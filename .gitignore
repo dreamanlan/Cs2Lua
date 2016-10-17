@@ -45,3 +45,11 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+LuaJIT-2.0.4.zip
+obj
+*.sdf
+*.suo
+*.user
+*.opensdf
+Test/obj

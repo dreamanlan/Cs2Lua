@@ -1,0 +1,22 @@
+test.cs(92,21): error CS0535: 'Bar' does not implement interface member 'IDictionary<int, int>.Values'
+test.cs(92,21): error CS0535: 'Bar' does not implement interface member 'IDictionary<int, int>.ContainsKey(int)'
+test.cs(92,21): error CS0535: 'Bar' does not implement interface member 'IDictionary<int, int>.Add(int, int)'
+test.cs(92,21): error CS0535: 'Bar' does not implement interface member 'IDictionary<int, int>.Remove(int)'
+test.cs(92,21): error CS0535: 'Bar' does not implement interface member 'IDictionary<int, int>.TryGetValue(int, out int)'
+test.cs(92,21): error CS0535: 'Bar' does not implement interface member 'IDictionary<int, int>.this[int]'
+test.cs(92,21): error CS0535: 'Bar' does not implement interface member 'IDictionary<int, int>.Keys'
+test.cs(92,21): error CS0535: 'Bar' does not implement interface member 'ICollection<KeyValuePair<int, int>>.IsReadOnly'
+test.cs(92,21): error CS0535: 'Bar' does not implement interface member 'ICollection<KeyValuePair<int, int>>.Add(KeyValuePair<int, int>)'
+test.cs(92,21): error CS0535: 'Bar' does not implement interface member 'ICollection<KeyValuePair<int, int>>.Clear()'
+test.cs(92,21): error CS0535: 'Bar' does not implement interface member 'ICollection<KeyValuePair<int, int>>.Contains(KeyValuePair<int, int>)'
+test.cs(92,21): error CS0535: 'Bar' does not implement interface member 'ICollection<KeyValuePair<int, int>>.CopyTo(KeyValuePair<int, int>[], int)'
+test.cs(92,21): error CS0535: 'Bar' does not implement interface member 'ICollection<KeyValuePair<int, int>>.Remove(KeyValuePair<int, int>)'
+test.cs(92,21): error CS0535: 'Bar' does not implement interface member 'ICollection<KeyValuePair<int, int>>.Count'
+test.cs(92,21): error CS0535: 'Bar' does not implement interface member 'IEnumerable<KeyValuePair<int, int>>.GetEnumerator()'
+test.cs(92,21): error CS0535: 'Bar' does not implement interface member 'IEnumerable.GetEnumerator()'
+test.cs(10,9): error CS0103: The name 'print' does not exist in the current context
+test.cs(96,21): error CS0815: Cannot assign anonymous method to an implicitly-typed variable
+test.cs(104,19): error CS0070: The event 'Foo.OnSimple' can only appear on the left hand side of += or -= (except when used from within the type 'Foo')
+test.cs(108,78): error CS1950: The best overloaded Add method 'Dictionary<string, int>.Add(string, int)' for the collection initializer has some invalid arguments
+test.cs(108,87): error CS1503: Argument 2: cannot convert from 'string' to 'int'
+test.cs(135,21): warning CS0162: Unreachable code detected

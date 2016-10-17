@@ -1,0 +1,3 @@
+(9,9): error CS0103: The name 'print' does not exist in the current context
+(90,21): error CS0815: Cannot assign anonymous method to an implicitly-typed variable
+(98,19): error CS0070: The event 'Foo.OnSimple' can only appear on the left hand side of += or -= (except when used from within the type 'Foo')
