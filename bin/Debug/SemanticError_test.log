@@ -15,8 +15,8 @@ test.cs(92,21): error CS0535: 'Bar' does not implement interface member 'ICollec
 test.cs(92,21): error CS0535: 'Bar' does not implement interface member 'IEnumerable<KeyValuePair<int, int>>.GetEnumerator()'
 test.cs(92,21): error CS0535: 'Bar' does not implement interface member 'IEnumerable.GetEnumerator()'
 test.cs(10,9): error CS0103: The name 'print' does not exist in the current context
-test.cs(96,21): error CS0815: Cannot assign anonymous method to an implicitly-typed variable
-test.cs(104,19): error CS0070: The event 'Foo.OnSimple' can only appear on the left hand side of += or -= (except when used from within the type 'Foo')
-test.cs(108,78): error CS1950: The best overloaded Add method 'Dictionary<string, int>.Add(string, int)' for the collection initializer has some invalid arguments
-test.cs(108,87): error CS1503: Argument 2: cannot convert from 'string' to 'int'
-test.cs(135,21): warning CS0162: Unreachable code detected
+test.cs(97,21): error CS0815: Cannot assign anonymous method to an implicitly-typed variable
+test.cs(108,19): error CS0070: The event 'Foo.OnSimple' can only appear on the left hand side of += or -= (except when used from within the type 'Foo')
+test.cs(112,78): error CS1950: The best overloaded Add method 'Dictionary<string, int>.Add(string, int)' for the collection initializer has some invalid arguments
+test.cs(112,87): error CS1503: Argument 2: cannot convert from 'string' to 'int'
+test.cs(139,21): warning CS0162: Unreachable code detected

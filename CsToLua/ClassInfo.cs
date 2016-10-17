@@ -31,6 +31,9 @@ namespace RoslynTool.CsToLua
         internal INamedTypeSymbol SemanticInfo = null;
         internal StringBuilder CurrentSourceCodeBuilder = null;
 
+        internal StringBuilder BeforeOuterCodeBuilder = new StringBuilder();
+        internal StringBuilder AfterOuterCodeBuilder = new StringBuilder();
+
         internal StringBuilder InstanceFunctionSourceCodeBuilder = new StringBuilder();
         internal StringBuilder InstanceFieldSourceCodeBuilder = new StringBuilder();
 

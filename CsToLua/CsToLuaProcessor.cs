@@ -14,7 +14,7 @@ namespace RoslynTool.CsToLua
 {
     public static class CsToLuaProcessor
     {
-        public static void Translate(string srcFile)
+        public static void Process(string srcFile)
         {
             //srcFile = "Cs2Lua.csproj";
             string path = Path.GetDirectoryName(srcFile);
@@ -79,7 +79,8 @@ namespace RoslynTool.CsToLua
             refs.Add(MetadataReference.CreateFromFile(typeof(SyntaxTree).Assembly.Location));
             refs.Add(MetadataReference.CreateFromFile(typeof(CSharpSyntaxTree).Assembly.Location));
             foreach (var refByPath in refByPaths) {
-                refs.Add(MetadataReference.CreateFromFile(refByPath));
+                string fullPath = Path.Combine(path, refByPath);
+                refs.Add(MetadataReference.CreateFromFile(fullPath));
             }
             foreach (var refByName in refByNames) {
 #pragma warning disable 618
@@ -111,7 +112,7 @@ namespace RoslynTool.CsToLua
                     sw.Close();
                 }
                 CsLuaTranslater csToLua = new CsLuaTranslater(model, new SymbolTable(compilation.Assembly));
-                csToLua.Visit(root);
+                csToLua.Translate(root);
                 csToLua.SaveLog(string.Format("Translation_{0}.log", fileName));
 
                 foreach (var pair in csToLua.ToplevelClasses) {
@@ -201,6 +202,9 @@ namespace RoslynTool.CsToLua
             string[] nss = key.Split('.');
             string className = nss[nss.Length-1];
 
+            foreach (var ci in classes) {
+                sb.Append(ci.BeforeOuterCodeBuilder.ToString());
+            }
             if (isAlone) {
                 sb.AppendLine("require \"utility\";");
                 HashSet<string> refs = new HashSet<string>();
@@ -297,6 +301,11 @@ namespace RoslynTool.CsToLua
                     sb.AppendLine();
                 }
             }
+
+            foreach (var ci in classes) {
+                sb.Append(ci.AfterOuterCodeBuilder.ToString());
+            }
+
             return fileName;
         }
         private static string GetIndentString(int indent)

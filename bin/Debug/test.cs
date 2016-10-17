@@ -90,12 +90,16 @@ namespace TopLevel
             public static float Y;
         }
         class Bar : IDictionary<int, int>
-        { 
+        {
+            delegate void IntHandler(int v);
             public void Handler()
             {
                 var f = delegate() {
                     LuaConsole.Print(1, 2, 3);
                 };
+                Test(123);
+                IntHandler t = Test;
+                t(1);
             }
             public void Test()
             {
@@ -164,6 +168,10 @@ namespace TopLevel
                 foreach (var i in def) {
                     s_Test += i;
                 }
+            }
+            public void Test(int v)
+            {
+                LuaConsole.Print(v);
             }
 
             public static int s_Test = 123;

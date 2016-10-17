@@ -1,1 +1,8 @@
 ..\..\Test\test1.cs(9,9): error CS0103: The name 'print' does not exist in the current context
+..\..\Test\test1.cs(18,23): warning CS1701: Assuming assembly reference 'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' used by 'UnityEngine' matches identity 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' of 'mscorlib', you may need to supply runtime policy
+..\..\Test\test1.cs(19,32): warning CS1701: Assuming assembly reference 'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' used by 'UnityEngine' matches identity 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' of 'mscorlib', you may need to supply runtime policy
+..\..\Test\test1.cs(19,32): error CS0029: Cannot implicitly convert type 'UnityEngine.GameObject' to 'UnityEngine.Transform'
+..\..\Test\test1.cs(20,13): warning CS1701: Assuming assembly reference 'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' used by 'UnityEngine' matches identity 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' of 'mscorlib', you may need to supply runtime policy
+..\..\Test\test1.cs(20,9): warning CS1701: Assuming assembly reference 'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' used by 'UnityEngine' matches identity 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' of 'mscorlib', you may need to supply runtime policy
+..\..\Test\test1.cs(21,16): warning CS0219: The variable 's' is assigned but its value is never used
+..\..\Test\test1.cs(1,1): hidden CS8019: Unnecessary using directive.

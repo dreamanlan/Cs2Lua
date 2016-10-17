@@ -20,5 +20,5 @@ function condexp(cv,tv,fv)
     end;
 end;
 
-_table_proto_ = {  
+__table_proto__ = {  
 };

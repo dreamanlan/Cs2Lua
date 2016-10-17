@@ -1,6 +1,6 @@
-//test
 using System;
-//---------------------------------
+using UnityEngine;
+
 class LuaConsole
 {
     public static void Print(params object[] args)
@@ -11,138 +11,18 @@ class LuaConsole
     }
 }
 
-namespace TopLevel 
-{     
-#region abc
-    
-    namespace Child1 
-    {         
-        delegate void SimpleEventHandler();
+class MyScript
+{
+    public void Init(GameObject parent)
+    {
+        var obj = new GameObject("test");
+        obj.transform.parent = parent;
+        obj.SetActive(true);
+        string s = "123";
+    }
 
-        class Foo 
-        {
-            public event SimpleEventHandler OnSimple;
-            public SimpleEventHandler OnSimple2;
+    public void Update()
+    {
 
-            public Foo()
-            {}
-            public Foo(int v)
-            {
-                this.m_Test = v;
-            }
-
-            public void Test(int a, ref int b, out int c, params int[] args)
-            {
-                Func<int, int> f = p1 => p1;
-                f(1);
-                Func<int, int, int> f2 = (p1, p2) => { return p1 + p2; };
-                f2(1, 2);
-                m_Test = a + b + 123;
-                b = a < b ? a : b;
-                if (a > 0)
-                {
-                    c = a + b + args[0];
-                }
-                if (a < b) {
-                    c = b - a;
-                } else if (a >= b) {
-                    c = a - b;
-                }
-                if (a < b) {
-                    c = b - a;
-                } else {
-                    c = a - b;
-                }
-                if (a < b) {
-                    c = b - a;
-                } else if (a < c) {
-                    c = a - b;
-                } else {
-                    c = 0;
-                }
-            }
-
-            public int Test2(int a, int b, ref int c, out int d)
-            {
-                c += a + b;
-                d = c * 2;
-                return c;
-            }
-
-            internal int m_Test = 0;
-        } 
-    } 
-    
-#endregion
-
-    namespace Child2 
-    { 
-        enum TestEnum
-        {
-            One = 0,
-            Two,
-            Three,
-        }
-        class Bar
-        { 
-            public void Handler()
-            {
-                Action f = delegate() {
-                    LuaConsole.Print(1, 2, 3);
-                };
-            }
-            public void Test()
-            {
-                var F = Child2.Bar.s_Test;
-                Child1.Foo f = new Child1.Foo(123);
-                f.OnSimple += this.Handler;
-                var ff = new Child1.Foo { m_Test = 456 };
-                int a = 0, b = 0, c = 0;
-                b = (c += 2);
-                f.Test(1, ref b, out c, 3);
-                LuaConsole.Print(b, c);
-                int r = f.Test2(1, 2, ref b, out c);
-                LuaConsole.Print(r, b, c);
-                int v;
-                v = f.Test2(3, 4, ref b, out c);
-                LuaConsole.Print(v, b, c);
-                while (a < 10) {
-                    ++a;
-                }
-                do
-                {
-                    ++b;
-                }while(b<100);
-                int[] abc = new int[256];
-                int[] def = new int[] { 1, 2, 3, 4, 5 };
-                int[][][] g0 = new int[3][][];
-                int[, ,] h0 = new int[3, 5, 7];
-                int[][] g = new int[][] { new int[] { 1, 2 }, new int[] { 3, 4 } };
-                int[,] h = new int[,] { { 1, 2 }, { 3, 4 } };
-
-                for (int i = 0; i < g0.Length; ++i) {
-                    g0[i] = new int[3][];
-                    for (int j = 0; j < g0[i].Length; ++j) {
-                        g0[i][j] = new int[3];
-                    }
-                }
-
-                for (int i = 0; i < h0.GetLength(0); ++i) {
-                    for (int j = 0; j < h0.GetLength(1); ++j) {
-                        for (int k = 0; k < h0.GetLength(2); ++k) {
-                            h0[i, j, k] = i * j * k;
-                        }
-                    }
-                }
-
-                var hh = new[] { 5, 6, 7, 8 };
-            }
-
-            public static int s_Test = 123;
-        } 
-    } 
+    }
 }
-/*
-local obj = TopLevel.Child2.Bar:new();
-obj.Test();
-*/

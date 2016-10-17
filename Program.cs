@@ -18,7 +18,7 @@ namespace RoslynTool
             if (args.Length > 0) {
                 file = args[0];
             }
-            CsToLuaProcessor.Translate(file);
+            CsToLuaProcessor.Process(file);
             //Mandelbrot.Exec();
         }
     }

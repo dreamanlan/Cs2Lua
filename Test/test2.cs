@@ -36,11 +36,11 @@ class Mandelbrot
 
                 if (isInside) {
 #if __LUA__
-                    write('*');
+                    write("*");
 #endif
                 } else {
 #if __LUA__
-                    write(' ');
+                    write(" ");
 #endif
                 }
             }
