@@ -220,6 +220,7 @@ namespace RoslynTool.CsToLua
         }
         public override void VisitConstructorDeclaration(ConstructorDeclarationSyntax node)
         {
+            var ci = m_ClassInfoStack.Peek();
             IMethodSymbol sym = m_Model.GetDeclaredSymbol(node);
             if (null != sym) {
                 foreach (var attr in sym.GetAttributes()) {
@@ -1362,6 +1363,8 @@ namespace RoslynTool.CsToLua
                 bool isArray = node.IsKind(SyntaxKind.ArrayInitializerExpression);
                 if (isArray)
                     SourceCodeBuilder.Append("wraparray{");
+                else
+                    SourceCodeBuilder.Append(" ");
                 var args = node.Expressions;
                 int ct = args.Count;
                 for (int i = 0; i < ct; ++i) {

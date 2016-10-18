@@ -1,7 +1,4 @@
 require "utility";
-require "LuaConsole";
-require "TopLevel_Child2_Bar_IntHandler";
-require "TopLevel_Child1_Foo";
 
 TopLevel = {
 	Child2 = {
@@ -9,6 +6,8 @@ TopLevel = {
 			s_Test = 123,
 			new = function(self)
 				local o = {
+					ctor = function(self, i, j)
+					end,
 					Handler = function(self)
 						local f = (function()
 							LuaConsole.Print(1, 2, 3);
@@ -23,7 +22,7 @@ TopLevel = {
 						local F = TopLevel.Child2.Bar.s_Test;
 						local f = (function() local obj = TopLevel.Child1.Foo:new(); obj:ctor(123); return obj; end)();
 						f.OnSimple = (function() self.Handler() end);
-						local ff = (function() local obj = TopLevel.Child1.Foo:new(); local self = obj;self.m_Test = 456; return obj; end)();
+						local ff = (function() local obj = TopLevel.Child1.Foo:new(); local self = obj; self.m_Test = 456; return obj; end)();
 						local a = 0;
 						local b = 0;
 						local c = 0;
@@ -58,25 +57,25 @@ TopLevel = {
 						local h = wraparray{wraparray{1, 2}, wraparray{3, 4}};
 						local i = 0;
 						while i < g0.Length do
-						local __compiler_continue_138__ = false
+						local __compiler_continue_142__ = false
 						repeat
-							g0[i] = wraparray{};
+							g0[i + 1] = wraparray{};
 							if true then
-								__compiler_continue_138__ = true;
+								__compiler_continue_142__ = true;
 								break;
 							end;
 							if true then
-								__compiler_continue_138__ = false;
+								__compiler_continue_142__ = false;
 								break;
 							end;
 							local j = 0;
-							while j < g0[i].Length do
-								g0[i][j] = wraparray{};
+							while j < g0[i + 1].Length do
+								g0[i + 1][j + 1] = wraparray{};
 								j = j + 1;
 							end;
 							i = i + 1;
 						until true;
-						if __compiler_continue_138__ then break; end;
+						if __compiler_continue_142__ then break; end;
 						end;
 						local i = 0;
 						while i < h0:GetLength(0) do
@@ -84,7 +83,7 @@ TopLevel = {
 							while j < h0:GetLength(1) do
 								local k = 0;
 								while k < h0:GetLength(2) do
-									h0[i][j][k] = i * j * k;
+									h0[i + 1][j + 1][k + 1] = i * j * k;
 									k = k + 1;
 								end;
 								j = j + 1;
@@ -93,20 +92,20 @@ TopLevel = {
 						end;
 						local hh = wraparray{7, 6, 7, 8};
 						self:Test__Arr_System_Int32(hh);
-						local __compiler_switch_158__ = a;
-						if (__compiler_switch_158__ == 1) and (__compiler_switch_158__ == 3) then
+						local __compiler_switch_162__ = a;
+						if (__compiler_switch_162__ == 1) and (__compiler_switch_162__ == 3) then
 						repeat
 							if a == 1 then
 								break;
 							end;
 							break;
 						until 0 ~= 0;
-						elseif __compiler_switch_158__ == 2 then
+						elseif __compiler_switch_162__ == 2 then
 						else
 						end;
-						local __compiler_foreach_171__ = (def):GetEnumerator();
-						while __compiler_foreach_171__:MoveNext() do
-							i = __compiler_foreach_171__.Current;
+						local __compiler_foreach_175__ = (def):GetEnumerator();
+						while __compiler_foreach_175__:MoveNext() do
+							i = __compiler_foreach_175__.Current;
 							TopLevel.Child2.Bar.s_Test = TopLevel.Child2.Bar.s_Test + i;
 						end;
 						self:Test__Arr_System_Int32(wraparray{1, 2, 3});

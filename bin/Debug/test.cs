@@ -90,6 +90,10 @@ namespace TopLevel
         }
         class Bar
         {
+            public Bar(int i, int j)
+            {
+
+            }
             delegate void IntHandler(int v);
             public void Handler()
             {
