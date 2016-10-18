@@ -2,5 +2,5 @@ test.cs(85,16): warning CS3021: 'Point' does not need a CLSCompliant attribute b
 test.cs(5,7): warning CS3021: 'LuaConsole' does not need a CLSCompliant attribute because the assembly does not have a CLSCompliant attribute
 test.cs(88,33): warning CS3014: 'Point.X' cannot be marked as CLS-compliant because the assembly does not have a CLSCompliant attribute
 test.cs(96,21): error CS0815: Cannot assign anonymous method to an implicitly-typed variable
-test.cs(107,19): error CS0070: The event 'Foo.OnSimple' can only appear on the left hand side of += or -= (except when used from within the type 'Foo')
-test.cs(140,21): warning CS0162: Unreachable code detected
+test.cs(109,19): error CS0070: The event 'Foo.OnSimple' can only appear on the left hand side of += or -= (except when used from within the type 'Foo')
+test.cs(142,21): warning CS0162: Unreachable code detected

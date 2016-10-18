@@ -1,0 +1,112 @@
+require "utility";
+
+MyScript = {
+	GetString = function()
+		return "def";
+	end,
+	new = function(self)
+		local o = {
+			Init = function(self)
+				local s = "test test test from cs2lua !";
+				UnityEngine.Debug.Log(s);
+				self.root = UnityEngine.GameObject("root");
+				self.dict:Add("one", "one value");
+				self.dict["two"] = "two value";
+				local f = (function()
+					local ss = "abc" .. MyScript.GetString();
+				end);
+				local slider = typecast(UnityEngine.GameObject.Find("Canvas/Slider"):GetComponent(UnityEngine.UI.Slider), UnityEngine.UI.Slider);
+				local counttxt = typecast(UnityEngine.GameObject.Find("Canvas/Count"):GetComponent(UnityEngine.UI.Text), UnityEngine.UI.Text);
+				slider.onValueChanged:AddListener((function(v)
+					self:Reset();
+					counttxt.text = LuaString.Format("cube:%d", v);
+					self.max = typecast(v, "Int32");
+				end));
+				self:Reset();
+				self.OnHandle0 = (function()
+				end);
+				self.OnHandle = f;
+				self.OnHandle = (function() self:Handle() end);
+				if nil ~= self.OnHandle then
+					self.OnHandle();
+				end;
+				self.OnHandle = f;
+				self.OnHandle = (function() self:Handle() end);
+				if nil ~= self.OnHandle then
+					self.OnHandle();
+				end;
+				OnHandleEvent = f;
+				if nil ~= OnHandleEvent then
+					OnHandleEvent();
+				end;
+			end,
+			Update = function(self)
+				local i = 0;
+				while i < self.cubes.Length do
+					local offset = condexp(i % 2 == 1, 5, -5);
+					local nr = self.r + UnityEngine.Mathf.Sin(UnityEngine.Time.time) * offset;
+					local angle = condexp(i % 2 == 1, UnityEngine.Time.time, -5);
+					local b = UnityEngine.Vector3(typecast(( UnityEngine.Mathf.Cos(i / self.max * 3.141593 * 2 + angle) * nr ), "Single"), typecast(( UnityEngine.Mathf.Sin(i / self.max * 3.141593 * 2 + angle) * nr ), "Single"), 0);
+					self.cubes[i + 1].transform.position = b;
+					i = i + 1;
+				end;
+				if self.fogStart <= 0 or self.t > 1 then
+					self.fogStart = UnityEngine.Time.time;
+					self.bgCurrent = UnityEngine.Camera.main.backgroundColor;
+					local ix = UnityEngine.Random.Range(0, self.colors.Length);
+					self.bgColor = self.colors[ix + 1];
+				end;
+				self.t = ( UnityEngine.Time.time - self.fogStart ) / 10;
+				UnityEngine.Camera.main.backgroundColor = UnityEngine.Color.Lerp(self.bgCurrent, self.bgColor, self.t);
+			end,
+			Reset = function(self)
+				if nil ~= self.cubes then
+					local i = 0;
+					while i < self.cubes.Length do
+						UnityEngine.GameObject.Destroy(self.cubes[i + 1]);
+						i = i + 1;
+					end;
+				end;
+				self.cubes = wraparray{};
+				local P = UnityEngine.Resources.Load("Particle System");
+				local i = 0;
+				while i < self.max do
+					local cube = UnityEngine.GameObject.CreatePrimitive(3);
+					cube.transform.position = UnityEngine.Vector3(typecast(UnityEngine.Mathf.Cos(i / self.max * 3.141593 * 2), "Single") * self.r, typecast(UnityEngine.Mathf.Sin(i / self.max * 3.141593 * 2), "Single") * self.r, 0);
+					cube.transform:SetParent(self.root.transform);
+					local mat = cube:GetComponent(UnityEngine.Renderer).material;
+					local box = cube:GetComponent(UnityEngine.BoxCollider);
+					UnityEngine.GameObject.Destroy(box);
+					local p = typecast(UnityEngine.GameObject.Instantiate(P, UnityEngine.Vector3.zero, UnityEngine.Quaternion.identity), UnityEngine.GameObject);
+					p.transform:SetParent(cube.transform);
+					local ix = UnityEngine.Random.Range(0, self.colors.Length);
+					mat.color = self.colors[ix + 1];
+					self.cubes[i + 1] = cube;
+					i = i + 1;
+				end;
+			end,
+			Handle = function(self)
+				UnityEngine.Debug.Log("callback");
+			end,
+			OnHandle0 = nil,
+			OnHandle = nil,
+			root = nil,
+			r = 10,
+			max = 400,
+			t = 0,
+			fogStart = 0,
+			bgCurrent = nil,
+			bgColor = nil,
+			cubes = nil,
+			colors = wraparray{UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black},
+			dict = (function() local obj = wrapdictionary{}; return obj; end)(),
+		};
+		setmetatable(o, self);
+		self.__index = self;
+		return o;
+	end,
+};
+
+function main()
+	return MyScript;
+end;

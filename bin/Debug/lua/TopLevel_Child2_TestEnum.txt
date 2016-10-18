@@ -9,3 +9,7 @@ TopLevel = {
 		},
 	},
 };
+
+function main()
+	return TopLevel.Child2.TestEnum;
+end;

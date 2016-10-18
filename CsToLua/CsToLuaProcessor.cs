@@ -21,6 +21,15 @@ namespace RoslynTool.CsToLua
             string name = Path.GetFileNameWithoutExtension(srcFile);
             string ext = Path.GetExtension(srcFile);
 
+            string logDir = Path.Combine(path, "log");
+            if (!Directory.Exists(logDir)) {
+                Directory.CreateDirectory(logDir);
+            }
+            string outputDir = Path.Combine(path, "lua");
+            if (!Directory.Exists(outputDir)) {
+                Directory.CreateDirectory(outputDir);
+            }
+
             List<string> files = new List<string>();
             List<string> refByNames = new List<string>();
             List<string> refByPaths = new List<string>();
@@ -28,7 +37,7 @@ namespace RoslynTool.CsToLua
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.Load(srcFile);
                 var nodes = SelectNodes(xmlDoc, "ItemGroup", "Reference");
-                foreach(XmlElement node in nodes) {
+                foreach (XmlElement node in nodes) {
                     var pathNode = SelectSingleNode(node, "HintPath");
                     if (null != pathNode) {
                         refByPaths.Add(pathNode.InnerText);
@@ -50,16 +59,16 @@ namespace RoslynTool.CsToLua
 
             List<SyntaxTree> trees = new List<SyntaxTree>();
             foreach (string file in files) {
-                string filePath = Path.Combine(path,file);
+                string filePath = Path.Combine(path, file);
                 string fileName = Path.GetFileNameWithoutExtension(filePath);
                 CSharpParseOptions options = new CSharpParseOptions();
                 options = options.WithPreprocessorSymbols("__LUA__");
-                options = options.WithFeatures(new Dictionary<string,string> { {"IOperation", "true"} });
-                SyntaxTree tree = CSharpSyntaxTree.ParseText(File.ReadAllText(filePath), options, filePath);                
+                options = options.WithFeatures(new Dictionary<string, string> { { "IOperation", "true" } });
+                SyntaxTree tree = CSharpSyntaxTree.ParseText(File.ReadAllText(filePath), options, filePath);
                 trees.Add(tree);
                 var diags = tree.GetDiagnostics();
                 bool haveError = false;
-                using (StreamWriter sw = new StreamWriter(string.Format("SyntaxError_{0}.log",fileName))) {
+                using (StreamWriter sw = new StreamWriter(Path.Combine(logDir, string.Format("SyntaxError_{0}.log", fileName)))) {
                     foreach (var diag in diags) {
                         string msg = diag.ToString();
                         sw.WriteLine("{0}", msg);
@@ -90,7 +99,7 @@ namespace RoslynTool.CsToLua
                     refs.Add(MetadataReference.CreateFromFile(assembly.Location));
                 }
             }
-            CSharpCompilationOptions compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);            
+            CSharpCompilationOptions compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
             CSharpCompilation compilation = CSharpCompilation.Create(name);
             compilation = compilation.WithOptions(compilationOptions);
             compilation = compilation.AddReferences(refs.ToArray());
@@ -104,7 +113,7 @@ namespace RoslynTool.CsToLua
                 var root = tree.GetRoot();
                 SemanticModel model = compilation.GetSemanticModel(tree, true);
                 var diags = model.GetDiagnostics();
-                using (StreamWriter sw = new StreamWriter(string.Format("SemanticError_{0}.log", fileName))) {
+                using (StreamWriter sw = new StreamWriter(Path.Combine(logDir, string.Format("SemanticError_{0}.log", fileName)))) {
                     foreach (var diag in diags) {
                         string msg = diag.ToString();
                         sw.WriteLine("{0}", msg);
@@ -113,7 +122,7 @@ namespace RoslynTool.CsToLua
                 }
                 CsLuaTranslater csToLua = new CsLuaTranslater(model, new SymbolTable(compilation.Assembly));
                 csToLua.Translate(root);
-                csToLua.SaveLog(string.Format("Translation_{0}.log", fileName));
+                csToLua.SaveLog(Path.Combine(logDir, string.Format("Translation_{0}.log", fileName)));
 
                 foreach (var pair in csToLua.ToplevelClasses) {
                     var key = pair.Key;
@@ -137,7 +146,7 @@ namespace RoslynTool.CsToLua
                         }
                         mni.Name = nsname;
                         curMni = mni;
-                    }                        
+                    }
                     MergedClassInfo mci;
                     if (!curMni.Classes.TryGetValue(key, out mci)) {
                         mci = new MergedClassInfo();
@@ -150,11 +159,10 @@ namespace RoslynTool.CsToLua
             foreach (var pair in classes) {
                 StringBuilder sb0 = new StringBuilder();
                 string fileName = BuildLuaClass(sb0, pair.Key, pair.Value, true);
-                File.WriteAllText(fileName + ".lua", sb0.ToString());
+                File.WriteAllText(Path.Combine(outputDir, fileName + ".txt"), sb0.ToString());
             }
             StringBuilder sb = new StringBuilder();
             BuildLuaClass(sb, toplevelMni);
-            File.WriteAllText(name + ".lua", sb.ToString());
             Console.Write(sb.ToString());
         }
 
@@ -200,7 +208,7 @@ namespace RoslynTool.CsToLua
         {
             string fileName = key.Replace('.', '_');
             string[] nss = key.Split('.');
-            string className = nss[nss.Length-1];
+            string className = nss[nss.Length - 1];
 
             foreach (var ci in classes) {
                 sb.Append(ci.BeforeOuterCodeBuilder.ToString());
@@ -300,6 +308,14 @@ namespace RoslynTool.CsToLua
                     }
                     sb.AppendLine();
                 }
+            }
+
+            if (isAlone) {
+                sb.AppendLine();
+                sb.AppendLine("function main()");
+                sb.AppendFormat("\treturn {0};", key);
+                sb.AppendLine();
+                sb.AppendLine("end;");
             }
 
             foreach (var ci in classes) {

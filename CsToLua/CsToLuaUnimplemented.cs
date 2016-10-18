@@ -398,8 +398,6 @@ namespace RoslynTool.CsToLua
         { }
         public override void VisitDelegateDeclaration(DelegateDeclarationSyntax node)
         { }
-        public override void VisitPredefinedType(PredefinedTypeSyntax node)
-        { }
         public override void VisitUsingDirective(UsingDirectiveSyntax node)
         { }
         public override void VisitSkippedTokensTrivia(SkippedTokensTriviaSyntax node)

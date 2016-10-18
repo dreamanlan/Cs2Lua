@@ -58,3 +58,7 @@ TopLevel = {
 		},
 	},
 };
+
+function main()
+	return TopLevel.Child1.Foo;
+end;

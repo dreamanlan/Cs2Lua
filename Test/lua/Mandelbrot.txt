@@ -46,4 +46,8 @@ Mandelbrot = {
 		return o;
 	end,
 };
+
+function main()
+	return Mandelbrot;
+end;
 --Mandelbrot.Exec();

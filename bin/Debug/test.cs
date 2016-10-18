@@ -99,6 +99,8 @@ namespace TopLevel
                 Test(123);
                 IntHandler t = Test;
                 t(1);
+                IntHandler t2 = this.Test;
+                t2(2);
             }
             public void Test()
             {
