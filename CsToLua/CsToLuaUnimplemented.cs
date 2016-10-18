@@ -166,26 +166,6 @@ namespace RoslynTool.CsToLua
         {
             Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
         }
-        public override void VisitAttributeList(AttributeListSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitAttributeTargetSpecifier(AttributeTargetSpecifierSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitAttribute(AttributeSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitAttributeArgumentList(AttributeArgumentListSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitAttributeArgument(AttributeArgumentSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
         public override void VisitUsingStatement(UsingStatementSyntax node)
         {
             Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
@@ -380,6 +360,26 @@ namespace RoslynTool.CsToLua
         public override void VisitParameter(ParameterSyntax node)
         {
             Log(node, "Unhandle syntax part: {0}\n{1}", node.ToString(), Environment.StackTrace);
+        }
+        public override void VisitAttributeList(AttributeListSyntax node)
+        {
+            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+        }
+        public override void VisitAttributeTargetSpecifier(AttributeTargetSpecifierSyntax node)
+        {
+            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+        }
+        public override void VisitAttribute(AttributeSyntax node)
+        {
+            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+        }
+        public override void VisitAttributeArgumentList(AttributeArgumentListSyntax node)
+        {
+            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+        }
+        public override void VisitAttributeArgument(AttributeArgumentSyntax node)
+        {
+            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
         }
         #endregion
 

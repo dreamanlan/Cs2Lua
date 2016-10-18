@@ -20,5 +20,34 @@ function condexp(cv,tv,fv)
     end;
 end;
 
-__table_proto__ = {  
+LuaConsole = {
+    Print = function(...)
+    	print(...);
+    end,
+}
+
+__mt_array__ = {
+	__index = function(t, k)
+		if k=="Length" then
+			return table.maxn(t);
+		elseif k=="GetLength" then
+			return function(ix) table.maxn(t) end;
+		end;
+	end,
 };
+
+__mt_dictionary__ = {
+	__index = function(t, k)
+		if k=="Count" then
+			return table.maxn(t);
+		end;
+	end,
+};
+
+function wraparray(arr)
+	return setmetatable(arr, __mt_array__);
+end;
+
+function wrapdictionary(dict)
+	return setmetatable(dict, __mt_dictionary__);
+end;

@@ -1,14 +1,11 @@
-//test
 using System;
 using System.Collections.Generic;
-//---------------------------------
+
+[System.CLSCompliant(false)]
 class LuaConsole
 {
     public static void Print(params object[] args)
     {
-#if __LUA__
-        print(args);
-#endif
     }
 }
 
@@ -84,12 +81,14 @@ namespace TopLevel
             Two,
             Three,
         }
+        [System.CLSCompliant(false)]
         struct Point
         {
+            [System.CLSCompliant(true)]
             public static float X;
             public static float Y;
         }
-        class Bar : IDictionary<int, int>
+        class Bar
         {
             delegate void IntHandler(int v);
             public void Handler()
@@ -109,18 +108,20 @@ namespace TopLevel
                 var ff = new Child1.Foo { m_Test = 456 };
                 int a = 0, b = 0, c = 0;
                 b = (c += (int)2);
-                Dictionary<string, int> dict = new Dictionary<string, int> { { "key", "value" } };
+                Dictionary<string, string> dict = new Dictionary<string, string> { { "key1", "value1" }, { "key2", "value2" } };
+                Test(dict);
                 f.Test(1, ref b, out c, 3);
                 LuaConsole.Print(b, c);
                 int r = 0;
                 r += f.Test2(1, 2, ref b, out c);
                 LuaConsole.Print(r, b, c);
+                int v0 = f.Test2(3, 4, ref b, out c);
                 int v;
                 v = f.Test2(3, 4, ref b, out c);
                 LuaConsole.Print(v, b, c);
                 while (a < 10 + 2) {
-                    if (a < 5 + 3) continue;
                     ++a;
+                    if (a < 5 + 3) continue;
                 }
                 do
                 {
@@ -151,6 +152,7 @@ namespace TopLevel
                 }
 
                 var hh = new[] { 5 + 2, 6, 7, 8 };
+                Test(hh);
 
                 switch (a) {
                     case 1:
@@ -168,10 +170,21 @@ namespace TopLevel
                 foreach (var i in def) {
                     s_Test += i;
                 }
+                Test(new[] { 1, 2, 3 });
+                Test(new int[] { 1, 2, 3 });
+                Test(new Dictionary<string, string> { { "1", "2" }, { "3", "4" } });
             }
             public void Test(int v)
             {
                 LuaConsole.Print(v);
+            }
+            public void Test(int[] arr)
+            {
+
+            }
+            public void Test(Dictionary<string, string> dict)
+            {
+
             }
 
             public static int s_Test = 123;
@@ -180,5 +193,5 @@ namespace TopLevel
 }
 /*
 local obj = TopLevel.Child2.Bar:new();
-obj.Test();
+obj:Test();
 */

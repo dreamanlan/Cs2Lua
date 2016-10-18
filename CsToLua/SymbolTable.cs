@@ -129,13 +129,21 @@ namespace RoslynTool.CsToLua
             foreach (var param in methodSym.Parameters) {
                 sb.Append("__");
                 if (param.RefKind == RefKind.Ref) {
-                    sb.Append("ref_");
+                    sb.Append("Ref_");
                 } else if (param.RefKind == RefKind.Out) {
-                    sb.Append("out_");
+                    sb.Append("Out_");
                 }
-                string ns = ClassInfo.GetNamespaces(param.Type);
-                string fn = (string.IsNullOrEmpty(ns) ? string.Empty : ns.Replace('.', '_') + "_") + param.Type;
-                sb.Append(fn);
+                if (param.Type.Kind == SymbolKind.ArrayType) {
+                    sb.Append("Arr_");
+                    var arrSym = param.Type as IArrayTypeSymbol;
+                    string ns = ClassInfo.GetNamespaces(arrSym.ElementType);
+                    string fn = (string.IsNullOrEmpty(ns) ? string.Empty : ns.Replace('.', '_') + "_") + arrSym.ElementType.Name;
+                    sb.Append(fn);
+                } else {
+                    string ns = ClassInfo.GetNamespaces(param.Type);
+                    string fn = (string.IsNullOrEmpty(ns) ? string.Empty : ns.Replace('.', '_') + "_") + param.Type.Name;
+                    sb.Append(fn);
+                }
             }
             return sb.ToString();
         }

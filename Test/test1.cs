@@ -16,7 +16,7 @@ class MyScript
     public void Init(GameObject parent)
     {
         var obj = new GameObject("test");
-        obj.transform.parent = parent;
+        obj.transform.parent = parent.transform;
         obj.SetActive(true);
         string s = "123";
     }
