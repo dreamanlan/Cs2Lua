@@ -20,6 +20,30 @@ function condexp(cv,tv,fv)
     end;
 end;
 
+function nullablecondexp(v1,v2)
+	if v1~=nil then
+		return v1;
+	else
+		return v2;
+	end;
+end;
+
+function bitnot(v)
+	return 1-v;
+end;
+
+function bitand(v1,v2)
+	return v1-v2;
+end;
+
+function bitor(v1,v2)
+	return v1+v2;
+end;
+
+function bitxor(v1,v2)
+	return v1-v2;
+end;
+
 function typecast(obj, type)
   return obj;
 end;

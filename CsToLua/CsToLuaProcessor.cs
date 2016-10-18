@@ -106,6 +106,7 @@ namespace RoslynTool.CsToLua
             foreach (SyntaxTree tree in trees) {
                 compilation = compilation.AddSyntaxTrees(tree);
             }
+            SymbolTable symTable = new SymbolTable(compilation.Assembly);
             Dictionary<string, List<ClassInfo>> classes = new Dictionary<string, List<ClassInfo>>();
             MergedNamespaceInfo toplevelMni = new MergedNamespaceInfo();
             foreach (SyntaxTree tree in trees) {
@@ -120,7 +121,7 @@ namespace RoslynTool.CsToLua
                     }
                     sw.Close();
                 }
-                CsLuaTranslater csToLua = new CsLuaTranslater(model, new SymbolTable(compilation.Assembly));
+                CsLuaTranslater csToLua = new CsLuaTranslater(model, symTable);
                 csToLua.Translate(root);
                 csToLua.SaveLog(Path.Combine(logDir, string.Format("Translation_{0}.log", fileName)));
 
@@ -158,20 +159,20 @@ namespace RoslynTool.CsToLua
             }
             foreach (var pair in classes) {
                 StringBuilder sb0 = new StringBuilder();
-                string fileName = BuildLuaClass(sb0, pair.Key, pair.Value, true);
+                string fileName = BuildLuaClass(sb0, pair.Key, pair.Value, true, symTable);
                 File.WriteAllText(Path.Combine(outputDir, fileName + ".txt"), sb0.ToString());
             }
             StringBuilder sb = new StringBuilder();
-            BuildLuaClass(sb, toplevelMni);
+            BuildLuaClass(sb, toplevelMni, symTable);
             Console.Write(sb.ToString());
         }
 
-        private static void BuildLuaClass(StringBuilder sb, MergedNamespaceInfo toplevelMni)
+        private static void BuildLuaClass(StringBuilder sb, MergedNamespaceInfo toplevelMni, SymbolTable symTable)
         {
             sb.AppendLine("require \"utility\";");
-            BuildLuaClassRecursively(sb, toplevelMni, 0);
+            BuildLuaClassRecursively(sb, toplevelMni, 0, symTable);
         }
-        private static void BuildLuaClassRecursively(StringBuilder sb, MergedNamespaceInfo mni, int indent)
+        private static void BuildLuaClassRecursively(StringBuilder sb, MergedNamespaceInfo mni, int indent, SymbolTable symTable)
         {
             if (null != mni) {
                 string nsname = mni.Name;
@@ -182,11 +183,11 @@ namespace RoslynTool.CsToLua
                 }
                 foreach (var cpair in mni.Classes) {
                     var mci = cpair.Value;
-                    BuildLuaClass(sb, mci);
+                    BuildLuaClass(sb, mci, symTable);
                 }
                 foreach (var npair in mni.Namespaces) {
                     var newMni = npair.Value;
-                    BuildLuaClassRecursively(sb, newMni, indent);
+                    BuildLuaClassRecursively(sb, newMni, indent, symTable);
                 }
                 if (!string.IsNullOrEmpty(nsname)) {
                     --indent;
@@ -200,11 +201,11 @@ namespace RoslynTool.CsToLua
                 }
             }
         }
-        private static void BuildLuaClass(StringBuilder sb, MergedClassInfo mci)
+        private static void BuildLuaClass(StringBuilder sb, MergedClassInfo mci, SymbolTable symTable)
         {
-            BuildLuaClass(sb, mci.Key, mci.Classes, false);
+            BuildLuaClass(sb, mci.Key, mci.Classes, false, symTable);
         }
-        private static string BuildLuaClass(StringBuilder sb, string key, IList<ClassInfo> classes, bool isAlone)
+        private static string BuildLuaClass(StringBuilder sb, string key, IList<ClassInfo> classes, bool isAlone, SymbolTable symTable)
         {
             string fileName = key.Replace('.', '_');
             string[] nss = key.Split('.');
@@ -313,6 +314,13 @@ namespace RoslynTool.CsToLua
             if (isAlone) {
                 sb.AppendLine();
                 sb.AppendLine("function main()");
+                ClassSymbolInfo csi;
+                if (symTable.ClassSymbols.TryGetValue(key, out csi)) {
+                    if (csi.ExistStaticConstructor) {
+                        sb.AppendFormat("\t{0}:cctor();", key);
+                        sb.AppendLine();
+                    }
+                }
                 sb.AppendFormat("\treturn {0};", key);
                 sb.AppendLine();
                 sb.AppendLine("end;");

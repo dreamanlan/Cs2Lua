@@ -1,0 +1,31 @@
+require "utility";
+
+TopLevel = {
+	Child1 = {
+		GenericClass = {
+			cctor = function(self)
+				TopLevel.Child1.GenericClass.s_Test = 9876;
+			end,
+			s_Test = 8765,
+			new = function(self)
+				local o = {
+					Test = function(self, v)
+						LuaConsole.Print(v);
+					end,
+					ctor = function(self)
+						self.m_Test = 456;
+					end,
+					m_Test = 123,
+				};
+				setmetatable(o, self);
+				self.__index = self;
+				return o;
+			end,
+		},
+	},
+};
+
+function main()
+	TopLevel.Child1.GenericClass:cctor();
+	return TopLevel.Child1.GenericClass;
+end;

@@ -29,13 +29,15 @@ TopLevel = {
 						b = ( (function() c = c + 2; return c; end)() );
 						local dict = (function() local obj = wrapdictionary{}; obj["key1"] = "value1"; obj["key2"] = "value2"; return obj; end)();
 						self:Test__System_Collections_Generic_Dictionary(dict);
-						b, c = f:Test(1, b, 3);
+						b, c = f:Test__System_Int32__Ref_System_Int32__Out_System_Int32__Arr_System_Int32(1, b, 3);
 						LuaConsole.Print(b, c);
 						local r = 0;
 						r = r + (function() local ret; ret, b, c = f:Test2(1, 2, b); return ret; end)();
 						LuaConsole.Print(r, b, c);
 						local v0, b, c = f:Test2(3, 4, b);
-						local v;
+						local v = nullablecondexp(ff, f);
+						local vv = (function() local v = f; if v == nil then return nil; else return v.m_Test; end; end)();
+						local vvv = (function() local v = f; if v == nil then return nil; else return v:Test__System_Int32(123); end; end)();
 						v, b, c = f:Test2(3, 4, b);
 						LuaConsole.Print(v, b, c);
 						while a < 12 do
@@ -57,15 +59,15 @@ TopLevel = {
 						local h = wraparray{wraparray{1, 2}, wraparray{3, 4}};
 						local i = 0;
 						while i < g0.Length do
-						local __compiler_continue_142__ = false
+						local __compiler_continue_170__ = false
 						repeat
 							g0[i + 1] = wraparray{};
 							if true then
-								__compiler_continue_142__ = true;
+								__compiler_continue_170__ = true;
 								break;
 							end;
 							if true then
-								__compiler_continue_142__ = false;
+								__compiler_continue_170__ = false;
 								break;
 							end;
 							local j = 0;
@@ -75,7 +77,7 @@ TopLevel = {
 							end;
 							i = i + 1;
 						until true;
-						if __compiler_continue_142__ then break; end;
+						if __compiler_continue_170__ then break; end;
 						end;
 						local i = 0;
 						while i < h0:GetLength(0) do
@@ -92,21 +94,21 @@ TopLevel = {
 						end;
 						local hh = wraparray{7, 6, 7, 8};
 						self:Test__Arr_System_Int32(hh);
-						local __compiler_switch_162__ = a;
-						if (__compiler_switch_162__ == 1) and (__compiler_switch_162__ == 3) then
+						local __compiler_switch_190__ = a;
+						if (__compiler_switch_190__ == 1) and (__compiler_switch_190__ == 3) then
 						repeat
 							if a == 1 then
 								break;
 							end;
 							break;
 						until 0 ~= 0;
-						elseif __compiler_switch_162__ == 2 then
+						elseif __compiler_switch_190__ == 2 then
 						else
 						end;
-						local __compiler_foreach_175__ = (def):GetEnumerator();
-						while __compiler_foreach_175__:MoveNext() do
-							i = __compiler_foreach_175__.Current;
-							TopLevel.Child2.Bar.s_Test = TopLevel.Child2.Bar.s_Test + i;
+						local __compiler_foreach_203__ = (def):GetEnumerator();
+						while __compiler_foreach_203__:MoveNext() do
+							i = __compiler_foreach_203__.Current;
+							TopLevel.Child2.Bar.s_Test = TopLevel.Child2.Bar.s_Test + (function() local v = hh; if v == nil then return nil; else return v[i + 1]; end; end)();
 						end;
 						self:Test__Arr_System_Int32(wraparray{1, 2, 3});
 						self:Test__Arr_System_Int32(wraparray{1, 2, 3});
@@ -129,6 +131,7 @@ TopLevel = {
 };
 
 function main()
+	TopLevel.Child2.Bar:cctor();
 	return TopLevel.Child2.Bar;
 end;
 --local obj = TopLevel.Child2.Bar:new();

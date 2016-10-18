@@ -25,10 +25,11 @@ namespace RoslynTool.CsToLua
         internal string ClassName = string.Empty;
         internal string BaseNamespace = string.Empty;
         internal string BaseClassName = string.Empty;
-
+        
         internal HashSet<string> References = new HashSet<string>();
 
         internal INamedTypeSymbol SemanticInfo = null;
+
         internal StringBuilder CurrentSourceCodeBuilder = null;
 
         internal StringBuilder BeforeOuterCodeBuilder = new StringBuilder();

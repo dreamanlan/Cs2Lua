@@ -14,6 +14,8 @@ namespace RoslynTool.CsToLua
     internal class ClassSymbolInfo
     {
         internal string ClassKey = string.Empty;
+        internal bool ExistConstructor = false;
+        internal bool ExistStaticConstructor = false;
         internal INamedTypeSymbol TypeSymbol = null;
         internal List<IFieldSymbol> FieldSymbols = new List<IFieldSymbol>();
         internal List<IMethodSymbol> MethodSymbols = new List<IMethodSymbol>();
@@ -25,6 +27,8 @@ namespace RoslynTool.CsToLua
         {
             string ns = ClassInfo.GetNamespaces(typeSym);
             ClassKey = (string.IsNullOrEmpty(ns) ? string.Empty : ns + ".") + typeSym.Name;
+            ExistConstructor = false;
+            ExistStaticConstructor = false;
 
             TypeSymbol = typeSym;
             foreach (var sym in TypeSymbol.GetMembers()) {
@@ -32,9 +36,14 @@ namespace RoslynTool.CsToLua
                 if (null != fsym) {
                     FieldSymbols.Add(fsym);
                     continue;
-                }
+                }                
                 var msym = sym as IMethodSymbol;
                 if (null != msym) {
+                    if (msym.MethodKind == MethodKind.Constructor) {
+                        ExistConstructor = true;
+                    } else if (msym.MethodKind == MethodKind.StaticConstructor) {
+                        ExistStaticConstructor = true;
+                    }
                     MethodSymbols.Add(msym);
                     if (!SymbolOverloadFlags.ContainsKey(msym.Name)) {
                         SymbolOverloadFlags.Add(msym.Name, false);
@@ -62,11 +71,11 @@ namespace RoslynTool.CsToLua
         {
             get { return m_AssemblySymbol; }
         }
-        internal Dictionary<string, Microsoft.CodeAnalysis.INamespaceSymbol> NamespaceSymbols
+        internal Dictionary<string, INamespaceSymbol> NamespaceSymbols
         {
             get { return m_NamespaceSymbols; }
         }
-        internal Dictionary<string, RoslynTool.CsToLua.ClassSymbolInfo> ClassSymbols
+        internal Dictionary<string, ClassSymbolInfo> ClassSymbols
         {
             get { return m_ClassSymbols; }
         }
@@ -122,7 +131,7 @@ namespace RoslynTool.CsToLua
         private Dictionary<string, INamespaceSymbol> m_NamespaceSymbols = new Dictionary<string, INamespaceSymbol>();
         private Dictionary<string, ClassSymbolInfo> m_ClassSymbols = new Dictionary<string, ClassSymbolInfo>();
 
-        internal string CalcMethodMangling(IMethodSymbol methodSym)
+        internal static string CalcMethodMangling(IMethodSymbol methodSym)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(methodSym.Name);

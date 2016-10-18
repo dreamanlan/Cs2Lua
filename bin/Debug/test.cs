@@ -15,9 +15,26 @@ namespace TopLevel
     
     namespace Child1 
     {         
-        delegate void SimpleEventHandler();
+        class GenericClass<T> where T : new()
+        {
+            public void Test(T v)
+            {
+                LuaConsole.Print(v);
+            }
+            public GenericClass()
+            {
+                m_Test = 456;
+            }
+            private int m_Test = 123;
 
-        class Foo 
+            static GenericClass()
+            {
+                s_Test = 9876;
+            }
+            private static int s_Test = 8765;
+        }
+        delegate void SimpleEventHandler();
+        class Foo
         {
             public event SimpleEventHandler OnSimple;
             public SimpleEventHandler OnSimple2;
@@ -41,6 +58,7 @@ namespace TopLevel
                 {
                     c = a + b + args[0];
                 }
+                int? v = args?.Length;
                 if (a < b) {
                     c = b - a;
                 } else if (a >= b) {
@@ -65,6 +83,12 @@ namespace TopLevel
                 c += a + b;
                 d = c * 2;
                 return c;
+            }
+
+            public int Test(int v)
+            {
+                GenericClass<int> f = new GenericClass<int>();
+                f.Test(v);
             }
 
             internal int m_Test = 0;
@@ -122,7 +146,11 @@ namespace TopLevel
                 r += f.Test2(1, 2, ref b, out c);
                 LuaConsole.Print(r, b, c);
                 int v0 = f.Test2(3, 4, ref b, out c);
-                int v;
+                var v = ff ?? f;
+
+                var vv = f?.m_Test;
+                var vvv = f?.Test(123);
+                
                 v = f.Test2(3, 4, ref b, out c);
                 LuaConsole.Print(v, b, c);
                 while (a < 10 + 2) {
@@ -174,7 +202,7 @@ namespace TopLevel
                 }
 
                 foreach (var i in def) {
-                    s_Test += i;
+                    s_Test += hh?[i];
                 }
                 Test(new[] { 1, 2, 3 });
                 Test(new int[] { 1, 2, 3 });

@@ -221,8 +221,10 @@ namespace RoslynTool.CsToLua
         public override void VisitConstructorDeclaration(ConstructorDeclarationSyntax node)
         {
             var ci = m_ClassInfoStack.Peek();
+            bool isStatic = false;
             IMethodSymbol sym = m_Model.GetDeclaredSymbol(node);
             if (null != sym) {
+                isStatic = sym.IsStatic;
                 foreach (var attr in sym.GetAttributes()) {
                     if (attr.AttributeClass.Name == "CLSCompliantAttribute" && attr.ConstructorArguments.Length > 0 && !(bool)attr.ConstructorArguments[0].Value) {
                         return;
@@ -234,7 +236,7 @@ namespace RoslynTool.CsToLua
             mi.Init(sym);
             m_MethodInfoStack.Push(mi);
 
-            SourceCodeBuilder.AppendFormat("{0}ctor = function(self", GetIndentString());
+            SourceCodeBuilder.AppendFormat("{0}{1} = function(self", GetIndentString(), isStatic ? "cctor" : "ctor");
             if (mi.ParamNames.Count > 0) {
                 SourceCodeBuilder.Append(", ");
                 SourceCodeBuilder.Append(string.Join(", ", mi.ParamNames.ToArray()));
@@ -282,6 +284,10 @@ namespace RoslynTool.CsToLua
             SourceCodeBuilder.Append(")");
             SourceCodeBuilder.AppendLine();
             ++m_Indent;
+            if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
+                SourceCodeBuilder.AppendFormat("{0}local {1} = ...;", GetIndentString(), mi.OriginalParamsName);
+                SourceCodeBuilder.AppendLine();
+            }
             foreach (string name in mi.OutParamNames) {
                 SourceCodeBuilder.AppendFormat("{0}local {1} = nil;", GetIndentString(), name);
                 SourceCodeBuilder.AppendLine();
@@ -448,6 +454,14 @@ namespace RoslynTool.CsToLua
             SourceCodeBuilder.Append(", ");
             VisitExpressionSyntax(node.WhenFalse);
             SourceCodeBuilder.Append(")");
+        }
+        public override void VisitConditionalAccessExpression(ConditionalAccessExpressionSyntax node)
+        {
+            SourceCodeBuilder.Append("(function() local v = ");
+            VisitExpressionSyntax(node.Expression);
+            SourceCodeBuilder.Append("; if v == nil then return nil; else return v");
+            VisitExpressionSyntax(node.WhenNotNull);
+            SourceCodeBuilder.Append("; end; end)()");
         }
         public override void VisitThisExpression(ThisExpressionSyntax node)
         {
@@ -999,6 +1013,9 @@ namespace RoslynTool.CsToLua
                 if (null != invocation) {
                     MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
                     if (null != memberAccess) {
+                        if (memberAccess.OperatorToken.Text == "->") {
+                            Log(memberAccess, "Unsupported -> member access, code: {0} location{1}", memberAccess.ToString(), memberAccess.GetLocation().GetLineSpan());
+                        }
                         SymbolInfo symInfo = m_Model.GetSymbolInfo(invocation);
                         IMethodSymbol sym = symInfo.Symbol as IMethodSymbol;
                         if (null == sym) {
@@ -1068,6 +1085,9 @@ namespace RoslynTool.CsToLua
 
                 MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
                 if (null != memberAccess) {
+                    if (memberAccess.OperatorToken.Text == "->") {
+                        Log(memberAccess, "Unsupported -> member access, code: {0} location{1}", memberAccess.ToString(), memberAccess.GetLocation().GetLineSpan());
+                    }
                     if (null == sym) {
                         ReportIllegalSymbol(invocation, symInfo);
                     } else {
@@ -1217,6 +1237,9 @@ namespace RoslynTool.CsToLua
 
             MemberAccessExpressionSyntax memberAccess = node.Expression as MemberAccessExpressionSyntax;
             if (null != memberAccess) {
+                if (memberAccess.OperatorToken.Text == "->") {
+                    Log(memberAccess, "Unsupported -> member access, code: {0} location{1}", memberAccess.ToString(), memberAccess.GetLocation().GetLineSpan());
+                }
                 if (null == sym) {
                     ReportIllegalSymbol(node, symInfo);
                 } else {
@@ -1319,19 +1342,35 @@ namespace RoslynTool.CsToLua
         }
         public override void VisitElementAccessExpression(ElementAccessExpressionSyntax node)
         {
-            var id = node.Expression as IdentifierNameSyntax;
-            if (null != id) {
-                var mi = m_MethodInfoStack.Peek();
-                if (mi.OriginalParamsName == id.Identifier.Text) {
-                    SourceCodeBuilder.Append("({...})[");
-                    VisitArgument(node.ArgumentList.Arguments[0]);
-                    SourceCodeBuilder.Append(" + 1]");
-                    return;
-                }
-            }
-
             var oper = m_Model.GetOperation(node);
             VisitExpressionSyntax(node.Expression);
+            SourceCodeBuilder.Append("[");
+            VisitBracketedArgumentList(node.ArgumentList);
+            if (oper.Kind == OperationKind.ArrayElementReferenceExpression) {
+                SourceCodeBuilder.Append(" + 1]");
+            } else {
+                SourceCodeBuilder.Append("]");
+            }
+        }
+        public override void VisitMemberBindingExpression(MemberBindingExpressionSyntax node)
+        {
+            var symInfo = m_Model.GetSymbolInfo(node.Name);
+            var sym = symInfo.Symbol;
+            var msym = sym as IMethodSymbol;
+            if (null != msym) {
+                string manglingName = NameMangling(msym);
+                if (sym.IsStatic) {
+                    SourceCodeBuilder.AppendFormat(".{0}", manglingName);
+                } else {
+                    SourceCodeBuilder.AppendFormat(":{0}", manglingName);
+                }
+            } else {
+                SourceCodeBuilder.AppendFormat(".{0}", node.Name.Identifier.Text);
+            }
+        }
+        public override void VisitElementBindingExpression(ElementBindingExpressionSyntax node)
+        {
+            var oper = m_Model.GetOperation(node);
             SourceCodeBuilder.Append("[");
             VisitBracketedArgumentList(node.ArgumentList);
             if (oper.Kind == OperationKind.ArrayElementReferenceExpression) {
@@ -1397,9 +1436,14 @@ namespace RoslynTool.CsToLua
                 //脚本定义对象的处理
                 SourceCodeBuilder.AppendFormat("(function() local obj = {0}:new();", fullTypeName);
                 if (null != node.ArgumentList) {
-                    SourceCodeBuilder.Append(" obj:ctor(");
-                    VisitArgumentList(node.ArgumentList);
-                    SourceCodeBuilder.Append(");");
+                    ClassSymbolInfo csi;
+                    if (m_SymbolTable.ClassSymbols.TryGetValue(fullTypeName, out csi)) {
+                        if (csi.ExistConstructor) {
+                            SourceCodeBuilder.Append(" obj:ctor(");
+                            VisitArgumentList(node.ArgumentList);
+                            SourceCodeBuilder.Append(");");
+                        }
+                    }
                 }
                 if (null != node.Initializer) {
                     SourceCodeBuilder.Append(" local self = obj;");
@@ -1482,13 +1526,7 @@ namespace RoslynTool.CsToLua
                 SymbolInfo symbolInfo = m_Model.GetSymbolInfo(node);
                 var sym = symbolInfo.Symbol;
                 if (null != sym) {
-                    if (sym.Kind == SymbolKind.Parameter) {
-                        var paramSym = sym as IParameterSymbol;
-                        if (null != paramSym && paramSym.IsParams) {
-                            SourceCodeBuilder.Append("...");
-                            return;
-                        }
-                    } else if (sym.Kind == SymbolKind.NamedType || sym.Kind == SymbolKind.Namespace) {
+                    if (sym.Kind == SymbolKind.NamedType || sym.Kind == SymbolKind.Namespace) {
                         if (null != sym.ContainingType) {
                             string ns = ClassInfo.GetNamespaces(sym.ContainingType);
                             string fullName;
@@ -1775,6 +1813,9 @@ namespace RoslynTool.CsToLua
                     IMethodSymbol sym = symInfo.Symbol as IMethodSymbol;
                     MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
                     if (null != memberAccess) {
+                        if (memberAccess.OperatorToken.Text == "->") {
+                            Log(memberAccess, "Unsupported -> member access, code: {0} location{1}", memberAccess.ToString(), memberAccess.GetLocation().GetLineSpan());
+                        }
                         if (null == sym) {
                             ReportIllegalSymbol(invocation, symInfo);
                         } else {
@@ -1932,6 +1973,9 @@ namespace RoslynTool.CsToLua
                     IMethodSymbol sym = symInfo.Symbol as IMethodSymbol;
                     MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
                     if (null != memberAccess) {
+                        if (memberAccess.OperatorToken.Text == "->") {
+                            Log(memberAccess, "Unsupported -> member access, code: {0} location{1}", memberAccess.ToString(), memberAccess.GetLocation().GetLineSpan());
+                        }
                         if (null == sym) {
                             ReportIllegalSymbol(invocation, symInfo);
                         } else {
@@ -2126,24 +2170,30 @@ namespace RoslynTool.CsToLua
             return sb.ToString();
         }
 
-        private static HashSet<string> s_UnsupportedUnaryOperators = new HashSet<string> { "~", "&", "*" };
+        private static HashSet<string> s_UnsupportedUnaryOperators = new HashSet<string> { "&", "*" };
         private static HashSet<string> s_UnsupportedBinaryOperators = new HashSet<string> { "&", "|", "^" };
 
         private static Dictionary<string, string> s_UnaryAlias = new Dictionary<string, string> { 
-            {"!","not"}
+            {"!", "not"}
         };
         private static Dictionary<string, string> s_BinaryAlias = new Dictionary<string, string> { 
-            {"!=","~="},
-            {"&&","and"},
-            {"||","or"}
+            {"!=", "~="},
+            {"&&", "and"},
+            {"||", "or"}
         };
 
-        private static Dictionary<string, string> s_UnaryFunctor = new Dictionary<string, string> {};
+        private static Dictionary<string, string> s_UnaryFunctor = new Dictionary<string, string> {
+            {"~", "bitnot"},
+        };
         private static Dictionary<string, string> s_BinaryFunctor = new Dictionary<string, string> {
-            {"<<","lshift"},
-            {">>","rshift"},
+            {"<<", "lshift"},
+            {">>", "rshift"},
+            {"&", "bitand"},
+            {"|", "bitor"},
+            {"^", "bitxor"},
             {"as", "typecast"},
-            {"is", "typeis"}
+            {"is", "typeis"},
+            {"??", "nullablecondexp"}
         };
     }
 }

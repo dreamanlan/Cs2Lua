@@ -62,19 +62,7 @@ namespace RoslynTool.CsToLua
         {
             Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
         }
-        public override void VisitConditionalAccessExpression(ConditionalAccessExpressionSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
         public override void VisitArrowExpressionClause(ArrowExpressionClauseSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitMemberBindingExpression(MemberBindingExpressionSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitElementBindingExpression(ElementBindingExpressionSyntax node)
         {
             Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
         }
