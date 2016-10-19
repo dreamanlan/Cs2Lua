@@ -13,6 +13,7 @@ namespace RoslynTool.CsToLua
     internal class ClassInfo
     {
         internal bool IsEnum = false;
+        internal bool GenerateMain = false;
         internal string Key
         {
             get
@@ -47,6 +48,14 @@ namespace RoslynTool.CsToLua
         {
             IsEnum = sym.TypeKind == TypeKind.Enum;
 
+            GenerateMain = false;
+            foreach (var attr in sym.GetAttributes()) {
+                string fullName = ClassInfo.GetFullName(attr.AttributeClass);
+                if (fullName == "Cs2Lua.MainAttribute") {
+                    GenerateMain = true;
+                }
+            }
+
             Namespace = string.Empty;
             ClassName = string.Empty;
             BaseNamespace = string.Empty;
@@ -59,41 +68,60 @@ namespace RoslynTool.CsToLua
             BaseNamespace = null == sym.BaseType ? string.Empty : GetNamespaces(sym.BaseType);
             BaseClassName = null == sym.BaseType ? string.Empty : sym.BaseType.Name;
         }
-        internal void AddReference(string key)
+        internal void AddReference(ISymbol sym, INamedTypeSymbol curClassSym, string key)
         {
-            if (!string.IsNullOrEmpty(key) && !References.Contains(key) && key != Key) {
-                References.Add(key);
+            var refType = sym as INamedTypeSymbol;
+            if (null == refType) {
+                refType = sym.ContainingType;
+            }
+            if (null != refType && refType != curClassSym && !refType.IsAnonymousType && refType.TypeKind != TypeKind.Delegate) {                
+                if (!string.IsNullOrEmpty(key) && !References.Contains(key) && key != Key) {
+                    bool isValid = true;
+                    foreach (var attr in refType.GetAttributes()) {
+                        string fullName = ClassInfo.GetFullName(attr.AttributeClass);
+                        if (fullName == "Cs2Lua.IgnoreAttribute") {
+                            isValid = false;
+                        }
+                    }
+                    if (isValid) {
+                        References.Add(key);
+                    }
+                }
             }
         }
         internal static string CalcTypeReference(INamedTypeSymbol sym)
         {
-            string key = string.Empty;
-            if (null != sym.ContainingType) {
-                key = ClassInfo.GetNamespaces(sym);
-                key += (string.IsNullOrEmpty(key) ? string.Empty : ".") + sym.Name;
-            } else {
-                key = ClassInfo.GetNamespaces(sym.ContainingNamespace);
-                key += (string.IsNullOrEmpty(key) ? string.Empty : ".") + sym.Name;
-            }
+            string key = ClassInfo.GetFullName(sym);
             return key;
         }
         internal static string CalcMemberReference(ISymbol sym)
         {
-            string key = string.Empty;
-            if (null != sym.ContainingType) {
-                key = ClassInfo.GetNamespaces(sym.ContainingType);
-                key += (string.IsNullOrEmpty(key) ? string.Empty : ".") + sym.ContainingType.Name;
-            } else {
-                key = ClassInfo.GetNamespaces(sym.ContainingNamespace);
-            }
             if (sym.Kind == SymbolKind.NamedType) {
-                key += (string.IsNullOrEmpty(key) ? string.Empty : ".") + sym.Name;
+                string key = ClassInfo.GetFullName(sym);
+                return key;
+            } else {
+                string key = ClassInfo.GetFullName(sym.ContainingType);
+                return key;
             }
-            return key;
         }
-        internal static string GetNamespaces(INamespaceOrTypeSymbol type)
+        internal static string GetFullName(ISymbol type)
+        {
+            return CalcFullName(type, true);
+        }
+        internal static string GetNamespaces(ISymbol type)
+        {
+            if (type.Kind == SymbolKind.Namespace) {
+                return CalcFullName(type, true);
+            } else {
+                return CalcFullName(type, false);
+            }
+        }
+
+        private static string CalcFullName(ISymbol type, bool includeSelfName)
         {
             List<string> list = new List<string>();
+            if (includeSelfName)
+                list.Add(type.Name);
             INamespaceSymbol ns = type.ContainingNamespace;
             var ct = type.ContainingType;
             while (null != ct && ct.Name.Length > 0) {
@@ -101,31 +129,6 @@ namespace RoslynTool.CsToLua
                 ns = ct.ContainingNamespace;
                 ct = ct.ContainingType;
             }
-            while (null != ns && ns.Name.Length > 0) {
-                list.Insert(0, ns.Name);
-                ns = ns.ContainingNamespace;
-            }
-            return string.Join(".", list.ToArray());
-        }
-        internal static string GetNamespaces(INamedTypeSymbol type)
-        {
-            List<string> list = new List<string>();
-            INamespaceSymbol ns = type.ContainingNamespace;
-            var ct = type.ContainingType;
-            while (null != ct && ct.Name.Length > 0) {
-                list.Insert(0, ct.Name);
-                ns = ct.ContainingNamespace;
-                ct = ct.ContainingType;
-            }
-            while (null != ns && ns.Name.Length > 0) {
-                list.Insert(0, ns.Name);
-                ns = ns.ContainingNamespace;
-            }
-            return string.Join(".", list.ToArray());
-        }
-        internal static string GetNamespaces(INamespaceSymbol ns)
-        {
-            List<string> list = new List<string>();
             while (null != ns && ns.Name.Length > 0) {
                 list.Insert(0, ns.Name);
                 ns = ns.ContainingNamespace;

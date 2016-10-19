@@ -1,7 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[System.CLSCompliant(false)]
+
+[Cs2Lua.Ignore]
 class LuaConsole
 {
     public static void Print(params object[] args)
@@ -21,7 +22,7 @@ class LuaConsole
     }
 }
 
-[System.CLSCompliant(false)]
+[Cs2Lua.Ignore]
 class LuaString
 {
     public static string Format(string str, params object[] args)
@@ -32,6 +33,7 @@ class LuaString
 
 delegate void HandleDelegation();
 
+[Cs2Lua.Main]
 class MyScript
 {
     public System.Action OnHandle0;

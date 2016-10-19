@@ -1,4 +1,6 @@
 require "utility";
+require "LuaString_Format";
+require "HandleDelegation_Invoke";
 
 MyScript = {
 	GetString = function()
@@ -84,7 +86,7 @@ MyScript = {
 					local cube = UnityEngine.GameObject.CreatePrimitive(3);
 					cube.transform.position = UnityEngine.Vector3(typecast(UnityEngine.Mathf.Cos(i / self.max * 3.141593 * 2), "Single") * self.r, typecast(UnityEngine.Mathf.Sin(i / self.max * 3.141593 * 2), "Single") * self.r, 0);
 					cube.transform:SetParent(self.root.transform);
-					local mat = cube:GetComponent(UnityEngine.Renderer).material;
+					local mat = cube:GetComponent(UnityEngine.Renderer.Renderer).material;
 					local box = cube:GetComponent(UnityEngine.BoxCollider);
 					UnityEngine.GameObject.Destroy(box);
 					local p = typecast(UnityEngine.GameObject.Instantiate(P, UnityEngine.Vector3.zero, UnityEngine.Quaternion.identity), UnityEngine.GameObject);
@@ -120,9 +122,5 @@ MyScript = {
 		return defineclass(static, static_props, instance, instance_props);
 	end,
 };
-
-function main()
-	return MyScript;
-end;
 
 return MyScript:defineClass();

@@ -1,4 +1,4 @@
-local write = io.write;
+--local write = io.write;
 require "utility";
 
 Mandelbrot = {
@@ -60,10 +60,4 @@ Mandelbrot = {
 	end,
 };
 
-function main()
-	return Mandelbrot;
-end;
-
-Mandelbrot:defineClass();
-
-Mandelbrot.Exec();
+return Mandelbrot:defineClass();--Mandelbrot.Exec();

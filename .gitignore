@@ -52,4 +52,5 @@ obj
 *.suo
 *.user
 *.opensdf
+Cs2LuaUtility/obj
 Test/obj

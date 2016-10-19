@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-[System.CLSCompliant(false)]
+[Cs2Lua.Ignore]
 class LuaConsole
 {
     public static void Print(params object[] args)
@@ -26,7 +26,12 @@ namespace TopLevel
             public int Prop
             {
                 get { return 1; }
-                set { m_Test = 2; }
+                set { m_Test = value; }
+            }
+            public int PropErr
+            {
+                get;
+                set;
             }
             public void Test(T v)
             {
@@ -125,10 +130,10 @@ namespace TopLevel
             Two,
             Three,
         }
-        [System.CLSCompliant(false)]
+        [Cs2Lua.Ignore]
         struct Point
         {
-            [System.CLSCompliant(true)]
+            [Cs2Lua.Ignore]
             public static float X;
             public static float Y;
         }

@@ -25,8 +25,7 @@ namespace RoslynTool.CsToLua
 
         internal void Init(INamedTypeSymbol typeSym)
         {
-            string ns = ClassInfo.GetNamespaces(typeSym);
-            ClassKey = (string.IsNullOrEmpty(ns) ? string.Empty : ns + ".") + typeSym.Name;
+            ClassKey = ClassInfo.GetFullName(typeSym);
             ExistConstructor = false;
             ExistStaticConstructor = false;
 
@@ -153,13 +152,11 @@ namespace RoslynTool.CsToLua
                 if (param.Type.Kind == SymbolKind.ArrayType) {
                     sb.Append("Arr_");
                     var arrSym = param.Type as IArrayTypeSymbol;
-                    string ns = ClassInfo.GetNamespaces(arrSym.ElementType);
-                    string fn = (string.IsNullOrEmpty(ns) ? string.Empty : ns.Replace('.', '_') + "_") + arrSym.ElementType.Name;
-                    sb.Append(fn);
+                    string fn = ClassInfo.GetFullName(arrSym.ElementType);
+                    sb.Append(fn.Replace('.', '_'));
                 } else {
-                    string ns = ClassInfo.GetNamespaces(param.Type);
-                    string fn = (string.IsNullOrEmpty(ns) ? string.Empty : ns.Replace('.', '_') + "_") + param.Type.Name;
-                    sb.Append(fn);
+                    string fn = ClassInfo.GetFullName(param.Type);
+                    sb.Append(fn.Replace('.', '_'));
                 }
             }
             return sb.ToString();

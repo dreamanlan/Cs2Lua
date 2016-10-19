@@ -142,7 +142,7 @@ function defineclass(static, static_props, instance, instance_props)
     local class_props = static_props or {};
     setmetatable(class, 
         {            
-            __call = function(...)
+            __call = function()
                 local obj = instance or {};
                 local obj_props = instance_props or {};
                 setmetatable(obj,
@@ -180,10 +180,6 @@ function defineclass(static, static_props, instance, instance_props)
                             rawset(t, k, v);
                         end,
                     });
-
-                if obj.ctor then
-                    obj:ctor(...);
-                end;
 
                 return obj;
             end,

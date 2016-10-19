@@ -65,28 +65,34 @@ namespace RoslynTool.CsToLua
                 files.Add(srcFile);
             }
 
+            bool haveError = false;
             List<SyntaxTree> trees = new List<SyntaxTree>();
-            foreach (string file in files) {
-                string filePath = Path.Combine(path, file);
-                string fileName = Path.GetFileNameWithoutExtension(filePath);
-                CSharpParseOptions options = new CSharpParseOptions();
-                options = options.WithPreprocessorSymbols("__LUA__");
-                options = options.WithFeatures(new Dictionary<string, string> { { "IOperation", "true" } });
-                SyntaxTree tree = CSharpSyntaxTree.ParseText(File.ReadAllText(filePath), options, filePath);
-                trees.Add(tree);
-                var diags = tree.GetDiagnostics();
-                bool haveError = false;
-                using (StreamWriter sw = new StreamWriter(Path.Combine(logDir, string.Format("SyntaxError_{0}.log", fileName)))) {
+            using (StreamWriter sw = new StreamWriter(Path.Combine(logDir, "SyntaxError.log"))) {
+                foreach (string file in files) {
+                    string filePath = Path.Combine(path, file);
+                    string fileName = Path.GetFileNameWithoutExtension(filePath);
+                    CSharpParseOptions options = new CSharpParseOptions();
+                    options = options.WithPreprocessorSymbols("__LUA__");
+                    options = options.WithFeatures(new Dictionary<string, string> { { "IOperation", "true" } });
+                    SyntaxTree tree = CSharpSyntaxTree.ParseText(File.ReadAllText(filePath), options, filePath);
+                    trees.Add(tree);
+
+                    var diags = tree.GetDiagnostics();
+                    bool first = true;
                     foreach (var diag in diags) {
+                        if (first) {
+                            sw.WriteLine("============<<<Syntax Error:{0}>>>============", fileName);
+                            first = false;
+                        }
                         string msg = diag.ToString();
                         sw.WriteLine("{0}", msg);
                         haveError = true;
                     }
-                    sw.Close();
                 }
-                if (haveError) {
-                    return;
-                }
+                sw.Close();
+            }
+            if (haveError) {
+                return;
             }
 
             List<MetadataReference> refs = new List<MetadataReference>();
@@ -95,6 +101,7 @@ namespace RoslynTool.CsToLua
             refs.Add(MetadataReference.CreateFromFile(typeof(System.Collections.Immutable.ImmutableArray).Assembly.Location));
             refs.Add(MetadataReference.CreateFromFile(typeof(SyntaxTree).Assembly.Location));
             refs.Add(MetadataReference.CreateFromFile(typeof(CSharpSyntaxTree).Assembly.Location));
+            refs.Add(MetadataReference.CreateFromFile(typeof(Cs2Lua.MainAttribute).Assembly.Location));
             foreach (var pair in refByPaths) {
                 string fullPath = Path.Combine(path, pair.Key);
                 var arr = System.Collections.Immutable.ImmutableArray.Create(pair.Value);
@@ -119,53 +126,66 @@ namespace RoslynTool.CsToLua
             SymbolTable symTable = new SymbolTable(compilation.Assembly);
             Dictionary<string, List<ClassInfo>> classes = new Dictionary<string, List<ClassInfo>>();
             MergedNamespaceInfo toplevelMni = new MergedNamespaceInfo();
-            foreach (SyntaxTree tree in trees) {
-                string fileName = Path.GetFileNameWithoutExtension(tree.FilePath);
-                var root = tree.GetRoot();
-                SemanticModel model = compilation.GetSemanticModel(tree, true);
-                var diags = model.GetDiagnostics();
-                using (StreamWriter sw = new StreamWriter(Path.Combine(logDir, string.Format("SemanticError_{0}.log", fileName)))) {
-                    foreach (var diag in diags) {
-                        string msg = diag.ToString();
-                        sw.WriteLine("{0}", msg);
-                    }
-                    sw.Close();
-                }
-                CsLuaTranslater csToLua = new CsLuaTranslater(model, symTable);
-                csToLua.Translate(root);
-                csToLua.SaveLog(Path.Combine(logDir, string.Format("Translation_{0}.log", fileName)));
+            using (StreamWriter sw = new StreamWriter(Path.Combine(logDir, "SemanticError.log"))) {
+                using (StreamWriter sw2 = new StreamWriter(Path.Combine(logDir, "Translation.log"))) {
+                    foreach (SyntaxTree tree in trees) {
+                        string fileName = Path.GetFileNameWithoutExtension(tree.FilePath);
+                        var root = tree.GetRoot();
+                        SemanticModel model = compilation.GetSemanticModel(tree, true);
 
-                foreach (var pair in csToLua.ToplevelClasses) {
-                    var key = pair.Key;
-                    var ci = pair.Value;
-
-                    List<ClassInfo> list;
-                    if (!classes.TryGetValue(key, out list)) {
-                        list = new List<ClassInfo>();
-                        classes.Add(key, list);
-                    }
-                    list.Add(ci);
-
-                    string[] nss = key.Split('.');
-                    MergedNamespaceInfo curMni = toplevelMni;
-                    for (int i = 0; i < nss.Length - 1; ++i) {
-                        string nsname = nss[i];
-                        MergedNamespaceInfo mni;
-                        if (!curMni.Namespaces.TryGetValue(nsname, out mni)) {
-                            mni = new MergedNamespaceInfo();
-                            curMni.Namespaces.Add(nsname, mni);
+                        var diags = model.GetDiagnostics();
+                        bool first = true;
+                        foreach (var diag in diags) {
+                            if (first) {
+                                sw.WriteLine("============<<<Semantic Error:{0}>>>============", fileName);
+                                first = false;
+                            }
+                            string msg = diag.ToString();
+                            sw.WriteLine("{0}", msg);
                         }
-                        mni.Name = nsname;
-                        curMni = mni;
+
+                        CsLuaTranslater csToLua = new CsLuaTranslater(model, symTable);
+                        csToLua.Translate(root);
+                        if (csToLua.HaveError) {
+                            sw2.WriteLine("============<<<Translation Error:{0}>>>============", fileName);
+                            csToLua.SaveLog(sw2);
+                        }
+
+                        foreach (var pair in csToLua.ToplevelClasses) {
+                            var key = pair.Key;
+                            var ci = pair.Value;
+
+                            List<ClassInfo> list;
+                            if (!classes.TryGetValue(key, out list)) {
+                                list = new List<ClassInfo>();
+                                classes.Add(key, list);
+                            }
+                            list.Add(ci);
+
+                            string[] nss = key.Split('.');
+                            MergedNamespaceInfo curMni = toplevelMni;
+                            for (int i = 0; i < nss.Length - 1; ++i) {
+                                string nsname = nss[i];
+                                MergedNamespaceInfo mni;
+                                if (!curMni.Namespaces.TryGetValue(nsname, out mni)) {
+                                    mni = new MergedNamespaceInfo();
+                                    curMni.Namespaces.Add(nsname, mni);
+                                }
+                                mni.Name = nsname;
+                                curMni = mni;
+                            }
+                            MergedClassInfo mci;
+                            if (!curMni.Classes.TryGetValue(key, out mci)) {
+                                mci = new MergedClassInfo();
+                                mci.Key = key;
+                                curMni.Classes.Add(key, mci);
+                            }
+                            mci.Classes.Add(ci);
+                        }
                     }
-                    MergedClassInfo mci;
-                    if (!curMni.Classes.TryGetValue(key, out mci)) {
-                        mci = new MergedClassInfo();
-                        mci.Key = key;
-                        curMni.Classes.Add(key, mci);
-                    }
-                    mci.Classes.Add(ci);
+                    sw2.Close();
                 }
+                sw.Close();
             }
             foreach (var pair in classes) {
                 StringBuilder sb0 = new StringBuilder();
@@ -221,8 +241,11 @@ namespace RoslynTool.CsToLua
             string[] nss = key.Split('.');
             string className = nss[nss.Length - 1];
 
+            bool generateMain = false;
             foreach (var ci in classes) {
                 sb.Append(ci.BeforeOuterCodeBuilder.ToString());
+                if (ci.GenerateMain)
+                    generateMain = true;
             }
             if (isAlone) {
                 sb.AppendLine("require \"utility\";");
@@ -270,10 +293,18 @@ namespace RoslynTool.CsToLua
 
             if (classes.Count > 0 && !classes[0].IsEnum) {
                 
-                sb.AppendFormat("{0}newObject = function(self, ...)", GetIndentString(indent));
+                sb.AppendFormat("{0}newObject = function(self)", GetIndentString(indent));
                 sb.AppendLine();
                 ++indent;
-                sb.AppendFormat("{0}return self(...);", GetIndentString(indent));
+                sb.AppendFormat("{0}local obj = self();", GetIndentString(indent));
+                sb.AppendLine();
+                sb.AppendFormat("{0}if obj.ctor then", GetIndentString(indent));
+                sb.AppendLine();
+                sb.AppendFormat("{0}obj.ctor();", GetIndentString(indent + 1));
+                sb.AppendLine();
+                sb.AppendFormat("{0}end;", GetIndentString(indent));
+                sb.AppendLine();
+                sb.AppendFormat("{0}return obj;", GetIndentString(indent));
                 sb.AppendLine();
                 --indent;
                 sb.AppendFormat("{0}end,", GetIndentString(indent));
@@ -372,11 +403,13 @@ namespace RoslynTool.CsToLua
 
             if (isAlone) {
                 sb.AppendLine();
-                sb.AppendLine("function main()");
-                sb.AppendFormat("\treturn {0};", key);
-                sb.AppendLine();
-                sb.AppendLine("end;");
-                sb.AppendLine();
+                if (generateMain) {
+                    sb.AppendLine("function main()");
+                    sb.AppendFormat("\treturn {0};", key);
+                    sb.AppendLine();
+                    sb.AppendLine("end;");
+                    sb.AppendLine();
+                }
                 sb.AppendFormat("return {0}:defineClass();", key);
             }
 
