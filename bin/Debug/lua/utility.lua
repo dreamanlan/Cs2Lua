@@ -21,11 +21,7 @@ function condexp(cv,tv,fv)
 end;
 
 function nullablecondexp(v1,v2)
-	if v1~=nil then
-		return v1;
-	else
-		return v2;
-	end;
+	return v1 or v2;
 end;
 
 function bitnot(v)
@@ -140,3 +136,86 @@ LuaString = {
     return string.format(fmt,...);
   end,
 };
+
+function defineclass(static, static_props, instance, instance_props)
+    local class = static or {};
+    local class_props = static_props or {};
+    setmetatable(class, 
+        {            
+            __call = function(...)
+                local obj = instance or {};
+                local obj_props = instance_props or {};
+                setmetatable(obj,
+                    {
+                        __index = function(t, k)
+                            local ret;
+                            ret = class[k];
+                            if nil == ret then
+                              ret = obj_props[k];
+                              if nil ~= ret then
+                                if nil ~= ret.get then
+                                  ret = ret:get();
+                                else
+                                  ret = nil;
+                                end;
+                              end;
+                            end;
+                            return ret;
+                        end,
+
+                        __newindex = function(t, k, v)
+                            local ret;
+                            ret = class[k];
+                            if ret ~= nil then
+                              class[k] = v;
+                              return;
+                            end;
+                            ret = obj_props[k];
+                            if nil ~= ret then
+                              if nil ~= ret.set then
+                                ret:set(v);
+                              end;
+                              return;
+                            end;
+                            rawset(t, k, v);
+                        end,
+                    });
+
+                if obj.ctor then
+                    obj:ctor(...);
+                end;
+
+                return obj;
+            end,
+            
+            __index = function(t, k)
+                local ret;
+                ret = class_props[k];
+                if nil ~= ret then
+                  if nil ~= ret.get then
+                    ret = ret:get();
+                  else
+                    ret = nil;
+                  end;                           
+                end;
+                return ret;
+            end,
+
+            __newindex = function(t, k, v)
+                local ret;
+                ret = class_props[k];
+                if ret ~= nil then
+                  if nil ~= ret.set then
+                    ret:set(v);
+                  end;
+                  return;
+                end;    
+                rawset(t, k, v);
+            end,
+        }
+    );
+    if class.cctor then
+      class:cctor();
+    end;
+    return class;
+end;

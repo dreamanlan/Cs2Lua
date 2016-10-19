@@ -6,26 +6,56 @@ TopLevel = {
 			cctor = function(self)
 				TopLevel.Child1.GenericClass.s_Test = 9876;
 			end,
+
+			OnAction0 = nil,
+			OnAction1 = nil,
 			s_Test = 8765,
-			new = function(self)
-				local o = {
+
+			__define__ = function(self)
+				local static = self;
+
+				local static_props = {
+				};
+
+				local instance = {
 					Test = function(self, v)
 						LuaConsole.Print(v);
+						local fs = System.IO.StreamWriter(path);
+						LuaConsole.Print(fs:ToString());
+						fs:Dispose();
+						local s = "test";
+						local d = InputField();
+						local obj = (function() local obj = wrapdictionary{}; obj.a = 123; obj.b = 456; return obj; end)();
+						LuaConsole.Print(obj.a);
 					end,
 					ctor = function(self)
 						self.m_Test = 456;
 					end,
+
+					OnAction2 = nil,
+					OnAction3 = nil,
 					m_Test = 123,
 				};
-				setmetatable(o, self);
-				self.__index = self;
-				return o;
+
+				local instance_props = {
+					Prop = {
+						get = function(slef)
+							return 1;
+						end,
+						set = function(self, value)
+							self.m_Test = 2;
+						end,
+					},
+				};
+
+				return defineclass(static, static_props, instance, instance_props);
 			end,
 		},
 	},
 };
 
 function main()
-	TopLevel.Child1.GenericClass:cctor();
 	return TopLevel.Child1.GenericClass;
 end;
+
+return TopLevel.Child1.GenericClass:__define__();

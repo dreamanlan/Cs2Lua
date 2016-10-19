@@ -14,51 +14,11 @@ namespace RoslynTool.CsToLua
     internal partial class CsLuaTranslater
     {
         #region 未计划支持的语法特性
-        public override void VisitGenericName(GenericNameSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitTypeParameterList(TypeParameterListSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitTypeParameter(TypeParameterSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitTypeParameterConstraintClause(TypeParameterConstraintClauseSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitTypeArgumentList(TypeArgumentListSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitTypeConstraint(TypeConstraintSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitConstructorConstraint(ConstructorConstraintSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitClassOrStructConstraint(ClassOrStructConstraintSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
         public override void VisitIndexerDeclaration(IndexerDeclarationSyntax node)
         {
             Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
         }
         public override void VisitBracketedParameterList(BracketedParameterListSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitAccessorList(AccessorListSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitAccessorDeclaration(AccessorDeclarationSyntax node)
         {
             Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
         }
@@ -79,14 +39,6 @@ namespace RoslynTool.CsToLua
             Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
         }
         public override void VisitOperatorDeclaration(OperatorDeclarationSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitAnonymousObjectMemberDeclarator(AnonymousObjectMemberDeclaratorSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitAnonymousObjectCreationExpression(AnonymousObjectCreationExpressionSyntax node)
         {
             Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
         }
@@ -135,26 +87,6 @@ namespace RoslynTool.CsToLua
             Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
         }
         public override void VisitImplicitElementAccess(ImplicitElementAccessSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitNameColon(NameColonSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitAliasQualifiedName(AliasQualifiedNameSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitExternAliasDirective(ExternAliasDirectiveSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitNameEquals(NameEqualsSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitUsingStatement(UsingStatementSyntax node)
         {
             Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
         }
@@ -326,28 +258,64 @@ namespace RoslynTool.CsToLua
         {
             Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
         }
+        #endregion
+
+        #region 借助语义信息处理过的语法部分，如果执行到则说明处理不完整
+        public override void VisitGenericName(GenericNameSyntax node)
+        {
+            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+        }
+        public override void VisitTypeParameterList(TypeParameterListSyntax node)
+        {
+            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+        }
+        public override void VisitTypeParameter(TypeParameterSyntax node)
+        {
+            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+        }
+        public override void VisitTypeParameterConstraintClause(TypeParameterConstraintClauseSyntax node)
+        {
+            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+        }
+        public override void VisitTypeArgumentList(TypeArgumentListSyntax node)
+        {
+            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+        }
+        public override void VisitTypeConstraint(TypeConstraintSyntax node)
+        {
+            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+        }
+        public override void VisitConstructorConstraint(ConstructorConstraintSyntax node)
+        {
+            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+        }
+        public override void VisitClassOrStructConstraint(ClassOrStructConstraintSyntax node)
+        {
+            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+        }
         public override void VisitGlobalStatement(GlobalStatementSyntax node)
         {
             Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
         }
-        #endregion
-
-        #region 借助语义信息处理过的语法部分，如果执行到则说明处理不完整
+        public override void VisitAliasQualifiedName(AliasQualifiedNameSyntax node)
+        {
+            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+        }
         public override void VisitBaseList(BaseListSyntax node)
         {
-            Log(node, "Unhandle syntax part: {0}\n{1}", node.ToString(), Environment.StackTrace);
+            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
         }
         public override void VisitSimpleBaseType(SimpleBaseTypeSyntax node)
         {
-            Log(node, "Unhandle syntax part: {0}\n{1}", node.ToString(), Environment.StackTrace);
+            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
         }
         public override void VisitParameterList(ParameterListSyntax node)
         {
-            Log(node, "Unhandle syntax part: {0}\n{1}", node.ToString(), Environment.StackTrace);
+            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
         }
         public override void VisitParameter(ParameterSyntax node)
         {
-            Log(node, "Unhandle syntax part: {0}\n{1}", node.ToString(), Environment.StackTrace);
+            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
         }
         public override void VisitAttributeList(AttributeListSyntax node)
         {
@@ -372,6 +340,18 @@ namespace RoslynTool.CsToLua
         #endregion
 
         #region 不用单独处理的语法部分
+        public override void VisitAccessorList(AccessorListSyntax node)
+        { }
+        public override void VisitAccessorDeclaration(AccessorDeclarationSyntax node)
+        { }
+        public override void VisitEventDeclaration(EventDeclarationSyntax node)
+        {/*Cs2Lua不支持自定义add/remove的event，这一情形的检查在上层语法里处理，所以这里也不需要单独处理*/}
+        public override void VisitNameColon(NameColonSyntax node)
+        { }
+        public override void VisitNameEquals(NameEqualsSyntax node)
+        { }
+        public override void VisitAnonymousObjectMemberDeclarator(AnonymousObjectMemberDeclaratorSyntax node)
+        { }
         public override void VisitSwitchSection(SwitchSectionSyntax node)
         { }
         public override void VisitCaseSwitchLabel(CaseSwitchLabelSyntax node)
@@ -380,6 +360,8 @@ namespace RoslynTool.CsToLua
         { }
         public override void VisitFieldDeclaration(FieldDeclarationSyntax node)
         { }
+        public override void VisitEventFieldDeclaration(EventFieldDeclarationSyntax node)
+        { }
         public override void VisitArrayType(ArrayTypeSyntax node)
         { }
         public override void VisitArrayRankSpecifier(ArrayRankSpecifierSyntax node)
@@ -387,6 +369,8 @@ namespace RoslynTool.CsToLua
         public override void VisitDelegateDeclaration(DelegateDeclarationSyntax node)
         { }
         public override void VisitUsingDirective(UsingDirectiveSyntax node)
+        { }
+        public override void VisitExternAliasDirective(ExternAliasDirectiveSyntax node)
         { }
         public override void VisitSkippedTokensTrivia(SkippedTokensTriviaSyntax node)
         { }

@@ -1,9 +1,14 @@
-test.cs(5,7): warning CS3021: 'LuaConsole' does not need a CLSCompliant attribute because the assembly does not have a CLSCompliant attribute
-test.cs(109,16): warning CS3021: 'Point' does not need a CLSCompliant attribute because the assembly does not have a CLSCompliant attribute
-test.cs(112,33): warning CS3014: 'Point.X' cannot be marked as CLS-compliant because the assembly does not have a CLSCompliant attribute
-test.cs(124,21): error CS0815: Cannot assign anonymous method to an implicitly-typed variable
-test.cs(88,24): error CS0161: 'Foo.Test(int)': not all code paths return a value
-test.cs(137,19): error CS0070: The event 'Foo.OnSimple' can only appear on the left hand side of += or -= (except when used from within the type 'Foo')
-test.cs(154,21): error CS0029: Cannot implicitly convert type 'int' to 'TopLevel.Child1.Foo'
-test.cs(205,21): error CS0266: Cannot implicitly convert type 'int?' to 'int'. An explicit conversion exists (are you missing a cast?)
-test.cs(174,21): warning CS0162: Unreachable code detected
+test.cs(15,18): error CS0430: The extern alias 'ui' was not specified in a /reference option
+test.cs(6,7): warning CS3021: 'LuaConsole' does not need a CLSCompliant attribute because the assembly does not have a CLSCompliant attribute
+test.cs(129,16): warning CS3021: 'Point' does not need a CLSCompliant attribute because the assembly does not have a CLSCompliant attribute
+test.cs(132,33): warning CS3014: 'Point.X' cannot be marked as CLS-compliant because the assembly does not have a CLSCompliant attribute
+test.cs(144,21): error CS0815: Cannot assign anonymous method to an implicitly-typed variable
+test.cs(34,50): error CS0103: The name 'path' does not exist in the current context
+test.cs(38,21): error CS0234: The type or namespace name 'InputField' does not exist in the namespace 'ui' (are you missing an assembly reference?)
+test.cs(38,44): error CS0234: The type or namespace name 'InputField' does not exist in the namespace 'ui' (are you missing an assembly reference?)
+test.cs(37,39): warning CS0219: The variable 's' is assigned but its value is never used
+test.cs(106,24): error CS0161: 'Foo.Test(int)': not all code paths return a value
+test.cs(157,19): error CS0070: The event 'Foo.OnSimple' can only appear on the left hand side of += or -= (except when used from within the type 'Foo')
+test.cs(174,21): error CS0029: Cannot implicitly convert type 'int' to 'TopLevel.Child1.Foo'
+test.cs(225,21): error CS0266: Cannot implicitly convert type 'int?' to 'int'. An explicit conversion exists (are you missing a cast?)
+test.cs(194,21): warning CS0162: Unreachable code detected

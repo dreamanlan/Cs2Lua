@@ -1,4 +1,4 @@
---local write = io.write;
+local write = io.write;
 require "utility";
 
 Mandelbrot = {
@@ -38,16 +38,32 @@ Mandelbrot = {
 			y = y + 1;
 		end;
 	end,
-	new = function(self)
-		local o = {
+
+
+	newObject = function(self, ...)
+		return self(...);
+	end,
+	defineClass = function(self)
+		local static = self;
+
+		local static_props = {
 		};
-		setmetatable(o, self);
-		self.__index = self;
-		return o;
+
+		local instance = {
+
+		};
+
+		local instance_props = {
+		};
+
+		return defineclass(static, static_props, instance, instance_props);
 	end,
 };
 
 function main()
 	return Mandelbrot;
 end;
---Mandelbrot.Exec();
+
+Mandelbrot:defineClass();
+
+Mandelbrot.Exec();

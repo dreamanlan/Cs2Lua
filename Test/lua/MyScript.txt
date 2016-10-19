@@ -4,8 +4,18 @@ MyScript = {
 	GetString = function()
 		return "def";
 	end,
-	new = function(self)
-		local o = {
+
+
+	newObject = function(self, ...)
+		return self(...);
+	end,
+	defineClass = function(self)
+		local static = self;
+
+		local static_props = {
+		};
+
+		local instance = {
 			Init = function(self)
 				local s = "test test test from cs2lua !";
 				UnityEngine.Debug.Log(s);
@@ -88,8 +98,10 @@ MyScript = {
 			Handle = function(self)
 				UnityEngine.Debug.Log("callback");
 			end,
+
 			OnHandle0 = nil,
 			OnHandle = nil,
+			OnHandleEvent = nil,
 			root = nil,
 			r = 10,
 			max = 400,
@@ -101,12 +113,16 @@ MyScript = {
 			colors = wraparray{UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black},
 			dict = (function() local obj = wrapdictionary{}; return obj; end)(),
 		};
-		setmetatable(o, self);
-		self.__index = self;
-		return o;
+
+		local instance_props = {
+		};
+
+		return defineclass(static, static_props, instance, instance_props);
 	end,
 };
 
 function main()
 	return MyScript;
 end;
+
+return MyScript:defineClass();

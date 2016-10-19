@@ -3,11 +3,19 @@ require "utility";
 TopLevel = {
 	Child1 = {
 		Foo = {
-			new = function(self)
-				local o = {
+
+
+			__define__ = function(self)
+				local static = self;
+
+				local static_props = {
+				};
+
+				local instance = {
 					ctor = function(self)
+						self:ctor__System_Int32(0);
 					end,
-					ctor = function(self, v)
+					ctor__System_Int32 = function(self, v)
 						self.m_Test = v;
 					end,
 					Test__System_Int32__Ref_System_Int32__Out_System_Int32__Arr_System_Int32 = function(self, a, b, ...)
@@ -22,7 +30,7 @@ TopLevel = {
 						self.m_Test = a + b + 123;
 						b = condexp(a < b, a, b);
 						if a > 0 then
-							c = a + b + args[0 + 1];
+							c = a + b + args[1];
 						end;
 						local v = (function() local v = args; if v == nil then return nil; else return v.Length; end; end)();
 						if a < b then
@@ -51,15 +59,25 @@ TopLevel = {
 						return c, c, d;
 					end,
 					Test__System_Int32 = function(self, v)
-						local f = (function() local obj = TopLevel.Child1.GenericClass:new(); obj:ctor(); return obj; end)();
+						local f = TopLevel.Child1.GenericClass();
 						f:Test(v);
+						OnSimple = (function()
+						end);
+						do
+							self.OnSimple2 = (function()
+							end);
+						end;
 					end,
+
+					OnSimple = nil,
 					OnSimple2 = nil,
 					m_Test = 0,
 				};
-				setmetatable(o, self);
-				self.__index = self;
-				return o;
+
+				local instance_props = {
+				};
+
+				return defineclass(static, static_props, instance, instance_props);
 			end,
 		},
 	},
@@ -68,3 +86,5 @@ TopLevel = {
 function main()
 	return TopLevel.Child1.Foo;
 end;
+
+return TopLevel.Child1.Foo:__define__();

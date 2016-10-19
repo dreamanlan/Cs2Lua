@@ -37,13 +37,16 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
+    <Reference Include="System.Data">
+      <Aliases>global</Aliases>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
       <HintPath>..\dep\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>..\dep\UnityEngine.UI.dll</HintPath>
+      <Aliases>global</Aliases>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -45,10 +45,13 @@ namespace RoslynTool.CsToLua
                         ExistStaticConstructor = true;
                     }
                     MethodSymbols.Add(msym);
-                    if (!SymbolOverloadFlags.ContainsKey(msym.Name)) {
-                        SymbolOverloadFlags.Add(msym.Name, false);
+                    string name = msym.Name;
+                    if (name[0] == '.')
+                        name = name.Substring(1);
+                    if (!SymbolOverloadFlags.ContainsKey(name)) {
+                        SymbolOverloadFlags.Add(name, false);
                     } else {
-                        SymbolOverloadFlags[msym.Name] = true;
+                        SymbolOverloadFlags[name] = true;
                     }
                     continue;
                 }
@@ -82,11 +85,13 @@ namespace RoslynTool.CsToLua
         internal string NameMangling(IMethodSymbol sym)
         {
             string ret = sym.Name;
+            if (ret[0] == '.')
+                ret = ret.Substring(1);
             string key = ClassInfo.CalcTypeReference(sym.ContainingType);
             ClassSymbolInfo csi;
             if (m_ClassSymbols.TryGetValue(key, out csi)) {
                 bool isMangling;
-                csi.SymbolOverloadFlags.TryGetValue(sym.Name, out isMangling);
+                csi.SymbolOverloadFlags.TryGetValue(ret, out isMangling);
                 if (isMangling) {
                     ret = CalcMethodMangling(sym);
                 }
@@ -134,7 +139,10 @@ namespace RoslynTool.CsToLua
         internal static string CalcMethodMangling(IMethodSymbol methodSym)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(methodSym.Name);
+            string name = methodSym.Name;
+            if (name[0] == '.')
+                name = name.Substring(1);
+            sb.Append(name);
             foreach (var param in methodSym.Parameters) {
                 sb.Append("__");
                 if (param.RefKind == RefKind.Ref) {

@@ -2,5 +2,5 @@
 ..\..\Test\test2.cs(39,21): error CS0103: The name 'write' does not exist in the current context
 ..\..\Test\test2.cs(43,21): error CS0103: The name 'write' does not exist in the current context
 ..\..\Test\test2.cs(48,13): error CS0103: The name 'print' does not exist in the current context
-..\..\Test\test2.cs(1,1): hidden CS8019: Unnecessary using directive.
 ..\..\Test\test2.cs(2,1): hidden CS8019: Unnecessary using directive.
+..\..\Test\test2.cs(1,1): hidden CS8019: Unnecessary using directive.

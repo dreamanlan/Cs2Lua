@@ -31,20 +31,28 @@ namespace RoslynTool.CsToLua
             }
 
             List<string> files = new List<string>();
-            List<string> refByNames = new List<string>();
-            List<string> refByPaths = new List<string>();
+            Dictionary<string, string> refByNames = new Dictionary<string, string>();
+            Dictionary<string, string> refByPaths = new Dictionary<string, string>();
             if (ext == ".csproj") {
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.Load(srcFile);
                 var nodes = SelectNodes(xmlDoc, "ItemGroup", "Reference");
                 foreach (XmlElement node in nodes) {
+                    var aliasesNode = SelectSingleNode(node, "Aliases");
                     var pathNode = SelectSingleNode(node, "HintPath");
                     if (null != pathNode) {
-                        refByPaths.Add(pathNode.InnerText);
+                        if (null != aliasesNode)
+                            refByPaths.Add(pathNode.InnerText, aliasesNode.InnerText);
+                        else
+                            refByPaths.Add(pathNode.InnerText, "global");
                     } else {
                         string val = node.GetAttribute("Include");
-                        if (!string.IsNullOrEmpty(val))
-                            refByNames.Add(val);
+                        if (!string.IsNullOrEmpty(val)) {
+                            if (null != aliasesNode)
+                                refByNames.Add(val, aliasesNode.InnerText);
+                            else
+                                refByNames.Add(val, "global");
+                        }
                     }
                 }
                 nodes = SelectNodes(xmlDoc, "ItemGroup", "Compile");
@@ -87,16 +95,18 @@ namespace RoslynTool.CsToLua
             refs.Add(MetadataReference.CreateFromFile(typeof(System.Collections.Immutable.ImmutableArray).Assembly.Location));
             refs.Add(MetadataReference.CreateFromFile(typeof(SyntaxTree).Assembly.Location));
             refs.Add(MetadataReference.CreateFromFile(typeof(CSharpSyntaxTree).Assembly.Location));
-            foreach (var refByPath in refByPaths) {
-                string fullPath = Path.Combine(path, refByPath);
-                refs.Add(MetadataReference.CreateFromFile(fullPath));
+            foreach (var pair in refByPaths) {
+                string fullPath = Path.Combine(path, pair.Key);
+                var arr = System.Collections.Immutable.ImmutableArray.Create(pair.Value);
+                refs.Add(MetadataReference.CreateFromFile(fullPath, new MetadataReferenceProperties(MetadataImageKind.Assembly, arr)));
             }
-            foreach (var refByName in refByNames) {
+            foreach (var pair in refByNames) {
 #pragma warning disable 618
-                Assembly assembly = Assembly.LoadWithPartialName(refByName);
+                Assembly assembly = Assembly.LoadWithPartialName(pair.Key);
 #pragma warning restore 618
                 if (null != assembly) {
-                    refs.Add(MetadataReference.CreateFromFile(assembly.Location));
+                    var arr = System.Collections.Immutable.ImmutableArray.Create(pair.Value);
+                    refs.Add(MetadataReference.CreateFromFile(assembly.Location, new MetadataReferenceProperties(MetadataImageKind.Assembly, arr)));
                 }
             }
             CSharpCompilationOptions compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
@@ -230,8 +240,9 @@ namespace RoslynTool.CsToLua
                         }
                     }
                 }
-                sb.AppendLine();
             }
+            
+            sb.AppendLine();
 
             int indent = 0;
             for (int i = 0; i < nss.Length - 1; ++i) {
@@ -250,18 +261,50 @@ namespace RoslynTool.CsToLua
             foreach (var ci in classes) {
                 sb.Append(ci.StaticFunctionSourceCodeBuilder.ToString());
             }
+            sb.AppendLine();
             //static field
             foreach (var ci in classes) {
                 sb.Append(ci.StaticFieldSourceCodeBuilder.ToString());
             }
+            sb.AppendLine();
 
             if (classes.Count > 0 && !classes[0].IsEnum) {
+                
+                sb.AppendFormat("{0}newObject = function(self, ...)", GetIndentString(indent));
+                sb.AppendLine();
+                ++indent;
+                sb.AppendFormat("{0}return self(...);", GetIndentString(indent));
+                sb.AppendLine();
+                --indent;
+                sb.AppendFormat("{0}end,", GetIndentString(indent));
+                sb.AppendLine();
 
-                sb.AppendFormat("{0}new = function(self)", GetIndentString(indent));
+                sb.AppendFormat("{0}defineClass = function(self)", GetIndentString(indent));
                 sb.AppendLine();
                 ++indent;
 
-                sb.AppendFormat("{0}local o = {{", GetIndentString(indent));
+                sb.AppendFormat("{0}local static = self;", GetIndentString(indent));
+                sb.AppendLine();
+
+                sb.AppendLine();
+
+                sb.AppendFormat("{0}local static_props = {{", GetIndentString(indent));
+                sb.AppendLine();
+
+                ++indent;
+
+                //static property
+                foreach (var ci in classes) {
+                    sb.Append(ci.StaticPropertySourceCodeBuilder.ToString());
+                }
+
+                --indent;
+                sb.AppendFormat("{0}}};", GetIndentString(indent));
+                sb.AppendLine();
+
+                sb.AppendLine();
+
+                sb.AppendFormat("{0}local instance = {{", GetIndentString(indent));
                 sb.AppendLine();
                 ++indent;
 
@@ -269,6 +312,7 @@ namespace RoslynTool.CsToLua
                 foreach (var ci in classes) {
                     sb.Append(ci.InstanceFunctionSourceCodeBuilder.ToString());
                 }
+                sb.AppendLine();
                 //instance field
                 foreach (var ci in classes) {
                     sb.Append(ci.InstanceFieldSourceCodeBuilder.ToString());
@@ -277,11 +321,26 @@ namespace RoslynTool.CsToLua
                 --indent;
                 sb.AppendFormat("{0}}};", GetIndentString(indent));
                 sb.AppendLine();
-                sb.AppendFormat("{0}setmetatable(o, self);", GetIndentString(indent));
+
                 sb.AppendLine();
-                sb.AppendFormat("{0}self.__index = self;", GetIndentString(indent));
+                
+                sb.AppendFormat("{0}local instance_props = {{", GetIndentString(indent));
                 sb.AppendLine();
-                sb.AppendFormat("{0}return o;", GetIndentString(indent));
+
+                ++indent;
+
+                //instance property
+                foreach (var ci in classes) {
+                    sb.Append(ci.InstancePropertySourceCodeBuilder.ToString());
+                }
+
+                --indent;
+                sb.AppendFormat("{0}}};", GetIndentString(indent));
+                sb.AppendLine();
+
+                sb.AppendLine();
+
+                sb.AppendFormat("{0}return defineclass(static, static_props, instance, instance_props);", GetIndentString(indent));
                 sb.AppendLine();
 
                 --indent;
@@ -314,16 +373,11 @@ namespace RoslynTool.CsToLua
             if (isAlone) {
                 sb.AppendLine();
                 sb.AppendLine("function main()");
-                ClassSymbolInfo csi;
-                if (symTable.ClassSymbols.TryGetValue(key, out csi)) {
-                    if (csi.ExistStaticConstructor) {
-                        sb.AppendFormat("\t{0}:cctor();", key);
-                        sb.AppendLine();
-                    }
-                }
                 sb.AppendFormat("\treturn {0};", key);
                 sb.AppendLine();
                 sb.AppendLine("end;");
+                sb.AppendLine();
+                sb.AppendFormat("return {0}:defineClass();", key);
             }
 
             foreach (var ci in classes) {

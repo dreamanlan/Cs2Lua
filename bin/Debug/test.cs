@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 [System.CLSCompliant(false)]
 class LuaConsole
@@ -10,16 +11,33 @@ class LuaConsole
 }
 
 namespace TopLevel 
-{     
-#region abc
+{
+    extern alias ui;
+    using lua = LuaConsole;
     
-    namespace Child1 
-    {         
+    namespace Child1
+    {   
         class GenericClass<T> where T : new()
         {
+            public static event Action OnAction0;
+            public static Action OnAction1;
+            public event Action OnAction2;
+            public Action OnAction3;
+            public int Prop
+            {
+                get { return 1; }
+                set { m_Test = 2; }
+            }
             public void Test(T v)
             {
-                LuaConsole.Print(v);
+                lua.Print(v);
+                using (var fs = new StreamWriter(path)) {
+                    lua.Print(fs.ToString());
+                }
+                global::System.String s = "test";
+                ui::InputField d = new ui::InputField();
+                var obj = new { a=123,b=456 };
+                lua.Print(obj.a);
             }
             public GenericClass()
             {
@@ -39,7 +57,7 @@ namespace TopLevel
             public event SimpleEventHandler OnSimple;
             public SimpleEventHandler OnSimple2;
 
-            public Foo()
+            public Foo():this(0)
             {}
             public Foo(int v)
             {
@@ -89,14 +107,16 @@ namespace TopLevel
             {
                 GenericClass<int> f = new GenericClass<int>();
                 f.Test(v);
+                OnSimple += () => { };
+                {
+                    OnSimple2 += () => { };
+                }
             }
 
             internal int m_Test = 0;
         } 
     } 
     
-#endregion
-
     namespace Child2 
     { 
         enum TestEnum
