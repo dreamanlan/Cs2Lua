@@ -14,338 +14,291 @@ namespace RoslynTool.CsToLua
     internal partial class CsLuaTranslater
     {
         #region 未计划支持的语法特性
-        public override void VisitIndexerDeclaration(IndexerDeclarationSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        public override void VisitBracketedParameterList(BracketedParameterListSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
         public override void VisitArrowExpressionClause(ArrowExpressionClauseSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitConstructorInitializer(ConstructorInitializerSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitDestructorDeclaration(DestructorDeclarationSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitExplicitInterfaceSpecifier(ExplicitInterfaceSpecifierSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitOperatorDeclaration(OperatorDeclarationSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitConversionOperatorDeclaration(ConversionOperatorDeclarationSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitMakeRefExpression(MakeRefExpressionSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitRefTypeExpression(RefTypeExpressionSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitRefValueExpression(RefValueExpressionSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitThrowStatement(ThrowStatementSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitYieldStatement(YieldStatementSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitLabeledStatement(LabeledStatementSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitGotoStatement(GotoStatementSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitPointerType(PointerTypeSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitNullableType(NullableTypeSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitOmittedTypeArgument(OmittedTypeArgumentSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitImplicitElementAccess(ImplicitElementAccessSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitFixedStatement(FixedStatementSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitCheckedStatement(CheckedStatementSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitCheckedExpression(CheckedExpressionSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitUnsafeStatement(UnsafeStatementSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitLockStatement(LockStatementSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitTryStatement(TryStatementSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitCatchClause(CatchClauseSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitCatchDeclaration(CatchDeclarationSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitCatchFilterClause(CatchFilterClauseSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitFinallyClause(FinallyClauseSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitDefaultExpression(DefaultExpressionSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitSizeOfExpression(SizeOfExpressionSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitStackAllocArrayCreationExpression(StackAllocArrayCreationExpressionSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitIncompleteMember(IncompleteMemberSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitAwaitExpression(AwaitExpressionSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitTypeCref(TypeCrefSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitQualifiedCref(QualifiedCrefSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitNameMemberCref(NameMemberCrefSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitIndexerMemberCref(IndexerMemberCrefSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitOperatorMemberCref(OperatorMemberCrefSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitConversionOperatorMemberCref(ConversionOperatorMemberCrefSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitCrefParameterList(CrefParameterListSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitCrefBracketedParameterList(CrefBracketedParameterListSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitCrefParameter(CrefParameterSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitQueryExpression(QueryExpressionSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitQueryBody(QueryBodySyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitFromClause(FromClauseSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitLetClause(LetClauseSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitJoinClause(JoinClauseSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitJoinIntoClause(JoinIntoClauseSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitWhereClause(WhereClauseSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitOrderByClause(OrderByClauseSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitOrdering(OrderingSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitSelectClause(SelectClauseSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitGroupClause(GroupClauseSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitQueryContinuation(QueryContinuationSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitOmittedArraySizeExpression(OmittedArraySizeExpressionSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitInterpolatedStringExpression(InterpolatedStringExpressionSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitInterpolatedStringText(InterpolatedStringTextSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitInterpolation(InterpolationSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitInterpolationAlignmentClause(InterpolationAlignmentClauseSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitInterpolationFormatClause(InterpolationFormatClauseSyntax node)
         {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
+            Log(node, "Unsupported Syntax !");
         }
         #endregion
 
-        #region 借助语义信息处理过的语法部分，如果执行到则说明处理不完整
+        #region 借助语义信息或直接在上层语法里处理过的语法部分，或者不需要翻译到lua而忽略的语法部分
         public override void VisitGenericName(GenericNameSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
+        { }
         public override void VisitTypeParameterList(TypeParameterListSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
+        { }
         public override void VisitTypeParameter(TypeParameterSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
+        { }
         public override void VisitTypeParameterConstraintClause(TypeParameterConstraintClauseSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
+        { }
         public override void VisitTypeArgumentList(TypeArgumentListSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
+        { }
         public override void VisitTypeConstraint(TypeConstraintSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
+        { }
         public override void VisitConstructorConstraint(ConstructorConstraintSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
+        { }
         public override void VisitClassOrStructConstraint(ClassOrStructConstraintSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
+        { }
         public override void VisitGlobalStatement(GlobalStatementSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
+        { }
         public override void VisitAliasQualifiedName(AliasQualifiedNameSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
+        { }
         public override void VisitBaseList(BaseListSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
+        { }
         public override void VisitSimpleBaseType(SimpleBaseTypeSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
+        { }
+        public override void VisitBracketedParameterList(BracketedParameterListSyntax node)
+        { }
         public override void VisitParameterList(ParameterListSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
+        { }
         public override void VisitParameter(ParameterSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
+        { }
         public override void VisitAttributeList(AttributeListSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
+        { }
         public override void VisitAttributeTargetSpecifier(AttributeTargetSpecifierSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
+        { }
         public override void VisitAttribute(AttributeSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
+        { }
         public override void VisitAttributeArgumentList(AttributeArgumentListSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
+        { }
         public override void VisitAttributeArgument(AttributeArgumentSyntax node)
-        {
-            Log(node, "Unsupported syntax part: {0} location{1}", node.ToString(), node.GetLocation().GetLineSpan());
-        }
-        #endregion
-
-        #region 不用单独处理的语法部分
+        { }
+        public override void VisitEqualsValueClause(EqualsValueClauseSyntax node)
+        { }
         public override void VisitAccessorList(AccessorListSyntax node)
         { }
         public override void VisitAccessorDeclaration(AccessorDeclarationSyntax node)
         { }
-        public override void VisitEventDeclaration(EventDeclarationSyntax node)
-        {/*Cs2Lua不支持自定义add/remove的event，这一情形的检查在上层语法里处理，所以这里也不需要单独处理*/}
         public override void VisitNameColon(NameColonSyntax node)
         { }
         public override void VisitNameEquals(NameEqualsSyntax node)

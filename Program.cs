@@ -12,13 +12,99 @@ namespace RoslynTool
 {
     class Program
     {
+        static Action Test;
         static void Main(string[] args)
         {
             string file = "test.cs";
+            string outputExt = "txt";
+            List<string> macros = new List<string>();
+            Dictionary<string, string> refByNames = new Dictionary<string, string>();
+            Dictionary<string, string> refByPaths = new Dictionary<string, string>();
             if (args.Length > 0) {
-                file = args[0];
+                for (int i = 0; i < args.Length; ++i) {
+                    if (0 == string.Compare(args[i], "-ext", true)) {
+                        string arg = args[i + 1];
+                        if (!arg.StartsWith("-")) {
+                            outputExt = arg;
+                            ++i;
+                        }
+                    } else if (0 == string.Compare(args[i], "-d", true)) {
+                        string arg = args[i + 1];
+                        if (!arg.StartsWith("-")) {
+                            macros.Add(arg);
+                            ++i;
+                        }
+                    } else if (0 == string.Compare(args[i], "-refbyname", true)) {
+                        string name, alias;
+                        string arg = args[i + 1];
+                        if (!arg.StartsWith("-")) {
+                            name = arg;
+                            ++i;
+                        } else {
+                            continue;
+                        }
+                        arg = args[i + 1];
+                        if (!arg.StartsWith("-")) {
+                            alias = arg;
+                            ++i;
+                        } else {
+                            continue;
+                        }
+                        if (!refByNames.ContainsKey(name)) {
+                            refByNames.Add(name, alias);
+                        } else {
+                            Console.WriteLine("refbyname duplicate, ignored ! {0}={1}", name, alias);
+                        }
+                    } else if (0 == string.Compare(args[i], "-refbypath", true)) {
+                        string path, alias;
+                        string arg = args[i + 1];
+                        if (!arg.StartsWith("-")) {
+                            path = arg;
+                            ++i;
+                        } else {
+                            continue;
+                        }
+                        arg = args[i + 1];
+                        if (!arg.StartsWith("-")) {
+                            alias = arg;
+                            ++i;
+                        } else {
+                            continue;
+                        }
+                        if (!File.Exists(path)) {
+                            Console.WriteLine("refbypath path not found ! {0}={1}", path, alias);
+                        } else {
+                            if (!refByPaths.ContainsKey(path)) {
+                                refByPaths.Add(path, alias);
+                            } else {
+                                Console.WriteLine("refbypath duplicate, ignored ! {0}={1}", path, alias);
+                            }
+                        }
+                    } else {
+                        file = args[i];
+                        if (!File.Exists(file)) {
+                            Console.WriteLine("file path not found ! {0}", file);
+                        }
+                        break;
+                    }
+                }
+            } else {
+                Console.WriteLine("[Usage]:Cs2Lua [-ext fileext] [-d macro] [-refbyname dllname alias] [-refbypath dllpath alias] csfile|csprojfile");
+                Console.WriteLine("\twhere:");
+                Console.WriteLine("\t\tfileext = file externsion, default is txt for unity3d, maybe lua for other usage.");
+                Console.WriteLine("\t\tmacro = c# macro define, used in your csharp code #if/#elif/#else/#endif etc.");
+                Console.WriteLine("\t\tdllname = dotnet system assembly name, referenced by your csharp code.");
+                Console.WriteLine("\t\tdllpath = dotnet assembly path, referenced by your csharp code.");
+                Console.WriteLine("\t\talias = global for default or some dll toplevel namespace alias, used in your csharp code such as 'extern alias ui;'.");
+                Console.WriteLine();
+                if (File.Exists(file)) {
+                    Console.WriteLine("now will process test csharp code test.cs in current directory ...");
+                    Console.WriteLine();
+                }
             }
-            CsToLuaProcessor.Process(file);
+            if (File.Exists(file)) {
+                CsToLuaProcessor.Process(file, outputExt, macros, refByNames, refByPaths);
+            }
             //Mandelbrot.Exec();
         }
     }

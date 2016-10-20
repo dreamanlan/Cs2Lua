@@ -13,7 +13,7 @@ namespace RoslynTool.CsToLua
     internal class ClassInfo
     {
         internal bool IsEnum = false;
-        internal bool GenerateMain = false;
+        internal bool IsEntryClass = false;
         internal string Key
         {
             get
@@ -26,7 +26,9 @@ namespace RoslynTool.CsToLua
         internal string ClassName = string.Empty;
         internal string BaseNamespace = string.Empty;
         internal string BaseClassName = string.Empty;
-        
+
+        internal string ExportConstructor = string.Empty;
+        internal MethodInfo ExportConstructorInfo = null;
         internal HashSet<string> References = new HashSet<string>();
 
         internal INamedTypeSymbol SemanticInfo = null;
@@ -39,20 +41,22 @@ namespace RoslynTool.CsToLua
         internal StringBuilder InstanceFunctionSourceCodeBuilder = new StringBuilder();
         internal StringBuilder InstanceFieldSourceCodeBuilder = new StringBuilder();
         internal StringBuilder InstancePropertySourceCodeBuilder = new StringBuilder();
+        internal StringBuilder InstanceEventSourceCodeBuilder = new StringBuilder();
 
         internal StringBuilder StaticFunctionSourceCodeBuilder = new StringBuilder();
         internal StringBuilder StaticFieldSourceCodeBuilder = new StringBuilder();
         internal StringBuilder StaticPropertySourceCodeBuilder = new StringBuilder();
+        internal StringBuilder StaticEventSourceCodeBuilder = new StringBuilder();
 
         internal void Init(INamedTypeSymbol sym)
         {
             IsEnum = sym.TypeKind == TypeKind.Enum;
 
-            GenerateMain = false;
+            IsEntryClass = false;
             foreach (var attr in sym.GetAttributes()) {
                 string fullName = ClassInfo.GetFullName(attr.AttributeClass);
-                if (fullName == "Cs2Lua.MainAttribute") {
-                    GenerateMain = true;
+                if (fullName == "Cs2Lua.EntryAttribute") {
+                    IsEntryClass = true;
                 }
             }
 
@@ -146,6 +150,7 @@ namespace RoslynTool.CsToLua
         internal bool ExistReturn = false;
 
         internal IMethodSymbol SemanticInfo = null;
+        internal IPropertySymbol PropertySemanticInfo = null;
 
         internal void Init(IMethodSymbol sym)
         {
@@ -188,23 +193,25 @@ namespace RoslynTool.CsToLua
 
             ClassKey = ClassInfo.CalcMemberReference(sym);
 
-            var args = argList.Arguments;
-            
-            int ct = args.Count;
-            for (int i = 0; i < ct; ++i) {
-                var arg = args[i];
-                if (i < sym.Parameters.Length) {
-                    var param = sym.Parameters[i];
-                    if (param.RefKind == RefKind.Ref) {
-                        Args.Add(arg.Expression);
-                        ReturnArgs.Add(arg.Expression);
-                    } else if (param.RefKind == RefKind.Out) {
-                        ReturnArgs.Add(arg.Expression);
+            if (null != argList) {
+                var args = argList.Arguments;
+
+                int ct = args.Count;
+                for (int i = 0; i < ct; ++i) {
+                    var arg = args[i];
+                    if (i < sym.Parameters.Length) {
+                        var param = sym.Parameters[i];
+                        if (param.RefKind == RefKind.Ref) {
+                            Args.Add(arg.Expression);
+                            ReturnArgs.Add(arg.Expression);
+                        } else if (param.RefKind == RefKind.Out) {
+                            ReturnArgs.Add(arg.Expression);
+                        } else {
+                            Args.Add(arg.Expression);
+                        }
                     } else {
                         Args.Add(arg.Expression);
                     }
-                } else {
-                    Args.Add(arg.Expression);
                 }
             }
         }
@@ -233,7 +240,7 @@ namespace RoslynTool.CsToLua
             cont.Visit(syntax);
             HaveContinue = cont.ContinueCount > 0;
             HaveBreak = cont.BreakCount > 0;
-            BreakFlagVarName = string.Format("__compiler_continue_{0}__", syntax.GetLocation().GetLineSpan().StartLinePosition.Line);
+            BreakFlagVarName = string.Format("__compiler_continue_{0}", syntax.GetLocation().GetLineSpan().StartLinePosition.Line);
         }
     }
     internal class SwitchInfo

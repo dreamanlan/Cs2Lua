@@ -14,9 +14,8 @@ namespace RoslynTool.CsToLua
 {
     public static class CsToLuaProcessor
     {
-        public static void Process(string srcFile)
+        public static void Process(string srcFile, string outputExt, IList<string> macros, IDictionary<string, string> _refByNames, IDictionary<string, string> _refByPaths)
         {
-            //srcFile = "Cs2Lua.csproj";
             string path = Path.GetDirectoryName(srcFile);
             string name = Path.GetFileNameWithoutExtension(srcFile);
             string ext = Path.GetExtension(srcFile);
@@ -31,8 +30,8 @@ namespace RoslynTool.CsToLua
             }
 
             List<string> files = new List<string>();
-            Dictionary<string, string> refByNames = new Dictionary<string, string>();
-            Dictionary<string, string> refByPaths = new Dictionary<string, string>();
+            Dictionary<string, string> refByNames = new Dictionary<string, string>(_refByNames);
+            Dictionary<string, string> refByPaths = new Dictionary<string, string>(_refByPaths);
             if (ext == ".csproj") {
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.Load(srcFile);
@@ -72,7 +71,7 @@ namespace RoslynTool.CsToLua
                     string filePath = Path.Combine(path, file);
                     string fileName = Path.GetFileNameWithoutExtension(filePath);
                     CSharpParseOptions options = new CSharpParseOptions();
-                    options = options.WithPreprocessorSymbols("__LUA__");
+                    options = options.WithPreprocessorSymbols(macros);
                     options = options.WithFeatures(new Dictionary<string, string> { { "IOperation", "true" } });
                     SyntaxTree tree = CSharpSyntaxTree.ParseText(File.ReadAllText(filePath), options, filePath);
                     trees.Add(tree);
@@ -98,10 +97,12 @@ namespace RoslynTool.CsToLua
             List<MetadataReference> refs = new List<MetadataReference>();
             refs.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
             refs.Add(MetadataReference.CreateFromFile(typeof(System.Reflection.Metadata.AssemblyDefinition).Assembly.Location));
+            refs.Add(MetadataReference.CreateFromFile(typeof(Cs2Lua.IgnoreAttribute).Assembly.Location));
+            /*
             refs.Add(MetadataReference.CreateFromFile(typeof(System.Collections.Immutable.ImmutableArray).Assembly.Location));
             refs.Add(MetadataReference.CreateFromFile(typeof(SyntaxTree).Assembly.Location));
             refs.Add(MetadataReference.CreateFromFile(typeof(CSharpSyntaxTree).Assembly.Location));
-            refs.Add(MetadataReference.CreateFromFile(typeof(Cs2Lua.MainAttribute).Assembly.Location));
+            */
             foreach (var pair in refByPaths) {
                 string fullPath = Path.Combine(path, pair.Key);
                 var arr = System.Collections.Immutable.ImmutableArray.Create(pair.Value);
@@ -190,7 +191,7 @@ namespace RoslynTool.CsToLua
             foreach (var pair in classes) {
                 StringBuilder sb0 = new StringBuilder();
                 string fileName = BuildLuaClass(sb0, pair.Key, pair.Value, true, symTable);
-                File.WriteAllText(Path.Combine(outputDir, fileName + ".txt"), sb0.ToString());
+                File.WriteAllText(Path.Combine(outputDir, Path.ChangeExtension(fileName, outputExt)), sb0.ToString());
             }
             StringBuilder sb = new StringBuilder();
             BuildLuaClass(sb, toplevelMni, symTable);
@@ -241,11 +242,17 @@ namespace RoslynTool.CsToLua
             string[] nss = key.Split('.');
             string className = nss[nss.Length - 1];
 
-            bool generateMain = false;
+            bool isEntryClass = false;
+            string exportConstructor = string.Empty;
+            MethodInfo exportConstructorInfo = null;
             foreach (var ci in classes) {
                 sb.Append(ci.BeforeOuterCodeBuilder.ToString());
-                if (ci.GenerateMain)
-                    generateMain = true;
+                if (ci.IsEntryClass)
+                    isEntryClass = true;
+                if (!string.IsNullOrEmpty(ci.ExportConstructor)) {
+                    exportConstructor = ci.ExportConstructor;
+                    exportConstructorInfo = ci.ExportConstructorInfo;
+                }
             }
             if (isAlone) {
                 sb.AppendLine("require \"utility\";");
@@ -292,29 +299,44 @@ namespace RoslynTool.CsToLua
             sb.AppendLine();
 
             if (classes.Count > 0 && !classes[0].IsEnum) {
-                
-                sb.AppendFormat("{0}newObject = function(self)", GetIndentString(indent));
+
+                sb.AppendFormat("{0}newObject = function(...)", GetIndentString(indent));
                 sb.AppendLine();
                 ++indent;
-                sb.AppendFormat("{0}local obj = self();", GetIndentString(indent));
-                sb.AppendLine();
-                sb.AppendFormat("{0}if obj.ctor then", GetIndentString(indent));
-                sb.AppendLine();
-                sb.AppendFormat("{0}obj.ctor();", GetIndentString(indent + 1));
-                sb.AppendLine();
-                sb.AppendFormat("{0}end;", GetIndentString(indent));
-                sb.AppendLine();
-                sb.AppendFormat("{0}return obj;", GetIndentString(indent));
-                sb.AppendLine();
+
+                if (string.IsNullOrEmpty(exportConstructor)) {
+                    sb.AppendFormat("{0}return newobject({1}, (function(obj) return obj; end));", GetIndentString(indent), key);
+                    sb.AppendLine();
+                } else {
+                    //处理ref/out参数
+                    sb.AppendFormat("{0}local args = ...;", GetIndentString(indent));
+                    sb.AppendLine();
+                    sb.AppendFormat("{0}return newobject({1}, (function(obj)", GetIndentString(indent), key);
+                    string retArgStr = string.Join(", ", exportConstructorInfo.ReturnParamNames.ToArray());
+                    if (exportConstructorInfo.ReturnParamNames.Count > 0) {
+                        sb.AppendFormat(" local {0};", retArgStr);
+                    }
+                    sb.Append(" obj");
+                    if (exportConstructorInfo.ReturnParamNames.Count > 0) {
+                        sb.Append(", ");
+                        sb.Append(retArgStr);
+                    }
+                    sb.Append(" = ");
+                    sb.AppendFormat("obj:{0}", exportConstructor);
+                    sb.Append("(args);");
+                    sb.Append(" return obj; end));");
+                    sb.AppendLine();
+                }
+                
                 --indent;
                 sb.AppendFormat("{0}end,", GetIndentString(indent));
                 sb.AppendLine();
 
-                sb.AppendFormat("{0}defineClass = function(self)", GetIndentString(indent));
+                sb.AppendFormat("{0}defineClass = function()", GetIndentString(indent));
                 sb.AppendLine();
                 ++indent;
 
-                sb.AppendFormat("{0}local static = self;", GetIndentString(indent));
+                sb.AppendFormat("{0}local static = {1};", GetIndentString(indent), key);
                 sb.AppendLine();
 
                 sb.AppendLine();
@@ -327,6 +349,22 @@ namespace RoslynTool.CsToLua
                 //static property
                 foreach (var ci in classes) {
                     sb.Append(ci.StaticPropertySourceCodeBuilder.ToString());
+                }
+
+                --indent;
+                sb.AppendFormat("{0}}};", GetIndentString(indent));
+                sb.AppendLine();
+
+                sb.AppendLine();
+
+                sb.AppendFormat("{0}local static_events = {{", GetIndentString(indent));
+                sb.AppendLine();
+
+                ++indent;
+
+                //static event
+                foreach (var ci in classes) {
+                    sb.Append(ci.StaticEventSourceCodeBuilder.ToString());
                 }
 
                 --indent;
@@ -371,7 +409,23 @@ namespace RoslynTool.CsToLua
 
                 sb.AppendLine();
 
-                sb.AppendFormat("{0}return defineclass(static, static_props, instance, instance_props);", GetIndentString(indent));
+                sb.AppendFormat("{0}local instance_events = {{", GetIndentString(indent));
+                sb.AppendLine();
+
+                ++indent;
+
+                //instance event
+                foreach (var ci in classes) {
+                    sb.Append(ci.InstanceEventSourceCodeBuilder.ToString());
+                }
+
+                --indent;
+                sb.AppendFormat("{0}}};", GetIndentString(indent));
+                sb.AppendLine();
+
+                sb.AppendLine();
+
+                sb.AppendFormat("{0}return defineclass(static, static_props, static_events, instance, instance_props, instance_events);", GetIndentString(indent));
                 sb.AppendLine();
 
                 --indent;
@@ -403,14 +457,11 @@ namespace RoslynTool.CsToLua
 
             if (isAlone) {
                 sb.AppendLine();
-                if (generateMain) {
-                    sb.AppendLine("function main()");
-                    sb.AppendFormat("\treturn {0};", key);
-                    sb.AppendLine();
-                    sb.AppendLine("end;");
+                if (isEntryClass) {
+                    sb.AppendFormat("defineentry({0});", key);
                     sb.AppendLine();
                 }
-                sb.AppendFormat("return {0}:defineClass();", key);
+                sb.AppendFormat("return {0}.defineClass();", key);
             }
 
             foreach (var ci in classes) {

@@ -12,8 +12,4 @@ TopLevel = {
 	},
 };
 
-function main()
-	return TopLevel.Child2.TestEnum;
-end;
-
-return TopLevel.Child2.TestEnum:__define__();
+return TopLevel.Child2.TestEnum.defineClass();

@@ -33,7 +33,7 @@ class LuaString
 
 delegate void HandleDelegation();
 
-[Cs2Lua.Main]
+[Cs2Lua.Entry]
 class MyScript
 {
     public System.Action OnHandle0;

@@ -48,53 +48,71 @@ function typeis(obj, type)
   return true;
 end;
 
-__mt_array__ = {
+__mt_array = {
 	__index = function(t, k)
 		if k=="Length" then
 			return table.maxn(t);
 		elseif k=="GetLength" then
-			return function(ix)
-			    local ret = 0;
-			    local tb = t;
-			    for i=0,ix do			       
-			      ret = table.maxn(tb);
-			      tb = tb[0];
-			    end;
-			    return ret;
-			  end;
+			return function(obj, ix)
+        local ret = 0;
+        local tb = obj;
+        for i=0,ix do			       
+          ret = table.maxn(tb);
+          tb = tb[0];
+        end;
+        return ret;
+      end;
+    elseif k=="Add" then
+      return function(obj, v) table.insert(obj, v);
+    elseif k=="Remove" then
+      return function(obj, p)
+        local pos = 1;
+        local ret = nil;
+        for k,v in pairs(obj) do		        
+          if v==p then
+            ret=v;
+            break;
+          end;
+          pos=pos+1;		        
+        end;
+        if pos>=1 and pos<=table.maxn(obj) then
+          table.remove(obj,pos);
+        end;
+        return v;
+      end;
 		end;
 	end,
 };
 
-__mt_dictionary__ = {
+__mt_dictionary = {
 	__index = function(t, k)
 		if k=="Count" then
 			return table.maxn(t);
 		elseif k=="Add" then
-		  return function(p1,p2) t[p1]=p2; return p2; end;
+		  return function(obj, p1,p2) obj[p1]=p2; return p2; end;
 		elseif k=="Remove" then
-		  return function(p)
+		  return function(obj, p)
 		      local pos = 1;
 		      local ret = nil;
-		      for k,v in pairs(t) do		        
+		      for k,v in pairs(obj) do		        
 		        if k==p then
 		          ret=v;
 		          break;
 		        end;
 		        pos=pos+1;		        
 		      end;
-		      if pos>=1 and pos<=table.maxn(t) then
-		        table.remove(t,pos);
+		      if pos>=1 and pos<=table.maxn(obj) then
+		        table.remove(obj,pos);
 		      end;
 		      return v;
 		    end;
 		elseif k=="ContainsKey" then
-		  return function(p)
-		      if t[p]~=nil then
+		  return function(obj, p)
+		      if obj[p]~=nil then
 		        return true;
 		      end;
 		      local ret = false;
-		      for k,v in pairs(t) do		        
+		      for k,v in pairs(obj) do		        
 		        if k==p then
 		          ret=true;
 		          break;
@@ -103,9 +121,9 @@ __mt_dictionary__ = {
 		      return ret;
 		    end;
 		elseif k=="ContainsValue" then
-		  return function(p)
+		  return function(obj, p)
 		      local ret = false;
-		      for k,v in pairs(t) do		        
+		      for k,v in pairs(obj) do		        
 		        if v==p then
 		          ret=true;
 		          break;
@@ -117,12 +135,20 @@ __mt_dictionary__ = {
 	end,
 };
 
+__mt_delegation = {
+
+};
+
 function wraparray(arr)
-	return setmetatable(arr, __mt_array__);
+	return setmetatable(arr, __mt_array);
 end;
 
 function wrapdictionary(dict)
-	return setmetatable(dict, __mt_dictionary__);
+	return setmetatable(dict, __mt_dictionary);
+end;
+
+function wrapdelegation()
+  return setmetatable({}, __mt_delegation);
 end;
 
 LuaConsole = {
@@ -137,81 +163,120 @@ LuaString = {
   end,
 };
 
-function defineclass(static, static_props, instance, instance_props)
+function defineclass(static, static_props, static_events, instance, instance_props, instance_events)
     local class = static or {};
     local class_props = static_props or {};
-    setmetatable(class, 
-        {            
-            __call = function()
-                local obj = instance or {};
-                local obj_props = instance_props or {};
-                setmetatable(obj,
-                    {
-                        __index = function(t, k)
-                            local ret;
-                            ret = class[k];
-                            if nil == ret then
-                              ret = obj_props[k];
-                              if nil ~= ret then
-                                if nil ~= ret.get then
-                                  ret = ret:get();
-                                else
-                                  ret = nil;
-                                end;
-                              end;
-                            end;
-                            return ret;
-                        end,
+    local class_events = static_events or {};
+    setmetatable(class, {            
+        __call = function()
+            local obj = instance or {};
+            local obj_props = instance_props or {};
+            local obj_events = instance_events or {};
+            obj["__class"] = class;
+            setmetatable(obj, {
+                __index = function(t, k)
+                    local ret;
+                    ret = obj_props[k];
+                    if nil ~= ret then
+                      if nil ~= ret.get then
+                        ret = ret.get(t);
+                      else
+                        ret = nil;
+                      end;
+                    end;
+                    return ret;
+                end,
 
-                        __newindex = function(t, k, v)
-                            local ret;
-                            ret = class[k];
-                            if ret ~= nil then
-                              class[k] = v;
-                              return;
-                            end;
-                            ret = obj_props[k];
-                            if nil ~= ret then
-                              if nil ~= ret.set then
-                                ret:set(v);
-                              end;
-                              return;
-                            end;
-                            rawset(t, k, v);
-                        end,
-                    });
+                __newindex = function(t, k, v)
+                    local ret;
+                    ret = obj_props[k];
+                    if nil ~= ret then
+                      if nil ~= ret.set then
+                        ret.set(t, v);
+                      end;
+                      return;
+                    end;
+                    rawset(t, k, v);
+                end,
+            });
 
-                return obj;
-            end,
-            
-            __index = function(t, k)
-                local ret;
-                ret = class_props[k];
-                if nil ~= ret then
-                  if nil ~= ret.get then
-                    ret = ret:get();
-                  else
-                    ret = nil;
-                  end;                           
-                end;
-                return ret;
-            end,
+            return obj;
+        end,
+        
+        __index = function(t, k)
+            local ret;
+            ret = class_props[k];
+            if nil ~= ret then
+              if nil ~= ret.get then
+                ret = ret.get(t);
+              else
+                ret = nil;
+              end;                           
+            end;
+            return ret;
+        end,
 
-            __newindex = function(t, k, v)
-                local ret;
-                ret = class_props[k];
-                if ret ~= nil then
-                  if nil ~= ret.set then
-                    ret:set(v);
-                  end;
-                  return;
-                end;    
-                rawset(t, k, v);
-            end,
-        }
-    );
+        __newindex = function(t, k, v)
+            local ret;
+            ret = class_props[k];
+            if ret ~= nil then
+              if nil ~= ret.set then
+                ret.set(t, v);
+              end;
+              return;
+            end;    
+            rawset(t, k, v);
+        end,
+    });
     if class.cctor then
-      class:cctor();
+      class.cctor();
     end;
     return class;
+end;
+
+function newinternobject(class, ctorclosure)
+  local obj = class();
+  obj = ctorclosure(obj);
+  return obj;
+end;
+
+function newexternobject(class, ctorclosure)
+  local obj = ctorclosure(class);
+  return obj;
+end;
+
+function newobject(class, ctorclosure)
+  local obj = class();
+  obj = ctorclosure(obj);
+  return obj;
+end;
+
+function delegationwrap(handler)
+  return { handler };
+end;
+
+function interndelegationset(v, handler)
+
+end;
+function interndelegationadd(v, handler)
+
+end;
+function interndelegationremove(v, handler)
+
+end;
+
+function externdelegationset(v, handler)
+
+end;
+function externdelegationadd(v, handler)
+
+end;
+function interndelegationremove(v, handler)
+
+end;
+
+function defineentry(class)
+  _G.main = function()
+    return class;
+  end;
 end;

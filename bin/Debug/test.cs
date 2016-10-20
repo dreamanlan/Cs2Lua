@@ -12,7 +12,6 @@ class LuaConsole
 
 namespace TopLevel 
 {
-    extern alias ui;
     using lua = LuaConsole;
     
     namespace Child1
@@ -32,21 +31,41 @@ namespace TopLevel
             {
                 get;
                 set;
+            } = 456;
+            public int this[int v1, int v2]
+            {
+                get
+                {
+                    return 123;
+                }
+                set
+                {
+
+                }
+            }
+            public event Action AAA
+            {
+                add { OnAction0 += value; }
+                remove { OnAction0 -= value; }
             }
             public void Test(T v)
             {
-                lua.Print(v);
+                lua.Print(v is int);
+                string path = "";
                 using (var fs = new StreamWriter(path)) {
                     lua.Print(fs.ToString());
                 }
                 global::System.String s = "test";
-                ui::InputField d = new ui::InputField();
-                var obj = new { a=123,b=456 };
+                var obj = new { a=123, b=456 };
                 lua.Print(obj.a);
+                int v = this[1,2];
+                this[2,3]=456;
             }
-            public GenericClass()
+            public GenericClass(ref int v, out int v2)
             {
-                m_Test = 456;
+                m_Test = v + 456;
+                v = 123;
+                v2 = 789;
             }
             private int m_Test = 123;
 
@@ -110,7 +129,16 @@ namespace TopLevel
 
             public int Test(int v)
             {
-                GenericClass<int> f = new GenericClass<int>();
+                int v1 = 0, v2;
+                GenericClass<int> f = new GenericClass<int>(ref v1, out v2);
+                int v = f[3,4];
+                f[4,5] = 6;
+                f[4,5] = Test2(1,2,ref v1, out v2);
+                v = Test2(1,2,ref v1, out v2);
+                Test2(1,2,ref v1, out v2);
+                v = 1+Test2(1,2,ref v1, out v2);
+                v+=Test2(1,2,ref v1, out v2);
+                v2=(v=Test2(1,2,ref v1, out v2));
                 f.Test(v);
                 OnSimple += () => { };
                 {
@@ -119,6 +147,7 @@ namespace TopLevel
             }
 
             internal int m_Test = 0;
+            internal int m_Test2 = 0;
         } 
     } 
     
@@ -160,9 +189,12 @@ namespace TopLevel
                 var F = Child2.Bar.s_Test;
                 Child1.Foo f = new Child1.Foo(123);
                 f.OnSimple = this.Handler;
-                var ff = new Child1.Foo { m_Test = 456 };
+                var ff = new Child1.Foo { m_Test = 456, m_Test2 = 789 };
                 int a = 0, b = 0, c = 0;
                 b = (c += (int)2);
+                List<List<int>> list = new List<List<int>> { new List<int> { 1, 2 }, new List<int> { 3, 4, 5 } };
+                list.Add(new List<int>() { 123, 456 });
+                var v = list[0];
                 Dictionary<string, string> dict = new Dictionary<string, string> { { "key1", "value1" }, { "key2", "value2" } };
                 Test(dict);
                 f.Test(1, ref b, out c, 3);
