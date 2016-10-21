@@ -147,77 +147,137 @@ CSharp代码转lua，适用于使用lua实现热更新而又想有一个强类�
 5、循环中的continue实现
 
   while(a<b)
+  
   {
+  
     ++a;
+    
     if(a<10)
+    
       continue; 
+      
     if(a>100)
+    
       break;
+      
     ++a;
+    
   }
   
 => 
   
   while a < b do 
+  
     local isBreak = false; 
+    
     repeat 
+    
       a=a+1; 
+      
       if a>2 then 
+      
         isBreak=false; 
+        
         break; 
+        
       end;
+      
       if a>100 then
+      
         isBreak=true;
+        
         break;
+        
       end;
+      
       a=a+1;
+      
     until true;
+    
     if isBreak then
+    
       break;
+      
     end;
+    
   end;
 
 6、switch中的break实现（与5类似，不需要引用额外变量）
 
   switch(cond)
+  
   {
+  
   case 1:
+  
       if(a+b<12)
+      
         break;
+        
       a+=2;
+      
       b+=4;
+      
       c=a*b;
+      
       break;
+      
   default:
+  
       c=123;
+      
       break;
+      
   case 2:
+  
       c=456;
+      
       break;
+      
   }
   
 =>
   
   if cond==1 then
+  
     repeat
+    
       if a+b<12 then
+      
         break;
+        
       end;
+      
       a=a+2;
+      
       b=b+4;
+      
       c=a*b;
+      
       break;
+      
     until true;
+    
   elseif cond==2 then
+  
     repeat
+    
       c=456;
+      
       break;
+      
     until true;
+    
   else
+  
     repeat
+    
       c=123;
+      
       break;
+      
     until true;
+    
   end;
   
 【用法】
