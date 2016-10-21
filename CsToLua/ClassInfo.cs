@@ -14,14 +14,8 @@ namespace RoslynTool.CsToLua
     {
         internal bool IsEnum = false;
         internal bool IsEntryClass = false;
-        internal string Key
-        {
-            get
-            {
-                return (string.IsNullOrEmpty(Namespace) ? string.Empty : Namespace + ".") + ClassName;
-            }
-        }
 
+        internal string Key = string.Empty;
         internal string Namespace = string.Empty;
         internal string ClassName = string.Empty;
         internal string BaseNamespace = string.Empty;
@@ -30,23 +24,29 @@ namespace RoslynTool.CsToLua
         internal string ExportConstructor = string.Empty;
         internal MethodInfo ExportConstructorInfo = null;
         internal HashSet<string> References = new HashSet<string>();
+                
+        internal bool ExistConstructor = false;
+        internal bool ExistStaticConstructor = false;
 
         internal INamedTypeSymbol SemanticInfo = null;
 
-        internal StringBuilder CurrentSourceCodeBuilder = null;
+        internal StringBuilder CurrentCodeBuilder = null;
 
         internal StringBuilder BeforeOuterCodeBuilder = new StringBuilder();
         internal StringBuilder AfterOuterCodeBuilder = new StringBuilder();
 
-        internal StringBuilder InstanceFunctionSourceCodeBuilder = new StringBuilder();
-        internal StringBuilder InstanceFieldSourceCodeBuilder = new StringBuilder();
-        internal StringBuilder InstancePropertySourceCodeBuilder = new StringBuilder();
-        internal StringBuilder InstanceEventSourceCodeBuilder = new StringBuilder();
+        internal StringBuilder InstanceFunctionCodeBuilder = new StringBuilder();
+        internal StringBuilder InstanceFieldCodeBuilder = new StringBuilder();
+        internal StringBuilder InstancePropertyCodeBuilder = new StringBuilder();
+        internal StringBuilder InstanceEventCodeBuilder = new StringBuilder();
 
-        internal StringBuilder StaticFunctionSourceCodeBuilder = new StringBuilder();
-        internal StringBuilder StaticFieldSourceCodeBuilder = new StringBuilder();
-        internal StringBuilder StaticPropertySourceCodeBuilder = new StringBuilder();
-        internal StringBuilder StaticEventSourceCodeBuilder = new StringBuilder();
+        internal StringBuilder StaticFunctionCodeBuilder = new StringBuilder();
+        internal StringBuilder StaticFieldCodeBuilder = new StringBuilder();
+        internal StringBuilder StaticPropertyCodeBuilder = new StringBuilder();
+        internal StringBuilder StaticEventCodeBuilder = new StringBuilder();
+
+        internal StringBuilder InstanceInitializerCodeBuilder = new StringBuilder();
+        internal StringBuilder StaticInitializerCodeBuilder = new StringBuilder();
 
         internal void Init(INamedTypeSymbol sym)
         {
@@ -65,12 +65,16 @@ namespace RoslynTool.CsToLua
             BaseNamespace = string.Empty;
             BaseClassName = string.Empty;
 
+            ExistConstructor = false;
+            ExistStaticConstructor = false;
             SemanticInfo = sym;
 
             Namespace = GetNamespaces(sym);
             ClassName = sym.Name;
             BaseNamespace = null == sym.BaseType ? string.Empty : GetNamespaces(sym.BaseType);
             BaseClassName = null == sym.BaseType ? string.Empty : sym.BaseType.Name;
+
+            Key = GetFullName(sym);
         }
         internal void AddReference(ISymbol sym, INamedTypeSymbol curClassSym, string key)
         {
@@ -108,6 +112,7 @@ namespace RoslynTool.CsToLua
                 return key;
             }
         }
+
         internal static string GetFullName(ISymbol type)
         {
             return CalcFullName(type, true);
@@ -120,24 +125,111 @@ namespace RoslynTool.CsToLua
                 return CalcFullName(type, false);
             }
         }
-
-        private static string CalcFullName(ISymbol type, bool includeSelfName)
+        internal static string CalcFullName(ISymbol type, bool includeSelfName)
         {
             List<string> list = new List<string>();
-            if (includeSelfName)
-                list.Add(type.Name);
+            if (includeSelfName) {
+                list.Add(CalcNameWithTypeParameters(type));
+            }
             INamespaceSymbol ns = type.ContainingNamespace;
             var ct = type.ContainingType;
-            while (null != ct && ct.Name.Length > 0) {
-                list.Insert(0, ct.Name);
+            string name = string.Empty;
+            if (null != ct) {
+                CalcNameWithTypeParameters(ct);
+            }
+            while (null != ct && name.Length > 0) {
+                list.Insert(0, name);
                 ns = ct.ContainingNamespace;
                 ct = ct.ContainingType;
+                if (null != ct) {
+                    CalcNameWithTypeParameters(ct);
+                } else {
+                    name = string.Empty;
+                }
             }
             while (null != ns && ns.Name.Length > 0) {
                 list.Insert(0, ns.Name);
                 ns = ns.ContainingNamespace;
             }
             return string.Join(".", list.ToArray());
+        }
+        
+        internal static string GetFullNameWithTypeArguments(ISymbol type)
+        {
+            return CalcFullNameWithTypeArguments(type, true);
+        }
+        internal static string GetNamespacesWithTypeArguments(ISymbol type)
+        {
+            if (type.Kind == SymbolKind.Namespace) {
+                return CalcFullNameWithTypeArguments(type, true);
+            } else {
+                return CalcFullNameWithTypeArguments(type, false);
+            }
+        }
+        internal static string CalcFullNameWithTypeArguments(ISymbol type, bool includeSelfName)
+        {
+            List<string> list = new List<string>();
+            if (includeSelfName) {
+                list.Add(CalcNameWithTypeArguments(type));
+            }
+            INamespaceSymbol ns = type.ContainingNamespace;
+            var ct = type.ContainingType;
+            string name = string.Empty;
+            if (null != ct) {
+                CalcNameWithTypeArguments(ct);
+            }
+            while (null != ct && name.Length > 0) {
+                list.Insert(0, name);
+                ns = ct.ContainingNamespace;
+                ct = ct.ContainingType;
+                if (null != ct) {
+                    CalcNameWithTypeArguments(ct);
+                } else {
+                    name = string.Empty;
+                }
+            }
+            while (null != ns && ns.Name.Length > 0) {
+                list.Insert(0, ns.Name);
+                ns = ns.ContainingNamespace;
+            }
+            return string.Join(".", list.ToArray());
+        }
+
+        internal static string CalcNameWithTypeParameters(ISymbol sym)
+        {
+            var typeSym = sym as INamedTypeSymbol;
+            if (null != typeSym) {
+                return CalcNameWithTypeParameters(typeSym);
+            } else {
+                return sym.Name;
+            }
+        }
+        internal static string CalcNameWithTypeArguments(ISymbol sym)
+        {
+            var typeSym = sym as INamedTypeSymbol;
+            if (null != typeSym) {
+                return CalcNameWithTypeArguments(typeSym);
+            } else {
+                return sym.Name;
+            }
+        }
+        internal static string CalcNameWithTypeParameters(INamedTypeSymbol type)
+        {
+            List<string> list = new List<string>();
+            list.Add(type.Name);
+            foreach (var param in type.TypeParameters) {
+                list.Add(param.Name);
+            }
+            return string.Join("_", list.ToArray());
+        }
+        internal static string CalcNameWithTypeArguments(INamedTypeSymbol type)
+        {
+            List<string> list = new List<string>();
+            list.Add(type.Name);
+            foreach (var arg in type.TypeArguments) {
+                list.Add(arg.Name);
+            }
+            return string.Join("_", list.ToArray());
         }
     }
     internal class MethodInfo
@@ -185,11 +277,13 @@ namespace RoslynTool.CsToLua
         internal string ClassKey = string.Empty;
         internal List<ExpressionSyntax> Args = new List<ExpressionSyntax>();
         internal List<ExpressionSyntax> ReturnArgs = new List<ExpressionSyntax>();
+        internal List<ITypeSymbol> GenericTypeArgs = new List<ITypeSymbol>();
 
         internal void Init(IMethodSymbol sym, ArgumentListSyntax argList)
         {
             Args.Clear();
             ReturnArgs.Clear();
+            GenericTypeArgs.Clear();
 
             ClassKey = ClassInfo.CalcMemberReference(sym);
 
@@ -212,6 +306,14 @@ namespace RoslynTool.CsToLua
                     } else {
                         Args.Add(arg.Expression);
                     }
+                }
+            }
+
+            if (sym.IsGenericMethod) {
+                int ct = sym.TypeArguments.Length;
+                for (int i = 0; i < ct; ++i) {
+                    var arg = sym.TypeArguments[i];
+                    GenericTypeArgs.Add(arg);
                 }
             }
         }

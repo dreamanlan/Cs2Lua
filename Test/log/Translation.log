@@ -1,5 +1,0 @@
-============<<<Translation Error:test2>>>============
-<<<[Log for IdentifierNameSyntax]>>> Can't determine symbol: None, syntax part: write location..\..\Test\test2.cs: (14,8)-(14,13)
-<<<[Log for IdentifierNameSyntax]>>> Can't determine symbol: None, syntax part: write location..\..\Test\test2.cs: (38,20)-(38,25)
-<<<[Log for IdentifierNameSyntax]>>> Can't determine symbol: None, syntax part: write location..\..\Test\test2.cs: (42,20)-(42,25)
-<<<[Log for IdentifierNameSyntax]>>> Can't determine symbol: None, syntax part: print location..\..\Test\test2.cs: (47,12)-(47,17)

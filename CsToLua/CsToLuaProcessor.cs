@@ -242,6 +242,14 @@ namespace RoslynTool.CsToLua
             string[] nss = key.Split('.');
             string className = nss[nss.Length - 1];
 
+            bool haveCctor = false;
+            bool haveCtor = false;
+            ClassSymbolInfo csi;
+            if (symTable.ClassSymbols.TryGetValue(key, out csi)) {
+                haveCctor = csi.ExistStaticConstructor;
+                haveCtor = csi.ExistConstructor;
+            }
+
             bool isEntryClass = false;
             string exportConstructor = string.Empty;
             MethodInfo exportConstructorInfo = null;
@@ -252,7 +260,7 @@ namespace RoslynTool.CsToLua
                 if (!string.IsNullOrEmpty(ci.ExportConstructor)) {
                     exportConstructor = ci.ExportConstructor;
                     exportConstructorInfo = ci.ExportConstructorInfo;
-                }
+                }                
             }
             if (isAlone) {
                 sb.AppendLine("require \"utility\";");
@@ -289,42 +297,60 @@ namespace RoslynTool.CsToLua
 
             //static function
             foreach (var ci in classes) {
-                sb.Append(ci.StaticFunctionSourceCodeBuilder.ToString());
+                sb.Append(ci.StaticFunctionCodeBuilder.ToString());
             }
+
             sb.AppendLine();
+
+            if (!haveCctor) {
+                sb.AppendFormat("{0}cctor = function()", GetIndentString(indent));
+                sb.AppendLine();
+                ++indent;
+                sb.AppendFormat("{0}{1}.__cctor();", GetIndentString(indent), key);
+                sb.AppendLine();
+                --indent;
+                sb.AppendFormat("{0}end,", GetIndentString(indent));
+                sb.AppendLine();
+            }
+
+            sb.AppendFormat("{0}__cctor = function()", GetIndentString(indent));
+            sb.AppendLine();
+            //static initializer
+            foreach (var ci in classes) {
+                sb.Append(ci.StaticInitializerCodeBuilder.ToString());
+            }
+            sb.AppendFormat("{0}end,", GetIndentString(indent));
+            sb.AppendLine();
+
+            sb.AppendLine();
+            
             //static field
             foreach (var ci in classes) {
-                sb.Append(ci.StaticFieldSourceCodeBuilder.ToString());
+                sb.Append(ci.StaticFieldCodeBuilder.ToString());
             }
             sb.AppendLine();
 
             if (classes.Count > 0 && !classes[0].IsEnum) {
 
-                sb.AppendFormat("{0}newObject = function(...)", GetIndentString(indent));
+                sb.AppendFormat("{0}__new_object = function(...)", GetIndentString(indent));
                 sb.AppendLine();
                 ++indent;
 
                 if (string.IsNullOrEmpty(exportConstructor)) {
-                    sb.AppendFormat("{0}return newobject({1}, (function(obj) return obj; end));", GetIndentString(indent), key);
+                    sb.AppendFormat("{0}return newobject({1}, nil, ...);", GetIndentString(indent), key);
                     sb.AppendLine();
                 } else {
                     //处理ref/out参数
                     sb.AppendFormat("{0}local args = ...;", GetIndentString(indent));
                     sb.AppendLine();
-                    sb.AppendFormat("{0}return newobject({1}, (function(obj)", GetIndentString(indent), key);
-                    string retArgStr = string.Join(", ", exportConstructorInfo.ReturnParamNames.ToArray());
-                    if (exportConstructorInfo.ReturnParamNames.Count > 0) {
-                        sb.AppendFormat(" local {0};", retArgStr);
-                    }
-                    sb.Append(" obj");
+                    sb.AppendFormat("{0}return (function() ", GetIndentString(indent));
+                    string retArgStr = string.Join(", ", exportConstructorInfo.ReturnParamNames.ToArray());                    
+                    sb.Append("local obj");
                     if (exportConstructorInfo.ReturnParamNames.Count > 0) {
                         sb.Append(", ");
                         sb.Append(retArgStr);
                     }
-                    sb.Append(" = ");
-                    sb.AppendFormat("obj:{0}", exportConstructor);
-                    sb.Append("(args);");
-                    sb.Append(" return obj; end));");
+                    sb.AppendFormat(" = newobject({0}, \"{1}\", args); return obj; end)();", key, exportConstructor);
                     sb.AppendLine();
                 }
                 
@@ -332,7 +358,7 @@ namespace RoslynTool.CsToLua
                 sb.AppendFormat("{0}end,", GetIndentString(indent));
                 sb.AppendLine();
 
-                sb.AppendFormat("{0}defineClass = function()", GetIndentString(indent));
+                sb.AppendFormat("{0}__define_class = function()", GetIndentString(indent));
                 sb.AppendLine();
                 ++indent;
 
@@ -348,7 +374,7 @@ namespace RoslynTool.CsToLua
 
                 //static property
                 foreach (var ci in classes) {
-                    sb.Append(ci.StaticPropertySourceCodeBuilder.ToString());
+                    sb.Append(ci.StaticPropertyCodeBuilder.ToString());
                 }
 
                 --indent;
@@ -364,7 +390,7 @@ namespace RoslynTool.CsToLua
 
                 //static event
                 foreach (var ci in classes) {
-                    sb.Append(ci.StaticEventSourceCodeBuilder.ToString());
+                    sb.Append(ci.StaticEventCodeBuilder.ToString());
                 }
 
                 --indent;
@@ -379,12 +405,35 @@ namespace RoslynTool.CsToLua
 
                 //instance function
                 foreach (var ci in classes) {
-                    sb.Append(ci.InstanceFunctionSourceCodeBuilder.ToString());
+                    sb.Append(ci.InstanceFunctionCodeBuilder.ToString());
                 }
+
+                sb.AppendLine();
+
+                if (!haveCtor) {
+                    sb.AppendFormat("{0}ctor = function(self)", GetIndentString(indent));
+                    sb.AppendLine();
+                    ++indent;
+                    sb.AppendFormat("{0}self:__ctor();", GetIndentString(indent));
+                    sb.AppendLine();
+                    --indent;
+                    sb.AppendFormat("{0}end,", GetIndentString(indent));
+                    sb.AppendLine();
+                }
+
+                sb.AppendFormat("{0}__ctor = function(self)", GetIndentString(indent));
+                sb.AppendLine();
+                //instance initializer
+                foreach (var ci in classes) {
+                    sb.Append(ci.InstanceInitializerCodeBuilder.ToString());
+                }
+                sb.AppendFormat("{0}end,", GetIndentString(indent));
+                sb.AppendLine();
+            
                 sb.AppendLine();
                 //instance field
                 foreach (var ci in classes) {
-                    sb.Append(ci.InstanceFieldSourceCodeBuilder.ToString());
+                    sb.Append(ci.InstanceFieldCodeBuilder.ToString());
                 }
 
                 --indent;
@@ -400,7 +449,7 @@ namespace RoslynTool.CsToLua
 
                 //instance property
                 foreach (var ci in classes) {
-                    sb.Append(ci.InstancePropertySourceCodeBuilder.ToString());
+                    sb.Append(ci.InstancePropertyCodeBuilder.ToString());
                 }
 
                 --indent;
@@ -416,7 +465,7 @@ namespace RoslynTool.CsToLua
 
                 //instance event
                 foreach (var ci in classes) {
-                    sb.Append(ci.InstanceEventSourceCodeBuilder.ToString());
+                    sb.Append(ci.InstanceEventCodeBuilder.ToString());
                 }
 
                 --indent;
@@ -461,7 +510,7 @@ namespace RoslynTool.CsToLua
                     sb.AppendFormat("defineentry({0});", key);
                     sb.AppendLine();
                 }
-                sb.AppendFormat("return {0}.defineClass();", key);
+                sb.AppendFormat("return {0}.__define_class();", key);
             }
 
             foreach (var ci in classes) {

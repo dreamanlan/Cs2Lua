@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-
 [Cs2Lua.Ignore]
 class LuaConsole
 {
@@ -39,6 +38,9 @@ class MyScript
     public System.Action OnHandle0;
     public HandleDelegation OnHandle;
     public event HandleDelegation OnHandleEvent;
+    
+    public MyScript()
+    { }
     public void Init()
     {
         string s = "test test test from cs2lua !";

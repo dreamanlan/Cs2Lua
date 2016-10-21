@@ -1,12 +1,14 @@
 ============<<<Semantic Error:test>>>============
-test.cs(178,21): error CS0815: Cannot assign anonymous method to an implicitly-typed variable
+test.cs(199,25): error CS0051: Inconsistent accessibility: parameter type 'Bar.IntHandler' is less accessible than method 'Bar.TestDelegate(Bar.IntHandler)'
+test.cs(76,35): error CS0236: A field initializer cannot reference the non-static field, method, or property 'GenericClass<T>.m_Test'
+test.cs(187,21): error CS0815: Cannot assign anonymous method to an implicitly-typed variable
 test.cs(53,27): error CS0841: Cannot use local variable 'v' before it is declared
 test.cs(61,21): error CS0136: A local or parameter named 'v' cannot be declared in this scope because that name is used in an enclosing local scope to define a local or parameter
 test.cs(58,39): warning CS0219: The variable 's' is assigned but its value is never used
-test.cs(134,21): error CS0136: A local or parameter named 'v' cannot be declared in this scope because that name is used in an enclosing local scope to define a local or parameter
-test.cs(130,24): error CS0161: 'Foo.Test(int)': not all code paths return a value
-test.cs(191,19): error CS0070: The event 'Foo.OnSimple' can only appear on the left hand side of += or -= (except when used from within the type 'Foo')
-test.cs(206,21): error CS0128: A local variable named 'v' is already defined in this scope
-test.cs(211,21): error CS0029: Cannot implicitly convert type 'int' to 'System.Collections.Generic.List<int>'
-test.cs(262,21): error CS0266: Cannot implicitly convert type 'int?' to 'int'. An explicit conversion exists (are you missing a cast?)
-test.cs(231,21): warning CS0162: Unreachable code detected
+test.cs(143,21): error CS0136: A local or parameter named 'v' cannot be declared in this scope because that name is used in an enclosing local scope to define a local or parameter
+test.cs(139,24): error CS0161: 'Foo.Test(int)': not all code paths return a value
+test.cs(207,19): error CS0070: The event 'Foo.OnSimple' can only appear on the left hand side of += or -= (except when used from within the type 'Foo')
+test.cs(222,21): error CS0128: A local variable named 'v' is already defined in this scope
+test.cs(227,21): error CS0029: Cannot implicitly convert type 'int' to 'System.Collections.Generic.List<int>'
+test.cs(278,21): error CS0266: Cannot implicitly convert type 'int?' to 'int'. An explicit conversion exists (are you missing a cast?)
+test.cs(247,21): warning CS0162: Unreachable code detected

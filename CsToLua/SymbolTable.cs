@@ -38,9 +38,9 @@ namespace RoslynTool.CsToLua
                 }                
                 var msym = sym as IMethodSymbol;
                 if (null != msym) {
-                    if (msym.MethodKind == MethodKind.Constructor) {
+                    if (msym.MethodKind == MethodKind.Constructor && !msym.IsImplicitlyDeclared) {
                         ExistConstructor = true;
-                    } else if (msym.MethodKind == MethodKind.StaticConstructor) {
+                    } else if (msym.MethodKind == MethodKind.StaticConstructor && !msym.IsImplicitlyDeclared) {
                         ExistStaticConstructor = true;
                     }
                     MethodSymbols.Add(msym);
@@ -152,10 +152,10 @@ namespace RoslynTool.CsToLua
                 if (param.Type.Kind == SymbolKind.ArrayType) {
                     sb.Append("Arr_");
                     var arrSym = param.Type as IArrayTypeSymbol;
-                    string fn = ClassInfo.GetFullName(arrSym.ElementType);
+                    string fn = ClassInfo.GetFullNameWithTypeArguments(arrSym.ElementType);
                     sb.Append(fn.Replace('.', '_'));
                 } else {
-                    string fn = ClassInfo.GetFullName(param.Type);
+                    string fn = ClassInfo.GetFullNameWithTypeArguments(param.Type);
                     sb.Append(fn.Replace('.', '_'));
                 }
             }

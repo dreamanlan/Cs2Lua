@@ -63,7 +63,7 @@ __mt_array = {
         return ret;
       end;
     elseif k=="Add" then
-      return function(obj, v) table.insert(obj, v);
+      return function(obj, v) table.insert(obj, v); end;
     elseif k=="Remove" then
       return function(obj, p)
         local pos = 1;
@@ -75,10 +75,10 @@ __mt_array = {
           end;
           pos=pos+1;		        
         end;
-        if pos>=1 and pos<=table.maxn(obj) then
+        if ret then
           table.remove(obj,pos);
         end;
-        return v;
+        return ret;
       end;
 		end;
 	end,
@@ -92,51 +92,57 @@ __mt_dictionary = {
 		  return function(obj, p1,p2) obj[p1]=p2; return p2; end;
 		elseif k=="Remove" then
 		  return function(obj, p)
-		      local pos = 1;
-		      local ret = nil;
-		      for k,v in pairs(obj) do		        
-		        if k==p then
-		          ret=v;
-		          break;
-		        end;
-		        pos=pos+1;		        
-		      end;
-		      if pos>=1 and pos<=table.maxn(obj) then
-		        table.remove(obj,pos);
-		      end;
-		      return v;
-		    end;
+	      local pos = 1;
+	      local ret = nil;
+	      for k,v in pairs(obj) do		        
+	        if k==p then
+	          ret=v;
+	          break;
+	        end;
+	        pos=pos+1;		        
+	      end;
+	      if ret then
+	        table.remove(obj,pos);
+	      end;
+	      return ret;
+	    end;
 		elseif k=="ContainsKey" then
 		  return function(obj, p)
-		      if obj[p]~=nil then
-		        return true;
-		      end;
-		      local ret = false;
-		      for k,v in pairs(obj) do		        
-		        if k==p then
-		          ret=true;
-		          break;
-		        end;
-		      end;
-		      return ret;
-		    end;
+	      if obj[p]~=nil then
+	        return true;
+	      end;
+	      local ret = false;
+	      for k,v in pairs(obj) do		        
+	        if k==p then
+	          ret=true;
+	          break;
+	        end;
+	      end;
+	      return ret;
+	    end;
 		elseif k=="ContainsValue" then
 		  return function(obj, p)
-		      local ret = false;
-		      for k,v in pairs(obj) do		        
-		        if v==p then
-		          ret=true;
-		          break;
-		        end;
-		      end;
-		      return ret;
-		    end;		    
+	      local ret = false;
+	      for k,v in pairs(obj) do		        
+	        if v==p then
+	          ret=true;
+	          break;
+	        end;
+	      end;
+	      return ret;
+	    end;		    
 		end;
 	end,
 };
 
 __mt_delegation = {
-
+  __call = function(t, ...)
+    for k,v in pairs(t) do
+      if v then
+        v(...);
+      end;
+    end;
+  end;
 };
 
 function wraparray(arr)
@@ -147,8 +153,8 @@ function wrapdictionary(dict)
 	return setmetatable(dict, __mt_dictionary);
 end;
 
-function wrapdelegation()
-  return setmetatable({}, __mt_delegation);
+function wrapdelegation(handlers)
+  return setmetatable(handlers, __mt_delegation);
 end;
 
 LuaConsole = {
@@ -167,12 +173,14 @@ function defineclass(static, static_props, static_events, instance, instance_pro
     local class = static or {};
     local class_props = static_props or {};
     local class_events = static_events or {};
+    
     setmetatable(class, {            
         __call = function()
             local obj = instance or {};
             local obj_props = instance_props or {};
             local obj_events = instance_events or {};
             obj["__class"] = class;
+            
             setmetatable(obj, {
                 __index = function(t, k)
                     local ret;
@@ -234,45 +242,80 @@ function defineclass(static, static_props, static_events, instance, instance_pro
     return class;
 end;
 
-function newinternobject(class, ctorclosure)
+function newobject(class, ctor, ...)
   local obj = class();
-  obj = ctorclosure(obj);
+  if ctor then
+    obj[ctor](obj, ...);
+  end;
   return obj;
 end;
 
-function newexternobject(class, ctorclosure)
-  local obj = ctorclosure(class);
-  return obj;
-end;
-
-function newobject(class, ctorclosure)
-  local obj = class();
-  obj = ctorclosure(obj);
+function newexternobject(class, ctor, ...)
+  local obj = class(...);
   return obj;
 end;
 
 function delegationwrap(handler)
-  return { handler };
+  return wrapdelegation{ handler };
 end;
 
-function interndelegationset(v, handler)
-
+function delegationset(t, k, handler)
+  local v = t;
+  if k then
+    v = t[k];  
+  end;
+  local n = table.maxn(t[k]);
+  for i=1,n do
+    table.remove(v);
+  end;
+  table.insert(v,handler);
 end;
-function interndelegationadd(v, handler)
-
+function delegationadd(t, k, handler)
+  local v = t;
+  if k then
+    v = t[k];  
+  end;
+  table.insert(v, handler);
 end;
-function interndelegationremove(v, handler)
-
+function delegationremove(t, k, handler)
+  local v = t;
+  if k then
+    v = t[k];  
+  end;
+  local find=false;
+  local pos = 1;
+  for k,v in pairs(v) do
+    if v==handler then
+      find=true;
+      break;
+    end;
+    pos = pos + 1;
+  end;
+  if find then
+    table.remove(v, pos);
+  end;
 end;
 
-function externdelegationset(v, handler)
-
+function externdelegationset(t, k, handler)
+  if k then
+    t[k] = handler;
+  else
+    v = handler;
+  end;
 end;
-function externdelegationadd(v, handler)
-
+function externdelegationadd(t, k, handler)
+  if k then
+    t[k] = {"+=", handler};
+  else
+    v = {"+=", handler};
+  end;
 end;
-function interndelegationremove(v, handler)
-
+function externdelegationremove(t, k, handler)
+  if k then
+    t[k] = {"-=", handler};
+  else
+    v = {"-=", handler};
+  end;
 end;
 
 function defineentry(class)

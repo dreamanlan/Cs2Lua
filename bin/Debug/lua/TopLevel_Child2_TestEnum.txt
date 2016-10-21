@@ -4,6 +4,9 @@ TopLevel = {
 	Child2 = {
 		TestEnum = {
 
+			__cctor = function()
+			end,
+
 			One = 0,
 			Two = 1,
 			Three = 2,
@@ -12,4 +15,4 @@ TopLevel = {
 	},
 };
 
-return TopLevel.Child2.TestEnum.defineClass();
+return TopLevel.Child2.TestEnum.__define_class();

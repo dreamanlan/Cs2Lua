@@ -2,21 +2,25 @@ require "utility";
 
 TopLevel = {
 	Child1 = {
-		GenericClass = {
+		GenericClass_T = {
 			cctor = function()
-				TopLevel.Child1.GenericClass.s_Test = 9876;
+				TopLevel.Child1.GenericClass_T.__cctor();
+				TopLevel.Child1.GenericClass_T.s_Test = 9876;
 			end,
 
-			OnAction0 = wrapdelegation(),
-			OnAction1 = nil,
+			__cctor = function()
+			end,
+
+			OnAction0 = wrapdelegation({}),
+			OnAction1 = wrapdelegation({}),
 			s_Test = 8765,
 
-			newObject = function(...)
+			__new_object = function(...)
 				local args = ...;
-				return newobject(TopLevel.Child1.GenericClass, (function(obj) local v, v2; obj, v, v2 = obj:ctor(args); return obj; end));
+				return (function() local obj, v, v2 = newobject(TopLevel.Child1.GenericClass_T, "ctor", args); return obj; end)();
 			end,
-			defineClass = function()
-				local static = TopLevel.Child1.GenericClass;
+			__define_class = function()
+				local static = TopLevel.Child1.GenericClass_T;
 
 				local static_props = {
 				};
@@ -30,10 +34,10 @@ TopLevel = {
 					end,
 					__indexer_set = function(self, v1, v2, value)
 					end,
-					Test = function(self, v)
+					Test__TopLevel_Child1_T = function(self, v)
 						LuaConsole.Print(typeis(v, "System.Int32"));
 						local path = "";
-						local fs = newexternobject(System.IO.StreamWriter, (function(obj) return obj; end));
+						local fs = (function() local self; self = newexternobject(System.IO.StreamWriter, "ctor", path); return self; end)();
 						LuaConsole.Print(fs:ToString());
 						fs:Dispose();
 						local s = "test";
@@ -42,18 +46,27 @@ TopLevel = {
 						local v = self:__indexer_get(1, 2);
 						self:__indexer_set(2, 3, 456);
 					end,
+					Test__System_Int32__System_Single = function(self, vv, bb)
+					end,
 					ctor = function(self, v)
 						local v2 = nil;
+						self:__ctor();
 						self.m_Test = v + 456;
 						v = 123;
 						v2 = 789;
 						return self, v, v2;
 					end,
+					__ctor = function()
+						self.m_Array = wraparray{1, 2, 3, 4};
+						self.m_Test2 = self.m_Test + 1;
+					end,
 
 					PropErr = 456,
-					OnAction2 = wrapdelegation(),
-					OnAction3 = wrapdelegation(),
+					OnAction2 = wrapdelegation({}),
+					OnAction3 = wrapdelegation({}),
 					m_Test = 123,
+					m_Array = nil,
+					m_Test2 = nil,
 				};
 
 				local instance_props = {
@@ -70,10 +83,10 @@ TopLevel = {
 				local instance_events = {
 					AAA = {
 						add = function(self, value)
-							interndelegationadd(OnAction0, value);
+							delegationadd(TopLevel.Child1.GenericClass_T.OnAction0, value);
 						end,
 						remove = function(self, value)
-							interndelegationremove(OnAction0, value);
+							delegationremove(TopLevel.Child1.GenericClass_T.OnAction0, value);
 						end,
 					},
 				};
@@ -84,4 +97,4 @@ TopLevel = {
 	},
 };
 
-return TopLevel.Child1.GenericClass.defineClass();
+return TopLevel.Child1.GenericClass_T.__define_class();

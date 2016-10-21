@@ -61,6 +61,10 @@ namespace TopLevel
                 int v = this[1,2];
                 this[2,3]=456;
             }
+            public void Test(int vv, float bb)
+            {
+
+            }
             public GenericClass(ref int v, out int v2)
             {
                 m_Test = v + 456;
@@ -68,6 +72,8 @@ namespace TopLevel
                 v2 = 789;
             }
             private int m_Test = 123;
+            private int[] m_Array = new int[]{1,2,3,4};
+            private int m_Test2 = m_Test + 1;
 
             static GenericClass()
             {
@@ -87,6 +93,9 @@ namespace TopLevel
             {
                 this.m_Test = v;
             }
+
+            public void GTest(GenericClass<int> arg){}
+            public void GTest(GenericClass<float> arg){}
 
             public void Test(int a, ref int b, out int c, params int[] args)
             {
@@ -183,6 +192,13 @@ namespace TopLevel
                 t(1);
                 IntHandler t2 = this.Test;
                 t2(2);
+                IntHandler aa;
+                aa=Test;
+                TestDelegate(Test);
+            }
+            public void TestDelegate(IntHandler handler)
+            {
+
             }
             public void Test()
             {

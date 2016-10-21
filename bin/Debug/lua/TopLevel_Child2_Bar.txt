@@ -5,13 +5,16 @@ TopLevel = {
 	Child2 = {
 		Bar = {
 
+			__cctor = function()
+			end,
+
 			s_Test = 123,
 
-			newObject = function(...)
+			__new_object = function(...)
 				local args = ...;
-				return newobject(TopLevel.Child2.Bar, (function(obj) obj = obj:ctor(args); return obj; end));
+				return (function() local obj = newobject(TopLevel.Child2.Bar, "ctor", args); return obj; end)();
 			end,
-			defineClass = function()
+			__define_class = function()
 				local static = TopLevel.Child2.Bar;
 
 				local static_props = {
@@ -22,6 +25,7 @@ TopLevel = {
 
 				local instance = {
 					ctor = function(self, i, j)
+						self:__ctor();
 						return self;
 					end,
 					Handler = function(self)
@@ -29,25 +33,30 @@ TopLevel = {
 							LuaConsole.Print(1, 2, 3);
 						end);
 						Test__System_Int32(123);
-						local t = wrapdelegate((function(v) self:Test__System_Int32(v) end));
-						Invoke(1);
-						local t2 = wrapdelegate((function(v) self.Test__System_Int32(v) end));
-						Invoke(2);
+						local t = delegationwrap((function(v) self:Test__System_Int32(v) end));
+						t(1);
+						local t2 = delegationwrap((function(v) self.Test__System_Int32(v) end));
+						t2(2);
+						local aa;
+						aa = delegationwrap((function(v) self:Test__System_Int32(v) end));
+						TestDelegate((function(v) self:Test__System_Int32(v) end));
+					end,
+					TestDelegate = function(self, handler)
 					end,
 					Test = function(self)
 						local F = TopLevel.Child2.Bar.s_Test;
-						local f = newinternobject(TopLevel.Child1.Foo, (function(obj) objobj:ctor__System_Int32(123); return obj; end));
-						interndelegationset(f.OnSimple, (function() self.Handler() end));
-						local ff = newinternobject(TopLevel.Child1.Foo, (function(obj) objobj:ctor(); self.m_Test = 456; self.m_Test2 = 789; return obj; end));
+						local f = (function() local self; self = newobject(TopLevel.Child1.Foo, "ctor__System_Int32", 123); return self; end)();
+						delegationset(f.OnSimple, (function() self.Handler() end));
+						local ff = (function() local self; self = newobject(TopLevel.Child1.Foo, "ctor"); self.m_Test = 456; self.m_Test2 = 789; return self; end)();
 						local a = 0;
 						local b = 0;
 						local c = 0;
 						b = ( (function() c = c + 2; return c; end)() );
-						local list = newexternobject(System.Collections.Generic.List, (function(obj) ; return obj; end));
-						list:Add(newexternobject(System.Collections.Generic.List, (function(obj) ; return obj; end)));
-						local v = list:__indexer_get(0);
-						local dict = newexternobject(System.Collections.Generic.Dictionary, (function(obj) ; return obj; end));
-						Test__System_Collections_Generic_Dictionary(dict);
+						local list = wraparray{wraparray{1, 2}, wraparray{3, 4, 5}};
+						list:Add(wraparray{123, 456});
+						local v = list[0];
+						local dict = wrapdictionary{["key1"] = "value1", ["key2"] = "value2"};
+						Test__System_Collections_Generic_Dictionary_String_String(dict);
 						b, c = f:Test__System_Int32__Ref_System_Int32__Out_System_Int32__Arr_System_Int32(1, b, 3);
 						LuaConsole.Print(b, c);
 						local r = 0;
@@ -78,15 +87,15 @@ TopLevel = {
 						local h = wraparray{wraparray{1, 2}, wraparray{3, 4}};
 						local i = 0;
 						while i < g0.Length do
-						local __compiler_continue_227 = false
+						local __compiler_continue_243 = false
 						repeat
 							g0[i + 1] = wraparray{};
 							if true then
-								__compiler_continue_227 = true;
+								__compiler_continue_243 = true;
 								break;
 							end;
 							if true then
-								__compiler_continue_227 = false;
+								__compiler_continue_243 = false;
 								break;
 							end;
 							local j = 0;
@@ -96,7 +105,7 @@ TopLevel = {
 							end;
 							i = i + 1;
 						until true;
-						if __compiler_continue_227 then break; end;
+						if __compiler_continue_243 then break; end;
 						end;
 						local i = 0;
 						while i < h0:GetLength(0) do
@@ -113,32 +122,34 @@ TopLevel = {
 						end;
 						local hh = wraparray{7, 6, 7, 8};
 						Test__Arr_System_Int32(hh);
-						local __compiler_switch_247 = a;
-						if (__compiler_switch_247 == 1) and (__compiler_switch_247 == 3) then
+						local __compiler_switch_263 = a;
+						if (__compiler_switch_263 == 1) and (__compiler_switch_263 == 3) then
 						repeat
 							if a == 1 then
 								break;
 							end;
 							break;
 						until 0 ~= 0;
-						elseif __compiler_switch_247 == 2 then
+						elseif __compiler_switch_263 == 2 then
 						else
 						end;
-						local __compiler_foreach_260 = (def):GetEnumerator();
-						while __compiler_foreach_260:MoveNext() do
-							i = __compiler_foreach_260.Current;
+						local __compiler_foreach_276 = (def):GetEnumerator();
+						while __compiler_foreach_276:MoveNext() do
+							i = __compiler_foreach_276.Current;
 							TopLevel.Child2.Bar.s_Test = TopLevel.Child2.Bar.s_Test + (function() local v = hh; if v == nil then return nil; else return v[i + 1]; end; end)();
 						end;
 						Test__Arr_System_Int32(wraparray{1, 2, 3});
 						Test__Arr_System_Int32(wraparray{1, 2, 3});
-						Test__System_Collections_Generic_Dictionary(newexternobject(System.Collections.Generic.Dictionary, (function(obj) ; return obj; end)));
+						Test__System_Collections_Generic_Dictionary_String_String(wrapdictionary{["1"] = "2", ["3"] = "4"});
 					end,
 					Test__System_Int32 = function(self, v)
 						LuaConsole.Print(v);
 					end,
 					Test__Arr_System_Int32 = function(self, arr)
 					end,
-					Test__System_Collections_Generic_Dictionary = function(self, dict)
+					Test__System_Collections_Generic_Dictionary_String_String = function(self, dict)
+					end,
+					__ctor = function()
 					end,
 
 				};
@@ -155,5 +166,5 @@ TopLevel = {
 	},
 };
 
-return TopLevel.Child2.Bar.defineClass();--local obj = TopLevel.Child2.Bar:new();
+return TopLevel.Child2.Bar.__define_class();--local obj = TopLevel.Child2.Bar:new();
 --obj:Test();
