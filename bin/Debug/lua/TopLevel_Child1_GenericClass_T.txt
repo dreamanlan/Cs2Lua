@@ -11,8 +11,8 @@ TopLevel = {
 			__cctor = function()
 			end,
 
-			OnAction0 = wrapdelegation({}),
-			OnAction1 = wrapdelegation({}),
+			OnAction0 = wrapdelegation{},
+			OnAction1 = wrapdelegation{},
 			s_Test = 8765,
 
 			__new_object = function(...)
@@ -35,15 +35,17 @@ TopLevel = {
 					__indexer_set = function(self, v1, v2, value)
 					end,
 					Test__TopLevel_Child1_T = function(self, v)
+						local a = nil;
+						local obj = (function() local __compiler_newobject_54; __compiler_newobject_54 = newexternobject(UnityEngine.GameObject, "ctor"); return __compiler_newobject_54; end)();
+						obj:GetComponent(UnityEngine.Renderer);
 						LuaConsole.Print(typeis(v, "System.Int32"));
 						local path = "";
-						local fs = (function() local self; self = newexternobject(System.IO.StreamWriter, "ctor", path); return self; end)();
+						local fs = (function() local __compiler_newobject_58; __compiler_newobject_58 = newexternobject(System.IO.StreamWriter, "ctor", path); return __compiler_newobject_58; end)();
 						LuaConsole.Print(fs:ToString());
 						fs:Dispose();
 						local s = "test";
 						local obj = wrapdictionary{a = 123, b = 456};
-						LuaConsole.Print(obj.a);
-						local v = self:__indexer_get(1, 2);
+												local v = self:__indexer_get(1, 2);
 						self:__indexer_set(2, 3, 456);
 					end,
 					Test__System_Int32__System_Single = function(self, vv, bb)
@@ -56,14 +58,15 @@ TopLevel = {
 						v2 = 789;
 						return self, v, v2;
 					end,
-					__ctor = function()
+
+					__ctor = function(self)
 						self.m_Array = wraparray{1, 2, 3, 4};
 						self.m_Test2 = self.m_Test + 1;
 					end,
 
 					PropErr = 456,
-					OnAction2 = wrapdelegation({}),
-					OnAction3 = wrapdelegation({}),
+					OnAction2 = wrapdelegation{},
+					OnAction3 = wrapdelegation{},
 					m_Test = 123,
 					m_Array = nil,
 					m_Test2 = nil,
@@ -83,10 +86,10 @@ TopLevel = {
 				local instance_events = {
 					AAA = {
 						add = function(self, value)
-							delegationadd(TopLevel.Child1.GenericClass_T.OnAction0, value);
+							delegationadd(self, "OnAction0", value);
 						end,
 						remove = function(self, value)
-							delegationremove(TopLevel.Child1.GenericClass_T.OnAction0, value);
+							delegationremove(self, "OnAction0", value);
 						end,
 					},
 				};

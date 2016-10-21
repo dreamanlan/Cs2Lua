@@ -22,32 +22,42 @@ namespace RoslynTool
             if (args.Length > 0) {
                 for (int i = 0; i < args.Length; ++i) {
                     if (0 == string.Compare(args[i], "-ext", true)) {
-                        string arg = args[i + 1];
-                        if (!arg.StartsWith("-")) {
-                            outputExt = arg;
-                            ++i;
+                        if (i < args.Length - 1) {
+                            string arg = args[i + 1];
+                            if (!arg.StartsWith("-")) {
+                                outputExt = arg;
+                                ++i;
+                            }
                         }
                     } else if (0 == string.Compare(args[i], "-d", true)) {
-                        string arg = args[i + 1];
-                        if (!arg.StartsWith("-")) {
-                            macros.Add(arg);
-                            ++i;
+                        if (i < args.Length - 1) {
+                            string arg = args[i + 1];
+                            if (!arg.StartsWith("-")) {
+                                macros.Add(arg);
+                                ++i;
+                            }
                         }
                     } else if (0 == string.Compare(args[i], "-refbyname", true)) {
-                        string name, alias;
-                        string arg = args[i + 1];
-                        if (!arg.StartsWith("-")) {
-                            name = arg;
-                            ++i;
+                        string name = string.Empty, alias = "global";
+                        if (i < args.Length - 1) {
+                            string arg = args[i + 1];
+                            if (!arg.StartsWith("-")) {
+                                name = arg;
+                                ++i;
+                            } else {
+                                continue;
+                            }
                         } else {
                             continue;
                         }
-                        arg = args[i + 1];
-                        if (!arg.StartsWith("-")) {
-                            alias = arg;
-                            ++i;
-                        } else {
-                            continue;
+                        if (i < args.Length - 1) {
+                            string arg = args[i + 1];
+                            if (!arg.StartsWith("-")) {
+                                alias = arg;
+                                ++i;
+                            } else {
+                                continue;
+                            }
                         }
                         if (!refByNames.ContainsKey(name)) {
                             refByNames.Add(name, alias);
@@ -55,20 +65,26 @@ namespace RoslynTool
                             Console.WriteLine("refbyname duplicate, ignored ! {0}={1}", name, alias);
                         }
                     } else if (0 == string.Compare(args[i], "-refbypath", true)) {
-                        string path, alias;
-                        string arg = args[i + 1];
-                        if (!arg.StartsWith("-")) {
-                            path = arg;
-                            ++i;
+                        string path = string.Empty, alias = "global";
+                        if (i < args.Length - 1) {
+                            string arg = args[i + 1];
+                            if (!arg.StartsWith("-")) {
+                                path = arg;
+                                ++i;
+                            } else {
+                                continue;
+                            }
                         } else {
                             continue;
                         }
-                        arg = args[i + 1];
-                        if (!arg.StartsWith("-")) {
-                            alias = arg;
-                            ++i;
-                        } else {
-                            continue;
+                        if (i < args.Length - 1) {
+                            string arg = args[i + 1];
+                            if (!arg.StartsWith("-")) {
+                                alias = arg;
+                                ++i;
+                            } else {
+                                continue;
+                            }
                         }
                         if (!File.Exists(path)) {
                             Console.WriteLine("refbypath path not found ! {0}={1}", path, alias);

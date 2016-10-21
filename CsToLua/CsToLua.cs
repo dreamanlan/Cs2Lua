@@ -713,6 +713,10 @@ namespace RoslynTool.CsToLua
             TypeInfo typeInfo = m_Model.GetTypeInfo(node.Type);
             CodeBuilder.AppendFormat(", \"{0}\")", ClassInfo.GetFullName(typeInfo.Type));
         }
+        public override void VisitDefaultExpression(DefaultExpressionSyntax node)
+        {
+            CodeBuilder.Append("nil");
+        }
         #endregion
 
         #region 语句
@@ -1122,10 +1126,13 @@ namespace RoslynTool.CsToLua
         }
         private void OutputExpressionList(IList<ExpressionSyntax> args, IList<ITypeSymbol> typeArgs)
         {
-            if (args.Count > 0) {
-                OutputExpressionList(args);
-            } else if (typeArgs.Count > 0) {
+            if (typeArgs.Count > 0) {
                 OutputTypeArgumentList(typeArgs);
+            }
+            if (args.Count > 0) {
+                if (typeArgs.Count > 0)
+                    CodeBuilder.Append(", ");
+                OutputExpressionList(args);
             }
         }
         private void OutputExpressionList(IList<ExpressionSyntax> args)

@@ -5,6 +5,9 @@ TopLevel = {
 	Child2 = {
 		Bar = {
 
+			cctor = function()
+				TopLevel.Child2.Bar.__cctor();
+			end,
 			__cctor = function()
 			end,
 
@@ -32,22 +35,22 @@ TopLevel = {
 						local f = (function()
 							LuaConsole.Print(1, 2, 3);
 						end);
-						Test__System_Int32(123);
+						self:Test__System_Int32(123);
 						local t = delegationwrap((function(v) self:Test__System_Int32(v) end));
 						t(1);
 						local t2 = delegationwrap((function(v) self.Test__System_Int32(v) end));
 						t2(2);
 						local aa;
 						aa = delegationwrap((function(v) self:Test__System_Int32(v) end));
-						TestDelegate((function(v) self:Test__System_Int32(v) end));
+						self:TestDelegate((function(v) self:Test__System_Int32(v) end));
 					end,
 					TestDelegate = function(self, handler)
 					end,
 					Test = function(self)
 						local F = TopLevel.Child2.Bar.s_Test;
-						local f = (function() local self; self = newobject(TopLevel.Child1.Foo, "ctor__System_Int32", 123); return self; end)();
-						delegationset(f.OnSimple, (function() self.Handler() end));
-						local ff = (function() local self; self = newobject(TopLevel.Child1.Foo, "ctor"); self.m_Test = 456; self.m_Test2 = 789; return self; end)();
+						local f = (function() local __compiler_newobject_209; __compiler_newobject_209 = newobject(TopLevel.Child1.Foo, "ctor__System_Int32", 123); return __compiler_newobject_209; end)();
+						delegationset(f, "OnSimple", (function() self.Handler() end));
+						local ff = (function() local __compiler_newobject_211; __compiler_newobject_211 = newobject(TopLevel.Child1.Foo, "ctor"); (function(self) self.m_Test = 456; self.m_Test2 = 789; )(__compiler_newobject_211)return __compiler_newobject_211; end)();
 						local a = 0;
 						local b = 0;
 						local c = 0;
@@ -56,16 +59,16 @@ TopLevel = {
 						list:Add(wraparray{123, 456});
 						local v = list[0];
 						local dict = wrapdictionary{["key1"] = "value1", ["key2"] = "value2"};
-						Test__System_Collections_Generic_Dictionary_String_String(dict);
+						self:Test__System_Collections_Generic_Dictionary_String_String(dict);
 						b, c = f:Test__System_Int32__Ref_System_Int32__Out_System_Int32__Arr_System_Int32(1, b, 3);
 						LuaConsole.Print(b, c);
 						local r = 0;
-						r = r + (function() local ret; ret, b, c = f:Test2(1, 2, b); return ret; end)();
+						r = r + (function() local __compiler_assigninvoke_222; __compiler_assigninvoke_222, b, c = f:Test2(1, 2, b); return __compiler_assigninvoke_222; end)();
 						LuaConsole.Print(r, b, c);
 						local v0, b, c = f:Test2(3, 4, b);
 						local v = nullablecondexp(ff, f);
-						local vv = (function() local v = f; if v == nil then return nil; else return v.m_Test; end; end)();
-						local vvv = (function() local v = f; if v == nil then return nil; else return vTest__System_Int32(123); end; end)();
+						local vv = (function() local __compiler_condaccess_227 = f; if __compiler_condaccess_227 == nil then return nil; else return __compiler_condaccess_227.m_Test; end; end)();
+						local vvv = (function() local __compiler_condaccess_228 = f; if __compiler_condaccess_228 == nil then return nil; else return __compiler_condaccess_228self:Test__System_Int32(123); end; end)();
 						v, b, c = f:Test2(3, 4, b);
 						LuaConsole.Print(v, b, c);
 						while a < 12 do
@@ -87,15 +90,15 @@ TopLevel = {
 						local h = wraparray{wraparray{1, 2}, wraparray{3, 4}};
 						local i = 0;
 						while i < g0.Length do
-						local __compiler_continue_243 = false
+						local __compiler_continue_247 = false
 						repeat
 							g0[i + 1] = wraparray{};
 							if true then
-								__compiler_continue_243 = true;
+								__compiler_continue_247 = true;
 								break;
 							end;
 							if true then
-								__compiler_continue_243 = false;
+								__compiler_continue_247 = false;
 								break;
 							end;
 							local j = 0;
@@ -105,7 +108,7 @@ TopLevel = {
 							end;
 							i = i + 1;
 						until true;
-						if __compiler_continue_243 then break; end;
+						if __compiler_continue_247 then break; end;
 						end;
 						local i = 0;
 						while i < h0:GetLength(0) do
@@ -121,26 +124,26 @@ TopLevel = {
 							i = i + 1;
 						end;
 						local hh = wraparray{7, 6, 7, 8};
-						Test__Arr_System_Int32(hh);
-						local __compiler_switch_263 = a;
-						if (__compiler_switch_263 == 1) and (__compiler_switch_263 == 3) then
+						self:Test__Arr_System_Int32(hh);
+						local __compiler_switch_267 = a;
+						if (__compiler_switch_267 == 1) and (__compiler_switch_267 == 3) then
 						repeat
 							if a == 1 then
 								break;
 							end;
 							break;
 						until 0 ~= 0;
-						elseif __compiler_switch_263 == 2 then
+						elseif __compiler_switch_267 == 2 then
 						else
 						end;
-						local __compiler_foreach_276 = (def):GetEnumerator();
-						while __compiler_foreach_276:MoveNext() do
-							i = __compiler_foreach_276.Current;
-							TopLevel.Child2.Bar.s_Test = TopLevel.Child2.Bar.s_Test + (function() local v = hh; if v == nil then return nil; else return v[i + 1]; end; end)();
+						local __compiler_foreach_280 = (def):GetEnumerator();
+						while __compiler_foreach_280:MoveNext() do
+							i = __compiler_foreach_280.Current;
+							TopLevel.Child2.Bar.s_Test = TopLevel.Child2.Bar.s_Test + (function() local __compiler_condaccess_281 = hh; if __compiler_condaccess_281 == nil then return nil; else return __compiler_condaccess_281[i + 1]; end; end)();
 						end;
-						Test__Arr_System_Int32(wraparray{1, 2, 3});
-						Test__Arr_System_Int32(wraparray{1, 2, 3});
-						Test__System_Collections_Generic_Dictionary_String_String(wrapdictionary{["1"] = "2", ["3"] = "4"});
+						self:Test__Arr_System_Int32(wraparray{1, 2, 3});
+						self:Test__Arr_System_Int32(wraparray{1, 2, 3});
+						self:Test__System_Collections_Generic_Dictionary_String_String(wrapdictionary{["1"] = "2", ["3"] = "4"});
 					end,
 					Test__System_Int32 = function(self, v)
 						LuaConsole.Print(v);
@@ -149,7 +152,8 @@ TopLevel = {
 					end,
 					Test__System_Collections_Generic_Dictionary_String_String = function(self, dict)
 					end,
-					__ctor = function()
+
+					__ctor = function(self)
 					end,
 
 				};

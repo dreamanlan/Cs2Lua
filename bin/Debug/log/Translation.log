@@ -1,0 +1,3 @@
+============<<<Translation Error:test>>>============
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: OverloadResolutionFailure, code: lua.Print(obj.a) locationtest.cs: (63,16)-(63,32)
+	CandidateSymbol: LuaConsole.Print(params object[])

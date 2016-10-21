@@ -122,10 +122,6 @@ namespace RoslynTool.CsToLua
         {
             Log(node, "Unsupported Syntax !");
         }
-        public override void VisitDefaultExpression(DefaultExpressionSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
         public override void VisitSizeOfExpression(SizeOfExpressionSyntax node)
         {
             Log(node, "Unsupported Syntax !");

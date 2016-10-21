@@ -5,6 +5,9 @@ TopLevel = {
 	Child1 = {
 		Foo = {
 
+			cctor = function()
+				TopLevel.Child1.Foo.__cctor();
+			end,
 			__cctor = function()
 			end,
 
@@ -51,7 +54,7 @@ TopLevel = {
 						if a > 0 then
 							c = a + b + args[1];
 						end;
-						local v = (function() local v = args; if v == nil then return nil; else return v.Length; end; end)();
+						local v = (function() local __compiler_condaccess_115 = args; if __compiler_condaccess_115 == nil then return nil; else return __compiler_condaccess_115.Length; end; end)();
 						if a < b then
 							c = b - a;
 						elseif a >= b then
@@ -80,28 +83,29 @@ TopLevel = {
 					Test__System_Int32 = function(self, v)
 						local v1 = 0;
 						local v2;
-						local f = (function() local self; self, v1, v2 = newobject(TopLevel.Child1.GenericClass_T, "ctor", v1); return self; end)();
+						local f = (function() local __compiler_newobject_145; __compiler_newobject_145, v1, v2 = newobject(TopLevel.Child1.GenericClass_T, "ctor", v1); return __compiler_newobject_145; end)();
 						local v = f:__indexer_get(3, 4);
 						f:__indexer_set(4, 5, 6);
-						f:__indexer_set(4, 5, (function() local ret; ret, v1, v2 = Test2(1, 2, v1) return ret; end)());
-						v, v1, v2 = Test2(1, 2, v1);
-						v1, v2 = Test2(1, 2, v1);
-						v = 1 + (function() local ret; ret, v1, v2 = Test2(1, 2, v1) return ret; end)();
-						v = v + (function() local ret; ret, v1, v2 = Test2(1, 2, v1); return ret; end)();
-						v2 = ( (function() v, v1, v2 = Test2(1, 2, v1); return v; end)() );
+						f:__indexer_set(4, 5, (function() local __compiler_invoke_148; __compiler_invoke_148v1, v2 = self:Test2(1, 2, v1) return __compiler_invoke_148; end)());
+						v, v1, v2 = self:Test2(1, 2, v1);
+						v1, v2 = self:Test2(1, 2, v1);
+						v = 1 + (function() local __compiler_invoke_151; __compiler_invoke_151v1, v2 = self:Test2(1, 2, v1) return __compiler_invoke_151; end)();
+						v = v + (function() local __compiler_assigninvoke_152; __compiler_assigninvoke_152, v1, v2 = self:Test2(1, 2, v1); return __compiler_assigninvoke_152; end)();
+						v2 = ( (function() v, v1, v2 = self:Test2(1, 2, v1); return v; end)() );
 						f:Test__System_Int32(v);
-						delegationadd(self.OnSimple, (function()
+						delegationadd(self, "OnSimple", (function()
 						end));
 						do
-							delegationadd(self.OnSimple2, (function()
+							delegationadd(self, "OnSimple2", (function()
 							end));
 						end;
 					end,
-					__ctor = function()
+
+					__ctor = function(self)
 					end,
 
-					OnSimple = wrapdelegation({}),
-					OnSimple2 = wrapdelegation({}),
+					OnSimple = wrapdelegation{},
+					OnSimple2 = wrapdelegation{},
 					m_Test = 0,
 					m_Test2 = 0,
 				};

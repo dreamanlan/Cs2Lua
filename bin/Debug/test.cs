@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine;
 
 [Cs2Lua.Ignore]
 class LuaConsole
@@ -50,6 +51,9 @@ namespace TopLevel
             }
             public void Test(T v)
             {
+                T a = default(T);
+                GameObject obj = new GameObject();
+                obj.GetComponent<Renderer>();
                 lua.Print(v is int);
                 string path = "";
                 using (var fs = new StreamWriter(path)) {

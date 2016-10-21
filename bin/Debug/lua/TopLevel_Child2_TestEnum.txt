@@ -4,6 +4,9 @@ TopLevel = {
 	Child2 = {
 		TestEnum = {
 
+			cctor = function()
+				TopLevel.Child2.TestEnum.__cctor();
+			end,
 			__cctor = function()
 			end,
 
