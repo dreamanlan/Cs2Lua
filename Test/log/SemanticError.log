@@ -44,5 +44,5 @@
 ..\..\Test\test1.cs(114,22): warning CS1701: Assuming assembly reference 'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' used by 'UnityEngine' matches identity 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' of 'mscorlib', you may need to supply runtime policy
 ..\..\Test\test1.cs(123,9): warning CS1701: Assuming assembly reference 'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' used by 'UnityEngine' matches identity 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' of 'mscorlib', you may need to supply runtime policy
 ============<<<Semantic Error:test2>>>============
-..\..\Test\test2.cs(2,1): hidden CS8019: Unnecessary using directive.
 ..\..\Test\test2.cs(1,1): hidden CS8019: Unnecessary using directive.
+..\..\Test\test2.cs(2,1): hidden CS8019: Unnecessary using directive.

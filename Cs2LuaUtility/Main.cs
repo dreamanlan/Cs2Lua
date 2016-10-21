@@ -9,11 +9,6 @@ namespace Cs2Lua
     [System.AttributeUsage(System.AttributeTargets.All)]
     public sealed class RequireAttribute : System.Attribute
     {
-        public string LuaModuleName
-        {
-            get { return m_LuaModuleName; }
-            set { m_LuaModuleName = value; }
-        }
         public RequireAttribute(string luaModuleName)
         {
             m_LuaModuleName = luaModuleName;

@@ -24,6 +24,7 @@ namespace RoslynTool.CsToLua
         internal string ExportConstructor = string.Empty;
         internal MethodInfo ExportConstructorInfo = null;
         internal HashSet<string> References = new HashSet<string>();
+        internal HashSet<string> IgnoreReferences = new HashSet<string>();
                 
         internal bool ExistConstructor = false;
         internal bool ExistStaticConstructor = false;
@@ -68,6 +69,8 @@ namespace RoslynTool.CsToLua
             BaseClassName = null == sym.BaseType ? string.Empty : sym.BaseType.Name;
 
             Key = GetFullName(sym);
+            References.Clear();
+            IgnoreReferences.Clear();
         }
         internal void AddReference(ISymbol sym, INamedTypeSymbol curClassSym, string key)
         {
@@ -77,8 +80,10 @@ namespace RoslynTool.CsToLua
             }
             if (null != refType && refType != curClassSym && !refType.IsAnonymousType && refType.TypeKind != TypeKind.Delegate) {                
                 if (!string.IsNullOrEmpty(key) && !References.Contains(key) && key != Key) {
-                    bool isValid = !ClassInfo.HasAttribute(refType, "Cs2Lua.IgnoreAttribute");
-                    if (isValid) {
+                    bool isIgnore = ClassInfo.HasAttribute(refType, "Cs2Lua.IgnoreAttribute");
+                    if (isIgnore) {
+                        IgnoreReferences.Add(key);
+                    } else {
                         References.Add(key);
                     }
                 }

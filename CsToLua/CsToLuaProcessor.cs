@@ -260,15 +260,33 @@ namespace RoslynTool.CsToLua
                 haveCctor = csi.ExistStaticConstructor;
                 haveCtor = csi.ExistConstructor;
             }
+            HashSet<string> requiredlibs = new HashSet<string>();
             HashSet<string> lualibs;
             if (symTable.Requires.TryGetValue(key, out lualibs)) {
                 foreach (string lib in lualibs) {
                     if (!lualibRefs.Contains(lib)) {
                         lualibRefs.Add(lib);
                     }
+                    if (!requiredlibs.Contains(lib)) {
+                        requiredlibs.Add(lib);
+                    }
                 }
             }
-
+            foreach (var ci in classes) {
+                foreach (string r in ci.IgnoreReferences) {
+                    if (symTable.Requires.TryGetValue(r, out lualibs)) {
+                        foreach (string lib in lualibs) {
+                            if (!lualibRefs.Contains(lib)) {
+                                lualibRefs.Add(lib);
+                            }
+                            if (!requiredlibs.Contains(lib)) {
+                                requiredlibs.Add(lib);
+                            }
+                        }
+                    }
+                }
+            }
+            
             bool isEntryClass = false;
             string exportConstructor = string.Empty;
             MethodInfo exportConstructorInfo = null;
@@ -283,12 +301,11 @@ namespace RoslynTool.CsToLua
             }
             if (isAlone) {
                 sb.AppendLine("require \"utility\";");
-                if (null != lualibs) {
-                    foreach (string lib in lualibs) {
-                        sb.AppendFormat("require \"{0}\";", lib);
-                        sb.AppendLine();
-                    }
+                foreach (string lib in requiredlibs) {
+                    sb.AppendFormat("require \"{0}\";", lib);
+                    sb.AppendLine();
                 }
+
                 HashSet<string> refs = new HashSet<string>();
                 //references
                 foreach (var ci in classes) {
