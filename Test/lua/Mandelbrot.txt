@@ -7,6 +7,7 @@ Mandelbrot = {
 		local height = width;
 		local maxiter = 50;
 		local limit = 4;
+		LuaConsole.Write("P4\n", width, " ", height, "\n");
 		local y = 0;
 		while y < height do
 			local Ci = 2 * y / height - 1;
@@ -27,10 +28,13 @@ Mandelbrot = {
 					end;
 				until not ((function() i = i - 1; return i; end)() > 0);
 				if isInside then
+					LuaConsole.Write("*");
 				else
+					LuaConsole.Write(" ");
 				end;
 				x = x + 1;
 			end;
+			LuaConsole.Print();
 			y = y + 1;
 		end;
 	end,

@@ -2,32 +2,19 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [Cs2Lua.Ignore]
-class LuaConsole
-{
-    public static void Print(params object[] args)
-    {
-        for (int i = 0; i < args.Length; ++i) {
-            var arg = args[i];
-            System.Console.Write(arg);
-            if (i < args.Length - 1) {
-                System.Console.Write(", ");
-            }
-        }
-        System.Console.WriteLine();
-    }
-    private static void Main()
-    {
-
-    }
-}
-
-[Cs2Lua.Ignore]
 class LuaString
 {
     public static string Format(string str, params object[] args)
     {
         return string.Format(str, args);
     }
+}
+
+[Cs2Lua.Ignore]
+class MainClass
+{
+    public static void Main()
+    { }
 }
 
 delegate void HandleDelegation();

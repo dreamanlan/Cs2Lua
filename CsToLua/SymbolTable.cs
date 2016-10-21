@@ -81,6 +81,21 @@ namespace RoslynTool.CsToLua
         {
             get { return m_ClassSymbols; }
         }
+        internal Dictionary<string, HashSet<string>> Requires
+        {
+            get { return m_Requires; }
+        }
+        internal void AddRequire(string refClass, string moduleName)
+        {
+            HashSet<string> hashset;
+            if (!m_Requires.TryGetValue(refClass, out hashset)) {
+                hashset = new HashSet<string>();
+                m_Requires.Add(refClass, hashset);
+            }
+            if (!hashset.Contains(moduleName)) {
+                hashset.Add(moduleName);
+            }
+        }
         internal string NameMangling(IMethodSymbol sym)
         {
             string ret = sym.Name;
@@ -134,6 +149,7 @@ namespace RoslynTool.CsToLua
         private IAssemblySymbol m_AssemblySymbol = null;
         private Dictionary<string, INamespaceSymbol> m_NamespaceSymbols = new Dictionary<string, INamespaceSymbol>();
         private Dictionary<string, ClassSymbolInfo> m_ClassSymbols = new Dictionary<string, ClassSymbolInfo>();
+        private Dictionary<string, HashSet<string>> m_Requires = new Dictionary<string, HashSet<string>>();
 
         internal static string CalcMethodMangling(IMethodSymbol methodSym)
         {

@@ -158,6 +158,9 @@ function wrapdelegation(handlers)
 end;
 
 LuaConsole = {
+  Write = function(...)
+    io.write(...);
+  end,
   Print = function(...)
   	print(...);
   end,

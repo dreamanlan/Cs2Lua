@@ -51,14 +51,7 @@ namespace RoslynTool.CsToLua
         internal void Init(INamedTypeSymbol sym)
         {
             IsEnum = sym.TypeKind == TypeKind.Enum;
-
-            IsEntryClass = false;
-            foreach (var attr in sym.GetAttributes()) {
-                string fullName = ClassInfo.GetFullName(attr.AttributeClass);
-                if (fullName == "Cs2Lua.EntryAttribute") {
-                    IsEntryClass = true;
-                }
-            }
+            IsEntryClass = HasAttribute(sym, "Cs2Lua.EntryAttribute");
 
             Namespace = string.Empty;
             ClassName = string.Empty;
@@ -84,13 +77,7 @@ namespace RoslynTool.CsToLua
             }
             if (null != refType && refType != curClassSym && !refType.IsAnonymousType && refType.TypeKind != TypeKind.Delegate) {                
                 if (!string.IsNullOrEmpty(key) && !References.Contains(key) && key != Key) {
-                    bool isValid = true;
-                    foreach (var attr in refType.GetAttributes()) {
-                        string fullName = ClassInfo.GetFullName(attr.AttributeClass);
-                        if (fullName == "Cs2Lua.IgnoreAttribute") {
-                            isValid = false;
-                        }
-                    }
+                    bool isValid = !ClassInfo.HasAttribute(refType, "Cs2Lua.IgnoreAttribute");
                     if (isValid) {
                         References.Add(key);
                     }
@@ -230,6 +217,47 @@ namespace RoslynTool.CsToLua
                 list.Add(arg.Name);
             }
             return string.Join("_", list.ToArray());
+        }
+
+        internal static bool HasAttribute(ISymbol sym, string fullName)
+        {
+            foreach (var attr in sym.GetAttributes()) {
+                string fn = GetFullName(attr.AttributeClass);
+                if (fn == fullName)
+                    return true;
+            }
+            return false;
+        }
+        internal static T GetAttributeArgument<T>(ISymbol sym, string fullName, string argName)
+        {
+            foreach (var attr in sym.GetAttributes()) {
+                string fn = GetFullName(attr.AttributeClass);
+                if (fn == fullName) {
+                    var args = attr.NamedArguments;
+                    foreach (var pair in args) {
+                        if (pair.Key == argName) {
+                            var arg = pair.Value;
+                            return (T)Convert.ChangeType(arg.Value, typeof(T));
+                        }
+                    }
+                }
+            }
+            return default(T);
+        }
+        internal static T GetAttributeArgument<T>(ISymbol sym, string fullName, int index)
+        {
+            foreach (var attr in sym.GetAttributes()) {
+                string fn = GetFullName(attr.AttributeClass);
+                if (fn == fullName) {
+                    var args = attr.ConstructorArguments;
+                    int ct = args.Length;
+                    if (index >= 0 && index < ct) {
+                        var arg = args[index];
+                        return (T)Convert.ChangeType(arg.Value, typeof(T));
+                    }
+                }
+            }
+            return default(T);
         }
     }
     internal class MethodInfo

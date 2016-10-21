@@ -190,7 +190,7 @@ namespace RoslynTool.CsToLua
             }
             foreach (var pair in classes) {
                 StringBuilder sb0 = new StringBuilder();
-                string fileName = BuildLuaClass(sb0, pair.Key, pair.Value, true, symTable);
+                string fileName = BuildLuaClass(sb0, pair.Key, pair.Value, symTable);
                 File.WriteAllText(Path.Combine(outputDir, Path.ChangeExtension(fileName, outputExt)), sb0.ToString());
             }
             StringBuilder sb = new StringBuilder();
@@ -200,10 +200,17 @@ namespace RoslynTool.CsToLua
 
         private static void BuildLuaClass(StringBuilder sb, MergedNamespaceInfo toplevelMni, SymbolTable symTable)
         {
+            StringBuilder code = new StringBuilder();
+            HashSet<string> lualibRefs = new HashSet<string>();
+            BuildLuaClassRecursively(code, toplevelMni, 0, symTable, lualibRefs);
             sb.AppendLine("require \"utility\";");
-            BuildLuaClassRecursively(sb, toplevelMni, 0, symTable);
+            foreach (string lib in lualibRefs) {
+                sb.AppendFormat("require \"{0}\";", lib);
+                sb.AppendLine();
+            }
+            sb.Append(code.ToString());
         }
-        private static void BuildLuaClassRecursively(StringBuilder sb, MergedNamespaceInfo mni, int indent, SymbolTable symTable)
+        private static void BuildLuaClassRecursively(StringBuilder sb, MergedNamespaceInfo mni, int indent, SymbolTable symTable, HashSet<string> lualibRefs)
         {
             if (null != mni) {
                 string nsname = mni.Name;
@@ -214,11 +221,11 @@ namespace RoslynTool.CsToLua
                 }
                 foreach (var cpair in mni.Classes) {
                     var mci = cpair.Value;
-                    BuildLuaClass(sb, mci, symTable);
+                    BuildLuaClass(sb, mci, symTable, lualibRefs);
                 }
                 foreach (var npair in mni.Namespaces) {
                     var newMni = npair.Value;
-                    BuildLuaClassRecursively(sb, newMni, indent, symTable);
+                    BuildLuaClassRecursively(sb, newMni, indent, symTable, lualibRefs);
                 }
                 if (!string.IsNullOrEmpty(nsname)) {
                     --indent;
@@ -232,11 +239,15 @@ namespace RoslynTool.CsToLua
                 }
             }
         }
-        private static void BuildLuaClass(StringBuilder sb, MergedClassInfo mci, SymbolTable symTable)
+        private static void BuildLuaClass(StringBuilder sb, MergedClassInfo mci, SymbolTable symTable, HashSet<string> lualibRefs)
         {
-            BuildLuaClass(sb, mci.Key, mci.Classes, false, symTable);
+            BuildLuaClass(sb, mci.Key, mci.Classes, false, symTable, lualibRefs);
         }
-        private static string BuildLuaClass(StringBuilder sb, string key, IList<ClassInfo> classes, bool isAlone, SymbolTable symTable)
+        private static string BuildLuaClass(StringBuilder sb, string key, IList<ClassInfo> classes, SymbolTable symTable)
+        {
+            return BuildLuaClass(sb, key, classes, true, symTable, new HashSet<string>());
+        }
+        private static string BuildLuaClass(StringBuilder sb, string key, IList<ClassInfo> classes, bool isAlone, SymbolTable symTable, HashSet<string> lualibRefs)
         {
             string fileName = key.Replace('.', '_');
             string[] nss = key.Split('.');
@@ -248,6 +259,14 @@ namespace RoslynTool.CsToLua
             if (symTable.ClassSymbols.TryGetValue(key, out csi)) {
                 haveCctor = csi.ExistStaticConstructor;
                 haveCtor = csi.ExistConstructor;
+            }
+            HashSet<string> lualibs;
+            if (symTable.Requires.TryGetValue(key, out lualibs)) {
+                foreach (string lib in lualibs) {
+                    if (!lualibRefs.Contains(lib)) {
+                        lualibRefs.Add(lib);
+                    }
+                }
             }
 
             bool isEntryClass = false;
@@ -264,6 +283,12 @@ namespace RoslynTool.CsToLua
             }
             if (isAlone) {
                 sb.AppendLine("require \"utility\";");
+                if (null != lualibs) {
+                    foreach (string lib in lualibs) {
+                        sb.AppendFormat("require \"{0}\";", lib);
+                        sb.AppendLine();
+                    }
+                }
                 HashSet<string> refs = new HashSet<string>();
                 //references
                 foreach (var ci in classes) {

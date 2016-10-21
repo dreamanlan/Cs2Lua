@@ -215,24 +215,23 @@ namespace RoslynTool.CsToLua
         {
             bool isExportConstructor = false;
             var ci = m_ClassInfoStack.Peek();
-            IMethodSymbol sym = m_Model.GetDeclaredSymbol(node);
-            if (null != sym) {
-                foreach (var attr in sym.GetAttributes()) {
-                    string fullName = ClassInfo.GetFullName(attr.AttributeClass);
-                    if (fullName == "Cs2Lua.IgnoreAttribute") {
-                        return;
-                    } else if (fullName == "Cs2Lua.ExportAttribute") {
-                        isExportConstructor = true;
-                    }
+            IMethodSymbol declSym = m_Model.GetDeclaredSymbol(node);
+            if (null != declSym) {
+                string require = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.RequireAttribute", 0);
+                if (!string.IsNullOrEmpty(require)) {
+                    m_SymbolTable.AddRequire(ci.Key, require);
                 }
+                if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
+                    return;
+                isExportConstructor = ClassInfo.HasAttribute(declSym, "Cs2Lua.ExportAttribute");
             }
 
-            bool isStatic = sym.IsStatic;
+            bool isStatic = declSym.IsStatic;
             var mi = new MethodInfo();
-            mi.Init(sym);
+            mi.Init(declSym);
             m_MethodInfoStack.Push(mi);
 
-            string manglingName = NameMangling(sym);
+            string manglingName = NameMangling(declSym);
             if (isStatic) {
                 ci.ExistStaticConstructor = true;
             } else {
@@ -295,22 +294,24 @@ namespace RoslynTool.CsToLua
         }
         public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
-            IMethodSymbol sym = m_Model.GetDeclaredSymbol(node);
-            if (null != sym) {
-                foreach (var attr in sym.GetAttributes()) {
-                    string fullName = ClassInfo.GetFullName(attr.AttributeClass);
-                    if (fullName == "Cs2Lua.IgnoreAttribute") {
-                        return;
-                    }
+            var ci = m_ClassInfoStack.Peek();
+
+            IMethodSymbol declSym = m_Model.GetDeclaredSymbol(node);
+            if (null != declSym) {
+                string require = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.RequireAttribute", 0);
+                if (!string.IsNullOrEmpty(require)) {
+                    m_SymbolTable.AddRequire(ci.Key, require);
                 }
+                if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
+                    return;
             }
 
             var mi = new MethodInfo();
-            mi.Init(sym);
+            mi.Init(declSym);
             m_MethodInfoStack.Push(mi);
 
-            bool isStatic = sym.IsStatic;
-            CodeBuilder.AppendFormat("{0}{1} = function({2}", GetIndentString(), NameMangling(sym), isStatic ? string.Empty : "self");
+            bool isStatic = declSym.IsStatic;
+            CodeBuilder.AppendFormat("{0}{1} = function({2}", GetIndentString(), NameMangling(declSym), isStatic ? string.Empty : "self");
             if (mi.ParamNames.Count > 0) {
                 if (!isStatic) {
                     CodeBuilder.Append(", ");
@@ -343,6 +344,17 @@ namespace RoslynTool.CsToLua
         }
         public override void VisitPropertyDeclaration(PropertyDeclarationSyntax node)
         {
+            var ci = m_ClassInfoStack.Peek();
+            IPropertySymbol declSym = m_Model.GetDeclaredSymbol(node);
+            if (null != declSym) {
+                string require = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.RequireAttribute", 0);
+                if (!string.IsNullOrEmpty(require)) {
+                    m_SymbolTable.AddRequire(ci.Key, require);
+                }
+                if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
+                    return;
+            }
+
             bool noimpl = true;
             foreach (var accessor in node.AccessorList.Accessors) {
                 if (null != accessor.Body) {
@@ -353,11 +365,9 @@ namespace RoslynTool.CsToLua
 
             if (noimpl) {
                 //退化为field
-                var ci = m_ClassInfoStack.Peek();
                 StringBuilder curBuilder = ci.CurrentCodeBuilder;
 
-                IPropertySymbol sym = m_Model.GetDeclaredSymbol(node);
-                if (sym.IsStatic) {
+                if (declSym.IsStatic) {
                     ci.CurrentCodeBuilder = ci.StaticFieldCodeBuilder;
                 } else {
                     ci.CurrentCodeBuilder = ci.InstanceFieldCodeBuilder;
@@ -402,6 +412,17 @@ namespace RoslynTool.CsToLua
         }
         public override void VisitEventDeclaration(EventDeclarationSyntax node)
         {
+            var ci = m_ClassInfoStack.Peek();
+            IEventSymbol declSym = m_Model.GetDeclaredSymbol(node);
+            if (null != declSym) {
+                string require = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.RequireAttribute", 0);
+                if (!string.IsNullOrEmpty(require)) {
+                    m_SymbolTable.AddRequire(ci.Key, require);
+                }
+                if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
+                    return;
+            }
+
             CodeBuilder.AppendFormat("{0}{1} = {{", GetIndentString(), node.Identifier.Text);
             CodeBuilder.AppendLine();
             ++m_Indent;
@@ -432,6 +453,15 @@ namespace RoslynTool.CsToLua
         {
             var ci = m_ClassInfoStack.Peek();
             var declSym = m_Model.GetDeclaredSymbol(node);
+            if (null != declSym) {
+                string require = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.RequireAttribute", 0);
+                if (!string.IsNullOrEmpty(require)) {
+                    m_SymbolTable.AddRequire(ci.Key, require);
+                }
+                if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
+                    return;
+            }
+
             StringBuilder currentBuilder = ci.CurrentCodeBuilder;
             if(declSym.IsStatic)
                 ci.CurrentCodeBuilder = ci.StaticFunctionCodeBuilder;
@@ -1395,7 +1425,16 @@ namespace RoslynTool.CsToLua
                             }
                             CodeBuilder.Append("}");
                         } else {
-                            Log(node, "Can't generate initializer code ! operation info: {0}", oper.ToString());
+                            CodeBuilder.Append("{");
+                            var args = node.Expressions;
+                            int ct = args.Count;
+                            for (int i = 0; i < ct; ++i) {
+                                VisitExpressionSyntax(args[i]);
+                                if (i < ct - 1) {
+                                    CodeBuilder.Append(", ");
+                                }
+                            }
+                            CodeBuilder.Append("}");
                         }
                     } else {
                         Log(node, "Can't find operation type ! operation info: {0}", oper.ToString());
@@ -1673,18 +1712,18 @@ namespace RoslynTool.CsToLua
         }
         private void VisitTypeDeclarationSyntax(TypeDeclarationSyntax node)
         {
-            INamedTypeSymbol sym = m_Model.GetDeclaredSymbol(node);
-            if (null != sym) {
-                foreach (var attr in sym.GetAttributes()) {
-                    string fullName = ClassInfo.GetFullName(attr.AttributeClass);
-                    if (fullName == "Cs2Lua.IgnoreAttribute") {
-                        return;
-                    }
+            INamedTypeSymbol declSym = m_Model.GetDeclaredSymbol(node);
+            ClassInfo ci = new ClassInfo();
+            ci.Init(declSym);
+            if (null != declSym) {
+                string require = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.RequireAttribute", 0);
+                if (!string.IsNullOrEmpty(require)) {
+                    m_SymbolTable.AddRequire(ci.Key, require);
                 }
+                if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
+                    return;
             }
 
-            ClassInfo ci = new ClassInfo();
-            ci.Init(sym);
             m_ClassInfoStack.Push(ci);
 
             if (m_ClassInfoStack.Count == 1) {
@@ -1731,75 +1770,11 @@ namespace RoslynTool.CsToLua
             foreach (var member in node.Members) {
                 FieldDeclarationSyntax fieldDecl = member as FieldDeclarationSyntax;
                 if (null != fieldDecl) {
-                    foreach (var v in fieldDecl.Declaration.Variables) {
-                        var baseSym = m_Model.GetDeclaredSymbol(v);
-                        var fieldSym = baseSym as IFieldSymbol;
-                        if (baseSym.IsStatic) {
-                            string name = v.Identifier.Text;
-                            if (null != v.Initializer) {
-                                var expOper = m_Model.GetOperation(v.Initializer.Value);
-                                var constVal = expOper.ConstantValue;
-                                if (!constVal.HasValue) {
-                                    CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
-                                    CodeBuilder.AppendLine(" = nil,");
-                                    ci.CurrentCodeBuilder = ci.StaticInitializerCodeBuilder;
-                                    ++m_Indent;
-                                    CodeBuilder.AppendFormat("{0}{1}.{2}", GetIndentString(), ci.Key, name);
-                                    CodeBuilder.AppendFormat(" = ", fieldSym.Type.TypeKind == TypeKind.Delegate ? "delegationwrap(" : string.Empty);
-                                    VisitExpressionSyntax(v.Initializer.Value);
-                                    CodeBuilder.AppendFormat("{0};", fieldSym.Type.TypeKind == TypeKind.Delegate ? ")" : string.Empty);
-                                    CodeBuilder.AppendLine();
-                                    --m_Indent;
-                                    ci.CurrentCodeBuilder = ci.StaticFieldCodeBuilder;
-                                    continue;
-                                } else {
-                                    CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
-                                    CodeBuilder.Append(" = ");
-                                    if (null == constVal.Value)
-                                        CodeBuilder.Append("nil");
-                                    else
-                                        CodeBuilder.Append(constVal.Value);
-                                }
-                            } else if (fieldSym.Type.TypeKind == TypeKind.Delegate) {
-                                CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
-                                CodeBuilder.Append(" = wrapdelegation{}");   
-                            } else {
-                                CodeBuilder.AppendFormat("{0}{1} = nil", GetIndentString(), name);
-                            }
-                            CodeBuilder.Append(",");
-                            CodeBuilder.AppendLine();
-                        }
-                    }
-                    member.Accept(this);
+                    VisitFieldDeclaration(ci, fieldDecl, true);
                 }
                 EventFieldDeclarationSyntax eventFieldDecl = member as EventFieldDeclarationSyntax;
                 if (null != eventFieldDecl) {
-                    foreach (var v in eventFieldDecl.Declaration.Variables) {
-                        var baseSym = m_Model.GetDeclaredSymbol(v);
-                        var fieldSym = baseSym as IEventSymbol;
-                        if (fieldSym.IsStatic) {
-                            string name = v.Identifier.Text;
-                            if (null != v.Initializer) {
-                                CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
-                                CodeBuilder.AppendLine(" = nil,");
-                                ci.CurrentCodeBuilder = ci.StaticInitializerCodeBuilder;
-                                ++m_Indent;
-                                CodeBuilder.AppendFormat("{0}{1}.{2}", GetIndentString(), ci.Key, name);
-                                CodeBuilder.Append(" = delegationwrap(");
-                                VisitExpressionSyntax(v.Initializer.Value);
-                                CodeBuilder.Append(");");
-                                CodeBuilder.AppendLine();
-                                --m_Indent;
-                                ci.CurrentCodeBuilder = ci.StaticFieldCodeBuilder;
-                                continue;
-                            } else {
-                                CodeBuilder.AppendFormat("{0}{1} = wrapdelegation", GetIndentString(), name);
-                                CodeBuilder.Append("{}");
-                            }
-                            CodeBuilder.Append(",");
-                            CodeBuilder.AppendLine();
-                        }
-                    }
+                    VisitEventFieldDeclaration(ci, eventFieldDecl, true);
                 }
             }
             ++m_Indent;
@@ -1826,75 +1801,11 @@ namespace RoslynTool.CsToLua
             foreach (var member in node.Members) {
                 FieldDeclarationSyntax fieldDecl = member as FieldDeclarationSyntax;
                 if (null != fieldDecl) {
-                    foreach (var v in fieldDecl.Declaration.Variables) {
-                        var baseSym = m_Model.GetDeclaredSymbol(v);
-                        var fieldSym = baseSym as IFieldSymbol;
-                        if (!fieldSym.IsStatic) {
-                            string name = v.Identifier.Text;
-                            if (null != v.Initializer) {
-                                var expOper = m_Model.GetOperation(v.Initializer.Value);
-                                var constVal = expOper.ConstantValue;
-                                if (!constVal.HasValue) {
-                                    CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
-                                    CodeBuilder.AppendLine(" = nil,");
-                                    ci.CurrentCodeBuilder = ci.InstanceInitializerCodeBuilder;
-                                    ++m_Indent;
-                                    CodeBuilder.AppendFormat("{0}self.{1}", GetIndentString(), name);
-                                    CodeBuilder.AppendFormat(" = ", fieldSym.Type.TypeKind == TypeKind.Delegate ? "delegationwrap(" : string.Empty);
-                                    VisitExpressionSyntax(v.Initializer.Value);
-                                    CodeBuilder.AppendFormat("{0};", fieldSym.Type.TypeKind == TypeKind.Delegate ? ")" : string.Empty);
-                                    CodeBuilder.AppendLine();
-                                    --m_Indent;
-                                    ci.CurrentCodeBuilder = ci.InstanceFieldCodeBuilder;
-                                    continue;
-                                } else {
-                                    CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
-                                    CodeBuilder.Append(" = ");
-                                    if (null == constVal.Value)
-                                        CodeBuilder.Append("nil");
-                                    else
-                                        CodeBuilder.Append(constVal.Value);
-                                }
-                            } else if (fieldSym.Type.TypeKind == TypeKind.Delegate) {
-                                CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
-                                CodeBuilder.Append(" = wrapdelegation{}");                            
-                            } else {
-                                CodeBuilder.AppendFormat("{0}{1} = nil", GetIndentString(), name);
-                            }
-                            CodeBuilder.Append(",");
-                            CodeBuilder.AppendLine();
-                        }
-                    }
-                    member.Accept(this);
+                    VisitFieldDeclaration(ci, fieldDecl, false);
                 }
                 EventFieldDeclarationSyntax eventFieldDecl = member as EventFieldDeclarationSyntax;
                 if (null != eventFieldDecl) {
-                    foreach (var v in eventFieldDecl.Declaration.Variables) {
-                        var baseSym = m_Model.GetDeclaredSymbol(v);
-                        var fieldSym = baseSym as IEventSymbol;
-                        if (!fieldSym.IsStatic) {
-                            string name = v.Identifier.Text;
-                            if (null != v.Initializer) {
-                                CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
-                                CodeBuilder.AppendLine(" = nil,");
-                                ci.CurrentCodeBuilder = ci.InstanceInitializerCodeBuilder;
-                                ++m_Indent;
-                                CodeBuilder.AppendFormat("{0}self.{1}", GetIndentString(), name);
-                                CodeBuilder.Append(" = delegationwrap(");
-                                VisitExpressionSyntax(v.Initializer.Value);
-                                CodeBuilder.Append(");");
-                                CodeBuilder.AppendLine();
-                                --m_Indent;
-                                ci.CurrentCodeBuilder = ci.InstanceFieldCodeBuilder;
-                                continue;
-                            } else {
-                                CodeBuilder.AppendFormat("{0}{1} = wrapdelegation", GetIndentString(), name);
-                                CodeBuilder.Append("{}");
-                            }
-                            CodeBuilder.Append(",");
-                            CodeBuilder.AppendLine();
-                        }
-                    }
+                    VisitEventFieldDeclaration(ci, eventFieldDecl, false);
                 }
             }
             --m_Indent;
@@ -1904,6 +1815,99 @@ namespace RoslynTool.CsToLua
 
             if (m_ClassInfoStack.Count <= 0) {
                 AddToplevelClass(ci.Key, ci);
+            }
+        }
+        private void VisitFieldDeclaration(ClassInfo ci, FieldDeclarationSyntax fieldDecl, bool isStatic)
+        {
+            foreach (var v in fieldDecl.Declaration.Variables) {
+                var baseSym = m_Model.GetDeclaredSymbol(v);
+                if (null != baseSym) {
+                    string require = ClassInfo.GetAttributeArgument<string>(baseSym, "Cs2Lua.RequireAttribute", 0);
+                    if (!string.IsNullOrEmpty(require)) {
+                        m_SymbolTable.AddRequire(ci.Key, require);
+                    }
+                    if (ClassInfo.HasAttribute(baseSym, "Cs2Lua.IgnoreAttribute"))
+                        continue;
+                } else {
+                    Log(v, "Can't get field declared symbol !");
+                    continue;
+                }
+                var fieldSym = baseSym as IFieldSymbol;
+                if (isStatic && fieldSym.IsStatic || !isStatic && !fieldSym.IsStatic) {
+                    string name = v.Identifier.Text;
+                    if (null != v.Initializer) {
+                        var expOper = m_Model.GetOperation(v.Initializer.Value);
+                        var constVal = expOper.ConstantValue;
+                        if (!constVal.HasValue) {
+                            CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
+                            CodeBuilder.AppendLine(" = nil,");
+                            ci.CurrentCodeBuilder = ci.InstanceInitializerCodeBuilder;
+                            ++m_Indent;
+                            CodeBuilder.AppendFormat("{0}{1}.{2}", GetIndentString(), isStatic ? ci.Key : "self", name);
+                            CodeBuilder.AppendFormat(" = ", fieldSym.Type.TypeKind == TypeKind.Delegate ? "delegationwrap(" : string.Empty);
+                            VisitExpressionSyntax(v.Initializer.Value);
+                            CodeBuilder.AppendFormat("{0};", fieldSym.Type.TypeKind == TypeKind.Delegate ? ")" : string.Empty);
+                            CodeBuilder.AppendLine();
+                            --m_Indent;
+                            ci.CurrentCodeBuilder = ci.InstanceFieldCodeBuilder;
+                            continue;
+                        } else {
+                            CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
+                            CodeBuilder.Append(" = ");
+                            if (null == constVal.Value)
+                                CodeBuilder.Append("nil");
+                            else
+                                CodeBuilder.Append(constVal.Value);
+                        }
+                    } else if (fieldSym.Type.TypeKind == TypeKind.Delegate) {
+                        CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
+                        CodeBuilder.Append(" = wrapdelegation{}");
+                    } else {
+                        CodeBuilder.AppendFormat("{0}{1} = nil", GetIndentString(), name);
+                    }
+                    CodeBuilder.Append(",");
+                    CodeBuilder.AppendLine();
+                }
+            }
+        }
+        private void VisitEventFieldDeclaration(ClassInfo ci, EventFieldDeclarationSyntax eventFieldDecl, bool isStatic)
+        {
+            foreach (var v in eventFieldDecl.Declaration.Variables) {
+                var baseSym = m_Model.GetDeclaredSymbol(v);
+                if (null != baseSym) {
+                    string require = ClassInfo.GetAttributeArgument<string>(baseSym, "Cs2Lua.RequireAttribute", 0);
+                    if (!string.IsNullOrEmpty(require)) {
+                        m_SymbolTable.AddRequire(ci.Key, require);
+                    }
+                    if (ClassInfo.HasAttribute(baseSym, "Cs2Lua.IgnoreAttribute"))
+                        continue;
+                } else {
+                    Log(v, "Can't get event field declared symbol !");
+                    continue;
+                }
+                var fieldSym = baseSym as IEventSymbol;
+                if (isStatic && fieldSym.IsStatic || !isStatic && !fieldSym.IsStatic) {
+                    string name = v.Identifier.Text;
+                    if (null != v.Initializer) {
+                        CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
+                        CodeBuilder.AppendLine(" = nil,");
+                        ci.CurrentCodeBuilder = ci.StaticInitializerCodeBuilder;
+                        ++m_Indent;
+                        CodeBuilder.AppendFormat("{0}{1}.{2}", GetIndentString(), isStatic ? ci.Key : "self", name);
+                        CodeBuilder.Append(" = delegationwrap(");
+                        VisitExpressionSyntax(v.Initializer.Value);
+                        CodeBuilder.Append(");");
+                        CodeBuilder.AppendLine();
+                        --m_Indent;
+                        ci.CurrentCodeBuilder = ci.StaticFieldCodeBuilder;
+                        continue;
+                    } else {
+                        CodeBuilder.AppendFormat("{0}{1} = wrapdelegation", GetIndentString(), name);
+                        CodeBuilder.Append("{}");
+                    }
+                    CodeBuilder.Append(",");
+                    CodeBuilder.AppendLine();
+                }
             }
         }
         private void VisitExpressionSyntax(ExpressionSyntax node)

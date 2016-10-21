@@ -3,6 +3,26 @@ using System.IO;
 
 //local write = io.write;
 
+[Cs2Lua.Ignore]
+class LuaConsole
+{
+    public static void Write(params object[] args)
+    {
+        for (int i = 0; i < args.Length; ++i) {
+            var arg = args[i];
+            System.Console.Write(arg);
+            if (i < args.Length - 1) {
+                System.Console.Write(", ");
+            }
+        }
+    }
+    public static void Print(params object[] args)
+    {
+        Write(args);
+        System.Console.WriteLine();
+    }
+}
+
 class Mandelbrot
 {
     public static void Exec()
@@ -11,9 +31,9 @@ class Mandelbrot
         int height = width;
         int maxiter = 50;
         double limit = 4.0;
-#if __LUA__
-        write("P4\n", width, " ", height, "\n");
-#endif
+
+        LuaConsole.Write("P4\n", width, " ", height, "\n");
+
         for (int y = 0; y < height; y++) {
             double Ci = 2.0 * y / height - 1.0;
 
@@ -35,18 +55,12 @@ class Mandelbrot
                 } while (--i > 0);
 
                 if (isInside) {
-#if __LUA__
-                    write("*");
-#endif
+                    LuaConsole.Write("*");
                 } else {
-#if __LUA__
-                    write(" ");
-#endif
+                    LuaConsole.Write(" ");
                 }
             }
-#if __LUA__
-            print();
-#endif
+            LuaConsole.Print();
         }
     }
 }

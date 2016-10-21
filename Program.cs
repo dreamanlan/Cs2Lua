@@ -12,7 +12,6 @@ namespace RoslynTool
 {
     class Program
     {
-        static Action Test;
         static void Main(string[] args)
         {
             string file = "test.cs";
