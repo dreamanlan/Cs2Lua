@@ -80,13 +80,17 @@ CSharp代码转lua，适用于使用lua实现热更新而又想有一个强类�
 
 用于指明某个c#类的构造在转换为lua后生成的供c#端调用的__new_object方法里用于对象构造。
 
+5、Cs2Lua.EnableBaseClass属性
+
+由于指明某个c#类可能使用继承（此时转换到lua时不会报错），Cs2Lua会采用一种继承实现机制来实现继承，但与c#的继承语义不太一样，此属性用于使用都能确保使用一致继承的情形（就是说语义与c#是一致的），一般继承层次只有2层并且只涉及复用代码与纯虚函数重载的情形是可以的，子类隐藏父类非虚函数的情形要避免使用。
+
 【utility.lua里实现的部分】
 
 1、位操作。
 
 2、数组与集合的封装（用以支持IList、IDictionary接口）。
 
-3、对应的lua对象机制（field、method、property、event）。
+3、对应的lua对象机制（field、method、property、event、inherit）。
 
 4、委托机制。
 
@@ -96,7 +100,7 @@ CSharp代码转lua，适用于使用lua实现热更新而又想有一个强类�
 
 2、目前仅测试了基于Slua的交互。
 
-【基本原理】
+【基本思路】
 
 1、语法制导的翻译。（c#语法、语义直接使用Rosyln工程）
 
@@ -106,9 +110,13 @@ CSharp代码转lua，适用于使用lua实现热更新而又想有一个强类�
 
 4、表达式 -> lua表达式 + 匿名函数调用
 
-5、c# 语句 -> lua语句 + 匿名函数调用
+5、c#语句 -> lua语句 + 匿名函数调用
 
-6、lambda/delegate -> 函数对象
+6、lambda/delegate/event -> 函数对象
+
+7、inherit/property/event interface implementation -> metatable __index/__newindex
+
+8、generic/interface -> 转化时忽略，类型信息（形参与实参）记录到类与实例，只需要处理typeof操作
 
 【比较复杂的转换】
 
@@ -280,6 +288,33 @@ CSharp代码转lua，适用于使用lua实现热更新而又想有一个强类�
     
   end;
   
+【特殊处理】
+
+1、转换出的lua代码不使用self表示对象自己，而是使用this表示对象自己，这样无需处理c#代码里用self作变量名的情形。类似的，转换出的lua使用base来表示父
+
+类子对象。类似的，property的get/set方法名也仍然是get/set，event接口实现的add/remove方法名也仍然使用add/remove。
+
+2、泛型方法在转换时会将泛型参数当函数参数作用。
+
+亦即
+
+void GenericMethod<T>()
+
+{
+
+}
+
+->
+
+GenericMethod = function(this, T)
+
+
+end
+
+***这种转换方法能适应unity3d的GetComponent方法
+
+GetComponent<T>() => GetCompoent(Type)
+  
 【用法】
 
 1、建立一个C#工程，引用Cs2LuaUtility.dll。
@@ -295,9 +330,3 @@ CSharp代码转lua，适用于使用lua实现热更新而又想有一个强类�
 理论上按此顺序即可。
 
 *** 注意第3步的输出lua在工程文件所在目录下的lua目录里，日志在log目录里，必须检查日志文件确定没有错误才能继续！！！
-
-*** 为了适应unity3d的GetComponent<T>()这类API，添加了一种转换，将泛型方法的泛型参数转化为普通函数实参：
-
-  GetComonent<T>() => GetComponent(Type)
-  
-*** 注意我们自己的代码里不要定义泛型方法。
