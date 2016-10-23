@@ -172,19 +172,28 @@ LuaString = {
   end,
 };
 
-function defineclass(static, static_props, static_events, instance, instance_props, instance_events)
+function defineclass(base, static, static_props, static_events, instance, instance_props, instance_events)
+    
+    local base_class = base or {};
+    local mt = getmetatable(base_class);
+
     local class = static or {};
     local class_props = static_props or {};
     local class_events = static_events or {};
     
     setmetatable(class, {            
         __call = function()
+        		local baseObj = nil;
+        		if mt then
+        			baseObj = mt.__call();
+        		end;
             local obj = instance or {};
             local obj_props = instance_props or {};
             local obj_events = instance_events or {};
             obj["__class"] = class;
+            obj["base"] = baseObj;
             
-            setmetatable(obj, {
+            setmetatable(obj, {                
                 __index = function(t, k)
                     local ret;
                     ret = obj_props[k];
@@ -194,6 +203,8 @@ function defineclass(static, static_props, static_events, instance, instance_pro
                       else
                         ret = nil;
                       end;
+                    elseif baseObj then
+                    	ret = baseObj[k];
                     end;
                     return ret;
                 end,
@@ -207,7 +218,9 @@ function defineclass(static, static_props, static_events, instance, instance_pro
                       end;
                       return;
                     end;
-                    rawset(t, k, v);
+                    if nil == baseObj or not pcall(function() baseObj[k] = v end) then
+                        rawset(t, k, v);
+                    end;
                 end,
             });
 
@@ -222,7 +235,9 @@ function defineclass(static, static_props, static_events, instance, instance_pro
                 ret = ret.get(t);
               else
                 ret = nil;
-              end;                           
+              end;
+            elseif base_class then
+            	ret = base_class[k];                         
             end;
             return ret;
         end,
@@ -235,7 +250,7 @@ function defineclass(static, static_props, static_events, instance, instance_pro
                 ret.set(t, v);
               end;
               return;
-            end;    
+            end;
             rawset(t, k, v);
         end,
     });

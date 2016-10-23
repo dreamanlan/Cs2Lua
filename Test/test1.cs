@@ -40,6 +40,7 @@ class MyScript
 
         HandleDelegation f = () => {
             string ss = "abc" + GetString();
+            Debug.Log(ss);
         };
 
         var slider = GameObject.Find("Canvas/Slider").GetComponent(typeof(UnityEngine.UI.Slider)) as UnityEngine.UI.Slider;

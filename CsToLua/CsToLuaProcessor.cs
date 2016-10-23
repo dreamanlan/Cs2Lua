@@ -124,8 +124,8 @@ namespace RoslynTool.CsToLua
             foreach (SyntaxTree tree in trees) {
                 compilation = compilation.AddSyntaxTrees(tree);
             }
-            SymbolTable symTable = new SymbolTable(compilation.Assembly);
-            Dictionary<string, List<ClassInfo>> classes = new Dictionary<string, List<ClassInfo>>();
+            SymbolTable symTable = new SymbolTable(compilation);
+            Dictionary<string, MergedClassInfo> toplevelClasses = new Dictionary<string, MergedClassInfo>();
             MergedNamespaceInfo toplevelMni = new MergedNamespaceInfo();
             using (StreamWriter sw = new StreamWriter(Path.Combine(logDir, "SemanticError.log"))) {
                 using (StreamWriter sw2 = new StreamWriter(Path.Combine(logDir, "Translation.log"))) {
@@ -156,61 +156,62 @@ namespace RoslynTool.CsToLua
                             var key = pair.Key;
                             var ci = pair.Value;
 
-                            List<ClassInfo> list;
-                            if (!classes.TryGetValue(key, out list)) {
-                                list = new List<ClassInfo>();
-                                classes.Add(key, list);
-                            }
-                            list.Add(ci);
+                            AddMergedClasses(toplevelClasses, key, ci);
 
                             string[] nss = key.Split('.');
-                            MergedNamespaceInfo curMni = toplevelMni;
-                            for (int i = 0; i < nss.Length - 1; ++i) {
-                                string nsname = nss[i];
-                                MergedNamespaceInfo mni;
-                                if (!curMni.Namespaces.TryGetValue(nsname, out mni)) {
-                                    mni = new MergedNamespaceInfo();
-                                    curMni.Namespaces.Add(nsname, mni);
-                                }
-                                mni.Name = nsname;
-                                curMni = mni;
-                            }
-                            MergedClassInfo mci;
-                            if (!curMni.Classes.TryGetValue(key, out mci)) {
-                                mci = new MergedClassInfo();
-                                mci.Key = key;
-                                curMni.Classes.Add(key, mci);
-                            }
-                            mci.Classes.Add(ci);
+                            AddMergedNamespaces(toplevelMni, nss);
                         }
                     }
                     sw2.Close();
                 }
                 sw.Close();
             }
-            foreach (var pair in classes) {
-                StringBuilder sb0 = new StringBuilder();
-                string fileName = BuildLuaClass(sb0, pair.Key, pair.Value, symTable);
-                File.WriteAllText(Path.Combine(outputDir, Path.ChangeExtension(fileName, outputExt)), sb0.ToString());
+            StringBuilder nsBuilder = new StringBuilder();
+            BuildNamespaces(nsBuilder, toplevelMni);
+            File.WriteAllText(Path.Combine(outputDir, "namespaces." + outputExt), nsBuilder.ToString());
+            foreach (var pair in toplevelClasses) {
+                StringBuilder classBuilder = new StringBuilder();
+                string fileName = BuildLuaClass(classBuilder, pair.Key, pair.Value, symTable);
+                File.WriteAllText(Path.Combine(outputDir, Path.ChangeExtension(fileName, outputExt)), classBuilder.ToString());
             }
-            StringBuilder sb = new StringBuilder();
-            BuildLuaClass(sb, toplevelMni, symTable);
-            Console.Write(sb.ToString());
+            StringBuilder allClassBuilder = new StringBuilder();
+            BuildLuaClass(allClassBuilder, toplevelMni, toplevelClasses, symTable);
+            Console.Write(allClassBuilder.ToString());
         }
 
-        private static void BuildLuaClass(StringBuilder sb, MergedNamespaceInfo toplevelMni, SymbolTable symTable)
+        private static void AddMergedClasses(Dictionary<string, MergedClassInfo> mergedClasses, string key, ClassInfo ci)
         {
-            StringBuilder code = new StringBuilder();
-            HashSet<string> lualibRefs = new HashSet<string>();
-            BuildLuaClassRecursively(code, toplevelMni, 0, symTable, lualibRefs);
-            sb.AppendLine("require \"utility\";");
-            foreach (string lib in lualibRefs) {
-                sb.AppendFormat("require \"{0}\";", lib);
-                sb.AppendLine();
+            MergedClassInfo mci;
+            if (!mergedClasses.TryGetValue(key, out mci)) {
+                mci = new MergedClassInfo();
+                mci.Key = key;
+                mci.Classes.Add(ci);
+                mergedClasses.Add(key, mci);
             }
-            sb.Append(code.ToString());
+
+            foreach (var pair in ci.InnerClasses) {
+                AddMergedClasses(mci.InnerClasses, pair.Key, pair.Value);
+            }
         }
-        private static void BuildLuaClassRecursively(StringBuilder sb, MergedNamespaceInfo mni, int indent, SymbolTable symTable, HashSet<string> lualibRefs)
+        private static void AddMergedNamespaces(MergedNamespaceInfo toplevelMni, params string[] nss)
+        {
+            MergedNamespaceInfo curMni = toplevelMni;
+            for (int i = 0; i < nss.Length - 1; ++i) {
+                string nsname = nss[i];
+                MergedNamespaceInfo mni;
+                if (!curMni.Namespaces.TryGetValue(nsname, out mni)) {
+                    mni = new MergedNamespaceInfo();
+                    curMni.Namespaces.Add(nsname, mni);
+                }
+                mni.Name = nsname;
+                curMni = mni;
+            }
+        }
+        private static void BuildNamespaces(StringBuilder sb, MergedNamespaceInfo mni)
+        {
+            BuildNamespacesRecursively(sb, mni, 0);
+        }
+        private static void BuildNamespacesRecursively(StringBuilder sb, MergedNamespaceInfo mni, int indent)
         {
             if (null != mni) {
                 string nsname = mni.Name;
@@ -219,13 +220,9 @@ namespace RoslynTool.CsToLua
                     sb.AppendLine();
                     ++indent;
                 }
-                foreach (var cpair in mni.Classes) {
-                    var mci = cpair.Value;
-                    BuildLuaClass(sb, mci, symTable, lualibRefs);
-                }
                 foreach (var npair in mni.Namespaces) {
                     var newMni = npair.Value;
-                    BuildLuaClassRecursively(sb, newMni, indent, symTable, lualibRefs);
+                    BuildNamespacesRecursively(sb, newMni, indent);
                 }
                 if (!string.IsNullOrEmpty(nsname)) {
                     --indent;
@@ -239,26 +236,41 @@ namespace RoslynTool.CsToLua
                 }
             }
         }
-        private static void BuildLuaClass(StringBuilder sb, MergedClassInfo mci, SymbolTable symTable, HashSet<string> lualibRefs)
+        private static void BuildLuaClass(StringBuilder sb, MergedNamespaceInfo toplevelMni, Dictionary<string, MergedClassInfo> toplevelMcis, SymbolTable symTable)
         {
-            BuildLuaClass(sb, mci.Key, mci.Classes, false, symTable, lualibRefs);
+            StringBuilder code = new StringBuilder();
+            HashSet<string> lualibRefs = new HashSet<string>();
+            BuildNamespaces(code, toplevelMni);
+            foreach (var pair in toplevelMcis) {
+                StringBuilder classBuilder = new StringBuilder();
+                string fileName = BuildLuaClass(classBuilder, pair.Key, pair.Value, false, symTable, lualibRefs);
+                code.Append(classBuilder.ToString());
+            }
+            sb.AppendLine("require \"utility\";");
+            foreach (string lib in lualibRefs) {
+                sb.AppendFormat("require \"{0}\";", lib);
+                sb.AppendLine();
+            }
+            sb.Append(code.ToString());
         }
-        private static string BuildLuaClass(StringBuilder sb, string key, IList<ClassInfo> classes, SymbolTable symTable)
+        private static string BuildLuaClass(StringBuilder sb, string key, MergedClassInfo mci, SymbolTable symTable)
         {
-            return BuildLuaClass(sb, key, classes, true, symTable, new HashSet<string>());
+            return BuildLuaClass(sb, key, mci, true, symTable, new HashSet<string>());
         }
-        private static string BuildLuaClass(StringBuilder sb, string key, IList<ClassInfo> classes, bool isAlone, SymbolTable symTable, HashSet<string> lualibRefs)
+        private static string BuildLuaClass(StringBuilder sb, string key, MergedClassInfo mci, bool isAlone, SymbolTable symTable, HashSet<string> lualibRefs)
         {
+            var classes = mci.Classes;
+
             string fileName = key.Replace('.', '_');
-            string[] nss = key.Split('.');
-            string className = nss[nss.Length - 1];
 
             bool haveCctor = false;
             bool haveCtor = false;
+            string baseClass = string.Empty;
             ClassSymbolInfo csi;
             if (symTable.ClassSymbols.TryGetValue(key, out csi)) {
                 haveCctor = csi.ExistStaticConstructor;
                 haveCtor = csi.ExistConstructor;
+                baseClass = csi.BaseClassKey;
             }
             HashSet<string> requiredlibs = new HashSet<string>();
             HashSet<string> lualibs;
@@ -301,6 +313,7 @@ namespace RoslynTool.CsToLua
             }
             if (isAlone) {
                 sb.AppendLine("require \"utility\";");
+                sb.AppendLine("require \"namespaces\";");
                 foreach (string lib in requiredlibs) {
                     sb.AppendFormat("require \"{0}\";", lib);
                     sb.AppendLine();
@@ -325,15 +338,7 @@ namespace RoslynTool.CsToLua
             sb.AppendLine();
 
             int indent = 0;
-            for (int i = 0; i < nss.Length - 1; ++i) {
-                if (isAlone) {
-                    sb.AppendFormat("{0}{1} = {{", GetIndentString(indent), nss[i]);
-                    sb.AppendLine();
-                }
-                ++indent;
-            }
-
-            sb.AppendFormat("{0}{1} = {{", GetIndentString(indent), className);
+            sb.AppendFormat("{0}{1} = {{", GetIndentString(indent), key);
             sb.AppendLine();
             ++indent;
 
@@ -342,27 +347,18 @@ namespace RoslynTool.CsToLua
                 sb.Append(ci.StaticFunctionCodeBuilder.ToString());
             }
 
-            sb.AppendLine();
-
             if (!haveCctor) {
                 sb.AppendFormat("{0}cctor = function()", GetIndentString(indent));
                 sb.AppendLine();
                 ++indent;
-                sb.AppendFormat("{0}{1}.__cctor();", GetIndentString(indent), key);
-                sb.AppendLine();
+                if (!string.IsNullOrEmpty(baseClass)) {
+                    sb.AppendFormat("{0}{1}.cctor(this);", GetIndentString(indent), baseClass);
+                    sb.AppendLine();
+                }
                 --indent;
                 sb.AppendFormat("{0}end,", GetIndentString(indent));
                 sb.AppendLine();
             }
-
-            sb.AppendFormat("{0}__cctor = function()", GetIndentString(indent));
-            sb.AppendLine();
-            //static initializer
-            foreach (var ci in classes) {
-                sb.Append(ci.StaticInitializerCodeBuilder.ToString());
-            }
-            sb.AppendFormat("{0}end,", GetIndentString(indent));
-            sb.AppendLine();
 
             sb.AppendLine();
             
@@ -370,6 +366,7 @@ namespace RoslynTool.CsToLua
             foreach (var ci in classes) {
                 sb.Append(ci.StaticFieldCodeBuilder.ToString());
             }
+
             sb.AppendLine();
 
             if (classes.Count > 0 && !classes[0].IsEnum) {
@@ -450,29 +447,21 @@ namespace RoslynTool.CsToLua
                     sb.Append(ci.InstanceFunctionCodeBuilder.ToString());
                 }
 
-                sb.AppendLine();
-
                 if (!haveCtor) {
-                    sb.AppendFormat("{0}ctor = function(self)", GetIndentString(indent));
+                    sb.AppendFormat("{0}ctor = function(this)", GetIndentString(indent));
                     sb.AppendLine();
                     ++indent;
-                    sb.AppendFormat("{0}self:__ctor();", GetIndentString(indent));
-                    sb.AppendLine();
+                    if (!string.IsNullOrEmpty(baseClass)) {
+                        sb.AppendFormat("{0}base.ctor(this);", GetIndentString(indent));
+                        sb.AppendLine();
+                    }
                     --indent;
                     sb.AppendFormat("{0}end,", GetIndentString(indent));
                     sb.AppendLine();
                 }
-
-                sb.AppendFormat("{0}__ctor = function(self)", GetIndentString(indent));
-                sb.AppendLine();
-                //instance initializer
-                foreach (var ci in classes) {
-                    sb.Append(ci.InstanceInitializerCodeBuilder.ToString());
-                }
-                sb.AppendFormat("{0}end,", GetIndentString(indent));
-                sb.AppendLine();
             
                 sb.AppendLine();
+
                 //instance field
                 foreach (var ci in classes) {
                     sb.Append(ci.InstanceFieldCodeBuilder.ToString());
@@ -516,7 +505,7 @@ namespace RoslynTool.CsToLua
 
                 sb.AppendLine();
 
-                sb.AppendFormat("{0}return defineclass(static, static_props, static_events, instance, instance_props, instance_events);", GetIndentString(indent));
+                sb.AppendFormat("{0}return defineclass({1}, static, static_props, static_events, instance, instance_props, instance_events);", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass);
                 sb.AppendLine();
 
                 --indent;
@@ -533,30 +522,21 @@ namespace RoslynTool.CsToLua
             }
             sb.AppendLine();
 
-            for (int i = 0; i < nss.Length - 1; ++i) {
-                --indent;
-                if (isAlone) {
-                    sb.AppendFormat("{0}}}", GetIndentString(indent));
-                    if (indent > 0) {
-                        sb.Append(",");
-                    } else {
-                        sb.Append(";");
-                    }
-                    sb.AppendLine();
-                }
-            }
-
-            if (isAlone) {
+            sb.AppendLine();
+            sb.AppendFormat("{0}.__define_class();", key);
+            sb.AppendLine();
+            sb.AppendLine();
+            if (isEntryClass) {
+                sb.AppendFormat("defineentry({0});", key);
                 sb.AppendLine();
-                if (isEntryClass) {
-                    sb.AppendFormat("defineentry({0});", key);
-                    sb.AppendLine();
-                }
-                sb.AppendFormat("return {0}.__define_class();", key);
             }
 
             foreach (var ci in classes) {
                 sb.Append(ci.AfterOuterCodeBuilder.ToString());
+            }
+
+            foreach (var pair in mci.InnerClasses) {
+                BuildLuaClass(sb, pair.Key, pair.Value, false, symTable, lualibRefs);
             }
 
             return fileName;

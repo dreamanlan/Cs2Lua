@@ -1,3 +1,3 @@
 ============<<<Translation Error:test>>>============
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: OverloadResolutionFailure, code: lua.Print(obj.a) locationtest.cs: (63,16)-(63,32)
-	CandidateSymbol: LuaConsole.Print(params object[])
+<<<[Log for TypeOfExpressionSyntax]>>> [code: typeof(T) locationtest.cs: (41,39)-(41,48)]typeof of TypeParameter can only be used in function ! 
+<<<[Log for TypeOfExpressionSyntax]>>> [code: typeof(TT) locationtest.cs: (42,40)-(42,50)]typeof of TypeParameter can only be used in function ! 

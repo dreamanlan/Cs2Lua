@@ -10,7 +10,7 @@ using RoslynTool.CsToLua;
 
 namespace RoslynTool
 {
-    class Program
+    partial class Program
     {
         static void Main(string[] args)
         {

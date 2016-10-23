@@ -1,5 +1,6 @@
 --local write = io.write;
 require "utility";
+require "namespaces";
 
 Mandelbrot = {
 	Exec = function()
@@ -38,11 +39,7 @@ Mandelbrot = {
 			y = y + 1;
 		end;
 	end,
-
 	cctor = function()
-		Mandelbrot.__cctor();
-	end,
-	__cctor = function()
 	end,
 
 
@@ -59,11 +56,7 @@ Mandelbrot = {
 		};
 
 		local instance = {
-
-			ctor = function(self)
-				self:__ctor();
-			end,
-			__ctor = function(self)
+			ctor = function(this)
 			end,
 
 		};
@@ -74,8 +67,10 @@ Mandelbrot = {
 		local instance_events = {
 		};
 
-		return defineclass(static, static_props, static_events, instance, instance_props, instance_events);
+		return defineclass(nil, static, static_props, static_events, instance, instance_props, instance_events);
 	end,
 };
 
-return Mandelbrot.__define_class();--Mandelbrot.Exec();
+Mandelbrot.__define_class();
+
+--Mandelbrot.Exec();

@@ -14,6 +14,7 @@ namespace RoslynTool.CsToLua
     internal class ClassSymbolInfo
     {
         internal string ClassKey = string.Empty;
+        internal string BaseClassKey = string.Empty;
         internal bool ExistConstructor = false;
         internal bool ExistStaticConstructor = false;
         internal INamedTypeSymbol TypeSymbol = null;
@@ -22,10 +23,14 @@ namespace RoslynTool.CsToLua
         internal List<IPropertySymbol> PropertySymbols = new List<IPropertySymbol>();
         internal List<IEventSymbol> EventSymbols = new List<IEventSymbol>();
         internal Dictionary<string, bool> SymbolOverloadFlags = new Dictionary<string, bool>();
+        internal Dictionary<string, IMethodSymbol> MethodIncludeTypeOfs = new Dictionary<string, IMethodSymbol>();
 
-        internal void Init(INamedTypeSymbol typeSym)
+        internal void Init(INamedTypeSymbol typeSym, CSharpCompilation compilation)
         {
             ClassKey = ClassInfo.GetFullName(typeSym);
+            BaseClassKey = ClassInfo.GetFullName(typeSym.BaseType);
+            if (BaseClassKey == "System.Object" || BaseClassKey == "System.ValueType")
+                BaseClassKey = string.Empty;
             ExistConstructor = false;
             ExistStaticConstructor = false;
 
@@ -44,6 +49,7 @@ namespace RoslynTool.CsToLua
                         ExistStaticConstructor = true;
                     }
                     MethodSymbols.Add(msym);
+
                     string name = msym.Name;
                     if (name[0] == '.')
                         name = name.Substring(1);
@@ -51,6 +57,24 @@ namespace RoslynTool.CsToLua
                         SymbolOverloadFlags.Add(name, false);
                     } else {
                         SymbolOverloadFlags[name] = true;
+                    }
+
+                    bool existTypeOf = false;
+                    foreach (var decl in msym.DeclaringSyntaxReferences) {
+                        var node = decl.GetSyntax() as CSharpSyntaxNode;
+                        if (null != node) {
+                            var model = compilation.GetSemanticModel(node.SyntaxTree, true);
+                            var analysis = new TypeOfAnalysis(model);
+                            node.Accept(analysis);
+                            if (analysis.HaveTypeOf) {
+                                existTypeOf = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (existTypeOf) {
+                        string manglingName = SymbolTable.CalcMethodMangling(msym);
+                        MethodIncludeTypeOfs.Add(manglingName, msym);
                     }
                     continue;
                 }
@@ -112,9 +136,21 @@ namespace RoslynTool.CsToLua
             }
             return ret;
         }
-        internal SymbolTable(IAssemblySymbol assemblySymbol)
+        internal bool ExistTypeOf(IMethodSymbol sym)
         {
-            Init(assemblySymbol);
+            bool ret = false;
+            string key = ClassInfo.CalcTypeReference(sym.ContainingType);
+            ClassSymbolInfo csi;
+            if (m_ClassSymbols.TryGetValue(key, out csi)) {
+                string manglingName = CalcMethodMangling(sym);
+                ret = csi.MethodIncludeTypeOfs.ContainsKey(manglingName);
+            }
+            return ret;
+        }
+        internal SymbolTable(CSharpCompilation compilation)
+        {
+            m_Compilation = compilation;
+            Init(compilation.Assembly);
         }
 
         private void Init(IAssemblySymbol assemblySymbol)
@@ -139,13 +175,14 @@ namespace RoslynTool.CsToLua
         private void InitRecursively(INamedTypeSymbol typeSym)
         {
             ClassSymbolInfo csi = new ClassSymbolInfo();
-            csi.Init(typeSym);
+            csi.Init(typeSym, m_Compilation);
             m_ClassSymbols.Add(csi.ClassKey, csi);
             foreach (var newSym in typeSym.GetTypeMembers()) {
                 InitRecursively(newSym);
             }
         }
 
+        private CSharpCompilation m_Compilation = null;
         private IAssemblySymbol m_AssemblySymbol = null;
         private Dictionary<string, INamespaceSymbol> m_NamespaceSymbols = new Dictionary<string, INamespaceSymbol>();
         private Dictionary<string, ClassSymbolInfo> m_ClassSymbols = new Dictionary<string, ClassSymbolInfo>();

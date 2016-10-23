@@ -1,14 +1,11 @@
 require "utility";
+require "namespaces";
 
 MyScript = {
 	GetString = function()
 		return "def";
 	end,
-
 	cctor = function()
-		MyScript.__cctor();
-	end,
-	__cctor = function()
 	end,
 
 
@@ -26,96 +23,91 @@ MyScript = {
 		};
 
 		local instance = {
-			ctor = function(self)
-				self:__ctor();
-				return self;
+			ctor = function(this)
+				return this;
 			end,
-			Init = function(self)
+			Init = function(this)
 				local s = "test test test from cs2lua !";
 				UnityEngine.Debug.Log(s);
-				self.root = (function() local __compiler_newobject_35; __compiler_newobject_35 = newexternobject(UnityEngine.GameObject, "ctor", "root"); return __compiler_newobject_35; end)();
-				self.dict:Add("one", "one value");
-				self.dict["two"] = "two value";
+				this.root = (function() local __compiler_newobject_35; __compiler_newobject_35 = newexternobject(UnityEngine.GameObject, "ctor", "root"); return __compiler_newobject_35; end)();
+				this.dict:Add("one", "one value");
+				this.dict["two"] = "two value";
 				local f = delegationwrap((function()
 					local ss = "abc" .. MyScript.GetString();
+					UnityEngine.Debug.Log(ss);
 				end));
 				local slider = typecast(UnityEngine.GameObject.Find("Canvas/Slider"):GetComponent(UnityEngine.UI.Slider), "UnityEngine.UI.Slider");
 				local counttxt = typecast(UnityEngine.GameObject.Find("Canvas/Count"):GetComponent(UnityEngine.UI.Text), "UnityEngine.UI.Text");
 				slider.onValueChanged:AddListener((function(v)
-					self:Reset();
+					this:Reset();
 					counttxt.text = LuaString.Format("cube:%d", v);
-					self.max = typecast(v, "System.Int32");
+					this.max = typecast(v, "System.Int32");
 				end));
-				self:Reset();
-				delegationadd(self, "OnHandle0", (function()
+				this:Reset();
+				delegationadd(this, "OnHandle0", (function()
 				end));
-				delegationadd(self, "OnHandle", f);
-				delegationadd(self, "OnHandle", (function() self:Handle() end));
-				if nil ~= self.OnHandle then
-					self.OnHandle();
+				delegationadd(this, "OnHandle", f);
+				delegationadd(this, "OnHandle", (function() this:Handle() end));
+				if nil ~= this.OnHandle then
+					this.OnHandle();
 				end;
-				delegationremove(self, "OnHandle", f);
-				delegationremove(self, "OnHandle", (function() self:Handle() end));
-				if nil ~= self.OnHandle then
-					self.OnHandle();
+				delegationremove(this, "OnHandle", f);
+				delegationremove(this, "OnHandle", (function() this:Handle() end));
+				if nil ~= this.OnHandle then
+					this.OnHandle();
 				end;
-				delegationadd(self, "OnHandleEvent", f);
-				if nil ~= self.OnHandleEvent then
-					self.OnHandleEvent();
+				delegationadd(this, "OnHandleEvent", f);
+				if nil ~= this.OnHandleEvent then
+					this.OnHandleEvent();
 				end;
 			end,
-			Update = function(self)
+			Update = function(this)
 				local i = 0;
-				while i < self.cubes.Length do
+				while i < this.cubes.Length do
 					local offset = condexp(i % 2 == 1, 5, -5);
-					local nr = self.r + UnityEngine.Mathf.Sin(UnityEngine.Time.time) * offset;
+					local nr = this.r + UnityEngine.Mathf.Sin(UnityEngine.Time.time) * offset;
 					local angle = condexp(i % 2 == 1, UnityEngine.Time.time, -5);
-					local b = (function() local __compiler_newobject_77; __compiler_newobject_77 = newexternobject(UnityEngine.Vector3, "ctor", typecast(( UnityEngine.Mathf.Cos(i / self.max * 3.141593 * 2 + angle) * nr ), "System.Single"), typecast(( UnityEngine.Mathf.Sin(i / self.max * 3.141593 * 2 + angle) * nr ), "System.Single"), 0); return __compiler_newobject_77; end)();
-					self.cubes[i + 1].transform.position = b;
+					local b = (function() local __compiler_newobject_78; __compiler_newobject_78 = newexternobject(UnityEngine.Vector3, "ctor", typecast(( UnityEngine.Mathf.Cos(i / this.max * 3.141593 * 2 + angle) * nr ), "System.Single"), typecast(( UnityEngine.Mathf.Sin(i / this.max * 3.141593 * 2 + angle) * nr ), "System.Single"), 0); return __compiler_newobject_78; end)();
+					this.cubes[i + 1].transform.position = b;
 					i = i + 1;
 				end;
-				if self.fogStart <= 0 or self.t > 1 then
-					self.fogStart = UnityEngine.Time.time;
-					self.bgCurrent = UnityEngine.Camera.main.backgroundColor;
-					local ix = UnityEngine.Random.Range(0, self.colors.Length);
-					self.bgColor = self.colors[ix + 1];
+				if this.fogStart <= 0 or this.t > 1 then
+					this.fogStart = UnityEngine.Time.time;
+					this.bgCurrent = UnityEngine.Camera.main.backgroundColor;
+					local ix = UnityEngine.Random.Range(0, this.colors.Length);
+					this.bgColor = this.colors[ix + 1];
 				end;
-				self.t = ( UnityEngine.Time.time - self.fogStart ) / 10;
-				UnityEngine.Camera.main.backgroundColor = UnityEngine.Color.Lerp(self.bgCurrent, self.bgColor, self.t);
+				this.t = ( UnityEngine.Time.time - this.fogStart ) / 10;
+				UnityEngine.Camera.main.backgroundColor = UnityEngine.Color.Lerp(this.bgCurrent, this.bgColor, this.t);
 			end,
-			Reset = function(self)
-				if nil ~= self.cubes then
+			Reset = function(this)
+				if nil ~= this.cubes then
 					local i = 0;
-					while i < self.cubes.Length do
-						UnityEngine.Object.Destroy(self.cubes[i + 1]);
+					while i < this.cubes.Length do
+						UnityEngine.Object.Destroy(this.cubes[i + 1]);
 						i = i + 1;
 					end;
 				end;
-				self.cubes = wraparray{};
+				this.cubes = wraparray{};
 				local P = UnityEngine.Resources.Load("Particle System");
 				local i = 0;
-				while i < self.max do
+				while i < this.max do
 					local cube = UnityEngine.GameObject.CreatePrimitive(3);
-					cube.transform.position = (function() local __compiler_newobject_103; __compiler_newobject_103 = newexternobject(UnityEngine.Vector3, "ctor", typecast(UnityEngine.Mathf.Cos(i / self.max * 3.141593 * 2), "System.Single") * self.r, typecast(UnityEngine.Mathf.Sin(i / self.max * 3.141593 * 2), "System.Single") * self.r, 0); return __compiler_newobject_103; end)();
-					cube.transform:SetParent(self.root.transform);
+					cube.transform.position = (function() local __compiler_newobject_104; __compiler_newobject_104 = newexternobject(UnityEngine.Vector3, "ctor", typecast(UnityEngine.Mathf.Cos(i / this.max * 3.141593 * 2), "System.Single") * this.r, typecast(UnityEngine.Mathf.Sin(i / this.max * 3.141593 * 2), "System.Single") * this.r, 0); return __compiler_newobject_104; end)();
+					cube.transform:SetParent(this.root.transform);
 					local mat = cube:GetComponent(UnityEngine.Renderer).material;
 					local box = cube:GetComponent(UnityEngine.BoxCollider);
 					UnityEngine.Object.Destroy(box);
 					local p = typecast(UnityEngine.Object.Instantiate(P, UnityEngine.Vector3.zero, UnityEngine.Quaternion.identity), "UnityEngine.GameObject");
 					p.transform:SetParent(cube.transform);
-					local ix = UnityEngine.Random.Range(0, self.colors.Length);
-					mat.color = self.colors[ix + 1];
-					self.cubes[i + 1] = cube;
+					local ix = UnityEngine.Random.Range(0, this.colors.Length);
+					mat.color = this.colors[ix + 1];
+					this.cubes[i + 1] = cube;
 					i = i + 1;
 				end;
 			end,
-			Handle = function(self)
+			Handle = function(this)
 				UnityEngine.Debug.Log("callback");
-			end,
-
-			__ctor = function(self)
-				self.colors = wraparray{UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black};
-				self.dict = wrapdictionary{};
 			end,
 
 			OnHandle0 = wrapdelegation{},
@@ -129,8 +121,8 @@ MyScript = {
 			bgCurrent = nil,
 			bgColor = nil,
 			cubes = nil,
-			colors = nil,
-			dict = nil,
+			colors = wraparray{UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black},
+			dict = wrapdictionary{},
 		};
 
 		local instance_props = {
@@ -139,9 +131,10 @@ MyScript = {
 		local instance_events = {
 		};
 
-		return defineclass(static, static_props, static_events, instance, instance_props, instance_events);
+		return defineclass(nil, static, static_props, static_events, instance, instance_props, instance_events);
 	end,
 };
 
+MyScript.__define_class();
+
 defineentry(MyScript);
-return MyScript.__define_class();

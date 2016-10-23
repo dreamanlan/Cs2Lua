@@ -1,20 +1,5 @@
 ============<<<Semantic Error:test>>>============
-test.cs(203,25): error CS0051: Inconsistent accessibility: parameter type 'Bar.IntHandler' is less accessible than method 'Bar.TestDelegate(Bar.IntHandler)'
-test.cs(80,35): error CS0236: A field initializer cannot reference the non-static field, method, or property 'GenericClass<T>.m_Test'
-test.cs(191,21): error CS0815: Cannot assign anonymous method to an implicitly-typed variable
-test.cs(55,38): warning CS1701: Assuming assembly reference 'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' used by 'UnityEngine' matches identity 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' of 'mscorlib', you may need to supply runtime policy
-test.cs(56,21): warning CS1701: Assuming assembly reference 'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' used by 'UnityEngine' matches identity 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' of 'mscorlib', you may need to supply runtime policy
-test.cs(57,27): error CS0841: Cannot use local variable 'v' before it is declared
-test.cs(63,21): error CS0128: A local variable named 'obj' is already defined in this scope
-test.cs(64,31): warning CS1701: Assuming assembly reference 'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' used by 'UnityEngine' matches identity 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' of 'mscorlib', you may need to supply runtime policy
-test.cs(64,31): error CS1061: 'GameObject' does not contain a definition for 'a' and no extension method 'a' accepting a first argument of type 'GameObject' could be found (are you missing a using directive or an assembly reference?)
-test.cs(65,21): error CS0136: A local or parameter named 'v' cannot be declared in this scope because that name is used in an enclosing local scope to define a local or parameter
-test.cs(54,19): warning CS0219: The variable 'a' is assigned but its value is never used
-test.cs(62,39): warning CS0219: The variable 's' is assigned but its value is never used
-test.cs(147,21): error CS0136: A local or parameter named 'v' cannot be declared in this scope because that name is used in an enclosing local scope to define a local or parameter
-test.cs(143,24): error CS0161: 'Foo.Test(int)': not all code paths return a value
-test.cs(211,19): error CS0070: The event 'Foo.OnSimple' can only appear on the left hand side of += or -= (except when used from within the type 'Foo')
-test.cs(226,21): error CS0128: A local variable named 'v' is already defined in this scope
-test.cs(231,21): error CS0029: Cannot implicitly convert type 'int' to 'System.Collections.Generic.List<int>'
-test.cs(282,21): error CS0266: Cannot implicitly convert type 'int?' to 'int'. An explicit conversion exists (are you missing a cast?)
-test.cs(251,21): warning CS0162: Unreachable code detected
+test.cs(3,1): hidden CS8019: Unnecessary using directive.
+test.cs(16,5): hidden CS8019: Unnecessary using directive.
+test.cs(2,1): hidden CS8019: Unnecessary using directive.
+test.cs(4,1): hidden CS8019: Unnecessary using directive.

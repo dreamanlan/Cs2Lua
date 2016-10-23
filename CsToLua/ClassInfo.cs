@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
+using Microsoft.CodeAnalysis.Semantics;
 
 namespace RoslynTool.CsToLua
 {
@@ -16,6 +17,8 @@ namespace RoslynTool.CsToLua
         internal bool IsEntryClass = false;
 
         internal string Key = string.Empty;
+        internal string BaseKey = string.Empty;
+
         internal string Namespace = string.Empty;
         internal string ClassName = string.Empty;
         internal string BaseNamespace = string.Empty;
@@ -46,8 +49,7 @@ namespace RoslynTool.CsToLua
         internal StringBuilder StaticPropertyCodeBuilder = new StringBuilder();
         internal StringBuilder StaticEventCodeBuilder = new StringBuilder();
 
-        internal StringBuilder InstanceInitializerCodeBuilder = new StringBuilder();
-        internal StringBuilder StaticInitializerCodeBuilder = new StringBuilder();
+        internal Dictionary<string, ClassInfo> InnerClasses = new Dictionary<string, ClassInfo>();
 
         internal void Init(INamedTypeSymbol sym)
         {
@@ -67,17 +69,30 @@ namespace RoslynTool.CsToLua
             ClassName = sym.Name;
             BaseNamespace = null == sym.BaseType ? string.Empty : GetNamespaces(sym.BaseType);
             BaseClassName = null == sym.BaseType ? string.Empty : sym.BaseType.Name;
-
+            
             Key = GetFullName(sym);
+            BaseKey = GetFullName(sym.BaseType);
+            if (BaseKey == "System.Object" || BaseKey == "System.ValueType") {
+                BaseKey = string.Empty;
+            }
+
             References.Clear();
             IgnoreReferences.Clear();
         }
-        internal void AddReference(ISymbol sym, INamedTypeSymbol curClassSym, string key)
+        internal void AddReference(ISymbol sym, INamedTypeSymbol curClassSym)
         {
             var refType = sym as INamedTypeSymbol;
             if (null == refType) {
                 refType = sym.ContainingType;
             }
+            AddReference(refType, curClassSym);
+        }
+        internal void AddReference(INamedTypeSymbol refType, INamedTypeSymbol curClassSym)
+        {
+            while (null != refType.ContainingType) {
+                refType = refType.ContainingType;
+            }
+            string key = GetFullName(refType);
             if (null != refType && refType != curClassSym && !refType.IsAnonymousType && refType.TypeKind != TypeKind.Delegate) {                
                 if (!string.IsNullOrEmpty(key) && !References.Contains(key) && key != Key) {
                     bool isIgnore = ClassInfo.HasAttribute(refType, "Cs2Lua.IgnoreAttribute");
@@ -88,6 +103,30 @@ namespace RoslynTool.CsToLua
                     }
                 }
             }
+        }
+
+        internal static bool IsBaseInitializerCalled(ConstructorDeclarationSyntax node, SemanticModel model)
+        {
+            bool baseInitializerCalled = false;
+            var init = node.Initializer;
+            if (null != init) {
+                var oper = model.GetOperation(init) as IInvocationExpression;
+                if (init.ThisOrBaseKeyword.Text == "this") {
+                    var constructor = oper.TargetMethod;
+                    if (null != constructor) {
+                        var decl = constructor.DeclaringSyntaxReferences;
+                        if (decl.Length == 1) {
+                            var syntax = decl[0].GetSyntax() as ConstructorDeclarationSyntax;
+                            if (null != syntax) {
+                                return IsBaseInitializerCalled(syntax, model);
+                            }
+                        }
+                    }
+                } else if (init.ThisOrBaseKeyword.Text == "base") {
+                    baseInitializerCalled = true;
+                }
+            }
+            return baseInitializerCalled;
         }
         internal static string CalcTypeReference(INamedTypeSymbol sym)
         {
@@ -127,14 +166,14 @@ namespace RoslynTool.CsToLua
             var ct = type.ContainingType;
             string name = string.Empty;
             if (null != ct) {
-                CalcNameWithTypeParameters(ct);
+                name = CalcNameWithTypeParameters(ct);
             }
             while (null != ct && name.Length > 0) {
                 list.Insert(0, name);
                 ns = ct.ContainingNamespace;
                 ct = ct.ContainingType;
                 if (null != ct) {
-                    CalcNameWithTypeParameters(ct);
+                    name = CalcNameWithTypeParameters(ct);
                 } else {
                     name = string.Empty;
                 }
@@ -273,11 +312,16 @@ namespace RoslynTool.CsToLua
         internal List<string> OutParamNames = new List<string>();
         internal string OriginalParamsName = string.Empty;
         internal bool ExistReturn = false;
+        internal bool ExistTypeOf = false;
 
         internal IMethodSymbol SemanticInfo = null;
         internal IPropertySymbol PropertySemanticInfo = null;
-
+        
         internal void Init(IMethodSymbol sym)
+        {
+            Init(sym, false);
+        }
+        internal void Init(IMethodSymbol sym, bool existTypeOf)
         {
             ParamNames.Clear();
             ReturnParamNames.Clear();
@@ -285,8 +329,27 @@ namespace RoslynTool.CsToLua
             OutParamNames.Clear();
             OriginalParamsName = string.Empty;
             ExistReturn = false;
+            ExistTypeOf = existTypeOf;
             
             SemanticInfo = sym;
+
+            if (sym.IsGenericMethod) {
+                foreach (var param in sym.TypeParameters) {
+                    ParamNames.Add(param.Name);
+                }
+            }
+
+            if (ExistTypeOf) {
+                INamedTypeSymbol type = sym.ContainingType;
+                while (null != type) {
+                    if (type.IsGenericType) {
+                        foreach (var param in type.TypeParameters) {
+                            ParamNames.Add(param.Name);
+                        }
+                    }
+                    type = type.ContainingType;
+                }
+            }
 
             foreach (var param in sym.Parameters) {
                 if (param.IsParams) {
@@ -312,7 +375,7 @@ namespace RoslynTool.CsToLua
         internal List<ExpressionSyntax> ReturnArgs = new List<ExpressionSyntax>();
         internal List<ITypeSymbol> GenericTypeArgs = new List<ITypeSymbol>();
 
-        internal void Init(IMethodSymbol sym, ArgumentListSyntax argList)
+        internal void Init(IMethodSymbol sym, ArgumentListSyntax argList, bool existTypeOf)
         {
             Args.Clear();
             ReturnArgs.Clear();
@@ -343,10 +406,20 @@ namespace RoslynTool.CsToLua
             }
 
             if (sym.IsGenericMethod) {
-                int ct = sym.TypeArguments.Length;
-                for (int i = 0; i < ct; ++i) {
-                    var arg = sym.TypeArguments[i];
+                foreach(var arg in sym.TypeArguments) {
                     GenericTypeArgs.Add(arg);
+                }
+            }
+
+            if (existTypeOf) {
+                INamedTypeSymbol type = sym.ContainingType;
+                while (null != type) {
+                    if (type.IsGenericType) {
+                        foreach (var arg in type.TypeArguments) {
+                            GenericTypeArgs.Add(arg);
+                        }
+                    }
+                    type = type.ContainingType;
                 }
             }
         }
@@ -382,16 +455,15 @@ namespace RoslynTool.CsToLua
     {
         internal string SwitchVarName = string.Empty;
     }
-
     internal class MergedNamespaceInfo
     {
         internal string Name = string.Empty;
-        internal Dictionary<string, MergedClassInfo> Classes = new Dictionary<string, MergedClassInfo>();
         internal Dictionary<string, MergedNamespaceInfo> Namespaces = new Dictionary<string, MergedNamespaceInfo>();
     }
     internal class MergedClassInfo
     {
         internal string Key = string.Empty;
         internal List<ClassInfo> Classes = new List<ClassInfo>();
+        internal Dictionary<string, MergedClassInfo> InnerClasses = new Dictionary<string, MergedClassInfo>();
     }
 }
