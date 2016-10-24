@@ -296,7 +296,7 @@ CSharp代码转lua，适用于使用lua实现热更新而又想有一个强类�
 
 类子对象。类似的，property的get/set方法名也仍然是get/set，event接口实现的add/remove方法名也仍然使用add/remove。
 
-2、泛型类与泛型方法在转换时会将泛型参数当函数参数作用。
+2、泛型类静态方法与泛型方法在转换时会将泛型参数当函数参数作用，泛型类实例在构造时记录泛型参数到实例字段，实例方法通过字段获得泛型参数信息。
 
 亦即
 
@@ -331,12 +331,11 @@ class GenericClass<TypeT>
 
 GenericClass = {
 
-  GenericMethod = function(T,TypeT)
+  GenericMethod = function(T, TypeT)
   
   end,
-  
+    
 }
-
 
 ***这种转换方法能适应unity3d的GetComponent方法
 
