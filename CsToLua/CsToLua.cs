@@ -236,6 +236,14 @@ namespace RoslynTool.CsToLua
                 isExportConstructor = ClassInfo.HasAttribute(declSym, "Cs2Lua.ExportAttribute");
             }
 
+            bool generateBasicCtor = false;
+            bool generateBasicCctor = false;
+            ClassSymbolInfo csi;
+            if (m_SymbolTable.ClassSymbols.TryGetValue(ci.Key, out csi)) {
+                generateBasicCtor = csi.GenerateBasicCtor;
+                generateBasicCctor = csi.GenerateBasicCctor;
+            }
+
             bool isStatic = declSym.IsStatic;
             var mi = new MethodInfo();
             mi.Init(declSym, m_SymbolTable.ExistTypeOf(declSym));
@@ -297,10 +305,18 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendFormat("{0}{1}.cctor();", GetIndentString(), ci.BaseKey);
                     CodeBuilder.AppendLine();
                 }
+                if (generateBasicCctor) {
+                    CodeBuilder.AppendFormat("{0}{1}.__cctor({2});", GetIndentString(), ci.Key, string.Join(", ", mi.GenericTypeTypeParamNames.ToArray()));
+                    CodeBuilder.AppendLine();
+                }
             } else {
                 if (!string.IsNullOrEmpty(ci.BaseKey) && !ClassInfo.IsBaseInitializerCalled(node, m_Model)) {
                     //如果当前构造没有调父类构造并且委托的其它构造也没有调父类构造，则调用默认构造。
                     CodeBuilder.AppendFormat("{0}base.ctor(this);", GetIndentString());
+                    CodeBuilder.AppendLine();
+                }
+                if (generateBasicCtor) {
+                    CodeBuilder.AppendFormat("{0}this.__ctor({1});", GetIndentString(), string.Join(", ", mi.GenericTypeTypeParamNames.ToArray()));
                     CodeBuilder.AppendLine();
                 }
             }
@@ -731,12 +747,7 @@ namespace RoslynTool.CsToLua
             var type = oper.TypeOperand;
             if (null != type) {
                 if (type.TypeKind == TypeKind.TypeParameter) {
-                    if (m_MethodInfoStack.Count <= 0) {
-                        Log(node, "typeof of TypeParameter can only be used in function ! ");
-                        CodeBuilder.Append("nil");
-                    } else {
-                        CodeBuilder.Append(type.Name);
-                    }
+                    CodeBuilder.Append(type.Name);
                 } else {
                     var fullName = ClassInfo.GetFullName(type);
                     CodeBuilder.Append(fullName);
@@ -1905,10 +1916,31 @@ namespace RoslynTool.CsToLua
                         var expOper = m_Model.GetOperation(v.Initializer.Value);
                         var constVal = expOper.ConstantValue;
                         if (!constVal.HasValue) {
-                            CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
-                            CodeBuilder.AppendFormat(" = ", fieldSym.Type.TypeKind == TypeKind.Delegate ? "delegationwrap(" : string.Empty);
-                            VisitExpressionSyntax(v.Initializer.Value);
-                            CodeBuilder.AppendFormat("{0}", fieldSym.Type.TypeKind == TypeKind.Delegate ? ")" : string.Empty);
+                            if (m_SymbolTable.ExistTypeOf(fieldSym)) {
+                                CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
+                                CodeBuilder.AppendLine(" = nil,");
+                                if(isStatic)
+                                    ci.CurrentCodeBuilder = ci.StaticInitializerCodeBuilder;
+                                else
+                                    ci.CurrentCodeBuilder = ci.InstanceInitializerCodeBuilder;
+                                ++m_Indent;
+                                CodeBuilder.AppendFormat("{0}{1}.{2}", GetIndentString(), isStatic ? ci.Key : "self", name);
+                                CodeBuilder.AppendFormat(" = ", fieldSym.Type.TypeKind == TypeKind.Delegate ? "delegationwrap(" : string.Empty);
+                                VisitExpressionSyntax(v.Initializer.Value);
+                                CodeBuilder.AppendFormat("{0};", fieldSym.Type.TypeKind == TypeKind.Delegate ? ")" : string.Empty);
+                                CodeBuilder.AppendLine();
+                                --m_Indent;
+                                if(isStatic)
+                                    ci.CurrentCodeBuilder = ci.StaticFieldCodeBuilder;
+                                else
+                                    ci.CurrentCodeBuilder = ci.InstanceFieldCodeBuilder;
+                                continue;
+                            } else {
+                                CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
+                                CodeBuilder.AppendFormat(" = ", fieldSym.Type.TypeKind == TypeKind.Delegate ? "delegationwrap(" : string.Empty);
+                                VisitExpressionSyntax(v.Initializer.Value);
+                                CodeBuilder.AppendFormat("{0}", fieldSym.Type.TypeKind == TypeKind.Delegate ? ")" : string.Empty);
+                            }
                         } else {
                             CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
                             CodeBuilder.Append(" = ");
@@ -1946,7 +1978,7 @@ namespace RoslynTool.CsToLua
                 var fieldSym = baseSym as IEventSymbol;
                 if (isStatic && fieldSym.IsStatic || !isStatic && !fieldSym.IsStatic) {
                     string name = v.Identifier.Text;
-                    if (null != v.Initializer) {
+                    if (null != v.Initializer) {                        
                         CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
                         CodeBuilder.Append(" = delegationwrap(");
                         VisitExpressionSyntax(v.Initializer.Value);

@@ -26,7 +26,10 @@ namespace RoslynTool.CsToLua
             var type = oper.TypeOperand;
             if (null != type) {
                 if (type.TypeKind == TypeKind.TypeParameter) {
-                    m_HaveTypeOf = true;
+                    var typeParam = type as ITypeParameterSymbol;
+                    if (typeParam.TypeParameterKind == TypeParameterKind.Type) {
+                        m_HaveTypeOf = true;
+                    }
                 }
             }
             base.VisitTypeOfExpression(node);

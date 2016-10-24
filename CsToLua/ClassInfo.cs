@@ -49,6 +49,8 @@ namespace RoslynTool.CsToLua
         internal StringBuilder StaticPropertyCodeBuilder = new StringBuilder();
         internal StringBuilder StaticEventCodeBuilder = new StringBuilder();
 
+        internal StringBuilder InstanceInitializerCodeBuilder = new StringBuilder();
+        internal StringBuilder StaticInitializerCodeBuilder = new StringBuilder();
         internal Dictionary<string, ClassInfo> InnerClasses = new Dictionary<string, ClassInfo>();
 
         internal void Init(INamedTypeSymbol sym)
@@ -310,6 +312,8 @@ namespace RoslynTool.CsToLua
         internal List<string> ReturnParamNames = new List<string>();
         internal List<string> RefParamNames = new List<string>();
         internal List<string> OutParamNames = new List<string>();
+        internal List<string> GenericTypeTypeParamNames = new List<string>();
+        internal List<string> GenericMethodTypeParamNames = new List<string>();
         internal string OriginalParamsName = string.Empty;
         internal bool ExistReturn = false;
         internal bool ExistTypeOf = false;
@@ -336,6 +340,7 @@ namespace RoslynTool.CsToLua
             if (sym.IsGenericMethod) {
                 foreach (var param in sym.TypeParameters) {
                     ParamNames.Add(param.Name);
+                    GenericMethodTypeParamNames.Add(param.Name);
                 }
             }
 
@@ -345,6 +350,7 @@ namespace RoslynTool.CsToLua
                     if (type.IsGenericType) {
                         foreach (var param in type.TypeParameters) {
                             ParamNames.Add(param.Name);
+                            GenericTypeTypeParamNames.Add(param.Name);
                         }
                     }
                     type = type.ContainingType;

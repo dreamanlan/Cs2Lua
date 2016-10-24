@@ -1,3 +1,0 @@
-============<<<Translation Error:test>>>============
-<<<[Log for TypeOfExpressionSyntax]>>> [code: typeof(T) locationtest.cs: (41,39)-(41,48)]typeof of TypeParameter can only be used in function ! 
-<<<[Log for TypeOfExpressionSyntax]>>> [code: typeof(TT) locationtest.cs: (42,40)-(42,50)]typeof of TypeParameter can only be used in function ! 

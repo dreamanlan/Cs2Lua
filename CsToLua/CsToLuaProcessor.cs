@@ -262,16 +262,26 @@ namespace RoslynTool.CsToLua
             var classes = mci.Classes;
 
             string fileName = key.Replace('.', '_');
-
+            
             bool haveCctor = false;
             bool haveCtor = false;
+            bool generateBasicCctor = false;
+            bool generateBasicCtor = false;
+            bool generateStaticTypeParamFields = false;
+            bool generateTypeParamFields = false;
             string baseClass = string.Empty;
             ClassSymbolInfo csi;
             if (symTable.ClassSymbols.TryGetValue(key, out csi)) {
                 haveCctor = csi.ExistStaticConstructor;
                 haveCtor = csi.ExistConstructor;
+                generateBasicCctor = csi.GenerateBasicCctor;
+                generateBasicCtor = csi.GenerateBasicCtor;
+                generateStaticTypeParamFields = csi.GenerateStaticTypeParamFields;
+                generateTypeParamFields = csi.GenerateTypeParamFields;
                 baseClass = csi.BaseClassKey;
             }
+            string genericTypeParamNames = string.Join(", ", csi.GenericTypeParamNames.ToArray());
+
             HashSet<string> requiredlibs = new HashSet<string>();
             HashSet<string> lualibs;
             if (symTable.Requires.TryGetValue(key, out lualibs)) {
@@ -348,14 +358,50 @@ namespace RoslynTool.CsToLua
             }
 
             if (!haveCctor) {
-                sb.AppendFormat("{0}cctor = function()", GetIndentString(indent));
+                sb.AppendFormat("{0}cctor = function({1})", GetIndentString(indent), genericTypeParamNames);
                 sb.AppendLine();
                 ++indent;
                 if (!string.IsNullOrEmpty(baseClass)) {
                     sb.AppendFormat("{0}{1}.cctor(this);", GetIndentString(indent), baseClass);
                     sb.AppendLine();
                 }
+                if (generateBasicCctor) {
+                    sb.AppendFormat("{0}{1}.__cctor({2});", GetIndentString(indent), key, genericTypeParamNames);
+                    sb.AppendLine();
+                }
                 --indent;
+                sb.AppendFormat("{0}end,", GetIndentString(indent));
+                sb.AppendLine();
+            }
+            if (generateBasicCctor) {
+                sb.AppendFormat("{0}__cctor = function({1})", GetIndentString(indent), genericTypeParamNames);
+                sb.AppendLine();
+                ++indent;
+                sb.AppendFormat("{0}if {1}.__cctor_called then", GetIndentString(indent), key);
+                sb.AppendLine();
+                ++indent;
+                sb.AppendFormat("{0}return;", GetIndentString(indent));
+                sb.AppendLine();
+                --indent;
+                sb.AppendFormat("{0}else", GetIndentString(indent));
+                sb.AppendLine();
+                ++indent;
+                sb.AppendFormat("{0}{1}.__cctor_called = true;", GetIndentString(indent), key);
+                sb.AppendLine();
+                --indent;
+                sb.AppendFormat("{0}end", GetIndentString(indent));
+                sb.AppendLine();
+                if (generateStaticTypeParamFields) {
+                    sb.AppendFormat("{0}{1}.__type_params = ", GetIndentString(indent), key);
+                    sb.Append("{");
+                    sb.Append(genericTypeParamNames);
+                    sb.Append("};");
+                }
+                --indent;
+                //static initializer
+                foreach (var ci in classes) {
+                    sb.Append(ci.StaticInitializerCodeBuilder.ToString());
+                }
                 sb.AppendFormat("{0}end,", GetIndentString(indent));
                 sb.AppendLine();
             }
@@ -365,6 +411,15 @@ namespace RoslynTool.CsToLua
             //static field
             foreach (var ci in classes) {
                 sb.Append(ci.StaticFieldCodeBuilder.ToString());
+            }
+
+            if (generateBasicCctor) {
+                sb.AppendFormat("{0}__cctor_called = false,", GetIndentString(indent));
+                sb.AppendLine();
+            }
+            if (generateStaticTypeParamFields) {
+                sb.AppendFormat("{0}__type_params = nil,", GetIndentString(indent));
+                sb.AppendLine();
             }
 
             sb.AppendLine();
@@ -448,14 +503,50 @@ namespace RoslynTool.CsToLua
                 }
 
                 if (!haveCtor) {
-                    sb.AppendFormat("{0}ctor = function(this)", GetIndentString(indent));
+                    sb.AppendFormat("{0}ctor = function(this{1}{2})", GetIndentString(indent), string.IsNullOrEmpty(genericTypeParamNames) ? string.Empty : ", ", genericTypeParamNames);
                     sb.AppendLine();
                     ++indent;
                     if (!string.IsNullOrEmpty(baseClass)) {
                         sb.AppendFormat("{0}base.ctor(this);", GetIndentString(indent));
                         sb.AppendLine();
                     }
+                    if (generateBasicCtor) {
+                        sb.AppendFormat("{0}this:__ctor({1});", GetIndentString(indent), genericTypeParamNames);
+                        sb.AppendLine();
+                    }
                     --indent;
+                    sb.AppendFormat("{0}end,", GetIndentString(indent));
+                    sb.AppendLine();
+                }
+                if (generateBasicCtor) {
+                    sb.AppendFormat("{0}__ctor = function(this{1}{2})", GetIndentString(indent), string.IsNullOrEmpty(genericTypeParamNames) ? string.Empty : ", ", genericTypeParamNames);
+                    sb.AppendLine();
+                    ++indent;
+                    sb.AppendFormat("{0}if this.__ctor_called then", GetIndentString(indent));
+                    sb.AppendLine();
+                    ++indent;
+                    sb.AppendFormat("{0}return;", GetIndentString(indent));
+                    sb.AppendLine();
+                    --indent;
+                    sb.AppendFormat("{0}else", GetIndentString(indent));
+                    sb.AppendLine();
+                    ++indent;
+                    sb.AppendFormat("{0}this.__ctor_called = true;", GetIndentString(indent));
+                    sb.AppendLine();
+                    --indent;
+                    sb.AppendFormat("{0}end", GetIndentString(indent));
+                    sb.AppendLine();
+                    if (generateTypeParamFields) {
+                        sb.AppendFormat("{0}this.__type_params = ", GetIndentString(indent));
+                        sb.Append("{");
+                        sb.Append(genericTypeParamNames);
+                        sb.Append("};");
+                    }
+                    --indent;
+                    //instance initializer
+                    foreach (var ci in classes) {
+                        sb.Append(ci.InstanceInitializerCodeBuilder.ToString());
+                    }
                     sb.AppendFormat("{0}end,", GetIndentString(indent));
                     sb.AppendLine();
                 }
@@ -465,6 +556,15 @@ namespace RoslynTool.CsToLua
                 //instance field
                 foreach (var ci in classes) {
                     sb.Append(ci.InstanceFieldCodeBuilder.ToString());
+                }
+
+                if (generateBasicCtor) {
+                    sb.AppendFormat("{0}__ctor_called = false,", GetIndentString(indent));
+                    sb.AppendLine();
+                }
+                if (generateTypeParamFields) {
+                    sb.AppendFormat("{0}__type_params = nil,", GetIndentString(indent));
+                    sb.AppendLine();
                 }
 
                 --indent;

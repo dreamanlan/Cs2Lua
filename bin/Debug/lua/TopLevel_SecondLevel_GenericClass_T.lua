@@ -48,7 +48,7 @@ TopLevel.SecondLevel.GenericClass_T.__define_class();
 
 
 TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT = {
-	cctor = function()
+	cctor = function(TT, T)
 	end,
 
 
@@ -66,7 +66,8 @@ TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT = {
 		};
 
 		local instance = {
-			ctor = function(this, v, vv)
+			ctor = function(this, TT, T, v, vv)
+				this.__ctor(TT, T);
 				this.m_T = v;
 				this.m_TT = vv;
 				return this;
@@ -79,11 +80,21 @@ TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT = {
 				local t3 = TT;
 				local t4 = System.Int32;
 			end,
+			__ctor = function(this, TT, T)
+				if this.__ctor_called then
+					return;
+				else
+					this.__ctor_called = true;
+				end
+				self.m_TypeT = T;
+				self.m_TypeTT = TT;
+			end,
 
 			m_T = nil,
 			m_TT = nil,
 			m_TypeT = nil,
 			m_TypeTT = nil,
+			__ctor_called = false,
 		};
 
 		local instance_props = {

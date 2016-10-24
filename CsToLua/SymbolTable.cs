@@ -17,6 +17,10 @@ namespace RoslynTool.CsToLua
         internal string BaseClassKey = string.Empty;
         internal bool ExistConstructor = false;
         internal bool ExistStaticConstructor = false;
+        internal bool GenerateBasicCtor = false;
+        internal bool GenerateBasicCctor = false;
+        internal bool GenerateTypeParamFields = false;
+        internal bool GenerateStaticTypeParamFields = false;
         internal INamedTypeSymbol TypeSymbol = null;
         internal List<IFieldSymbol> FieldSymbols = new List<IFieldSymbol>();
         internal List<IMethodSymbol> MethodSymbols = new List<IMethodSymbol>();
@@ -24,6 +28,8 @@ namespace RoslynTool.CsToLua
         internal List<IEventSymbol> EventSymbols = new List<IEventSymbol>();
         internal Dictionary<string, bool> SymbolOverloadFlags = new Dictionary<string, bool>();
         internal Dictionary<string, IMethodSymbol> MethodIncludeTypeOfs = new Dictionary<string, IMethodSymbol>();
+        internal Dictionary<string, IFieldSymbol> FieldIncludeTypeOfs = new Dictionary<string, IFieldSymbol>();
+        internal List<string> GenericTypeParamNames = new List<string>();
 
         internal void Init(INamedTypeSymbol typeSym, CSharpCompilation compilation)
         {
@@ -34,13 +40,31 @@ namespace RoslynTool.CsToLua
             ExistConstructor = false;
             ExistStaticConstructor = false;
 
+            INamedTypeSymbol type = typeSym;
+            while (null != type) {
+                if (type.IsGenericType) {
+                    foreach (var param in type.TypeParameters) {
+                        GenericTypeParamNames.Add(param.Name);
+                    }
+                }
+                type = type.ContainingType;
+            }
+
+            bool fieldIncludeTypeOf = false;
+            bool staticFieldIncludeTypeOf = false;
             TypeSymbol = typeSym;
             foreach (var sym in TypeSymbol.GetMembers()) {
                 var fsym = sym as IFieldSymbol;
                 if (null != fsym) {
                     FieldSymbols.Add(fsym);
+
+                    if (typeSym.IsGenericType) {
+                        CheckFieldIncludeTypeOf(fsym, compilation, ref fieldIncludeTypeOf, ref staticFieldIncludeTypeOf);
+                    }
                     continue;
-                }                
+                }
+            }
+            foreach (var sym in TypeSymbol.GetMembers()) {
                 var msym = sym as IMethodSymbol;
                 if (null != msym) {
                     if (msym.MethodKind == MethodKind.Constructor && !msym.IsImplicitlyDeclared) {
@@ -59,34 +83,103 @@ namespace RoslynTool.CsToLua
                         SymbolOverloadFlags[name] = true;
                     }
 
-                    bool existTypeOf = false;
-                    foreach (var decl in msym.DeclaringSyntaxReferences) {
-                        var node = decl.GetSyntax() as CSharpSyntaxNode;
-                        if (null != node) {
-                            var model = compilation.GetSemanticModel(node.SyntaxTree, true);
-                            var analysis = new TypeOfAnalysis(model);
-                            node.Accept(analysis);
-                            if (analysis.HaveTypeOf) {
-                                existTypeOf = true;
-                                break;
-                            }
+                    if (typeSym.IsGenericType) {
+                        CheckMethodIncludeTypeOf(msym, compilation, false);
+
+                        if (fieldIncludeTypeOf && msym.MethodKind == MethodKind.Constructor) {
+                            string manglingName = SymbolTable.CalcMethodMangling(msym);
+                            MethodIncludeTypeOfs.Add(manglingName, msym);
                         }
-                    }
-                    if (existTypeOf) {
-                        string manglingName = SymbolTable.CalcMethodMangling(msym);
-                        MethodIncludeTypeOfs.Add(manglingName, msym);
+                        if (staticFieldIncludeTypeOf && msym.MethodKind == MethodKind.StaticConstructor) {
+                            string manglingName = SymbolTable.CalcMethodMangling(msym);
+                            MethodIncludeTypeOfs.Add(manglingName, msym);
+                        }
                     }
                     continue;
                 }
                 var psym = sym as IPropertySymbol;
                 if (null != psym) {
                     PropertySymbols.Add(psym);
+
+                    if (typeSym.IsGenericType) {
+                        if (null != psym.GetMethod) {
+                            CheckMethodIncludeTypeOf(psym.GetMethod, compilation, true);
+                        }
+                        if (null != psym.SetMethod) {
+                            CheckMethodIncludeTypeOf(psym.SetMethod, compilation, true);
+                        }
+                    }
                     continue;
                 }
                 var esym = sym as IEventSymbol;
                 if (null != esym) {
                     EventSymbols.Add(esym);
+
+                    if (typeSym.IsGenericType) {
+                        if (null != esym.AddMethod) {
+                            CheckMethodIncludeTypeOf(esym.AddMethod, compilation, true);
+                        }
+                        if (null != esym.RemoveMethod) {
+                            CheckMethodIncludeTypeOf(esym.RemoveMethod, compilation, true);
+                        }
+                    }
                     continue;
+                }
+            }
+        }
+
+        private void CheckFieldIncludeTypeOf(IFieldSymbol fsym, Compilation compilation, ref bool fieldIncludeTypeOf, ref bool staticFieldIncludeTypeOf)
+        {
+            bool existTypeOf = false;
+            foreach (var decl in fsym.DeclaringSyntaxReferences) {
+                var node = decl.GetSyntax() as CSharpSyntaxNode;
+                if (null != node) {
+                    var model = compilation.GetSemanticModel(node.SyntaxTree, true);
+                    var analysis = new TypeOfAnalysis(model);
+                    node.Accept(analysis);
+                    if (analysis.HaveTypeOf) {
+                        existTypeOf = true;
+                        break;
+                    }
+                }
+            }
+            if (existTypeOf) {
+                if (fsym.IsStatic) {
+                    staticFieldIncludeTypeOf = true;
+                    GenerateBasicCctor = true;
+                } else {
+                    fieldIncludeTypeOf = true;
+                    GenerateBasicCtor = true;
+                }
+                FieldIncludeTypeOfs.Add(fsym.Name, fsym);
+            }
+        }
+        private void CheckMethodIncludeTypeOf(IMethodSymbol msym, Compilation compilation, bool setGenerateBasicFlagIfInclude)
+        {
+            bool existTypeOf = false;
+            foreach (var decl in msym.DeclaringSyntaxReferences) {
+                var node = decl.GetSyntax() as CSharpSyntaxNode;
+                if (null != node) {
+                    var model = compilation.GetSemanticModel(node.SyntaxTree, true);
+                    var analysis = new TypeOfAnalysis(model);
+                    node.Accept(analysis);
+                    if (analysis.HaveTypeOf) {
+                        existTypeOf = true;
+                        break;
+                    }
+                }
+            }
+            if (existTypeOf) {
+                string manglingName = SymbolTable.CalcMethodMangling(msym);
+                MethodIncludeTypeOfs.Add(manglingName, msym);
+                if (setGenerateBasicFlagIfInclude) {
+                    if (msym.IsStatic) {
+                        GenerateBasicCctor = true;
+                        GenerateStaticTypeParamFields = true;
+                    } else {
+                        GenerateBasicCtor = true;
+                        GenerateTypeParamFields = true;
+                    }
                 }
             }
         }
@@ -133,6 +226,16 @@ namespace RoslynTool.CsToLua
                 if (isMangling) {
                     ret = CalcMethodMangling(sym);
                 }
+            }
+            return ret;
+        }
+        internal bool ExistTypeOf(IFieldSymbol sym)
+        {
+            bool ret = false;
+            string key = ClassInfo.CalcTypeReference(sym.ContainingType);
+            ClassSymbolInfo csi;
+            if (m_ClassSymbols.TryGetValue(key, out csi)) {
+                ret = csi.FieldIncludeTypeOfs.ContainsKey(sym.Name);
             }
             return ret;
         }
