@@ -344,7 +344,7 @@ namespace RoslynTool.CsToLua
                 }
             }
 
-            if (ExistTypeOf) {
+            if (ExistTypeOf && (sym.MethodKind == MethodKind.Constructor || sym.MethodKind == MethodKind.StaticConstructor || sym.IsStatic)) {
                 INamedTypeSymbol type = sym.ContainingType;
                 while (null != type) {
                     if (type.IsGenericType) {
@@ -417,7 +417,7 @@ namespace RoslynTool.CsToLua
                 }
             }
 
-            if (existTypeOf) {
+            if (existTypeOf && (sym.MethodKind == MethodKind.Constructor || sym.MethodKind == MethodKind.StaticConstructor || sym.IsStatic)) {
                 INamedTypeSymbol type = sym.ContainingType;
                 while (null != type) {
                     if (type.IsGenericType) {

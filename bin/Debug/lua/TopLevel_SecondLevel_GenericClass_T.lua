@@ -48,7 +48,7 @@ TopLevel.SecondLevel.GenericClass_T.__define_class();
 
 
 TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT = {
-	cctor = function(TT, T)
+	cctor = function()
 	end,
 
 
@@ -74,10 +74,10 @@ TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT = {
 			end,
 			Test = function(this, G, g)
 			end,
-			Test2 = function(this, GG, TT, T, t, tt)
+			Test2 = function(this, GG, t, tt)
 				local t1 = GG;
-				local t2 = T;
-				local t3 = TT;
+				local t2 = this.T;
+				local t3 = this.TT;
 				local t4 = System.Int32;
 			end,
 			__ctor = function(this, TT, T)

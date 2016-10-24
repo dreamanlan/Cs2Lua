@@ -20,7 +20,7 @@ namespace RoslynTool.CsToLua
         internal bool GenerateBasicCtor = false;
         internal bool GenerateBasicCctor = false;
         internal bool GenerateTypeParamFields = false;
-        internal bool GenerateStaticTypeParamFields = false;
+
         internal INamedTypeSymbol TypeSymbol = null;
         internal List<IFieldSymbol> FieldSymbols = new List<IFieldSymbol>();
         internal List<IMethodSymbol> MethodSymbols = new List<IMethodSymbol>();
@@ -173,10 +173,7 @@ namespace RoslynTool.CsToLua
                 string manglingName = SymbolTable.CalcMethodMangling(msym);
                 MethodIncludeTypeOfs.Add(manglingName, msym);
                 if (setGenerateBasicFlagIfInclude) {
-                    if (msym.IsStatic) {
-                        GenerateBasicCctor = true;
-                        GenerateStaticTypeParamFields = true;
-                    } else {
+                    if (!msym.IsStatic) {
                         GenerateBasicCtor = true;
                         GenerateTypeParamFields = true;
                     }

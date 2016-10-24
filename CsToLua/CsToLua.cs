@@ -747,7 +747,26 @@ namespace RoslynTool.CsToLua
             var type = oper.TypeOperand;
             if (null != type) {
                 if (type.TypeKind == TypeKind.TypeParameter) {
-                    CodeBuilder.Append(type.Name);
+                    var typeParam = type as ITypeParameterSymbol;
+                    if (typeParam.TypeParameterKind == TypeParameterKind.Type) {
+                        IMethodSymbol sym = FindClassMethodDeclaredSymbol(node);
+                        if (null != sym) {
+                            if (sym.IsStatic) {
+                                CodeBuilder.Append(type.Name);
+                            } else {
+                                CodeBuilder.AppendFormat("this.{0}", type.Name);
+                            }
+                        } else {
+                            ISymbol varSym = FindVariableDeclaredSymbol(node);
+                            if (null != varSym) {
+                                CodeBuilder.Append(type.Name);
+                            } else {
+                                CodeBuilder.Append(type.Name);
+                            }
+                        }
+                    } else {
+                        CodeBuilder.Append(type.Name);
+                    }
                 } else {
                     var fullName = ClassInfo.GetFullName(type);
                     CodeBuilder.Append(fullName);
@@ -1275,6 +1294,36 @@ namespace RoslynTool.CsToLua
         {
             m_ToplevelClasses.Add(key, ci);
             m_LastToplevelClass = ci;
+        }
+        private IMethodSymbol FindClassMethodDeclaredSymbol(SyntaxNode node)
+        {
+            while (null != node) {
+                var constructor = node as ConstructorDeclarationSyntax;
+                if (null != constructor) {
+                    return m_Model.GetDeclaredSymbol(constructor);
+                }
+                var method = node as MethodDeclarationSyntax;
+                if (null != method) {
+                    return m_Model.GetDeclaredSymbol(method);
+                }
+                var accessor = node as AccessorDeclarationSyntax;
+                if (null != accessor) {
+                    return m_Model.GetDeclaredSymbol(accessor);
+                }
+                node = node.Parent;
+            }
+            return null;
+        }
+        private ISymbol FindVariableDeclaredSymbol(SyntaxNode node)
+        {
+            while (null != node) {
+                var varDecl = node as VariableDeclaratorSyntax;
+                if (null != varDecl) {
+                    return m_Model.GetDeclaredSymbol(varDecl);
+                }
+                node = node.Parent;
+            }
+            return null;
         }
 
         #region 符号相关的处理
@@ -1919,10 +1968,14 @@ namespace RoslynTool.CsToLua
                             if (m_SymbolTable.ExistTypeOf(fieldSym)) {
                                 CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
                                 CodeBuilder.AppendLine(" = nil,");
-                                if(isStatic)
+                                if (isStatic) {
+                                    Log(v, "typeof(GenericTypeParameter) can't be used in static field initializer !");
+                                }
+                                if (isStatic) {
                                     ci.CurrentCodeBuilder = ci.StaticInitializerCodeBuilder;
-                                else
+                                } else {
                                     ci.CurrentCodeBuilder = ci.InstanceInitializerCodeBuilder;
+                                }
                                 ++m_Indent;
                                 CodeBuilder.AppendFormat("{0}{1}.{2}", GetIndentString(), isStatic ? ci.Key : "self", name);
                                 CodeBuilder.AppendFormat(" = ", fieldSym.Type.TypeKind == TypeKind.Delegate ? "delegationwrap(" : string.Empty);
@@ -1930,10 +1983,11 @@ namespace RoslynTool.CsToLua
                                 CodeBuilder.AppendFormat("{0};", fieldSym.Type.TypeKind == TypeKind.Delegate ? ")" : string.Empty);
                                 CodeBuilder.AppendLine();
                                 --m_Indent;
-                                if(isStatic)
+                                if (isStatic) {
                                     ci.CurrentCodeBuilder = ci.StaticFieldCodeBuilder;
-                                else
+                                } else {
                                     ci.CurrentCodeBuilder = ci.InstanceFieldCodeBuilder;
+                                }
                                 continue;
                             } else {
                                 CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);

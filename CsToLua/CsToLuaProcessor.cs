@@ -267,7 +267,6 @@ namespace RoslynTool.CsToLua
             bool haveCtor = false;
             bool generateBasicCctor = false;
             bool generateBasicCtor = false;
-            bool generateStaticTypeParamFields = false;
             bool generateTypeParamFields = false;
             string baseClass = string.Empty;
             ClassSymbolInfo csi;
@@ -276,7 +275,6 @@ namespace RoslynTool.CsToLua
                 haveCtor = csi.ExistConstructor;
                 generateBasicCctor = csi.GenerateBasicCctor;
                 generateBasicCtor = csi.GenerateBasicCtor;
-                generateStaticTypeParamFields = csi.GenerateStaticTypeParamFields;
                 generateTypeParamFields = csi.GenerateTypeParamFields;
                 baseClass = csi.BaseClassKey;
             }
@@ -358,7 +356,7 @@ namespace RoslynTool.CsToLua
             }
 
             if (!haveCctor) {
-                sb.AppendFormat("{0}cctor = function({1})", GetIndentString(indent), genericTypeParamNames);
+                sb.AppendFormat("{0}cctor = function()", GetIndentString(indent));
                 sb.AppendLine();
                 ++indent;
                 if (!string.IsNullOrEmpty(baseClass)) {
@@ -366,7 +364,7 @@ namespace RoslynTool.CsToLua
                     sb.AppendLine();
                 }
                 if (generateBasicCctor) {
-                    sb.AppendFormat("{0}{1}.__cctor({2});", GetIndentString(indent), key, genericTypeParamNames);
+                    sb.AppendFormat("{0}{1}.__cctor();", GetIndentString(indent), key);
                     sb.AppendLine();
                 }
                 --indent;
@@ -374,7 +372,7 @@ namespace RoslynTool.CsToLua
                 sb.AppendLine();
             }
             if (generateBasicCctor) {
-                sb.AppendFormat("{0}__cctor = function({1})", GetIndentString(indent), genericTypeParamNames);
+                sb.AppendFormat("{0}__cctor = function()", GetIndentString(indent));
                 sb.AppendLine();
                 ++indent;
                 sb.AppendFormat("{0}if {1}.__cctor_called then", GetIndentString(indent), key);
@@ -391,12 +389,7 @@ namespace RoslynTool.CsToLua
                 --indent;
                 sb.AppendFormat("{0}end", GetIndentString(indent));
                 sb.AppendLine();
-                if (generateStaticTypeParamFields) {
-                    sb.AppendFormat("{0}{1}.__type_params = ", GetIndentString(indent), key);
-                    sb.Append("{");
-                    sb.Append(genericTypeParamNames);
-                    sb.Append("};");
-                }
+
                 --indent;
                 //static initializer
                 foreach (var ci in classes) {
@@ -415,10 +408,6 @@ namespace RoslynTool.CsToLua
 
             if (generateBasicCctor) {
                 sb.AppendFormat("{0}__cctor_called = false,", GetIndentString(indent));
-                sb.AppendLine();
-            }
-            if (generateStaticTypeParamFields) {
-                sb.AppendFormat("{0}__type_params = nil,", GetIndentString(indent));
                 sb.AppendLine();
             }
 
