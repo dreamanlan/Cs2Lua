@@ -1,5 +1,5 @@
-require "utility";
-require "namespaces";
+require "cs2lua_utility";
+require "cs2lua_namespaces";
 
 TopLevel.SecondLevel.FooBase = {
 	cctor = function()

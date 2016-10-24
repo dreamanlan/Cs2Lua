@@ -80,6 +80,18 @@ namespace TopLevel
             public event SimpleEventHandler OnSimple;
             public SimpleEventHandler OnSimple2;
 
+            public int Val
+            {
+                get
+                {
+                    return this.m_Test;
+                }
+                set
+                {
+
+                }
+            }
+
             public Foo():this(0)
             {}
             public Foo(int v):base()

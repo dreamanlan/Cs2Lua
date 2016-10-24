@@ -1,5 +1,6 @@
 ============<<<Semantic Error:test>>>============
+test.cs(4,7): error CS0246: The type or namespace name 'UnityEngine' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(4,1): hidden CS8019: Unnecessary using directive.
 test.cs(3,1): hidden CS8019: Unnecessary using directive.
 test.cs(16,5): hidden CS8019: Unnecessary using directive.
 test.cs(2,1): hidden CS8019: Unnecessary using directive.
-test.cs(4,1): hidden CS8019: Unnecessary using directive.

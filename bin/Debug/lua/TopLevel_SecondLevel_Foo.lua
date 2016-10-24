@@ -1,5 +1,5 @@
-require "utility";
-require "namespaces";
+require "cs2lua_utility";
+require "cs2lua_namespaces";
 require "TopLevel_SecondLevel_FooBase";
 require "TopLevel_SecondLevel_GenericClass_T";
 
@@ -41,9 +41,9 @@ TopLevel.SecondLevel.Foo = {
 			GTest__TopLevel_SecondLevel_GenericClass_Single = function(this, arg)
 			end,
 			Test = function(this)
-				local t = (function() local __compiler_newobject_96; __compiler_newobject_96 = newobject(TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT, "ctor", (function() local __compiler_newobject_96; __compiler_newobject_96 = newobject(TopLevel.SecondLevel.Foo.Test1, "ctor"); return __compiler_newobject_96; end)(), (function() local __compiler_newobject_96; __compiler_newobject_96 = newobject(TopLevel.SecondLevel.Foo.Test2, "ctor"); return __compiler_newobject_96; end)()); return __compiler_newobject_96; end)();
+				local t = (function() local __compiler_newobject_108; __compiler_newobject_108 = newobject(TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT, "ctor", (function() local __compiler_newobject_108; __compiler_newobject_108 = newobject(TopLevel.SecondLevel.Foo.Test1, "ctor"); return __compiler_newobject_108; end)(), (function() local __compiler_newobject_108; __compiler_newobject_108 = newobject(TopLevel.SecondLevel.Foo.Test2, "ctor"); return __compiler_newobject_108; end)()); return __compiler_newobject_108; end)();
 				t:Test(System.Int32, 123);
-				t:Test2(System.Int32, (function() local __compiler_newobject_98; __compiler_newobject_98 = newobject(TopLevel.SecondLevel.Foo.Test1, "ctor"); return __compiler_newobject_98; end)(), (function() local __compiler_newobject_98; __compiler_newobject_98 = newobject(TopLevel.SecondLevel.Foo.Test2, "ctor"); return __compiler_newobject_98; end)());
+				t:Test2(System.Int32, (function() local __compiler_newobject_110; __compiler_newobject_110 = newobject(TopLevel.SecondLevel.Foo.Test1, "ctor"); return __compiler_newobject_110; end)(), (function() local __compiler_newobject_110; __compiler_newobject_110 = newobject(TopLevel.SecondLevel.Foo.Test2, "ctor"); return __compiler_newobject_110; end)());
 			end,
 
 			OnSimple = wrapdelegation{},
@@ -53,6 +53,13 @@ TopLevel.SecondLevel.Foo = {
 		};
 
 		local instance_props = {
+			Val = {
+				get = function(this)
+					return this.m_Test;
+				end,
+				set = function(this, value)
+				end,
+			},
 		};
 
 		local instance_events = {

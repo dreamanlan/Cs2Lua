@@ -16,6 +16,7 @@ namespace RoslynTool.CsToLua
     {
         public static void Process(string srcFile, string outputExt, IList<string> macros, IDictionary<string, string> _refByNames, IDictionary<string, string> _refByPaths)
         {
+            string exepath = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
             string path = Path.GetDirectoryName(srcFile);
             string name = Path.GetFileNameWithoutExtension(srcFile);
             string ext = Path.GetExtension(srcFile);
@@ -52,6 +53,14 @@ namespace RoslynTool.CsToLua
                             else
                                 refByNames.Add(val, "global");
                         }
+                    }
+                }
+                nodes = SelectNodes(xmlDoc, "ItemGroup", "ProjectReference");
+                foreach (XmlElement node in nodes) {
+                    string val = node.GetAttribute("Include");
+                    var nameNode = SelectSingleNode(node, "Name");
+                    if (null != nameNode) {
+                        refByPaths.Add(string.Format("bin/Debug/{0}.dll", nameNode.InnerText), "global");
                     }
                 }
                 nodes = SelectNodes(xmlDoc, "ItemGroup", "Compile");
@@ -168,7 +177,8 @@ namespace RoslynTool.CsToLua
             }
             StringBuilder nsBuilder = new StringBuilder();
             BuildNamespaces(nsBuilder, toplevelMni);
-            File.WriteAllText(Path.Combine(outputDir, "namespaces." + outputExt), nsBuilder.ToString());
+            File.Copy(Path.Combine(exepath, "lua/utility.lua"), Path.Combine(outputDir, string.Format("cs2lua_utility.{0}", outputExt)), true);
+            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua_namespaces.{0}", outputExt)), nsBuilder.ToString());
             foreach (var pair in toplevelClasses) {
                 StringBuilder classBuilder = new StringBuilder();
                 string fileName = BuildLuaClass(classBuilder, pair.Key, pair.Value, symTable);
@@ -246,7 +256,7 @@ namespace RoslynTool.CsToLua
                 string fileName = BuildLuaClass(classBuilder, pair.Key, pair.Value, false, symTable, lualibRefs);
                 code.Append(classBuilder.ToString());
             }
-            sb.AppendLine("require \"utility\";");
+            sb.AppendLine("require \"cs2lua_utility\";");
             foreach (string lib in lualibRefs) {
                 sb.AppendFormat("require \"{0}\";", lib);
                 sb.AppendLine();
@@ -320,8 +330,8 @@ namespace RoslynTool.CsToLua
                 }                
             }
             if (isAlone) {
-                sb.AppendLine("require \"utility\";");
-                sb.AppendLine("require \"namespaces\";");
+                sb.AppendLine("require \"cs2lua_utility\";");
+                sb.AppendLine("require \"cs2lua_namespaces\";");
                 foreach (string lib in requiredlibs) {
                     sb.AppendFormat("require \"{0}\";", lib);
                     sb.AppendLine();
