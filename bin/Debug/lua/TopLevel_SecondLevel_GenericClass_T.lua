@@ -44,6 +44,7 @@ TopLevel.SecondLevel.GenericClass_T = {
 	end,
 };
 
+
 TopLevel.SecondLevel.GenericClass_T.__define_class();
 
 
@@ -53,8 +54,7 @@ TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT = {
 
 
 	__new_object = function(...)
-		local args = ...;
-		return (function() local obj = newobject(TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT, "ctor", args); return obj; end)();
+		return newobject(TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT, "ctor", args);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT;
@@ -73,6 +73,8 @@ TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT = {
 				return this;
 			end,
 			Test = function(this, G, g)
+				local f = newobject(TopLevel.SecondLevel.Foo, "ctor");
+				f:Test3();
 			end,
 			Test2 = function(this, GG, t, tt)
 				local t1 = GG;
@@ -106,6 +108,7 @@ TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT = {
 		return defineclass(nil, static, static_props, static_events, instance, instance_props, instance_events);
 	end,
 };
+
 
 TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT.__define_class();
 

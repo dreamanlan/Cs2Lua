@@ -11,9 +11,16 @@ class LuaConsole
     }
 }
 
-namespace TopLevel 
+namespace TopLevel
 {
     using lua = LuaConsole;
+
+    enum TestEnum
+    {
+        One = 1,
+        Two,
+        Three,
+    }
     
     namespace SecondLevel
     {
@@ -28,6 +35,8 @@ namespace TopLevel
                 }
                 public void Test<G>(G g)
                 {
+                    Foo f = new Foo();
+                    f.Test3();
                 }
                 public void Test2<GG>(T t, TT tt)
                 {
@@ -63,7 +72,7 @@ namespace TopLevel
         {
             internal int m_Ttt = 6789;
         }
-        [Cs2Lua.EnableBaseClass]
+        [Cs2Lua.EnableInherit]
         class Foo : FooBase
         {
             class Test1
@@ -109,11 +118,67 @@ namespace TopLevel
                 GenericClass<Test1>.InnerGenericClass<Test2> t = new GenericClass<Test1>.InnerGenericClass<Test2>(new Test1(), new Test2());
                 t.Test(123);
                 t.Test2<int>(new Test1(), new Test2());
+
+
+            }
+
+            private int TestContinueAndReturn()
+            {
+                for (int i = 0; i < 100; ++i) {
+                    if (i < 10) {
+                        continue;
+                    }
+                    return ix;
+                }
+                return -1;
+            }
+            private void TestSwitch()
+            {
+                int i=10;
+                switch (i) {
+                    case 1:
+                        return;
+                    case 2:
+                        return;
+                    default:
+                        return;
+                }
+                if (i > 3) {
+                    return;
+                }
+                if (this is FooBase) {
+                    return;
+                }
             }
 
             internal int m_Test = 0;
             internal int m_Test2 = 0;
         } 
+
+        static class FooExtension
+        {
+            public static void Test3(this Foo obj)
+            {
+                if (obj.m_Test > 0) {
+                    obj.m_Test2 = 678;
+                }
+            }
+            public static void Test3(Foo obj, int ix)
+            { }
+            public static void NormalMethod()
+            {
+                LuaConsole.Print(1, 2, 3, 4, 5);
+                Foo f = new Foo();
+
+                Action f1 = f.Test;
+                f1();
+
+                Action f2 = f.Test3;
+                f2();
+
+                Test3(f);
+            }
+        }
     }
 }
 /*

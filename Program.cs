@@ -12,13 +12,14 @@ namespace RoslynTool
 {
     partial class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             string file = "test.cs";
             string outputExt = "txt";
             List<string> macros = new List<string>();
             Dictionary<string, string> refByNames = new Dictionary<string, string>();
             Dictionary<string, string> refByPaths = new Dictionary<string, string>();
+            bool enableInherit = false;
             if (args.Length > 0) {
                 for (int i = 0; i < args.Length; ++i) {
                     if (0 == string.Compare(args[i], "-ext", true)) {
@@ -37,6 +38,8 @@ namespace RoslynTool
                                 ++i;
                             }
                         }
+                    } else if (0 == string.Compare(args[i], "-enableinherit", true)) {
+                        enableInherit = true;
                     } else if (0 == string.Compare(args[i], "-refbyname", true)) {
                         string name = string.Empty, alias = "global";
                         if (i < args.Length - 1) {
@@ -118,7 +121,9 @@ namespace RoslynTool
                 }
             }
             if (File.Exists(file)) {
-                CsToLuaProcessor.Process(file, outputExt, macros, refByNames, refByPaths);
+                return (int)CsToLuaProcessor.Process(file, outputExt, macros, refByNames, refByPaths, enableInherit);
+            } else {
+                return (int)ExitCode.FileNotFound;
             }
             //Mandelbrot.Exec();
         }

@@ -26,6 +26,6 @@ namespace Cs2Lua
     { }
 
     [System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Struct)]
-    public sealed class EnableBaseClassAttribute : System.Attribute
+    public sealed class EnableInheritAttribute : System.Attribute
     { }
 }

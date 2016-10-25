@@ -1,5 +1,5 @@
-require "utility";
-require "namespaces";
+require "cs2lua_utility";
+require "cs2lua_namespaces";
 
 MyScript = {
 	GetString = function()
@@ -10,8 +10,7 @@ MyScript = {
 
 
 	__new_object = function(...)
-		local args = ...;
-		return (function() local obj = newobject(MyScript, "ctor", args); return obj; end)();
+		return newobject(MyScript, "ctor", args);
 	end,
 	__define_class = function()
 		local static = MyScript;
@@ -29,7 +28,7 @@ MyScript = {
 			Init = function(this)
 				local s = "test test test from cs2lua !";
 				UnityEngine.Debug.Log(s);
-				this.root = (function() local __compiler_newobject_35; __compiler_newobject_35 = newexternobject(UnityEngine.GameObject, "ctor", "root"); return __compiler_newobject_35; end)();
+				this.root = newexternobject(UnityEngine.GameObject, "ctor", "root");
 				this.dict:Add("one", "one value");
 				this.dict["two"] = "two value";
 				local f = delegationwrap((function()
@@ -67,7 +66,7 @@ MyScript = {
 					local offset = condexp(i % 2 == 1, 5, -5);
 					local nr = this.r + UnityEngine.Mathf.Sin(UnityEngine.Time.time) * offset;
 					local angle = condexp(i % 2 == 1, UnityEngine.Time.time, -5);
-					local b = (function() local __compiler_newobject_78; __compiler_newobject_78 = newexternobject(UnityEngine.Vector3, "ctor", typecast(( UnityEngine.Mathf.Cos(i / this.max * 3.141593 * 2 + angle) * nr ), "System.Single"), typecast(( UnityEngine.Mathf.Sin(i / this.max * 3.141593 * 2 + angle) * nr ), "System.Single"), 0); return __compiler_newobject_78; end)();
+					local b = newexternobject(UnityEngine.Vector3, "ctor", typecast(( UnityEngine.Mathf.Cos(i / this.max * 3.141593 * 2 + angle) * nr ), "System.Single"), typecast(( UnityEngine.Mathf.Sin(i / this.max * 3.141593 * 2 + angle) * nr ), "System.Single"), 0);
 					this.cubes[i + 1].transform.position = b;
 					i = i + 1;
 				end;
@@ -93,7 +92,7 @@ MyScript = {
 				local i = 0;
 				while i < this.max do
 					local cube = UnityEngine.GameObject.CreatePrimitive(3);
-					cube.transform.position = (function() local __compiler_newobject_104; __compiler_newobject_104 = newexternobject(UnityEngine.Vector3, "ctor", typecast(UnityEngine.Mathf.Cos(i / this.max * 3.141593 * 2), "System.Single") * this.r, typecast(UnityEngine.Mathf.Sin(i / this.max * 3.141593 * 2), "System.Single") * this.r, 0); return __compiler_newobject_104; end)();
+					cube.transform.position = newexternobject(UnityEngine.Vector3, "ctor", typecast(UnityEngine.Mathf.Cos(i / this.max * 3.141593 * 2), "System.Single") * this.r, typecast(UnityEngine.Mathf.Sin(i / this.max * 3.141593 * 2), "System.Single") * this.r, 0);
 					cube.transform:SetParent(this.root.transform);
 					local mat = cube:GetComponent(UnityEngine.Renderer).material;
 					local box = cube:GetComponent(UnityEngine.BoxCollider);
@@ -134,6 +133,7 @@ MyScript = {
 		return defineclass(nil, static, static_props, static_events, instance, instance_props, instance_events);
 	end,
 };
+
 
 MyScript.__define_class();
 

@@ -9,11 +9,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.Semantics;
 
-using RoslynTool.CsToLua;
-
 namespace RoslynTool.CsToLua
 {
-    internal class TypeOfAnalysis : CSharpSyntaxWalker
+    internal class MethodAnalysis : CSharpSyntaxWalker
     {
         public bool HaveTypeOf
         {
@@ -35,7 +33,7 @@ namespace RoslynTool.CsToLua
             base.VisitTypeOfExpression(node);
         }
 
-        internal TypeOfAnalysis(SemanticModel model)
+        internal MethodAnalysis(SemanticModel model)
         {
             m_Model = model;
         }

@@ -58,8 +58,10 @@
     <Compile Include="CsToLua\CsToLua.cs" />
     <Compile Include="CsToLua\CsToLuaProcessor.cs" />
     <Compile Include="CsToLua\CsToLuaUnimplemented.cs" />
+    <Compile Include="CsToLua\FieldInitializerAnalysis.cs" />
+    <Compile Include="CsToLua\LuaKeywordsReplacer.cs" />
     <Compile Include="CsToLua\SymbolTable.cs" />
-    <Compile Include="CsToLua\TypeOfAnalysis.cs" />
+    <Compile Include="CsToLua\MethodAnalysis.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

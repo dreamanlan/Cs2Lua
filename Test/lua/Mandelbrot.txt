@@ -1,6 +1,6 @@
 --local write = io.write;
-require "utility";
-require "namespaces";
+require "cs2lua_utility";
+require "cs2lua_namespaces";
 
 Mandelbrot = {
 	Exec = function()
@@ -70,6 +70,7 @@ Mandelbrot = {
 		return defineclass(nil, static, static_props, static_events, instance, instance_props, instance_events);
 	end,
 };
+
 
 Mandelbrot.__define_class();
 

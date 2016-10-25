@@ -27,11 +27,14 @@ namespace RoslynTool.CsToLua
         internal List<IPropertySymbol> PropertySymbols = new List<IPropertySymbol>();
         internal List<IEventSymbol> EventSymbols = new List<IEventSymbol>();
         internal Dictionary<string, bool> SymbolOverloadFlags = new Dictionary<string, bool>();
+        internal HashSet<string> MethodNames = new HashSet<string>();
+        internal Dictionary<string, INamedTypeSymbol> ExtensionClasses = new Dictionary<string, INamedTypeSymbol>();
         internal Dictionary<string, IMethodSymbol> MethodIncludeTypeOfs = new Dictionary<string, IMethodSymbol>();
         internal Dictionary<string, IFieldSymbol> FieldIncludeTypeOfs = new Dictionary<string, IFieldSymbol>();
+        internal Dictionary<string, IFieldSymbol> FieldCreateSelfs = new Dictionary<string, IFieldSymbol>();
         internal List<string> GenericTypeParamNames = new List<string>();
 
-        internal void Init(INamedTypeSymbol typeSym, CSharpCompilation compilation)
+        internal void Init(INamedTypeSymbol typeSym, CSharpCompilation compilation, SymbolTable symTable)
         {
             ClassKey = ClassInfo.GetFullName(typeSym);
             BaseClassKey = ClassInfo.GetFullName(typeSym.BaseType);
@@ -49,7 +52,7 @@ namespace RoslynTool.CsToLua
                 }
                 type = type.ContainingType;
             }
-
+            
             bool fieldIncludeTypeOf = false;
             bool staticFieldIncludeTypeOf = false;
             TypeSymbol = typeSym;
@@ -58,9 +61,7 @@ namespace RoslynTool.CsToLua
                 if (null != fsym) {
                     FieldSymbols.Add(fsym);
 
-                    if (typeSym.IsGenericType) {
-                        CheckFieldIncludeTypeOf(fsym, compilation, ref fieldIncludeTypeOf, ref staticFieldIncludeTypeOf);
-                    }
+                    CheckFieldIncludeTypeOf(fsym, compilation, ref fieldIncludeTypeOf, ref staticFieldIncludeTypeOf);
                     continue;
                 }
             }
@@ -77,21 +78,67 @@ namespace RoslynTool.CsToLua
                     string name = msym.Name;
                     if (name[0] == '.')
                         name = name.Substring(1);
-                    if (!SymbolOverloadFlags.ContainsKey(name)) {
-                        SymbolOverloadFlags.Add(name, false);
+                    string manglingName = SymbolTable.CalcMethodMangling(msym);
+                    if (msym.IsExtensionMethod && msym.Parameters.Length > 0) {
+                        var targetType = msym.Parameters[0].Type as INamedTypeSymbol;
+                        if (null != targetType && targetType.ContainingAssembly == symTable.AssemblySymbol) {
+                            string key = ClassInfo.GetFullName(targetType);
+                            ClassSymbolInfo csi;
+                            if (!symTable.ClassSymbols.TryGetValue(key, out csi)) {
+                                csi = new ClassSymbolInfo();
+                                symTable.ClassSymbols.Add(key, csi);
+                                csi.Init(targetType, compilation, symTable);
+                            }
+                            if (!csi.ExtensionClasses.ContainsKey(ClassKey)) {
+                                csi.ExtensionClasses.Add(ClassKey, typeSym);
+                                csi.GenerateBasicCtor = true;
+                            }
+                            bool needMangling;
+                            bool isOverloaded;
+                            if (csi.SymbolOverloadFlags.TryGetValue(name, out isOverloaded)) {
+                                if (csi.MethodNames.Contains(manglingName)) {
+                                    continue;
+                                }
+                                csi.SymbolOverloadFlags[name] = true;
+                                needMangling = true;
+                            } else {
+                                if (SymbolOverloadFlags.TryGetValue(name, out isOverloaded)) {
+                                    csi.SymbolOverloadFlags.Add(name, true);
+                                    needMangling = true;
+                                } else {
+                                    csi.SymbolOverloadFlags.Add(name, false);
+                                    needMangling = false;
+                                }
+                            }
+                            if (needMangling) {
+                                csi.MethodNames.Add(manglingName);
+
+                                SymbolOverloadFlags[name] = true;
+                                MethodNames.Add(manglingName);
+                            } else {
+                                SymbolOverloadFlags.Add(name, false);
+                                MethodNames.Add(name);
+                            }
+                        }
                     } else {
-                        SymbolOverloadFlags[name] = true;
+                        if (!SymbolOverloadFlags.ContainsKey(name)) {
+                            SymbolOverloadFlags.Add(name, false);
+
+                            MethodNames.Add(name);
+                        } else {
+                            SymbolOverloadFlags[name] = true;
+
+                            MethodNames.Add(manglingName);
+                        }
                     }
 
                     if (typeSym.IsGenericType) {
                         CheckMethodIncludeTypeOf(msym, compilation, false);
 
                         if (fieldIncludeTypeOf && msym.MethodKind == MethodKind.Constructor) {
-                            string manglingName = SymbolTable.CalcMethodMangling(msym);
                             MethodIncludeTypeOfs.Add(manglingName, msym);
                         }
                         if (staticFieldIncludeTypeOf && msym.MethodKind == MethodKind.StaticConstructor) {
-                            string manglingName = SymbolTable.CalcMethodMangling(msym);
                             MethodIncludeTypeOfs.Add(manglingName, msym);
                         }
                     }
@@ -131,14 +178,19 @@ namespace RoslynTool.CsToLua
         private void CheckFieldIncludeTypeOf(IFieldSymbol fsym, Compilation compilation, ref bool fieldIncludeTypeOf, ref bool staticFieldIncludeTypeOf)
         {
             bool existTypeOf = false;
+            bool createSelf = false;
             foreach (var decl in fsym.DeclaringSyntaxReferences) {
                 var node = decl.GetSyntax() as CSharpSyntaxNode;
                 if (null != node) {
                     var model = compilation.GetSemanticModel(node.SyntaxTree, true);
-                    var analysis = new TypeOfAnalysis(model);
+                    var analysis = new FieldInitializerAnalysis(model);
                     node.Accept(analysis);
                     if (analysis.HaveTypeOf) {
                         existTypeOf = true;
+                        break;
+                    }
+                    if (analysis.ObjectCreateType == fsym.ContainingType) {
+                        createSelf = true;
                         break;
                     }
                 }
@@ -153,6 +205,14 @@ namespace RoslynTool.CsToLua
                 }
                 FieldIncludeTypeOfs.Add(fsym.Name, fsym);
             }
+            if (createSelf) {
+                if (fsym.IsStatic) {
+                    GenerateBasicCctor = true;
+                } else {
+                    GenerateBasicCtor = true;
+                }
+                FieldCreateSelfs.Add(fsym.Name, fsym);
+            }
         }
         private void CheckMethodIncludeTypeOf(IMethodSymbol msym, Compilation compilation, bool setGenerateBasicFlagIfInclude)
         {
@@ -161,7 +221,7 @@ namespace RoslynTool.CsToLua
                 var node = decl.GetSyntax() as CSharpSyntaxNode;
                 if (null != node) {
                     var model = compilation.GetSemanticModel(node.SyntaxTree, true);
-                    var analysis = new TypeOfAnalysis(model);
+                    var analysis = new MethodAnalysis(model);
                     node.Accept(analysis);
                     if (analysis.HaveTypeOf) {
                         existTypeOf = true;
@@ -226,6 +286,16 @@ namespace RoslynTool.CsToLua
             }
             return ret;
         }
+        internal bool IsFieldCreateSelf(IFieldSymbol sym)
+        {
+            bool ret = false;
+            string key = ClassInfo.CalcTypeReference(sym.ContainingType);
+            ClassSymbolInfo csi;
+            if (m_ClassSymbols.TryGetValue(key, out csi)) {
+                ret = csi.FieldCreateSelfs.ContainsKey(sym.Name);
+            }
+            return ret;
+        }
         internal bool ExistTypeOf(IFieldSymbol sym)
         {
             bool ret = false;
@@ -269,14 +339,17 @@ namespace RoslynTool.CsToLua
                 }
                 foreach (var newSym in nssym.GetNamespaceMembers()) {
                     InitRecursively(newSym);
-                }
+                }                
             }
         }
         private void InitRecursively(INamedTypeSymbol typeSym)
         {
-            ClassSymbolInfo csi = new ClassSymbolInfo();
-            csi.Init(typeSym, m_Compilation);
-            m_ClassSymbols.Add(csi.ClassKey, csi);
+            string key = ClassInfo.GetFullName(typeSym);
+            if (!m_ClassSymbols.ContainsKey(key)) {
+                ClassSymbolInfo csi = new ClassSymbolInfo();
+                m_ClassSymbols.Add(key, csi);
+                csi.Init(typeSym, m_Compilation, this);
+            }
             foreach (var newSym in typeSym.GetTypeMembers()) {
                 InitRecursively(newSym);
             }
@@ -314,5 +387,19 @@ namespace RoslynTool.CsToLua
             }
             return sb.ToString();
         }
+        internal static string CheckLuaKeyword(string name, out bool change)
+        {
+            if (s_ExtraLuaKeywords.Contains(name)) {
+                change = true;
+                return "__compiler_" + name;
+            } else {
+                change = false;                
+                return name;
+            }
+        }
+
+        private static HashSet<string> s_ExtraLuaKeywords = new HashSet<string> {
+            "and", "elseif", "end", "function", "local", "nil", "not", "or", "repeat", "then", "until"
+        };
     }
 }

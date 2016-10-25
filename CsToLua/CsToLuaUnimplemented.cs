@@ -50,14 +50,6 @@ namespace RoslynTool.CsToLua
         {
             Log(node, "Unsupported Syntax !");
         }
-        public override void VisitThrowStatement(ThrowStatementSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitYieldStatement(YieldStatementSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
         public override void VisitLabeledStatement(LabeledStatementSyntax node)
         {
             Log(node, "Unsupported Syntax !");
@@ -91,34 +83,6 @@ namespace RoslynTool.CsToLua
             Log(node, "Unsupported Syntax !");
         }
         public override void VisitCheckedExpression(CheckedExpressionSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitUnsafeStatement(UnsafeStatementSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitLockStatement(LockStatementSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitTryStatement(TryStatementSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitCatchClause(CatchClauseSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitCatchDeclaration(CatchDeclarationSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitCatchFilterClause(CatchFilterClauseSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitFinallyClause(FinallyClauseSyntax node)
         {
             Log(node, "Unsupported Syntax !");
         }

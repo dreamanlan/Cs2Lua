@@ -51,6 +51,9 @@ namespace RoslynTool.CsToLua
 
         internal StringBuilder InstanceInitializerCodeBuilder = new StringBuilder();
         internal StringBuilder StaticInitializerCodeBuilder = new StringBuilder();
+
+        internal Dictionary<string, StringBuilder> ExtensionCodeBuilders = new Dictionary<string, StringBuilder>();
+
         internal Dictionary<string, ClassInfo> InnerClasses = new Dictionary<string, ClassInfo>();
 
         internal void Init(INamedTypeSymbol sym)
@@ -95,7 +98,7 @@ namespace RoslynTool.CsToLua
                 refType = refType.ContainingType;
             }
             string key = GetFullName(refType);
-            if (null != refType && refType != curClassSym && !refType.IsAnonymousType && refType.TypeKind != TypeKind.Delegate) {                
+            if (null != refType && refType != curClassSym && refType.ContainingAssembly == curClassSym.ContainingAssembly && !refType.IsAnonymousType && refType.TypeKind != TypeKind.Delegate) {
                 if (!string.IsNullOrEmpty(key) && !References.Contains(key) && key != Key) {
                     bool isIgnore = ClassInfo.HasAttribute(refType, "Cs2Lua.IgnoreAttribute");
                     if (isIgnore) {

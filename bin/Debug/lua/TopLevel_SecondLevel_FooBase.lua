@@ -35,5 +35,6 @@ TopLevel.SecondLevel.FooBase = {
 	end,
 };
 
+
 TopLevel.SecondLevel.FooBase.__define_class();
 
