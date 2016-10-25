@@ -128,6 +128,9 @@ namespace RoslynTool.CsToLua
             refs.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
             refs.Add(MetadataReference.CreateFromFile(typeof(System.Reflection.Metadata.AssemblyDefinition).Assembly.Location));
             refs.Add(MetadataReference.CreateFromFile(typeof(Cs2Lua.IgnoreAttribute).Assembly.Location));
+            refs.Add(MetadataReference.CreateFromFile(typeof(List<>).Assembly.Location));
+            refs.Add(MetadataReference.CreateFromFile(typeof(Dictionary<,>).Assembly.Location));
+            refs.Add(MetadataReference.CreateFromFile(typeof(HashSet<>).Assembly.Location));
             /*
             refs.Add(MetadataReference.CreateFromFile(typeof(System.Collections.Immutable.ImmutableArray).Assembly.Location));
             refs.Add(MetadataReference.CreateFromFile(typeof(SyntaxTree).Assembly.Location));

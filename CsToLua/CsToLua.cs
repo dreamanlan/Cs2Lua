@@ -1754,16 +1754,7 @@ namespace RoslynTool.CsToLua
                             }
                             CodeBuilder.Append("}");
                         } else {
-                            CodeBuilder.Append("{");
-                            var args = node.Expressions;
-                            int ct = args.Count;
-                            for (int i = 0; i < ct; ++i) {
-                                VisitExpressionSyntax(args[i]);
-                                if (i < ct - 1) {
-                                    CodeBuilder.Append(", ");
-                                }
-                            }
-                            CodeBuilder.Append("}");
+                            Log(node, "Only dictionary or list or array can use CollectionInitializerExpression, please use constructor or ObjectInitializerExpression ! operation info: {0}", oper.ToString());
                         }
                     } else {
                         Log(node, "Can't find operation type ! operation info: {0}", oper.ToString());

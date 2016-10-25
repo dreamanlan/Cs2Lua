@@ -1,6 +1,0 @@
-============<<<Semantic Warning:test>>>============
-test.cs(146,17): warning CS0162: Unreachable code detected
-test.cs(3,1): hidden CS8019: Unnecessary using directive.
-test.cs(2,1): hidden CS8019: Unnecessary using directive.
-test.cs(16,5): hidden CS8019: Unnecessary using directive.
-test.cs(4,1): hidden CS8019: Unnecessary using directive.

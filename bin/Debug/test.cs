@@ -153,6 +153,7 @@ namespace TopLevel
 
             internal int m_Test = 0;
             internal int m_Test2 = 0;
+            private HashSet<string> m_HashSet = new HashSet<string> { "one", "two", "three" };
         } 
 
         static class FooExtension

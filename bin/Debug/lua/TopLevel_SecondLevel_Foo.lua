@@ -92,6 +92,7 @@ TopLevel.SecondLevel.Foo = {
 			OnSimple2 = wrapdelegation{},
 			m_Test = 0,
 			m_Test2 = 0,
+			m_HashSet = (function() local __compiler_newobject_155; __compiler_newobject_155 = newexternobject(System.Collections.Generic.HashSet_T, "ctor"); (function(this) {"one", "two", "three"}; end)(__compiler_newobject_155); return __compiler_newobject_155; end)(),
 			__ctor_called = false,
 		};
 
