@@ -159,7 +159,8 @@ namespace RoslynTool.CsToLua
                 newTrees.Add(newTree);
                 compilation = compilation.AddSyntaxTrees(newTree);
             }
-            haveError = false;
+            bool haveSemanticError = false;
+            bool haveTranslationError = false;
             SymbolTable symTable = new SymbolTable(compilation);
             Dictionary<string, MergedClassInfo> toplevelClasses = new Dictionary<string, MergedClassInfo>();
             MergedNamespaceInfo toplevelMni = new MergedNamespaceInfo();
@@ -182,7 +183,7 @@ namespace RoslynTool.CsToLua
                                     }
                                     string msg = diag.ToString();
                                     sw.WriteLine("{0}", msg);
-                                    haveError = true;
+                                    haveSemanticError = true;
                                 } else {
                                     if (firstWarning) {
                                         sw2.WriteLine("============<<<Semantic Warning:{0}>>>============", fileName);
@@ -198,13 +199,16 @@ namespace RoslynTool.CsToLua
                             if (csToLua.HaveError) {
                                 sw3.WriteLine("============<<<Translation Error:{0}>>>============", fileName);
                                 csToLua.SaveLog(sw3);
+                                haveTranslationError = true;
                             }
 
                             foreach (var pair in csToLua.ToplevelClasses) {
                                 var key = pair.Key;
-                                var ci = pair.Value;
+                                var cis = pair.Value;
 
-                                AddMergedClasses(toplevelClasses, key, ci);
+                                foreach (var ci in cis) {
+                                    AddMergedClasses(toplevelClasses, key, ci);
+                                }
 
                                 string[] nss = key.Split('.');
                                 AddMergedNamespaces(toplevelMni, nss);
@@ -227,8 +231,13 @@ namespace RoslynTool.CsToLua
             }
             StringBuilder allClassBuilder = new StringBuilder();
             BuildLuaClass(allClassBuilder, toplevelMni, toplevelClasses, symTable);
-            if (haveError) {
-                Console.WriteLine("{0}", File.ReadAllText(Path.Combine(logDir, "SemanticError.log")));
+            if (haveSemanticError || haveTranslationError) {
+                if (haveSemanticError) {
+                    Console.WriteLine("{0}", File.ReadAllText(Path.Combine(logDir, "SemanticError.log")));
+                }
+                if (haveTranslationError) {
+                    Console.WriteLine("{0}", File.ReadAllText(Path.Combine(logDir, "Translation.log")));
+                }
                 return ExitCode.SemanticError;
             } else {
                 Console.Write(allClassBuilder.ToString());
@@ -241,10 +250,10 @@ namespace RoslynTool.CsToLua
             MergedClassInfo mci;
             if (!mergedClasses.TryGetValue(key, out mci)) {
                 mci = new MergedClassInfo();
-                mci.Key = key;
-                mci.Classes.Add(ci);
                 mergedClasses.Add(key, mci);
+                mci.Key = key;
             }
+            mci.Classes.Add(ci);
 
             foreach (var pair in ci.InnerClasses) {
                 AddMergedClasses(mci.InnerClasses, pair.Key, pair.Value);

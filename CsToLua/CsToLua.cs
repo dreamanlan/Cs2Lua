@@ -14,7 +14,7 @@ namespace RoslynTool.CsToLua
 {
     internal sealed partial class CsLuaTranslater : CSharpSyntaxVisitor
     {
-        public Dictionary<string, ClassInfo> ToplevelClasses
+        public Dictionary<string, List<ClassInfo>> ToplevelClasses
         {
             get { return m_ToplevelClasses; }
         }
@@ -207,7 +207,8 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.AppendFormat(" {0} ", node.EqualsValue.EqualsToken.Text);
                 VisitExpressionSyntax(node.EqualsValue.Value);
             } else if (sym.HasConstantValue) {
-                CodeBuilder.AppendFormat(" = {0}", sym.ConstantValue);
+                CodeBuilder.Append(" = ");
+                OutputConstValue(sym.ConstantValue);
             } else {
                 Log(node, "enum member can't deduce a value ! ");
                 CodeBuilder.Append(" = nil");
@@ -1428,6 +1429,21 @@ namespace RoslynTool.CsToLua
                 }
             }
         }
+        private void OutputConstValue(object val)
+        {
+            string v = val as string;
+            if (null != v) {
+                CodeBuilder.AppendFormat("\"{0}\"", Escape(v));
+            } else if (val is bool) {
+                CodeBuilder.Append((bool)val ? "true" : "false");
+            } else if (val is char) {
+                CodeBuilder.AppendFormat("'{0}'", val);
+            } else if (null == val) {
+                CodeBuilder.Append("nil");
+            } else {
+                CodeBuilder.Append(val);
+            }
+        }
         private void ProcessUnaryOperator(CSharpSyntaxNode node, ref string op)
         {
             if (s_UnsupportedUnaryOperators.Contains(op)) {
@@ -1452,7 +1468,12 @@ namespace RoslynTool.CsToLua
         }
         private void AddToplevelClass(string key, ClassInfo ci)
         {
-            m_ToplevelClasses.Add(key, ci);
+            List<ClassInfo> list;
+            if (!m_ToplevelClasses.TryGetValue(key, out list)) {
+                list = new List<ClassInfo>();
+                m_ToplevelClasses.Add(key, list);
+            }
+            list.Add(ci);
             m_LastToplevelClass = ci;
         }
         private IMethodSymbol FindClassMethodDeclaredSymbol(SyntaxNode node)
@@ -1543,7 +1564,7 @@ namespace RoslynTool.CsToLua
             CodeBuilder.AppendFormat("{0}local {1}", GetIndentString(), node.Identifier.Text);
             if (null != localSym && localSym.HasConstantValue) {
                 CodeBuilder.Append(" = ");
-                CodeBuilder.Append(localSym.ConstantValue);
+                OutputConstValue(localSym.ConstantValue);
                 CodeBuilder.AppendLine(";");
                 return;
             }
@@ -2249,10 +2270,7 @@ namespace RoslynTool.CsToLua
                         } else {
                             CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
                             CodeBuilder.Append(" = ");
-                            if (null == constVal.Value)
-                                CodeBuilder.Append("nil");
-                            else
-                                CodeBuilder.Append(constVal.Value);
+                            OutputConstValue(constVal.Value);
                         }
                     } else if (fieldSym.Type.TypeKind == TypeKind.Delegate) {
                         CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
@@ -2302,18 +2320,7 @@ namespace RoslynTool.CsToLua
             IOperation oper = m_Model.GetOperation(node);
             if (null != oper && oper.ConstantValue.HasValue) {
                 object val = oper.ConstantValue.Value;
-                string v = val as string;
-                if (null != v) {
-                    CodeBuilder.AppendFormat("\"{0}\"", Escape(v));
-                } else if (val is bool) {
-                    CodeBuilder.Append((bool)val ? "true" : "false");
-                } else if (val is char) {
-                    CodeBuilder.AppendFormat("'{0}'", val);
-                } else if (null == val) {
-                    CodeBuilder.Append("nil");
-                } else {
-                    CodeBuilder.Append(val);
-                }
+                OutputConstValue(val);
                 return;
             }
             node.Accept(this);
@@ -2770,7 +2777,7 @@ namespace RoslynTool.CsToLua
         private Stack<SwitchInfo> m_SwitchInfoStack = new Stack<SwitchInfo>();
         private Queue<PostfixUnaryExpressionSyntax> m_PostfixUnaryExpressions = new Queue<PostfixUnaryExpressionSyntax>();
 
-        private Dictionary<string, ClassInfo> m_ToplevelClasses = new Dictionary<string, ClassInfo>();
+        private Dictionary<string, List<ClassInfo>> m_ToplevelClasses = new Dictionary<string, List<ClassInfo>>();
         private ClassInfo m_LastToplevelClass = null;
 
         internal static string GetIndentString(int indent)
