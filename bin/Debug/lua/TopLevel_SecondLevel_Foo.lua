@@ -43,9 +43,9 @@ TopLevel.SecondLevel.Foo = {
 			GTest__TopLevel_SecondLevel_GenericClass_Single = function(this, arg)
 			end,
 			Test = function(this)
-				local t = newobject(TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT, "ctor", newobject(TopLevel.SecondLevel.Foo.Test1, "ctor"), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor"));
+				local t = newobject(TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT, "ctor", {}, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
 				t:Test(System.Int32, 123);
-				t:Test2(System.Int32, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor"), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor"));
+				t:Test2(System.Int32, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
 			end,
 			TestContinueAndReturn = function(this)
 				local i = 0;
@@ -92,7 +92,7 @@ TopLevel.SecondLevel.Foo = {
 			OnSimple2 = wrapdelegation{},
 			m_Test = 0,
 			m_Test2 = 0,
-			m_HashSet = (function() local __compiler_newobject_155; __compiler_newobject_155 = newexternobject(System.Collections.Generic.HashSet_T, "ctor"); (function(this) {"one", "two", "three"}; end)(__compiler_newobject_155); return __compiler_newobject_155; end)(),
+			m_HashSet = newcollection(System.Collections.Generic.HashSet_T, "ctor", {{"one", "two", "three"}}),
 			__ctor_called = false,
 		};
 

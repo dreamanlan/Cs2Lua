@@ -223,17 +223,23 @@ namespace RoslynTool.CsToLua
                 }
                 sw.Close();
             }
+            HashSet<string> lualibRefs = new HashSet<string>();
             StringBuilder nsBuilder = new StringBuilder();
             BuildNamespaces(nsBuilder, toplevelMni);
-            File.Copy(Path.Combine(exepath, "lua/utility.lua"), Path.Combine(outputDir, string.Format("cs2lua_utility.{0}", outputExt)), true);
+            File.Copy(Path.Combine(exepath, "lualib/utility.lua"), Path.Combine(outputDir, string.Format("cs2lua_utility.{0}", outputExt)), true);
             File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua_namespaces.{0}", outputExt)), nsBuilder.ToString());
             foreach (var pair in toplevelClasses) {
                 StringBuilder classBuilder = new StringBuilder();
-                string fileName = BuildLuaClass(classBuilder, pair.Key, pair.Value, symTable);
+                lualibRefs.Clear();
+                string fileName = BuildLuaClass(classBuilder, pair.Key, pair.Value, symTable, lualibRefs);
+                foreach (string lib in lualibRefs) {
+                    File.Copy(Path.Combine(exepath, "lualib/" + lib), Path.Combine(outputDir, string.Format("{0}.{1}", lib, outputExt)), true);
+                }
                 File.WriteAllText(Path.Combine(outputDir, Path.ChangeExtension(fileName, outputExt)), classBuilder.ToString());
             }
             StringBuilder allClassBuilder = new StringBuilder();
-            BuildLuaClass(allClassBuilder, toplevelMni, toplevelClasses, symTable);
+            lualibRefs.Clear();
+            BuildLuaClass(allClassBuilder, toplevelMni, toplevelClasses, symTable, lualibRefs);
             if (haveSemanticError || haveTranslationError) {
                 if (haveSemanticError) {
                     Console.WriteLine("{0}", File.ReadAllText(Path.Combine(logDir, "SemanticError.log")));
@@ -305,10 +311,9 @@ namespace RoslynTool.CsToLua
                 }
             }
         }
-        private static void BuildLuaClass(StringBuilder sb, MergedNamespaceInfo toplevelMni, Dictionary<string, MergedClassInfo> toplevelMcis, SymbolTable symTable)
+        private static void BuildLuaClass(StringBuilder sb, MergedNamespaceInfo toplevelMni, Dictionary<string, MergedClassInfo> toplevelMcis, SymbolTable symTable, HashSet<string> lualibRefs)
         {
             StringBuilder code = new StringBuilder();
-            HashSet<string> lualibRefs = new HashSet<string>();
             BuildNamespaces(code, toplevelMni);
             foreach (var pair in toplevelMcis) {
                 StringBuilder classBuilder = new StringBuilder();
@@ -322,9 +327,9 @@ namespace RoslynTool.CsToLua
             }
             sb.Append(code.ToString());
         }
-        private static string BuildLuaClass(StringBuilder sb, string key, MergedClassInfo mci, SymbolTable symTable)
+        private static string BuildLuaClass(StringBuilder sb, string key, MergedClassInfo mci, SymbolTable symTable, HashSet<string> lualibRefs)
         {
-            return BuildLuaClass(sb, key, mci, true, symTable, new HashSet<string>());
+            return BuildLuaClass(sb, key, mci, true, symTable, lualibRefs);
         }
         private static string BuildLuaClass(StringBuilder sb, string key, MergedClassInfo mci, bool isAlone, SymbolTable symTable, HashSet<string> lualibRefs)
         {
@@ -508,7 +513,7 @@ namespace RoslynTool.CsToLua
                     ++indent;
 
                     if (string.IsNullOrEmpty(exportConstructor)) {
-                        sb.AppendFormat("{0}return newobject({1}, nil, ...);", GetIndentString(indent), key);
+                        sb.AppendFormat("{0}return newobject({1}, nil, {{}}, ...);", GetIndentString(indent), key);
                         sb.AppendLine();
                     } else {
                         //处理ref/out参数
@@ -522,10 +527,10 @@ namespace RoslynTool.CsToLua
                                 sb.Append(", ");
                                 sb.Append(retArgStr);
                             }
-                            sb.AppendFormat(" = newobject({0}, \"{1}\", args); return obj; end)();", key, exportConstructor);
+                            sb.AppendFormat(" = newobject({0}, \"{1}\", {{}}, args); return obj; end)();", key, exportConstructor);
                             sb.AppendLine();
                         } else {
-                            sb.AppendFormat("{0}return newobject({1}, \"{2}\", args);", GetIndentString(indent), key, exportConstructor);
+                            sb.AppendFormat("{0}return newobject({1}, \"{2}\", {{}}, args);", GetIndentString(indent), key, exportConstructor);
                             sb.AppendLine();
                         }
                     }

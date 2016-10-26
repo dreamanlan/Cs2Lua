@@ -10,7 +10,7 @@ MyScript = {
 
 
 	__new_object = function(...)
-		return newobject(MyScript, "ctor", args);
+		return newobject(MyScript, "ctor", {}, args);
 	end,
 	__define_class = function()
 		local static = MyScript;
@@ -28,7 +28,7 @@ MyScript = {
 			Init = function(this)
 				local s = "test test test from cs2lua !";
 				UnityEngine.Debug.Log(s);
-				this.root = newexternobject(UnityEngine.GameObject, "ctor", "root");
+				this.root = newexternobject(UnityEngine.GameObject, "ctor", {}, "root");
 				this.dict:Add("one", "one value");
 				this.dict["two"] = "two value";
 				local f = delegationwrap((function()
@@ -66,7 +66,7 @@ MyScript = {
 					local offset = condexp(i % 2 == 1, 5, -5);
 					local nr = this.r + UnityEngine.Mathf.Sin(UnityEngine.Time.time) * offset;
 					local angle = condexp(i % 2 == 1, UnityEngine.Time.time, -5);
-					local b = newexternobject(UnityEngine.Vector3, "ctor", typecast(( UnityEngine.Mathf.Cos(i / this.max * 3.141593 * 2 + angle) * nr ), "System.Single"), typecast(( UnityEngine.Mathf.Sin(i / this.max * 3.141593 * 2 + angle) * nr ), "System.Single"), 0);
+					local b = newexternobject(UnityEngine.Vector3, "ctor", {}, typecast(( UnityEngine.Mathf.Cos(i / this.max * 3.141593 * 2 + angle) * nr ), "System.Single"), typecast(( UnityEngine.Mathf.Sin(i / this.max * 3.141593 * 2 + angle) * nr ), "System.Single"), 0);
 					this.cubes[i + 1].transform.position = b;
 					i = i + 1;
 				end;
@@ -92,7 +92,7 @@ MyScript = {
 				local i = 0;
 				while i < this.max do
 					local cube = UnityEngine.GameObject.CreatePrimitive(3);
-					cube.transform.position = newexternobject(UnityEngine.Vector3, "ctor", typecast(UnityEngine.Mathf.Cos(i / this.max * 3.141593 * 2), "System.Single") * this.r, typecast(UnityEngine.Mathf.Sin(i / this.max * 3.141593 * 2), "System.Single") * this.r, 0);
+					cube.transform.position = newexternobject(UnityEngine.Vector3, "ctor", {}, typecast(UnityEngine.Mathf.Cos(i / this.max * 3.141593 * 2), "System.Single") * this.r, typecast(UnityEngine.Mathf.Sin(i / this.max * 3.141593 * 2), "System.Single") * this.r, 0);
 					cube.transform:SetParent(this.root.transform);
 					local mat = cube:GetComponent(UnityEngine.Renderer).material;
 					local box = cube:GetComponent(UnityEngine.BoxCollider);
@@ -121,7 +121,7 @@ MyScript = {
 			bgColor = nil,
 			cubes = nil,
 			colors = wraparray{UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black},
-			dict = wrapdictionary{},
+			dict = newdictionary(System.Collections.Generic.Dictionary_TKey_TValue, "ctor", {}),
 		};
 
 		local instance_props = {

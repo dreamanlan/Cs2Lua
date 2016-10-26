@@ -73,7 +73,7 @@ TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT = {
 				return this;
 			end,
 			Test = function(this, G, g)
-				local f = newobject(TopLevel.SecondLevel.Foo, "ctor");
+				local f = newobject(TopLevel.SecondLevel.Foo, "ctor", {});
 				f:Test3();
 			end,
 			Test2 = function(this, GG, t, tt)

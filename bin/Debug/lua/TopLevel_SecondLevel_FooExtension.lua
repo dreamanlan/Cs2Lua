@@ -12,7 +12,7 @@ TopLevel.SecondLevel.FooExtension = {
 	end,
 	NormalMethod = function()
 		LuaConsole.Print(1, 2, 3, 4, 5);
-		local f = newobject(TopLevel.SecondLevel.Foo, "ctor");
+		local f = newobject(TopLevel.SecondLevel.Foo, "ctor", {});
 		local f1 = delegationwrap((function() f:Test() end));
 		f1();
 		local f2 = delegationwrap((function() f:Test3() end));

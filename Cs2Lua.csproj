@@ -54,16 +54,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CsToLua\BreakAnalysis.cs" />
-    <Compile Include="CsToLua\ClassInfo.cs" />
-    <Compile Include="CsToLua\ContinueAnalysis.cs" />
+    <Compile Include="AnalysisHelper\BreakAnalysis.cs" />
+    <Compile Include="Info\ClassInfo.cs" />
+    <Compile Include="AnalysisHelper\ContinueAnalysis.cs" />
     <Compile Include="CsToLua\CsToLua.cs" />
     <Compile Include="CsToLua\CsToLuaProcessor.cs" />
     <Compile Include="CsToLua\CsToLuaUnimplemented.cs" />
-    <Compile Include="CsToLua\FieldInitializerAnalysis.cs" />
-    <Compile Include="CsToLua\LuaKeywordsReplacer.cs" />
-    <Compile Include="CsToLua\SymbolTable.cs" />
-    <Compile Include="CsToLua\MethodAnalysis.cs" />
+    <Compile Include="AnalysisHelper\FieldInitializerAnalysis.cs" />
+    <Compile Include="AnalysisHelper\LuaKeywordsReplacer.cs" />
+    <Compile Include="Info\SymbolTable.cs" />
+    <Compile Include="AnalysisHelper\MethodAnalysis.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

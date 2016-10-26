@@ -1,3 +1,7 @@
+System = System or {};
+System.Collections = System.Collections or {};
+System.Collections.Generic = System.Collections.Generic or {};
+
 function lshift(v,n)
     for i=1,n do
         v=v*2;
@@ -260,17 +264,35 @@ function defineclass(base, static, static_props, static_events, instance, instan
     return class;
 end;
 
-function newobject(class, ctor, ...)
+function newobject(class, ctor, initializer, ...)
   local obj = class();
   if ctor then
     obj[ctor](obj, ...);
   end;
+  for k,v in pairs(initializer) do
+    obj[k] = v;
+  end;
   return obj;
 end;
 
-function newexternobject(class, ctor, ...)
+function newexternobject(class, ctor, initializer, ...)
   local obj = class(...);
+  for k,v in pairs(initializer) do
+    obj[k] = v;
+  end;
   return obj;
+end;
+
+function newdictionary(type, dict, dict, ...)
+	return setmetatable(dict, __mt_dictionary);
+end;
+
+function newlist(type, ctor, list, ...)
+  return setmetatable(list, __mt_array);
+end;
+
+function newcollection(type, ctor, coll, ...)
+  return setmetatable(dict, __mt_array);
 end;
 
 function delegationwrap(handler)

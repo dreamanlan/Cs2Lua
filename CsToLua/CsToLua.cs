@@ -141,7 +141,7 @@ namespace RoslynTool.CsToLua
             base.VisitCompilationUnit(node);
         }
         public override void VisitNamespaceDeclaration(NamespaceDeclarationSyntax node)
-        {            
+        {
             /*
             //--别名语法处理在这里跳过
             //--using alias = namespaces;
@@ -362,7 +362,7 @@ namespace RoslynTool.CsToLua
 
             string manglingName = NameMangling(declSym);
             bool isExtension = declSym.IsExtensionMethod;
-            if (isExtension && declSym.Parameters.Length>0) {
+            if (isExtension && declSym.Parameters.Length > 0) {
                 var targetType = declSym.Parameters[0].Type;
                 ci.AddReference(targetType, ci.SemanticInfo);
                 string key = ClassInfo.GetFullName(targetType);
@@ -544,7 +544,7 @@ namespace RoslynTool.CsToLua
             }
 
             StringBuilder currentBuilder = ci.CurrentCodeBuilder;
-            if(declSym.IsStatic)
+            if (declSym.IsStatic)
                 ci.CurrentCodeBuilder = ci.StaticFunctionCodeBuilder;
             else
                 ci.CurrentCodeBuilder = ci.InstanceFunctionCodeBuilder;
@@ -1255,7 +1255,7 @@ namespace RoslynTool.CsToLua
         public override void VisitTryStatement(TryStatementSyntax node)
         {
             if (null != node.Block) {
-                CodeBuilder.AppendFormat("{0}do",GetIndentString());
+                CodeBuilder.AppendFormat("{0}do", GetIndentString());
                 CodeBuilder.AppendLine();
                 ++m_Indent;
                 VisitBlock(node.Block);
@@ -1408,7 +1408,7 @@ namespace RoslynTool.CsToLua
                         VisitArgument(arg);
                         CodeBuilder.Append(" + 1");
                     }
-                } else if (null != indexerOper) {                    
+                } else if (null != indexerOper) {
                     bool isConst = false;
                     if (i < indexerOper.ArgumentsInParameterOrder.Length) {
                         var argSym = indexerOper.ArgumentsInParameterOrder[i];
@@ -1508,7 +1508,7 @@ namespace RoslynTool.CsToLua
         }
         private bool IsLastNodeOfParent(ReturnStatementSyntax node)
         {
-            var parent = node.Parent;            
+            var parent = node.Parent;
             var nextNode = GetNextNode(node, parent);
             if (null == nextNode) {
                 if (parent.IsKind(SyntaxKind.Block)) {
@@ -1742,7 +1742,7 @@ namespace RoslynTool.CsToLua
                                 }
                             }
                             CodeBuilder.Append("}");
-                        } else if (isList) {
+                        } else {
                             CodeBuilder.Append("{");
                             var args = node.Expressions;
                             int ct = args.Count;
@@ -1753,24 +1753,12 @@ namespace RoslynTool.CsToLua
                                 }
                             }
                             CodeBuilder.Append("}");
-                        } else {
-                            Log(node, "Only dictionary or list or array can use CollectionInitializerExpression, please use constructor or ObjectInitializerExpression ! operation info: {0}", oper.ToString());
                         }
                     } else {
                         Log(node, "Can't find operation type ! operation info: {0}", oper.ToString());
                     }
                 } else if (isComplex) {
                     Log(node, "Can't generate initializer code for complex ! operation info: {0}", oper.ToString());
-                } else if (isObjectInitializer) {
-                    var args = node.Expressions;
-                    int ct = args.Count;
-                    for (int i = 0; i < ct; ++i) {
-                        var exp = args[i];
-                        VisitToplevelExpression(exp, string.Empty);
-                        if (i < ct - 1) {
-                            CodeBuilder.Append("; ");
-                        }
-                    }
                 } else {
                     if (isArray)
                         CodeBuilder.Append("wraparray{");
@@ -1802,75 +1790,59 @@ namespace RoslynTool.CsToLua
                 m_ObjectCreateStack.Push(typeSymInfo);
 
                 string fullTypeName = ClassInfo.GetFullName(typeSymInfo);
-                bool isDictionary = IsSysInterface(typeSymInfo, "IDictionary");
-                bool isList = IsSysInterface(typeSymInfo, "IList");
-                if (isDictionary) {
-                    //字典对象的处理
-                    CodeBuilder.Append("wrapdictionary");
-                    if (null != node.Initializer) {
-                        VisitInitializerExpression(node.Initializer);
+
+                //处理ref/out参数
+                InvocationInfo ii = new InvocationInfo();
+                ii.Init(sym, node.ArgumentList, m_SymbolTable.ExistTypeOf(sym));
+                ci.AddReference(sym, ci.SemanticInfo);
+
+                bool isCollection = IsSysInterface(typeSymInfo, "ICollection");
+
+                string ctor = NameMangling(sym);
+                string localName = string.Format("__compiler_newobject_{0}", node.GetLocation().GetLineSpan().StartLinePosition.Line);
+                if (ii.ReturnArgs.Count > 0) {
+                    CodeBuilder.Append("(function() ");
+                    CodeBuilder.AppendFormat("local {0}; {1}", localName, localName);
+                    CodeBuilder.Append(", ");
+                    OutputExpressionList(ii.ReturnArgs);
+                    CodeBuilder.Append(" = ");
+                }
+                if (isCollection) {
+                    bool isDictionary = IsSysInterface(typeSymInfo, "IDictionary");
+                    bool isList = IsSysInterface(typeSymInfo, "IList");
+                    if (isDictionary) {
+                        //字典对象的处理
+                        CodeBuilder.AppendFormat("newdictionary({0}, ", fullTypeName);
+                    } else if (isList) {
+                        //列表对象的处理
+                        CodeBuilder.AppendFormat("newlist({0}, ", fullTypeName);
                     } else {
-                        CodeBuilder.Append("{}");
-                    }
-                } else if (isList) {
-                    //数组对象的处理
-                    CodeBuilder.Append("wraparray");
-                    if (null != node.Initializer) {
-                        VisitInitializerExpression(node.Initializer);
-                    } else {
-                        CodeBuilder.Append("{}");
-                    }
+                        //集合对象的处理
+                        CodeBuilder.AppendFormat("newcollection({0}, ", fullTypeName);
+                    }                        
                 } else {
-                    //处理ref/out参数
-                    InvocationInfo ii = new InvocationInfo();
-                    ii.Init(sym, node.ArgumentList, m_SymbolTable.ExistTypeOf(sym));
-                    ci.AddReference(sym, ci.SemanticInfo);
-
-                    string ctor = NameMangling(sym);
-
-                    string localName = string.Format("__compiler_newobject_{0}", node.GetLocation().GetLineSpan().StartLinePosition.Line);
-                    if (null != node.Initializer || ii.ReturnArgs.Count > 0) {
-                        CodeBuilder.Append("(function() ");
-                        if (!string.IsNullOrEmpty(ctor)) {
-                            CodeBuilder.AppendFormat("local {0}; {1}", localName, localName);
-                            if (ii.ReturnArgs.Count > 0) {
-                                CodeBuilder.Append(", ");
-                                OutputExpressionList(ii.ReturnArgs);
-                            }
-                            CodeBuilder.AppendFormat(" = new{0}object({1}, ", typeSymInfo.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", fullTypeName);
-                            if (string.IsNullOrEmpty(ctor)) {
-                                CodeBuilder.Append("nil");
-                            } else {
-                                CodeBuilder.AppendFormat("\"{0}\"", ctor);
-                            }
-                            if (ii.Args.Count > 0) {
-                                CodeBuilder.Append(", ");
-                            }
-                            OutputExpressionList(ii.Args, ii.GenericTypeArgs);
-                            CodeBuilder.Append("); ");
-                        }
-                        if (null != node.Initializer) {
-                            CodeBuilder.Append("(function(this) ");
-                            VisitInitializerExpression(node.Initializer);
-                            if (node.Initializer.Expressions.Count > 0) {
-                                CodeBuilder.Append("; ");
-                            }
-                            CodeBuilder.AppendFormat("end)({0}); ", localName);
-                        }
-                        CodeBuilder.AppendFormat("return {0}; end)()", localName);
-                    } else {
-                        CodeBuilder.AppendFormat("new{0}object({1}, ", typeSymInfo.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", fullTypeName);
-                        if (string.IsNullOrEmpty(ctor)) {
-                            CodeBuilder.Append("nil");
-                        } else {
-                            CodeBuilder.AppendFormat("\"{0}\"", ctor);
-                        }
-                        if (ii.Args.Count > 0) {
-                            CodeBuilder.Append(", ");
-                        }
-                        OutputExpressionList(ii.Args, ii.GenericTypeArgs);
-                        CodeBuilder.Append(")");
-                    }
+                    CodeBuilder.AppendFormat("new{0}object({1}, ", typeSymInfo.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", fullTypeName);
+                }
+                if (string.IsNullOrEmpty(ctor)) {
+                    CodeBuilder.Append("nil");
+                } else {
+                    CodeBuilder.AppendFormat("\"{0}\"", ctor);
+                }
+                if (null != node.Initializer) {
+                    CodeBuilder.Append(", {");
+                    VisitInitializerExpression(node.Initializer);
+                    CodeBuilder.Append("}");
+                } else {
+                    CodeBuilder.Append(", {}");
+                }
+                if (ii.Args.Count + ii.GenericTypeArgs.Count > 0) {
+                    CodeBuilder.Append(", ");
+                }
+                OutputExpressionList(ii.Args, ii.GenericTypeArgs);
+                CodeBuilder.Append(")");
+                if (ii.ReturnArgs.Count > 0) {
+                    CodeBuilder.Append("; ");
+                    CodeBuilder.AppendFormat("return {0}; end)()", localName);
                 }
 
                 m_ObjectCreateStack.Pop();
@@ -1991,7 +1963,7 @@ namespace RoslynTool.CsToLua
                             if (null != symInfo) {
                                 var names = symInfo.GetMembers(name);
                                 if (names.Length > 0) {
-                                    CodeBuilder.AppendFormat("this.{0}", name);
+                                    CodeBuilder.AppendFormat("{0}", name);
                                     return;
                                 }
                             }
@@ -2033,7 +2005,7 @@ namespace RoslynTool.CsToLua
                         if (null != symInfo) {
                             var names = symInfo.GetMembers(name);
                             if (names.Length > 0) {
-                                CodeBuilder.AppendFormat("this.{0}", name);
+                                CodeBuilder.AppendFormat("{0}", name);
                                 return;
                             }
                         }
@@ -2292,14 +2264,13 @@ namespace RoslynTool.CsToLua
                 var fieldSym = baseSym as IEventSymbol;
                 if (isStatic && fieldSym.IsStatic || !isStatic && !fieldSym.IsStatic) {
                     string name = v.Identifier.Text;
-                    if (null != v.Initializer) {                        
+                    if (null != v.Initializer) {
                         CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
                         CodeBuilder.Append(" = delegationwrap(");
                         VisitExpressionSyntax(v.Initializer.Value);
                         CodeBuilder.Append(");");
                     } else {
-                        CodeBuilder.AppendFormat("{0}{1} = wrapdelegation", GetIndentString(), name);
-                        CodeBuilder.Append("{}");
+                        CodeBuilder.AppendFormat("{0}{1} = wrapdelegation{{}}", GetIndentString(), name);
                     }
                     CodeBuilder.Append(",");
                     CodeBuilder.AppendLine();
@@ -2663,7 +2634,7 @@ namespace RoslynTool.CsToLua
             }
             CodeBuilder.AppendFormat("{0}", expTerminater);
             if (expTerminater.Length > 0)
-                CodeBuilder.AppendLine();    
+                CodeBuilder.AppendLine();
         }
         private void VisitInvocation(ClassInfo ci, InvocationExpressionSyntax invocation, string expTerminater, bool toplevel)
         {
@@ -2719,7 +2690,7 @@ namespace RoslynTool.CsToLua
                     }
                     if (sym.MethodKind == MethodKind.DelegateInvoke) {
                         VisitExpressionSyntax(invocation.Expression);
-                    } else if(sym.IsStatic) {
+                    } else if (sym.IsStatic) {
                         CodeBuilder.AppendFormat("{0}.", ii.ClassKey);
                         CodeBuilder.Append(NameMangling(sym));
                     } else {

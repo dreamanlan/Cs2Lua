@@ -44,7 +44,7 @@ Mandelbrot = {
 
 
 	__new_object = function(...)
-		return newobject(Mandelbrot, nil, ...);
+		return newobject(Mandelbrot, nil, {}, ...);
 	end,
 	__define_class = function()
 		local static = Mandelbrot;
