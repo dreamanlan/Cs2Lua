@@ -1370,7 +1370,16 @@ namespace RoslynTool.CsToLua
             int ct = args.Count;
             for (int i = 0; i < ct; ++i) {
                 var exp = args[i];
-                VisitExpressionSyntax(exp);
+                //表达式对象为空表明这个是一个slua的out实参，替换为Slua.out，这里为了容错，将非Slua情形为空换为lua的空
+                if (null == exp) {
+                    if (SymbolTable.ForSlua) {
+                        CodeBuilder.Append("Slua.out");
+                    } else {
+                        CodeBuilder.Append("nil");
+                    }
+                } else {
+                    VisitExpressionSyntax(exp);
+                }
                 if (i < ct - 1) {
                     CodeBuilder.Append(", ");
                 }
@@ -1793,7 +1802,7 @@ namespace RoslynTool.CsToLua
 
                 //处理ref/out参数
                 InvocationInfo ii = new InvocationInfo();
-                ii.Init(sym, node.ArgumentList, m_SymbolTable.ExistTypeOf(sym));
+                ii.Init(sym, m_SymbolTable.AssemblySymbol, node.ArgumentList, m_SymbolTable.ExistTypeOf(sym));
                 ci.AddReference(sym, ci.SemanticInfo);
 
                 bool isCollection = IsSysInterface(typeSymInfo, "ICollection");
@@ -2368,7 +2377,7 @@ namespace RoslynTool.CsToLua
                     } else {
                         //处理ref/out参数
                         InvocationInfo ii = new InvocationInfo();
-                        ii.Init(sym, invocation.ArgumentList, m_SymbolTable.ExistTypeOf(sym));
+                        ii.Init(sym, m_SymbolTable.AssemblySymbol, invocation.ArgumentList, m_SymbolTable.ExistTypeOf(sym));
                         ci.AddReference(sym, ci.SemanticInfo);
 
                         MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
@@ -2510,7 +2519,7 @@ namespace RoslynTool.CsToLua
                 } else {
                     //处理ref/out参数
                     InvocationInfo ii = new InvocationInfo();
-                    ii.Init(sym, invocation.ArgumentList, m_SymbolTable.ExistTypeOf(sym));
+                    ii.Init(sym, m_SymbolTable.AssemblySymbol, invocation.ArgumentList, m_SymbolTable.ExistTypeOf(sym));
                     ci.AddReference(sym, ci.SemanticInfo);
 
                     MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
@@ -2647,7 +2656,7 @@ namespace RoslynTool.CsToLua
             } else {
                 //处理ref/out参数
                 InvocationInfo ii = new InvocationInfo();
-                ii.Init(sym, invocation.ArgumentList, m_SymbolTable.ExistTypeOf(sym));
+                ii.Init(sym, m_SymbolTable.AssemblySymbol, invocation.ArgumentList, m_SymbolTable.ExistTypeOf(sym));
                 ci.AddReference(sym, ci.SemanticInfo);
 
                 MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;

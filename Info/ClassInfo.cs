@@ -384,8 +384,14 @@ namespace RoslynTool.CsToLua
         internal List<ExpressionSyntax> ReturnArgs = new List<ExpressionSyntax>();
         internal List<ITypeSymbol> GenericTypeArgs = new List<ITypeSymbol>();
 
-        internal void Init(IMethodSymbol sym, ArgumentListSyntax argList, bool existTypeOf)
+        internal IMethodSymbol MethodSymbol = null;
+        internal IAssemblySymbol AssemblySymbol = null;
+
+        internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, ArgumentListSyntax argList, bool existTypeOf)
         {
+            MethodSymbol = sym;
+            AssemblySymbol = assemblySym;
+
             Args.Clear();
             ReturnArgs.Clear();
             GenericTypeArgs.Clear();
@@ -404,6 +410,10 @@ namespace RoslynTool.CsToLua
                             Args.Add(arg.Expression);
                             ReturnArgs.Add(arg.Expression);
                         } else if (param.RefKind == RefKind.Out) {
+                            if (sym.ContainingAssembly != assemblySym && SymbolTable.ForSlua) {
+                                //外部类的方法的out参数,slua在调用时传入Slua.out,这里用null标记一下，在实际输出参数时再变为Slua.out
+                                Args.Add(null);
+                            }
                             ReturnArgs.Add(arg.Expression);
                         } else {
                             Args.Add(arg.Expression);
