@@ -40,6 +40,10 @@ namespace RoslynTool
                         }
                     } else if (0 == string.Compare(args[i], "-enableinherit", true)) {
                         enableInherit = true;
+                    } else if (0 == string.Compare(args[i], "-normallua", true)) {
+                        SymbolTable.ForSlua = false;
+                    } else if (0 == string.Compare(args[i], "-slua", true)) {
+                        SymbolTable.ForSlua = true;
                     } else if (0 == string.Compare(args[i], "-refbyname", true)) {
                         string name = string.Empty, alias = "global";
                         if (i < args.Length - 1) {

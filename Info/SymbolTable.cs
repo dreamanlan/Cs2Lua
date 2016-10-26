@@ -77,7 +77,7 @@ namespace RoslynTool.CsToLua
                     string name = msym.Name;
                     if (name[0] == '.')
                         name = name.Substring(1);
-                    string manglingName = SymbolTable.CalcMethodMangling(msym);
+                    string manglingName = SymbolTable.CalcMethodMangling(msym, symTable.AssemblySymbol);
                     if (msym.IsExtensionMethod && msym.Parameters.Length > 0) {
                         var targetType = msym.Parameters[0].Type as INamedTypeSymbol;
                         if (null != targetType && targetType.ContainingAssembly == symTable.AssemblySymbol) {
@@ -132,7 +132,7 @@ namespace RoslynTool.CsToLua
                     }
 
                     if (typeSym.IsGenericType) {
-                        CheckMethodIncludeTypeOf(msym, compilation, false);
+                        CheckMethodIncludeTypeOf(msym, symTable.AssemblySymbol, compilation, false);
 
                         if (fieldIncludeTypeOf && msym.MethodKind == MethodKind.Constructor) {
                             MethodIncludeTypeOfs.Add(manglingName, msym);
@@ -149,10 +149,10 @@ namespace RoslynTool.CsToLua
 
                     if (typeSym.IsGenericType) {
                         if (null != psym.GetMethod) {
-                            CheckMethodIncludeTypeOf(psym.GetMethod, compilation, true);
+                            CheckMethodIncludeTypeOf(psym.GetMethod, symTable.AssemblySymbol, compilation, true);
                         }
                         if (null != psym.SetMethod) {
-                            CheckMethodIncludeTypeOf(psym.SetMethod, compilation, true);
+                            CheckMethodIncludeTypeOf(psym.SetMethod, symTable.AssemblySymbol, compilation, true);
                         }
                     }
                     continue;
@@ -163,10 +163,10 @@ namespace RoslynTool.CsToLua
 
                     if (typeSym.IsGenericType) {
                         if (null != esym.AddMethod) {
-                            CheckMethodIncludeTypeOf(esym.AddMethod, compilation, true);
+                            CheckMethodIncludeTypeOf(esym.AddMethod, symTable.AssemblySymbol, compilation, true);
                         }
                         if (null != esym.RemoveMethod) {
-                            CheckMethodIncludeTypeOf(esym.RemoveMethod, compilation, true);
+                            CheckMethodIncludeTypeOf(esym.RemoveMethod, symTable.AssemblySymbol, compilation, true);
                         }
                     }
                     continue;
@@ -213,7 +213,7 @@ namespace RoslynTool.CsToLua
                 FieldCreateSelfs.Add(fsym.Name, fsym);
             }
         }
-        private void CheckMethodIncludeTypeOf(IMethodSymbol msym, Compilation compilation, bool setGenerateBasicFlagIfInclude)
+        private void CheckMethodIncludeTypeOf(IMethodSymbol msym, IAssemblySymbol assemblySym, Compilation compilation, bool setGenerateBasicFlagIfInclude)
         {
             bool existTypeOf = false;
             foreach (var decl in msym.DeclaringSyntaxReferences) {
@@ -229,7 +229,7 @@ namespace RoslynTool.CsToLua
                 }
             }
             if (existTypeOf) {
-                string manglingName = SymbolTable.CalcMethodMangling(msym);
+                string manglingName = SymbolTable.CalcMethodMangling(msym, assemblySym);
                 MethodIncludeTypeOfs.Add(manglingName, msym);
                 if (setGenerateBasicFlagIfInclude) {
                     if (!msym.IsStatic) {
@@ -280,7 +280,7 @@ namespace RoslynTool.CsToLua
                 bool isMangling;
                 csi.SymbolOverloadFlags.TryGetValue(ret, out isMangling);
                 if (isMangling) {
-                    ret = CalcMethodMangling(sym);
+                    ret = CalcMethodMangling(sym, m_AssemblySymbol);
                 }
             }
             return ret;
@@ -311,7 +311,7 @@ namespace RoslynTool.CsToLua
             string key = ClassInfo.CalcTypeReference(sym.ContainingType);
             ClassSymbolInfo csi;
             if (m_ClassSymbols.TryGetValue(key, out csi)) {
-                string manglingName = CalcMethodMangling(sym);
+                string manglingName = CalcMethodMangling(sym, m_AssemblySymbol);
                 ret = csi.MethodIncludeTypeOfs.ContainsKey(manglingName);
             }
             return ret;
@@ -360,31 +360,33 @@ namespace RoslynTool.CsToLua
         private Dictionary<string, ClassSymbolInfo> m_ClassSymbols = new Dictionary<string, ClassSymbolInfo>();
         private Dictionary<string, HashSet<string>> m_Requires = new Dictionary<string, HashSet<string>>();
 
-        internal static string CalcMethodMangling(IMethodSymbol methodSym)
+        internal static string CalcMethodMangling(IMethodSymbol methodSym, IAssemblySymbol assemblySym)
         {
             StringBuilder sb = new StringBuilder();
             string name = methodSym.Name;
             if (name[0] == '.')
                 name = name.Substring(1);
             sb.Append(name);
-            foreach (var param in methodSym.Parameters) {
-                sb.Append("__");
-                if (param.RefKind == RefKind.Ref) {
-                    sb.Append("Ref_");
-                } else if (param.RefKind == RefKind.Out) {
-                    sb.Append("Out_");
-                }
-                if (param.Type.Kind == SymbolKind.ArrayType) {
-                    sb.Append("Arr_");
-                    var arrSym = param.Type as IArrayTypeSymbol;
-                    string fn = ClassInfo.GetFullNameWithTypeArguments(arrSym.ElementType);
-                    sb.Append(fn.Replace('.', '_'));
-                } else {
-                    string fn = ClassInfo.GetFullNameWithTypeArguments(param.Type);
-                    sb.Append(fn.Replace('.', '_'));
+            if (methodSym.ContainingAssembly == assemblySym) {
+                foreach (var param in methodSym.Parameters) {
+                    sb.Append("__");
+                    if (param.RefKind == RefKind.Ref) {
+                        sb.Append("Ref_");
+                    } else if (param.RefKind == RefKind.Out) {
+                        sb.Append("Out_");
+                    }
+                    if (param.Type.Kind == SymbolKind.ArrayType) {
+                        sb.Append("Arr_");
+                        var arrSym = param.Type as IArrayTypeSymbol;
+                        string fn = ClassInfo.GetFullNameWithTypeArguments(arrSym.ElementType);
+                        sb.Append(fn.Replace('.', '_'));
+                    } else {
+                        string fn = ClassInfo.GetFullNameWithTypeArguments(param.Type);
+                        sb.Append(fn.Replace('.', '_'));
+                    }
                 }
             }
-            return sb.ToString();
+            return WrapMethodName(sb.ToString(), methodSym);
         }
         internal static string CheckLuaKeyword(string name, out bool change)
         {
@@ -396,7 +398,24 @@ namespace RoslynTool.CsToLua
                 return name;
             }
         }
+        internal static string WrapMethodName(string name, IMethodSymbol methodSym)
+        {
+            if (!methodSym.IsStatic || !ForSlua) {
+                return name;
+            } else {
+                if (name.StartsWith("op_"))
+                    return name;
+                else
+                    return name + "_s";
+            }
+        }
+        internal static bool ForSlua
+        {
+            get { return s_ForSlua; }
+            set { s_ForSlua = value; }
+        }
 
+        private static bool s_ForSlua = true;
         private static HashSet<string> s_ExtraLuaKeywords = new HashSet<string> {
             "and", "elseif", "end", "function", "local", "nil", "not", "or", "repeat", "then", "until"
         };

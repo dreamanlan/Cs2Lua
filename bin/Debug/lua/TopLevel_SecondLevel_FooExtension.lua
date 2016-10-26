@@ -3,12 +3,12 @@ require "cs2lua_namespaces";
 require "TopLevel_SecondLevel_Foo";
 
 TopLevel.SecondLevel.FooExtension = {
-	Test3__TopLevel_SecondLevel_Foo = function(obj)
+	Test3__TopLevel_SecondLevel_Foo_s = function(obj)
 		if obj.m_Test > 0 then
 			obj.m_Test2 = 678;
 		end;
 	end,
-	Test3__TopLevel_SecondLevel_Foo__System_Int32 = function(obj, ix)
+	Test3__TopLevel_SecondLevel_Foo__System_Int32_s = function(obj, ix)
 	end,
 	NormalMethod = function()
 		LuaConsole.Print(1, 2, 3, 4, 5);
@@ -17,7 +17,7 @@ TopLevel.SecondLevel.FooExtension = {
 		f1();
 		local f2 = delegationwrap((function() f:Test3() end));
 		f2();
-		TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo(f);
+		TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo_s(f);
 	end,
 	cctor = function()
 	end,
@@ -25,7 +25,7 @@ TopLevel.SecondLevel.FooExtension = {
 
 	__define_class = function()
 		TopLevel.SecondLevel.Foo.__install_TopLevel_SecondLevel_FooExtension = function()
-			this.Test3__TopLevel_SecondLevel_Foo = TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo;
+			this.Test3__TopLevel_SecondLevel_Foo_s = TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo_s;
 		end
 		local static = TopLevel.SecondLevel.FooExtension;
 

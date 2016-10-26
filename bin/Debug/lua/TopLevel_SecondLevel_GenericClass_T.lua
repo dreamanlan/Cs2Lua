@@ -11,7 +11,7 @@ TopLevel.SecondLevel.GenericClass_T = {
 
 	__new_object = function(...)
 		local args = ...;
-		return (function() local obj, v, v2 = newobject(TopLevel.SecondLevel.GenericClass_T, "ctor", args); return obj; end)();
+		return (function() local obj, v, v2 = newobject(TopLevel.SecondLevel.GenericClass_T, "ctor", {}, args); return obj; end)();
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.GenericClass_T;
@@ -54,7 +54,7 @@ TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT = {
 
 
 	__new_object = function(...)
-		return newobject(TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT, "ctor", args);
+		return newobject(TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT, "ctor", {}, args);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT;

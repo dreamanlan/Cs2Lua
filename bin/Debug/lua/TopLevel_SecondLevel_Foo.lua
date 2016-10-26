@@ -10,7 +10,7 @@ TopLevel.SecondLevel.Foo = {
 
 
 	__new_object = function(...)
-		return newobject(TopLevel.SecondLevel.Foo, "ctor", args);
+		return newobject(TopLevel.SecondLevel.Foo, "ctor", {}, args);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.Foo;
@@ -123,7 +123,7 @@ TopLevel.SecondLevel.Foo.Test1 = {
 
 
 	__new_object = function(...)
-		return newobject(TopLevel.SecondLevel.Foo.Test1, nil, ...);
+		return newobject(TopLevel.SecondLevel.Foo.Test1, nil, {}, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.Foo.Test1;
@@ -160,7 +160,7 @@ TopLevel.SecondLevel.Foo.Test2 = {
 
 
 	__new_object = function(...)
-		return newobject(TopLevel.SecondLevel.Foo.Test2, nil, ...);
+		return newobject(TopLevel.SecondLevel.Foo.Test2, nil, {}, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.Foo.Test2;
@@ -197,7 +197,7 @@ TopLevel.SecondLevel.Foo.FooChild = {
 
 
 	__new_object = function(...)
-		return newobject(TopLevel.SecondLevel.Foo.FooChild, nil, ...);
+		return newobject(TopLevel.SecondLevel.Foo.FooChild, nil, {}, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.Foo.FooChild;

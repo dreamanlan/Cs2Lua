@@ -1,3 +1,7 @@
+System = System or {};
+System.Collections = System.Collections or {};
+System.Collections.Generic = System.Collections.Generic or {};
+
 function lshift(v,n)
     for i=1,n do
         v=v*2;
