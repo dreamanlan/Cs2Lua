@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Semantics;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
-using RoslynTool.CsToLua;
 
 namespace RoslynTool.CsToLua
 {
@@ -22,14 +20,14 @@ namespace RoslynTool.CsToLua
         {
             get
             {
-                return m_LogBuilder.Length > 0;
+                return Logger.Instance.HaveError;
             }
         }
         public string ErrorLog
         {
             get
             {
-                return m_LogBuilder.ToString();
+                return Logger.Instance.ErrorLog;
             }
         }
         public void Translate(SyntaxNode node)
@@ -374,7 +372,7 @@ namespace RoslynTool.CsToLua
 
                 ++m_Indent;
                 ++m_Indent;
-                extensionCodeBuilder.AppendFormat("{0}this.{1} = {2}.{3};", GetIndentString(), manglingName, ci.Key, manglingName);
+                extensionCodeBuilder.AppendFormat("{0}obj.{1} = {2}.{3};", GetIndentString(), manglingName, ci.Key, manglingName);
                 extensionCodeBuilder.AppendLine();
                 --m_Indent;
                 --m_Indent;
@@ -1303,11 +1301,11 @@ namespace RoslynTool.CsToLua
 
         public void SaveLog(TextWriter writer)
         {
-            writer.Write(m_LogBuilder.ToString());
+            Logger.Instance.SaveLog(writer);
         }
         public void SaveLog(string path)
         {
-            File.WriteAllText(path, m_LogBuilder.ToString());
+            Logger.Instance.SaveLog(path);
         }
 
         private string GetIndentString()
@@ -1316,23 +1314,19 @@ namespace RoslynTool.CsToLua
         }
         private void Log(CSharpSyntaxNode node, string format, params object[] args)
         {
-            string[] lines = node.ToString().Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            string line = lines.Length > 0 ? lines[0] : string.Empty;
-            m_LogBuilder.AppendFormat("<<<[Log for {0}]>>> [code:[ {1} ] location: {2}]", node.GetType().Name, line, node.GetLocation().GetLineSpan());
-            m_LogBuilder.AppendFormat(format, args);
-            m_LogBuilder.AppendLine();
+            Logger.Instance.Log(node, format, args);
         }
         private void ReportIllegalSymbol(CSharpSyntaxNode node, SymbolInfo symInfo)
         {
-            string[] lines = node.ToString().Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            string line = lines.Length > 0 ? lines[0] : string.Empty;
-            m_LogBuilder.AppendFormat("<<<[Log for {0}]>>> ", node.GetType().Name);
-            m_LogBuilder.AppendFormat("Can't determine symbol: {0}, code:[ {1} ] location: {2}", symInfo.CandidateReason, line, node.GetLocation().GetLineSpan());
-            m_LogBuilder.AppendLine();
-            foreach (var candidateSymbol in symInfo.CandidateSymbols) {
-                m_LogBuilder.AppendFormat("\tCandidateSymbol: {0}", candidateSymbol.ToString());
-                m_LogBuilder.AppendLine();
-            }
+            Logger.Instance.ReportIllegalSymbol(node, symInfo);
+        }
+        private void ReportIllegalType(CSharpSyntaxNode node, ITypeSymbol typeSym)
+        {
+            Logger.Instance.ReportIllegalType(node, typeSym);
+        }
+        private void ReportIllegalType(ITypeSymbol typeSym)
+        {
+            Logger.Instance.ReportIllegalType(typeSym);
         }
         private string NameMangling(IMethodSymbol sym)
         {
@@ -1806,6 +1800,7 @@ namespace RoslynTool.CsToLua
                 ci.AddReference(sym, ci.SemanticInfo);
 
                 bool isCollection = IsSysInterface(typeSymInfo, "ICollection");
+                bool isExternal = typeSymInfo.ContainingAssembly != m_SymbolTable.AssemblySymbol;
 
                 string ctor = NameMangling(sym);
                 string localName = string.Format("__compiler_newobject_{0}", node.GetLocation().GetLineSpan().StartLinePosition.Line);
@@ -1830,12 +1825,29 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.AppendFormat("newcollection({0}, ", fullTypeName);
                     }                        
                 } else {
-                    CodeBuilder.AppendFormat("new{0}object({1}, ", typeSymInfo.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", fullTypeName);
+                    CodeBuilder.AppendFormat("new{0}object({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
                 }
                 if (string.IsNullOrEmpty(ctor)) {
                     CodeBuilder.Append("nil");
                 } else {
                     CodeBuilder.AppendFormat("\"{0}\"", ctor);
+                }
+                if (isExternal) {
+                    ClassSymbolInfo csi;
+                    if (m_SymbolTable.ClassSymbols.TryGetValue(fullTypeName, out csi)) {
+                        if (csi.ExtensionClasses.Count > 0) {
+                            CodeBuilder.Append(", (function(obj)");
+                            foreach (var pair in csi.ExtensionClasses) {
+                                string refname = pair.Key;
+                                CodeBuilder.AppendFormat(" {0}.__install_{1}(obj);", fullTypeName, refname.Replace(".", "_"));
+                            }
+                            CodeBuilder.Append(" end)");
+                        } else {
+                            CodeBuilder.Append(", nil");
+                        }
+                    } else {
+                        CodeBuilder.Append(", nil");
+                    }
                 }
                 if (null != node.Initializer) {
                     CodeBuilder.Append(", {");

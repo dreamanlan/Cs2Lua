@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Reflection;
 using Microsoft.CodeAnalysis;
@@ -358,6 +357,19 @@ namespace RoslynTool.CsToLua
             }
             string genericTypeParamNames = string.Join(", ", csi.GenericTypeParamNames.ToArray());
 
+            //按目标类重新组织扩展代码
+            Dictionary<string, List<StringBuilder>> classExternsions = new Dictionary<string, List<StringBuilder>>();
+            foreach (var ci in classes) {
+                foreach (var pair in ci.ExtensionCodeBuilders) {
+                    List<StringBuilder> list;
+                    if (!classExternsions.TryGetValue(pair.Key, out list)) {
+                        list = new List<StringBuilder>();
+                        classExternsions.Add(pair.Key, list);
+                    }
+                    list.Add(pair.Value);
+                }
+            }
+
             HashSet<string> requiredlibs = new HashSet<string>();
             HashSet<string> lualibs;
             if (symTable.Requires.TryGetValue(key, out lualibs)) {
@@ -544,16 +556,16 @@ namespace RoslynTool.CsToLua
                 sb.AppendLine();
                 ++indent;
 
-                foreach (var ci in classes) {
-                    foreach (var pair in ci.ExtensionCodeBuilders) {
-                        sb.AppendFormat("{0}{1}.__install_{2} = function()", GetIndentString(indent), pair.Key, fileName);
-                        sb.AppendLine();
-                        ++indent;
-                        sb.AppendFormat(pair.Value.ToString());
-                        --indent;
-                        sb.AppendFormat("{0}end", GetIndentString(indent));
-                        sb.AppendLine();
+                foreach (var pair in classExternsions) {
+                    sb.AppendFormat("{0}{1}.__install_{2} = function(obj)", GetIndentString(indent), pair.Key, fileName);
+                    sb.AppendLine();
+                    ++indent;
+                    foreach (var builder in pair.Value) {
+                        sb.AppendFormat(builder.ToString());
                     }
+                    --indent;
+                    sb.AppendFormat("{0}end", GetIndentString(indent));
+                    sb.AppendLine();
                 }
 
                 sb.AppendFormat("{0}local static = {1};", GetIndentString(indent), key);
@@ -645,7 +657,7 @@ namespace RoslynTool.CsToLua
                         }
                         foreach (var pair in csi.ExtensionClasses) {
                             string refname = pair.Key;
-                            sb.AppendFormat("{0}{1}.__install_{2}(instance);", GetIndentString(indent), key, refname.Replace(".", "_"));
+                            sb.AppendFormat("{0}{1}.__install_{2}(this);", GetIndentString(indent), key, refname.Replace(".", "_"));
                             sb.AppendLine();
                         }
                         --indent;

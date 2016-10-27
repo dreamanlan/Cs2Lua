@@ -275,24 +275,33 @@ function newobject(class, ctor, initializer, ...)
   return obj;
 end;
 
-function newexternobject(class, ctor, initializer, ...)
+function newexternobject(class, ctor, doexternsion, initializer, ...)
   local obj = class(...);
+  if doexternsion then
+    doexternsion();
+  end;
   for k,v in pairs(initializer) do
     obj[k] = v;
   end;
   return obj;
 end;
 
-function newdictionary(type, dict, dict, ...)
-	return setmetatable(dict, __mt_dictionary);
+function newdictionary(type, ctor, dict, ...)
+  if dict then
+	  return setmetatable(dict, __mt_dictionary);
+	end;
 end;
 
 function newlist(type, ctor, list, ...)
-  return setmetatable(list, __mt_array);
+  if list then
+    return setmetatable(list, __mt_array);
+  end;
 end;
 
 function newcollection(type, ctor, coll, ...)
-  return setmetatable(dict, __mt_array);
+  if coll then
+    return setmetatable(dict, __mt_array);
+  end;
 end;
 
 function delegationwrap(handler)

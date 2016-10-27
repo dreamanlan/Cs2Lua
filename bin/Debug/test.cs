@@ -166,6 +166,8 @@ namespace TopLevel
             }
             public static void Test3(Foo obj, int ix)
             { }
+            public static void TestExtern(this GameObject obj)
+            { }
             public static void NormalMethod()
             {
                 LuaConsole.Print(1, 2, 3, 4, 5);
@@ -178,6 +180,8 @@ namespace TopLevel
                 f2();
 
                 Test3(f);
+
+                var obj = new GameObject("test test test");
             }
         }
     }

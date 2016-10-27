@@ -35,6 +35,10 @@ namespace RoslynTool.CsToLua
 
         internal void Init(INamedTypeSymbol typeSym, CSharpCompilation compilation, SymbolTable symTable)
         {
+            if (typeSym.TypeKind == TypeKind.Error) {
+                Logger.Instance.ReportIllegalType(typeSym);
+                return;
+            }
             ClassKey = ClassInfo.GetFullName(typeSym);
             BaseClassKey = ClassInfo.GetFullName(typeSym.BaseType);
             if (BaseClassKey == "System.Object" || BaseClassKey == "System.ValueType")
@@ -80,7 +84,7 @@ namespace RoslynTool.CsToLua
                     string manglingName = SymbolTable.CalcMethodMangling(msym, symTable.AssemblySymbol);
                     if (msym.IsExtensionMethod && msym.Parameters.Length > 0) {
                         var targetType = msym.Parameters[0].Type as INamedTypeSymbol;
-                        if (null != targetType && targetType.ContainingAssembly == symTable.AssemblySymbol) {
+                        if (null != targetType) {
                             string key = ClassInfo.GetFullName(targetType);
                             ClassSymbolInfo csi;
                             if (!symTable.ClassSymbols.TryGetValue(key, out csi)) {
@@ -386,7 +390,7 @@ namespace RoslynTool.CsToLua
                     }
                 }
             }
-            return WrapMethodName(sb.ToString(), methodSym);
+            return WrapMethodName(sb.ToString(), methodSym, assemblySym);
         }
         internal static string CheckLuaKeyword(string name, out bool change)
         {
@@ -398,15 +402,15 @@ namespace RoslynTool.CsToLua
                 return name;
             }
         }
-        internal static string WrapMethodName(string name, IMethodSymbol methodSym)
+        internal static string WrapMethodName(string name, IMethodSymbol methodSym, IAssemblySymbol assemblySym)
         {
-            if (!methodSym.IsStatic || !ForSlua) {
-                return name;
-            } else {
+            if (ForSlua && methodSym.IsStatic && methodSym.ContainingAssembly != assemblySym) {
                 if (name.StartsWith("op_"))
                     return name;
                 else
                     return name + "_s";
+            } else {
+                return name;
             }
         }
         internal static bool ForSlua

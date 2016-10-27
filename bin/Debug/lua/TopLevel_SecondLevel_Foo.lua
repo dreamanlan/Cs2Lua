@@ -85,14 +85,14 @@ TopLevel.SecondLevel.Foo = {
 				else
 					this.__ctor_called = true;
 				end
-				TopLevel.SecondLevel.Foo.__install_TopLevel_SecondLevel_FooExtension(instance);
+				TopLevel.SecondLevel.Foo.__install_TopLevel_SecondLevel_FooExtension(this);
 			end,
 
 			OnSimple = wrapdelegation{},
 			OnSimple2 = wrapdelegation{},
 			m_Test = 0,
 			m_Test2 = 0,
-			m_HashSet = newcollection(System.Collections.Generic.HashSet_T, "ctor", {{"one", "two", "three"}}),
+			m_HashSet = newcollection(System.Collections.Generic.HashSet_T, "ctor", nil, {{"one", "two", "three"}}),
 			__ctor_called = false,
 		};
 

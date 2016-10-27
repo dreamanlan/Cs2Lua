@@ -1,4 +1,3 @@
 ============<<<Semantic Error:test>>>============
-test.cs(4,7): error CS0246: The type or namespace name 'UnityEngine' could not be found (are you missing a using directive or an assembly reference?)
 test.cs(156,69): error CS0012: The type 'ISet<>' is defined in an assembly that is not referenced. You must add a reference to assembly 'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
 test.cs(131,28): error CS0103: The name 'ix' does not exist in the current context
