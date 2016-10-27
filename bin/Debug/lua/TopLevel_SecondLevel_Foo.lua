@@ -55,7 +55,7 @@ TopLevel.SecondLevel.Foo = {
 						break;
 					end;
 					do
-					return ix;
+					return i;
 					end;
 					i = i + 1;
 				until true;
@@ -92,7 +92,7 @@ TopLevel.SecondLevel.Foo = {
 			OnSimple2 = wrapdelegation{},
 			m_Test = 0,
 			m_Test2 = 0,
-			m_HashSet = newcollection(System.Collections.Generic.HashSet_T, "ctor", nil, {{"one", "two", "three"}}),
+			m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, "ctor", nil, {"one", "two", "three"}),
 			__ctor_called = false,
 		};
 
@@ -109,7 +109,7 @@ TopLevel.SecondLevel.Foo = {
 		local instance_events = {
 		};
 
-		return defineclass(TopLevel.SecondLevel.FooBase, static, static_props, static_events, instance, instance_props, instance_events);
+		return defineclass(TopLevel.SecondLevel.FooBase, false, static, static_props, static_events, instance, instance_props, instance_events);
 	end,
 };
 
@@ -146,7 +146,7 @@ TopLevel.SecondLevel.Foo.Test1 = {
 		local instance_events = {
 		};
 
-		return defineclass(nil, static, static_props, static_events, instance, instance_props, instance_events);
+		return defineclass(nil, true, static, static_props, static_events, instance, instance_props, instance_events);
 	end,
 };
 
@@ -183,7 +183,7 @@ TopLevel.SecondLevel.Foo.Test2 = {
 		local instance_events = {
 		};
 
-		return defineclass(nil, static, static_props, static_events, instance, instance_props, instance_events);
+		return defineclass(nil, true, static, static_props, static_events, instance, instance_props, instance_events);
 	end,
 };
 
@@ -222,7 +222,7 @@ TopLevel.SecondLevel.Foo.FooChild = {
 		local instance_events = {
 		};
 
-		return defineclass(nil, static, static_props, static_events, instance, instance_props, instance_events);
+		return defineclass(nil, true, static, static_props, static_events, instance, instance_props, instance_events);
 	end,
 };
 

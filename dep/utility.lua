@@ -304,6 +304,24 @@ function newcollection(type, ctor, coll, ...)
   end;
 end;
 
+function newexterndictionary(type, ctor, doexternsion, dict, ...)
+  if dict then
+	  return setmetatable(dict, __mt_dictionary);
+	end;
+end;
+
+function newexternlist(type, ctor, doexternsion, list, ...)
+  if list then
+    return setmetatable(list, __mt_array);
+  end;
+end;
+
+function newexterncollection(type, ctor, doexternsion, coll, ...)
+  if coll then
+    return setmetatable(dict, __mt_array);
+  end;
+end;
+
 function delegationwrap(handler)
   return wrapdelegation{ handler };
 end;

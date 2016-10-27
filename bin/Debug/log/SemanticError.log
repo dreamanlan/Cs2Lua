@@ -1,0 +1,3 @@
+============<<<Semantic Error:test>>>============
+test.cs(166,59): error CS1501: No overload for method 'Add' takes 2 arguments
+test.cs(166,69): error CS1501: No overload for method 'Add' takes 2 arguments

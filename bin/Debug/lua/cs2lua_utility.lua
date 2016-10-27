@@ -176,7 +176,7 @@ LuaString = {
   end,
 };
 
-function defineclass(base, static, static_props, static_events, instance, instance_props, instance_events)
+function defineclass(base, baseIsExtern, static, static_props, static_events, instance, instance_props, instance_events)
     
     local base_class = base or {};
     local mt = getmetatable(base_class);
@@ -299,6 +299,24 @@ function newlist(type, ctor, list, ...)
 end;
 
 function newcollection(type, ctor, coll, ...)
+  if coll then
+    return setmetatable(dict, __mt_array);
+  end;
+end;
+
+function newexterndictionary(type, ctor, doexternsion, dict, ...)
+  if dict then
+	  return setmetatable(dict, __mt_dictionary);
+	end;
+end;
+
+function newexternlist(type, ctor, doexternsion, list, ...)
+  if list then
+    return setmetatable(list, __mt_array);
+  end;
+end;
+
+function newexterncollection(type, ctor, doexternsion, coll, ...)
   if coll then
     return setmetatable(dict, __mt_array);
   end;

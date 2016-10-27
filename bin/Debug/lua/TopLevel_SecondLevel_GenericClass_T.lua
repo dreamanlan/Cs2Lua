@@ -40,7 +40,7 @@ TopLevel.SecondLevel.GenericClass_T = {
 		local instance_events = {
 		};
 
-		return defineclass(nil, static, static_props, static_events, instance, instance_props, instance_events);
+		return defineclass(nil, true, static, static_props, static_events, instance, instance_props, instance_events);
 	end,
 };
 
@@ -105,7 +105,7 @@ TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT = {
 		local instance_events = {
 		};
 
-		return defineclass(nil, static, static_props, static_events, instance, instance_props, instance_events);
+		return defineclass(nil, true, static, static_props, static_events, instance, instance_props, instance_events);
 	end,
 };
 

@@ -1747,6 +1747,17 @@ namespace RoslynTool.CsToLua
                                 }
                             }
                             CodeBuilder.Append("}");
+                        } else if(isList) {
+                            CodeBuilder.Append("{");
+                            var args = node.Expressions;
+                            int ct = args.Count;
+                            for (int i = 0; i < ct; ++i) {
+                                VisitExpressionSyntax(args[i]);
+                                if (i < ct - 1) {
+                                    CodeBuilder.Append(", ");
+                                }
+                            }
+                            CodeBuilder.Append("}");
                         } else {
                             CodeBuilder.Append("{");
                             var args = node.Expressions;
@@ -1763,7 +1774,16 @@ namespace RoslynTool.CsToLua
                         Log(node, "Can't find operation type ! operation info: {0}", oper.ToString());
                     }
                 } else if (isComplex) {
-                    Log(node, "Can't generate initializer code for complex ! operation info: {0}", oper.ToString());
+                    CodeBuilder.Append("{");
+                    var args = node.Expressions;
+                    int ct = args.Count;
+                    for (int i = 0; i < ct; ++i) {
+                        VisitExpressionSyntax(args[i]);
+                        if (i < ct - 1) {
+                            CodeBuilder.Append(", ");
+                        }
+                    }
+                    CodeBuilder.Append("}");
                 } else {
                     if (isArray)
                         CodeBuilder.Append("wraparray{");
@@ -1818,13 +1838,13 @@ namespace RoslynTool.CsToLua
                     bool isList = IsSysInterface(typeSymInfo, "IList");
                     if (isDictionary) {
                         //字典对象的处理
-                        CodeBuilder.AppendFormat("newdictionary({0}, ", fullTypeName);
+                        CodeBuilder.AppendFormat("new{0}dictionary({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
                     } else if (isList) {
                         //列表对象的处理
-                        CodeBuilder.AppendFormat("newlist({0}, ", fullTypeName);
+                        CodeBuilder.AppendFormat("new{0}list({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
                     } else {
                         //集合对象的处理
-                        CodeBuilder.AppendFormat("newcollection({0}, ", fullTypeName);
+                        CodeBuilder.AppendFormat("new{0}collection({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
                     }                        
                 } else {
                     CodeBuilder.AppendFormat("new{0}object({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
@@ -1852,9 +1872,14 @@ namespace RoslynTool.CsToLua
                     }
                 }
                 if (null != node.Initializer) {
-                    CodeBuilder.Append(", {");
+                    CodeBuilder.Append(", ");
+                    if (!isCollection) {
+                        CodeBuilder.Append("{");
+                    }
                     VisitInitializerExpression(node.Initializer);
-                    CodeBuilder.Append("}");
+                    if (!isCollection) {
+                        CodeBuilder.Append("}");
+                    }
                 } else {
                     CodeBuilder.Append(", {}");
                 }

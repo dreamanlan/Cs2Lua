@@ -128,7 +128,7 @@ namespace TopLevel
                     if (i < 10) {
                         continue;
                     }
-                    return ix;
+                    return i;
                 }
                 return -1;
             }
@@ -163,6 +163,7 @@ namespace TopLevel
                 if (obj.m_Test > 0) {
                     obj.m_Test2 = 678;
                 }
+                List<List<int>> f = new List<List<int>> { { 1, 2 }, { 2, 3 } };
             }
             public static void Test3(Foo obj, int ix)
             { }

@@ -31,7 +31,7 @@ TopLevel.SecondLevel.FooBase = {
 		local instance_events = {
 		};
 
-		return defineclass(nil, static, static_props, static_events, instance, instance_props, instance_events);
+		return defineclass(nil, true, static, static_props, static_events, instance, instance_props, instance_events);
 	end,
 };
 
