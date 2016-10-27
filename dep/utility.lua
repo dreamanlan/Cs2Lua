@@ -176,7 +176,7 @@ LuaString = {
   end,
 };
 
-function defineclass(base, static, static_props, static_events, instance, instance_props, instance_events)
+function defineclass(base, baseIsExtern, static, static_props, static_events, instance, instance_props, instance_events)
     
     local base_class = base or {};
     local mt = getmetatable(base_class);

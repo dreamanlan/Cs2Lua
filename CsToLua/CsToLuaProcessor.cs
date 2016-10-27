@@ -724,10 +724,10 @@ namespace RoslynTool.CsToLua
 
                     sb.AppendLine();
                     
-                    sb.AppendFormat("{0}return defineclass({1}, static, static_props, static_events, instance, instance_props, instance_events);", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass);
+                    sb.AppendFormat("{0}return defineclass({1}, {2}, static, static_props, static_events, instance, instance_props, instance_events);", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass, myselfDefinedBaseClass ? "false" : "true");
                     sb.AppendLine();
                 } else {
-                    sb.AppendFormat("{0}return defineclass({1}, static, static_props, static_events, nil, nil, nil);", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass);
+                    sb.AppendFormat("{0}return defineclass({1}, {2}, static, static_props, static_events, nil, nil, nil);", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass, myselfDefinedBaseClass ? "false" : "true");
                     sb.AppendLine();
                 }
 
