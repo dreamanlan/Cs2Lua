@@ -355,6 +355,7 @@ namespace RoslynTool.CsToLua
                 isStaticClass = csi.TypeSymbol.IsStatic;
                 isEnumClass = csi.TypeSymbol.TypeKind == TypeKind.Enum;
             }
+            bool myselfDefinedBaseClass = csi.TypeSymbol.BaseType.ContainingAssembly == symTable.AssemblySymbol;
             string genericTypeParamNames = string.Join(", ", csi.GenericTypeParamNames.ToArray());
 
             //按目标类重新组织扩展代码
@@ -463,7 +464,7 @@ namespace RoslynTool.CsToLua
                     sb.AppendFormat("{0}cctor = function()", GetIndentString(indent));
                     sb.AppendLine();
                     ++indent;
-                    if (!string.IsNullOrEmpty(baseClass)) {
+                    if (!string.IsNullOrEmpty(baseClass) && myselfDefinedBaseClass) {
                         sb.AppendFormat("{0}{1}.cctor(this);", GetIndentString(indent), baseClass);
                         sb.AppendLine();
                     }
@@ -619,7 +620,7 @@ namespace RoslynTool.CsToLua
                         sb.AppendFormat("{0}ctor = function(this{1}{2})", GetIndentString(indent), string.IsNullOrEmpty(genericTypeParamNames) ? string.Empty : ", ", genericTypeParamNames);
                         sb.AppendLine();
                         ++indent;
-                        if (!string.IsNullOrEmpty(baseClass)) {
+                        if (!string.IsNullOrEmpty(baseClass) && myselfDefinedBaseClass) {
                             sb.AppendFormat("{0}base.ctor(this);", GetIndentString(indent));
                             sb.AppendLine();
                         }

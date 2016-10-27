@@ -267,6 +267,8 @@ namespace RoslynTool.CsToLua
                 }
             }
 
+            bool myselfDefinedBaseClass = ci.SemanticInfo.BaseType.ContainingAssembly == m_SymbolTable.AssemblySymbol;
+
             CodeBuilder.AppendFormat("{0}{1} = function({2}", GetIndentString(), manglingName, isStatic ? string.Empty : "this");
             if (mi.ParamNames.Count > 0) {
                 if (!isStatic) {
@@ -303,7 +305,7 @@ namespace RoslynTool.CsToLua
             }
             //再执行构造函数内容（字段初始化部分）
             if (isStatic) {
-                if (!string.IsNullOrEmpty(ci.BaseKey)) {
+                if (!string.IsNullOrEmpty(ci.BaseKey) && myselfDefinedBaseClass) {
                     CodeBuilder.AppendFormat("{0}{1}.cctor();", GetIndentString(), ci.BaseKey);
                     CodeBuilder.AppendLine();
                 }
@@ -312,7 +314,7 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendLine();
                 }
             } else {
-                if (!string.IsNullOrEmpty(ci.BaseKey) && !ClassInfo.IsBaseInitializerCalled(node, m_Model)) {
+                if (!string.IsNullOrEmpty(ci.BaseKey) && !ClassInfo.IsBaseInitializerCalled(node, m_Model) && myselfDefinedBaseClass) {
                     //如果当前构造没有调父类构造并且委托的其它构造也没有调父类构造，则调用默认构造。
                     CodeBuilder.AppendFormat("{0}base.ctor(this);", GetIndentString());
                     CodeBuilder.AppendLine();

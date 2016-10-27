@@ -1,6 +1,7 @@
 require "cs2lua_utility";
 require "cs2lua_namespaces";
 require "TopLevel_SecondLevel_Foo";
+require "GameObject";
 
 TopLevel.SecondLevel.FooExtension = {
 	Test3__TopLevel_SecondLevel_Foo = function(obj)
@@ -20,7 +21,7 @@ TopLevel.SecondLevel.FooExtension = {
 		local f2 = delegationwrap((function() f:Test3() end));
 		f2();
 		TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo(f);
-		local obj = newexternobject(UnityEngine.GameObject, "ctor", (function(obj) UnityEngine.GameObject.__install_TopLevel_SecondLevel_FooExtension(obj); end), {}, "test test test");
+		local obj = ;
 	end,
 	cctor = function()
 	end,
@@ -30,7 +31,7 @@ TopLevel.SecondLevel.FooExtension = {
 		TopLevel.SecondLevel.Foo.__install_TopLevel_SecondLevel_FooExtension = function(obj)
 			obj.Test3__TopLevel_SecondLevel_Foo = TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo;
 		end
-		UnityEngine.GameObject.__install_TopLevel_SecondLevel_FooExtension = function(obj)
+		GameObject.__install_TopLevel_SecondLevel_FooExtension = function(obj)
 			obj.TestExtern = TopLevel.SecondLevel.FooExtension.TestExtern;
 		end
 		local static = TopLevel.SecondLevel.FooExtension;
