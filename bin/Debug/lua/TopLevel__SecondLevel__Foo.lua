@@ -1,7 +1,7 @@
-require "cs2lua_utility";
-require "cs2lua_namespaces";
-require "TopLevel_SecondLevel_FooBase";
-require "TopLevel_SecondLevel_GenericClass_T";
+require "cs2lua__utility";
+require "cs2lua__namespaces";
+require "TopLevel__SecondLevel__FooBase";
+require "TopLevel__SecondLevel__GenericClass_T";
 
 TopLevel.SecondLevel.Foo = {
 	cctor = function()
@@ -49,9 +49,9 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			TestContinueAndReturn = function(this)
 				local i = 0;
-				while i < 100 do
+				while (i < 100) do
 				repeat
-					if i < 10 then
+					if (i < 10) then
 						break;
 					end;
 					do
@@ -72,7 +72,7 @@ TopLevel.SecondLevel.Foo = {
 				else
 					return ;
 				end;
-				if i > 3 then
+				if (i > 3) then
 					return ;
 				end;
 				if typeis(this, TopLevel.SecondLevel.FooBase) then

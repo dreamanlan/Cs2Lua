@@ -1,0 +1,3 @@
+============<<<Translation Error:test>>>============
+<<<[Log]>>> Error type: GameObject
+<<<[Log for ObjectCreationExpressionSyntax]>>> [code:[ new GameObject("test test test") ] location: test.cs: (185,26)-(185,58)]Unknown ObjectCreationExpressionSyntax !

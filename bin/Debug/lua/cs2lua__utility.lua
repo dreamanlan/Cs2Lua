@@ -184,6 +184,7 @@ function defineclass(base, static, static_props, static_events, instance, instan
     local class = static or {};
     local class_props = static_props or {};
     local class_events = static_events or {};
+    class["__cs2lua_defined"] = true;
     
     setmetatable(class, {            
         __call = function()
@@ -275,24 +276,51 @@ function newobject(class, ctor, initializer, ...)
   return obj;
 end;
 
-function newexternobject(class, ctor, initializer, ...)
+function newexternobject(class, ctor, doexternsion, initializer, ...)
   local obj = class(...);
+  if doexternsion then
+    doexternsion();
+  end;
   for k,v in pairs(initializer) do
     obj[k] = v;
   end;
   return obj;
 end;
 
-function newdictionary(type, dict, dict, ...)
-	return setmetatable(dict, __mt_dictionary);
+function newdictionary(type, ctor, dict, ...)
+  if dict then
+	  return setmetatable(dict, __mt_dictionary);
+	end;
 end;
 
 function newlist(type, ctor, list, ...)
-  return setmetatable(list, __mt_array);
+  if list then
+    return setmetatable(list, __mt_array);
+  end;
 end;
 
 function newcollection(type, ctor, coll, ...)
-  return setmetatable(dict, __mt_array);
+  if coll then
+    return setmetatable(dict, __mt_array);
+  end;
+end;
+
+function newexterndictionary(type, ctor, doexternsion, dict, ...)
+  if dict then
+	  return setmetatable(dict, __mt_dictionary);
+	end;
+end;
+
+function newexternlist(type, ctor, doexternsion, list, ...)
+  if list then
+    return setmetatable(list, __mt_array);
+  end;
+end;
+
+function newexterncollection(type, ctor, doexternsion, coll, ...)
+  if coll then
+    return setmetatable(coll, __mt_array);
+  end;
 end;
 
 function delegationwrap(handler)

@@ -1,6 +1,6 @@
 --local write = io.write;
-require "cs2lua_utility";
-require "cs2lua_namespaces";
+require "cs2lua__utility";
+require "cs2lua__namespaces";
 
 Mandelbrot = {
 	Exec = function()
@@ -10,24 +10,24 @@ Mandelbrot = {
 		local limit = 4;
 		LuaConsole.Write("P4\n", width, " ", height, "\n");
 		local y = 0;
-		while y < height do
-			local Ci = 2 * y / height - 1;
+		while (y < height) do
+			local Ci = (((2 * y) / height) - 1);
 			local x = 0;
-			while x < width do
+			while (x < width) do
 				local Zr = 0;
 				local Zi = 0;
-				local Cr = 2 * x / width - 1.5;
+				local Cr = (((2 * x) / width) - 1.5);
 				local i = maxiter;
 				local isInside = true;
 				repeat
-					local Tr = Zr * Zr - Zi * Zi + Cr;
-					Zi = 2 * Zr * Zi + Ci;
+					local Tr = (((Zr * Zr) - (Zi * Zi)) + Cr);
+					Zi = (((2 * Zr) * Zi) + Ci);
 					Zr = Tr;
-					if Zr * Zr + Zi * Zi > limit then
+					if (((Zr * Zr) + (Zi * Zi)) > limit) then
 						isInside = false;
 						break;
 					end;
-				until not ((function() i = i - 1; return i; end)() > 0);
+				until not (((function() i = i - 1; return i; end)() > 0));
 				if isInside then
 					LuaConsole.Write("*");
 				else

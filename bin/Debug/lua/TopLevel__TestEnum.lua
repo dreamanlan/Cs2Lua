@@ -1,5 +1,5 @@
-require "cs2lua_utility";
-require "cs2lua_namespaces";
+require "cs2lua__utility";
+require "cs2lua__namespaces";
 
 TopLevel.TestEnum = {
 	One = 1,

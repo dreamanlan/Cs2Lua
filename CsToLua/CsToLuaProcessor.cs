@@ -226,8 +226,8 @@ namespace RoslynTool.CsToLua
             HashSet<string> lualibRefs = new HashSet<string>();
             StringBuilder nsBuilder = new StringBuilder();
             BuildNamespaces(nsBuilder, toplevelMni);
-            File.Copy(Path.Combine(exepath, "lualib/utility.lua"), Path.Combine(outputDir, string.Format("cs2lua_utility.{0}", outputExt)), true);
-            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua_namespaces.{0}", outputExt)), nsBuilder.ToString());
+            File.Copy(Path.Combine(exepath, "lualib/utility.lua"), Path.Combine(outputDir, string.Format("cs2lua__utility.{0}", outputExt)), true);
+            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__namespaces.{0}", outputExt)), nsBuilder.ToString());
             foreach (var pair in toplevelClasses) {
                 StringBuilder classBuilder = new StringBuilder();
                 lualibRefs.Clear();
@@ -320,7 +320,7 @@ namespace RoslynTool.CsToLua
                 string fileName = BuildLuaClass(classBuilder, pair.Key, pair.Value, false, symTable, lualibRefs);
                 code.Append(classBuilder.ToString());
             }
-            sb.AppendLine("require \"cs2lua_utility\";");
+            sb.AppendLine("require \"cs2lua__utility\";");
             foreach (string lib in lualibRefs) {
                 sb.AppendFormat("require \"{0}\";", lib);
                 sb.AppendLine();
@@ -335,7 +335,7 @@ namespace RoslynTool.CsToLua
         {
             var classes = mci.Classes;
 
-            string fileName = key.Replace('.', '_');
+            string fileName = key.Replace(".", "__");
 
             bool isStaticClass = false;
             bool isEnumClass = false;
@@ -414,8 +414,8 @@ namespace RoslynTool.CsToLua
 
             HashSet<string> refs = new HashSet<string>();
             if (isAlone) {
-                sb.AppendLine("require \"cs2lua_utility\";");
-                sb.AppendLine("require \"cs2lua_namespaces\";");
+                sb.AppendLine("require \"cs2lua__utility\";");
+                sb.AppendLine("require \"cs2lua__namespaces\";");
                 foreach (string lib in requiredlibs) {
                     sb.AppendFormat("require \"{0}\";", lib);
                     sb.AppendLine();
@@ -426,7 +426,7 @@ namespace RoslynTool.CsToLua
                 foreach (var ci in classes) {
                     foreach (string r in ci.References) {
                         if (!r.StartsWith("System.") && !r.StartsWith("UnityEngine.")) {
-                            string refname = r.Replace('.', '_');
+                            string refname = r.Replace(".", "__");
                             if (!refs.Contains(refname)) {
                                 sb.AppendFormat("require \"{0}\";", refname);
                                 sb.AppendLine();

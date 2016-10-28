@@ -1,5 +1,5 @@
-require "cs2lua_utility";
-require "cs2lua_namespaces";
+require "cs2lua__utility";
+require "cs2lua__namespaces";
 
 TopLevel.SecondLevel.GenericClass_T = {
 	cctor = function()
@@ -25,13 +25,13 @@ TopLevel.SecondLevel.GenericClass_T = {
 		local instance = {
 			ctor = function(this, v)
 				local v2 = nil;
-				this.m_Test = v + 456;
+				this.m_Test = (v + 456);
 				v2 = 123;
 				return this, v, v2;
 			end,
 
 			m_Test = 123,
-			m_Test2 = TopLevel.SecondLevel.GenericClass_T.TTT + 1,
+			m_Test2 = (TopLevel.SecondLevel.GenericClass_T.TTT + 1),
 		};
 
 		local instance_props = {
