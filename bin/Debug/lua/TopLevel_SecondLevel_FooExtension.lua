@@ -42,7 +42,7 @@ TopLevel.SecondLevel.FooExtension = {
 		local static_events = {
 		};
 
-		return defineclass(nil, true, static, static_props, static_events, nil, nil, nil);
+		return defineclass(nil, static, static_props, static_events, nil, nil, nil);
 	end,
 };
 

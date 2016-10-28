@@ -1,3 +1,4 @@
 ============<<<Semantic Error:test>>>============
-test.cs(166,59): error CS1501: No overload for method 'Add' takes 2 arguments
-test.cs(166,69): error CS1501: No overload for method 'Add' takes 2 arguments
+test.cs(47,29): error CS0413: The type parameter 'TT' cannot be used with the 'as' operator because it does not have a class type constraint nor a 'class' constraint
+test.cs(167,59): error CS1501: No overload for method 'Add' takes 2 arguments
+test.cs(167,69): error CS1501: No overload for method 'Add' takes 2 arguments

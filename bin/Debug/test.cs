@@ -44,6 +44,7 @@ namespace TopLevel
                     Type t2 = typeof(T);
                     Type t3 = typeof(TT);
                     Type t4 = typeof(int);
+                    var v = t as TT;
                 }
 
                 private T m_T = default(T);

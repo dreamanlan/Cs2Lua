@@ -176,7 +176,7 @@ LuaString = {
   end,
 };
 
-function defineclass(base, baseIsExtern, static, static_props, static_events, instance, instance_props, instance_events)
+function defineclass(base, static, static_props, static_events, instance, instance_props, instance_events)
     
     local base_class = base or {};
     local mt = getmetatable(base_class);
@@ -184,6 +184,7 @@ function defineclass(base, baseIsExtern, static, static_props, static_events, in
     local class = static or {};
     local class_props = static_props or {};
     local class_events = static_events or {};
+    class["__cs2lua_defined"] = true;
     
     setmetatable(class, {            
         __call = function()
@@ -318,7 +319,7 @@ end;
 
 function newexterncollection(type, ctor, doexternsion, coll, ...)
   if coll then
-    return setmetatable(dict, __mt_array);
+    return setmetatable(coll, __mt_array);
   end;
 end;
 

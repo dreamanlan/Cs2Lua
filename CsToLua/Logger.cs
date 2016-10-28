@@ -41,7 +41,7 @@ namespace RoslynTool.CsToLua
             m_LogBuilder.AppendFormat(format, args);
             m_LogBuilder.AppendLine();
         }
-        public void Log(CSharpSyntaxNode node, string format, params object[] args)
+        public void Log(SyntaxNode node, string format, params object[] args)
         {
             string[] lines = node.ToString().Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             string line = lines.Length > 0 ? lines[0] : string.Empty;
@@ -49,7 +49,7 @@ namespace RoslynTool.CsToLua
             m_LogBuilder.AppendFormat(format, args);
             m_LogBuilder.AppendLine();
         }
-        public void ReportIllegalSymbol(CSharpSyntaxNode node, SymbolInfo symInfo)
+        public void ReportIllegalSymbol(SyntaxNode node, SymbolInfo symInfo)
         {
             string[] lines = node.ToString().Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             string line = lines.Length > 0 ? lines[0] : string.Empty;
@@ -61,7 +61,7 @@ namespace RoslynTool.CsToLua
                 m_LogBuilder.AppendLine();
             }
         }
-        public void ReportIllegalType(CSharpSyntaxNode node, ITypeSymbol typeSym)
+        public void ReportIllegalType(SyntaxNode node, ITypeSymbol typeSym)
         {
             if (typeSym.TypeKind == TypeKind.Error) {
                 var errType = typeSym as IErrorTypeSymbol;

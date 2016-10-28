@@ -64,10 +64,10 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			TestSwitch = function(this)
 				local i = 10;
-				local __compiler_switch_137 = i;
-				if __compiler_switch_137 == 1 then
+				local __compiler_switch_138 = i;
+				if __compiler_switch_138 == 1 then
 					return ;
-				elseif __compiler_switch_137 == 2 then
+				elseif __compiler_switch_138 == 2 then
 					return ;
 				else
 					return ;
@@ -75,7 +75,7 @@ TopLevel.SecondLevel.Foo = {
 				if i > 3 then
 					return ;
 				end;
-				if typeis(this, "TopLevel.SecondLevel.FooBase") then
+				if typeis(this, TopLevel.SecondLevel.FooBase) then
 					return ;
 				end;
 			end,
@@ -109,7 +109,7 @@ TopLevel.SecondLevel.Foo = {
 		local instance_events = {
 		};
 
-		return defineclass(TopLevel.SecondLevel.FooBase, false, static, static_props, static_events, instance, instance_props, instance_events);
+		return defineclass(TopLevel.SecondLevel.FooBase, static, static_props, static_events, instance, instance_props, instance_events);
 	end,
 };
 
@@ -146,7 +146,7 @@ TopLevel.SecondLevel.Foo.Test1 = {
 		local instance_events = {
 		};
 
-		return defineclass(nil, true, static, static_props, static_events, instance, instance_props, instance_events);
+		return defineclass(nil, static, static_props, static_events, instance, instance_props, instance_events);
 	end,
 };
 
@@ -183,7 +183,7 @@ TopLevel.SecondLevel.Foo.Test2 = {
 		local instance_events = {
 		};
 
-		return defineclass(nil, true, static, static_props, static_events, instance, instance_props, instance_events);
+		return defineclass(nil, static, static_props, static_events, instance, instance_props, instance_events);
 	end,
 };
 
@@ -222,7 +222,7 @@ TopLevel.SecondLevel.Foo.FooChild = {
 		local instance_events = {
 		};
 
-		return defineclass(nil, true, static, static_props, static_events, instance, instance_props, instance_events);
+		return defineclass(nil, static, static_props, static_events, instance, instance_props, instance_events);
 	end,
 };
 

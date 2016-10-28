@@ -208,7 +208,7 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.Append(" = ");
                 OutputConstValue(sym.ConstantValue);
             } else {
-                Log(node, "enum member can't deduce a value ! ");
+                Log(node, "enum member can't deduce a value !");
                 CodeBuilder.Append(" = nil");
             }
             CodeBuilder.AppendLine(",");
@@ -689,6 +689,7 @@ namespace RoslynTool.CsToLua
         }
         public override void VisitBinaryExpression(BinaryExpressionSyntax node)
         {
+            var ci = m_ClassInfoStack.Peek();
             var oper = m_Model.GetOperation(node);
 
             string op = node.OperatorToken.Text;
@@ -699,11 +700,11 @@ namespace RoslynTool.CsToLua
                 VisitExpressionSyntax(node.Left);
                 CodeBuilder.Append(", ");
                 if (op == "as" || op == "is") {
-                    CodeBuilder.Append("\"");
-                }
-                VisitExpressionSyntax(node.Right);
-                if (op == "as" || op == "is") {
-                    CodeBuilder.Append("\"");
+                    var typeInfo = m_Model.GetTypeInfo(node.Right);
+                    var type = typeInfo.Type;
+                    OutputType(type, node, ci, op);
+                } else {
+                    VisitExpressionSyntax(node.Right);
                 }
                 CodeBuilder.Append(")");
             } else {
@@ -788,40 +789,7 @@ namespace RoslynTool.CsToLua
 
             var oper = m_Model.GetOperation(node) as ITypeOfExpression;
             var type = oper.TypeOperand;
-            if (null != type) {
-                if (type.TypeKind == TypeKind.TypeParameter) {
-                    var typeParam = type as ITypeParameterSymbol;
-                    if (typeParam.TypeParameterKind == TypeParameterKind.Type) {
-                        IMethodSymbol sym = FindClassMethodDeclaredSymbol(node);
-                        if (null != sym) {
-                            if (sym.IsStatic) {
-                                CodeBuilder.Append(type.Name);
-                            } else {
-                                CodeBuilder.AppendFormat("this.{0}", type.Name);
-                            }
-                        } else {
-                            ISymbol varSym = FindVariableDeclaredSymbol(node);
-                            if (null != varSym) {
-                                CodeBuilder.Append(type.Name);
-                            } else {
-                                CodeBuilder.Append(type.Name);
-                            }
-                        }
-                    } else {
-                        CodeBuilder.Append(type.Name);
-                    }
-                } else {
-                    var fullName = ClassInfo.GetFullName(type);
-                    CodeBuilder.Append(fullName);
-
-                    var namedType = type as INamedTypeSymbol;
-                    if (null != namedType) {
-                        ci.AddReference(namedType, ci.SemanticInfo);
-                    }
-                }
-            } else {
-                Log(node, "Unknown Type of typeof(Type) ! ");
-            }
+            OutputType(type, node, ci, "typeof");
         }
         public override void VisitCastExpression(CastExpressionSyntax node)
         {
@@ -831,12 +799,9 @@ namespace RoslynTool.CsToLua
             VisitExpressionSyntax(node.Expression);
             var typeInfo = m_Model.GetTypeInfo(node.Type);
             var type = typeInfo.Type;
-            CodeBuilder.AppendFormat(", \"{0}\")", ClassInfo.GetFullName(type));
-
-            var namedType = type as INamedTypeSymbol;
-            if (null != namedType) {
-                ci.AddReference(namedType, ci.SemanticInfo);
-            }
+            CodeBuilder.Append(", ");
+            OutputType(type, node, ci, "cast");
+            CodeBuilder.Append(")");
         }
         public override void VisitDefaultExpression(DefaultExpressionSyntax node)
         {
@@ -1314,15 +1279,15 @@ namespace RoslynTool.CsToLua
         {
             return GetIndentString(m_Indent);
         }
-        private void Log(CSharpSyntaxNode node, string format, params object[] args)
+        private void Log(SyntaxNode node, string format, params object[] args)
         {
             Logger.Instance.Log(node, format, args);
         }
-        private void ReportIllegalSymbol(CSharpSyntaxNode node, SymbolInfo symInfo)
+        private void ReportIllegalSymbol(SyntaxNode node, SymbolInfo symInfo)
         {
             Logger.Instance.ReportIllegalSymbol(node, symInfo);
         }
-        private void ReportIllegalType(CSharpSyntaxNode node, ITypeSymbol typeSym)
+        private void ReportIllegalType(SyntaxNode node, ITypeSymbol typeSym)
         {
             Logger.Instance.ReportIllegalType(node, typeSym);
         }
@@ -1447,6 +1412,47 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.Append("nil");
             } else {
                 CodeBuilder.Append(val);
+            }
+        }
+        private void OutputType(ITypeSymbol type, SyntaxNode node, ClassInfo ci, string errorTag)
+        {
+            if (null != type && type.TypeKind != TypeKind.Error) {
+                if (type.TypeKind == TypeKind.TypeParameter) {
+                    var typeParam = type as ITypeParameterSymbol;
+                    if (typeParam.TypeParameterKind == TypeParameterKind.Type) {
+                        IMethodSymbol sym = FindClassMethodDeclaredSymbol(node);
+                        if (null != sym) {
+                            if (sym.IsStatic) {
+                                CodeBuilder.Append(type.Name);
+                            } else {
+                                CodeBuilder.AppendFormat("this.{0}", type.Name);
+                            }
+                        } else {
+                            ISymbol varSym = FindVariableDeclaredSymbol(node);
+                            if (null != varSym) {
+                                CodeBuilder.Append(type.Name);
+                            } else {
+                                CodeBuilder.Append(type.Name);
+                            }
+                        }
+                    } else {
+                        CodeBuilder.Append(type.Name);
+                    }
+                } else {
+                    var fullName = ClassInfo.GetFullName(type);
+                    CodeBuilder.Append(fullName);
+
+                    var namedType = type as INamedTypeSymbol;
+                    if (null != namedType) {
+                        ci.AddReference(namedType, ci.SemanticInfo);
+                    }
+                }
+            } else if (null != type) {
+                CodeBuilder.Append("nil");
+                ReportIllegalType(node, type);
+            } else {
+                CodeBuilder.Append("nil");
+                Log(node, "Unknown {0} Type !", errorTag);
             }
         }
         private void ProcessUnaryOperator(CSharpSyntaxNode node, ref string op)
@@ -1924,7 +1930,7 @@ namespace RoslynTool.CsToLua
                         VisitArgumentList(node.ArgumentList);
                     }
                 } else {
-                    Log(node, "Unknown ObjectCreationExpressionSyntax ! ");
+                    Log(node, "Unknown ObjectCreationExpressionSyntax !");
                 }
             }
         }
@@ -2120,7 +2126,7 @@ namespace RoslynTool.CsToLua
 
             if (!m_EnableInherit && !ClassInfo.HasAttribute(declSym, "Cs2Lua.EnableInheritAttribute") && !ClassInfo.HasAttribute(declSym.BaseType, "Cs2Lua.EnableInheritAttribute")) {
                 if (!string.IsNullOrEmpty(ci.BaseClassName) && ci.BaseClassName != "Object" && ci.BaseClassName != "ValueType") {
-                    Log(node, "Cs2Lua class/struct can't inherit ! ");
+                    Log(node, "Cs2Lua class/struct can't inherit !");
                 }
             }
 
