@@ -711,9 +711,11 @@ namespace RoslynTool.CsToLua
                 if (op == "+" && oper.Type.Name == "String") {
                     op = "..";
                 }
+                CodeBuilder.Append("(");
                 VisitExpressionSyntax(node.Left);
                 CodeBuilder.AppendFormat(" {0} ", op);
                 VisitExpressionSyntax(node.Right);
+                CodeBuilder.Append(")");
             }
         }
         public override void VisitConditionalExpression(ConditionalExpressionSyntax node)
@@ -766,6 +768,7 @@ namespace RoslynTool.CsToLua
                 ProcessUnaryOperator(node, ref op);
                 CodeBuilder.Append("(");
                 CodeBuilder.Append(op);
+                CodeBuilder.Append(" ");
                 VisitExpressionSyntax(node.Operand);
                 CodeBuilder.Append(")");
             }
@@ -779,6 +782,7 @@ namespace RoslynTool.CsToLua
             } else {
                 CodeBuilder.Append("(");
                 CodeBuilder.Append(op);
+                CodeBuilder.Append(" ");
                 VisitExpressionSyntax(node.Operand);
                 CodeBuilder.Append(")");
             }

@@ -390,7 +390,7 @@ namespace RoslynTool.CsToLua
                     }
                 }
             }
-            return WrapMethodName(sb.ToString(), methodSym, assemblySym);
+            return sb.ToString();
         }
         internal static string CheckLuaKeyword(string name, out bool change)
         {
@@ -399,17 +399,6 @@ namespace RoslynTool.CsToLua
                 return "__compiler_" + name;
             } else {
                 change = false;                
-                return name;
-            }
-        }
-        internal static string WrapMethodName(string name, IMethodSymbol methodSym, IAssemblySymbol assemblySym)
-        {
-            if (ForSlua && methodSym.IsStatic && methodSym.ContainingAssembly != assemblySym) {
-                if (name.StartsWith("op_"))
-                    return name;
-                else
-                    return name + "_s";
-            } else {
                 return name;
             }
         }

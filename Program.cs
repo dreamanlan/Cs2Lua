@@ -121,7 +121,7 @@ namespace RoslynTool
                     }
                 }
             } else {
-                Console.WriteLine("[Usage]:Cs2Lua [-ext fileext] [-enableinherit] [-normallua] [-d macro] [-refbyname dllname alias] [-refbypath dllpath alias] csfile|csprojfile");
+                Console.WriteLine("[Usage]:Cs2Lua [-ext fileext] [-enableinherit] [-normallua] [-d macro] [-refbyname dllname alias] [-refbypath dllpath alias] [-src] csfile|csprojfile");
                 Console.WriteLine("\twhere:");
                 Console.WriteLine("\t\tfileext = file externsion, default is txt for unity3d, maybe lua for other usage.");
                 Console.WriteLine("\t\tmacro = c# macro define, used in your csharp code #if/#elif/#else/#endif etc.");
