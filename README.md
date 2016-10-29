@@ -22,11 +22,11 @@ CSharp代码转lua，适用于使用lua实现热更新而又想有一个强类�
 
 1、不完全支持类的继承与泛型（可以实现接口），主要原因是lua的元表机制很难完美实现c#对象继承的详细语义同时还保持良好的效率与可理解性。并且支持接口与partial类后，继承的很多特性可以很优雅的实现。
 
-2、不支持异常相关语句（try/catch/finally/filter）。
+2、忽略异常相关语句（try/catch/finally/filter）。
 
 3、不支持指针与内存相关操作fixed/*/&/stackalloc。
 
-4、不支持yield/async/wait/lock等异步或并发相关设施。
+4、不支持async/wait/lock等异步或并发相关设施。
 
 5、不支持label与goto语句。
 
@@ -59,6 +59,10 @@ CSharp代码转lua，适用于使用lua实现热更新而又想有一个强类�
 11、枚举支持。
 
 12、支持ref/out参数。
+
+13、扩展方法。
+
+14、yield与协程。
 
 *** CsToLua.cs是目前支持的语法（Visit开头的方法）.
 
