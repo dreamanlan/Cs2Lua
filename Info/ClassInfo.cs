@@ -318,16 +318,17 @@ namespace RoslynTool.CsToLua
         internal List<string> GenericMethodTypeParamNames = new List<string>();
         internal string OriginalParamsName = string.Empty;
         internal bool ExistReturn = false;
+        internal bool ExistYield = false;
         internal bool ExistTypeOf = false;
 
         internal IMethodSymbol SemanticInfo = null;
         internal IPropertySymbol PropertySemanticInfo = null;
         
-        internal void Init(IMethodSymbol sym)
+        internal void Init(IMethodSymbol sym, SyntaxNode node)
         {
-            Init(sym, false);
+            Init(sym, node, false);
         }
-        internal void Init(IMethodSymbol sym, bool existTypeOf)
+        internal void Init(IMethodSymbol sym, SyntaxNode node, bool existTypeOf)
         {
             ParamNames.Clear();
             ReturnParamNames.Clear();
@@ -335,6 +336,7 @@ namespace RoslynTool.CsToLua
             OutParamNames.Clear();
             OriginalParamsName = string.Empty;
             ExistReturn = false;
+            ExistYield = false;
             ExistTypeOf = existTypeOf;
             
             SemanticInfo = sym;
@@ -372,6 +374,15 @@ namespace RoslynTool.CsToLua
                     ReturnParamNames.Add(param.Name);
                 } else {
                     ParamNames.Add(param.Name);
+                }
+            }
+
+            if (!sym.ReturnsVoid) {
+                var returnType = ClassInfo.GetFullName(sym.ReturnType);
+                if (returnType.StartsWith("System.Collections") && (sym.ReturnType.Name == "IEnumerable" || sym.ReturnType.Name == "IEnumerator")) {
+                    var analysis = new YieldAnalysis();
+                    analysis.Visit(node);
+                    ExistYield = analysis.YieldCount > 0;
                 }
             }
         }

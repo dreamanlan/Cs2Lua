@@ -42,6 +42,14 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			GTest__TopLevel_SecondLevel_GenericClass_Single = function(this, arg)
 			end,
+			Iterator = wrapenumerable(function(this)
+				coroutine.yield(nil);
+				return nil;
+			end),
+			Iterator2 = wrapenumerable(function(this)
+				coroutine.yield(nil);
+				return nil;
+			end),
 			Test = function(this)
 				local t = newobject(TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT, "ctor", {}, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
 				t:Test(System.Int32, 123);
@@ -64,10 +72,10 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			TestSwitch = function(this)
 				local i = 10;
-				local __compiler_switch_138 = i;
-				if __compiler_switch_138 == 1 then
+				local __compiler_switch_150 = i;
+				if __compiler_switch_150 == 1 then
 					return ;
-				elseif __compiler_switch_138 == 2 then
+				elseif __compiler_switch_150 == 2 then
 					return ;
 				else
 					return ;

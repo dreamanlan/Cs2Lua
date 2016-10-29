@@ -161,6 +161,14 @@ function wrapdelegation(handlers)
   return setmetatable(handlers, __mt_delegation);
 end;
 
+function wrapenumerable(func)
+	return function(...)
+		local args = ...;
+		local f = coroutine.wrap(func);
+		return WrapEnumerator(function() return f(args); end);
+	end;
+end;
+
 LuaConsole = {
   Write = function(...)
     io.write(...);

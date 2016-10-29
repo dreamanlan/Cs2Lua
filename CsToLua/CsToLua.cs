@@ -248,7 +248,7 @@ namespace RoslynTool.CsToLua
 
             bool isStatic = declSym.IsStatic;
             var mi = new MethodInfo();
-            mi.Init(declSym, m_SymbolTable.ExistTypeOf(declSym));
+            mi.Init(declSym, node, m_SymbolTable.ExistTypeOf(declSym));
             m_MethodInfoStack.Push(mi);
 
             string manglingName = NameMangling(declSym);
@@ -357,7 +357,7 @@ namespace RoslynTool.CsToLua
             }
 
             var mi = new MethodInfo();
-            mi.Init(declSym, m_SymbolTable.ExistTypeOf(declSym));
+            mi.Init(declSym, node, m_SymbolTable.ExistTypeOf(declSym));
             m_MethodInfoStack.Push(mi);
 
             string manglingName = NameMangling(declSym);
@@ -380,7 +380,7 @@ namespace RoslynTool.CsToLua
                 --m_Indent;
             }
             bool isStatic = declSym.IsStatic;
-            CodeBuilder.AppendFormat("{0}{1} = function({2}", GetIndentString(), manglingName, isStatic ? string.Empty : "this");
+            CodeBuilder.AppendFormat("{0}{1} = {2}function({3}", GetIndentString(), manglingName, mi.ExistYield ? "wrapenumerable(" : string.Empty, isStatic ? string.Empty : "this");
             if (mi.ParamNames.Count > 0) {
                 if (!isStatic) {
                     CodeBuilder.Append(", ");
@@ -406,7 +406,7 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.AppendLine();
             }
             --m_Indent;
-            CodeBuilder.AppendFormat("{0}end", GetIndentString());
+            CodeBuilder.AppendFormat("{0}end{1}", GetIndentString(), mi.ExistYield ? ")" : string.Empty);
             if (m_Indent > 0) {
                 CodeBuilder.Append(",");
             }
@@ -463,18 +463,18 @@ namespace RoslynTool.CsToLua
                     var sym = m_Model.GetDeclaredSymbol(accessor);
                     if (null != sym) {
                         var mi = new MethodInfo();
-                        mi.Init(sym, m_SymbolTable.ExistTypeOf(sym));
+                        mi.Init(sym, accessor, m_SymbolTable.ExistTypeOf(sym));
                         m_MethodInfoStack.Push(mi);
 
                         string keyword = accessor.Keyword.Text;
-                        CodeBuilder.AppendFormat("{0}{1} = function({2})", GetIndentString(), keyword, keyword == "get" ? "this" : "this, value");
+                        CodeBuilder.AppendFormat("{0}{1} = {2}function({3})", GetIndentString(), keyword, mi.ExistYield ? "wrapenumerable(" : string.Empty, keyword == "get" ? "this" : "this, value");
                         CodeBuilder.AppendLine();
                         ++m_Indent;
                         if (null != accessor.Body) {
                             VisitBlock(accessor.Body);
                         }
                         --m_Indent;
-                        CodeBuilder.AppendFormat("{0}end,", GetIndentString());
+                        CodeBuilder.AppendFormat("{0}end{1},", GetIndentString(), mi.ExistYield ? ")" : string.Empty);
                         CodeBuilder.AppendLine();
 
                         m_MethodInfoStack.Pop();
@@ -507,7 +507,7 @@ namespace RoslynTool.CsToLua
                 var sym = m_Model.GetDeclaredSymbol(accessor);
                 if (null != sym) {
                     var mi = new MethodInfo();
-                    mi.Init(sym, m_SymbolTable.ExistTypeOf(sym));
+                    mi.Init(sym, accessor, m_SymbolTable.ExistTypeOf(sym));
                     m_MethodInfoStack.Push(mi);
 
                     string keyword = accessor.Keyword.Text;
@@ -553,7 +553,7 @@ namespace RoslynTool.CsToLua
                 var sym = m_Model.GetDeclaredSymbol(accessor);
                 if (null != sym) {
                     var mi = new MethodInfo();
-                    mi.Init(sym, m_SymbolTable.ExistTypeOf(sym));
+                    mi.Init(sym, accessor, m_SymbolTable.ExistTypeOf(sym));
                     m_MethodInfoStack.Push(mi);
 
                     string keyword = accessor.Keyword.Text;
@@ -593,7 +593,7 @@ namespace RoslynTool.CsToLua
             var sym = symInfo.Symbol as IMethodSymbol;
             if (null != sym) {
                 var mi = new MethodInfo();
-                mi.Init(sym);
+                mi.Init(sym, node);
                 m_MethodInfoStack.Push(mi);
 
                 CodeBuilder.Append("(function(");
@@ -624,7 +624,7 @@ namespace RoslynTool.CsToLua
             var sym = symInfo.Symbol as IMethodSymbol;
             if (null != sym) {
                 var mi = new MethodInfo();
-                mi.Init(sym);
+                mi.Init(sym, node);
                 m_MethodInfoStack.Push(mi);
 
                 CodeBuilder.Append("(function(");
@@ -1211,7 +1211,30 @@ namespace RoslynTool.CsToLua
         }
         public override void VisitYieldStatement(YieldStatementSyntax node)
         {
-            Log(node, "Unsupported Syntax !");
+            MethodInfo mi = m_MethodInfoStack.Peek();
+            mi.ExistReturn = true;
+            mi.ExistYield = true;
+
+            if (node.ReturnOrBreakKeyword.Text == "return") {
+                CodeBuilder.AppendFormat("{0}coroutine.yield(", GetIndentString());
+                VisitExpressionSyntax(node.Expression);
+                CodeBuilder.Append(");");
+                CodeBuilder.AppendLine();
+            } else {
+                bool isLastNode = IsLastNodeOfParent(node);
+                if (!isLastNode) {
+                    CodeBuilder.AppendFormat("{0}do", GetIndentString());
+                    CodeBuilder.AppendLine();
+                }
+
+                CodeBuilder.AppendFormat("{0}return nil;", GetIndentString());
+                CodeBuilder.AppendLine();
+
+                if (!isLastNode) {
+                    CodeBuilder.AppendFormat("{0}end;", GetIndentString());
+                    CodeBuilder.AppendLine();
+                }
+            }
         }
         #endregion
 
@@ -1521,7 +1544,7 @@ namespace RoslynTool.CsToLua
             }
             return null;
         }
-        private bool IsLastNodeOfParent(ReturnStatementSyntax node)
+        private bool IsLastNodeOfParent(SyntaxNode node)
         {
             var parent = node.Parent;
             var nextNode = GetNextNode(node, parent);
@@ -1654,7 +1677,7 @@ namespace RoslynTool.CsToLua
                 if (null != msym) {
                     string manglingName = NameMangling(msym);
                     var mi = new MethodInfo();
-                    mi.Init(msym);
+                    mi.Init(msym, node);
 
                     CodeBuilder.Append("(function(");
                     string paramsString = string.Join(", ", mi.ParamNames.ToArray());
@@ -1912,7 +1935,7 @@ namespace RoslynTool.CsToLua
                     if (null != msym) {
                         string manglingName = NameMangling(msym);
                         var mi = new MethodInfo();
-                        mi.Init(msym);
+                        mi.Init(msym, node);
 
                         CodeBuilder.Append("(function(");
                         string paramsString = string.Join(", ", mi.ParamNames.ToArray());
@@ -2038,7 +2061,7 @@ namespace RoslynTool.CsToLua
                         var msym = sym as IMethodSymbol;
                         string manglingName = NameMangling(msym);
                         var mi = new MethodInfo();
-                        mi.Init(msym);
+                        mi.Init(msym, node);
                         if (node.Parent is InvocationExpressionSyntax) {
                             if (sym.IsStatic) {
                                 CodeBuilder.AppendFormat("{0}.{1}", classInfo.Key, manglingName);

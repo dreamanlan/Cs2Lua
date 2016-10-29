@@ -7,7 +7,6 @@ using System.Reflection;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using RoslynTool.CsToLua;
 
 namespace RoslynTool.CsToLua
 {

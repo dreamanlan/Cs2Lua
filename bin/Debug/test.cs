@@ -114,6 +114,18 @@ namespace TopLevel
             public void GTest(GenericClass<int> arg){}
             public void GTest(GenericClass<float> arg){}
 
+            public IEnumerable Iterator()
+            {
+                yield return null;
+                yield break;
+            }
+
+            public IEnumerator Iterator2()
+            {
+                yield return null;
+                yield break;
+            }
+
             public void Test()
             {
                 GenericClass<Test1>.InnerGenericClass<Test2> t = new GenericClass<Test1>.InnerGenericClass<Test2>(new Test1(), new Test2());
