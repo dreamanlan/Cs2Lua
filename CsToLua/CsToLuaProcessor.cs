@@ -129,9 +129,7 @@ namespace RoslynTool.CsToLua
             refs.Add(MetadataReference.CreateFromFile(typeof(List<>).Assembly.Location));
             refs.Add(MetadataReference.CreateFromFile(typeof(Dictionary<,>).Assembly.Location));
             refs.Add(MetadataReference.CreateFromFile(typeof(Queue<>).Assembly.Location));
-            refs.Add(MetadataReference.CreateFromFile(typeof(HashSet<>).Assembly.Location));
-            refs.Add(MetadataReference.CreateFromFile("../../dep/UnityEngine.dll"));
-            refs.Add(MetadataReference.CreateFromFile("../../dep/UnityEngine.UI.dll"));
+            refs.Add(MetadataReference.CreateFromFile(typeof(HashSet<>).Assembly.Location));            
             /*
             refs.Add(MetadataReference.CreateFromFile(typeof(System.Collections.Immutable.ImmutableArray).Assembly.Location));
             refs.Add(MetadataReference.CreateFromFile(typeof(SyntaxTree).Assembly.Location));
