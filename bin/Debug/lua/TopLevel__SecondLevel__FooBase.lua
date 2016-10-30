@@ -18,12 +18,20 @@ TopLevel.SecondLevel.FooBase = {
 		local static_events = {
 		};
 
-		local instance = {
+		local instance_methods = {
 			ctor = function(this)
 			end,
-
-			m_Ttt = 6789,
 		};
+
+		local instance_build = function()
+			local instance = {
+				m_Ttt = 6789,
+			};
+			for k,v in pairs(instance_methods) do
+				instance[k] = v;
+			end;
+			return instance;
+		end;
 
 		local instance_props = {
 		};
@@ -31,7 +39,7 @@ TopLevel.SecondLevel.FooBase = {
 		local instance_events = {
 		};
 
-		return defineclass(nil, static, static_props, static_events, instance, instance_props, instance_events);
+		return defineclass(nil, static, static_props, static_events, instance_build, instance_props, instance_events);
 	end,
 };
 

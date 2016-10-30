@@ -21,7 +21,7 @@ TopLevel.SecondLevel.Foo = {
 		local static_events = {
 		};
 
-		local instance = {
+		local instance_methods = {
 			ctor = function(this)
 				this:ctor__System_Int32(0);
 				this.__ctor();
@@ -96,14 +96,22 @@ TopLevel.SecondLevel.Foo = {
 				end
 				TopLevel.SecondLevel.Foo.__install_TopLevel_SecondLevel_FooExtension(this);
 			end,
-
-			OnSimple = wrapdelegation{},
-			OnSimple2 = wrapdelegation{},
-			m_Test = 0,
-			m_Test2 = 0,
-			m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, "ctor", nil, {"one", "two", "three"}),
-			__ctor_called = false,
 		};
+
+		local instance_build = function()
+			local instance = {
+				OnSimple = wrapdelegation{},
+				OnSimple2 = wrapdelegation{},
+				m_Test = 0,
+				m_Test2 = 0,
+				m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, "ctor", nil, {"one", "two", "three"}),
+				__ctor_called = false,
+			};
+			for k,v in pairs(instance_methods) do
+				instance[k] = v;
+			end;
+			return instance;
+		end;
 
 		local instance_props = {
 			Val = {
@@ -118,7 +126,7 @@ TopLevel.SecondLevel.Foo = {
 		local instance_events = {
 		};
 
-		return defineclass(TopLevel.SecondLevel.FooBase, static, static_props, static_events, instance, instance_props, instance_events);
+		return defineclass(TopLevel.SecondLevel.FooBase, static, static_props, static_events, instance_build, instance_props, instance_events);
 	end,
 };
 
@@ -143,11 +151,19 @@ TopLevel.SecondLevel.Foo.Test1 = {
 		local static_events = {
 		};
 
-		local instance = {
+		local instance_methods = {
 			ctor = function(this)
 			end,
-
 		};
+
+		local instance_build = function()
+			local instance = {
+			};
+			for k,v in pairs(instance_methods) do
+				instance[k] = v;
+			end;
+			return instance;
+		end;
 
 		local instance_props = {
 		};
@@ -155,7 +171,7 @@ TopLevel.SecondLevel.Foo.Test1 = {
 		local instance_events = {
 		};
 
-		return defineclass(nil, static, static_props, static_events, instance, instance_props, instance_events);
+		return defineclass(nil, static, static_props, static_events, instance_build, instance_props, instance_events);
 	end,
 };
 
@@ -180,11 +196,19 @@ TopLevel.SecondLevel.Foo.Test2 = {
 		local static_events = {
 		};
 
-		local instance = {
+		local instance_methods = {
 			ctor = function(this)
 			end,
-
 		};
+
+		local instance_build = function()
+			local instance = {
+			};
+			for k,v in pairs(instance_methods) do
+				instance[k] = v;
+			end;
+			return instance;
+		end;
 
 		local instance_props = {
 		};
@@ -192,7 +216,7 @@ TopLevel.SecondLevel.Foo.Test2 = {
 		local instance_events = {
 		};
 
-		return defineclass(nil, static, static_props, static_events, instance, instance_props, instance_events);
+		return defineclass(nil, static, static_props, static_events, instance_build, instance_props, instance_events);
 	end,
 };
 
@@ -217,13 +241,21 @@ TopLevel.SecondLevel.Foo.FooChild = {
 		local static_events = {
 		};
 
-		local instance = {
+		local instance_methods = {
 			ctor = function(this)
 			end,
-
-			m_Test1 = 123,
-			m_Test2 = 456,
 		};
+
+		local instance_build = function()
+			local instance = {
+				m_Test1 = 123,
+				m_Test2 = 456,
+			};
+			for k,v in pairs(instance_methods) do
+				instance[k] = v;
+			end;
+			return instance;
+		end;
 
 		local instance_props = {
 		};
@@ -231,7 +263,7 @@ TopLevel.SecondLevel.Foo.FooChild = {
 		local instance_events = {
 		};
 
-		return defineclass(nil, static, static_props, static_events, instance, instance_props, instance_events);
+		return defineclass(nil, static, static_props, static_events, instance_build, instance_props, instance_events);
 	end,
 };
 

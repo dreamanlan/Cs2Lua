@@ -2238,6 +2238,7 @@ namespace RoslynTool.CsToLua
                     member.Accept(this);
                 }
             }
+            ++m_Indent;
             ci.CurrentCodeBuilder = ci.InstanceFieldCodeBuilder;
             foreach (var member in node.Members) {
                 FieldDeclarationSyntax fieldDecl = member as FieldDeclarationSyntax;
@@ -2249,6 +2250,7 @@ namespace RoslynTool.CsToLua
                     VisitEventFieldDeclaration(ci, eventFieldDecl, false);
                 }
             }
+            --m_Indent;
             --m_Indent;
             --m_Indent;
             --m_Indent;

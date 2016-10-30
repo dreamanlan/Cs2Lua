@@ -169,6 +169,16 @@ function wrapenumerable(func)
 	end;
 end;
 
+function wrapyield(yieldVal, isEnumerableOrEnumerator, isUnityYield)
+	if isEnumerableOrEnumerator then
+		Yield(yieldVal);
+	elseif isUnityYield then
+		Yield(yieldVal);
+	else
+		coroutine.yield(yieldVal);
+	end;
+end;
+
 LuaConsole = {
   Write = function(...)
     io.write(...);
@@ -184,7 +194,7 @@ LuaString = {
   end,
 };
 
-function defineclass(base, static, static_props, static_events, instance, instance_props, instance_events)
+function defineclass(base, static, static_props, static_events, instance_build, instance_props, instance_events)
     
     local base_class = base or {};
     local mt = getmetatable(base_class);
@@ -200,7 +210,12 @@ function defineclass(base, static, static_props, static_events, instance, instan
         		if mt then
         			baseObj = mt.__call();
         		end;
-            local obj = instance or {};
+            local obj = nil;
+            if instance_build then
+            	obj = instance_build();
+            else
+            	obj = {};
+            end;
             local obj_props = instance_props or {};
             local obj_events = instance_events or {};
             obj["__class"] = class;

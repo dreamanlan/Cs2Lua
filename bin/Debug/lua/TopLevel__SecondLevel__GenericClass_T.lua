@@ -22,17 +22,25 @@ TopLevel.SecondLevel.GenericClass_T = {
 		local static_events = {
 		};
 
-		local instance = {
+		local instance_methods = {
 			ctor = function(this, v)
 				local v2 = nil;
 				this.m_Test = (v + 456);
 				v2 = 123;
 				return this, v, v2;
 			end,
-
-			m_Test = 123,
-			m_Test2 = (TopLevel.SecondLevel.GenericClass_T.TTT + 1),
 		};
+
+		local instance_build = function()
+			local instance = {
+				m_Test = 123,
+				m_Test2 = (TopLevel.SecondLevel.GenericClass_T.TTT + 1),
+			};
+			for k,v in pairs(instance_methods) do
+				instance[k] = v;
+			end;
+			return instance;
+		end;
 
 		local instance_props = {
 		};
@@ -40,7 +48,7 @@ TopLevel.SecondLevel.GenericClass_T = {
 		local instance_events = {
 		};
 
-		return defineclass(nil, static, static_props, static_events, instance, instance_props, instance_events);
+		return defineclass(nil, static, static_props, static_events, instance_build, instance_props, instance_events);
 	end,
 };
 
@@ -65,7 +73,7 @@ TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT = {
 		local static_events = {
 		};
 
-		local instance = {
+		local instance_methods = {
 			ctor = function(this, TT, T, v, vv)
 				this.__ctor(TT, T);
 				this.m_T = v;
@@ -89,16 +97,24 @@ TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT = {
 				else
 					this.__ctor_called = true;
 				end
-				self.m_TypeT = T;
-				self.m_TypeTT = TT;
+					self.m_TypeT = T;
+					self.m_TypeTT = TT;
 			end,
-
-			m_T = nil,
-			m_TT = nil,
-			m_TypeT = nil,
-			m_TypeTT = nil,
-			__ctor_called = false,
 		};
+
+		local instance_build = function()
+			local instance = {
+				m_T = nil,
+				m_TT = nil,
+				m_TypeT = nil,
+				m_TypeTT = nil,
+				__ctor_called = false,
+			};
+			for k,v in pairs(instance_methods) do
+				instance[k] = v;
+			end;
+			return instance;
+		end;
 
 		local instance_props = {
 		};
@@ -106,7 +122,7 @@ TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT = {
 		local instance_events = {
 		};
 
-		return defineclass(nil, static, static_props, static_events, instance, instance_props, instance_events);
+		return defineclass(nil, static, static_props, static_events, instance_build, instance_props, instance_events);
 	end,
 };
 

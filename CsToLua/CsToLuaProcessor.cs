@@ -607,7 +607,7 @@ namespace RoslynTool.CsToLua
                 sb.AppendLine();
 
                 if (!isStaticClass) {
-                    sb.AppendFormat("{0}local instance = {{", GetIndentString(indent));
+                    sb.AppendFormat("{0}local instance_methods = {{", GetIndentString(indent));
                     sb.AppendLine();
                     ++indent;
 
@@ -670,7 +670,20 @@ namespace RoslynTool.CsToLua
                         sb.AppendLine();
                     }
 
+                    --indent;
+                    sb.AppendFormat("{0}}};", GetIndentString(indent));
                     sb.AppendLine();
+
+                    sb.AppendLine();
+                    //实例构造函数（每次new都应该产生一个新实例，所以必须提供一个工厂函数）
+
+                    sb.AppendFormat("{0}local instance_build = function()", GetIndentString(indent));
+                    sb.AppendLine();
+                    ++indent;
+
+                    sb.AppendFormat("{0}local instance = {{", GetIndentString(indent));
+                    sb.AppendLine();
+                    ++indent;
 
                     //instance field
                     foreach (var ci in classes) {
@@ -688,6 +701,22 @@ namespace RoslynTool.CsToLua
 
                     --indent;
                     sb.AppendFormat("{0}}};", GetIndentString(indent));
+                    sb.AppendLine();
+
+                    sb.AppendFormat("{0}for k,v in pairs(instance_methods) do", GetIndentString(indent));
+                    sb.AppendLine();
+                    ++indent;
+                    sb.AppendFormat("{0}instance[k] = v;", GetIndentString(indent));
+                    sb.AppendLine();
+                    --indent;
+                    sb.AppendFormat("{0}end;", GetIndentString(indent));
+                    sb.AppendLine();
+
+                    sb.AppendFormat("{0}return instance;", GetIndentString(indent));
+                    sb.AppendLine();
+
+                    --indent;
+                    sb.AppendFormat("{0}end;", GetIndentString(indent));
                     sb.AppendLine();
 
                     sb.AppendLine();
@@ -724,7 +753,7 @@ namespace RoslynTool.CsToLua
 
                     sb.AppendLine();
                     
-                    sb.AppendFormat("{0}return defineclass({1}, static, static_props, static_events, instance, instance_props, instance_events);", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass);
+                    sb.AppendFormat("{0}return defineclass({1}, static, static_props, static_events, instance_build, instance_props, instance_events);", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass);
                     sb.AppendLine();
                 } else {
                     sb.AppendFormat("{0}return defineclass({1}, static, static_props, static_events, nil, nil, nil);", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass);
