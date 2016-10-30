@@ -162,7 +162,11 @@ function wrapdelegation(handlers)
 end;
 
 function wrapenumerable(func)
-	return coroutine.wrap(func);
+	return function(...)
+		local args = ...;
+		local f = coroutine.wrap(func);
+		return WrapEnumerator(function() return f(args); end);
+	end;
 end;
 
 LuaConsole = {

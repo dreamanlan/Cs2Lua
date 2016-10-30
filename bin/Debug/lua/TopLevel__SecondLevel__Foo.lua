@@ -43,11 +43,12 @@ TopLevel.SecondLevel.Foo = {
 			GTest__TopLevel_SecondLevel_GenericClass_Single = function(this, arg)
 			end,
 			Iterator = wrapenumerable(function(this)
-				coroutine.yield(nil);
+				wrapyield(nil, false, false);
+				wrapyield(newexternobject(UnityEngine.WaitForSeconds, "ctor", nil, {}, 3), false, true);
 				return nil;
 			end),
 			Iterator2 = wrapenumerable(function(this)
-				coroutine.yield(nil);
+				wrapyield(nil, false, false);
 				return nil;
 			end),
 			Test = function(this)
@@ -72,10 +73,10 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			TestSwitch = function(this)
 				local i = 10;
-				local __compiler_switch_150 = i;
-				if __compiler_switch_150 == 1 then
+				local __compiler_switch_152 = i;
+				if __compiler_switch_152 == 1 then
 					return ;
-				elseif __compiler_switch_150 == 2 then
+				elseif __compiler_switch_152 == 2 then
 					return ;
 				else
 					return ;

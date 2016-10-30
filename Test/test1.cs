@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 [Cs2Lua.Ignore]
@@ -89,6 +90,11 @@ class MyScript
 
         t = (Time.time - fogStart) / 10;
         Camera.main.backgroundColor = Color.Lerp(bgCurrent, bgColor, t);
+    }
+    public IEnumerator Test()
+    {
+        yield return new WaitForSeconds(3);
+        yield return null;
     }
 
     private void Reset()

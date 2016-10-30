@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -117,6 +118,7 @@ namespace TopLevel
             public IEnumerable Iterator()
             {
                 yield return null;
+                yield return new UnityEngine.WaitForSeconds(3);
                 yield break;
             }
 

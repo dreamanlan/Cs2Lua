@@ -1216,8 +1216,24 @@ namespace RoslynTool.CsToLua
             mi.ExistYield = true;
 
             if (node.ReturnOrBreakKeyword.Text == "return") {
-                CodeBuilder.AppendFormat("{0}coroutine.yield(", GetIndentString());
-                VisitExpressionSyntax(node.Expression);
+                CodeBuilder.AppendFormat("{0}wrapyield(", GetIndentString());
+                if (null != node.Expression) {
+                    var oper = m_Model.GetOperation(node.Expression);
+                    var type = oper.Type;
+                    VisitExpressionSyntax(node.Expression);
+                    if (null != type && (IsImplementationOfSys(type, "IEnumerable") || IsImplementationOfSys(type, "IEnumerator"))) {
+                        CodeBuilder.Append(", true");
+                    } else {
+                        CodeBuilder.Append(", false");
+                    }
+                    if (null != type && IsSubclassOf(type, "UnityEngine.YieldInstruction")) {
+                        CodeBuilder.Append(", true");
+                    } else {
+                        CodeBuilder.Append(", false");
+                    }
+                } else {
+                    CodeBuilder.Append("nil, false, false");
+                }
                 CodeBuilder.Append(");");
                 CodeBuilder.AppendLine();
             } else {
@@ -1712,7 +1728,7 @@ namespace RoslynTool.CsToLua
             var symInfo = m_Model.GetSymbolInfo(node);
             var sym = symInfo.Symbol as IPropertySymbol;
 
-            if (null != sym && sym.IsIndexer && !IsSysInterface(sym.ContainingType, "IDictionary") && !IsSysInterface(sym.ContainingType, "IList")) {
+            if (null != sym && sym.IsIndexer && !IsImplementationOfSys(sym.ContainingType, "IDictionary") && !IsImplementationOfSys(sym.ContainingType, "IList")) {
                 VisitExpressionSyntax(node.Expression);
                 if (sym.IsStatic)
                     CodeBuilder.Append(".__indexer_get(");
@@ -1759,8 +1775,8 @@ namespace RoslynTool.CsToLua
                 bool isComplex = node.IsKind(SyntaxKind.ComplexElementInitializerExpression);
                 if (isCollection) {
                     if (null != oper.Type) {
-                        bool isDictionary = IsSysInterface(oper.Type, "IDictionary");
-                        bool isList = IsSysInterface(oper.Type, "IList");
+                        bool isDictionary = IsImplementationOfSys(oper.Type, "IDictionary");
+                        bool isList = IsImplementationOfSys(oper.Type, "IList");
                         if (isDictionary) {
                             CodeBuilder.Append("{");
                             var args = node.Expressions;
@@ -1854,7 +1870,7 @@ namespace RoslynTool.CsToLua
                 ii.Init(sym, m_SymbolTable.AssemblySymbol, node.ArgumentList, m_SymbolTable.ExistTypeOf(sym));
                 ci.AddReference(sym, ci.SemanticInfo);
 
-                bool isCollection = IsSysInterface(typeSymInfo, "ICollection");
+                bool isCollection = IsImplementationOfSys(typeSymInfo, "ICollection");
                 bool isExternal = typeSymInfo.ContainingAssembly != m_SymbolTable.AssemblySymbol;
 
                 string ctor = NameMangling(sym);
@@ -1867,8 +1883,8 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.Append(" = ");
                 }
                 if (isCollection) {
-                    bool isDictionary = IsSysInterface(typeSymInfo, "IDictionary");
-                    bool isList = IsSysInterface(typeSymInfo, "IList");
+                    bool isDictionary = IsImplementationOfSys(typeSymInfo, "IDictionary");
+                    bool isList = IsImplementationOfSys(typeSymInfo, "IList");
                     if (isDictionary) {
                         //字典对象的处理
                         CodeBuilder.AppendFormat("new{0}dictionary({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
@@ -2523,7 +2539,7 @@ namespace RoslynTool.CsToLua
             var leftSym = leftSymbolInfo.Symbol;
             var propSym = leftSym as IPropertySymbol;
             var indexerNode = assign.Left as ElementAccessExpressionSyntax;
-            if (null != indexerNode && null != propSym && propSym.IsIndexer && !IsSysInterface(propSym.ContainingType, "IDictionary") && !IsSysInterface(propSym.ContainingType, "IList")) {
+            if (null != indexerNode && null != propSym && propSym.IsIndexer && !IsImplementationOfSys(propSym.ContainingType, "IDictionary") && !IsImplementationOfSys(propSym.ContainingType, "IList")) {
                 VisitExpressionSyntax(indexerNode.Expression);
                 if (propSym.IsStatic)
                     CodeBuilder.Append(".__indexer_set(");
@@ -2828,7 +2844,21 @@ namespace RoslynTool.CsToLua
             const string c_IndentString = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
             return c_IndentString.Substring(0, indent);
         }
-        private static bool IsSysInterface(ITypeSymbol symInfo, string name)
+        private static bool IsSubclassOf(ITypeSymbol symInfo, string name)
+        {
+            bool ret = false;
+            INamedTypeSymbol baseType = symInfo.BaseType;
+            while (null != baseType) {
+                string fullName = ClassInfo.GetFullName(baseType);
+                if (fullName == name) {
+                    ret = true;
+                    break;
+                }
+                baseType = baseType.BaseType;
+            }
+            return ret;
+        }
+        private static bool IsImplementationOfSys(ITypeSymbol symInfo, string name)
         {
             if (null != symInfo) {
                 foreach (var intf in symInfo.AllInterfaces) {
@@ -2842,7 +2872,7 @@ namespace RoslynTool.CsToLua
             }
             return false;
         }
-        private static bool IsInterface(ITypeSymbol symInfo, string name)
+        private static bool IsImplementationOf(ITypeSymbol symInfo, string name)
         {
             if (null != symInfo) {
                 foreach (var intf in symInfo.AllInterfaces) {

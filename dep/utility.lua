@@ -169,6 +169,16 @@ function wrapenumerable(func)
 	end;
 end;
 
+function wrapyield(yieldVal, isEnumerableOrEnumerator, isUnityYield)
+	if isEnumerableOrEnumerator then
+		Yield(yieldVal);
+	elseif isUnityYield then
+		Yield(yieldVal);
+	else
+		coroutine.yield(yieldVal);
+	end;
+end;
+
 LuaConsole = {
   Write = function(...)
     io.write(...);
