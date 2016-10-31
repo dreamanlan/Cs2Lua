@@ -1,0 +1,2 @@
+Cs2LuaScript = {
+};

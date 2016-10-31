@@ -1,0 +1,96 @@
+require "cs2lua__utility";
+require "cs2lua__namespaces";
+
+Mandelbrot = {
+	cctor = function()
+	end,
+
+
+	__new_object = function(...)
+		return newobject(Mandelbrot, nil, {}, ...);
+	end,
+	__define_class = function()
+		local static = Mandelbrot;
+
+		local static_props = {
+		};
+
+		local static_events = {
+		};
+
+		local instance_methods = {
+			Start = function(this, obj)
+				this.root = newexternobject(UnityEngine.GameObject, "ctor", nil, {}, "mandelbrot");
+				this:Exec();
+			end,
+			Exec = function(this)
+				local width = 50;
+				local height = width;
+				local maxiter = 50;
+				local limit = 4;
+				local y = 0;
+				while (y < height) do
+					local Ci = (((2 * y) / height) - 1);
+					local x = 0;
+					while (x < width) do
+						local Zr = 0;
+						local Zi = 0;
+						local Cr = (((2 * x) / width) - 1.5);
+						local i = maxiter;
+						local isInside = true;
+						repeat
+							local Tr = (((Zr * Zr) - (Zi * Zi)) + Cr);
+							Zi = (((2 * Zr) * Zi) + Ci);
+							Zr = Tr;
+							if (((Zr * Zr) + (Zi * Zi)) > limit) then
+								isInside = false;
+								break;
+							end;
+						until not (((function() i = i - 1; return i; end)() > 0));
+						if isInside then
+							this:DrawCube(x, y, width, height);
+						end;
+						x = x + 1;
+					end;
+					y = y + 1;
+				end;
+			end,
+			DrawCube = function(this, x, y, w, h)
+				local cube = UnityEngine.GameObject.CreatePrimitive(3);
+				cube.transform.position = newexternobject(UnityEngine.Vector3, "ctor", nil, {}, (((x * this.r) * this.scale) / w), ((((y * this.r) * this.scale) / h) - 12), 0);
+				cube.transform:SetParent(this.root.transform);
+				local mat = cube:GetComponent(UnityEngine.Renderer).material;
+				local ix = UnityEngine.Random.Range(0, this.colors.Length);
+				mat.color = this.colors[ix + 1];
+			end,
+			ctor = function(this)
+			end,
+		};
+
+		local instance_build = function()
+			local instance = {
+				root = nil,
+				colors = wraparray{UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black},
+				r = 10,
+				scale = 3,
+			};
+			for k,v in pairs(instance_methods) do
+				instance[k] = v;
+			end;
+			return instance;
+		end;
+
+		local instance_props = {
+		};
+
+		local instance_events = {
+		};
+
+		return defineclass(nil, static, static_props, static_events, instance_build, instance_props, instance_events);
+	end,
+};
+
+
+Mandelbrot.__define_class();
+
+--Mandelbrot.Exec();

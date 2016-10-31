@@ -1,0 +1,1227 @@
+﻿using System;
+using LuaInterface;
+using SLua;
+using System.Collections.Generic;
+public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int constructor(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint o;
+			o=new UnityEngine.ConfigurableJoint();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int GetComponent(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(matchType(l,argc,2,typeof(string))){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				var ret=self.GetComponent(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(matchType(l,argc,2,typeof(System.Type))){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				var ret=self.GetComponent(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int GetComponentInChildren(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==2){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				var ret=self.GetComponentInChildren(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==3){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				System.Boolean a2;
+				checkType(l,3,out a2);
+				var ret=self.GetComponentInChildren(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int GetComponentsInChildren(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==2){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				var ret=self.GetComponentsInChildren(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==3){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				System.Boolean a2;
+				checkType(l,3,out a2);
+				var ret=self.GetComponentsInChildren(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int GetComponentInParent(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			System.Type a1;
+			checkType(l,2,out a1);
+			var ret=self.GetComponentInParent(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int GetComponentsInParent(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==2){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				var ret=self.GetComponentsInParent(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==3){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				System.Boolean a2;
+				checkType(l,3,out a2);
+				var ret=self.GetComponentsInParent(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int GetComponents(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==2){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				var ret=self.GetComponents(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==3){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				System.Collections.Generic.List<UnityEngine.Component> a2;
+				checkType(l,3,out a2);
+				self.GetComponents(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int CompareTag(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.CompareTag(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int SendMessageUpwards(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==2){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				self.SendMessageUpwards(a1);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(string),typeof(UnityEngine.SendMessageOptions))){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				UnityEngine.SendMessageOptions a2;
+				checkEnum(l,3,out a2);
+				self.SendMessageUpwards(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(string),typeof(System.Object))){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				System.Object a2;
+				checkType(l,3,out a2);
+				self.SendMessageUpwards(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==4){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				System.Object a2;
+				checkType(l,3,out a2);
+				UnityEngine.SendMessageOptions a3;
+				checkEnum(l,4,out a3);
+				self.SendMessageUpwards(a1,a2,a3);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int SendMessage(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==2){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				self.SendMessage(a1);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(string),typeof(UnityEngine.SendMessageOptions))){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				UnityEngine.SendMessageOptions a2;
+				checkEnum(l,3,out a2);
+				self.SendMessage(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(string),typeof(System.Object))){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				System.Object a2;
+				checkType(l,3,out a2);
+				self.SendMessage(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==4){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				System.Object a2;
+				checkType(l,3,out a2);
+				UnityEngine.SendMessageOptions a3;
+				checkEnum(l,4,out a3);
+				self.SendMessage(a1,a2,a3);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int BroadcastMessage(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==2){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				self.BroadcastMessage(a1);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(string),typeof(UnityEngine.SendMessageOptions))){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				UnityEngine.SendMessageOptions a2;
+				checkEnum(l,3,out a2);
+				self.BroadcastMessage(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(string),typeof(System.Object))){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				System.Object a2;
+				checkType(l,3,out a2);
+				self.BroadcastMessage(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==4){
+				UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				System.Object a2;
+				checkType(l,3,out a2);
+				UnityEngine.SendMessageOptions a3;
+				checkEnum(l,4,out a3);
+				self.BroadcastMessage(a1,a2,a3);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int GetInstanceID(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			var ret=self.GetInstanceID();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_secondaryAxis(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.secondaryAxis);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_secondaryAxis(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.Vector3 v;
+			checkType(l,2,out v);
+			self.secondaryAxis=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_xMotion(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.xMotion);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_xMotion(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.ConfigurableJointMotion v;
+			checkEnum(l,2,out v);
+			self.xMotion=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_yMotion(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.yMotion);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_yMotion(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.ConfigurableJointMotion v;
+			checkEnum(l,2,out v);
+			self.yMotion=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_zMotion(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.zMotion);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_zMotion(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.ConfigurableJointMotion v;
+			checkEnum(l,2,out v);
+			self.zMotion=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_angularXMotion(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.angularXMotion);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_angularXMotion(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.ConfigurableJointMotion v;
+			checkEnum(l,2,out v);
+			self.angularXMotion=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_angularYMotion(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.angularYMotion);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_angularYMotion(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.ConfigurableJointMotion v;
+			checkEnum(l,2,out v);
+			self.angularYMotion=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_angularZMotion(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.angularZMotion);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_angularZMotion(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.ConfigurableJointMotion v;
+			checkEnum(l,2,out v);
+			self.angularZMotion=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_linearLimitSpring(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.linearLimitSpring);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_linearLimitSpring(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.SoftJointLimitSpring v;
+			checkValueType(l,2,out v);
+			self.linearLimitSpring=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_angularXLimitSpring(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.angularXLimitSpring);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_angularXLimitSpring(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.SoftJointLimitSpring v;
+			checkValueType(l,2,out v);
+			self.angularXLimitSpring=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_angularYZLimitSpring(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.angularYZLimitSpring);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_angularYZLimitSpring(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.SoftJointLimitSpring v;
+			checkValueType(l,2,out v);
+			self.angularYZLimitSpring=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_linearLimit(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.linearLimit);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_linearLimit(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.SoftJointLimit v;
+			checkValueType(l,2,out v);
+			self.linearLimit=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_lowAngularXLimit(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.lowAngularXLimit);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_lowAngularXLimit(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.SoftJointLimit v;
+			checkValueType(l,2,out v);
+			self.lowAngularXLimit=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_highAngularXLimit(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.highAngularXLimit);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_highAngularXLimit(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.SoftJointLimit v;
+			checkValueType(l,2,out v);
+			self.highAngularXLimit=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_angularYLimit(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.angularYLimit);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_angularYLimit(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.SoftJointLimit v;
+			checkValueType(l,2,out v);
+			self.angularYLimit=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_angularZLimit(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.angularZLimit);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_angularZLimit(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.SoftJointLimit v;
+			checkValueType(l,2,out v);
+			self.angularZLimit=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_targetPosition(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.targetPosition);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_targetPosition(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.Vector3 v;
+			checkType(l,2,out v);
+			self.targetPosition=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_targetVelocity(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.targetVelocity);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_targetVelocity(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.Vector3 v;
+			checkType(l,2,out v);
+			self.targetVelocity=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_xDrive(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.xDrive);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_xDrive(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.JointDrive v;
+			checkValueType(l,2,out v);
+			self.xDrive=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_yDrive(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.yDrive);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_yDrive(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.JointDrive v;
+			checkValueType(l,2,out v);
+			self.yDrive=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_zDrive(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.zDrive);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_zDrive(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.JointDrive v;
+			checkValueType(l,2,out v);
+			self.zDrive=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_targetRotation(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.targetRotation);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_targetRotation(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.Quaternion v;
+			checkType(l,2,out v);
+			self.targetRotation=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_targetAngularVelocity(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.targetAngularVelocity);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_targetAngularVelocity(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.Vector3 v;
+			checkType(l,2,out v);
+			self.targetAngularVelocity=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_rotationDriveMode(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.rotationDriveMode);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_rotationDriveMode(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.RotationDriveMode v;
+			checkEnum(l,2,out v);
+			self.rotationDriveMode=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_angularXDrive(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.angularXDrive);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_angularXDrive(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.JointDrive v;
+			checkValueType(l,2,out v);
+			self.angularXDrive=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_angularYZDrive(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.angularYZDrive);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_angularYZDrive(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.JointDrive v;
+			checkValueType(l,2,out v);
+			self.angularYZDrive=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_slerpDrive(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.slerpDrive);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_slerpDrive(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.JointDrive v;
+			checkValueType(l,2,out v);
+			self.slerpDrive=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_projectionMode(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.projectionMode);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_projectionMode(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			UnityEngine.JointProjectionMode v;
+			checkEnum(l,2,out v);
+			self.projectionMode=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_projectionDistance(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.projectionDistance);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_projectionDistance(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			float v;
+			checkType(l,2,out v);
+			self.projectionDistance=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_projectionAngle(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.projectionAngle);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_projectionAngle(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			float v;
+			checkType(l,2,out v);
+			self.projectionAngle=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_configuredInWorldSpace(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.configuredInWorldSpace);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_configuredInWorldSpace(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			bool v;
+			checkType(l,2,out v);
+			self.configuredInWorldSpace=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_swapBodies(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.swapBodies);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_swapBodies(IntPtr l) {
+		try {
+			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
+			bool v;
+			checkType(l,2,out v);
+			self.swapBodies=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	static public void reg(IntPtr l) {
+		getTypeTable(l,"UnityEngine.ConfigurableJoint");
+		addMember(l,GetComponent);
+		addMember(l,GetComponentInChildren);
+		addMember(l,GetComponentsInChildren);
+		addMember(l,GetComponentInParent);
+		addMember(l,GetComponentsInParent);
+		addMember(l,GetComponents);
+		addMember(l,CompareTag);
+		addMember(l,SendMessageUpwards);
+		addMember(l,SendMessage);
+		addMember(l,BroadcastMessage);
+		addMember(l,GetInstanceID);
+		addMember(l,"secondaryAxis",get_secondaryAxis,set_secondaryAxis,true);
+		addMember(l,"xMotion",get_xMotion,set_xMotion,true);
+		addMember(l,"yMotion",get_yMotion,set_yMotion,true);
+		addMember(l,"zMotion",get_zMotion,set_zMotion,true);
+		addMember(l,"angularXMotion",get_angularXMotion,set_angularXMotion,true);
+		addMember(l,"angularYMotion",get_angularYMotion,set_angularYMotion,true);
+		addMember(l,"angularZMotion",get_angularZMotion,set_angularZMotion,true);
+		addMember(l,"linearLimitSpring",get_linearLimitSpring,set_linearLimitSpring,true);
+		addMember(l,"angularXLimitSpring",get_angularXLimitSpring,set_angularXLimitSpring,true);
+		addMember(l,"angularYZLimitSpring",get_angularYZLimitSpring,set_angularYZLimitSpring,true);
+		addMember(l,"linearLimit",get_linearLimit,set_linearLimit,true);
+		addMember(l,"lowAngularXLimit",get_lowAngularXLimit,set_lowAngularXLimit,true);
+		addMember(l,"highAngularXLimit",get_highAngularXLimit,set_highAngularXLimit,true);
+		addMember(l,"angularYLimit",get_angularYLimit,set_angularYLimit,true);
+		addMember(l,"angularZLimit",get_angularZLimit,set_angularZLimit,true);
+		addMember(l,"targetPosition",get_targetPosition,set_targetPosition,true);
+		addMember(l,"targetVelocity",get_targetVelocity,set_targetVelocity,true);
+		addMember(l,"xDrive",get_xDrive,set_xDrive,true);
+		addMember(l,"yDrive",get_yDrive,set_yDrive,true);
+		addMember(l,"zDrive",get_zDrive,set_zDrive,true);
+		addMember(l,"targetRotation",get_targetRotation,set_targetRotation,true);
+		addMember(l,"targetAngularVelocity",get_targetAngularVelocity,set_targetAngularVelocity,true);
+		addMember(l,"rotationDriveMode",get_rotationDriveMode,set_rotationDriveMode,true);
+		addMember(l,"angularXDrive",get_angularXDrive,set_angularXDrive,true);
+		addMember(l,"angularYZDrive",get_angularYZDrive,set_angularYZDrive,true);
+		addMember(l,"slerpDrive",get_slerpDrive,set_slerpDrive,true);
+		addMember(l,"projectionMode",get_projectionMode,set_projectionMode,true);
+		addMember(l,"projectionDistance",get_projectionDistance,set_projectionDistance,true);
+		addMember(l,"projectionAngle",get_projectionAngle,set_projectionAngle,true);
+		addMember(l,"configuredInWorldSpace",get_configuredInWorldSpace,set_configuredInWorldSpace,true);
+		addMember(l,"swapBodies",get_swapBodies,set_swapBodies,true);
+		createTypeMetatable(l,constructor, typeof(UnityEngine.ConfigurableJoint),typeof(UnityEngine.Joint));
+	}
+}

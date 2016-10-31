@@ -1,0 +1,620 @@
+﻿using System;
+using LuaInterface;
+using SLua;
+using System.Collections.Generic;
+public class Lua_UnityEngine_LODGroup : LuaObject {
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int constructor(IntPtr l) {
+		try {
+			UnityEngine.LODGroup o;
+			o=new UnityEngine.LODGroup();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int RecalculateBounds(IntPtr l) {
+		try {
+			UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+			self.RecalculateBounds();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int GetLODs(IntPtr l) {
+		try {
+			UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+			var ret=self.GetLODs();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int SetLODs(IntPtr l) {
+		try {
+			UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+			UnityEngine.LOD[] a1;
+			checkArray(l,2,out a1);
+			self.SetLODs(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int ForceLOD(IntPtr l) {
+		try {
+			UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			self.ForceLOD(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int GetComponent(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(matchType(l,argc,2,typeof(string))){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				var ret=self.GetComponent(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(matchType(l,argc,2,typeof(System.Type))){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				var ret=self.GetComponent(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int GetComponentInChildren(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==2){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				var ret=self.GetComponentInChildren(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==3){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				System.Boolean a2;
+				checkType(l,3,out a2);
+				var ret=self.GetComponentInChildren(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int GetComponentsInChildren(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==2){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				var ret=self.GetComponentsInChildren(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==3){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				System.Boolean a2;
+				checkType(l,3,out a2);
+				var ret=self.GetComponentsInChildren(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int GetComponentInParent(IntPtr l) {
+		try {
+			UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+			System.Type a1;
+			checkType(l,2,out a1);
+			var ret=self.GetComponentInParent(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int GetComponentsInParent(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==2){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				var ret=self.GetComponentsInParent(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==3){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				System.Boolean a2;
+				checkType(l,3,out a2);
+				var ret=self.GetComponentsInParent(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int GetComponents(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==2){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				var ret=self.GetComponents(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==3){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				System.Collections.Generic.List<UnityEngine.Component> a2;
+				checkType(l,3,out a2);
+				self.GetComponents(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int CompareTag(IntPtr l) {
+		try {
+			UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.CompareTag(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int SendMessageUpwards(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==2){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				self.SendMessageUpwards(a1);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(string),typeof(UnityEngine.SendMessageOptions))){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				UnityEngine.SendMessageOptions a2;
+				checkEnum(l,3,out a2);
+				self.SendMessageUpwards(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(string),typeof(System.Object))){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				System.Object a2;
+				checkType(l,3,out a2);
+				self.SendMessageUpwards(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==4){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				System.Object a2;
+				checkType(l,3,out a2);
+				UnityEngine.SendMessageOptions a3;
+				checkEnum(l,4,out a3);
+				self.SendMessageUpwards(a1,a2,a3);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int SendMessage(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==2){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				self.SendMessage(a1);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(string),typeof(UnityEngine.SendMessageOptions))){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				UnityEngine.SendMessageOptions a2;
+				checkEnum(l,3,out a2);
+				self.SendMessage(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(string),typeof(System.Object))){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				System.Object a2;
+				checkType(l,3,out a2);
+				self.SendMessage(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==4){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				System.Object a2;
+				checkType(l,3,out a2);
+				UnityEngine.SendMessageOptions a3;
+				checkEnum(l,4,out a3);
+				self.SendMessage(a1,a2,a3);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int BroadcastMessage(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==2){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				self.BroadcastMessage(a1);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(string),typeof(UnityEngine.SendMessageOptions))){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				UnityEngine.SendMessageOptions a2;
+				checkEnum(l,3,out a2);
+				self.BroadcastMessage(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(string),typeof(System.Object))){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				System.Object a2;
+				checkType(l,3,out a2);
+				self.BroadcastMessage(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==4){
+				UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				System.Object a2;
+				checkType(l,3,out a2);
+				UnityEngine.SendMessageOptions a3;
+				checkEnum(l,4,out a3);
+				self.BroadcastMessage(a1,a2,a3);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int GetInstanceID(IntPtr l) {
+		try {
+			UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+			var ret=self.GetInstanceID();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_localReferencePoint(IntPtr l) {
+		try {
+			UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.localReferencePoint);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_localReferencePoint(IntPtr l) {
+		try {
+			UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+			UnityEngine.Vector3 v;
+			checkType(l,2,out v);
+			self.localReferencePoint=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_size(IntPtr l) {
+		try {
+			UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.size);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_size(IntPtr l) {
+		try {
+			UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+			float v;
+			checkType(l,2,out v);
+			self.size=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_lodCount(IntPtr l) {
+		try {
+			UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.lodCount);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_fadeMode(IntPtr l) {
+		try {
+			UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.fadeMode);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_fadeMode(IntPtr l) {
+		try {
+			UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+			UnityEngine.LODFadeMode v;
+			checkEnum(l,2,out v);
+			self.fadeMode=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_animateCrossFading(IntPtr l) {
+		try {
+			UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.animateCrossFading);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_animateCrossFading(IntPtr l) {
+		try {
+			UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+			bool v;
+			checkType(l,2,out v);
+			self.animateCrossFading=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_enabled(IntPtr l) {
+		try {
+			UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.enabled);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_enabled(IntPtr l) {
+		try {
+			UnityEngine.LODGroup self=(UnityEngine.LODGroup)checkSelf(l);
+			bool v;
+			checkType(l,2,out v);
+			self.enabled=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int get_crossFadeAnimationDuration(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.LODGroup.crossFadeAnimationDuration);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static public int set_crossFadeAnimationDuration(IntPtr l) {
+		try {
+			float v;
+			checkType(l,2,out v);
+			UnityEngine.LODGroup.crossFadeAnimationDuration=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	static public void reg(IntPtr l) {
+		getTypeTable(l,"UnityEngine.LODGroup");
+		addMember(l,RecalculateBounds);
+		addMember(l,GetLODs);
+		addMember(l,SetLODs);
+		addMember(l,ForceLOD);
+		addMember(l,GetComponent);
+		addMember(l,GetComponentInChildren);
+		addMember(l,GetComponentsInChildren);
+		addMember(l,GetComponentInParent);
+		addMember(l,GetComponentsInParent);
+		addMember(l,GetComponents);
+		addMember(l,CompareTag);
+		addMember(l,SendMessageUpwards);
+		addMember(l,SendMessage);
+		addMember(l,BroadcastMessage);
+		addMember(l,GetInstanceID);
+		addMember(l,"localReferencePoint",get_localReferencePoint,set_localReferencePoint,true);
+		addMember(l,"size",get_size,set_size,true);
+		addMember(l,"lodCount",get_lodCount,null,true);
+		addMember(l,"fadeMode",get_fadeMode,set_fadeMode,true);
+		addMember(l,"animateCrossFading",get_animateCrossFading,set_animateCrossFading,true);
+		addMember(l,"enabled",get_enabled,set_enabled,true);
+		addMember(l,"crossFadeAnimationDuration",get_crossFadeAnimationDuration,set_crossFadeAnimationDuration,false);
+		createTypeMetatable(l,constructor, typeof(UnityEngine.LODGroup),typeof(UnityEngine.Component));
+	}
+}
