@@ -1,6 +1,10 @@
 # Cs2Lua
 CSharp代码转lua，适用于使用lua实现热更新而又想有一个强类型检查的语言的场合
 
+【示例链接】
+
+https://github.com/dreamanlan/Cs2Lua/tree/master/Test
+
 【源由】
 
 1、基于unity3d的移动游戏开发，在android与ios平台上的限制不同。在android上，我们可以拆分可执行文件为多个dll，然后运行时动态加载除主程序外的其它dll，这样也v允许了对dll的单独更新，然而ios上此路不通，ios禁止使用jit与动态加载dll。为了实现热更新，游戏行业一般采用lua。
@@ -360,3 +364,7 @@ GetComponent<T>() => GetCompoent(Type)
 理论上按此顺序即可。
 
 *** 注意第3步的输出lua在工程文件所在目录下的lua目录里，日志在log目录里，必须检查日志文件确定没有错误才能继续！！！
+
+【示例链接】
+
+https://github.com/dreamanlan/Cs2Lua/tree/master/Test
