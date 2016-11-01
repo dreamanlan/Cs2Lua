@@ -43,7 +43,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IModulePlugin.cs" />
     <Compile Include="IStartupPlugin.cs" />
     <Compile Include="ITickPlugin.cs" />
     <Compile Include="PluginManager.cs" />

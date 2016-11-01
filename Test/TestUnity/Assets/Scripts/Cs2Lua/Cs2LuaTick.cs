@@ -4,43 +4,33 @@ using System.Collections;
 using System.Reflection;
 using SLua;
 
-public enum Cs2LuaLoadType
+public enum PluginType
 {
-    LuaTxt = 0,
-    CSharpDll,
+    Native = 0,
+    Lua,
 }
 public class Cs2LuaTick : MonoBehaviour
 {
-    public Cs2LuaLoadType LoadType;
+    public PluginType PluginType;
     public string LuaClassFileName;
 
     internal void Start()
     {
         string className = LuaClassFileName.Replace("__", ".");
-        if (LoadType == Cs2LuaLoadType.LuaTxt) {
+        if (PluginType == PluginType.Lua) {
             luaInited = false;
             StartCoroutine(StartupLua(className));
         } else {
-#if UNITY_IOS
             csObject = PluginManager.Instance.CreateTick(className);
             if (null != csObject) {
                 csObject.Init(gameObject);
             }
-#else
-            Assembly assembly = Cs2LuaAssembly.Instance.Assembly;
-            if (null != assembly) {
-                csObject = assembly.CreateInstance(className) as ITickPlugin;
-                if (null != csObject) {
-                    csObject.Init(gameObject);
-                }
-            }
-#endif
         }
     }
 
     internal void Update()
     {
-        if (LoadType == Cs2LuaLoadType.LuaTxt) {
+        if (PluginType == PluginType.Lua) {
             if (luaInited && null != update) {
                 update.call(self);
             }

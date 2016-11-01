@@ -7,27 +7,17 @@ using SLua;
 
 public class Cs2LuaStartup : MonoBehaviour
 {
-    public Cs2LuaLoadType LoadType;
+    public PluginType PluginType;
     public string LuaClassFileName;
 
     internal void Start()
     {
         string className = LuaClassFileName.Replace("__",".");
-        if (LoadType == Cs2LuaLoadType.LuaTxt) {
+        if (PluginType == PluginType.Lua) {
             StartCoroutine(StartupLua(className));
         } else {
-#if UNITY_IOS
             csObject = PluginManager.Instance.CreateStartup(className);
             csObject.Start(gameObject);
-#else
-            Assembly assembly = Cs2LuaAssembly.Instance.Assembly;
-            if (null != assembly) {
-                csObject = assembly.CreateInstance(className) as IStartupPlugin;
-                if (null != csObject) {
-                    csObject.Start(gameObject);
-                }
-            }
-#endif
         }
     }
 

@@ -24,14 +24,6 @@ public class PluginManager
         }
         return null;
     }
-    public IModulePlugin CreateModule(string name)
-    {
-        IModulePluginFactory factory;
-        if (m_ModuleFactories.TryGetValue(name, out factory)) {
-            return factory.CreateInstance();
-        }
-        return null;
-    }
     public IStartupPlugin CreateStartup(string name)
     {
         IStartupPluginFactory factory;
@@ -56,14 +48,6 @@ public class PluginManager
             m_ObjectFactories[name] = factory;
         }
     }
-    public void RegisterModuleFactory(string name, IModulePluginFactory factory)
-    {
-        if (!m_ModuleFactories.ContainsKey(name)) {
-            m_ModuleFactories.Add(name, factory);
-        } else {
-            m_ModuleFactories[name] = factory;
-        }
-    }
     public void RegisterStartupFactory(string name, IStartupPluginFactory factory)
     {
         if (!m_StartupFactories.ContainsKey(name)) {
@@ -82,7 +66,6 @@ public class PluginManager
     }
 
     private Dictionary<string, IObjectPluginFactory> m_ObjectFactories = new Dictionary<string, IObjectPluginFactory>();
-    private Dictionary<string, IModulePluginFactory> m_ModuleFactories = new Dictionary<string, IModulePluginFactory>();
     private Dictionary<string, IStartupPluginFactory> m_StartupFactories = new Dictionary<string, IStartupPluginFactory>();
     private Dictionary<string, ITickPluginFactory> m_TickFactories = new Dictionary<string, ITickPluginFactory>();
 
