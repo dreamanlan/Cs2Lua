@@ -399,14 +399,7 @@ namespace RoslynTool.CsToLua
 
         internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, ArgumentListSyntax argList, bool existTypeOf)
         {
-            MethodSymbol = sym;
-            AssemblySymbol = assemblySym;
-
-            Args.Clear();
-            ReturnArgs.Clear();
-            GenericTypeArgs.Clear();
-
-            ClassKey = ClassInfo.CalcMemberReference(sym);
+            Init(sym, assemblySym, existTypeOf);
 
             if (null != argList) {
                 var args = argList.Arguments;
@@ -433,9 +426,30 @@ namespace RoslynTool.CsToLua
                     }
                 }
             }
+        }
+        
+        internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, List<ExpressionSyntax> argList, bool existTypeOf)
+        {
+            Init(sym, assemblySym, existTypeOf);
 
+            if (null != argList) {
+                Args.AddRange(argList);
+            }
+        }
+
+        private void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, bool existTypeOf)
+        {
+            MethodSymbol = sym;
+            AssemblySymbol = assemblySym;
+
+            Args.Clear();
+            ReturnArgs.Clear();
+            GenericTypeArgs.Clear();
+
+            ClassKey = ClassInfo.CalcMemberReference(sym);
+            
             if (sym.IsGenericMethod) {
-                foreach(var arg in sym.TypeArguments) {
+                foreach (var arg in sym.TypeArguments) {
                     GenericTypeArgs.Add(arg);
                 }
             }

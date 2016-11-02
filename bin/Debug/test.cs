@@ -112,6 +112,20 @@ namespace TopLevel
             public Foo(int a, int b)
             {}
 
+            public static Foo operator + (Foo self, Foo other)
+            {
+                self.m_Test += other.m_Test;
+                return self;
+            }
+            public static explicit operator Foo (int a)
+            {
+                var f = new Foo();
+                f.m_Test = a;
+                return f;
+            }
+
+            public int Test123(int a, int b) => a+b;
+
             public void GTest(GenericClass<int> arg){}
             public void GTest(GenericClass<float> arg){}
 
@@ -188,6 +202,7 @@ namespace TopLevel
             {
                 LuaConsole.Print(1, 2, 3, 4, 5);
                 Foo f = new Foo();
+                Foo ff = new Foo();
 
                 Action f1 = f.Test;
                 f1();
@@ -197,7 +212,29 @@ namespace TopLevel
 
                 Test3(f);
 
+                var r = f + ff;
+
+                f+=ff;
+                
+                var rr = (Foo)123;
+
+                var rrr = 123 as Foo;
+
                 var obj = new GameObject("test test test");
+
+                var arr = new int[] {1,2,3,4,56};
+                var v = arr[2];
+                var dict = new Dictionary<int,int> {{1,2},{3,4}};
+                var v1 = dict?[1];
+                List<int> list = null;
+                var l = list?.Count;
+                list?.Add(1);
+                var v2 = list?[3]=1;
+                int[] arr2 = new int[]{1,2,3,4};
+                var v3 = arr2?[2]; 
+                arr2?[3]=345;
+                int a=1,b=2,c=3;
+                a=b=c++;
             }
         }
     }

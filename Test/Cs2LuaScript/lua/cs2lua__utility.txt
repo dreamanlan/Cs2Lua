@@ -24,7 +24,11 @@ function condexp(cv,tv,fv)
     end;
 end;
 
-function nullablecondexp(v1,v2)
+function condaccess(v, func)
+	return v and func();
+end;
+
+function nullcoalescing(v1,v2)
 	return v1 or v2;
 end;
 
@@ -149,6 +153,14 @@ __mt_delegation = {
   end;
 };
 
+function wrapstring(str)
+  if type(str)=="string" then
+    return System.String(str);
+  else
+    return str;
+  end;
+end;
+
 function wraparray(arr)
 	return setmetatable(arr, __mt_array);
 end;
@@ -244,6 +256,7 @@ function defineclass(base, static, static_props, static_events, instance_build, 
                         rawset(t, k, v);
                     end;
                 end,
+                
             });
 
             return obj;
@@ -401,6 +414,26 @@ function externdelegationremove(t, k, handler)
   else
     v = {"-=", handler};
   end;
+end;
+
+function getexternstaticindexer(obj, ...)
+
+end;
+function getexterninstanceindexer(obj, ...)
+
+end;
+
+function getelement(obj, ...)
+
+end;
+function setelement(obj, ...)
+  --为了适应表达式内嵌赋值，这个函数需要返回值
+end;
+function getexternelement(obj, ...)
+
+end;
+function setexternelement(obj, ...)
+  --为了适应表达式内嵌赋值，这个函数需要返回值
 end;
 
 function defineentry(class)

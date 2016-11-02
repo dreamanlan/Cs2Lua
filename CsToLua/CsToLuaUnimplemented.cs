@@ -12,27 +12,7 @@ namespace RoslynTool.CsToLua
     internal partial class CsLuaTranslater
     {
         #region 未计划支持的语法特性
-        public override void VisitArrowExpressionClause(ArrowExpressionClauseSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitConstructorInitializer(ConstructorInitializerSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
         public override void VisitDestructorDeclaration(DestructorDeclarationSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitExplicitInterfaceSpecifier(ExplicitInterfaceSpecifierSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitOperatorDeclaration(OperatorDeclarationSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitConversionOperatorDeclaration(ConversionOperatorDeclarationSyntax node)
         {
             Log(node, "Unsupported Syntax !");
         }
@@ -211,6 +191,12 @@ namespace RoslynTool.CsToLua
         #endregion
 
         #region 借助语义信息或直接在上层语法里处理过的语法部分，或者不需要翻译到lua而忽略的语法部分
+        public override void VisitArrowExpressionClause(ArrowExpressionClauseSyntax node)
+        { }
+        public override void VisitConstructorInitializer(ConstructorInitializerSyntax node)
+        { }
+        public override void VisitExplicitInterfaceSpecifier(ExplicitInterfaceSpecifierSyntax node)
+        { }
         public override void VisitGenericName(GenericNameSyntax node)
         { }
         public override void VisitTypeParameterList(TypeParameterListSyntax node)

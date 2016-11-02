@@ -16,12 +16,33 @@ TopLevel.SecondLevel.FooExtension = {
 	NormalMethod = function()
 		LuaConsole.Print(1, 2, 3, 4, 5);
 		local f = newobject(TopLevel.SecondLevel.Foo, "ctor", {});
+		local ff = newobject(TopLevel.SecondLevel.Foo, "ctor", {});
 		local f1 = delegationwrap((function() f:Test() end));
 		f1();
 		local f2 = delegationwrap((function() f:Test3() end));
 		f2();
 		TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo(f);
-		local obj = newexternobject(UnityEngine.GameObject, "ctor", (function(obj) UnityEngine.GameObject.__install_TopLevel_SecondLevel_FooExtension(obj); end), {}, "test test test");
+		local r = TopLevel.SecondLevel.Foo.op_Addition(f);
+		f = TopLevel.SecondLevel.Foo.op_Addition(f, ff);
+		local rr = TopLevel.SecondLevel.Foo.op_Explicit(123);
+		local rrr = typecast(123, TopLevel.SecondLevel.Foo);
+		local obj = newexternobject(UnityEngine.GameObject, "ctor", (function(obj) UnityEngine.GameObject.__install_TopLevel_SecondLevel_FooExtension(obj); end), {}, wrapstring("test test test"));
+		local arr = wraparray{1, 2, 3, 4, 56};
+		local v = arr[3];
+		local dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "ctor", nil, {[1] = 2, [3] = 4});
+		local v1 = condaccess(dict, getexterninstanceindexer(dict, 1));
+		local list = nil;
+		local l = condaccess(list, list.Count);
+		condaccess(list, listthis:Add(1));
+		local v2 = condaccess(list, setexterninstanceindexer(list, 3, 1));
+		local arr2 = wraparray{1, 2, 3, 4};
+		local v3 = condaccess(arr2, arr2[3]);
+		condaccess(arr2, (function() arr2[4] = 345; return 345; end)());
+		local a = 1;
+		local b = 2;
+		local c = 3;
+		a = (function() b = c; return b; end)();
+		c = c + 1;
 	end,
 	cctor = function()
 	end,

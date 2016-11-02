@@ -6,3 +6,6 @@ set workdir=%~dp0
 xcopy %workdir%\Cs2LuaScript\lua\*.txt %workdir%\TestUnity\Assets\Slua\Resources /y /q
 xcopy %workdir%\Cs2LuaScript\bin\Debug\Cs2LuaScript.dll %workdir%\TestUnity\Assets\StreamingAssets /y /q
 xcopy %workdir%\Cs2LuaScript\bin\Debug\Cs2LuaUtility.dll %workdir%\TestUnity\Assets\StreamingAssets /y /q
+
+del /a /f %workdir%\TestUnity\Assets\Plugins\Cs2LuaScript.dll
+del /a /f %workdir%\TestUnity\Assets\Plugins\Cs2LuaUtility.dll

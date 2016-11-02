@@ -4,6 +4,15 @@ require "TopLevel__SecondLevel__FooBase";
 require "TopLevel__SecondLevel__GenericClass_T";
 
 TopLevel.SecondLevel.Foo = {
+	op_Addition = function(self, other)
+		self.m_Test = self.m_Test + other.m_Test;
+		return self;
+	end,
+	op_Explicit = function(a)
+		local f = newobject(TopLevel.SecondLevel.Foo, "ctor", {});
+		f.m_Test = a;
+		return f;
+	end,
 	cctor = function()
 		TopLevel.SecondLevel.FooBase.cctor(this);
 	end,
@@ -37,6 +46,9 @@ TopLevel.SecondLevel.Foo = {
 				base.ctor(this);
 				this.__ctor();
 				return this;
+			end,
+			Test123 = function(this, a, b)
+				return (a + b);
 			end,
 			GTest__TopLevel_SecondLevel_GenericClass_Int32 = function(this, arg)
 			end,
@@ -73,10 +85,10 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			TestSwitch = function(this)
 				local i = 10;
-				local __compiler_switch_152 = i;
-				if __compiler_switch_152 == 1 then
+				local __compiler_switch_166 = i;
+				if __compiler_switch_166 == 1 then
 					return ;
-				elseif __compiler_switch_152 == 2 then
+				elseif __compiler_switch_166 == 2 then
 					return ;
 				else
 					return ;
@@ -104,7 +116,7 @@ TopLevel.SecondLevel.Foo = {
 				OnSimple2 = wrapdelegation{},
 				m_Test = 0,
 				m_Test2 = 0,
-				m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, "ctor", nil, {"one", "two", "three"}),
+				m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, "ctor", nil, {wrapstring("one"), wrapstring("two"), wrapstring("three")}),
 				__ctor_called = false,
 			};
 			for k,v in pairs(instance_methods) do

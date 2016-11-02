@@ -21,14 +21,14 @@ MyScript = {
 
 		local instance_methods = {
 			Init = function(this, obj)
-				local s = "test test test from cs2lua !";
+				local s = wrapstring("test test test from cs2lua !");
 				UnityEngine.Debug.Log(s);
-				this.root = newexternobject(UnityEngine.GameObject, "ctor", nil, {}, "root");
-				local slider = typecast(UnityEngine.GameObject.Find("Canvas/Slider"):GetComponent(UnityEngine.UI.Slider), UnityEngine.UI.Slider);
-				local counttxt = typecast(UnityEngine.GameObject.Find("Canvas/Count"):GetComponent(UnityEngine.UI.Text), UnityEngine.UI.Text);
+				this.root = newexternobject(UnityEngine.GameObject, "ctor", nil, {}, wrapstring("root"));
+				local slider = typecast(UnityEngine.GameObject.Find(wrapstring("Canvas/Slider")):GetComponent(UnityEngine.UI.Slider), UnityEngine.UI.Slider);
+				local counttxt = typecast(UnityEngine.GameObject.Find(wrapstring("Canvas/Count")):GetComponent(UnityEngine.UI.Text), UnityEngine.UI.Text);
 				slider.onValueChanged:AddListener((function(v)
 					this:Reset();
-					counttxt.text = LuaString.Format("cube:{0}", v);
+					counttxt.text = LuaString.Format(wrapstring("cube:{0}"), v);
 					this.max = typecast(v, System.Int32);
 				end));
 				this:Reset();
@@ -61,7 +61,7 @@ MyScript = {
 					end;
 				end;
 				this.cubes = wraparray{};
-				local P = UnityEngine.Resources.Load("Particle System");
+				local P = UnityEngine.Resources.Load(wrapstring("Particle System"));
 				local i = 0;
 				while (i < this.max) do
 					local cube = UnityEngine.GameObject.CreatePrimitive(3);
