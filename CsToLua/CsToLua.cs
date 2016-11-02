@@ -280,7 +280,7 @@ namespace RoslynTool.CsToLua
             CodeBuilder.AppendLine();
             ++m_Indent;
             if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
-                CodeBuilder.AppendFormat("{0}local {1} = ...;", GetIndentString(), mi.OriginalParamsName);
+                CodeBuilder.AppendFormat("{0}local {1} = {...};", GetIndentString(), mi.OriginalParamsName);
                 CodeBuilder.AppendLine();
             }
             foreach (string name in mi.OutParamNames) {
@@ -639,12 +639,12 @@ namespace RoslynTool.CsToLua
                 var castOper = oper as IConversionExpression;
                 if (null != castOper) {
                     InvocationInfo ii = new InvocationInfo();
-                    var arglist = new List<ExpressionSyntax>() { node.Left, node.Right };
+                    var arglist = new List<ExpressionSyntax>() { node.Left };
                     ii.Init(msym, m_SymbolTable.AssemblySymbol, arglist, m_SymbolTable.ExistTypeOf(msym));
                     OutputOperatorInvoke(ii);
                 } else {
                     InvocationInfo ii = new InvocationInfo();
-                    var arglist = new List<ExpressionSyntax>() { node.Left };
+                    var arglist = new List<ExpressionSyntax>() { node.Left, node.Right };
                     ii.Init(msym, m_SymbolTable.AssemblySymbol, arglist, m_SymbolTable.ExistTypeOf(msym));
                     OutputOperatorInvoke(ii);
                 }
@@ -1627,11 +1627,19 @@ namespace RoslynTool.CsToLua
         }
         private void OutputOperatorInvoke(InvocationInfo ii)
         {
-            CodeBuilder.AppendFormat("{0}.", ii.ClassKey);
-            CodeBuilder.Append(ii.MethodSymbol.Name);
-            CodeBuilder.Append("(");
-            OutputExpressionList(ii.Args, ii.GenericTypeArgs);
-            CodeBuilder.Append(")");
+            if (ii.MethodSymbol.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
+                CodeBuilder.AppendFormat("{0}.", ii.ClassKey);
+                CodeBuilder.Append(ii.MethodSymbol.Name);
+                CodeBuilder.Append("(");
+                OutputExpressionList(ii.Args, ii.GenericTypeArgs);
+                CodeBuilder.Append(")");
+            } else {
+                CodeBuilder.AppendFormat("invokeexternoperator({0}, ", ii.ClassKey);
+                CodeBuilder.AppendFormat("\"{0}\"", ii.MethodSymbol.Name);
+                CodeBuilder.Append(", ");
+                OutputExpressionList(ii.Args, ii.GenericTypeArgs);
+                CodeBuilder.Append(")");
+            }
         }
 
         #region 符号相关的处理
@@ -2390,7 +2398,7 @@ namespace RoslynTool.CsToLua
             CodeBuilder.AppendLine();
             ++m_Indent;
             if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
-                CodeBuilder.AppendFormat("{0}local {1} = ...;", GetIndentString(), mi.OriginalParamsName);
+                CodeBuilder.AppendFormat("{0}local {1} = {...};", GetIndentString(), mi.OriginalParamsName);
                 CodeBuilder.AppendLine();
             }
             foreach (string name in mi.OutParamNames) {
