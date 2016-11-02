@@ -58,7 +58,7 @@ end;
 
 __mt_array = {
 	__index = function(t, k)
-		if k=="Length" then
+		if k=="Length" or k=="Count" then
 			return table.maxn(t);
 		elseif k=="GetLength" then
 			return function(obj, ix)
@@ -416,11 +416,15 @@ function externdelegationremove(t, k, handler)
   end;
 end;
 
-function getexternstaticindexer(obj, ...)
-
+function getexternstaticindexer(class, ...)
+	local args = {...};
+	local index = args[1];
+	return class[index+1];
 end;
 function getexterninstanceindexer(obj, ...)
-
+	local args = {...};
+	local index = args[1];
+	return obj[index+1];
 end;
 
 function getelement(obj, ...)
