@@ -415,7 +415,7 @@ cs2lua在转换delegate时委托到几个lua函数处理，这些函数在utilit
 
 对应的c#特性是什么，内部与外部实现都在utility.lua里。
 
-5、generic集合类型
+7、generic集合类型
 
 cs2lua转换出的lua代码只使用lua的基础类型（不含string）与数组，其它类型假定都是经由slua导入。
 
