@@ -302,9 +302,7 @@ https://github.com/dreamanlan/Cs2Lua/tree/master/Test
   
 【特殊处理】
 
-1、转换出的lua代码不使用self表示对象自己，而是使用this表示对象自己，这样无需处理c#代码里用self作变量名的情形。类似的，转换出的lua使用base来表示父
-
-类子对象。类似的，property的get/set方法名也仍然是get/set，event接口实现的add/remove方法名也仍然使用add/remove。
+1、转换出的lua代码不使用self表示对象自己，而是使用this表示对象自己，这样无需处理c#代码里用self作变量名的情形。类似的，转换出的lua使用base来表示父类子对象。类似的，property的get/set方法名也仍然是get/set，event接口实现的add/remove方法名也仍然使用add/remove。
 
 2、泛型类静态方法与泛型方法在转换时会将泛型参数当函数参数作用，泛型类实例在构造时记录泛型参数到实例字段，实例方法通过字段获得泛型参数信息。
 
@@ -371,59 +369,39 @@ GetComponent<T>() => GetCompoent(Type)
 
 *** cs2lua的实现假设C#导出给lua的API都采用slua。
 
-Cs2Lua.exe负责按照c#语意选择合适的lua语法来实现对应语义，由于c#语言比lua复杂很多，在语言基础设施上很多是没法一一对应的，所以我们用utility.lua来
-
-构建无法直接在lua语法层面简单实现的c#语义。主要包括：
+Cs2Lua.exe负责按照c#语意选择合适的lua语法来实现对应语义，由于c#语言比lua复杂很多，在语言基础设施上很多是没法一一对应的，所以我们用utility.lua来构建无法直接在lua语法层面简单实现的c#语义。主要包括：
 
 1、基本运算
 
-lua的运算符比c#少了很多，多出来的c#运算，有一些cs2lua经过语法变换对应到lua语句，比如复合赋值等；有一些cs2lua直接放弃，比如指针相关的操作；另一些则
-
-约定由utility.lua提供一个对应的lua函数来实现，比如称位操作、位操作、条件表达式等。
+lua的运算符比c#少了很多，多出来的c#运算，有一些cs2lua经过语法变换对应到lua语句，比如复合赋值等；有一些cs2lua直接放弃，比如指针相关的操作；另一些则约定由utility.lua提供一个对应的lua函数来实现，比如称位操作、位操作、条件表达式等。
 
 2、对象语义
 
-c#里的对象在lua里一般通过table+metatable来表示，与设计c#的对象运行时机制一样，我们需要在lua设计一套类似c#对象语义的运行时设施，这种机制也在
-
-utility.lua里实现，cs2lua负责提供素材，比如method、property、field、event、indexer等对象的组成部分，组装成一个对象的工作则在utility.lua里完成。
+c#里的对象在lua里一般通过table+metatable来表示，与设计c#的对象运行时机制一样，我们需要在lua设计一套类似c#对象语义的运行时设施，这种机制也在utility.lua里实现，cs2lua负责提供素材，比如method、property、field、event、indexer等对象的组成部分，组装成一个对象的工作则在utility.lua里完成。
 
 cs2lua将对象分类为被cs2lua转换的c#代码本身定义的对象与外部由slua导入的c#对象2大类，每类又分为普通对象、IList、IDictionary、ICollection这几种。
 
 3、外部操作符重载处理
 
-c#里的操作符重载比lua元表的操作符函数多，对lua元表支持的操作符重载，cs2lua按照slua的规则直接转换为lua对应操作（slua会在这些操作的元表函数里关联到实
-
-际的c#重载函数），不在lua元表里的操作符重载，需要在utility.lua里处理，这个与slua的实现有关，本来c#的操作符重载函数都必须是类的静态方法，但slua在导
-
-出时将这些方法放到类实例上了，因此我们无法直接按c#操作符重载语义调用类的对应的静态操作符重载方法（对于被cs2lua转换的c#代码里定义的操作符重载，cs2lua
-
-在转换时采用c#的语义，所以可以直接转换为静态方法调用），而必须调用实例方法，由于操作符的实例有可能为空，不能直接写一个调用了事，判空的处理委托到
-
-utility.lua里处理。
+c#里的操作符重载比lua元表的操作符函数多，对lua元表支持的操作符重载，cs2lua按照slua的规则直接转换为lua对应操作（slua会在这些操作的元表函数里关联到实际的c#重载函数），不在lua元表里的操作符重载，需要在utility.lua里处理，这个与slua的实现有关，本来c#的操作符重载函数都必须是类的静态方法，但slua在导出时将这些方法放到类实例上了，因此我们无法直接按c#操作符重载语义调用类的对应的静态操作符重载方法（对于被cs2lua转换的c#代码里定义的操作符重载，cs2lua在转换时采用c#的语义，所以可以直接转换为静态方法调用），而必须调用实例方法，由于操作符的实例有可能为空，不能直接写一个调用了事，判空的处理委托到utility.lua里处理。
 
 4、delegate的实现
 
-cs2lua在转换delegate时委托到几个lua函数处理，这些函数在utility.lua里实现，对被cs2lua转换的c#代码里定义的委托与slua导入的委托采用不同的函数，实现
-
-机制也不太相同。
+cs2lua在转换delegate时委托到几个lua函数处理，这些函数在utility.lua里实现，对被cs2lua转换的c#代码里定义的委托与slua导入的委托采用不同的函数，实现机制也不太相同。
 
 5、外部indexer的实现
 
-这块主要为了与slua的机制配合，放到utility.lua里实现
+这块主要为了与slua的机制配合，放到utility.lua里实现。
 
 6、[]成员访问操作的实现
 
-这个是预留，在语法上，对于数组访问[]与indexer已经分别独立处理，目前来看没发现其它种类的[]操作，但仍然预留了实现函数在utility.lua里，由于这块不清楚
-
-对应的c#特性是什么，内部与外部实现都在utility.lua里。
+这个是预留，在语法上，对于数组访问[]与indexer已经分别独立处理，目前来看没发现其它种类的[]操作，但仍然预留了实现函数在utility.lua里，由于这块不清楚对应的c#特性是什么，内部与外部实现都在utility.lua里。
 
 7、generic集合类型
 
 cs2lua转换出的lua代码只使用lua的基础类型（不含string）与数组，其它类型假定都是经由slua导入。
 
-由于lua不能直接对应generic语义，slua在导出c#类时要求导出的类必须是具体类，为了保证cs2lua在转换前后类名一致，所有generic类的实例类在导出时都需要进
-
-行一次继承，以保证导出的类在c#代码与lua代码里名字相同，比如导出List<int>，我们需要命名为IntList：
+由于lua不能直接对应generic语义，slua在导出c#类时要求导出的类必须是具体类，为了保证cs2lua在转换前后类名一致，所有generic类的实例类在导出时都需要进行一次继承，以保证导出的类在c#代码与lua代码里名字相同，比如导出List<int>，我们需要命名为IntList：
 
 public class IntList : List<int>
 
@@ -431,31 +409,19 @@ public class IntList : List<int>
 
 之后再由slua导出，之后在c#里就需要使用IntList而不是List<int>，这样才能保证转换出的lua代码能正确访问导出的类。
 
-对于slua导入的API，这个约定没有问题，但被cs2lua转换的c#代码里也会有很频繁的需求使用常见的集合类型，因为被cs2lua转换的c#类转换后就是lua的table，天
+对于slua导入的API，这个约定没有问题，但被cs2lua转换的c#代码里也会有很频繁的需求使用常见的集合类型，因为被cs2lua转换的c#类转换后就是lua的table，天然可以支持动态类型，从这一角度出发，我们认为在被cs2lua转换的c#代码里使用的集合对象可以考虑转换为lua的table，借助table的元表机制，我们可以实现与c#里的集合对象相同的操作方法，这些代码都需要lua实现，所以放在utility.lua里。
 
-然可以支持动态类型，从这一角度出发，我们认为在被cs2lua转换的c#代码里使用的集合对象可以考虑转换为lua的table，借助table的元表机制，我们可以实现与c#里
-
-的集合对象相同的操作方法，这些代码都需要lua实现，所以放在utility.lua里。
-
-*** 需要注意的是，List<T>这类直接在被cs2lua转换的c#代码里使用的generic集合对象，由于转换为lua的table，不能作为参数传递给slua（除非修改slua的代码
-
-进行识别并转换，目前不采用这种思路）
+*** 需要注意的是，List<T>这类直接在被cs2lua转换的c#代码里使用的generic集合对象，由于转换为lua的table，不能作为参数传递给slua（除非修改slua的代码进行识别并转换，目前不采用这种思路）
 
 【如何增加可以在c#里使用的API】
 
 1、第一种方式就是在独立的C# dll里实现，然后用slua导出。
 
-2、另一种方式其实可以在上面提到的utility.lua里实现，就像我们提到的generic集合类一样（这种在dotnet系统dll里定义，所以c#代码可以直接使用，但由于slua
+2、另一种方式其实可以在上面提到的utility.lua里实现，就像我们提到的generic集合类一样（这种在dotnet系统dll里定义，所以c#代码可以直接使用，但由于slua并不导出，所以转化后的lua里要使用的话必须有额外的lua来实现）。这其实表明了两种情形：
 
-并不导出，所以转化后的lua里要使用的话必须有额外的lua来实现）。这其实表明了两种情形：
+a、所用的api在某个c# dll里已经定义了，但slua没有导出（上面说的就是这种情形），实现方式一种是在utility.lua里实现，另外还有一个办法是单独加一个lua模块实现，并在c#代码里使用Cs2Lua.Require属性在使用它的类里标明一下依赖关系。
 
-a、所用的api在某个c# dll里已经定义了，但slua没有导出（上面说的就是这种情形），实现方式一种是在utility.lua里实现，另外还有一个办法是单独加一个lua模
-
-块实现，并在c#代码里使用Cs2Lua.Require属性在使用它的类里标明一下依赖关系。
-
-b、所用的api没有在c# dll里定义，所以也不会在slua里导出。这时需要在C#与lua里各实现一套，然后c#的实现标记为Cs2Lua.Ignore并同时使用Cs2Lua.Require标
-
-明对lua实现代码的依赖关系（当然也可将lua实现放在utility.lua里，这样就不用标明依赖了，utility.lua是默认要依赖的）。
+b、所用的api没有在c# dll里定义，所以也不会在slua里导出。这时需要在C#与lua里各实现一套，然后c#的实现标记为Cs2Lua.Ignore并同时使用Cs2Lua.Require标明对lua实现代码的依赖关系（当然也可将lua实现放在utility.lua里，这样就不用标明依赖了，utility.lua是默认要依赖的）。
 
 【示例链接】
 
