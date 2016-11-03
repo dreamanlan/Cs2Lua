@@ -94,16 +94,6 @@ https://github.com/dreamanlan/Cs2Lua/tree/master/Test
 
 由于指明某个c#类可能使用继承（此时转换到lua时不会报错），Cs2Lua会采用一种继承实现机制来实现继承，但与c#的继承语义不太一样，此属性用于使用都能确保使用一致继承的情形（就是说语义与c#是一致的），一般继承层次只有2层并且只涉及复用代码与纯虚函数重载的情形是可以的，子类隐藏父类非虚函数的情形要避免使用。
 
-【utility.lua里实现的部分】
-
-1、位操作。
-
-2、数组与集合的封装（用以支持IList、IDictionary接口）。
-
-3、对应的lua对象机制（field、method、property、event、inherit）。
-
-4、委托机制。
-
 【生成的lua与C#的互操作】
 
 1、目标是可以不依赖特定的交互机制（相关依赖都在utility.lua或明确引用的外部lua里，转换工具只处理语法直接支持的语义转换）。
