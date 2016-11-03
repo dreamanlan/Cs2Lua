@@ -68,6 +68,8 @@ https://github.com/dreamanlan/Cs2Lua/tree/master/Test
 
 14、yield与协程。
 
+15、操作符重载。
+
 *** CsToLua.cs是目前支持的语法（Visit开头的方法）.
 
 【额外特性】
