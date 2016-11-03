@@ -106,9 +106,9 @@ https://github.com/dreamanlan/Cs2Lua/tree/master/Test
 
 【生成的lua与C#的互操作】
 
-1、目标是不依赖特定的交互机制（相关依赖都在utility.lua里，转换工具只处理语法直接支持的语义转换）。
+1、目标是可以不依赖特定的交互机制（相关依赖都在utility.lua或明确引用的外部lua里，转换工具只处理语法直接支持的语义转换）。
 
-2、目前仅测试了基于Slua的交互。
+2、目前生成的lua代码能使用的c# API假定由slua导出（可以用命令行开关切换为纯lua, 这时可能需要手写lua代码提供API）。
 
 【基本思路】
 
@@ -359,9 +359,9 @@ GetComponent<T>() => GetCompoent(Type)
 
 3、运行Cs2Lua C#.csproj，生成该工程各C#类对应的lua代码，输出按类组织，每个类一个文件，输出时的类已经合并过（支持c# partial）
 
-4、用Slua或其它方式封装供前面C#工程使用的其它DLL里的类。
+4、用slua封装供前面C#工程使用的其它DLL里的类。
 
-5、将生成的lua文件放到unity3d工程里，按Slua的规则启动其入口类。
+5、将生成的lua文件放到unity3d工程里，按slua的规则启动其入口类。
 
 理论上按此顺序即可。
 
@@ -369,7 +369,7 @@ GetComponent<T>() => GetCompoent(Type)
 
 【utility.lua】
 
-*** cs2lua的实现假设C#导出给lua的API都采用Slua。
+*** cs2lua的实现假设C#导出给lua的API都采用slua。
 
 Cs2Lua.exe负责按照c#语意选择合适的lua语法来实现对应语义，由于c#语言比lua复杂很多，在语言基础设施上很多是没法一一对应的，所以我们用utility.lua来
 
@@ -440,6 +440,22 @@ public class IntList : List<int>
 *** 需要注意的是，List<T>这类直接在被cs2lua转换的c#代码里使用的generic集合对象，由于转换为lua的table，不能作为参数传递给slua（除非修改slua的代码
 
 进行识别并转换，目前不采用这种思路）
+
+【如何增加可以在c#里使用的API】
+
+1、第一种方式就是在独立的C# dll里实现，然后用slua导出。
+
+2、另一种方式其实可以在上面提到的utility.lua里实现，就像我们提到的generic集合类一样（这种在dotnet系统dll里定义，所以c#代码可以直接使用，但由于slua
+
+并不导出，所以转化后的lua里要使用的话必须有额外的lua来实现）。这其实表明了两种情形：
+
+a、所用的api在某个c# dll里已经定义了，但slua没有导出（上面说的就是这种情形），实现方式一种是在utility.lua里实现，另外还有一个办法是单独加一个lua模
+
+块实现，并在c#代码里使用Cs2Lua.Require属性在使用它的类里标明一下依赖关系。
+
+b、所用的api没有在c# dll里定义，所以也不会在slua里导出。这时需要在C#与lua里各实现一套，然后c#的实现标记为Cs2Lua.Ignore并同时使用Cs2Lua.Require标
+
+明对lua实现代码的依赖关系（当然也可将lua实现放在utility.lua里，这样就不用标明依赖了，utility.lua是默认要依赖的）。
 
 【示例链接】
 
