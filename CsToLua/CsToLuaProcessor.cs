@@ -19,7 +19,7 @@ namespace RoslynTool.CsToLua
     }
     public static class CsToLuaProcessor
     {
-        public static ExitCode Process(string srcFile, string outputExt, IList<string> macros, IDictionary<string, string> _refByNames, IDictionary<string, string> _refByPaths, bool enableInherit)
+        public static ExitCode Process(string srcFile, string outputExt, IList<string> macros, IDictionary<string, string> _refByNames, IDictionary<string, string> _refByPaths, bool enableInherit, bool outputResult)
         {
             string exepath = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
             string path = Path.GetDirectoryName(srcFile);
@@ -248,7 +248,9 @@ namespace RoslynTool.CsToLua
                 }
                 return ExitCode.SemanticError;
             } else {
-                Console.Write(allClassBuilder.ToString());
+                if (outputResult) {
+                    Console.Write(allClassBuilder.ToString());
+                }
                 return ExitCode.Success;
             }
         }

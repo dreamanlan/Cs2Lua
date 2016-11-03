@@ -634,7 +634,7 @@ namespace RoslynTool.CsToLua
             var ci = m_ClassInfoStack.Peek();
             var oper = m_Model.GetOperation(node) as IHasOperatorMethodExpression;
 
-            if (null != oper && oper.UsesOperatorMethod && CanInvokeOperator(oper.OperatorMethod)) {
+            if (null != oper && oper.UsesOperatorMethod) {
                 IMethodSymbol msym = oper.OperatorMethod;
                 var castOper = oper as IConversionExpression;
                 if (null != castOper) {
@@ -750,7 +750,7 @@ namespace RoslynTool.CsToLua
         public override void VisitPrefixUnaryExpression(PrefixUnaryExpressionSyntax node)
         {
             var oper = m_Model.GetOperation(node) as IHasOperatorMethodExpression;
-            if (null != oper && oper.UsesOperatorMethod && CanInvokeOperator(oper.OperatorMethod)) {
+            if (null != oper && oper.UsesOperatorMethod) {
                 IMethodSymbol msym = oper.OperatorMethod;
                 InvocationInfo ii = new InvocationInfo();
                 var arglist = new List<ExpressionSyntax>() { node.Operand };
@@ -781,7 +781,7 @@ namespace RoslynTool.CsToLua
         public override void VisitPostfixUnaryExpression(PostfixUnaryExpressionSyntax node)
         {
             var oper = m_Model.GetOperation(node) as IHasOperatorMethodExpression;
-            if (null != oper && oper.UsesOperatorMethod && CanInvokeOperator(oper.OperatorMethod)) {
+            if (null != oper && oper.UsesOperatorMethod) {
                 IMethodSymbol msym = oper.OperatorMethod;
                 InvocationInfo ii = new InvocationInfo();
                 var arglist = new List<ExpressionSyntax>() { node.Operand };
@@ -814,7 +814,7 @@ namespace RoslynTool.CsToLua
             var ci = m_ClassInfoStack.Peek();
             var oper = m_Model.GetOperation(node) as IConversionExpression;
 
-            if (null != oper && oper.UsesOperatorMethod && CanInvokeOperator(oper.OperatorMethod)) {
+            if (null != oper && oper.UsesOperatorMethod) {
                 IMethodSymbol msym = oper.OperatorMethod;
                 InvocationInfo ii = new InvocationInfo();
                 var arglist = new List<ExpressionSyntax>() { node.Expression };
@@ -1621,10 +1621,6 @@ namespace RoslynTool.CsToLua
             }
             return null;
         }
-        private bool CanInvokeOperator(IMethodSymbol msym)
-        {
-            return msym.ContainingAssembly == m_SymbolTable.AssemblySymbol || SymbolTable.ForSlua;
-        }
         private void OutputOperatorInvoke(InvocationInfo ii)
         {
             if (ii.MethodSymbol.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
@@ -1635,11 +1631,62 @@ namespace RoslynTool.CsToLua
                 OutputExpressionList(ii.Args, ii.GenericTypeArgs);
                 CodeBuilder.Append(")");
             } else {
-                CodeBuilder.AppendFormat("invokeexternoperator({0}, ", ii.ClassKey);
-                CodeBuilder.AppendFormat("\"{0}\"", ii.MethodSymbol.Name);
-                CodeBuilder.Append(", ");
-                OutputExpressionList(ii.Args, ii.GenericTypeArgs);
-                CodeBuilder.Append(")");
+                string method = ii.MethodSymbol.Name;
+                string luaOp = string.Empty;
+                if (SymbolTable.ForSlua) {
+                    //slua导出时把重载操作符导出成lua实例方法了，然后利用lua实例上支持的操作符元方法在运行时绑定到重载实现
+                    //这里把lua支持的操作符方法转成lua操作（可能比invokeexternoperator要快一些）
+                    if (method == "op_Addition") {
+                        luaOp = "+";
+                    } else if (method == "op_Subtraction") {
+                        luaOp = "-";
+                    } else if (method == "op_Multiply") {
+                        luaOp = "*";
+                    } else if (method == "op_Division") {
+                        luaOp = "/";
+                    } else if (method == "op_UnaryNegation") {
+                        luaOp = "-";
+                    } else if (method == "op_UnaryPlus") {
+                        luaOp = "+";
+                    } else if (method == "op_Equality") {
+                        luaOp = "==";
+                    } else if (method == "op_Inequality") {
+                        luaOp = "~=";
+                    } else if (method == "op_LessThan") {
+                        luaOp = "<";
+                    } else if (method == "op_GreaterThan") {
+                        luaOp = "< ";
+                    } else if (method == "op_LessThanOrEqual") {
+                        luaOp = "<=";
+                    } else if (method == "op_GreaterThanOrEqual") {
+                        luaOp = "<= ";
+                    }
+                }
+                if (string.IsNullOrEmpty(luaOp)) {
+                    CodeBuilder.AppendFormat("invokeexternoperator({0}, ", ii.ClassKey);
+                    CodeBuilder.AppendFormat("\"{0}\"", method);
+                    CodeBuilder.Append(", ");
+                    OutputExpressionList(ii.Args, ii.GenericTypeArgs);
+                    CodeBuilder.Append(")");
+                } else {
+                    if (ii.Args.Count == 1) {
+                        if (luaOp == "-") {
+                            CodeBuilder.Append("(");
+                            CodeBuilder.Append(luaOp);
+                            CodeBuilder.Append(" ");
+                            VisitExpressionSyntax(ii.Args[0]);
+                            CodeBuilder.Append(")");
+                        }
+                    } else if (ii.Args.Count == 2) {
+                        CodeBuilder.Append("(");
+                        VisitExpressionSyntax(ii.Args[0]);
+                        CodeBuilder.Append(" ");
+                        CodeBuilder.Append(luaOp);
+                        CodeBuilder.Append(" ");
+                        VisitExpressionSyntax(ii.Args[1]);
+                        CodeBuilder.Append(")");
+                    }
+                }
             }
         }
 
@@ -2990,7 +3037,7 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.Append(" = ");
 
                     var operatorInfo = assignOper as IHasOperatorMethodExpression;
-                    if (null != operatorInfo && operatorInfo.UsesOperatorMethod && CanInvokeOperator(operatorInfo.OperatorMethod)) {
+                    if (null != operatorInfo && operatorInfo.UsesOperatorMethod) {
                         IMethodSymbol msym = operatorInfo.OperatorMethod;
                         InvocationInfo ii = new InvocationInfo();
                         var arglist = new List<ExpressionSyntax>() { assign.Left, assign.Right };

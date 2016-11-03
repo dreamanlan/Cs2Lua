@@ -19,6 +19,7 @@ namespace RoslynTool
             Dictionary<string, string> refByNames = new Dictionary<string, string>();
             Dictionary<string, string> refByPaths = new Dictionary<string, string>();
             bool enableInherit = false;
+            bool outputResult = false;
             if (args.Length > 0) {
                 for (int i = 0; i < args.Length; ++i) {
                     if (0 == string.Compare(args[i], "-ext", true)) {
@@ -54,6 +55,8 @@ namespace RoslynTool
                         SymbolTable.ForSlua = false;
                     } else if (0 == string.Compare(args[i], "-slua", true)) {
                         SymbolTable.ForSlua = true;
+                    } else if (0 == string.Compare(args[i], "-outputresult", true)) {
+                        outputResult = true;
                     } else if (0 == string.Compare(args[i], "-refbyname", true)) {
                         string name = string.Empty, alias = "global";
                         if (i < args.Length - 1) {
@@ -121,7 +124,7 @@ namespace RoslynTool
                     }
                 }
             } else {
-                Console.WriteLine("[Usage]:Cs2Lua [-ext fileext] [-enableinherit] [-normallua] [-d macro] [-refbyname dllname alias] [-refbypath dllpath alias] [-src] csfile|csprojfile");
+                Console.WriteLine("[Usage]:Cs2Lua [-ext fileext] [-enableinherit] [-normallua/-slua] [-outputresult] [-d macro] [-refbyname dllname alias] [-refbypath dllpath alias] [-src] csfile|csprojfile");
                 Console.WriteLine("\twhere:");
                 Console.WriteLine("\t\tfileext = file externsion, default is txt for unity3d, maybe lua for other usage.");
                 Console.WriteLine("\t\tmacro = c# macro define, used in your csharp code #if/#elif/#else/#endif etc.");
@@ -135,7 +138,7 @@ namespace RoslynTool
                 }
             }
             if (File.Exists(file)) {
-                return (int)CsToLuaProcessor.Process(file, outputExt, macros, refByNames, refByPaths, enableInherit);
+                return (int)CsToLuaProcessor.Process(file, outputExt, macros, refByNames, refByPaths, enableInherit, outputResult);
             } else {
                 return (int)ExitCode.FileNotFound;
             }
