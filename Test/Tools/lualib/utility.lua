@@ -216,7 +216,6 @@ function GetDictEnumerator(tb)
         Key = this.index,
         Value = v,
       };
-      UnityEngine.Debug.Log("===>" .. tostring(this.index));
       if this.index then
         return true;
       else
