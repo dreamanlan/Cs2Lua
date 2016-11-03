@@ -470,31 +470,19 @@ end;
 
 function invokeexternoperator(class, method, ...)
 	local args = {...};
-	if method == "op_Addition" then
-		return args[1] + args[2] ;
-	elseif method == "op_Subtraction" then
-		return args[1] - args[2] ;
-	elseif method == "op_Multiply" then
-		return args[1] * args[2] ;
-	elseif method == "op_Division" then
-		return args[1] / args[2] ;
-	elseif method == "op_UnaryNegation" then
-		return -args[1] ;
-	elseif method == "op_UnaryPlus" then
-		return args[1] ;
-	elseif method == "op_Equality" then
-		return args[1] == args[2] ;
-	elseif method == "op_Inequality" then
-		return args[1] ~= args[2] ;
-	elseif method == "op_LessThan" then
-		return args[1] < args[2] ;
-	elseif method == "op_GreaterThan" then
-		return args[2] < args[1] ;
-	elseif method == "op_LessThanOrEqual" then
-		return args[1] <= args[2] ;
-	elseif method == "op_GreaterThanOrEqual" then
-		return args[2] <= args[1] ;
+	--对slua，对应到lua元表操作符函数的操作符重载cs2lua转lua代码时已经换成对应操作符表达式。
+	--执行到这里的应该是无法对应到lua操作符的操作符重载
+	local argnum = table.maxn(args);
+	if argnum == 1 and args[1] then
+	  return args[1][method](...);
+	elseif argnum == 2 then
+	  if args[1] then
+	    return args[1][method](...);
+	  elseif args[2] then
+	    return args[2][method](...);
+	  end;
 	end;
+	return nil;
 end;
 
 function defineentry(class)
