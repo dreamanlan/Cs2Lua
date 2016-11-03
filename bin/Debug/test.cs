@@ -117,6 +117,11 @@ namespace TopLevel
                 self.m_Test += other.m_Test;
                 return self;
             }
+            public static Foo operator + (Foo self, int val)
+            {
+                self.m_Test += val;
+                return self;
+            }
             public static explicit operator Foo (int a)
             {
                 var f = new Foo();

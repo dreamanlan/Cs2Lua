@@ -58,7 +58,7 @@ end;
 
 __mt_array = {
 	__index = function(t, k)
-		if k=="Length" then
+		if k=="Length" or k=="Count" then
 			return table.maxn(t);
 		elseif k=="GetLength" then
 			return function(obj, ix)
@@ -155,7 +155,7 @@ __mt_delegation = {
 
 function wrapstring(str)
   if type(str)=="string" then
-    return String(str);
+    return System.String(str);
   else
     return str;
   end;
@@ -175,7 +175,7 @@ end;
 
 function wrapenumerable(func)
 	return function(...)
-		local args = ...;
+		local args = {...};
 		local f = coroutine.wrap(func);
 		return WrapEnumerator(function() return f(args); end);
 	end;
@@ -416,24 +416,57 @@ function externdelegationremove(t, k, handler)
   end;
 end;
 
-function getexternstaticindexer(obj, ...)
-
+function getexternstaticindexer(class, ...)
+	local args = {...};
+	local index = args[1];
+	return class[index+1];
 end;
 function getexterninstanceindexer(obj, ...)
-
+	local args = {...};
+	local index = args[1];
+	return obj[index+1];
 end;
 
 function getelement(obj, ...)
 
 end;
 function setelement(obj, ...)
-  //为了适应表达式内嵌赋值，这个函数需要返回值
+  --为了适应表达式内嵌赋值，这个函数需要返回值
 end;
 function getexternelement(obj, ...)
 
 end;
 function setexternelement(obj, ...)
-  //为了适应表达式内嵌赋值，这个函数需要返回值
+  --为了适应表达式内嵌赋值，这个函数需要返回值
+end;
+
+function invokeexternoperator(class, method, ...)
+	local args = {...};
+	if method == "op_Addition" then
+		return args[1] + args[2] ;
+	elseif method == "op_Subtraction" then
+		return args[1] - args[2] ;
+	elseif method == "op_Multiply" then
+		return args[1] * args[2] ;
+	elseif method == "op_Division" then
+		return args[1] / args[2] ;
+	elseif method == "op_UnaryNegation" then
+		return -args[1] ;
+	elseif method == "op_UnaryPlus" then
+		return args[1] ;
+	elseif method == "op_Equality" then
+		return args[1] == args[2] ;
+	elseif method == "op_Inequality" then
+		return args[1] ~= args[2] ;
+	elseif method == "op_LessThan" then
+		return args[1] < args[2] ;
+	elseif method == "op_GreaterThan" then
+		return args[2] < args[1] ;
+	elseif method == "op_LessThanOrEqual" then
+		return args[1] <= args[2] ;
+	elseif method == "op_GreaterThanOrEqual" then
+		return args[2] <= args[1] ;
+	end;
 end;
 
 function defineentry(class)

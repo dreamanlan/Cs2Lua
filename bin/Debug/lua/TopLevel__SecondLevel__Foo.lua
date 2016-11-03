@@ -4,8 +4,12 @@ require "TopLevel__SecondLevel__FooBase";
 require "TopLevel__SecondLevel__GenericClass_T";
 
 TopLevel.SecondLevel.Foo = {
-	op_Addition = function(self, other)
+	op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo = function(self, other)
 		self.m_Test = self.m_Test + other.m_Test;
+		return self;
+	end,
+	op_Addition__TopLevel_SecondLevel_Foo__System_Int32 = function(self, val)
+		self.m_Test = self.m_Test + val;
 		return self;
 	end,
 	op_Explicit = function(a)
@@ -85,10 +89,10 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			TestSwitch = function(this)
 				local i = 10;
-				local __compiler_switch_166 = i;
-				if __compiler_switch_166 == 1 then
+				local __compiler_switch_171 = i;
+				if __compiler_switch_171 == 1 then
 					return ;
-				elseif __compiler_switch_166 == 2 then
+				elseif __compiler_switch_171 == 2 then
 					return ;
 				else
 					return ;

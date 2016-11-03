@@ -22,7 +22,7 @@ TopLevel.SecondLevel.FooExtension = {
 		local f2 = delegationwrap((function() f:Test3() end));
 		f2();
 		TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo(f);
-		local r = TopLevel.SecondLevel.Foo.op_Addition(f);
+		local r = TopLevel.SecondLevel.Foo.op_Addition(f, ff);
 		f = TopLevel.SecondLevel.Foo.op_Addition(f, ff);
 		local rr = TopLevel.SecondLevel.Foo.op_Explicit(123);
 		local rrr = typecast(123, TopLevel.SecondLevel.Foo);

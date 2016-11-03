@@ -1,6 +1,9 @@
 System = System or {};
 System.Collections = System.Collections or {};
 System.Collections.Generic = System.Collections.Generic or {};
+System.Collections.Generic.List_T = {};
+System.Collections.Generic.Dictionary_TKey_TValue = {};
+System.Collections.Generic.HashSet_T = {};
 
 function lshift(v,n)
     for i=1,n do
@@ -306,50 +309,71 @@ function newobject(class, ctor, initializer, ...)
   return obj;
 end;
 
-function newexternobject(class, ctor, doexternsion, initializer, ...)
-  local obj = class(...);
-  if doexternsion then
-    doexternsion();
+function newexternobject(class, className, ctor, doexternsion, initializer, ...)
+  local obj = nil;
+  if class then
+    obj = class(...);
+  else
+    obj = Slua.CreateClass(className, ...);
   end;
-  for k,v in pairs(initializer) do
-    obj[k] = v;
+  if obj then
+    if doexternsion then
+      doexternsion();
+    end;
+    for k,v in pairs(initializer) do
+      obj[k] = v;
+    end;
+    return obj;
+  else
+    return nil;
   end;
-  return obj;
 end;
 
 function newdictionary(type, ctor, dict, ...)
   if dict then
+    dict["__class"] = type;
 	  return setmetatable(dict, __mt_dictionary);
 	end;
 end;
 
 function newlist(type, ctor, list, ...)
   if list then
+    list["__class"] = type;
     return setmetatable(list, __mt_array);
   end;
 end;
 
 function newcollection(type, ctor, coll, ...)
   if coll then
+    coll["__class"] = type;
     return setmetatable(dict, __mt_array);
   end;
 end;
 
-function newexterndictionary(type, ctor, doexternsion, dict, ...)
-  if dict then
+function newexterndictionary(type, className, ctor, doexternsion, dict, ...)
+  if dict and type==System.Collections.Generic.Dictionary_TKey_TValue then    
+    dict["__class"] = type;
 	  return setmetatable(dict, __mt_dictionary);
+	else
+	  return newexternobject(type, className, ctor, doexternsion, dict, ...);
 	end;
 end;
 
-function newexternlist(type, ctor, doexternsion, list, ...)
-  if list then
+function newexternlist(type, className, ctor, doexternsion, list, ...)
+  if list and type==System.Collections.Generic.List_T then
+    list["__class"] = type;
     return setmetatable(list, __mt_array);
+	else
+	  return newexternobject(type, className, ctor, doexternsion, list, ...);
   end;
 end;
 
-function newexterncollection(type, ctor, doexternsion, coll, ...)
-  if coll then
+function newexterncollection(type, className, ctor, doexternsion, coll, ...)
+  if coll and type==System.Collections.Generic.HashSet_T then
+    coll["__class"] = type;
     return setmetatable(coll, __mt_array);
+	else
+	  return newexternobject(type, className, ctor, doexternsion, coll, ...);
   end;
 end;
 
@@ -398,46 +422,50 @@ function externdelegationset(t, k, handler)
   if k then
     t[k] = handler;
   else
-    v = handler;
+    t = handler;
   end;
 end;
 function externdelegationadd(t, k, handler)
   if k then
     t[k] = {"+=", handler};
   else
-    v = {"+=", handler};
+    t = {"+=", handler};
   end;
 end;
 function externdelegationremove(t, k, handler)
   if k then
     t[k] = {"-=", handler};
   else
-    v = {"-=", handler};
+    t = {"-=", handler};
   end;
 end;
 
 function getexternstaticindexer(class, ...)
-	local args = {...};
-	local index = args[1];
-	return class[index+1];
+	return class[...];
 end;
-function getexterninstanceindexer(obj, ...)
+function getexterninstanceindexer(obj, ...)  
 	local args = {...};
 	local index = args[1];
-	return obj[index+1];
+	if obj.__class == System.Collections.Generic.List_T then
+	  return obj[index+1];
+	else
+	  return obj[...];
+  end;
 end;
 
 function getelement(obj, ...)
-
+  return nil;
 end;
 function setelement(obj, ...)
   --为了适应表达式内嵌赋值，这个函数需要返回值
+  return nil;
 end;
 function getexternelement(obj, ...)
-
+  return nil;
 end;
 function setexternelement(obj, ...)
   --为了适应表达式内嵌赋值，这个函数需要返回值
+  return nil;
 end;
 
 function invokeexternoperator(class, method, ...)
