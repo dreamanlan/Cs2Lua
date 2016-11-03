@@ -91,6 +91,10 @@ __mt_array = {
         end;
         return ret;
       end;
+	  elseif k=="GetEnumerator" then
+	    return function(obj)
+	      return GetArrayEnumerator(obj);
+	    end;
 		end;
 	end,
 };
@@ -119,7 +123,7 @@ __mt_dictionary = {
 	    end;
 		elseif k=="ContainsKey" then
 		  return function(obj, p)
-	      if obj[p]~=nil then
+	      if obj[p] then
 	        return true;
 	      end;
 	      local ret = false;
@@ -142,6 +146,23 @@ __mt_dictionary = {
 	      end;
 	      return ret;
 	    end;		    
+	  elseif k=="TryGetValue" then
+	    return function(obj, p)
+	      local val = obj[p];
+	      if val then
+	        return true, val;
+	      end;
+	      for k,v in pairs(obj) do		        
+	        if k==p then
+	          return true, v;
+	        end;
+	      end;
+	      return false, nil;
+	    end;
+	  elseif k=="GetEnumerator" then
+	    return function(obj)
+	      return GetDictEnumerator(obj);
+	    end;
 		end;
 	end,
 };
@@ -155,6 +176,65 @@ __mt_delegation = {
     end;
   end;
 };
+
+function GetArrayEnumerator(tb)
+  return setmetatable({
+    MoveNext = function(this)
+      local tb = this.object;
+      local num = table.maxn(tb);
+      if this.index < num then
+        this.index = this.index + 1;
+        this.current = tb[this.index];
+        return true;
+      else
+        return false;
+      end;
+    end,
+    object = tb,
+    index = 0,
+    current = nil,
+  },{
+    __index = function(t, k)
+      if k=="Current" then
+        return t.current;
+      end;
+      return nil;
+    end,
+  });
+end;
+
+function GetDictEnumerator(tb)
+  return setmetatable({
+    MoveNext = function(this)
+      local tb = this.object;
+      local v = nil;
+      this.index, v = next(tb, this.index);
+      if this.index == "__class" then
+        this.index, v = next(tb, this.index);
+      end;
+      this.current = {
+        Key = this.index,
+        Value = v,
+      };
+      UnityEngine.Debug.Log("===>" .. tostring(this.index));
+      if this.index then
+        return true;
+      else
+        return false;
+      end;
+    end,
+    object = tb,
+    index = nil,
+    current = nil,
+  },{
+    __index = function(t, k)
+      if k=="Current" then
+        return t.current;
+      end;
+      return nil;
+    end,
+  });
+end;
 
 function wrapstring(str)
   if type(str)=="string" then
@@ -234,8 +314,8 @@ function defineclass(base, static, static_props, static_events, instance_build, 
                 __index = function(t, k)
                     local ret;
                     ret = obj_props[k];
-                    if nil ~= ret then
-                      if nil ~= ret.get then
+                    if ret then
+                      if ret.get then
                         ret = ret.get(t);
                       else
                         ret = nil;
@@ -249,13 +329,13 @@ function defineclass(base, static, static_props, static_events, instance_build, 
                 __newindex = function(t, k, v)
                     local ret;
                     ret = obj_props[k];
-                    if nil ~= ret then
-                      if nil ~= ret.set then
+                    if ret then
+                      if ret.set then
                         ret.set(t, v);
                       end;
                       return;
                     end;
-                    if nil == baseObj or not pcall(function() baseObj[k] = v end) then
+                    if not baseObj or not pcall(function() baseObj[k] = v end) then
                         rawset(t, k, v);
                     end;
                 end,
@@ -268,8 +348,8 @@ function defineclass(base, static, static_props, static_events, instance_build, 
         __index = function(t, k)
             local ret;
             ret = class_props[k];
-            if nil ~= ret then
-              if nil ~= ret.get then
+            if ret then
+              if ret.get then
                 ret = ret.get(t);
               else
                 ret = nil;
@@ -283,8 +363,8 @@ function defineclass(base, static, static_props, static_events, instance_build, 
         __newindex = function(t, k, v)
             local ret;
             ret = class_props[k];
-            if ret ~= nil then
-              if nil ~= ret.set then
+            if ret then
+              if ret.set then
                 ret.set(t, v);
               end;
               return;
