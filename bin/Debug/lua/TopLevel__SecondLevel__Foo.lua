@@ -60,7 +60,7 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			Iterator = wrapenumerable(function(this)
 				wrapyield(nil, false, false);
-				wrapyield(newexternobject(UnityEngine.WaitForSeconds, "ctor", nil, {}, 3), false, true);
+				wrapyield(, false, false);
 				return nil;
 			end),
 			Iterator2 = wrapenumerable(function(this)
@@ -120,7 +120,7 @@ TopLevel.SecondLevel.Foo = {
 				OnSimple2 = wrapdelegation{},
 				m_Test = 0,
 				m_Test2 = 0,
-				m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, "ctor", nil, {wrapstring("one"), wrapstring("two"), wrapstring("three")}),
+				m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, "System.Collections.Generic.HashSet_T", "ctor", nil, {wrapstring("one"), wrapstring("two"), wrapstring("three")}),
 				__ctor_called = false,
 			};
 			for k,v in pairs(instance_methods) do

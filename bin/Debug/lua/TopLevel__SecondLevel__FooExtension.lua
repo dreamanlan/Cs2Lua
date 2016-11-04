@@ -1,13 +1,14 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
 require "TopLevel__SecondLevel__Foo";
+require "GameObject";
 
 TopLevel.SecondLevel.FooExtension = {
 	Test3__TopLevel_SecondLevel_Foo = function(obj)
 		if (obj.m_Test > 0) then
 			obj.m_Test2 = 678;
 		end;
-		local f = newexternlist(System.Collections.Generic.List_T, "ctor", nil, {{1, 2}, {2, 3}});
+		local f = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", nil, {{1, 2}, {2, 3}});
 	end,
 	Test3__TopLevel_SecondLevel_Foo__System_Int32 = function(obj, ix)
 	end,
@@ -22,14 +23,14 @@ TopLevel.SecondLevel.FooExtension = {
 		local f2 = delegationwrap((function() f:Test3() end));
 		f2();
 		TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo(f);
-		local r = TopLevel.SecondLevel.Foo.op_Addition(f, ff);
-		f = TopLevel.SecondLevel.Foo.op_Addition(f, ff);
+		local r = TopLevel.SecondLevel.Foo.op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo(f, ff);
+		f = TopLevel.SecondLevel.Foo.op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo(f, ff);
 		local rr = TopLevel.SecondLevel.Foo.op_Explicit(123);
 		local rrr = typecast(123, TopLevel.SecondLevel.Foo);
-		local obj = newexternobject(UnityEngine.GameObject, "ctor", (function(obj) UnityEngine.GameObject.__install_TopLevel_SecondLevel_FooExtension(obj); end), {}, wrapstring("test test test"));
+		local obj = ;
 		local arr = wraparray{1, 2, 3, 4, 56};
 		local v = arr[3];
-		local dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "ctor", nil, {[1] = 2, [3] = 4});
+		local dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", nil, {[1] = 2, [3] = 4});
 		local v1 = condaccess(dict, getexterninstanceindexer(dict, 1));
 		local list = nil;
 		local l = condaccess(list, list.Count);
@@ -52,7 +53,7 @@ TopLevel.SecondLevel.FooExtension = {
 		TopLevel.SecondLevel.Foo.__install_TopLevel__SecondLevel__FooExtension = function(obj)
 			obj.Test3__TopLevel_SecondLevel_Foo = TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo;
 		end
-		UnityEngine.GameObject.__install_TopLevel__SecondLevel__FooExtension = function(obj)
+		GameObject.__install_TopLevel__SecondLevel__FooExtension = function(obj)
 			obj.TestExtern = TopLevel.SecondLevel.FooExtension.TestExtern;
 		end
 		local static = TopLevel.SecondLevel.FooExtension;

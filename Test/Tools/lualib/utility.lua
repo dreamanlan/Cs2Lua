@@ -2,6 +2,8 @@ System = System or {};
 System.Collections = System.Collections or {};
 System.Collections.Generic = System.Collections.Generic or {};
 System.Collections.Generic.List_T = {};
+System.Collections.Generic.Queue_T = {};
+System.Collections.Generic.Stack_T = {};
 System.Collections.Generic.Dictionary_TKey_TValue = {};
 System.Collections.Generic.HashSet_T = {};
 
@@ -91,6 +93,96 @@ __mt_array = {
         end;
         return ret;
       end;
+    elseif k=="AddRange" then
+      return function(obj, coll)
+        local enumer = coll:GetEnumerator();
+        while enumer:MoveNext() do
+          table.insert(obj, enumer.Current);
+        end;
+      end;
+    elseif k=="Insert" then
+      return function(obj, ix, p)
+        table.insert(obj,ix+1,p);
+	    end;
+    elseif k=="IndexOf" then
+		  return function(obj, p)
+		    local ix = 0;
+	      for k,v in pairs(obj) do
+	        if v==p then	          
+	          return ix;
+	        end;
+	        ix = ix + 1;
+	      end;
+	      return -1;
+	    end;
+    elseif k=="LastIndexOf" then
+		  return function(obj, p)
+		    local num = table.maxn(obj);
+	      for k=num,1 do
+	        local v = obj[k];
+	        if v==p then	          
+	          return k-1;
+	        end;
+	      end;
+	      return -1;
+	    end;
+    elseif k=="Contains" then
+		  return function(obj, p)
+	      local ret = false;
+	      for k,v in pairs(obj) do		        
+	        if v==p then
+	          ret=true;
+	          break;
+	        end;
+	      end;
+	      return ret;
+	    end;
+    elseif k=="Peek" then    
+      return function(obj)
+        local num = table.maxn(obj);
+        local v = obj[num];
+        return v;
+      end;
+    elseif k=="Enqueue" then
+      return function(obj,v)
+        table.insert(obj,1,v);
+      end;
+    elseif k=="Dequeue" then
+      return function(obj)
+        local num = table.maxn(obj);
+        local v = obj[num];
+        table.remove(obj,num);
+        return v;
+      end;
+    elseif k=="Push" then
+      return function(obj,v)
+        table.insert(obj,v);
+      end;
+    elseif k=="Pop" then
+      return function(obj)
+        local num = table.maxn(obj);
+        local v = obj[num];
+        table.remove(obj,num);
+        return v;
+      end;
+    elseif k=="CopyTo" then
+      return function(obj, arr)
+        for k,v in pairs(obj) do
+          arr[k]=v;
+        end;
+      end;
+    elseif k=="ToArray" then
+      return function(obj)
+        local ret = {};
+        for k,v in pairs(obj) do
+          ret[k]=v;
+        end;
+        return ret;
+      end;
+	  elseif k=="Clear" then
+	  	while table.maxn(t)>0 do
+	  		table.remove(t);
+	  	end;	  	
 	  elseif k=="GetEnumerator" then
 	    return function(obj)
 	      return GetArrayEnumerator(obj);
@@ -104,7 +196,7 @@ __mt_dictionary = {
 		if k=="Count" then
 			return table.maxn(t);
 		elseif k=="Add" then
-		  return function(obj, p1,p2) obj[p1]=p2; return p2; end;
+		  return function(obj, p1, p2) obj[p1]=p2; return p2; end;
 		elseif k=="Remove" then
 		  return function(obj, p)
 	      local pos = 1;
@@ -159,9 +251,79 @@ __mt_dictionary = {
 	      end;
 	      return false, nil;
 	    end;
+    elseif k=="Keys" then
+      local ret = {};
+      for k,v in pairs(t) do
+        table.insert(ret, k);
+      end;
+      return ret;
+    elseif k=="Values" then
+      local ret = {};
+      for k,v in pairs(t) do
+        table.insert(ret, v);
+      end;
+      return ret;
+	  elseif k=="Clear" then
+	  	while table.maxn(t)>0 do
+	  		table.remove(t);
+	  	end;	  	
 	  elseif k=="GetEnumerator" then
 	    return function(obj)
 	      return GetDictEnumerator(obj);
+	    end;
+		end;
+	end,
+};
+
+__mt_hashset = {
+	__index = function(t, k)
+		if k=="Count" then
+			return table.maxn(t);
+		elseif k=="Add" then
+		  return function(obj, p) obj[p]=true; return true; end;
+		elseif k=="Remove" then
+		  return function(obj, p)
+	      local pos = 1;
+	      local ret = nil;
+	      for k,v in pairs(obj) do		        
+	        if k==p then
+	          ret=v;
+	          break;
+	        end;
+	        pos=pos+1;		        
+	      end;
+	      if ret then
+	        table.remove(obj,pos);
+	      end;
+	      return ret;
+	    end;
+		elseif k=="Contains" then
+		  return function(obj, p)
+	      if obj[p] then
+	        return true;
+	      end;
+	      local ret = false;
+	      for k,v in pairs(obj) do		        
+	        if k==p then
+	          ret=true;
+	          break;
+	        end;
+	      end;
+	      return ret;
+	    end;
+    elseif k=="CopyTo" then
+      return function(obj, arr)
+        for k,v in pairs(obj) do
+          table.insert(arr,k);
+        end;
+      end;
+	  elseif k=="Clear" then
+	  	while table.maxn(t)>0 do
+	  		table.remove(t);
+	  	end;	  	
+	  elseif k=="GetEnumerator" then
+	    return function(obj)
+	      return GetHashsetEnumerator(obj);
 	    end;
 		end;
 	end,
@@ -208,27 +370,48 @@ function GetDictEnumerator(tb)
     MoveNext = function(this)
       local tb = this.object;
       local v = nil;
-      this.index, v = next(tb, this.index);
-      if this.index == "__class" then
-        this.index, v = next(tb, this.index);
-      end;
+      this.key, v = next(tb, this.key);
       this.current = {
-        Key = this.index,
+        Key = this.key,
         Value = v,
       };
-      if this.index then
+      if this.key then
         return true;
       else
         return false;
       end;
     end,
     object = tb,
-    index = nil,
+    key = nil,
     current = nil,
   },{
     __index = function(t, k)
       if k=="Current" then
         return t.current;
+      end;
+      return nil;
+    end,
+  });
+end;
+
+function GetHashsetEnumerator(tb)
+  return setmetatable({
+    MoveNext = function(this)
+      local tb = this.object;
+      local v = nil;
+      this.key, v = next(tb, this.key);
+      if this.key then
+        return true;
+      else
+        return false;
+      end;
+    end,
+    object = tb,
+    key = nil,
+  },{
+    __index = function(t, k)
+      if k=="Current" then
+        return t.key;
       end;
       return nil;
     end,
@@ -244,11 +427,13 @@ function wrapstring(str)
 end;
 
 function wraparray(arr)
-	return setmetatable(arr, __mt_array);
+	local meta = setmetatable({}, __mt_array);
+	return setmetatable(arr, { __index = meta});
 end;
 
 function wrapdictionary(dict)
-	return setmetatable(dict, __mt_dictionary);
+	local meta = setmetatable({}, __mt_dictionary);
+	return setmetatable(dict, { __index = meta});
 end;
 
 function wrapdelegation(handlers)
@@ -292,7 +477,7 @@ function defineclass(base, static, static_props, static_events, instance_build, 
     local class_events = static_events or {};
     class["__cs2lua_defined"] = true;
     
-    setmetatable(class, {            
+    setmetatable(class, {
         __call = function()
         		local baseObj = nil;
         		if mt then
@@ -306,10 +491,10 @@ function defineclass(base, static, static_props, static_events, instance_build, 
             end;
             local obj_props = instance_props or {};
             local obj_events = instance_events or {};
-            obj["__class"] = class;
             obj["base"] = baseObj;
             
-            setmetatable(obj, {                
+            setmetatable(obj, {
+            		__class = class,                
                 __index = function(t, k)
                     local ret;
                     ret = obj_props[k];
@@ -410,38 +595,43 @@ end;
 
 function newdictionary(type, ctor, dict, ...)
   if dict then
-    dict["__class"] = type;
-	  return setmetatable(dict, __mt_dictionary);
+	  local meta = setmetatable({}, __mt_dictionary);
+    meta["__class"] = type;
+	  return setmetatable(dict, { __index = meta});
 	end;
 end;
 
 function newlist(type, ctor, list, ...)
   if list then
-    list["__class"] = type;
-    return setmetatable(list, __mt_array);
+	  local meta = setmetatable({}, __mt_array);
+    meta["__class"] = type;
+    return setmetatable(list, { __index = meta});
   end;
 end;
 
 function newcollection(type, ctor, coll, ...)
   if coll then
-    coll["__class"] = type;
-    return setmetatable(dict, __mt_array);
+	  local meta = setmetatable({}, __mt_hashset);
+    meta["__class"] = type;
+    return setmetatable(dict, { __index = meta});
   end;
 end;
 
 function newexterndictionary(type, className, ctor, doexternsion, dict, ...)
-  if dict and type==System.Collections.Generic.Dictionary_TKey_TValue then    
-    dict["__class"] = type;
-	  return setmetatable(dict, __mt_dictionary);
+  if dict and type==System.Collections.Generic.Dictionary_TKey_TValue then
+	  local meta = setmetatable({}, __mt_dictionary);
+    meta["__class"] = type;
+	  return setmetatable(dict, { __index = meta});
 	else
 	  return newexternobject(type, className, ctor, doexternsion, dict, ...);
 	end;
 end;
 
 function newexternlist(type, className, ctor, doexternsion, list, ...)
-  if list and type==System.Collections.Generic.List_T then
-    list["__class"] = type;
-    return setmetatable(list, __mt_array);
+  if list and (type==System.Collections.Generic.List_T or type==System.Collections.Generic.Queue_T or type==System.Collections.Generic.Stack_T) then    
+	  local meta = setmetatable({}, __mt_array);
+    meta["__class"] = type;
+    return setmetatable(list, { __index = meta});
 	else
 	  return newexternobject(type, className, ctor, doexternsion, list, ...);
   end;
@@ -449,8 +639,9 @@ end;
 
 function newexterncollection(type, className, ctor, doexternsion, coll, ...)
   if coll and type==System.Collections.Generic.HashSet_T then
-    coll["__class"] = type;
-    return setmetatable(coll, __mt_array);
+	  local meta = setmetatable({}, __mt_hashset);
+    meta["__class"] = type;
+    return setmetatable(dict, { __index = meta});
 	else
 	  return newexternobject(type, className, ctor, doexternsion, coll, ...);
   end;
@@ -525,7 +716,8 @@ end;
 function getexterninstanceindexer(obj, ...)  
 	local args = {...};
 	local index = args[1];
-	if obj.__class == System.Collections.Generic.List_T then
+	local meta = getmetatable(obj);
+	if meta and meta.__class == System.Collections.Generic.List_T then
 	  return obj[index+1];
 	else
 	  return obj[...];
