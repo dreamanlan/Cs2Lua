@@ -1383,7 +1383,7 @@ namespace SLua
 			List<PropertyInfo> getter = new List<PropertyInfo>();
 			List<PropertyInfo> setter = new List<PropertyInfo>();
 			// Write property set/get
-			PropertyInfo[] props = t.GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+			PropertyInfo[] props = t.GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.Instance);
 			foreach (PropertyInfo fi in props)
 			{
 				//if (fi.Name == "Item" || IsObsolete(fi) || MemberInFilter(t,fi) || DontExport(fi))
