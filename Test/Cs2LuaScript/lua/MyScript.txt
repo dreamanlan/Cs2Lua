@@ -23,7 +23,7 @@ MyScript = {
 			Init = function(this, obj)
 				local s = wrapstring("test test test from cs2lua !");
 				UnityEngine.Debug.Log(s);
-				this.root = newexternobject(UnityEngine.GameObject, "ctor", nil, {}, wrapstring("root"));
+				this.root = newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", nil, {}, wrapstring("root"));
 				local slider = typecast(UnityEngine.GameObject.Find(wrapstring("Canvas/Slider")):GetComponent(UnityEngine.UI.Slider), UnityEngine.UI.Slider);
 				local counttxt = typecast(UnityEngine.GameObject.Find(wrapstring("Canvas/Count")):GetComponent(UnityEngine.UI.Text), UnityEngine.UI.Text);
 				slider.onValueChanged:AddListener((function(v)
@@ -39,7 +39,7 @@ MyScript = {
 					local offset = condexp(((i % 2) == 1), 5, -5);
 					local nr = (this.r + (UnityEngine.Mathf.Sin(UnityEngine.Time.time) * offset));
 					local angle = condexp(((i % 2) == 1), UnityEngine.Time.time, -5);
-					local b = newexternobject(UnityEngine.Vector3, "ctor", nil, {}, typecast(( (UnityEngine.Mathf.Cos(((((i * 3.141593) * 2) / this.max) + angle)) * nr) ), System.Single), typecast(( (UnityEngine.Mathf.Sin(((((i * 3.141593) * 2) / this.max) + angle)) * nr) ), System.Single), 0);
+					local b = newexternobject(UnityEngine.Vector3, "UnityEngine.Vector3", "ctor", nil, {}, typecast(( (UnityEngine.Mathf.Cos(((((i * 3.141593) * 2) / this.max) + angle)) * nr) ), System.Single), typecast(( (UnityEngine.Mathf.Sin(((((i * 3.141593) * 2) / this.max) + angle)) * nr) ), System.Single), 0);
 					this.cubes[i + 1].transform.position = b;
 					i = i + 1;
 				end;
@@ -65,7 +65,7 @@ MyScript = {
 				local i = 0;
 				while (i < this.max) do
 					local cube = UnityEngine.GameObject.CreatePrimitive(3);
-					cube.transform.position = newexternobject(UnityEngine.Vector3, "ctor", nil, {}, (typecast(UnityEngine.Mathf.Cos((((i * 3.141593) * 2) / this.max)), System.Single) * this.r), (typecast(UnityEngine.Mathf.Sin((((i * 3.141593) * 2) / this.max)), System.Single) * this.r), 0);
+					cube.transform.position = newexternobject(UnityEngine.Vector3, "UnityEngine.Vector3", "ctor", nil, {}, (typecast(UnityEngine.Mathf.Cos((((i * 3.141593) * 2) / this.max)), System.Single) * this.r), (typecast(UnityEngine.Mathf.Sin((((i * 3.141593) * 2) / this.max)), System.Single) * this.r), 0);
 					cube.transform:SetParent(this.root.transform);
 					local mat = cube:GetComponent(UnityEngine.Renderer).material;
 					local box = cube:GetComponent(UnityEngine.BoxCollider);

@@ -280,7 +280,7 @@ namespace RoslynTool.CsToLua
             CodeBuilder.AppendLine();
             ++m_Indent;
             if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
-                CodeBuilder.AppendFormat("{0}local {1} = {...};", GetIndentString(), mi.OriginalParamsName);
+                CodeBuilder.AppendFormat("{0}local {1} = wraparray{{...}};", GetIndentString(), mi.OriginalParamsName);
                 CodeBuilder.AppendLine();
             }
             foreach (string name in mi.OutParamNames) {
@@ -1381,7 +1381,7 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.Append(", ");
             }
         }
-        private void OutputExpressionList(IList<ExpressionSyntax> args, IList<ITypeSymbol> typeArgs)
+        private void OutputExpressionList(IList<ExpressionSyntax> args, IList<ITypeSymbol> typeArgs, bool arrayToParams)
         {
             if (typeArgs.Count > 0) {
                 OutputTypeArgumentList(typeArgs);
@@ -1389,10 +1389,14 @@ namespace RoslynTool.CsToLua
             if (args.Count > 0) {
                 if (typeArgs.Count > 0)
                     CodeBuilder.Append(", ");
-                OutputExpressionList(args);
+                OutputExpressionList(args, arrayToParams);
             }
         }
         private void OutputExpressionList(IList<ExpressionSyntax> args)
+        {
+            OutputExpressionList(args, false);
+        }
+        private void OutputExpressionList(IList<ExpressionSyntax> args, bool arrayToParams)
         {
             int ct = args.Count;
             for (int i = 0; i < ct; ++i) {
@@ -1404,8 +1408,16 @@ namespace RoslynTool.CsToLua
                     } else {
                         CodeBuilder.Append("nil");
                     }
-                } else {
+                } else if (i < ct - 1) {
                     VisitExpressionSyntax(exp);
+                } else {
+                    if (arrayToParams) {
+                        CodeBuilder.Append("arraytoparams(");
+                        VisitExpressionSyntax(exp);
+                        CodeBuilder.Append(")");
+                    } else {
+                        VisitExpressionSyntax(exp);
+                    }
                 }
                 if (i < ct - 1) {
                     CodeBuilder.Append(", ");
@@ -1628,7 +1640,7 @@ namespace RoslynTool.CsToLua
                 string manglingName = NameMangling(ii.MethodSymbol);
                 CodeBuilder.Append(manglingName);
                 CodeBuilder.Append("(");
-                OutputExpressionList(ii.Args, ii.GenericTypeArgs);
+                OutputExpressionList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
                 CodeBuilder.Append(")");
             } else {
                 string method = ii.MethodSymbol.Name;
@@ -1666,7 +1678,7 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendFormat("invokeexternoperator({0}, ", ii.ClassKey);
                     CodeBuilder.AppendFormat("\"{0}\"", method);
                     CodeBuilder.Append(", ");
-                    OutputExpressionList(ii.Args, ii.GenericTypeArgs);
+                    OutputExpressionList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
                     CodeBuilder.Append(")");
                 } else {
                     if (ii.Args.Count == 1) {
@@ -1987,7 +1999,7 @@ namespace RoslynTool.CsToLua
 
                 //处理ref/out参数
                 InvocationInfo ii = new InvocationInfo();
-                ii.Init(sym, m_SymbolTable.AssemblySymbol, node.ArgumentList, m_SymbolTable.ExistTypeOf(sym));
+                ii.Init(sym, m_SymbolTable.AssemblySymbol, node.ArgumentList, m_SymbolTable.ExistTypeOf(sym), m_Model);
                 ci.AddReference(sym, ci.SemanticInfo);
 
                 bool isCollection = IsImplementationOfSys(typeSymInfo, "ICollection");
@@ -2067,7 +2079,7 @@ namespace RoslynTool.CsToLua
                 if (ii.Args.Count + ii.GenericTypeArgs.Count > 0) {
                     CodeBuilder.Append(", ");
                 }
-                OutputExpressionList(ii.Args, ii.GenericTypeArgs);
+                OutputExpressionList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
                 CodeBuilder.Append(")");
                 if (ii.ReturnArgs.Count > 0) {
                     CodeBuilder.Append("; ");
@@ -2458,7 +2470,7 @@ namespace RoslynTool.CsToLua
             CodeBuilder.AppendLine();
             ++m_Indent;
             if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
-                CodeBuilder.AppendFormat("{0}local {1} = {...};", GetIndentString(), mi.OriginalParamsName);
+                CodeBuilder.AppendFormat("{0}local {1} = wraparray{{...}};", GetIndentString(), mi.OriginalParamsName);
                 CodeBuilder.AppendLine();
             }
             foreach (string name in mi.OutParamNames) {
@@ -2684,7 +2696,7 @@ namespace RoslynTool.CsToLua
                     } else {
                         //处理ref/out参数
                         InvocationInfo ii = new InvocationInfo();
-                        ii.Init(sym, m_SymbolTable.AssemblySymbol, invocation.ArgumentList, m_SymbolTable.ExistTypeOf(sym));
+                        ii.Init(sym, m_SymbolTable.AssemblySymbol, invocation.ArgumentList, m_SymbolTable.ExistTypeOf(sym), m_Model);
                         ci.AddReference(sym, ci.SemanticInfo);
 
                         MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
@@ -2711,7 +2723,7 @@ namespace RoslynTool.CsToLua
                             }
                             CodeBuilder.Append(NameMangling(sym));
                             CodeBuilder.Append("(");
-                            OutputExpressionList(ii.Args, ii.GenericTypeArgs);
+                            OutputExpressionList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
                             CodeBuilder.Append(")");
                         } else {
                             int ct = ii.ReturnArgs.Count;
@@ -2733,7 +2745,7 @@ namespace RoslynTool.CsToLua
                                 CodeBuilder.Append(NameMangling(sym));
                             }
                             CodeBuilder.Append("(");
-                            OutputExpressionList(ii.Args, ii.GenericTypeArgs);
+                            OutputExpressionList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
                             CodeBuilder.Append(")");
                         }
                     }
@@ -2928,7 +2940,7 @@ namespace RoslynTool.CsToLua
                 } else {
                     //处理ref/out参数
                     InvocationInfo ii = new InvocationInfo();
-                    ii.Init(sym, m_SymbolTable.AssemblySymbol, invocation.ArgumentList, m_SymbolTable.ExistTypeOf(sym));
+                    ii.Init(sym, m_SymbolTable.AssemblySymbol, invocation.ArgumentList, m_SymbolTable.ExistTypeOf(sym), m_Model);
                     ci.AddReference(sym, ci.SemanticInfo);
 
                     MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
@@ -2970,7 +2982,7 @@ namespace RoslynTool.CsToLua
                         }
                         CodeBuilder.Append(NameMangling(sym));
                         CodeBuilder.Append("(");
-                        OutputExpressionList(ii.Args, ii.GenericTypeArgs);
+                        OutputExpressionList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
                         CodeBuilder.Append(")");
 
                         if (op != "=") {
@@ -3015,7 +3027,7 @@ namespace RoslynTool.CsToLua
                             CodeBuilder.Append(NameMangling(sym));
                         }
                         CodeBuilder.Append("(");
-                        OutputExpressionList(ii.Args, ii.GenericTypeArgs);
+                        OutputExpressionList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
                         CodeBuilder.Append(")");
 
                         if (op != "=") {
@@ -3075,7 +3087,7 @@ namespace RoslynTool.CsToLua
             } else {
                 //处理ref/out参数
                 InvocationInfo ii = new InvocationInfo();
-                ii.Init(sym, m_SymbolTable.AssemblySymbol, invocation.ArgumentList, m_SymbolTable.ExistTypeOf(sym));
+                ii.Init(sym, m_SymbolTable.AssemblySymbol, invocation.ArgumentList, m_SymbolTable.ExistTypeOf(sym), m_Model);
                 ci.AddReference(sym, ci.SemanticInfo);
 
                 MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
@@ -3100,7 +3112,7 @@ namespace RoslynTool.CsToLua
                     }
                     CodeBuilder.Append(NameMangling(sym));
                     CodeBuilder.Append("(");
-                    OutputExpressionList(ii.Args, ii.GenericTypeArgs);
+                    OutputExpressionList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
                     CodeBuilder.Append(")");
                     if (ii.ReturnArgs.Count > 0 && !toplevel) {
                         CodeBuilder.AppendFormat(" return {0}; end)()", localName);
@@ -3126,7 +3138,7 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.Append(NameMangling(sym));
                     }
                     CodeBuilder.Append("(");
-                    OutputExpressionList(ii.Args, ii.GenericTypeArgs);
+                    OutputExpressionList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
                     CodeBuilder.Append(")");
                     if (ii.ReturnArgs.Count > 0 && !toplevel) {
                         CodeBuilder.AppendFormat(" return {0}; end)()", localName);

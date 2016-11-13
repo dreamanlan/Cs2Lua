@@ -61,10 +61,15 @@ function typeis(obj, type)
   return true;
 end;
 
+function arraytoparams(arr)
+	return unpack(arr);
+end;
+
 __mt_array = {
 	__index = function(t, k)
 		if k=="Length" or k=="Count" then
-			return table.maxn(t);
+			local tb = t.__object;
+			return table.maxn(tb);
 		elseif k=="GetLength" then
 			return function(obj, ix)
         local ret = 0;
@@ -194,7 +199,8 @@ __mt_array = {
 __mt_dictionary = {
 	__index = function(t, k)
 		if k=="Count" then
-			return table.maxn(t);
+			local tb = t.__object;
+			return table.maxn(tb);
 		elseif k=="Add" then
 		  return function(obj, p1, p2) obj[p1]=p2; return p2; end;
 		elseif k=="Remove" then
@@ -278,7 +284,8 @@ __mt_dictionary = {
 __mt_hashset = {
 	__index = function(t, k)
 		if k=="Count" then
-			return table.maxn(t);
+			local tb = t.__object;
+			return table.maxn(tb);
 		elseif k=="Add" then
 		  return function(obj, p) obj[p]=true; return true; end;
 		elseif k=="Remove" then
@@ -427,12 +434,12 @@ function wrapstring(str)
 end;
 
 function wraparray(arr)
-	local meta = setmetatable({}, __mt_array);
+	local meta = setmetatable({__object=arr}, __mt_array);
 	return setmetatable(arr, { __index = meta});
 end;
 
 function wrapdictionary(dict)
-	local meta = setmetatable({}, __mt_dictionary);
+	local meta = setmetatable({__object=dict}, __mt_dictionary);
 	return setmetatable(dict, { __index = meta});
 end;
 
@@ -595,7 +602,7 @@ end;
 
 function newdictionary(type, ctor, dict, ...)
   if dict then
-	  local meta = setmetatable({}, __mt_dictionary);
+	  local meta = setmetatable({__object=dict}, __mt_dictionary);
     meta["__class"] = type;
 	  return setmetatable(dict, { __index = meta});
 	end;
@@ -603,7 +610,7 @@ end;
 
 function newlist(type, ctor, list, ...)
   if list then
-	  local meta = setmetatable({}, __mt_array);
+	  local meta = setmetatable({__object=list}, __mt_array);
     meta["__class"] = type;
     return setmetatable(list, { __index = meta});
   end;
@@ -611,7 +618,7 @@ end;
 
 function newcollection(type, ctor, coll, ...)
   if coll then
-	  local meta = setmetatable({}, __mt_hashset);
+	  local meta = setmetatable({__object=coll}, __mt_hashset);
     meta["__class"] = type;
     return setmetatable(dict, { __index = meta});
   end;
@@ -619,7 +626,7 @@ end;
 
 function newexterndictionary(type, className, ctor, doexternsion, dict, ...)
   if dict and type==System.Collections.Generic.Dictionary_TKey_TValue then
-	  local meta = setmetatable({}, __mt_dictionary);
+	  local meta = setmetatable({__object=dict}, __mt_dictionary);
     meta["__class"] = type;
 	  return setmetatable(dict, { __index = meta});
 	else
@@ -629,7 +636,7 @@ end;
 
 function newexternlist(type, className, ctor, doexternsion, list, ...)
   if list and (type==System.Collections.Generic.List_T or type==System.Collections.Generic.Queue_T or type==System.Collections.Generic.Stack_T) then    
-	  local meta = setmetatable({}, __mt_array);
+	  local meta = setmetatable({__object=list}, __mt_array);
     meta["__class"] = type;
     return setmetatable(list, { __index = meta});
 	else
@@ -639,7 +646,7 @@ end;
 
 function newexterncollection(type, className, ctor, doexternsion, coll, ...)
   if coll and type==System.Collections.Generic.HashSet_T then
-	  local meta = setmetatable({}, __mt_hashset);
+	  local meta = setmetatable({__object=coll}, __mt_hashset);
     meta["__class"] = type;
     return setmetatable(dict, { __index = meta});
 	else

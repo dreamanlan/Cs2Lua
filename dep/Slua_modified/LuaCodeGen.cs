@@ -570,7 +570,11 @@ namespace SLua
 				{
 					if (type.IsSealed && !type.IsGenericType && !type.IsNested)
 					{
-						MethodInfo[] methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public);
+                        BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.Public;
+                        if (null == type.BaseType || !type.BaseType.IsGenericType) {
+                            bindingFlags |= BindingFlags.DeclaredOnly;
+                        }
+                        MethodInfo[] methods = type.GetMethods(bindingFlags);
 						foreach (MethodInfo method in methods)
 						{
 							if (IsExtensionMethod(method))
@@ -1127,7 +1131,10 @@ namespace SLua
 			if (writeStatic)
 				bf |= BindingFlags.Static;
 			else
-				bf |= BindingFlags.Instance;
+                bf |= BindingFlags.Instance;
+            if (null == t.BaseType || !t.BaseType.IsGenericType) {
+                bf |= BindingFlags.DeclaredOnly;
+            }
 			
 			MethodInfo[] members = t.GetMethods(bf);
 			List<MethodInfo> methods = new List<MethodInfo>();
@@ -1382,8 +1389,12 @@ namespace SLua
 			//for this[]
 			List<PropertyInfo> getter = new List<PropertyInfo>();
 			List<PropertyInfo> setter = new List<PropertyInfo>();
-			// Write property set/get
-			PropertyInfo[] props = t.GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.Instance);
+            // Write property set/get
+            BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.Instance;
+            if (null == t.BaseType || !t.BaseType.IsGenericType) {
+                bindingFlags |= BindingFlags.DeclaredOnly;
+            }
+			PropertyInfo[] props = t.GetProperties(bindingFlags);
 			foreach (PropertyInfo fi in props)
 			{
 				//if (fi.Name == "Item" || IsObsolete(fi) || MemberInFilter(t,fi) || DontExport(fi))

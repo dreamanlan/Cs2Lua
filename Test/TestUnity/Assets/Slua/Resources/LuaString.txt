@@ -3,8 +3,8 @@ require "cs2lua__namespaces";
 
 LuaString = {
 	Format = function(str, ...)
-		local args = ...;
-		return System.String.Format(str, args);
+		local args = wraparray{...};
+		return System.String.Format(str, arraytoparams(args));
 	end,
 	cctor = function()
 	end,

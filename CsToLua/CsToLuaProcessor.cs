@@ -533,19 +533,17 @@ namespace RoslynTool.CsToLua
                     } else {
                         //处理ref/out参数
                         if (exportConstructorInfo.ReturnParamNames.Count > 0) {
-                            sb.AppendFormat("{0}local args = ...;", GetIndentString(indent));
-                            sb.AppendLine();
-                            sb.AppendFormat("{0}return (function() ", GetIndentString(indent));
+                            sb.AppendFormat("{0}return (function(...) ", GetIndentString(indent));
                             string retArgStr = string.Join(", ", exportConstructorInfo.ReturnParamNames.ToArray());
                             sb.Append("local obj");
                             if (exportConstructorInfo.ReturnParamNames.Count > 0) {
                                 sb.Append(", ");
                                 sb.Append(retArgStr);
                             }
-                            sb.AppendFormat(" = newobject({0}, \"{1}\", {{}}, args); return obj; end)();", key, exportConstructor);
+                            sb.AppendFormat(" = newobject({0}, \"{1}\", {{}}, ...); return obj; end)(...);", key, exportConstructor);
                             sb.AppendLine();
                         } else {
-                            sb.AppendFormat("{0}return newobject({1}, \"{2}\", {{}}, args);", GetIndentString(indent), key, exportConstructor);
+                            sb.AppendFormat("{0}return newobject({1}, \"{2}\", {{}}, ...);", GetIndentString(indent), key, exportConstructor);
                             sb.AppendLine();
                         }
                     }

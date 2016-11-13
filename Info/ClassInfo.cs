@@ -393,11 +393,12 @@ namespace RoslynTool.CsToLua
         internal List<ExpressionSyntax> Args = new List<ExpressionSyntax>();
         internal List<ExpressionSyntax> ReturnArgs = new List<ExpressionSyntax>();
         internal List<ITypeSymbol> GenericTypeArgs = new List<ITypeSymbol>();
+        internal bool ArrayToParams = false;
 
         internal IMethodSymbol MethodSymbol = null;
         internal IAssemblySymbol AssemblySymbol = null;
 
-        internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, ArgumentListSyntax argList, bool existTypeOf)
+        internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, ArgumentListSyntax argList, bool existTypeOf, SemanticModel model)
         {
             Init(sym, assemblySym, existTypeOf);
 
@@ -418,6 +419,12 @@ namespace RoslynTool.CsToLua
                                 Args.Add(null);
                             }
                             ReturnArgs.Add(arg.Expression);
+                        } else if (param.IsParams) {
+                            var argOper = model.GetOperation(arg.Expression);
+                            if (null != argOper && null != argOper.Type && argOper.Type.TypeKind == TypeKind.Array && i == ct - 1) {
+                                ArrayToParams = true;
+                            }
+                            Args.Add(arg.Expression);
                         } else {
                             Args.Add(arg.Expression);
                         }

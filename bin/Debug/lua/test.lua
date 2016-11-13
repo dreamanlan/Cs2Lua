@@ -17,3 +17,21 @@ local t = wrapdictionary{};
 print(t.Count);
 
 t:Add("test", 12345);
+
+function b(...)
+	print(...);
+end;
+
+function a(...)
+	local args = {...};
+	(function() b(unpack(args)); end)();
+end;
+
+a(1,2,3,54);
+
+local arr = wraparray{};
+
+arr[1]=1231;
+arr[2]=3456;
+
+print(arr.Count);
