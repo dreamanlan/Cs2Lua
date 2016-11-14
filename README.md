@@ -7,39 +7,39 @@ https://github.com/dreamanlan/Cs2Lua/tree/master/Test
 
 【命令行】
 
-Cs2Lua [-ext fileext] [-enableinherit] [-normallua/-slua] [-outputresult] [-d macro] [-refbyname dllname alias] [-refbypath dllpath alias] [-src] csfile|csprojfile
+    Cs2Lua [-ext fileext] [-enableinherit] [-normallua/-slua] [-outputresult] [-d macro] [-refbyname dllname alias] [-refbypath dllpath alias] [-src] csfile|csprojfile
 
 其中:
 
-fileext = 生成的lua脚本文件扩展名，对unity3d和slua应该是txt，对普通lua则为lua。
+    fileext = 生成的lua脚本文件扩展名，对unity3d和slua应该是txt，对普通lua则为lua。
 
-macro = 宏定义，会影响被转化的c#代码里的#if/#elif/#else/#endif语句的结果。
+    macro = 宏定义，会影响被转化的c#代码里的#if/#elif/#else/#endif语句的结果。
 
-dllname = 以名字（Assembly Name）提供的被引用的外部dotnet DLL，cs2lua尝试从名字获取这些DLL的路径（一般只有dotnet系统提供的DLL才可以这么用）。
+    dllname = 以名字（Assembly Name）提供的被引用的外部dotnet DLL，cs2lua尝试从名字获取这些DLL的路径（一般只有dotnet系统提供的DLL才可以这么用）。
 
-dllpath = 以文件全路径提供的被引用的外部dotnet DLL。
+    dllpath = 以文件全路径提供的被引用的外部dotnet DLL。
 
-alias = 外部dll顶层名空间别名，默认为global, 别名在c#代码里由'extern alias 名字;'语句使用。
+    alias = 外部dll顶层名空间别名，默认为global, 别名在c#代码里由'extern alias 名字;'语句使用。
     
-enableinherit = 此选项指明是否允许继承。
+    enableinherit = 此选项指明是否允许继承。
 
-normallua = 此选项指明输出为普通lua，此时与slua特定实现相关的语法会关闭（如输出参数调用时传入Slua.out）。
+    normallua = 此选项指明输出为普通lua，此时与slua特定实现相关的语法会关闭（如输出参数调用时传入Slua.out）。
 
-slua = 此选项默认打开，指明输出lua用于unity3d+slua。
+    slua = 此选项默认打开，指明输出lua用于unity3d+slua。
 
-outputresult = 此选项指明是否在控制台输出最终转化的结果（合并为单一文件样式）。
+    outputresult = 此选项指明是否在控制台输出最终转化的结果（合并为单一文件样式）。
 
-src = 此选项仅用在refbyname/refbypath选项未指明alias参数的情形，此时需要此选项在csfile|csprojfile前明确表明后面的参数是输入文件。
+    src = 此选项仅用在refbyname/refbypath选项未指明alias参数的情形，此时需要此选项在csfile|csprojfile前明确表明后面的参数是输入文件。
     
 Cs2Lua的输出主要包括：
 
-1、对应c#代码的转换出的lua代码，每个c#顶层类对应一个lua文件。
+    1、对应c#代码的转换出的lua代码，每个c#顶层类对应一个lua文件。
 
-2、所有名字空间的定义lua文件，此文件被1中文件引用，输出文件为cs2lua_namespaces.lua/txt。
+    2、所有名字空间的定义lua文件，此文件被1中文件引用，输出文件为cs2lua_namespaces.lua/txt。
 
-3、Cs2Lua依赖的lualib文件utility.lua，输出文件名为cs2lua_utility.lua/txt。
+    3、Cs2Lua依赖的lualib文件utility.lua，输出文件名为cs2lua_utility.lua/txt。
 
-4、在c#代码里使用Cs2Lua.Require明确指明要依赖的lualib文件，这些文件需要自己放到Cs2Lua.exe所在目录的子目录lualib里，之后自动拷到输出目录。
+    4、在c#代码里使用Cs2Lua.Require明确指明要依赖的lualib文件，这些文件需要自己放到Cs2Lua.exe所在目录的子目录lualib里，之后自动拷到输出目录。
 
 【源由】
 
