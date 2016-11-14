@@ -5,6 +5,42 @@ CSharp代码转lua，适用于使用lua实现热更新而又想有一个强类�
 
 https://github.com/dreamanlan/Cs2Lua/tree/master/Test
 
+【命令行】
+
+Cs2Lua [-ext fileext] [-enableinherit] [-normallua/-slua] [-outputresult] [-d macro] [-refbyname dllname alias] [-refbypath dllpath alias] [-src] csfile|csprojfile
+
+其中:
+
+fileext = 生成的lua脚本文件扩展名，对unity3d和slua应该是txt，对普通lua则为lua。
+
+macro = 宏定义，会影响被转化的c#代码里的#if/#elif/#else/#endif语句的结果。
+
+dllname = 以名字（Assembly Name）提供的被引用的外部dotnet DLL，cs2lua尝试从名字获取这些DLL的路径（一般只有dotnet系统提供的DLL才可以这么用）。
+
+dllpath = 以文件全路径提供的被引用的外部dotnet DLL。
+
+alias = 外部dll顶层名空间别名，默认为global, 别名在c#代码里由'extern alias 名字;'语句使用。
+    
+enableinherit = 此选项指明是否允许继承。
+
+normallua = 此选项指明输出为普通lua，此时与slua特定实现相关的语法会关闭（如输出参数调用时传入Slua.out）。
+
+slua = 此选项默认打开，指明输出lua用于unity3d+slua。
+
+outputresult = 此选项指明是否在控制台输出最终转化的结果（合并为单一文件样式）。
+
+src = 此选项仅用在refbyname/refbypath选项未指明alias参数的情形，此时需要此选项在csfile|csprojfile前明确表明后面的参数是输入文件。
+    
+Cs2Lua的输出主要包括：
+
+1、对应c#代码的转换出的lua代码，每个c#顶层类对应一个lua文件。
+
+2、所有名字空间的定义lua文件，此文件被1中文件引用，输出文件为cs2lua_namespaces.lua/txt。
+
+3、Cs2Lua依赖的lualib文件utility.lua，输出文件名为cs2lua_utility.lua/txt。
+
+4、在c#代码里使用Cs2Lua.Require明确指明要依赖的lualib文件，这些文件需要自己放到Cs2Lua.exe所在目录的子目录lualib里，之后自动拷到输出目录。
+
 【源由】
 
 1、基于unity3d的移动游戏开发，在android与ios平台上的限制不同。在android上，我们可以拆分可执行文件为多个dll，然后运行时动态加载除主程序外的其它dll，这样也v允许了对dll的单独更新，然而ios上此路不通，ios禁止使用jit与动态加载dll。为了实现热更新，游戏行业一般采用lua。
@@ -106,19 +142,19 @@ https://github.com/dreamanlan/Cs2Lua/tree/master/Test
 
 2、C# class/struct -> lua table + metatable
 
-3、数组、集合 -> lua table
+3、inherit/property/event interface implementation -> metatable __index/__newindex
 
-4、表达式 -> lua表达式 + 匿名函数调用
+4、lambda/delegate/event -> 函数对象
 
-5、c#语句 -> lua语句 + 匿名函数调用
+5、generic -> 转化为普通类与方法，类型参数（类与方法均是）转化为普通参数，代码里明确用到类型参数的地方只有typeof操作
 
-6、lambda/delegate/event -> 函数对象
+6、interface -> 直接忽略
 
-7、inherit/property/event interface implementation -> metatable __index/__newindex
+7、数组、集合 -> lua table
 
-8、generic -> 转化为普通类与方法，类型参数（类与方法均是）转化为普通参数，代码里明确用到类型参数的地方只有typeof操作
+8、表达式 -> lua表达式 + 匿名函数调用
 
-9、interface -> 直接忽略
+9、c#语句 -> lua语句 + 匿名函数调用
 
 【比较复杂的转换】
 
