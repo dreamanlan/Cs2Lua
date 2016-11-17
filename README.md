@@ -72,6 +72,8 @@ Cs2Lua的输出主要包括：
 
 6、不支持checked/unchecked语句。
 
+7、不支持linq语法糖。
+
 *** CsToLuaUnimplemented.cs是目前明确不支持与不需要处理的语法特性（Visit开头的方法）.
 
 【主要支持的c#特性】
