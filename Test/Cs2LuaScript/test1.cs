@@ -54,6 +54,8 @@ class MyScript : ITickPlugin
     [Cs2Lua.Ignore]
     public void LateUpdate()
     { }
+    public void Call(string name, params object[] args)
+    { }
 
     private void Reset()
     {

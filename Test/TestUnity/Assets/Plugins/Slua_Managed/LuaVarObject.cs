@@ -163,11 +163,20 @@ namespace SLua
                 object[] args;
                 checkArgs(l, 1, m, out args);
                 object ret = m.Invoke(m.IsStatic ? null : self, args);
+                var pis = m.GetParameters();
                 pushValue(l, true);
                 if (ret != null)
                 {
                     pushVar(l, ret);
-                    return 2;
+                    int ct = 2;
+                    for (int i = 0; i < pis.Length; ++i) {
+                        var pi = pis[i];
+                        if (pi.ParameterType.IsByRef || pi.IsOut) {
+                            pushValue(l, args[i]);
+                            ++ct;
+                        }
+                    }
+                    return ct;
                 }
                 return 1;
             }

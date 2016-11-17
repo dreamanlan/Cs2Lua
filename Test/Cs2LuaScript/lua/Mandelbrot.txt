@@ -23,6 +23,9 @@ Mandelbrot = {
 				this.root = newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", nil, {}, wrapstring("mandelbrot"));
 				this:Exec();
 			end,
+			Call = function(this, name, ...)
+				local args = wraparray{...};
+			end,
 			Exec = function(this)
 				local width = 50;
 				local height = width;

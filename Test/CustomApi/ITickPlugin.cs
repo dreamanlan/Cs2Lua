@@ -8,6 +8,7 @@ public interface ITickPlugin
     void Update();
     void FixedUpdate();
     void LateUpdate();
+    void Call(string name, params object[] args);
 }
 public interface ITickPluginFactory
 {

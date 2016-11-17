@@ -52,6 +52,9 @@ MyScript = {
 				this.t = (( (UnityEngine.Time.time - this.fogStart) ) / 10);
 				UnityEngine.Camera.main.backgroundColor = UnityEngine.Color.Lerp(this.bgCurrent, this.bgColor, this.t);
 			end,
+			Call = function(this, name, ...)
+				local args = wraparray{...};
+			end,
 			Reset = function(this)
 				if (nil ~= this.cubes) then
 					local i = 0;

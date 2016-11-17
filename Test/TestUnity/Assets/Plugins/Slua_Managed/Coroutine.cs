@@ -38,6 +38,7 @@ namespace SLua
 		{
 			mb = m;
 			reg(l, Yieldk, "UnityEngine");
+            reg(l, WrapEnumerator, "UnityEngine");
 
 			string yield =
 @"
@@ -72,6 +73,8 @@ end
 
 -- backward compatibility of older versions
 UnityEngine.Yield = uCoroutine.yield
+
+local WrapEnumerator = UnityEngine.WrapEnumerator
 ";
 			LuaState.get(l).doString(yield);
 		}
@@ -107,7 +110,35 @@ UnityEngine.Yield = uCoroutine.yield
 				yield return y;
 			f.call();
 		}
+        
+        [MonoPInvokeCallback(typeof(LuaCSFunction))]
+        static public int WrapEnumerator(IntPtr l)
+        {
+            try {
+                if (LuaDLL.lua_pushthread(l) == 1) {
+                    return error(l, "should put WrapEnumerator call into lua coroutine.");
+                }
+                LuaFunction f;
+                checkType(l, 1, out f);
+                IEnumerator enumer = buildEnumerator(f);
+                pushValue(l, enumer);
+                return 1;
+            } catch (Exception e) {
+                return error(l, e);
+            }
+        }
 
+        static public IEnumerator buildEnumerator(LuaFunction f)
+        {
+            for (; ; ) {
+                bool r = (bool)f.call();
+                if (r) {
+                    yield return null;
+                } else {
+                    yield break;
+                }
+            }
+        }
 	}
 }
 #endif

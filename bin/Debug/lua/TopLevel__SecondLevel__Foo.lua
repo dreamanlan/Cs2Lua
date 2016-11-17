@@ -23,7 +23,7 @@ TopLevel.SecondLevel.Foo = {
 
 
 	__new_object = function(...)
-		return newobject(TopLevel.SecondLevel.Foo, "ctor", {}, args);
+		return newobject(TopLevel.SecondLevel.Foo, "ctor", {}, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.Foo;
@@ -60,7 +60,7 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			Iterator = wrapenumerable(function(this)
 				wrapyield(nil, false, false);
-				wrapyield(, false, false);
+				wrapyield(newexternobject(UnityEngine.WaitForSeconds, "UnityEngine.WaitForSeconds", "ctor", nil, {}, 3), false, true);
 				return nil;
 			end),
 			Iterator2 = wrapenumerable(function(this)

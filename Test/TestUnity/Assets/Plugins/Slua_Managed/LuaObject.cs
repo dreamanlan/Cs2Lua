@@ -1296,8 +1296,7 @@ return index
 					return null;
 			}
 		}
-
-
+        
 		public static void pushValue(IntPtr l, object o)
 		{
 			pushVar(l, o);
@@ -1333,8 +1332,6 @@ return index
 				pushObject(l, o);
          
 		}
-
-
 
 		public static T checkSelf<T>(IntPtr l)
 		{
@@ -1418,8 +1415,7 @@ return index
 			}
 			return op;
 		}
-
-
+        
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 		static public int noConstructor(IntPtr l)
 		{
@@ -1495,5 +1491,4 @@ return index
             }
 	    }
 	}
-
 }

@@ -82,291 +82,282 @@ function __unwrap_if_string(val)
   end;
 end;
 
-__mt_array = {
-	__index = function(t, k)
-		if k=="Length" or k=="Count" then
-			local tb = t.__object;
-			return table.maxn(tb);
-		elseif k=="GetLength" then
-			return function(obj, ix)
-        local ret = 0;
-        local tb = obj;
-        for i=0,ix do			       
-          ret = table.maxn(tb);
-          tb = tb[0];
-        end;
-        return ret;
-      end;
-    elseif k=="Add" then
-      return function(obj, v) table.insert(obj, v); end;
-    elseif k=="Remove" then
-      return function(obj, p)
-        local pos = 1;
-        local ret = nil;
-        for k,v in pairs(obj) do		        
-          if v==p then
-            ret=v;
-            break;
-          end;
-          pos=pos+1;		        
-        end;
-        if ret then
-          table.remove(obj,pos);
-        end;
-        return ret;
-      end;
-    elseif k=="AddRange" then
-      return function(obj, coll)
-        local enumer = coll:GetEnumerator();
-        while enumer:MoveNext() do
-          table.insert(obj, enumer.Current);
-        end;
-      end;
-    elseif k=="Insert" then
-      return function(obj, ix, p)
-        table.insert(obj,ix+1,p);
-	    end;
-    elseif k=="IndexOf" then
-		  return function(obj, p)
-		    local ix = 0;
-	      for k,v in pairs(obj) do
-	        if v==p then	          
-	          return ix;
-	        end;
-	        ix = ix + 1;
-	      end;
-	      return -1;
-	    end;
-    elseif k=="LastIndexOf" then
-		  return function(obj, p)
-		    local num = table.maxn(obj);
-	      for k=num,1 do
-	        local v = obj[k];
-	        if v==p then	          
-	          return k-1;
-	        end;
-	      end;
-	      return -1;
-	    end;
-    elseif k=="Contains" then
-		  return function(obj, p)
-	      local ret = false;
-	      for k,v in pairs(obj) do		        
-	        if v==p then
-	          ret=true;
-	          break;
-	        end;
-	      end;
-	      return ret;
-	    end;
-    elseif k=="Peek" then    
-      return function(obj)
-        local num = table.maxn(obj);
-        local v = obj[num];
-        return v;
-      end;
-    elseif k=="Enqueue" then
-      return function(obj,v)
-        table.insert(obj,1,v);
-      end;
-    elseif k=="Dequeue" then
-      return function(obj)
-        local num = table.maxn(obj);
-        local v = obj[num];
-        table.remove(obj,num);
-        return v;
-      end;
-    elseif k=="Push" then
-      return function(obj,v)
-        table.insert(obj,v);
-      end;
-    elseif k=="Pop" then
-      return function(obj)
-        local num = table.maxn(obj);
-        local v = obj[num];
-        table.remove(obj,num);
-        return v;
-      end;
-    elseif k=="CopyTo" then
-      return function(obj, arr)
-        for k,v in pairs(obj) do
-          arr[k]=v;
-        end;
-      end;
-    elseif k=="ToArray" then
-      return function(obj)
-        local ret = {};
-        for k,v in pairs(obj) do
-          ret[k]=v;
-        end;
-        return ret;
-      end;
-	  elseif k=="Clear" then
-	  	while table.maxn(t)>0 do
-	  		table.remove(t);
-	  	end;	  	
-	  elseif k=="GetEnumerator" then
-	    return function(obj)
-	      return GetArrayEnumerator(obj);
-	    end;
-		end;
-	end,
-};
-
-__mt_dictionary = {
-	__index = function(t, k)
-		if k=="Count" then
-			local tb = t.__object;
-			return table.maxn(tb);
-		elseif k=="Add" then
-		  return function(obj, p1, p2)
-		    p1 = __unwrap_if_string(p1);		    
-		    obj[p1]=p2;
-		    return p2;
-		  end;
-		elseif k=="Remove" then
-		  return function(obj, p)
-		    p = __unwrap_if_string(p);
-	      local pos = 1;
-	      local ret = nil;
-	      for k,v in pairs(obj) do		        
-	        if k==p then
-	          ret=v;
-	          break;
-	        end;
-	        pos=pos+1;		        
-	      end;
-	      if ret then
-	        table.remove(obj,pos);
-	      end;
-	      return ret;
-	    end;
-		elseif k=="ContainsKey" then
-		  return function(obj, p)
-		    p = __unwrap_if_string(p);
-	      if obj[p] then
-	        return true;
-	      end;
-	      local ret = false;
-	      for k,v in pairs(obj) do		        
-	        if k==p then
-	          ret=true;
-	          break;
-	        end;
-	      end;
-	      return ret;
-	    end;
-		elseif k=="ContainsValue" then
-		  return function(obj, p)
-	      local ret = false;
-	      for k,v in pairs(obj) do		        
-	        if v==p then
-	          ret=true;
-	          break;
-	        end;
-	      end;
-	      return ret;
-	    end;		    
-	  elseif k=="TryGetValue" then
-	    return function(obj, p)
-		    p = __unwrap_if_string(p);
-	      local val = obj[p];
-	      if val then
-	        return true, val;
-	      end;
-	      for k,v in pairs(obj) do
-	        if k==p then
-	          return true, v;
-	        end;
-	      end;
-	      return false, nil;
-	    end;
-    elseif k=="Keys" then
-      local ret = {};
-      for k,v in pairs(t) do
-        k = __wrap_if_string(k);
-        table.insert(ret, k);
+__mt_index_of_array = function(t, k)
+	if k=="Length" or k=="Count" then
+		return table.maxn(t);
+	elseif k=="GetLength" then
+		return function(obj, ix)
+      local ret = 0;
+      local tb = obj;
+      for i=0,ix do			       
+        ret = table.maxn(tb);
+        tb = tb[0];
       end;
       return ret;
-    elseif k=="Values" then
-      local ret = {};
-      for k,v in pairs(t) do
-        table.insert(ret, v);
+    end;
+  elseif k=="Add" then
+    return function(obj, v) table.insert(obj, v); end;
+  elseif k=="Remove" then
+    return function(obj, p)
+      local pos = 1;
+      local ret = nil;
+      for k,v in pairs(obj) do		        
+        if v==p then
+          ret=v;
+          break;
+        end;
+        pos=pos+1;		        
+      end;
+      if ret then
+        table.remove(obj,pos);
       end;
       return ret;
-	  elseif k=="Clear" then
-	  	while table.maxn(t)>0 do
-	  		table.remove(t);
-	  	end;	  	
-	  elseif k=="GetEnumerator" then
-	    return function(obj)
-	      return GetDictEnumerator(obj);
-	    end;
-		end;
-	end,
-};
-
-__mt_hashset = {
-	__index = function(t, k)
-		if k=="Count" then
-			local tb = t.__object;
-			return table.maxn(tb);
-		elseif k=="Add" then
-		  return function(obj, p)
-		    p = __unwrap_if_string(p);
-		    obj[p]=true;
-		    return true;
-		  end;
-		elseif k=="Remove" then
-		  return function(obj, p)
-		    p = __unwrap_if_string(p);
-	      local pos = 1;
-	      local ret = nil;
-	      for k,v in pairs(obj) do		        
-	        if k==p then
-	          ret=v;
-	          break;
-	        end;
-	        pos=pos+1;		        
-	      end;
-	      if ret then
-	        table.remove(obj,pos);
-	      end;
-	      return ret;
-	    end;
-		elseif k=="Contains" then
-		  return function(obj, p)
-		    p = __unwrap_if_string(p);
-	      if obj[p] then
-	        return true;
-	      end;
-	      local ret = false;
-	      for k,v in pairs(obj) do		        
-	        if k==p then
-	          ret=true;
-	          break;
-	        end;
-	      end;
-	      return ret;
-	    end;
-    elseif k=="CopyTo" then
-      return function(obj, arr)
-        for k,v in pairs(obj) do
-		      k = __wrap_if_string(l);
-          table.insert(arr,k);
+    end;
+  elseif k=="AddRange" then
+    return function(obj, coll)
+      local enumer = coll:GetEnumerator();
+      while enumer:MoveNext() do
+        table.insert(obj, enumer.Current);
+      end;
+    end;
+  elseif k=="Insert" then
+    return function(obj, ix, p)
+      table.insert(obj,ix+1,p);
+    end;
+  elseif k=="IndexOf" then
+	  return function(obj, p)
+	    local ix = 0;
+      for k,v in pairs(obj) do
+        if v==p then	          
+          return ix;
+        end;
+        ix = ix + 1;
+      end;
+      return -1;
+    end;
+  elseif k=="LastIndexOf" then
+	  return function(obj, p)
+	    local num = table.maxn(obj);
+      for k=num,1 do
+        local v = obj[k];
+        if v==p then	          
+          return k-1;
         end;
       end;
-	  elseif k=="Clear" then
-	  	while table.maxn(t)>0 do
-	  		table.remove(t);
-	  	end;	  	
-	  elseif k=="GetEnumerator" then
-	    return function(obj)
-	      return GetHashsetEnumerator(obj);
-	    end;
-		end;
-	end,
-};
+      return -1;
+    end;
+  elseif k=="Contains" then
+	  return function(obj, p)
+      local ret = false;
+      for k,v in pairs(obj) do		        
+        if v==p then
+          ret=true;
+          break;
+        end;
+      end;
+      return ret;
+    end;
+  elseif k=="Peek" then    
+    return function(obj)
+      local num = table.maxn(obj);
+      local v = obj[num];
+      return v;
+    end;
+  elseif k=="Enqueue" then
+    return function(obj,v)
+      table.insert(obj,1,v);
+    end;
+  elseif k=="Dequeue" then
+    return function(obj)
+      local num = table.maxn(obj);
+      local v = obj[num];
+      table.remove(obj,num);
+      return v;
+    end;
+  elseif k=="Push" then
+    return function(obj,v)
+      table.insert(obj,v);
+    end;
+  elseif k=="Pop" then
+    return function(obj)
+      local num = table.maxn(obj);
+      local v = obj[num];
+      table.remove(obj,num);
+      return v;
+    end;
+  elseif k=="CopyTo" then
+    return function(obj, arr)
+      for k,v in pairs(obj) do
+        arr[k]=v;
+      end;
+    end;
+  elseif k=="ToArray" then
+    return function(obj)
+      local ret = {};
+      for k,v in pairs(obj) do
+        ret[k]=v;
+      end;
+      return ret;
+    end;
+  elseif k=="Clear" then
+  	while table.maxn(t)>0 do
+  		table.remove(t);
+  	end;	  	
+  elseif k=="GetEnumerator" then
+    return function(obj)
+      return GetArrayEnumerator(obj);
+    end;
+	end;
+end;
+
+__mt_index_of_dictionary = function(t, k)
+	if k=="Count" then
+		return table.maxn(t);
+	elseif k=="Add" then
+	  return function(obj, p1, p2)
+	    p1 = __unwrap_if_string(p1);		    
+	    obj[p1]=p2;
+	    return p2;
+	  end;
+	elseif k=="Remove" then
+	  return function(obj, p)
+	    p = __unwrap_if_string(p);
+      local pos = 1;
+      local ret = nil;
+      for k,v in pairs(obj) do		        
+        if k==p then
+          ret=v;
+          break;
+        end;
+        pos=pos+1;		        
+      end;
+      if ret then
+        table.remove(obj,pos);
+      end;
+      return ret;
+    end;
+	elseif k=="ContainsKey" then
+	  return function(obj, p)
+	    p = __unwrap_if_string(p);
+      if obj[p] then
+        return true;
+      end;
+      local ret = false;
+      for k,v in pairs(obj) do		        
+        if k==p then
+          ret=true;
+          break;
+        end;
+      end;
+      return ret;
+    end;
+	elseif k=="ContainsValue" then
+	  return function(obj, p)
+      local ret = false;
+      for k,v in pairs(obj) do		        
+        if v==p then
+          ret=true;
+          break;
+        end;
+      end;
+      return ret;
+    end;		    
+  elseif k=="TryGetValue" then
+    return function(obj, p)
+	    p = __unwrap_if_string(p);
+      local val = obj[p];
+      if val then
+        return true, val;
+      end;
+      for k,v in pairs(obj) do
+        if k==p then
+          return true, v;
+        end;
+      end;
+      return false, nil;
+    end;
+  elseif k=="Keys" then
+    local ret = {};
+    for k,v in pairs(t) do
+      k = __wrap_if_string(k);
+      table.insert(ret, k);
+    end;
+    return ret;
+  elseif k=="Values" then
+    local ret = {};
+    for k,v in pairs(t) do
+      table.insert(ret, v);
+    end;
+    return ret;
+  elseif k=="Clear" then
+  	while table.maxn(t)>0 do
+  		table.remove(t);
+  	end;	  	
+  elseif k=="GetEnumerator" then
+    return function(obj)
+      return GetDictEnumerator(obj);
+    end;
+	end;
+end;
+
+__mt_index_of_hashset = function(t, k)
+	if k=="Count" then
+		return table.maxn(t);
+	elseif k=="Add" then
+	  return function(obj, p)
+	    p = __unwrap_if_string(p);
+	    obj[p]=true;
+	    return true;
+	  end;
+	elseif k=="Remove" then
+	  return function(obj, p)
+	    p = __unwrap_if_string(p);
+      local pos = 1;
+      local ret = nil;
+      for k,v in pairs(obj) do		        
+        if k==p then
+          ret=v;
+          break;
+        end;
+        pos=pos+1;		        
+      end;
+      if ret then
+        table.remove(obj,pos);
+      end;
+      return ret;
+    end;
+	elseif k=="Contains" then
+	  return function(obj, p)
+	    p = __unwrap_if_string(p);
+      if obj[p] then
+        return true;
+      end;
+      local ret = false;
+      for k,v in pairs(obj) do		        
+        if k==p then
+          ret=true;
+          break;
+        end;
+      end;
+      return ret;
+    end;
+  elseif k=="CopyTo" then
+    return function(obj, arr)
+      for k,v in pairs(obj) do
+	      k = __wrap_if_string(l);
+        table.insert(arr,k);
+      end;
+    end;
+  elseif k=="Clear" then
+  	while table.maxn(t)>0 do
+  		table.remove(t);
+  	end;	  	
+  elseif k=="GetEnumerator" then
+    return function(obj)
+      return GetHashsetEnumerator(obj);
+    end;
+	end;
+end;
 
 __mt_delegation = {
   __call = function(t, ...)
@@ -466,13 +457,11 @@ function wrapstring(str)
 end;
 
 function wraparray(arr)
-	local mt = setmetatable({__object=arr}, __mt_array);
-	return setmetatable(arr, { __index = mt});
+	return setmetatable(arr, { __index = __mt_index_of_array });
 end;
 
 function wrapdictionary(dict)
-	local mt = setmetatable({__object=dict}, __mt_dictionary);
-	return setmetatable(dict, { __index = mt});
+	return setmetatable(dict, { __index = __mt_index_of_dictionary });
 end;
 
 function wrapdelegation(handlers)
@@ -634,29 +623,25 @@ end;
 
 function newdictionary(type, ctor, dict, ...)
   if dict then
-	  local mt = setmetatable({__object=dict}, __mt_dictionary);
-	  return setmetatable(dict, { __index = mt, __class = type });
+	  return setmetatable(dict, { __index = __mt_index_of_dictionary, __class = type });
 	end;
 end;
 
 function newlist(type, ctor, list, ...)
   if list then
-	  local mt = setmetatable({__object=list}, __mt_array);
-    return setmetatable(list, { __index = mt, __class = type });
+    return setmetatable(list, { __index = __mt_index_of_array, __class = type });
   end;
 end;
 
 function newcollection(type, ctor, coll, ...)
   if coll then
-	  local mt = setmetatable({__object=coll}, __mt_hashset);
-    return setmetatable(dict, { __index = mt, __class = type });
+    return setmetatable(dict, { __index = __mt_index_of_hashset, __class = type });
   end;
 end;
 
 function newexterndictionary(type, className, ctor, doexternsion, dict, ...)
   if dict and type==System.Collections.Generic.Dictionary_TKey_TValue then
-	  local mt = setmetatable({__object=dict}, __mt_dictionary);
-	  return setmetatable(dict, { __index = mt, __class = type });
+	  return setmetatable(dict, { __index = __mt_index_of_dictionary, __class = type });
 	else
 	  return newexternobject(type, className, ctor, doexternsion, dict, ...);
 	end;
@@ -664,8 +649,7 @@ end;
 
 function newexternlist(type, className, ctor, doexternsion, list, ...)
   if list and (type==System.Collections.Generic.List_T or type==System.Collections.Generic.Queue_T or type==System.Collections.Generic.Stack_T) then    
-	  local mt = setmetatable({__object=list}, __mt_array);
-    return setmetatable(list, { __index = mt, __class = type });
+	  return setmetatable(list, { __index = __mt_index_of_array, __class = type });
 	else
 	  return newexternobject(type, className, ctor, doexternsion, list, ...);
   end;
@@ -673,8 +657,7 @@ end;
 
 function newexterncollection(type, className, ctor, doexternsion, coll, ...)
   if coll and type==System.Collections.Generic.HashSet_T then
-	  local mt = setmetatable({__object=coll}, __mt_hashset);
-    return setmetatable(dict, { __index = mt, __class = type });
+    return setmetatable(dict, { __index = __mt_index_of_hashset, __class = type });
 	else
 	  return newexternobject(type, className, ctor, doexternsion, coll, ...);
   end;

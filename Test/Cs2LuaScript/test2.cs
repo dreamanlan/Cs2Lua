@@ -8,6 +8,8 @@ class Mandelbrot : IStartupPlugin
         root = new GameObject("mandelbrot");
         Exec();
     }
+    public void Call(string name, params object[] args)
+    { }
     private void Exec()
     {
         int width = 50;
