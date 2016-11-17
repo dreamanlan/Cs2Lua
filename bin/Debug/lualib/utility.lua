@@ -65,6 +65,23 @@ function arraytoparams(arr)
 	return unpack(arr);
 end;
 
+function __wrap_if_string(val)
+  if type(val)=="string" then
+    return System.String(val);
+  else
+    return val;
+  end;
+end;
+
+function __unwrap_if_string(val)
+  local meta = getmetatable(val);
+  if type(val)=="userdata" and meta.__typename=="String" then
+    return tostring(val);
+  else
+    return val;
+  end;
+end;
+
 __mt_array = {
 	__index = function(t, k)
 		if k=="Length" or k=="Count" then
@@ -202,9 +219,14 @@ __mt_dictionary = {
 			local tb = t.__object;
 			return table.maxn(tb);
 		elseif k=="Add" then
-		  return function(obj, p1, p2) obj[p1]=p2; return p2; end;
+		  return function(obj, p1, p2)
+		    p1 = __unwrap_if_string(p1);		    
+		    obj[p1]=p2;
+		    return p2;
+		  end;
 		elseif k=="Remove" then
 		  return function(obj, p)
+		    p = __unwrap_if_string(p);
 	      local pos = 1;
 	      local ret = nil;
 	      for k,v in pairs(obj) do		        
@@ -221,6 +243,7 @@ __mt_dictionary = {
 	    end;
 		elseif k=="ContainsKey" then
 		  return function(obj, p)
+		    p = __unwrap_if_string(p);
 	      if obj[p] then
 	        return true;
 	      end;
@@ -246,11 +269,12 @@ __mt_dictionary = {
 	    end;		    
 	  elseif k=="TryGetValue" then
 	    return function(obj, p)
+		    p = __unwrap_if_string(p);
 	      local val = obj[p];
 	      if val then
 	        return true, val;
 	      end;
-	      for k,v in pairs(obj) do		        
+	      for k,v in pairs(obj) do
 	        if k==p then
 	          return true, v;
 	        end;
@@ -260,6 +284,7 @@ __mt_dictionary = {
     elseif k=="Keys" then
       local ret = {};
       for k,v in pairs(t) do
+        k = __wrap_if_string(k);
         table.insert(ret, k);
       end;
       return ret;
@@ -287,9 +312,14 @@ __mt_hashset = {
 			local tb = t.__object;
 			return table.maxn(tb);
 		elseif k=="Add" then
-		  return function(obj, p) obj[p]=true; return true; end;
+		  return function(obj, p)
+		    p = __unwrap_if_string(p);
+		    obj[p]=true;
+		    return true;
+		  end;
 		elseif k=="Remove" then
 		  return function(obj, p)
+		    p = __unwrap_if_string(p);
 	      local pos = 1;
 	      local ret = nil;
 	      for k,v in pairs(obj) do		        
@@ -306,6 +336,7 @@ __mt_hashset = {
 	    end;
 		elseif k=="Contains" then
 		  return function(obj, p)
+		    p = __unwrap_if_string(p);
 	      if obj[p] then
 	        return true;
 	      end;
@@ -321,6 +352,7 @@ __mt_hashset = {
     elseif k=="CopyTo" then
       return function(obj, arr)
         for k,v in pairs(obj) do
+		      k = __wrap_if_string(l);
           table.insert(arr,k);
         end;
       end;
@@ -379,7 +411,7 @@ function GetDictEnumerator(tb)
       local v = nil;
       this.key, v = next(tb, this.key);
       this.current = {
-        Key = this.key,
+        Key = __wrap_if_string(this.key),
         Value = v,
       };
       if this.key then
@@ -406,7 +438,7 @@ function GetHashsetEnumerator(tb)
     MoveNext = function(this)
       local tb = this.object;
       local v = nil;
-      this.key, v = next(tb, this.key);
+      this.key, v = next(tb, this.key);      
       if this.key then
         return true;
       else
@@ -418,7 +450,7 @@ function GetHashsetEnumerator(tb)
   },{
     __index = function(t, k)
       if k=="Current" then
-        return t.key;
+        return __wrap_if_string(t.key);
       end;
       return nil;
     end,
@@ -434,13 +466,13 @@ function wrapstring(str)
 end;
 
 function wraparray(arr)
-	local meta = setmetatable({__object=arr}, __mt_array);
-	return setmetatable(arr, { __index = meta});
+	local mt = setmetatable({__object=arr}, __mt_array);
+	return setmetatable(arr, { __index = mt});
 end;
 
 function wrapdictionary(dict)
-	local meta = setmetatable({__object=dict}, __mt_dictionary);
-	return setmetatable(dict, { __index = meta});
+	local mt = setmetatable({__object=dict}, __mt_dictionary);
+	return setmetatable(dict, { __index = mt});
 end;
 
 function wrapdelegation(handlers)
@@ -602,33 +634,29 @@ end;
 
 function newdictionary(type, ctor, dict, ...)
   if dict then
-	  local meta = setmetatable({__object=dict}, __mt_dictionary);
-    meta["__class"] = type;
-	  return setmetatable(dict, { __index = meta});
+	  local mt = setmetatable({__object=dict}, __mt_dictionary);
+	  return setmetatable(dict, { __index = mt, __class = type });
 	end;
 end;
 
 function newlist(type, ctor, list, ...)
   if list then
-	  local meta = setmetatable({__object=list}, __mt_array);
-    meta["__class"] = type;
-    return setmetatable(list, { __index = meta});
+	  local mt = setmetatable({__object=list}, __mt_array);
+    return setmetatable(list, { __index = mt, __class = type });
   end;
 end;
 
 function newcollection(type, ctor, coll, ...)
   if coll then
-	  local meta = setmetatable({__object=coll}, __mt_hashset);
-    meta["__class"] = type;
-    return setmetatable(dict, { __index = meta});
+	  local mt = setmetatable({__object=coll}, __mt_hashset);
+    return setmetatable(dict, { __index = mt, __class = type });
   end;
 end;
 
 function newexterndictionary(type, className, ctor, doexternsion, dict, ...)
   if dict and type==System.Collections.Generic.Dictionary_TKey_TValue then
-	  local meta = setmetatable({__object=dict}, __mt_dictionary);
-    meta["__class"] = type;
-	  return setmetatable(dict, { __index = meta});
+	  local mt = setmetatable({__object=dict}, __mt_dictionary);
+	  return setmetatable(dict, { __index = mt, __class = type });
 	else
 	  return newexternobject(type, className, ctor, doexternsion, dict, ...);
 	end;
@@ -636,9 +664,8 @@ end;
 
 function newexternlist(type, className, ctor, doexternsion, list, ...)
   if list and (type==System.Collections.Generic.List_T or type==System.Collections.Generic.Queue_T or type==System.Collections.Generic.Stack_T) then    
-	  local meta = setmetatable({__object=list}, __mt_array);
-    meta["__class"] = type;
-    return setmetatable(list, { __index = meta});
+	  local mt = setmetatable({__object=list}, __mt_array);
+    return setmetatable(list, { __index = mt, __class = type });
 	else
 	  return newexternobject(type, className, ctor, doexternsion, list, ...);
   end;
@@ -646,9 +673,8 @@ end;
 
 function newexterncollection(type, className, ctor, doexternsion, coll, ...)
   if coll and type==System.Collections.Generic.HashSet_T then
-	  local meta = setmetatable({__object=coll}, __mt_hashset);
-    meta["__class"] = type;
-    return setmetatable(dict, { __index = meta});
+	  local mt = setmetatable({__object=coll}, __mt_hashset);
+    return setmetatable(dict, { __index = mt, __class = type });
 	else
 	  return newexternobject(type, className, ctor, doexternsion, coll, ...);
   end;
@@ -724,10 +750,30 @@ function getexterninstanceindexer(obj, ...)
 	local args = {...};
 	local index = args[1];
 	local meta = getmetatable(obj);
-	if meta and meta.__class == System.Collections.Generic.List_T then
-	  return obj[index+1];
-	else
-	  return obj[...];
+	if meta then
+  	if meta.__class == System.Collections.Generic.List_T then
+  	  return obj[index+1];
+  	elseif meta.__class == System.Collections.Generic.Dictionary_TKey_TValue then
+      return obj[index];
+    end;
+  end;
+end;
+
+function setexternstaticindexer(class, ...)
+  
+end;
+function setexterninstanceindexer(obj, ...)
+  local args = {...};
+  local num = table.maxn(args);
+	local index = __unwrap_if_string(args[1]);
+	local val = args[num];
+  local meta = getmetatable(obj);
+  if meta then
+    if meta.__class == System.Collections.Generic.List_T then
+      obj[index+1] = val;
+    elseif meta.__class == System.Collections.Generic.Dictionary_TKey_TValue then      
+      obj[index] = val;  
+    end;
   end;
 end;
 
@@ -738,10 +784,10 @@ function setelement(obj, ...)
   --为了适应表达式内嵌赋值，这个函数需要返回值
   return nil;
 end;
-function getexternelement(obj, ...)
+function getexternement(obj, ...)
   return nil;
 end;
-function setexternelement(obj, ...)
+function setexternement(obj, ...)
   --为了适应表达式内嵌赋值，这个函数需要返回值
   return nil;
 end;
