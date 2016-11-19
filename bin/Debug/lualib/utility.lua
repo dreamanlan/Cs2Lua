@@ -8,17 +8,25 @@ System.Collections.Generic.Dictionary_TKey_TValue = {};
 System.Collections.Generic.HashSet_T = {};
 
 function lshift(v,n)
+  if bit then
+    return bit.lshift(v,n);
+  else
     for i=1,n do
         v=v*2;
     end;
     return v;
+  end;
 end;
 
 function rshift(v,n)
+  if bit then
+    return bit.rshift(v,n);
+  else
     for i=1,n do
         v=v/2;
     end;
     return v;
+  end;
 end;
 
 function condexp(cv,tv,fv)
@@ -38,19 +46,35 @@ function nullcoalescing(v1,v2)
 end;
 
 function bitnot(v)
-	return 1-v;
+  if bit then
+    return bit.bnot(v);
+  else
+	  return 0;
+	end;
 end;
 
 function bitand(v1,v2)
-	return v1-v2;
+  if bit then
+    return bit.band(v1,v2);
+  else
+	  return 0;
+	end;
 end;
 
 function bitor(v1,v2)
-	return v1+v2;
+  if bit then
+    return bit.bor(v1,v2);
+  else
+	  return 0;
+  end;
 end;
 
 function bitxor(v1,v2)
-	return v1-v2;
+  if bit then
+    return bit.bxor(v1,v2);
+  else
+	  return 0;
+	end;
 end;
 
 function typecast(obj, type)
@@ -58,7 +82,16 @@ function typecast(obj, type)
 end;
 
 function typeis(obj, type)
-  return true;
+  local meta = getmetatable(obj);
+  local meta2 = getmetatable(type);
+  if meta then
+    if type(obj)=="userdata" then
+      return meta2 and meta.__typename == meta2.__fullname;
+    else
+      return meta.__class == type;
+    end;
+  end;
+  return false;
 end;
 
 function arraytoparams(arr)

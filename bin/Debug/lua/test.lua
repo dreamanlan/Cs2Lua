@@ -35,3 +35,10 @@ arr[1]=1231;
 arr[2]=3456;
 
 print(arr.Count);
+
+--require "bit";
+
+print("bxor:", bit.bxor(1,2));
+print("bor", bit.bor(1,2));
+print("band", bit.band(1,2));
+print("bnot", bit.bnot(2));
