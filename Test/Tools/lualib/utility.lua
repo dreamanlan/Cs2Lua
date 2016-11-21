@@ -303,15 +303,17 @@ __mt_index_of_dictionary = function(t, k)
 	elseif k=="Add" then
 	  return function(obj, p1, p2)
 	    p1 = __unwrap_if_string(p1);		    
-	    obj[p1]=p2;
+	    obj[p1] = { value=p2 };
 	    __inc_table_count(obj);
 	    return p2;
 	  end;
 	elseif k=="Remove" then
 	  return function(obj, p)
 	    p = __unwrap_if_string(p);
-	    local ret = obj[p];
-	    if ret then
+	    local v = obj[p];
+	    local ret = nil;
+	    if v then
+	      ret = v.value;
         obj[p]=nil;
       end;
       __dec_table_count(obj);
@@ -329,7 +331,7 @@ __mt_index_of_dictionary = function(t, k)
 	  return function(obj, p)
       local ret = false;
       for k,v in pairs(obj) do		        
-        if v==p then
+        if v.value==p then
           ret=true;
           break;
         end;
@@ -339,9 +341,9 @@ __mt_index_of_dictionary = function(t, k)
   elseif k=="TryGetValue" then
     return function(obj, p)
 	    p = __unwrap_if_string(p);
-      local val = obj[p];
-      if val then
-        return true, val;
+      local v = obj[p];
+      if v then
+        return true, v.value;
       end;
       return false, nil;
     end;
@@ -355,7 +357,7 @@ __mt_index_of_dictionary = function(t, k)
   elseif k=="Values" then
     local ret = {};
     for k,v in pairs(t) do
-      table.insert(ret, v);
+      table.insert(ret, v.value);
     end;
     return ret;
   elseif k=="Clear" then
@@ -459,7 +461,7 @@ function GetDictEnumerator(tb)
       this.key, v = next(tb, this.key);
       this.current = {
         Key = __wrap_if_string(this.key),
-        Value = v,
+        Value = v and v.value,
       };
       if this.key then
         return true;
