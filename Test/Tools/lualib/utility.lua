@@ -115,6 +115,60 @@ function __unwrap_if_string(val)
   end;
 end;
 
+function __calc_table_count(tb)
+  local count = 0;
+  for k,v in pairs(tb) do
+    count = count+1;
+  end;
+  return count;
+end;
+
+function __get_table_count(tb)
+  local count = 0;
+  local meta = getmetatable(tb);
+  if meta then
+    if meta.__count then
+      count = meta.__count;
+    else
+      count = __calc_table_count(tb);
+      meta.__count = count;
+    end;
+  end;
+  return count;
+end;
+
+function __inc_table_count(tb)
+  local count = __get_table_count(tb);
+  local meta = getmetatable(tb);
+  if meta then
+    meta.__count = count + 1;
+  end;
+end;
+
+function __dec_table_count(tb)
+  local count = __get_table_count(tb);
+  if count>0 then
+    local meta = getmetatable(tb);
+    if meta then
+      meta.__count = count - 1;    
+    end;
+  end;
+end;
+
+function __clear_table(tb)
+  local keys={};
+  for k,v in pairs(tb) do
+    table.insert(keys,k);
+  end;
+  for i,v in ipairs(keys) do
+    tb[v]=nil;
+  end;
+  local meta = getmetatable(tb);
+  if meta then
+    meta.__count = 0;
+  end;
+end;
+
 __mt_index_of_array = function(t, k)
 	if k=="Length" or k=="Count" then
 		return table.maxn(t);
@@ -245,28 +299,22 @@ end;
 
 __mt_index_of_dictionary = function(t, k)
 	if k=="Count" then
-		return table.maxn(t);
+		return __get_table_count(t);
 	elseif k=="Add" then
 	  return function(obj, p1, p2)
 	    p1 = __unwrap_if_string(p1);		    
 	    obj[p1]=p2;
+	    __inc_table_count(obj);
 	    return p2;
 	  end;
 	elseif k=="Remove" then
 	  return function(obj, p)
 	    p = __unwrap_if_string(p);
-      local pos = 1;
-      local ret = nil;
-      for k,v in pairs(obj) do		        
-        if k==p then
-          ret=v;
-          break;
-        end;
-        pos=pos+1;		        
+	    local ret = obj[p];
+	    if ret then
+        obj[p]=nil;
       end;
-      if ret then
-        table.remove(obj,pos);
-      end;
+      __dec_table_count(obj);
       return ret;
     end;
 	elseif k=="ContainsKey" then
@@ -275,14 +323,7 @@ __mt_index_of_dictionary = function(t, k)
       if obj[p] then
         return true;
       end;
-      local ret = false;
-      for k,v in pairs(obj) do		        
-        if k==p then
-          ret=true;
-          break;
-        end;
-      end;
-      return ret;
+      return false;
     end;
 	elseif k=="ContainsValue" then
 	  return function(obj, p)
@@ -302,11 +343,6 @@ __mt_index_of_dictionary = function(t, k)
       if val then
         return true, val;
       end;
-      for k,v in pairs(obj) do
-        if k==p then
-          return true, v;
-        end;
-      end;
       return false, nil;
     end;
   elseif k=="Keys" then
@@ -323,9 +359,9 @@ __mt_index_of_dictionary = function(t, k)
     end;
     return ret;
   elseif k=="Clear" then
-  	while table.maxn(t)>0 do
-  		table.remove(t);
-  	end;	  	
+  	return function(obj)
+  	  __clear_table(obj);
+  	end;
   elseif k=="GetEnumerator" then
     return function(obj)
       return GetDictEnumerator(obj);
@@ -335,28 +371,22 @@ end;
 
 __mt_index_of_hashset = function(t, k)
 	if k=="Count" then
-		return table.maxn(t);
+		return __get_table_count(t);
 	elseif k=="Add" then
 	  return function(obj, p)
 	    p = __unwrap_if_string(p);
 	    obj[p]=true;
+	    __inc_table_count(obj);
 	    return true;
 	  end;
 	elseif k=="Remove" then
 	  return function(obj, p)
 	    p = __unwrap_if_string(p);
-      local pos = 1;
-      local ret = nil;
-      for k,v in pairs(obj) do		        
-        if k==p then
-          ret=v;
-          break;
-        end;
-        pos=pos+1;		        
+	    local ret = obj[p];
+	    if ret then
+        obj[p]=nil;
       end;
-      if ret then
-        table.remove(obj,pos);
-      end;
+      __dec_table_count(obj);
       return ret;
     end;
 	elseif k=="Contains" then
@@ -365,14 +395,7 @@ __mt_index_of_hashset = function(t, k)
       if obj[p] then
         return true;
       end;
-      local ret = false;
-      for k,v in pairs(obj) do		        
-        if k==p then
-          ret=true;
-          break;
-        end;
-      end;
-      return ret;
+      return false;
     end;
   elseif k=="CopyTo" then
     return function(obj, arr)
@@ -382,9 +405,9 @@ __mt_index_of_hashset = function(t, k)
       end;
     end;
   elseif k=="Clear" then
-  	while table.maxn(t)>0 do
-  		table.remove(t);
-  	end;	  	
+  	return function(obj)
+  	  __clear_table(obj);
+  	end;
   elseif k=="GetEnumerator" then
     return function(obj)
       return GetHashsetEnumerator(obj);
