@@ -1,3 +1,6 @@
+--用OpenBrane远程调试时打开下面这句
+--require "luadebug";
+
 System = System or {};
 System.Collections = System.Collections or {};
 System.Collections.Generic = System.Collections.Generic or {};
