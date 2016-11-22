@@ -572,38 +572,58 @@ namespace RoslynTool.CsToLua
                 sb.AppendFormat("{0}local static = {1};", GetIndentString(indent), key);
                 sb.AppendLine();
 
-                sb.AppendLine();
-
-                sb.AppendFormat("{0}local static_props = {{", GetIndentString(indent));
-                sb.AppendLine();
-
-                ++indent;
-
-                //static property
+                bool hasStaticProp = false;
                 foreach (var ci in classes) {
-                    sb.Append(ci.StaticPropertyCodeBuilder.ToString());
+                    if (ci.StaticPropertyCodeBuilder.Length > 0)
+                        hasStaticProp = true;
+                }
+                if (hasStaticProp) {
+                    sb.AppendLine();
+
+                    sb.AppendFormat("{0}local static_props = {{", GetIndentString(indent));
+                    sb.AppendLine();
+
+                    ++indent;
+
+                    //static property
+                    foreach (var ci in classes) {
+                        sb.Append(ci.StaticPropertyCodeBuilder.ToString());
+                    }
+
+                    --indent;
+                    sb.AppendFormat("{0}}};", GetIndentString(indent));
+                    sb.AppendLine();
+
+                    sb.AppendLine();
+                } else {
+                    sb.AppendFormat("{0}local static_props = nil;", GetIndentString(indent));
+                    sb.AppendLine();
                 }
 
-                --indent;
-                sb.AppendFormat("{0}}};", GetIndentString(indent));
-                sb.AppendLine();
-
-                sb.AppendLine();
-
-                sb.AppendFormat("{0}local static_events = {{", GetIndentString(indent));
-                sb.AppendLine();
-
-                ++indent;
-
-                //static event
+                bool hasStaticEvent = false;
                 foreach (var ci in classes) {
-                    sb.Append(ci.StaticEventCodeBuilder.ToString());
+                    if (ci.StaticEventCodeBuilder.Length > 0)
+                        hasStaticEvent = true;
                 }
+                if (hasStaticEvent) {
+                    sb.AppendFormat("{0}local static_events = {{", GetIndentString(indent));
+                    sb.AppendLine();
 
-                --indent;
-                sb.AppendFormat("{0}}};", GetIndentString(indent));
-                sb.AppendLine();
+                    ++indent;
 
+                    //static event
+                    foreach (var ci in classes) {
+                        sb.Append(ci.StaticEventCodeBuilder.ToString());
+                    }
+
+                    --indent;
+                    sb.AppendFormat("{0}}};", GetIndentString(indent));
+                    sb.AppendLine();
+                } else {
+                    sb.AppendFormat("{0}local static_events = nil;", GetIndentString(indent));
+                    sb.AppendLine();
+                }
+                
                 sb.AppendLine();
 
                 if (!isStaticClass) {
@@ -719,37 +739,57 @@ namespace RoslynTool.CsToLua
                     sb.AppendFormat("{0}end;", GetIndentString(indent));
                     sb.AppendLine();
 
-                    sb.AppendLine();
-
-                    sb.AppendFormat("{0}local instance_props = {{", GetIndentString(indent));
-                    sb.AppendLine();
-
-                    ++indent;
-
-                    //instance property
+                    bool hasInstanceProp = false;
                     foreach (var ci in classes) {
-                        sb.Append(ci.InstancePropertyCodeBuilder.ToString());
+                        if (ci.InstancePropertyCodeBuilder.Length > 0)
+                            hasInstanceProp = true;
+                    }
+                    if (hasInstanceProp) {
+                        sb.AppendLine();
+
+                        sb.AppendFormat("{0}local instance_props = {{", GetIndentString(indent));
+                        sb.AppendLine();
+
+                        ++indent;
+
+                        //instance property
+                        foreach (var ci in classes) {
+                            sb.Append(ci.InstancePropertyCodeBuilder.ToString());
+                        }
+
+                        --indent;
+                        sb.AppendFormat("{0}}};", GetIndentString(indent));
+                        sb.AppendLine();
+
+                        sb.AppendLine();
+                    } else {
+                        sb.AppendFormat("{0}local instance_props = nil;", GetIndentString(indent));
+                        sb.AppendLine();
                     }
 
-                    --indent;
-                    sb.AppendFormat("{0}}};", GetIndentString(indent));
-                    sb.AppendLine();
-
-                    sb.AppendLine();
-
-                    sb.AppendFormat("{0}local instance_events = {{", GetIndentString(indent));
-                    sb.AppendLine();
-
-                    ++indent;
-
-                    //instance event
+                    bool hasInstanceEvent = false;
                     foreach (var ci in classes) {
-                        sb.Append(ci.InstanceEventCodeBuilder.ToString());
+                        if (ci.InstanceEventCodeBuilder.Length > 0)
+                            hasInstanceEvent = true;
                     }
+                    if (hasInstanceEvent) {
+                        sb.AppendFormat("{0}local instance_events = {{", GetIndentString(indent));
+                        sb.AppendLine();
 
-                    --indent;
-                    sb.AppendFormat("{0}}};", GetIndentString(indent));
-                    sb.AppendLine();
+                        ++indent;
+
+                        //instance event
+                        foreach (var ci in classes) {
+                            sb.Append(ci.InstanceEventCodeBuilder.ToString());
+                        }
+
+                        --indent;
+                        sb.AppendFormat("{0}}};", GetIndentString(indent));
+                        sb.AppendLine();
+                    } else {
+                        sb.AppendFormat("{0}local instance_events = nil;", GetIndentString(indent));
+                        sb.AppendLine();
+                    }
 
                     sb.AppendLine();
                     

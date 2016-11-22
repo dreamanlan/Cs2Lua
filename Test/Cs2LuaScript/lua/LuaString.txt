@@ -15,12 +15,8 @@ LuaString = {
 	end,
 	__define_class = function()
 		local static = LuaString;
-
-		local static_props = {
-		};
-
-		local static_events = {
-		};
+		local static_props = nil;
+		local static_events = nil;
 
 		local instance_methods = {
 			ctor = function(this)
@@ -35,12 +31,8 @@ LuaString = {
 			end;
 			return instance;
 		end;
-
-		local instance_props = {
-		};
-
-		local instance_events = {
-		};
+		local instance_props = nil;
+		local instance_events = nil;
 
 		return defineclass(nil, static, static_props, static_events, instance_build, instance_props, instance_events);
 	end,
