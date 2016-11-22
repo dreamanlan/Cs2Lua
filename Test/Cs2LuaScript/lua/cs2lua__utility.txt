@@ -1,4 +1,4 @@
---用OpenBrane远程调试时打开下面这句
+--用ZeroBrane远程调试时打开下面这句
 --require "luadebug";
 
 System = System or {};
