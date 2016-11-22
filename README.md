@@ -451,6 +451,10 @@ a、所用的api在某个c# dll里已经定义了，但slua没有导出（上面
 
 b、所用的api没有在c# dll里定义，所以也不会在slua里导出。这时需要在C#与lua里各实现一套，然后c#的实现标记为Cs2Lua.Ignore并同时使用Cs2Lua.Require标明对lua实现代码的依赖关系（当然也可将lua实现放在utility.lua里，这样就不用标明依赖了，utility.lua是默认要依赖的）。
 
+【调试lua】
+
+cs2lua工程基于slua1.2里带的luajit代码重新编译了一个luasocket x64 dll，并从ZeroBrane里抽取了用于远程调试的lua脚本，可以对放在unity工程Assets/Slua/Resources目录下的扩展名为txt的脚本进行调试（对从ZeroBrane里抽取出的远程调试lua脚本进行了相应修改来支持调试以txt扩展名结尾的lua脚本）。具体见示例工程。
+
 【示例链接】
 
 https://github.com/dreamanlan/Cs2Lua/tree/master/Test
