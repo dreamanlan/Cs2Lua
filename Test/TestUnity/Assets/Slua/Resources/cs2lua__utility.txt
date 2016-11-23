@@ -532,19 +532,17 @@ end;
 function wrapenumerable(func)
 	return function(...)
 		local args = {...};
-		local f = coroutine.wrap(func);
-		return WrapEnumerator(function() return f(args); end);
+		return UnityEngine.WrapEnumerator(function()
+			local co = coroutine.create(func);
+			repeat
+				coroutine.resume(co, unpack(args));
+			until coroutine.status(co) == 'dead';
+		end);
 	end;
 end;
 
 function wrapyield(yieldVal, isEnumerableOrEnumerator, isUnityYield)
-	if isEnumerableOrEnumerator then
-		Yield(yieldVal);
-	elseif isUnityYield then
-		Yield(yieldVal);
-	else
-		coroutine.yield(yieldVal);
-	end;
+	UnityEngine.Yield(yieldVal);
 end;
 
 LuaConsole = {
