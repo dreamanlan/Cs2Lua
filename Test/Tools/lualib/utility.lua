@@ -1,4 +1,4 @@
---用ZeroBrane远程调试时打开下面这句
+--remove comments for debug with ZeroBrane
 --require "luadebug";
 
 System = System or {};
