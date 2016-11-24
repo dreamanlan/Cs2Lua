@@ -18,7 +18,7 @@ public class Cs2LuaTickWithAllUpdate : MonoBehaviour
         } else {
             csObject = PluginManager.Instance.CreateTick(className);
             if (null != csObject) {
-                csObject.Init(gameObject);
+                csObject.Init(gameObject, this);
             }
         }
     }
@@ -72,9 +72,11 @@ public class Cs2LuaTickWithAllUpdate : MonoBehaviour
         self = (LuaTable)((LuaFunction)classObj["__new_object"]).call();
         init = (LuaFunction)self["Init"];
         update = (LuaFunction)self["Update"];
+        fixedUpdate = (LuaFunction)self["FixedUpdate"];
+        lateUpdate = (LuaFunction)self["LateUpdate"];
         call = (LuaFunction)self["Call"];
         if (null != init) {
-            init.call(self, gameObject);
+            init.call(self, gameObject, this);
         }
         luaInited = true;
         yield return null;

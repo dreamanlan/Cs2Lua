@@ -533,10 +533,8 @@ function wrapenumerable(func)
 	return function(...)
 		local args = {...};
 		return UnityEngine.WrapEnumerator(function()
-			local co = coroutine.create(func);
-			repeat
-				coroutine.resume(co, unpack(args));
-			until coroutine.status(co) == 'dead';
+			local f = coroutine.wrap(func);
+			f(unpack(args));
 		end);
 	end;
 end;

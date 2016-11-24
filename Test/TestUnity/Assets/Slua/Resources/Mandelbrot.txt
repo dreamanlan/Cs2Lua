@@ -15,7 +15,7 @@ Mandelbrot = {
 		local static_events = nil;
 
 		local instance_methods = {
-			Start = function(this, obj)
+			Start = function(this, obj, mb)
 				this.root = newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", nil, {}, wrapstring("mandelbrot"));
 				this:Exec();
 			end,

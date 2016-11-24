@@ -18,7 +18,7 @@ public class Cs2LuaStartup : MonoBehaviour
             StartCoroutine(StartupLua(className));
         } else {
             csObject = PluginManager.Instance.CreateStartup(className);
-            csObject.Start(gameObject);
+            csObject.Start(gameObject, this);
         }
     }
 
@@ -33,7 +33,7 @@ public class Cs2LuaStartup : MonoBehaviour
         start = (LuaFunction)self["Start"];
         call = (LuaFunction)self["Call"];
         if (null != start) {
-            start.call(self, gameObject);
+            start.call(self, gameObject, this);
         }
         luaInited = true;
         yield return null;

@@ -12,10 +12,12 @@ class LuaString
 
 class MyScript : ITickPlugin
 {   
-    public void Init(GameObject obj)
+    public void Init(GameObject obj, MonoBehaviour mb)
     {
         string s = "test test test from cs2lua !";
         Debug.Log(s);
+
+        mb.StartCoroutine(this.TestCoroutine());
         
         root = new GameObject("root");
 
@@ -57,6 +59,14 @@ class MyScript : ITickPlugin
     public void Call(string name, params object[] args)
     { }
 
+    private IEnumerator TestCoroutine()
+    {
+        yield return new WaitForSeconds(10);
+        for (int i = 0; i < 60; ++i) {
+            yield return new WaitForSeconds(1);
+            UnityEngine.Debug.Log(string.Format("{0} seconds", i));
+        }
+    }
     private void Reset()
     {
         if (null != cubes) {

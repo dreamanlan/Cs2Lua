@@ -16,9 +16,10 @@ MyScript = {
 		local static_events = nil;
 
 		local instance_methods = {
-			Init = function(this, obj)
+			Init = function(this, obj, mb)
 				local s = wrapstring("test test test from cs2lua !");
 				UnityEngine.Debug.Log(s);
+				mb:StartCoroutine(this:TestCoroutine());
 				this.root = newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", nil, {}, wrapstring("root"));
 				local slider = typecast(UnityEngine.GameObject.Find(wrapstring("Canvas/Slider")):GetComponent(UnityEngine.UI.Slider), UnityEngine.UI.Slider);
 				local counttxt = typecast(UnityEngine.GameObject.Find(wrapstring("Canvas/Count")):GetComponent(UnityEngine.UI.Text), UnityEngine.UI.Text);
@@ -51,6 +52,15 @@ MyScript = {
 			Call = function(this, name, ...)
 				local args = wraparray{...};
 			end,
+			TestCoroutine = wrapenumerable(function(this)
+				wrapyield(newexternobject(UnityEngine.WaitForSeconds, "UnityEngine.WaitForSeconds", "ctor", nil, {}, 10), false, true);
+				local i = 0;
+				while (i < 60) do
+					wrapyield(newexternobject(UnityEngine.WaitForSeconds, "UnityEngine.WaitForSeconds", "ctor", nil, {}, 1), false, true);
+					UnityEngine.Debug.Log(System.String.Format(wrapstring("{0} seconds"), i));
+					i = i + 1;
+				end;
+			end),
 			Reset = function(this)
 				if (nil ~= this.cubes) then
 					local i = 0;

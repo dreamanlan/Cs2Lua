@@ -23,7 +23,7 @@ public class Cs2LuaTick : MonoBehaviour
         } else {
             csObject = PluginManager.Instance.CreateTick(className);
             if (null != csObject) {
-                csObject.Init(gameObject);
+                csObject.Init(gameObject, this);
             }
         }
     }
@@ -53,7 +53,7 @@ public class Cs2LuaTick : MonoBehaviour
         update = (LuaFunction)self["Update"];
         call = (LuaFunction)self["Call"];
         if (null != init) {
-            init.call(self, gameObject);
+            init.call(self, gameObject, this);
         }
         luaInited = true;
         yield return null;
