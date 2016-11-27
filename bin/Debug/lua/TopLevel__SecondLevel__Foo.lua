@@ -2,6 +2,7 @@ require "cs2lua__utility";
 require "cs2lua__namespaces";
 require "TopLevel__SecondLevel__FooBase";
 require "TopLevel__SecondLevel__GenericClass_T";
+require "TopLevel__TestStruct";
 
 TopLevel.SecondLevel.Foo = {
 	op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo = function(self, other)
@@ -13,7 +14,7 @@ TopLevel.SecondLevel.Foo = {
 		return self;
 	end,
 	op_Explicit = function(a)
-		local f = newobject(TopLevel.SecondLevel.Foo, "ctor", {});
+		local f; f = newobject(TopLevel.SecondLevel.Foo, "ctor", {});
 		f.m_Test = a;
 		return f;
 	end,
@@ -21,20 +22,23 @@ TopLevel.SecondLevel.Foo = {
 		TopLevel.SecondLevel.FooBase.cctor(this);
 	end,
 
-
 	__new_object = function(...)
 		return newobject(TopLevel.SecondLevel.Foo, "ctor", {}, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.Foo;
-
-		local static_props = {
-		};
-
-		local static_events = {
-		};
+		local static_fields = nil;
+		local static_props = nil;
+		local static_events = nil;
 
 		local instance_methods = {
+			__indexer_get = function(this, ...)
+				local args = wrapvaluetypearray{...};
+				return 1;
+			end,
+			__indexer_set = function(this, ..., value)
+				local args = wrapvaluetypearray{...};
+			end,
 			ctor = function(this)
 				this:ctor__System_Int32(0);
 				this.__ctor();
@@ -68,12 +72,36 @@ TopLevel.SecondLevel.Foo = {
 				return nil;
 			end),
 			Test = function(this)
-				local t = newobject(TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT, "ctor", {}, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
+				local t; t = newobject(TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT, "ctor", {}, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
 				t:Test(System.Int32, 123);
 				t:Test2(System.Int32, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
+				local v;
+				local vv; vv, v = this:TestLocal();
+				local ts; ts = newobject(TopLevel.TestStruct, "ctor", {});
+				ts = wrapvaluetype(ts);
+				ts.A = 1;
+				ts.B = 2;
+				ts.C = 3;
+				local ts2; ts2 = ts;
+				ts2 = wrapvaluetype(ts2);
+				local ts3;
+				ts3 = ts;
+				ts3 = wrapvaluetype(ts3);
+				this:TestValueArg(ts);
+			end,
+			TestLocal = function(this)
+				local v = nil;
+				v = 1;
+				return 2, v;
+			end,
+			TestValueArg = function(this, ts)
+				ts = wrapvaluetype(ts);
+				ts.A = 4;
+				ts.B = 5;
+				ts.C = 6;
 			end,
 			TestContinueAndReturn = function(this)
-				local i = 0;
+				local i; i = 0;
 				while (i < 100) do
 				repeat
 					if (i < 10) then
@@ -88,11 +116,11 @@ TopLevel.SecondLevel.Foo = {
 				return -1;
 			end,
 			TestSwitch = function(this)
-				local i = 10;
-				local __compiler_switch_171 = i;
-				if __compiler_switch_171 == 1 then
+				local i; i = 10;
+				local __compiler_switch_210 = i;
+				if __compiler_switch_210 == 1 then
 					return ;
-				elseif __compiler_switch_171 == 2 then
+				elseif __compiler_switch_210 == 2 then
 					return ;
 				else
 					return ;
@@ -115,34 +143,36 @@ TopLevel.SecondLevel.Foo = {
 		};
 
 		local instance_build = function()
-			local instance = {
+			local instance_fields = {
 				OnSimple = wrapdelegation{},
 				OnSimple2 = wrapdelegation{},
 				m_Test = 0,
 				m_Test2 = 0,
+				m_TS = nil,
 				m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, "System.Collections.Generic.HashSet_T", "ctor", nil, {wrapstring("one"), wrapstring("two"), wrapstring("three")}),
 				__ctor_called = false,
 			};
 			for k,v in pairs(instance_methods) do
 				instance[k] = v;
 			end;
-			return instance;
+			return instance_fields;
 		end;
 
 		local instance_props = {
 			Val = {
 				get = function(this)
-					return this.m_Test;
+					return this.m_TS;
 				end,
 				set = function(this, value)
+					value = wrapvaluetype(value);
+					this.m_TS = value;
 				end,
 			},
 		};
 
-		local instance_events = {
-		};
+		local instance_events = nil;
 
-		return defineclass(TopLevel.SecondLevel.FooBase, static, static_props, static_events, instance_build, instance_props, instance_events);
+		return defineclass(TopLevel.SecondLevel.FooBase, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, false);
 	end,
 };
 
@@ -154,18 +184,14 @@ TopLevel.SecondLevel.Foo.Test1 = {
 	cctor = function()
 	end,
 
-
 	__new_object = function(...)
 		return newobject(TopLevel.SecondLevel.Foo.Test1, nil, {}, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.Foo.Test1;
-
-		local static_props = {
-		};
-
-		local static_events = {
-		};
+		local static_fields = nil;
+		local static_props = nil;
+		local static_events = nil;
 
 		local instance_methods = {
 			ctor = function(this)
@@ -173,21 +199,17 @@ TopLevel.SecondLevel.Foo.Test1 = {
 		};
 
 		local instance_build = function()
-			local instance = {
+			local instance_fields = {
 			};
 			for k,v in pairs(instance_methods) do
 				instance[k] = v;
 			end;
-			return instance;
+			return instance_fields;
 		end;
+		local instance_props = nil;
+		local instance_events = nil;
 
-		local instance_props = {
-		};
-
-		local instance_events = {
-		};
-
-		return defineclass(nil, static, static_props, static_events, instance_build, instance_props, instance_events);
+		return defineclass(nil, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, false);
 	end,
 };
 
@@ -199,18 +221,14 @@ TopLevel.SecondLevel.Foo.Test2 = {
 	cctor = function()
 	end,
 
-
 	__new_object = function(...)
 		return newobject(TopLevel.SecondLevel.Foo.Test2, nil, {}, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.Foo.Test2;
-
-		local static_props = {
-		};
-
-		local static_events = {
-		};
+		local static_fields = nil;
+		local static_props = nil;
+		local static_events = nil;
 
 		local instance_methods = {
 			ctor = function(this)
@@ -218,21 +236,17 @@ TopLevel.SecondLevel.Foo.Test2 = {
 		};
 
 		local instance_build = function()
-			local instance = {
+			local instance_fields = {
 			};
 			for k,v in pairs(instance_methods) do
 				instance[k] = v;
 			end;
-			return instance;
+			return instance_fields;
 		end;
+		local instance_props = nil;
+		local instance_events = nil;
 
-		local instance_props = {
-		};
-
-		local instance_events = {
-		};
-
-		return defineclass(nil, static, static_props, static_events, instance_build, instance_props, instance_events);
+		return defineclass(nil, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, false);
 	end,
 };
 
@@ -244,18 +258,14 @@ TopLevel.SecondLevel.Foo.FooChild = {
 	cctor = function()
 	end,
 
-
 	__new_object = function(...)
 		return newobject(TopLevel.SecondLevel.Foo.FooChild, nil, {}, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.Foo.FooChild;
-
-		local static_props = {
-		};
-
-		local static_events = {
-		};
+		local static_fields = nil;
+		local static_props = nil;
+		local static_events = nil;
 
 		local instance_methods = {
 			ctor = function(this)
@@ -263,23 +273,19 @@ TopLevel.SecondLevel.Foo.FooChild = {
 		};
 
 		local instance_build = function()
-			local instance = {
+			local instance_fields = {
 				m_Test1 = 123,
 				m_Test2 = 456,
 			};
 			for k,v in pairs(instance_methods) do
 				instance[k] = v;
 			end;
-			return instance;
+			return instance_fields;
 		end;
+		local instance_props = nil;
+		local instance_events = nil;
 
-		local instance_props = {
-		};
-
-		local instance_events = {
-		};
-
-		return defineclass(nil, static, static_props, static_events, instance_build, instance_props, instance_events);
+		return defineclass(nil, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, false);
 	end,
 };
 

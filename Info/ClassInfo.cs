@@ -14,6 +14,7 @@ namespace RoslynTool.CsToLua
     {
         internal bool IsEnum = false;
         internal bool IsEntryClass = false;
+        internal bool IsValueType = false;
 
         internal string Key = string.Empty;
         internal string BaseKey = string.Empty;
@@ -59,6 +60,7 @@ namespace RoslynTool.CsToLua
         {
             IsEnum = sym.TypeKind == TypeKind.Enum;
             IsEntryClass = HasAttribute(sym, "Cs2Lua.EntryAttribute");
+            IsValueType = sym.IsValueType;
 
             Namespace = string.Empty;
             ClassName = string.Empty;
@@ -314,21 +316,23 @@ namespace RoslynTool.CsToLua
         internal List<string> ReturnParamNames = new List<string>();
         internal List<string> RefParamNames = new List<string>();
         internal List<string> OutParamNames = new List<string>();
+        internal HashSet<int> ValueParams = new HashSet<int>();
         internal List<string> GenericTypeTypeParamNames = new List<string>();
         internal List<string> GenericMethodTypeParamNames = new List<string>();
         internal string OriginalParamsName = string.Empty;
+        internal bool ParamsIsValueType = false;
         internal bool ExistReturn = false;
         internal bool ExistYield = false;
         internal bool ExistTypeOf = false;
 
         internal IMethodSymbol SemanticInfo = null;
         internal IPropertySymbol PropertySemanticInfo = null;
-        
-        internal void Init(IMethodSymbol sym, SyntaxNode node)
+
+        internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, SyntaxNode node)
         {
-            Init(sym, node, false);
+            Init(sym, assemblySym, node, false);
         }
-        internal void Init(IMethodSymbol sym, SyntaxNode node, bool existTypeOf)
+        internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, SyntaxNode node, bool existTypeOf)
         {
             ParamNames.Clear();
             ReturnParamNames.Clear();
@@ -363,6 +367,10 @@ namespace RoslynTool.CsToLua
 
             foreach (var param in sym.Parameters) {
                 if (param.IsParams) {
+                    var arrTypeSym = param.Type as IArrayTypeSymbol;
+                    if (null != arrTypeSym && arrTypeSym.ElementType.IsValueType && arrTypeSym.ElementType.ContainingAssembly == assemblySym) {
+                        ParamsIsValueType = true;
+                    }
                     ParamNames.Add("...");
                     OriginalParamsName = param.Name;
                 } else if (param.RefKind == RefKind.Ref) {
@@ -373,6 +381,9 @@ namespace RoslynTool.CsToLua
                     OutParamNames.Add(param.Name);
                     ReturnParamNames.Add(param.Name);
                 } else {
+                    if (param.Type.IsValueType && param.Type.ContainingAssembly == assemblySym) {
+                        ValueParams.Add(ParamNames.Count);
+                    }
                     ParamNames.Add(param.Name);
                 }
             }
@@ -434,12 +445,15 @@ namespace RoslynTool.CsToLua
                 }
             }
         }
-        
-        internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, List<ExpressionSyntax> argList, bool existTypeOf)
+
+        internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, List<ExpressionSyntax> argList, bool existTypeOf, SemanticModel model)
         {
             Init(sym, assemblySym, existTypeOf);
 
             if (null != argList) {
+                for (int i = 0; i < argList.Count; ++i) {
+                    var arg = argList[i];
+                }
                 Args.AddRange(argList);
             }
         }

@@ -1,19 +1,15 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
 
-LuaString = {
-	Format = function(str, ...)
-		local args = wraparray{...};
-		return System.String.Format(str, arraytoparams(args));
-	end,
+TopLevel.TestStruct = {
 	cctor = function()
 	end,
 
 	__new_object = function(...)
-		return newobject(LuaString, nil, {}, ...);
+		return newobject(TopLevel.TestStruct, nil, {}, ...);
 	end,
 	__define_class = function()
-		local static = LuaString;
+		local static = TopLevel.TestStruct;
 		local static_fields = nil;
 		local static_props = nil;
 		local static_events = nil;
@@ -25,16 +21,22 @@ LuaString = {
 
 		local instance_build = function()
 			local instance_fields = {
+				A = nil,
+				B = nil,
+				C = nil,
 			};
+			for k,v in pairs(instance_methods) do
+				instance[k] = v;
+			end;
 			return instance_fields;
 		end;
 		local instance_props = nil;
 		local instance_events = nil;
 
-		return defineclass(nil, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, false);
+		return defineclass(nil, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, true);
 	end,
 };
 
 
-LuaString.__define_class();
+TopLevel.TestStruct.__define_class();
 

@@ -1,3 +1,6 @@
+--remove comments for debug with ZeroBrane
+--require "luadebug";
+
 System = System or {};
 System.Collections = System.Collections or {};
 System.Collections.Generic = System.Collections.Generic or {};
@@ -8,17 +11,25 @@ System.Collections.Generic.Dictionary_TKey_TValue = {};
 System.Collections.Generic.HashSet_T = {};
 
 function lshift(v,n)
+  if bit then
+    return bit.lshift(v,n);
+  else
     for i=1,n do
         v=v*2;
     end;
     return v;
+  end;
 end;
 
 function rshift(v,n)
+  if bit then
+    return bit.rshift(v,n);
+  else
     for i=1,n do
         v=v/2;
     end;
     return v;
+  end;
 end;
 
 function condexp(cv,tv,fv)
@@ -38,19 +49,35 @@ function nullcoalescing(v1,v2)
 end;
 
 function bitnot(v)
-	return 1-v;
+  if bit then
+    return bit.bnot(v);
+  else
+	  return 0;
+	end;
 end;
 
 function bitand(v1,v2)
-	return v1-v2;
+  if bit then
+    return bit.band(v1,v2);
+  else
+	  return 0;
+	end;
 end;
 
 function bitor(v1,v2)
-	return v1+v2;
+  if bit then
+    return bit.bor(v1,v2);
+  else
+	  return 0;
+  end;
 end;
 
 function bitxor(v1,v2)
-	return v1-v2;
+  if bit then
+    return bit.bxor(v1,v2);
+  else
+	  return 0;
+	end;
 end;
 
 function typecast(obj, type)
@@ -58,7 +85,16 @@ function typecast(obj, type)
 end;
 
 function typeis(obj, type)
-  return true;
+  local meta = getmetatable(obj);
+  local meta2 = getmetatable(type);
+  if meta then
+    if type(obj)=="userdata" then
+      return meta2 and meta.__typename == meta2.__fullname;
+    else
+      return meta.__class == type;
+    end;
+  end;
+  return false;
 end;
 
 function arraytoparams(arr)
@@ -79,6 +115,60 @@ function __unwrap_if_string(val)
     return tostring(val);
   else
     return val;
+  end;
+end;
+
+function __calc_table_count(tb)
+  local count = 0;
+  for k,v in pairs(tb) do
+    count = count+1;
+  end;
+  return count;
+end;
+
+function __get_table_count(tb)
+  local count = 0;
+  local meta = getmetatable(tb);
+  if meta then
+    if meta.__count then
+      count = meta.__count;
+    else
+      count = __calc_table_count(tb);
+      meta.__count = count;
+    end;
+  end;
+  return count;
+end;
+
+function __inc_table_count(tb)
+  local count = __get_table_count(tb);
+  local meta = getmetatable(tb);
+  if meta then
+    meta.__count = count + 1;
+  end;
+end;
+
+function __dec_table_count(tb)
+  local count = __get_table_count(tb);
+  if count>0 then
+    local meta = getmetatable(tb);
+    if meta then
+      meta.__count = count - 1;    
+    end;
+  end;
+end;
+
+function __clear_table(tb)
+  local keys={};
+  for k,v in pairs(tb) do
+    table.insert(keys,k);
+  end;
+  for i,v in ipairs(keys) do
+    tb[v]=nil;
+  end;
+  local meta = getmetatable(tb);
+  if meta then
+    meta.__count = 0;
   end;
 end;
 
@@ -212,28 +302,24 @@ end;
 
 __mt_index_of_dictionary = function(t, k)
 	if k=="Count" then
-		return table.maxn(t);
+		return __get_table_count(t);
 	elseif k=="Add" then
 	  return function(obj, p1, p2)
 	    p1 = __unwrap_if_string(p1);		    
-	    obj[p1]=p2;
+	    obj[p1] = { value=p2 };
+	    __inc_table_count(obj);
 	    return p2;
 	  end;
 	elseif k=="Remove" then
 	  return function(obj, p)
 	    p = __unwrap_if_string(p);
-      local pos = 1;
-      local ret = nil;
-      for k,v in pairs(obj) do		        
-        if k==p then
-          ret=v;
-          break;
-        end;
-        pos=pos+1;		        
+	    local v = obj[p];
+	    local ret = nil;
+	    if v then
+	      ret = v.value;
+        obj[p]=nil;
       end;
-      if ret then
-        table.remove(obj,pos);
-      end;
+      __dec_table_count(obj);
       return ret;
     end;
 	elseif k=="ContainsKey" then
@@ -242,20 +328,13 @@ __mt_index_of_dictionary = function(t, k)
       if obj[p] then
         return true;
       end;
-      local ret = false;
-      for k,v in pairs(obj) do		        
-        if k==p then
-          ret=true;
-          break;
-        end;
-      end;
-      return ret;
+      return false;
     end;
 	elseif k=="ContainsValue" then
 	  return function(obj, p)
       local ret = false;
       for k,v in pairs(obj) do		        
-        if v==p then
+        if v.value==p then
           ret=true;
           break;
         end;
@@ -265,14 +344,9 @@ __mt_index_of_dictionary = function(t, k)
   elseif k=="TryGetValue" then
     return function(obj, p)
 	    p = __unwrap_if_string(p);
-      local val = obj[p];
-      if val then
-        return true, val;
-      end;
-      for k,v in pairs(obj) do
-        if k==p then
-          return true, v;
-        end;
+      local v = obj[p];
+      if v then
+        return true, v.value;
       end;
       return false, nil;
     end;
@@ -286,13 +360,13 @@ __mt_index_of_dictionary = function(t, k)
   elseif k=="Values" then
     local ret = {};
     for k,v in pairs(t) do
-      table.insert(ret, v);
+      table.insert(ret, v.value);
     end;
     return ret;
   elseif k=="Clear" then
-  	while table.maxn(t)>0 do
-  		table.remove(t);
-  	end;	  	
+  	return function(obj)
+  	  __clear_table(obj);
+  	end;
   elseif k=="GetEnumerator" then
     return function(obj)
       return GetDictEnumerator(obj);
@@ -302,28 +376,22 @@ end;
 
 __mt_index_of_hashset = function(t, k)
 	if k=="Count" then
-		return table.maxn(t);
+		return __get_table_count(t);
 	elseif k=="Add" then
 	  return function(obj, p)
 	    p = __unwrap_if_string(p);
 	    obj[p]=true;
+	    __inc_table_count(obj);
 	    return true;
 	  end;
 	elseif k=="Remove" then
 	  return function(obj, p)
 	    p = __unwrap_if_string(p);
-      local pos = 1;
-      local ret = nil;
-      for k,v in pairs(obj) do		        
-        if k==p then
-          ret=v;
-          break;
-        end;
-        pos=pos+1;		        
+	    local ret = obj[p];
+	    if ret then
+        obj[p]=nil;
       end;
-      if ret then
-        table.remove(obj,pos);
-      end;
+      __dec_table_count(obj);
       return ret;
     end;
 	elseif k=="Contains" then
@@ -332,14 +400,7 @@ __mt_index_of_hashset = function(t, k)
       if obj[p] then
         return true;
       end;
-      local ret = false;
-      for k,v in pairs(obj) do		        
-        if k==p then
-          ret=true;
-          break;
-        end;
-      end;
-      return ret;
+      return false;
     end;
   elseif k=="CopyTo" then
     return function(obj, arr)
@@ -349,9 +410,9 @@ __mt_index_of_hashset = function(t, k)
       end;
     end;
   elseif k=="Clear" then
-  	while table.maxn(t)>0 do
-  		table.remove(t);
-  	end;	  	
+  	return function(obj)
+  	  __clear_table(obj);
+  	end;
   elseif k=="GetEnumerator" then
     return function(obj)
       return GetHashsetEnumerator(obj);
@@ -403,7 +464,7 @@ function GetDictEnumerator(tb)
       this.key, v = next(tb, this.key);
       this.current = {
         Key = __wrap_if_string(this.key),
-        Value = v,
+        Value = v and v.value,
       };
       if this.key then
         return true;
@@ -471,19 +532,15 @@ end;
 function wrapenumerable(func)
 	return function(...)
 		local args = {...};
-		local f = coroutine.wrap(func);
-		return WrapEnumerator(function() return f(args); end);
+		return UnityEngine.WrapEnumerator(function()
+			local f = coroutine.wrap(func);
+			f(unpack(args));
+		end);
 	end;
 end;
 
 function wrapyield(yieldVal, isEnumerableOrEnumerator, isUnityYield)
-	if isEnumerableOrEnumerator then
-		Yield(yieldVal);
-	elseif isUnityYield then
-		Yield(yieldVal);
-	else
-		coroutine.yield(yieldVal);
-	end;
+	UnityEngine.Yield(yieldVal);
 end;
 
 LuaConsole = {
@@ -495,12 +552,24 @@ LuaConsole = {
   end,
 };
 
-function defineclass(base, static, static_props, static_events, instance_build, instance_props, instance_events)
+function wrapvaluetype(v)
+	return v;
+end;
+
+function wrapvaluetypearray(arr)
+	for i,v in ipairs(arr) do
+		arr[i]=wrapvaluetype(v);
+	end;
+	return setmetatable(arr, { __index = __mt_index_of_array });
+end;
+
+function defineclass(base, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, is_value_type)
     
     local base_class = base or {};
     local mt = getmetatable(base_class);
 
     local class = static or {};
+    local class_fields = static_fields or {};
     local class_props = static_props or {};
     local class_events = static_events or {};
     class["__cs2lua_defined"] = true;
@@ -511,20 +580,29 @@ function defineclass(base, static, static_props, static_events, instance_build, 
         		if mt then
         			baseObj = mt.__call();
         		end;
-            local obj = nil;
+            local obj = {};
+						for k,v in pairs(instance_methods) do
+							obj[k] = v;
+						end;
+            local obj_fields;
             if instance_build then
-            	obj = instance_build();
+            	obj_fields = instance_build();
             else
-            	obj = {};
+            	obj_fields = {};
             end;
             local obj_props = instance_props or {};
             local obj_events = instance_events or {};
             obj["base"] = baseObj;
             
             setmetatable(obj, {
-            		__class = class,                
+            		__class = class,
+            		__is_value_type = is_value_type,
                 __index = function(t, k)
                     local ret;
+				            ret = obj_fields[k];
+				            if ret then
+				            	return ret;
+				            end;
                     ret = obj_props[k];
                     if ret then
                       if ret.get then
@@ -540,6 +618,10 @@ function defineclass(base, static, static_props, static_events, instance_build, 
 
                 __newindex = function(t, k, v)
                     local ret;
+				            ret = obj_fields[k];
+				            if ret then
+				            	obj_fields[k] = v;
+				            end;
                     ret = obj_props[k];
                     if ret then
                       if ret.set then
@@ -559,6 +641,10 @@ function defineclass(base, static, static_props, static_events, instance_build, 
         
         __index = function(t, k)
             local ret;
+            ret = class_fields[k];
+            if ret then
+            	return ret;
+            end;
             ret = class_props[k];
             if ret then
               if ret.get then
@@ -569,11 +655,14 @@ function defineclass(base, static, static_props, static_events, instance_build, 
             elseif base_class then
             	ret = base_class[k];                         
             end;
-            return ret;
         end,
 
         __newindex = function(t, k, v)
             local ret;
+            ret = class_fields[k];
+            if ret then
+            	class_fields[k] = v;
+            end;
             ret = class_props[k];
             if ret then
               if ret.set then

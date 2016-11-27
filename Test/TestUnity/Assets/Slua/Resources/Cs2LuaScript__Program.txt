@@ -12,13 +12,13 @@ Cs2LuaScript.Program = {
 	cctor = function()
 	end,
 
-
 	__define_class = function()
 		local static = Cs2LuaScript.Program;
+		local static_fields = nil;
 		local static_props = nil;
 		local static_events = nil;
 
-		return defineclass(nil, static, static_props, static_events, nil, nil, nil);
+		return defineclass(nil, static, static_fields, static_props, static_events, nil, nil, nil, nil, false);
 	end,
 };
 

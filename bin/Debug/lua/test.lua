@@ -42,3 +42,8 @@ print("bxor:", bit.bxor(1,2));
 print("bor", bit.bor(1,2));
 print("band", bit.band(1,2));
 print("bnot", bit.bnot(2));
+
+local t = {abc=false};
+for k,v in pairs(t) do
+	print(k,v);
+end;

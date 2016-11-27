@@ -5,18 +5,14 @@ TopLevel.SecondLevel.FooBase = {
 	cctor = function()
 	end,
 
-
 	__new_object = function(...)
 		return newobject(TopLevel.SecondLevel.FooBase, nil, {}, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.FooBase;
-
-		local static_props = {
-		};
-
-		local static_events = {
-		};
+		local static_fields = nil;
+		local static_props = nil;
+		local static_events = nil;
 
 		local instance_methods = {
 			ctor = function(this)
@@ -24,22 +20,18 @@ TopLevel.SecondLevel.FooBase = {
 		};
 
 		local instance_build = function()
-			local instance = {
+			local instance_fields = {
 				m_Ttt = 6789,
 			};
 			for k,v in pairs(instance_methods) do
 				instance[k] = v;
 			end;
-			return instance;
+			return instance_fields;
 		end;
+		local instance_props = nil;
+		local instance_events = nil;
 
-		local instance_props = {
-		};
-
-		local instance_events = {
-		};
-
-		return defineclass(nil, static, static_props, static_events, instance_build, instance_props, instance_events);
+		return defineclass(nil, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, false);
 	end,
 };
 

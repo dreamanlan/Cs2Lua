@@ -22,6 +22,13 @@ namespace TopLevel
         Two,
         Three,
     }
+
+    struct TestStruct
+    {
+        public int A;
+        public int B;
+        public int C;
+    }
     
     namespace SecondLevel
     {
@@ -91,11 +98,22 @@ namespace TopLevel
             public event SimpleEventHandler OnSimple;
             public SimpleEventHandler OnSimple2;
 
-            public int Val
+            public TestStruct Val
             {
                 get
                 {
-                    return this.m_Test;
+                    return this.m_TS;
+                }
+                set
+                {
+                    this.m_TS=value;
+                }
+            }
+            public int this[params TestStruct[] args]
+            {
+                get
+                {
+                    return 1;
                 }
                 set
                 {
@@ -153,9 +171,30 @@ namespace TopLevel
                 t.Test(123);
                 t.Test2<int>(new Test1(), new Test2());
 
+                int v;
+                int vv=TestLocal(out v);
 
+                TestStruct ts = new TestStruct();
+                ts.A=1;
+                ts.B=2;
+                ts.C=3;
+                TestStruct ts2 = ts;
+                TestStruct ts3;
+                ts3=ts;
+                TestValueArg(ts);
             }
 
+            private int TestLocal(out int v)
+            {
+                v = 1;
+                return 2;
+            }
+            private int TestValueArg(TestStruct ts)
+            {
+                ts.A=4;
+                ts.B=5;
+                ts.C=6;
+            }
             private int TestContinueAndReturn()
             {
                 for (int i = 0; i < 100; ++i) {
@@ -187,6 +226,7 @@ namespace TopLevel
 
             internal int m_Test = 0;
             internal int m_Test2 = 0;
+            internal TestStruct m_TS;
             private HashSet<string> m_HashSet = new HashSet<string> { "one", "two", "three" };
         } 
 

@@ -6,23 +6,23 @@ MyScript = {
 	cctor = function()
 	end,
 
-
 	__new_object = function(...)
 		return newobject(MyScript, nil, {}, ...);
 	end,
 	__define_class = function()
 		local static = MyScript;
+		local static_fields = nil;
 		local static_props = nil;
 		local static_events = nil;
 
 		local instance_methods = {
 			Init = function(this, obj, mb)
-				local s = wrapstring("test test test from cs2lua !");
+				local s; s = wrapstring("test test test from cs2lua !");
 				UnityEngine.Debug.Log(s);
 				mb:StartCoroutine(this:TestCoroutine());
 				this.root = newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", nil, {}, wrapstring("root"));
-				local slider = typecast(UnityEngine.GameObject.Find(wrapstring("Canvas/Slider")):GetComponent(UnityEngine.UI.Slider), UnityEngine.UI.Slider);
-				local counttxt = typecast(UnityEngine.GameObject.Find(wrapstring("Canvas/Count")):GetComponent(UnityEngine.UI.Text), UnityEngine.UI.Text);
+				local slider; slider = typecast(UnityEngine.GameObject.Find(wrapstring("Canvas/Slider")):GetComponent(UnityEngine.UI.Slider), UnityEngine.UI.Slider);
+				local counttxt; counttxt = typecast(UnityEngine.GameObject.Find(wrapstring("Canvas/Count")):GetComponent(UnityEngine.UI.Text), UnityEngine.UI.Text);
 				slider.onValueChanged:AddListener((function(v)
 					this:Reset();
 					counttxt.text = LuaString.Format(wrapstring("cube:{0}"), v);
@@ -31,19 +31,19 @@ MyScript = {
 				this:Reset();
 			end,
 			Update = function(this)
-				local i = 0;
+				local i; i = 0;
 				while (i < this.cubes.Length) do
-					local offset = condexp(((i % 2) == 1), 5, -5);
-					local nr = (this.r + (UnityEngine.Mathf.Sin(UnityEngine.Time.time) * offset));
-					local angle = condexp(((i % 2) == 1), UnityEngine.Time.time, -5);
-					local b = newexternobject(UnityEngine.Vector3, "UnityEngine.Vector3", "ctor", nil, {}, typecast(( (UnityEngine.Mathf.Cos(((((i * 3.141593) * 2) / this.max) + angle)) * nr) ), System.Single), typecast(( (UnityEngine.Mathf.Sin(((((i * 3.141593) * 2) / this.max) + angle)) * nr) ), System.Single), 0);
+					local offset; offset = condexp(((i % 2) == 1), 5, -5);
+					local nr; nr = (this.r + (UnityEngine.Mathf.Sin(UnityEngine.Time.time) * offset));
+					local angle; angle = condexp(((i % 2) == 1), UnityEngine.Time.time, -5);
+					local b; b = newexternobject(UnityEngine.Vector3, "UnityEngine.Vector3", "ctor", nil, {}, typecast(( (UnityEngine.Mathf.Cos(((((i * 3.141593) * 2) / this.max) + angle)) * nr) ), System.Single), typecast(( (UnityEngine.Mathf.Sin(((((i * 3.141593) * 2) / this.max) + angle)) * nr) ), System.Single), 0);
 					this.cubes[i + 1].transform.position = b;
 					i = i + 1;
 				end;
 				if ((this.fogStart <= 0) or (this.t > 1)) then
 					this.fogStart = UnityEngine.Time.time;
 					this.bgCurrent = UnityEngine.Camera.main.backgroundColor;
-					local ix = UnityEngine.Random.Range(0, this.colors.Length);
+					local ix; ix = UnityEngine.Random.Range(0, this.colors.Length);
 					this.bgColor = this.colors[ix + 1];
 				end;
 				this.t = (( (UnityEngine.Time.time - this.fogStart) ) / 10);
@@ -54,7 +54,7 @@ MyScript = {
 			end,
 			TestCoroutine = wrapenumerable(function(this)
 				wrapyield(newexternobject(UnityEngine.WaitForSeconds, "UnityEngine.WaitForSeconds", "ctor", nil, {}, 10), false, true);
-				local i = 0;
+				local i; i = 0;
 				while (i < 60) do
 					wrapyield(newexternobject(UnityEngine.WaitForSeconds, "UnityEngine.WaitForSeconds", "ctor", nil, {}, 1), false, true);
 					UnityEngine.Debug.Log(System.String.Format(wrapstring("{0} seconds"), i));
@@ -63,25 +63,25 @@ MyScript = {
 			end),
 			Reset = function(this)
 				if (nil ~= this.cubes) then
-					local i = 0;
+					local i; i = 0;
 					while (i < this.cubes.Length) do
 						UnityEngine.Object.Destroy(this.cubes[i + 1]);
 						i = i + 1;
 					end;
 				end;
 				this.cubes = wraparray{};
-				local P = UnityEngine.Resources.Load(wrapstring("Particle System"));
-				local i = 0;
+				local P; P = UnityEngine.Resources.Load(wrapstring("Particle System"));
+				local i; i = 0;
 				while (i < this.max) do
-					local cube = UnityEngine.GameObject.CreatePrimitive(3);
+					local cube; cube = UnityEngine.GameObject.CreatePrimitive(3);
 					cube.transform.position = newexternobject(UnityEngine.Vector3, "UnityEngine.Vector3", "ctor", nil, {}, (typecast(UnityEngine.Mathf.Cos((((i * 3.141593) * 2) / this.max)), System.Single) * this.r), (typecast(UnityEngine.Mathf.Sin((((i * 3.141593) * 2) / this.max)), System.Single) * this.r), 0);
 					cube.transform:SetParent(this.root.transform);
-					local mat = cube:GetComponent(UnityEngine.Renderer).material;
-					local box = cube:GetComponent(UnityEngine.BoxCollider);
+					local mat; mat = cube:GetComponent(UnityEngine.Renderer).material;
+					local box; box = cube:GetComponent(UnityEngine.BoxCollider);
 					UnityEngine.Object.Destroy(box);
-					local p = typecast(UnityEngine.Object.Instantiate(P, UnityEngine.Vector3.zero, UnityEngine.Quaternion.identity), UnityEngine.GameObject);
+					local p; p = typecast(UnityEngine.Object.Instantiate(P, UnityEngine.Vector3.zero, UnityEngine.Quaternion.identity), UnityEngine.GameObject);
 					p.transform:SetParent(cube.transform);
-					local ix = UnityEngine.Random.Range(0, this.colors.Length);
+					local ix; ix = UnityEngine.Random.Range(0, this.colors.Length);
 					mat.color = this.colors[ix + 1];
 					this.cubes[i + 1] = cube;
 					i = i + 1;
@@ -92,26 +92,23 @@ MyScript = {
 		};
 
 		local instance_build = function()
-			local instance = {
-				root = nil,
+			local instance_fields = {
+				root = true,
 				r = 10,
 				max = 400,
 				t = 0,
 				fogStart = 0,
-				bgCurrent = nil,
-				bgColor = nil,
+				bgCurrent = true,
+				bgColor = true,
 				cubes = nil,
 				colors = wraparray{UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black},
 			};
-			for k,v in pairs(instance_methods) do
-				instance[k] = v;
-			end;
-			return instance;
+			return instance_fields;
 		end;
 		local instance_props = nil;
 		local instance_events = nil;
 
-		return defineclass(nil, static, static_props, static_events, instance_build, instance_props, instance_events);
+		return defineclass(nil, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, false);
 	end,
 };
 

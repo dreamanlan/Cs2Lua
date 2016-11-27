@@ -9,12 +9,12 @@ LuaString = {
 	cctor = function()
 	end,
 
-
 	__new_object = function(...)
 		return newobject(LuaString, nil, {}, ...);
 	end,
 	__define_class = function()
 		local static = LuaString;
+		local static_fields = nil;
 		local static_props = nil;
 		local static_events = nil;
 
@@ -24,17 +24,14 @@ LuaString = {
 		};
 
 		local instance_build = function()
-			local instance = {
+			local instance_fields = {
 			};
-			for k,v in pairs(instance_methods) do
-				instance[k] = v;
-			end;
-			return instance;
+			return instance_fields;
 		end;
 		local instance_props = nil;
 		local instance_events = nil;
 
-		return defineclass(nil, static, static_props, static_events, instance_build, instance_props, instance_events);
+		return defineclass(nil, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, false);
 	end,
 };
 

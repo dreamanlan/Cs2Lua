@@ -552,12 +552,24 @@ LuaConsole = {
   end,
 };
 
-function defineclass(base, static, static_props, static_events, instance_build, instance_props, instance_events)
+function wrapvaluetype(v)
+	return v;
+end;
+
+function wrapvaluetypearray(arr)
+	for i,v in ipairs(arr) do
+		arr[i]=wrapvaluetype(v);
+	end;
+	return setmetatable(arr, { __index = __mt_index_of_array });
+end;
+
+function defineclass(base, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, is_value_type)
     
     local base_class = base or {};
     local mt = getmetatable(base_class);
 
     local class = static or {};
+    local class_fields = static_fields or {};
     local class_props = static_props or {};
     local class_events = static_events or {};
     class["__cs2lua_defined"] = true;
@@ -568,20 +580,29 @@ function defineclass(base, static, static_props, static_events, instance_build, 
         		if mt then
         			baseObj = mt.__call();
         		end;
-            local obj = nil;
+            local obj = {};
+						for k,v in pairs(instance_methods) do
+							obj[k] = v;
+						end;
+            local obj_fields;
             if instance_build then
-            	obj = instance_build();
+            	obj_fields = instance_build();
             else
-            	obj = {};
+            	obj_fields = {};
             end;
             local obj_props = instance_props or {};
             local obj_events = instance_events or {};
             obj["base"] = baseObj;
             
             setmetatable(obj, {
-            		__class = class,                
+            		__class = class,
+            		__is_value_type = is_value_type,
                 __index = function(t, k)
                     local ret;
+				            ret = obj_fields[k];
+				            if ret then
+				            	return ret;
+				            end;
                     ret = obj_props[k];
                     if ret then
                       if ret.get then
@@ -597,6 +618,10 @@ function defineclass(base, static, static_props, static_events, instance_build, 
 
                 __newindex = function(t, k, v)
                     local ret;
+				            ret = obj_fields[k];
+				            if ret then
+				            	obj_fields[k] = v;
+				            end;
                     ret = obj_props[k];
                     if ret then
                       if ret.set then
@@ -616,6 +641,10 @@ function defineclass(base, static, static_props, static_events, instance_build, 
         
         __index = function(t, k)
             local ret;
+            ret = class_fields[k];
+            if ret then
+            	return ret;
+            end;
             ret = class_props[k];
             if ret then
               if ret.get then
@@ -626,11 +655,14 @@ function defineclass(base, static, static_props, static_events, instance_build, 
             elseif base_class then
             	ret = base_class[k];                         
             end;
-            return ret;
         end,
 
         __newindex = function(t, k, v)
             local ret;
+            ret = class_fields[k];
+            if ret then
+            	class_fields[k] = v;
+            end;
             ret = class_props[k];
             if ret then
               if ret.set then
