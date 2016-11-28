@@ -1,4 +1,5 @@
 require "cs2lua__utility";
+require "cs2lua__attributes";
 require "cs2lua__namespaces";
 require "TopLevel__SecondLevel__FooBase";
 require "TopLevel__SecondLevel__GenericClass_T";
@@ -27,7 +28,9 @@ TopLevel.SecondLevel.Foo = {
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.Foo;
-		local static_fields = nil;
+		local static_fields = {
+			__attributes = TopLevel__SecondLevel__Foo__Attrs,
+		};
 		local static_props = nil;
 		local static_events = nil;
 
@@ -64,7 +67,7 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			Iterator = wrapenumerable(function(this)
 				wrapyield(nil, false, false);
-				wrapyield(newexternobject(UnityEngine.WaitForSeconds, "UnityEngine.WaitForSeconds", "ctor", nil, {}, 3), false, true);
+				wrapyield(, false, false);
 				return nil;
 			end),
 			Iterator2 = wrapenumerable(function(this)
@@ -148,13 +151,11 @@ TopLevel.SecondLevel.Foo = {
 				OnSimple2 = wrapdelegation{},
 				m_Test = 0,
 				m_Test2 = 0,
-				m_TS = nil,
+				m_TS = true,
 				m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, "System.Collections.Generic.HashSet_T", "ctor", nil, {wrapstring("one"), wrapstring("two"), wrapstring("three")}),
+				__attributes = TopLevel__SecondLevel__Foo__Attrs,
 				__ctor_called = false,
 			};
-			for k,v in pairs(instance_methods) do
-				instance[k] = v;
-			end;
 			return instance_fields;
 		end;
 
@@ -201,9 +202,6 @@ TopLevel.SecondLevel.Foo.Test1 = {
 		local instance_build = function()
 			local instance_fields = {
 			};
-			for k,v in pairs(instance_methods) do
-				instance[k] = v;
-			end;
 			return instance_fields;
 		end;
 		local instance_props = nil;
@@ -238,9 +236,6 @@ TopLevel.SecondLevel.Foo.Test2 = {
 		local instance_build = function()
 			local instance_fields = {
 			};
-			for k,v in pairs(instance_methods) do
-				instance[k] = v;
-			end;
 			return instance_fields;
 		end;
 		local instance_props = nil;
@@ -277,9 +272,6 @@ TopLevel.SecondLevel.Foo.FooChild = {
 				m_Test1 = 123,
 				m_Test2 = 456,
 			};
-			for k,v in pairs(instance_methods) do
-				instance[k] = v;
-			end;
 			return instance_fields;
 		end;
 		local instance_props = nil;

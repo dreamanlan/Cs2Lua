@@ -32,9 +32,6 @@ TopLevel.SecondLevel.GenericClass_T = {
 				m_Test = 123,
 				m_Test2 = (TopLevel.SecondLevel.GenericClass_T.TTT + 1),
 			};
-			for k,v in pairs(instance_methods) do
-				instance[k] = v;
-			end;
 			return instance_fields;
 		end;
 		local instance_props = nil;
@@ -94,13 +91,10 @@ TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT = {
 			local instance_fields = {
 				m_T = nil,
 				m_TT = nil,
-				m_TypeT = nil,
-				m_TypeTT = nil,
+				m_TypeT = true,
+				m_TypeTT = true,
 				__ctor_called = false,
 			};
-			for k,v in pairs(instance_methods) do
-				instance[k] = v;
-			end;
 			return instance_fields;
 		end;
 		local instance_props = nil;

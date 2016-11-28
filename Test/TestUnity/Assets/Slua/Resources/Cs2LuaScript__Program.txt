@@ -1,4 +1,5 @@
 require "cs2lua__utility";
+require "cs2lua__attributes";
 require "cs2lua__namespaces";
 
 Cs2LuaScript.Program = {
@@ -14,7 +15,9 @@ Cs2LuaScript.Program = {
 
 	__define_class = function()
 		local static = Cs2LuaScript.Program;
-		local static_fields = nil;
+		local static_fields = {
+			__attributes = Cs2LuaScript__Program__Attrs,
+		};
 		local static_props = nil;
 		local static_events = nil;
 

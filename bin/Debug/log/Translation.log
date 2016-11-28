@@ -1,0 +1,4 @@
+============<<<Translation Error:test>>>============
+<<<[Log]>>> Error type: GameObject
+<<<[Log for ObjectCreationExpressionSyntax]>>> [code:[ new UnityEngine.WaitForSeconds(3) ] location: test.cs: (157,29)-(157,62)]Unknown ObjectCreationExpressionSyntax !
+<<<[Log for ObjectCreationExpressionSyntax]>>> [code:[ new GameObject("test test test") ] location: test.cs: (267,26)-(267,58)]Unknown ObjectCreationExpressionSyntax !

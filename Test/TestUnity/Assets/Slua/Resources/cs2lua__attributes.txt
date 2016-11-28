@@ -1,0 +1,16 @@
+MyScript__Attrs = {
+	FixedUpdate = {
+		{"Cs2Lua.IgnoreAttribute", {}, {}},
+	},
+	LateUpdate = {
+		{"Cs2Lua.IgnoreAttribute", {}, {}},
+	},
+};
+Cs2LuaScript__Program__Attrs = {
+	Class = {
+		{"Cs2Lua.EntryAttribute", {}, {}},
+	},
+	InitDll = {
+		{"Cs2Lua.IgnoreAttribute", {}, {}},
+	},
+};

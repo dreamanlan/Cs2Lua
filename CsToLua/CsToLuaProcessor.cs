@@ -225,8 +225,11 @@ namespace RoslynTool.CsToLua
             HashSet<string> lualibRefs = new HashSet<string>();
             StringBuilder nsBuilder = new StringBuilder();
             BuildNamespaces(nsBuilder, toplevelMni);
+            StringBuilder attrBuilder = new StringBuilder();
+            BuildAttributes(attrBuilder, compilation.Assembly);
             File.Copy(Path.Combine(exepath, "lualib/utility.lua"), Path.Combine(outputDir, string.Format("cs2lua__utility.{0}", outputExt)), true);
             File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__namespaces.{0}", outputExt)), nsBuilder.ToString());
+            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__attributes.{0}", outputExt)), attrBuilder.ToString());
             foreach (var pair in toplevelClasses) {
                 StringBuilder classBuilder = new StringBuilder();
                 lualibRefs.Clear();
@@ -312,6 +315,165 @@ namespace RoslynTool.CsToLua
                 }
             }
         }
+        private static void BuildAttributes(StringBuilder sb, IAssemblySymbol assemblySymbol)
+        {
+            INamespaceSymbol nssym = assemblySymbol.GlobalNamespace;
+            BuildAttributesRecursively(sb, nssym, assemblySymbol);
+        }
+        private static void BuildAttributesRecursively(StringBuilder sb, INamespaceSymbol nssym, IAssemblySymbol assemblySymbol)
+        {
+            if (null != nssym) {
+                foreach (var typeSym in nssym.GetTypeMembers()) {
+                    BuildAttributesRecursively(sb, typeSym, assemblySymbol);
+                }
+                foreach (var newSym in nssym.GetNamespaceMembers()) {
+                    BuildAttributesRecursively(sb, newSym, assemblySymbol);
+                }
+            }
+        }
+        private static void BuildAttributesRecursively(StringBuilder sb, INamedTypeSymbol typesym, IAssemblySymbol assemblySymbol)
+        {
+            BuildClassAttributes(sb, typesym, assemblySymbol);
+            foreach (var newSym in typesym.GetTypeMembers()) {
+                BuildAttributesRecursively(sb, newSym, assemblySymbol);
+            }
+        }
+        private static void BuildClassAttributes(StringBuilder sb, INamedTypeSymbol typesym, IAssemblySymbol assemblySymbol)
+        {
+            StringBuilder csb = new StringBuilder();
+            StringBuilder temp = new StringBuilder();
+            int indent = 0;
+            ++indent;
+            if (typesym.GetAttributes().Length > 0) {
+                csb.AppendFormat("{0}Class = {{", GetIndentString(indent));
+                csb.AppendLine();
+                ++indent;
+                BuildAttributes(csb, indent, typesym.GetAttributes());
+                --indent;
+                csb.AppendFormat("{0}}},", GetIndentString(indent));
+                csb.AppendLine();
+            }
+            temp.Length = 0;
+            foreach (var sym in typesym.GetMembers()) {
+                var msym = sym as IFieldSymbol;
+                if (null != msym && msym.GetAttributes().Length > 0) {
+                    temp.AppendFormat("{0}{1} = {{", GetIndentString(indent), sym.Name);
+                    temp.AppendLine();
+                    ++indent;
+                    BuildAttributes(temp, indent, msym.GetAttributes());
+                    --indent;
+                    temp.AppendFormat("{0}}},", GetIndentString(indent));
+                    temp.AppendLine();
+                }
+            }
+            if (temp.Length > 0) {
+                csb.Append(temp.ToString());
+            }
+            temp.Length = 0;
+            foreach (var sym in typesym.GetMembers()) {
+                var msym = sym as IMethodSymbol;
+                if (null != msym && msym.GetAttributes().Length > 0) {
+                    temp.AppendFormat("{0}{1} = {{", GetIndentString(indent), sym.Name);
+                    temp.AppendLine();
+                    ++indent;
+                    BuildAttributes(temp, indent, msym.GetAttributes());
+                    --indent;
+                    temp.AppendFormat("{0}}},", GetIndentString(indent));
+                    temp.AppendLine();
+                }
+            }
+            if (temp.Length > 0) {
+                csb.Append(temp.ToString());
+            }
+            temp.Length = 0;
+            foreach (var sym in typesym.GetMembers()) {
+                var msym = sym as IPropertySymbol;
+                if (null != msym && msym.GetAttributes().Length > 0) {
+                    temp.AppendFormat("{0}{1} = {{", GetIndentString(indent), sym.Name);
+                    temp.AppendLine();
+                    ++indent;
+                    BuildAttributes(temp, indent, msym.GetAttributes());
+                    --indent;
+                    temp.AppendFormat("{0}}},", GetIndentString(indent));
+                    temp.AppendLine();
+                }
+            }
+            if (temp.Length > 0) {
+                csb.Append(temp.ToString());
+            }
+            temp.Length = 0;
+            foreach (var sym in typesym.GetMembers()) {
+                var msym = sym as IEventSymbol;
+                if (null != msym && msym.GetAttributes().Length > 0) {
+                    temp.AppendFormat("{0}{1} = {{", GetIndentString(indent), sym.Name);
+                    temp.AppendLine();
+                    ++indent;
+                    BuildAttributes(temp, indent, msym.GetAttributes());
+                    --indent;
+                    temp.AppendFormat("{0}}},", GetIndentString(indent));
+                    temp.AppendLine();
+                }
+            }
+            if (temp.Length > 0) {
+                csb.Append(temp.ToString());
+            }
+            --indent;
+            if (csb.Length > 0) {
+                sb.AppendFormat("{0}__Attrs = {{", ClassInfo.GetFullName(typesym).Replace(".", "__"));
+                sb.AppendLine();
+                sb.Append(csb.ToString());
+                sb.Append("};");
+                sb.AppendLine();
+            }
+        }
+        private static void BuildAttributes(StringBuilder sb, int indent, System.Collections.Immutable.ImmutableArray<AttributeData> attrs)
+        {
+            foreach (var attr in attrs) {
+                string fn = ClassInfo.GetFullName(attr.AttributeClass);
+                sb.AppendFormat("{0}{{", GetIndentString(indent));
+                sb.AppendFormat("\"{0}\", {{", fn);
+                var ps = attr.AttributeConstructor.Parameters;
+                var args = attr.ConstructorArguments;
+                int ct = args.Length < ps.Length ? args.Length : ps.Length;
+                for (int i = 0; i < ct; ++i) {
+                    string name = ps[i].Name;
+                    sb.Append(name);
+                    sb.Append(" = ");
+                    object v = args[i].Value;
+                    if (null == v) {
+                        sb.Append(" nil");
+                    } else if (v is string) {
+                        sb.AppendFormat("\"{0}\"", v.ToString());
+                    } else {
+                        sb.Append(v);
+                    }
+                    if (i < ct - 1) {
+                        sb.Append(", ");
+                    }
+                }
+                sb.Append("}, {");
+                var namedArgs = attr.NamedArguments;
+                ct = namedArgs.Length;
+                for (int i = 0; i < ct; ++i) {
+                    var pair = namedArgs[i];
+                    string name = pair.Key;
+                    object v = pair.Value.Value;
+                    sb.Append(name);
+                    sb.Append(" = ");
+                    if (null == v) {
+                        sb.Append(" nil");
+                    } else if (v is string) {
+                        sb.AppendFormat("\"{0}\"", v.ToString());
+                    } else {
+                        sb.Append(v);
+                    }
+                    if (i < ct - 1) {
+                        sb.Append(", ");
+                    }
+                }
+                sb.AppendLine("}},");
+            }
+        }
         private static void BuildLuaClass(StringBuilder sb, MergedNamespaceInfo toplevelMni, Dictionary<string, MergedClassInfo> toplevelMcis, SymbolTable symTable, HashSet<string> lualibRefs)
         {
             StringBuilder code = new StringBuilder();
@@ -322,6 +484,7 @@ namespace RoslynTool.CsToLua
                 code.Append(classBuilder.ToString());
             }
             sb.AppendLine("require \"cs2lua__utility\";");
+            sb.AppendLine("require \"cs2lua__attributes\";");
             foreach (string lib in lualibRefs) {
                 sb.AppendFormat("require \"{0}\";", lib);
                 sb.AppendLine();
@@ -337,6 +500,7 @@ namespace RoslynTool.CsToLua
             var classes = mci.Classes;
 
             string fileName = key.Replace(".", "__");
+            string attributesName = fileName + "__Attrs";
 
             bool isStaticClass = false;
             bool isValueType = false;
@@ -346,6 +510,7 @@ namespace RoslynTool.CsToLua
             bool generateBasicCctor = false;
             bool generateBasicCtor = false;
             bool generateTypeParamFields = false;
+            bool existAttributes = false;
             string baseClass = string.Empty;
             ClassSymbolInfo csi;
             if (symTable.ClassSymbols.TryGetValue(key, out csi)) {
@@ -354,6 +519,7 @@ namespace RoslynTool.CsToLua
                 generateBasicCctor = csi.GenerateBasicCctor;
                 generateBasicCtor = csi.GenerateBasicCtor;
                 generateTypeParamFields = csi.GenerateTypeParamFields;
+                existAttributes = csi.ExistAttributes;
                 baseClass = csi.BaseClassKey;
                 isStaticClass = csi.TypeSymbol.IsStatic;
                 isValueType = csi.TypeSymbol.IsValueType;
@@ -418,6 +584,8 @@ namespace RoslynTool.CsToLua
             HashSet<string> refs = new HashSet<string>();
             if (isAlone) {
                 sb.AppendLine("require \"cs2lua__utility\";");
+                if (existAttributes)
+                    sb.AppendLine("require \"cs2lua__attributes\";");
                 sb.AppendLine("require \"cs2lua__namespaces\";");
                 foreach (string lib in requiredlibs) {
                     sb.AppendFormat("require \"{0}\";", lib);
@@ -571,7 +739,7 @@ namespace RoslynTool.CsToLua
                         hasStaticField = true;
                 }
 
-                if (hasStaticField) {
+                if (hasStaticField || existAttributes || generateBasicCctor) {
                     sb.AppendFormat("{0}local static_fields = {{", GetIndentString(indent));
                     sb.AppendLine();
                     ++indent;
@@ -581,11 +749,16 @@ namespace RoslynTool.CsToLua
                         sb.Append(ci.StaticFieldCodeBuilder.ToString());
                     }
 
+                    if (existAttributes) {
+                        sb.AppendFormat("{0}__attributes = {1},", GetIndentString(indent), attributesName);
+                        sb.AppendLine();
+                    }
+
                     if (generateBasicCctor) {
                         sb.AppendFormat("{0}__cctor_called = false,", GetIndentString(indent));
                         sb.AppendLine();
                     }
-
+                    
                     --indent;
                     sb.AppendFormat("{0}}};", GetIndentString(indent));
                     sb.AppendLine();
@@ -731,6 +904,11 @@ namespace RoslynTool.CsToLua
                     foreach (var ci in classes) {
                         sb.Append(ci.InstanceFieldCodeBuilder.ToString());
                     }
+                    
+                    if (existAttributes) {
+                        sb.AppendFormat("{0}__attributes = {1},", GetIndentString(indent), attributesName);
+                        sb.AppendLine();
+                    }
 
                     if (generateBasicCtor) {
                         sb.AppendFormat("{0}__ctor_called = false,", GetIndentString(indent));
@@ -846,6 +1024,7 @@ namespace RoslynTool.CsToLua
 
             return fileName;
         }
+
         private static string GetIndentString(int indent)
         {
             return CsLuaTranslater.GetIndentString(indent);

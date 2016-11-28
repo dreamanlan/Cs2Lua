@@ -23,9 +23,6 @@ TopLevel.SecondLevel.FooBase = {
 			local instance_fields = {
 				m_Ttt = 6789,
 			};
-			for k,v in pairs(instance_methods) do
-				instance[k] = v;
-			end;
 			return instance_fields;
 		end;
 		local instance_props = nil;

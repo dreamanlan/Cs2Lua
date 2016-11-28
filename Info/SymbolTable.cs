@@ -13,6 +13,7 @@ namespace RoslynTool.CsToLua
     {
         internal string ClassKey = string.Empty;
         internal string BaseClassKey = string.Empty;
+        internal bool ExistAttributes = false;
         internal bool ExistConstructor = false;
         internal bool ExistStaticConstructor = false;
         internal bool GenerateBasicCtor = false;
@@ -45,6 +46,10 @@ namespace RoslynTool.CsToLua
             ExistConstructor = false;
             ExistStaticConstructor = false;
 
+            if (typeSym.GetAttributes().Length > 0) {
+                ExistAttributes = true;
+            }
+
             INamedTypeSymbol type = typeSym;
             while (null != type) {
                 if (type.IsGenericType) {
@@ -63,8 +68,10 @@ namespace RoslynTool.CsToLua
                 if (null != fsym) {
                     FieldSymbols.Add(fsym);
 
+                    if (fsym.GetAttributes().Length > 0) {
+                        ExistAttributes = true;
+                    }
                     CheckFieldIncludeTypeOf(fsym, compilation, ref fieldIncludeTypeOf, ref staticFieldIncludeTypeOf);
-                    continue;
                 }
             }
             foreach (var sym in TypeSymbol.GetMembers()) {
@@ -76,6 +83,10 @@ namespace RoslynTool.CsToLua
                         ExistStaticConstructor = true;
                     }
                     MethodSymbols.Add(msym);
+
+                    if (msym.GetAttributes().Length > 0) {
+                        ExistAttributes = true;
+                    }
 
                     string name = msym.Name;
                     if (name[0] == '.')
@@ -149,6 +160,10 @@ namespace RoslynTool.CsToLua
                 var psym = sym as IPropertySymbol;
                 if (null != psym) {
                     PropertySymbols.Add(psym);
+                    
+                    if (psym.GetAttributes().Length > 0) {
+                        ExistAttributes = true;
+                    }
 
                     if (typeSym.IsGenericType) {
                         if (null != psym.GetMethod) {
@@ -163,6 +178,10 @@ namespace RoslynTool.CsToLua
                 var esym = sym as IEventSymbol;
                 if (null != esym) {
                     EventSymbols.Add(esym);
+
+                    if (esym.GetAttributes().Length > 0) {
+                        ExistAttributes = true;
+                    }
 
                     if (typeSym.IsGenericType) {
                         if (null != esym.AddMethod) {
@@ -365,6 +384,8 @@ namespace RoslynTool.CsToLua
 
         internal static string CalcMethodMangling(IMethodSymbol methodSym, IAssemblySymbol assemblySym)
         {
+            if (null == methodSym)
+                return string.Empty;
             StringBuilder sb = new StringBuilder();
             string name = methodSym.Name;
             if (name[0] == '.')

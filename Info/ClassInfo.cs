@@ -87,11 +87,20 @@ namespace RoslynTool.CsToLua
         }
         internal void AddReference(ISymbol sym, INamedTypeSymbol curClassSym)
         {
-            var refType = sym as INamedTypeSymbol;
-            if (null == refType) {
-                refType = sym.ContainingType;
+            var arrType = sym as IArrayTypeSymbol;
+            if (null != arrType) {
+                AddReference(arrType.ElementType, curClassSym);
+            } else {
+                var refType = sym as INamedTypeSymbol;
+                if (null == refType) {
+                    refType = sym.ContainingType;
+                }
+                if (null != refType) {
+                    AddReference(refType, curClassSym);
+                } else {
+                    throw new Exception("Can't find symbol !!!");
+                }
             }
-            AddReference(refType, curClassSym);
         }
         internal void AddReference(INamedTypeSymbol refType, INamedTypeSymbol curClassSym)
         {
@@ -136,11 +145,15 @@ namespace RoslynTool.CsToLua
         }
         internal static string CalcTypeReference(INamedTypeSymbol sym)
         {
+            if (null == sym)
+                return string.Empty;
             string key = ClassInfo.GetFullName(sym);
             return key;
         }
         internal static string CalcMemberReference(ISymbol sym)
         {
+            if (null == sym)
+                return string.Empty;
             if (sym.Kind == SymbolKind.NamedType) {
                 string key = ClassInfo.GetFullName(sym);
                 return key;
@@ -152,10 +165,14 @@ namespace RoslynTool.CsToLua
 
         internal static string GetFullName(ISymbol type)
         {
+            if (null == type)
+                return string.Empty;
             return CalcFullName(type, true);
         }
         internal static string GetNamespaces(ISymbol type)
         {
+            if (null == type)
+                return string.Empty;
             if (type.Kind == SymbolKind.Namespace) {
                 return CalcFullName(type, true);
             } else {
@@ -164,6 +181,8 @@ namespace RoslynTool.CsToLua
         }
         internal static string CalcFullName(ISymbol type, bool includeSelfName)
         {
+            if (null == type)
+                return string.Empty;
             List<string> list = new List<string>();
             if (includeSelfName) {
                 list.Add(CalcNameWithTypeParameters(type));
@@ -193,10 +212,14 @@ namespace RoslynTool.CsToLua
         
         internal static string GetFullNameWithTypeArguments(ISymbol type)
         {
+            if (null == type)
+                return string.Empty;
             return CalcFullNameWithTypeArguments(type, true);
         }
         internal static string GetNamespacesWithTypeArguments(ISymbol type)
         {
+            if (null == type)
+                return string.Empty;
             if (type.Kind == SymbolKind.Namespace) {
                 return CalcFullNameWithTypeArguments(type, true);
             } else {
@@ -205,6 +228,8 @@ namespace RoslynTool.CsToLua
         }
         internal static string CalcFullNameWithTypeArguments(ISymbol type, bool includeSelfName)
         {
+            if (null == type)
+                return string.Empty;
             List<string> list = new List<string>();
             if (includeSelfName) {
                 list.Add(CalcNameWithTypeArguments(type));
@@ -234,6 +259,8 @@ namespace RoslynTool.CsToLua
 
         internal static string CalcNameWithTypeParameters(ISymbol sym)
         {
+            if (null == sym)
+                return string.Empty;
             var typeSym = sym as INamedTypeSymbol;
             if (null != typeSym) {
                 return CalcNameWithTypeParameters(typeSym);
@@ -243,6 +270,8 @@ namespace RoslynTool.CsToLua
         }
         internal static string CalcNameWithTypeArguments(ISymbol sym)
         {
+            if (null == sym)
+                return string.Empty;
             var typeSym = sym as INamedTypeSymbol;
             if (null != typeSym) {
                 return CalcNameWithTypeArguments(typeSym);
@@ -252,6 +281,8 @@ namespace RoslynTool.CsToLua
         }
         internal static string CalcNameWithTypeParameters(INamedTypeSymbol type)
         {
+            if (null == type)
+                return string.Empty;
             List<string> list = new List<string>();
             list.Add(type.Name);
             foreach (var param in type.TypeParameters) {
@@ -261,6 +292,8 @@ namespace RoslynTool.CsToLua
         }
         internal static string CalcNameWithTypeArguments(INamedTypeSymbol type)
         {
+            if (null == type)
+                return string.Empty;
             List<string> list = new List<string>();
             list.Add(type.Name);
             foreach (var arg in type.TypeArguments) {
@@ -271,6 +304,8 @@ namespace RoslynTool.CsToLua
 
         internal static bool HasAttribute(ISymbol sym, string fullName)
         {
+            if (null == sym)
+                return false;
             foreach (var attr in sym.GetAttributes()) {
                 string fn = GetFullName(attr.AttributeClass);
                 if (fn == fullName)
@@ -280,6 +315,8 @@ namespace RoslynTool.CsToLua
         }
         internal static T GetAttributeArgument<T>(ISymbol sym, string fullName, string argName)
         {
+            if (null == sym)
+                return default(T);
             foreach (var attr in sym.GetAttributes()) {
                 string fn = GetFullName(attr.AttributeClass);
                 if (fn == fullName) {
@@ -296,6 +333,8 @@ namespace RoslynTool.CsToLua
         }
         internal static T GetAttributeArgument<T>(ISymbol sym, string fullName, int index)
         {
+            if (null == sym)
+                return default(T);
             foreach (var attr in sym.GetAttributes()) {
                 string fn = GetFullName(attr.AttributeClass);
                 if (fn == fullName) {
@@ -317,10 +356,12 @@ namespace RoslynTool.CsToLua
         internal List<string> RefParamNames = new List<string>();
         internal List<string> OutParamNames = new List<string>();
         internal HashSet<int> ValueParams = new HashSet<int>();
+        internal HashSet<int> ExternValueParams = new HashSet<int>();
         internal List<string> GenericTypeTypeParamNames = new List<string>();
         internal List<string> GenericMethodTypeParamNames = new List<string>();
         internal string OriginalParamsName = string.Empty;
         internal bool ParamsIsValueType = false;
+        internal bool ParamsIsExternValueType = false;
         internal bool ExistReturn = false;
         internal bool ExistYield = false;
         internal bool ExistTypeOf = false;
@@ -368,8 +409,14 @@ namespace RoslynTool.CsToLua
             foreach (var param in sym.Parameters) {
                 if (param.IsParams) {
                     var arrTypeSym = param.Type as IArrayTypeSymbol;
-                    if (null != arrTypeSym && arrTypeSym.ElementType.IsValueType && arrTypeSym.ElementType.ContainingAssembly == assemblySym) {
-                        ParamsIsValueType = true;
+                    if (null != arrTypeSym && arrTypeSym.ElementType.IsValueType) {
+                        string ns = ClassInfo.GetNamespaces(arrTypeSym.ElementType);
+                        if (arrTypeSym.ElementType.ContainingAssembly == assemblySym)
+                            ParamsIsValueType = true;
+                        else if (ns != "System") {
+                            ParamsIsExternValueType = true;
+                        }
+
                     }
                     ParamNames.Add("...");
                     OriginalParamsName = param.Name;
@@ -381,8 +428,12 @@ namespace RoslynTool.CsToLua
                     OutParamNames.Add(param.Name);
                     ReturnParamNames.Add(param.Name);
                 } else {
-                    if (param.Type.IsValueType && param.Type.ContainingAssembly == assemblySym) {
-                        ValueParams.Add(ParamNames.Count);
+                    if (param.Type.IsValueType) {
+                        string ns = ClassInfo.GetNamespaces(param.Type);
+                        if (param.Type.ContainingAssembly == assemblySym)
+                            ValueParams.Add(ParamNames.Count);
+                        else if (ns != "System")
+                            ExternValueParams.Add(ParamNames.Count);
                     }
                     ParamNames.Add(param.Name);
                 }

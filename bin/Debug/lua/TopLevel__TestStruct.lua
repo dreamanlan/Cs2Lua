@@ -21,13 +21,10 @@ TopLevel.TestStruct = {
 
 		local instance_build = function()
 			local instance_fields = {
-				A = nil,
-				B = nil,
-				C = nil,
+				A = true,
+				B = true,
+				C = true,
 			};
-			for k,v in pairs(instance_methods) do
-				instance[k] = v;
-			end;
 			return instance_fields;
 		end;
 		local instance_props = nil;

@@ -1,4 +1,5 @@
 require "cs2lua__utility";
+require "cs2lua__attributes";
 require "cs2lua__namespaces";
 require "LuaString";
 
@@ -11,7 +12,9 @@ MyScript = {
 	end,
 	__define_class = function()
 		local static = MyScript;
-		local static_fields = nil;
+		local static_fields = {
+			__attributes = MyScript__Attrs,
+		};
 		local static_props = nil;
 		local static_events = nil;
 
@@ -102,6 +105,7 @@ MyScript = {
 				bgColor = true,
 				cubes = nil,
 				colors = wraparray{UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black},
+				__attributes = MyScript__Attrs,
 			};
 			return instance_fields;
 		end;
