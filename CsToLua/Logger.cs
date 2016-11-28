@@ -36,33 +36,45 @@ namespace RoslynTool.CsToLua
         }
         public void Log(Location location, string format, params object[] args)
         {
-            m_LogBuilder.AppendFormat("<<<[Log]>>> [location: {0}]", location.GetLineSpan());
+            if (null != location) {
+                m_LogBuilder.AppendFormat("<<<[Log]>>> [location: {0}]", location.GetLineSpan());
+            } else {
+                LogCallStack("Log: location == null !");
+            }
             m_LogBuilder.AppendFormat(format, args);
             m_LogBuilder.AppendLine();
         }
         public void Log(SyntaxNode node, string format, params object[] args)
         {
-            string[] lines = node.ToString().Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            string line = lines.Length > 0 ? lines[0] : string.Empty;
-            m_LogBuilder.AppendFormat("<<<[Log for {0}]>>> [code:[ {1} ] location: {2}]", node.GetType().Name, line, node.GetLocation().GetLineSpan());
+            if (null != node) {
+                string[] lines = node.ToString().Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                string line = lines.Length > 0 ? lines[0] : string.Empty;
+                m_LogBuilder.AppendFormat("<<<[Log for {0}]>>> [code:[ {1} ] location: {2}]", node.GetType().Name, line, node.GetLocation().GetLineSpan());
+            } else {
+                LogCallStack("Log: node == null !");
+            }
             m_LogBuilder.AppendFormat(format, args);
             m_LogBuilder.AppendLine();
         }
         public void ReportIllegalSymbol(SyntaxNode node, SymbolInfo symInfo)
         {
-            string[] lines = node.ToString().Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            string line = lines.Length > 0 ? lines[0] : string.Empty;
-            m_LogBuilder.AppendFormat("<<<[Log for {0}]>>> ", node.GetType().Name);
-            m_LogBuilder.AppendFormat("Can't determine symbol: {0}, code:[ {1} ] location: {2}", symInfo.CandidateReason, line, node.GetLocation().GetLineSpan());
-            m_LogBuilder.AppendLine();
-            foreach (var candidateSymbol in symInfo.CandidateSymbols) {
-                m_LogBuilder.AppendFormat("\tCandidateSymbol: {0}", candidateSymbol.ToString());
+            if (null != node) {
+                string[] lines = node.ToString().Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                string line = lines.Length > 0 ? lines[0] : string.Empty;
+                m_LogBuilder.AppendFormat("<<<[Log for {0}]>>> ", node.GetType().Name);
+                m_LogBuilder.AppendFormat("Can't determine symbol: {0}, code:[ {1} ] location: {2}", symInfo.CandidateReason, line, node.GetLocation().GetLineSpan());
                 m_LogBuilder.AppendLine();
+                foreach (var candidateSymbol in symInfo.CandidateSymbols) {
+                    m_LogBuilder.AppendFormat("\tCandidateSymbol: {0}", candidateSymbol.ToString());
+                    m_LogBuilder.AppendLine();
+                }
+            } else {
+                LogCallStack("ReportIllegalSymbol: node == null !");
             }
         }
         public void ReportIllegalType(SyntaxNode node, ITypeSymbol typeSym)
         {
-            if (typeSym.TypeKind == TypeKind.Error) {
+            if (null != node && null != typeSym && typeSym.TypeKind == TypeKind.Error) {
                 var errType = typeSym as IErrorTypeSymbol;
                 if (null != errType) {
                     string[] lines = node.ToString().Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
@@ -75,11 +87,14 @@ namespace RoslynTool.CsToLua
                         m_LogBuilder.AppendLine();
                     }
                 }
+            } else {
+                LogCallStack("ReportIllegalType: node == null || typeSym == null || typeSym.TypeKind != TypeKind.Error !");
             }
         }
-        public void ReportIllegalType(ITypeSymbol typeSym)
+        public void ReportIllegalType(ISymbol sym)
         {
-            if (typeSym.TypeKind == TypeKind.Error) {
+            var typeSym = sym as ITypeSymbol;
+            if (null!=typeSym && typeSym.TypeKind == TypeKind.Error) {
                 var errType = typeSym as IErrorTypeSymbol;
                 if (null != errType) {
                     m_LogBuilder.AppendFormat("<<<[Log]>>> Error type: {0}", errType.ToString());
@@ -92,7 +107,20 @@ namespace RoslynTool.CsToLua
                         m_LogBuilder.AppendLine();
                     }
                 }
+                return;
             }
+            if (null != sym) {
+                m_LogBuilder.AppendFormat("ErrorSymbol: {0} type:{1}", sym.ToString(), sym.Kind);
+                m_LogBuilder.AppendLine();
+            } else {
+                LogCallStack("ReportIllegalType: sym == null !");
+            }
+        }
+        public void LogCallStack(string format, params object[] args)
+        {
+            m_LogBuilder.AppendFormat(format, args);
+            m_LogBuilder.AppendLine();
+            m_LogBuilder.Append(System.Environment.StackTrace);
         }
 
         private StringBuilder m_LogBuilder = new StringBuilder();

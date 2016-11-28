@@ -98,7 +98,7 @@ namespace RoslynTool.CsToLua
                 if (null != refType) {
                     AddReference(refType, curClassSym);
                 } else {
-                    throw new Exception("Can't find symbol !!!");
+                    Logger.Instance.ReportIllegalType(sym);
                 }
             }
         }
