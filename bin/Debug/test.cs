@@ -40,6 +40,8 @@ namespace TopLevel
                 {
                     m_T = v;
                     m_TT = vv;
+                    T obj1 = new T();
+                    TT obj2 = new TT();
                 }
                 public void Test<G>(G g)
                 {
@@ -52,7 +54,7 @@ namespace TopLevel
                     Type t2 = typeof(T);
                     Type t3 = typeof(TT);
                     Type t4 = typeof(int);
-                    var v = t as TT;
+                    var v = (TT)t;
                 }
 
                 private T m_T = default(T);
@@ -64,17 +66,20 @@ namespace TopLevel
             public static int TTT = 789;
             public GenericClass(ref int v, out int v2)
             {
+                T obj = new T();
                 m_Test = v + 456;
                 v2 = 123;
             }
             private int m_Test = 123;
             private int m_Test2 = TTT + 1;
+            private T m_Inst = new T();
 
             static GenericClass()
             {
                 s_Test = 9876;
             }
             private static int s_Test = 8765;
+            private static T s_Inst = new T();
         }
         delegate void SimpleEventHandler();
         class FooBase

@@ -44,6 +44,11 @@ namespace RoslynTool.CsToLua
                 var typeSymInfo = objectCreate.Type;
                 var sym = objectCreate.Constructor;
                 m_ObjectCreateType = typeSymInfo;
+            } else {
+                var typeParamObjCreate = oper as ITypeParameterObjectCreationExpression;
+                if (null != typeParamObjCreate) {
+                    m_HaveTypeOf = true;
+                }
             }
             base.VisitObjectCreationExpression(node);
         }

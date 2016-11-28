@@ -2,8 +2,17 @@ require "cs2lua__utility";
 require "cs2lua__namespaces";
 
 TopLevel.SecondLevel.GenericClass_T = {
-	cctor = function()
+	cctor = function(T)
+		TopLevel.SecondLevel.GenericClass_T.__cctor(T);
 		TopLevel.SecondLevel.GenericClass_T.s_Test = 9876;
+	end,
+	__cctor = function()
+		if TopLevel.SecondLevel.GenericClass_T.__cctor_called then
+			return;
+		else
+			TopLevel.SecondLevel.GenericClass_T.__cctor_called = true;
+		end
+				TopLevel.SecondLevel.GenericClass_T.s_Inst = new T();
 	end,
 
 	__new_object = function(...)
@@ -14,16 +23,28 @@ TopLevel.SecondLevel.GenericClass_T = {
 		local static_fields = {
 			TTT = 789,
 			s_Test = 8765,
+			s_Inst = true,
+			__cctor_called = false,
 		};
 		local static_props = nil;
 		local static_events = nil;
 
 		local instance_methods = {
-			ctor = function(this, v)
+			ctor = function(this, T, v)
 				local v2 = nil;
+				this.__ctor(T);
+				local obj; obj = new T();
 				this.m_Test = (v + 456);
 				v2 = 123;
 				return this, v, v2;
+			end,
+			__ctor = function(this, T)
+				if this.__ctor_called then
+					return;
+				else
+					this.__ctor_called = true;
+				end
+					self.m_Inst = new T();
 			end,
 		};
 
@@ -31,6 +52,8 @@ TopLevel.SecondLevel.GenericClass_T = {
 			local instance_fields = {
 				m_Test = 123,
 				m_Test2 = (TopLevel.SecondLevel.GenericClass_T.TTT + 1),
+				m_Inst = true,
+				__ctor_called = false,
 			};
 			return instance_fields;
 		end;
@@ -63,6 +86,8 @@ TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT = {
 				this.__ctor(TT, T);
 				this.m_T = v;
 				this.m_TT = vv;
+				local obj1; obj1 = new T();
+				local obj2; obj2 = new TT();
 				return this;
 			end,
 			Test = function(this, G, g)

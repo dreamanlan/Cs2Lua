@@ -32,6 +32,16 @@ namespace RoslynTool.CsToLua
             base.VisitTypeOfExpression(node);
         }
 
+        public override void VisitObjectCreationExpression(ObjectCreationExpressionSyntax node)
+        {
+            var oper = m_Model.GetOperation(node);
+            var typeParamObjCreate = oper as ITypeParameterObjectCreationExpression;
+            if (null != typeParamObjCreate) {
+                m_HaveTypeOf = true;
+            }
+            base.VisitObjectCreationExpression(node);
+        }
+
         internal MethodAnalysis(SemanticModel model)
         {
             m_Model = model;

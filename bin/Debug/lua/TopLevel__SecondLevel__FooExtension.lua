@@ -1,7 +1,6 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
 require "TopLevel__SecondLevel__Foo";
-require "GameObject";
 
 TopLevel.SecondLevel.FooExtension = {
 	Test3__TopLevel_SecondLevel_Foo = function(obj)
@@ -27,7 +26,7 @@ TopLevel.SecondLevel.FooExtension = {
 		f = TopLevel.SecondLevel.Foo.op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo(f, ff);
 		local rr; rr = TopLevel.SecondLevel.Foo.op_Explicit(123);
 		local rrr; rrr = typecast(123, TopLevel.SecondLevel.Foo);
-		local obj; obj = ;
+		local obj; obj = newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", (function(obj) UnityEngine.GameObject.__install_TopLevel_SecondLevel_FooExtension(obj); end), {}, wrapstring("test test test"));
 		local arr; arr = wraparray{1, 2, 3, 4, 56};
 		local v; v = arr[3];
 		local dict; dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", nil, {[1] = 2, [3] = 4});
@@ -52,7 +51,7 @@ TopLevel.SecondLevel.FooExtension = {
 		TopLevel.SecondLevel.Foo.__install_TopLevel__SecondLevel__FooExtension = function(obj)
 			obj.Test3__TopLevel_SecondLevel_Foo = TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo;
 		end
-		GameObject.__install_TopLevel__SecondLevel__FooExtension = function(obj)
+		UnityEngine.GameObject.__install_TopLevel__SecondLevel__FooExtension = function(obj)
 			obj.TestExtern = TopLevel.SecondLevel.FooExtension.TestExtern;
 		end
 		local static = TopLevel.SecondLevel.FooExtension;

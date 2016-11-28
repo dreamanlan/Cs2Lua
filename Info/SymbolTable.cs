@@ -149,10 +149,12 @@ namespace RoslynTool.CsToLua
                         CheckMethodIncludeTypeOf(msym, symTable.AssemblySymbol, compilation, false);
 
                         if (fieldIncludeTypeOf && msym.MethodKind == MethodKind.Constructor) {
-                            MethodIncludeTypeOfs.Add(manglingName, msym);
+                            if (!MethodIncludeTypeOfs.ContainsKey(manglingName))
+                                MethodIncludeTypeOfs.Add(manglingName, msym);
                         }
                         if (staticFieldIncludeTypeOf && msym.MethodKind == MethodKind.StaticConstructor) {
-                            MethodIncludeTypeOfs.Add(manglingName, msym);
+                            if (!MethodIncludeTypeOfs.ContainsKey(manglingName))
+                                MethodIncludeTypeOfs.Add(manglingName, msym);
                         }
                     }
                     continue;

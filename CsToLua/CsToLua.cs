@@ -1527,7 +1527,7 @@ namespace RoslynTool.CsToLua
             } else if (val is bool) {
                 CodeBuilder.Append((bool)val ? "true" : "false");
             } else if (val is char) {
-                CodeBuilder.AppendFormat("wrapstring('{0}')", val);
+                CodeBuilder.AppendFormat("wrapstring('{0}')", Escape((char)val));
             } else if (null == val) {
                 CodeBuilder.Append("nil");
             } else {
@@ -2174,7 +2174,27 @@ namespace RoslynTool.CsToLua
                         VisitArgumentList(node.ArgumentList);
                     }
                 } else {
-                    Log(node, "Unknown ObjectCreationExpressionSyntax !");
+                    var typeParamObjCreate = oper as ITypeParameterObjectCreationExpression;
+                    if (null != typeParamObjCreate) {
+                        string paramName = typeParamObjCreate.Type.Name;
+                        if (m_MethodInfoStack.Count > 0) {
+                            var mi = m_MethodInfoStack.Peek();
+                            if (mi.SemanticInfo.IsStatic) {
+                                CodeBuilder.AppendFormat("new {0}()", paramName);
+                            } else {
+                                CodeBuilder.AppendFormat("new {0}()", paramName);
+                            }
+                        } else {
+                            ISymbol varSym = FindVariableDeclaredSymbol(node);
+                            if (varSym.IsStatic) {
+                                CodeBuilder.AppendFormat("new {0}()", paramName);
+                            } else {
+                                CodeBuilder.AppendFormat("new {0}()", paramName);
+                            }
+                        }
+                    } else {
+                        Log(node, "Unknown ObjectCreationExpressionSyntax !");
+                    }
                 }
             }
         }
@@ -2594,7 +2614,7 @@ namespace RoslynTool.CsToLua
                                 CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
                                 CodeBuilder.AppendLine(" = true,");
                                 if (isStatic && existTypeOf) {
-                                    Log(v, "typeof(GenericTypeParameter) can't be used in static field initializer !");
+                                    Log(v, "typeof(GenericTypeParameter) or new GenericTypeParameter() can't be used in static field initializer !");
                                 }
                                 if (isStatic) {
                                     ci.CurrentCodeBuilder = ci.StaticInitializerCodeBuilder;
@@ -3310,43 +3330,37 @@ namespace RoslynTool.CsToLua
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < src.Length; ++i) {
                 char c = src[i];
-                switch (c) {
-                    case '\a':
-                        sb.Append("\\a");
-                        break;
-                    case '\b':
-                        sb.Append("\\b");
-                        break;
-                    case '\f':
-                        sb.Append("\\f");
-                        break;
-                    case '\n':
-                        sb.Append("\\n");
-                        break;
-                    case '\r':
-                        sb.Append("\\r");
-                        break;
-                    case '\t':
-                        sb.Append("\\t");
-                        break;
-                    case '\v':
-                        sb.Append("\\v");
-                        break;
-                    case '\\':
-                        sb.Append("\\\\");
-                        break;
-                    case '\"':
-                        sb.Append("\\\"");
-                        break;
-                    case '\'':
-                        sb.Append("\\'");
-                        break;
-                    default:
-                        sb.Append(c);
-                        break;
-                }
+                string es = Escape(c);
+                sb.Append(es);
             }
             return sb.ToString();
+        }
+        private static string Escape(char c)
+        {
+            switch (c) {
+                case '\a':
+                    return "\\a";
+                case '\b':
+                    return "\\b";
+                case '\f':
+                    return "\\f";
+                case '\n':
+                    return "\\n";
+                case '\r':
+                    return "\\r";
+                case '\t':
+                    return "\\t";
+                case '\v':
+                    return "\\v";
+                case '\\':
+                    return "\\\\";
+                case '\"':
+                    return "\\\"";
+                case '\'':
+                    return "\\'";
+                default:
+                    return c.ToString();
+            }
         }
 
         private static HashSet<string> s_UnsupportedUnaryOperators = new HashSet<string> { "&", "*" };

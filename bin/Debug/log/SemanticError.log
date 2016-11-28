@@ -1,12 +1,8 @@
 ============<<<Semantic Error:test>>>============
-test.cs(244,48): error CS0246: The type or namespace name 'GameObject' could not be found (are you missing a using directive or an assembly reference?)
-test.cs(5,7): error CS0246: The type or namespace name 'UnityEngine' could not be found (are you missing a using directive or an assembly reference?)
-test.cs(55,29): error CS0413: The type parameter 'TT' cannot be used with the 'as' operator because it does not have a class type constraint nor a 'class' constraint
-test.cs(240,59): error CS1501: No overload for method 'Add' takes 2 arguments
-test.cs(240,69): error CS1501: No overload for method 'Add' takes 2 arguments
-test.cs(158,34): error CS0246: The type or namespace name 'UnityEngine' could not be found (are you missing a using directive or an assembly reference?)
-test.cs(192,25): error CS0161: 'Foo.TestValueArg(TestStruct)': not all code paths return a value
-test.cs(266,27): error CS0039: Cannot convert type 'int' to 'TopLevel.SecondLevel.Foo' via a reference conversion, boxing conversion, unboxing conversion, wrapping conversion, or null type conversion
-test.cs(268,31): error CS0246: The type or namespace name 'GameObject' could not be found (are you missing a using directive or an assembly reference?)
-test.cs(277,26): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
-test.cs(280,17): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
+test.cs(245,59): error CS1501: No overload for method 'Add' takes 2 arguments
+test.cs(245,69): error CS1501: No overload for method 'Add' takes 2 arguments
+test.cs(57,29): error CS0030: Cannot convert type 'T' to 'TT'
+test.cs(197,25): error CS0161: 'Foo.TestValueArg(TestStruct)': not all code paths return a value
+test.cs(271,27): error CS0039: Cannot convert type 'int' to 'TopLevel.SecondLevel.Foo' via a reference conversion, boxing conversion, unboxing conversion, wrapping conversion, or null type conversion
+test.cs(282,26): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
+test.cs(285,17): error CS0131: The left-hand side of an assignment must be a variable, property or indexer

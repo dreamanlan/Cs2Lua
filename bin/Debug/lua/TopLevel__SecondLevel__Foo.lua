@@ -67,7 +67,7 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			Iterator = wrapenumerable(function(this)
 				wrapyield(nil, false, false);
-				wrapyield(, false, false);
+				wrapyield(newexternobject(UnityEngine.WaitForSeconds, "UnityEngine.WaitForSeconds", "ctor", nil, {}, 3), false, true);
 				return nil;
 			end),
 			Iterator2 = wrapenumerable(function(this)
@@ -120,10 +120,10 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			TestSwitch = function(this)
 				local i; i = 10;
-				local __compiler_switch_210 = i;
-				if __compiler_switch_210 == 1 then
+				local __compiler_switch_215 = i;
+				if __compiler_switch_215 == 1 then
 					return ;
-				elseif __compiler_switch_210 == 2 then
+				elseif __compiler_switch_215 == 2 then
 					return ;
 				else
 					return ;

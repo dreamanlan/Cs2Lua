@@ -16,6 +16,7 @@ namespace RoslynTool.CsToLua
         SyntaxError = 1,
         SemanticError = 2,
         FileNotFound = 3,
+        Exception = 4,
     }
     public static class CsToLuaProcessor
     {
@@ -60,12 +61,28 @@ namespace RoslynTool.CsToLua
                         }
                     }
                 }
+                string prjOutputDir = "bin/Debug/";
+                nodes = SelectNodes(xmlDoc, "PropertyGroup");
+                foreach (XmlElement node in nodes) {
+                    var defNode = SelectSingleNode(node, "DefineConstants");
+                    var pathNode = SelectSingleNode(node, "OutputPath");
+                    if (null != defNode && null != pathNode) {
+                        string text = defNode.InnerText.Trim();                       
+                        if (text == "DEBUG" || text.IndexOf(";DEBUG;") > 0 || text.StartsWith("DEBUG;") || text.EndsWith(";DEBUG")) {
+                            prjOutputDir = pathNode.InnerText.Trim();
+                        }
+                    }
+                }
                 nodes = SelectNodes(xmlDoc, "ItemGroup", "ProjectReference");
                 foreach (XmlElement node in nodes) {
                     string val = node.GetAttribute("Include");
+                    string prjFile = Path.Combine(path, val.Trim());
                     var nameNode = SelectSingleNode(node, "Name");
-                    if (null != nameNode) {
-                        refByPaths.Add(string.Format("bin/Debug/{0}.dll", nameNode.InnerText), "global");
+                    if (null != prjFile && null != nameNode) {
+                        string prjName = nameNode.InnerText.Trim();
+                        string prjOutputFile = ParseProjectOutputFile(prjFile, prjName);
+                        string fileName = Path.Combine(prjOutputDir, prjOutputFile);
+                        refByPaths.Add(fileName, "global");
                     }
                 }
                 nodes = SelectNodes(xmlDoc, "ItemGroup", "Compile");
@@ -149,6 +166,7 @@ namespace RoslynTool.CsToLua
                     refs.Add(MetadataReference.CreateFromFile(assembly.Location, new MetadataReferenceProperties(MetadataImageKind.Assembly, arr)));
                 }
             }
+
             List<SyntaxTree> newTrees = new List<SyntaxTree>();
             CSharpCompilationOptions compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
             CSharpCompilation compilation = CSharpCompilation.Create(name);
@@ -161,6 +179,7 @@ namespace RoslynTool.CsToLua
                 newTrees.Add(newTree);
                 compilation = compilation.AddSyntaxTrees(newTree);
             }
+
             bool haveSemanticError = false;
             bool haveTranslationError = false;
             SymbolTable symTable = new SymbolTable(compilation);
@@ -1028,6 +1047,24 @@ namespace RoslynTool.CsToLua
         private static string GetIndentString(int indent)
         {
             return CsLuaTranslater.GetIndentString(indent);
+        }
+
+        private static string ParseProjectOutputFile(string srcFile, string prjName)
+        {
+            string fileName = prjName + ".dll";
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(srcFile);
+            var nodes = SelectNodes(xmlDoc, "PropertyGroup");
+            foreach (XmlElement node in nodes) {
+                var typeNode = SelectSingleNode(node, "OutputType");
+                var nameNode = SelectSingleNode(node, "AssemblyName");
+                if (null != typeNode && null != nameNode) {
+                    string type = typeNode.InnerText.Trim();
+                    string name = nameNode.InnerText.Trim();
+                    fileName = name + (type == "Library" ? ".dll" : ".exe");
+                }
+            }
+            return fileName;
         }
 
         private static List<XmlElement> SelectNodes(XmlNode node, params string[] names)
