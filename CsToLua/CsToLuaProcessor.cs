@@ -22,6 +22,9 @@ namespace RoslynTool.CsToLua
     {
         public static ExitCode Process(string srcFile, string outputExt, IList<string> macros, IDictionary<string, string> _refByNames, IDictionary<string, string> _refByPaths, bool enableInherit, bool outputResult)
         {
+            List<string> preprocessors = new List<string>(macros);
+            preprocessors.Add("__LUA__");
+
             string exepath = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
             string path = Path.GetDirectoryName(srcFile);
             string name = Path.GetFileNameWithoutExtension(srcFile);
@@ -69,6 +72,7 @@ namespace RoslynTool.CsToLua
                     if (null != defNode && null != pathNode) {
                         string text = defNode.InnerText.Trim();                       
                         if (text == "DEBUG" || text.IndexOf(";DEBUG;") > 0 || text.StartsWith("DEBUG;") || text.EndsWith(";DEBUG")) {
+                            preprocessors.AddRange(text.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
                             prjOutputDir = pathNode.InnerText.Trim();
                         }
                     }
@@ -103,7 +107,7 @@ namespace RoslynTool.CsToLua
                         string filePath = Path.Combine(path, file);
                         string fileName = Path.GetFileNameWithoutExtension(filePath);
                         CSharpParseOptions options = new CSharpParseOptions();
-                        options = options.WithPreprocessorSymbols(macros);
+                        options = options.WithPreprocessorSymbols(preprocessors);
                         options = options.WithFeatures(new Dictionary<string, string> { { "IOperation", "true" } });
                         SyntaxTree tree = CSharpSyntaxTree.ParseText(File.ReadAllText(filePath), options, filePath);
                         trees.Add(tree);

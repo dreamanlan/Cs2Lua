@@ -5,10 +5,10 @@ F:\OpenSource\Cs2Lua_local\Test\Cs2LuaScript\Program.cs(14,72): warning CS1701: 
 F:\OpenSource\Cs2Lua_local\Test\Cs2LuaScript\Program.cs(14,13): warning CS1701: Assuming assembly reference 'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' used by 'CustomApi' matches identity 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' of 'mscorlib', you may need to supply runtime policy
 F:\OpenSource\Cs2Lua_local\Test\Cs2LuaScript\Program.cs(15,77): warning CS1701: Assuming assembly reference 'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' used by 'CustomApi' matches identity 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' of 'mscorlib', you may need to supply runtime policy
 F:\OpenSource\Cs2Lua_local\Test\Cs2LuaScript\Program.cs(15,13): warning CS1701: Assuming assembly reference 'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' used by 'CustomApi' matches identity 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' of 'mscorlib', you may need to supply runtime policy
-F:\OpenSource\Cs2Lua_local\Test\Cs2LuaScript\Program.cs(1,1): hidden CS8019: Unnecessary using directive.
-F:\OpenSource\Cs2Lua_local\Test\Cs2LuaScript\Program.cs(3,1): hidden CS8019: Unnecessary using directive.
 F:\OpenSource\Cs2Lua_local\Test\Cs2LuaScript\Program.cs(2,1): hidden CS8019: Unnecessary using directive.
 F:\OpenSource\Cs2Lua_local\Test\Cs2LuaScript\Program.cs(4,1): hidden CS8019: Unnecessary using directive.
+F:\OpenSource\Cs2Lua_local\Test\Cs2LuaScript\Program.cs(1,1): hidden CS8019: Unnecessary using directive.
+F:\OpenSource\Cs2Lua_local\Test\Cs2LuaScript\Program.cs(3,1): hidden CS8019: Unnecessary using directive.
 ============<<<Semantic Warning:test1>>>============
 F:\OpenSource\Cs2Lua_local\Test\Cs2LuaScript\test1.cs(53,6): warning CS1701: Assuming assembly reference 'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' used by 'Cs2LuaUtility' matches identity 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' of 'mscorlib', you may need to supply runtime policy
 F:\OpenSource\Cs2Lua_local\Test\Cs2LuaScript\test1.cs(56,6): warning CS1701: Assuming assembly reference 'mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' used by 'Cs2LuaUtility' matches identity 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' of 'mscorlib', you may need to supply runtime policy

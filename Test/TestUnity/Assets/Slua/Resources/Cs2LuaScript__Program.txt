@@ -5,6 +5,7 @@ require "cs2lua__namespaces";
 Cs2LuaScript.Program = {
 	Init = function()
 --使用c#代码时需要的初始化（平台相关代码，不会转换为lua代码）
+		Cs2LuaScript.Program.InitDll();
 --公共初始化（也就是逻辑相关的代码）
 	end,
 	Main = function(args)

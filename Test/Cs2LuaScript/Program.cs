@@ -16,8 +16,9 @@ namespace Cs2LuaScript
         }
         public static void Init()
         {
-            //使用c#代码时需要的初始化（平台相关代码，不会转换为lua代码）
-#if __DLL__
+            //使用c#代码时需要的初始化（平台相关代码，不会转换为lua代码，cs2lua在翻译时会添加__LUA__宏，可以据此设定代码是否要转换为lua）
+#if __LUA__
+#else
             InitDll();
 #endif
             //公共初始化（也就是逻辑相关的代码）
