@@ -21,7 +21,7 @@ Cs2LuaScript.Program = {
 		local static_props = nil;
 		local static_events = nil;
 
-		return defineclass(nil, static, static_fields, static_props, static_events, nil, nil, nil, nil, false);
+		return defineclass(nil, "Cs2LuaScript.Program", static, static_fields, static_props, static_events, nil, nil, nil, nil, false);
 	end,
 };
 

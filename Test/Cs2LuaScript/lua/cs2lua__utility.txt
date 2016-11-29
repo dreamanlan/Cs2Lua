@@ -574,7 +574,7 @@ function wrapexternvaluetypearray(arr)
 	return setmetatable(arr, { __index = __mt_index_of_array });
 end;
 
-function defineclass(base, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, is_value_type)
+function defineclass(base, className, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, is_value_type)
     
     local base_class = base or {};
     local mt = getmetatable(base_class);
@@ -584,6 +584,7 @@ function defineclass(base, static, static_fields, static_props, static_events, i
     local class_props = static_props or {};
     local class_events = static_events or {};
     class["__cs2lua_defined"] = true;
+    class["__class_name"] = className;
     
     setmetatable(class, {
         __call = function()
@@ -718,6 +719,18 @@ function newexternobject(class, className, ctor, doexternsion, initializer, ...)
     return obj;
   else
     return nil;
+  end;
+end;
+
+function newtypeparamobject(type)
+  if type.__cs2lua_defined then
+    local obj = type();
+    if obj.ctor then
+      obj:ctor();
+    end;
+    return obj;
+  else
+    return type();
   end;
 end;
 

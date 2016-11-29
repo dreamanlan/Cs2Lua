@@ -45,6 +45,8 @@ namespace TopLevel
                 }
                 public void Test<G>(G g)
                 {
+                    T v = g as T;
+                    T v = (T)(object)g;
                     Foo f = new Foo();
                     f.Test3();
                 }
@@ -69,6 +71,10 @@ namespace TopLevel
                 T obj = new T();
                 m_Test = v + 456;
                 v2 = 123;
+            }
+            public void Test<G>()
+            {
+                var t = typeof(G);
             }
             private int m_Test = 123;
             private int m_Test2 = TTT + 1;

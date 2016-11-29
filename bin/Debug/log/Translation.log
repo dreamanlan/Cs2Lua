@@ -1,2 +1,3 @@
 ============<<<Translation Error:test>>>============
-<<<[Log for VariableDeclaratorSyntax]>>> [code:[ s_Inst = new T() ] location: test.cs: (81,29)-(81,45)]typeof(GenericTypeParameter) or new GenericTypeParameter() can't be used in static field initializer !
+<<<[Log for ConstructorDeclarationSyntax]>>> [code:[ static GenericClass() ] location: test.cs: (82,12)-(85,13)]typeof/as/is/cast(GenericTypeParameter) or new GenericTypeParameter() can't be used in static constructor !
+<<<[Log for VariableDeclaratorSyntax]>>> [code:[ s_Inst = new T() ] location: test.cs: (87,29)-(87,45)]typeof/as/is/cast(GenericTypeParameter) or new GenericTypeParameter() can't be used in static field initializer !

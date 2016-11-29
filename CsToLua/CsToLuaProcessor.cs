@@ -888,7 +888,7 @@ namespace RoslynTool.CsToLua
                             sb.AppendFormat("{0}this.__type_params = ", GetIndentString(indent));
                             sb.Append("{");
                             sb.Append(genericTypeParamNames);
-                            sb.Append("};");
+                            sb.AppendLine("};");
                         }
                         foreach (var pair in csi.ExtensionClasses) {
                             string refname = pair.Key;
@@ -998,10 +998,10 @@ namespace RoslynTool.CsToLua
 
                     sb.AppendLine();
                     
-                    sb.AppendFormat("{0}return defineclass({1}, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, {2});", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass, isValueType ? "true" : "false");
+                    sb.AppendFormat("{0}return defineclass({1}, \"{2}\", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, {3});", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass, key, isValueType ? "true" : "false");
                     sb.AppendLine();
                 } else {
-                    sb.AppendFormat("{0}return defineclass({1}, static, static_fields, static_props, static_events, nil, nil, nil, nil, {2});", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass, isValueType ? "true" : "false");
+                    sb.AppendFormat("{0}return defineclass({1}, \"{2}\", static, static_fields, static_props, static_events, nil, nil, nil, nil, {3});", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass, key, isValueType ? "true" : "false");
                     sb.AppendLine();
                 }
 

@@ -44,18 +44,18 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			ctor = function(this)
 				this:ctor__System_Int32(0);
-				this.__ctor();
+				this:__ctor();
 				return this;
 			end,
 			ctor__System_Int32 = function(this, v)
 				base.ctor(this);
-				this.__ctor();
+				this:__ctor();
 				this.m_Test = v;
 				return this;
 			end,
 			ctor__System_Int32__System_Int32 = function(this, a, b)
 				base.ctor(this);
-				this.__ctor();
+				this:__ctor();
 				return this;
 			end,
 			Test123 = function(this, a, b)
@@ -120,10 +120,10 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			TestSwitch = function(this)
 				local i; i = 10;
-				local __compiler_switch_215 = i;
-				if __compiler_switch_215 == 1 then
+				local __compiler_switch_221 = i;
+				if __compiler_switch_221 == 1 then
 					return ;
-				elseif __compiler_switch_215 == 2 then
+				elseif __compiler_switch_221 == 2 then
 					return ;
 				else
 					return ;
@@ -173,7 +173,7 @@ TopLevel.SecondLevel.Foo = {
 
 		local instance_events = nil;
 
-		return defineclass(TopLevel.SecondLevel.FooBase, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, false);
+		return defineclass(TopLevel.SecondLevel.FooBase, "TopLevel.SecondLevel.Foo", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, false);
 	end,
 };
 
@@ -207,7 +207,7 @@ TopLevel.SecondLevel.Foo.Test1 = {
 		local instance_props = nil;
 		local instance_events = nil;
 
-		return defineclass(nil, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, false);
+		return defineclass(nil, "TopLevel.SecondLevel.Foo.Test1", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, false);
 	end,
 };
 
@@ -241,7 +241,7 @@ TopLevel.SecondLevel.Foo.Test2 = {
 		local instance_props = nil;
 		local instance_events = nil;
 
-		return defineclass(nil, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, false);
+		return defineclass(nil, "TopLevel.SecondLevel.Foo.Test2", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, false);
 	end,
 };
 
@@ -277,7 +277,7 @@ TopLevel.SecondLevel.Foo.FooChild = {
 		local instance_props = nil;
 		local instance_events = nil;
 
-		return defineclass(nil, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, false);
+		return defineclass(nil, "TopLevel.SecondLevel.Foo.FooChild", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, false);
 	end,
 };
 

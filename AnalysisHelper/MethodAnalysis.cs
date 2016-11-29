@@ -12,9 +12,9 @@ namespace RoslynTool.CsToLua
 {
     internal class MethodAnalysis : CSharpSyntaxWalker
     {
-        public bool HaveTypeOf
+        public bool UseExplicitTypeParam
         {
-            get { return m_HaveTypeOf; }
+            get { return m_UseExplicitTypeParam; }
         }
 
         public override void VisitTypeOfExpression(TypeOfExpressionSyntax node)
@@ -25,7 +25,7 @@ namespace RoslynTool.CsToLua
                 if (type.TypeKind == TypeKind.TypeParameter) {
                     var typeParam = type as ITypeParameterSymbol;
                     if (typeParam.TypeParameterKind == TypeParameterKind.Type) {
-                        m_HaveTypeOf = true;
+                        m_UseExplicitTypeParam = true;
                     }
                 }
             }
@@ -37,9 +37,37 @@ namespace RoslynTool.CsToLua
             var oper = m_Model.GetOperation(node);
             var typeParamObjCreate = oper as ITypeParameterObjectCreationExpression;
             if (null != typeParamObjCreate) {
-                m_HaveTypeOf = true;
+                var typeParam = typeParamObjCreate.Type as ITypeParameterSymbol;
+                if (typeParam.TypeParameterKind == TypeParameterKind.Type) {
+                    m_UseExplicitTypeParam = true;
+                }
             }
             base.VisitObjectCreationExpression(node);
+        }
+
+        public override void VisitCastExpression(CastExpressionSyntax node)
+        {
+            var typeInfo = m_Model.GetTypeInfo(node.Type);
+            var type = typeInfo.Type as ITypeParameterSymbol;
+            if (null != type && type.TypeParameterKind == TypeParameterKind.Type) {
+                m_UseExplicitTypeParam = true;
+            }
+            base.VisitCastExpression(node);
+        }
+
+        public override void VisitBinaryExpression(BinaryExpressionSyntax node)
+        {
+            string op = node.OperatorToken.Text;
+            if (op == "is" || op == "as") {
+                var oper = m_Model.GetOperation(node.Right);
+                if (null != oper) {
+                    var type = oper.Type as ITypeParameterSymbol;
+                    if (null != type && type.TypeParameterKind == TypeParameterKind.Type) {
+                        m_UseExplicitTypeParam = true;
+                    }
+                }
+            }
+            base.VisitBinaryExpression(node);
         }
 
         internal MethodAnalysis(SemanticModel model)
@@ -48,6 +76,6 @@ namespace RoslynTool.CsToLua
         }
 
         private SemanticModel m_Model = null;
-        private bool m_HaveTypeOf = false;
+        private bool m_UseExplicitTypeParam = false;
     }
 }

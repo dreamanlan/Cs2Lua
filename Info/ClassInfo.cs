@@ -33,6 +33,7 @@ namespace RoslynTool.CsToLua
         internal bool ExistStaticConstructor = false;
 
         internal INamedTypeSymbol SemanticInfo = null;
+        internal ClassSymbolInfo ClassSemanticInfo = null;
 
         internal StringBuilder CurrentCodeBuilder = null;
 
@@ -56,7 +57,7 @@ namespace RoslynTool.CsToLua
 
         internal Dictionary<string, ClassInfo> InnerClasses = new Dictionary<string, ClassInfo>();
 
-        internal void Init(INamedTypeSymbol sym)
+        internal void Init(INamedTypeSymbol sym, ClassSymbolInfo info)
         {
             IsEnum = sym.TypeKind == TypeKind.Enum;
             IsEntryClass = HasAttribute(sym, "Cs2Lua.EntryAttribute");
@@ -70,6 +71,7 @@ namespace RoslynTool.CsToLua
             ExistConstructor = false;
             ExistStaticConstructor = false;
             SemanticInfo = sym;
+            ClassSemanticInfo = info;
 
             Namespace = GetNamespaces(sym);
             ClassName = sym.Name;
@@ -364,7 +366,7 @@ namespace RoslynTool.CsToLua
         internal bool ParamsIsExternValueType = false;
         internal bool ExistReturn = false;
         internal bool ExistYield = false;
-        internal bool ExistTypeOf = false;
+        internal bool UseExplicitTypeParam = false;
 
         internal IMethodSymbol SemanticInfo = null;
         internal IPropertySymbol PropertySemanticInfo = null;
@@ -373,7 +375,7 @@ namespace RoslynTool.CsToLua
         {
             Init(sym, assemblySym, node, false);
         }
-        internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, SyntaxNode node, bool existTypeOf)
+        internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, SyntaxNode node, bool useExplicitTypeParam)
         {
             ParamNames.Clear();
             ReturnParamNames.Clear();
@@ -382,7 +384,7 @@ namespace RoslynTool.CsToLua
             OriginalParamsName = string.Empty;
             ExistReturn = false;
             ExistYield = false;
-            ExistTypeOf = existTypeOf;
+            UseExplicitTypeParam = useExplicitTypeParam;
             
             SemanticInfo = sym;
 
@@ -393,7 +395,7 @@ namespace RoslynTool.CsToLua
                 }
             }
 
-            if (ExistTypeOf && (sym.MethodKind == MethodKind.Constructor || sym.MethodKind == MethodKind.StaticConstructor || sym.IsStatic)) {
+            if (UseExplicitTypeParam && (sym.MethodKind == MethodKind.Constructor || sym.IsStatic && sym.MethodKind != MethodKind.StaticConstructor)) {
                 INamedTypeSymbol type = sym.ContainingType;
                 while (null != type) {
                     if (type.IsGenericType) {
@@ -460,9 +462,9 @@ namespace RoslynTool.CsToLua
         internal IMethodSymbol MethodSymbol = null;
         internal IAssemblySymbol AssemblySymbol = null;
 
-        internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, ArgumentListSyntax argList, bool existTypeOf, SemanticModel model)
+        internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, ArgumentListSyntax argList, bool useExplicitTypeParam, SemanticModel model)
         {
-            Init(sym, assemblySym, existTypeOf);
+            Init(sym, assemblySym, useExplicitTypeParam);
 
             if (null != argList) {
                 var args = argList.Arguments;
@@ -497,9 +499,9 @@ namespace RoslynTool.CsToLua
             }
         }
 
-        internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, List<ExpressionSyntax> argList, bool existTypeOf, SemanticModel model)
+        internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, List<ExpressionSyntax> argList, bool useExplicitTypeParam, SemanticModel model)
         {
-            Init(sym, assemblySym, existTypeOf);
+            Init(sym, assemblySym, useExplicitTypeParam);
 
             if (null != argList) {
                 for (int i = 0; i < argList.Count; ++i) {
@@ -509,7 +511,7 @@ namespace RoslynTool.CsToLua
             }
         }
 
-        private void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, bool existTypeOf)
+        private void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, bool useExplicitTypeParam)
         {
             MethodSymbol = sym;
             AssemblySymbol = assemblySym;
@@ -526,7 +528,7 @@ namespace RoslynTool.CsToLua
                 }
             }
 
-            if (existTypeOf && (sym.MethodKind == MethodKind.Constructor || sym.MethodKind == MethodKind.StaticConstructor || sym.IsStatic)) {
+            if (useExplicitTypeParam && (sym.MethodKind == MethodKind.Constructor || sym.MethodKind == MethodKind.StaticConstructor || sym.IsStatic)) {
                 INamedTypeSymbol type = sym.ContainingType;
                 while (null != type) {
                     if (type.IsGenericType) {
