@@ -76,7 +76,7 @@ namespace RoslynTool.CsToLua
             }
             foreach (var sym in TypeSymbol.GetMembers()) {
                 var msym = sym as IMethodSymbol;
-                if (null != msym) {
+                if (null != msym && !SymbolTable.IsAccessorMethod(msym.MethodKind)) {
                     if (msym.MethodKind == MethodKind.Constructor && !msym.IsImplicitlyDeclared) {
                         ExistConstructor = true;
                     } else if (msym.MethodKind == MethodKind.StaticConstructor && !msym.IsImplicitlyDeclared) {
@@ -385,6 +385,19 @@ namespace RoslynTool.CsToLua
         private Dictionary<string, ClassSymbolInfo> m_ClassSymbols = new Dictionary<string, ClassSymbolInfo>();
         private Dictionary<string, HashSet<string>> m_Requires = new Dictionary<string, HashSet<string>>();
 
+        internal static bool IsAccessorMethod(MethodKind kind)
+        {
+            switch (kind) {
+                case MethodKind.PropertyGet:
+                case MethodKind.PropertySet:
+                case MethodKind.EventAdd:
+                case MethodKind.EventRemove:
+                case MethodKind.EventRaise:
+                    return true;
+                default:
+                    return false;
+            }
+        }
         internal static string CalcMethodMangling(IMethodSymbol methodSym, IAssemblySymbol assemblySym)
         {
             if (null == methodSym)

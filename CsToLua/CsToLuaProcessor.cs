@@ -391,7 +391,7 @@ namespace RoslynTool.CsToLua
             temp.Length = 0;
             foreach (var sym in typesym.GetMembers()) {
                 var msym = sym as IMethodSymbol;
-                if (null != msym && msym.GetAttributes().Length > 0) {
+                if (null != msym && !SymbolTable.IsAccessorMethod(msym.MethodKind) && msym.GetAttributes().Length > 0) {
                     temp.AppendFormat("{0}{1} = {{", GetIndentString(indent), sym.Name);
                     temp.AppendLine();
                     ++indent;

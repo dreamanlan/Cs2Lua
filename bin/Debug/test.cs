@@ -29,6 +29,37 @@ namespace TopLevel
         public int B;
         public int C;
     }
+
+    public class Singleton<T> where T : new()
+    {
+        protected static T ms_instance;
+        public static T instance
+        {
+            get
+            {
+                if (ms_instance == null) 
+                {
+                    ms_instance = new T();
+                }
+                return ms_instance;
+            }
+        }
+
+        public Singleton()
+        {
+            if (ms_instance != null)
+            {
+                Debug.LogError("Cannot have two instances in singleton");
+                return;
+            }
+            ms_instance = (T)(System.Object)this;
+        }
+
+        public static void Delete()
+        {
+            ms_instance = default(T) ;
+        }
+    }
     
     namespace SecondLevel
     {

@@ -395,7 +395,7 @@ namespace RoslynTool.CsToLua
                 }
             }
 
-            if (UseExplicitTypeParam && (sym.MethodKind == MethodKind.Constructor || sym.IsStatic && sym.MethodKind != MethodKind.StaticConstructor)) {
+            if (UseExplicitTypeParam && (sym.MethodKind == MethodKind.Constructor || sym.IsStatic && sym.MethodKind != MethodKind.StaticConstructor && !SymbolTable.IsAccessorMethod(sym.MethodKind))) {
                 INamedTypeSymbol type = sym.ContainingType;
                 while (null != type) {
                     if (type.IsGenericType) {

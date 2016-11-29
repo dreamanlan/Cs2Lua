@@ -272,7 +272,7 @@ namespace RoslynTool.CsToLua
             bool myselfDefinedBaseClass = ci.SemanticInfo.BaseType.ContainingAssembly == m_SymbolTable.AssemblySymbol;
 
             if (isStatic && mi.UseExplicitTypeParam) {
-                Log(node, "typeof/as/is/cast(GenericTypeParameter) or new GenericTypeParameter() can't be used in static constructor !");
+                Log(node, "typeof/as/is/cast(GenericTypeParameter) or new GenericTypeParameter() can't be used in static constructor or static field initializer !");
             }
 
             CodeBuilder.AppendFormat("{0}{1} = function({2}", GetIndentString(), manglingName, isStatic ? string.Empty : "this");
@@ -413,6 +413,10 @@ namespace RoslynTool.CsToLua
                         mi.Init(sym, m_SymbolTable.AssemblySymbol, accessor, m_SymbolTable.IsUseExplicitTypeParam(sym));
                         m_MethodInfoStack.Push(mi);
 
+                        if (mi.SemanticInfo.IsStatic && mi.UseExplicitTypeParam) {
+                            Log(node, "typeof/as/is/cast(GenericTypeParameter) or new GenericTypeParameter() can't be used in static property accessor !");
+                        }
+
                         string keyword = accessor.Keyword.Text;
                         CodeBuilder.AppendFormat("{0}{1} = {2}function({3})", GetIndentString(), keyword, mi.ExistYield ? "wrapenumerable(" : string.Empty, keyword == "get" ? "this" : "this, value");
                         CodeBuilder.AppendLine();
@@ -459,6 +463,10 @@ namespace RoslynTool.CsToLua
                     var mi = new MethodInfo();
                     mi.Init(sym, m_SymbolTable.AssemblySymbol, accessor, m_SymbolTable.IsUseExplicitTypeParam(sym));
                     m_MethodInfoStack.Push(mi);
+
+                    if (mi.SemanticInfo.IsStatic && mi.UseExplicitTypeParam) {
+                        Log(node, "typeof/as/is/cast(GenericTypeParameter) or new GenericTypeParameter() can't be used in static event accessor !");
+                    }
 
                     string keyword = accessor.Keyword.Text;
                     CodeBuilder.AppendFormat("{0}{1} = function({2})", GetIndentString(), keyword, "this, value");
@@ -515,6 +523,10 @@ namespace RoslynTool.CsToLua
                     var mi = new MethodInfo();
                     mi.Init(sym, m_SymbolTable.AssemblySymbol, accessor, m_SymbolTable.IsUseExplicitTypeParam(sym));
                     m_MethodInfoStack.Push(mi);
+
+                    if (mi.SemanticInfo.IsStatic && mi.UseExplicitTypeParam) {
+                        Log(node, "typeof/as/is/cast(GenericTypeParameter) or new GenericTypeParameter() can't be used in static indexer accessor !");
+                    }
 
                     string keyword = accessor.Keyword.Text;
                     CodeBuilder.AppendFormat("{0}__indexer_{1} = function(this, {2})", GetIndentString(), keyword, string.Join(", ", mi.ParamNames.ToArray()));
