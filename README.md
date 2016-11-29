@@ -74,6 +74,8 @@ Cs2Lua的输出主要包括：
 
 7、不支持linq语法糖（直接调用方法就可以，而且c#的linq支持本来也不如visual basic全，这语法风格与c#有点不搭，放弃了）。
 
+8、自定义struct未完全实现拷贝语义（需要在utility.lua里完善）。
+
 *** CsToLuaUnimplemented.cs是目前明确不支持与不需要处理的语法特性（Visit开头的方法）.
 
 【主要支持的c#特性】
@@ -107,6 +109,10 @@ Cs2Lua的输出主要包括：
 14、yield与协程。
 
 15、操作符重载。
+
+16、部分支持Attribute（目前会生成cs2lua_attributes.lua/txt文件，包含了所有自定义代码里用到的attribute，但utility.lua里未实现自定义属性的访问机制）
+
+17、部分支持自定义struct，语法层面基本完成，拷贝语义需要在utility.lua里实现。
 
 *** CsToLua.cs是目前支持的语法（Visit开头的方法）.
 
