@@ -186,6 +186,12 @@ namespace TopLevel
             {
                 var f = new Foo();
                 f.m_Test = a;
+                f.Val = new TestStruct();
+                var ts = f.Val;
+                f[ts,ts]=123;
+                int r = f[ts,ts];
+                f?[ts,ts]=123;
+                r = f?[ts,ts];
                 return f;
             }
 

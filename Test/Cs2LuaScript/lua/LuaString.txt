@@ -4,7 +4,7 @@ require "cs2lua__namespaces";
 LuaString = {
 	Format = function(str, ...)
 		local args = wraparray{...};
-		return System.String.Format(str, arraytoparams(args));
+		return System.String.Format(str, unpack(args));
 	end,
 	cctor = function()
 	end,

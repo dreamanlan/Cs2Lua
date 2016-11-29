@@ -76,7 +76,7 @@ namespace RoslynTool.CsToLua
             }
             foreach (var sym in TypeSymbol.GetMembers()) {
                 var msym = sym as IMethodSymbol;
-                if (null != msym && !SymbolTable.IsAccessorMethod(msym.MethodKind)) {
+                if (null != msym && !SymbolTable.IsAccessorMethod(msym)) {
                     if (msym.MethodKind == MethodKind.Constructor && !msym.IsImplicitlyDeclared) {
                         ExistConstructor = true;
                     } else if (msym.MethodKind == MethodKind.StaticConstructor && !msym.IsImplicitlyDeclared) {
@@ -160,7 +160,7 @@ namespace RoslynTool.CsToLua
                     continue;
                 }
                 var psym = sym as IPropertySymbol;
-                if (null != psym) {
+                if (null != psym && !psym.IsIndexer) {
                     PropertySymbols.Add(psym);
                     
                     if (psym.GetAttributes().Length > 0) {
@@ -385,11 +385,16 @@ namespace RoslynTool.CsToLua
         private Dictionary<string, ClassSymbolInfo> m_ClassSymbols = new Dictionary<string, ClassSymbolInfo>();
         private Dictionary<string, HashSet<string>> m_Requires = new Dictionary<string, HashSet<string>>();
 
-        internal static bool IsAccessorMethod(MethodKind kind)
+        internal static bool IsAccessorMethod(IMethodSymbol msym)
         {
-            switch (kind) {
+            switch (msym.MethodKind) {
                 case MethodKind.PropertyGet:
                 case MethodKind.PropertySet:
+                    if (msym.Name == "get_Item" || msym.Name == "set_Item") {
+                        return false;
+                    } else {
+                        return true;
+                    }
                 case MethodKind.EventAdd:
                 case MethodKind.EventRemove:
                 case MethodKind.EventRaise:

@@ -524,12 +524,9 @@ namespace RoslynTool.CsToLua
                     mi.Init(sym, m_SymbolTable.AssemblySymbol, accessor, m_SymbolTable.IsUseExplicitTypeParam(sym));
                     m_MethodInfoStack.Push(mi);
 
-                    if (mi.SemanticInfo.IsStatic && mi.UseExplicitTypeParam) {
-                        Log(node, "typeof/as/is/cast(GenericTypeParameter) or new GenericTypeParameter() can't be used in static indexer accessor !");
-                    }
-
+                    string manglingName = NameMangling(sym);
                     string keyword = accessor.Keyword.Text;
-                    CodeBuilder.AppendFormat("{0}__indexer_{1} = function(this, {2})", GetIndentString(), keyword, string.Join(", ", mi.ParamNames.ToArray()));
+                    CodeBuilder.AppendFormat("{0}{1} = function(this, {2})", GetIndentString(), manglingName, string.Join(", ", mi.ParamNames.ToArray()));
                     CodeBuilder.AppendLine();
                     ++m_Indent;
                     if (null != accessor.Body) {
@@ -537,14 +534,29 @@ namespace RoslynTool.CsToLua
                             OutputWrapValueParams(CodeBuilder, mi);
                         }
                         if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
-                            if (mi.ParamsIsValueType) {
-                                CodeBuilder.AppendFormat("{0}local {1} = wrapvaluetypearray{{...}};", GetIndentString(), mi.OriginalParamsName);
-                            } else if (mi.ParamsIsExternValueType) {
-                                CodeBuilder.AppendFormat("{0}local {1} = wrapexternvaluetypearray{{...}};", GetIndentString(), mi.OriginalParamsName);
+                            if (keyword == "get") {
+                                if (mi.ParamsIsValueType) {
+                                    CodeBuilder.AppendFormat("{0}local {1} = wrapvaluetypearray{{...}};", GetIndentString(), mi.OriginalParamsName);
+                                } else if (mi.ParamsIsExternValueType) {
+                                    CodeBuilder.AppendFormat("{0}local {1} = wrapexternvaluetypearray{{...}};", GetIndentString(), mi.OriginalParamsName);
+                                } else {
+                                    CodeBuilder.AppendFormat("{0}local {1} = wraparray{{...}};", GetIndentString(), mi.OriginalParamsName);
+                                }
+                                CodeBuilder.AppendLine();
                             } else {
-                                CodeBuilder.AppendFormat("{0}local {1} = wraparray{{...}};", GetIndentString(), mi.OriginalParamsName);
+                                CodeBuilder.AppendFormat("{0}local {1} = {{...}};", GetIndentString(), mi.OriginalParamsName);
+                                CodeBuilder.AppendLine();
+                                CodeBuilder.AppendFormat("{0}local value = table.remove({1});", GetIndentString(), mi.OriginalParamsName);
+                                CodeBuilder.AppendLine();
+                                if (mi.ParamsIsValueType) {
+                                    CodeBuilder.AppendFormat("{0}{1} = wrapvaluetypearray({2});", GetIndentString(), mi.OriginalParamsName, mi.OriginalParamsName);
+                                } else if (mi.ParamsIsExternValueType) {
+                                    CodeBuilder.AppendFormat("{0}{1} = wrapexternvaluetypearray({2});", GetIndentString(), mi.OriginalParamsName, mi.OriginalParamsName);
+                                } else {
+                                    CodeBuilder.AppendFormat("{0}{1} = wraparray({2});", GetIndentString(), mi.OriginalParamsName, mi.OriginalParamsName);
+                                }
+                                CodeBuilder.AppendLine();
                             }
-                            CodeBuilder.AppendLine();
                         }
                         VisitBlock(accessor.Body);
                     }
@@ -735,40 +747,43 @@ namespace RoslynTool.CsToLua
             if (null != elementBinding) {
                 var oper = m_Model.GetOperation(node.WhenNotNull);
                 var symInfo = m_Model.GetSymbolInfo(node.WhenNotNull);
-                var sym = symInfo.Symbol as IPropertySymbol;
-
-                if (null != sym && sym.IsIndexer) {
-                    if (sym.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
-                        VisitExpressionSyntax(node.Expression);
-                        if (sym.IsStatic)
-                            CodeBuilder.Append(".__indexer_get(");
-                        else
-                            CodeBuilder.Append(":__indexer_get(");
-                        VisitExpressionSyntax(node.WhenNotNull);
-                        CodeBuilder.Append(")");
+                var sym = symInfo.Symbol;
+                var psym = sym as IPropertySymbol;
+                if (null != psym && psym.IsIndexer) {
+                    CodeBuilder.AppendFormat("get{0}{1}indexer(", psym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
+                    if (psym.IsStatic) {
+                        string fullName = ClassInfo.GetFullName(psym.ContainingType);
+                        CodeBuilder.Append(fullName);
                     } else {
-                        CodeBuilder.AppendFormat("getextern{0}indexer(", sym.IsStatic ? "static" : "instance");
-                        if (sym.IsStatic) {
-                            string fullName = ClassInfo.GetFullName(sym.ContainingType);
-                            CodeBuilder.Append(fullName);
-                        } else {
-                            VisitExpressionSyntax(node.Expression);
-                        }
-                        CodeBuilder.Append(", ");
-                        VisitExpressionSyntax(node.WhenNotNull);
-                        CodeBuilder.Append(")");
+                        VisitExpressionSyntax(node.Expression);
                     }
+                    CodeBuilder.Append(", ");
+                    string manglingName = NameMangling(psym.GetMethod);
+                    CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
+                    InvocationInfo ii = new InvocationInfo();
+                    List<ExpressionSyntax> args = new List<ExpressionSyntax>{node.WhenNotNull};
+                    ii.Init(psym.GetMethod, m_SymbolTable.AssemblySymbol, args, m_SymbolTable.IsUseExplicitTypeParam(psym.GetMethod), m_Model);
+                    OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
+                    CodeBuilder.Append(")");
                 } else if (oper.Kind == OperationKind.ArrayElementReferenceExpression) {
                     VisitExpressionSyntax(node.Expression);
                     CodeBuilder.Append("[");
                     VisitExpressionSyntax(node.WhenNotNull);
-                    CodeBuilder.Append("]");
-                } else {
-                    CodeBuilder.AppendFormat("get{0}element(", sym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern");
-                    VisitExpressionSyntax(node.Expression);
+                    CodeBuilder.Append(" + 1]");
+                } else if (null != sym) {
+                    CodeBuilder.AppendFormat("get{0}{1}element(", sym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", sym.IsStatic ? "static" : "instance");
+                    if (sym.IsStatic) {
+                        string fullName = ClassInfo.GetFullName(sym.ContainingType);
+                        CodeBuilder.Append(fullName);
+                    } else {
+                        VisitExpressionSyntax(node.Expression);
+                    }
                     CodeBuilder.Append(", ");
+                    CodeBuilder.AppendFormat("\"{0}\", ", sym.Name);
                     VisitExpressionSyntax(node.WhenNotNull);
                     CodeBuilder.Append(")");
+                } else {
+                    ReportIllegalSymbol(node, symInfo);
                 }
             } else {
                 VisitExpressionSyntax(node.Expression);
@@ -1472,7 +1487,7 @@ namespace RoslynTool.CsToLua
                     VisitExpressionSyntax(exp);
                 } else {
                     if (arrayToParams) {
-                        CodeBuilder.Append("arraytoparams(");
+                        CodeBuilder.Append("unpack(");
                         VisitExpressionSyntax(exp);
                         CodeBuilder.Append(")");
                     } else {
@@ -1922,40 +1937,42 @@ namespace RoslynTool.CsToLua
         {
             var oper = m_Model.GetOperation(node);
             var symInfo = m_Model.GetSymbolInfo(node);
-            var sym = symInfo.Symbol as IPropertySymbol;
-
-            if (null != sym && sym.IsIndexer) {
-                if (sym.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
-                    VisitExpressionSyntax(node.Expression);
-                    if (sym.IsStatic)
-                        CodeBuilder.Append(".__indexer_get(");
-                    else
-                        CodeBuilder.Append(":__indexer_get(");
-                    VisitBracketedArgumentList(node.ArgumentList);
-                    CodeBuilder.Append(")");
+            var sym = symInfo.Symbol;
+            var psym = sym as IPropertySymbol;
+            if (null != psym && psym.IsIndexer) {
+                CodeBuilder.AppendFormat("get{0}{1}indexer(", psym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
+                if (psym.IsStatic) {
+                    string fullName = ClassInfo.GetFullName(psym.ContainingType);
+                    CodeBuilder.Append(fullName);
                 } else {
-                    CodeBuilder.AppendFormat("getextern{0}indexer(", sym.IsStatic ? "static" : "instance");
-                    if (sym.IsStatic) {
-                        string fullName = ClassInfo.GetFullName(sym.ContainingType);
-                        CodeBuilder.Append(fullName);
-                    } else {
-                        VisitExpressionSyntax(node.Expression);
-                    }
-                    CodeBuilder.Append(", ");
-                    VisitBracketedArgumentList(node.ArgumentList);
-                    CodeBuilder.Append(")");
+                    VisitExpressionSyntax(node.Expression);
                 }
+                CodeBuilder.Append(", ");
+                string manglingName = NameMangling(psym.GetMethod);
+                CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
+                InvocationInfo ii = new InvocationInfo();
+                ii.Init(psym.GetMethod, m_SymbolTable.AssemblySymbol, node.ArgumentList, m_SymbolTable.IsUseExplicitTypeParam(psym.GetMethod), m_Model);
+                OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
+                CodeBuilder.Append(")");
             } else if (oper.Kind == OperationKind.ArrayElementReferenceExpression) {
                 VisitExpressionSyntax(node.Expression);
                 CodeBuilder.Append("[");
                 VisitBracketedArgumentList(node.ArgumentList);
                 CodeBuilder.Append("]");
-            } else {
-                CodeBuilder.AppendFormat("get{0}element(", sym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern");
-                VisitExpressionSyntax(node.Expression);
+            } else if (null != sym) {
+                CodeBuilder.AppendFormat("get{0}{1}element(", sym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", sym.IsStatic ? "static" : "instance");
+                if (sym.IsStatic) {
+                    string fullName = ClassInfo.GetFullName(sym.ContainingType);
+                    CodeBuilder.Append(fullName);
+                } else {
+                    VisitExpressionSyntax(node.Expression);
+                }
                 CodeBuilder.Append(", ");
+                CodeBuilder.AppendFormat("\"{0}\", ", sym.Name);
                 VisitBracketedArgumentList(node.ArgumentList);
                 CodeBuilder.Append(")");
+            } else {
+                ReportIllegalSymbol(node, symInfo);
             }
         }
         public override void VisitMemberBindingExpression(MemberBindingExpressionSyntax node)
@@ -2874,30 +2891,22 @@ namespace RoslynTool.CsToLua
             if (null != leftElementAccess) {
                 var propSym = leftSym as IPropertySymbol;
                 if (null != propSym && propSym.IsIndexer) {
-                    if (propSym.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
-                        VisitExpressionSyntax(leftElementAccess.Expression);
-                        if (propSym.IsStatic)
-                            CodeBuilder.Append(".__indexer_set(");
-                        else
-                            CodeBuilder.Append(":__indexer_set(");
-                        VisitBracketedArgumentList(leftElementAccess.ArgumentList);
-                        CodeBuilder.Append(", ");
-                        VisitExpressionSyntax(assign.Right);
-                        CodeBuilder.Append(")");
+                    CodeBuilder.AppendFormat("set{0}{1}indexer(", propSym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", propSym.IsStatic ? "static" : "instance");
+                    if (propSym.IsStatic) {
+                        string fullName = ClassInfo.GetFullName(propSym.ContainingType);
+                        CodeBuilder.Append(fullName);
                     } else {
-                        CodeBuilder.AppendFormat("setextern{0}indexer(", propSym.IsStatic ? "static" : "instance");
-                        if (propSym.IsStatic) {
-                            string fullName = ClassInfo.GetFullName(propSym.ContainingType);
-                            CodeBuilder.Append(fullName);
-                        } else {
-                            VisitExpressionSyntax(leftElementAccess.Expression);
-                        }
-                        CodeBuilder.Append(", ");
-                        VisitBracketedArgumentList(leftElementAccess.ArgumentList);
-                        CodeBuilder.Append(", ");
-                        VisitExpressionSyntax(assign.Right);
-                        CodeBuilder.Append(")");
+                        VisitExpressionSyntax(leftElementAccess.Expression);
                     }
+                    CodeBuilder.Append(", ");
+                    string manglingName = NameMangling(propSym.SetMethod);
+                    CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
+                    InvocationInfo ii = new InvocationInfo();
+                    ii.Init(propSym.GetMethod, m_SymbolTable.AssemblySymbol, leftElementAccess.ArgumentList, m_SymbolTable.IsUseExplicitTypeParam(propSym.SetMethod), m_Model);
+                    OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
+                    CodeBuilder.Append(", ");
+                    VisitExpressionSyntax(assign.Right);
+                    CodeBuilder.Append(")");
                 } else if (leftOper.Kind == OperationKind.ArrayElementReferenceExpression) {
                     if (!toplevel) {
                         CodeBuilder.Append("(function() ");
@@ -2912,14 +2921,22 @@ namespace RoslynTool.CsToLua
                         VisitExpressionSyntax(assign.Right);
                         CodeBuilder.Append("; end)()");
                     }
-                } else {
-                    CodeBuilder.AppendFormat("set{0}element(", leftSym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern");
-                    VisitExpressionSyntax(leftElementAccess.Expression);
+                } else if (null != leftSym) {
+                    CodeBuilder.AppendFormat("set{0}{1}element(", leftSym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", leftSym.IsStatic ? "static" : "instance");
+                    if (leftSym.IsStatic) {
+                        string fullName = ClassInfo.GetFullName(leftSym.ContainingType);
+                        CodeBuilder.Append(fullName);
+                    } else {
+                        VisitExpressionSyntax(leftElementAccess.Expression);
+                    }
                     CodeBuilder.Append(", ");
+                    CodeBuilder.AppendFormat("\"{0}\", ", leftSym.Name);
                     VisitBracketedArgumentList(leftElementAccess.ArgumentList);
                     CodeBuilder.Append(", ");
                     VisitExpressionSyntax(assign.Right);
                     CodeBuilder.Append(")");
+                } else {
+                    Log(assign, "unknown set element symbol !");
                 }
             } else if (null != leftCondAccess) {
                 CodeBuilder.Append("condaccess(");
@@ -2929,51 +2946,53 @@ namespace RoslynTool.CsToLua
                 if (null != elementBinding) {
                     var bindingOper = m_Model.GetOperation(leftCondAccess.WhenNotNull);
                     var symInfo = m_Model.GetSymbolInfo(leftCondAccess.WhenNotNull);
-                    var sym = symInfo.Symbol as IPropertySymbol;
+                    var sym = symInfo.Symbol;
+                    var psym = sym as IPropertySymbol;
 
-                    if (null != sym && sym.IsIndexer) {
-                        if (sym.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
-                            VisitExpressionSyntax(leftCondAccess.Expression);
-                            if (sym.IsStatic)
-                                CodeBuilder.Append(".__indexer_set(");
-                            else
-                                CodeBuilder.Append(":__indexer_set(");
-                            VisitExpressionSyntax(leftCondAccess.WhenNotNull);
-                            CodeBuilder.Append(", ");
-                            VisitExpressionSyntax(assign.Right);
-                            CodeBuilder.Append(")");
+                    if (null != psym && psym.IsIndexer) {
+                        CodeBuilder.AppendFormat("set{0}{1}indexer(", psym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
+                        if (psym.IsStatic) {
+                            string fullName = ClassInfo.GetFullName(psym.ContainingType);
+                            CodeBuilder.Append(fullName);
                         } else {
-                            CodeBuilder.AppendFormat("setextern{0}indexer(", sym.IsStatic ? "static" : "instance");
-                            if (sym.IsStatic) {
-                                string fullName = ClassInfo.GetFullName(sym.ContainingType);
-                                CodeBuilder.Append(fullName);
-                            } else {
-                                VisitExpressionSyntax(leftCondAccess.Expression);
-                            }
-                            CodeBuilder.Append(", ");
-                            VisitExpressionSyntax(leftCondAccess.WhenNotNull);
-                            CodeBuilder.Append(", ");
-                            VisitExpressionSyntax(assign.Right);
-                            CodeBuilder.Append(")");
+                            VisitExpressionSyntax(leftCondAccess.Expression);
                         }
+                        CodeBuilder.Append(", ");
+                        string manglingName = NameMangling(psym.SetMethod);
+                        CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
+                        InvocationInfo ii = new InvocationInfo();
+                        List<ExpressionSyntax> args = new List<ExpressionSyntax> { leftCondAccess.WhenNotNull };
+                        ii.Init(psym.SetMethod, m_SymbolTable.AssemblySymbol, args, m_SymbolTable.IsUseExplicitTypeParam(psym.SetMethod), m_Model);
+                        OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
+                        CodeBuilder.Append(", ");
+                        VisitExpressionSyntax(assign.Right);
+                        CodeBuilder.Append(")");
                     } else if (bindingOper.Kind == OperationKind.ArrayElementReferenceExpression) {
                         CodeBuilder.Append("(function() ");
                         VisitExpressionSyntax(leftCondAccess.Expression);
                         CodeBuilder.Append("[");
                         VisitExpressionSyntax(leftCondAccess.WhenNotNull);
-                        CodeBuilder.Append("] = ");
+                        CodeBuilder.Append(" + 1] = ");
                         VisitExpressionSyntax(assign.Right);
                         CodeBuilder.Append("; return ");
                         VisitExpressionSyntax(assign.Right);
                         CodeBuilder.Append("; end)()");
-                    } else {
-                        CodeBuilder.AppendFormat("set{0}element(", sym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern");
-                        VisitExpressionSyntax(leftCondAccess.Expression);
+                    } else if (null != sym) {
+                        CodeBuilder.AppendFormat("set{0}{1}element(", sym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", sym.IsStatic ? "static" : "instance");
+                        if (sym.IsStatic) {
+                            string fullName = ClassInfo.GetFullName(sym.ContainingType);
+                            CodeBuilder.Append(fullName);
+                        } else {
+                            VisitExpressionSyntax(leftCondAccess.Expression);
+                        }
                         CodeBuilder.Append(", ");
+                        CodeBuilder.AppendFormat("\"{0}\", ", leftSym.Name);
                         VisitExpressionSyntax(leftCondAccess.WhenNotNull);
                         CodeBuilder.Append(", ");
                         VisitExpressionSyntax(assign.Right);
                         CodeBuilder.Append(")");
+                    } else {
+                        ReportIllegalSymbol(assign, symInfo);
                     }
                 } else {
                     CodeBuilder.Append("(function() ");

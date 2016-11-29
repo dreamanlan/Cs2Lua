@@ -395,7 +395,7 @@ namespace RoslynTool.CsToLua
                 }
             }
 
-            if (UseExplicitTypeParam && (sym.MethodKind == MethodKind.Constructor || sym.IsStatic && sym.MethodKind != MethodKind.StaticConstructor && !SymbolTable.IsAccessorMethod(sym.MethodKind))) {
+            if (UseExplicitTypeParam && (sym.MethodKind == MethodKind.Constructor || sym.IsStatic && sym.MethodKind != MethodKind.StaticConstructor && !SymbolTable.IsAccessorMethod(sym))) {
                 INamedTypeSymbol type = sym.ContainingType;
                 while (null != type) {
                     if (type.IsGenericType) {
@@ -422,6 +422,8 @@ namespace RoslynTool.CsToLua
                     }
                     ParamNames.Add("...");
                     OriginalParamsName = param.Name;
+                    //遇到变参直接结束（变参set_Item会出现后面带一个value参数的情形，在函数实现里处理）
+                    break;
                 } else if (param.RefKind == RefKind.Ref) {
                     ParamNames.Add(param.Name);
                     RefParamNames.Add(param.Name);
@@ -463,6 +465,43 @@ namespace RoslynTool.CsToLua
         internal IAssemblySymbol AssemblySymbol = null;
 
         internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, ArgumentListSyntax argList, bool useExplicitTypeParam, SemanticModel model)
+        {
+            Init(sym, assemblySym, useExplicitTypeParam);
+
+            if (null != argList) {
+                var args = argList.Arguments;
+
+                int ct = args.Count;
+                for (int i = 0; i < ct; ++i) {
+                    var arg = args[i];
+                    if (i < sym.Parameters.Length) {
+                        var param = sym.Parameters[i];
+                        if (param.RefKind == RefKind.Ref) {
+                            Args.Add(arg.Expression);
+                            ReturnArgs.Add(arg.Expression);
+                        } else if (param.RefKind == RefKind.Out) {
+                            if (sym.ContainingAssembly != assemblySym && SymbolTable.ForSlua) {
+                                //外部类的方法的out参数,slua在调用时传入Slua.out,这里用null标记一下，在实际输出参数时再变为Slua.out
+                                Args.Add(null);
+                            }
+                            ReturnArgs.Add(arg.Expression);
+                        } else if (param.IsParams) {
+                            var argOper = model.GetOperation(arg.Expression);
+                            if (null != argOper && null != argOper.Type && argOper.Type.TypeKind == TypeKind.Array && i == ct - 1) {
+                                ArrayToParams = true;
+                            }
+                            Args.Add(arg.Expression);
+                        } else {
+                            Args.Add(arg.Expression);
+                        }
+                    } else {
+                        Args.Add(arg.Expression);
+                    }
+                }
+            }
+        }
+
+        internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, BracketedArgumentListSyntax argList, bool useExplicitTypeParam, SemanticModel model)
         {
             Init(sym, assemblySym, useExplicitTypeParam);
 

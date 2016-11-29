@@ -97,10 +97,6 @@ function typeis(obj, type)
   return false;
 end;
 
-function arraytoparams(arr)
-	return unpack(arr);
-end;
-
 function __wrap_if_string(val)
   if type(val)=="string" then
     return System.String(val);
@@ -839,10 +835,25 @@ function externdelegationremove(t, k, handler)
   end;
 end;
 
-function getexternstaticindexer(class, ...)
+function getstaticindexer(class, name, ...)
+	return 
+end;
+function getinstanceindexer(obj, name, ...)
+end;
+
+function setstaticindexer(class, name, ...)
+	class[name](...);
+	return nil;
+end;
+function setinstanceindexer(obj, name, ...)
+	obj[name](obj, ...);
+	return nil;
+end;
+
+function getexternstaticindexer(class, name, ...)
 	return class[...];
 end;
-function getexterninstanceindexer(obj, ...)  
+function getexterninstanceindexer(obj, name, ...)  
 	local args = {...};
 	local index = args[1];
 	local meta = getmetatable(obj);
@@ -855,10 +866,11 @@ function getexterninstanceindexer(obj, ...)
   end;
 end;
 
-function setexternstaticindexer(class, ...)
-  
+function setexternstaticindexer(class, name, ...)
+	
+  return nil;
 end;
-function setexterninstanceindexer(obj, ...)
+function setexterninstanceindexer(obj, name, ...)
   local args = {...};
   local num = table.maxn(args);
 	local index = __unwrap_if_string(args[1]);
@@ -871,19 +883,34 @@ function setexterninstanceindexer(obj, ...)
       obj[index] = val;  
     end;
   end;
-end;
-
-function getelement(obj, ...)
   return nil;
 end;
-function setelement(obj, ...)
+
+function getstaticelement(class, ...)
+  return nil;
+end;
+function getinstanceelement(obj, ...)
+  return nil;
+end;
+function setstaticelement(class, ...)
   --为了适应表达式内嵌赋值，这个函数需要返回值
   return nil;
 end;
-function getexternement(obj, ...)
+function setinstanceelement(obj, ...)
+  --为了适应表达式内嵌赋值，这个函数需要返回值
   return nil;
 end;
-function setexternement(obj, ...)
+function getexternstaticelement(class, ...)
+  return nil;
+end;
+function getexterninstanceelement(obj, ...)
+  return nil;
+end;
+function setexternstaticelement(class, ...)
+  --为了适应表达式内嵌赋值，这个函数需要返回值
+  return nil;
+end;
+function setexterninstanceelement(obj, ...)
   --为了适应表达式内嵌赋值，这个函数需要返回值
   return nil;
 end;

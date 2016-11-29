@@ -2,8 +2,8 @@ require "cs2lua__utility";
 require "cs2lua__attributes";
 require "cs2lua__namespaces";
 require "TopLevel__SecondLevel__FooBase";
-require "TopLevel__SecondLevel__GenericClass_T";
 require "TopLevel__TestStruct";
+require "TopLevel__SecondLevel__GenericClass_T";
 
 TopLevel.SecondLevel.Foo = {
 	op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo = function(self, other)
@@ -17,6 +17,13 @@ TopLevel.SecondLevel.Foo = {
 	op_Explicit = function(a)
 		local f; f = newobject(TopLevel.SecondLevel.Foo, "ctor", {});
 		f.m_Test = a;
+		f.Val = newobject(TopLevel.TestStruct, "ctor", {});
+		local ts; ts = f.Val;
+		ts = wrapvaluetype(ts);
+		setinstanceindexer(f, "set_Item", ts, ts, 123);
+		local r; r = getinstanceindexer(f, "get_Item", ts, ts);
+		condaccess(f, setinstanceindexer(f, "set_Item", ts, ts, 123));
+		r = condaccess(f, getinstanceindexer(f, "get_Item", ts, ts));
 		return f;
 	end,
 	cctor = function()
@@ -35,12 +42,14 @@ TopLevel.SecondLevel.Foo = {
 		local static_events = nil;
 
 		local instance_methods = {
-			__indexer_get = function(this, ...)
+			get_Item = function(this, ...)
 				local args = wrapvaluetypearray{...};
 				return 1;
 			end,
-			__indexer_set = function(this, ..., value)
-				local args = wrapvaluetypearray{...};
+			set_Item = function(this, ...)
+				local args = {...};
+				local value = table.remove(args);
+				args = wrapvaluetypearray(args);
 			end,
 			ctor = function(this)
 				this:ctor__System_Int32(0);
@@ -120,10 +129,10 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			TestSwitch = function(this)
 				local i; i = 10;
-				local __compiler_switch_252 = i;
-				if __compiler_switch_252 == 1 then
+				local __compiler_switch_258 = i;
+				if __compiler_switch_258 == 1 then
 					return ;
-				elseif __compiler_switch_252 == 2 then
+				elseif __compiler_switch_258 == 2 then
 					return ;
 				else
 					return ;
