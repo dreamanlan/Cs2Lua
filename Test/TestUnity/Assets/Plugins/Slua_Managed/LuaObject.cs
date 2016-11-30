@@ -586,9 +586,16 @@ return index
 
 		static void completeTypeMeta(IntPtr l, LuaCSFunction con, Type self)
 		{
-
 			LuaDLL.lua_pushstring(l, ObjectCache.getAQName(self));
-			LuaDLL.lua_setfield(l, -3, "__fullname");
+            LuaDLL.lua_setfield(l, -3, "__fullname");
+
+            LuaDLL.lua_pushstring(l, "__fullname");
+            LuaDLL.lua_pushstring(l, self.FullName);
+            LuaDLL.lua_rawset(l, -3);
+
+            LuaDLL.lua_pushstring(l, "__typename");
+            LuaDLL.lua_pushstring(l, self.Name);
+            LuaDLL.lua_rawset(l, -3);
 
 			index_func.push(l);
 			LuaDLL.lua_setfield(l, -2, "__index");
@@ -611,7 +618,11 @@ return index
 		}
 
 		private static void completeInstanceMeta(IntPtr l, Type self)
-		{
+        {
+            LuaDLL.lua_pushstring(l, "__fullname");
+            LuaDLL.lua_pushstring(l, self.FullName);
+            LuaDLL.lua_rawset(l, -3);
+
 			LuaDLL.lua_pushstring(l, "__typename");
 			LuaDLL.lua_pushstring(l, self.Name);
 			LuaDLL.lua_rawset(l, -3);

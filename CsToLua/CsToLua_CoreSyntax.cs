@@ -844,6 +844,8 @@ namespace RoslynTool.CsToLua
                             CodeBuilder.Append(", ");
                             VisitExpressionSyntax(assign.Right);
                             CodeBuilder.Append(")");
+                        } else if (baseOp == "+") {
+                            ProcessAddOrStringConcat(assign.Left, assign.Right);
                         } else {
                             VisitExpressionSyntax(assign.Left);
                             CodeBuilder.AppendFormat(" {0} ", baseOp);

@@ -287,6 +287,42 @@ namespace RoslynTool.CsToLua
                 }
             }
         }
+        private void ProcessAddOrStringConcat(ExpressionSyntax left, ExpressionSyntax right)
+        {
+            var leftOper = m_Model.GetOperation(left);
+            var rightOper = m_Model.GetOperation(right);
+            string leftAssemblyName = leftOper.Type.ContainingAssembly.Name;
+            string rightAssemblyName = rightOper.Type.ContainingAssembly.Name;
+            string leftNamespace = ClassInfo.GetNamespaces(leftOper.Type);
+            string rightNamespace = ClassInfo.GetNamespaces(rightOper.Type);
+            string leftTypeFullName = ClassInfo.GetFullName(leftOper.Type);
+            string rightTypeFullName = ClassInfo.GetFullName(rightOper.Type);
+            if (leftTypeFullName == "System.String" && rightTypeFullName == "System.String") {
+                CodeBuilder.Append("System.String.Concat(");
+                VisitExpressionSyntax(left);
+                CodeBuilder.Append(", ");
+                VisitExpressionSyntax(right);
+                CodeBuilder.Append(")");
+            } else if (leftTypeFullName == "System.String") {
+                CodeBuilder.Append("System.String.Concat(");
+                VisitExpressionSyntax(left);
+                CodeBuilder.Append(", wrapstring(");
+                VisitExpressionSyntax(right);
+                CodeBuilder.Append("):ToString())");
+            } else if (rightTypeFullName == "System.String") {
+                CodeBuilder.Append("System.String.Concat(wrapstring(");
+                VisitExpressionSyntax(left);
+                CodeBuilder.Append("):ToString(), ");
+                VisitExpressionSyntax(right);
+                CodeBuilder.Append(")");
+            } else {
+                CodeBuilder.Append("(");
+                VisitExpressionSyntax(left);
+                CodeBuilder.Append(" + ");
+                VisitExpressionSyntax(right);
+                CodeBuilder.Append(")");
+            }
+        }
         private void AddToplevelClass(string key, ClassInfo ci)
         {
             List<ClassInfo> list;

@@ -12,11 +12,11 @@ TopLevel.SecondLevel.Foo = {
 	remove_StaticEventBridge = function(value)
 	end,
 	op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo = function(self, other)
-		self.m_Test = self.m_Test + other.m_Test;
+		self.m_Test = (self.m_Test + other.m_Test);
 		return self;
 	end,
 	op_Addition__TopLevel_SecondLevel_Foo__System_Int32 = function(self, val)
-		self.m_Test = self.m_Test + val;
+		self.m_Test = (self.m_Test + val);
 		return self;
 	end,
 	op_Explicit = function(a)

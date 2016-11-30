@@ -80,18 +80,22 @@ function bitxor(v1,v2)
 	end;
 end;
 
-function typecast(obj, type)
-  return obj;
+function typecast(obj, t)
+	if t == System.String then
+		return wrapstring(obj);		
+	else
+  	return obj;
+ 	end;
 end;
 
-function typeis(obj, type)
+function typeis(obj, t)
   local meta = getmetatable(obj);
-  local meta2 = getmetatable(type);
+  local meta2 = getmetatable(t);
   if meta then
     if type(obj)=="userdata" then
-      return meta2 and meta.__typename == meta2.__fullname;
+      return meta2 and meta.__typename == meta2.__typename;
     else
-      return meta.__class == type;
+      return meta.__class == t;
     end;
   end;
   return false;
@@ -508,6 +512,8 @@ end;
 function wrapstring(str)
   if type(str)=="string" then
     return System.String(str);
+  elseif type(str)=="number" then
+  	return System.String(tostring(str));
   else
     return str;
   end;
@@ -719,57 +725,57 @@ function newexternobject(class, className, ctor, doexternsion, initializer, ...)
   end;
 end;
 
-function newtypeparamobject(type)
-  if type.__cs2lua_defined then
-    local obj = type();
+function newtypeparamobject(t)
+  if t.__cs2lua_defined then
+    local obj = t();
     if obj.ctor then
       obj:ctor();
     end;
     return obj;
   else
-    return type();
+    return t();
   end;
 end;
 
-function newdictionary(type, ctor, dict, ...)
+function newdictionary(t, ctor, dict, ...)
   if dict then
-	  return setmetatable(dict, { __index = __mt_index_of_dictionary, __class = type });
+	  return setmetatable(dict, { __index = __mt_index_of_dictionary, __class = t });
 	end;
 end;
 
-function newlist(type, ctor, list, ...)
+function newlist(t, ctor, list, ...)
   if list then
-    return setmetatable(list, { __index = __mt_index_of_array, __class = type });
+    return setmetatable(list, { __index = __mt_index_of_array, __class = t });
   end;
 end;
 
-function newcollection(type, ctor, coll, ...)
+function newcollection(t, ctor, coll, ...)
   if coll then
-    return setmetatable(dict, { __index = __mt_index_of_hashset, __class = type });
+    return setmetatable(dict, { __index = __mt_index_of_hashset, __class = t });
   end;
 end;
 
-function newexterndictionary(type, className, ctor, doexternsion, dict, ...)
-  if dict and type==System.Collections.Generic.Dictionary_TKey_TValue then
-	  return setmetatable(dict, { __index = __mt_index_of_dictionary, __class = type });
+function newexterndictionary(t, className, ctor, doexternsion, dict, ...)
+  if dict and t==System.Collections.Generic.Dictionary_TKey_TValue then
+	  return setmetatable(dict, { __index = __mt_index_of_dictionary, __class = t });
 	else
-	  return newexternobject(type, className, ctor, doexternsion, dict, ...);
+	  return newexternobject(t, className, ctor, doexternsion, dict, ...);
 	end;
 end;
 
-function newexternlist(type, className, ctor, doexternsion, list, ...)
-  if list and (type==System.Collections.Generic.List_T or type==System.Collections.Generic.Queue_T or type==System.Collections.Generic.Stack_T) then    
-	  return setmetatable(list, { __index = __mt_index_of_array, __class = type });
+function newexternlist(t, className, ctor, doexternsion, list, ...)
+  if list and (t==System.Collections.Generic.List_T or t==System.Collections.Generic.Queue_T or t==System.Collections.Generic.Stack_T) then    
+	  return setmetatable(list, { __index = __mt_index_of_array, __class = t });
 	else
-	  return newexternobject(type, className, ctor, doexternsion, list, ...);
+	  return newexternobject(t, className, ctor, doexternsion, list, ...);
   end;
 end;
 
-function newexterncollection(type, className, ctor, doexternsion, coll, ...)
-  if coll and type==System.Collections.Generic.HashSet_T then
-    return setmetatable(dict, { __index = __mt_index_of_hashset, __class = type });
+function newexterncollection(t, className, ctor, doexternsion, coll, ...)
+  if coll and t==System.Collections.Generic.HashSet_T then
+    return setmetatable(dict, { __index = __mt_index_of_hashset, __class = t });
 	else
-	  return newexternobject(type, className, ctor, doexternsion, coll, ...);
+	  return newexternobject(t, className, ctor, doexternsion, coll, ...);
   end;
 end;
 
