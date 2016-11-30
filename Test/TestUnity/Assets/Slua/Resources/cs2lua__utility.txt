@@ -663,6 +663,7 @@ function defineclass(base, className, static, static_fields, static_props, stati
             elseif base_class then
             	ret = base_class[k];                         
             end;
+            return ret;
         end,
 
         __newindex = function(t, k, v)

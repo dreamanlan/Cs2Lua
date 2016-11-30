@@ -2,6 +2,14 @@ require "cs2lua__utility";
 require "cs2lua__namespaces";
 
 TopLevel.Singleton_T = {
+	get_instance = function(T)
+		if (TopLevel.Singleton_T.ms_instance == nil) then
+			TopLevel.Singleton_T.ms_instance = newtypeparamobject(T);
+		end;
+		return TopLevel.Singleton_T.ms_instance;
+	end,
+	set_instance = function(value)
+	end,
 	Delete = function()
 		TopLevel.Singleton_T.ms_instance = nil;
 	end,
@@ -19,12 +27,8 @@ TopLevel.Singleton_T = {
 
 		local static_props = {
 			instance = {
-				get = function(this)
-					if (TopLevel.Singleton_T.ms_instance == nil) then
-						TopLevel.Singleton_T.ms_instance = newtypeparamobject(T);
-					end;
-					return TopLevel.Singleton_T.ms_instance;
-				end,
+				get = static.get_instance,
+				set = static.set_instance,
 			},
 		};
 

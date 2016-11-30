@@ -76,7 +76,7 @@ namespace RoslynTool.CsToLua
             }
             foreach (var sym in TypeSymbol.GetMembers()) {
                 var msym = sym as IMethodSymbol;
-                if (null != msym && !SymbolTable.IsAccessorMethod(msym)) {
+                if (null != msym) {
                     if (msym.MethodKind == MethodKind.Constructor && !msym.IsImplicitlyDeclared) {
                         ExistConstructor = true;
                     } else if (msym.MethodKind == MethodKind.StaticConstructor && !msym.IsImplicitlyDeclared) {
@@ -254,7 +254,9 @@ namespace RoslynTool.CsToLua
             }
             if (useExplicitTypeParam) {
                 string manglingName = SymbolTable.CalcMethodMangling(msym, assemblySym);
-                MethodUseExplicitTypeParams.Add(manglingName, msym);
+                if (!MethodUseExplicitTypeParams.ContainsKey(manglingName)) {
+                    MethodUseExplicitTypeParams.Add(manglingName, msym);
+                }
                 if (setGenerateBasicFlagIfInclude) {
                     //静态函数的generic参数直接作函数参数，非静态的函数又非构造函数需要借助类型参数成员
                     if (!msym.IsStatic) {

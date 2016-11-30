@@ -192,16 +192,25 @@ namespace RoslynTool.CsToLua
             var leftOper = m_Model.GetOperation(node.Left);
             var leftSymbolInfo = m_Model.GetSymbolInfo(node.Left);
             var leftSym = leftSymbolInfo.Symbol;
+            var leftPsym = leftSym as IPropertySymbol;
+            var leftMemberAccess = node.Left as MemberAccessExpressionSyntax;
             var leftElementAccess = node.Left as ElementAccessExpressionSyntax;
             var leftCondAccess = node.Left as ConditionalAccessExpressionSyntax;
-            if (null != leftElementAccess || null != leftCondAccess || leftOper.Type.TypeKind == TypeKind.Delegate && (leftSym.Kind != SymbolKind.Local || op != "=")) {
+
+            bool staticPropUseExplicitTypeParam = false;
+            if (null != leftMemberAccess && null != leftPsym && leftPsym.IsStatic) {
+                if (m_SymbolTable.IsUseExplicitTypeParam(leftPsym.GetMethod) || m_SymbolTable.IsUseExplicitTypeParam(leftPsym.SetMethod)) {
+                    staticPropUseExplicitTypeParam = true;
+                }
+            }
+            if (staticPropUseExplicitTypeParam || null != leftElementAccess || null != leftCondAccess || leftOper.Type.TypeKind == TypeKind.Delegate && (leftSym.Kind != SymbolKind.Local || op != "=")) {
                 needWrapFunction = false;
             }
             if (needWrapFunction) {
                 //顶层的赋值语句已经处理，这里的赋值都需要包装成lambda函数的样式
                 CodeBuilder.Append("(function() ");
             }
-            VisitAssignment(ci, op, baseOp, node, string.Empty, false, leftOper, leftSym, leftElementAccess, leftCondAccess);
+            VisitAssignment(ci, op, baseOp, node, string.Empty, false, leftOper, leftSym, leftPsym, leftMemberAccess, leftElementAccess, leftCondAccess, staticPropUseExplicitTypeParam);
             var oper = m_Model.GetOperation(node.Right);
             if (null != leftSym && leftSym.Kind == SymbolKind.Local && null != oper && null != oper.Type && oper.Type.IsValueType && oper.Type.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
                 CodeBuilder.AppendFormat("; {0} = wrapvaluetype({1})", leftSym.Name, leftSym.Name);
@@ -268,13 +277,33 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.Append(manglingName);
                     CodeBuilder.AppendFormat("({0}) end)", paramsString);
                 } else {
-                    if (string.IsNullOrEmpty(className)) {
-                        VisitExpressionSyntax(node.Expression);
-                    } else {
-                        CodeBuilder.Append(className);
+                    var psym = sym as IPropertySymbol;
+                    bool staticPropUseExplicitTypeParam = false;
+                    if (null != psym && psym.IsStatic) {
+                        if (m_SymbolTable.IsUseExplicitTypeParam(psym.GetMethod)) {
+                            staticPropUseExplicitTypeParam = true;
+                        }
                     }
-                    CodeBuilder.Append(node.OperatorToken.Text);
-                    CodeBuilder.Append(node.Name.Identifier.Text);
+                    if (staticPropUseExplicitTypeParam) {
+                        string manglingName = NameMangling(psym.GetMethod);
+                        InvocationInfo ii = new InvocationInfo();
+                        List<ExpressionSyntax> args = new List<ExpressionSyntax>();
+                        ii.Init(psym.GetMethod, m_SymbolTable.AssemblySymbol, args, true, m_Model);
+                        CodeBuilder.Append(className);
+                        CodeBuilder.Append(".");
+                        CodeBuilder.Append(manglingName);
+                        CodeBuilder.Append("(");
+                        OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
+                        CodeBuilder.Append(")");
+                    } else {
+                        if (string.IsNullOrEmpty(className)) {
+                            VisitExpressionSyntax(node.Expression);
+                        } else {
+                            CodeBuilder.Append(className);
+                        }
+                        CodeBuilder.Append(node.OperatorToken.Text);
+                        CodeBuilder.Append(node.Name.Identifier.Text);
+                    }
                 }
             }
         }

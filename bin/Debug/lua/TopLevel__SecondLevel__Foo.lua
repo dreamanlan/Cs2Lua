@@ -3,9 +3,14 @@ require "cs2lua__attributes";
 require "cs2lua__namespaces";
 require "TopLevel__SecondLevel__FooBase";
 require "TopLevel__TestStruct";
+require "TopLevel__Singleton_T";
 require "TopLevel__SecondLevel__GenericClass_T";
 
 TopLevel.SecondLevel.Foo = {
+	add_StaticEventBridge = function(value)
+	end,
+	remove_StaticEventBridge = function(value)
+	end,
 	op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo = function(self, other)
 		self.m_Test = self.m_Test + other.m_Test;
 		return self;
@@ -24,6 +29,8 @@ TopLevel.SecondLevel.Foo = {
 		local r; r = getinstanceindexer(f, "get_Item", ts, ts);
 		condaccess(f, setinstanceindexer(f, "set_Item", ts, ts, 123));
 		r = condaccess(f, getinstanceindexer(f, "get_Item", ts, ts));
+		local result; result = TopLevel.Singleton_T.get_instance(TopLevel.SecondLevel.Foo):Test123(1, 2);
+		TopLevel.Singleton_T.set_instance(TopLevel.SecondLevel.Foo, nil);
 		return f;
 	end,
 	cctor = function()
@@ -39,9 +46,25 @@ TopLevel.SecondLevel.Foo = {
 			__attributes = TopLevel__SecondLevel__Foo__Attrs,
 		};
 		local static_props = nil;
-		local static_events = nil;
+		local static_events = {
+			StaticEventBridge = {
+				add = static.add_StaticEventBridge,
+				remove = static.remove_StaticEventBridge,
+			},
+		};
 
 		local instance_methods = {
+			add_EventBridge = function(this, value)
+			end,
+			remove_EventBridge = function(this, value)
+			end,
+			get_Val = function(this)
+				return this.m_TS;
+			end,
+			set_Val = function(this, value)
+				value = wrapvaluetype(value);
+				this.m_TS = value;
+			end,
 			get_Item = function(this, ...)
 				local args = wrapvaluetypearray{...};
 				return 1;
@@ -129,10 +152,10 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			TestSwitch = function(this)
 				local i; i = 10;
-				local __compiler_switch_258 = i;
-				if __compiler_switch_258 == 1 then
+				local __compiler_switch_287 = i;
+				if __compiler_switch_287 == 1 then
 					return ;
-				elseif __compiler_switch_258 == 2 then
+				elseif __compiler_switch_287 == 2 then
 					return ;
 				else
 					return ;
@@ -170,17 +193,17 @@ TopLevel.SecondLevel.Foo = {
 
 		local instance_props = {
 			Val = {
-				get = function(this)
-					return this.m_TS;
-				end,
-				set = function(this, value)
-					value = wrapvaluetype(value);
-					this.m_TS = value;
-				end,
+				get = instance_methods.get_Val,
+				set = instance_methods.set_Val,
 			},
 		};
 
-		local instance_events = nil;
+		local instance_events = {
+			EventBridge = {
+				add = instance_methods.add_EventBridge,
+				remove = instance_methods.remove_EventBridge,
+			},
+		};
 
 		return defineclass(TopLevel.SecondLevel.FooBase, "TopLevel.SecondLevel.Foo", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, false);
 	end,

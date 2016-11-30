@@ -43,6 +43,10 @@ namespace TopLevel
                 }
                 return ms_instance;
             }
+            set
+            {
+
+            }
         }
 
         public Singleton()
@@ -139,6 +143,28 @@ namespace TopLevel
 
             public event SimpleEventHandler OnSimple;
             public SimpleEventHandler OnSimple2;
+            public event SimpleEventHandler EventBridge
+            {
+                add
+                {
+
+                }
+                remove
+                {
+
+                }
+            }
+            public static event SimpleEventHandler StaticEventBridge
+            {
+                add
+                {
+
+                }
+                remove
+                {
+
+                }
+            }
 
             public TestStruct Val
             {
@@ -192,6 +218,9 @@ namespace TopLevel
                 int r = f[ts,ts];
                 f?[ts,ts]=123;
                 r = f?[ts,ts];
+
+                int result = Singleton<Foo>.instance.Test123(1,2);
+                Singleton<Foo>.instance = null;
                 return f;
             }
 

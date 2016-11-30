@@ -374,9 +374,19 @@ namespace RoslynTool.CsToLua
                 var leftOper = m_Model.GetOperation(assign.Left);
                 var leftSymbolInfo = m_Model.GetSymbolInfo(assign.Left);
                 var leftSym = leftSymbolInfo.Symbol;
+                var leftPsym = leftSym as IPropertySymbol;
+                var leftMemberAccess = assign.Left as MemberAccessExpressionSyntax;
                 var leftElementAccess = assign.Left as ElementAccessExpressionSyntax;
                 var leftCondAccess = assign.Left as ConditionalAccessExpressionSyntax;
-                VisitAssignment(ci, op, baseOp, assign, expTerminater, true, leftOper, leftSym, leftElementAccess, leftCondAccess);
+
+                bool staticPropUseExplicitTypeParam = false;
+                if (null != leftMemberAccess && null != leftPsym && leftPsym.IsStatic) {
+                    if (m_SymbolTable.IsUseExplicitTypeParam(leftPsym.GetMethod) || m_SymbolTable.IsUseExplicitTypeParam(leftPsym.SetMethod)) {
+                        staticPropUseExplicitTypeParam = true;
+                    }
+                }
+
+                VisitAssignment(ci, op, baseOp, assign, expTerminater, true, leftOper, leftSym, leftPsym, leftMemberAccess, leftElementAccess, leftCondAccess, staticPropUseExplicitTypeParam);
                 var oper = m_Model.GetOperation(assign.Right);
                 if (null != leftSym && leftSym.Kind == SymbolKind.Local && null != oper && null != oper.Type && oper.Type.IsValueType && oper.Type.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
                     CodeBuilder.AppendFormat("{0}{1} = wrapvaluetype({2});", GetIndentString(), leftSym.Name, leftSym.Name);
@@ -520,25 +530,36 @@ namespace RoslynTool.CsToLua
             }
             CodeBuilder.AppendLine(";");
         }
-        private void VisitAssignment(ClassInfo ci, string op, string baseOp, AssignmentExpressionSyntax assign, string expTerminater, bool toplevel, IOperation leftOper, ISymbol leftSym, ElementAccessExpressionSyntax leftElementAccess, ConditionalAccessExpressionSyntax leftCondAccess)
+        private void VisitAssignment(ClassInfo ci, string op, string baseOp, AssignmentExpressionSyntax assign, string expTerminater, bool toplevel, IOperation leftOper, ISymbol leftSym, IPropertySymbol leftPsym, MemberAccessExpressionSyntax leftMemberAccess, ElementAccessExpressionSyntax leftElementAccess, ConditionalAccessExpressionSyntax leftCondAccess, bool staticPropUseExplicitTypeParam)
         {
             var assignOper = m_Model.GetOperation(assign);
             InvocationExpressionSyntax invocation = assign.Right as InvocationExpressionSyntax;
-            if (null != leftElementAccess) {
-                var propSym = leftSym as IPropertySymbol;
-                if (null != propSym && propSym.IsIndexer) {
-                    CodeBuilder.AppendFormat("set{0}{1}indexer(", propSym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", propSym.IsStatic ? "static" : "instance");
-                    if (propSym.IsStatic) {
-                        string fullName = ClassInfo.GetFullName(propSym.ContainingType);
+            if (staticPropUseExplicitTypeParam) {
+                string className = ClassInfo.GetFullName(leftPsym.ContainingType);
+                string manglingName = NameMangling(leftPsym.SetMethod);
+                InvocationInfo ii = new InvocationInfo();
+                List<ExpressionSyntax> args = new List<ExpressionSyntax> { assign.Right };
+                ii.Init(leftPsym.SetMethod, m_SymbolTable.AssemblySymbol, args, true, m_Model);
+                CodeBuilder.Append(className);
+                CodeBuilder.Append(".");
+                CodeBuilder.Append(manglingName);
+                CodeBuilder.Append("(");
+                OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
+                CodeBuilder.Append(")");
+            } else if (null != leftElementAccess) {
+                if (null != leftPsym && leftPsym.IsIndexer) {
+                    CodeBuilder.AppendFormat("set{0}{1}indexer(", leftPsym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", leftPsym.IsStatic ? "static" : "instance");
+                    if (leftPsym.IsStatic) {
+                        string fullName = ClassInfo.GetFullName(leftPsym.ContainingType);
                         CodeBuilder.Append(fullName);
                     } else {
                         VisitExpressionSyntax(leftElementAccess.Expression);
                     }
                     CodeBuilder.Append(", ");
-                    string manglingName = NameMangling(propSym.SetMethod);
+                    string manglingName = NameMangling(leftPsym.SetMethod);
                     CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
                     InvocationInfo ii = new InvocationInfo();
-                    ii.Init(propSym.GetMethod, m_SymbolTable.AssemblySymbol, leftElementAccess.ArgumentList, m_SymbolTable.IsUseExplicitTypeParam(propSym.SetMethod), m_Model);
+                    ii.Init(leftPsym.SetMethod, m_SymbolTable.AssemblySymbol, leftElementAccess.ArgumentList, m_SymbolTable.IsUseExplicitTypeParam(leftPsym.SetMethod), m_Model);
                     OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
                     CodeBuilder.Append(", ");
                     VisitExpressionSyntax(assign.Right);

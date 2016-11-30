@@ -34,7 +34,12 @@ local arr = wraparray{};
 arr[1]=1231;
 arr[2]=3456;
 
-print(arr.Count);
+local tb = {
+  abc = arr[1],
+  def = arr[2],
+};
+
+print(arr.Count,tb.abc,tb.def);
 
 --require "bit";
 

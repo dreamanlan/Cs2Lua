@@ -256,6 +256,7 @@ namespace RoslynTool.CsToLua
 
             bool noimpl = true;
             foreach (var accessor in node.AccessorList.Accessors) {
+                var sym = m_Model.GetDeclaredSymbol(accessor);
                 if (null != accessor.Body) {
                     noimpl = false;
                     break;
@@ -282,9 +283,14 @@ namespace RoslynTool.CsToLua
 
                 ci.CurrentCodeBuilder = curBuilder;
             } else {
-                CodeBuilder.AppendFormat("{0}{1} = {{", GetIndentString(), node.Identifier.Text);
-                CodeBuilder.AppendLine();
-                ++m_Indent;
+                StringBuilder curBuilder = ci.CurrentCodeBuilder;
+                if(declSym.IsStatic) {
+                    ci.CurrentCodeBuilder = ci.StaticFunctionCodeBuilder;
+                    --m_Indent;
+                    --m_Indent;
+                } else {
+                    ci.CurrentCodeBuilder = ci.InstanceFunctionCodeBuilder;
+                }
                 foreach (var accessor in node.AccessorList.Accessors) {
                     var sym = m_Model.GetDeclaredSymbol(accessor);
                     if (null != sym) {
@@ -292,12 +298,16 @@ namespace RoslynTool.CsToLua
                         mi.Init(sym, m_SymbolTable.AssemblySymbol, accessor, m_SymbolTable.IsUseExplicitTypeParam(sym));
                         m_MethodInfoStack.Push(mi);
 
-                        if (mi.SemanticInfo.IsStatic && mi.UseExplicitTypeParam) {
-                            Log(node, "typeof/as/is/cast(GenericTypeParameter) or new GenericTypeParameter() can't be used in static property accessor !");
-                        }
-
+                        string manglingName = NameMangling(sym);
                         string keyword = accessor.Keyword.Text;
-                        CodeBuilder.AppendFormat("{0}{1} = {2}function({3})", GetIndentString(), keyword, mi.ExistYield ? "wrapenumerable(" : string.Empty, keyword == "get" ? "this" : "this, value");
+                        string paramStr = string.Join(", ", mi.ParamNames.ToArray());
+                        if (!declSym.IsStatic) {
+                            if (string.IsNullOrEmpty(paramStr))
+                                paramStr = "this";
+                            else
+                                paramStr = "this, " + paramStr;
+                        }
+                        CodeBuilder.AppendFormat("{0}{1} = {2}function({3})", GetIndentString(), manglingName, mi.ExistYield ? "wrapenumerable(" : string.Empty, paramStr);
                         CodeBuilder.AppendLine();
                         ++m_Indent;
                         if (null != accessor.Body) {
@@ -311,6 +321,24 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.AppendLine();
 
                         m_MethodInfoStack.Pop();
+                    }
+                }
+                if(declSym.IsStatic) {
+                    ++m_Indent;
+                    ++m_Indent;
+                }
+                ci.CurrentCodeBuilder = curBuilder;
+
+                CodeBuilder.AppendFormat("{0}{1} = {{", GetIndentString(), declSym.Name);
+                CodeBuilder.AppendLine();
+                ++m_Indent;
+                foreach (var accessor in node.AccessorList.Accessors) {
+                    var sym = m_Model.GetDeclaredSymbol(accessor);
+                    if (null != sym) {
+                        string manglingName = NameMangling(sym);
+                        string keyword = accessor.Keyword.Text;
+                        CodeBuilder.AppendFormat("{0}{1} = {2}.{3},", GetIndentString(), keyword, declSym.IsStatic ? "static" : "instance_methods", manglingName);
+                        CodeBuilder.AppendLine();
                     }
                 }
                 --m_Indent;
@@ -332,10 +360,15 @@ namespace RoslynTool.CsToLua
                 if (declSym.IsAbstract)
                     return;
             }
-
-            CodeBuilder.AppendFormat("{0}{1} = {{", GetIndentString(), node.Identifier.Text);
-            CodeBuilder.AppendLine();
-            ++m_Indent;
+            
+            StringBuilder curBuilder = ci.CurrentCodeBuilder;
+            if (declSym.IsStatic) {
+                ci.CurrentCodeBuilder = ci.StaticFunctionCodeBuilder;
+                --m_Indent;
+                --m_Indent;
+            } else {
+                ci.CurrentCodeBuilder = ci.InstanceFunctionCodeBuilder;
+            }
             foreach (var accessor in node.AccessorList.Accessors) {
                 var sym = m_Model.GetDeclaredSymbol(accessor);
                 if (null != sym) {
@@ -343,15 +376,26 @@ namespace RoslynTool.CsToLua
                     mi.Init(sym, m_SymbolTable.AssemblySymbol, accessor, m_SymbolTable.IsUseExplicitTypeParam(sym));
                     m_MethodInfoStack.Push(mi);
 
-                    if (mi.SemanticInfo.IsStatic && mi.UseExplicitTypeParam) {
+                    if (sym.IsStatic && mi.UseExplicitTypeParam) {
                         Log(node, "typeof/as/is/cast(GenericTypeParameter) or new GenericTypeParameter() can't be used in static event accessor !");
                     }
 
+                    string manglingName = NameMangling(sym);
                     string keyword = accessor.Keyword.Text;
-                    CodeBuilder.AppendFormat("{0}{1} = function({2})", GetIndentString(), keyword, "this, value");
+                    string paramStr = string.Join(", ", mi.ParamNames.ToArray());
+                    if(!declSym.IsStatic){
+                        if (string.IsNullOrEmpty(paramStr))
+                            paramStr = "this";
+                        else
+                            paramStr = "this, "+paramStr;
+                    }
+                    CodeBuilder.AppendFormat("{0}{1} = function({2})", GetIndentString(), manglingName, paramStr);
                     CodeBuilder.AppendLine();
                     ++m_Indent;
                     if (null != accessor.Body) {
+                        if (mi.ValueParams.Count > 0) {
+                            OutputWrapValueParams(CodeBuilder, mi);
+                        }
                         VisitBlock(accessor.Body);
                     }
                     --m_Indent;
@@ -359,6 +403,24 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendLine();
 
                     m_MethodInfoStack.Pop();
+                }
+            }
+            if (declSym.IsStatic) {
+                ++m_Indent;
+                ++m_Indent;
+            }
+            ci.CurrentCodeBuilder = curBuilder;
+
+            CodeBuilder.AppendFormat("{0}{1} = {{", GetIndentString(), declSym.Name);
+            CodeBuilder.AppendLine();
+            ++m_Indent;
+            foreach (var accessor in node.AccessorList.Accessors) {
+                var sym = m_Model.GetDeclaredSymbol(accessor);
+                if (null != sym) {
+                    string manglingName = NameMangling(sym);
+                    string keyword = accessor.Keyword.Text;
+                    CodeBuilder.AppendFormat("{0}{1} = {2}.{3},", GetIndentString(), keyword, declSym.IsStatic ? "static" : "instance_methods", manglingName);
+                    CodeBuilder.AppendLine();
                 }
             }
             --m_Indent;
