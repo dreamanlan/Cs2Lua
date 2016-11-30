@@ -140,7 +140,9 @@ namespace SLua
 			propMethod["Table"] = toTable;
 			propMethod["Length"] = length;
 
-			LuaDLL.lua_createtable(l, 0, 6);
+            LuaDLL.lua_createtable(l, 0, 7);
+            LuaDLL.lua_pushstring(l, "LuaArray");
+            LuaDLL.lua_setfield(l, -2, "__fullname");
             LuaDLL.lua_pushstring(l, "LuaArray");
 			LuaDLL.lua_setfield(l, -2, "__typename");
 			pushValue(l, luaIndex);

@@ -517,7 +517,9 @@ namespace SLua
 
         static new public void init(IntPtr l)
         {
-            LuaDLL.lua_createtable(l, 0, 4);
+            LuaDLL.lua_createtable(l, 0, 5);
+            LuaDLL.lua_pushstring(l, "LuaVarObject");
+            LuaDLL.lua_setfield(l, -2, "__fullname");
             LuaDLL.lua_pushstring(l, "LuaVarObject");
             LuaDLL.lua_setfield(l, -2, "__typename");
             pushValue(l, luaIndex);
