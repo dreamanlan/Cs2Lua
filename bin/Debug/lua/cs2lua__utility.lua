@@ -837,9 +837,10 @@ function externdelegationremove(t, k, handler)
 end;
 
 function getstaticindexer(class, name, ...)
-	return 
+	return class[name](...);
 end;
 function getinstanceindexer(obj, name, ...)
+	return obj[name](obj, ...);
 end;
 
 function setstaticindexer(class, name, ...)
@@ -863,12 +864,17 @@ function getexterninstanceindexer(obj, name, ...)
   	  return obj[index+1];
   	elseif meta.__class == System.Collections.Generic.Dictionary_TKey_TValue then
       return obj[index];
+    elseif meta.__typename == "LuaArray" then
+    	return obj[index+1];
+    elseif meta.__typename == "LuaVarObject" then
+    	return obj[index];
+    else
+    	return obj:getItem(index);
     end;
   end;
 end;
 
-function setexternstaticindexer(class, name, ...)
-	
+function setexternstaticindexer(class, name, ...)	
   return nil;
 end;
 function setexterninstanceindexer(obj, name, ...)
@@ -881,37 +887,43 @@ function setexterninstanceindexer(obj, name, ...)
     if meta.__class == System.Collections.Generic.List_T then
       obj[index+1] = val;
     elseif meta.__class == System.Collections.Generic.Dictionary_TKey_TValue then      
-      obj[index] = val;  
+      obj[index] = val;
+    elseif meta.__typename == "LuaArray" then
+    	obj[index+1] = val;
+    elseif meta.__typename == "LuaVarObject" then
+    	obj[index] = val;
+    else
+    	obj:setItem(index, val);
     end;
   end;
   return nil;
 end;
 
-function getstaticelement(class, ...)
+function getstaticelement(class, name, ...)
   return nil;
 end;
-function getinstanceelement(obj, ...)
+function getinstanceelement(obj, name, ...)
   return nil;
 end;
-function setstaticelement(class, ...)
+function setstaticelement(class, name, ...)
   --为了适应表达式内嵌赋值，这个函数需要返回值
   return nil;
 end;
-function setinstanceelement(obj, ...)
+function setinstanceelement(obj, name, ...)
   --为了适应表达式内嵌赋值，这个函数需要返回值
   return nil;
 end;
-function getexternstaticelement(class, ...)
+function getexternstaticelement(class, name, ...)
   return nil;
 end;
-function getexterninstanceelement(obj, ...)
+function getexterninstanceelement(obj, name, ...)
   return nil;
 end;
-function setexternstaticelement(class, ...)
+function setexternstaticelement(class, name, ...)
   --为了适应表达式内嵌赋值，这个函数需要返回值
   return nil;
 end;
-function setexterninstanceelement(obj, ...)
+function setexterninstanceelement(obj, name, ...)
   --为了适应表达式内嵌赋值，这个函数需要返回值
   return nil;
 end;
