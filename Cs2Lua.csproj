@@ -56,6 +56,12 @@
   <ItemGroup>
     <Compile Include="AnalysisHelper\BreakAnalysis.cs" />
     <Compile Include="AnalysisHelper\YieldAnalysis.cs" />
+    <Compile Include="CsToLua\CsToLua_CoreSyntax.cs" />
+    <Compile Include="CsToLua\CsToLua_Exception.cs" />
+    <Compile Include="CsToLua\CsToLua_Expression.cs" />
+    <Compile Include="CsToLua\CsToLua_Misc.cs" />
+    <Compile Include="CsToLua\CsToLua_Object.cs" />
+    <Compile Include="CsToLua\CsToLua_Statement.cs" />
     <Compile Include="CsToLua\Logger.cs" />
     <Compile Include="Info\ClassInfo.cs" />
     <Compile Include="AnalysisHelper\ContinueAnalysis.cs" />
@@ -64,6 +70,10 @@
     <Compile Include="CsToLua\CsToLuaUnimplemented.cs" />
     <Compile Include="AnalysisHelper\FieldInitializerAnalysis.cs" />
     <Compile Include="AnalysisHelper\LuaKeywordsReplacer.cs" />
+    <Compile Include="Info\ClassSymbolInfo.cs" />
+    <Compile Include="Info\InvocationInfo.cs" />
+    <Compile Include="Info\MethodInfo.cs" />
+    <Compile Include="Info\MiscInfo.cs" />
     <Compile Include="Info\SymbolTable.cs" />
     <Compile Include="AnalysisHelper\MethodAnalysis.cs" />
     <Compile Include="Program.cs" />
