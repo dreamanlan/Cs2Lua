@@ -128,6 +128,7 @@ TopLevel.SecondLevel.Foo = {
 				local v = nil;
 				v = 1;
 				return 2, v;
+				return v;
 			end,
 			TestValueArg = function(this, ts)
 				ts = wrapvaluetype(ts);

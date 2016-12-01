@@ -222,12 +222,14 @@ namespace RoslynTool.CsToLua
             if (null != node.Body) {
                 VisitBlock(node.Body);
             }
-            if (mi.ReturnParamNames.Count > 0) {
-                CodeBuilder.AppendFormat("{0}return this, {1};", GetIndentString(), string.Join(", ", mi.ReturnParamNames));
-                CodeBuilder.AppendLine();
-            } else if (!isStatic) {
-                CodeBuilder.AppendFormat("{0}return this;", GetIndentString());
-                CodeBuilder.AppendLine();
+            if (!mi.ExistTopLevelReturn) {
+                if (mi.ReturnParamNames.Count > 0) {
+                    CodeBuilder.AppendFormat("{0}return this, {1};", GetIndentString(), string.Join(", ", mi.ReturnParamNames));
+                    CodeBuilder.AppendLine();
+                } else if (!isStatic) {
+                    CodeBuilder.AppendFormat("{0}return this;", GetIndentString());
+                    CodeBuilder.AppendLine();
+                }
             }
             --m_Indent;
             CodeBuilder.AppendFormat("{0}end,", GetIndentString());

@@ -38,7 +38,7 @@ TopLevel.Singleton_T = {
 			ctor = function(this, T)
 				if (TopLevel.Singleton_T.ms_instance ~= nil) then
 					UnityEngine.Debug.LogError(wrapstring("Cannot have two instances in singleton"));
-					return ;
+					return this;
 				end;
 				TopLevel.Singleton_T.ms_instance = typecast(typecast(this, System.Object), T);
 				return this;

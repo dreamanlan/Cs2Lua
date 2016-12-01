@@ -46,17 +46,24 @@ namespace RoslynTool.CsToLua
         public override void VisitReturnStatement(ReturnStatementSyntax node)
         {
             MethodInfo mi = m_MethodInfoStack.Peek();
-            mi.ExistReturn = true;
-
+            mi.ExistTopLevelReturn = IsLastNodeOfMethod(node);
+            
             bool isLastNode = IsLastNodeOfParent(node);
             if (!isLastNode) {
                 CodeBuilder.AppendFormat("{0}do", GetIndentString());
                 CodeBuilder.AppendLine();
             }
 
-            CodeBuilder.AppendFormat("{0}return ", GetIndentString());
-            string prestr = "";
+            string prestr;
+            if (mi.SemanticInfo.MethodKind == MethodKind.Constructor) {
+                CodeBuilder.AppendFormat("{0}return this", GetIndentString());
+                prestr = ", ";
+            } else {
+                CodeBuilder.AppendFormat("{0}return ", GetIndentString());
+                prestr = string.Empty;
+            }
             if (null != node.Expression) {
+                CodeBuilder.Append(prestr);
                 VisitExpressionSyntax(node.Expression);
                 prestr = ", ";
             }
@@ -415,7 +422,6 @@ namespace RoslynTool.CsToLua
         public override void VisitYieldStatement(YieldStatementSyntax node)
         {
             MethodInfo mi = m_MethodInfoStack.Peek();
-            mi.ExistReturn = true;
             mi.ExistYield = true;
 
             if (node.ReturnOrBreakKeyword.Text == "return") {

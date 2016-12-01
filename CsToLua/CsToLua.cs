@@ -363,6 +363,28 @@ namespace RoslynTool.CsToLua
             }
             return null;
         }
+        private bool IsLastNodeOfMethod(SyntaxNode node)
+        {
+            bool ret = false;
+            var parent = node.Parent;
+            while (null != parent && parent.IsKind(SyntaxKind.Block)) {
+                parent = parent.Parent;
+            }
+            if (null != node && null != parent && (parent.IsKind(SyntaxKind.MethodDeclaration) || parent.IsKind(SyntaxKind.ConstructorDeclaration))) {
+                int ix = -1;
+                int ct = 0;
+                var nodes = parent.ChildNodes();
+                var enumer = nodes.GetEnumerator();
+                while (enumer.MoveNext()) {
+                    if (enumer.Current == node) {
+                        ix = ct;
+                    }
+                    ++ct;
+                }
+                ret = ix == ct - 1;
+            }
+            return ret;
+        }
         private bool IsLastNodeOfParent(SyntaxNode node)
         {
             var parent = node.Parent;

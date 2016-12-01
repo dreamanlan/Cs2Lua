@@ -23,8 +23,8 @@ namespace RoslynTool.CsToLua
         internal string OriginalParamsName = string.Empty;
         internal bool ParamsIsValueType = false;
         internal bool ParamsIsExternValueType = false;
-        internal bool ExistReturn = false;
         internal bool ExistYield = false;
+        internal bool ExistTopLevelReturn = false;
         internal bool UseExplicitTypeParam = false;
 
         internal IMethodSymbol SemanticInfo = null;
@@ -41,8 +41,8 @@ namespace RoslynTool.CsToLua
             RefParamNames.Clear();
             OutParamNames.Clear();
             OriginalParamsName = string.Empty;
-            ExistReturn = false;
             ExistYield = false;
+            ExistTopLevelReturn = false;
             UseExplicitTypeParam = useExplicitTypeParam;
 
             SemanticInfo = sym;

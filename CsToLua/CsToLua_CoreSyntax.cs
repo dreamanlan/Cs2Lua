@@ -240,7 +240,7 @@ namespace RoslynTool.CsToLua
                 VisitExpressionSyntax(expressionBody.Expression);
                 CodeBuilder.AppendLine(";");
             }
-            if (!mi.ExistReturn && mi.ReturnParamNames.Count > 0) {
+            if (!mi.ExistTopLevelReturn && mi.ReturnParamNames.Count > 0) {
                 CodeBuilder.AppendFormat("{0}return {1};", GetIndentString(), string.Join(", ", mi.ReturnParamNames));
                 CodeBuilder.AppendLine();
             }
