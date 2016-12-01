@@ -381,7 +381,7 @@ namespace RoslynTool.CsToLua
 
                 bool staticPropUseExplicitTypeParam = false;
                 if (null != leftMemberAccess && null != leftPsym && leftPsym.IsStatic) {
-                    if (m_SymbolTable.IsUseExplicitTypeParam(leftPsym.GetMethod) || m_SymbolTable.IsUseExplicitTypeParam(leftPsym.SetMethod)) {
+                    if (null != leftPsym.GetMethod && m_SymbolTable.IsUseExplicitTypeParam(leftPsym.GetMethod) || null != leftPsym.SetMethod && m_SymbolTable.IsUseExplicitTypeParam(leftPsym.SetMethod)) {
                         staticPropUseExplicitTypeParam = true;
                     }
                 }
