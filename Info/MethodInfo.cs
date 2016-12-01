@@ -70,7 +70,7 @@ namespace RoslynTool.CsToLua
             foreach (var param in sym.Parameters) {
                 if (param.IsParams) {
                     var arrTypeSym = param.Type as IArrayTypeSymbol;
-                    if (null != arrTypeSym && arrTypeSym.ElementType.IsValueType) {
+                    if (null != arrTypeSym && arrTypeSym.ElementType.TypeKind == TypeKind.Struct) {
                         string ns = ClassInfo.GetNamespaces(arrTypeSym.ElementType);
                         if (arrTypeSym.ElementType.ContainingAssembly == assemblySym)
                             ParamsIsValueType = true;
@@ -91,7 +91,7 @@ namespace RoslynTool.CsToLua
                     OutParamNames.Add(param.Name);
                     ReturnParamNames.Add(param.Name);
                 } else {
-                    if (param.Type.IsValueType) {
+                    if (param.Type.TypeKind == TypeKind.Struct) {
                         string ns = ClassInfo.GetNamespaces(param.Type);
                         if (param.Type.ContainingAssembly == assemblySym)
                             ValueParams.Add(ParamNames.Count);

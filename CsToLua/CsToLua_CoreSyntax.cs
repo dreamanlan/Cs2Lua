@@ -388,7 +388,7 @@ namespace RoslynTool.CsToLua
 
                 VisitAssignment(ci, op, baseOp, assign, expTerminater, true, leftOper, leftSym, leftPsym, leftMemberAccess, leftElementAccess, leftCondAccess, staticPropUseExplicitTypeParam);
                 var oper = m_Model.GetOperation(assign.Right);
-                if (null != leftSym && leftSym.Kind == SymbolKind.Local && null != oper && null != oper.Type && oper.Type.IsValueType && oper.Type.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
+                if (null != leftSym && leftSym.Kind == SymbolKind.Local && null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && oper.Type.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
                     CodeBuilder.AppendFormat("{0}{1} = wrapvaluetype({2});", GetIndentString(), leftSym.Name, leftSym.Name);
                     CodeBuilder.AppendLine();
                 }
