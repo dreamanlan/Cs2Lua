@@ -19,7 +19,7 @@ UIDemo.UICommonHeader = {
 			return ;
 		end;
 		pUICommonHeader:SetTitle(strTitle);
-		delegationset(pUICommonHeader, "OnBackBtn", pHander);
+		delegationset(pUICommonHeader, "nil", "OnBackBtn", pHander);
 	end,
 	Hide = function()
 			end,
@@ -89,10 +89,10 @@ UIDemo.UICommonHeader = {
 									end;
 			end,
 			OnFireEvent = function(this, key, param1, param2)
-				local __compiler_switch_692 = key;
-				if __compiler_switch_692 == typecast(EventDef.Character_MailChanged, System.UInt32) then
+				local __compiler_switch_703 = key;
+				if __compiler_switch_703 == typecast(EventDef.Character_MailChanged, System.UInt32) then
 					this:UpdateMailUI();
-				elseif __compiler_switch_692 == typecast(EventDef.Character_MoneyChanged, System.UInt32) then
+				elseif __compiler_switch_703 == typecast(EventDef.Character_MoneyChanged, System.UInt32) then
 					this:UpdateMoneyUI();
 				end;
 				return false;
@@ -126,13 +126,13 @@ UIDemo.UICommonHeader = {
 		end;
 		local instance_props = nil;
 		local instance_events = nil;
-		local instance_interfaces = {
+		local interfaces = {
 			"IEventListener",
 		};
 
-		local instance_interface_map = nil;
+		local interface_map = nil;
 
-		return defineclass(UnityEngine.MonoBehaviour, "UIDemo.UICommonHeader", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, instance_interfaces, instance_interface_map, false);
+		return defineclass(UnityEngine.MonoBehaviour, "UIDemo.UICommonHeader", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
 

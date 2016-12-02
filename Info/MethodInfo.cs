@@ -30,12 +30,13 @@ namespace RoslynTool.CsToLua
         internal IMethodSymbol SemanticInfo = null;
         internal IPropertySymbol PropertySemanticInfo = null;
 
-        internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, SyntaxNode node)
+        internal void Init(IMethodSymbol sym, SyntaxNode node)
         {
-            Init(sym, assemblySym, node, false);
+            Init(sym, node, false);
         }
-        internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, SyntaxNode node, bool useExplicitTypeParam)
+        internal void Init(IMethodSymbol sym, SyntaxNode node, bool useExplicitTypeParam)
         {
+            IAssemblySymbol assemblySym = SymbolTable.Instance.AssemblySymbol;
             ParamNames.Clear();
             ReturnParamNames.Clear();
             RefParamNames.Clear();

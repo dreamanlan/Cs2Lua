@@ -26,10 +26,10 @@ TopLevel.SecondLevel.Foo = {
 		f.Val = newobject(TopLevel.TestStruct, "ctor", {});
 		local ts; ts = f.Val;
 		ts = wrapvaluetype(ts);
-		setinstanceindexer(f, "set_Item", ts, ts, 123);
-		local r; r = getinstanceindexer(f, "get_Item", ts, ts);
-		condaccess(f, setinstanceindexer(f, "set_Item", ts, ts, 123));
-		r = condaccess(f, getinstanceindexer(f, "get_Item", ts, ts));
+		setinstanceindexer(f, "nil", "set_Item", ts, ts, 123);
+		local r; r = getinstanceindexer(f, "nil", "get_Item", ts, ts);
+		condaccess(f, setinstanceindexer(f, "nil", "set_Item", ts, ts, 123));
+		r = condaccess(f, getinstanceindexer(f, "nil", "get_Item", ts, ts));
 		local result; result = TopLevel.Singleton_T.get_instance(TopLevel.SecondLevel.Foo):Test123(1, 2);
 		TopLevel.Singleton_T.set_instance(TopLevel.SecondLevel.Foo, nil);
 		return f;
@@ -128,8 +128,7 @@ TopLevel.SecondLevel.Foo = {
 			TestLocal = function(this)
 				local v = nil;
 				local ir; ir = newobject(TopLevel.Runnable, "ctor", {});
-				ir:TopLevel_IRunnable_Test();
-				v = 1;
+								v = 1;
 				return 2, v;
 			end,
 			TestValueArg = function(this, ts)
@@ -155,10 +154,10 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			TestSwitch = function(this)
 				local i; i = 10;
-				local __compiler_switch_337 = i;
-				if __compiler_switch_337 == 1 then
+				local __compiler_switch_348 = i;
+				if __compiler_switch_348 == 1 then
 					return ;
-				elseif __compiler_switch_337 == 2 then
+				elseif __compiler_switch_348 == 2 then
 					return ;
 				else
 					return ;
@@ -208,10 +207,10 @@ TopLevel.SecondLevel.Foo = {
 			},
 		};
 
-		local instance_interfaces = nil;
-		local instance_interface_map = nil;
+		local interfaces = nil;
+		local interface_map = nil;
 
-		return defineclass(TopLevel.SecondLevel.FooBase, "TopLevel.SecondLevel.Foo", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, instance_interfaces, instance_interface_map, false);
+		return defineclass(TopLevel.SecondLevel.FooBase, "TopLevel.SecondLevel.Foo", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
 
@@ -244,10 +243,10 @@ TopLevel.SecondLevel.Foo.Test1 = {
 		end;
 		local instance_props = nil;
 		local instance_events = nil;
-		local instance_interfaces = nil;
-		local instance_interface_map = nil;
+		local interfaces = nil;
+		local interface_map = nil;
 
-		return defineclass(nil, "TopLevel.SecondLevel.Foo.Test1", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, instance_interfaces, instance_interface_map, false);
+		return defineclass(nil, "TopLevel.SecondLevel.Foo.Test1", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
 
@@ -280,10 +279,10 @@ TopLevel.SecondLevel.Foo.Test2 = {
 		end;
 		local instance_props = nil;
 		local instance_events = nil;
-		local instance_interfaces = nil;
-		local instance_interface_map = nil;
+		local interfaces = nil;
+		local interface_map = nil;
 
-		return defineclass(nil, "TopLevel.SecondLevel.Foo.Test2", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, instance_interfaces, instance_interface_map, false);
+		return defineclass(nil, "TopLevel.SecondLevel.Foo.Test2", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
 
@@ -318,10 +317,10 @@ TopLevel.SecondLevel.Foo.FooChild = {
 		end;
 		local instance_props = nil;
 		local instance_events = nil;
-		local instance_interfaces = nil;
-		local instance_interface_map = nil;
+		local interfaces = nil;
+		local interface_map = nil;
 
-		return defineclass(nil, "TopLevel.SecondLevel.Foo.FooChild", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, instance_interfaces, instance_interface_map, false);
+		return defineclass(nil, "TopLevel.SecondLevel.Foo.FooChild", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
 

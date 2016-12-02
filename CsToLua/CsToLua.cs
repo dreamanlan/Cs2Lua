@@ -12,25 +12,31 @@ namespace RoslynTool.CsToLua
 {
     internal sealed partial class CsLuaTranslater : CSharpSyntaxVisitor
     {
-        public Dictionary<string, List<ClassInfo>> ToplevelClasses
+        internal enum SpecialAssignmentType
+        {
+            None = 0,
+            StaticPropUseExplicitTypeParams,
+            PropExplicitImplementInterface,
+        }
+        internal Dictionary<string, List<ClassInfo>> ToplevelClasses
         {
             get { return m_ToplevelClasses; }
         }
-        public bool HaveError
+        internal bool HaveError
         {
             get
             {
                 return Logger.Instance.HaveError;
             }
         }
-        public string ErrorLog
+        internal string ErrorLog
         {
             get
             {
                 return Logger.Instance.ErrorLog;
             }
         }
-        public void Translate(SyntaxNode node)
+        internal void Translate(SyntaxNode node)
         {
             Visit(node);
             if (null != m_LastToplevelClass) {
@@ -38,19 +44,94 @@ namespace RoslynTool.CsToLua
                 m_ToplevelCodeBuilder.Clear();
             }
         }        
-        public void SaveLog(TextWriter writer)
+        internal void SaveLog(TextWriter writer)
         {
             Logger.Instance.SaveLog(writer);
         }
-        public void SaveLog(string path)
+        internal void SaveLog(string path)
         {
             Logger.Instance.SaveLog(path);
         }
+        internal string NameMangling(IMethodSymbol sym)
+        {
+            return m_SymbolTable.NameMangling(sym);
+        }
+        internal bool CheckExplicitInterfaceAccess(ISymbol sym)
+        {
+            string nameOfIntf = null;
+            string mname = null;
+            return CheckExplicitInterfaceAccess(sym, ref nameOfIntf, ref mname);
+        }
+        internal bool CheckExplicitInterfaceAccess(ISymbol sym, ref string nameOfIntf)
+        {
+            string mname = null;
+            return CheckExplicitInterfaceAccess(sym, ref nameOfIntf, ref mname);
+        }
+        internal bool CheckExplicitInterfaceAccess(ISymbol sym, ref string nameOfIntf, ref string mname)
+        {
+            bool ret = false;
+            if (sym.ContainingType.TypeKind == TypeKind.Interface) {
+                string fn = ClassInfo.GetFullName(sym.ContainingType);
+                ClassSymbolInfo csi;
+                if (SymbolTable.Instance.ClassSymbols.TryGetValue(fn, out csi)) {
+                    switch (sym.Kind){
+                        case SymbolKind.Method:
+                            IMethodSymbol msym = sym as IMethodSymbol;
+                            if (csi.ExplicitInterfaceImplementationMethods.Contains(msym)) {
+                                ret = true;
+                                if (null != nameOfIntf) {
+                                    nameOfIntf = fn.Replace(".", "_");
+                                }
+                                if (null != mname) {
+                                    mname = NameMangling(msym);
+                                }
+                            }
+                            break;
+                        case SymbolKind.Property:
+                            IPropertySymbol psym = sym as IPropertySymbol;
+                            if (csi.ExplicitInterfaceImplementationProperties.Contains(psym)) {
+                                ret = true;
+                                if (null != nameOfIntf) {
+                                    nameOfIntf = fn.Replace(".", "_");
+                                }
+                                if (null != mname) {
+                                    mname = SymbolTable.GetPropertyName(psym);
+                                }
+                            }
+                            break;
+                        case SymbolKind.Event:
+                            IEventSymbol esym = sym as IEventSymbol;
+                            if (csi.ExplicitInterfaceImplementationEvents.Contains(esym)) {
+                                ret = true;
+                                if (null != nameOfIntf) {
+                                    nameOfIntf = fn.Replace(".", "_");
+                                }
+                                if (null != mname) {
+                                    mname = SymbolTable.GetEventName(esym);
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+            return ret;
+        }
+        internal void OutputArgumentList(IList<ExpressionSyntax> args, IList<ITypeSymbol> typeArgs, bool arrayToParams)
+        {
+            if (typeArgs.Count > 0) {
+                OutputTypeArgumentList(typeArgs);
+            }
+            if (args.Count > 0) {
+                if (typeArgs.Count > 0)
+                    CodeBuilder.Append(", ");
+                OutputExpressionList(args, arrayToParams);
+            }
+        }
 
-        public CsLuaTranslater(SemanticModel model, SymbolTable symbolTable, bool enableInherit)
+        internal CsLuaTranslater(SemanticModel model, bool enableInherit)
         {
             m_Model = model;
-            m_SymbolTable = symbolTable;
+            m_SymbolTable = SymbolTable.Instance;
             m_EnableInherit = enableInherit;
         }
 
@@ -73,10 +154,6 @@ namespace RoslynTool.CsToLua
         private void ReportIllegalType(ITypeSymbol typeSym)
         {
             Logger.Instance.ReportIllegalType(typeSym);
-        }
-        private string NameMangling(IMethodSymbol sym)
-        {
-            return m_SymbolTable.NameMangling(sym);
         }
         private void TryConvertTypeArgmentList(IMethodSymbol sym, int argCount)
         {
@@ -105,17 +182,6 @@ namespace RoslynTool.CsToLua
                     codeBuilder.AppendFormat("{0}{1} = wrapexternvaluetype({2});", GetIndentString(), name, name);
                     codeBuilder.AppendLine();
                 }
-            }
-        }
-        private void OutputArgumentList(IList<ExpressionSyntax> args, IList<ITypeSymbol> typeArgs, bool arrayToParams)
-        {
-            if (typeArgs.Count > 0) {
-                OutputTypeArgumentList(typeArgs);
-            }
-            if (args.Count > 0) {
-                if (typeArgs.Count > 0)
-                    CodeBuilder.Append(", ");
-                OutputExpressionList(args, arrayToParams);
             }
         }
         private void OutputExpressionList(IList<ExpressionSyntax> args)

@@ -62,10 +62,10 @@ TopLevel.SecondLevel.GenericClass_T = {
 		end;
 		local instance_props = nil;
 		local instance_events = nil;
-		local instance_interfaces = nil;
-		local instance_interface_map = nil;
+		local interfaces = nil;
+		local interface_map = nil;
 
-		return defineclass(nil, "TopLevel.SecondLevel.GenericClass_T", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, instance_interfaces, instance_interface_map, false);
+		return defineclass(nil, "TopLevel.SecondLevel.GenericClass_T", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
 
@@ -132,10 +132,10 @@ TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT = {
 		end;
 		local instance_props = nil;
 		local instance_events = nil;
-		local instance_interfaces = nil;
-		local instance_interface_map = nil;
+		local interfaces = nil;
+		local interface_map = nil;
 
-		return defineclass(nil, "TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, instance_interfaces, instance_interface_map, false);
+		return defineclass(nil, "TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
 

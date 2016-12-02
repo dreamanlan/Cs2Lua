@@ -62,11 +62,11 @@ Extentions = {
 			list:Add(item);
 			return ;
 		end;
-		if (getexterninstanceindexer(list, "get_Item", (list.Count - 1)):System_IComparable_T_CompareTo(item) <= 0) then
+		if (getexterninstanceindexer(list, "nil", "get_Item", (list.Count - 1)):CompareTo(item) <= 0) then
 			list:Add(item);
 			return ;
 		end;
-		if (getexterninstanceindexer(list, "get_Item", 0):System_IComparable_T_CompareTo(item) >= 0) then
+		if (getexterninstanceindexer(list, "nil", "get_Item", 0):CompareTo(item) >= 0) then
 			list:Insert(0, item);
 			return ;
 		end;

@@ -18,7 +18,15 @@ TopLevel.TestRunnable = {
 		local instance_methods = {
 			Test = function(this)
 				local f; f = newobject(TopLevel.Runnable, "ctor", {});
-				f:TopLevel_IRunnable_Test();
+				invokewithinterface(f, "TopLevel_IRunnable0", "Test");
+				local i; i = getinstanceindexer(f, "nil", "get_Item", 0);
+				setinstanceindexer(f, "nil", "set_Item", 0, i);
+				setwithinterface(f, "TopLevel_IRunnable_T", "TestProp", i);
+				i = getwithinterface(f, "TopLevel_IRunnable_T", "TestProp");
+				local a; a = delegationwrap((function()
+				end));
+				delegationadd(f, "TopLevel_IRunnable_T", "OnAction", a);
+				delegationremove(f, "TopLevel_IRunnable_T", "OnAction", a);
 			end,
 			ctor = function(this)
 			end,
@@ -31,10 +39,10 @@ TopLevel.TestRunnable = {
 		end;
 		local instance_props = nil;
 		local instance_events = nil;
-		local instance_interfaces = nil;
-		local instance_interface_map = nil;
+		local interfaces = nil;
+		local interface_map = nil;
 
-		return defineclass(nil, "TopLevel.TestRunnable", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, instance_interfaces, instance_interface_map, false);
+		return defineclass(nil, "TopLevel.TestRunnable", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
 

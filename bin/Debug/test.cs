@@ -30,39 +30,43 @@ namespace TopLevel
         public int C;
     }
 
-    public interface IRunnable
+    public interface IRunnable0
     {
         void Test();
-        int this[int ix]{get;}
+    }
+
+    public interface IRunnable<T> : IRunnable0
+    {
+        void Test2();
+        int this[int ix]{get;set;}
         int TestProp {get;set;}
         event Action OnAction;
     }
 
-    public class Runnable : IRunnable
+    public class Runnable : IRunnable<int>
     {
-        /*
-        void IRunnable.Test()
+        void IRunnable0.Test()
         {
             LuaConsole.Print("test.");
         }
-        */
-        int IRunnable.TestProp
+        int IRunnable<int>.TestProp
         {
             get{return 1;}
             set{}
         }
-        int this[int ix]
+        public int this[int ix]
         {
             get
             {
                 return 1;
             }
+            set{}
         }
-        void Test()
+        public void Test2()
         {
 
         }
-        event Action IRunnable.OnAction
+        event Action IRunnable<int>.OnAction
         {
             add{}
             remove{}
@@ -73,8 +77,15 @@ namespace TopLevel
     {
         public void Test()
         {
-            IRunnable f = new Runnable();
+            IRunnable<int> f = new Runnable();
             f.Test();
+            int i = f[0];
+            f[0]=i;
+            f.TestProp = i;
+            i = f.TestProp;
+            Action a = ()=>{};
+            f.OnAction+=a;
+            f.OnAction-=a;
         }
     }
 

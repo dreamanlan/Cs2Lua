@@ -204,7 +204,7 @@ namespace RoslynTool.CsToLua
                         var msym = sym as IMethodSymbol;
                         string manglingName = NameMangling(msym);
                         var mi = new MethodInfo();
-                        mi.Init(msym, m_SymbolTable.AssemblySymbol, node);
+                        mi.Init(msym, node);
                         if (node.Parent is InvocationExpressionSyntax) {
                             if (sym.IsStatic) {
                                 CodeBuilder.AppendFormat("{0}.{1}", classInfo.Key, manglingName);

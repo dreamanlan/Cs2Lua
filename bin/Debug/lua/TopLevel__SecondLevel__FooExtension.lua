@@ -31,11 +31,11 @@ TopLevel.SecondLevel.FooExtension = {
 		local arr; arr = wraparray{1, 2, 3, 4, 56};
 		local v; v = arr[3];
 		local dict; dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", nil, {[1] = 2, [3] = 4});
-		local v1; v1 = condaccess(dict, getexterninstanceindexer(dict, "get_Item", 1));
+		local v1; v1 = condaccess(dict, getexterninstanceindexer(dict, "nil", "get_Item", 1));
 		local list; list = nil;
 		local l; l = condaccess(list, list.Count);
 		condaccess(list, listthis:Add(1));
-		local v2; v2 = condaccess(list, setexterninstanceindexer(list, "set_Item", 3, 1));
+		local v2; v2 = condaccess(list, setexterninstanceindexer(list, "nil", "set_Item", 3, 1));
 		local arr2; arr2 = wraparray{1, 2, 3, 4};
 		local v3; v3 = condaccess(arr2, arr2[3 + 1]);
 		condaccess(arr2, (function() arr2[4 + 1] = 345; return 345; end)());

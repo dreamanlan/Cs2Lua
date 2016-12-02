@@ -129,7 +129,7 @@ namespace RoslynTool.CsToLua
 
             bool isStatic = declSym.IsStatic;
             var mi = new MethodInfo();
-            mi.Init(declSym, m_SymbolTable.AssemblySymbol, node, m_SymbolTable.IsUseExplicitTypeParam(declSym));
+            mi.Init(declSym, node, m_SymbolTable.IsUseExplicitTypeParam(declSym));
             m_MethodInfoStack.Push(mi);
 
             string manglingName = NameMangling(declSym);
@@ -297,7 +297,7 @@ namespace RoslynTool.CsToLua
                     var sym = m_Model.GetDeclaredSymbol(accessor);
                     if (null != sym) {
                         var mi = new MethodInfo();
-                        mi.Init(sym, m_SymbolTable.AssemblySymbol, accessor, m_SymbolTable.IsUseExplicitTypeParam(sym));
+                        mi.Init(sym, accessor, m_SymbolTable.IsUseExplicitTypeParam(sym));
                         m_MethodInfoStack.Push(mi);
 
                         string manglingName = NameMangling(sym);
@@ -375,12 +375,8 @@ namespace RoslynTool.CsToLua
                 var sym = m_Model.GetDeclaredSymbol(accessor);
                 if (null != sym) {
                     var mi = new MethodInfo();
-                    mi.Init(sym, m_SymbolTable.AssemblySymbol, accessor, m_SymbolTable.IsUseExplicitTypeParam(sym));
+                    mi.Init(sym, accessor, m_SymbolTable.IsUseExplicitTypeParam(sym));
                     m_MethodInfoStack.Push(mi);
-
-                    if (sym.IsStatic && mi.UseExplicitTypeParam) {
-                        Log(node, "typeof/as/is/cast(GenericTypeParameter) or new GenericTypeParameter() can't be used in static event accessor !");
-                    }
 
                     string manglingName = NameMangling(sym);
                     string keyword = accessor.Keyword.Text;
@@ -464,7 +460,7 @@ namespace RoslynTool.CsToLua
                 var sym = m_Model.GetDeclaredSymbol(accessor);
                 if (null != sym) {
                     var mi = new MethodInfo();
-                    mi.Init(sym, m_SymbolTable.AssemblySymbol, accessor, m_SymbolTable.IsUseExplicitTypeParam(sym));
+                    mi.Init(sym, accessor, m_SymbolTable.IsUseExplicitTypeParam(sym));
                     m_MethodInfoStack.Push(mi);
 
                     string manglingName = NameMangling(sym);
@@ -533,7 +529,7 @@ namespace RoslynTool.CsToLua
             var sym = symInfo.Symbol as IMethodSymbol;
             if (null != sym) {
                 var mi = new MethodInfo();
-                mi.Init(sym, m_SymbolTable.AssemblySymbol, node);
+                mi.Init(sym, node);
                 m_MethodInfoStack.Push(mi);
 
                 CodeBuilder.Append("(function(");
@@ -564,7 +560,7 @@ namespace RoslynTool.CsToLua
             var sym = symInfo.Symbol as IMethodSymbol;
             if (null != sym) {
                 var mi = new MethodInfo();
-                mi.Init(sym, m_SymbolTable.AssemblySymbol, node);
+                mi.Init(sym, node);
                 m_MethodInfoStack.Push(mi);
 
                 CodeBuilder.Append("(function(");

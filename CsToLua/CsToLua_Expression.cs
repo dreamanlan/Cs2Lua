@@ -34,12 +34,12 @@ namespace RoslynTool.CsToLua
                 if (null != castOper) {
                     InvocationInfo ii = new InvocationInfo();
                     var arglist = new List<ExpressionSyntax>() { node.Left };
-                    ii.Init(msym, m_SymbolTable.AssemblySymbol, arglist, m_SymbolTable.IsUseExplicitTypeParam(msym), m_Model);
+                    ii.Init(msym, arglist, m_SymbolTable.IsUseExplicitTypeParam(msym), m_Model);
                     OutputOperatorInvoke(ii);
                 } else {
                     InvocationInfo ii = new InvocationInfo();
                     var arglist = new List<ExpressionSyntax>() { node.Left, node.Right };
-                    ii.Init(msym, m_SymbolTable.AssemblySymbol, arglist, m_SymbolTable.IsUseExplicitTypeParam(msym), m_Model);
+                    ii.Init(msym, arglist, m_SymbolTable.IsUseExplicitTypeParam(msym), m_Model);
                     OutputOperatorInvoke(ii);
                 }
             } else {
@@ -100,7 +100,7 @@ namespace RoslynTool.CsToLua
                 IMethodSymbol msym = oper.OperatorMethod;
                 InvocationInfo ii = new InvocationInfo();
                 var arglist = new List<ExpressionSyntax>() { node.Operand };
-                ii.Init(msym, m_SymbolTable.AssemblySymbol, arglist, m_SymbolTable.IsUseExplicitTypeParam(msym), m_Model);
+                ii.Init(msym, arglist, m_SymbolTable.IsUseExplicitTypeParam(msym), m_Model);
                 OutputOperatorInvoke(ii);
             } else {
                 string op = node.OperatorToken.Text;
@@ -137,7 +137,7 @@ namespace RoslynTool.CsToLua
                 IMethodSymbol msym = oper.OperatorMethod;
                 InvocationInfo ii = new InvocationInfo();
                 var arglist = new List<ExpressionSyntax>() { node.Operand };
-                ii.Init(msym, m_SymbolTable.AssemblySymbol, arglist, m_SymbolTable.IsUseExplicitTypeParam(msym), m_Model);
+                ii.Init(msym, arglist, m_SymbolTable.IsUseExplicitTypeParam(msym), m_Model);
                 OutputOperatorInvoke(ii);
             } else {
                 string op = node.OperatorToken.Text;
@@ -170,7 +170,7 @@ namespace RoslynTool.CsToLua
                 IMethodSymbol msym = oper.OperatorMethod;
                 InvocationInfo ii = new InvocationInfo();
                 var arglist = new List<ExpressionSyntax>() { node.Expression };
-                ii.Init(msym, m_SymbolTable.AssemblySymbol, arglist, m_SymbolTable.IsUseExplicitTypeParam(msym), m_Model);
+                ii.Init(msym, arglist, m_SymbolTable.IsUseExplicitTypeParam(msym), m_Model);
                 OutputOperatorInvoke(ii);
             } else {
                 CodeBuilder.Append("typecast(");
@@ -205,20 +205,29 @@ namespace RoslynTool.CsToLua
             var leftElementAccess = node.Left as ElementAccessExpressionSyntax;
             var leftCondAccess = node.Left as ConditionalAccessExpressionSyntax;
 
-            bool staticPropUseExplicitTypeParam = false;
-            if (null != leftMemberAccess && null != leftPsym && leftPsym.IsStatic) {
-                if (null != leftPsym.GetMethod && m_SymbolTable.IsUseExplicitTypeParam(leftPsym.GetMethod) || null != leftPsym.SetMethod && m_SymbolTable.IsUseExplicitTypeParam(leftPsym.SetMethod)) {
-                    staticPropUseExplicitTypeParam = true;
+
+            SpecialAssignmentType specialType = SpecialAssignmentType.None;
+            if (null != leftMemberAccess && null != leftPsym) {
+                if (leftPsym.IsStatic) {
+                    if (null != leftPsym.GetMethod && m_SymbolTable.IsUseExplicitTypeParam(leftPsym.GetMethod) || null != leftPsym.SetMethod && m_SymbolTable.IsUseExplicitTypeParam(leftPsym.SetMethod)) {
+                        specialType = SpecialAssignmentType.StaticPropUseExplicitTypeParams;
+                    }
+                } else {
+                    if (CheckExplicitInterfaceAccess(leftPsym)) {
+                        specialType = SpecialAssignmentType.PropExplicitImplementInterface;
+                    }
                 }
             }
-            if (staticPropUseExplicitTypeParam || null != leftElementAccess || null != leftCondAccess || leftOper.Type.TypeKind == TypeKind.Delegate && (leftSym.Kind != SymbolKind.Local || op != "=")) {
+            if (specialType==SpecialAssignmentType.StaticPropUseExplicitTypeParams || specialType==SpecialAssignmentType.PropExplicitImplementInterface
+                || null != leftElementAccess || null != leftCondAccess 
+                || leftOper.Type.TypeKind == TypeKind.Delegate && (leftSym.Kind != SymbolKind.Local || op != "=")) {
                 needWrapFunction = false;
             }
             if (needWrapFunction) {
                 //顶层的赋值语句已经处理，这里的赋值都需要包装成lambda函数的样式
                 CodeBuilder.Append("(function() ");
             }
-            VisitAssignment(ci, op, baseOp, node, string.Empty, false, leftOper, leftSym, leftPsym, leftMemberAccess, leftElementAccess, leftCondAccess, staticPropUseExplicitTypeParam);
+            VisitAssignment(ci, op, baseOp, node, string.Empty, false, leftOper, leftSym, leftPsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType);
             var oper = m_Model.GetOperation(node.Right);
             if (null != leftSym && leftSym.Kind == SymbolKind.Local && null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && oper.Type.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
                 CodeBuilder.AppendFormat("; {0} = wrapvaluetype({1})", leftSym.Name, leftSym.Name);
@@ -266,7 +275,7 @@ namespace RoslynTool.CsToLua
                 if (null != msym) {
                     string manglingName = NameMangling(msym);
                     var mi = new MethodInfo();
-                    mi.Init(msym, m_SymbolTable.AssemblySymbol, node);
+                    mi.Init(msym, node);
 
                     CodeBuilder.Append("(function(");
                     string paramsString = string.Join(", ", mi.ParamNames.ToArray());
@@ -286,23 +295,34 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendFormat("({0}) end)", paramsString);
                 } else {
                     var psym = sym as IPropertySymbol;
+                    string fnOfIntf = string.Empty;
+                    string mname = string.Empty;
                     bool staticPropUseExplicitTypeParam = false;
-                    if (null != psym && psym.IsStatic) {
-                        if (m_SymbolTable.IsUseExplicitTypeParam(psym.GetMethod)) {
-                            staticPropUseExplicitTypeParam = true;
+                    bool propExplicitImplementInterface = false;
+                    if (null != psym){
+                        if (psym.IsStatic) {
+                            if (m_SymbolTable.IsUseExplicitTypeParam(psym.GetMethod)) {
+                                staticPropUseExplicitTypeParam = true;
+                            }
+                        } else {
+                            propExplicitImplementInterface = CheckExplicitInterfaceAccess(psym, ref fnOfIntf, ref mname);
                         }
                     }
                     if (staticPropUseExplicitTypeParam) {
                         string manglingName = NameMangling(psym.GetMethod);
                         InvocationInfo ii = new InvocationInfo();
                         List<ExpressionSyntax> args = new List<ExpressionSyntax>();
-                        ii.Init(psym.GetMethod, m_SymbolTable.AssemblySymbol, args, true, m_Model);
+                        ii.Init(psym.GetMethod, args, true, m_Model);
                         CodeBuilder.Append(className);
                         CodeBuilder.Append(".");
                         CodeBuilder.Append(manglingName);
                         CodeBuilder.Append("(");
                         OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
                         CodeBuilder.Append(")");
+                    } else if (propExplicitImplementInterface) {
+                        CodeBuilder.AppendFormat("getwithinterface(");
+                        VisitExpressionSyntax(node.Expression);
+                        CodeBuilder.AppendFormat(", \"{0}\", \"{1}\")", fnOfIntf, mname);
                     } else {
                         if (string.IsNullOrEmpty(className)) {
                             VisitExpressionSyntax(node.Expression);
@@ -330,10 +350,15 @@ namespace RoslynTool.CsToLua
                     VisitExpressionSyntax(node.Expression);
                 }
                 CodeBuilder.Append(", ");
+                if (!psym.IsStatic) {
+                    string fnOfIntf = "nil";
+                    CheckExplicitInterfaceAccess(psym.GetMethod, ref fnOfIntf);
+                    CodeBuilder.AppendFormat("\"{0}\", ", fnOfIntf);
+                }
                 string manglingName = NameMangling(psym.GetMethod);
                 CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
                 InvocationInfo ii = new InvocationInfo();
-                ii.Init(psym.GetMethod, m_SymbolTable.AssemblySymbol, node.ArgumentList, m_SymbolTable.IsUseExplicitTypeParam(psym.GetMethod), m_Model);
+                ii.Init(psym.GetMethod, node.ArgumentList, m_SymbolTable.IsUseExplicitTypeParam(psym.GetMethod), m_Model);
                 OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
                 CodeBuilder.Append(")");
             } else if (oper.Kind == OperationKind.ArrayElementReferenceExpression) {
@@ -377,11 +402,16 @@ namespace RoslynTool.CsToLua
                         VisitExpressionSyntax(node.Expression);
                     }
                     CodeBuilder.Append(", ");
+                    if (!psym.IsStatic) {
+                        string fnOfIntf = "nil";
+                        CheckExplicitInterfaceAccess(psym.GetMethod, ref fnOfIntf);
+                        CodeBuilder.AppendFormat("\"{0}\", ", fnOfIntf);
+                    }
                     string manglingName = NameMangling(psym.GetMethod);
                     CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
                     InvocationInfo ii = new InvocationInfo();
                     List<ExpressionSyntax> args = new List<ExpressionSyntax> { node.WhenNotNull };
-                    ii.Init(psym.GetMethod, m_SymbolTable.AssemblySymbol, args, m_SymbolTable.IsUseExplicitTypeParam(psym.GetMethod), m_Model);
+                    ii.Init(psym.GetMethod, args, m_SymbolTable.IsUseExplicitTypeParam(psym.GetMethod), m_Model);
                     OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
                     CodeBuilder.Append(")");
                 } else if (oper.Kind == OperationKind.ArrayElementReferenceExpression) {
@@ -532,7 +562,7 @@ namespace RoslynTool.CsToLua
 
                 //处理ref/out参数
                 InvocationInfo ii = new InvocationInfo();
-                ii.Init(sym, m_SymbolTable.AssemblySymbol, node.ArgumentList, m_SymbolTable.IsUseExplicitTypeParam(sym), m_Model);
+                ii.Init(sym, node.ArgumentList, m_SymbolTable.IsUseExplicitTypeParam(sym), m_Model);
                 ci.AddReference(sym, ci.SemanticInfo);
 
                 bool isCollection = IsImplementationOfSys(typeSymInfo, "ICollection");
@@ -628,7 +658,7 @@ namespace RoslynTool.CsToLua
                     if (null != msym) {
                         string manglingName = NameMangling(msym);
                         var mi = new MethodInfo();
-                        mi.Init(msym, m_SymbolTable.AssemblySymbol, node);
+                        mi.Init(msym, node);
 
                         CodeBuilder.Append("(function(");
                         string paramsString = string.Join(", ", mi.ParamNames.ToArray());

@@ -191,7 +191,7 @@ namespace RoslynTool.CsToLua
 
             bool haveSemanticError = false;
             bool haveTranslationError = false;
-            SymbolTable symTable = new SymbolTable(compilation);
+            SymbolTable.Instance.Init(compilation);
             Dictionary<string, MergedClassInfo> toplevelClasses = new Dictionary<string, MergedClassInfo>();
             MergedNamespaceInfo toplevelMni = new MergedNamespaceInfo();
             using (StreamWriter sw = new StreamWriter(Path.Combine(logDir, "SemanticError.log"))) {
@@ -224,7 +224,7 @@ namespace RoslynTool.CsToLua
                                 }
                             }
 
-                            CsLuaTranslater csToLua = new CsLuaTranslater(model, symTable, enableInherit);
+                            CsLuaTranslater csToLua = new CsLuaTranslater(model, enableInherit);
                             csToLua.Translate(root);
                             if (csToLua.HaveError) {
                                 sw3.WriteLine("============<<<Translation Error:{0}>>>============", fileName);
@@ -261,7 +261,7 @@ namespace RoslynTool.CsToLua
             foreach (var pair in toplevelClasses) {
                 StringBuilder classBuilder = new StringBuilder();
                 lualibRefs.Clear();
-                string fileName = BuildLuaClass(classBuilder, pair.Key, pair.Value, symTable, lualibRefs);
+                string fileName = BuildLuaClass(classBuilder, pair.Key, pair.Value, lualibRefs);
                 foreach (string lib in lualibRefs) {
                     File.Copy(Path.Combine(exepath, "lualib/" + lib), Path.Combine(outputDir, string.Format("{0}.{1}", lib, outputExt)), true);
                 }
@@ -269,7 +269,7 @@ namespace RoslynTool.CsToLua
             }
             StringBuilder allClassBuilder = new StringBuilder();
             lualibRefs.Clear();
-            BuildLuaClass(allClassBuilder, toplevelMni, toplevelClasses, symTable, lualibRefs);
+            BuildLuaClass(allClassBuilder, toplevelMni, toplevelClasses, lualibRefs);
             if (haveSemanticError || haveTranslationError) {
                 if (haveSemanticError) {
                     Console.WriteLine("{0}", File.ReadAllText(Path.Combine(logDir, "SemanticError.log")));
@@ -400,7 +400,7 @@ namespace RoslynTool.CsToLua
             temp.Length = 0;
             foreach (var sym in typesym.GetMembers()) {
                 var msym = sym as IMethodSymbol;
-                if (null != msym && !SymbolTable.IsAccessorMethod(msym) && msym.GetAttributes().Length > 0) {
+                if (null != msym && msym.GetAttributes().Length > 0) {
                     temp.AppendFormat("{0}{1} = {{", GetIndentString(indent), sym.Name);
                     temp.AppendLine();
                     ++indent;
@@ -502,13 +502,13 @@ namespace RoslynTool.CsToLua
                 sb.AppendLine("}},");
             }
         }
-        private static void BuildLuaClass(StringBuilder sb, MergedNamespaceInfo toplevelMni, Dictionary<string, MergedClassInfo> toplevelMcis, SymbolTable symTable, HashSet<string> lualibRefs)
+        private static void BuildLuaClass(StringBuilder sb, MergedNamespaceInfo toplevelMni, Dictionary<string, MergedClassInfo> toplevelMcis, HashSet<string> lualibRefs)
         {
             StringBuilder code = new StringBuilder();
             BuildNamespaces(code, toplevelMni);
             foreach (var pair in toplevelMcis) {
                 StringBuilder classBuilder = new StringBuilder();
-                string fileName = BuildLuaClass(classBuilder, pair.Key, pair.Value, false, symTable, lualibRefs);
+                string fileName = BuildLuaClass(classBuilder, pair.Key, pair.Value, false, lualibRefs);
                 code.Append(classBuilder.ToString());
             }
             sb.AppendLine("require \"cs2lua__utility\";");
@@ -519,12 +519,13 @@ namespace RoslynTool.CsToLua
             }
             sb.Append(code.ToString());
         }
-        private static string BuildLuaClass(StringBuilder sb, string key, MergedClassInfo mci, SymbolTable symTable, HashSet<string> lualibRefs)
+        private static string BuildLuaClass(StringBuilder sb, string key, MergedClassInfo mci, HashSet<string> lualibRefs)
         {
-            return BuildLuaClass(sb, key, mci, true, symTable, lualibRefs);
+            return BuildLuaClass(sb, key, mci, true, lualibRefs);
         }
-        private static string BuildLuaClass(StringBuilder sb, string key, MergedClassInfo mci, bool isAlone, SymbolTable symTable, HashSet<string> lualibRefs)
+        private static string BuildLuaClass(StringBuilder sb, string key, MergedClassInfo mci, bool isAlone, HashSet<string> lualibRefs)
         {
+            SymbolTable symTable = SymbolTable.Instance;
             var classes = mci.Classes;
 
             string fileName = key.Replace(".", "__");
@@ -999,7 +1000,7 @@ namespace RoslynTool.CsToLua
                     }
 
                     if (csi.InterfaceSymbols.Count > 0) {
-                        sb.AppendFormat("{0}local instance_interfaces = {{", GetIndentString(indent));
+                        sb.AppendFormat("{0}local interfaces = {{", GetIndentString(indent));
                         sb.AppendLine();
                         ++indent;
 
@@ -1014,12 +1015,12 @@ namespace RoslynTool.CsToLua
 
                         sb.AppendLine();
                     } else {
-                        sb.AppendFormat("{0}local instance_interfaces = nil;", GetIndentString(indent));
+                        sb.AppendFormat("{0}local interfaces = nil;", GetIndentString(indent));
                         sb.AppendLine();
                     }
 
                     if (csi.InterfaceMethodMap.Count > 0) {
-                        sb.AppendFormat("{0}local instance_interface_map = {{", GetIndentString(indent));
+                        sb.AppendFormat("{0}local interface_map = {{", GetIndentString(indent));
                         sb.AppendLine();
                         ++indent;
 
@@ -1034,13 +1035,13 @@ namespace RoslynTool.CsToLua
 
                         sb.AppendLine();
                     } else {
-                        sb.AppendFormat("{0}local instance_interface_map = nil;", GetIndentString(indent));
+                        sb.AppendFormat("{0}local interface_map = nil;", GetIndentString(indent));
                         sb.AppendLine();
                     }
 
                     sb.AppendLine();
                     
-                    sb.AppendFormat("{0}return defineclass({1}, \"{2}\", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, instance_interfaces, instance_interface_map, {3});", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass, key, isValueType ? "true" : "false");
+                    sb.AppendFormat("{0}return defineclass({1}, \"{2}\", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, interfaces, interface_map, {3});", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass, key, isValueType ? "true" : "false");
                     sb.AppendLine();
                 } else {
                     sb.AppendFormat("{0}return defineclass({1}, \"{2}\", static, static_fields, static_props, static_events, nil, nil, nil, nil, nil, nil, {3});", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass, key, isValueType ? "true" : "false");
@@ -1079,7 +1080,7 @@ namespace RoslynTool.CsToLua
 
             if (!isEnumClass) {
                 foreach (var pair in mci.InnerClasses) {
-                    BuildLuaClass(sb, pair.Key, pair.Value, false, symTable, lualibRefs);
+                    BuildLuaClass(sb, pair.Key, pair.Value, false, lualibRefs);
                 }
             }
 

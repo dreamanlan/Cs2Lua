@@ -21,9 +21,10 @@ namespace RoslynTool.CsToLua
         internal IMethodSymbol MethodSymbol = null;
         internal IAssemblySymbol AssemblySymbol = null;
 
-        internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, ArgumentListSyntax argList, bool useExplicitTypeParam, SemanticModel model)
+        internal void Init(IMethodSymbol sym, ArgumentListSyntax argList, bool useExplicitTypeParam, SemanticModel model)
         {
-            Init(sym, assemblySym, useExplicitTypeParam);
+            IAssemblySymbol assemblySym = SymbolTable.Instance.AssemblySymbol;
+            Init(sym, useExplicitTypeParam);
 
             if (null != argList) {
                 var args = argList.Arguments;
@@ -58,9 +59,10 @@ namespace RoslynTool.CsToLua
             }
         }
 
-        internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, BracketedArgumentListSyntax argList, bool useExplicitTypeParam, SemanticModel model)
+        internal void Init(IMethodSymbol sym, BracketedArgumentListSyntax argList, bool useExplicitTypeParam, SemanticModel model)
         {
-            Init(sym, assemblySym, useExplicitTypeParam);
+            IAssemblySymbol assemblySym = SymbolTable.Instance.AssemblySymbol; 
+            Init(sym, useExplicitTypeParam);
 
             if (null != argList) {
                 var args = argList.Arguments;
@@ -95,9 +97,9 @@ namespace RoslynTool.CsToLua
             }
         }
 
-        internal void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, List<ExpressionSyntax> argList, bool useExplicitTypeParam, SemanticModel model)
+        internal void Init(IMethodSymbol sym, List<ExpressionSyntax> argList, bool useExplicitTypeParam, SemanticModel model)
         {
-            Init(sym, assemblySym, useExplicitTypeParam);
+            Init(sym, useExplicitTypeParam);
 
             if (null != argList) {
                 for (int i = 0; i < argList.Count; ++i) {
@@ -107,10 +109,54 @@ namespace RoslynTool.CsToLua
             }
         }
 
-        private void Init(IMethodSymbol sym, IAssemblySymbol assemblySym, bool useExplicitTypeParam)
+        internal void OutputInvocation(StringBuilder codeBuilder, CsLuaTranslater cs2lua, ExpressionSyntax exp, bool isMemberAccess)
+        {
+            IMethodSymbol sym = MethodSymbol;
+            string mname = cs2lua.NameMangling(sym);
+            string prestr = string.Empty;
+            if (isMemberAccess) {
+                string fnOfIntf = string.Empty;
+                bool isExplicitInterfaceInvoke = cs2lua.CheckExplicitInterfaceAccess(sym, ref fnOfIntf);
+                if (isExplicitInterfaceInvoke) {
+                    codeBuilder.Append("invokewithinterface(");
+                    cs2lua.VisitExpressionSyntax(exp);
+                    codeBuilder.Append(", ");
+                    codeBuilder.AppendFormat("\"{0}\", \"{1}\"", fnOfIntf, mname);
+                    prestr = ", ";
+                } else {
+                    if (sym.IsStatic) {
+                        codeBuilder.Append(ClassKey);
+                        codeBuilder.Append(".");
+                    } else {
+                        cs2lua.VisitExpressionSyntax(exp);
+                        codeBuilder.Append(":");
+                    }
+                    codeBuilder.Append(mname);
+                    codeBuilder.Append("(");
+                }
+            } else {
+                if (sym.MethodKind == MethodKind.DelegateInvoke) {
+                    cs2lua.VisitExpressionSyntax(exp);
+                } else if (sym.IsStatic) {
+                    codeBuilder.AppendFormat("{0}.", ClassKey);
+                    codeBuilder.Append(mname);
+                } else {
+                    codeBuilder.Append("this:");
+                    codeBuilder.Append(mname);
+                }
+                codeBuilder.Append("(");
+            }
+            if (Args.Count > 0 || GenericTypeArgs.Count > 0) {
+                codeBuilder.Append(prestr);
+            }
+            cs2lua.OutputArgumentList(Args, GenericTypeArgs, ArrayToParams);
+            codeBuilder.Append(")");
+        }
+
+        private void Init(IMethodSymbol sym, bool useExplicitTypeParam)
         {
             MethodSymbol = sym;
-            AssemblySymbol = assemblySym;
+            AssemblySymbol = SymbolTable.Instance.AssemblySymbol;;
 
             Args.Clear();
             ReturnArgs.Clear();

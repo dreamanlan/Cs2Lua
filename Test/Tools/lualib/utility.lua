@@ -576,7 +576,7 @@ function wrapexternvaluetypearray(arr)
 	return setmetatable(arr, { __index = __mt_index_of_array });
 end;
 
-function defineclass(base, className, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, instance_interfaces, instance_interface_map, is_value_type)
+function defineclass(base, className, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, interfaces, interface_map, is_value_type)
     
     local base_class = base or {};
     local mt = getmetatable(base_class);
@@ -587,6 +587,9 @@ function defineclass(base, className, static, static_fields, static_props, stati
     local class_events = static_events or {};
     class["__cs2lua_defined"] = true;
     class["__class_name"] = className;
+    class["__is_value_type"] = is_value_type;
+    class["__interfaces"] = interfaces;
+    class["__interface_map"] = interface_map;
     
     setmetatable(class, {
         __call = function()
@@ -606,13 +609,16 @@ function defineclass(base, className, static, static_fields, static_props, stati
             end;
             local obj_props = instance_props or {};
             local obj_events = instance_events or {};
-            local obj_intfs = instance_interfaces or {};
-            local obj_intf_map = instance_interface_map or {};
+            local obj_intf_map = interface_map or {};
             obj["base"] = baseObj;
             
             setmetatable(obj, {
             		__class = class,
+            		__cs2lua_defined = true,
+            		__class_name = className,
             		__is_value_type = is_value_type,
+				    		__interfaces = interfaces,
+				    		__interface_map = interface_map,
                 __index = function(t, k)
                     local ret;
 				            ret = obj_fields[k];
@@ -813,7 +819,7 @@ function delegationwrap(handler)
   return wrapdelegation{ handler };
 end;
 
-function delegationset(t, k, handler)
+function delegationset(t, intf, k, handler, ...)
   local v = t;
   if k then
     v = t[k];  
@@ -824,14 +830,14 @@ function delegationset(t, k, handler)
   end;
   table.insert(v,handler);
 end;
-function delegationadd(t, k, handler)
+function delegationadd(t, intf, k, handler, ...)
   local v = t;
   if k then
     v = t[k];  
   end;
   table.insert(v, handler);
 end;
-function delegationremove(t, k, handler)
+function delegationremove(t, intf, k, handler, ...)
   local v = t;
   if k then
     v = t[k];  
@@ -850,21 +856,21 @@ function delegationremove(t, k, handler)
   end;
 end;
 
-function externdelegationset(t, k, handler)
+function externdelegationset(t, intf, k, handler, ...)
   if k then
     t[k] = handler;
   else
     t = handler;
   end;
 end;
-function externdelegationadd(t, k, handler)
+function externdelegationadd(t, intf, k, handler, ...)
   if k then
     t[k] = {"+=", handler};
   else
     t = {"+=", handler};
   end;
 end;
-function externdelegationremove(t, k, handler)
+function externdelegationremove(t, intf, k, handler, ...)
   if k then
     t[k] = {"-=", handler};
   else
@@ -875,7 +881,7 @@ end;
 function getstaticindexer(class, name, ...)
 	return class[name](...);
 end;
-function getinstanceindexer(obj, name, ...)
+function getinstanceindexer(obj, intf, name, ...)
 	return obj[name](obj, ...);
 end;
 
@@ -883,7 +889,7 @@ function setstaticindexer(class, name, ...)
 	class[name](...);
 	return nil;
 end;
-function setinstanceindexer(obj, name, ...)
+function setinstanceindexer(obj, intf, name, ...)
 	obj[name](obj, ...);
 	return nil;
 end;
@@ -891,7 +897,7 @@ end;
 function getexternstaticindexer(class, name, ...)
 	return class[...];
 end;
-function getexterninstanceindexer(obj, name, ...)  
+function getexterninstanceindexer(obj, intf, name, ...)  
 	local args = {...};
 	local index = args[1];
 	local meta = getmetatable(obj);
@@ -913,7 +919,7 @@ end;
 function setexternstaticindexer(class, name, ...)	
   return nil;
 end;
-function setexterninstanceindexer(obj, name, ...)
+function setexterninstanceindexer(obj, intf, name, ...)
   local args = {...};
   local num = table.maxn(args);
 	local index = __unwrap_if_string(args[1]);
@@ -985,4 +991,32 @@ function defineentry(class)
   _G.main = function()
     return class;
   end;
+end;
+
+function invokewithinterface(obj, intf, method, ...)
+	local meta = getmetatable(obj);
+	if meta.__cs2lua_defined then
+		return obj[intf+"_"+method](obj,...);
+	else
+		return obj:method(...);
+	end;
+	return nil;
+end;
+function getwithinterface(obj, intf, property)
+	local meta = getmetatable(obj);
+	if meta.__cs2lua_defined then
+		return obj[intf+"_"+property];
+	else
+		return obj[property];
+	end;
+	return nil;
+end;
+function setwithinterface(obj, intf, property, value)
+	local meta = getmetatable(obj);
+	if meta.__cs2lua_defined then
+		obj[intf+"_"+property]=value;
+	else
+		obj[property]=value;
+	end;
+	return nil;
 end;

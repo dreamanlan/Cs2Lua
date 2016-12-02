@@ -11,6 +11,10 @@ namespace RoslynTool.CsToLua
 {
     internal class SymbolTable
     {
+        internal CSharpCompilation Compilation
+        {
+            get { return m_Compilation; }
+        }
         internal IAssemblySymbol AssemblySymbol
         {
             get { return m_AssemblySymbol; }
@@ -26,6 +30,13 @@ namespace RoslynTool.CsToLua
         internal Dictionary<string, HashSet<string>> Requires
         {
             get { return m_Requires; }
+        }
+        internal void Init(CSharpCompilation compilation)
+        {
+            m_Compilation = compilation;
+            m_AssemblySymbol = compilation.Assembly;
+            INamespaceSymbol nssym = m_AssemblySymbol.GlobalNamespace;
+            InitRecursively(nssym);
         }
         internal void AddRequire(string refClass, string moduleName)
         {
@@ -85,18 +96,7 @@ namespace RoslynTool.CsToLua
             }
             return ret;
         }
-        internal SymbolTable(CSharpCompilation compilation)
-        {
-            m_Compilation = compilation;
-            Init(compilation.Assembly);
-        }
 
-        private void Init(IAssemblySymbol assemblySymbol)
-        {
-            m_AssemblySymbol = assemblySymbol;
-            INamespaceSymbol nssym = m_AssemblySymbol.GlobalNamespace;
-            InitRecursively(nssym);
-        }
         private void InitRecursively(INamespaceSymbol nssym)
         {
             if (null != nssym) {
@@ -122,6 +122,7 @@ namespace RoslynTool.CsToLua
                 InitRecursively(newSym);
             }
         }
+        private SymbolTable() { }
 
         private CSharpCompilation m_Compilation = null;
         private IAssemblySymbol m_AssemblySymbol = null;
@@ -129,24 +130,15 @@ namespace RoslynTool.CsToLua
         private Dictionary<string, ClassSymbolInfo> m_ClassSymbols = new Dictionary<string, ClassSymbolInfo>();
         private Dictionary<string, HashSet<string>> m_Requires = new Dictionary<string, HashSet<string>>();
 
-        internal static bool IsAccessorMethod(IMethodSymbol msym)
+        internal static SymbolTable Instance
         {
-            switch (msym.MethodKind) {
-                case MethodKind.PropertyGet:
-                case MethodKind.PropertySet:
-                    if (msym.Name == "get_Item" || msym.Name == "set_Item") {
-                        return false;
-                    } else {
-                        return true;
-                    }
-                case MethodKind.EventAdd:
-                case MethodKind.EventRemove:
-                case MethodKind.EventRaise:
-                    return true;
-                default:
-                    return false;
+            get
+            {
+                return s_Instance;
             }
         }
+        private static SymbolTable s_Instance = new SymbolTable();
+
         internal static string CalcMethodMangling(IMethodSymbol methodSym, IAssemblySymbol assemblySym)
         {
             if (null == methodSym)
@@ -182,11 +174,9 @@ namespace RoslynTool.CsToLua
             if (null == sym) {
                 return string.Empty;
             }
-            if (sym.ContainingType.TypeKind == TypeKind.Interface) {
-                string name = ClassInfo.GetFullName(sym.ContainingType) + "." + sym.Name;
-                return name.Replace(".", "_");
-            } else if (sym.ExplicitInterfaceImplementations.Length > 0) {
-                return sym.Name.Replace(".", "_");
+            if (sym.ExplicitInterfaceImplementations.Length > 0) {
+                int ix = sym.Name.LastIndexOf('.');
+                return CalcNameWithFullTypeName(sym.Name.Substring(ix + 1), sym.ContainingType);
             } else {
                 return sym.Name;
             }
@@ -196,11 +186,9 @@ namespace RoslynTool.CsToLua
             if (null == sym) {
                 return string.Empty;
             }
-            if (sym.ContainingType.TypeKind == TypeKind.Interface) {
-                string name = ClassInfo.GetFullName(sym.ContainingType) + "." + sym.Name;
-                return name.Replace(".", "_");
-            } else if (sym.ExplicitInterfaceImplementations.Length > 0) {
-                return sym.Name.Replace(".", "_");
+            if (sym.ExplicitInterfaceImplementations.Length > 0) {
+                int ix = sym.Name.LastIndexOf('.');
+                return CalcNameWithFullTypeName(sym.Name.Substring(ix + 1), sym.ContainingType);
             } else {
                 return sym.Name;
             }
@@ -210,13 +198,24 @@ namespace RoslynTool.CsToLua
             if (null == sym) {
                 return string.Empty;
             }
-            if (sym.ContainingType.TypeKind == TypeKind.Interface) {
-                string name = ClassInfo.GetFullName(sym.ContainingType) + "." + sym.Name;
-                return name.Replace(".", "_");
-            } else if (sym.ExplicitInterfaceImplementations.Length > 0) {
-                return sym.Name.Replace(".", "_");
+            if (sym.ExplicitInterfaceImplementations.Length > 0) {
+                int ix = sym.Name.LastIndexOf('.');
+                return CalcNameWithFullTypeName(sym.Name.Substring(ix + 1), sym.ContainingType);
             } else {
                 return sym.Name;
+            }
+        }
+        internal static string CalcNameWithFullTypeName(string name, INamedTypeSymbol typeSym)
+        {
+            if (null == typeSym) {
+                return name;
+            } else {
+                string ns = ClassInfo.GetFullName(typeSym);
+                if (string.IsNullOrEmpty(ns)) {
+                    return name;
+                } else {
+                    return ns.Replace(".", "_") + "_" + name;
+                }
             }
         }
         internal static string CheckLuaKeyword(string name, out bool change)

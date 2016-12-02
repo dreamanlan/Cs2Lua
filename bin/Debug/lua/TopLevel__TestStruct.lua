@@ -29,10 +29,10 @@ TopLevel.TestStruct = {
 		end;
 		local instance_props = nil;
 		local instance_events = nil;
-		local instance_interfaces = nil;
-		local instance_interface_map = nil;
+		local interfaces = nil;
+		local interface_map = nil;
 
-		return defineclass(nil, "TopLevel.TestStruct", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, instance_interfaces, instance_interface_map, true);
+		return defineclass(nil, "TopLevel.TestStruct", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, interfaces, interface_map, true);
 	end,
 };
 

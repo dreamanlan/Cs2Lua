@@ -12,6 +12,16 @@ namespace RoslynTool.CsToLua
 {
     internal partial class CsLuaTranslater
     {
+        internal void VisitExpressionSyntax(ExpressionSyntax node)
+        {
+            IOperation oper = m_Model.GetOperation(node);
+            if (null != oper && oper.ConstantValue.HasValue) {
+                object val = oper.ConstantValue.Value;
+                OutputConstValue(val);
+                return;
+            }
+            node.Accept(this);
+        }
         private void VisitToplevelExpression(ExpressionSyntax expression, string expTerminater)
         {
             VisitToplevelExpressionFirstPass(expression, expTerminater);
@@ -179,7 +189,7 @@ namespace RoslynTool.CsToLua
             }
 
             var mi = new MethodInfo();
-            mi.Init(declSym, m_SymbolTable.AssemblySymbol, node, m_SymbolTable.IsUseExplicitTypeParam(declSym));
+            mi.Init(declSym, node, m_SymbolTable.IsUseExplicitTypeParam(declSym));
             m_MethodInfoStack.Push(mi);
 
             string manglingName = NameMangling(declSym);
@@ -353,16 +363,6 @@ namespace RoslynTool.CsToLua
                 }
             }
         }
-        private void VisitExpressionSyntax(ExpressionSyntax node)
-        {
-            IOperation oper = m_Model.GetOperation(node);
-            if (null != oper && oper.ConstantValue.HasValue) {
-                object val = oper.ConstantValue.Value;
-                OutputConstValue(val);
-                return;
-            }
-            node.Accept(this);
-        }
         private void VisitToplevelExpressionFirstPass(ExpressionSyntax expression, string expTerminater)
         {
             var ci = m_ClassInfoStack.Peek();
@@ -379,14 +379,19 @@ namespace RoslynTool.CsToLua
                 var leftElementAccess = assign.Left as ElementAccessExpressionSyntax;
                 var leftCondAccess = assign.Left as ConditionalAccessExpressionSyntax;
 
-                bool staticPropUseExplicitTypeParam = false;
-                if (null != leftMemberAccess && null != leftPsym && leftPsym.IsStatic) {
-                    if (null != leftPsym.GetMethod && m_SymbolTable.IsUseExplicitTypeParam(leftPsym.GetMethod) || null != leftPsym.SetMethod && m_SymbolTable.IsUseExplicitTypeParam(leftPsym.SetMethod)) {
-                        staticPropUseExplicitTypeParam = true;
+                SpecialAssignmentType specialType = SpecialAssignmentType.None;
+                if (null != leftMemberAccess && null != leftPsym) {
+                    if(leftPsym.IsStatic) {
+                        if (null != leftPsym.GetMethod && m_SymbolTable.IsUseExplicitTypeParam(leftPsym.GetMethod) || null != leftPsym.SetMethod && m_SymbolTable.IsUseExplicitTypeParam(leftPsym.SetMethod)) {
+                            specialType = SpecialAssignmentType.StaticPropUseExplicitTypeParams;
+                        }
+                    } else {
+                        if (CheckExplicitInterfaceAccess(leftPsym)) {
+                            specialType = SpecialAssignmentType.PropExplicitImplementInterface;
+                        }
                     }
                 }
-
-                VisitAssignment(ci, op, baseOp, assign, expTerminater, true, leftOper, leftSym, leftPsym, leftMemberAccess, leftElementAccess, leftCondAccess, staticPropUseExplicitTypeParam);
+                VisitAssignment(ci, op, baseOp, assign, expTerminater, true, leftOper, leftSym, leftPsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType);
                 var oper = m_Model.GetOperation(assign.Right);
                 if (null != leftSym && leftSym.Kind == SymbolKind.Local && null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && oper.Type.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
                     CodeBuilder.AppendFormat("{0}{1} = wrapvaluetype({2});", GetIndentString(), leftSym.Name, leftSym.Name);
@@ -469,7 +474,7 @@ namespace RoslynTool.CsToLua
                     } else {
                         //处理ref/out参数
                         InvocationInfo ii = new InvocationInfo();
-                        ii.Init(sym, m_SymbolTable.AssemblySymbol, invocation.ArgumentList, m_SymbolTable.IsUseExplicitTypeParam(sym), m_Model);
+                        ii.Init(sym, invocation.ArgumentList, m_SymbolTable.IsUseExplicitTypeParam(sym), m_Model);
                         ci.AddReference(sym, ci.SemanticInfo);
 
                         MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
@@ -486,18 +491,8 @@ namespace RoslynTool.CsToLua
                             CodeBuilder.AppendFormat(" {0} ", token.Text);
                             if (isDelegate) {
                                 CodeBuilder.Append("delegationwrap(");
-                            }
-                            if (sym.IsStatic) {
-                                CodeBuilder.Append(ii.ClassKey);
-                                CodeBuilder.Append(".");
-                            } else {
-                                VisitExpressionSyntax(memberAccess.Expression);
-                                CodeBuilder.Append(":");
-                            }
-                            CodeBuilder.Append(NameMangling(sym));
-                            CodeBuilder.Append("(");
-                            OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
-                            CodeBuilder.Append(")");
+                            }                            
+                            ii.OutputInvocation(CodeBuilder, this, memberAccess.Expression, true);
                         } else {
                             int ct = ii.ReturnArgs.Count;
                             if (ct > 0) {
@@ -507,19 +502,8 @@ namespace RoslynTool.CsToLua
                             CodeBuilder.AppendFormat(" {0} ", token.Text);
                             if (isDelegate) {
                                 CodeBuilder.Append("delegationwrap(");
-                            }
-                            if (sym.MethodKind == MethodKind.DelegateInvoke) {
-                                VisitExpressionSyntax(invocation.Expression);
-                            } else if (sym.IsStatic) {
-                                CodeBuilder.AppendFormat("{0}.", ii.ClassKey);
-                                CodeBuilder.Append(NameMangling(sym));
-                            } else {
-                                CodeBuilder.Append("this:");
-                                CodeBuilder.Append(NameMangling(sym));
-                            }
-                            CodeBuilder.Append("(");
-                            OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
-                            CodeBuilder.Append(")");
+                            }                            
+                            ii.OutputInvocation(CodeBuilder, this, invocation.Expression, false);
                         }
                     }
                 } else {
@@ -536,21 +520,30 @@ namespace RoslynTool.CsToLua
             }
             CodeBuilder.AppendLine(";");
         }
-        private void VisitAssignment(ClassInfo ci, string op, string baseOp, AssignmentExpressionSyntax assign, string expTerminater, bool toplevel, IOperation leftOper, ISymbol leftSym, IPropertySymbol leftPsym, MemberAccessExpressionSyntax leftMemberAccess, ElementAccessExpressionSyntax leftElementAccess, ConditionalAccessExpressionSyntax leftCondAccess, bool staticPropUseExplicitTypeParam)
+        private void VisitAssignment(ClassInfo ci, string op, string baseOp, AssignmentExpressionSyntax assign, string expTerminater, bool toplevel, IOperation leftOper, ISymbol leftSym, IPropertySymbol leftPsym, MemberAccessExpressionSyntax leftMemberAccess, ElementAccessExpressionSyntax leftElementAccess, ConditionalAccessExpressionSyntax leftCondAccess, SpecialAssignmentType specialType)
         {
             var assignOper = m_Model.GetOperation(assign);
             InvocationExpressionSyntax invocation = assign.Right as InvocationExpressionSyntax;
-            if (staticPropUseExplicitTypeParam) {
+            if (specialType==SpecialAssignmentType.StaticPropUseExplicitTypeParams) {
                 string className = ClassInfo.GetFullName(leftPsym.ContainingType);
                 string manglingName = NameMangling(leftPsym.SetMethod);
                 InvocationInfo ii = new InvocationInfo();
                 List<ExpressionSyntax> args = new List<ExpressionSyntax> { assign.Right };
-                ii.Init(leftPsym.SetMethod, m_SymbolTable.AssemblySymbol, args, true, m_Model);
+                ii.Init(leftPsym.SetMethod, args, true, m_Model);
                 CodeBuilder.Append(className);
                 CodeBuilder.Append(".");
                 CodeBuilder.Append(manglingName);
                 CodeBuilder.Append("(");
                 OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
+                CodeBuilder.Append(")");
+            } else if (specialType == SpecialAssignmentType.PropExplicitImplementInterface) {
+                string fnOfIntf = string.Empty;
+                string mname = string.Empty;
+                CheckExplicitInterfaceAccess(leftPsym, ref fnOfIntf, ref mname);
+                CodeBuilder.AppendFormat("setwithinterface(");
+                VisitExpressionSyntax(leftMemberAccess.Expression);
+                CodeBuilder.AppendFormat(", \"{0}\", \"{1}\", ", fnOfIntf, mname);
+                VisitExpressionSyntax(assign.Right);
                 CodeBuilder.Append(")");
             } else if (null != leftElementAccess) {
                 if (null != leftPsym && leftPsym.IsIndexer) {
@@ -562,10 +555,15 @@ namespace RoslynTool.CsToLua
                         VisitExpressionSyntax(leftElementAccess.Expression);
                     }
                     CodeBuilder.Append(", ");
+                    if (!leftPsym.IsStatic) {
+                        string fnOfIntf = "nil";
+                        CheckExplicitInterfaceAccess(leftPsym.SetMethod, ref fnOfIntf);
+                        CodeBuilder.AppendFormat("\"{0}\", ", fnOfIntf);
+                    }
                     string manglingName = NameMangling(leftPsym.SetMethod);
                     CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
                     InvocationInfo ii = new InvocationInfo();
-                    ii.Init(leftPsym.SetMethod, m_SymbolTable.AssemblySymbol, leftElementAccess.ArgumentList, m_SymbolTable.IsUseExplicitTypeParam(leftPsym.SetMethod), m_Model);
+                    ii.Init(leftPsym.SetMethod, leftElementAccess.ArgumentList, m_SymbolTable.IsUseExplicitTypeParam(leftPsym.SetMethod), m_Model);
                     OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
                     CodeBuilder.Append(", ");
                     VisitExpressionSyntax(assign.Right);
@@ -621,11 +619,16 @@ namespace RoslynTool.CsToLua
                             VisitExpressionSyntax(leftCondAccess.Expression);
                         }
                         CodeBuilder.Append(", ");
+                        if (!psym.IsStatic) {
+                            string fnOfIntf = "nil";
+                            CheckExplicitInterfaceAccess(psym.SetMethod, ref fnOfIntf);
+                            CodeBuilder.AppendFormat("\"{0}\", ", fnOfIntf);
+                        }
                         string manglingName = NameMangling(psym.SetMethod);
                         CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
                         InvocationInfo ii = new InvocationInfo();
                         List<ExpressionSyntax> args = new List<ExpressionSyntax> { leftCondAccess.WhenNotNull };
-                        ii.Init(psym.SetMethod, m_SymbolTable.AssemblySymbol, args, m_SymbolTable.IsUseExplicitTypeParam(psym.SetMethod), m_Model);
+                        ii.Init(psym.SetMethod, args, m_SymbolTable.IsUseExplicitTypeParam(psym.SetMethod), m_Model);
                         OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
                         CodeBuilder.Append(", ");
                         VisitExpressionSyntax(assign.Right);
@@ -701,20 +704,41 @@ namespace RoslynTool.CsToLua
                         if (null != memberAccess) {
                             VisitExpressionSyntax(memberAccess.Expression);
                             CodeBuilder.Append(", ");
-                            CodeBuilder.AppendFormat("\"{0}\"", memberAccess.Name.Identifier.Text);
+                            string intf = "nil";
+                            string mname = memberAccess.Name.Identifier.Text;
+                            CheckExplicitInterfaceAccess(leftSym, ref intf, ref mname);
+                            CodeBuilder.AppendFormat("\"{0}\", \"{1}\"", intf, mname);
                         } else if (leftSym.ContainingType == ci.SemanticInfo) {
                             CodeBuilder.Append("this, ");
                             CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
                         } else {
                             VisitExpressionSyntax(assign.Left);
-                            CodeBuilder.Append(", nil");
+                            CodeBuilder.Append(", nil, nil");
                         }
                     } else {
                         VisitExpressionSyntax(assign.Left);
-                        CodeBuilder.Append(", nil");
+                        CodeBuilder.Append(", nil, nil");
                     }
                     CodeBuilder.Append(", ");
                     VisitExpressionSyntax(assign.Right);
+                    if (leftSym.IsStatic) {
+                        if (leftSym.Kind == SymbolKind.Event) {
+                            IEventSymbol leftEsym = leftSym as IEventSymbol;
+                            if (null != leftEsym.AddMethod && m_SymbolTable.IsUseExplicitTypeParam(leftEsym.AddMethod) || null != leftEsym.RemoveMethod && m_SymbolTable.IsUseExplicitTypeParam(leftEsym.RemoveMethod)) {
+                                INamedTypeSymbol type = leftSym.ContainingType;
+                                while (null != type) {
+                                    if (type.IsGenericType) {
+                                        foreach (var arg in type.TypeArguments) {
+                                            CodeBuilder.Append(", "); 
+                                            string typeName = ClassInfo.GetFullName(arg);
+                                            CodeBuilder.Append(typeName);
+                                        }
+                                    }
+                                    type = type.ContainingType;
+                                }
+                            }
+                        }
+                    }
                     CodeBuilder.Append(")");
                 }
             } else if (null != invocation) {
@@ -726,7 +750,7 @@ namespace RoslynTool.CsToLua
                 } else {
                     //处理ref/out参数
                     InvocationInfo ii = new InvocationInfo();
-                    ii.Init(sym, m_SymbolTable.AssemblySymbol, invocation.ArgumentList, m_SymbolTable.IsUseExplicitTypeParam(sym), m_Model);
+                    ii.Init(sym, invocation.ArgumentList, m_SymbolTable.IsUseExplicitTypeParam(sym), m_Model);
                     ci.AddReference(sym, ci.SemanticInfo);
 
                     MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
@@ -759,18 +783,7 @@ namespace RoslynTool.CsToLua
                             OutputExpressionList(ii.ReturnArgs);
                         }
                         CodeBuilder.Append(" = ");
-                        if (sym.IsStatic) {
-                            CodeBuilder.Append(ii.ClassKey);
-                            CodeBuilder.Append(".");
-                        } else {
-                            VisitExpressionSyntax(memberAccess.Expression);
-                            CodeBuilder.Append(":");
-                        }
-                        CodeBuilder.Append(NameMangling(sym));
-                        CodeBuilder.Append("(");
-                        OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
-                        CodeBuilder.Append(")");
-
+                        ii.OutputInvocation(CodeBuilder, this, memberAccess.Expression, true);
                         if (op != "=") {
                             CodeBuilder.AppendFormat("; return {0}; end)()", localName);
                             string functor;
@@ -803,19 +816,7 @@ namespace RoslynTool.CsToLua
                             OutputExpressionList(ii.ReturnArgs);
                         }
                         CodeBuilder.Append(" = ");
-                        if (sym.MethodKind == MethodKind.DelegateInvoke) {
-                            VisitExpressionSyntax(invocation.Expression);
-                        } else if (sym.IsStatic) {
-                            CodeBuilder.AppendFormat("{0}.", ii.ClassKey);
-                            CodeBuilder.Append(NameMangling(sym));
-                        } else {
-                            CodeBuilder.Append("this:");
-                            CodeBuilder.Append(NameMangling(sym));
-                        }
-                        CodeBuilder.Append("(");
-                        OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
-                        CodeBuilder.Append(")");
-
+                        ii.OutputInvocation(CodeBuilder, this, invocation.Expression, false);
                         if (op != "=") {
                             CodeBuilder.AppendFormat("; return {0}; end)()", localName);
                             string functor;
@@ -839,7 +840,7 @@ namespace RoslynTool.CsToLua
                         IMethodSymbol msym = operatorInfo.OperatorMethod;
                         InvocationInfo ii = new InvocationInfo();
                         var arglist = new List<ExpressionSyntax>() { assign.Left, assign.Right };
-                        ii.Init(msym, m_SymbolTable.AssemblySymbol, arglist, m_SymbolTable.IsUseExplicitTypeParam(msym), m_Model);
+                        ii.Init(msym, arglist, m_SymbolTable.IsUseExplicitTypeParam(msym), m_Model);
                         OutputOperatorInvoke(ii);
                     } else {
                         ProcessBinaryOperator(assign, ref baseOp);
@@ -875,7 +876,7 @@ namespace RoslynTool.CsToLua
             } else {
                 //处理ref/out参数
                 InvocationInfo ii = new InvocationInfo();
-                ii.Init(sym, m_SymbolTable.AssemblySymbol, invocation.ArgumentList, m_SymbolTable.IsUseExplicitTypeParam(sym), m_Model);
+                ii.Init(sym, invocation.ArgumentList, m_SymbolTable.IsUseExplicitTypeParam(sym), m_Model);
                 ci.AddReference(sym, ci.SemanticInfo);
 
                 MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
@@ -891,17 +892,7 @@ namespace RoslynTool.CsToLua
                         OutputExpressionList(ii.ReturnArgs);
                         CodeBuilder.Append(" = ");
                     }
-                    if (sym.IsStatic) {
-                        CodeBuilder.Append(ii.ClassKey);
-                        CodeBuilder.Append(".");
-                    } else {
-                        VisitExpressionSyntax(memberAccess.Expression);
-                        CodeBuilder.Append(":");
-                    }
-                    CodeBuilder.Append(NameMangling(sym));
-                    CodeBuilder.Append("(");
-                    OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
-                    CodeBuilder.Append(")");
+                    ii.OutputInvocation(CodeBuilder, this, memberAccess.Expression, true);
                     if (ii.ReturnArgs.Count > 0 && !toplevel) {
                         CodeBuilder.AppendFormat(" return {0}; end)()", localName);
                     }
@@ -916,18 +907,7 @@ namespace RoslynTool.CsToLua
                         OutputExpressionList(ii.ReturnArgs);
                         CodeBuilder.Append(" = ");
                     }
-                    if (sym.MethodKind == MethodKind.DelegateInvoke) {
-                        VisitExpressionSyntax(invocation.Expression);
-                    } else if (sym.IsStatic) {
-                        CodeBuilder.AppendFormat("{0}.", ii.ClassKey);
-                        CodeBuilder.Append(NameMangling(sym));
-                    } else {
-                        CodeBuilder.Append("this:");
-                        CodeBuilder.Append(NameMangling(sym));
-                    }
-                    CodeBuilder.Append("(");
-                    OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
-                    CodeBuilder.Append(")");
+                    ii.OutputInvocation(CodeBuilder, this, invocation.Expression, false);
                     if (ii.ReturnArgs.Count > 0 && !toplevel) {
                         CodeBuilder.AppendFormat(" return {0}; end)()", localName);
                     }
