@@ -25,6 +25,7 @@ namespace RoslynTool.CsToLua
         internal List<IMethodSymbol> MethodSymbols = new List<IMethodSymbol>();
         internal List<IPropertySymbol> PropertySymbols = new List<IPropertySymbol>();
         internal List<IEventSymbol> EventSymbols = new List<IEventSymbol>();
+        internal List<INamedTypeSymbol> InterfaceSymbols = new List<INamedTypeSymbol>();
         internal Dictionary<string, bool> SymbolOverloadFlags = new Dictionary<string, bool>();
         internal HashSet<string> MethodNames = new HashSet<string>();
         internal Dictionary<string, INamedTypeSymbol> ExtensionClasses = new Dictionary<string, INamedTypeSymbol>();
@@ -32,6 +33,7 @@ namespace RoslynTool.CsToLua
         internal Dictionary<string, IFieldSymbol> FieldUseExplicitTypeParams = new Dictionary<string, IFieldSymbol>();
         internal Dictionary<string, IFieldSymbol> FieldCreateSelfs = new Dictionary<string, IFieldSymbol>();
         internal List<string> GenericTypeParamNames = new List<string>();
+        internal Dictionary<string, string> InterfaceMethodMap = new Dictionary<string, string>();
 
         internal void Init(INamedTypeSymbol typeSym, CSharpCompilation compilation, SymbolTable symTable)
         {
@@ -39,6 +41,16 @@ namespace RoslynTool.CsToLua
                 Logger.Instance.ReportIllegalType(typeSym);
                 return;
             }
+            foreach (var intf in typeSym.AllInterfaces) {
+                string key = ClassInfo.GetFullName(intf);
+                ClassSymbolInfo isi;
+                if (!symTable.ClassSymbols.TryGetValue(key, out isi)) {
+                    isi = new ClassSymbolInfo();
+                    symTable.ClassSymbols.Add(key, isi);
+                    isi.Init(intf, compilation, symTable);
+                }
+            }
+
             ClassKey = ClassInfo.GetFullName(typeSym);
             BaseClassKey = ClassInfo.GetFullName(typeSym.BaseType);
             if (BaseClassKey == "System.Object" || BaseClassKey == "System.ValueType")
@@ -196,6 +208,8 @@ namespace RoslynTool.CsToLua
                     continue;
                 }
             }
+            BuildInterfaceMethodMap(typeSym, compilation, symTable);
+            BuildInterfaces(typeSym);
         }
 
         private void CheckFieldUseExplicitTypeParam(IFieldSymbol fsym, Compilation compilation, ref bool fieldIncludeTypeOf, ref bool staticFieldIncludeTypeOf)
@@ -264,6 +278,56 @@ namespace RoslynTool.CsToLua
                         GenerateTypeParamFields = true;
                     }
                 }
+            }
+        }
+        private void BuildInterfaceMethodMap(INamedTypeSymbol typeSym, CSharpCompilation compilation, SymbolTable symTable)
+        {
+            foreach (var intf in typeSym.AllInterfaces) {
+                foreach (var sym in intf.GetMembers()) {
+                    var msym = sym as IMethodSymbol;
+                    if (null != msym) {
+                        var implSym = typeSym.FindImplementationForInterfaceMember(sym) as IMethodSymbol;
+                        if (null != implSym) {
+                            string name = symTable.NameMangling(msym);
+                            string implName = symTable.NameMangling(implSym);
+                            if (!InterfaceMethodMap.ContainsKey(name)) {
+                                InterfaceMethodMap.Add(name, implName);
+                            }
+                        }
+                    }
+                    var psym = sym as IPropertySymbol;
+                    if (null != psym) {
+                        var implSym = typeSym.FindImplementationForInterfaceMember(sym) as IPropertySymbol;
+                        if (null != implSym && !psym.IsIndexer) {
+                            string name = SymbolTable.GetPropertyName(psym);
+                            string implName = SymbolTable.GetPropertyName(implSym);
+                            if (!InterfaceMethodMap.ContainsKey(name)) {
+                                InterfaceMethodMap.Add(name, implName);
+                            }
+                        }
+                    }
+                    var esym = sym as IEventSymbol;
+                    if (null != esym) {
+                        var implSym = typeSym.FindImplementationForInterfaceMember(sym) as IEventSymbol;
+                        if (null != implSym) {
+                            string name = SymbolTable.GetEventName(esym);
+                            string implName = SymbolTable.GetEventName(implSym);
+                            if (!InterfaceMethodMap.ContainsKey(name)) {
+                                InterfaceMethodMap.Add(name, implName);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        private void BuildInterfaces(INamedTypeSymbol typeSym)
+        {
+            foreach (var intf in typeSym.AllInterfaces) {
+                if (!InterfaceSymbols.Contains(intf)) {
+                    InterfaceSymbols.Add(intf);
+                }
+
+                BuildInterfaces(intf);
             }
         }
     }

@@ -7,9 +7,10 @@ TopLevel.SecondLevel.FooExtension = {
 		if (obj.m_Test > 0) then
 			obj.m_Test2 = 678;
 		end;
-		local f; f = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", nil, {{1, 2}, {2, 3}});
+		local f; f = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", (function(obj) System.Collections.Generic.List_T.__install_Extentions(obj); end), {{1, 2}, {2, 3}});
 	end,
-	Test3__TopLevel_SecondLevel_Foo__System_Int32 = function(obj, ix)
+	Test3__TopLevel_SecondLevel_Foo__System_Int32 = function(__compiler_cs_this, ix)
+		__compiler_cs_this:Test123(123, 456);
 	end,
 	TestExtern = function(obj)
 	end,
@@ -48,23 +49,21 @@ TopLevel.SecondLevel.FooExtension = {
 	end,
 
 	__define_class = function()
-		TopLevel.SecondLevel.Foo.__install_TopLevel__SecondLevel__FooExtension = function(obj)
-			obj.Test3__TopLevel_SecondLevel_Foo = TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo;
-		end
-		UnityEngine.GameObject.__install_TopLevel__SecondLevel__FooExtension = function(obj)
-			obj.TestExtern = TopLevel.SecondLevel.FooExtension.TestExtern;
-		end
+		rawset(TopLevel.SecondLevel.Foo, "__install_TopLevel__SecondLevel__FooExtension", (function(obj)
+			rawset(obj, "Test3__TopLevel_SecondLevel_Foo", TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo);
+		end));
+		rawset(UnityEngine.GameObject, "__install_TopLevel__SecondLevel__FooExtension", (function(obj)
+			rawset(obj, "TestExtern", TopLevel.SecondLevel.FooExtension.TestExtern);
+		end));
 		local static = TopLevel.SecondLevel.FooExtension;
 		local static_fields = nil;
 		local static_props = nil;
 		local static_events = nil;
 
-		return defineclass(nil, "TopLevel.SecondLevel.FooExtension", static, static_fields, static_props, static_events, nil, nil, nil, nil, false);
+		return defineclass(nil, "TopLevel.SecondLevel.FooExtension", static, static_fields, static_props, static_events, nil, nil, nil, nil, nil, nil, false);
 	end,
 };
 
 
 TopLevel.SecondLevel.FooExtension.__define_class();
 
---local obj = TopLevel.Child2.Bar:new();
---obj:Test();

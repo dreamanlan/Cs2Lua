@@ -58,6 +58,8 @@ namespace RoslynTool
                             SymbolTable.ForSlua = true;
                         } else if (0 == string.Compare(args[i], "-outputresult", true)) {
                             outputResult = true;
+                        } else if (0 == string.Compare(args[i], "-norequire", true)) {
+                            CsToLuaProcessor.NoRequire = true;
                         } else if (0 == string.Compare(args[i], "-refbyname", true)) {
                             string name = string.Empty, alias = "global";
                             if (i < args.Length - 1) {
@@ -125,7 +127,7 @@ namespace RoslynTool
                         }
                     }
                 } else {
-                    Console.WriteLine("[Usage]:Cs2Lua [-ext fileext] [-enableinherit] [-normallua/-slua] [-outputresult] [-d macro] [-refbyname dllname alias] [-refbypath dllpath alias] [-src] csfile|csprojfile");
+                    Console.WriteLine("[Usage]:Cs2Lua [-ext fileext] [-enableinherit] [-normallua/-slua] [-outputresult] [-norequire] [-d macro] [-refbyname dllname alias] [-refbypath dllpath alias] [-src] csfile|csprojfile");
                     Console.WriteLine("\twhere:");
                     Console.WriteLine("\t\tfileext = file externsion, default is txt for unity3d, maybe lua for other usage.");
                     Console.WriteLine("\t\tmacro = c# macro define, used in your csharp code #if/#elif/#else/#endif etc.");

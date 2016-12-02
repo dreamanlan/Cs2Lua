@@ -116,10 +116,16 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.Append("; end)()");
                 } else {
                     ProcessUnaryOperator(node, ref op);
-                    CodeBuilder.Append("(");
-                    CodeBuilder.Append(op);
-                    CodeBuilder.Append(" ");
-                    VisitExpressionSyntax(node.Operand);
+                    string functor;
+                    if (s_UnaryFunctor.TryGetValue(op, out functor)) {
+                        CodeBuilder.AppendFormat("{0}(", functor);
+                        VisitExpressionSyntax(node.Operand);
+                    } else {
+                        CodeBuilder.Append("(");
+                        CodeBuilder.Append(op);
+                        CodeBuilder.Append(" ");
+                        VisitExpressionSyntax(node.Operand);
+                    }
                     CodeBuilder.Append(")");
                 }
             }

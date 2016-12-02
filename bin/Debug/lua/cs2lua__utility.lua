@@ -576,7 +576,7 @@ function wrapexternvaluetypearray(arr)
 	return setmetatable(arr, { __index = __mt_index_of_array });
 end;
 
-function defineclass(base, className, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, is_value_type)
+function defineclass(base, className, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, instance_interfaces, instance_interface_map, is_value_type)
     
     local base_class = base or {};
     local mt = getmetatable(base_class);

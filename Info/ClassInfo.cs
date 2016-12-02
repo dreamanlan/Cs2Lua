@@ -110,7 +110,7 @@ namespace RoslynTool.CsToLua
                 refType = refType.ContainingType;
             }
             string key = GetFullName(refType);
-            if (null != refType && refType != curClassSym && refType.ContainingAssembly == curClassSym.ContainingAssembly && !refType.IsAnonymousType && refType.TypeKind != TypeKind.Delegate) {
+            if (null != refType && refType != curClassSym && refType.ContainingAssembly == curClassSym.ContainingAssembly && !refType.IsAnonymousType && !refType.IsImplicitClass && !refType.IsImplicitlyDeclared && refType.TypeKind != TypeKind.Delegate && refType.TypeKind != TypeKind.Dynamic && refType.TypeKind != TypeKind.Interface) {
                 if (!string.IsNullOrEmpty(key) && !References.Contains(key) && key != Key) {
                     bool isIgnore = ClassInfo.HasAttribute(refType, "Cs2Lua.IgnoreAttribute");
                     if (isIgnore) {

@@ -30,6 +30,54 @@ namespace TopLevel
         public int C;
     }
 
+    public interface IRunnable
+    {
+        void Test();
+        int this[int ix]{get;}
+        int TestProp {get;set;}
+        event Action OnAction;
+    }
+
+    public class Runnable : IRunnable
+    {
+        /*
+        void IRunnable.Test()
+        {
+            LuaConsole.Print("test.");
+        }
+        */
+        int IRunnable.TestProp
+        {
+            get{return 1;}
+            set{}
+        }
+        int this[int ix]
+        {
+            get
+            {
+                return 1;
+            }
+        }
+        void Test()
+        {
+
+        }
+        event Action IRunnable.OnAction
+        {
+            add{}
+            remove{}
+        }
+    }
+
+    public class TestRunnable
+    {
+        public void Test()
+        {
+            IRunnable f = new Runnable();
+            f.Test();
+        }
+    }
+
     public class Singleton<T> where T : new()
     {
         protected static T ms_instance;
@@ -263,6 +311,8 @@ namespace TopLevel
 
             private int TestLocal(out int v)
             {
+                IRunnable ir = new Runnable();
+                ir.Test();
                 v = 1;
                 return 2;
             }
@@ -316,8 +366,10 @@ namespace TopLevel
                 }
                 List<List<int>> f = new List<List<int>> { { 1, 2 }, { 2, 3 } };
             }
-            public static void Test3(Foo obj, int ix)
-            { }
+            public static void Test3(Foo @this, int ix)
+            {
+                @this.Test123(123,456);
+            }
             public static void TestExtern(this GameObject obj)
             { }
             public static void NormalMethod()
@@ -359,6 +411,313 @@ namespace TopLevel
                 a=b=c++;
             }
         }
+    }
+}
+
+
+public static class Extentions
+{
+
+	private static DateTime dateTime1970;
+
+	public static long timeInMillisecond(this DateTime dateTime)
+	{
+		return dateTime.Ticks / 10000;
+	}
+
+	public static long timeSince1970(this DateTime dateTime)
+	{
+		return (long)(dateTime.timeSince1970InMillisecond()/1000);
+	}
+
+	public static long timeSince1970InMillisecond(this DateTime dateTime)
+	{
+		//return (long)(Time.realtimeSinceStartup * 1000);
+		if (dateTime1970.Ticks == 0){
+			//Debug.LogError("Ticks = 0");
+			dateTime1970 = DateTime.Parse("1970-1-1");
+		}
+
+		TimeSpan ts = dateTime - dateTime1970;
+		return(long)ts.TotalMilliseconds;
+
+	}
+
+    /// <summary>
+    /// 搜索指定名字的子节点
+    /// 
+    /// 默认最多递归16层 保证安全跟性能
+    /// </summary>
+    /// <param name="transform"></param>
+    /// <param name="childName"></param>
+    /// <returns></returns>
+	public static Transform findChildRecursively(this Transform transform, string childName,int maxDepth = 16)
+	{
+		Transform child = transform.FindChild(childName);
+
+		if (child == null && maxDepth > 0) {
+			int childCount = transform.childCount;
+			for (int i=0; i<childCount; i++){
+				child = transform.GetChild(i).findChildRecursively(childName,maxDepth - 1);
+
+				if (child != null){
+					break;
+				}
+                break;
+			}
+		}
+
+		return child;
+	}
+    
+    /// <summary>
+    /// 搜索名字包含指定关键字的子节点
+    /// 
+    /// 默认最多递归16层
+    /// </summary>
+    /// <param name="transform"></param>
+    /// <param name="childName"></param>
+    /// <returns></returns>
+    public static Transform searchChildRecursively(this Transform transform, string childName,int maxDepth = 16)
+    {
+        if (transform.name.IndexOf(childName) != -1)
+        {
+            return  transform;
+        }
+
+        int count = transform.childCount;
+        if (maxDepth > 0)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                Transform nowNode = transform.GetChild(i);
+                Transform searchRes = searchChildRecursively(nowNode, childName, maxDepth - 1);
+                if (searchRes != null)
+                    return searchRes;
+            }
+        }
+
+        return null;
+    }
+
+	public static bool isFirstTimeToStart()
+	{
+		int isFirstTimeStart = PlayerPrefs.GetInt("isFirstTimeToStart", 1);
+		return isFirstTimeStart == 1;
+	}
+
+    public static void AddSorted<T>(this List<T> list, T item) where T : IComparable<T>
+    {
+        if (list.Count == 0)
+        {
+            list.Add(item);
+            return;
+        }
+        if (list[list.Count - 1].CompareTo(item) <= 0)
+        {
+            list.Add(item);
+            return;
+        }
+        if (list[0].CompareTo(item) >= 0)
+        {
+            list.Insert(0, item);
+            return;
+        }
+        int index = list.BinarySearch(item);
+        if (index < 0)
+            index = ~index;
+        list.Insert(index, item);
+    }
+}
+
+namespace UIDemo
+{
+    public class UICommonHeader : MonoBehaviour, IEventListener
+    {
+        public delegate void OnBackBtnHandler();
+
+        public GameObject TitleContainer;
+        public GameObject OptionContainer;
+
+        public GameObject MailCountObj;
+        public UILabel MailCount;
+
+        public UILabel GoldValue;
+        public UILabel TicketValue;
+        public UILabel DiamondValue;
+        public UILabel TitleCaption;
+
+        public GameObject FadeInAni;
+        public GameObject FadeOutAni;
+
+        public event OnBackBtnHandler OnBackBtn = null;
+
+        void OnEnable()
+        {
+            AttachEvent();
+            UpdateUI();
+        }
+
+        void OnDisable()
+        {
+            DetachEvent();
+        }
+
+        public void UpdateUI()
+        {
+            UpdateMailUI();
+            UpdateMoneyUI();
+        }
+
+        public void UpdateMailUI()
+        {
+            int nMailCount = MailSystem.instance().GetNewMailCount();
+            UICommon.SetActive(MailCountObj, nMailCount > 0);
+            if (nMailCount > 0)
+            {
+                MailCount.text = nMailCount.ToString();
+            }
+        }
+        public void UpdateMoneyUI()
+        {
+            GoldValue.text = UICommon.GetCurrencyText(CharacterSystem.instance().MyInfo.GoldValue);
+            TicketValue.text = UICommon.GetCurrencyText(CharacterSystem.instance().MyInfo.TicketValue);
+            DiamondValue.text = UICommon.GetCurrencyText(CharacterSystem.instance().MyInfo.DiamondValue);
+        }
+
+        public void SetTitle(string strTitle)
+        {
+            if(strTitle.Length == 0)
+            {
+                UICommon.SetActive(TitleContainer, false);
+                UICommon.SetActive(OptionContainer, true);
+            }
+            else
+            {
+                UICommon.SetActive(TitleContainer, true);
+                UICommon.SetActive(OptionContainer, false);
+                TitleCaption.text = strTitle;
+            }
+        }
+
+        public void StartFadeIn()
+        {
+            UICommon.SetActive(FadeInAni, false);
+            UICommon.SetActive(FadeOutAni, false);
+            FadeInAni.SetActive(true);
+        }
+
+        public void StartFadeOut()
+        {
+            UICommon.SetActive(FadeInAni, false);
+            UICommon.SetActive(FadeOutAni, false);
+            FadeOutAni.SetActive(true);
+        }
+
+        #region BtnEvent
+        public void OnSettingBtnClick()
+        {
+            GameEntry.StateManager.PushStateFadeOut(typeof(HFEStateSetting));
+        }
+
+        public void OnMailBtnClick()
+        {
+            GameEntry.StateManager.PushStateFadeOut(typeof(HFEStateMail));
+        }
+
+        public void OnGiftBtnClick()
+        {
+            UICommonTip.ShowText("不要搞我！哼！", UICommonTip.ColError);
+        }
+
+        public void OnGoldClick()
+        {
+            UICommonTip.ShowText("不要搞我！哼！", UICommonTip.ColError);
+        }
+
+        public void OnGameGOldClick()
+        {
+            UICommonTip.ShowText("不要搞我！哼！", UICommonTip.ColError);
+        }
+
+        public void OnDiamondClick()
+        {
+            UICommonTip.ShowText("不要搞我！哼！", UICommonTip.ColError);
+        }
+
+        public void OnBackBtnClick()
+        {
+            if(OnBackBtn != null)
+            {
+                OnBackBtn();
+            }
+            else
+            {
+                GameEntry.StateManager.PopStateFadeOut();
+            }
+        }
+        #endregion
+
+        static public UICommonHeader GetActive()
+        {
+            GameObject pHeader = GameEntry.uiMgr.Show(UIHudDef.UI_COMMON_HEADER);
+            if (pHeader == null)
+            {
+                return null;
+            }
+            return pHeader.GetComponent<UICommonHeader>();
+        }
+        static public void Show(string strTitle, OnBackBtnHandler pHander = null)
+        {
+            GameObject pHeader = GameEntry.uiMgr.Show(UIHudDef.UI_COMMON_HEADER);
+            if (pHeader == null)
+            {
+                return;
+            }
+            UICommonHeader pUICommonHeader = pHeader.GetComponent<UICommonHeader>();
+            if(pUICommonHeader == null)
+            {
+                return;
+            }
+            pUICommonHeader.SetTitle(strTitle);
+            pUICommonHeader.OnBackBtn = pHander;
+        }
+        static public void Hide()
+        {
+            GameEntry.uiMgr.Hide(UIHudDef.UI_COMMON_HEADER);
+        }
+
+        #region Event
+        public bool OnFireEvent(uint key, object param1, object param2)
+        {
+            switch(key)
+            {
+                case (uint)EventDef.Character_MailChanged:
+                    {
+                        UpdateMailUI();
+                    } break;
+                case (uint)EventDef.Character_MoneyChanged:
+                    {
+                        UpdateMoneyUI();
+                    } break;
+            }
+            return false;
+        }
+        public int GetListenerPriority(uint eventKey)
+        {
+            return 0;
+        }
+        public void AttachEvent()
+        {
+            GameEntry.rootEventDispatcher.AttachListenerNow(this, (uint)EventDef.Character_MailChanged);
+            GameEntry.rootEventDispatcher.AttachListenerNow(this, (uint)EventDef.Character_MoneyChanged);
+        }
+        public void DetachEvent()
+        {
+            GameEntry.rootEventDispatcher.DetachListenerNow(this, (uint)EventDef.Character_MailChanged);
+            GameEntry.rootEventDispatcher.DetachListenerNow(this, (uint)EventDef.Character_MoneyChanged);
+        }
+        #endregion
     }
 }
 /*

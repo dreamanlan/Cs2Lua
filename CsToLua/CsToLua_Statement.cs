@@ -25,8 +25,20 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendFormat("{0}{1} = true;", GetIndentString(), ci.BreakFlagVarName);
                     CodeBuilder.AppendLine();
                 }
+
+                bool isLastNode = IsLastNodeOfFor(node);
+                if (isLastNode) {
+                    CodeBuilder.AppendFormat("{0}do", GetIndentString());
+                    CodeBuilder.AppendLine();
+                }
+                
                 CodeBuilder.AppendFormat("{0}break;", GetIndentString());
                 CodeBuilder.AppendLine();
+
+                if (isLastNode) {
+                    CodeBuilder.AppendFormat("{0}end;", GetIndentString());
+                    CodeBuilder.AppendLine();
+                }
             }
         }
         public override void VisitContinueStatement(ContinueStatementSyntax node)
@@ -39,8 +51,20 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendFormat("{0}{1} = false;", GetIndentString(), ci.BreakFlagVarName);
                     CodeBuilder.AppendLine();
                 }
+                
+                bool isLastNode = IsLastNodeOfFor(node);
+                if (isLastNode) {
+                    CodeBuilder.AppendFormat("{0}do", GetIndentString());
+                    CodeBuilder.AppendLine();
+                }
+                
                 CodeBuilder.AppendFormat("{0}break;", GetIndentString());
                 CodeBuilder.AppendLine();
+                
+                if (isLastNode) {
+                    CodeBuilder.AppendFormat("{0}end;", GetIndentString());
+                    CodeBuilder.AppendLine();
+                }
             }
         }
         public override void VisitReturnStatement(ReturnStatementSyntax node)

@@ -14,8 +14,9 @@ namespace RoslynTool.CsToLua
         public override SyntaxToken VisitToken(SyntaxToken token)
         {
             if (token.Kind() == SyntaxKind.IdentifierToken) {
+                string id = token.Text;
                 bool change;
-                string name = SymbolTable.CheckLuaKeyword(token.Text, out change);
+                string name = SymbolTable.CheckLuaKeyword(id, out change);
                 if (change && !token.IsKeyword()) {
                     return SyntaxFactory.Identifier(token.LeadingTrivia, name, token.TrailingTrivia);
                 } else {

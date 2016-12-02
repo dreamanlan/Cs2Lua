@@ -40,7 +40,7 @@ namespace RoslynTool.CsToLua
         }
         internal string NameMangling(IMethodSymbol sym)
         {
-            string ret = sym.Name;
+            string ret = GetMethodName(sym);
             if (ret[0] == '.')
                 ret = ret.Substring(1);
             string key = ClassInfo.CalcTypeReference(sym.ContainingType);
@@ -152,7 +152,7 @@ namespace RoslynTool.CsToLua
             if (null == methodSym)
                 return string.Empty;
             StringBuilder sb = new StringBuilder();
-            string name = methodSym.Name;
+            string name = GetMethodName(methodSym);
             if (name[0] == '.')
                 name = name.Substring(1);
             sb.Append(name);
@@ -177,11 +177,56 @@ namespace RoslynTool.CsToLua
             }
             return sb.ToString();
         }
+        internal static string GetMethodName(IMethodSymbol sym)
+        {
+            if (null == sym) {
+                return string.Empty;
+            }
+            if (sym.ContainingType.TypeKind == TypeKind.Interface) {
+                string name = ClassInfo.GetFullName(sym.ContainingType) + "." + sym.Name;
+                return name.Replace(".", "_");
+            } else if (sym.ExplicitInterfaceImplementations.Length > 0) {
+                return sym.Name.Replace(".", "_");
+            } else {
+                return sym.Name;
+            }
+        }
+        internal static string GetPropertyName(IPropertySymbol sym)
+        {
+            if (null == sym) {
+                return string.Empty;
+            }
+            if (sym.ContainingType.TypeKind == TypeKind.Interface) {
+                string name = ClassInfo.GetFullName(sym.ContainingType) + "." + sym.Name;
+                return name.Replace(".", "_");
+            } else if (sym.ExplicitInterfaceImplementations.Length > 0) {
+                return sym.Name.Replace(".", "_");
+            } else {
+                return sym.Name;
+            }
+        }
+        internal static string GetEventName(IEventSymbol sym)
+        {
+            if (null == sym) {
+                return string.Empty;
+            }
+            if (sym.ContainingType.TypeKind == TypeKind.Interface) {
+                string name = ClassInfo.GetFullName(sym.ContainingType) + "." + sym.Name;
+                return name.Replace(".", "_");
+            } else if (sym.ExplicitInterfaceImplementations.Length > 0) {
+                return sym.Name.Replace(".", "_");
+            } else {
+                return sym.Name;
+            }
+        }
         internal static string CheckLuaKeyword(string name, out bool change)
         {
-            if (s_ExtraLuaKeywords.Contains(name)) {
+            if (name.StartsWith("@")) {
                 change = true;
-                return "__compiler_" + name;
+                return "__compiler_cs_" + name.Substring(1);
+            } else if (s_ExtraLuaKeywords.Contains(name)) {
+                change = true;
+                return "__compiler_lua_" + name;
             } else {
                 change = false;                
                 return name;

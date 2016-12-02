@@ -274,7 +274,7 @@ namespace RoslynTool.CsToLua
                 } else {
                     ci.CurrentCodeBuilder = ci.InstanceFieldCodeBuilder;
                 }
-                CodeBuilder.AppendFormat("{0}{1} = ", GetIndentString(), node.Identifier.Text);
+                CodeBuilder.AppendFormat("{0}{1} = ", GetIndentString(), SymbolTable.GetPropertyName(declSym));
                 if (null != node.Initializer) {
                     VisitExpressionSyntax(node.Initializer.Value);
                     CodeBuilder.Append(",");
@@ -331,7 +331,7 @@ namespace RoslynTool.CsToLua
                 }
                 ci.CurrentCodeBuilder = curBuilder;
 
-                CodeBuilder.AppendFormat("{0}{1} = {{", GetIndentString(), declSym.Name);
+                CodeBuilder.AppendFormat("{0}{1} = {{", GetIndentString(), SymbolTable.GetPropertyName(declSym));
                 CodeBuilder.AppendLine();
                 ++m_Indent;
                 foreach (var accessor in node.AccessorList.Accessors) {
@@ -413,7 +413,7 @@ namespace RoslynTool.CsToLua
             }
             ci.CurrentCodeBuilder = curBuilder;
 
-            CodeBuilder.AppendFormat("{0}{1} = {{", GetIndentString(), declSym.Name);
+            CodeBuilder.AppendFormat("{0}{1} = {{", GetIndentString(), SymbolTable.GetEventName(declSym));
             CodeBuilder.AppendLine();
             ++m_Indent;
             foreach (var accessor in node.AccessorList.Accessors) {

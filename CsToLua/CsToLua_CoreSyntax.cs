@@ -196,7 +196,7 @@ namespace RoslynTool.CsToLua
 
                 ++m_Indent;
                 ++m_Indent;
-                extensionCodeBuilder.AppendFormat("{0}obj.{1} = {2}.{3};", GetIndentString(), manglingName, ci.Key, manglingName);
+                extensionCodeBuilder.AppendFormat("{0}rawset(obj, \"{1}\", {2}.{3});", GetIndentString(), manglingName, ci.Key, manglingName);
                 extensionCodeBuilder.AppendLine();
                 --m_Indent;
                 --m_Indent;
@@ -291,7 +291,7 @@ namespace RoslynTool.CsToLua
                                 CodeBuilder.AppendFormat("{0}{1}.{2}", GetIndentString(), isStatic ? ci.Key : "this", name);
                                 CodeBuilder.AppendFormat(" = ", fieldSym.Type.TypeKind == TypeKind.Delegate ? "delegationwrap(" : string.Empty);
                                 VisitExpressionSyntax(v.Initializer.Value);
-                                CodeBuilder.AppendFormat("{0};", fieldSym.Type.TypeKind == TypeKind.Delegate ? ")" : string.Empty);
+                                CodeBuilder.AppendFormat("{0}", fieldSym.Type.TypeKind == TypeKind.Delegate ? ")" : string.Empty);
                                 CodeBuilder.AppendLine();
                                 if (isStatic) {
                                     ++m_Indent;
@@ -344,7 +344,7 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
                         CodeBuilder.Append(" = delegationwrap(");
                         VisitExpressionSyntax(v.Initializer.Value);
-                        CodeBuilder.Append(");");
+                        CodeBuilder.Append(")");
                     } else {
                         CodeBuilder.AppendFormat("{0}{1} = wrapdelegation{{}}", GetIndentString(), name);
                     }
@@ -413,10 +413,16 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.AppendLine();
                 } else {
                     ProcessUnaryOperator(expression, ref op);
-                    CodeBuilder.Append("(");
-                    CodeBuilder.Append(op);
-                    CodeBuilder.Append(" ");
-                    VisitExpressionSyntax(prefixUnary.Operand);
+                    string functor;
+                    if (s_UnaryFunctor.TryGetValue(op, out functor)) {
+                        CodeBuilder.AppendFormat("{0}(", functor);
+                        VisitExpressionSyntax(prefixUnary.Operand);
+                    } else {
+                        CodeBuilder.Append("(");
+                        CodeBuilder.Append(op);
+                        CodeBuilder.Append(" ");
+                        VisitExpressionSyntax(prefixUnary.Operand);
+                    }
                     CodeBuilder.AppendFormat("){0}", expTerminater);
                     if (expTerminater.Length > 0)
                         CodeBuilder.AppendLine();

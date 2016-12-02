@@ -20,6 +20,11 @@ namespace RoslynTool.CsToLua
     }
     public static class CsToLuaProcessor
     {
+        public static bool NoRequire
+        {
+            get;
+            set;
+        }
         public static ExitCode Process(string srcFile, string outputExt, IList<string> macros, IDictionary<string, string> _refByNames, IDictionary<string, string> _refByPaths, bool enableInherit, bool outputResult)
         {
             List<string> preprocessors = new List<string>(macros);
@@ -617,29 +622,20 @@ namespace RoslynTool.CsToLua
                 }
 
                 //references
-                foreach (var ci in classes) {
-                    foreach (string r in ci.References) {
-                        if (!r.StartsWith("System.") && !r.StartsWith("UnityEngine.")) {
-                            string refname = r.Replace(".", "__");
-                            if (!refs.Contains(refname)) {
-                                sb.AppendFormat("require \"{0}\";", refname);
-                                sb.AppendLine();
-                                refs.Add(refname);
+                if (!NoRequire) {
+                    foreach (var ci in classes) {
+                        foreach (string r in ci.References) {
+                            if (!r.StartsWith("System.") && !r.StartsWith("UnityEngine.")) {
+                                string refname = r.Replace(".", "__");
+                                if (!refs.Contains(refname)) {
+                                    sb.AppendFormat("require \"{0}\";", refname);
+                                    sb.AppendLine();
+                                    refs.Add(refname);
+                                }
                             }
                         }
                     }
                 }
-
-                /*
-                foreach (var pair in csi.ExtensionClasses) {
-                    string refname = pair.Key;
-                    if (!refs.Contains(refname)) {
-                        sb.AppendFormat("require \"{0}\";", refname);
-                        sb.AppendLine();
-                        refs.Add(refname);
-                    }
-                }
-                */
             }
             
             sb.AppendLine();
@@ -742,14 +738,14 @@ namespace RoslynTool.CsToLua
                 ++indent;
 
                 foreach (var pair in classExternsions) {
-                    sb.AppendFormat("{0}{1}.__install_{2} = function(obj)", GetIndentString(indent), pair.Key, fileName);
+                    sb.AppendFormat("{0}rawset({1}, \"__install_{2}\", (function(obj)", GetIndentString(indent), pair.Key, fileName);
                     sb.AppendLine();
                     ++indent;
                     foreach (var builder in pair.Value) {
                         sb.AppendFormat(builder.ToString());
                     }
                     --indent;
-                    sb.AppendFormat("{0}end", GetIndentString(indent));
+                    sb.AppendFormat("{0}end));", GetIndentString(indent));
                     sb.AppendLine();
                 }
 
@@ -995,17 +991,59 @@ namespace RoslynTool.CsToLua
                         --indent;
                         sb.AppendFormat("{0}}};", GetIndentString(indent));
                         sb.AppendLine();
+
+                        sb.AppendLine();
                     } else {
                         sb.AppendFormat("{0}local instance_events = nil;", GetIndentString(indent));
                         sb.AppendLine();
                     }
 
+                    if (csi.InterfaceSymbols.Count > 0) {
+                        sb.AppendFormat("{0}local instance_interfaces = {{", GetIndentString(indent));
+                        sb.AppendLine();
+                        ++indent;
+
+                        foreach (var intf in csi.InterfaceSymbols) {
+                            sb.AppendFormat("{0}\"{1}\",", GetIndentString(indent), ClassInfo.GetFullName(intf));
+                            sb.AppendLine();
+                        }
+
+                        --indent;
+                        sb.AppendFormat("{0}}};", GetIndentString(indent));
+                        sb.AppendLine();
+
+                        sb.AppendLine();
+                    } else {
+                        sb.AppendFormat("{0}local instance_interfaces = nil;", GetIndentString(indent));
+                        sb.AppendLine();
+                    }
+
+                    if (csi.InterfaceMethodMap.Count > 0) {
+                        sb.AppendFormat("{0}local instance_interface_map = {{", GetIndentString(indent));
+                        sb.AppendLine();
+                        ++indent;
+
+                        foreach (var pair in csi.InterfaceMethodMap) {
+                            sb.AppendFormat("{0}{1} = \"{2}\",", GetIndentString(indent), pair.Key, pair.Value);
+                            sb.AppendLine();
+                        }
+
+                        --indent;
+                        sb.AppendFormat("{0}}};", GetIndentString(indent));
+                        sb.AppendLine();
+
+                        sb.AppendLine();
+                    } else {
+                        sb.AppendFormat("{0}local instance_interface_map = nil;", GetIndentString(indent));
+                        sb.AppendLine();
+                    }
+
                     sb.AppendLine();
                     
-                    sb.AppendFormat("{0}return defineclass({1}, \"{2}\", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, {3});", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass, key, isValueType ? "true" : "false");
+                    sb.AppendFormat("{0}return defineclass({1}, \"{2}\", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, instance_interfaces, instance_interface_map, {3});", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass, key, isValueType ? "true" : "false");
                     sb.AppendLine();
                 } else {
-                    sb.AppendFormat("{0}return defineclass({1}, \"{2}\", static, static_fields, static_props, static_events, nil, nil, nil, nil, {3});", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass, key, isValueType ? "true" : "false");
+                    sb.AppendFormat("{0}return defineclass({1}, \"{2}\", static, static_fields, static_props, static_events, nil, nil, nil, nil, nil, nil, {3});", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass, key, isValueType ? "true" : "false");
                     sb.AppendLine();
                 }
 

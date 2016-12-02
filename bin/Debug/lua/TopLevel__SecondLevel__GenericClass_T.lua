@@ -12,7 +12,7 @@ TopLevel.SecondLevel.GenericClass_T = {
 		else
 			TopLevel.SecondLevel.GenericClass_T.__cctor_called = true;
 		end
-		TopLevel.SecondLevel.GenericClass_T.s_Inst = newtypeparamobject(T);
+		TopLevel.SecondLevel.GenericClass_T.s_Inst = newtypeparamobject(T)
 	end,
 
 	__new_object = function(...)
@@ -47,7 +47,7 @@ TopLevel.SecondLevel.GenericClass_T = {
 				else
 					this.__ctor_called = true;
 				end
-				this.m_Inst = newtypeparamobject(T);
+				this.m_Inst = newtypeparamobject(T)
 			end,
 		};
 
@@ -62,8 +62,10 @@ TopLevel.SecondLevel.GenericClass_T = {
 		end;
 		local instance_props = nil;
 		local instance_events = nil;
+		local instance_interfaces = nil;
+		local instance_interface_map = nil;
 
-		return defineclass(nil, "TopLevel.SecondLevel.GenericClass_T", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, false);
+		return defineclass(nil, "TopLevel.SecondLevel.GenericClass_T", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, instance_interfaces, instance_interface_map, false);
 	end,
 };
 
@@ -113,8 +115,8 @@ TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT = {
 					this.__ctor_called = true;
 				end
 				this.__type_params = {TT, T};
-				this.m_TypeT = T;
-				this.m_TypeTT = TT;
+				this.m_TypeT = T
+				this.m_TypeTT = TT
 			end,
 		};
 
@@ -130,8 +132,10 @@ TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT = {
 		end;
 		local instance_props = nil;
 		local instance_events = nil;
+		local instance_interfaces = nil;
+		local instance_interface_map = nil;
 
-		return defineclass(nil, "TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, false);
+		return defineclass(nil, "TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, instance_interfaces, instance_interface_map, false);
 	end,
 };
 

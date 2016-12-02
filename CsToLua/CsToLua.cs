@@ -211,7 +211,7 @@ namespace RoslynTool.CsToLua
             } else if (val is bool) {
                 CodeBuilder.Append((bool)val ? "true" : "false");
             } else if (val is char) {
-                CodeBuilder.AppendFormat("wrapstring('{0}')", Escape((char)val));
+                CodeBuilder.AppendFormat("0x0{0:X}", (int)(char)val);
             } else if (null == val) {
                 CodeBuilder.Append("nil");
             } else {
@@ -367,10 +367,7 @@ namespace RoslynTool.CsToLua
         {
             bool ret = false;
             var parent = node.Parent;
-            while (null != parent && parent.IsKind(SyntaxKind.Block)) {
-                parent = parent.Parent;
-            }
-            if (null != node && null != parent && (parent.IsKind(SyntaxKind.MethodDeclaration) || parent.IsKind(SyntaxKind.ConstructorDeclaration))) {
+            if (null != node && null != parent) {
                 int ix = -1;
                 int ct = 0;
                 var nodes = parent.ChildNodes();
@@ -383,6 +380,33 @@ namespace RoslynTool.CsToLua
                 }
                 ret = ix == ct - 1;
             }
+            while (null != parent && parent.IsKind(SyntaxKind.Block)) {
+                parent = parent.Parent;
+            }
+            ret = ret && (parent.IsKind(SyntaxKind.MethodDeclaration) || parent.IsKind(SyntaxKind.ConstructorDeclaration));
+            return ret;
+        }
+        private bool IsLastNodeOfFor(SyntaxNode node)
+        {
+            bool ret = false;
+            var parent = node.Parent;
+            if (null != node && null != parent) {
+                int ix = -1;
+                int ct = 0;
+                var nodes = parent.ChildNodes();
+                var enumer = nodes.GetEnumerator();
+                while (enumer.MoveNext()) {
+                    if (enumer.Current == node) {
+                        ix = ct;
+                    }
+                    ++ct;
+                }
+                ret = ix == ct - 1;
+            }
+            while (null != parent && parent.IsKind(SyntaxKind.Block)) {
+                parent = parent.Parent;
+            }
+            ret = ret && (parent.IsKind(SyntaxKind.ForStatement));
             return ret;
         }
         private bool IsLastNodeOfParent(SyntaxNode node)

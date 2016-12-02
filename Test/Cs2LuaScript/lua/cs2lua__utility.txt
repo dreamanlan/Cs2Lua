@@ -576,7 +576,7 @@ function wrapexternvaluetypearray(arr)
 	return setmetatable(arr, { __index = __mt_index_of_array });
 end;
 
-function defineclass(base, className, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, is_value_type)
+function defineclass(base, className, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, instance_interfaces, instance_interface_map, is_value_type)
     
     local base_class = base or {};
     local mt = getmetatable(base_class);
@@ -606,6 +606,8 @@ function defineclass(base, className, static, static_fields, static_props, stati
             end;
             local obj_props = instance_props or {};
             local obj_events = instance_events or {};
+            local obj_intfs = instance_interfaces or {};
+            local obj_intf_map = instance_interface_map or {};
             obj["base"] = baseObj;
             
             setmetatable(obj, {
@@ -614,17 +616,35 @@ function defineclass(base, className, static, static_fields, static_props, stati
                 __index = function(t, k)
                     local ret;
 				            ret = obj_fields[k];
-				            if ret then
+				            if nil~=ret then
 				            	return ret;
 				            end;
                     ret = obj_props[k];
-                    if ret then
+                    if nil~=ret then
                       if ret.get then
                         ret = ret.get(t);
                       else
                         ret = nil;
                       end;
-                    elseif baseObj then
+                      return ret;
+                    end;
+                    ret = obj_intf_maps[k];
+                    if nil~=ret then
+                      ret = t[ret];
+                      if nil~=ret then
+                        return ret;
+                      end;
+                      ret = obj_props[ret];
+                      if nil~=ret then
+                        if ret.get then
+                          ret = ret.get(t);
+                        else
+                          ret = nil;
+                        end;
+                        return ret;
+                      end;
+                    end;
+                    if baseObj then
                     	ret = baseObj[k];
                     end;
                     return ret;
@@ -633,15 +653,25 @@ function defineclass(base, className, static, static_fields, static_props, stati
                 __newindex = function(t, k, v)
                     local ret;
 				            ret = obj_fields[k];
-				            if ret then
+				            if nil~=ret then
 				            	obj_fields[k] = v;
 				            end;
                     ret = obj_props[k];
-                    if ret then
+                    if nil~=ret then
                       if ret.set then
                         ret.set(t, v);
                       end;
                       return;
+                    end;
+                    ret = obj_intf_maps[k];
+                    if nil~=ret then
+                      ret = obj_props[ret];
+                      if nil~=ret then
+                        if ret.set then
+                          ret.set(t, v);
+                        end;
+                        return;
+                      end;
                     end;
                     if not baseObj or not pcall(function() baseObj[k] = v end) then
                         rawset(t, k, v);
@@ -656,11 +686,11 @@ function defineclass(base, className, static, static_fields, static_props, stati
         __index = function(t, k)
             local ret;
             ret = class_fields[k];
-            if ret then
+            if nil~=ret then
             	return ret;
             end;
             ret = class_props[k];
-            if ret then
+            if nil~=ret then
               if ret.get then
                 ret = ret.get(t);
               else
@@ -675,11 +705,11 @@ function defineclass(base, className, static, static_fields, static_props, stati
         __newindex = function(t, k, v)
             local ret;
             ret = class_fields[k];
-            if ret then
+            if nil~=ret then
             	class_fields[k] = v;
             end;
             ret = class_props[k];
-            if ret then
+            if nil~=ret then
               if ret.set then
                 ret.set(t, v);
               end;

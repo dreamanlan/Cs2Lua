@@ -27,8 +27,10 @@ TopLevel.SecondLevel.FooBase = {
 		end;
 		local instance_props = nil;
 		local instance_events = nil;
+		local instance_interfaces = nil;
+		local instance_interface_map = nil;
 
-		return defineclass(nil, "TopLevel.SecondLevel.FooBase", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, false);
+		return defineclass(nil, "TopLevel.SecondLevel.FooBase", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, instance_interfaces, instance_interface_map, false);
 	end,
 };
 
