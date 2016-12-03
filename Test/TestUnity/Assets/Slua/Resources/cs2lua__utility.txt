@@ -519,6 +519,25 @@ function wrapstring(str)
   end;
 end;
 
+function wrapchar(char, intVal)
+  if intVal>0 then
+    return intVal;
+  else
+    local str = tostring(char);
+    local l = string.len(str);
+    if l==1 then
+      local first = string.byte(str,1,1);
+      return first;
+    elseif l==2 then
+      local first = string.byte(str,1,1);
+      local second = string.byte(str,2,2);
+      return first+second*0x100;
+    else
+      return 0;
+    end;
+  end;
+end;
+
 function wraparray(arr)
 	return setmetatable(arr, { __index = __mt_index_of_array });
 end;

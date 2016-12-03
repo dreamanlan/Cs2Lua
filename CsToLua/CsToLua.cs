@@ -277,7 +277,7 @@ namespace RoslynTool.CsToLua
             } else if (val is bool) {
                 CodeBuilder.Append((bool)val ? "true" : "false");
             } else if (val is char) {
-                CodeBuilder.AppendFormat("0x0{0:X}", (int)(char)val);
+                CodeBuilder.AppendFormat("wrapchar('{0}', 0x0{1:X})", Escape((char)val), (int)(char)val);
             } else if (null == val) {
                 CodeBuilder.Append("nil");
             } else {

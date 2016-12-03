@@ -8,6 +8,8 @@ test.cs(559,16): error CS0246: The type or namespace name 'UILabel' could not be
 test.cs(142,27): error CS0413: The type parameter 'T' cannot be used with the 'as' operator because it does not have a class type constraint nor a 'class' constraint
 test.cs(143,23): error CS0128: A local variable named 'v' is already defined in this scope
 test.cs(153,29): error CS0030: Cannot convert type 'T' to 'TT'
+test.cs(378,59): error CS1501: No overload for method 'Add' takes 2 arguments
+test.cs(378,69): error CS1501: No overload for method 'Add' takes 2 arguments
 test.cs(585,30): error CS0103: The name 'MailSystem' does not exist in the current context
 test.cs(586,13): error CS0103: The name 'UICommon' does not exist in the current context
 test.cs(594,55): error CS0103: The name 'CharacterSystem' does not exist in the current context
@@ -16,8 +18,6 @@ test.cs(595,57): error CS0103: The name 'CharacterSystem' does not exist in the 
 test.cs(595,32): error CS0103: The name 'UICommon' does not exist in the current context
 test.cs(596,58): error CS0103: The name 'CharacterSystem' does not exist in the current context
 test.cs(596,33): error CS0103: The name 'UICommon' does not exist in the current context
-test.cs(378,59): error CS1501: No overload for method 'Add' takes 2 arguments
-test.cs(378,69): error CS1501: No overload for method 'Add' takes 2 arguments
 test.cs(603,17): error CS0103: The name 'UICommon' does not exist in the current context
 test.cs(604,17): error CS0103: The name 'UICommon' does not exist in the current context
 test.cs(608,17): error CS0103: The name 'UICommon' does not exist in the current context
@@ -47,9 +47,6 @@ test.cs(683,55): error CS0103: The name 'UIHudDef' does not exist in the current
 test.cs(683,34): error CS0103: The name 'GameEntry' does not exist in the current context
 test.cs(698,34): error CS0103: The name 'UIHudDef' does not exist in the current context
 test.cs(698,13): error CS0103: The name 'GameEntry' does not exist in the current context
-test.cs(406,27): error CS0039: Cannot convert type 'int' to 'TopLevel.SecondLevel.Foo' via a reference conversion, boxing conversion, unboxing conversion, wrapping conversion, or null type conversion
-test.cs(417,26): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
-test.cs(420,17): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
 test.cs(325,17): error CS0305: Using the generic type 'IRunnable<T>' requires 1 type arguments
 test.cs(330,25): error CS0161: 'Foo.TestValueArg(TestStruct)': not all code paths return a value
 test.cs(706,28): error CS0103: The name 'EventDef' does not exist in the current context
@@ -62,3 +59,6 @@ test.cs(728,73): error CS0103: The name 'EventDef' does not exist in the current
 test.cs(728,13): error CS0103: The name 'GameEntry' does not exist in the current context
 test.cs(729,73): error CS0103: The name 'EventDef' does not exist in the current context
 test.cs(729,13): error CS0103: The name 'GameEntry' does not exist in the current context
+test.cs(406,27): error CS0039: Cannot convert type 'int' to 'TopLevel.SecondLevel.Foo' via a reference conversion, boxing conversion, unboxing conversion, wrapping conversion, or null type conversion
+test.cs(417,26): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
+test.cs(420,17): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
