@@ -353,7 +353,7 @@ namespace RoslynTool.CsToLua
                 if (!psym.IsStatic) {
                     string fnOfIntf = "nil";
                     CheckExplicitInterfaceAccess(psym.GetMethod, ref fnOfIntf);
-                    CodeBuilder.AppendFormat("\"{0}\", ", fnOfIntf);
+                    CodeBuilder.AppendFormat("{0}, ", fnOfIntf);
                 }
                 string manglingName = NameMangling(psym.GetMethod);
                 CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
@@ -405,7 +405,7 @@ namespace RoslynTool.CsToLua
                     if (!psym.IsStatic) {
                         string fnOfIntf = "nil";
                         CheckExplicitInterfaceAccess(psym.GetMethod, ref fnOfIntf);
-                        CodeBuilder.AppendFormat("\"{0}\", ", fnOfIntf);
+                        CodeBuilder.AppendFormat("{0}, ", fnOfIntf);
                     }
                     string manglingName = NameMangling(psym.GetMethod);
                     CodeBuilder.AppendFormat("\"{0}\", ", manglingName);

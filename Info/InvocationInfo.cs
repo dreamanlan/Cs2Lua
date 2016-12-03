@@ -115,13 +115,13 @@ namespace RoslynTool.CsToLua
             string mname = cs2lua.NameMangling(sym);
             string prestr = string.Empty;
             if (isMemberAccess) {
-                string fnOfIntf = string.Empty;
+                string fnOfIntf = "nil";
                 bool isExplicitInterfaceInvoke = cs2lua.CheckExplicitInterfaceAccess(sym, ref fnOfIntf);
                 if (isExplicitInterfaceInvoke) {
                     codeBuilder.Append("invokewithinterface(");
                     cs2lua.VisitExpressionSyntax(exp);
                     codeBuilder.Append(", ");
-                    codeBuilder.AppendFormat("\"{0}\", \"{1}\"", fnOfIntf, mname);
+                    codeBuilder.AppendFormat("{0}, \"{1}\"", fnOfIntf, mname);
                     prestr = ", ";
                 } else {
                     if (sym.IsStatic) {

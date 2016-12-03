@@ -537,12 +537,12 @@ namespace RoslynTool.CsToLua
                 OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
                 CodeBuilder.Append(")");
             } else if (specialType == SpecialAssignmentType.PropExplicitImplementInterface) {
-                string fnOfIntf = string.Empty;
-                string mname = string.Empty;
+                string fnOfIntf = "nil";
+                string mname = "nil";
                 CheckExplicitInterfaceAccess(leftPsym, ref fnOfIntf, ref mname);
                 CodeBuilder.AppendFormat("setwithinterface(");
                 VisitExpressionSyntax(leftMemberAccess.Expression);
-                CodeBuilder.AppendFormat(", \"{0}\", \"{1}\", ", fnOfIntf, mname);
+                CodeBuilder.AppendFormat(", {0}, {1}, ", fnOfIntf, mname);
                 VisitExpressionSyntax(assign.Right);
                 CodeBuilder.Append(")");
             } else if (null != leftElementAccess) {
@@ -558,7 +558,7 @@ namespace RoslynTool.CsToLua
                     if (!leftPsym.IsStatic) {
                         string fnOfIntf = "nil";
                         CheckExplicitInterfaceAccess(leftPsym.SetMethod, ref fnOfIntf);
-                        CodeBuilder.AppendFormat("\"{0}\", ", fnOfIntf);
+                        CodeBuilder.AppendFormat("{0}, ", fnOfIntf);
                     }
                     string manglingName = NameMangling(leftPsym.SetMethod);
                     CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
@@ -622,7 +622,7 @@ namespace RoslynTool.CsToLua
                         if (!psym.IsStatic) {
                             string fnOfIntf = "nil";
                             CheckExplicitInterfaceAccess(psym.SetMethod, ref fnOfIntf);
-                            CodeBuilder.AppendFormat("\"{0}\", ", fnOfIntf);
+                            CodeBuilder.AppendFormat("{0}, ", fnOfIntf);
                         }
                         string manglingName = NameMangling(psym.SetMethod);
                         CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
@@ -705,9 +705,9 @@ namespace RoslynTool.CsToLua
                             VisitExpressionSyntax(memberAccess.Expression);
                             CodeBuilder.Append(", ");
                             string intf = "nil";
-                            string mname = memberAccess.Name.Identifier.Text;
+                            string mname = string.Format("\"{0}\"", memberAccess.Name.Identifier.Text);
                             CheckExplicitInterfaceAccess(leftSym, ref intf, ref mname);
-                            CodeBuilder.AppendFormat("\"{0}\", \"{1}\"", intf, mname);
+                            CodeBuilder.AppendFormat("{0}, {1}", intf, mname);
                         } else if (leftSym.ContainingType == ci.SemanticInfo) {
                             CodeBuilder.Append("this, ");
                             CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);

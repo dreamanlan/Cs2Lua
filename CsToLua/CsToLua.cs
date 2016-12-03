@@ -80,10 +80,10 @@ namespace RoslynTool.CsToLua
                             if (csi.ExplicitInterfaceImplementationMethods.Contains(msym)) {
                                 ret = true;
                                 if (null != nameOfIntf) {
-                                    nameOfIntf = fn.Replace(".", "_");
+                                    nameOfIntf = string.Format("\"{0}\"", fn.Replace(".", "_"));
                                 }
                                 if (null != mname) {
-                                    mname = NameMangling(msym);
+                                    mname = string.Format("\"{0}\"", NameMangling(msym));
                                 }
                             }
                             break;
@@ -92,10 +92,10 @@ namespace RoslynTool.CsToLua
                             if (csi.ExplicitInterfaceImplementationProperties.Contains(psym)) {
                                 ret = true;
                                 if (null != nameOfIntf) {
-                                    nameOfIntf = fn.Replace(".", "_");
+                                    nameOfIntf = string.Format("\"{0}\"", fn.Replace(".", "_"));
                                 }
                                 if (null != mname) {
-                                    mname = SymbolTable.GetPropertyName(psym);
+                                    mname = string.Format("\"{0}\"", SymbolTable.GetPropertyName(psym));
                                 }
                             }
                             break;
@@ -104,10 +104,10 @@ namespace RoslynTool.CsToLua
                             if (csi.ExplicitInterfaceImplementationEvents.Contains(esym)) {
                                 ret = true;
                                 if (null != nameOfIntf) {
-                                    nameOfIntf = fn.Replace(".", "_");
+                                    nameOfIntf = string.Format("\"{0}\"", fn.Replace(".", "_"));
                                 }
                                 if (null != mname) {
-                                    mname = SymbolTable.GetEventName(esym);
+                                    mname = string.Format("\"{0}\"", SymbolTable.GetEventName(esym));
                                 }
                             }
                             break;
