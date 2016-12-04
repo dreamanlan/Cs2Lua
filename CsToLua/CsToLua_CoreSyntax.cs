@@ -888,13 +888,17 @@ namespace RoslynTool.CsToLua
                     if (ii.ReturnArgs.Count > 0) {
                         if (!toplevel) {
                             CodeBuilder.AppendFormat("(function() local {0}; {1}, ", localName, localName);
+                        } else if (!sym.ReturnsVoid) {
+                            CodeBuilder.AppendFormat("local {0}; {1}, ", localName, localName);
                         }
                         OutputExpressionList(ii.ReturnArgs);
                         CodeBuilder.Append(" = ");
                     }
                     ii.OutputInvocation(CodeBuilder, this, memberAccess.Expression, true);
-                    if (ii.ReturnArgs.Count > 0 && !toplevel) {
-                        CodeBuilder.AppendFormat(" return {0}; end)()", localName);
+                    if (ii.ReturnArgs.Count > 0) {
+                        if (!toplevel) {
+                            CodeBuilder.AppendFormat(" return {0}; end)()", localName);
+                        }
                     }
                     CodeBuilder.AppendFormat("{0}", expTerminater);
                     if (expTerminater.Length > 0)
@@ -903,13 +907,17 @@ namespace RoslynTool.CsToLua
                     if (ii.ReturnArgs.Count > 0) {
                         if (!toplevel) {
                             CodeBuilder.AppendFormat("(function() local {0}; {1}, ", localName, localName);
+                        } else if (!sym.ReturnsVoid) {
+                            CodeBuilder.AppendFormat("local {0}; {1}, ", localName, localName);
                         }
                         OutputExpressionList(ii.ReturnArgs);
                         CodeBuilder.Append(" = ");
                     }
                     ii.OutputInvocation(CodeBuilder, this, invocation.Expression, false);
-                    if (ii.ReturnArgs.Count > 0 && !toplevel) {
-                        CodeBuilder.AppendFormat(" return {0}; end)()", localName);
+                    if (ii.ReturnArgs.Count > 0) {
+                        if (!toplevel) {
+                            CodeBuilder.AppendFormat(" return {0}; end)()", localName);
+                        }
                     }
                     CodeBuilder.AppendFormat("{0}", expTerminater);
                     if (expTerminater.Length > 0)
