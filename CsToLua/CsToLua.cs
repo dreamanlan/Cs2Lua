@@ -613,6 +613,7 @@ namespace RoslynTool.CsToLua
 
         private Dictionary<string, List<ClassInfo>> m_ToplevelClasses = new Dictionary<string, List<ClassInfo>>();
         private ClassInfo m_LastToplevelClass = null;
+        private string m_LastComment = string.Empty;
 
         internal static string GetIndentString(int indent)
         {

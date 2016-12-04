@@ -51,15 +51,21 @@ namespace RoslynTool.CsToLua
                 if (trivia.IsKind(SyntaxKind.SingleLineCommentTrivia)) {
                     string content = trivia.ToString();
                     content = content.Substring(2);
-                    CodeBuilder.AppendFormat("--{0}", content);
-                    CodeBuilder.AppendLine();
+                    if (content != m_LastComment) {
+                        m_LastComment = content;
+                        CodeBuilder.AppendFormat("--{0}", content);
+                        CodeBuilder.AppendLine();
+                    }
                 } else if (trivia.IsKind(SyntaxKind.MultiLineCommentTrivia)) {
                     string content = trivia.ToString();
                     content = content.Substring(2, content.Length - 4);
-                    var lines = content.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-                    foreach (var line in lines) {
-                        CodeBuilder.AppendFormat("--{0}", line);
-                        CodeBuilder.AppendLine();
+                    if (content != m_LastComment) {
+                        m_LastComment = content;
+                        var lines = content.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var line in lines) {
+                            CodeBuilder.AppendFormat("--{0}", line);
+                            CodeBuilder.AppendLine();
+                        }
                     }
                 }
             }
@@ -89,6 +95,7 @@ namespace RoslynTool.CsToLua
                     }
                 }
                 ((CSharpSyntaxNode)node).Accept(this);
+                m_LastComment = string.Empty;
                 if (node.HasTrailingTrivia) {
                     SyntaxTriviaList.Enumerator enumerator = node.GetTrailingTrivia().GetEnumerator();
                     while (enumerator.MoveNext()) {
