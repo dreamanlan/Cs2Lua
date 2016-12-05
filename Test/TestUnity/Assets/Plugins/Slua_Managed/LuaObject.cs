@@ -848,7 +848,7 @@ return index
 						if (t == typeof(LuaTable) || t.IsArray)
 							return true;
 						else if (t.IsValueType)
-							return true;//luaTypeCheck(l, p, t.Name);
+							return luaTypeCheck(l, p, t.Name);//true
 						else if (LuaDLL.luaS_subclassof(l, p, t.Name) == 1)
 							return true;
 						else
