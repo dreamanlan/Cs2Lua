@@ -196,10 +196,6 @@ namespace RoslynTool.CsToLua
             }
             ++m_Indent;
             node.Statement.Accept(this);
-            foreach (var exp in node.Incrementors) {
-                CodeBuilder.AppendFormat("{0}", GetIndentString());
-                VisitToplevelExpression(exp, ";");
-            }
             --m_Indent;
             if (ci.HaveContinue) {
                 CodeBuilder.AppendFormat("{0}until true;", GetIndentString());
@@ -208,6 +204,10 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendFormat("{0}if {1} then break; end;", GetIndentString(), ci.BreakFlagVarName);
                     CodeBuilder.AppendLine();
                 }
+            }
+            foreach (var exp in node.Incrementors) {
+                CodeBuilder.AppendFormat("{0}", GetIndentString());
+                VisitToplevelExpression(exp, ";");
             }
             CodeBuilder.AppendFormat("{0}end;", GetIndentString());
             CodeBuilder.AppendLine();
