@@ -317,7 +317,7 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.Append(".");
                         CodeBuilder.Append(manglingName);
                         CodeBuilder.Append("(");
-                        OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
+                        OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false);
                         CodeBuilder.Append(")");
                     } else if (propExplicitImplementInterface) {
                         CodeBuilder.AppendFormat("getwithinterface(");
@@ -359,7 +359,7 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
                 InvocationInfo ii = new InvocationInfo();
                 ii.Init(psym.GetMethod, node.ArgumentList, m_SymbolTable.IsUseExplicitTypeParam(psym.GetMethod), m_Model);
-                OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
+                OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false);
                 CodeBuilder.Append(")");
             } else if (oper.Kind == OperationKind.ArrayElementReferenceExpression) {
                 VisitExpressionSyntax(node.Expression);
@@ -412,7 +412,7 @@ namespace RoslynTool.CsToLua
                     InvocationInfo ii = new InvocationInfo();
                     List<ExpressionSyntax> args = new List<ExpressionSyntax> { node.WhenNotNull };
                     ii.Init(psym.GetMethod, args, m_SymbolTable.IsUseExplicitTypeParam(psym.GetMethod), m_Model);
-                    OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
+                    OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false);
                     CodeBuilder.Append(")");
                 } else if (oper.Kind == OperationKind.ArrayElementReferenceExpression) {
                     VisitExpressionSyntax(node.Expression);
@@ -642,7 +642,7 @@ namespace RoslynTool.CsToLua
                 if (ii.Args.Count + ii.GenericTypeArgs.Count > 0) {
                     CodeBuilder.Append(", ");
                 }
-                OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
+                OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false);
                 CodeBuilder.Append(")");
                 if (ii.ReturnArgs.Count > 0) {
                     CodeBuilder.Append("; ");

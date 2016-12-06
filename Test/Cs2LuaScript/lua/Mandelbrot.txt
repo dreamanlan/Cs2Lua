@@ -49,9 +49,9 @@ Mandelbrot = {
 						if isInside then
 							this:DrawCube(x, y, width, height);
 						end;
-						x = x + 1;
+					x = x + 1;
 					end;
-					y = y + 1;
+				y = y + 1;
 				end;
 			end,
 			DrawCube = function(this, x, y, w, h)

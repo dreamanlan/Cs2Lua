@@ -17,6 +17,7 @@ namespace RoslynTool.CsToLua
         internal List<ExpressionSyntax> ReturnArgs = new List<ExpressionSyntax>();
         internal List<ITypeSymbol> GenericTypeArgs = new List<ITypeSymbol>();
         internal bool ArrayToParams = false;
+        internal bool IsComponentGetOrAdd = false;
 
         internal IMethodSymbol MethodSymbol = null;
         internal IAssemblySymbol AssemblySymbol = null;
@@ -109,7 +110,7 @@ namespace RoslynTool.CsToLua
             }
         }
 
-        internal void OutputInvocation(StringBuilder codeBuilder, CsLuaTranslater cs2lua, ExpressionSyntax exp, bool isMemberAccess)
+        internal void OutputInvocation(StringBuilder codeBuilder, CsLuaTranslater cs2lua, ExpressionSyntax exp, bool isMemberAccess, SemanticModel model)
         {
             IMethodSymbol sym = MethodSymbol;
             string mname = cs2lua.NameMangling(sym);
@@ -149,7 +150,13 @@ namespace RoslynTool.CsToLua
             if (Args.Count > 0 || GenericTypeArgs.Count > 0) {
                 codeBuilder.Append(prestr);
             }
-            cs2lua.OutputArgumentList(Args, GenericTypeArgs, ArrayToParams);
+            bool useTypeNameString = false;
+            if(IsComponentGetOrAdd && SymbolTable.LuaComponentByString){
+                if (sym.TypeArguments.Length > 0 && sym.TypeArguments[0].ContainingAssembly == AssemblySymbol) {
+                    useTypeNameString = true;
+                }
+            }
+            cs2lua.OutputArgumentList(Args, GenericTypeArgs, ArrayToParams, useTypeNameString);
             codeBuilder.Append(")");
         }
 
@@ -161,8 +168,12 @@ namespace RoslynTool.CsToLua
             Args.Clear();
             ReturnArgs.Clear();
             GenericTypeArgs.Clear();
-
+            
             ClassKey = ClassInfo.CalcMemberReference(sym);
+
+            if ((ClassKey == "UnityEngine.GameObject" || ClassKey == "UnityEngine.Component") && (sym.Name.StartsWith("GetComponent") || sym.Name.StartsWith("AddComponent"))) {
+                IsComponentGetOrAdd = true;
+            }
 
             if (sym.IsGenericMethod) {
                 foreach (var arg in sym.TypeArguments) {

@@ -236,8 +236,21 @@ namespace RoslynTool.CsToLua
             get { return s_ForSlua; }
             set { s_ForSlua = value; }
         }
+        internal static bool NoAutoRequire
+        {
+            get { return s_NoAutoRequire; }
+            set { s_NoAutoRequire = value; }
+        }
+        internal static bool LuaComponentByString
+        {
+            get { return s_LuaComponentByString; }
+            set { s_LuaComponentByString = value; }
+        }
 
         private static bool s_ForSlua = true;
+        private static bool s_NoAutoRequire = false;
+        private static bool s_LuaComponentByString = false;
+
         private static HashSet<string> s_ExtraLuaKeywords = new HashSet<string> {
             "and", "elseif", "end", "function", "local", "nil", "not", "or", "repeat", "then", "until"
         };

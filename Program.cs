@@ -17,6 +17,7 @@ namespace RoslynTool
                 string file = "test.cs";
                 string outputExt = "txt";
                 List<string> macros = new List<string>();
+                List<string> ignoredPath = new List<string>();
                 Dictionary<string, string> refByNames = new Dictionary<string, string>();
                 Dictionary<string, string> refByPaths = new Dictionary<string, string>();
                 bool enableInherit = false;
@@ -39,6 +40,14 @@ namespace RoslynTool
                                     ++i;
                                 }
                             }
+                        } else if (0 == string.Compare(args[i], "-ignorepath", true)) {
+                            if (i < args.Length - 1) {
+                                string arg = args[i + 1];
+                                if (!arg.StartsWith("-")) {
+                                    ignoredPath.Add(arg);
+                                    ++i;
+                                }
+                            }
                         } else if (0 == string.Compare(args[i], "-src", true)) {
                             if (i < args.Length - 1) {
                                 string arg = args[i + 1];
@@ -58,8 +67,10 @@ namespace RoslynTool
                             SymbolTable.ForSlua = true;
                         } else if (0 == string.Compare(args[i], "-outputresult", true)) {
                             outputResult = true;
-                        } else if (0 == string.Compare(args[i], "-norequire", true)) {
-                            CsToLuaProcessor.NoRequire = true;
+                        } else if (0 == string.Compare(args[i], "-noautorequire", true)) {
+                            SymbolTable.NoAutoRequire = true;
+                        } else if (0 == string.Compare(args[i], "-luacomponentbystring", true)) {
+                            SymbolTable.LuaComponentByString = true;
                         } else if (0 == string.Compare(args[i], "-refbyname", true)) {
                             string name = string.Empty, alias = "global";
                             if (i < args.Length - 1) {
@@ -127,7 +138,7 @@ namespace RoslynTool
                         }
                     }
                 } else {
-                    Console.WriteLine("[Usage]:Cs2Lua [-ext fileext] [-enableinherit] [-normallua/-slua] [-outputresult] [-norequire] [-d macro] [-refbyname dllname alias] [-refbypath dllpath alias] [-src] csfile|csprojfile");
+                    Console.WriteLine("[Usage]:Cs2Lua [-ext fileext] [-enableinherit] [-normallua/-slua] [-outputresult] [-noautorequire] [-luacomponentbystring] [-d macro] [-ignorepath path] [-refbyname dllname alias] [-refbypath dllpath alias] [-src] csfile|csprojfile");
                     Console.WriteLine("\twhere:");
                     Console.WriteLine("\t\tfileext = file externsion, default is txt for unity3d, maybe lua for other usage.");
                     Console.WriteLine("\t\tmacro = c# macro define, used in your csharp code #if/#elif/#else/#endif etc.");
@@ -141,7 +152,7 @@ namespace RoslynTool
                     }
                 }
                 if (File.Exists(file)) {
-                    return (int)CsToLuaProcessor.Process(file, outputExt, macros, refByNames, refByPaths, enableInherit, outputResult);
+                    return (int)CsToLuaProcessor.Process(file, outputExt, macros, ignoredPath, refByNames, refByPaths, enableInherit, outputResult);
                 } else {
                     return (int)ExitCode.FileNotFound;
                 }

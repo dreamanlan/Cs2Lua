@@ -20,12 +20,7 @@ namespace RoslynTool.CsToLua
     }
     public static class CsToLuaProcessor
     {
-        public static bool NoRequire
-        {
-            get;
-            set;
-        }
-        public static ExitCode Process(string srcFile, string outputExt, IList<string> macros, IDictionary<string, string> _refByNames, IDictionary<string, string> _refByPaths, bool enableInherit, bool outputResult)
+        public static ExitCode Process(string srcFile, string outputExt, IList<string> macros, IList<string> ignoredPath, IDictionary<string, string> _refByNames, IDictionary<string, string> _refByPaths, bool enableInherit, bool outputResult)
         {
             List<string> preprocessors = new List<string>(macros);
             preprocessors.Add("__LUA__");
@@ -34,6 +29,11 @@ namespace RoslynTool.CsToLua
             string path = Path.GetDirectoryName(srcFile);
             string name = Path.GetFileNameWithoutExtension(srcFile);
             string ext = Path.GetExtension(srcFile);
+
+            List<string> ignoredFullPath = new List<string>();
+            foreach (string s in ignoredPath) {
+                ignoredFullPath.Add(Path.Combine(path, s));
+            }
 
             string logDir = Path.Combine(path, "log");
             if (!Directory.Exists(logDir)) {
@@ -192,16 +192,18 @@ namespace RoslynTool.CsToLua
             bool haveSemanticError = false;
             bool haveTranslationError = false;
             SymbolTable.Instance.Init(compilation);
+            Dictionary<string, INamedTypeSymbol> ignoredClasses = new Dictionary<string, INamedTypeSymbol>();
             Dictionary<string, MergedClassInfo> toplevelClasses = new Dictionary<string, MergedClassInfo>();
             MergedNamespaceInfo toplevelMni = new MergedNamespaceInfo();
             using (StreamWriter sw = new StreamWriter(Path.Combine(logDir, "SemanticError.log"))) {
                 using (StreamWriter sw2 = new StreamWriter(Path.Combine(logDir, "SemanticWarning.log"))) {
                     using (StreamWriter sw3 = new StreamWriter(Path.Combine(logDir, "Translation.log"))) {
                         foreach (SyntaxTree tree in newTrees) {
+                            bool ignore = IsIgnoredFile(ignoredFullPath, tree.FilePath);
                             string fileName = Path.GetFileNameWithoutExtension(tree.FilePath);
                             var root = tree.GetRoot();
                             SemanticModel model = compilation.GetSemanticModel(tree, true);
-
+                            
                             var diags = model.GetDiagnostics();
                             bool firstError = true;
                             bool firstWarning = true;
@@ -224,24 +226,37 @@ namespace RoslynTool.CsToLua
                                 }
                             }
 
-                            CsLuaTranslater csToLua = new CsLuaTranslater(model, enableInherit);
-                            csToLua.Translate(root);
-                            if (csToLua.HaveError) {
-                                sw3.WriteLine("============<<<Translation Error:{0}>>>============", fileName);
-                                csToLua.SaveLog(sw3);
-                                haveTranslationError = true;
-                            }
-
-                            foreach (var pair in csToLua.ToplevelClasses) {
-                                var key = pair.Key;
-                                var cis = pair.Value;
-
-                                foreach (var ci in cis) {
-                                    AddMergedClasses(toplevelClasses, key, ci);
+                            if (ignore) {
+                                var symbols = model.LookupNamespacesAndTypes(0);
+                                foreach (var symbol in symbols) {
+                                    var type = symbol as INamedTypeSymbol;
+                                    if (null != type) {
+                                        string key = ClassInfo.GetFullName(type);
+                                        if (!ignoredClasses.ContainsKey(key)) {
+                                            ignoredClasses.Add(key, type);
+                                        }
+                                    }
+                                }
+                            } else {
+                                CsLuaTranslater csToLua = new CsLuaTranslater(model, enableInherit);
+                                csToLua.Translate(root);
+                                if (csToLua.HaveError) {
+                                    sw3.WriteLine("============<<<Translation Error:{0}>>>============", fileName);
+                                    csToLua.SaveLog(sw3);
+                                    haveTranslationError = true;
                                 }
 
-                                string[] nss = key.Split('.');
-                                AddMergedNamespaces(toplevelMni, nss);
+                                foreach (var pair in csToLua.ToplevelClasses) {
+                                    var key = pair.Key;
+                                    var cis = pair.Value;
+
+                                    foreach (var ci in cis) {
+                                        AddMergedClasses(toplevelClasses, key, ci);
+                                    }
+
+                                    string[] nss = key.Split('.');
+                                    AddMergedNamespaces(toplevelMni, nss);
+                                }
                             }
                         }
                         sw3.Close();
@@ -254,7 +269,7 @@ namespace RoslynTool.CsToLua
             StringBuilder nsBuilder = new StringBuilder();
             BuildNamespaces(nsBuilder, toplevelMni);
             StringBuilder attrBuilder = new StringBuilder();
-            BuildAttributes(attrBuilder, compilation.Assembly);
+            BuildAttributes(attrBuilder, compilation.Assembly, ignoredClasses);
             File.Copy(Path.Combine(exepath, "lualib/utility.lua"), Path.Combine(outputDir, string.Format("cs2lua__utility.{0}", outputExt)), true);
             File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__namespaces.{0}", outputExt)), nsBuilder.ToString());
             File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__attributes.{0}", outputExt)), attrBuilder.ToString());
@@ -343,31 +358,38 @@ namespace RoslynTool.CsToLua
                 }
             }
         }
-        private static void BuildAttributes(StringBuilder sb, IAssemblySymbol assemblySymbol)
+        private static void BuildAttributes(StringBuilder sb, IAssemblySymbol assemblySymbol, Dictionary<string, INamedTypeSymbol> ignoredClasses)
         {
             INamespaceSymbol nssym = assemblySymbol.GlobalNamespace;
-            BuildAttributesRecursively(sb, nssym, assemblySymbol);
+            BuildAttributesRecursively(sb, nssym, assemblySymbol, ignoredClasses);
         }
-        private static void BuildAttributesRecursively(StringBuilder sb, INamespaceSymbol nssym, IAssemblySymbol assemblySymbol)
+        private static void BuildAttributesRecursively(StringBuilder sb, INamespaceSymbol nssym, IAssemblySymbol assemblySymbol, Dictionary<string, INamedTypeSymbol> ignoredClasses)
         {
             if (null != nssym) {
                 foreach (var typeSym in nssym.GetTypeMembers()) {
-                    BuildAttributesRecursively(sb, typeSym, assemblySymbol);
+                    BuildAttributesRecursively(sb, typeSym, assemblySymbol, ignoredClasses);
                 }
                 foreach (var newSym in nssym.GetNamespaceMembers()) {
-                    BuildAttributesRecursively(sb, newSym, assemblySymbol);
+                    BuildAttributesRecursively(sb, newSym, assemblySymbol, ignoredClasses);
                 }
             }
         }
-        private static void BuildAttributesRecursively(StringBuilder sb, INamedTypeSymbol typesym, IAssemblySymbol assemblySymbol)
+        private static void BuildAttributesRecursively(StringBuilder sb, INamedTypeSymbol typesym, IAssemblySymbol assemblySymbol, Dictionary<string, INamedTypeSymbol> ignoredClasses)
         {
-            BuildClassAttributes(sb, typesym, assemblySymbol);
+            BuildClassAttributes(sb, typesym, assemblySymbol, ignoredClasses);
             foreach (var newSym in typesym.GetTypeMembers()) {
-                BuildAttributesRecursively(sb, newSym, assemblySymbol);
+                BuildAttributesRecursively(sb, newSym, assemblySymbol, ignoredClasses);
             }
         }
-        private static void BuildClassAttributes(StringBuilder sb, INamedTypeSymbol typesym, IAssemblySymbol assemblySymbol)
+        private static void BuildClassAttributes(StringBuilder sb, INamedTypeSymbol typesym, IAssemblySymbol assemblySymbol, Dictionary<string, INamedTypeSymbol> ignoredClasses)
         {
+            string key = ClassInfo.GetFullName(typesym);
+            if (ignoredClasses.ContainsKey(key)) {
+                return;
+            }
+            if (ClassInfo.HasAttribute(typesym, "Cs2Lua.IgnoreAttribute")) {
+                return;
+            }
             StringBuilder csb = new StringBuilder();
             StringBuilder temp = new StringBuilder();
             int indent = 0;
@@ -384,7 +406,7 @@ namespace RoslynTool.CsToLua
             temp.Length = 0;
             foreach (var sym in typesym.GetMembers()) {
                 var msym = sym as IFieldSymbol;
-                if (null != msym && msym.GetAttributes().Length > 0) {
+                if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Lua.IgnoreAttribute")) {
                     temp.AppendFormat("{0}{1} = {{", GetIndentString(indent), sym.Name);
                     temp.AppendLine();
                     ++indent;
@@ -400,7 +422,7 @@ namespace RoslynTool.CsToLua
             temp.Length = 0;
             foreach (var sym in typesym.GetMembers()) {
                 var msym = sym as IMethodSymbol;
-                if (null != msym && msym.GetAttributes().Length > 0) {
+                if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Lua.IgnoreAttribute")) {
                     temp.AppendFormat("{0}{1} = {{", GetIndentString(indent), sym.Name);
                     temp.AppendLine();
                     ++indent;
@@ -416,7 +438,7 @@ namespace RoslynTool.CsToLua
             temp.Length = 0;
             foreach (var sym in typesym.GetMembers()) {
                 var msym = sym as IPropertySymbol;
-                if (null != msym && !msym.IsIndexer && msym.GetAttributes().Length > 0) {
+                if (null != msym && !msym.IsIndexer && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Lua.IgnoreAttribute")) {
                     temp.AppendFormat("{0}{1} = {{", GetIndentString(indent), sym.Name);
                     temp.AppendLine();
                     ++indent;
@@ -432,7 +454,7 @@ namespace RoslynTool.CsToLua
             temp.Length = 0;
             foreach (var sym in typesym.GetMembers()) {
                 var msym = sym as IEventSymbol;
-                if (null != msym && msym.GetAttributes().Length > 0) {
+                if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Lua.IgnoreAttribute")) {
                     temp.AppendFormat("{0}{1} = {{", GetIndentString(indent), sym.Name);
                     temp.AppendLine();
                     ++indent;
@@ -623,7 +645,7 @@ namespace RoslynTool.CsToLua
                 }
 
                 //references
-                if (!NoRequire) {
+                if (!SymbolTable.NoAutoRequire) {
                     foreach (var ci in classes) {
                         foreach (string r in ci.References) {
                             if (!r.StartsWith("System.") && !r.StartsWith("UnityEngine.")) {
@@ -1090,6 +1112,18 @@ namespace RoslynTool.CsToLua
         private static string GetIndentString(int indent)
         {
             return CsLuaTranslater.GetIndentString(indent);
+        }
+
+        private static bool IsIgnoredFile(IList<string> ignoredPath, string filePath)
+        {
+            bool ret = false;
+            foreach (string path in ignoredPath) {
+                if (filePath.StartsWith(path)) {
+                    ret = true;
+                    break;
+                }
+            }
+            return ret;
         }
 
         private static string ParseProjectOutputFile(string srcFile, string prjName)

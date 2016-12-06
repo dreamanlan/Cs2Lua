@@ -116,10 +116,10 @@ namespace RoslynTool.CsToLua
             }
             return ret;
         }
-        internal void OutputArgumentList(IList<ExpressionSyntax> args, IList<ITypeSymbol> typeArgs, bool arrayToParams)
+        internal void OutputArgumentList(IList<ExpressionSyntax> args, IList<ITypeSymbol> typeArgs, bool arrayToParams, bool useTypeNameString)
         {
             if (typeArgs.Count > 0) {
-                OutputTypeArgumentList(typeArgs);
+                OutputTypeArgumentList(typeArgs, useTypeNameString);
             }
             if (args.Count > 0) {
                 if (typeArgs.Count > 0)
@@ -216,13 +216,17 @@ namespace RoslynTool.CsToLua
                 }
             }
         }
-        private void OutputTypeArgumentList(IList<ITypeSymbol> typeArgs)
+        private void OutputTypeArgumentList(IList<ITypeSymbol> typeArgs, bool useTypeNameString)
         {
             int ct = typeArgs.Count;
             for (int i = 0; i < ct; ++i) {
                 var type = typeArgs[i];
                 string typeName = ClassInfo.GetFullName(type);
+                if (useTypeNameString)
+                    CodeBuilder.Append("\"");
                 CodeBuilder.Append(typeName);
+                if (useTypeNameString)
+                    CodeBuilder.Append("\"");
                 if (i < ct - 1) {
                     CodeBuilder.Append(", ");
                 }
@@ -520,7 +524,7 @@ namespace RoslynTool.CsToLua
                 string manglingName = NameMangling(ii.MethodSymbol);
                 CodeBuilder.Append(manglingName);
                 CodeBuilder.Append("(");
-                OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
+                OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false);
                 CodeBuilder.Append(")");
             } else {
                 string method = ii.MethodSymbol.Name;
@@ -558,7 +562,7 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendFormat("invokeexternoperator({0}, ", ii.ClassKey);
                     CodeBuilder.AppendFormat("\"{0}\"", method);
                     CodeBuilder.Append(", ");
-                    OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams);
+                    OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false);
                     CodeBuilder.Append(")");
                 } else {
                     if (ii.Args.Count == 1) {
