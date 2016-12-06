@@ -121,6 +121,21 @@ namespace RoslynTool.CsToLua
                 }
             }
         }
+        internal bool IsInherit(INamedTypeSymbol type)
+        {
+            bool ret = false;
+            if (null != SemanticInfo) {
+                var baseType = SemanticInfo.BaseType;
+                while (null != baseType) {
+                    if (type == baseType) {
+                        ret = true;
+                        break;
+                    }
+                    baseType = baseType.BaseType;
+                }
+            }
+            return ret;
+        }
 
         internal static bool IsBaseInitializerCalled(ConstructorDeclarationSyntax node, SemanticModel model)
         {

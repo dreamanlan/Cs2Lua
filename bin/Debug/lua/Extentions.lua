@@ -30,7 +30,7 @@ Extentions = {
 				do
 				break;
 				end;
-				i = i + 1;
+			i = i + 1;
 			end;
 		end;
 		return child;
@@ -48,7 +48,7 @@ Extentions = {
 				if (searchRes ~= nil) then
 					return searchRes;
 				end;
-				i = i + 1;
+			i = i + 1;
 			end;
 		end;
 		return nil;
@@ -62,11 +62,11 @@ Extentions = {
 			list:Add(item);
 			return ;
 		end;
-		if (getexterninstanceindexer(list, "nil", "get_Item", (list.Count - 1)):CompareTo(item) <= 0) then
+		if (getexterninstanceindexer(list, nil, "get_Item", (list.Count - 1)):CompareTo(item) <= 0) then
 			list:Add(item);
 			return ;
 		end;
-		if (getexterninstanceindexer(list, "nil", "get_Item", 0):CompareTo(item) >= 0) then
+		if (getexterninstanceindexer(list, nil, "get_Item", 0):CompareTo(item) >= 0) then
 			list:Insert(0, item);
 			return ;
 		end;

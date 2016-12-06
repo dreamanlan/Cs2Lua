@@ -26,10 +26,10 @@ TopLevel.SecondLevel.Foo = {
 		f.Val = newobject(TopLevel.TestStruct, "ctor", {});
 		local ts; ts = f.Val;
 		ts = wrapvaluetype(ts);
-		setinstanceindexer(f, "nil", "set_Item", ts, ts, 123);
-		local r; r = getinstanceindexer(f, "nil", "get_Item", ts, ts);
-		condaccess(f, setinstanceindexer(f, "nil", "set_Item", ts, ts, 123));
-		r = condaccess(f, getinstanceindexer(f, "nil", "get_Item", ts, ts));
+		setinstanceindexer(f, nil, "set_Item", ts, ts, 123);
+		local r; r = getinstanceindexer(f, nil, "get_Item", ts, ts);
+		condaccess(f, setinstanceindexer(f, nil, "set_Item", ts, ts, 123));
+		r = condaccess(f, getinstanceindexer(f, nil, "get_Item", ts, ts));
 		local result; result = TopLevel.Singleton_T.get_instance(TopLevel.SecondLevel.Foo):Test123(1, 2);
 		TopLevel.Singleton_T.set_instance(TopLevel.SecondLevel.Foo, nil);
 		return f;
@@ -147,17 +147,17 @@ TopLevel.SecondLevel.Foo = {
 					do
 					return i;
 					end;
-					i = i + 1;
 				until true;
+				i = i + 1;
 				end;
 				return -1;
 			end,
 			TestSwitch = function(this)
 				local i; i = 10;
-				local __compiler_switch_348 = i;
-				if __compiler_switch_348 == 1 then
+				local __compiler_switch_359 = i;
+				if __compiler_switch_359 == 1 then
 					return ;
-				elseif __compiler_switch_348 == 2 then
+				elseif __compiler_switch_359 == 2 then
 					return ;
 				else
 					return ;

@@ -199,7 +199,7 @@ namespace RoslynTool.CsToLua
                                 }
                             }
                         }
-                        if (sym.ContainingType == classInfo.SemanticInfo) {
+                        if (sym.ContainingType == classInfo.SemanticInfo || classInfo.IsInherit(sym.ContainingType)) {
                             if (sym.IsStatic) {
                                 CodeBuilder.AppendFormat("{0}.{1}", classInfo.Key, sym.Name);
                             } else {

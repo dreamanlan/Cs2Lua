@@ -19,10 +19,10 @@ TopLevel.TestRunnable = {
 			Test = function(this)
 				local f; f = newobject(TopLevel.Runnable, "ctor", {});
 				invokewithinterface(f, "TopLevel_IRunnable0", "Test");
-				local i; i = getinstanceindexer(f, "nil", "get_Item", 0);
-				setinstanceindexer(f, "nil", "set_Item", 0, i);
+				local i; i = getinstanceindexer(f, nil, "get_Item", 0);
+				setinstanceindexer(f, nil, "set_Item", 0, i);
 				setwithinterface(f, "TopLevel_IRunnable_T", "TestProp", i);
-				i = getwithinterface(f, "TopLevel_IRunnable_T", "TestProp");
+				i = getwithinterface(f, ""TopLevel_IRunnable_T"", ""TestProp"");
 				local a; a = delegationwrap((function()
 				end));
 				delegationadd(f, "TopLevel_IRunnable_T", "OnAction", a);

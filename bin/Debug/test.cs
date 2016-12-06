@@ -12,6 +12,17 @@ class LuaConsole
     }
 }
 
+class TestUnity : MonoBehaviour
+{
+    void Test()
+    {
+        var t = gameObject.GetComponent<Transform>();
+        gameObject.SetActive(true);
+        var r = gameObject.renderer;
+        gameObject.active=true;
+    }
+}
+
 namespace TopLevel
 {
     using lua = LuaConsole;
