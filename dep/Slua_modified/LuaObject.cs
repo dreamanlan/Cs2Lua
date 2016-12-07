@@ -1086,6 +1086,24 @@ return index
 			}
 		}
 
+        static public bool checkArray<T>(IntPtr l, int p, out T[][] ta)
+        {
+            if (LuaDLL.lua_type(l, p) == LuaTypes.LUA_TTABLE) {
+                int n = LuaDLL.lua_rawlen(l, p);
+                ta = new T[n][];
+                for (int k = 0; k < n; k++) {
+                    LuaDLL.lua_rawgeti(l, p, k + 1);
+                    checkArray(l, -1, out ta[k]);
+                    LuaDLL.lua_pop(l, 1);
+                }
+                return true;
+            } else {
+                Array array = checkObj(l, p) as Array;
+                ta = array as T[][];
+                return ta != null;
+            }
+        }
+
 		static public bool checkParams<T>(IntPtr l, int p, out T[] pars) where T:class
 		{
 			int top = LuaDLL.lua_gettop(l);

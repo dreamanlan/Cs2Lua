@@ -28,8 +28,8 @@ TopLevel.SecondLevel.Foo = {
 		ts = wrapvaluetype(ts);
 		setinstanceindexer(f, nil, "set_Item", ts, ts, 123);
 		local r; r = getinstanceindexer(f, nil, "get_Item", ts, ts);
-		condaccess(f, setinstanceindexer(f, nil, "set_Item", ts, ts, 123));
-		r = condaccess(f, getinstanceindexer(f, nil, "get_Item", ts, ts));
+		condaccess(f, (function() return setinstanceindexer(f, nil, "set_Item", ts, ts, 123); end));
+		r = condaccess(f, (function() return getinstanceindexer(f, nil, "get_Item", ts, ts); end));
 		local result; result = TopLevel.Singleton_T.get_instance(TopLevel.SecondLevel.Foo):Test123(1, 2);
 		TopLevel.Singleton_T.set_instance(TopLevel.SecondLevel.Foo, nil);
 		return f;

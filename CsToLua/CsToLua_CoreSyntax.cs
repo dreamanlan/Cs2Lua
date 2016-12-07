@@ -611,6 +611,7 @@ namespace RoslynTool.CsToLua
                     var psym = sym as IPropertySymbol;
 
                     if (null != psym && psym.IsIndexer) {
+                        CodeBuilder.Append("(function() return ");
                         CodeBuilder.AppendFormat("set{0}{1}indexer(", psym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
                         if (psym.IsStatic) {
                             string fullName = ClassInfo.GetFullName(psym.ContainingType);
@@ -633,6 +634,7 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.Append(", ");
                         VisitExpressionSyntax(assign.Right);
                         CodeBuilder.Append(")");
+                        CodeBuilder.Append("; end)");
                     } else if (bindingOper.Kind == OperationKind.ArrayElementReferenceExpression) {
                         CodeBuilder.Append("(function() ");
                         VisitExpressionSyntax(leftCondAccess.Expression);
@@ -642,8 +644,9 @@ namespace RoslynTool.CsToLua
                         VisitExpressionSyntax(assign.Right);
                         CodeBuilder.Append("; return ");
                         VisitExpressionSyntax(assign.Right);
-                        CodeBuilder.Append("; end)()");
+                        CodeBuilder.Append("; end)");
                     } else if (null != sym) {
+                        CodeBuilder.Append("(function() return ");
                         CodeBuilder.AppendFormat("set{0}{1}element(", sym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", sym.IsStatic ? "static" : "instance");
                         if (sym.IsStatic) {
                             string fullName = ClassInfo.GetFullName(sym.ContainingType);
@@ -657,6 +660,7 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.Append(", ");
                         VisitExpressionSyntax(assign.Right);
                         CodeBuilder.Append(")");
+                        CodeBuilder.Append("; end)");
                     } else {
                         ReportIllegalSymbol(assign, symInfo);
                     }
@@ -668,7 +672,7 @@ namespace RoslynTool.CsToLua
                     VisitExpressionSyntax(assign.Right);
                     CodeBuilder.Append("; return ");
                     VisitExpressionSyntax(assign.Right);
-                    CodeBuilder.Append("; end)()");
+                    CodeBuilder.Append("; end)");
                 }
                 CodeBuilder.Append(")");
             } else if (leftOper.Type.TypeKind == TypeKind.Delegate) {

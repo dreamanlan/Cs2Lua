@@ -32,11 +32,11 @@ function rshift(v,n)
   end;
 end;
 
-function condexp(cv,tv,fv)
+function condexp(cv,tf,ff)
     if cv then
-        return tv;
+        return tf();
     else
-        return fv;
+        return ff();
     end;
 end;
 
@@ -44,8 +44,8 @@ function condaccess(v, func)
 	return v and func();
 end;
 
-function nullcoalescing(v1,v2)
-	return v1 or v2;
+function nullcoalescing(v, func)
+	return v or func();
 end;
 
 function bitnot(v)

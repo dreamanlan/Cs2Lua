@@ -54,6 +54,10 @@ namespace RoslynTool.CsToLua
                         var typeInfo = m_Model.GetTypeInfo(node.Right);
                         var type = typeInfo.Type;
                         OutputType(type, node, ci, op);
+                    } else if (op == "??") {
+                        CodeBuilder.Append("(function() return ");
+                        VisitExpressionSyntax(node.Right);
+                        CodeBuilder.Append("; end)");
                     } else {
                         VisitExpressionSyntax(node.Right);
                     }
@@ -73,11 +77,11 @@ namespace RoslynTool.CsToLua
         {
             CodeBuilder.Append("condexp(");
             VisitExpressionSyntax(node.Condition);
-            CodeBuilder.Append(", ");
+            CodeBuilder.Append(", (function() return ");
             VisitExpressionSyntax(node.WhenTrue);
-            CodeBuilder.Append(", ");
+            CodeBuilder.Append("; end), (function() return ");
             VisitExpressionSyntax(node.WhenFalse);
-            CodeBuilder.Append(")");
+            CodeBuilder.Append("; end))");
         }
         public override void VisitThisExpression(ThisExpressionSyntax node)
         {
@@ -394,6 +398,7 @@ namespace RoslynTool.CsToLua
                 var sym = symInfo.Symbol;
                 var psym = sym as IPropertySymbol;
                 if (null != psym && psym.IsIndexer) {
+                    CodeBuilder.Append("(function() return ");
                     CodeBuilder.AppendFormat("get{0}{1}indexer(", psym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
                     if (psym.IsStatic) {
                         string fullName = ClassInfo.GetFullName(psym.ContainingType);
@@ -414,12 +419,16 @@ namespace RoslynTool.CsToLua
                     ii.Init(psym.GetMethod, args, m_SymbolTable.IsUseExplicitTypeParam(psym.GetMethod), m_Model);
                     OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false);
                     CodeBuilder.Append(")");
+                    CodeBuilder.Append("; end)");
                 } else if (oper.Kind == OperationKind.ArrayElementReferenceExpression) {
+                    CodeBuilder.Append("(function() return ");
                     VisitExpressionSyntax(node.Expression);
                     CodeBuilder.Append("[");
                     VisitExpressionSyntax(node.WhenNotNull);
                     CodeBuilder.Append(" + 1]");
+                    CodeBuilder.Append("; end)");
                 } else if (null != sym) {
+                    CodeBuilder.Append("(function() return ");
                     CodeBuilder.AppendFormat("get{0}{1}element(", sym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", sym.IsStatic ? "static" : "instance");
                     if (sym.IsStatic) {
                         string fullName = ClassInfo.GetFullName(sym.ContainingType);
@@ -431,12 +440,15 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendFormat("\"{0}\", ", sym.Name);
                     VisitExpressionSyntax(node.WhenNotNull);
                     CodeBuilder.Append(")");
+                    CodeBuilder.Append("; end)");
                 } else {
                     ReportIllegalSymbol(node, symInfo);
                 }
             } else {
+                CodeBuilder.Append("(function() return ");
                 VisitExpressionSyntax(node.Expression);
                 VisitExpressionSyntax(node.WhenNotNull);
+                CodeBuilder.Append("; end)");
             }
             CodeBuilder.Append(")");
         }
