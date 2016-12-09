@@ -55,9 +55,16 @@ namespace RoslynTool.CsToLua
                         var type = typeInfo.Type;
                         OutputType(type, node, ci, op);
                     } else if (op == "??") {
-                        CodeBuilder.Append("(function() return ");
-                        VisitExpressionSyntax(node.Right);
-                        CodeBuilder.Append("; end)");
+                        var rightOper = m_Model.GetOperation(node.Right);
+                        bool rightIsConst = null != rightOper && rightOper.ConstantValue.HasValue;
+                        if (rightIsConst) {
+                            CodeBuilder.Append("true, ");
+                            VisitExpressionSyntax(node.Right);
+                        } else {
+                            CodeBuilder.Append("false, (function() return ");
+                            VisitExpressionSyntax(node.Right);
+                            CodeBuilder.Append("; end)");
+                        }
                     } else {
                         VisitExpressionSyntax(node.Right);
                     }
@@ -75,13 +82,35 @@ namespace RoslynTool.CsToLua
         }
         public override void VisitConditionalExpression(ConditionalExpressionSyntax node)
         {
+            var tOper = m_Model.GetOperation(node.WhenTrue);
+            var fOper = m_Model.GetOperation(node.WhenFalse);
+            bool trueIsConst = null != tOper && tOper.ConstantValue.HasValue;
+            bool falseIsConst = null != fOper && fOper.ConstantValue.HasValue;
+
             CodeBuilder.Append("condexp(");
             VisitExpressionSyntax(node.Condition);
-            CodeBuilder.Append(", (function() return ");
+            if (trueIsConst) {
+                CodeBuilder.Append(", true, ");
+            } else {
+                CodeBuilder.Append(", false, (function() return ");
+            }
             VisitExpressionSyntax(node.WhenTrue);
-            CodeBuilder.Append("; end), (function() return ");
+            if (trueIsConst) {
+                CodeBuilder.Append(", ");
+            } else {
+                CodeBuilder.Append("; end), ");
+            }
+            if (falseIsConst) {
+                CodeBuilder.Append("true, ");
+            } else {
+                CodeBuilder.Append("false, (function() return ");
+            }
             VisitExpressionSyntax(node.WhenFalse);
-            CodeBuilder.Append("; end))");
+            if (falseIsConst) {
+                CodeBuilder.Append(")");
+            } else {
+                CodeBuilder.Append("; end))");
+            }
         }
         public override void VisitThisExpression(ThisExpressionSyntax node)
         {

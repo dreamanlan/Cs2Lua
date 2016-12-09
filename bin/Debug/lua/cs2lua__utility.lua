@@ -32,11 +32,19 @@ function rshift(v,n)
   end;
 end;
 
-function condexp(cv,tv,fv)
+function condexp(cv, tfIsConst, tf, ffIsConst, ff)
     if cv then
-        return tv;
+      if tfIsConst then
+        return tf;
+      else
+        return tf();
+      end;
     else
-        return fv;
+      if ffIsConst then
+        return ff;
+      else
+        return ff();
+      end;
     end;
 end;
 
@@ -44,8 +52,16 @@ function condaccess(v, func)
 	return v and func();
 end;
 
-function nullcoalescing(v1,v2)
-	return v1 or v2;
+function nullcoalescing(v, isConst, func)
+  if v then
+    return v;
+	else
+    if isConst then
+	    return func;
+	  else
+	    return func();
+	  end;	  
+	end;
 end;
 
 function bitnot(v)
@@ -82,7 +98,25 @@ end;
 
 function typecast(obj, t)
 	if t == System.String then
-		return wrapstring(obj);		
+		return wrapstring(obj);
+	elseif t == System.Single or t ==	System.Double then
+	  return tonumber(obj);
+	elseif t == System.Int64 or t == System.UInt64 then
+	  local v = tonumber(obj);
+	  v = math.floor(v);
+	  return v;
+	elseif t == System.Int32 or t == System.UInt32 then
+	  local v = tonumber(obj);
+	  v = math.floor(v);
+	  return v % 0x100000000;
+	elseif t == System.Int16 or t == System.UInt16 then
+	  local v = tonumber(obj);
+	  v = math.floor(v);
+	  return v % 0x10000;
+	elseif t == System.SByte or t == System.Byte then
+	  local v = tonumber(obj);
+	  v = math.floor(v);
+	  return v % 0x100;
 	else
   	return obj;
  	end;

@@ -36,9 +36,9 @@ MyScript = {
 			Update = function(this)
 				local i; i = 0;
 				while (i < this.cubes.Length) do
-					local offset; offset = condexp(((i % 2) == 1), (function() return 5; end), (function() return -5; end));
+					local offset; offset = condexp(((i % 2) == 1), true, 5, true, -5);
 					local nr; nr = (this.r + (UnityEngine.Mathf.Sin(UnityEngine.Time.time) * offset));
-					local angle; angle = condexp(((i % 2) == 1), (function() return UnityEngine.Time.time; end), (function() return -5; end));
+					local angle; angle = condexp(((i % 2) == 1), false, (function() return UnityEngine.Time.time; end), true, -5);
 					local b; b = newexternobject(UnityEngine.Vector3, "UnityEngine.Vector3", "ctor", nil, {}, typecast(( (UnityEngine.Mathf.Cos(((((i * 3.141593) * 2) / this.max) + angle)) * nr) ), System.Single), typecast(( (UnityEngine.Mathf.Sin(((((i * 3.141593) * 2) / this.max) + angle)) * nr) ), System.Single), 0);
 					this.cubes[i + 1].transform.position = b;
 				i = i + 1;
