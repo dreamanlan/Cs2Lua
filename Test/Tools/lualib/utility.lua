@@ -82,7 +82,25 @@ end;
 
 function typecast(obj, t)
 	if t == System.String then
-		return wrapstring(obj);		
+		return wrapstring(obj);
+	elseif t == System.Single or t ==	System.Double then
+	  return tonumber(obj);
+	elseif t == System.Int64 or t == System.UInt64 then
+	  local v = tonumber(obj);
+	  v = math.floor(v);
+	  return v;
+	elseif t == System.Int32 or t == System.UInt32 then
+	  local v = tonumber(obj);
+	  v = math.floor(v);
+	  return v % 0x100000000;
+	elseif t == System.Int16 or t == System.UInt16 then
+	  local v = tonumber(obj);
+	  v = math.floor(v);
+	  return v % 0x10000;
+	elseif t == System.SByte or t == System.Byte then
+	  local v = tonumber(obj);
+	  v = math.floor(v);
+	  return v % 0x100;
 	else
   	return obj;
  	end;

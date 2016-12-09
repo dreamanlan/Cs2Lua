@@ -42,6 +42,10 @@ namespace SLua
             add(typeof(List<int>), "ListInt");
             add(typeof(Dictionary<int, string>), "DictIntStr");
             add(typeof(string), "System.String");
+            add(typeof(System.SByte), "System.SByte");
+            add(typeof(System.Byte), "System.Byte");
+            add(typeof(System.Int16), "System.Int16");
+            add(typeof(System.UInt16), "System.UInt16");
             add(typeof(System.Int32), "System.Int32");
             add(typeof(System.UInt32), "System.UInt32");
             add(typeof(System.Int64), "System.Int64");
