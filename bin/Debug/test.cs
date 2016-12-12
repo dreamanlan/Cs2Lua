@@ -29,6 +29,7 @@ namespace TopLevel
 
     enum TestEnum
     {
+        Invalid = int.MinValue,
         One = 1,
         Two,
         Three,
@@ -97,6 +98,8 @@ namespace TopLevel
             Action a = ()=>{};
             f.OnAction+=a;
             f.OnAction-=a;
+            float t = float.NegativeInfinity;
+            t = float.NaN;
         }
     }
 
@@ -189,7 +192,8 @@ namespace TopLevel
             {
                 s_Test = 9876;
             }
-            private static int s_Test = 8765;
+            private static int s_Test = int.MaxValue;
+            private static float s_Float = float.PositiveInfinity;
             private static T s_Inst = new T();
         }
         delegate void SimpleEventHandler();

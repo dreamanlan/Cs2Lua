@@ -543,6 +543,10 @@ function GetHashsetEnumerator(tb)
   });
 end;
 
+function wrapconst(t, name)
+  return t[name];
+end;
+
 function wrapstring(str)
   if type(str)=="string" then
     return System.String(str);

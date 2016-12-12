@@ -87,7 +87,7 @@ namespace RoslynTool.CsToLua
                 VisitExpressionSyntax(node.EqualsValue.Value);
             } else if (sym.HasConstantValue) {
                 CodeBuilder.Append(" = ");
-                OutputConstValue(sym.ConstantValue);
+                OutputConstValue(sym.ConstantValue, sym);
             } else {
                 Log(node, "enum member can't deduce a value !");
                 CodeBuilder.Append(" = 0");

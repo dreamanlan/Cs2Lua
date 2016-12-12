@@ -17,7 +17,7 @@ namespace RoslynTool.CsToLua
             IOperation oper = m_Model.GetOperation(node);
             if (null != oper && oper.ConstantValue.HasValue) {
                 object val = oper.ConstantValue.Value;
-                OutputConstValue(val);
+                OutputConstValue(val, oper);
                 return;
             }
             node.Accept(this);
@@ -319,7 +319,7 @@ namespace RoslynTool.CsToLua
                         } else {
                             CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
                             CodeBuilder.Append(" = ");
-                            OutputConstValue(constVal.Value);
+                            OutputConstValue(constVal.Value, expOper);
                         }
                     } else if (fieldSym.Type.TypeKind == TypeKind.Delegate) {
                         CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);

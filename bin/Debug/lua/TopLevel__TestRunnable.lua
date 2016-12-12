@@ -27,6 +27,8 @@ TopLevel.TestRunnable = {
 				end));
 				delegationadd(f, "TopLevel_IRunnable_T", "OnAction", a);
 				delegationremove(f, "TopLevel_IRunnable_T", "OnAction", a);
+				local t; t = wrapconst(System.Single, "NegativeInfinity");
+				t = wrapconst(System.Single, "NaN");
 			end,
 			ctor = function(this)
 			end,

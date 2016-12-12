@@ -22,7 +22,8 @@ TopLevel.SecondLevel.GenericClass_T = {
 		local static = TopLevel.SecondLevel.GenericClass_T;
 		local static_fields = {
 			TTT = 789,
-			s_Test = 8765,
+			s_Test = 2147483647,
+			s_Float = wrapconst(System.Single, "PositiveInfinity"),
 			s_Inst = true,
 			__cctor_called = false,
 		};

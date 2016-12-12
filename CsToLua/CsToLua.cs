@@ -273,7 +273,7 @@ namespace RoslynTool.CsToLua
                 }
             }
         }
-        private void OutputConstValue(object val)
+        private void OutputConstValue(object val, object operOrSym)
         {
             string v = val as string;
             if (null != v) {
@@ -285,7 +285,19 @@ namespace RoslynTool.CsToLua
             } else if (null == val) {
                 CodeBuilder.Append("nil");
             } else {
-                CodeBuilder.Append(val);
+                string sv = val.ToString();
+                char c = sv.Length>0 ? sv[0] : '\0';
+                if (c == '-' || c == '.' || char.IsNumber(c)) {
+                    CodeBuilder.Append(val);
+                } else {
+                    var oper = operOrSym as IFieldReferenceExpression;
+                    if (null != oper) {
+                        var fieldSym = oper.Field;
+                        CodeBuilder.AppendFormat("wrapconst({0}, \"{1}\")", ClassInfo.GetFullName(fieldSym.Type), fieldSym.Name);
+                    } else {
+                        CodeBuilder.Append(val);
+                    }
+                }
             }
         }
         private void OutputType(ITypeSymbol type, SyntaxNode node, ClassInfo ci, string errorTag)

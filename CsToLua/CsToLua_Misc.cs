@@ -130,7 +130,7 @@ namespace RoslynTool.CsToLua
             }
             if (null != localSym && localSym.HasConstantValue) {
                 CodeBuilder.Append(" = ");
-                OutputConstValue(localSym.ConstantValue);
+                OutputConstValue(localSym.ConstantValue, localSym);
                 CodeBuilder.AppendLine(";");
                 return;
             }
