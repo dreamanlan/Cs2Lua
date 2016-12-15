@@ -718,6 +718,7 @@ function defineclass(base, className, static, static_fields, static_props, stati
 				            ret = obj_fields[k];
 				            if nil~=ret then
 				            	obj_fields[k] = v;
+				            	return;
 				            end;
                     ret = obj_props[k];
                     if nil~=ret then
@@ -770,6 +771,7 @@ function defineclass(base, className, static, static_fields, static_props, stati
             ret = class_fields[k];
             if nil~=ret then
             	class_fields[k] = v;
+            	return;
             end;
             ret = class_props[k];
             if nil~=ret then
