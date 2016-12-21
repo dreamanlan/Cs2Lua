@@ -54,14 +54,14 @@ namespace RoslynTool.CsToLua
                 foreach (XmlElement node in nodes) {
                     var aliasesNode = SelectSingleNode(node, "Aliases");
                     var pathNode = SelectSingleNode(node, "HintPath");
-                    if (null != pathNode) {
+                    if (null != pathNode && !refByPaths.ContainsKey(pathNode.InnerText)) {
                         if (null != aliasesNode)
                             refByPaths.Add(pathNode.InnerText, aliasesNode.InnerText);
                         else
                             refByPaths.Add(pathNode.InnerText, "global");
                     } else {
                         string val = node.GetAttribute("Include");
-                        if (!string.IsNullOrEmpty(val)) {
+                        if (!string.IsNullOrEmpty(val) && !refByNames.ContainsKey(val)) {
                             if (null != aliasesNode)
                                 refByNames.Add(val, aliasesNode.InnerText);
                             else
@@ -91,14 +91,17 @@ namespace RoslynTool.CsToLua
                         string prjName = nameNode.InnerText.Trim();
                         string prjOutputFile = ParseProjectOutputFile(prjFile, prjName);
                         string fileName = Path.Combine(prjOutputDir, prjOutputFile);
-                        refByPaths.Add(fileName, "global");
+                        if (!refByPaths.ContainsKey(fileName)) {
+                            refByPaths.Add(fileName, "global");
+                        }
                     }
                 }
                 nodes = SelectNodes(xmlDoc, "ItemGroup", "Compile");
                 foreach (XmlElement node in nodes) {
                     string val = node.GetAttribute("Include");
-                    if (!string.IsNullOrEmpty(val) && val.EndsWith(".cs"))
+                    if (!string.IsNullOrEmpty(val) && val.EndsWith(".cs") && !files.Contains(val)) {
                         files.Add(val);
+                    }
                 }
             } else {
                 files.Add(srcFile);

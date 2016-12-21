@@ -5,12 +5,12 @@ test.cs(571,16): error CS0246: The type or namespace name 'UILabel' could not be
 test.cs(572,16): error CS0246: The type or namespace name 'UILabel' could not be found (are you missing a using directive or an assembly reference?)
 test.cs(573,16): error CS0246: The type or namespace name 'UILabel' could not be found (are you missing a using directive or an assembly reference?)
 test.cs(574,16): error CS0246: The type or namespace name 'UILabel' could not be found (are you missing a using directive or an assembly reference?)
-test.cs(393,59): error CS1501: No overload for method 'Add' takes 2 arguments
-test.cs(393,69): error CS1501: No overload for method 'Add' takes 2 arguments
 test.cs(21,17): error CS0619: 'GameObject.renderer' is obsolete: 'Property renderer has been deprecated. Use GetComponent<Renderer>() instead. (UnityUpgradable)'
 test.cs(156,27): error CS0413: The type parameter 'T' cannot be used with the 'as' operator because it does not have a class type constraint nor a 'class' constraint
 test.cs(157,23): error CS0128: A local variable named 'v' is already defined in this scope
 test.cs(167,29): error CS0030: Cannot convert type 'T' to 'TT'
+test.cs(393,59): error CS1501: No overload for method 'Add' takes 2 arguments
+test.cs(393,69): error CS1501: No overload for method 'Add' takes 2 arguments
 test.cs(600,30): error CS0103: The name 'MailSystem' does not exist in the current context
 test.cs(601,13): error CS0103: The name 'UICommon' does not exist in the current context
 test.cs(609,55): error CS0103: The name 'CharacterSystem' does not exist in the current context
@@ -50,9 +50,6 @@ test.cs(293,17): error CS0131: The left-hand side of an assignment must be a var
 test.cs(294,21): error CS0266: Cannot implicitly convert type 'int?' to 'int'. An explicit conversion exists (are you missing a cast?)
 test.cs(721,28): error CS0103: The name 'EventDef' does not exist in the current context
 test.cs(725,28): error CS0103: The name 'EventDef' does not exist in the current context
-test.cs(421,27): error CS0039: Cannot convert type 'int' to 'TopLevel.SecondLevel.Foo' via a reference conversion, boxing conversion, unboxing conversion, wrapping conversion, or null type conversion
-test.cs(432,26): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
-test.cs(435,17): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
 test.cs(738,73): error CS0103: The name 'EventDef' does not exist in the current context
 test.cs(738,13): error CS0103: The name 'GameEntry' does not exist in the current context
 test.cs(739,73): error CS0103: The name 'EventDef' does not exist in the current context
@@ -61,5 +58,8 @@ test.cs(743,73): error CS0103: The name 'EventDef' does not exist in the current
 test.cs(743,13): error CS0103: The name 'GameEntry' does not exist in the current context
 test.cs(744,73): error CS0103: The name 'EventDef' does not exist in the current context
 test.cs(744,13): error CS0103: The name 'GameEntry' does not exist in the current context
+test.cs(421,27): error CS0039: Cannot convert type 'int' to 'TopLevel.SecondLevel.Foo' via a reference conversion, boxing conversion, unboxing conversion, wrapping conversion, or null type conversion
+test.cs(432,26): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
+test.cs(435,17): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
 test.cs(340,17): error CS0305: Using the generic type 'IRunnable<T>' requires 1 type arguments
 test.cs(345,25): error CS0161: 'Foo.TestValueArg(TestStruct)': not all code paths return a value
