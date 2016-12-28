@@ -234,7 +234,7 @@ namespace RoslynTool.CsToLua
         internal static bool IsBasicValueProperty(IPropertySymbol sym)
         {
             bool ret = false;
-            if (null != sym && null != sym.ContainingType && sym.ContainingType.IsValueType) {
+            if (null != sym && !sym.IsStatic && null != sym.ContainingType && sym.ContainingType.IsValueType) {
                 string type = ClassInfo.GetFullName(sym.ContainingType);
                 ret = IsBasicValueType(type);
             }
@@ -243,7 +243,7 @@ namespace RoslynTool.CsToLua
         internal static bool IsBasicValueMethod(IMethodSymbol sym)
         {
             bool ret = false;
-            if (null != sym && null != sym.ContainingType && sym.ContainingType.IsValueType) {
+            if (null != sym && !sym.IsStatic && null != sym.ContainingType && sym.ContainingType.IsValueType) {
                 string type = ClassInfo.GetFullName(sym.ContainingType);
                 ret = IsBasicValueType(type);
             }
