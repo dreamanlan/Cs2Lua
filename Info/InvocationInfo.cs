@@ -191,7 +191,14 @@ namespace RoslynTool.CsToLua
                 }
             }
 
-            if (useExplicitTypeParam && (sym.MethodKind == MethodKind.Constructor || sym.MethodKind == MethodKind.StaticConstructor || sym.IsStatic)) {
+            if (!useExplicitTypeParam && sym.MethodKind == MethodKind.Constructor) {
+                ClassSymbolInfo csi;
+                if (SymbolTable.Instance.ClassSymbols.TryGetValue(ClassKey, out csi)) {
+                    useExplicitTypeParam = csi.GenerateTypeParamFields;
+                }
+            }
+
+            if (useExplicitTypeParam && (sym.MethodKind == MethodKind.Constructor || sym.IsStatic)) {
                 INamedTypeSymbol type = sym.ContainingType;
                 while (null != type) {
                     if (type.IsGenericType) {

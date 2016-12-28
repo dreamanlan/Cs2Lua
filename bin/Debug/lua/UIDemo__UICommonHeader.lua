@@ -89,10 +89,10 @@ UIDemo.UICommonHeader = {
 									end;
 			end,
 			OnFireEvent = function(this, key, param1, param2)
-				local __compiler_switch_765 = key;
-				if __compiler_switch_765 == typecast(EventDef.Character_MailChanged, System.UInt32) then
+				local __compiler_switch_783 = key;
+				if __compiler_switch_783 == typecast(EventDef.Character_MailChanged, System.UInt32) then
 					this:UpdateMailUI();
-				elseif __compiler_switch_765 == typecast(EventDef.Character_MoneyChanged, System.UInt32) then
+				elseif __compiler_switch_783 == typecast(EventDef.Character_MoneyChanged, System.UInt32) then
 					this:UpdateMoneyUI();
 				end;
 				return false;

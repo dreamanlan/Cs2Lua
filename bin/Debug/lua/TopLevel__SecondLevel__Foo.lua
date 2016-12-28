@@ -108,7 +108,7 @@ TopLevel.SecondLevel.Foo = {
 				return nil;
 			end),
 			Test = function(this)
-				local t; t = newobject(TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT, "ctor", {}, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
+				local t; t = newobject(TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT, "ctor", {}, TopLevel.SecondLevel.Foo.Test2, TopLevel.SecondLevel.Foo.Test1, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
 				t:Test(System.Int32, 123);
 				t:Test2(System.Int32, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
 				local v;
@@ -154,10 +154,10 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			TestSwitch = function(this)
 				local i; i = 10;
-				local __compiler_switch_410 = i;
-				if __compiler_switch_410 == 1 then
+				local __compiler_switch_428 = i;
+				if __compiler_switch_428 == 1 then
 					return ;
-				elseif __compiler_switch_410 == 2 then
+				elseif __compiler_switch_428 == 2 then
 					return ;
 				else
 					return ;

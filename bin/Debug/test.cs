@@ -27,6 +27,24 @@ class TestUnity : MonoBehaviour
     }
 }
 
+public class foo<T, K>
+{
+    public void parse(string a, string b)
+    {
+        var t = typeof(T);
+        var k = typeof(K);
+    }
+}
+
+public class bar 
+{
+    public void test()
+    {
+        foo<int, int> a = new foo<int, int>();
+        a.parse("123", "456");
+    }
+}
+
 namespace UIDemo
 {
     class UICommon<CT> where CT : Component
