@@ -18,6 +18,7 @@ namespace RoslynTool.CsToLua
         internal List<ITypeSymbol> GenericTypeArgs = new List<ITypeSymbol>();
         internal bool ArrayToParams = false;
         internal bool IsComponentGetOrAdd = false;
+        internal bool IsBasicValueMethod = false;
 
         internal IMethodSymbol MethodSymbol = null;
         internal IAssemblySymbol AssemblySymbol = null;
@@ -109,7 +110,7 @@ namespace RoslynTool.CsToLua
                 Args.AddRange(argList);
             }
         }
-
+        
         internal void OutputInvocation(StringBuilder codeBuilder, CsLuaTranslater cs2lua, ExpressionSyntax exp, bool isMemberAccess, SemanticModel model, SyntaxNode node)
         {
             IMethodSymbol sym = MethodSymbol;
@@ -125,15 +126,23 @@ namespace RoslynTool.CsToLua
                     codeBuilder.AppendFormat("{0}, \"{1}\"", fnOfIntf, mname);
                     prestr = ", ";
                 } else {
-                    if (sym.IsStatic) {
-                        codeBuilder.Append(ClassKey);
-                        codeBuilder.Append(".");
-                    } else {
+                    if (IsBasicValueMethod) {
+                        codeBuilder.Append("invokeforbasicvalue(");
                         cs2lua.VisitExpressionSyntax(exp);
-                        codeBuilder.Append(":");
+                        codeBuilder.Append(", ");
+                        codeBuilder.AppendFormat("{0}, \"{1}\"", ClassKey, mname);
+                        prestr = ", ";
+                    } else {
+                        if (sym.IsStatic) {
+                            codeBuilder.Append(ClassKey);
+                            codeBuilder.Append(".");
+                        } else {
+                            cs2lua.VisitExpressionSyntax(exp);
+                            codeBuilder.Append(":");
+                        }
+                        codeBuilder.Append(mname);
+                        codeBuilder.Append("(");
                     }
-                    codeBuilder.Append(mname);
-                    codeBuilder.Append("(");
                 }
             } else {
                 if (sym.MethodKind == MethodKind.DelegateInvoke) {
@@ -170,6 +179,7 @@ namespace RoslynTool.CsToLua
             GenericTypeArgs.Clear();
             
             ClassKey = ClassInfo.CalcMemberReference(sym);
+            IsBasicValueMethod = SymbolTable.IsBasicValueMethod(sym);
 
             if ((ClassKey == "UnityEngine.GameObject" || ClassKey == "UnityEngine.Component") && (sym.Name.StartsWith("GetComponent") || sym.Name.StartsWith("AddComponent"))) {
                 IsComponentGetOrAdd = true;

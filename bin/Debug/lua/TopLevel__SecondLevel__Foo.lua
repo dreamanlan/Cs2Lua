@@ -154,10 +154,10 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			TestSwitch = function(this)
 				local i; i = 10;
-				local __compiler_switch_406 = i;
-				if __compiler_switch_406 == 1 then
+				local __compiler_switch_410 = i;
+				if __compiler_switch_410 == 1 then
 					return ;
-				elseif __compiler_switch_406 == 2 then
+				elseif __compiler_switch_410 == 2 then
 					return ;
 				else
 					return ;
@@ -185,7 +185,7 @@ TopLevel.SecondLevel.Foo = {
 				OnSimple2 = wrapdelegation{},
 				m_Test = 0,
 				m_Test2 = 0,
-				m_TS = true,
+				m_TS = false,
 				m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, "System.Collections.Generic.HashSet_T", "ctor", nil, {wrapstring("one"), wrapstring("two"), wrapstring("three")}),
 				__attributes = TopLevel__SecondLevel__Foo__Attrs,
 				__ctor_called = false,

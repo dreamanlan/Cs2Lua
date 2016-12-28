@@ -24,7 +24,7 @@ TopLevel.SecondLevel.GenericClass_T = {
 			TTT = 789,
 			s_Test = 2147483647,
 			s_Float = wrapconst(System.Single, "PositiveInfinity"),
-			s_Inst = true,
+			s_Inst = false,
 			__cctor_called = false,
 		};
 		local static_props = nil;
@@ -56,7 +56,7 @@ TopLevel.SecondLevel.GenericClass_T = {
 			local instance_fields = {
 				m_Test = 123,
 				m_Test2 = (TopLevel.SecondLevel.GenericClass_T.TTT + 1),
-				m_Inst = true,
+				m_Inst = false,
 				__ctor_called = false,
 			};
 			return instance_fields;
@@ -125,8 +125,8 @@ TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT = {
 			local instance_fields = {
 				m_T = nil,
 				m_TT = nil,
-				m_TypeT = true,
-				m_TypeTT = true,
+				m_TypeT = false,
+				m_TypeTT = false,
 				__ctor_called = false,
 			};
 			return instance_fields;

@@ -17,6 +17,7 @@ namespace RoslynTool.CsToLua
             None = 0,
             StaticPropUseExplicitTypeParams,
             PropExplicitImplementInterface,
+            PropForBasicValueType,
         }
         internal Dictionary<string, List<ClassInfo>> ToplevelClasses
         {

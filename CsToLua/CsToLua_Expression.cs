@@ -248,10 +248,12 @@ namespace RoslynTool.CsToLua
                 } else {
                     if (CheckExplicitInterfaceAccess(leftPsym)) {
                         specialType = SpecialAssignmentType.PropExplicitImplementInterface;
+                    } else if (SymbolTable.IsBasicValueProperty(leftPsym)) {
+                        specialType = SpecialAssignmentType.PropForBasicValueType;
                     }
                 }
             }
-            if (specialType==SpecialAssignmentType.StaticPropUseExplicitTypeParams || specialType==SpecialAssignmentType.PropExplicitImplementInterface
+            if (specialType == SpecialAssignmentType.StaticPropUseExplicitTypeParams || specialType == SpecialAssignmentType.PropExplicitImplementInterface || specialType == SpecialAssignmentType.PropForBasicValueType 
                 || null != leftElementAccess || null != leftCondAccess 
                 || leftOper.Type.TypeKind == TypeKind.Delegate && (leftSym.Kind != SymbolKind.Local || op != "=")) {
                 needWrapFunction = false;
@@ -332,6 +334,7 @@ namespace RoslynTool.CsToLua
                     string mname = string.Empty;
                     bool staticPropUseExplicitTypeParam = false;
                     bool propExplicitImplementInterface = false;
+                    bool propForBasicValueType = false;
                     if (null != psym){
                         if (psym.IsStatic) {
                             if (m_SymbolTable.IsUseExplicitTypeParam(psym.GetMethod)) {
@@ -339,6 +342,7 @@ namespace RoslynTool.CsToLua
                             }
                         } else {
                             propExplicitImplementInterface = CheckExplicitInterfaceAccess(psym, ref fnOfIntf, ref mname);
+                            propForBasicValueType = SymbolTable.IsBasicValueProperty(psym);
                         }
                     }
                     if (staticPropUseExplicitTypeParam) {
@@ -356,6 +360,11 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.AppendFormat("getwithinterface(");
                         VisitExpressionSyntax(node.Expression);
                         CodeBuilder.AppendFormat(", \"{0}\", \"{1}\")", fnOfIntf, mname);
+                    } else if (propForBasicValueType) {
+                        string pname = psym.Name;
+                        CodeBuilder.AppendFormat("getforbasicvalue(");
+                        VisitExpressionSyntax(node.Expression);
+                        CodeBuilder.AppendFormat(", \"{0}\", \"{1}\")", className, pname);
                     } else {
                         if (string.IsNullOrEmpty(className)) {
                             VisitExpressionSyntax(node.Expression);

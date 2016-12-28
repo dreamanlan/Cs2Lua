@@ -20,6 +20,10 @@ class TestUnity : MonoBehaviour
         gameObject.SetActive(true);
         var r = gameObject.renderer;
         gameObject.active=true;
+        bool v = true;
+        string s = v.ToString();
+        int i = 123;
+        string s = i.ToString();        
     }
 }
 

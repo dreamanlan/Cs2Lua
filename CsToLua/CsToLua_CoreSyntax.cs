@@ -288,7 +288,7 @@ namespace RoslynTool.CsToLua
                             bool createSelf = m_SymbolTable.IsFieldCreateSelf(fieldSym);
                             if (useExplicitTypeParam || createSelf) {
                                 CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
-                                CodeBuilder.AppendLine(" = true,");
+                                CodeBuilder.AppendLine(" = false,");
                                 if (isStatic && useExplicitTypeParam) {
                                     Log(v, "typeof/as/is/cast(GenericTypeParameter) or new GenericTypeParameter() can't be used in static field initializer !");
                                 }
@@ -325,7 +325,7 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
                         CodeBuilder.Append(" = wrapdelegation{}");
                     } else {
-                        CodeBuilder.AppendFormat("{0}{1} = true", GetIndentString(), name);
+                        CodeBuilder.AppendFormat("{0}{1} = false", GetIndentString(), name);
                     }
                     CodeBuilder.Append(",");
                     CodeBuilder.AppendLine();
@@ -543,6 +543,14 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.AppendFormat("setwithinterface(");
                 VisitExpressionSyntax(leftMemberAccess.Expression);
                 CodeBuilder.AppendFormat(", {0}, {1}, ", fnOfIntf, mname);
+                VisitExpressionSyntax(assign.Right);
+                CodeBuilder.Append(")");
+            } else if (specialType == SpecialAssignmentType.PropForBasicValueType) {
+                string className = ClassInfo.GetFullName(leftPsym.ContainingType);
+                string pname = leftPsym.Name;
+                CodeBuilder.AppendFormat("setforbasicvalue(");
+                VisitExpressionSyntax(leftMemberAccess.Expression);
+                CodeBuilder.AppendFormat(", {0}, \"{1}\", ", className, pname);
                 VisitExpressionSyntax(assign.Right);
                 CodeBuilder.Append(")");
             } else if (null != leftElementAccess) {

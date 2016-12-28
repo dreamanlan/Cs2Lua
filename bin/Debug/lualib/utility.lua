@@ -1055,16 +1055,16 @@ end;
 function invokewithinterface(obj, intf, method, ...)
 	local meta = getmetatable(obj);
 	if meta.__cs2lua_defined then
-		return obj[intf+"_"+method](obj,...);
+		return obj[method](obj,...);
 	else
-		return obj:method(...);
+		return obj[method](obj,...);
 	end;
 	return nil;
 end;
 function getwithinterface(obj, intf, property)
 	local meta = getmetatable(obj);
 	if meta.__cs2lua_defined then
-		return obj[intf+"_"+property];
+		return obj[property];
 	else
 		return obj[property];
 	end;
@@ -1073,7 +1073,35 @@ end;
 function setwithinterface(obj, intf, property, value)
 	local meta = getmetatable(obj);
 	if meta.__cs2lua_defined then
-		obj[intf+"_"+property]=value;
+		obj[property]=value;
+	else
+		obj[property]=value;
+	end;
+	return nil;
+end;
+
+function invokeforbasicvalue(obj, intf, method, ...)
+	local meta = getmetatable(obj);
+	if meta then
+		return obj[method](obj,...);
+	else
+		return obj[method](obj,...);
+	end;
+	return nil;
+end;
+function getforbasicvalue(obj, intf, property)
+	local meta = getmetatable(obj);
+	if meta then
+		return obj[property];
+	else
+		return obj[property];
+	end;
+	return nil;
+end;
+function setforbasicvalue(obj, intf, property, value)
+	local meta = getmetatable(obj);
+	if meta then
+		obj[property]=value;
 	else
 		obj[property]=value;
 	end;

@@ -21,9 +21,9 @@ TopLevel.TestStruct = {
 
 		local instance_build = function()
 			local instance_fields = {
-				A = true,
-				B = true,
-				C = true,
+				A = false,
+				B = false,
+				C = false,
 			};
 			return instance_fields;
 		end;

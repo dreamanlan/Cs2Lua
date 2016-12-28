@@ -94,7 +94,7 @@ Extentions = {
 		end));
 		local static = Extentions;
 		local static_fields = {
-			dateTime1970 = true,
+			dateTime1970 = false,
 		};
 		local static_props = nil;
 		local static_events = nil;

@@ -20,6 +20,10 @@ TestUnity = {
 				this.gameObject:SetActive(true);
 				local r; r = this.gameObject.renderer;
 				this.gameObject.active = true;
+				local v; v = true;
+				local s; s = invokeforbasicvalue(v, System.Boolean, "ToString");
+				local i; i = 123;
+				local s; s = invokeforbasicvalue(i, System.Int32, "ToString");
 			end,
 			ctor = function(this)
 			end,

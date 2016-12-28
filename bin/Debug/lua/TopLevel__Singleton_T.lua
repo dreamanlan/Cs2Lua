@@ -22,7 +22,7 @@ TopLevel.Singleton_T = {
 	__define_class = function()
 		local static = TopLevel.Singleton_T;
 		local static_fields = {
-			ms_instance = true,
+			ms_instance = false,
 		};
 
 		local static_props = {

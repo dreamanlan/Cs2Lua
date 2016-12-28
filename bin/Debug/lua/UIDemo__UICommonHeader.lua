@@ -50,7 +50,7 @@ UIDemo.UICommonHeader = {
 			UpdateMailUI = function(this)
 				local nMailCount; nMailCount;
 								if (nMailCount > 0) then
-					this.MailCount.text = nMailCount:ToString();
+					this.MailCount.text = invokeforbasicvalue(nMailCount, System.Int32, "ToString");
 				end;
 			end,
 			UpdateMoneyUI = function(this)
@@ -89,10 +89,10 @@ UIDemo.UICommonHeader = {
 									end;
 			end,
 			OnFireEvent = function(this, key, param1, param2)
-				local __compiler_switch_761 = key;
-				if __compiler_switch_761 == typecast(EventDef.Character_MailChanged, System.UInt32) then
+				local __compiler_switch_765 = key;
+				if __compiler_switch_765 == typecast(EventDef.Character_MailChanged, System.UInt32) then
 					this:UpdateMailUI();
-				elseif __compiler_switch_761 == typecast(EventDef.Character_MoneyChanged, System.UInt32) then
+				elseif __compiler_switch_765 == typecast(EventDef.Character_MoneyChanged, System.UInt32) then
 					this:UpdateMoneyUI();
 				end;
 				return false;
@@ -110,16 +110,16 @@ UIDemo.UICommonHeader = {
 
 		local instance_build = function()
 			local instance_fields = {
-				TitleContainer = true,
-				OptionContainer = true,
-				MailCountObj = true,
-				MailCount = true,
-				GoldValue = true,
-				TicketValue = true,
-				DiamondValue = true,
-				TitleCaption = true,
-				FadeInAni = true,
-				FadeOutAni = true,
+				TitleContainer = false,
+				OptionContainer = false,
+				MailCountObj = false,
+				MailCount = false,
+				GoldValue = false,
+				TicketValue = false,
+				DiamondValue = false,
+				TitleCaption = false,
+				FadeInAni = false,
+				FadeOutAni = false,
 				OnBackBtn = delegationwrap(nil),
 			};
 			return instance_fields;

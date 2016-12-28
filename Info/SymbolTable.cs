@@ -231,6 +231,28 @@ namespace RoslynTool.CsToLua
                 return name;
             }
         }
+        internal static bool IsBasicValueProperty(IPropertySymbol sym)
+        {
+            bool ret = false;
+            if (null != sym && null != sym.ContainingType && sym.ContainingType.IsValueType) {
+                string type = ClassInfo.GetFullName(sym.ContainingType);
+                ret = IsBasicValueType(type);
+            }
+            return ret;
+        }
+        internal static bool IsBasicValueMethod(IMethodSymbol sym)
+        {
+            bool ret = false;
+            if (null != sym && null != sym.ContainingType && sym.ContainingType.IsValueType) {
+                string type = ClassInfo.GetFullName(sym.ContainingType);
+                ret = IsBasicValueType(type);
+            }
+            return ret;
+        }
+        internal static bool IsBasicValueType(string type)
+        {
+            return s_BasicValueTypes.Contains(type);
+        }
         internal static bool ForSlua
         {
             get { return s_ForSlua; }
@@ -253,6 +275,9 @@ namespace RoslynTool.CsToLua
 
         private static HashSet<string> s_ExtraLuaKeywords = new HashSet<string> {
             "and", "elseif", "end", "function", "local", "nil", "not", "or", "repeat", "then", "until"
+        };
+        private static HashSet<string> s_BasicValueTypes = new HashSet<string> {
+            "System.Boolean", "System.Byte", "System.SByte", "System.Int16", "System.UInt16", "System.Int32", "System.UInt32", "System.Int64", "System.UInt64", "System.Single", "System.Double"
         };
     }
 }
