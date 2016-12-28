@@ -35,12 +35,12 @@ namespace RoslynTool.CsToLua
                     InvocationInfo ii = new InvocationInfo();
                     var arglist = new List<ExpressionSyntax>() { node.Left };
                     ii.Init(msym, arglist, m_SymbolTable.IsUseExplicitTypeParam(msym), m_Model);
-                    OutputOperatorInvoke(ii);
+                    OutputOperatorInvoke(ii, node);
                 } else {
                     InvocationInfo ii = new InvocationInfo();
                     var arglist = new List<ExpressionSyntax>() { node.Left, node.Right };
                     ii.Init(msym, arglist, m_SymbolTable.IsUseExplicitTypeParam(msym), m_Model);
-                    OutputOperatorInvoke(ii);
+                    OutputOperatorInvoke(ii, node);
                 }
             } else {
                 string op = node.OperatorToken.Text;
@@ -134,7 +134,7 @@ namespace RoslynTool.CsToLua
                 InvocationInfo ii = new InvocationInfo();
                 var arglist = new List<ExpressionSyntax>() { node.Operand };
                 ii.Init(msym, arglist, m_SymbolTable.IsUseExplicitTypeParam(msym), m_Model);
-                OutputOperatorInvoke(ii);
+                OutputOperatorInvoke(ii, node);
             } else {
                 string op = node.OperatorToken.Text;
                 if (op == "++" || op == "--") {
@@ -171,7 +171,7 @@ namespace RoslynTool.CsToLua
                 InvocationInfo ii = new InvocationInfo();
                 var arglist = new List<ExpressionSyntax>() { node.Operand };
                 ii.Init(msym, arglist, m_SymbolTable.IsUseExplicitTypeParam(msym), m_Model);
-                OutputOperatorInvoke(ii);
+                OutputOperatorInvoke(ii, node);
             } else {
                 string op = node.OperatorToken.Text;
                 if (op == "++" || op == "--") {
@@ -204,7 +204,7 @@ namespace RoslynTool.CsToLua
                 InvocationInfo ii = new InvocationInfo();
                 var arglist = new List<ExpressionSyntax>() { node.Expression };
                 ii.Init(msym, arglist, m_SymbolTable.IsUseExplicitTypeParam(msym), m_Model);
-                OutputOperatorInvoke(ii);
+                OutputOperatorInvoke(ii, node);
             } else {
                 CodeBuilder.Append("typecast(");
                 VisitExpressionSyntax(node.Expression);
@@ -350,7 +350,7 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.Append(".");
                         CodeBuilder.Append(manglingName);
                         CodeBuilder.Append("(");
-                        OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false);
+                        OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false, node);
                         CodeBuilder.Append(")");
                     } else if (propExplicitImplementInterface) {
                         CodeBuilder.AppendFormat("getwithinterface(");
@@ -392,7 +392,7 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
                 InvocationInfo ii = new InvocationInfo();
                 ii.Init(psym.GetMethod, node.ArgumentList, m_SymbolTable.IsUseExplicitTypeParam(psym.GetMethod), m_Model);
-                OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false);
+                OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false, node);
                 CodeBuilder.Append(")");
             } else if (oper.Kind == OperationKind.ArrayElementReferenceExpression) {
                 VisitExpressionSyntax(node.Expression);
@@ -446,7 +446,7 @@ namespace RoslynTool.CsToLua
                     InvocationInfo ii = new InvocationInfo();
                     List<ExpressionSyntax> args = new List<ExpressionSyntax> { node.WhenNotNull };
                     ii.Init(psym.GetMethod, args, m_SymbolTable.IsUseExplicitTypeParam(psym.GetMethod), m_Model);
-                    OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false);
+                    OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false, elementBinding);
                     CodeBuilder.Append(")");
                     CodeBuilder.Append("; end)");
                 } else if (oper.Kind == OperationKind.ArrayElementReferenceExpression) {
@@ -683,7 +683,7 @@ namespace RoslynTool.CsToLua
                 if (ii.Args.Count + ii.GenericTypeArgs.Count > 0) {
                     CodeBuilder.Append(", ");
                 }
-                OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false);
+                OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false, node);
                 CodeBuilder.Append(")");
                 if (ii.ReturnArgs.Count > 0) {
                     CodeBuilder.Append("; ");

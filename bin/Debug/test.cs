@@ -23,6 +23,49 @@ class TestUnity : MonoBehaviour
     }
 }
 
+namespace UIDemo
+{
+    class UICommon<CT> where CT : Component
+    {
+        public static T StaticCreateCustomComponent<T>(string strName, Transform pParent) where T : Component
+        {
+            GameObject pObj = new GameObject(strName/*, typeof(T)*/);
+            if (pObj != null)
+            {
+                if (pParent != null)
+                {
+                    pObj.transform.parent = pParent;
+                }
+                pObj.AddComponent<CT>();
+                return pObj.AddComponent<T>();
+            }
+            else
+            {
+                Debug.LogError("Error! NULL=" + typeof(T).ToString());
+            }
+            return null;
+        }
+        public T CreateCustomComponent<T>(string strName, Transform pParent) where T : Component
+        {
+            GameObject pObj = new GameObject(strName/*, typeof(T)*/);
+            if (pObj != null)
+            {
+                if (pParent != null)
+                {
+                    pObj.transform.parent = pParent;
+                }
+                pObj.AddComponent<CT>();
+                return pObj.AddComponent<T>();
+            }
+            else
+            {
+                Debug.LogError("Error! NULL=" + typeof(T).ToString());
+            }
+            return null;
+        }
+    }
+}
+
 namespace TopLevel
 {
     using lua = LuaConsole;

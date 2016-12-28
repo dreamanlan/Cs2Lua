@@ -116,10 +116,10 @@ namespace RoslynTool.CsToLua
             }
             return ret;
         }
-        internal void OutputArgumentList(IList<ExpressionSyntax> args, IList<ITypeSymbol> typeArgs, bool arrayToParams, bool useTypeNameString)
+        internal void OutputArgumentList(IList<ExpressionSyntax> args, IList<ITypeSymbol> typeArgs, bool arrayToParams, bool useTypeNameString, SyntaxNode node)
         {
             if (typeArgs.Count > 0) {
-                OutputTypeArgumentList(typeArgs, useTypeNameString);
+                OutputTypeArgumentList(typeArgs, useTypeNameString, node);
             }
             if (args.Count > 0) {
                 if (typeArgs.Count > 0)
@@ -216,17 +216,20 @@ namespace RoslynTool.CsToLua
                 }
             }
         }
-        private void OutputTypeArgumentList(IList<ITypeSymbol> typeArgs, bool useTypeNameString)
+        private void OutputTypeArgumentList(IList<ITypeSymbol> typeArgs, bool useTypeNameString, SyntaxNode node)
         {
             int ct = typeArgs.Count;
             for (int i = 0; i < ct; ++i) {
                 var type = typeArgs[i];
-                string typeName = ClassInfo.GetFullName(type);
-                if (useTypeNameString)
+                if (useTypeNameString) {
                     CodeBuilder.Append("\"");
-                CodeBuilder.Append(typeName);
-                if (useTypeNameString)
+                    string typeName = ClassInfo.GetFullName(type);
+                    CodeBuilder.Append(typeName);
                     CodeBuilder.Append("\"");
+                } else {
+                    var ci = m_ClassInfoStack.Peek();
+                    OutputType(type, node, ci, "invoke");
+                }
                 if (i < ct - 1) {
                     CodeBuilder.Append(", ");
                 }
@@ -529,14 +532,14 @@ namespace RoslynTool.CsToLua
             }
             return null;
         }
-        private void OutputOperatorInvoke(InvocationInfo ii)
+        private void OutputOperatorInvoke(InvocationInfo ii, SyntaxNode node)
         {
             if (ii.MethodSymbol.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
                 CodeBuilder.AppendFormat("{0}.", ii.ClassKey);
                 string manglingName = NameMangling(ii.MethodSymbol);
                 CodeBuilder.Append(manglingName);
                 CodeBuilder.Append("(");
-                OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false);
+                OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false, node);
                 CodeBuilder.Append(")");
             } else {
                 string method = ii.MethodSymbol.Name;
@@ -574,7 +577,7 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendFormat("invokeexternoperator({0}, ", ii.ClassKey);
                     CodeBuilder.AppendFormat("\"{0}\"", method);
                     CodeBuilder.Append(", ");
-                    OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false);
+                    OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false, node);
                     CodeBuilder.Append(")");
                 } else {
                     if (ii.Args.Count == 1) {

@@ -1,65 +1,65 @@
 ============<<<Semantic Error:test>>>============
-test.cs(561,50): error CS0246: The type or namespace name 'IEventListener' could not be found (are you missing a using directive or an assembly reference?)
-test.cs(569,16): error CS0246: The type or namespace name 'UILabel' could not be found (are you missing a using directive or an assembly reference?)
-test.cs(571,16): error CS0246: The type or namespace name 'UILabel' could not be found (are you missing a using directive or an assembly reference?)
-test.cs(572,16): error CS0246: The type or namespace name 'UILabel' could not be found (are you missing a using directive or an assembly reference?)
-test.cs(573,16): error CS0246: The type or namespace name 'UILabel' could not be found (are you missing a using directive or an assembly reference?)
-test.cs(574,16): error CS0246: The type or namespace name 'UILabel' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(604,50): error CS0246: The type or namespace name 'IEventListener' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(612,16): error CS0246: The type or namespace name 'UILabel' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(614,16): error CS0246: The type or namespace name 'UILabel' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(615,16): error CS0246: The type or namespace name 'UILabel' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(616,16): error CS0246: The type or namespace name 'UILabel' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(617,16): error CS0246: The type or namespace name 'UILabel' could not be found (are you missing a using directive or an assembly reference?)
 test.cs(21,17): error CS0619: 'GameObject.renderer' is obsolete: 'Property renderer has been deprecated. Use GetComponent<Renderer>() instead. (UnityUpgradable)'
-test.cs(156,27): error CS0413: The type parameter 'T' cannot be used with the 'as' operator because it does not have a class type constraint nor a 'class' constraint
-test.cs(157,23): error CS0128: A local variable named 'v' is already defined in this scope
-test.cs(167,29): error CS0030: Cannot convert type 'T' to 'TT'
-test.cs(393,59): error CS1501: No overload for method 'Add' takes 2 arguments
-test.cs(393,69): error CS1501: No overload for method 'Add' takes 2 arguments
-test.cs(600,30): error CS0103: The name 'MailSystem' does not exist in the current context
-test.cs(601,13): error CS0103: The name 'UICommon' does not exist in the current context
-test.cs(609,55): error CS0103: The name 'CharacterSystem' does not exist in the current context
-test.cs(609,30): error CS0103: The name 'UICommon' does not exist in the current context
-test.cs(610,57): error CS0103: The name 'CharacterSystem' does not exist in the current context
-test.cs(610,32): error CS0103: The name 'UICommon' does not exist in the current context
-test.cs(611,58): error CS0103: The name 'CharacterSystem' does not exist in the current context
-test.cs(611,33): error CS0103: The name 'UICommon' does not exist in the current context
-test.cs(618,17): error CS0103: The name 'UICommon' does not exist in the current context
-test.cs(619,17): error CS0103: The name 'UICommon' does not exist in the current context
-test.cs(623,17): error CS0103: The name 'UICommon' does not exist in the current context
-test.cs(624,17): error CS0103: The name 'UICommon' does not exist in the current context
-test.cs(631,13): error CS0103: The name 'UICommon' does not exist in the current context
-test.cs(632,13): error CS0103: The name 'UICommon' does not exist in the current context
-test.cs(638,13): error CS0103: The name 'UICommon' does not exist in the current context
-test.cs(639,13): error CS0103: The name 'UICommon' does not exist in the current context
-test.cs(646,60): error CS0246: The type or namespace name 'HFEStateSetting' could not be found (are you missing a using directive or an assembly reference?)
-test.cs(646,13): error CS0103: The name 'GameEntry' does not exist in the current context
-test.cs(651,60): error CS0246: The type or namespace name 'HFEStateMail' could not be found (are you missing a using directive or an assembly reference?)
-test.cs(651,13): error CS0103: The name 'GameEntry' does not exist in the current context
-test.cs(656,49): error CS0103: The name 'UICommonTip' does not exist in the current context
-test.cs(656,13): error CS0103: The name 'UICommonTip' does not exist in the current context
-test.cs(661,49): error CS0103: The name 'UICommonTip' does not exist in the current context
-test.cs(661,13): error CS0103: The name 'UICommonTip' does not exist in the current context
-test.cs(666,49): error CS0103: The name 'UICommonTip' does not exist in the current context
-test.cs(666,13): error CS0103: The name 'UICommonTip' does not exist in the current context
-test.cs(671,49): error CS0103: The name 'UICommonTip' does not exist in the current context
-test.cs(671,13): error CS0103: The name 'UICommonTip' does not exist in the current context
-test.cs(682,17): error CS0103: The name 'GameEntry' does not exist in the current context
-test.cs(689,55): error CS0103: The name 'UIHudDef' does not exist in the current context
-test.cs(689,34): error CS0103: The name 'GameEntry' does not exist in the current context
-test.cs(698,55): error CS0103: The name 'UIHudDef' does not exist in the current context
-test.cs(698,34): error CS0103: The name 'GameEntry' does not exist in the current context
-test.cs(713,34): error CS0103: The name 'UIHudDef' does not exist in the current context
-test.cs(713,13): error CS0103: The name 'GameEntry' does not exist in the current context
-test.cs(293,17): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
-test.cs(294,21): error CS0266: Cannot implicitly convert type 'int?' to 'int'. An explicit conversion exists (are you missing a cast?)
-test.cs(721,28): error CS0103: The name 'EventDef' does not exist in the current context
-test.cs(725,28): error CS0103: The name 'EventDef' does not exist in the current context
-test.cs(738,73): error CS0103: The name 'EventDef' does not exist in the current context
-test.cs(738,13): error CS0103: The name 'GameEntry' does not exist in the current context
-test.cs(739,73): error CS0103: The name 'EventDef' does not exist in the current context
-test.cs(739,13): error CS0103: The name 'GameEntry' does not exist in the current context
-test.cs(743,73): error CS0103: The name 'EventDef' does not exist in the current context
-test.cs(743,13): error CS0103: The name 'GameEntry' does not exist in the current context
-test.cs(744,73): error CS0103: The name 'EventDef' does not exist in the current context
-test.cs(744,13): error CS0103: The name 'GameEntry' does not exist in the current context
-test.cs(421,27): error CS0039: Cannot convert type 'int' to 'TopLevel.SecondLevel.Foo' via a reference conversion, boxing conversion, unboxing conversion, wrapping conversion, or null type conversion
-test.cs(432,26): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
-test.cs(435,17): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
-test.cs(340,17): error CS0305: Using the generic type 'IRunnable<T>' requires 1 type arguments
-test.cs(345,25): error CS0161: 'Foo.TestValueArg(TestStruct)': not all code paths return a value
+test.cs(436,59): error CS1501: No overload for method 'Add' takes 2 arguments
+test.cs(436,69): error CS1501: No overload for method 'Add' takes 2 arguments
+test.cs(199,27): error CS0413: The type parameter 'T' cannot be used with the 'as' operator because it does not have a class type constraint nor a 'class' constraint
+test.cs(200,23): error CS0128: A local variable named 'v' is already defined in this scope
+test.cs(210,29): error CS0030: Cannot convert type 'T' to 'TT'
+test.cs(643,30): error CS0103: The name 'MailSystem' does not exist in the current context
+test.cs(644,13): error CS0305: Using the generic type 'UICommon<CT>' requires 1 type arguments
+test.cs(652,55): error CS0103: The name 'CharacterSystem' does not exist in the current context
+test.cs(652,30): error CS0305: Using the generic type 'UICommon<CT>' requires 1 type arguments
+test.cs(653,57): error CS0103: The name 'CharacterSystem' does not exist in the current context
+test.cs(653,32): error CS0305: Using the generic type 'UICommon<CT>' requires 1 type arguments
+test.cs(654,58): error CS0103: The name 'CharacterSystem' does not exist in the current context
+test.cs(654,33): error CS0305: Using the generic type 'UICommon<CT>' requires 1 type arguments
+test.cs(661,17): error CS0305: Using the generic type 'UICommon<CT>' requires 1 type arguments
+test.cs(662,17): error CS0305: Using the generic type 'UICommon<CT>' requires 1 type arguments
+test.cs(666,17): error CS0305: Using the generic type 'UICommon<CT>' requires 1 type arguments
+test.cs(667,17): error CS0305: Using the generic type 'UICommon<CT>' requires 1 type arguments
+test.cs(674,13): error CS0305: Using the generic type 'UICommon<CT>' requires 1 type arguments
+test.cs(675,13): error CS0305: Using the generic type 'UICommon<CT>' requires 1 type arguments
+test.cs(681,13): error CS0305: Using the generic type 'UICommon<CT>' requires 1 type arguments
+test.cs(682,13): error CS0305: Using the generic type 'UICommon<CT>' requires 1 type arguments
+test.cs(689,60): error CS0246: The type or namespace name 'HFEStateSetting' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(689,13): error CS0103: The name 'GameEntry' does not exist in the current context
+test.cs(694,60): error CS0246: The type or namespace name 'HFEStateMail' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(694,13): error CS0103: The name 'GameEntry' does not exist in the current context
+test.cs(699,49): error CS0103: The name 'UICommonTip' does not exist in the current context
+test.cs(699,13): error CS0103: The name 'UICommonTip' does not exist in the current context
+test.cs(704,49): error CS0103: The name 'UICommonTip' does not exist in the current context
+test.cs(704,13): error CS0103: The name 'UICommonTip' does not exist in the current context
+test.cs(709,49): error CS0103: The name 'UICommonTip' does not exist in the current context
+test.cs(709,13): error CS0103: The name 'UICommonTip' does not exist in the current context
+test.cs(714,49): error CS0103: The name 'UICommonTip' does not exist in the current context
+test.cs(714,13): error CS0103: The name 'UICommonTip' does not exist in the current context
+test.cs(725,17): error CS0103: The name 'GameEntry' does not exist in the current context
+test.cs(732,55): error CS0103: The name 'UIHudDef' does not exist in the current context
+test.cs(732,34): error CS0103: The name 'GameEntry' does not exist in the current context
+test.cs(741,55): error CS0103: The name 'UIHudDef' does not exist in the current context
+test.cs(741,34): error CS0103: The name 'GameEntry' does not exist in the current context
+test.cs(756,34): error CS0103: The name 'UIHudDef' does not exist in the current context
+test.cs(756,13): error CS0103: The name 'GameEntry' does not exist in the current context
+test.cs(336,17): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
+test.cs(337,21): error CS0266: Cannot implicitly convert type 'int?' to 'int'. An explicit conversion exists (are you missing a cast?)
+test.cs(464,27): error CS0039: Cannot convert type 'int' to 'TopLevel.SecondLevel.Foo' via a reference conversion, boxing conversion, unboxing conversion, wrapping conversion, or null type conversion
+test.cs(475,26): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
+test.cs(478,17): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
+test.cs(383,17): error CS0305: Using the generic type 'IRunnable<T>' requires 1 type arguments
+test.cs(388,25): error CS0161: 'Foo.TestValueArg(TestStruct)': not all code paths return a value
+test.cs(764,28): error CS0103: The name 'EventDef' does not exist in the current context
+test.cs(768,28): error CS0103: The name 'EventDef' does not exist in the current context
+test.cs(781,73): error CS0103: The name 'EventDef' does not exist in the current context
+test.cs(781,13): error CS0103: The name 'GameEntry' does not exist in the current context
+test.cs(782,73): error CS0103: The name 'EventDef' does not exist in the current context
+test.cs(782,13): error CS0103: The name 'GameEntry' does not exist in the current context
+test.cs(786,73): error CS0103: The name 'EventDef' does not exist in the current context
+test.cs(786,13): error CS0103: The name 'GameEntry' does not exist in the current context
+test.cs(787,73): error CS0103: The name 'EventDef' does not exist in the current context
+test.cs(787,13): error CS0103: The name 'GameEntry' does not exist in the current context

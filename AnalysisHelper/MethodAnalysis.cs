@@ -45,6 +45,21 @@ namespace RoslynTool.CsToLua
             base.VisitObjectCreationExpression(node);
         }
 
+        public override void VisitInvocationExpression(InvocationExpressionSyntax node)
+        {
+            var symInfo = m_Model.GetSymbolInfo(node);
+            var msym = symInfo.Symbol as IMethodSymbol;
+            if (null != msym && msym.IsGenericMethod) {
+                foreach (var arg in msym.TypeArguments) {
+                    var targ = arg as ITypeParameterSymbol;
+                    if (null != targ && targ.TypeParameterKind == TypeParameterKind.Type) {
+                        m_UseExplicitTypeParam = true;
+                    }
+                }
+            }
+            base.VisitInvocationExpression(node);
+        }
+
         public override void VisitCastExpression(CastExpressionSyntax node)
         {
             var typeInfo = m_Model.GetTypeInfo(node.Type);

@@ -1,6 +1,6 @@
+UIDemo = {
+};
 TopLevel = {
 	SecondLevel = {
 	},
-};
-UIDemo = {
 };

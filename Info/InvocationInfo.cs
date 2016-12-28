@@ -110,7 +110,7 @@ namespace RoslynTool.CsToLua
             }
         }
 
-        internal void OutputInvocation(StringBuilder codeBuilder, CsLuaTranslater cs2lua, ExpressionSyntax exp, bool isMemberAccess, SemanticModel model)
+        internal void OutputInvocation(StringBuilder codeBuilder, CsLuaTranslater cs2lua, ExpressionSyntax exp, bool isMemberAccess, SemanticModel model, SyntaxNode node)
         {
             IMethodSymbol sym = MethodSymbol;
             string mname = cs2lua.NameMangling(sym);
@@ -156,7 +156,7 @@ namespace RoslynTool.CsToLua
                     useTypeNameString = true;
                 }
             }
-            cs2lua.OutputArgumentList(Args, GenericTypeArgs, ArrayToParams, useTypeNameString);
+            cs2lua.OutputArgumentList(Args, GenericTypeArgs, ArrayToParams, useTypeNameString, node);
             codeBuilder.Append(")");
         }
 
