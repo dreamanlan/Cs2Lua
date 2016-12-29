@@ -17,6 +17,13 @@ local t = wrapdictionary{};
 print(t.Count);
 
 t:Add("test", 12345);
+setexterninstanceindexer(t, nil, "set_Item", "test2", 23456);
+
+local exist, v = t:TryGetValue("test");
+print("TryGetValue:", exist, v);
+
+local exist2, v2 = t:TryGetValue("test2");
+print("TryGetValue:", exist2, v2);
 
 function b(...)
 	print(...);

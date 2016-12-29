@@ -577,11 +577,11 @@ function wrapchar(char, intVal)
 end;
 
 function wraparray(arr)
-	return setmetatable(arr, { __index = __mt_index_of_array });
+	return setmetatable(arr, { __index = __mt_index_of_array, __class = System.Collections.Generic.List_T });
 end;
 
 function wrapdictionary(dict)
-	return setmetatable(dict, { __index = __mt_index_of_dictionary });
+	return setmetatable(dict, { __index = __mt_index_of_dictionary, __class = System.Collections.Generic.Dictionary_TKey_TValue });
 end;
 
 function wrapdelegation(handlers)
@@ -619,7 +619,7 @@ function wrapvaluetypearray(arr)
 	for i,v in ipairs(arr) do
 		arr[i]=wrapvaluetype(v);
 	end;
-	return setmetatable(arr, { __index = __mt_index_of_array });
+	return setmetatable(arr, { __index = __mt_index_of_array, __class = System.Collections.Generic.List_T });
 end;
 
 function wrapexternvaluetype(v)
@@ -630,7 +630,7 @@ function wrapexternvaluetypearray(arr)
 	for i,v in ipairs(arr) do
 		arr[i]=wrapexternvaluetype(v);
 	end;
-	return setmetatable(arr, { __index = __mt_index_of_array });
+	return setmetatable(arr, { __index = __mt_index_of_array, __class = System.Collections.Generic.List_T });
 end;
 
 function defineclass(base, className, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, interfaces, interface_map, is_value_type)
@@ -800,7 +800,7 @@ function newobject(class, ctor, initializer, ...)
   return obj;
 end;
 
-function newexternobject(class, className, ctor, doexternsion, initializer, ...)
+function newexternobject(class, className, ctor, doextension, initializer, ...)
   local obj = nil;
   if class then
     obj = class(...);
@@ -808,8 +808,8 @@ function newexternobject(class, className, ctor, doexternsion, initializer, ...)
     obj = Slua.CreateClass(className, ...);
   end;
   if obj then
-    if doexternsion then
-      doexternsion();
+    if doextension then
+      doextension();
     end;
     for k,v in pairs(initializer) do
       obj[k] = v;
@@ -850,27 +850,27 @@ function newcollection(t, ctor, coll, ...)
   end;
 end;
 
-function newexterndictionary(t, className, ctor, doexternsion, dict, ...)
+function newexterndictionary(t, className, ctor, doextension, dict, ...)
   if dict and t==System.Collections.Generic.Dictionary_TKey_TValue then
 	  return setmetatable(dict, { __index = __mt_index_of_dictionary, __class = t });
 	else
-	  return newexternobject(t, className, ctor, doexternsion, dict, ...);
+	  return newexternobject(t, className, ctor, doextension, dict, ...);
 	end;
 end;
 
-function newexternlist(t, className, ctor, doexternsion, list, ...)
+function newexternlist(t, className, ctor, doextension, list, ...)
   if list and (t==System.Collections.Generic.List_T or t==System.Collections.Generic.Queue_T or t==System.Collections.Generic.Stack_T) then    
 	  return setmetatable(list, { __index = __mt_index_of_array, __class = t });
 	else
-	  return newexternobject(t, className, ctor, doexternsion, list, ...);
+	  return newexternobject(t, className, ctor, doextension, list, ...);
   end;
 end;
 
-function newexterncollection(t, className, ctor, doexternsion, coll, ...)
+function newexterncollection(t, className, ctor, doextension, coll, ...)
   if coll and t==System.Collections.Generic.HashSet_T then
     return setmetatable(dict, { __index = __mt_index_of_hashset, __class = t });
 	else
-	  return newexternobject(t, className, ctor, doexternsion, coll, ...);
+	  return newexternobject(t, className, ctor, doextension, coll, ...);
   end;
 end;
 
@@ -964,7 +964,12 @@ function getexterninstanceindexer(obj, intf, name, ...)
   	if meta.__class == System.Collections.Generic.List_T then
   	  return obj[index+1];
   	elseif meta.__class == System.Collections.Generic.Dictionary_TKey_TValue then
-      return obj[index];
+      local v = obj[index];
+      if v then
+        return v.value;
+      else
+        return nil;
+      end;
     elseif meta.__typename == "LuaArray" then
     	return obj[index+1];
     elseif meta.__typename == "LuaVarObject" then
@@ -988,7 +993,7 @@ function setexterninstanceindexer(obj, intf, name, ...)
     if meta.__class == System.Collections.Generic.List_T then
       obj[index+1] = val;
     elseif meta.__class == System.Collections.Generic.Dictionary_TKey_TValue then      
-      obj[index] = val;
+      obj[index] = { value=val };
     elseif meta.__typename == "LuaArray" then
     	obj[index+1] = val;
     elseif meta.__typename == "LuaVarObject" then
@@ -1081,11 +1086,14 @@ function setwithinterface(obj, intf, property, value)
 end;
 
 function invokeforbasicvalue(obj, intf, method, ...)
+	local args = {...};
 	local meta = getmetatable(obj);
 	if meta then
 		return obj[method](obj,...);
-	else
-		return obj[method](obj,...);
+	elseif method=="CompareTo" then
+	  return obj==args[1];
+	elseif method=="ToString" then
+	  return tostring(obj);
 	end;
 	return nil;
 end;

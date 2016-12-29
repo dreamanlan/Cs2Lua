@@ -235,8 +235,12 @@ namespace RoslynTool.CsToLua
         {
             bool ret = false;
             if (null != sym && !sym.IsStatic && null != sym.ContainingType && sym.ContainingType.IsValueType) {
-                string type = ClassInfo.GetFullName(sym.ContainingType);
-                ret = IsBasicValueType(type);
+                if (sym.ContainingType.TypeKind == TypeKind.Enum) {
+                    ret = true;
+                } else {
+                    string type = ClassInfo.GetFullName(sym.ContainingType);
+                    ret = IsBasicValueType(type);
+                }
             }
             return ret;
         }
@@ -244,8 +248,12 @@ namespace RoslynTool.CsToLua
         {
             bool ret = false;
             if (null != sym && !sym.IsStatic && null != sym.ContainingType && sym.ContainingType.IsValueType) {
-                string type = ClassInfo.GetFullName(sym.ContainingType);
-                ret = IsBasicValueType(type);
+                if (sym.ContainingType.TypeKind == TypeKind.Enum) {
+                    ret = true;
+                } else {
+                    string type = ClassInfo.GetFullName(sym.ContainingType);
+                    ret = IsBasicValueType(type);
+                }
             }
             return ret;
         }
