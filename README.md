@@ -154,7 +154,7 @@ Cs2Lua的输出主要包括：
 
 4、lambda/delegate/event -> 函数对象
 
-5、generic -> 转化为普通类与方法，类型参数（类与方法均是）转化为普通参数，代码里明确用到类型参数的地方只有typeof操作
+5、generic -> 为每个generic实例生成一份代码，generic类本身不生成代码
 
 6、interface -> 直接忽略
 
