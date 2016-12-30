@@ -620,7 +620,7 @@ public static class Extentions
         list.Insert(index, item);
     }
 }
-
+/*
 namespace UIDemo
 {
     public class UICommonHeader : MonoBehaviour, IEventListener
@@ -811,6 +811,7 @@ namespace UIDemo
         #endregion
     }
 }
+*/
 /*
 local obj = TopLevel.Child2.Bar:new();
 obj:Test();

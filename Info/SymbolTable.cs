@@ -31,6 +31,14 @@ namespace RoslynTool.CsToLua
         {
             get { return m_Requires; }
         }
+        internal Dictionary<string, List<SyntaxNode>> GenericTypeDefines
+        {
+            get { return m_GenericTypeDefines; }
+        }
+        internal Dictionary<string, INamedTypeSymbol> GenericTypeInstances
+        {
+            get { return m_GenericTypeInstances; }
+        }
         internal void Init(CSharpCompilation compilation)
         {
             m_Compilation = compilation;
@@ -49,12 +57,27 @@ namespace RoslynTool.CsToLua
                 hashset.Add(moduleName);
             }
         }
+        internal void AddGenericTypeDefine(string key, SyntaxNode node)
+        {
+            List<SyntaxNode> defines;
+            if (!m_GenericTypeDefines.TryGetValue(key, out defines)) {
+                defines = new List<SyntaxNode>();
+                m_GenericTypeDefines.Add(key, defines);
+            }
+            defines.Add(node);
+        }
+        internal void AddGenericTypeInstance(string key, INamedTypeSymbol sym)
+        {
+            if (!m_GenericTypeInstances.ContainsKey(key)) {
+                m_GenericTypeInstances.Add(key, sym);
+            }
+        }
         internal string NameMangling(IMethodSymbol sym)
         {
             string ret = GetMethodName(sym);
             if (ret[0] == '.')
                 ret = ret.Substring(1);
-            string key = ClassInfo.CalcTypeReference(sym.ContainingType);
+            string key = ClassInfo.GetFullNameWithTypeParameters(sym.ContainingType);
             ClassSymbolInfo csi;
             if (m_ClassSymbols.TryGetValue(key, out csi)) {
                 bool isMangling;
@@ -68,7 +91,7 @@ namespace RoslynTool.CsToLua
         internal bool IsFieldCreateSelf(IFieldSymbol sym)
         {
             bool ret = false;
-            string key = ClassInfo.CalcTypeReference(sym.ContainingType);
+            string key = ClassInfo.GetFullName(sym.ContainingType);
             ClassSymbolInfo csi;
             if (m_ClassSymbols.TryGetValue(key, out csi)) {
                 ret = csi.FieldCreateSelfs.ContainsKey(sym.Name);
@@ -78,21 +101,10 @@ namespace RoslynTool.CsToLua
         internal bool IsUseExplicitTypeParam(IFieldSymbol sym)
         {
             bool ret = false;
-            string key = ClassInfo.CalcTypeReference(sym.ContainingType);
+            string key = ClassInfo.GetFullName(sym.ContainingType);
             ClassSymbolInfo csi;
             if (m_ClassSymbols.TryGetValue(key, out csi)) {
                 ret = csi.FieldUseExplicitTypeParams.ContainsKey(sym.Name);
-            }
-            return ret;
-        }
-        internal bool IsUseExplicitTypeParam(IMethodSymbol sym)
-        {
-            bool ret = false;
-            string key = ClassInfo.CalcTypeReference(sym.ContainingType);
-            ClassSymbolInfo csi;
-            if (m_ClassSymbols.TryGetValue(key, out csi)) {
-                string manglingName = CalcMethodMangling(sym, m_AssemblySymbol);
-                ret = csi.MethodUseExplicitTypeParams.ContainsKey(manglingName);
             }
             return ret;
         }
@@ -130,6 +142,9 @@ namespace RoslynTool.CsToLua
         private Dictionary<string, ClassSymbolInfo> m_ClassSymbols = new Dictionary<string, ClassSymbolInfo>();
         private Dictionary<string, HashSet<string>> m_Requires = new Dictionary<string, HashSet<string>>();
 
+        private Dictionary<string, List<SyntaxNode>> m_GenericTypeDefines = new Dictionary<string, List<SyntaxNode>>();
+        private Dictionary<string, INamedTypeSymbol> m_GenericTypeInstances = new Dictionary<string, INamedTypeSymbol>();
+
         internal static SymbolTable Instance
         {
             get
@@ -159,10 +174,18 @@ namespace RoslynTool.CsToLua
                     if (param.Type.Kind == SymbolKind.ArrayType) {
                         sb.Append("Arr_");
                         var arrSym = param.Type as IArrayTypeSymbol;
-                        string fn = ClassInfo.GetFullNameWithTypeArguments(arrSym.ElementType);
+                        string fn;
+                        if (arrSym.ElementType.TypeKind == TypeKind.TypeParameter) {
+                            fn = ClassInfo.GetFullNameWithTypeParameters(arrSym.ElementType);
+                        } else {
+                            fn = ClassInfo.GetFullName(arrSym.ElementType);
+                        }
+                        sb.Append(fn.Replace('.', '_'));
+                    } else if (param.Type.TypeKind == TypeKind.TypeParameter) {
+                        string fn = ClassInfo.GetFullNameWithTypeParameters(param.Type);
                         sb.Append(fn.Replace('.', '_'));
                     } else {
-                        string fn = ClassInfo.GetFullNameWithTypeArguments(param.Type);
+                        string fn = ClassInfo.GetFullName(param.Type);
                         sb.Append(fn.Replace('.', '_'));
                     }
                 }
@@ -176,7 +199,7 @@ namespace RoslynTool.CsToLua
             }
             if (sym.ExplicitInterfaceImplementations.Length > 0) {
                 int ix = sym.Name.LastIndexOf('.');
-                return CalcNameWithFullTypeName(sym.Name.Substring(ix + 1), sym.ContainingType);
+                return ClassInfo.CalcNameWithFullTypeName(sym.Name.Substring(ix + 1), sym.ContainingType);
             } else {
                 return sym.Name;
             }
@@ -188,7 +211,7 @@ namespace RoslynTool.CsToLua
             }
             if (sym.ExplicitInterfaceImplementations.Length > 0) {
                 int ix = sym.Name.LastIndexOf('.');
-                return CalcNameWithFullTypeName(sym.Name.Substring(ix + 1), sym.ContainingType);
+                return ClassInfo.CalcNameWithFullTypeName(sym.Name.Substring(ix + 1), sym.ContainingType);
             } else {
                 return sym.Name;
             }
@@ -200,22 +223,9 @@ namespace RoslynTool.CsToLua
             }
             if (sym.ExplicitInterfaceImplementations.Length > 0) {
                 int ix = sym.Name.LastIndexOf('.');
-                return CalcNameWithFullTypeName(sym.Name.Substring(ix + 1), sym.ContainingType);
+                return ClassInfo.CalcNameWithFullTypeName(sym.Name.Substring(ix + 1), sym.ContainingType);
             } else {
                 return sym.Name;
-            }
-        }
-        internal static string CalcNameWithFullTypeName(string name, INamedTypeSymbol typeSym)
-        {
-            if (null == typeSym) {
-                return name;
-            } else {
-                string ns = ClassInfo.GetFullName(typeSym);
-                if (string.IsNullOrEmpty(ns)) {
-                    return name;
-                } else {
-                    return ns.Replace(".", "_") + "_" + name;
-                }
             }
         }
         internal static string CheckLuaKeyword(string name, out bool change)

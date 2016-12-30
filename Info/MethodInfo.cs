@@ -25,16 +25,11 @@ namespace RoslynTool.CsToLua
         internal bool ParamsIsExternValueType = false;
         internal bool ExistYield = false;
         internal bool ExistTopLevelReturn = false;
-        internal bool UseExplicitTypeParam = false;
 
         internal IMethodSymbol SemanticInfo = null;
         internal IPropertySymbol PropertySemanticInfo = null;
 
         internal void Init(IMethodSymbol sym, SyntaxNode node)
-        {
-            Init(sym, node, false);
-        }
-        internal void Init(IMethodSymbol sym, SyntaxNode node, bool useExplicitTypeParam)
         {
             IAssemblySymbol assemblySym = SymbolTable.Instance.AssemblySymbol;
             ParamNames.Clear();
@@ -44,7 +39,6 @@ namespace RoslynTool.CsToLua
             OriginalParamsName = string.Empty;
             ExistYield = false;
             ExistTopLevelReturn = false;
-            UseExplicitTypeParam = useExplicitTypeParam;
 
             SemanticInfo = sym;
 
@@ -52,19 +46,6 @@ namespace RoslynTool.CsToLua
                 foreach (var param in sym.TypeParameters) {
                     ParamNames.Add(param.Name);
                     GenericMethodTypeParamNames.Add(param.Name);
-                }
-            }
-
-            if (UseExplicitTypeParam && (sym.MethodKind == MethodKind.Constructor || sym.IsStatic && sym.MethodKind != MethodKind.StaticConstructor)) {
-                INamedTypeSymbol type = sym.ContainingType;
-                while (null != type) {
-                    if (type.IsGenericType) {
-                        foreach (var param in type.TypeParameters) {
-                            ParamNames.Add(param.Name);
-                            GenericTypeTypeParamNames.Add(param.Name);
-                        }
-                    }
-                    type = type.ContainingType;
                 }
             }
 

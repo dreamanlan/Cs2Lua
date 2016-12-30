@@ -13,6 +13,7 @@ namespace RoslynTool.CsToLua
     internal class InvocationInfo
     {
         internal string ClassKey = string.Empty;
+        internal string GenericClassKey = string.Empty;
         internal List<ExpressionSyntax> Args = new List<ExpressionSyntax>();
         internal List<ExpressionSyntax> ReturnArgs = new List<ExpressionSyntax>();
         internal List<ITypeSymbol> GenericTypeArgs = new List<ITypeSymbol>();
@@ -23,10 +24,10 @@ namespace RoslynTool.CsToLua
         internal IMethodSymbol MethodSymbol = null;
         internal IAssemblySymbol AssemblySymbol = null;
 
-        internal void Init(IMethodSymbol sym, ArgumentListSyntax argList, bool useExplicitTypeParam, SemanticModel model)
+        internal void Init(IMethodSymbol sym, ArgumentListSyntax argList, SemanticModel model)
         {
             IAssemblySymbol assemblySym = SymbolTable.Instance.AssemblySymbol;
-            Init(sym, useExplicitTypeParam);
+            Init(sym);
 
             if (null != argList) {
                 var args = argList.Arguments;
@@ -61,10 +62,10 @@ namespace RoslynTool.CsToLua
             }
         }
 
-        internal void Init(IMethodSymbol sym, BracketedArgumentListSyntax argList, bool useExplicitTypeParam, SemanticModel model)
+        internal void Init(IMethodSymbol sym, BracketedArgumentListSyntax argList, SemanticModel model)
         {
             IAssemblySymbol assemblySym = SymbolTable.Instance.AssemblySymbol; 
-            Init(sym, useExplicitTypeParam);
+            Init(sym);
 
             if (null != argList) {
                 var args = argList.Arguments;
@@ -99,9 +100,9 @@ namespace RoslynTool.CsToLua
             }
         }
 
-        internal void Init(IMethodSymbol sym, List<ExpressionSyntax> argList, bool useExplicitTypeParam, SemanticModel model)
+        internal void Init(IMethodSymbol sym, List<ExpressionSyntax> argList, SemanticModel model)
         {
-            Init(sym, useExplicitTypeParam);
+            Init(sym);
 
             if (null != argList) {
                 for (int i = 0; i < argList.Count; ++i) {
@@ -169,7 +170,7 @@ namespace RoslynTool.CsToLua
             codeBuilder.Append(")");
         }
 
-        private void Init(IMethodSymbol sym, bool useExplicitTypeParam)
+        private void Init(IMethodSymbol sym)
         {
             MethodSymbol = sym;
             AssemblySymbol = SymbolTable.Instance.AssemblySymbol;;
@@ -178,7 +179,8 @@ namespace RoslynTool.CsToLua
             ReturnArgs.Clear();
             GenericTypeArgs.Clear();
             
-            ClassKey = ClassInfo.CalcMemberReference(sym);
+            ClassKey = ClassInfo.GetFullName(sym.ContainingType);
+            GenericClassKey = ClassInfo.GetFullNameWithTypeParameters(sym.ContainingType);
             IsBasicValueMethod = SymbolTable.IsBasicValueMethod(sym);
 
             if ((ClassKey == "UnityEngine.GameObject" || ClassKey == "UnityEngine.Component") && (sym.Name.StartsWith("GetComponent") || sym.Name.StartsWith("AddComponent"))) {
@@ -188,25 +190,6 @@ namespace RoslynTool.CsToLua
             if (sym.IsGenericMethod) {
                 foreach (var arg in sym.TypeArguments) {
                     GenericTypeArgs.Add(arg);
-                }
-            }
-
-            if (!useExplicitTypeParam && sym.MethodKind == MethodKind.Constructor) {
-                ClassSymbolInfo csi;
-                if (SymbolTable.Instance.ClassSymbols.TryGetValue(ClassKey, out csi)) {
-                    useExplicitTypeParam = csi.GenerateTypeParamFields;
-                }
-            }
-
-            if (useExplicitTypeParam && (sym.MethodKind == MethodKind.Constructor || sym.IsStatic)) {
-                INamedTypeSymbol type = sym.ContainingType;
-                while (null != type) {
-                    if (type.IsGenericType) {
-                        foreach (var arg in type.TypeArguments) {
-                            GenericTypeArgs.Add(arg);
-                        }
-                    }
-                    type = type.ContainingType;
                 }
             }
         }

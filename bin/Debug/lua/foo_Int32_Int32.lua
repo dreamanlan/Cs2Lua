@@ -1,18 +1,14 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
 
-LuaString = {
+foo_Int32_Int32 = {
 	__new_object = function(...)
-		return newobject(LuaString, nil, {}, ...);
+		return newobject(foo_Int32_Int32, nil, {}, ...);
 	end,
 	__define_class = function()
-		local static = LuaString;
+		local static = foo_Int32_Int32;
 
 		local static_methods = {
-			Format = function(str, ...)
-				local args = wraparray{...};
-				return System.String.Format(str, unpack(args));
-			end,
 			cctor = function()
 			end,
 		};
@@ -26,6 +22,10 @@ LuaString = {
 		local static_events = nil;
 
 		local instance_methods = {
+			parse = function(this, a, b)
+				local t; t = Int32;
+				local k; k = Int32;
+			end,
 			ctor = function(this)
 			end,
 		};
@@ -40,10 +40,10 @@ LuaString = {
 		local interfaces = nil;
 		local interface_map = nil;
 
-		return defineclass(nil, "LuaString", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
+		return defineclass(nil, "foo_Int32_Int32", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
 
 
-LuaString.__define_class();
+foo_Int32_Int32.__define_class();
 

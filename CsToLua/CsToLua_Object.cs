@@ -129,7 +129,7 @@ namespace RoslynTool.CsToLua
 
             bool isStatic = declSym.IsStatic;
             var mi = new MethodInfo();
-            mi.Init(declSym, node, m_SymbolTable.IsUseExplicitTypeParam(declSym));
+            mi.Init(declSym, node);
             m_MethodInfoStack.Push(mi);
 
             string manglingName = NameMangling(declSym);
@@ -148,12 +148,7 @@ namespace RoslynTool.CsToLua
                 }
             }
 
-            bool myselfDefinedBaseClass = ci.SemanticInfo.BaseType.ContainingAssembly == m_SymbolTable.AssemblySymbol;
-
-            if (isStatic && mi.UseExplicitTypeParam) {
-                Log(node, "typeof/as/is/cast(GenericTypeParameter) or new GenericTypeParameter() can't be used in static constructor or static field initializer !");
-            }
-
+            bool myselfDefinedBaseClass = ci.SemanticInfo.BaseType.ContainingAssembly == m_SymbolTable.AssemblySymbol;            
             CodeBuilder.AppendFormat("{0}{1} = function({2}", GetIndentString(), manglingName, isStatic ? string.Empty : "this");
             if (mi.ParamNames.Count > 0) {
                 if (!isStatic) {
@@ -288,8 +283,6 @@ namespace RoslynTool.CsToLua
                 StringBuilder curBuilder = ci.CurrentCodeBuilder;
                 if(declSym.IsStatic) {
                     ci.CurrentCodeBuilder = ci.StaticFunctionCodeBuilder;
-                    --m_Indent;
-                    --m_Indent;
                 } else {
                     ci.CurrentCodeBuilder = ci.InstanceFunctionCodeBuilder;
                 }
@@ -297,7 +290,7 @@ namespace RoslynTool.CsToLua
                     var sym = m_Model.GetDeclaredSymbol(accessor);
                     if (null != sym) {
                         var mi = new MethodInfo();
-                        mi.Init(sym, accessor, m_SymbolTable.IsUseExplicitTypeParam(sym));
+                        mi.Init(sym, accessor);
                         m_MethodInfoStack.Push(mi);
 
                         string manglingName = NameMangling(sym);
@@ -325,10 +318,6 @@ namespace RoslynTool.CsToLua
                         m_MethodInfoStack.Pop();
                     }
                 }
-                if(declSym.IsStatic) {
-                    ++m_Indent;
-                    ++m_Indent;
-                }
                 ci.CurrentCodeBuilder = curBuilder;
 
                 CodeBuilder.AppendFormat("{0}{1} = {{", GetIndentString(), SymbolTable.GetPropertyName(declSym));
@@ -339,7 +328,7 @@ namespace RoslynTool.CsToLua
                     if (null != sym) {
                         string manglingName = NameMangling(sym);
                         string keyword = accessor.Keyword.Text;
-                        CodeBuilder.AppendFormat("{0}{1} = {2}.{3},", GetIndentString(), keyword, declSym.IsStatic ? "static" : "instance_methods", manglingName);
+                        CodeBuilder.AppendFormat("{0}{1} = {2}.{3},", GetIndentString(), keyword, declSym.IsStatic ? "static_methods" : "instance_methods", manglingName);
                         CodeBuilder.AppendLine();
                     }
                 }
@@ -366,8 +355,6 @@ namespace RoslynTool.CsToLua
             StringBuilder curBuilder = ci.CurrentCodeBuilder;
             if (declSym.IsStatic) {
                 ci.CurrentCodeBuilder = ci.StaticFunctionCodeBuilder;
-                --m_Indent;
-                --m_Indent;
             } else {
                 ci.CurrentCodeBuilder = ci.InstanceFunctionCodeBuilder;
             }
@@ -375,7 +362,7 @@ namespace RoslynTool.CsToLua
                 var sym = m_Model.GetDeclaredSymbol(accessor);
                 if (null != sym) {
                     var mi = new MethodInfo();
-                    mi.Init(sym, accessor, m_SymbolTable.IsUseExplicitTypeParam(sym));
+                    mi.Init(sym, accessor);
                     m_MethodInfoStack.Push(mi);
 
                     string manglingName = NameMangling(sym);
@@ -403,10 +390,6 @@ namespace RoslynTool.CsToLua
                     m_MethodInfoStack.Pop();
                 }
             }
-            if (declSym.IsStatic) {
-                ++m_Indent;
-                ++m_Indent;
-            }
             ci.CurrentCodeBuilder = curBuilder;
 
             CodeBuilder.AppendFormat("{0}{1} = {{", GetIndentString(), SymbolTable.GetEventName(declSym));
@@ -417,7 +400,7 @@ namespace RoslynTool.CsToLua
                 if (null != sym) {
                     string manglingName = NameMangling(sym);
                     string keyword = accessor.Keyword.Text;
-                    CodeBuilder.AppendFormat("{0}{1} = {2}.{3},", GetIndentString(), keyword, declSym.IsStatic ? "static" : "instance_methods", manglingName);
+                    CodeBuilder.AppendFormat("{0}{1} = {2}.{3},", GetIndentString(), keyword, declSym.IsStatic ? "static_methods" : "instance_methods", manglingName);
                     CodeBuilder.AppendLine();
                 }
             }
@@ -460,7 +443,7 @@ namespace RoslynTool.CsToLua
                 var sym = m_Model.GetDeclaredSymbol(accessor);
                 if (null != sym) {
                     var mi = new MethodInfo();
-                    mi.Init(sym, accessor, m_SymbolTable.IsUseExplicitTypeParam(sym));
+                    mi.Init(sym, accessor);
                     m_MethodInfoStack.Push(mi);
 
                     string manglingName = NameMangling(sym);

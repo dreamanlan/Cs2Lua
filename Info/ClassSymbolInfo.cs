@@ -18,7 +18,6 @@ namespace RoslynTool.CsToLua
         internal bool ExistStaticConstructor = false;
         internal bool GenerateBasicCtor = false;
         internal bool GenerateBasicCctor = false;
-        internal bool GenerateTypeParamFields = false;
 
         internal INamedTypeSymbol TypeSymbol = null;
         internal List<IFieldSymbol> FieldSymbols = new List<IFieldSymbol>();
@@ -29,10 +28,8 @@ namespace RoslynTool.CsToLua
         internal Dictionary<string, bool> SymbolOverloadFlags = new Dictionary<string, bool>();
         internal HashSet<string> MethodNames = new HashSet<string>();
         internal Dictionary<string, INamedTypeSymbol> ExtensionClasses = new Dictionary<string, INamedTypeSymbol>();
-        internal Dictionary<string, IMethodSymbol> MethodUseExplicitTypeParams = new Dictionary<string, IMethodSymbol>();
         internal Dictionary<string, IFieldSymbol> FieldUseExplicitTypeParams = new Dictionary<string, IFieldSymbol>();
         internal Dictionary<string, IFieldSymbol> FieldCreateSelfs = new Dictionary<string, IFieldSymbol>();
-        internal List<string> GenericTypeParamNames = new List<string>();
 
         internal bool IsInterface = false;
         internal Dictionary<string, string> InterfaceMethodMap = new Dictionary<string, string>();
@@ -70,16 +67,6 @@ namespace RoslynTool.CsToLua
                 ExistAttributes = true;
             }
 
-            INamedTypeSymbol type = typeSym;
-            while (null != type) {
-                if (type.IsGenericType) {
-                    foreach (var param in type.TypeParameters) {
-                        GenericTypeParamNames.Add(param.Name);
-                    }
-                }
-                type = type.ContainingType;
-            }
-
             bool fieldUseExplicitTypeParams = false;
             bool staticUseExplicitTypeParams = false;
             TypeSymbol = typeSym;
@@ -115,7 +102,7 @@ namespace RoslynTool.CsToLua
                     if (msym.IsExtensionMethod && msym.Parameters.Length > 0) {
                         var targetType = msym.Parameters[0].Type as INamedTypeSymbol;
                         if (null != targetType) {
-                            string key = ClassInfo.GetFullName(targetType);
+                            string key = ClassInfo.GetFullNameWithTypeParameters(targetType);
                             ClassSymbolInfo csi;
                             if (!symTable.ClassSymbols.TryGetValue(key, out csi)) {
                                 csi = new ClassSymbolInfo();
@@ -164,19 +151,6 @@ namespace RoslynTool.CsToLua
                             MethodNames.Add(manglingName);
                         }
                     }
-
-                    if (typeSym.IsGenericType) {
-                        CheckMethodUseExplicitTypeParam(msym, symTable.AssemblySymbol, compilation, msym.MethodKind != MethodKind.Constructor);
-
-                        if (fieldUseExplicitTypeParams && msym.MethodKind == MethodKind.Constructor) {
-                            if (!MethodUseExplicitTypeParams.ContainsKey(manglingName))
-                                MethodUseExplicitTypeParams.Add(manglingName, msym);
-                        }
-                        if (staticUseExplicitTypeParams && msym.MethodKind == MethodKind.StaticConstructor) {
-                            if (!MethodUseExplicitTypeParams.ContainsKey(manglingName))
-                                MethodUseExplicitTypeParams.Add(manglingName, msym);
-                        }
-                    }
                     continue;
                 }
                 var psym = sym as IPropertySymbol;
@@ -185,15 +159,6 @@ namespace RoslynTool.CsToLua
 
                     if (psym.GetAttributes().Length > 0) {
                         ExistAttributes = true;
-                    }
-
-                    if (typeSym.IsGenericType) {
-                        if (null != psym.GetMethod) {
-                            CheckMethodUseExplicitTypeParam(psym.GetMethod, symTable.AssemblySymbol, compilation, true);
-                        }
-                        if (null != psym.SetMethod) {
-                            CheckMethodUseExplicitTypeParam(psym.SetMethod, symTable.AssemblySymbol, compilation, true);
-                        }
                     }
                     continue;
                 }
@@ -204,22 +169,13 @@ namespace RoslynTool.CsToLua
                     if (esym.GetAttributes().Length > 0) {
                         ExistAttributes = true;
                     }
-
-                    if (typeSym.IsGenericType) {
-                        if (null != esym.AddMethod) {
-                            CheckMethodUseExplicitTypeParam(esym.AddMethod, symTable.AssemblySymbol, compilation, true);
-                        }
-                        if (null != esym.RemoveMethod) {
-                            CheckMethodUseExplicitTypeParam(esym.RemoveMethod, symTable.AssemblySymbol, compilation, true);
-                        }
-                    }
                     continue;
                 }
             }
             BuildInterfaceInfo(typeSym, compilation, symTable);
         }
 
-        private void CheckFieldUseExplicitTypeParam(IFieldSymbol fsym, Compilation compilation, ref bool fieldIncludeTypeOf, ref bool staticFieldIncludeTypeOf)
+        private void CheckFieldUseExplicitTypeParam(IFieldSymbol fsym, Compilation compilation, ref bool fieldUseExplicitTypeParams, ref bool staticFieldUseExplicitTypeParams)
         {
             bool useExplicitTypeParam = false;
             bool createSelf = false;
@@ -241,10 +197,10 @@ namespace RoslynTool.CsToLua
             }
             if (useExplicitTypeParam) {
                 if (fsym.IsStatic) {
-                    staticFieldIncludeTypeOf = true;
+                    staticFieldUseExplicitTypeParams = true;
                     GenerateBasicCctor = true;
                 } else {
-                    fieldIncludeTypeOf = true;
+                    fieldUseExplicitTypeParams = true;
                     GenerateBasicCtor = true;
                 }
                 FieldUseExplicitTypeParams.Add(fsym.Name, fsym);
@@ -256,35 +212,6 @@ namespace RoslynTool.CsToLua
                     GenerateBasicCtor = true;
                 }
                 FieldCreateSelfs.Add(fsym.Name, fsym);
-            }
-        }
-        private void CheckMethodUseExplicitTypeParam(IMethodSymbol msym, IAssemblySymbol assemblySym, Compilation compilation, bool setGenerateBasicFlagIfInclude)
-        {
-            bool useExplicitTypeParam = false;
-            foreach (var decl in msym.DeclaringSyntaxReferences) {
-                var node = decl.GetSyntax() as CSharpSyntaxNode;
-                if (null != node) {
-                    var model = compilation.GetSemanticModel(node.SyntaxTree, true);
-                    var analysis = new MethodAnalysis(model);
-                    node.Accept(analysis);
-                    if (analysis.UseExplicitTypeParam) {
-                        useExplicitTypeParam = true;
-                        break;
-                    }
-                }
-            }
-            if (useExplicitTypeParam) {
-                string manglingName = SymbolTable.CalcMethodMangling(msym, assemblySym);
-                if (!MethodUseExplicitTypeParams.ContainsKey(manglingName)) {
-                    MethodUseExplicitTypeParams.Add(manglingName, msym);
-                }
-                if (setGenerateBasicFlagIfInclude) {
-                    //静态函数的generic参数直接作函数参数，非静态的函数又非构造函数需要借助类型参数成员
-                    if (!msym.IsStatic) {
-                        GenerateBasicCtor = true;
-                        GenerateTypeParamFields = true;
-                    }
-                }
             }
         }
         private void BuildInterfaceInfo(INamedTypeSymbol typeSym, CSharpCompilation compilation, SymbolTable symTable)
@@ -299,7 +226,7 @@ namespace RoslynTool.CsToLua
                         var implSym = typeSym.FindImplementationForInterfaceMember(sym) as IMethodSymbol;
                         if (null != implSym) {
                             string name = symTable.NameMangling(msym);
-                            name = SymbolTable.CalcNameWithFullTypeName(name, sym.ContainingType);
+                            name = ClassInfo.CalcNameWithFullTypeName(name, sym.ContainingType);
                             string implName = symTable.NameMangling(implSym);
                             if (!InterfaceMethodMap.ContainsKey(name)) {
                                 InterfaceMethodMap.Add(name, implName);
@@ -311,7 +238,7 @@ namespace RoslynTool.CsToLua
                         var implSym = typeSym.FindImplementationForInterfaceMember(sym) as IPropertySymbol;
                         if (null != implSym && !psym.IsIndexer) {
                             string name = SymbolTable.GetPropertyName(psym);
-                            name = SymbolTable.CalcNameWithFullTypeName(name, sym.ContainingType);
+                            name = ClassInfo.CalcNameWithFullTypeName(name, sym.ContainingType);
                             string implName = SymbolTable.GetPropertyName(implSym);
                             if (!InterfaceMethodMap.ContainsKey(name)) {
                                 InterfaceMethodMap.Add(name, implName);
@@ -323,7 +250,7 @@ namespace RoslynTool.CsToLua
                         var implSym = typeSym.FindImplementationForInterfaceMember(sym) as IEventSymbol;
                         if (null != implSym) {
                             string name = SymbolTable.GetEventName(esym);
-                            name = SymbolTable.CalcNameWithFullTypeName(name, sym.ContainingType);
+                            name = ClassInfo.CalcNameWithFullTypeName(name, sym.ContainingType);
                             string implName = SymbolTable.GetEventName(implSym);
                             if (!InterfaceMethodMap.ContainsKey(name)) {
                                 InterfaceMethodMap.Add(name, implName);

@@ -633,13 +633,21 @@ function wrapexternvaluetypearray(arr)
 	return setmetatable(arr, { __index = __mt_index_of_array, __class = System.Collections.Generic.List_T });
 end;
 
-function defineclass(base, className, static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, interfaces, interface_map, is_value_type)
+function defineclass(base, className, static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, is_value_type)
     
     local base_class = base or {};
     local mt = getmetatable(base_class);
 
     local class = static or {};
-    local class_fields = static_fields or {};
+		for ck,cv in pairs(static_methods) do
+			class[ck] = cv;
+		end;
+    local class_fields;
+    if static_fields_build then
+      class_fields = static_fields_build();
+    else
+      class_fields = {};
+    end;
     local class_props = static_props or {};
     local class_events = static_events or {};
     class["__cs2lua_defined"] = true;
@@ -647,6 +655,7 @@ function defineclass(base, className, static, static_fields, static_props, stati
     class["__is_value_type"] = is_value_type;
     class["__interfaces"] = interfaces;
     class["__interface_map"] = interface_map;
+    class["base"] = base_class;
     
     setmetatable(class, {
         __call = function()
@@ -659,8 +668,8 @@ function defineclass(base, className, static, static_fields, static_props, stati
 							obj[k] = v;
 						end;
             local obj_fields;
-            if instance_build then
-            	obj_fields = instance_build();
+            if instance_fields_build then
+            	obj_fields = instance_fields_build();
             else
             	obj_fields = {};
             end;
@@ -878,7 +887,7 @@ function delegationwrap(handler)
   return wrapdelegation{ handler };
 end;
 
-function delegationset(t, intf, k, handler, ...)
+function delegationset(t, intf, k, handler)
   local v = t;
   if k then
     v = t[k];  
@@ -889,14 +898,14 @@ function delegationset(t, intf, k, handler, ...)
   end;
   table.insert(v,handler);
 end;
-function delegationadd(t, intf, k, handler, ...)
+function delegationadd(t, intf, k, handler)
   local v = t;
   if k then
     v = t[k];  
   end;
   table.insert(v, handler);
 end;
-function delegationremove(t, intf, k, handler, ...)
+function delegationremove(t, intf, k, handler)
   local v = t;
   if k then
     v = t[k];  
@@ -915,21 +924,21 @@ function delegationremove(t, intf, k, handler, ...)
   end;
 end;
 
-function externdelegationset(t, intf, k, handler, ...)
+function externdelegationset(t, intf, k, handler)
   if k then
     t[k] = handler;
   else
     t = handler;
   end;
 end;
-function externdelegationadd(t, intf, k, handler, ...)
+function externdelegationadd(t, intf, k, handler)
   if k then
     t[k] = {"+=", handler};
   else
     t = {"+=", handler};
   end;
 end;
-function externdelegationremove(t, intf, k, handler, ...)
+function externdelegationremove(t, intf, k, handler)
   if k then
     t[k] = {"-=", handler};
   else

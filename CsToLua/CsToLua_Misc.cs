@@ -185,7 +185,9 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.Append(fullName);
 
                         if (sym.Kind == SymbolKind.NamedType) {
-                            classInfo.AddReference(sym as INamedTypeSymbol, classInfo.SemanticInfo);
+                            var namedType = sym as INamedTypeSymbol;
+                            classInfo.AddReference(namedType, classInfo.SemanticInfo);
+                            TryDeriveGenericTypeInstance(namedType);
                         }
                         return;
                     } else if (sym.Kind == SymbolKind.Field || sym.Kind == SymbolKind.Property || sym.Kind == SymbolKind.Event) {

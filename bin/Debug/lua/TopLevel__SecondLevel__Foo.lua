@@ -3,54 +3,60 @@ require "cs2lua__attributes";
 require "cs2lua__namespaces";
 require "TopLevel__SecondLevel__FooBase";
 require "TopLevel__TestStruct";
-require "TopLevel__Singleton_T";
-require "TopLevel__SecondLevel__GenericClass_T";
+require "TopLevel__Singleton_Foo";
+require "TopLevel__SecondLevel__GenericClass_Test1";
 require "TopLevel__Runnable";
 
 TopLevel.SecondLevel.Foo = {
-	add_StaticEventBridge = function(value)
-	end,
-	remove_StaticEventBridge = function(value)
-	end,
-	op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo = function(self, other)
-		self.m_Test = (self.m_Test + other.m_Test);
-		return self;
-	end,
-	op_Addition__TopLevel_SecondLevel_Foo__System_Int32 = function(self, val)
-		self.m_Test = (self.m_Test + val);
-		return self;
-	end,
-	op_Explicit = function(a)
-		local f; f = newobject(TopLevel.SecondLevel.Foo, "ctor", {});
-		f.m_Test = a;
-		f.Val = newobject(TopLevel.TestStruct, "ctor", {});
-		local ts; ts = f.Val;
-		ts = wrapvaluetype(ts);
-		setinstanceindexer(f, nil, "set_Item", ts, ts, 123);
-		local r; r = getinstanceindexer(f, nil, "get_Item", ts, ts);
-		condaccess(f, (function() return setinstanceindexer(f, nil, "set_Item", ts, ts, 123); end));
-		r = condaccess(f, (function() return getinstanceindexer(f, nil, "get_Item", ts, ts); end));
-		local result; result = TopLevel.Singleton_T.get_instance(TopLevel.SecondLevel.Foo):Test123(1, 2);
-		TopLevel.Singleton_T.set_instance(TopLevel.SecondLevel.Foo, nil);
-		return f;
-	end,
-	cctor = function()
-		TopLevel.SecondLevel.FooBase.cctor(this);
-	end,
-
 	__new_object = function(...)
 		return newobject(TopLevel.SecondLevel.Foo, "ctor", {}, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.Foo;
-		local static_fields = {
-			__attributes = TopLevel__SecondLevel__Foo__Attrs,
+
+		local static_methods = {
+			add_StaticEventBridge = function(value)
+			end,
+			remove_StaticEventBridge = function(value)
+			end,
+			op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo = function(self, other)
+				self.m_Test = (self.m_Test + other.m_Test);
+				return self;
+			end,
+			op_Addition__TopLevel_SecondLevel_Foo__System_Int32 = function(self, val)
+				self.m_Test = (self.m_Test + val);
+				return self;
+			end,
+			op_Explicit = function(a)
+				local f; f = newobject(TopLevel.SecondLevel.Foo, "ctor", {});
+				f.m_Test = a;
+				f.Val = newobject(TopLevel.TestStruct, "ctor", {});
+				local ts; ts = f.Val;
+				ts = wrapvaluetype(ts);
+				setinstanceindexer(f, nil, "set_Item", ts, ts, 123);
+				local r; r = getinstanceindexer(f, nil, "get_Item", ts, ts);
+				condaccess(f, (function() return setinstanceindexer(f, nil, "set_Item", ts, ts, 123); end));
+				r = condaccess(f, (function() return getinstanceindexer(f, nil, "get_Item", ts, ts); end));
+				local result; result = TopLevel.Singleton_Foo.instance:Test123(1, 2);
+				TopLevel.Singleton_Foo.instance = nil;
+				return f;
+			end,
+			cctor = function()
+				TopLevel.SecondLevel.FooBase.cctor(this);
+			end,
 		};
+
+		local static_fields_build = function()
+			local static_fields = {
+				__attributes = TopLevel__SecondLevel__Foo__Attrs,
+			};
+			return static_fields;
+		end;
 		local static_props = nil;
 		local static_events = {
 			StaticEventBridge = {
-				add = static.add_StaticEventBridge,
-				remove = static.remove_StaticEventBridge,
+				add = static_methods.add_StaticEventBridge,
+				remove = static_methods.remove_StaticEventBridge,
 			},
 		};
 
@@ -108,7 +114,7 @@ TopLevel.SecondLevel.Foo = {
 				return nil;
 			end),
 			Test = function(this)
-				local t; t = newobject(TopLevel.SecondLevel.GenericClass_T.InnerGenericClass_TT, "ctor", {}, TopLevel.SecondLevel.Foo.Test2, TopLevel.SecondLevel.Foo.Test1, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
+				local t; t = newobject(TopLevel.SecondLevel.GenericClass_Test1.InnerGenericClass_Test2, "ctor", {}, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
 				t:Test(System.Int32, 123);
 				t:Test2(System.Int32, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
 				local v;
@@ -179,7 +185,7 @@ TopLevel.SecondLevel.Foo = {
 			end,
 		};
 
-		local instance_build = function()
+		local instance_fields_build = function()
 			local instance_fields = {
 				OnSimple = wrapdelegation{},
 				OnSimple2 = wrapdelegation{},
@@ -210,7 +216,7 @@ TopLevel.SecondLevel.Foo = {
 		local interfaces = nil;
 		local interface_map = nil;
 
-		return defineclass(TopLevel.SecondLevel.FooBase, "TopLevel.SecondLevel.Foo", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, interfaces, interface_map, false);
+		return defineclass(TopLevel.SecondLevel.FooBase, "TopLevel.SecondLevel.Foo", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
 
@@ -219,15 +225,22 @@ TopLevel.SecondLevel.Foo.__define_class();
 
 
 TopLevel.SecondLevel.Foo.Test1 = {
-	cctor = function()
-	end,
-
 	__new_object = function(...)
 		return newobject(TopLevel.SecondLevel.Foo.Test1, nil, {}, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.Foo.Test1;
-		local static_fields = nil;
+
+		local static_methods = {
+			cctor = function()
+			end,
+		};
+
+		local static_fields_build = function()
+			local static_fields = {
+			};
+			return static_fields;
+		end;
 		local static_props = nil;
 		local static_events = nil;
 
@@ -236,7 +249,7 @@ TopLevel.SecondLevel.Foo.Test1 = {
 			end,
 		};
 
-		local instance_build = function()
+		local instance_fields_build = function()
 			local instance_fields = {
 			};
 			return instance_fields;
@@ -246,7 +259,7 @@ TopLevel.SecondLevel.Foo.Test1 = {
 		local interfaces = nil;
 		local interface_map = nil;
 
-		return defineclass(nil, "TopLevel.SecondLevel.Foo.Test1", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, interfaces, interface_map, false);
+		return defineclass(nil, "TopLevel.SecondLevel.Foo.Test1", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
 
@@ -255,15 +268,22 @@ TopLevel.SecondLevel.Foo.Test1.__define_class();
 
 
 TopLevel.SecondLevel.Foo.Test2 = {
-	cctor = function()
-	end,
-
 	__new_object = function(...)
 		return newobject(TopLevel.SecondLevel.Foo.Test2, nil, {}, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.Foo.Test2;
-		local static_fields = nil;
+
+		local static_methods = {
+			cctor = function()
+			end,
+		};
+
+		local static_fields_build = function()
+			local static_fields = {
+			};
+			return static_fields;
+		end;
 		local static_props = nil;
 		local static_events = nil;
 
@@ -272,7 +292,7 @@ TopLevel.SecondLevel.Foo.Test2 = {
 			end,
 		};
 
-		local instance_build = function()
+		local instance_fields_build = function()
 			local instance_fields = {
 			};
 			return instance_fields;
@@ -282,7 +302,7 @@ TopLevel.SecondLevel.Foo.Test2 = {
 		local interfaces = nil;
 		local interface_map = nil;
 
-		return defineclass(nil, "TopLevel.SecondLevel.Foo.Test2", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, interfaces, interface_map, false);
+		return defineclass(nil, "TopLevel.SecondLevel.Foo.Test2", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
 
@@ -291,15 +311,22 @@ TopLevel.SecondLevel.Foo.Test2.__define_class();
 
 
 TopLevel.SecondLevel.Foo.FooChild = {
-	cctor = function()
-	end,
-
 	__new_object = function(...)
 		return newobject(TopLevel.SecondLevel.Foo.FooChild, nil, {}, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.Foo.FooChild;
-		local static_fields = nil;
+
+		local static_methods = {
+			cctor = function()
+			end,
+		};
+
+		local static_fields_build = function()
+			local static_fields = {
+			};
+			return static_fields;
+		end;
 		local static_props = nil;
 		local static_events = nil;
 
@@ -308,7 +335,7 @@ TopLevel.SecondLevel.Foo.FooChild = {
 			end,
 		};
 
-		local instance_build = function()
+		local instance_fields_build = function()
 			local instance_fields = {
 				m_Test1 = 123,
 				m_Test2 = 456,
@@ -320,7 +347,7 @@ TopLevel.SecondLevel.Foo.FooChild = {
 		local interfaces = nil;
 		local interface_map = nil;
 
-		return defineclass(nil, "TopLevel.SecondLevel.Foo.FooChild", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, interfaces, interface_map, false);
+		return defineclass(nil, "TopLevel.SecondLevel.Foo.FooChild", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
 

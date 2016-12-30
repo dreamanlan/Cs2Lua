@@ -10,14 +10,26 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace RoslynTool.CsToLua
 {
+    internal sealed class DerivedGenericTypeInstanceInfo
+    {
+        internal INamedTypeSymbol Symbol;
+        internal SyntaxNode Node;
+    }
     internal sealed partial class CsLuaTranslater : CSharpSyntaxVisitor
     {
         internal enum SpecialAssignmentType
         {
             None = 0,
-            StaticPropUseExplicitTypeParams,
             PropExplicitImplementInterface,
             PropForBasicValueType,
+        }
+        internal bool IsSkipGenericTypeDefine
+        {
+            get { return m_SkipGenericTypeDefine; }
+        }
+        internal Queue<DerivedGenericTypeInstanceInfo> DerivedGenericTypeInstances
+        {
+            get { return m_DerivedGenericTypeInstances; }
         }
         internal Dictionary<string, List<ClassInfo>> ToplevelClasses
         {
@@ -39,12 +51,23 @@ namespace RoslynTool.CsToLua
         }
         internal void Translate(SyntaxNode node)
         {
+            m_SkipGenericTypeDefine = true;
             Visit(node);
             if (null != m_LastToplevelClass) {
                 m_LastToplevelClass.AfterOuterCodeBuilder.Append(m_ToplevelCodeBuilder.ToString());
                 m_ToplevelCodeBuilder.Clear();
             }
-        }        
+        }
+        internal void Translate(SyntaxNode node, INamedTypeSymbol sym)
+        {
+            m_SkipGenericTypeDefine = false;
+            m_GenericTypeInstance = sym;
+            Visit(node);
+            if (null != m_LastToplevelClass) {
+                m_LastToplevelClass.AfterOuterCodeBuilder.Append(m_ToplevelCodeBuilder.ToString());
+                m_ToplevelCodeBuilder.Clear();
+            }
+        }
         internal void SaveLog(TextWriter writer)
         {
             Logger.Instance.SaveLog(writer);
@@ -155,6 +178,39 @@ namespace RoslynTool.CsToLua
         private void ReportIllegalType(ITypeSymbol typeSym)
         {
             Logger.Instance.ReportIllegalType(typeSym);
+        }
+        private INamedTypeSymbol GetTypeDefineSymbol(INamedTypeSymbol declSym)
+        {
+            if (m_SkipGenericTypeDefine)
+                return declSym;
+            else
+                return m_GenericTypeInstance;
+        }
+        private void TryDeriveGenericTypeInstance(ISymbol sym)
+        {
+            TryDeriveGenericTypeInstance(sym, null);
+        }
+        private void TryDeriveGenericTypeInstance(ISymbol sym, SyntaxNode node)
+        {
+            var arrType = sym as IArrayTypeSymbol;
+            if (null != arrType) {
+                TryDeriveGenericTypeInstance(arrType.ElementType, node);
+            } else {
+                var refType = sym as INamedTypeSymbol;
+                if (null == refType) {
+                    refType = sym.ContainingType;
+                }
+                while (null != refType && refType.TypeKind != TypeKind.Class && refType.TypeKind != TypeKind.Struct && refType.TypeKind != TypeKind.Structure) {
+                    refType = refType.ContainingType;
+                }
+                if (null != refType && refType.IsGenericType && refType.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
+                    if (m_SkipGenericTypeDefine) {
+                        SymbolTable.Instance.AddGenericTypeInstance(ClassInfo.GetFullName(refType), refType);
+                    } else {
+                        m_DerivedGenericTypeInstances.Enqueue(new DerivedGenericTypeInstanceInfo { Symbol = refType, Node = node });
+                    }
+                }
+            }
         }
         private void TryConvertTypeArgmentList(IMethodSymbol sym, int argCount)
         {
@@ -309,24 +365,24 @@ namespace RoslynTool.CsToLua
             if (null != type && type.TypeKind != TypeKind.Error) {
                 if (type.TypeKind == TypeKind.TypeParameter) {
                     var typeParam = type as ITypeParameterSymbol;
-                    if (typeParam.TypeParameterKind == TypeParameterKind.Type) {
+                    if (typeParam.TypeParameterKind == TypeParameterKind.Type && !m_SkipGenericTypeDefine && null != m_GenericTypeInstance) {
                         IMethodSymbol sym = FindClassMethodDeclaredSymbol(node);
                         if (null != sym) {
-                            if (sym.IsStatic || sym.MethodKind==MethodKind.Constructor) {
-                                //静态函数与构造函数泛型参数直接作函数参数，不用读数据成员
-                                CodeBuilder.Append(type.Name);
-                            } else if (null != ci.ClassSemanticInfo) {
-                                //普通函数泛型参数不作函数参数，读数据成员获取信息
-                                int ix = ci.ClassSemanticInfo.GenericTypeParamNames.IndexOf(type.Name);
-                                CodeBuilder.AppendFormat("this.__type_params[{0}]", ix + 1);
+                            var t = ClassInfo.FindTypeArgument(type, m_GenericTypeInstance);
+                            if (null != t) {
+                                CodeBuilder.Append(t.Name);
                             } else {
-                                Log(node, "class {0} ClassSemanticInfo == null !", ci.Key);
+                                CodeBuilder.Append(type.Name);
                             }
                         } else {
                             ISymbol varSym = FindVariableDeclaredSymbol(node);
                             if (null != varSym) {
-                                //数据成员初始化里使用type参数的，初始化代码合并到构造里面，所以不需要借助数据成员取泛型参数
-                                CodeBuilder.Append(type.Name);
+                                var t = ClassInfo.FindTypeArgument(type, m_GenericTypeInstance);
+                                if (null != t) {
+                                    CodeBuilder.Append(t.Name);
+                                } else {
+                                    CodeBuilder.Append(type.Name);
+                                }
                             } else {
                                 Log(node, "Can't find declaration for type param !", type.Name);
                             }
@@ -341,6 +397,7 @@ namespace RoslynTool.CsToLua
                     var namedType = type as INamedTypeSymbol;
                     if (null != namedType) {
                         ci.AddReference(namedType, ci.SemanticInfo);
+                        TryDeriveGenericTypeInstance(namedType);
                     }
                 }
             } else if (null != type) {
@@ -575,7 +632,7 @@ namespace RoslynTool.CsToLua
                     }
                 }
                 if (string.IsNullOrEmpty(luaOp)) {
-                    CodeBuilder.AppendFormat("invokeexternoperator({0}, ", ii.ClassKey);
+                    CodeBuilder.AppendFormat("invokeexternoperator({0}, ", ii.GenericClassKey);
                     CodeBuilder.AppendFormat("\"{0}\"", method);
                     CodeBuilder.Append(", ");
                     OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false, node);
@@ -616,6 +673,10 @@ namespace RoslynTool.CsToLua
                 return m_ToplevelCodeBuilder;
             }
         }
+
+        private bool m_SkipGenericTypeDefine = false;
+        private INamedTypeSymbol m_GenericTypeInstance = null;
+        private Queue<DerivedGenericTypeInstanceInfo> m_DerivedGenericTypeInstances = new Queue<DerivedGenericTypeInstanceInfo>();
 
         private SemanticModel m_Model = null;
         private bool m_EnableInherit = false;

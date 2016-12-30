@@ -262,6 +262,57 @@ namespace RoslynTool.CsToLua
                                 }
                             }
                         }
+                        HashSet<string> handledTypes = new HashSet<string>();
+                        var typeSyms = new Queue<DerivedGenericTypeInstanceInfo>();
+                        Action<SyntaxNode, INamedTypeSymbol> action = (SyntaxNode node, INamedTypeSymbol typeSym) => {
+                            string fileName = Path.GetFileNameWithoutExtension(node.SyntaxTree.FilePath);
+                            SemanticModel model = compilation.GetSemanticModel(node.SyntaxTree, true);
+                            CsLuaTranslater csToLua = new CsLuaTranslater(model, enableInherit);
+                            csToLua.Translate(node, typeSym);
+                            if (csToLua.HaveError) {
+                                sw3.WriteLine("============<<<Translation Error:{0}>>>============", fileName);
+                                csToLua.SaveLog(sw3);
+                                haveTranslationError = true;
+                            } else {
+                                while (csToLua.DerivedGenericTypeInstances.Count > 0) {
+                                    var t = csToLua.DerivedGenericTypeInstances.Dequeue();
+                                    typeSyms.Enqueue(t);
+                                }
+                            }
+
+                            foreach (var cpair in csToLua.ToplevelClasses) {
+                                var ckey = cpair.Key;
+                                var cis = cpair.Value;
+
+                                foreach (var ci in cis) {
+                                    AddMergedClasses(toplevelClasses, ckey, ci);
+                                }
+
+                                string[] nss = ckey.Split('.');
+                                AddMergedNamespaces(toplevelMni, nss);
+                            }
+                        };
+                        foreach (var pair in SymbolTable.Instance.GenericTypeInstances) {
+                            var typeSym = pair.Value;
+                            typeSyms.Enqueue(new DerivedGenericTypeInstanceInfo { Symbol = typeSym, Node = null });
+                            while (typeSyms.Count > 0) {
+                                var ts = typeSyms.Dequeue();
+                                var key = ClassInfo.GetFullNameWithTypeParameters(ts.Symbol);
+                                if (!handledTypes.Contains(key)) {
+                                    handledTypes.Add(key);
+
+                                    List<SyntaxNode> nodes;
+                                    if (SymbolTable.Instance.GenericTypeDefines.TryGetValue(key, out nodes)) {
+                                        if (null != ts.Node) {
+                                            action(ts.Node, ts.Symbol);
+                                        }
+                                        foreach (var node in nodes) {
+                                            action(node, typeSym);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         sw3.Close();
                     }
                     sw2.Close();
@@ -552,6 +603,13 @@ namespace RoslynTool.CsToLua
         {
             SymbolTable symTable = SymbolTable.Instance;
             var classes = mci.Classes;
+            var firstClass = classes.Count > 0 ? classes[0] : null;
+            string genericTypeKey = key;
+            string baseClass = string.Empty;
+            if (null != firstClass) {
+                baseClass = firstClass.BaseKey;
+                genericTypeKey = firstClass.GenericTypeKey;
+            }
 
             string fileName = key.Replace(".", "__");
             string attributesName = fileName + "__Attrs";
@@ -563,24 +621,19 @@ namespace RoslynTool.CsToLua
             bool haveCtor = false;
             bool generateBasicCctor = false;
             bool generateBasicCtor = false;
-            bool generateTypeParamFields = false;
             bool existAttributes = false;
-            string baseClass = string.Empty;
             ClassSymbolInfo csi;
-            if (symTable.ClassSymbols.TryGetValue(key, out csi)) {
+            if (symTable.ClassSymbols.TryGetValue(genericTypeKey, out csi)) {
                 haveCctor = csi.ExistStaticConstructor;
                 haveCtor = csi.ExistConstructor;
                 generateBasicCctor = csi.GenerateBasicCctor;
                 generateBasicCtor = csi.GenerateBasicCtor;
-                generateTypeParamFields = csi.GenerateTypeParamFields;
                 existAttributes = csi.ExistAttributes;
-                baseClass = csi.BaseClassKey;
                 isStaticClass = csi.TypeSymbol.IsStatic;
                 isValueType = csi.TypeSymbol.IsValueType;
                 isEnumClass = csi.TypeSymbol.TypeKind == TypeKind.Enum;
             }
             bool myselfDefinedBaseClass = csi.TypeSymbol.BaseType.ContainingAssembly == symTable.AssemblySymbol;
-            string genericTypeParamNames = string.Join(", ", csi.GenericTypeParamNames.ToArray());
 
             //按目标类重新组织扩展代码
             Dictionary<string, List<StringBuilder>> classExternsions = new Dictionary<string, List<StringBuilder>>();
@@ -677,57 +730,6 @@ namespace RoslynTool.CsToLua
                     sb.Append(ci.StaticFieldCodeBuilder.ToString());
                 }
             } else {
-                //static function
-                foreach (var ci in classes) {
-                    sb.Append(ci.StaticFunctionCodeBuilder.ToString());
-                }
-
-                if (!haveCctor) {
-                    sb.AppendFormat("{0}cctor = function()", GetIndentString(indent));
-                    sb.AppendLine();
-                    ++indent;
-                    if (!string.IsNullOrEmpty(baseClass) && myselfDefinedBaseClass) {
-                        sb.AppendFormat("{0}{1}.cctor(this);", GetIndentString(indent), baseClass);
-                        sb.AppendLine();
-                    }
-                    if (generateBasicCctor) {
-                        sb.AppendFormat("{0}{1}.__cctor();", GetIndentString(indent), key);
-                        sb.AppendLine();
-                    }
-                    --indent;
-                    sb.AppendFormat("{0}end,", GetIndentString(indent));
-                    sb.AppendLine();
-                }
-                if (generateBasicCctor) {
-                    sb.AppendFormat("{0}__cctor = function()", GetIndentString(indent));
-                    sb.AppendLine();
-                    ++indent;
-                    sb.AppendFormat("{0}if {1}.__cctor_called then", GetIndentString(indent), key);
-                    sb.AppendLine();
-                    ++indent;
-                    sb.AppendFormat("{0}return;", GetIndentString(indent));
-                    sb.AppendLine();
-                    --indent;
-                    sb.AppendFormat("{0}else", GetIndentString(indent));
-                    sb.AppendLine();
-                    ++indent;
-                    sb.AppendFormat("{0}{1}.__cctor_called = true;", GetIndentString(indent), key);
-                    sb.AppendLine();
-                    --indent;
-                    sb.AppendFormat("{0}end", GetIndentString(indent));
-                    sb.AppendLine();
-
-                    --indent;
-                    //static initializer
-                    foreach (var ci in classes) {
-                        sb.Append(ci.StaticInitializerCodeBuilder.ToString());
-                    }
-                    sb.AppendFormat("{0}end,", GetIndentString(indent));
-                    sb.AppendLine();
-                }
-
-                sb.AppendLine();
-
                 if (!isStaticClass) {
                     sb.AppendFormat("{0}__new_object = function(...)", GetIndentString(indent));
                     sb.AppendLine();
@@ -777,40 +779,98 @@ namespace RoslynTool.CsToLua
 
                 sb.AppendFormat("{0}local static = {1};", GetIndentString(indent), key);
                 sb.AppendLine();
+                sb.AppendLine();
+                sb.AppendFormat("{0}local static_methods = {{", GetIndentString(indent));
+                sb.AppendLine();
+                ++indent;
 
-                bool hasStaticField = false;
+                //static function
                 foreach (var ci in classes) {
-                    if (ci.StaticFieldCodeBuilder.Length > 0)
-                        hasStaticField = true;
+                    sb.Append(ci.StaticFunctionCodeBuilder.ToString());
                 }
 
-                if (hasStaticField || existAttributes || generateBasicCctor) {
-                    sb.AppendFormat("{0}local static_fields = {{", GetIndentString(indent));
+                if (!haveCctor) {
+                    sb.AppendFormat("{0}cctor = function()", GetIndentString(indent));
                     sb.AppendLine();
                     ++indent;
-
-                    //static field
-                    foreach (var ci in classes) {
-                        sb.Append(ci.StaticFieldCodeBuilder.ToString());
-                    }
-
-                    if (existAttributes) {
-                        sb.AppendFormat("{0}__attributes = {1},", GetIndentString(indent), attributesName);
+                    if (!string.IsNullOrEmpty(baseClass) && myselfDefinedBaseClass) {
+                        sb.AppendFormat("{0}{1}.cctor(this);", GetIndentString(indent), baseClass);
                         sb.AppendLine();
                     }
-
                     if (generateBasicCctor) {
-                        sb.AppendFormat("{0}__cctor_called = false,", GetIndentString(indent));
+                        sb.AppendFormat("{0}{1}.__cctor();", GetIndentString(indent), key);
                         sb.AppendLine();
                     }
-                    
                     --indent;
-                    sb.AppendFormat("{0}}};", GetIndentString(indent));
-                    sb.AppendLine();
-                } else {
-                    sb.AppendFormat("{0}local static_fields = nil;", GetIndentString(indent));
+                    sb.AppendFormat("{0}end,", GetIndentString(indent));
                     sb.AppendLine();
                 }
+                if (generateBasicCctor) {
+                    sb.AppendFormat("{0}__cctor = function()", GetIndentString(indent));
+                    sb.AppendLine();
+                    ++indent;
+                    sb.AppendFormat("{0}if {1}.__cctor_called then", GetIndentString(indent), key);
+                    sb.AppendLine();
+                    ++indent;
+                    sb.AppendFormat("{0}return;", GetIndentString(indent));
+                    sb.AppendLine();
+                    --indent;
+                    sb.AppendFormat("{0}else", GetIndentString(indent));
+                    sb.AppendLine();
+                    ++indent;
+                    sb.AppendFormat("{0}{1}.__cctor_called = true;", GetIndentString(indent), key);
+                    sb.AppendLine();
+                    --indent;
+                    sb.AppendFormat("{0}end", GetIndentString(indent));
+                    sb.AppendLine();
+                    //static initializer
+                    foreach (var ci in classes) {
+                        sb.Append(ci.StaticInitializerCodeBuilder.ToString());
+                    }
+                    --indent;
+                    sb.AppendFormat("{0}end,", GetIndentString(indent));
+                    sb.AppendLine();
+                }
+
+                --indent;
+                sb.AppendFormat("{0}}};", GetIndentString(indent));
+                sb.AppendLine();
+
+                sb.AppendLine();
+
+                //静态实例构造函数（主要用以支持generic的实例化）
+                sb.AppendFormat("{0}local static_fields_build = function()", GetIndentString(indent));
+                sb.AppendLine();
+                ++indent;
+
+                sb.AppendFormat("{0}local static_fields = {{", GetIndentString(indent));
+                sb.AppendLine();
+                ++indent;
+
+                //static field
+                foreach (var ci in classes) {
+                    sb.Append(ci.StaticFieldCodeBuilder.ToString());
+                }
+
+                if (existAttributes) {
+                    sb.AppendFormat("{0}__attributes = {1},", GetIndentString(indent), attributesName);
+                    sb.AppendLine();
+                }
+
+                if (generateBasicCctor) {
+                    sb.AppendFormat("{0}__cctor_called = false,", GetIndentString(indent));
+                    sb.AppendLine();
+                }
+                    
+                --indent;
+                sb.AppendFormat("{0}}};", GetIndentString(indent));
+                sb.AppendLine();
+
+                sb.AppendFormat("{0}return static_fields;", GetIndentString(indent));
+                sb.AppendLine();
+                --indent;
+                sb.AppendFormat("{0}end;", GetIndentString(indent));
+                sb.AppendLine();
 
                 bool hasStaticProp = false;
                 foreach (var ci in classes) {
@@ -863,7 +923,7 @@ namespace RoslynTool.CsToLua
                     sb.AppendFormat("{0}local static_events = nil;", GetIndentString(indent));
                     sb.AppendLine();
                 }
-                
+
                 sb.AppendLine();
 
                 if (!isStaticClass) {
@@ -877,7 +937,7 @@ namespace RoslynTool.CsToLua
                     }
 
                     if (!haveCtor) {
-                        sb.AppendFormat("{0}ctor = function(this{1}{2})", GetIndentString(indent), string.IsNullOrEmpty(genericTypeParamNames) ? string.Empty : ", ", genericTypeParamNames);
+                        sb.AppendFormat("{0}ctor = function(this)", GetIndentString(indent));
                         sb.AppendLine();
                         ++indent;
                         if (!string.IsNullOrEmpty(baseClass) && myselfDefinedBaseClass) {
@@ -885,7 +945,7 @@ namespace RoslynTool.CsToLua
                             sb.AppendLine();
                         }
                         if (generateBasicCtor) {
-                            sb.AppendFormat("{0}this:__ctor({1});", GetIndentString(indent), genericTypeParamNames);
+                            sb.AppendFormat("{0}this:__ctor();", GetIndentString(indent));
                             sb.AppendLine();
                         }
                         --indent;
@@ -893,7 +953,7 @@ namespace RoslynTool.CsToLua
                         sb.AppendLine();
                     }
                     if (generateBasicCtor) {
-                        sb.AppendFormat("{0}__ctor = function(this{1}{2})", GetIndentString(indent), string.IsNullOrEmpty(genericTypeParamNames) ? string.Empty : ", ", genericTypeParamNames);
+                        sb.AppendFormat("{0}__ctor = function(this)", GetIndentString(indent));
                         sb.AppendLine();
                         ++indent;
                         sb.AppendFormat("{0}if this.__ctor_called then", GetIndentString(indent));
@@ -910,22 +970,16 @@ namespace RoslynTool.CsToLua
                         --indent;
                         sb.AppendFormat("{0}end", GetIndentString(indent));
                         sb.AppendLine();
-                        if (generateTypeParamFields) {
-                            sb.AppendFormat("{0}this.__type_params = ", GetIndentString(indent));
-                            sb.Append("{");
-                            sb.Append(genericTypeParamNames);
-                            sb.AppendLine("};");
-                        }
                         foreach (var pair in csi.ExtensionClasses) {
                             string refname = pair.Key;
                             sb.AppendFormat("{0}{1}.__install_{2}(this);", GetIndentString(indent), key, refname.Replace(".", "_"));
                             sb.AppendLine();
                         }
-                        --indent;
                         //instance initializer
                         foreach (var ci in classes) {
                             sb.Append(ci.InstanceInitializerCodeBuilder.ToString());
                         }
+                        --indent;
                         sb.AppendFormat("{0}end,", GetIndentString(indent));
                         sb.AppendLine();
                     }
@@ -937,7 +991,7 @@ namespace RoslynTool.CsToLua
                     sb.AppendLine();
 
                     //实例构造函数（每次new都应该产生一个新实例，所以必须提供一个工厂函数）
-                    sb.AppendFormat("{0}local instance_build = function()", GetIndentString(indent));
+                    sb.AppendFormat("{0}local instance_fields_build = function()", GetIndentString(indent));
                     sb.AppendLine();
                     ++indent;
 
@@ -1066,10 +1120,10 @@ namespace RoslynTool.CsToLua
 
                     sb.AppendLine();
                     
-                    sb.AppendFormat("{0}return defineclass({1}, \"{2}\", static, static_fields, static_props, static_events, instance_methods, instance_build, instance_props, instance_events, interfaces, interface_map, {3});", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass, key, isValueType ? "true" : "false");
+                    sb.AppendFormat("{0}return defineclass({1}, \"{2}\", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, {3});", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass, key, isValueType ? "true" : "false");
                     sb.AppendLine();
                 } else {
-                    sb.AppendFormat("{0}return defineclass({1}, \"{2}\", static, static_fields, static_props, static_events, nil, nil, nil, nil, nil, nil, {3});", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass, key, isValueType ? "true" : "false");
+                    sb.AppendFormat("{0}return defineclass({1}, \"{2}\", static, static_methods, static_fields_build, static_props, static_events, nil, nil, nil, nil, nil, nil, {3});", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass, key, isValueType ? "true" : "false");
                     sb.AppendLine();
                 }
 

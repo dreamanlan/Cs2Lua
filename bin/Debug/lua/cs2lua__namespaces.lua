@@ -1,5 +1,3 @@
-UIDemo = {
-};
 TopLevel = {
 	SecondLevel = {
 	},
