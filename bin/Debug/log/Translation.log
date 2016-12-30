@@ -1,12 +1,6 @@
 ============<<<Translation Error:test>>>============
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ ir.Test() ] location: test.cs: (405,16)-(405,25)
-<<<[Log for ElementAccessExpressionSyntax]>>> Can't determine symbol: None, code:[ arr[2] ] location: test.cs: (490,24)-(490,30)
-<<<[Log for ConditionalAccessExpressionSyntax]>>> Can't determine symbol: None, code:[ arr2?[2] ] location: test.cs: (498,25)-(498,33)
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ ir.Test() ] location: test.cs: (410,16)-(410,25)
 ============<<<Translation Error:test>>>============
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ ir.Test() ] location: test.cs: (405,16)-(405,25)
-<<<[Log for ElementAccessExpressionSyntax]>>> Can't determine symbol: None, code:[ arr[2] ] location: test.cs: (490,24)-(490,30)
-<<<[Log for ConditionalAccessExpressionSyntax]>>> Can't determine symbol: None, code:[ arr2?[2] ] location: test.cs: (498,25)-(498,33)
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ ir.Test() ] location: test.cs: (410,16)-(410,25)
 ============<<<Translation Error:test>>>============
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ ir.Test() ] location: test.cs: (405,16)-(405,25)
-<<<[Log for ElementAccessExpressionSyntax]>>> Can't determine symbol: None, code:[ arr[2] ] location: test.cs: (490,24)-(490,30)
-<<<[Log for ConditionalAccessExpressionSyntax]>>> Can't determine symbol: None, code:[ arr2?[2] ] location: test.cs: (498,25)-(498,33)
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ ir.Test() ] location: test.cs: (410,16)-(410,25)

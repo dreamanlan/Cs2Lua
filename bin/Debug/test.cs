@@ -14,8 +14,13 @@ class LuaConsole
 
 class TestUnity : MonoBehaviour
 {
-    void Test()
+    void Test(params object[] args)
     {
+        if (args.Length >= 3) {
+            int sagatObjId = (int)args[0];
+            int protectObjId = (int)args[1];
+            int attackObjId = (int)args[2];
+        }
         var t = gameObject.GetComponent<Transform>();
         gameObject.SetActive(true);
         var r = gameObject.renderer;

@@ -368,6 +368,10 @@ namespace RoslynTool.CsToLua
                 var ci = m_ClassInfoStack.Peek();
                 ci.AddReference(sym, ci.SemanticInfo);
                 TryDeriveGenericTypeInstance(sym);
+            } else if (null != oper) {
+                var ci = m_ClassInfoStack.Peek();
+                ci.AddReference(oper.Type, ci.SemanticInfo);
+                TryDeriveGenericTypeInstance(oper.Type);
             } else {
                 ReportIllegalSymbol(node, symInfo);
             }
@@ -425,6 +429,10 @@ namespace RoslynTool.CsToLua
                     var ci = m_ClassInfoStack.Peek();
                     ci.AddReference(sym, ci.SemanticInfo);
                     TryDeriveGenericTypeInstance(sym);
+                } else if (null != oper) {
+                    var ci = m_ClassInfoStack.Peek();
+                    ci.AddReference(oper.Type, ci.SemanticInfo);
+                    TryDeriveGenericTypeInstance(oper.Type);
                 } else {
                     ReportIllegalSymbol(node, symInfo);
                 }
