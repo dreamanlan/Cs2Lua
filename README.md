@@ -96,7 +96,7 @@ Cs2Lua的输出主要包括：
 
 8、匿名类、匿名委托等。
 
-9、自定义类部分支持generic（静态构造、静态字段以及静态的accessor定义里不能明确使用泛型参数）。
+9、自定义类部分支持generic（为每个generic实例生成一份代码，generic类本身不生成代码）。
 
 10、数组与集合支持。
 
@@ -338,7 +338,7 @@ Cs2Lua的输出主要包括：
 
 1、转换出的lua代码不使用self表示对象自己，而是使用this表示对象自己，这样无需处理c#代码里用self作变量名的情形。类似的，转换出的lua使用base来表示父类子对象。类似的，property的get/set方法名也仍然是get/set，event接口实现的add/remove方法名也仍然使用add/remove。
 
-2、泛型类静态方法与泛型方法在转换时会将泛型参数当函数参数作用，泛型类实例在构造时记录泛型参数到实例字段，实例方法通过字段获得泛型参数信息。
+2、泛型方法在转换时会将泛型参数当函数参数作用。
 
 亦即
 
@@ -354,30 +354,6 @@ GenericMethod = function(this, T)
 
 
 end
-
-再如
-
-class GenericClass<TypeT>
-
-{
-
-  static void GenericMethod<T>()
-  
-  {
-  
-  }
-  
-}
-
-=>
-
-GenericClass = {
-
-  GenericMethod = function(T, TypeT)
-  
-  end,
-    
-}
 
 ***这种转换方法能适应unity3d的GetComponent方法
 
