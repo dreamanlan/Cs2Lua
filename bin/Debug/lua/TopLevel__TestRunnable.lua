@@ -28,12 +28,12 @@ TopLevel.TestRunnable = {
 				invokewithinterface(f, "TopLevel_IRunnable0", "Test");
 				local i; i = getinstanceindexer(f, nil, "get_Item", 0);
 				setinstanceindexer(f, nil, "set_Item", 0, i);
-				setwithinterface(f, "TopLevel_IRunnable_Int32", "TestProp", i);
-				i = getwithinterface(f, ""TopLevel_IRunnable_Int32"", ""TestProp"");
+				setwithinterface(f, "TopLevel_IRunnable_System_Int32", "TestProp", i);
+				i = getwithinterface(f, ""TopLevel_IRunnable_System_Int32"", ""TestProp"");
 				local a; a = delegationwrap((function()
 				end));
-				delegationadd(f, "TopLevel_IRunnable_Int32", "OnAction", a);
-				delegationremove(f, "TopLevel_IRunnable_Int32", "OnAction", a);
+				delegationadd(f, "TopLevel_IRunnable_System_Int32", "OnAction", a);
+				delegationremove(f, "TopLevel_IRunnable_System_Int32", "OnAction", a);
 				local t; t = wrapconst(System.Single, "NegativeInfinity");
 				t = wrapconst(System.Single, "NaN");
 			end,

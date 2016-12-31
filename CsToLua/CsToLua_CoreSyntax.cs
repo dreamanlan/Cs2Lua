@@ -46,11 +46,15 @@ namespace RoslynTool.CsToLua
         {
             INamedTypeSymbol declSym = m_Model.GetDeclaredSymbol(node);
             if (m_SkipGenericTypeDefine && declSym.IsGenericType) {
-                m_SymbolTable.AddGenericTypeDefine(ClassInfo.GetFullNameWithTypeParameters(declSym), node);
+                node.Accept(new InnerClassAnalysis(m_Model));
                 return;
             }
-            if (!m_SkipGenericTypeDefine && m_GenericTypeInstance.ConstructedFrom != declSym) {
-                m_DerivedGenericTypeInstances.Enqueue(new DerivedGenericTypeInstanceInfo { Symbol = declSym, Node = node });
+            if (!m_SkipGenericTypeDefine && !ClassInfo.IsOriginalOrContainingGenericType(m_GenericTypeInstance, declSym)) {
+                DerivedGenericTypeInstanceInfo instInfo = new DerivedGenericTypeInstanceInfo();
+                instInfo.Symbol = declSym;
+                instInfo.Node = node;
+                instInfo.FillTypeParamsAndArgs(declSym);
+                m_DerivedGenericTypeInstances.Enqueue(instInfo);
                 return;
             }
             declSym = GetTypeDefineSymbol(declSym);
@@ -80,11 +84,17 @@ namespace RoslynTool.CsToLua
                 if (!string.IsNullOrEmpty(fullBaseClassName) && fullBaseClassName != "System.Object" && fullBaseClassName != "System.ValueType") {
                     Log(node, "Cs2Lua class/struct can't inherit !");
                 }
-            }
+            }                     
 
             if (!string.IsNullOrEmpty(ci.BaseKey)) {
-                ci.AddReference(declSym.BaseType, declSym);
-                TryDeriveGenericTypeInstance(declSym.BaseType);
+                AddReferenceAndTryDeriveGenericTypeInstance(ci, declSym.BaseType);
+            }
+            if (declSym.IsGenericType || ci.IsInnerOfGenericType) {
+                //泛型类及其嵌入类不与包含类放在同一文件里，所以需要依赖包含类
+                var ctype = declSym.ContainingType;
+                if (null != ctype) {
+                    AddReferenceAndTryDeriveGenericTypeInstance(ci, ctype);
+                }
             }
 
             TypeInfo typeInfo = m_Model.GetTypeInfo(node);
@@ -202,8 +212,7 @@ namespace RoslynTool.CsToLua
             bool isExtension = declSym.IsExtensionMethod;
             if (isExtension && declSym.Parameters.Length > 0) {
                 var targetType = declSym.Parameters[0].Type;
-                ci.AddReference(targetType, ci.SemanticInfo);
-                TryDeriveGenericTypeInstance(targetType);
+                AddReferenceAndTryDeriveGenericTypeInstance(ci, targetType);
                 string key = ClassInfo.GetFullName(targetType);
                 StringBuilder extensionCodeBuilder;
                 if (!ci.ExtensionCodeBuilders.TryGetValue(key, out extensionCodeBuilder)) {
@@ -295,7 +304,7 @@ namespace RoslynTool.CsToLua
                             bool createSelf = m_SymbolTable.IsFieldCreateSelf(fieldSym);
                             if (useExplicitTypeParam || createSelf) {
                                 CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
-                                CodeBuilder.AppendLine(" = false,");
+                                CodeBuilder.AppendLine(" = __nil_table_field,");
                                 if (isStatic) {
                                     ci.CurrentCodeBuilder = ci.StaticInitializerCodeBuilder;
                                 } else {
@@ -334,7 +343,7 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
                         CodeBuilder.Append(" = wrapdelegation{}");
                     } else {
-                        CodeBuilder.AppendFormat("{0}{1} = false", GetIndentString(), name);
+                        CodeBuilder.AppendFormat("{0}{1} = __nil_table_field", GetIndentString(), name);
                     }
                     CodeBuilder.Append(",");
                     CodeBuilder.AppendLine();
@@ -486,8 +495,6 @@ namespace RoslynTool.CsToLua
                         //处理ref/out参数
                         InvocationInfo ii = new InvocationInfo();
                         ii.Init(sym, invocation.ArgumentList, m_Model);
-                        ci.AddReference(sym, ci.SemanticInfo);
-                        TryDeriveGenericTypeInstance(sym);
 
                         MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
                         if (null != memberAccess) {
@@ -554,6 +561,9 @@ namespace RoslynTool.CsToLua
                 VisitExpressionSyntax(assign.Right);
                 CodeBuilder.Append(")");
             } else if (null != leftElementAccess) {
+                if (null != leftSym && leftSym.IsStatic) {
+                    AddReferenceAndTryDeriveGenericTypeInstance(ci, leftSym);
+                }
                 if (null != leftPsym && leftPsym.IsIndexer) {
                     CodeBuilder.AppendFormat("set{0}{1}indexer(", leftPsym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", leftPsym.IsStatic ? "static" : "instance");
                     if (leftPsym.IsStatic) {
@@ -617,7 +627,9 @@ namespace RoslynTool.CsToLua
                     var symInfo = m_Model.GetSymbolInfo(leftCondAccess.WhenNotNull);
                     var sym = symInfo.Symbol;
                     var psym = sym as IPropertySymbol;
-
+                    if (null != sym && sym.IsStatic) {
+                        AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
+                    }
                     if (null != psym && psym.IsIndexer) {
                         CodeBuilder.Append("(function() return ");
                         CodeBuilder.AppendFormat("set{0}{1}indexer(", psym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
@@ -745,8 +757,9 @@ namespace RoslynTool.CsToLua
                     //处理ref/out参数
                     InvocationInfo ii = new InvocationInfo();
                     ii.Init(sym, invocation.ArgumentList, m_Model);
-                    ci.AddReference(sym, ci.SemanticInfo);
-                    TryDeriveGenericTypeInstance(sym);
+                    if (sym.IsStatic) {
+                        AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
+                    }
 
                     MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
                     if (null != memberAccess) {
@@ -872,8 +885,9 @@ namespace RoslynTool.CsToLua
                 //处理ref/out参数
                 InvocationInfo ii = new InvocationInfo();
                 ii.Init(sym, invocation.ArgumentList, m_Model);
-                ci.AddReference(sym, ci.SemanticInfo);
-                TryDeriveGenericTypeInstance(sym);
+                if (sym.IsStatic) {
+                    AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
+                }
 
                 MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
                 if (null != memberAccess) {

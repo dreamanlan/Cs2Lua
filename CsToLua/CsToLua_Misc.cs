@@ -186,8 +186,7 @@ namespace RoslynTool.CsToLua
 
                         if (sym.Kind == SymbolKind.NamedType) {
                             var namedType = sym as INamedTypeSymbol;
-                            classInfo.AddReference(namedType, classInfo.SemanticInfo);
-                            TryDeriveGenericTypeInstance(namedType);
+                            AddReferenceAndTryDeriveGenericTypeInstance(classInfo, namedType);
                         }
                         return;
                     } else if (sym.Kind == SymbolKind.Field || sym.Kind == SymbolKind.Property || sym.Kind == SymbolKind.Event) {
@@ -201,7 +200,7 @@ namespace RoslynTool.CsToLua
                                 }
                             }
                         }
-                        if (sym.ContainingType == classInfo.SemanticInfo || classInfo.IsInherit(sym.ContainingType)) {
+                        if (sym.ContainingType == classInfo.SemanticInfo || sym.ContainingType == classInfo.SemanticInfo.OriginalDefinition || classInfo.IsInherit(sym.ContainingType)) {
                             if (sym.IsStatic) {
                                 CodeBuilder.AppendFormat("{0}.{1}", classInfo.Key, sym.Name);
                             } else {

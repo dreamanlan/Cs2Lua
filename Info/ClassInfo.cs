@@ -16,6 +16,7 @@ namespace RoslynTool.CsToLua
         internal bool IsEnum = false;
         internal bool IsEntryClass = false;
         internal bool IsValueType = false;
+        internal bool IsInnerOfGenericType = false;
 
         internal string Key = string.Empty;
         internal string BaseKey = string.Empty;
@@ -60,11 +61,13 @@ namespace RoslynTool.CsToLua
             IsEntryClass = HasAttribute(sym, "Cs2Lua.EntryAttribute");
             IsValueType = sym.IsValueType;
 
+            IsInnerOfGenericType = IsInnerClassOfGenericType(sym);
+
             ExistConstructor = false;
             ExistStaticConstructor = false;
             SemanticInfo = sym;
             ClassSemanticInfo = info;
-            
+                        
             Key = GetFullName(sym);
             BaseKey = GetFullName(sym.BaseType);
             if (BaseKey == "System.Object" || BaseKey == "System.ValueType") {
@@ -76,36 +79,45 @@ namespace RoslynTool.CsToLua
             References.Clear();
             IgnoreReferences.Clear();
         }
-        internal void AddReference(ISymbol sym, INamedTypeSymbol curClassSym)
+        internal void AddReference(ISymbol sym)
         {
             var arrType = sym as IArrayTypeSymbol;
             if (null != arrType) {
-                AddReference(arrType.ElementType, curClassSym);
+                AddReference(arrType.ElementType);
             } else {
                 var refType = sym as INamedTypeSymbol;
                 if (null == refType) {
                     refType = sym.ContainingType;
                 }
                 if (null != refType) {
-                    AddReference(refType, curClassSym);
+                    AddReference(refType);
                 } else {
                     Logger.Instance.ReportIllegalType(sym);
                 }
             }
         }
-        internal void AddReference(INamedTypeSymbol refType, INamedTypeSymbol curClassSym)
+        internal void AddReference(INamedTypeSymbol refType)
         {
-            while (null != refType.ContainingType) {
-                refType = refType.ContainingType;
+            if (!IsInnerClassOfGenericType(refType)) {
+                while (null != refType.ContainingType) {
+                    refType = refType.ContainingType;
+                }
             }
             string key = GetFullName(refType);
-            if (null != refType && refType != curClassSym && refType.ContainingAssembly == curClassSym.ContainingAssembly && !refType.IsAnonymousType && !refType.IsImplicitClass && !refType.IsImplicitlyDeclared && refType.TypeKind != TypeKind.Delegate && refType.TypeKind != TypeKind.Dynamic && refType.TypeKind != TypeKind.Interface) {
+            if (null != refType && refType != SemanticInfo && refType.ContainingAssembly == SemanticInfo.ContainingAssembly && !refType.IsAnonymousType && !refType.IsImplicitClass && !refType.IsImplicitlyDeclared && refType.TypeKind != TypeKind.Delegate && refType.TypeKind != TypeKind.Dynamic && refType.TypeKind != TypeKind.Interface) {
                 if (!string.IsNullOrEmpty(key) && !References.Contains(key) && key != Key) {
                     bool isIgnore = ClassInfo.HasAttribute(refType, "Cs2Lua.IgnoreAttribute");
                     if (isIgnore) {
                         IgnoreReferences.Add(key);
                     } else {
-                        References.Add(key);
+                        if (!SemanticInfo.IsGenericType || SemanticInfo.TypeArguments.IndexOf(refType) < 0) {
+                            References.Add(key);
+                            if (refType.IsGenericType) {
+                                foreach (var sym in refType.TypeArguments) {
+                                    AddReference(sym);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -121,6 +133,36 @@ namespace RoslynTool.CsToLua
                         break;
                     }
                     baseType = baseType.BaseType;
+                }
+            }
+            return ret;
+        }
+        internal static bool IsInnerClassOfGenericType(INamedTypeSymbol type)
+        {
+            bool ret = false;
+            var refType = type;
+            while (null != refType.ContainingType) {
+                refType = refType.ContainingType;
+                if (refType.IsGenericType) {
+                    ret = true;
+                    break;
+                }
+            }
+            return ret;
+        }
+        internal static bool IsOriginalOrContainingGenericType(INamedTypeSymbol type, INamedTypeSymbol genericType)
+        {
+            bool ret = false;
+            if (type.OriginalDefinition == genericType) {
+                ret = true;
+            } else {
+                var refType = type.OriginalDefinition;
+                while (null != refType.ContainingType) {
+                    refType = refType.ContainingType;
+                    if (refType==genericType) {
+                        ret = true;
+                        break;
+                    }
                 }
             }
             return ret;
@@ -147,23 +189,6 @@ namespace RoslynTool.CsToLua
                 }
             }
             return baseInitializerCalled;
-        }
-        internal static ITypeSymbol FindTypeArgument(ITypeSymbol type, INamedTypeSymbol typeInstance)
-        {
-            var typeParams = typeInstance.TypeParameters;
-            var typeArgs = typeInstance.TypeArguments;
-            for (int i = 0; i < typeParams.Length;++i ) {
-                var sym = typeParams[i];
-                if (type.Name == sym.Name) {
-                    if (i < typeArgs.Length) {
-                        return typeArgs[i];
-                    }
-                }
-            }
-            if (null != typeInstance.ContainingType) {
-                return FindTypeArgument(type, typeInstance.ContainingType);
-            }
-            return null;
         }
         
         internal static bool HasAttribute(ISymbol sym, string fullName)
@@ -366,7 +391,18 @@ namespace RoslynTool.CsToLua
             List<string> list = new List<string>();
             list.Add(type.Name);
             foreach (var arg in type.TypeArguments) {
-                list.Add(arg.Name);
+                if (arg.TypeKind == TypeKind.TypeParameter) {
+                    var t = SymbolTable.Instance.FindTypeArgument(arg);
+                    if (t.TypeKind == TypeKind.TypeParameter) {
+                        list.Add(t.Name);
+                    } else {
+                        var fn = GetFullName(t);
+                        list.Add(fn.Replace(".", "_"));
+                    }
+                } else {
+                    var fn = GetFullName(arg);
+                    list.Add(fn.Replace(".", "_"));
+                }
             }
             return string.Join("_", list.ToArray());
         }        

@@ -1,7 +1,24 @@
 --remove comments for debug with ZeroBrane
 --require "luadebug";
 
+function __basic_type_func(v)
+	return v;
+end;
+
 System = System or {};
+System.Boolean = System.Boolean or __basic_type_func;
+System.SByte = System.SByte or __basic_type_func;
+System.Byte = System.Byte or __basic_type_func;
+System.Char = System.Char or __basic_type_func;
+System.Int16 = System.Int16 or __basic_type_func;
+System.Int32 = System.Int32 or __basic_type_func;
+System.Int64 = System.Int64 or __basic_type_func;
+System.UInt16 = System.UInt16 or __basic_type_func;
+System.UInt32 = System.UInt32 or __basic_type_func;
+System.UInt64 = System.UInt64 or __basic_type_func;
+System.Single = System.Single or __basic_type_func;
+System.Double = System.Double or __basic_type_func;
+System.String = System.String or __basic_type_func;
 System.Collections = System.Collections or {};
 System.Collections.Generic = System.Collections.Generic or {};
 System.Collections.Generic.List_T = {};
@@ -109,7 +126,7 @@ function typecast(obj, t)
 	  local v = tonumber(obj);
 	  v = math.floor(v);
 	  return v % 0x100000000;
-	elseif t == System.Int16 or t == System.UInt16 then
+	elseif t == System.Int16 or t == System.UInt16 or t == System.Char then
 	  local v = tonumber(obj);
 	  v = math.floor(v);
 	  return v % 0x10000;
@@ -117,6 +134,9 @@ function typecast(obj, t)
 	  local v = tonumber(obj);
 	  v = math.floor(v);
 	  return v % 0x100;
+	elseif t == System.Boolean then
+		local v = tonumber(obj);
+		return v ~= 0;
 	else
   	return obj;
  	end;
@@ -175,19 +195,23 @@ function __get_table_count(tb)
 end;
 
 function __inc_table_count(tb)
-  local count = __get_table_count(tb);
   local meta = getmetatable(tb);
   if meta then
-    meta.__count = count + 1;
-  end;
+  	if nil ~= meta.__count then
+	    meta.__count = meta.__count + 1;
+	  else
+	  	meta.__count = __calc_table_count(tb);
+	  end;
+	end;
 end;
 
 function __dec_table_count(tb)
-  local count = __get_table_count(tb);
-  if count>0 then
-    local meta = getmetatable(tb);
-    if meta then
-      meta.__count = count - 1;    
+  local meta = getmetatable(tb);
+  if meta then
+  	if meta.__count > 0 then
+    	meta.__count = count - 1;    
+    else
+    	meta.__count = __calc_table_count(tb);
     end;
   end;
 end;
@@ -204,6 +228,24 @@ function __clear_table(tb)
   if meta then
     meta.__count = 0;
   end;
+end;
+
+__nil_table_field = {};
+
+function __wrap_table_field(v)
+	if nil==v then
+		return __nil_table_field;
+	else
+		return v;
+	end;
+end;
+
+function __unwrap_table_field(v)
+	if __nil_table_field==v then
+		return nil;
+	else
+		return v;
+	end;
 end;
 
 __mt_index_of_array = function(t, k)
@@ -655,7 +697,7 @@ function defineclass(base, className, static, static_methods, static_fields_buil
     class["__is_value_type"] = is_value_type;
     class["__interfaces"] = interfaces;
     class["__interface_map"] = interface_map;
-    class["base"] = base_class;
+    class["__base_class"] = base_class;
     
     setmetatable(class, {
         __call = function()
@@ -685,11 +727,12 @@ function defineclass(base, className, static, static_methods, static_fields_buil
             		__is_value_type = is_value_type,
 				    		__interfaces = interfaces,
 				    		__interface_map = interface_map,
+				    		__base_class = base_class,
                 __index = function(t, k)
                     local ret;
 				            ret = obj_fields[k];
 				            if nil~=ret then
-				            	return ret;
+				            	return __unwrap_table_field(ret);
 				            end;
                     ret = obj_props[k];
                     if nil~=ret then
@@ -726,7 +769,7 @@ function defineclass(base, className, static, static_methods, static_fields_buil
                     local ret;
 				            ret = obj_fields[k];
 				            if nil~=ret then
-				            	obj_fields[k] = v;
+				            	obj_fields[k] = __wrap_table_field(v);
 				            	return;
 				            end;
                     ret = obj_props[k];
@@ -760,7 +803,7 @@ function defineclass(base, className, static, static_methods, static_fields_buil
             local ret;
             ret = class_fields[k];
             if nil~=ret then
-            	return ret;
+            	return __unwrap_table_field(ret);
             end;
             ret = class_props[k];
             if nil~=ret then
@@ -779,7 +822,7 @@ function defineclass(base, className, static, static_methods, static_fields_buil
             local ret;
             ret = class_fields[k];
             if nil~=ret then
-            	class_fields[k] = v;
+            	class_fields[k] = __wrap_table_field(v);
             	return;
             end;
             ret = class_props[k];

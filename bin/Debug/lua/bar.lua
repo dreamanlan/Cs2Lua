@@ -1,6 +1,6 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
-require "foo_Int32_Int32";
+require "foo_System_Int32_System_Int32";
 
 bar = {
 	__new_object = function(...)
@@ -24,7 +24,7 @@ bar = {
 
 		local instance_methods = {
 			test = function(this)
-				local a; a = newobject(foo_Int32_Int32, "ctor", {});
+				local a; a = newobject(foo_System_Int32_System_Int32, "ctor", {});
 				a:parse(wrapstring("123"), wrapstring("456"));
 			end,
 			ctor = function(this)

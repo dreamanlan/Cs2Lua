@@ -162,7 +162,8 @@ namespace RoslynTool.CsToLua
             }
             bool useTypeNameString = false;
             if(IsComponentGetOrAdd && SymbolTable.LuaComponentByString){
-                if (sym.TypeArguments.Length > 0 && sym.TypeArguments[0].ContainingAssembly == AssemblySymbol) {
+                var tArgs = sym.TypeArguments;
+                if (tArgs.Length > 0 && tArgs[0].ContainingAssembly == AssemblySymbol) {
                     useTypeNameString = true;
                 }
             }

@@ -98,7 +98,7 @@ Extentions = {
 
 		local static_fields_build = function()
 			local static_fields = {
-				dateTime1970 = false,
+				dateTime1970 = __nil_table_field,
 			};
 			return static_fields;
 		end;

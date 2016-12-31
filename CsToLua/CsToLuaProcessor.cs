@@ -297,17 +297,19 @@ namespace RoslynTool.CsToLua
                             typeSyms.Enqueue(new DerivedGenericTypeInstanceInfo { Symbol = typeSym, Node = null });
                             while (typeSyms.Count > 0) {
                                 var ts = typeSyms.Dequeue();
-                                var key = ClassInfo.GetFullNameWithTypeParameters(ts.Symbol);
+                                var key = ClassInfo.GetFullName(ts.Symbol);
                                 if (!handledTypes.Contains(key)) {
                                     handledTypes.Add(key);
 
+                                    SymbolTable.Instance.SetTypeParamsAndArgs(ts.TypeParameters, ts.TypeArguments, ts.Symbol);
+                                    var refKey = ClassInfo.GetFullNameWithTypeParameters(ts.Symbol);
                                     List<SyntaxNode> nodes;
-                                    if (SymbolTable.Instance.GenericTypeDefines.TryGetValue(key, out nodes)) {
+                                    if (SymbolTable.Instance.GenericTypeDefines.TryGetValue(refKey, out nodes)) {
                                         if (null != ts.Node) {
                                             action(ts.Node, ts.Symbol);
                                         }
                                         foreach (var node in nodes) {
-                                            action(node, typeSym);
+                                            action(node, ts.Symbol);
                                         }
                                     }
                                 }
@@ -941,7 +943,7 @@ namespace RoslynTool.CsToLua
                         sb.AppendLine();
                         ++indent;
                         if (!string.IsNullOrEmpty(baseClass) && myselfDefinedBaseClass) {
-                            sb.AppendFormat("{0}base.ctor(this);", GetIndentString(indent));
+                            sb.AppendFormat("{0}this.base.ctor(this);", GetIndentString(indent));
                             sb.AppendLine();
                         }
                         if (generateBasicCtor) {

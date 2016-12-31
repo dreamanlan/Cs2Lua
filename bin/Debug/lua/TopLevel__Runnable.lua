@@ -66,7 +66,7 @@ TopLevel.Runnable = {
 		};
 
 		local interfaces = {
-			"TopLevel.IRunnable_Int32",
+			"TopLevel.IRunnable_System_Int32",
 			"TopLevel.IRunnable0",
 		};
 

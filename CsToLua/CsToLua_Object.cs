@@ -184,7 +184,7 @@ namespace RoslynTool.CsToLua
                 if (init.ThisOrBaseKeyword.Text == "this") {
                     CodeBuilder.AppendFormat("{0}this:{1}(", GetIndentString(), manglingName2);
                 } else if (init.ThisOrBaseKeyword.Text == "base") {
-                    CodeBuilder.AppendFormat("{0}base.{1}(this", GetIndentString(), manglingName2);
+                    CodeBuilder.AppendFormat("{0}this.base.{1}(this", GetIndentString(), manglingName2);
                     if (init.ArgumentList.Arguments.Count > 0) {
                         CodeBuilder.Append(", ");
                     }
@@ -205,7 +205,7 @@ namespace RoslynTool.CsToLua
             } else {
                 if (!string.IsNullOrEmpty(ci.BaseKey) && !ClassInfo.IsBaseInitializerCalled(node, m_Model) && myselfDefinedBaseClass) {
                     //如果当前构造没有调父类构造并且委托的其它构造也没有调父类构造，则调用默认构造。
-                    CodeBuilder.AppendFormat("{0}base.ctor(this);", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}this.base.ctor(this);", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
                 if (generateBasicCtor) {

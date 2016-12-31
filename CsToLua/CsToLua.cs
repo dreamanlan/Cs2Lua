@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Text;
 using Microsoft.CodeAnalysis;
@@ -14,6 +15,15 @@ namespace RoslynTool.CsToLua
     {
         internal INamedTypeSymbol Symbol;
         internal SyntaxNode Node;
+        internal List<ITypeParameterSymbol> TypeParameters = new List<ITypeParameterSymbol>();
+        internal List<ITypeSymbol> TypeArguments = new List<ITypeSymbol>();
+
+        internal void FillTypeParamsAndArgs(INamedTypeSymbol refType)
+        {
+            TypeParameters.AddRange(SymbolTable.Instance.TypeParameters);
+            TypeArguments.AddRange(SymbolTable.Instance.TypeArguments);
+            SymbolTable.MergeTypeParamsAndArgs(TypeParameters, TypeArguments, refType);
+        }
     }
     internal sealed partial class CsLuaTranslater : CSharpSyntaxVisitor
     {
@@ -186,6 +196,11 @@ namespace RoslynTool.CsToLua
             else
                 return m_GenericTypeInstance;
         }
+        private void AddReferenceAndTryDeriveGenericTypeInstance(ClassInfo ci, ISymbol refSym)
+        {
+            ci.AddReference(refSym);
+            TryDeriveGenericTypeInstance(refSym);
+        }
         private void TryDeriveGenericTypeInstance(ISymbol sym)
         {
             TryDeriveGenericTypeInstance(sym, null);
@@ -207,7 +222,11 @@ namespace RoslynTool.CsToLua
                     if (m_SkipGenericTypeDefine) {
                         SymbolTable.Instance.AddGenericTypeInstance(ClassInfo.GetFullName(refType), refType);
                     } else {
-                        m_DerivedGenericTypeInstances.Enqueue(new DerivedGenericTypeInstanceInfo { Symbol = refType, Node = node });
+                        var instInfo = new DerivedGenericTypeInstanceInfo();
+                        instInfo.Symbol = refType;
+                        instInfo.Node = null;
+                        instInfo.FillTypeParamsAndArgs(refType);
+                        m_DerivedGenericTypeInstances.Enqueue(instInfo);
                     }
                 }
             }
@@ -368,20 +387,22 @@ namespace RoslynTool.CsToLua
                     if (typeParam.TypeParameterKind == TypeParameterKind.Type && !m_SkipGenericTypeDefine && null != m_GenericTypeInstance) {
                         IMethodSymbol sym = FindClassMethodDeclaredSymbol(node);
                         if (null != sym) {
-                            var t = ClassInfo.FindTypeArgument(type, m_GenericTypeInstance);
-                            if (null != t) {
-                                CodeBuilder.Append(t.Name);
+                            var t = m_SymbolTable.FindTypeArgument(type);
+                            if (t.TypeKind != TypeKind.TypeParameter) {
+                                CodeBuilder.Append(ClassInfo.GetFullName(t));
+                                AddReferenceAndTryDeriveGenericTypeInstance(ci, t);
                             } else {
-                                CodeBuilder.Append(type.Name);
+                                CodeBuilder.Append(t.Name);
                             }
                         } else {
                             ISymbol varSym = FindVariableDeclaredSymbol(node);
                             if (null != varSym) {
-                                var t = ClassInfo.FindTypeArgument(type, m_GenericTypeInstance);
-                                if (null != t) {
-                                    CodeBuilder.Append(t.Name);
+                                var t = m_SymbolTable.FindTypeArgument(type);
+                                if (t.TypeKind != TypeKind.TypeParameter) {
+                                    CodeBuilder.Append(ClassInfo.GetFullName(t));
+                                    AddReferenceAndTryDeriveGenericTypeInstance(ci, t);
                                 } else {
-                                    CodeBuilder.Append(type.Name);
+                                    CodeBuilder.Append(t.Name);
                                 }
                             } else {
                                 Log(node, "Can't find declaration for type param !", type.Name);
@@ -396,8 +417,7 @@ namespace RoslynTool.CsToLua
 
                     var namedType = type as INamedTypeSymbol;
                     if (null != namedType) {
-                        ci.AddReference(namedType, ci.SemanticInfo);
-                        TryDeriveGenericTypeInstance(namedType);
+                        AddReferenceAndTryDeriveGenericTypeInstance(ci, namedType);
                     }
                 }
             } else if (null != type) {

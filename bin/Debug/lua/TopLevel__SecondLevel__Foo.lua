@@ -3,8 +3,8 @@ require "cs2lua__attributes";
 require "cs2lua__namespaces";
 require "TopLevel__SecondLevel__FooBase";
 require "TopLevel__TestStruct";
-require "TopLevel__Singleton_Foo";
-require "TopLevel__SecondLevel__GenericClass_Test1";
+require "TopLevel__Singleton_TopLevel_SecondLevel_Foo";
+require "TopLevel__SecondLevel__GenericClass_TopLevel_SecondLevel_Foo_Test1__InnerGenericClass_TopLevel_SecondLevel_Foo_Test2";
 require "TopLevel__Runnable";
 
 TopLevel.SecondLevel.Foo = {
@@ -37,8 +37,8 @@ TopLevel.SecondLevel.Foo = {
 				local r; r = getinstanceindexer(f, nil, "get_Item", ts, ts);
 				condaccess(f, (function() return setinstanceindexer(f, nil, "set_Item", ts, ts, 123); end));
 				r = condaccess(f, (function() return getinstanceindexer(f, nil, "get_Item", ts, ts); end));
-				local result; result = TopLevel.Singleton_Foo.instance:Test123(1, 2);
-				TopLevel.Singleton_Foo.instance = nil;
+				local result; result = TopLevel.Singleton_TopLevel_SecondLevel_Foo.instance:Test123(1, 2);
+				TopLevel.Singleton_TopLevel_SecondLevel_Foo.instance = nil;
 				return f;
 			end,
 			cctor = function()
@@ -87,22 +87,22 @@ TopLevel.SecondLevel.Foo = {
 				return this;
 			end,
 			ctor__System_Int32 = function(this, v)
-				base.ctor(this);
+				this.base.ctor(this);
 				this:__ctor();
 				this.m_Test = v;
 				return this;
 			end,
 			ctor__System_Int32__System_Int32 = function(this, a, b)
-				base.ctor(this);
+				this.base.ctor(this);
 				this:__ctor();
 				return this;
 			end,
 			Test123 = function(this, a, b)
 				return (a + b);
 			end,
-			GTest__TopLevel_SecondLevel_GenericClass_Int32 = function(this, arg)
+			GTest__TopLevel_SecondLevel_GenericClass_System_Int32 = function(this, arg)
 			end,
-			GTest__TopLevel_SecondLevel_GenericClass_Single = function(this, arg)
+			GTest__TopLevel_SecondLevel_GenericClass_System_Single = function(this, arg)
 			end,
 			Iterator = wrapenumerable(function(this)
 				wrapyield(nil, false, false);
@@ -114,7 +114,7 @@ TopLevel.SecondLevel.Foo = {
 				return nil;
 			end),
 			Test = function(this)
-				local t; t = newobject(TopLevel.SecondLevel.GenericClass_Test1.InnerGenericClass_Test2, "ctor", {}, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
+				local t; t = newobject(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2, "ctor", {}, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
 				t:Test(System.Int32, 123);
 				t:Test2(System.Int32, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
 				local v;
@@ -191,7 +191,7 @@ TopLevel.SecondLevel.Foo = {
 				OnSimple2 = wrapdelegation{},
 				m_Test = 0,
 				m_Test2 = 0,
-				m_TS = false,
+				m_TS = __nil_table_field,
 				m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, "System.Collections.Generic.HashSet_T", "ctor", nil, {wrapstring("one"), wrapstring("two"), wrapstring("three")}),
 				__attributes = TopLevel__SecondLevel__Foo__Attrs,
 				__ctor_called = false,

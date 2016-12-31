@@ -204,10 +204,13 @@ namespace RoslynTool.CsToLua
                 InvocationInfo ii = new InvocationInfo();
                 var arglist = new List<ExpressionSyntax>() { node.Expression };
                 ii.Init(msym, arglist, m_Model);
+                AddReferenceAndTryDeriveGenericTypeInstance(ci, oper.Type);
+
                 OutputOperatorInvoke(ii, node);
             } else {
                 CodeBuilder.Append("typecast(");
                 VisitExpressionSyntax(node.Expression);
+
                 var typeInfo = m_Model.GetTypeInfo(node.Type);
                 var type = typeInfo.Type;
                 CodeBuilder.Append(", ");
@@ -285,9 +288,10 @@ namespace RoslynTool.CsToLua
             }
 
             if (null != sym) {
-                var ci = m_ClassInfoStack.Peek();
-                ci.AddReference(sym, ci.SemanticInfo);
-                TryDeriveGenericTypeInstance(sym);
+                if (sym.IsStatic) {
+                    var ci = m_ClassInfoStack.Peek();
+                    AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
+                }
             } else {
                 ReportIllegalSymbol(node, symInfo);
             }
@@ -364,16 +368,9 @@ namespace RoslynTool.CsToLua
             var symInfo = m_Model.GetSymbolInfo(node);
             var sym = symInfo.Symbol;
             var psym = sym as IPropertySymbol;
-            if (null != sym) {
+            if (null != sym && sym.IsStatic) {
                 var ci = m_ClassInfoStack.Peek();
-                ci.AddReference(sym, ci.SemanticInfo);
-                TryDeriveGenericTypeInstance(sym);
-            } else if (null != oper) {
-                var ci = m_ClassInfoStack.Peek();
-                ci.AddReference(oper.Type, ci.SemanticInfo);
-                TryDeriveGenericTypeInstance(oper.Type);
-            } else {
-                ReportIllegalSymbol(node, symInfo);
+                AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
             }
             if (null != psym && psym.IsIndexer) {
                 CodeBuilder.AppendFormat("get{0}{1}indexer(", psym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
@@ -412,6 +409,8 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.AppendFormat("\"{0}\", ", sym.Name);
                 VisitBracketedArgumentList(node.ArgumentList);
                 CodeBuilder.Append(")");
+            } else {
+                ReportIllegalSymbol(node, symInfo);
             }
         }
         public override void VisitConditionalAccessExpression(ConditionalAccessExpressionSyntax node)
@@ -425,16 +424,9 @@ namespace RoslynTool.CsToLua
                 var symInfo = m_Model.GetSymbolInfo(node.WhenNotNull);
                 var sym = symInfo.Symbol;
                 var psym = sym as IPropertySymbol;
-                if (null != sym) {
+                if (null != sym && sym.IsStatic) {
                     var ci = m_ClassInfoStack.Peek();
-                    ci.AddReference(sym, ci.SemanticInfo);
-                    TryDeriveGenericTypeInstance(sym);
-                } else if (null != oper) {
-                    var ci = m_ClassInfoStack.Peek();
-                    ci.AddReference(oper.Type, ci.SemanticInfo);
-                    TryDeriveGenericTypeInstance(oper.Type);
-                } else {
-                    ReportIllegalSymbol(node, symInfo);
+                    AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
                 }
                 if (null != psym && psym.IsIndexer) {
                     CodeBuilder.Append("(function() return ");
@@ -480,6 +472,8 @@ namespace RoslynTool.CsToLua
                     VisitExpressionSyntax(node.WhenNotNull);
                     CodeBuilder.Append(")");
                     CodeBuilder.Append("; end)");
+                } else {
+                    ReportIllegalSymbol(node, symInfo);
                 }
             } else {
                 CodeBuilder.Append("(function() return ");
@@ -612,8 +606,7 @@ namespace RoslynTool.CsToLua
                 //处理ref/out参数
                 InvocationInfo ii = new InvocationInfo();
                 ii.Init(sym, node.ArgumentList, m_Model);
-                ci.AddReference(sym, ci.SemanticInfo);
-                TryDeriveGenericTypeInstance(sym);
+                AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
 
                 bool isCollection = IsImplementationOfSys(typeSymInfo, "ICollection");
                 bool isExternal = typeSymInfo.ContainingAssembly != m_SymbolTable.AssemblySymbol;
@@ -718,6 +711,8 @@ namespace RoslynTool.CsToLua
                             CodeBuilder.Append("return ");
                         }
                         if (msym.IsStatic) {
+                            AddReferenceAndTryDeriveGenericTypeInstance(ci, msym);
+
                             string className = ClassInfo.GetFullName(msym.ContainingType);
                             CodeBuilder.Append(className);
                             CodeBuilder.Append(".");

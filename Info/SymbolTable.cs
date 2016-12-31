@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Text;
 using Microsoft.CodeAnalysis;
@@ -38,6 +39,34 @@ namespace RoslynTool.CsToLua
         internal Dictionary<string, INamedTypeSymbol> GenericTypeInstances
         {
             get { return m_GenericTypeInstances; }
+        }
+        internal List<ITypeParameterSymbol> TypeParameters
+        {
+            get { return m_TypeParameters; }
+        }
+        internal List<ITypeSymbol> TypeArguments
+        {
+            get { return m_TypeArguments; }
+        }
+        internal void SetTypeParamsAndArgs(List<ITypeParameterSymbol> typeParams, List<ITypeSymbol> typeArgs, INamedTypeSymbol refType)
+        {
+            m_TypeParameters.Clear();
+            m_TypeArguments.Clear();
+            m_TypeParameters.AddRange(typeParams);
+            m_TypeArguments.AddRange(typeArgs);
+            MergeTypeParamsAndArgs(m_TypeParameters, m_TypeArguments, refType);
+        }
+        internal ITypeSymbol FindTypeArgument(ITypeSymbol sym)
+        {
+            ITypeSymbol ret = sym;
+            var refType = sym as ITypeParameterSymbol;
+            if (null != refType) {
+                int ix = IndexOfTypeParameter(m_TypeParameters, refType);
+                if (ix >= 0) {
+                    ret = m_TypeArguments[ix];
+                }
+            }
+            return ret;
         }
         internal void Init(CSharpCompilation compilation)
         {
@@ -145,6 +174,9 @@ namespace RoslynTool.CsToLua
         private Dictionary<string, List<SyntaxNode>> m_GenericTypeDefines = new Dictionary<string, List<SyntaxNode>>();
         private Dictionary<string, INamedTypeSymbol> m_GenericTypeInstances = new Dictionary<string, INamedTypeSymbol>();
 
+        private List<ITypeParameterSymbol> m_TypeParameters = new List<ITypeParameterSymbol>();
+        private List<ITypeSymbol> m_TypeArguments = new List<ITypeSymbol>();
+        
         internal static SymbolTable Instance
         {
             get
@@ -153,7 +185,50 @@ namespace RoslynTool.CsToLua
             }
         }
         private static SymbolTable s_Instance = new SymbolTable();
-
+        
+        internal static void MergeTypeParamsAndArgs(List<ITypeParameterSymbol> tParams, List<ITypeSymbol> tArgs, INamedTypeSymbol refType)
+        {
+            var typeParams = refType.TypeParameters;
+            var typeArgs = refType.TypeArguments;
+            for (int i = 0; i < typeParams.Length && i < typeArgs.Length; ++i) {
+                var t1 = typeParams[i];
+                var t2 = typeArgs[i];
+                int ix = IndexOfTypeParameter(tParams, t1);
+                if (t2.TypeKind != TypeKind.TypeParameter) {
+                    if (ix < 0) {
+                        tParams.Add(t1);
+                        tArgs.Add(t2);
+                    } else {
+                        tArgs[ix] = t2;
+                    }
+                } else {
+                    int ix2 = IndexOfTypeParameter(tParams, t2);
+                    if (ix < 0) {
+                        if (ix2 >= 0) {
+                            tParams.Add(t1);
+                            tArgs.Add(tArgs[ix2]);
+                        }
+                    } else {
+                        if (ix2 >= 0) {
+                            tArgs[ix] = tArgs[ix2];
+                        }
+                    }
+                }
+            }
+            if (null != refType.ContainingType) {
+                MergeTypeParamsAndArgs(tParams, tArgs, refType.ContainingType);
+            }
+        }
+        internal static int IndexOfTypeParameter(List<ITypeParameterSymbol> tParams, ITypeSymbol t)
+        {
+            string name = ClassInfo.GetFullNameWithTypeParameters(t);
+            for (int i = 0; i < tParams.Count; ++i) {
+                if (name == ClassInfo.GetFullNameWithTypeParameters(tParams[i])) {
+                    return i;
+                }
+            }
+            return -1;
+        }
         internal static string CalcMethodMangling(IMethodSymbol methodSym, IAssemblySymbol assemblySym)
         {
             if (null == methodSym)
