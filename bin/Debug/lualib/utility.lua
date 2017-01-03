@@ -359,7 +359,7 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="ToArray" then
     return function(obj)
-      local ret = {};
+      local ret = wraparray{};
       for k,v in pairs(obj) do
         ret[k]=v;
       end;
@@ -427,14 +427,14 @@ __mt_index_of_dictionary = function(t, k)
       return false, nil;
     end;
   elseif k=="Keys" then
-    local ret = {};
+    local ret = wraparray{};
     for k,v in pairs(t) do
       k = __wrap_if_string(k);
       table.insert(ret, k);
     end;
     return ret;
   elseif k=="Values" then
-    local ret = {};
+    local ret = wraparray{};
     for k,v in pairs(t) do
       table.insert(ret, v.value);
     end;
