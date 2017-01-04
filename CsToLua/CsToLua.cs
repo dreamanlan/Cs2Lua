@@ -510,7 +510,7 @@ namespace RoslynTool.CsToLua
         {
             var ci = m_ClassInfoStack.Peek();
             CodeBuilder.AppendFormat("{0}delegationcomparewithnil(", isCs2LuaAssembly ? string.Empty : "extern");
-            if (null!=leftSym && leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event) {
+            if (null != leftSym && (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event)) {
                 var memberAccess = left as MemberAccessExpressionSyntax;
                 if (null != memberAccess) {
                     VisitExpressionSyntax(memberAccess.Expression);
