@@ -71,6 +71,8 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.Append(")");
                 } else if (op == "+") {
                     ProcessAddOrStringConcat(node.Left, node.Right);
+                } else if (op == "==" || op == "~=") {
+                    ProcessEqualOrNotEqual(op, node.Left, node.Right);
                 } else {
                     CodeBuilder.Append("(");
                     VisitExpressionSyntax(node.Left);

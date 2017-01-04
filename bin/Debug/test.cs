@@ -403,6 +403,15 @@ namespace TopLevel
                 TestStruct ts3;
                 ts3=ts;
                 TestValueArg(ts);
+
+                if(OnSimple!=null){
+                    OnSimple();
+                }
+
+                var f = OnSimple;
+                if(null!=f){
+                    f();
+                }
             }
 
             private int TestLocal(out int v)

@@ -359,7 +359,7 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="ToArray" then
     return function(obj)
-      local ret = {};
+      local ret = wraparray{};
       for k,v in pairs(obj) do
         ret[k]=v;
       end;
@@ -427,14 +427,14 @@ __mt_index_of_dictionary = function(t, k)
       return false, nil;
     end;
   elseif k=="Keys" then
-    local ret = {};
+    local ret = wraparray{};
     for k,v in pairs(t) do
       k = __wrap_if_string(k);
       table.insert(ret, k);
     end;
     return ret;
   elseif k=="Values" then
-    local ret = {};
+    local ret = wraparray{};
     for k,v in pairs(t) do
       table.insert(ret, v.value);
     end;
@@ -497,13 +497,14 @@ __mt_index_of_hashset = function(t, k)
 end;
 
 __mt_delegation = {
+  __is_delegation = true,
   __call = function(t, ...)
     for k,v in pairs(t) do
       if v then
         v(...);
       end;
     end;
-  end;
+  end,
 };
 
 function GetArrayEnumerator(tb)
@@ -701,10 +702,12 @@ function defineclass(base, className, static, static_methods, static_fields_buil
     
     setmetatable(class, {
         __call = function()
-        		local baseObj = nil;
-        		if mt then
-        			baseObj = mt.__call();
-        		end;
+      			local baseObj = nil;
+      			if base_class == UnityEngine.MonoBehaviour then
+      				baseObj = nil;
+      			elseif mt then
+      				baseObj = mt.__call();
+      			end;
             local obj = {};
 						for k,v in pairs(instance_methods) do
 							obj[k] = v;
@@ -789,11 +792,14 @@ function defineclass(base, className, static, static_methods, static_fields_buil
                         return;
                       end;
                     end;
-                    if not baseObj or not pcall(function() baseObj[k] = v end) then
-                        rawset(t, k, v);
-                    end;
+          					if not baseObj or not baseObj[k] or not pcall(function() baseObj[k] = v end) then
+          						rawset(t, k, v);
+          					end;
                 end,
-                
+				
+        				__setbase = function(self, base)
+        					baseObj = base;
+        				end,              
             });
 
             return obj;
@@ -854,18 +860,20 @@ end;
 
 function newexternobject(class, className, ctor, doextension, initializer, ...)
   local obj = nil;
-  if class then
+  if class ~= nil then
     obj = class(...);
   else
     obj = Slua.CreateClass(className, ...);
   end;
   if obj then
-    if doextension then
+    if doextension ~= nil then
       doextension();
     end;
-    for k,v in pairs(initializer) do
-      obj[k] = v;
-    end;
+	if initializer ~= nil then	
+		for k,v in pairs(initializer) do
+		  obj[k] = v;
+		end;
+	end	
     return obj;
   else
     return nil;
@@ -927,9 +935,28 @@ function newexterncollection(t, className, ctor, doextension, coll, ...)
 end;
 
 function delegationwrap(handler)
-  return wrapdelegation{ handler };
+  local meta = getmetatable(handler);
+  if meta and meta.__is_delegation then
+    return handler;
+  else
+    return wrapdelegation{ handler };
+  end;
 end;
 
+function delegationcomparewithnil(t, inf, k, isequal)
+  local v = t;
+  if k then
+    v = t[k];  
+  end;
+  local n = table.maxn(t[k]);
+  if isequal and n==0 then
+    return true;
+  elseif not isqual and n>0 then
+    return true;
+  else
+    return false;
+  end;
+end;
 function delegationset(t, intf, k, handler)
   local v = t;
   if k then
@@ -967,6 +994,19 @@ function delegationremove(t, intf, k, handler)
   end;
 end;
 
+function externdelegationcomparewithnil(t, inf, k, isequal)
+  local v = t;
+  if k then
+    v = t[k];
+  end;
+  if isequal and not v then
+    return true;
+  elseif not isequal and v then
+    return true;
+  else
+    return false;
+  end;
+end;
 function externdelegationset(t, intf, k, handler)
   if k then
     t[k] = handler;

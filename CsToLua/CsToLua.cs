@@ -485,6 +485,52 @@ namespace RoslynTool.CsToLua
                 VisitExpressionSyntax(right);
                 CodeBuilder.Append(")");
             }
+        }        
+        private void ProcessEqualOrNotEqual(string op, ExpressionSyntax left, ExpressionSyntax right)
+        {
+            var leftOper = m_Model.GetOperation(left);
+            var rightOper = m_Model.GetOperation(right);
+            if (null != leftOper.Type && leftOper.Type.TypeKind == TypeKind.Delegate && (!leftOper.ConstantValue.HasValue || null != leftOper.ConstantValue.Value) && rightOper.ConstantValue.HasValue && rightOper.ConstantValue.Value == null) {
+                var leftAssembly = leftOper.Type.ContainingAssembly;
+                var sym = m_Model.GetSymbolInfo(left);
+                OutputDelegationCompareWithNull(sym.Symbol, left, leftAssembly == m_SymbolTable.AssemblySymbol, op == "==");
+            } else if (null!=rightOper.Type && rightOper.Type.TypeKind == TypeKind.Delegate && (!rightOper.ConstantValue.HasValue || null != rightOper.ConstantValue.Value) && leftOper.ConstantValue.HasValue && leftOper.ConstantValue.Value == null) {
+                var rightAssembly = rightOper.Type.ContainingAssembly;
+                var sym = m_Model.GetSymbolInfo(right);
+                OutputDelegationCompareWithNull(sym.Symbol, right, rightAssembly == m_SymbolTable.AssemblySymbol, op == "==");
+            } else {
+                CodeBuilder.Append("(");
+                VisitExpressionSyntax(left);
+                CodeBuilder.AppendFormat(" {0} ", op);
+                VisitExpressionSyntax(right);
+                CodeBuilder.Append(")");
+            }
+        }
+        private void OutputDelegationCompareWithNull(ISymbol leftSym, ExpressionSyntax left, bool isCs2LuaAssembly, bool isEqual)
+        {
+            var ci = m_ClassInfoStack.Peek();
+            CodeBuilder.AppendFormat("{0}delegationcomparewithnil(", isCs2LuaAssembly ? string.Empty : "extern");
+            if (null!=leftSym && leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event) {
+                var memberAccess = left as MemberAccessExpressionSyntax;
+                if (null != memberAccess) {
+                    VisitExpressionSyntax(memberAccess.Expression);
+                    CodeBuilder.Append(", ");
+                    string intf = "nil";
+                    string mname = string.Format("\"{0}\"", memberAccess.Name.Identifier.Text);
+                    CheckExplicitInterfaceAccess(leftSym, ref intf, ref mname);
+                    CodeBuilder.AppendFormat("{0}, {1}", intf, mname);
+                } else if (leftSym.ContainingType == ci.SemanticInfo || ci.IsInherit(leftSym.ContainingType)) {
+                    CodeBuilder.Append("this, nil, ");
+                    CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
+                } else {
+                    VisitExpressionSyntax(left);
+                    CodeBuilder.Append(", nil, nil");
+                }
+            } else {
+                VisitExpressionSyntax(left);
+                CodeBuilder.Append(", nil, nil");
+            }
+            CodeBuilder.AppendFormat(", {0})", isEqual ? "true" : "false");
         }
         private void AddToplevelClass(string key, ClassInfo ci)
         {

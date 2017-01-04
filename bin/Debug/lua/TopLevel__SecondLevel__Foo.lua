@@ -130,6 +130,13 @@ TopLevel.SecondLevel.Foo = {
 				ts3 = ts;
 				ts3 = wrapvaluetype(ts3);
 				this:TestValueArg(ts);
+				if delegationcomparewithnil(this, nil, "OnSimple", false) then
+					this.OnSimple();
+				end;
+				local f; f = delegationwrap(this.OnSimple);
+				if delegationcomparewithnil(f, nil, nil, false) then
+					f();
+				end;
 			end,
 			TestLocal = function(this)
 				local v = nil;
@@ -160,10 +167,10 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			TestSwitch = function(this)
 				local i; i = 10;
-				local __compiler_switch_433 = i;
-				if __compiler_switch_433 == 1 then
+				local __compiler_switch_442 = i;
+				if __compiler_switch_442 == 1 then
 					return ;
-				elseif __compiler_switch_433 == 2 then
+				elseif __compiler_switch_442 == 2 then
 					return ;
 				else
 					return ;

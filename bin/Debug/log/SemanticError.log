@@ -1,15 +1,15 @@
 ============<<<Semantic Error:test>>>============
 test.cs(26,17): error CS0619: 'GameObject.renderer' is obsolete: 'Property renderer has been deprecated. Use GetComponent<Renderer>() instead. (UnityUpgradable)'
 test.cs(31,16): error CS0128: A local variable named 's' is already defined in this scope
-test.cs(463,59): error CS1501: No overload for method 'Add' takes 2 arguments
-test.cs(463,69): error CS1501: No overload for method 'Add' takes 2 arguments
+test.cs(472,59): error CS1501: No overload for method 'Add' takes 2 arguments
+test.cs(472,69): error CS1501: No overload for method 'Add' takes 2 arguments
 test.cs(226,27): error CS0413: The type parameter 'T' cannot be used with the 'as' operator because it does not have a class type constraint nor a 'class' constraint
 test.cs(227,23): error CS0128: A local variable named 'v' is already defined in this scope
 test.cs(237,29): error CS0030: Cannot convert type 'T' to 'TT'
 test.cs(363,17): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
 test.cs(364,21): error CS0266: Cannot implicitly convert type 'int?' to 'int'. An explicit conversion exists (are you missing a cast?)
-test.cs(491,27): error CS0039: Cannot convert type 'int' to 'TopLevel.SecondLevel.Foo' via a reference conversion, boxing conversion, unboxing conversion, wrapping conversion, or null type conversion
-test.cs(502,26): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
-test.cs(505,17): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
-test.cs(410,17): error CS0305: Using the generic type 'IRunnable<T>' requires 1 type arguments
-test.cs(415,25): error CS0161: 'Foo.TestValueArg(TestStruct)': not all code paths return a value
+test.cs(500,27): error CS0039: Cannot convert type 'int' to 'TopLevel.SecondLevel.Foo' via a reference conversion, boxing conversion, unboxing conversion, wrapping conversion, or null type conversion
+test.cs(511,26): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
+test.cs(514,17): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
+test.cs(419,17): error CS0305: Using the generic type 'IRunnable<T>' requires 1 type arguments
+test.cs(424,25): error CS0161: 'Foo.TestValueArg(TestStruct)': not all code paths return a value
