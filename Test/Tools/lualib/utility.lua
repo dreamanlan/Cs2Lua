@@ -366,9 +366,11 @@ __mt_index_of_array = function(t, k)
       return ret;
     end;
   elseif k=="Clear" then
-  	while table.maxn(t)>0 do
-  		table.remove(t);
-  	end;	  	
+    return function(obj)
+    	while table.maxn(t)>0 do
+    		table.remove(t);
+    	end;
+    end;
   elseif k=="GetEnumerator" then
     return function(obj)
       return GetArrayEnumerator(obj);
