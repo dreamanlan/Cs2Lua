@@ -209,7 +209,7 @@ function __dec_table_count(tb)
   local meta = getmetatable(tb);
   if meta then
   	if meta.__count > 0 then
-    	meta.__count = count - 1;    
+    	meta.__count = meta.__count - 1;    
     else
     	meta.__count = __calc_table_count(tb);
     end;
@@ -1085,7 +1085,11 @@ function setexterninstanceindexer(obj, intf, name, ...)
     if meta.__class == System.Collections.Generic.List_T then
       obj[index+1] = val;
     elseif meta.__class == System.Collections.Generic.Dictionary_TKey_TValue then      
-      obj[index] = { value=val };
+      if obj[index] then
+        obj[index] = { value=val };
+      else
+        obj:Add(val);
+      end;
     elseif meta.__typename == "LuaArray" then
     	obj[index+1] = val;
     elseif meta.__typename == "LuaVarObject" then
