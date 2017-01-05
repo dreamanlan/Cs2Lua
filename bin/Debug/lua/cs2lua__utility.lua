@@ -946,6 +946,13 @@ function delegationwrap(handler)
 end;
 
 function delegationcomparewithnil(t, inf, k, isequal)
+  if not t then
+    if isequal then 
+      return true;
+    else
+      return false;
+    end;
+  end;
   local v = t;
   if k then
     v = t[k];  
