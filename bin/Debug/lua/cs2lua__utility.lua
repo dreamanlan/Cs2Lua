@@ -1090,7 +1090,7 @@ function setexterninstanceindexer(obj, intf, name, ...)
       if obj[index] then
         obj[index] = { value=val };
       else
-        obj:Add(val);
+        obj:Add(index, val);
       end;
     elseif meta.__typename == "LuaArray" then
     	obj[index+1] = val;

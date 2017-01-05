@@ -12,8 +12,8 @@ print("count",dict.Count);
 local b,r = dict:TryGetValue(3);
 print(b,r);
 
-setexterninstanceindexer(dict, System.Collections.Generic.Dictionary_TKey_TValue, "Item", 3, 2);
-setexterninstanceindexer(dict, System.Collections.Generic.Dictionary_TKey_TValue, "Item", 7, 8);
+setexterninstanceindexer(dict, nil, "set_Item", 3, 2);
+setexterninstanceindexer(dict, nil, "set_Item", 7, 8);
 
 print("count",dict.Count);
 
@@ -23,6 +23,20 @@ print(b,r);
 b,r = dict:TryGetValue(2);
 print(b,r);
 
+r = getexterninstanceindexer(dict, nil, "get_Item", 3);
+print(r);
+
+r = getexterninstanceindexer(dict, nil, "get_Item", 7);
+print(r);
+
 local arr = wraparray{};
+arr:Add(1);
+arr:Add(2);
+arr:Add(3);
+
+print("array size", arr.Length);
+
+arr:Remove(3);
+print("array size", arr.Length);
 
 arr:Clear();
