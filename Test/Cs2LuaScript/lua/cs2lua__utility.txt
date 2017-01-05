@@ -209,7 +209,7 @@ function __dec_table_count(tb)
   local meta = getmetatable(tb);
   if meta then
   	if meta.__count > 0 then
-    	meta.__count = count - 1;    
+    	meta.__count = meta.__count - 1;    
     else
     	meta.__count = __calc_table_count(tb);
     end;
@@ -366,9 +366,11 @@ __mt_index_of_array = function(t, k)
       return ret;
     end;
   elseif k=="Clear" then
-  	while table.maxn(t)>0 do
-  		table.remove(t);
-  	end;	  	
+    return function(obj)
+    	while table.maxn(obj)>0 do
+    		table.remove(obj);
+    	end;
+    end;
   elseif k=="GetEnumerator" then
     return function(obj)
       return GetArrayEnumerator(obj);
@@ -944,6 +946,13 @@ function delegationwrap(handler)
 end;
 
 function delegationcomparewithnil(t, inf, k, isequal)
+  if not t then
+    if isequal then 
+      return true;
+    else
+      return false;
+    end;
+  end;
   local v = t;
   if k then
     v = t[k];  
@@ -1085,7 +1094,11 @@ function setexterninstanceindexer(obj, intf, name, ...)
     if meta.__class == System.Collections.Generic.List_T then
       obj[index+1] = val;
     elseif meta.__class == System.Collections.Generic.Dictionary_TKey_TValue then      
-      obj[index] = { value=val };
+      if obj[index] then
+        obj[index] = { value=val };
+      else
+        obj:Add(index, val);
+      end;
     elseif meta.__typename == "LuaArray" then
     	obj[index+1] = val;
     elseif meta.__typename == "LuaVarObject" then
@@ -1180,7 +1193,10 @@ end;
 function invokeforbasicvalue(obj, intf, method, ...)
 	local args = {...};
 	local meta = getmetatable(obj);
-	if meta then
+	if type(obj)=="string" then
+	  local csstr = System.String(obj);
+	  return csstr[method](csstr,...);
+	elseif meta then
 		return obj[method](obj,...);
 	elseif method=="CompareTo" then
 	  return obj==args[1];
@@ -1191,7 +1207,10 @@ function invokeforbasicvalue(obj, intf, method, ...)
 end;
 function getforbasicvalue(obj, intf, property)
 	local meta = getmetatable(obj);
-	if meta then
+	if type(obj)=="string" then
+	  local csstr = System.String(obj);
+	  return csstr[property];
+	elseif meta then
 		return obj[property];
 	else
 		return obj[property];
@@ -1200,7 +1219,10 @@ function getforbasicvalue(obj, intf, property)
 end;
 function setforbasicvalue(obj, intf, property, value)
 	local meta = getmetatable(obj);
-	if meta then
+	if type(obj)=="string" then
+	  local csstr = System.String(obj);
+	  csstr[property]=value;
+	elseif meta then
 		obj[property]=value;
 	else
 		obj[property]=value;

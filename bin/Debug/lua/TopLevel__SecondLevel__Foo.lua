@@ -167,10 +167,10 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			TestSwitch = function(this)
 				local i; i = 10;
-				local __compiler_switch_442 = i;
-				if __compiler_switch_442 == 1 then
+				local __compiler_switch_444 = i;
+				if __compiler_switch_444 == 1 then
 					return ;
-				elseif __compiler_switch_442 == 2 then
+				elseif __compiler_switch_444 == 2 then
 					return ;
 				else
 					return ;

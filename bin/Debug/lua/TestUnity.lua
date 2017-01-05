@@ -37,6 +37,8 @@ TestUnity = {
 				local s; s = invokeforbasicvalue(v, System.Boolean, "ToString");
 				local i; i = 123;
 				local s; s = invokeforbasicvalue(i, System.Int32, "ToString");
+				local i; i = invokeforbasicvalue(s, System.String, "IndexOf", wrapchar('2', 0x032));
+				LuaConsole.Print(i);
 			end,
 			ctor = function(this)
 			end,

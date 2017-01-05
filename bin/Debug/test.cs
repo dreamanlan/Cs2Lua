@@ -28,7 +28,9 @@ class TestUnity : MonoBehaviour
         bool v = true;
         string s = v.ToString();
         int i = 123;
-        string s = i.ToString();        
+        string s = i.ToString();     
+        int i = s.IndexOf('2');
+        LuaConsole.Print(i);
     }
 }
 

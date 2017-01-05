@@ -1195,6 +1195,9 @@ function invokeforbasicvalue(obj, intf, method, ...)
 	local meta = getmetatable(obj);
 	if meta then
 		return obj[method](obj,...);
+	elseif type(obj)=="string" then
+	  local csstr = System.String(obj);
+	  return csstr[method](csstr,...);
 	elseif method=="CompareTo" then
 	  return obj==args[1];
 	elseif method=="ToString" then
@@ -1206,6 +1209,9 @@ function getforbasicvalue(obj, intf, property)
 	local meta = getmetatable(obj);
 	if meta then
 		return obj[property];
+	elseif type(obj)=="string" then
+	  local csstr = System.String(obj);
+	  return csstr[property];
 	else
 		return obj[property];
 	end;
@@ -1215,6 +1221,9 @@ function setforbasicvalue(obj, intf, property, value)
 	local meta = getmetatable(obj);
 	if meta then
 		obj[property]=value;
+	elseif type(obj)=="string" then
+	  local csstr = System.String(obj);
+	  csstr[property]=value;
 	else
 		obj[property]=value;
 	end;

@@ -52,7 +52,7 @@ Extentions = {
 				return child;
 			end,
 			searchChildRecursively = function(transform, childName, maxDepth)
-				if (transform.name:IndexOf(childName) ~= -1) then
+				if (invokeforbasicvalue(transform.name, System.String, "IndexOf", childName) ~= -1) then
 					return transform;
 				end;
 				local count; count = transform.childCount;
