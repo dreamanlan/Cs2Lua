@@ -367,8 +367,8 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="Clear" then
     return function(obj)
-    	while table.maxn(t)>0 do
-    		table.remove(t);
+    	while table.maxn(obj)>0 do
+    		table.remove(obj);
     	end;
     end;
   elseif k=="GetEnumerator" then

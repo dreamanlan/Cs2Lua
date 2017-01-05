@@ -22,3 +22,7 @@ print(b,r);
 
 b,r = dict:TryGetValue(2);
 print(b,r);
+
+local list = wraplist{};
+
+list:Clear();
