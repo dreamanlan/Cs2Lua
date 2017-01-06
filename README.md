@@ -358,7 +358,9 @@ end
 ***这种转换方法能适应unity3d的GetComponent方法
 
 GetComponent<T>() => GetCompoent(Type)
-  
+
+3、为与Slua及dotnet reflection调用的机制一致，函数的out参数在调用时传入实参__cs2lua_out（使用Slua时此值为Slua.out否则为一空表）。
+  
 【用法】
 
 1、建立一个C#工程，引用Cs2LuaUtility.dll。
