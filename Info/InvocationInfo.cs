@@ -41,10 +41,8 @@ namespace RoslynTool.CsToLua
                             Args.Add(arg.Expression);
                             ReturnArgs.Add(arg.Expression);
                         } else if (param.RefKind == RefKind.Out) {
-                            if (sym.ContainingAssembly != assemblySym && SymbolTable.ForSlua) {
-                                //外部类的方法的out参数,slua在调用时传入Slua.out,这里用null标记一下，在实际输出参数时再变为Slua.out
-                                Args.Add(null);
-                            }
+                            //方法的out参数，为与Slua的机制一致，在调用时传入__cs2lua_out，这里用null标记一下，在实际输出参数时再变为__cs2lua_out
+                            Args.Add(null);
                             ReturnArgs.Add(arg.Expression);
                         } else if (param.IsParams) {
                             var argOper = model.GetOperation(arg.Expression);
@@ -79,10 +77,8 @@ namespace RoslynTool.CsToLua
                             Args.Add(arg.Expression);
                             ReturnArgs.Add(arg.Expression);
                         } else if (param.RefKind == RefKind.Out) {
-                            if (sym.ContainingAssembly != assemblySym && SymbolTable.ForSlua) {
-                                //外部类的方法的out参数,slua在调用时传入Slua.out,这里用null标记一下，在实际输出参数时再变为Slua.out
-                                Args.Add(null);
-                            }
+                            //方法的out参数，为与Slua的机制一致，在调用时传入__cs2lua_out，这里用null标记一下，在实际输出参数时再变为__cs2lua_out
+                            Args.Add(null);
                             ReturnArgs.Add(arg.Expression);
                         } else if (param.IsParams) {
                             var argOper = model.GetOperation(arg.Expression);

@@ -118,7 +118,7 @@ TopLevel.SecondLevel.Foo = {
 				t:Test(System.Int32, 123);
 				t:Test2(System.Int32, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
 				local v;
-				local vv; vv, v = this:TestLocal();
+				local vv; vv, v = this:TestLocal(__cs2lua_out);
 				local ts; ts = newobject(TopLevel.TestStruct, "ctor", {});
 				ts = wrapvaluetype(ts);
 				ts.A = 1;
@@ -138,8 +138,7 @@ TopLevel.SecondLevel.Foo = {
 					f();
 				end;
 			end,
-			TestLocal = function(this)
-				local v = nil;
+			TestLocal = function(this, v)
 				local ir; ir = newobject(TopLevel.Runnable, "ctor", {});
 								v = 1;
 				return 2, v;
@@ -198,7 +197,7 @@ TopLevel.SecondLevel.Foo = {
 				OnSimple2 = wrapdelegation{},
 				m_Test = 0,
 				m_Test2 = 0,
-				m_TS = __nil_table_field,
+				m_TS = __cs2lua_nil_field_value,
 				m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, "System.Collections.Generic.HashSet_T", "ctor", nil, {wrapstring("one"), wrapstring("two"), wrapstring("three")}),
 				__attributes = TopLevel__SecondLevel__Foo__Attrs,
 				__ctor_called = false,

@@ -65,12 +65,10 @@ namespace RoslynTool.CsToLua
                     OriginalParamsName = param.Name;
                     //遇到变参直接结束（变参set_Item会出现后面带一个value参数的情形，在函数实现里处理）
                     break;
-                } else if (param.RefKind == RefKind.Ref) {
+                } else if (param.RefKind == RefKind.Ref || param.RefKind == RefKind.Out) {
+                    //ref参数与out参数在形参处理时机制相同，实参时out参数传入__cs2lua_out（适应slua与dotnet反射的调用规则）
                     ParamNames.Add(param.Name);
                     RefParamNames.Add(param.Name);
-                    ReturnParamNames.Add(param.Name);
-                } else if (param.RefKind == RefKind.Out) {
-                    OutParamNames.Add(param.Name);
                     ReturnParamNames.Add(param.Name);
                 } else {
                     if (param.Type.TypeKind == TypeKind.Struct) {

@@ -304,7 +304,7 @@ namespace RoslynTool.CsToLua
                             bool createSelf = m_SymbolTable.IsFieldCreateSelf(fieldSym);
                             if (useExplicitTypeParam || createSelf) {
                                 CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
-                                CodeBuilder.AppendLine(" = __nil_table_field,");
+                                CodeBuilder.AppendLine(" = __cs2lua_nil_field_value,");
                                 if (isStatic) {
                                     ci.CurrentCodeBuilder = ci.StaticInitializerCodeBuilder;
                                 } else {
@@ -343,7 +343,7 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
                         CodeBuilder.Append(" = wrapdelegation{}");
                     } else {
-                        CodeBuilder.AppendFormat("{0}{1} = __nil_table_field", GetIndentString(), name);
+                        CodeBuilder.AppendFormat("{0}{1} = __cs2lua_nil_field_value", GetIndentString(), name);
                     }
                     CodeBuilder.Append(",");
                     CodeBuilder.AppendLine();

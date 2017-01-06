@@ -26,7 +26,7 @@ TopLevel.Singleton_TopLevel_SecondLevel_Foo = {
 
 		local static_fields_build = function()
 			local static_fields = {
-				ms_instance = __nil_table_field,
+				ms_instance = __cs2lua_nil_field_value,
 			};
 			return static_fields;
 		end;

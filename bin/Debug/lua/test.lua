@@ -40,3 +40,10 @@ arr:Remove(3);
 print("array size", arr.Length);
 
 arr:Clear();
+
+local abc = "abcdef";
+local meta = getmetatable(abc);
+print(type(abc), meta);
+for k,v in pairs(meta) do
+  print(k,v);
+end;

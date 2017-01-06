@@ -27,6 +27,9 @@ System.Collections.Generic.Stack_T = {};
 System.Collections.Generic.Dictionary_TKey_TValue = {};
 System.Collections.Generic.HashSet_T = {};
 
+__cs2lua_out = (Slua and Slua.out) or {};
+__cs2lua_nil_field_value = {};
+
 function lshift(v,n)
   if bit then
     return bit.lshift(v,n);
@@ -230,18 +233,16 @@ function __clear_table(tb)
   end;
 end;
 
-__nil_table_field = {};
-
 function __wrap_table_field(v)
 	if nil==v then
-		return __nil_table_field;
+		return __cs2lua_nil_field_value;
 	else
 		return v;
 	end;
 end;
 
 function __unwrap_table_field(v)
-	if __nil_table_field==v then
+	if __cs2lua_nil_field_value==v then
 		return nil;
 	else
 		return v;
@@ -1193,11 +1194,11 @@ end;
 function invokeforbasicvalue(obj, intf, method, ...)
 	local args = {...};
 	local meta = getmetatable(obj);
-	if meta then
-		return obj[method](obj,...);
-	elseif type(obj)=="string" then
+	if type(obj)=="string" then
 	  local csstr = System.String(obj);
 	  return csstr[method](csstr,...);
+	elseif meta then
+		return obj[method](obj,...);
 	elseif method=="CompareTo" then
 	  return obj==args[1];
 	elseif method=="ToString" then
@@ -1207,11 +1208,11 @@ function invokeforbasicvalue(obj, intf, method, ...)
 end;
 function getforbasicvalue(obj, intf, property)
 	local meta = getmetatable(obj);
-	if meta then
-		return obj[property];
-	elseif type(obj)=="string" then
+	if type(obj)=="string" then
 	  local csstr = System.String(obj);
 	  return csstr[property];
+	elseif meta then
+		return obj[property];
 	else
 		return obj[property];
 	end;
@@ -1219,11 +1220,11 @@ function getforbasicvalue(obj, intf, property)
 end;
 function setforbasicvalue(obj, intf, property, value)
 	local meta = getmetatable(obj);
-	if meta then
-		obj[property]=value;
-	elseif type(obj)=="string" then
+	if type(obj)=="string" then
 	  local csstr = System.String(obj);
 	  csstr[property]=value;
+	elseif meta then
+		obj[property]=value;
 	else
 		obj[property]=value;
 	end;

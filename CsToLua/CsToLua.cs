@@ -269,13 +269,9 @@ namespace RoslynTool.CsToLua
             int ct = args.Count;
             for (int i = 0; i < ct; ++i) {
                 var exp = args[i];
-                //表达式对象为空表明这个是一个slua的out实参，替换为Slua.out，这里为了容错，将非Slua情形为空换为lua的空
+                //表达式对象为空表明这个是一个out实参，替换为__cs2lua_out
                 if (null == exp) {
-                    if (SymbolTable.ForSlua) {
-                        CodeBuilder.Append("Slua.out");
-                    } else {
-                        CodeBuilder.Append("nil");
-                    }
+                    CodeBuilder.Append("__cs2lua_out");
                 } else if (i < ct - 1) {
                     VisitExpressionSyntax(exp);
                 } else {

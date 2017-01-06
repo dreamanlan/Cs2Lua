@@ -28,9 +28,9 @@ TopLevel.TestStruct = {
 
 		local instance_fields_build = function()
 			local instance_fields = {
-				A = __nil_table_field,
-				B = __nil_table_field,
-				C = __nil_table_field,
+				A = __cs2lua_nil_field_value,
+				B = __cs2lua_nil_field_value,
+				C = __cs2lua_nil_field_value,
 			};
 			return instance_fields;
 		end;
