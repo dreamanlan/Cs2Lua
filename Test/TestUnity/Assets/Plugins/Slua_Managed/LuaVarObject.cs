@@ -192,7 +192,17 @@ namespace SLua
                 {
                     if (k + 1 > ps.Length)
                         break;
-                    args[k] = checkVar(l, n, ps[k].ParameterType);
+                    var p = ps[k];
+                    args[k] = checkVar(l, n, p.ParameterType);
+                    if (p.IsOut) {
+                        var t = p.ParameterType;
+                        if (t.IsByRef)
+                            t = t.GetElementType();
+                        if (t.IsValueType || t.IsPrimitive || t.IsEnum)
+                            args[k] = Convert.ChangeType(0, t);
+                        else
+                            args[k] = null;
+                    }
                 }
             }
         }

@@ -246,9 +246,10 @@ namespace RoslynTool.CsToLua
                     } else if (param.RefKind == RefKind.Out) {
                         sb.Append("Out_");
                     }
-                    if (param.Type.Kind == SymbolKind.ArrayType) {
+                    var oriparam = param.OriginalDefinition;
+                    if (oriparam.Type.Kind == SymbolKind.ArrayType) {
                         sb.Append("Arr_");
-                        var arrSym = param.Type as IArrayTypeSymbol;
+                        var arrSym = oriparam.Type as IArrayTypeSymbol;
                         string fn;
                         if (arrSym.ElementType.TypeKind == TypeKind.TypeParameter) {
                             fn = ClassInfo.GetFullNameWithTypeParameters(arrSym.ElementType);
@@ -256,11 +257,11 @@ namespace RoslynTool.CsToLua
                             fn = ClassInfo.GetFullName(arrSym.ElementType);
                         }
                         sb.Append(fn.Replace('.', '_'));
-                    } else if (param.Type.TypeKind == TypeKind.TypeParameter) {
-                        string fn = ClassInfo.GetFullNameWithTypeParameters(param.Type);
+                    } else if (oriparam.Type.TypeKind == TypeKind.TypeParameter) {
+                        string fn = ClassInfo.GetFullNameWithTypeParameters(oriparam.Type);
                         sb.Append(fn.Replace('.', '_'));
                     } else {
-                        string fn = ClassInfo.GetFullName(param.Type);
+                        string fn = ClassInfo.GetFullName(oriparam.Type);
                         sb.Append(fn.Replace('.', '_'));
                     }
                 }
