@@ -43,6 +43,4 @@ TopLevel.TestStruct = {
 	end,
 };
 
-
 TopLevel.TestStruct.__define_class();
-

@@ -1,6 +1,11 @@
 --remove comments for debug with ZeroBrane
 --require "luadebug";
 
+local rawrequire = require;
+require = function(file)  
+  return package.loaded[file] or rawrequire(file);
+end;
+
 function __basic_type_func(v)
 	return v;
 end;
@@ -26,6 +31,9 @@ System.Collections.Generic.Queue_T = {};
 System.Collections.Generic.Stack_T = {};
 System.Collections.Generic.Dictionary_TKey_TValue = {};
 System.Collections.Generic.HashSet_T = {};
+System.Array = System.Array or {};
+
+System.Collections.Generic.MyDictionary_TKey_TValue = System.Collections.Generic.Dictionary_TKey_TValue;
 
 __cs2lua_out = (Slua and Slua.out) or {};
 __cs2lua_nil_field_value = {};
@@ -909,7 +917,7 @@ end;
 
 function newcollection(t, ctor, coll, ...)
   if coll then
-    return setmetatable(dict, { __index = __mt_index_of_hashset, __class = t });
+    return setmetatable(coll, { __index = __mt_index_of_hashset, __class = t });
   end;
 end;
 
@@ -922,7 +930,7 @@ function newexterndictionary(t, className, ctor, doextension, dict, ...)
 end;
 
 function newexternlist(t, className, ctor, doextension, list, ...)
-  if list and (t==System.Collections.Generic.List_T or t==System.Collections.Generic.Queue_T or t==System.Collections.Generic.Stack_T) then    
+  if list and t==System.Collections.Generic.List_T then    
 	  return setmetatable(list, { __index = __mt_index_of_array, __class = t });
 	else
 	  return newexternobject(t, className, ctor, doextension, list, ...);
@@ -930,8 +938,10 @@ function newexternlist(t, className, ctor, doextension, list, ...)
 end;
 
 function newexterncollection(t, className, ctor, doextension, coll, ...)
-  if coll and t==System.Collections.Generic.HashSet_T then
-    return setmetatable(dict, { __index = __mt_index_of_hashset, __class = t });
+  if coll and (t==System.Collections.Generic.Queue_T or t==System.Collections.Generic.Stack_T) then
+    return setmetatable(coll, { __index = __mt_index_of_array, __class = t });
+  elseif coll and t==System.Collections.Generic.HashSet_T then
+    return setmetatable(coll, { __index = __mt_index_of_hashset, __class = t });
 	else
 	  return newexternobject(t, className, ctor, doextension, coll, ...);
   end;

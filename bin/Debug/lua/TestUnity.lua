@@ -58,6 +58,4 @@ TestUnity = {
 	end,
 };
 
-
 TestUnity.__define_class();
-

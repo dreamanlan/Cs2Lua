@@ -65,6 +65,4 @@ TopLevel.Singleton_TopLevel_SecondLevel_Foo = {
 	end,
 };
 
-
 TopLevel.Singleton_TopLevel_SecondLevel_Foo.__define_class();
-

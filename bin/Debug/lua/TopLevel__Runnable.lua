@@ -88,6 +88,4 @@ TopLevel.Runnable = {
 	end,
 };
 
-
 TopLevel.Runnable.__define_class();
-

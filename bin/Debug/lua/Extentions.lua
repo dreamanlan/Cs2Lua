@@ -108,10 +108,6 @@ Extentions = {
 		return defineclass(nil, "Extentions", static, static_methods, static_fields_build, static_props, static_events, nil, nil, nil, nil, nil, nil, false);
 	end,
 };
-
-
-Extentions.__define_class();
-
 --namespace UIDemo
 --{
 --    public class UICommonHeader : MonoBehaviour, IEventListener
@@ -283,3 +279,5 @@ Extentions.__define_class();
 --}
 --local obj = TopLevel.Child2.Bar:new();
 --obj:Test();
+
+Extentions.__define_class();

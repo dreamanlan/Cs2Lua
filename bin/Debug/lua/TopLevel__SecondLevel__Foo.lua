@@ -227,9 +227,6 @@ TopLevel.SecondLevel.Foo = {
 };
 
 
-TopLevel.SecondLevel.Foo.__define_class();
-
-
 TopLevel.SecondLevel.Foo.Test1 = {
 	__new_object = function(...)
 		return newobject(TopLevel.SecondLevel.Foo.Test1, nil, {}, ...);
@@ -269,9 +266,7 @@ TopLevel.SecondLevel.Foo.Test1 = {
 	end,
 };
 
-
 TopLevel.SecondLevel.Foo.Test1.__define_class();
-
 
 TopLevel.SecondLevel.Foo.Test2 = {
 	__new_object = function(...)
@@ -312,9 +307,7 @@ TopLevel.SecondLevel.Foo.Test2 = {
 	end,
 };
 
-
 TopLevel.SecondLevel.Foo.Test2.__define_class();
-
 
 TopLevel.SecondLevel.Foo.FooChild = {
 	__new_object = function(...)
@@ -357,6 +350,5 @@ TopLevel.SecondLevel.Foo.FooChild = {
 	end,
 };
 
-
 TopLevel.SecondLevel.Foo.FooChild.__define_class();
-
+TopLevel.SecondLevel.Foo.__define_class();

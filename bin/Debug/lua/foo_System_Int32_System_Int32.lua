@@ -44,6 +44,4 @@ foo_System_Int32_System_Int32 = {
 	end,
 };
 
-
 foo_System_Int32_System_Int32.__define_class();
-

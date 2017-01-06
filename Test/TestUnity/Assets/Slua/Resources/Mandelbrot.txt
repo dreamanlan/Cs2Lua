@@ -75,7 +75,7 @@ Mandelbrot = {
 
 		local instance_fields_build = function()
 			local instance_fields = {
-				root = nil,
+				root = __cs2lua_nil_field_value,
 				colors = wraparray{UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black},
 				r = 10,
 				scale = 3,
@@ -97,8 +97,6 @@ Mandelbrot = {
 		return defineclass(nil, "Mandelbrot", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
-
+--Mandelbrot.Exec();
 
 Mandelbrot.__define_class();
-
---Mandelbrot.Exec();

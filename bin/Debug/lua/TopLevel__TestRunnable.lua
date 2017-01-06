@@ -55,6 +55,4 @@ TopLevel.TestRunnable = {
 	end,
 };
 
-
 TopLevel.TestRunnable.__define_class();
-

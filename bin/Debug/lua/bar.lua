@@ -45,6 +45,4 @@ bar = {
 	end,
 };
 
-
 bar.__define_class();
-

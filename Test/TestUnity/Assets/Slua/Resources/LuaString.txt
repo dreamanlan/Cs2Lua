@@ -44,6 +44,4 @@ LuaString = {
 	end,
 };
 
-
 LuaString.__define_class();
-

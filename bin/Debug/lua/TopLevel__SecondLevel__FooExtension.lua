@@ -71,6 +71,4 @@ TopLevel.SecondLevel.FooExtension = {
 	end,
 };
 
-
 TopLevel.SecondLevel.FooExtension.__define_class();
-

@@ -287,9 +287,6 @@ namespace RoslynTool.CsToLua
                                 foreach (var ci in cis) {
                                     AddMergedClasses(toplevelClasses, ckey, ci);
                                 }
-
-                                string[] nss = ckey.Split('.');
-                                AddMergedNamespaces(toplevelMni, nss);
                             }
                         };
                         foreach (var pair in SymbolTable.Instance.GenericTypeInstances) {
@@ -387,30 +384,24 @@ namespace RoslynTool.CsToLua
         }
         private static void BuildNamespaces(StringBuilder sb, MergedNamespaceInfo mni)
         {
-            BuildNamespacesRecursively(sb, mni, 0);
+            BuildNamespacesRecursively(sb, mni, string.Empty);
         }
-        private static void BuildNamespacesRecursively(StringBuilder sb, MergedNamespaceInfo mni, int indent)
+        private static void BuildNamespacesRecursively(StringBuilder sb, MergedNamespaceInfo mni, string upperns)
         {
             if (null != mni) {
-                string nsname = mni.Name;
+                string nsname;
+                if (string.IsNullOrEmpty(upperns)) {
+                    nsname = mni.Name;
+                } else {
+                    nsname = upperns + "." + mni.Name;
+                }
                 if (!string.IsNullOrEmpty(nsname)) {
-                    sb.AppendFormat("{0}{1} = {{", GetIndentString(indent), nsname);
+                    sb.AppendFormat("{0} = {1} or {{}};", nsname, nsname);
                     sb.AppendLine();
-                    ++indent;
                 }
                 foreach (var npair in mni.Namespaces) {
                     var newMni = npair.Value;
-                    BuildNamespacesRecursively(sb, newMni, indent);
-                }
-                if (!string.IsNullOrEmpty(nsname)) {
-                    --indent;
-                    sb.AppendFormat("{0}}}", GetIndentString(indent));
-                    if (indent > 0) {
-                        sb.Append(",");
-                    } else {
-                        sb.Append(";");
-                    }
-                    sb.AppendLine();
+                    BuildNamespacesRecursively(sb, newMni, nsname);
                 }
             }
         }
@@ -1143,25 +1134,20 @@ namespace RoslynTool.CsToLua
             }
             sb.AppendLine();
 
-            if (!isEnumClass) {
-                sb.AppendLine();
-                sb.AppendLine();
-                sb.AppendFormat("{0}.__define_class();", key);
-                sb.AppendLine();
-                sb.AppendLine();
-                if (isEntryClass) {
-                    sb.AppendFormat("defineentry({0});", key);
-                    sb.AppendLine();
-                }
-            }
-
             foreach (var ci in classes) {
                 sb.Append(ci.AfterOuterCodeBuilder.ToString());
             }
+            sb.AppendLine();
 
             if (!isEnumClass) {
                 foreach (var pair in mci.InnerClasses) {
                     BuildLuaClass(sb, pair.Key, pair.Value, false, lualibRefs);
+                }
+                sb.AppendFormat("{0}.__define_class();", key);
+                sb.AppendLine();
+                if (isEntryClass) {
+                    sb.AppendFormat("defineentry({0});", key);
+                    sb.AppendLine();
                 }
             }
 

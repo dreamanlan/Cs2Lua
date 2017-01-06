@@ -31,7 +31,5 @@ Cs2LuaScript.Program = {
 	end,
 };
 
-
 Cs2LuaScript.Program.__define_class();
-
 defineentry(Cs2LuaScript.Program);

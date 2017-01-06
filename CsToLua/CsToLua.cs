@@ -407,6 +407,9 @@ namespace RoslynTool.CsToLua
                     } else {
                         CodeBuilder.Append(type.Name);
                     }
+                } else if (type.TypeKind == TypeKind.Array) {
+                    var arrType = type as IArrayTypeSymbol;
+                    CodeBuilder.Append("System.Array");
                 } else {
                     var fullName = ClassInfo.GetFullName(type);
                     CodeBuilder.Append(fullName);

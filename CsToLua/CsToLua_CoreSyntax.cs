@@ -337,7 +337,11 @@ namespace RoslynTool.CsToLua
                         } else {
                             CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
                             CodeBuilder.Append(" = ");
-                            OutputConstValue(constVal.Value, expOper);
+                            if (null != constVal.Value) {
+                                OutputConstValue(constVal.Value, expOper);
+                            } else {
+                                CodeBuilder.Append("__cs2lua_nil_field_value");
+                            }
                         }
                     } else if (fieldSym.Type.TypeKind == TypeKind.Delegate) {
                         CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
