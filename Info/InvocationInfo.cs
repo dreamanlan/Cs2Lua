@@ -10,11 +10,17 @@ using Microsoft.CodeAnalysis.Semantics;
 
 namespace RoslynTool.CsToLua
 {
+    internal class ArgDefaultValueInfo
+    {
+        internal object Value;
+        internal object OperOrSym;
+    }
     internal class InvocationInfo
     {
         internal string ClassKey = string.Empty;
         internal string GenericClassKey = string.Empty;
         internal List<ExpressionSyntax> Args = new List<ExpressionSyntax>();
+        internal List<ArgDefaultValueInfo> DefaultValueArgs = new List<ArgDefaultValueInfo>();
         internal List<ExpressionSyntax> ReturnArgs = new List<ExpressionSyntax>();
         internal List<ITypeSymbol> GenericTypeArgs = new List<ITypeSymbol>();
         internal bool ArrayToParams = false;
@@ -57,6 +63,25 @@ namespace RoslynTool.CsToLua
                         Args.Add(arg.Expression);
                     }
                 }
+                for (int i = ct; i < sym.Parameters.Length; ++i) {
+                    var param = sym.Parameters[i];
+                    if (param.HasExplicitDefaultValue) {
+                        var decl = param.DeclaringSyntaxReferences;
+                        if (decl.Length == 1) {
+                            var node = param.DeclaringSyntaxReferences[0].GetSyntax() as ParameterSyntax;
+                            if (null != node) {
+                                var exp = node.Default.Value;
+                                var tree = node.SyntaxTree;
+                                var newModel = SymbolTable.Instance.Compilation.GetSemanticModel(tree, true);
+                                if (null != newModel) {
+                                    var oper = newModel.GetOperation(exp);
+                                    //var dsym = newModel.GetSymbolInfo(exp).Symbol;
+                                    DefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, OperOrSym = oper });
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -91,6 +116,25 @@ namespace RoslynTool.CsToLua
                         }
                     } else {
                         Args.Add(arg.Expression);
+                    }
+                }
+                for (int i = ct; i < sym.Parameters.Length; ++i) {
+                    var param = sym.Parameters[i];
+                    if (param.HasExplicitDefaultValue) {
+                        var decl = param.DeclaringSyntaxReferences;
+                        if (decl.Length == 1) {
+                            var node = param.DeclaringSyntaxReferences[0].GetSyntax() as ParameterSyntax;
+                            if (null != node) {
+                                var exp = node.Default.Value;
+                                var tree = node.SyntaxTree;
+                                var newModel = SymbolTable.Instance.Compilation.GetSemanticModel(tree, true);
+                                if (null != newModel) {
+                                    var oper = newModel.GetOperation(exp);
+                                    //var dsym = newModel.GetSymbolInfo(exp).Symbol;
+                                    DefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, OperOrSym = oper });
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -153,7 +197,7 @@ namespace RoslynTool.CsToLua
                 }
                 codeBuilder.Append("(");
             }
-            if (Args.Count > 0 || GenericTypeArgs.Count > 0) {
+            if (Args.Count + DefaultValueArgs.Count + GenericTypeArgs.Count > 0) {
                 codeBuilder.Append(prestr);
             }
             bool useTypeNameString = false;
@@ -163,7 +207,7 @@ namespace RoslynTool.CsToLua
                     useTypeNameString = true;
                 }
             }
-            cs2lua.OutputArgumentList(Args, GenericTypeArgs, ArrayToParams, useTypeNameString, node);
+            cs2lua.OutputArgumentList(Args, DefaultValueArgs, GenericTypeArgs, ArrayToParams, useTypeNameString, node);
             codeBuilder.Append(")");
         }
 

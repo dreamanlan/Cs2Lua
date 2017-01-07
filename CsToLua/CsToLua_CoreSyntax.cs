@@ -304,7 +304,11 @@ namespace RoslynTool.CsToLua
                             bool createSelf = m_SymbolTable.IsFieldCreateSelf(fieldSym);
                             if (useExplicitTypeParam || createSelf) {
                                 CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
-                                CodeBuilder.AppendLine(" = __cs2lua_nil_field_value,");
+                                if (fieldSym.Type.IsValueType) {
+                                    CodeBuilder.AppendLine(" = 0,");
+                                } else {
+                                    CodeBuilder.AppendLine(" = __cs2lua_nil_field_value,");
+                                }
                                 if (isStatic) {
                                     ci.CurrentCodeBuilder = ci.StaticInitializerCodeBuilder;
                                 } else {
@@ -339,6 +343,8 @@ namespace RoslynTool.CsToLua
                             CodeBuilder.Append(" = ");
                             if (null != constVal.Value) {
                                 OutputConstValue(constVal.Value, expOper);
+                            } else if (fieldSym.Type.IsValueType) {
+                                CodeBuilder.Append("0");
                             } else {
                                 CodeBuilder.Append("__cs2lua_nil_field_value");
                             }
@@ -346,6 +352,8 @@ namespace RoslynTool.CsToLua
                     } else if (fieldSym.Type.TypeKind == TypeKind.Delegate) {
                         CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
                         CodeBuilder.Append(" = wrapdelegation{}");
+                    } else if (fieldSym.Type.IsValueType) {
+                        CodeBuilder.AppendFormat("{0}{1} = 0", GetIndentString(), name);
                     } else {
                         CodeBuilder.AppendFormat("{0}{1} = __cs2lua_nil_field_value", GetIndentString(), name);
                     }
@@ -586,7 +594,7 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
                     InvocationInfo ii = new InvocationInfo();
                     ii.Init(leftPsym.SetMethod, leftElementAccess.ArgumentList, m_Model);
-                    OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false, leftElementAccess);
+                    OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, leftElementAccess);
                     CodeBuilder.Append(", ");
                     VisitExpressionSyntax(assign.Right);
                     CodeBuilder.Append(")");
@@ -654,7 +662,7 @@ namespace RoslynTool.CsToLua
                         InvocationInfo ii = new InvocationInfo();
                         List<ExpressionSyntax> args = new List<ExpressionSyntax> { leftCondAccess.WhenNotNull };
                         ii.Init(psym.SetMethod, args, m_Model);
-                        OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false, leftCondAccess);
+                        OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, leftCondAccess);
                         CodeBuilder.Append(", ");
                         VisitExpressionSyntax(assign.Right);
                         CodeBuilder.Append(")");

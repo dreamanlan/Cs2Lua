@@ -370,7 +370,7 @@ namespace TopLevel
                 return f;
             }
 
-            public int Test123(int a, int b) => a+b;
+            public int Test123(int a = 1, float b = float.NegativeInfinity) => a+b;
 
             public void GTest(GenericClass<int> arg){}
             public void GTest(GenericClass<float> arg){}
@@ -390,6 +390,8 @@ namespace TopLevel
 
             public void Test()
             {
+                Test123();
+                float abc = float.NegativeInfinity;
                 GenericClass<Test1>.InnerGenericClass<Test2> t = new GenericClass<Test1>.InnerGenericClass<Test2>(new Test1(), new Test2());
                 t.Test(123);
                 t.Test2<int>(new Test1(), new Test2());

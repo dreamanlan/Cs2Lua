@@ -150,15 +150,15 @@ namespace RoslynTool.CsToLua
             }
             return ret;
         }
-        internal void OutputArgumentList(IList<ExpressionSyntax> args, IList<ITypeSymbol> typeArgs, bool arrayToParams, bool useTypeNameString, SyntaxNode node)
+        internal void OutputArgumentList(IList<ExpressionSyntax> args, IList<ArgDefaultValueInfo> defValArgs, IList<ITypeSymbol> typeArgs, bool arrayToParams, bool useTypeNameString, SyntaxNode node)
         {
             if (typeArgs.Count > 0) {
                 OutputTypeArgumentList(typeArgs, useTypeNameString, node);
             }
-            if (args.Count > 0) {
+            if (args.Count + defValArgs.Count > 0) {
                 if (typeArgs.Count > 0)
                     CodeBuilder.Append(", ");
-                OutputExpressionList(args, arrayToParams);
+                OutputExpressionList(args, defValArgs, arrayToParams);
             }
         }
 
@@ -262,9 +262,9 @@ namespace RoslynTool.CsToLua
         }
         private void OutputExpressionList(IList<ExpressionSyntax> args)
         {
-            OutputExpressionList(args, false);
+            OutputExpressionList(args, null, false);
         }
-        private void OutputExpressionList(IList<ExpressionSyntax> args, bool arrayToParams)
+        private void OutputExpressionList(IList<ExpressionSyntax> args, IList<ArgDefaultValueInfo> defValArgs, bool arrayToParams)
         {
             int ct = args.Count;
             for (int i = 0; i < ct; ++i) {
@@ -285,6 +285,19 @@ namespace RoslynTool.CsToLua
                 }
                 if (i < ct - 1) {
                     CodeBuilder.Append(", ");
+                }
+            }
+            if (null != defValArgs) {
+                int dvCt = defValArgs.Count;
+                if (ct>0 && dvCt > 0) {
+                    CodeBuilder.Append(", ");
+                }
+                for (int i = 0; i < dvCt; ++i) {
+                    var info = defValArgs[i];
+                    OutputConstValue(info.Value, info.OperOrSym);
+                    if (i < dvCt - 1) {
+                        CodeBuilder.Append(", ");
+                    }
                 }
             }
         }
@@ -662,7 +675,7 @@ namespace RoslynTool.CsToLua
                 string manglingName = NameMangling(ii.MethodSymbol);
                 CodeBuilder.Append(manglingName);
                 CodeBuilder.Append("(");
-                OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false, node);
+                OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, node);
                 CodeBuilder.Append(")");
             } else {
                 string method = ii.MethodSymbol.Name;
@@ -700,7 +713,7 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendFormat("invokeexternoperator({0}, ", ii.GenericClassKey);
                     CodeBuilder.AppendFormat("\"{0}\"", method);
                     CodeBuilder.Append(", ");
-                    OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false, node);
+                    OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, node);
                     CodeBuilder.Append(")");
                 } else {
                     if (ii.Args.Count == 1) {

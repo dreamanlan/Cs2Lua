@@ -392,7 +392,7 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
                 InvocationInfo ii = new InvocationInfo();
                 ii.Init(psym.GetMethod, node.ArgumentList, m_Model);
-                OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false, node);
+                OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, node);
                 CodeBuilder.Append(")");
             } else if (oper.Kind == OperationKind.ArrayElementReferenceExpression) {
                 VisitExpressionSyntax(node.Expression);
@@ -450,7 +450,7 @@ namespace RoslynTool.CsToLua
                     InvocationInfo ii = new InvocationInfo();
                     List<ExpressionSyntax> args = new List<ExpressionSyntax> { node.WhenNotNull };
                     ii.Init(psym.GetMethod, args, m_Model);
-                    OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false, elementBinding);
+                    OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, elementBinding);
                     CodeBuilder.Append(")");
                     CodeBuilder.Append("; end)");
                 } else if (oper.Kind == OperationKind.ArrayElementReferenceExpression) {
@@ -684,10 +684,10 @@ namespace RoslynTool.CsToLua
                 } else {
                     CodeBuilder.Append(", {}");
                 }
-                if (ii.Args.Count + ii.GenericTypeArgs.Count > 0) {
+                if (ii.Args.Count + ii.DefaultValueArgs.Count + ii.GenericTypeArgs.Count > 0) {
                     CodeBuilder.Append(", ");
                 }
-                OutputArgumentList(ii.Args, ii.GenericTypeArgs, ii.ArrayToParams, false, node);
+                OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, node);
                 CodeBuilder.Append(")");
                 if (ii.ReturnArgs.Count > 0) {
                     CodeBuilder.Append("; ");

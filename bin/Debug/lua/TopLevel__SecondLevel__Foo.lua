@@ -114,6 +114,8 @@ TopLevel.SecondLevel.Foo = {
 				return nil;
 			end),
 			Test = function(this)
+				this:Test123(1, wrapconst(System.Single, "NegativeInfinity"));
+				local abc; abc = wrapconst(System.Single, "NegativeInfinity");
 				local t; t = newobject(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2, "ctor", {}, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
 				t:Test(System.Int32, 123);
 				t:Test2(System.Int32, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
@@ -166,10 +168,10 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			TestSwitch = function(this)
 				local i; i = 10;
-				local __compiler_switch_444 = i;
-				if __compiler_switch_444 == 1 then
+				local __compiler_switch_446 = i;
+				if __compiler_switch_446 == 1 then
 					return ;
-				elseif __compiler_switch_444 == 2 then
+				elseif __compiler_switch_446 == 2 then
 					return ;
 				else
 					return ;
@@ -197,7 +199,7 @@ TopLevel.SecondLevel.Foo = {
 				OnSimple2 = wrapdelegation{},
 				m_Test = 0,
 				m_Test2 = 0,
-				m_TS = __cs2lua_nil_field_value,
+				m_TS = 0,
 				m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, "System.Collections.Generic.HashSet_T", "ctor", nil, {wrapstring("one"), wrapstring("two"), wrapstring("three")}),
 				__attributes = TopLevel__SecondLevel__Foo__Attrs,
 				__ctor_called = false,
