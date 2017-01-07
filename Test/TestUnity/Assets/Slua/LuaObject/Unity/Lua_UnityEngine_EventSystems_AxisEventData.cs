@@ -19,30 +19,6 @@ public class Lua_UnityEngine_EventSystems_AxisEventData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int Reset(IntPtr l) {
-		try {
-			UnityEngine.EventSystems.AxisEventData self=(UnityEngine.EventSystems.AxisEventData)checkSelf(l);
-			self.Reset();
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int Use(IntPtr l) {
-		try {
-			UnityEngine.EventSystems.AxisEventData self=(UnityEngine.EventSystems.AxisEventData)checkSelf(l);
-			self.Use();
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int get_moveVector(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.AxisEventData self=(UnityEngine.EventSystems.AxisEventData)checkSelf(l);
@@ -96,8 +72,6 @@ public class Lua_UnityEngine_EventSystems_AxisEventData : LuaObject {
 	}
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.EventSystems.AxisEventData");
-		addMember(l,Reset);
-		addMember(l,Use);
 		addMember(l,"moveVector",get_moveVector,set_moveVector,true);
 		addMember(l,"moveDir",get_moveDir,set_moveDir,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.EventSystems.AxisEventData),typeof(UnityEngine.EventSystems.BaseEventData));

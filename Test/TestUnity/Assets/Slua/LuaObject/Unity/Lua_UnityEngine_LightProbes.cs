@@ -17,19 +17,6 @@ public class Lua_UnityEngine_LightProbes : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.LightProbes self=(UnityEngine.LightProbes)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int GetInterpolatedProbe_s(IntPtr l) {
 		try {
 			UnityEngine.Vector3 a1;
@@ -110,7 +97,6 @@ public class Lua_UnityEngine_LightProbes : LuaObject {
 	}
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.LightProbes");
-		addMember(l,GetInstanceID);
 		addMember(l,GetInterpolatedProbe_s);
 		addMember(l,"positions",get_positions,null,true);
 		addMember(l,"bakedProbes",get_bakedProbes,set_bakedProbes,true);

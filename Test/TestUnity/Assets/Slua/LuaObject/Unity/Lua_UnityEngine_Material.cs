@@ -653,19 +653,6 @@ public class Lua_UnityEngine_Material : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int get_shader(IntPtr l) {
 		try {
 			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
@@ -913,7 +900,6 @@ public class Lua_UnityEngine_Material : LuaObject {
 		addMember(l,EnableKeyword);
 		addMember(l,DisableKeyword);
 		addMember(l,IsKeywordEnabled);
-		addMember(l,GetInstanceID);
 		addMember(l,"shader",get_shader,set_shader,true);
 		addMember(l,"color",get_color,set_color,true);
 		addMember(l,"mainTexture",get_mainTexture,set_mainTexture,true);

@@ -17,19 +17,6 @@ public class Lua_UnityEngine_QualitySettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.QualitySettings self=(UnityEngine.QualitySettings)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int GetQualityLevel_s(IntPtr l) {
 		try {
 			var ret=UnityEngine.QualitySettings.GetQualityLevel();
@@ -656,7 +643,6 @@ public class Lua_UnityEngine_QualitySettings : LuaObject {
 	}
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.QualitySettings");
-		addMember(l,GetInstanceID);
 		addMember(l,GetQualityLevel_s);
 		addMember(l,SetQualityLevel_s);
 		addMember(l,IncreaseLevel_s);

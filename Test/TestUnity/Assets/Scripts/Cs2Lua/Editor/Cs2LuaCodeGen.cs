@@ -174,9 +174,9 @@ public static class Cs2LuaCodeGen
                     sb.AppendLine("{");
                     ++s_Indent;
                     if (IsValueType(prop.PropertyType)) {
-                        sb.AppendFormat("{0}return ({1})base.CallFunction(m_Cs2Lua_{2}, Self, ", GetIndentString(), typeName, get.Name);
+                        sb.AppendFormat("{0}return base.CastTo<{1}>(base.CallFunction(m_Cs2Lua_{2}, Self, ", GetIndentString(), typeName, get.Name);
                         OutputArgs(sb, ps);
-                        sb.AppendLine(");");
+                        sb.AppendLine("));");
                     } else {
                         sb.AppendFormat("{0}return base.CallFunction(m_Cs2Lua_{1}, Self, ", GetIndentString(), get.Name);
                         OutputArgs(sb, ps);
@@ -218,7 +218,7 @@ public static class Cs2LuaCodeGen
                     sb.AppendLine("{");
                     ++s_Indent;
                     if (IsValueType(prop.PropertyType))
-                        sb.AppendFormat("{0}return ({1})base.CallFunction(m_Cs2Lua_{2}, Self);", GetIndentString(), typeName, get.Name);
+                        sb.AppendFormat("{0}return base.CastTo<{1}>(base.CallFunction(m_Cs2Lua_{2}, Self));", GetIndentString(), typeName, get.Name);
                     else
                         sb.AppendFormat("{0}return base.CallFunction(m_Cs2Lua_{1}, Self) as {2};", GetIndentString(), get.Name, typeName);
                     sb.AppendLine();
@@ -278,9 +278,9 @@ public static class Cs2LuaCodeGen
             if (retType != "void") {
                 if (IsValueType(method.ReturnType)) {
                     if (mi.ExistReturnParam)
-                        sb.AppendFormat("{0}return ({1})__cs2lua_ret[0];", GetIndentString(), retType);
+                        sb.AppendFormat("{0}return base.CastTo<{1}>(__cs2lua_ret[0]);", GetIndentString(), retType);
                     else
-                        sb.AppendFormat("{0}return ({1})__cs2lua_ret;", GetIndentString(), retType);
+                        sb.AppendFormat("{0}return base.CastTo<{1}>(__cs2lua_ret);", GetIndentString(), retType);
                 } else {
                     if (mi.ExistReturnParam)
                         sb.AppendFormat("{0}return __cs2lua_ret[0] as {1};", GetIndentString(), retType);
@@ -393,7 +393,7 @@ public static class Cs2LuaCodeGen
         foreach (var pi in ps) {
             if (pi.IsOut || pi.ParameterType.IsByRef) {
                 if(IsValueType(pi.ParameterType))
-                    sb.AppendFormat("{0}{1} = ({2})__cs2lua_ret[{3}];", GetIndentString(), pi.Name, SimpleName(pi.ParameterType), ix);
+                    sb.AppendFormat("{0}{1} = base.CastTo<{2}>(__cs2lua_ret[{3}]);", GetIndentString(), pi.Name, SimpleName(pi.ParameterType), ix);
                 else
                     sb.AppendFormat("{0}{1} = __cs2lua_ret[{2}] as {3};", GetIndentString(), pi.Name, ix, SimpleName(pi.ParameterType));
                 sb.AppendLine();
@@ -458,8 +458,7 @@ public static class Cs2LuaCodeGen
             }
             gs += ">";
 
-            ret = Regex.Replace(ret, @"`\d", gs);
-
+            ret = Regex.Replace(ret, @"`\d+", gs);
             return ret;
         }
         if (t.IsArray) {

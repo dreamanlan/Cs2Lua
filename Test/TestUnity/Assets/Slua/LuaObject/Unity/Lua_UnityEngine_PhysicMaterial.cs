@@ -29,19 +29,6 @@ public class Lua_UnityEngine_PhysicMaterial : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.PhysicMaterial self=(UnityEngine.PhysicMaterial)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int get_dynamicFriction(IntPtr l) {
 		try {
 			UnityEngine.PhysicMaterial self=(UnityEngine.PhysicMaterial)checkSelf(l);
@@ -173,7 +160,6 @@ public class Lua_UnityEngine_PhysicMaterial : LuaObject {
 	}
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.PhysicMaterial");
-		addMember(l,GetInstanceID);
 		addMember(l,"dynamicFriction",get_dynamicFriction,set_dynamicFriction,true);
 		addMember(l,"staticFriction",get_staticFriction,set_staticFriction,true);
 		addMember(l,"bounciness",get_bounciness,set_bounciness,true);

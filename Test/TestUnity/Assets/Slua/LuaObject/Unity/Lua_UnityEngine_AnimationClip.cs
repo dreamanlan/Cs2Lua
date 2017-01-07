@@ -91,19 +91,6 @@ public class Lua_UnityEngine_AnimationClip : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.AnimationClip self=(UnityEngine.AnimationClip)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int get_length(IntPtr l) {
 		try {
 			UnityEngine.AnimationClip self=(UnityEngine.AnimationClip)checkSelf(l);
@@ -264,7 +251,6 @@ public class Lua_UnityEngine_AnimationClip : LuaObject {
 		addMember(l,EnsureQuaternionContinuity);
 		addMember(l,ClearCurves);
 		addMember(l,AddEvent);
-		addMember(l,GetInstanceID);
 		addMember(l,"length",get_length,null,true);
 		addMember(l,"frameRate",get_frameRate,set_frameRate,true);
 		addMember(l,"wrapMode",get_wrapMode,set_wrapMode,true);

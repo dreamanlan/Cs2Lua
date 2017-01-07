@@ -17,19 +17,6 @@ public class Lua_UnityEngine_Rendering_GraphicsSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.Rendering.GraphicsSettings self=(UnityEngine.Rendering.GraphicsSettings)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int SetShaderMode_s(IntPtr l) {
 		try {
 			UnityEngine.Rendering.BuiltinShaderType a1;
@@ -89,7 +76,6 @@ public class Lua_UnityEngine_Rendering_GraphicsSettings : LuaObject {
 	}
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Rendering.GraphicsSettings");
-		addMember(l,GetInstanceID);
 		addMember(l,SetShaderMode_s);
 		addMember(l,GetShaderMode_s);
 		addMember(l,SetCustomShader_s);

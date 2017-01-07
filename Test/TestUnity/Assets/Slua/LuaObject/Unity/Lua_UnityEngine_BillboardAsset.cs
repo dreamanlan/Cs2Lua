@@ -17,19 +17,6 @@ public class Lua_UnityEngine_BillboardAsset : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int get_width(IntPtr l) {
 		try {
 			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
@@ -171,7 +158,6 @@ public class Lua_UnityEngine_BillboardAsset : LuaObject {
 	}
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.BillboardAsset");
-		addMember(l,GetInstanceID);
 		addMember(l,"width",get_width,set_width,true);
 		addMember(l,"height",get_height,set_height,true);
 		addMember(l,"bottom",get_bottom,set_bottom,true);

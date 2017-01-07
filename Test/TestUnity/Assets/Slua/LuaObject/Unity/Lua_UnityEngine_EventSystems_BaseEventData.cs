@@ -19,30 +19,6 @@ public class Lua_UnityEngine_EventSystems_BaseEventData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int Reset(IntPtr l) {
-		try {
-			UnityEngine.EventSystems.BaseEventData self=(UnityEngine.EventSystems.BaseEventData)checkSelf(l);
-			self.Reset();
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int Use(IntPtr l) {
-		try {
-			UnityEngine.EventSystems.BaseEventData self=(UnityEngine.EventSystems.BaseEventData)checkSelf(l);
-			self.Use();
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int get_currentInputModule(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.BaseEventData self=(UnityEngine.EventSystems.BaseEventData)checkSelf(l);
@@ -82,8 +58,6 @@ public class Lua_UnityEngine_EventSystems_BaseEventData : LuaObject {
 	}
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.EventSystems.BaseEventData");
-		addMember(l,Reset);
-		addMember(l,Use);
 		addMember(l,"currentInputModule",get_currentInputModule,null,true);
 		addMember(l,"selectedObject",get_selectedObject,set_selectedObject,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.EventSystems.BaseEventData),typeof(UnityEngine.EventSystems.AbstractEventData));

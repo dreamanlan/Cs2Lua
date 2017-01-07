@@ -77,19 +77,6 @@ public class Lua_UnityEngine_AudioClip : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.AudioClip self=(UnityEngine.AudioClip)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int Create_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -257,7 +244,6 @@ public class Lua_UnityEngine_AudioClip : LuaObject {
 		addMember(l,UnloadAudioData);
 		addMember(l,GetData);
 		addMember(l,SetData);
-		addMember(l,GetInstanceID);
 		addMember(l,Create_s);
 		addMember(l,"length",get_length,null,true);
 		addMember(l,"samples",get_samples,null,true);

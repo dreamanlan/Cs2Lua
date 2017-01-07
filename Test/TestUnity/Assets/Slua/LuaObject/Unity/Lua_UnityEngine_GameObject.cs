@@ -411,19 +411,6 @@ public class Lua_UnityEngine_GameObject : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.GameObject self=(UnityEngine.GameObject)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int CreatePrimitive_s(IntPtr l) {
 		try {
 			UnityEngine.PrimitiveType a1;
@@ -645,7 +632,6 @@ public class Lua_UnityEngine_GameObject : LuaObject {
 		addMember(l,SendMessage);
 		addMember(l,BroadcastMessage);
 		addMember(l,AddComponent);
-		addMember(l,GetInstanceID);
 		addMember(l,CreatePrimitive_s);
 		addMember(l,FindGameObjectWithTag_s);
 		addMember(l,FindWithTag_s);

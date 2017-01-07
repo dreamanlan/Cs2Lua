@@ -261,19 +261,6 @@ public class Lua_UnityEngine_StateMachineBehaviour : LuaObject {
 			return error(l,e);
 		}
 	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.StateMachineBehaviour self=(UnityEngine.StateMachineBehaviour)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.StateMachineBehaviour");
 		addMember(l,OnStateEnter);
@@ -283,7 +270,6 @@ public class Lua_UnityEngine_StateMachineBehaviour : LuaObject {
 		addMember(l,OnStateIK);
 		addMember(l,OnStateMachineEnter);
 		addMember(l,OnStateMachineExit);
-		addMember(l,GetInstanceID);
 		createTypeMetatable(l,null, typeof(UnityEngine.StateMachineBehaviour),typeof(UnityEngine.ScriptableObject));
 	}
 }

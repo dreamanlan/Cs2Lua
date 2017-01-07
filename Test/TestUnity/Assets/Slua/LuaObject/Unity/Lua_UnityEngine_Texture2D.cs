@@ -630,32 +630,6 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetNativeTexturePtr(IntPtr l) {
-		try {
-			UnityEngine.Texture2D self=(UnityEngine.Texture2D)checkSelf(l);
-			var ret=self.GetNativeTexturePtr();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.Texture2D self=(UnityEngine.Texture2D)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int CreateExternalTexture_s(IntPtr l) {
 		try {
 			System.Int32 a1;
@@ -745,8 +719,6 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		addMember(l,ReadPixels);
 		addMember(l,EncodeToPNG);
 		addMember(l,EncodeToJPG);
-		addMember(l,GetNativeTexturePtr);
-		addMember(l,GetInstanceID);
 		addMember(l,CreateExternalTexture_s);
 		addMember(l,"mipmapCount",get_mipmapCount,null,true);
 		addMember(l,"format",get_format,null,true);

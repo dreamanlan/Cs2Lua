@@ -2214,8 +2214,7 @@ namespace SLua
 				}
 				gs += ">";
 				
-				ret = Regex.Replace(ret, @"`\d", gs);
-				
+				ret = Regex.Replace(ret, @"`\d+", gs);
 				return ret;
 			}
 			if (t.IsArray)

@@ -169,32 +169,6 @@ public class Lua_UnityEngine_Texture3D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetNativeTexturePtr(IntPtr l) {
-		try {
-			UnityEngine.Texture3D self=(UnityEngine.Texture3D)checkSelf(l);
-			var ret=self.GetNativeTexturePtr();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.Texture3D self=(UnityEngine.Texture3D)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int get_depth(IntPtr l) {
 		try {
 			UnityEngine.Texture3D self=(UnityEngine.Texture3D)checkSelf(l);
@@ -225,8 +199,6 @@ public class Lua_UnityEngine_Texture3D : LuaObject {
 		addMember(l,SetPixels);
 		addMember(l,SetPixels32);
 		addMember(l,Apply);
-		addMember(l,GetNativeTexturePtr);
-		addMember(l,GetInstanceID);
 		addMember(l,"depth",get_depth,null,true);
 		addMember(l,"format",get_format,null,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.Texture3D),typeof(UnityEngine.Texture));

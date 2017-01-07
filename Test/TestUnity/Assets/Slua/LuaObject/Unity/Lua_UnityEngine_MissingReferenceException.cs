@@ -38,39 +38,8 @@ public class Lua_UnityEngine_MissingReferenceException : LuaObject {
 			return error(l,e);
 		}
 	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetBaseException(IntPtr l) {
-		try {
-			UnityEngine.MissingReferenceException self=(UnityEngine.MissingReferenceException)checkSelf(l);
-			var ret=self.GetBaseException();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetObjectData(IntPtr l) {
-		try {
-			UnityEngine.MissingReferenceException self=(UnityEngine.MissingReferenceException)checkSelf(l);
-			System.Runtime.Serialization.SerializationInfo a1;
-			checkType(l,2,out a1);
-			System.Runtime.Serialization.StreamingContext a2;
-			checkValueType(l,3,out a2);
-			self.GetObjectData(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.MissingReferenceException");
-		addMember(l,GetBaseException);
-		addMember(l,GetObjectData);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.MissingReferenceException),typeof(System.SystemException));
 	}
 }

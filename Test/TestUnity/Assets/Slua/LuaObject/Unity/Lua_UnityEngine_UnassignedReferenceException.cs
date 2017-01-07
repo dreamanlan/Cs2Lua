@@ -38,39 +38,8 @@ public class Lua_UnityEngine_UnassignedReferenceException : LuaObject {
 			return error(l,e);
 		}
 	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetBaseException(IntPtr l) {
-		try {
-			UnityEngine.UnassignedReferenceException self=(UnityEngine.UnassignedReferenceException)checkSelf(l);
-			var ret=self.GetBaseException();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetObjectData(IntPtr l) {
-		try {
-			UnityEngine.UnassignedReferenceException self=(UnityEngine.UnassignedReferenceException)checkSelf(l);
-			System.Runtime.Serialization.SerializationInfo a1;
-			checkType(l,2,out a1);
-			System.Runtime.Serialization.StreamingContext a2;
-			checkValueType(l,3,out a2);
-			self.GetObjectData(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UnassignedReferenceException");
-		addMember(l,GetBaseException);
-		addMember(l,GetObjectData);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.UnassignedReferenceException),typeof(System.SystemException));
 	}
 }

@@ -17,19 +17,6 @@ public class Lua_UnityEngine_Motion : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.Motion self=(UnityEngine.Motion)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int get_averageDuration(IntPtr l) {
 		try {
 			UnityEngine.Motion self=(UnityEngine.Motion)checkSelf(l);
@@ -115,7 +102,6 @@ public class Lua_UnityEngine_Motion : LuaObject {
 	}
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Motion");
-		addMember(l,GetInstanceID);
 		addMember(l,"averageDuration",get_averageDuration,null,true);
 		addMember(l,"averageAngularSpeed",get_averageAngularSpeed,null,true);
 		addMember(l,"averageSpeed",get_averageSpeed,null,true);

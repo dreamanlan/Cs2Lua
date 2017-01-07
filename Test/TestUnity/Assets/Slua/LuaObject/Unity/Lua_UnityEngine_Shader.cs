@@ -17,19 +17,6 @@ public class Lua_UnityEngine_Shader : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.Shader self=(UnityEngine.Shader)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int Find_s(IntPtr l) {
 		try {
 			System.String a1;
@@ -379,7 +366,6 @@ public class Lua_UnityEngine_Shader : LuaObject {
 	}
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Shader");
-		addMember(l,GetInstanceID);
 		addMember(l,Find_s);
 		addMember(l,EnableKeyword_s);
 		addMember(l,DisableKeyword_s);

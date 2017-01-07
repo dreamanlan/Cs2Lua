@@ -51,32 +51,6 @@ public class Lua_UnityEngine_ProceduralTexture : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetNativeTexturePtr(IntPtr l) {
-		try {
-			UnityEngine.ProceduralTexture self=(UnityEngine.ProceduralTexture)checkSelf(l);
-			var ret=self.GetNativeTexturePtr();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.ProceduralTexture self=(UnityEngine.ProceduralTexture)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int get_hasAlpha(IntPtr l) {
 		try {
 			UnityEngine.ProceduralTexture self=(UnityEngine.ProceduralTexture)checkSelf(l);
@@ -104,8 +78,6 @@ public class Lua_UnityEngine_ProceduralTexture : LuaObject {
 		getTypeTable(l,"UnityEngine.ProceduralTexture");
 		addMember(l,GetProceduralOutputType);
 		addMember(l,GetPixels32);
-		addMember(l,GetNativeTexturePtr);
-		addMember(l,GetInstanceID);
 		addMember(l,"hasAlpha",get_hasAlpha,null,true);
 		addMember(l,"format",get_format,null,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.ProceduralTexture),typeof(UnityEngine.Texture));

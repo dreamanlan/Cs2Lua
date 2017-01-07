@@ -192,32 +192,6 @@ public class Lua_UnityEngine_WebCamTexture : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetNativeTexturePtr(IntPtr l) {
-		try {
-			UnityEngine.WebCamTexture self=(UnityEngine.WebCamTexture)checkSelf(l);
-			var ret=self.GetNativeTexturePtr();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.WebCamTexture self=(UnityEngine.WebCamTexture)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int get_isPlaying(IntPtr l) {
 		try {
 			UnityEngine.WebCamTexture self=(UnityEngine.WebCamTexture)checkSelf(l);
@@ -388,8 +362,6 @@ public class Lua_UnityEngine_WebCamTexture : LuaObject {
 		addMember(l,GetPixel);
 		addMember(l,GetPixels);
 		addMember(l,GetPixels32);
-		addMember(l,GetNativeTexturePtr);
-		addMember(l,GetInstanceID);
 		addMember(l,"isPlaying",get_isPlaying,null,true);
 		addMember(l,"deviceName",get_deviceName,set_deviceName,true);
 		addMember(l,"requestedFPS",get_requestedFPS,set_requestedFPS,true);

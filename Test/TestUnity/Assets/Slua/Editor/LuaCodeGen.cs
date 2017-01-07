@@ -570,7 +570,11 @@ namespace SLua
 				{
 					if (type.IsSealed && !type.IsGenericType && !type.IsNested)
 					{
-						MethodInfo[] methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public);
+                        BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.Public;
+                        if (null == type.BaseType || !type.BaseType.IsGenericType) {
+                            bindingFlags |= BindingFlags.DeclaredOnly;
+                        }
+                        MethodInfo[] methods = type.GetMethods(bindingFlags);
 						foreach (MethodInfo method in methods)
 						{
 							if (IsExtensionMethod(method))
@@ -598,7 +602,11 @@ namespace SLua
 		static Dictionary<System.Type,List<MethodInfo>> extensionMethods = new Dictionary<Type, List<MethodInfo>>();
 
 		static CodeGenerator(){
-			extensionMethods = GenerateExtensionMethodsMap();
+            try {
+                extensionMethods = GenerateExtensionMethodsMap();
+            } catch (Exception ex) {
+                UnityEngine.Debug.Log(string.Format("{0}\n{1}", ex.Message, ex.StackTrace));
+            }
 		}
 
 		HashSet<string> funcname = new HashSet<string>();
@@ -945,17 +953,17 @@ namespace SLua
             LuaDLL.luaL_checktype(l, p, LuaTypes.LUA_TFUNCTION);
             LuaDelegate ld;
             checkType(l, p, out ld);
+						l = LuaState.get(l).L;
             if (ld.d != null)
             {
                 ua = (UnityEngine.Events.UnityAction<$GN>)ld.d;
                 return true;
             }
-			l = LuaState.get(l).L;
             ua = ($ARGS) =>
             {
                 int error = pushTry(l);
                 $PUSHVALUES
-                ld.pcall(1, error);
+                ld.pcall($GENERICCOUNT, error);
                 LuaDLL.lua_settop(l,error - 1);
             };
             ld.d = ua;
@@ -970,6 +978,7 @@ namespace SLua
 			temp = temp.Replace("$GN", GenericName(t.BaseType,","));
 			temp = temp.Replace("$ARGS", ArgsDecl(t.BaseType));
 			temp = temp.Replace("$PUSHVALUES", PushValues(t.BaseType));
+			temp = temp.Replace ("$GENERICCOUNT", t.BaseType.GetGenericArguments ().Length.ToString());
 			Write(file, temp);
 		}
 
@@ -1127,7 +1136,10 @@ namespace SLua
 			if (writeStatic)
 				bf |= BindingFlags.Static;
 			else
-				bf |= BindingFlags.Instance;
+                bf |= BindingFlags.Instance;
+            if (null == t.BaseType || !t.BaseType.IsGenericType) {
+                bf |= BindingFlags.DeclaredOnly;
+            }
 			
 			MethodInfo[] members = t.GetMethods(bf);
 			List<MethodInfo> methods = new List<MethodInfo>();
@@ -1382,8 +1394,12 @@ namespace SLua
 			//for this[]
 			List<PropertyInfo> getter = new List<PropertyInfo>();
 			List<PropertyInfo> setter = new List<PropertyInfo>();
-			// Write property set/get
-			PropertyInfo[] props = t.GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            // Write property set/get
+            BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.Instance;
+            if (null == t.BaseType || !t.BaseType.IsGenericType) {
+                bindingFlags |= BindingFlags.DeclaredOnly;
+            }
+			PropertyInfo[] props = t.GetProperties(bindingFlags);
 			foreach (PropertyInfo fi in props)
 			{
 				//if (fi.Name == "Item" || IsObsolete(fi) || MemberInFilter(t,fi) || DontExport(fi))
@@ -2202,8 +2218,7 @@ namespace SLua
 				}
 				gs += ">";
 				
-				ret = Regex.Replace(ret, @"`\d", gs);
-				
+				ret = Regex.Replace(ret, @"`\d+", gs);
 				return ret;
 			}
 			if (t.IsArray)

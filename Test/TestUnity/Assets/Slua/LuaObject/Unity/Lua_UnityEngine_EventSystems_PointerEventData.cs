@@ -45,30 +45,6 @@ public class Lua_UnityEngine_EventSystems_PointerEventData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int Reset(IntPtr l) {
-		try {
-			UnityEngine.EventSystems.PointerEventData self=(UnityEngine.EventSystems.PointerEventData)checkSelf(l);
-			self.Reset();
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int Use(IntPtr l) {
-		try {
-			UnityEngine.EventSystems.PointerEventData self=(UnityEngine.EventSystems.PointerEventData)checkSelf(l);
-			self.Use();
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int get_hovered(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.PointerEventData self=(UnityEngine.EventSystems.PointerEventData)checkSelf(l);
@@ -576,8 +552,6 @@ public class Lua_UnityEngine_EventSystems_PointerEventData : LuaObject {
 		getTypeTable(l,"UnityEngine.EventSystems.PointerEventData");
 		addMember(l,IsPointerMoving);
 		addMember(l,IsScrolling);
-		addMember(l,Reset);
-		addMember(l,Use);
 		addMember(l,"hovered",get_hovered,set_hovered,true);
 		addMember(l,"pointerEnter",get_pointerEnter,set_pointerEnter,true);
 		addMember(l,"lastPress",get_lastPress,null,true);

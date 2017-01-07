@@ -73,12 +73,12 @@ namespace SLua
             LuaDLL.luaL_checktype(l, p, LuaTypes.LUA_TFUNCTION);
             LuaDelegate ld;
             checkType(l, p, out ld);
+						l = LuaState.get(l).L;
             if (ld.d != null)
             {
                 ua = (UnityEngine.Events.UnityAction<UnityEngine.Vector2>)ld.d;
                 return true;
             }
-			l = LuaState.get(l).L;
             ua = (UnityEngine.Vector2 v0) =>
             {
                 int error = pushTry(l);

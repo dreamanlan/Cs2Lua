@@ -17,19 +17,6 @@ public class Lua_UnityEngine_LightmapSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.LightmapSettings self=(UnityEngine.LightmapSettings)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int get_lightmaps(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -103,7 +90,6 @@ public class Lua_UnityEngine_LightmapSettings : LuaObject {
 	}
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.LightmapSettings");
-		addMember(l,GetInstanceID);
 		addMember(l,"lightmaps",get_lightmaps,set_lightmaps,false);
 		addMember(l,"lightmapsMode",get_lightmapsMode,set_lightmapsMode,false);
 		addMember(l,"lightProbes",get_lightProbes,set_lightProbes,false);

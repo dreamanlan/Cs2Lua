@@ -4,19 +4,6 @@ using SLua;
 using System.Collections.Generic;
 public class Lua_UnityEngine_Audio_AudioMixerGroup : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.Audio.AudioMixerGroup self=(UnityEngine.Audio.AudioMixerGroup)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int get_audioMixer(IntPtr l) {
 		try {
 			UnityEngine.Audio.AudioMixerGroup self=(UnityEngine.Audio.AudioMixerGroup)checkSelf(l);
@@ -30,7 +17,6 @@ public class Lua_UnityEngine_Audio_AudioMixerGroup : LuaObject {
 	}
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Audio.AudioMixerGroup");
-		addMember(l,GetInstanceID);
 		addMember(l,"audioMixer",get_audioMixer,null,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.Audio.AudioMixerGroup),typeof(UnityEngine.Object));
 	}

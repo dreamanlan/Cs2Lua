@@ -162,32 +162,6 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetNativeTexturePtr(IntPtr l) {
-		try {
-			UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
-			var ret=self.GetNativeTexturePtr();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int GetTemporary_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -677,8 +651,6 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 		addMember(l,MarkRestoreExpected);
 		addMember(l,SetGlobalShaderProperty);
 		addMember(l,GetTexelOffset);
-		addMember(l,GetNativeTexturePtr);
-		addMember(l,GetInstanceID);
 		addMember(l,GetTemporary_s);
 		addMember(l,ReleaseTemporary_s);
 		addMember(l,SupportsStencil_s);

@@ -103,32 +103,6 @@ public class Lua_UnityEngine_SparseTexture : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetNativeTexturePtr(IntPtr l) {
-		try {
-			UnityEngine.SparseTexture self=(UnityEngine.SparseTexture)checkSelf(l);
-			var ret=self.GetNativeTexturePtr();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.SparseTexture self=(UnityEngine.SparseTexture)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int get_tileWidth(IntPtr l) {
 		try {
 			UnityEngine.SparseTexture self=(UnityEngine.SparseTexture)checkSelf(l);
@@ -169,8 +143,6 @@ public class Lua_UnityEngine_SparseTexture : LuaObject {
 		addMember(l,UpdateTile);
 		addMember(l,UpdateTileRaw);
 		addMember(l,UnloadTile);
-		addMember(l,GetNativeTexturePtr);
-		addMember(l,GetInstanceID);
 		addMember(l,"tileWidth",get_tileWidth,null,true);
 		addMember(l,"tileHeight",get_tileHeight,null,true);
 		addMember(l,"isCreated",get_isCreated,null,true);

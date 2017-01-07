@@ -17,19 +17,6 @@ public class Lua_UnityEngine_RenderSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.RenderSettings self=(UnityEngine.RenderSettings)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int get_fog(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -559,7 +546,6 @@ public class Lua_UnityEngine_RenderSettings : LuaObject {
 	}
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.RenderSettings");
-		addMember(l,GetInstanceID);
 		addMember(l,"fog",get_fog,set_fog,false);
 		addMember(l,"fogMode",get_fogMode,set_fogMode,false);
 		addMember(l,"fogColor",get_fogColor,set_fogColor,false);

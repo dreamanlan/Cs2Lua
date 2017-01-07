@@ -101,19 +101,6 @@ public class Lua_UnityEngine_Audio_AudioMixer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.Audio.AudioMixer self=(UnityEngine.Audio.AudioMixer)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int get_outputAudioMixerGroup(IntPtr l) {
 		try {
 			UnityEngine.Audio.AudioMixer self=(UnityEngine.Audio.AudioMixer)checkSelf(l);
@@ -173,7 +160,6 @@ public class Lua_UnityEngine_Audio_AudioMixer : LuaObject {
 		addMember(l,SetFloat);
 		addMember(l,ClearFloat);
 		addMember(l,GetFloat);
-		addMember(l,GetInstanceID);
 		addMember(l,"outputAudioMixerGroup",get_outputAudioMixerGroup,set_outputAudioMixerGroup,true);
 		addMember(l,"updateMode",get_updateMode,set_updateMode,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.Audio.AudioMixer),typeof(UnityEngine.Object));

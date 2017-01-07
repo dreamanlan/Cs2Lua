@@ -167,19 +167,6 @@ public class Lua_UnityEngine_ComputeShader : LuaObject {
 			return error(l,e);
 		}
 	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.ComputeShader self=(UnityEngine.ComputeShader)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ComputeShader");
 		addMember(l,FindKernel);
@@ -191,7 +178,6 @@ public class Lua_UnityEngine_ComputeShader : LuaObject {
 		addMember(l,SetTexture);
 		addMember(l,SetBuffer);
 		addMember(l,Dispatch);
-		addMember(l,GetInstanceID);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.ComputeShader),typeof(UnityEngine.Object));
 	}
 }

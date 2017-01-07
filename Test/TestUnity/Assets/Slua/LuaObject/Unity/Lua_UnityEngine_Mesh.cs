@@ -514,19 +514,6 @@ public class Lua_UnityEngine_Mesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.Mesh self=(UnityEngine.Mesh)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int get_isReadable(IntPtr l) {
 		try {
 			UnityEngine.Mesh self=(UnityEngine.Mesh)checkSelf(l);
@@ -953,7 +940,6 @@ public class Lua_UnityEngine_Mesh : LuaObject {
 		addMember(l,GetBlendShapeFrameVertices);
 		addMember(l,ClearBlendShapes);
 		addMember(l,AddBlendShapeFrame);
-		addMember(l,GetInstanceID);
 		addMember(l,"isReadable",get_isReadable,null,true);
 		addMember(l,"vertices",get_vertices,set_vertices,true);
 		addMember(l,"normals",get_normals,set_normals,true);

@@ -137,19 +137,6 @@ public class Lua_UnityEngine_Font : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GetInstanceID(IntPtr l) {
-		try {
-			UnityEngine.Font self=(UnityEngine.Font)checkSelf(l);
-			var ret=self.GetInstanceID();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int GetOSInstalledFontNames_s(IntPtr l) {
 		try {
 			var ret=UnityEngine.Font.GetOSInstalledFontNames();
@@ -338,7 +325,6 @@ public class Lua_UnityEngine_Font : LuaObject {
 		addMember(l,HasCharacter);
 		addMember(l,RequestCharactersInTexture);
 		addMember(l,GetCharacterInfo);
-		addMember(l,GetInstanceID);
 		addMember(l,GetOSInstalledFontNames_s);
 		addMember(l,CreateDynamicFontFromOSFont_s);
 		addMember(l,GetMaxVertsForString_s);

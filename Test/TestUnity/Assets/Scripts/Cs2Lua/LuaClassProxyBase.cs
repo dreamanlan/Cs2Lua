@@ -32,10 +32,15 @@ public class LuaClassProxyBase
     protected object CallFunction(LuaFunction func, params object[] args)
     {
         PrepareSlua();
+        object ret = null;
         if (null != func) {
-            return func.call(args);
+            ret = func.call(args);
         }
-        return null;
+        return ret;
+    }
+    protected T CastTo<T>(object v)
+    {
+        return (T)System.Convert.ChangeType(v, typeof(T));
     }
     protected virtual void PrepareMembers()
     {
