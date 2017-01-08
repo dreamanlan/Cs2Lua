@@ -29,12 +29,31 @@ public class LuaClassProxyBase
         }
         return null;
     }
-    protected object CallFunction(LuaFunction func, params object[] args)
+    protected object CallFunction(LuaFunction func, bool checkParams, params object[] args)
     {
         PrepareSlua();
         object ret = null;
         if (null != func) {
-            ret = func.call(args);
+            bool normalCall = true;
+            if (checkParams) {
+                int ct = args.Length;
+                if (ct > 0) {
+                    object o = args[ct - 1];
+                    System.Type t = o.GetType();
+                    if (t.IsArray) {
+                        normalCall = false;
+                        ArrayList al = new ArrayList();
+                        for (int i = 0; i < ct - 1; ++i) {
+                            al.Add(args[i]);
+                        }
+                        al.AddRange(o as ICollection);
+                        ret = func.call(al.ToArray());
+                    }
+                }
+            }
+            if (normalCall) {
+                ret = func.call(args);
+            }
         }
         return ret;
     }

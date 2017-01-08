@@ -174,11 +174,11 @@ public static class Cs2LuaCodeGen
                     sb.AppendLine("{");
                     ++s_Indent;
                     if (IsValueType(prop.PropertyType)) {
-                        sb.AppendFormat("{0}return base.CastTo<{1}>(base.CallFunction(m_Cs2Lua_{2}, Self, ", GetIndentString(), typeName, get.Name);
+                        sb.AppendFormat("{0}return base.CastTo<{1}>(base.CallFunction(m_Cs2Lua_{2}, false, Self, ", GetIndentString(), typeName, get.Name);
                         OutputArgs(sb, ps);
                         sb.AppendLine("));");
                     } else {
-                        sb.AppendFormat("{0}return base.CallFunction(m_Cs2Lua_{1}, Self, ", GetIndentString(), get.Name);
+                        sb.AppendFormat("{0}return base.CallFunction(m_Cs2Lua_{1}, false, Self, ", GetIndentString(), get.Name);
                         OutputArgs(sb, ps);
                         sb.AppendFormat(") as {0};", typeName);
                         sb.AppendLine();
@@ -194,7 +194,7 @@ public static class Cs2LuaCodeGen
                     sb.AppendFormat("{0}", GetIndentString());
                     sb.AppendLine("{");
                     ++s_Indent;
-                    sb.AppendFormat("{0}base.CallFunction(m_Cs2Lua_{1}, Self, ", GetIndentString(), set.Name);
+                    sb.AppendFormat("{0}base.CallFunction(m_Cs2Lua_{1}, false, Self, ", GetIndentString(), set.Name);
                     OutputArgs(sb, ps);
                     sb.AppendLine(", value);");
                     --s_Indent;
@@ -218,9 +218,9 @@ public static class Cs2LuaCodeGen
                     sb.AppendLine("{");
                     ++s_Indent;
                     if (IsValueType(prop.PropertyType))
-                        sb.AppendFormat("{0}return base.CastTo<{1}>(base.CallFunction(m_Cs2Lua_{2}, Self));", GetIndentString(), typeName, get.Name);
+                        sb.AppendFormat("{0}return base.CastTo<{1}>(base.CallFunction(m_Cs2Lua_{2}, false, Self));", GetIndentString(), typeName, get.Name);
                     else
-                        sb.AppendFormat("{0}return base.CallFunction(m_Cs2Lua_{1}, Self) as {2};", GetIndentString(), get.Name, typeName);
+                        sb.AppendFormat("{0}return base.CallFunction(m_Cs2Lua_{1}, false, Self) as {2};", GetIndentString(), get.Name, typeName);
                     sb.AppendLine();
                     --s_Indent;
                     sb.AppendFormat("{0}", GetIndentString());
@@ -233,7 +233,7 @@ public static class Cs2LuaCodeGen
                     sb.AppendFormat("{0}", GetIndentString());
                     sb.AppendLine("{");
                     ++s_Indent;
-                    sb.AppendFormat("{0}base.CallFunction(m_Cs2Lua_{1}, Self, value);", GetIndentString(), set.Name);
+                    sb.AppendFormat("{0}base.CallFunction(m_Cs2Lua_{1}, false, Self, value);", GetIndentString(), set.Name);
                     sb.AppendLine();
                     --s_Indent;
                     sb.AppendFormat("{0}", GetIndentString());
@@ -253,6 +253,7 @@ public static class Cs2LuaCodeGen
             Cs2LuaMethodInfo mi = new Cs2LuaMethodInfo();
             mi.Init(method, type);
             var ps = method.GetParameters();
+            bool existParams = ExistParams(ps);
             sb.AppendFormat("{0}public {1} {2}(", GetIndentString(), retType, method.Name);
             OutputParams(sb, ps);
             sb.AppendLine(")");
@@ -264,7 +265,7 @@ public static class Cs2LuaCodeGen
             if (retType != "void" || mi.ExistReturnParam) {
                 sb.Append("var __cs2lua_ret = ");
             }
-            sb.AppendFormat("base.CallFunction(m_Cs2Lua_{0}, Self", mi.MethodName);
+            sb.AppendFormat("base.CallFunction(m_Cs2Lua_{0}, {1}, Self", mi.MethodName, existParams ? "true" : "false");
             if (mi.ExistParam) {
                 sb.Append(", ");
             }
@@ -350,6 +351,18 @@ public static class Cs2LuaCodeGen
         File.WriteAllText(Path.Combine(c_OutputDir, name + ".cs"), sb.ToString());
 
         Debug.Log(string.Format("GenCode {0}.cs finish.", name));
+    }
+    private static bool ExistParams(params ParameterInfo[] ps)
+    {
+        bool ret = false;
+        int ct = ps.Length;
+        if (ct > 0) {
+            var pi = ps[ct - 1];
+            if (pi.ParameterType.IsArray) {
+                ret = true;
+            }
+        }
+        return ret;
     }
     private static void OutputParams(StringBuilder sb, params ParameterInfo[] ps)
     {
