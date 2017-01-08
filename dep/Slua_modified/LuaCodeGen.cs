@@ -602,7 +602,11 @@ namespace SLua
 		static Dictionary<System.Type,List<MethodInfo>> extensionMethods = new Dictionary<Type, List<MethodInfo>>();
 
 		static CodeGenerator(){
-			extensionMethods = GenerateExtensionMethodsMap();
+            try {
+                extensionMethods = GenerateExtensionMethodsMap();
+            } catch (Exception ex) {
+                UnityEngine.Debug.Log(string.Format("{0}\n{1}", ex.Message, ex.StackTrace));
+            }
 		}
 
 		HashSet<string> funcname = new HashSet<string>();
@@ -1705,7 +1709,8 @@ namespace SLua
 				{
 					if(t.IsValueType)
 					{
-						Write(file, "{0}(argc=={1}){{", first ? "if" : "else if", 0);
+                        Write(file, "{0}(argc<=1){{", first ? "if" : "else if");
+						//Write(file, "{0}(argc=={1}){{", first ? "if" : "else if", 0);
 						Write(file, "o=new {0}();", FullName(t));
 						Write(file, "pushValue(l,true);");
 						Write(file, "pushObject(l,o);");
