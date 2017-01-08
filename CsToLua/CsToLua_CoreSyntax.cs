@@ -507,6 +507,9 @@ namespace RoslynTool.CsToLua
                         //处理ref/out参数
                         InvocationInfo ii = new InvocationInfo();
                         ii.Init(sym, invocation.ArgumentList, m_Model);
+                        if (sym.IsStatic) {
+                            AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
+                        }
 
                         MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
                         if (null != memberAccess) {
