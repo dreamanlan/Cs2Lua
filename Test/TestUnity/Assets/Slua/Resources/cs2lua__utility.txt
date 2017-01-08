@@ -126,7 +126,7 @@ end;
 
 function typecast(obj, t)
 	if t == System.String then
-		return wrapstring(obj);
+		return tostring(obj);
 	elseif t == System.Single or t ==	System.Double then
 	  return tonumber(obj);
 	elseif t == System.Int64 or t == System.UInt64 then
@@ -164,6 +164,19 @@ function typeis(obj, t)
     end;
   end;
   return false;
+end;
+
+function __do_eq(v1,v2)
+	return v1==v2;
+end;
+
+function isequal(v1,v2)
+	local succ, res = pcall(__do_eq,v1,v2);
+	if succ then
+		return res;
+	else
+		return rawequal(v1,v2);
+	end;
 end;
 
 function __wrap_if_string(val)
@@ -219,7 +232,7 @@ end;
 function __dec_table_count(tb)
   local meta = getmetatable(tb);
   if meta then
-  	if meta.__count > 0 then
+  	if meta.__count and meta.__count > 0 then
     	meta.__count = meta.__count - 1;    
     else
     	meta.__count = __calc_table_count(tb);
@@ -277,7 +290,7 @@ __mt_index_of_array = function(t, k)
       local pos = 1;
       local ret = nil;
       for k,v in pairs(obj) do		        
-        if v==p then
+        if isequal(v,p) then
           ret=v;
           break;
         end;
@@ -601,16 +614,6 @@ function wrapconst(t, name)
   return t[name];
 end;
 
-function wrapstring(str)
-  if type(str)=="string" then
-    return System.String(str);
-  elseif type(str)=="number" then
-  	return System.String(tostring(str));
-  else
-    return str;
-  end;
-end;
-
 function wrapchar(char, intVal)
   if intVal>0 then
     return intVal;
@@ -631,11 +634,11 @@ function wrapchar(char, intVal)
 end;
 
 function wraparray(arr)
-	return setmetatable(arr, { __index = __mt_index_of_array, __class = System.Collections.Generic.List_T });
+	return setmetatable(arr, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = System.Collections.Generic.List_T });
 end;
 
 function wrapdictionary(dict)
-	return setmetatable(dict, { __index = __mt_index_of_dictionary, __class = System.Collections.Generic.Dictionary_TKey_TValue });
+	return setmetatable(dict, { __index = __mt_index_of_dictionary, __cs2lua_defined = true, __class = System.Collections.Generic.Dictionary_TKey_TValue });
 end;
 
 function wrapdelegation(handlers)
@@ -673,7 +676,7 @@ function wrapvaluetypearray(arr)
 	for i,v in ipairs(arr) do
 		arr[i]=wrapvaluetype(v);
 	end;
-	return setmetatable(arr, { __index = __mt_index_of_array, __class = System.Collections.Generic.List_T });
+	return setmetatable(arr, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = System.Collections.Generic.List_T });
 end;
 
 function wrapexternvaluetype(v)
@@ -684,7 +687,7 @@ function wrapexternvaluetypearray(arr)
 	for i,v in ipairs(arr) do
 		arr[i]=wrapexternvaluetype(v);
 	end;
-	return setmetatable(arr, { __index = __mt_index_of_array, __class = System.Collections.Generic.List_T });
+	return setmetatable(arr, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = System.Collections.Generic.List_T });
 end;
 
 function defineclass(base, className, static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, is_value_type)
@@ -864,7 +867,8 @@ function newobject(class, ctor, initializer, ...)
     obj[ctor](obj, ...);
   end;
   for k,v in pairs(initializer) do
-    obj[k] = v;
+		local sk = __unwrap_if_string(k);
+		obj[sk] = v;
   end;
   return obj;
 end;
@@ -880,11 +884,12 @@ function newexternobject(class, className, ctor, doextension, initializer, ...)
     if doextension ~= nil then
       doextension();
     end;
-	if initializer ~= nil then	
-		for k,v in pairs(initializer) do
-		  obj[k] = v;
-		end;
-	end	
+		if initializer ~= nil then
+			for k,v in pairs(initializer) do
+				local sk = __unwrap_if_string(k);
+			  obj[sk] = v;
+			end;
+		end
     return obj;
   else
     return nil;
@@ -905,45 +910,99 @@ end;
 
 function newdictionary(t, ctor, dict, ...)
   if dict then
-	  return setmetatable(dict, { __index = __mt_index_of_dictionary, __class = t });
+	  return setmetatable(dict, { __index = __mt_index_of_dictionary, __cs2lua_defined = true, __class = t });
 	end;
 end;
 
 function newlist(t, ctor, list, ...)
   if list then
-    return setmetatable(list, { __index = __mt_index_of_array, __class = t });
+    return setmetatable(list, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = t });
   end;
 end;
 
 function newcollection(t, ctor, coll, ...)
   if coll then
-    return setmetatable(coll, { __index = __mt_index_of_hashset, __class = t });
+    return setmetatable(coll, { __index = __mt_index_of_hashset, __cs2lua_defined = true, __class = t });
   end;
 end;
 
 function newexterndictionary(t, className, ctor, doextension, dict, ...)
   if dict and t==System.Collections.Generic.Dictionary_TKey_TValue then
-	  return setmetatable(dict, { __index = __mt_index_of_dictionary, __class = t });
-	else
-	  return newexternobject(t, className, ctor, doextension, dict, ...);
+	  return setmetatable(dict, { __index = __mt_index_of_dictionary, __cs2lua_defined = true, __class = t });
+	else	  
+	  local obj = nil;
+	  if t ~= nil then
+	    obj = t(...);
+	  else
+	    obj = Slua.CreateClass(className, ...);
+	  end;
+	  if obj then
+	    if doextension ~= nil then
+	      doextension();
+	    end;
+			if dict ~= nil then
+				for k,v in pairs(dict) do
+				  obj:Add(k, v);
+				end;
+			end
+	    return obj;
+	  else
+	    return nil;
+	  end;
 	end;
 end;
 
 function newexternlist(t, className, ctor, doextension, list, ...)
   if list and t==System.Collections.Generic.List_T then    
-	  return setmetatable(list, { __index = __mt_index_of_array, __class = t });
-	else
-	  return newexternobject(t, className, ctor, doextension, list, ...);
+	  return setmetatable(list, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = t });
+	else 
+	  local obj = nil;
+	  if t ~= nil then
+	    obj = t(...);
+	  else
+	    obj = Slua.CreateClass(className, ...);
+	  end;
+	  if obj then
+	    if doextension ~= nil then
+	      doextension();
+	    end;
+			if list ~= nil then
+				for i,v in ipairs(list) do
+				  obj:Add(v);
+				end;
+			end
+	    return obj;
+	  else
+	    return nil;
+	  end;
   end;
 end;
 
 function newexterncollection(t, className, ctor, doextension, coll, ...)
   if coll and (t==System.Collections.Generic.Queue_T or t==System.Collections.Generic.Stack_T) then
-    return setmetatable(coll, { __index = __mt_index_of_array, __class = t });
+    return setmetatable(coll, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = t });
   elseif coll and t==System.Collections.Generic.HashSet_T then
-    return setmetatable(coll, { __index = __mt_index_of_hashset, __class = t });
+    return setmetatable(coll, { __index = __mt_index_of_hashset, __cs2lua_defined = true, __class = t });
 	else
-	  return newexternobject(t, className, ctor, doextension, coll, ...);
+	  local obj = nil;
+	  if t ~= nil then
+	    obj = t(...);
+	  else
+	    obj = Slua.CreateClass(className, ...);
+	  end;
+	  if obj then
+	    if doextension ~= nil then
+	      doextension();
+	    end;
+			if coll ~= nil then
+				for i,v in ipairs(coll) do
+				  obj:Add(v);
+				end;
+			end
+	    return obj;
+	  else
+	    return nil;
+	  end;
   end;
 end;
 
@@ -1070,7 +1129,7 @@ function getexternstaticindexer(class, name, ...)
 end;
 function getexterninstanceindexer(obj, intf, name, ...)  
 	local args = {...};
-	local index = args[1];
+	local index = __unwrap_if_string(args[1]);
 	local meta = getmetatable(obj);
 	if meta then
   	if meta.__class == System.Collections.Generic.List_T then

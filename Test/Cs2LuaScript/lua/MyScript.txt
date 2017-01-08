@@ -26,15 +26,15 @@ MyScript = {
 
 		local instance_methods = {
 			Init = function(this, obj, mb)
-				local s; s = wrapstring("test test test from cs2lua !");
+				local s; s = "test test test from cs2lua !";
 				UnityEngine.Debug.Log(s);
 				mb:StartCoroutine(this:TestCoroutine());
-				this.root = newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", nil, {}, wrapstring("root"));
-				local slider; slider = typecast(UnityEngine.GameObject.Find(wrapstring("Canvas/Slider")):GetComponent(UnityEngine.UI.Slider), UnityEngine.UI.Slider);
-				local counttxt; counttxt = typecast(UnityEngine.GameObject.Find(wrapstring("Canvas/Count")):GetComponent(UnityEngine.UI.Text), UnityEngine.UI.Text);
+				this.root = newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", nil, {}, "root");
+				local slider; slider = typecast(UnityEngine.GameObject.Find("Canvas/Slider"):GetComponent(UnityEngine.UI.Slider), UnityEngine.UI.Slider);
+				local counttxt; counttxt = typecast(UnityEngine.GameObject.Find("Canvas/Count"):GetComponent(UnityEngine.UI.Text), UnityEngine.UI.Text);
 				slider.onValueChanged:AddListener((function(v)
 					this:Reset();
-					counttxt.text = LuaString.Format(wrapstring("cube:{0}"), v);
+					counttxt.text = LuaString.Format("cube:{0}", v);
 					this.max = typecast(v, System.Int32);
 				end));
 				this:Reset();
@@ -66,7 +66,7 @@ MyScript = {
 				local i; i = 0;
 				while (i < 60) do
 					wrapyield(newexternobject(UnityEngine.WaitForSeconds, "UnityEngine.WaitForSeconds", "ctor", nil, {}, 1), false, true);
-					UnityEngine.Debug.Log(System.String.Format(wrapstring("{0} seconds"), i));
+					UnityEngine.Debug.Log(System.String.Format("{0} seconds", i));
 				i = i + 1;
 				end;
 			end),
@@ -79,7 +79,7 @@ MyScript = {
 					end;
 				end;
 				this.cubes = wraparray{};
-				local P; P = UnityEngine.Resources.Load(wrapstring("Particle System"));
+				local P; P = UnityEngine.Resources.Load("Particle System");
 				local i; i = 0;
 				while (i < this.max) do
 					local cube; cube = UnityEngine.GameObject.CreatePrimitive(3);

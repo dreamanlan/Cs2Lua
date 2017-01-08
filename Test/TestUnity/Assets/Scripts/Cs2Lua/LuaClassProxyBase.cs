@@ -40,7 +40,12 @@ public class LuaClassProxyBase
     }
     protected T CastTo<T>(object v)
     {
-        return (T)System.Convert.ChangeType(v, typeof(T));
+        System.Type t = typeof(T);
+        if (t.IsEnum) {
+            return (T)System.Convert.ChangeType(v, typeof(int));
+        } else {
+            return (T)System.Convert.ChangeType(v, t);
+        }
     }
     protected virtual void PrepareMembers()
     {

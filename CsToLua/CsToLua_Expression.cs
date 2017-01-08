@@ -524,9 +524,9 @@ namespace RoslynTool.CsToLua
                             for (int i = 0; i < ct; ++i) {
                                 var exp = args[i] as InitializerExpressionSyntax;
                                 if (null != exp) {
-                                    CodeBuilder.Append("[");
+                                    CodeBuilder.Append("[tostring(");
                                     VisitToplevelExpression(exp.Expressions[0], string.Empty);
-                                    CodeBuilder.Append("] = ");
+                                    CodeBuilder.Append(")] = ");
                                     VisitToplevelExpression(exp.Expressions[1], string.Empty);
                                 } else {
                                     Log(args[i], "Dictionary init error !");

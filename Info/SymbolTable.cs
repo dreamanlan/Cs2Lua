@@ -343,6 +343,17 @@ namespace RoslynTool.CsToLua
             }
             return ret;
         }
+        internal static bool IsBasicType(ITypeSymbol type)
+        {
+            bool ret = false;
+            if (type.TypeKind == TypeKind.Enum) {
+                ret = true;
+            } else {
+                string typeName = ClassInfo.GetFullName(type);
+                ret = IsBasicType(typeName);
+            }
+            return ret;
+        }
         internal static bool IsBasicType(string type)
         {
             return s_BasicTypes.Contains(type);

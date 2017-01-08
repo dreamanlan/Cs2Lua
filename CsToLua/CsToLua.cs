@@ -365,7 +365,7 @@ namespace RoslynTool.CsToLua
         {
             string v = val as string;
             if (null != v) {
-                CodeBuilder.AppendFormat("wrapstring(\"{0}\")", Escape(v));
+                CodeBuilder.AppendFormat("\"{0}\"", Escape(v));
             } else if (val is bool) {
                 CodeBuilder.Append((bool)val ? "true" : "false");
             } else if (val is char) {
@@ -481,13 +481,13 @@ namespace RoslynTool.CsToLua
             } else if (leftTypeFullName == "System.String") {
                 CodeBuilder.Append("System.String.Concat(");
                 VisitExpressionSyntax(left);
-                CodeBuilder.Append(", wrapstring(");
+                CodeBuilder.Append(", tostring(");
                 VisitExpressionSyntax(right);
-                CodeBuilder.Append("):ToString())");
+                CodeBuilder.Append("))");
             } else if (rightTypeFullName == "System.String") {
-                CodeBuilder.Append("System.String.Concat(wrapstring(");
+                CodeBuilder.Append("System.String.Concat(tostring(");
                 VisitExpressionSyntax(left);
-                CodeBuilder.Append("):ToString(), ");
+                CodeBuilder.Append("), ");
                 VisitExpressionSyntax(right);
                 CodeBuilder.Append(")");
             } else {
@@ -506,16 +506,30 @@ namespace RoslynTool.CsToLua
                 var leftAssembly = leftOper.Type.ContainingAssembly;
                 var sym = m_Model.GetSymbolInfo(left);
                 OutputDelegationCompareWithNull(sym.Symbol, left, leftAssembly == m_SymbolTable.AssemblySymbol, op == "==");
-            } else if (null!=rightOper.Type && rightOper.Type.TypeKind == TypeKind.Delegate && (!rightOper.ConstantValue.HasValue || null != rightOper.ConstantValue.Value) && leftOper.ConstantValue.HasValue && leftOper.ConstantValue.Value == null) {
+            } else if (null != rightOper.Type && rightOper.Type.TypeKind == TypeKind.Delegate && (!rightOper.ConstantValue.HasValue || null != rightOper.ConstantValue.Value) && leftOper.ConstantValue.HasValue && leftOper.ConstantValue.Value == null) {
                 var rightAssembly = rightOper.Type.ContainingAssembly;
                 var sym = m_Model.GetSymbolInfo(right);
                 OutputDelegationCompareWithNull(sym.Symbol, right, rightAssembly == m_SymbolTable.AssemblySymbol, op == "==");
-            } else {
+            } else if (null != leftOper && null != rightOper && (leftOper.ConstantValue.HasValue && null == leftOper.ConstantValue.Value || rightOper.ConstantValue.HasValue && null == rightOper.ConstantValue.Value || SymbolTable.IsBasicType(leftOper.Type) || SymbolTable.IsBasicType(rightOper.Type))) {
                 CodeBuilder.Append("(");
                 VisitExpressionSyntax(left);
                 CodeBuilder.AppendFormat(" {0} ", op);
                 VisitExpressionSyntax(right);
                 CodeBuilder.Append(")");
+            } else {
+                if (op == "==") {
+                    CodeBuilder.Append("isequal(");
+                    VisitExpressionSyntax(left);
+                    CodeBuilder.Append(", ");
+                    VisitExpressionSyntax(right);
+                    CodeBuilder.Append(")");
+                } else {
+                    CodeBuilder.Append("(not isequal(");
+                    VisitExpressionSyntax(left);
+                    CodeBuilder.Append(", ");
+                    VisitExpressionSyntax(right);
+                    CodeBuilder.Append("))");
+                }
             }
         }
         private void OutputDelegationCompareWithNull(ISymbol leftSym, ExpressionSyntax left, bool isCs2LuaAssembly, bool isEqual)

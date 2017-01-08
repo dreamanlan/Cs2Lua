@@ -274,7 +274,7 @@ public static class Cs2LuaCodeGen
                 sb.Append(" as object[]");
             }
             sb.AppendLine(";");
-            OutputPostMethodCall(sb, ps);
+            OutputPostMethodCall(sb, retType, ps);
             if (retType != "void") {
                 if (IsValueType(method.ReturnType)) {
                     if (mi.ExistReturnParam)
@@ -387,9 +387,12 @@ public static class Cs2LuaCodeGen
             }
         }
     }
-    private static void OutputPostMethodCall(StringBuilder sb, params ParameterInfo[] ps)
+    private static void OutputPostMethodCall(StringBuilder sb, string retType, params ParameterInfo[] ps)
     {
         int ix = 0;
+        if (retType != "void") {
+            ix = 1;
+        }
         foreach (var pi in ps) {
             if (pi.IsOut || pi.ParameterType.IsByRef) {
                 if(IsValueType(pi.ParameterType))
