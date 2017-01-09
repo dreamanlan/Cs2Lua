@@ -374,8 +374,10 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.Append("nil");
             } else {
                 string sv = val.ToString();
-                char c = sv.Length>0 ? sv[0] : '\0';
-                if (c == '-' || c == '.' || char.IsNumber(c)) {
+                char c1 = sv.Length>0 ? sv[0] : '\0';
+                char c2 = sv.Length > 1 ? sv[1] : '\0';
+                char c3 = sv.Length > 2 ? sv[2] : '\0';
+                if (c1 == '-' && c2 == '.' && char.IsNumber(c3) || (c1 == '-' || c1 == '.') && char.IsNumber(c2) || char.IsNumber(c1)) {
                     CodeBuilder.Append(val);
                 } else {
                     var oper = operOrSym as IFieldReferenceExpression;
