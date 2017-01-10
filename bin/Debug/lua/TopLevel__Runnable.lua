@@ -23,7 +23,7 @@ TopLevel.Runnable = {
 
 		local instance_methods = {
 			Runnable_Test = function(this)
-				LuaConsole.Print(wrapstring("test."));
+				LuaConsole.Print("test.");
 			end,
 			Runnable_get_TestProp = function(this)
 				return 1;

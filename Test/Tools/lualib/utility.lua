@@ -301,6 +301,10 @@ __mt_index_of_array = function(t, k)
       end;
       return ret;
     end;
+  elseif k=="RemoveAt" then
+    return function(obj, ix)
+      table.remove(obj,ix+1);
+    end;
   elseif k=="AddRange" then
     return function(obj, coll)
       local enumer = coll:GetEnumerator();

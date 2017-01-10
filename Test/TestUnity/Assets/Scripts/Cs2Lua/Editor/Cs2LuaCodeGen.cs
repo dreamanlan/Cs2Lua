@@ -148,6 +148,88 @@ public static class Cs2LuaCodeGen
         sb.AppendLine();
         sb.AppendFormat("{0}using System.Collections.Generic;", GetIndentString());
         sb.AppendLine();
+        sb.AppendLine();
+        sb.AppendFormat("{0}public interface {1}", GetIndentString(), name);
+        sb.AppendLine();
+        sb.AppendFormat("{0}", GetIndentString());
+        sb.AppendLine("{");
+        ++s_Indent;
+        foreach (var prop in type.GetProperties()) {
+            string typeName = SimpleName(prop.PropertyType);
+            var ps = prop.GetIndexParameters();
+            if (ps.Length > 0) {
+                sb.AppendFormat("{0}{1} {2}[", GetIndentString(), typeName, prop.Name);
+                OutputParams(sb, ps);
+                sb.AppendLine("]");
+                sb.AppendFormat("{0}", GetIndentString());
+                sb.AppendLine("{");
+                ++s_Indent;
+                var get = prop.GetGetMethod();
+                if (null != get) {
+                    sb.AppendFormat("{0}get;", GetIndentString());
+                    sb.AppendLine();
+                }
+                var set = prop.GetSetMethod();
+                if (null != set) {
+                    sb.AppendFormat("{0}set;", GetIndentString());
+                    sb.AppendLine();
+                }
+                --s_Indent;
+                sb.AppendFormat("{0}", GetIndentString());
+                sb.AppendLine("}");
+            } else {
+                sb.AppendFormat("{0}{1} {2}", GetIndentString(), typeName, prop.Name);
+                sb.AppendLine();
+                sb.AppendFormat("{0}", GetIndentString());
+                sb.AppendLine("{");
+                ++s_Indent;
+                var get = prop.GetGetMethod();
+                if (null != get) {
+                    sb.AppendFormat("{0}get;", GetIndentString());
+                    sb.AppendLine();
+                }
+                var set = prop.GetSetMethod();
+                if (null != set) {
+                    sb.AppendFormat("{0}set;", GetIndentString());
+                    sb.AppendLine();
+                }
+                --s_Indent;
+                sb.AppendFormat("{0}", GetIndentString());
+                sb.AppendLine("}");
+            }
+        }
+        foreach (var method in type.GetMethods()) {
+            if (method.IsSpecialName)
+                continue;
+            string retType = SimpleName(method.ReturnType);
+            if (retType == "System.Void")
+                retType = "void";
+            Cs2LuaMethodInfo mi = new Cs2LuaMethodInfo();
+            mi.Init(method, type);
+            var ps = method.GetParameters();
+            bool existParams = ExistParams(ps);
+            sb.AppendFormat("{0}{1} {2}(", GetIndentString(), retType, method.Name);
+            OutputParams(sb, ps);
+            sb.AppendLine(");");
+        }
+        --s_Indent;
+        sb.AppendFormat("{0}", GetIndentString());
+        sb.AppendLine("}");
+
+        File.WriteAllText(Path.Combine(c_InterfaceOutputDir, name + ".cs"), sb.ToString());
+
+        Debug.Log(string.Format("GenInterfaceCode {0}.cs finish.", name));
+    }
+    private static void GenLuaProxyCode(System.Type type, string name)
+    {
+        StringBuilder sb = new StringBuilder();
+        s_Indent = 0;
+        sb.AppendFormat("{0}using System;", GetIndentString());
+        sb.AppendLine();
+        sb.AppendFormat("{0}using System.Collections;", GetIndentString());
+        sb.AppendLine();
+        sb.AppendFormat("{0}using System.Collections.Generic;", GetIndentString());
+        sb.AppendLine();
         sb.AppendFormat("{0}using SLua;", GetIndentString());
         sb.AppendLine();
         sb.AppendLine();
@@ -348,9 +430,9 @@ public static class Cs2LuaCodeGen
         sb.AppendFormat("{0}", GetIndentString());
         sb.AppendLine("}");
 
-        File.WriteAllText(Path.Combine(c_OutputDir, name + ".cs"), sb.ToString());
+        File.WriteAllText(Path.Combine(c_LuaProxyOutputDir, name + ".cs"), sb.ToString());
 
-        Debug.Log(string.Format("GenCode {0}.cs finish.", name));
+        Debug.Log(string.Format("GenLuaProxyCode {0}.cs finish.", name));
     }
     private static bool ExistParams(params ParameterInfo[] ps)
     {
@@ -522,5 +604,6 @@ public static class Cs2LuaCodeGen
     private static int s_Indent = 0;
     private static string[] s_Prefixs = new string[] { "System.Collections.Generic" };
 
-    private const string c_OutputDir = "Assets\\Scripts\\Cs2Lua\\GeneratedCode";
+    private const string c_InterfaceOutputDir = "..\\CustomApi";
+    private const string c_LuaProxyOutputDir = "Assets\\Scripts\\Cs2Lua\\GeneratedCode";
 }

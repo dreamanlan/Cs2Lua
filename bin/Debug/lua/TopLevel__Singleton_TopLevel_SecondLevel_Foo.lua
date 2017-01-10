@@ -43,7 +43,7 @@ TopLevel.Singleton_TopLevel_SecondLevel_Foo = {
 		local instance_methods = {
 			ctor = function(this)
 				if (TopLevel.Singleton_TopLevel_SecondLevel_Foo.ms_instance ~= nil) then
-					UnityEngine.Debug.LogError(wrapstring("Cannot have two instances in singleton"));
+					UnityEngine.Debug.LogError("Cannot have two instances in singleton");
 					return this;
 				end;
 				TopLevel.Singleton_TopLevel_SecondLevel_Foo.ms_instance = typecast(typecast(this, System.Object), TopLevel.SecondLevel.Foo);

@@ -28,7 +28,7 @@ Extentions = {
 --return (long)(Time.realtimeSinceStartup * 1000);
 				if (Extentions.dateTime1970.Ticks == 0) then
 --Debug.LogError("Ticks = 0");
-					Extentions.dateTime1970 = System.DateTime.Parse(wrapstring("1970-1-1"));
+					Extentions.dateTime1970 = System.DateTime.Parse("1970-1-1");
 				end;
 				local ts; ts = (dateTime - Extentions.dateTime1970);
 				return typecast(ts.TotalMilliseconds, System.Int64);
@@ -70,7 +70,7 @@ Extentions = {
 				return nil;
 			end,
 			isFirstTimeToStart = function()
-				local isFirstTimeStart; isFirstTimeStart = UnityEngine.PlayerPrefs.GetInt(wrapstring("isFirstTimeToStart"), 1);
+				local isFirstTimeStart; isFirstTimeStart = UnityEngine.PlayerPrefs.GetInt("isFirstTimeToStart", 1);
 				return (isFirstTimeStart == 1);
 			end,
 			AddSorted = function(T, list, item)

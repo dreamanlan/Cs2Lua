@@ -1,12 +1,12 @@
 ============<<<Semantic Error:test>>>============
+test.cs(476,59): error CS1501: No overload for method 'Add' takes 2 arguments
+test.cs(476,69): error CS1501: No overload for method 'Add' takes 2 arguments
 test.cs(26,17): error CS0619: 'GameObject.renderer' is obsolete: 'Property renderer has been deprecated. Use GetComponent<Renderer>() instead. (UnityUpgradable)'
 test.cs(31,16): error CS0128: A local variable named 's' is already defined in this scope
 test.cs(32,13): error CS0128: A local variable named 'i' is already defined in this scope
 test.cs(228,27): error CS0413: The type parameter 'T' cannot be used with the 'as' operator because it does not have a class type constraint nor a 'class' constraint
 test.cs(229,23): error CS0128: A local variable named 'v' is already defined in this scope
 test.cs(239,29): error CS0030: Cannot convert type 'T' to 'TT'
-test.cs(476,59): error CS1501: No overload for method 'Add' takes 2 arguments
-test.cs(476,69): error CS1501: No overload for method 'Add' takes 2 arguments
 test.cs(365,17): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
 test.cs(366,21): error CS0266: Cannot implicitly convert type 'int?' to 'int'. An explicit conversion exists (are you missing a cast?)
 test.cs(373,80): error CS0266: Cannot implicitly convert type 'float' to 'int'. An explicit conversion exists (are you missing a cast?)

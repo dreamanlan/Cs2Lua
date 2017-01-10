@@ -37,10 +37,10 @@ TopLevel.SecondLevel.FooExtension = {
 				f = TopLevel.SecondLevel.Foo.op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo(f, ff);
 				local rr; rr = TopLevel.SecondLevel.Foo.op_Explicit(123);
 				local rrr; rrr = typecast(123, TopLevel.SecondLevel.Foo);
-				local obj; obj = newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", (function(obj) UnityEngine.GameObject.__install_TopLevel_SecondLevel_FooExtension(obj); end), {}, wrapstring("test test test"));
+				local obj; obj = newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", (function(obj) UnityEngine.GameObject.__install_TopLevel_SecondLevel_FooExtension(obj); end), {}, "test test test");
 				local arr; arr = wraparray{1, 2, 3, 4, 56};
 				local v; v = arr[3];
-				local dict; dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", nil, {[1] = 2, [3] = 4});
+				local dict; dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", nil, {[tostring(1)] = 2, [tostring(3)] = 4});
 				local v1; v1 = condaccess(dict, (function() return getexterninstanceindexer(dict, nil, "get_Item", 1); end));
 				local list; list = nil;
 				local l; l = condaccess(list, (function() return list.Count; end));

@@ -200,7 +200,7 @@ TopLevel.SecondLevel.Foo = {
 				m_Test = 0,
 				m_Test2 = 0,
 				m_TS = 0,
-				m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, "System.Collections.Generic.HashSet_T", "ctor", nil, {wrapstring("one"), wrapstring("two"), wrapstring("three")}),
+				m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, "System.Collections.Generic.HashSet_T", "ctor", nil, {"one", "two", "three"}),
 				__attributes = TopLevel__SecondLevel__Foo__Attrs,
 				__ctor_called = false,
 			};

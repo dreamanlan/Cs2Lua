@@ -25,7 +25,7 @@ bar = {
 		local instance_methods = {
 			test = function(this)
 				local a; a = newobject(foo_System_Int32_System_Int32, "ctor", {});
-				a:parse(wrapstring("123"), wrapstring("456"));
+				a:parse("123", "456");
 			end,
 			ctor = function(this)
 			end,
