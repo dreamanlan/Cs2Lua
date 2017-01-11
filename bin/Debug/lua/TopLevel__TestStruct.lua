@@ -1,5 +1,6 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
+require "cs2lua__externenums";
 
 TopLevel.TestStruct = {
 	__new_object = function(...)

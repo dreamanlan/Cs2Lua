@@ -1,5 +1,6 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
+require "cs2lua__externenums";
 
 TopLevel.SecondLevel.FooBase = {
 	__new_object = function(...)

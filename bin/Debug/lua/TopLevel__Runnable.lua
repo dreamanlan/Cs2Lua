@@ -1,5 +1,7 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
+require "cs2lua__externenums";
+require "TopLevel__TestEnum";
 
 TopLevel.Runnable = {
 	__new_object = function(...)
@@ -36,6 +38,10 @@ TopLevel.Runnable = {
 			set_Item = function(this, ix, value)
 			end,
 			Test2 = function(this)
+				local s; s = invokeforbasicvalue(3, true, TopLevel.TestEnum, "ToString");
+				local e; e = 1;
+				System.Enum.Parse(TopLevel.TestEnum, "Two");
+				local ss; ss = invokeforbasicvalue(1, true, System.PlatformID, "ToString");
 			end,
 			Runnable_add_OnAction = function(this, value)
 			end,

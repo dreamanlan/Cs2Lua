@@ -1,5 +1,6 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
+require "cs2lua__externenums";
 require "foo_System_Int32_System_Int32";
 
 bar = {

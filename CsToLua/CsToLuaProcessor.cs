@@ -323,9 +323,12 @@ namespace RoslynTool.CsToLua
             BuildNamespaces(nsBuilder, toplevelMni);
             StringBuilder attrBuilder = new StringBuilder();
             BuildAttributes(attrBuilder, compilation.Assembly, ignoredClasses);
+            StringBuilder enumBuilder = new StringBuilder();
+            BuildExternEnums(enumBuilder);
             File.Copy(Path.Combine(exepath, "lualib/utility.lua"), Path.Combine(outputDir, string.Format("cs2lua__utility.{0}", outputExt)), true);
             File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__namespaces.{0}", outputExt)), nsBuilder.ToString());
             File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__attributes.{0}", outputExt)), attrBuilder.ToString());
+            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__externenums.{0}", outputExt)), enumBuilder.ToString());
             foreach (var pair in toplevelClasses) {
                 StringBuilder classBuilder = new StringBuilder();
                 lualibRefs.Clear();
@@ -571,6 +574,54 @@ namespace RoslynTool.CsToLua
                 sb.AppendLine("}},");
             }
         }
+        private static void BuildExternEnums(StringBuilder sb)
+        {
+            int indent = 0;
+            foreach (var pair in SymbolTable.Instance.ExternEnums) {
+                string key = pair.Key;
+                var typeSym = pair.Value;
+
+                sb.AppendFormat("{0}{1} = {2} or {{}};", GetIndentString(indent), key, key);
+                sb.AppendLine();
+
+                sb.AppendLine();
+
+                sb.AppendFormat("{0}rawset({1}, \"Value2String\", {{", GetIndentString(indent), key);
+                sb.AppendLine();
+                ++indent;
+
+                foreach (var sym in typeSym.GetMembers()) {
+                    if (sym.Kind != SymbolKind.Field) continue;
+                    var fsym = sym as IFieldSymbol;
+                    sb.AppendFormat("{0}[", GetIndentString(indent));
+                    CsLuaTranslater.OutputConstValue(sb, fsym.ConstantValue, fsym);
+                    sb.AppendFormat("] = \"{0}\",", fsym.Name);
+                    sb.AppendLine();
+                }
+
+                --indent;
+                sb.AppendFormat("{0}}});", GetIndentString(indent));
+                sb.AppendLine();
+                sb.AppendFormat("{0}rawset({1}, \"String2Value\", {{", GetIndentString(indent), key);
+                sb.AppendLine();
+                ++indent;
+
+                foreach (var sym in typeSym.GetMembers()) {
+                    if (sym.Kind != SymbolKind.Field) continue;
+                    var fsym = sym as IFieldSymbol;
+                    sb.AppendFormat("{0}[\"{1}\"] = ", GetIndentString(indent), fsym.Name);
+                    CsLuaTranslater.OutputConstValue(sb, fsym.ConstantValue, fsym);
+                    sb.Append(",");
+                    sb.AppendLine();
+                }
+
+                --indent;
+                sb.AppendFormat("{0}}});", GetIndentString(indent));
+                sb.AppendLine();
+
+                sb.AppendLine();
+            }
+        }
         private static void BuildLuaClass(StringBuilder sb, MergedNamespaceInfo toplevelMni, Dictionary<string, MergedClassInfo> toplevelMcis, HashSet<string> lualibRefs)
         {
             StringBuilder code = new StringBuilder();
@@ -582,6 +633,7 @@ namespace RoslynTool.CsToLua
             }
             sb.AppendLine("require \"cs2lua__utility\";");
             sb.AppendLine("require \"cs2lua__attributes\";");
+            sb.AppendLine("require \"cs2lua__externenums\";");
             foreach (string lib in lualibRefs) {
                 sb.AppendFormat("require \"{0}\";", lib);
                 sb.AppendLine();
@@ -687,6 +739,7 @@ namespace RoslynTool.CsToLua
                 if (existAttributes)
                     sb.AppendLine("require \"cs2lua__attributes\";");
                 sb.AppendLine("require \"cs2lua__namespaces\";");
+                sb.AppendLine("require \"cs2lua__externenums\";");
                 foreach (string lib in requiredlibs) {
                     sb.AppendFormat("require \"{0}\";", lib);
                     sb.AppendLine();
@@ -1126,12 +1179,7 @@ namespace RoslynTool.CsToLua
             }
 
             --indent;
-            sb.AppendFormat("{0}}}", GetIndentString(indent));
-            if (indent > 0) {
-                sb.Append(",");
-            } else {
-                sb.Append(";");
-            }
+            sb.AppendFormat("{0}}};", GetIndentString(indent));
             sb.AppendLine();
 
             foreach (var ci in classes) {
@@ -1139,7 +1187,31 @@ namespace RoslynTool.CsToLua
             }
             sb.AppendLine();
 
-            if (!isEnumClass) {
+            if (isEnumClass) {
+                //生成枚举值与字符串的双向转换表
+                sb.AppendFormat("{0}rawset({1}, \"Value2String\", {{", GetIndentString(indent), key);
+                sb.AppendLine();
+                ++indent;
+
+                foreach (var ci in classes) {
+                    sb.Append(ci.EnumValue2StringCodeBuilder.ToString());
+                }
+
+                --indent; 
+                sb.AppendFormat("{0}}});", GetIndentString(indent));
+                sb.AppendLine();
+                sb.AppendFormat("{0}rawset({1}, \"String2Value\", {{", GetIndentString(indent), key);
+                sb.AppendLine();
+                ++indent;
+
+                foreach (var ci in classes) {
+                    sb.Append(ci.String2EnumValueCodeBuilder.ToString());
+                }
+
+                --indent;
+                sb.AppendFormat("{0}}});", GetIndentString(indent));
+                sb.AppendLine();
+            } else {
                 foreach (var pair in mci.InnerClasses) {
                     BuildLuaClass(sb, pair.Key, pair.Value, false, lualibRefs);
                 }

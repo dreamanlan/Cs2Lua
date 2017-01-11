@@ -1,5 +1,6 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
+require "cs2lua__externenums";
 
 Extentions = {
 	__define_class = function()
@@ -52,7 +53,7 @@ Extentions = {
 				return child;
 			end,
 			searchChildRecursively = function(transform, childName, maxDepth)
-				if (invokeforbasicvalue(transform.name, System.String, "IndexOf", childName) ~= -1) then
+				if (invokeforbasicvalue(transform.name, false, System.String, "IndexOf", childName) ~= -1) then
 					return transform;
 				end;
 				local count; count = transform.childCount;

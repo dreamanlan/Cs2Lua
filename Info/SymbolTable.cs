@@ -32,6 +32,10 @@ namespace RoslynTool.CsToLua
         {
             get { return m_Requires; }
         }
+        internal Dictionary<string, ITypeSymbol> ExternEnums
+        {
+            get { return m_ExternEnums; }
+        }
         internal Dictionary<string, List<SyntaxNode>> GenericTypeDefines
         {
             get { return m_GenericTypeDefines; }
@@ -84,6 +88,12 @@ namespace RoslynTool.CsToLua
             }
             if (!hashset.Contains(moduleName)) {
                 hashset.Add(moduleName);
+            }
+        }
+        internal void AddExternEnum(string enumKey, ITypeSymbol sym)
+        {
+            if (!m_ExternEnums.ContainsKey(enumKey)) {
+                m_ExternEnums.Add(enumKey, sym);
             }
         }
         internal void AddGenericTypeDefine(string key, SyntaxNode node)
@@ -170,7 +180,8 @@ namespace RoslynTool.CsToLua
         private Dictionary<string, INamespaceSymbol> m_NamespaceSymbols = new Dictionary<string, INamespaceSymbol>();
         private Dictionary<string, ClassSymbolInfo> m_ClassSymbols = new Dictionary<string, ClassSymbolInfo>();
         private Dictionary<string, HashSet<string>> m_Requires = new Dictionary<string, HashSet<string>>();
-
+        private Dictionary<string, ITypeSymbol> m_ExternEnums = new Dictionary<string, ITypeSymbol>();
+        
         private Dictionary<string, List<SyntaxNode>> m_GenericTypeDefines = new Dictionary<string, List<SyntaxNode>>();
         private Dictionary<string, INamedTypeSymbol> m_GenericTypeInstances = new Dictionary<string, INamedTypeSymbol>();
 
@@ -321,7 +332,7 @@ namespace RoslynTool.CsToLua
         {
             bool ret = false;
             if (null != sym && !sym.IsStatic && null != sym.ContainingType && sym.ContainingType.IsValueType) {
-                if (sym.ContainingType.TypeKind == TypeKind.Enum) {
+                if (ClassInfo.GetFullName(sym.ContainingType) == "System.Enum") {
                     ret = true;
                 } else {
                     string type = ClassInfo.GetFullName(sym.ContainingType);
@@ -334,7 +345,7 @@ namespace RoslynTool.CsToLua
         {
             bool ret = false;
             if (null != sym && !sym.IsStatic && null != sym.ContainingType) {
-                if (sym.ContainingType.TypeKind == TypeKind.Enum) {
+                if (ClassInfo.GetFullName(sym.ContainingType) == "System.Enum") {
                     ret = true;
                 } else {
                     string type = ClassInfo.GetFullName(sym.ContainingType);
@@ -346,7 +357,7 @@ namespace RoslynTool.CsToLua
         internal static bool IsBasicType(ITypeSymbol type)
         {
             bool ret = false;
-            if (type.TypeKind == TypeKind.Enum) {
+            if (type.TypeKind == TypeKind.Enum || ClassInfo.GetFullName(type) == "System.Enum") {
                 ret = true;
             } else {
                 string typeName = ClassInfo.GetFullName(type);

@@ -1,5 +1,6 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
+require "cs2lua__externenums";
 require "TopLevel__SecondLevel__GenericClass_TopLevel_SecondLevel_Foo_Test1";
 require "TopLevel__SecondLevel__Foo";
 

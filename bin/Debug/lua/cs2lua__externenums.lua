@@ -1,0 +1,21 @@
+System.PlatformID = System.PlatformID or {};
+
+rawset(System.PlatformID, "Value2String", {
+	[0] = "Win32S",
+	[1] = "Win32Windows",
+	[2] = "Win32NT",
+	[3] = "WinCE",
+	[4] = "Unix",
+	[5] = "Xbox",
+	[6] = "MacOSX",
+});
+rawset(System.PlatformID, "String2Value", {
+	["Win32S"] = 0,
+	["Win32Windows"] = 1,
+	["Win32NT"] = 2,
+	["WinCE"] = 3,
+	["Unix"] = 4,
+	["Xbox"] = 5,
+	["MacOSX"] = 6,
+});
+

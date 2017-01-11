@@ -242,8 +242,7 @@ namespace RoslynTool.CsToLua
             var leftMemberAccess = node.Left as MemberAccessExpressionSyntax;
             var leftElementAccess = node.Left as ElementAccessExpressionSyntax;
             var leftCondAccess = node.Left as ConditionalAccessExpressionSyntax;
-
-
+            
             SpecialAssignmentType specialType = SpecialAssignmentType.None;
             if (null != leftMemberAccess && null != leftPsym) {
                 if (!leftPsym.IsStatic) {
@@ -349,9 +348,10 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.AppendFormat(", \"{0}\", \"{1}\")", fnOfIntf, mname);
                     } else if (propForBasicValueType) {
                         string pname = psym.Name;
+                        string ckey = InvocationInfo.CalcInvokeTarget(className, this, node.Expression, m_Model);
                         CodeBuilder.AppendFormat("getforbasicvalue(");
                         VisitExpressionSyntax(node.Expression);
-                        CodeBuilder.AppendFormat(", \"{0}\", \"{1}\")", className, pname);
+                        CodeBuilder.AppendFormat(", {0}, {1}, \"{2}\")", className == "System.Enum" ? "true" : "false", ckey, pname);
                     } else {
                         if (string.IsNullOrEmpty(className)) {
                             VisitExpressionSyntax(node.Expression);

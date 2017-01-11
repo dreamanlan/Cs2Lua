@@ -161,6 +161,14 @@ namespace RoslynTool.CsToLua
                 OutputExpressionList(args, defValArgs, arrayToParams);
             }
         }
+        internal ClassInfo GetCurClassInfo()
+        {
+            return m_ClassInfoStack.Peek();
+        }
+        internal MethodInfo GetCurMethodInfo()
+        {
+            return m_MethodInfoStack.Peek();
+        }
 
         internal CsLuaTranslater(SemanticModel model, bool enableInherit)
         {
@@ -363,32 +371,7 @@ namespace RoslynTool.CsToLua
         }
         private void OutputConstValue(object val, object operOrSym)
         {
-            string v = val as string;
-            if (null != v) {
-                CodeBuilder.AppendFormat("\"{0}\"", Escape(v));
-            } else if (val is bool) {
-                CodeBuilder.Append((bool)val ? "true" : "false");
-            } else if (val is char) {
-                CodeBuilder.AppendFormat("wrapchar('{0}', 0x0{1:X})", Escape((char)val), (int)(char)val);
-            } else if (null == val) {
-                CodeBuilder.Append("nil");
-            } else {
-                string sv = val.ToString();
-                char c1 = sv.Length>0 ? sv[0] : '\0';
-                char c2 = sv.Length > 1 ? sv[1] : '\0';
-                char c3 = sv.Length > 2 ? sv[2] : '\0';
-                if (c1 == '-' && c2 == '.' && char.IsNumber(c3) || (c1 == '-' || c1 == '.') && char.IsNumber(c2) || char.IsNumber(c1)) {
-                    CodeBuilder.Append(val);
-                } else {
-                    var oper = operOrSym as IFieldReferenceExpression;
-                    if (null != oper) {
-                        var fieldSym = oper.Field;
-                        CodeBuilder.AppendFormat("wrapconst({0}, \"{1}\")", ClassInfo.GetFullName(fieldSym.Type), fieldSym.Name);
-                    } else {
-                        CodeBuilder.Append(val);
-                    }
-                }
-            }
+            OutputConstValue(CodeBuilder, val, operOrSym);
         }
         private void OutputType(ITypeSymbol type, SyntaxNode node, ClassInfo ci, string errorTag)
         {
@@ -794,6 +777,35 @@ namespace RoslynTool.CsToLua
         {
             const string c_IndentString = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
             return c_IndentString.Substring(0, indent);
+        }
+        internal static void OutputConstValue(StringBuilder sb, object val, object operOrSym)
+        {
+            string v = val as string;
+            if (null != v) {
+                sb.AppendFormat("\"{0}\"", Escape(v));
+            } else if (val is bool) {
+                sb.Append((bool)val ? "true" : "false");
+            } else if (val is char) {
+                sb.AppendFormat("wrapchar('{0}', 0x0{1:X})", Escape((char)val), (int)(char)val);
+            } else if (null == val) {
+                sb.Append("nil");
+            } else {
+                string sv = val.ToString();
+                char c1 = sv.Length > 0 ? sv[0] : '\0';
+                char c2 = sv.Length > 1 ? sv[1] : '\0';
+                char c3 = sv.Length > 2 ? sv[2] : '\0';
+                if (c1 == '-' && c2 == '.' && char.IsNumber(c3) || (c1 == '-' || c1 == '.') && char.IsNumber(c2) || char.IsNumber(c1)) {
+                    sb.Append(val);
+                } else {
+                    var oper = operOrSym as IFieldReferenceExpression;
+                    if (null != oper) {
+                        var fieldSym = oper.Field;
+                        sb.AppendFormat("wrapconst({0}, \"{1}\")", ClassInfo.GetFullName(fieldSym.Type), fieldSym.Name);
+                    } else {
+                        sb.Append(val);
+                    }
+                }
+            }
         }
         private static bool IsSubclassOf(ITypeSymbol symInfo, string name)
         {

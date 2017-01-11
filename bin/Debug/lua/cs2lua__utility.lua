@@ -810,7 +810,7 @@ function defineclass(base, className, static, static_methods, static_fields_buil
                         return;
                       end;
                     end;
-          					if not baseObj or not baseObj[k] or not pcall(function() baseObj[k] = v end) then
+          					if not baseObj or nil~=baseObj[k] or not pcall(function() baseObj[k] = v end) then
           						rawset(t, k, v);
           					end;
                 end,
@@ -1264,9 +1264,12 @@ function setwithinterface(obj, intf, property, value)
 	return nil;
 end;
 
-function invokeforbasicvalue(obj, intf, method, ...)
+function invokeforbasicvalue(obj, isEnum, class, method, ...)
 	local args = {...};
 	local meta = getmetatable(obj);
+	if isEnum and method=="string" then
+	  return class.Value2String[obj];
+	end;
 	if type(obj)=="string" then
 	  local csstr = System.String(obj);
 	  return csstr[method](csstr,...);
@@ -1279,7 +1282,7 @@ function invokeforbasicvalue(obj, intf, method, ...)
 	end;
 	return nil;
 end;
-function getforbasicvalue(obj, intf, property)
+function getforbasicvalue(obj, isEnum, class, property)
 	local meta = getmetatable(obj);
 	if type(obj)=="string" then
 	  local csstr = System.String(obj);
@@ -1291,7 +1294,7 @@ function getforbasicvalue(obj, intf, property)
 	end;
 	return nil;
 end;
-function setforbasicvalue(obj, intf, property, value)
+function setforbasicvalue(obj, isEnum, class, property, value)
 	local meta = getmetatable(obj);
 	if type(obj)=="string" then
 	  local csstr = System.String(obj);

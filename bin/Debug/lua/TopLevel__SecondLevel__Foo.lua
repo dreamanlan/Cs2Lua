@@ -1,6 +1,7 @@
 require "cs2lua__utility";
 require "cs2lua__attributes";
 require "cs2lua__namespaces";
+require "cs2lua__externenums";
 require "TopLevel__SecondLevel__FooBase";
 require "TopLevel__TestStruct";
 require "TopLevel__Singleton_TopLevel_SecondLevel_Foo";
@@ -168,10 +169,10 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			TestSwitch = function(this)
 				local i; i = 10;
-				local __compiler_switch_446 = i;
-				if __compiler_switch_446 == 1 then
+				local __compiler_switch_450 = i;
+				if __compiler_switch_450 == 1 then
 					return ;
-				elseif __compiler_switch_446 == 2 then
+				elseif __compiler_switch_450 == 2 then
 					return ;
 				else
 					return ;

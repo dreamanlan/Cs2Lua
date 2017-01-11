@@ -105,6 +105,7 @@ namespace TopLevel
         One = 1,
         Two,
         Three,
+        Four = (int)4.0*9.5,
     }
 
     struct TestStruct
@@ -148,7 +149,10 @@ namespace TopLevel
         }
         public void Test2()
         {
-
+            string s = TestEnum.Three.ToString();
+            TestEnum e = TestEnum.One;
+            TestEnum.Parse(typeof(TestEnum),"Two");
+            string ss = System.PlatformID.Win32Windows.ToString();
         }
         event Action IRunnable<int>.OnAction
         {

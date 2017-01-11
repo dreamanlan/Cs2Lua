@@ -41,6 +41,7 @@ namespace RoslynTool.CsToLua
                 int ct = args.Count;
                 for (int i = 0; i < ct; ++i) {
                     var arg = args[i];
+                    TryAddExternEnum(ClassKey, arg.Expression, model);
                     if (i < sym.Parameters.Length) {
                         var param = sym.Parameters[i];
                         if (param.RefKind == RefKind.Ref) {
@@ -92,10 +93,10 @@ namespace RoslynTool.CsToLua
 
             if (null != argList) {
                 var args = argList.Arguments;
-
                 int ct = args.Count;
                 for (int i = 0; i < ct; ++i) {
                     var arg = args[i];
+                    TryAddExternEnum(ClassKey, arg.Expression, model);
                     if (i < sym.Parameters.Length) {
                         var param = sym.Parameters[i];
                         if (param.RefKind == RefKind.Ref) {
@@ -147,6 +148,7 @@ namespace RoslynTool.CsToLua
             if (null != argList) {
                 for (int i = 0; i < argList.Count; ++i) {
                     var arg = argList[i];
+                    TryAddExternEnum(ClassKey, arg, model);
                 }
                 Args.AddRange(argList);
             }
@@ -168,10 +170,11 @@ namespace RoslynTool.CsToLua
                     prestr = ", ";
                 } else {
                     if (IsBasicValueMethod) {
+                        string ckey = CalcInvokeTarget(ClassKey, cs2lua, exp, model);
                         codeBuilder.Append("invokeforbasicvalue(");
                         cs2lua.VisitExpressionSyntax(exp);
                         codeBuilder.Append(", ");
-                        codeBuilder.AppendFormat("{0}, \"{1}\"", ClassKey, mname);
+                        codeBuilder.AppendFormat("{0}, {1}, \"{2}\"", ClassKey == "System.Enum" ? "true" : "false", ckey, mname);
                         prestr = ", ";
                     } else {
                         if (sym.IsStatic) {
@@ -233,6 +236,39 @@ namespace RoslynTool.CsToLua
                     GenericTypeArgs.Add(arg);
                 }
             }
+        }
+
+        internal static void TryAddExternEnum(string classKey, ExpressionSyntax exp, SemanticModel model)
+        {
+            if (classKey == "System.Enum") {
+                var oper = model.GetOperation(exp);
+                if (oper.Type.ContainingAssembly != SymbolTable.Instance.AssemblySymbol && oper.Type.TypeKind == TypeKind.Enum) {
+                    string ckey = ClassInfo.GetFullName(oper.Type);
+                    SymbolTable.Instance.AddExternEnum(ckey, oper.Type);
+                } else {
+                    var typeOf = oper as ITypeOfExpression;
+                    if (null != typeOf && typeOf.TypeOperand.ContainingAssembly != SymbolTable.Instance.AssemblySymbol && typeOf.TypeOperand.TypeKind == TypeKind.Enum) {
+                        string ckey = ClassInfo.GetFullName(typeOf.TypeOperand);
+                        SymbolTable.Instance.AddExternEnum(ckey, typeOf.TypeOperand);
+                    }
+                }
+            }
+        }
+
+        internal static string CalcInvokeTarget(string classKey, CsLuaTranslater cs2lua, ExpressionSyntax exp, SemanticModel model)
+        {
+            TryAddExternEnum(classKey, exp, model);
+            string ckey = classKey;
+            if (classKey == "System.Enum") {
+                var oper = model.GetOperation(exp);
+                if (oper.Type.TypeKind == TypeKind.Enum) {
+                    var ci = cs2lua.GetCurClassInfo();
+                    ci.AddReference(oper.Type);
+
+                    ckey = ClassInfo.GetFullName(oper.Type);
+                }
+            }
+            return ckey;
         }
     }
 }

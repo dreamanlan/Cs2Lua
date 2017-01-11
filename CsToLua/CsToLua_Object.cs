@@ -56,9 +56,7 @@ namespace RoslynTool.CsToLua
                 ci.BeforeOuterCodeBuilder.Append(m_ToplevelCodeBuilder.ToString());
                 m_ToplevelCodeBuilder.Clear();
             }
-
-            ci.CurrentCodeBuilder = ci.StaticFieldCodeBuilder;
-
+            
             ++m_Indent;
             foreach (var member in node.Members) {
                 VisitEnumMemberDeclaration(member);
@@ -80,19 +78,56 @@ namespace RoslynTool.CsToLua
         }
         public override void VisitEnumMemberDeclaration(EnumMemberDeclarationSyntax node)
         {
+            var ci = m_ClassInfoStack.Peek();
             IFieldSymbol sym = m_Model.GetDeclaredSymbol(node);
+
+            ci.CurrentCodeBuilder = ci.StaticFieldCodeBuilder;
             CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), node.Identifier.Text);
-            if (null != node.EqualsValue) {
-                CodeBuilder.AppendFormat(" {0} ", node.EqualsValue.EqualsToken.Text);
-                VisitExpressionSyntax(node.EqualsValue.Value);
-            } else if (sym.HasConstantValue) {
+            if (sym.HasConstantValue) {
                 CodeBuilder.Append(" = ");
                 OutputConstValue(sym.ConstantValue, sym);
+                CodeBuilder.AppendLine(",");
+
+                ++m_Indent;
+                
+                ci.CurrentCodeBuilder = ci.EnumValue2StringCodeBuilder;
+                CodeBuilder.AppendFormat("{0}[", GetIndentString());
+                OutputConstValue(sym.ConstantValue, sym);
+                CodeBuilder.AppendFormat("] = \"{0}\",", sym.Name);
+                CodeBuilder.AppendLine();
+
+                ci.CurrentCodeBuilder = ci.String2EnumValueCodeBuilder;
+                CodeBuilder.AppendFormat("{0}[\"{1}\"] = ", GetIndentString(), sym.Name);
+                OutputConstValue(sym.ConstantValue, sym);
+                CodeBuilder.Append(",");
+                CodeBuilder.AppendLine();
+
+                --m_Indent;
+            } else if (null != node.EqualsValue) {
+                CodeBuilder.AppendFormat(" {0} ", node.EqualsValue.EqualsToken.Text);
+                VisitExpressionSyntax(node.EqualsValue.Value);
+                CodeBuilder.AppendLine(",");
+                
+                ++m_Indent;
+
+                ci.CurrentCodeBuilder = ci.EnumValue2StringCodeBuilder;
+                CodeBuilder.AppendFormat("{0}[", GetIndentString());
+                VisitExpressionSyntax(node.EqualsValue.Value);
+                CodeBuilder.AppendFormat("] = \"{0}\",", sym.Name);
+                CodeBuilder.AppendLine();
+
+                ci.CurrentCodeBuilder = ci.String2EnumValueCodeBuilder;
+                CodeBuilder.AppendFormat("{0}[\"{1}\"] = ", GetIndentString(), sym.Name);
+                VisitExpressionSyntax(node.EqualsValue.Value);
+                CodeBuilder.Append(",");
+                CodeBuilder.AppendLine();
+
+                --m_Indent;
             } else {
                 Log(node, "enum member can't deduce a value !");
                 CodeBuilder.Append(" = 0");
+                CodeBuilder.AppendLine(",");
             }
-            CodeBuilder.AppendLine(",");
         }
         public override void VisitStructDeclaration(StructDeclarationSyntax node)
         {
@@ -526,10 +561,8 @@ namespace RoslynTool.CsToLua
                         }
                     }
                 }
-                CodeBuilder.AppendLine(")");
-                ++m_Indent;
+                CodeBuilder.AppendLine(") return ");
                 node.Body.Accept(this);
-                --m_Indent;
                 CodeBuilder.AppendFormat("{0}end)", GetIndentString());
 
                 m_MethodInfoStack.Pop();

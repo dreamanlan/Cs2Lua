@@ -1,5 +1,6 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
+require "cs2lua__externenums";
 
 TestUnity = {
 	__new_object = function(...)
@@ -34,10 +35,10 @@ TestUnity = {
 				local r; r = this.gameObject.renderer;
 				this.gameObject.active = true;
 				local v; v = true;
-				local s; s = invokeforbasicvalue(v, System.Boolean, "ToString");
+				local s; s = invokeforbasicvalue(v, false, System.Boolean, "ToString");
 				local i; i = 123;
-				local s; s = invokeforbasicvalue(i, System.Int32, "ToString");
-				local i; i = invokeforbasicvalue(s, System.String, "IndexOf", wrapchar('2', 0x032));
+				local s; s = invokeforbasicvalue(i, false, System.Int32, "ToString");
+				local i; i = invokeforbasicvalue(s, false, System.String, "IndexOf", wrapchar('2', 0x032));
 				LuaConsole.Print(i);
 			end,
 			ctor = function(this)

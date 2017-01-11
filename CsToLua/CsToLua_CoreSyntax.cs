@@ -525,7 +525,7 @@ namespace RoslynTool.CsToLua
                             CodeBuilder.AppendFormat(" {0} ", token.Text);
                             if (isDelegate) {
                                 CodeBuilder.Append("delegationwrap(");
-                            }                            
+                            }
                             ii.OutputInvocation(CodeBuilder, this, memberAccess.Expression, true, m_Model, memberAccess);
                         } else {
                             int ct = ii.ReturnArgs.Count;
@@ -570,9 +570,10 @@ namespace RoslynTool.CsToLua
             } else if (specialType == SpecialAssignmentType.PropForBasicValueType) {
                 string className = ClassInfo.GetFullName(leftPsym.ContainingType);
                 string pname = leftPsym.Name;
+                string ckey = InvocationInfo.CalcInvokeTarget(className, this, leftMemberAccess.Expression, m_Model);
                 CodeBuilder.AppendFormat("setforbasicvalue(");
                 VisitExpressionSyntax(leftMemberAccess.Expression);
-                CodeBuilder.AppendFormat(", {0}, \"{1}\", ", className, pname);
+                CodeBuilder.AppendFormat(", {0}, {1}, \"{2}\", ", className == "System.Enum" ? "true" : "false", ckey, pname);
                 VisitExpressionSyntax(assign.Right);
                 CodeBuilder.Append(")");
             } else if (null != leftElementAccess) {
