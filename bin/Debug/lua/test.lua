@@ -1,5 +1,6 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
+require "cs2lua__externenums";
 
 local dict = wrapdictionary{};
 
@@ -47,3 +48,6 @@ print(type(abc), meta);
 for k,v in pairs(meta) do
   print(k,v);
 end;
+
+print(System.PlatformID.Xbox);
+print(invokeforbasicvalue(5, true, System.PlatformID, "ToString"));

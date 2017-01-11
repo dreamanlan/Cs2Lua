@@ -1267,7 +1267,7 @@ end;
 function invokeforbasicvalue(obj, isEnum, class, method, ...)
 	local args = {...};
 	local meta = getmetatable(obj);
-	if isEnum and method=="string" then
+	if isEnum and method=="ToString" then
 	  return class.Value2String[obj];
 	end;
 	if type(obj)=="string" then

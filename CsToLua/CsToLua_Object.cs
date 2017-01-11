@@ -96,12 +96,6 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.AppendFormat("] = \"{0}\",", sym.Name);
                 CodeBuilder.AppendLine();
 
-                ci.CurrentCodeBuilder = ci.String2EnumValueCodeBuilder;
-                CodeBuilder.AppendFormat("{0}[\"{1}\"] = ", GetIndentString(), sym.Name);
-                OutputConstValue(sym.ConstantValue, sym);
-                CodeBuilder.Append(",");
-                CodeBuilder.AppendLine();
-
                 --m_Indent;
             } else if (null != node.EqualsValue) {
                 CodeBuilder.AppendFormat(" {0} ", node.EqualsValue.EqualsToken.Text);
@@ -114,12 +108,6 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.AppendFormat("{0}[", GetIndentString());
                 VisitExpressionSyntax(node.EqualsValue.Value);
                 CodeBuilder.AppendFormat("] = \"{0}\",", sym.Name);
-                CodeBuilder.AppendLine();
-
-                ci.CurrentCodeBuilder = ci.String2EnumValueCodeBuilder;
-                CodeBuilder.AppendFormat("{0}[\"{1}\"] = ", GetIndentString(), sym.Name);
-                VisitExpressionSyntax(node.EqualsValue.Value);
-                CodeBuilder.Append(",");
                 CodeBuilder.AppendLine();
 
                 --m_Indent;
@@ -561,9 +549,17 @@ namespace RoslynTool.CsToLua
                         }
                     }
                 }
-                CodeBuilder.AppendLine(") return ");
-                node.Body.Accept(this);
-                CodeBuilder.AppendFormat("{0}end)", GetIndentString());
+                if (node.Body is BlockSyntax) {
+                    CodeBuilder.AppendLine(")");
+                    ++m_Indent;
+                    node.Body.Accept(this);
+                    --m_Indent;
+                    CodeBuilder.AppendFormat("{0}end)", GetIndentString());
+                } else {
+                    CodeBuilder.Append(") return ");
+                    node.Body.Accept(this);
+                    CodeBuilder.Append("; end)");
+                }
 
                 m_MethodInfoStack.Pop();
             } else {

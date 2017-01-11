@@ -171,7 +171,9 @@ namespace TopLevel
             f[0]=i;
             f.TestProp = i;
             i = f.TestProp;
-            Action a = ()=>{};
+            Func<int, int> pow = v=>v*v;
+            Func<int, int, int> pow2 = (v1,v2)=>v1*v2;
+            Action a = ()=>{i=i*i;LuaConsole.Print(i);};
             f.OnAction+=a;
             f.OnAction-=a;
             float t = float.NegativeInfinity;

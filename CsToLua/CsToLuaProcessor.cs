@@ -581,11 +581,9 @@ namespace RoslynTool.CsToLua
                 string key = pair.Key;
                 var typeSym = pair.Value;
 
-                sb.AppendFormat("{0}{1} = {2} or {{}};", GetIndentString(indent), key, key);
-                sb.AppendLine();
+                BuildExternEnumNamespace(sb, indent, typeSym);
 
                 sb.AppendLine();
-
                 sb.AppendFormat("{0}rawset({1}, \"Value2String\", {{", GetIndentString(indent), key);
                 sb.AppendLine();
                 ++indent;
@@ -602,24 +600,79 @@ namespace RoslynTool.CsToLua
                 --indent;
                 sb.AppendFormat("{0}}});", GetIndentString(indent));
                 sb.AppendLine();
-                sb.AppendFormat("{0}rawset({1}, \"String2Value\", {{", GetIndentString(indent), key);
+
+                sb.AppendLine();
+            }
+        }
+        private static void BuildExternEnumNamespace(StringBuilder sb, int indent, ITypeSymbol enumSym)
+        {
+            string ns;
+            if (null != enumSym.ContainingType) {
+                ns = BuildExternEnumNamespace(sb, indent, enumSym.ContainingType);
+            } else if (null != enumSym.ContainingNamespace) {
+                ns = BuildExternEnumNamespace(sb, indent, enumSym.ContainingNamespace);
+            } else {
+                ns = string.Empty;
+            }
+            if (!string.IsNullOrEmpty(ns)) {
+                sb.AppendFormat("{0}{1}.{2} = {3}.{4} or {{", GetIndentString(indent), ns, enumSym.Name, ns, enumSym.Name);
                 sb.AppendLine();
                 ++indent;
 
-                foreach (var sym in typeSym.GetMembers()) {
+                foreach (var sym in enumSym.GetMembers()) {
                     if (sym.Kind != SymbolKind.Field) continue;
                     var fsym = sym as IFieldSymbol;
-                    sb.AppendFormat("{0}[\"{1}\"] = ", GetIndentString(indent), fsym.Name);
+                    sb.AppendFormat("{0}{1} = ", GetIndentString(indent), fsym.Name);
                     CsLuaTranslater.OutputConstValue(sb, fsym.ConstantValue, fsym);
                     sb.Append(",");
                     sb.AppendLine();
                 }
 
                 --indent;
-                sb.AppendFormat("{0}}});", GetIndentString(indent));
+                sb.AppendFormat("{0}}};", GetIndentString(indent));
                 sb.AppendLine();
-
+            }
+        }
+        private static string BuildExternEnumNamespace(StringBuilder sb, int indent, INamedTypeSymbol typeSym)
+        {
+            string ns;
+            if (null != typeSym.ContainingType) {
+                ns = BuildExternEnumNamespace(sb, indent, typeSym.ContainingType);
+            } else if (null != typeSym.ContainingNamespace) {
+                ns = BuildExternEnumNamespace(sb, indent, typeSym.ContainingNamespace);
+            } else {
+                ns = string.Empty;
+            }
+            if (string.IsNullOrEmpty(ns)) {
+                sb.AppendFormat("{0}{1} = {2} or {{}};", GetIndentString(indent), typeSym.Name, typeSym.Name);
                 sb.AppendLine();
+                return typeSym.Name;
+            } else {
+                sb.AppendFormat("{0}{1}.{2} = {3}.{4} or {{}};", GetIndentString(indent), ns, typeSym.Name, ns, typeSym.Name);
+                sb.AppendLine();
+                return ns + "." + typeSym.Name;
+            }
+        }
+        private static string BuildExternEnumNamespace(StringBuilder sb, int indent, INamespaceSymbol nsSym)
+        {
+            if (string.IsNullOrEmpty(nsSym.Name)) {
+                return string.Empty;
+            } else {
+                string ns;
+                if (null != nsSym.ContainingNamespace) {
+                    ns = BuildExternEnumNamespace(sb, indent, nsSym.ContainingNamespace);
+                } else {
+                    ns = string.Empty;
+                }
+                if (string.IsNullOrEmpty(ns)) {
+                    sb.AppendFormat("{0}{1} = {2} or {{}};", GetIndentString(indent), nsSym.Name, nsSym.Name);
+                    sb.AppendLine();
+                    return nsSym.Name;
+                } else {
+                    sb.AppendFormat("{0}{1}.{2} = {3}.{4} or {{}};", GetIndentString(indent), ns, nsSym.Name, ns, nsSym.Name);
+                    sb.AppendLine();
+                    return ns + "." + nsSym.Name;
+                }
             }
         }
         private static void BuildLuaClass(StringBuilder sb, MergedNamespaceInfo toplevelMni, Dictionary<string, MergedClassInfo> toplevelMcis, HashSet<string> lualibRefs)
@@ -1198,17 +1251,6 @@ namespace RoslynTool.CsToLua
                 }
 
                 --indent; 
-                sb.AppendFormat("{0}}});", GetIndentString(indent));
-                sb.AppendLine();
-                sb.AppendFormat("{0}rawset({1}, \"String2Value\", {{", GetIndentString(indent), key);
-                sb.AppendLine();
-                ++indent;
-
-                foreach (var ci in classes) {
-                    sb.Append(ci.String2EnumValueCodeBuilder.ToString());
-                }
-
-                --indent;
                 sb.AppendFormat("{0}}});", GetIndentString(indent));
                 sb.AppendLine();
             } else {

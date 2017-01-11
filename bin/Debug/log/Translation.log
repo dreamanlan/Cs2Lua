@@ -1,8 +1,8 @@
 ============<<<Translation Error:test>>>============
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ ir.Test() ] location: test.cs: (427,16)-(427,25)
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ ir.Test() ] location: test.cs: (429,16)-(429,25)
 ============<<<Translation Error:test>>>============
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ ir.Test() ] location: test.cs: (427,16)-(427,25)
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ ir.Test() ] location: test.cs: (429,16)-(429,25)
 ============<<<Translation Error:test>>>============
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ ir.Test() ] location: test.cs: (427,16)-(427,25)
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ ir.Test() ] location: test.cs: (429,16)-(429,25)
 ============<<<Translation Error:test>>>============
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ ir.Test() ] location: test.cs: (427,16)-(427,25)
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ ir.Test() ] location: test.cs: (429,16)-(429,25)

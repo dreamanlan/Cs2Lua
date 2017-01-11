@@ -17,10 +17,3 @@ rawset(TopLevel.TestEnum, "Value2String", {
 		[3] = "Three",
 		[38] = "Four",
 });
-rawset(TopLevel.TestEnum, "String2Value", {
-		["Invalid"] = -2147483648,
-		["One"] = 1,
-		["Two"] = 2,
-		["Three"] = 3,
-		["Four"] = 38,
-});

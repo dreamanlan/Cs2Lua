@@ -31,7 +31,11 @@ TopLevel.TestRunnable = {
 				setinstanceindexer(f, nil, "set_Item", 0, i);
 				setwithinterface(f, "TopLevel_IRunnable_System_Int32", "TestProp", i);
 				i = getwithinterface(f, ""TopLevel_IRunnable_System_Int32"", ""TestProp"");
+				local pow; pow = delegationwrap((function(v) return (v * v); end));
+				local pow2; pow2 = delegationwrap((function(v1, v2) return (v1 * v2); end));
 				local a; a = delegationwrap((function()
+					i = (i * i);
+					LuaConsole.Print(i);
 				end));
 				delegationadd(f, "TopLevel_IRunnable_System_Int32", "OnAction", a);
 				delegationremove(f, "TopLevel_IRunnable_System_Int32", "OnAction", a);
