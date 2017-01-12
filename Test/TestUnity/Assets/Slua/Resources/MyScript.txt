@@ -31,12 +31,12 @@ MyScript = {
 				UnityEngine.Debug.Log(s);
 				mb:StartCoroutine(this:TestCoroutine());
 				this.root = newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", nil, {}, "root");
-				local slider; slider = typecast(UnityEngine.GameObject.Find("Canvas/Slider"):GetComponent(UnityEngine.UI.Slider), UnityEngine.UI.Slider);
-				local counttxt; counttxt = typecast(UnityEngine.GameObject.Find("Canvas/Count"):GetComponent(UnityEngine.UI.Text), UnityEngine.UI.Text);
+				local slider; slider = typeas(UnityEngine.GameObject.Find("Canvas/Slider"):GetComponent(UnityEngine.UI.Slider), UnityEngine.UI.Slider, false);
+				local counttxt; counttxt = typeas(UnityEngine.GameObject.Find("Canvas/Count"):GetComponent(UnityEngine.UI.Text), UnityEngine.UI.Text, false);
 				slider.onValueChanged:AddListener((function(v)
 					this:Reset();
 					counttxt.text = LuaString.Format("cube:{0}", v);
-					this.max = typecast(v, System.Int32);
+					this.max = typecast(v, System.Int32, false);
 				end));
 				this:Reset();
 			end,
@@ -46,7 +46,7 @@ MyScript = {
 					local offset; offset = condexp(((i % 2) == 1), true, 5, true, -5);
 					local nr; nr = (this.r + (UnityEngine.Mathf.Sin(UnityEngine.Time.time) * offset));
 					local angle; angle = condexp(((i % 2) == 1), false, (function() return UnityEngine.Time.time; end), true, -5);
-					local b; b = newexternobject(UnityEngine.Vector3, "UnityEngine.Vector3", "ctor", nil, {}, typecast(( (UnityEngine.Mathf.Cos(((((i * 3.141593) * 2) / this.max) + angle)) * nr) ), System.Single), typecast(( (UnityEngine.Mathf.Sin(((((i * 3.141593) * 2) / this.max) + angle)) * nr) ), System.Single), 0);
+					local b; b = newexternobject(UnityEngine.Vector3, "UnityEngine.Vector3", "ctor", nil, {}, typecast(( (UnityEngine.Mathf.Cos(((((i * 3.141593) * 2) / this.max) + angle)) * nr) ), System.Single, false), typecast(( (UnityEngine.Mathf.Sin(((((i * 3.141593) * 2) / this.max) + angle)) * nr) ), System.Single, false), 0);
 					this.cubes[i + 1].transform.position = b;
 				i = i + 1;
 				end;
@@ -84,12 +84,12 @@ MyScript = {
 				local i; i = 0;
 				while (i < this.max) do
 					local cube; cube = UnityEngine.GameObject.CreatePrimitive(3);
-					cube.transform.position = newexternobject(UnityEngine.Vector3, "UnityEngine.Vector3", "ctor", nil, {}, (typecast(UnityEngine.Mathf.Cos((((i * 3.141593) * 2) / this.max)), System.Single) * this.r), (typecast(UnityEngine.Mathf.Sin((((i * 3.141593) * 2) / this.max)), System.Single) * this.r), 0);
+					cube.transform.position = newexternobject(UnityEngine.Vector3, "UnityEngine.Vector3", "ctor", nil, {}, (typecast(UnityEngine.Mathf.Cos((((i * 3.141593) * 2) / this.max)), System.Single, false) * this.r), (typecast(UnityEngine.Mathf.Sin((((i * 3.141593) * 2) / this.max)), System.Single, false) * this.r), 0);
 					cube.transform:SetParent(this.root.transform);
 					local mat; mat = cube:GetComponent(UnityEngine.Renderer).material;
 					local box; box = cube:GetComponent(UnityEngine.BoxCollider);
 					UnityEngine.Object.Destroy(box);
-					local p; p = typecast(UnityEngine.Object.Instantiate(P, UnityEngine.Vector3.zero, UnityEngine.Quaternion.identity), UnityEngine.GameObject);
+					local p; p = typeas(UnityEngine.Object.Instantiate(P, UnityEngine.Vector3.zero, UnityEngine.Quaternion.identity), UnityEngine.GameObject, false);
 					p.transform:SetParent(cube.transform);
 					local ix; ix = UnityEngine.Random.Range(0, this.colors.Length);
 					mat.color = this.colors[ix + 1];

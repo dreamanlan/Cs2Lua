@@ -193,20 +193,59 @@ end;
 function typeis(obj, t, isEnum)
   local meta = getmetatable(obj);
   local meta2 = getmetatable(t);
+  local tn1 = nil;
+  local tn2 = nil;
+  if meta then
+  	tn1 = rawget(meta, "__typename");
+  end;
+  if meta2 then
+  	tn2 = rawget(meta2, "__typename");
+  end;
   if meta then
     if type(obj)=="userdata" then
-      return meta2 and meta.__typename == meta2.__typename;
+      if tn1 and tn1==tn2 then
+      	return true;
+      end;
+      --check slua parent metatable chain
+      local parent = rawget(meta, "__parent");
+      while parent ~= nil do
+      	tn1 = rawget(parent, "__typename");
+      	if tn1 and tn1==tn2 then
+      		return true;
+      	end;
+      	parent = rawget(parent, "__parent");
+      end;
     else
-  	  if meta.__class == t then
+  	  if rawget(meta, "__class") == t then
   		  return true;
   	  end;
-  	  --Check base class
-  	  local baseClass = meta.__base_class;
-  	  while baseClass ~= nil do
+  	  --check cs2lua base class chain
+  	  local baseClass = rawget(meta, "__base_class");
+  	  local lastCheckedClass = meta;
+  	  while baseClass ~= nil do  	  
     		if baseClass == t then
     			return true;
     		end;
-    		baseClass = baseClass.__base_class;
+    		if rawget(baseClass, "__cs2lua_defined") then
+    			baseClass = rawget(baseClass, "__base_class");
+    		else
+    			lastCheckedClass = baseClass;
+    			break;
+    		end;
+    	end;
+    	--try slua base class and parent metatable chain 
+    	if not rawget(lastCheckedClass, "__cs2lua_defined") then
+    		local meta3 = getmetatable(lastCheckedClass);
+    		if meta3 then
+		      parent = rawget(meta3, "__parent");
+		      while parent ~= nil do
+		      	tn1 = rawget(parent, "__typename");
+		      	if tn1 and tn1 == tn2 then
+		      		return true;
+		      	end;
+		      	parent = rawget(parent, "__parent");
+		      end;
+	      end;
     	end;
     end;
   end;
@@ -236,7 +275,7 @@ end;
 
 function __unwrap_if_string(val)
   local meta = getmetatable(val);
-  if type(val)=="userdata" and meta.__typename=="String" then
+  if type(val)=="userdata" and rawget(meta, "__typename")=="String" then
     return tostring(val);
   else
     return val;
@@ -961,7 +1000,7 @@ function newexternobject(class, className, ctor, doextension, initializer, ...)
 end;
 
 function newtypeparamobject(t)
-  if t.__cs2lua_defined then
+  if rawget(t, "__cs2lua_defined") then
     local obj = t();
     if obj.ctor then
       obj:ctor();
@@ -1072,7 +1111,7 @@ end;
 
 function delegationwrap(handler)
   local meta = getmetatable(handler);
-  if meta and meta.__is_delegation then
+  if meta and rawget(meta, "__is_delegation") then
     return handler;
   else
     return wrapdelegation{ handler };
@@ -1196,18 +1235,20 @@ function getexterninstanceindexer(obj, intf, name, ...)
 	local index = __unwrap_if_string(args[1]);
 	local meta = getmetatable(obj);
 	if meta then
-  	if meta.__class == System.Collections.Generic.List_T then
+		local class = rawget(meta, "__class");
+		local typename = rawget(meta, "__typename");
+  	if class == System.Collections.Generic.List_T then
   	  return obj[index+1];
-  	elseif meta.__class == System.Collections.Generic.Dictionary_TKey_TValue then
+  	elseif class == System.Collections.Generic.Dictionary_TKey_TValue then
       local v = obj[index];
       if v then
         return v.value;
       else
         return nil;
       end;
-    elseif meta.__typename == "LuaArray" then
+    elseif typename == "LuaArray" then
     	return obj[index+1];
-    elseif meta.__typename == "LuaVarObject" then
+    elseif typename == "LuaVarObject" then
     	return obj[index];
     else
     	return obj:getItem(index);
@@ -1225,17 +1266,19 @@ function setexterninstanceindexer(obj, intf, name, ...)
 	local val = args[num];
   local meta = getmetatable(obj);
   if meta then
-    if meta.__class == System.Collections.Generic.List_T then
+		local class = rawget(meta, "__class");
+		local typename = rawget(meta, "__typename");
+    if class == System.Collections.Generic.List_T then
       obj[index+1] = val;
-    elseif meta.__class == System.Collections.Generic.Dictionary_TKey_TValue then      
+    elseif class == System.Collections.Generic.Dictionary_TKey_TValue then      
       if obj[index] then
         obj[index] = { value=val };
       else
         obj:Add(index, val);
       end;
-    elseif meta.__typename == "LuaArray" then
+    elseif typename == "LuaArray" then
     	obj[index+1] = val;
-    elseif meta.__typename == "LuaVarObject" then
+    elseif typename == "LuaVarObject" then
     	obj[index] = val;
     else
     	obj:setItem(index, val);
@@ -1298,7 +1341,7 @@ end;
 
 function invokewithinterface(obj, intf, method, ...)
 	local meta = getmetatable(obj);
-	if meta.__cs2lua_defined then
+	if meta and rawget(meta, "__cs2lua_defined") then
 		return obj[method](obj,...);
 	else
 		return obj[method](obj,...);
@@ -1307,7 +1350,7 @@ function invokewithinterface(obj, intf, method, ...)
 end;
 function getwithinterface(obj, intf, property)
 	local meta = getmetatable(obj);
-	if meta.__cs2lua_defined then
+	if meta and rawget(meta, "__cs2lua_defined") then
 		return obj[property];
 	else
 		return obj[property];
@@ -1316,7 +1359,7 @@ function getwithinterface(obj, intf, property)
 end;
 function setwithinterface(obj, intf, property, value)
 	local meta = getmetatable(obj);
-	if meta.__cs2lua_defined then
+	if meta and rawget(meta, "__cs2lua_defined") then
 		obj[property]=value;
 	else
 		obj[property]=value;
@@ -1371,7 +1414,7 @@ function invokearraystaticmethod(firstArray, secondArray, method, ...)
   if nil~=firstArray then
     local args = {...};
     local meta = getmetatable(firstArray);    
-    if meta and meta.__cs2lua_defined then
+		if meta and rawget(meta, "__cs2lua_defined") then
       if method=="IndexOf" then
         return firstArray:IndexOf(args[3]);
       elseif method=="Sort" then

@@ -89,8 +89,6 @@ namespace RoslynTool
                                 if (!arg.StartsWith("-")) {
                                     alias = arg;
                                     ++i;
-                                } else {
-                                    continue;
                                 }
                             }
                             if (!refByNames.ContainsKey(name)) {
@@ -116,8 +114,6 @@ namespace RoslynTool
                                 if (!arg.StartsWith("-")) {
                                     alias = arg;
                                     ++i;
-                                } else {
-                                    continue;
                                 }
                             }
                             if (!File.Exists(path)) {

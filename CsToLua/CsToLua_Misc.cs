@@ -224,9 +224,9 @@ namespace RoslynTool.CsToLua
                             string paramsString = string.Join(", ", mi.ParamNames.ToArray());
                             CodeBuilder.Append(paramsString);
                             if (sym.IsStatic) {
-                                CodeBuilder.AppendFormat(") {0}.{1}({2}) end)", classInfo.Key, manglingName, paramsString);
+                                CodeBuilder.AppendFormat(") {0}{1}.{2}({3}); end)", msym.ReturnsVoid ? string.Empty : "return ", classInfo.Key, manglingName, paramsString);
                             } else {
-                                CodeBuilder.AppendFormat(") this:{0}({1}) end)", manglingName, paramsString);
+                                CodeBuilder.AppendFormat(") {0}this:{1}({2}); end)", msym.ReturnsVoid ? string.Empty : "return ", manglingName, paramsString);
                             }
                         }
                         return;
