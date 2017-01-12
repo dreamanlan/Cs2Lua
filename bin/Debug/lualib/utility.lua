@@ -810,9 +810,12 @@ function defineclass(base, className, static, static_methods, static_fields_buil
                         return;
                       end;
                     end;
-          					if not baseObj or nil~=baseObj[k] or not pcall(function() baseObj[k] = v end) then
-          						rawset(t, k, v);
+          					if nil~=baseObj and nil~=baseObj[k] then
+          					  if pcall(function() baseObj[k] = v end) then
+          					    return;
+          					  end;
           					end;
+          					rawset(t, k, v);
                 end,
 				
         				__setbase = function(self, base)
