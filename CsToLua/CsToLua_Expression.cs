@@ -54,6 +54,11 @@ namespace RoslynTool.CsToLua
                         var typeInfo = m_Model.GetTypeInfo(node.Right);
                         var type = typeInfo.Type;
                         OutputType(type, node, ci, op);
+                        if (type.TypeKind == TypeKind.Enum) {
+                            CodeBuilder.Append(", true");
+                        } else {
+                            CodeBuilder.Append(", false");
+                        }
                     } else if (op == "??") {
                         var rightOper = m_Model.GetOperation(node.Right);
                         bool rightIsConst = null != rightOper && rightOper.ConstantValue.HasValue;
@@ -217,6 +222,11 @@ namespace RoslynTool.CsToLua
                 var type = typeInfo.Type;
                 CodeBuilder.Append(", ");
                 OutputType(type, node, ci, "cast");
+                if (type.TypeKind == TypeKind.Enum) {
+                    CodeBuilder.Append(", true");
+                } else {
+                    CodeBuilder.Append(", false");
+                }
                 CodeBuilder.Append(")");
             }
         }

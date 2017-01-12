@@ -124,7 +124,7 @@ function bitxor(v1,v2)
 	end;
 end;
 
-function typecast(obj, t)
+function typecast(obj, t, isEnum)
 	if t == System.String then
 		return tostring(obj);
 	elseif t == System.Single or t ==	System.Double then
@@ -148,19 +148,66 @@ function typecast(obj, t)
 	elseif t == System.Boolean then
 		local v = tonumber(obj);
 		return v ~= 0;
+	elseif isEnum then
+	  return obj;
+	elseif typeis(obj, t, isEnum) then
+		return obj;
 	else
   	return obj;
  	end;
 end;
 
-function typeis(obj, t)
+function typeas(obj, t, isEnum)
+	if t == System.String then
+		return tostring(obj);
+	elseif t == System.Single or t ==	System.Double then
+	  return tonumber(obj);
+	elseif t == System.Int64 or t == System.UInt64 then
+	  local v = tonumber(obj);
+	  v = math.floor(v);
+	  return v;
+	elseif t == System.Int32 or t == System.UInt32 then
+	  local v = tonumber(obj);
+	  v = math.floor(v);
+	  return v % 0x100000000;
+	elseif t == System.Int16 or t == System.UInt16 or t == System.Char then
+	  local v = tonumber(obj);
+	  v = math.floor(v);
+	  return v % 0x10000;
+	elseif t == System.SByte or t == System.Byte then
+	  local v = tonumber(obj);
+	  v = math.floor(v);
+	  return v % 0x100;
+	elseif t == System.Boolean then
+		local v = tonumber(obj);
+		return v ~= 0;
+	elseif isEnum then
+	  return obj;
+	elseif typeis(obj, t, isEnum) then
+		return obj;
+	else
+		return nil;
+ 	end;
+end;
+
+function typeis(obj, t, isEnum)
   local meta = getmetatable(obj);
   local meta2 = getmetatable(t);
   if meta then
     if type(obj)=="userdata" then
       return meta2 and meta.__typename == meta2.__typename;
     else
-      return meta.__class == t;
+  	  if meta.__class == t then
+  		  return true;
+  	  end;
+  	  --Check base class
+  	  local baseClass = meta.__base_class;
+  	  while baseClass ~= nil do
+    		if baseClass == t then
+    			return true;
+    		end;
+    		baseClass = baseClass.__base_class;
+    	end;
     end;
   end;
   return false;
@@ -1333,7 +1380,7 @@ function invokearraystaticmethod(firstArray, secondArray, method, ...)
         return nil;
       end;
     else
-      //这种情形认为是外部导出的数组调用，直接调导出接口了（由于System.Array有generic成员，这些方法的调用估计会出错）
+      --这种情形认为是外部导出的数组调用，直接调导出接口了（由于System.Array有generic成员，这些方法的调用估计会出错）
       System.Array[method](...);
     end;
   else

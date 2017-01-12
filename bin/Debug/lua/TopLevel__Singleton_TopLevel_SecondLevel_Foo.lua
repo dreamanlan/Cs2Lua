@@ -47,7 +47,7 @@ TopLevel.Singleton_TopLevel_SecondLevel_Foo = {
 					UnityEngine.Debug.LogError("Cannot have two instances in singleton");
 					return this;
 				end;
-				TopLevel.Singleton_TopLevel_SecondLevel_Foo.ms_instance = typecast(typecast(this, System.Object), TopLevel.SecondLevel.Foo);
+				TopLevel.Singleton_TopLevel_SecondLevel_Foo.ms_instance = typecast(typecast(this, System.Object, false), TopLevel.SecondLevel.Foo, false);
 				return this;
 			end,
 		};

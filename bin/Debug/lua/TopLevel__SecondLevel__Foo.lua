@@ -180,7 +180,7 @@ TopLevel.SecondLevel.Foo = {
 				if (i > 3) then
 					return ;
 				end;
-				if typeis(this, TopLevel.SecondLevel.FooBase) then
+				if typeis(this, TopLevel.SecondLevel.FooBase, false) then
 					return ;
 				end;
 			end,

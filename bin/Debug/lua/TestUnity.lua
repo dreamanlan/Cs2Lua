@@ -26,9 +26,9 @@ TestUnity = {
 			Test = function(this, ...)
 				local args = wraparray{...};
 				if (args.Length >= 3) then
-					local sagatObjId; sagatObjId = typecast(args[1], System.Int32);
-					local protectObjId; protectObjId = typecast(args[2], System.Int32);
-					local attackObjId; attackObjId = typecast(args[3], System.Int32);
+					local sagatObjId; sagatObjId = typecast(args[1], System.Int32, false);
+					local protectObjId; protectObjId = typecast(args[2], System.Int32, false);
+					local attackObjId; attackObjId = typecast(args[3], System.Int32, false);
 				end;
 				local t; t = this.gameObject:GetComponent(UnityEngine.Transform);
 				this.gameObject:SetActive(true);

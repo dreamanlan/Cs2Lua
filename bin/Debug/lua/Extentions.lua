@@ -23,7 +23,7 @@ Extentions = {
 				return (dateTime.Ticks / 10000);
 			end,
 			timeSince1970 = function(dateTime)
-				return typecast(( (dateTime:timeSince1970InMillisecond() / 1000) ), System.Int64);
+				return typecast(( (dateTime:timeSince1970InMillisecond() / 1000) ), System.Int64, false);
 			end,
 			timeSince1970InMillisecond = function(dateTime)
 --return (long)(Time.realtimeSinceStartup * 1000);
@@ -32,7 +32,7 @@ Extentions = {
 					Extentions.dateTime1970 = System.DateTime.Parse("1970-1-1");
 				end;
 				local ts; ts = (dateTime - Extentions.dateTime1970);
-				return typecast(ts.TotalMilliseconds, System.Int64);
+				return typecast(ts.TotalMilliseconds, System.Int64, false);
 			end,
 			findChildRecursively = function(transform, childName, maxDepth)
 				local child; child = transform:FindChild(childName);

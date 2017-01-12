@@ -33,8 +33,8 @@ TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericCla
 				return this;
 			end,
 			Test = function(this, G, g)
-				local v; v = typecast(g, TopLevel.SecondLevel.Foo.Test1);
-				local v; v = typecast(typecast(g, System.Object), TopLevel.SecondLevel.Foo.Test1);
+				local v; v = typeas(g, TopLevel.SecondLevel.Foo.Test1, false);
+				local v; v = typecast(typecast(g, System.Object, false), TopLevel.SecondLevel.Foo.Test1, false);
 				local f; f = newobject(TopLevel.SecondLevel.Foo, "ctor", {});
 				f:Test3();
 			end,
@@ -43,7 +43,7 @@ TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericCla
 				local t2; t2 = TopLevel.SecondLevel.Foo.Test1;
 				local t3; t3 = TopLevel.SecondLevel.Foo.Test2;
 				local t4; t4 = System.Int32;
-				local v; v = typecast(t, TopLevel.SecondLevel.Foo.Test2);
+				local v; v = typecast(t, TopLevel.SecondLevel.Foo.Test2, false);
 			end,
 			__ctor = function(this)
 				if this.__ctor_called then

@@ -913,7 +913,7 @@ namespace RoslynTool.CsToLua
             {"&", "bitand"},
             {"|", "bitor"},
             {"^", "bitxor"},
-            {"as", "typecast"},
+            {"as", "typeas"},
             {"is", "typeis"},
             {"??", "nullcoalescing"}
         };
