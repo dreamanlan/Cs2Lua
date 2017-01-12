@@ -284,7 +284,7 @@ namespace RoslynTool.CsToLua
             var sym = symInfo.Symbol;
 
             string className = string.Empty;
-            if (null != sym && sym.IsStatic && null != sym.ContainingType) {
+            if (null != sym && null != sym.ContainingType) {
                 className = ClassInfo.GetFullName(sym.ContainingType);
             }
 

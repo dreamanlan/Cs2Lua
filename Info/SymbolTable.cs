@@ -331,12 +331,12 @@ namespace RoslynTool.CsToLua
         internal static bool IsBasicValueProperty(IPropertySymbol sym)
         {
             bool ret = false;
-            if (null != sym && !sym.IsStatic && null != sym.ContainingType && sym.ContainingType.IsValueType) {
+            if (null != sym && !sym.IsStatic && null != sym.ContainingType) {
                 if (ClassInfo.GetFullName(sym.ContainingType) == "System.Enum") {
                     ret = true;
                 } else {
                     string type = ClassInfo.GetFullName(sym.ContainingType);
-                    ret = IsBasicType(type);
+                    ret = IsBasicType(type, true);
                 }
             }
             return ret;
@@ -349,24 +349,30 @@ namespace RoslynTool.CsToLua
                     ret = true;
                 } else {
                     string type = ClassInfo.GetFullName(sym.ContainingType);
-                    ret = IsBasicType(type);
+                    ret = IsBasicType(type, true);
                 }
             }
             return ret;
         }
         internal static bool IsBasicType(ITypeSymbol type)
         {
+            return IsBasicType(type, true);
+        }
+        internal static bool IsBasicType(ITypeSymbol type, bool includeString)
+        {
             bool ret = false;
             if (type.TypeKind == TypeKind.Enum || ClassInfo.GetFullName(type) == "System.Enum") {
                 ret = true;
             } else {
                 string typeName = ClassInfo.GetFullName(type);
-                ret = IsBasicType(typeName);
+                ret = IsBasicType(typeName, includeString);
             }
             return ret;
         }
-        internal static bool IsBasicType(string type)
+        internal static bool IsBasicType(string type, bool includeString)
         {
+            if (includeString && type == "System.String")
+                return true;
             return s_BasicTypes.Contains(type);
         }
         internal static bool ForSlua
@@ -393,7 +399,7 @@ namespace RoslynTool.CsToLua
             "and", "elseif", "end", "function", "local", "nil", "not", "or", "repeat", "then", "until"
         };
         private static HashSet<string> s_BasicTypes = new HashSet<string> {
-            "System.Boolean", "System.Byte", "System.SByte", "System.Int16", "System.UInt16", "System.Int32", "System.UInt32", "System.Int64", "System.UInt64", "System.Single", "System.Double", "System.String"
+            "System.Boolean", "System.Byte", "System.SByte", "System.Int16", "System.UInt16", "System.Int32", "System.UInt32", "System.Int64", "System.UInt64", "System.Single", "System.Double"
         };
     }
 }

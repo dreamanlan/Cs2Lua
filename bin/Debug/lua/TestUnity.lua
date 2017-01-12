@@ -25,21 +25,24 @@ TestUnity = {
 		local instance_methods = {
 			Test = function(this, ...)
 				local args = wraparray{...};
-				if (args.Length >= 3) then
+				if (System.Array.Length >= 3) then
 					local sagatObjId; sagatObjId = typecast(args[1], System.Int32);
 					local protectObjId; protectObjId = typecast(args[2], System.Int32);
 					local attackObjId; attackObjId = typecast(args[3], System.Int32);
 				end;
 				local t; t = this.gameObject:GetComponent(UnityEngine.Transform);
 				this.gameObject:SetActive(true);
-				local r; r = this.gameObject.renderer;
-				this.gameObject.active = true;
+				local r; r = UnityEngine.GameObject.renderer;
+				UnityEngine.GameObject.active = true;
 				local v; v = true;
 				local s; s = invokeforbasicvalue(v, false, System.Boolean, "ToString");
 				local i; i = 123;
 				local s; s = invokeforbasicvalue(i, false, System.Int32, "ToString");
 				local i; i = invokeforbasicvalue(s, false, System.String, "IndexOf", wrapchar('2', 0x032));
 				LuaConsole.Print(i);
+				local i; i = getforbasicvalue(this.m_TestString, false, System.String, "Length");
+				local c; c = getexterninstanceindexer(this.m_TestString, nil, "get_Chars", 2);
+				local equal; equal = (this.m_TestString == s);
 			end,
 			ctor = function(this)
 			end,
@@ -47,6 +50,7 @@ TestUnity = {
 
 		local instance_fields_build = function()
 			local instance_fields = {
+				m_TestString = "13579",
 			};
 			return instance_fields;
 		end;

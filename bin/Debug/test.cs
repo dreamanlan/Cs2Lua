@@ -31,7 +31,12 @@ class TestUnity : MonoBehaviour
         string s = i.ToString();     
         int i = s.IndexOf('2');
         LuaConsole.Print(i);
+        int i = m_TestString.Length;
+        char c = m_TestString[2];
+        bool equal = m_TestString == s;
     }
+
+    private string m_TestString = "13579";
 }
 
 public class foo<T, K>
