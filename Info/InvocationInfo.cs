@@ -26,6 +26,9 @@ namespace RoslynTool.CsToLua
         internal bool ArrayToParams = false;
         internal bool IsComponentGetOrAdd = false;
         internal bool IsBasicValueMethod = false;
+        internal bool IsArrayStaticMethod = false;
+        internal ExpressionSyntax FirstRefArray = null;
+        internal ExpressionSyntax SecondRefArray = null;
 
         internal IMethodSymbol MethodSymbol = null;
         internal IAssemblySymbol AssemblySymbol = null;
@@ -40,10 +43,13 @@ namespace RoslynTool.CsToLua
 
                 int ct = args.Count;
                 for (int i = 0; i < ct; ++i) {
-                    var arg = args[i];
+                    var arg = args[i];                    
                     TryAddExternEnum(ClassKey, arg.Expression, model);
                     if (i < sym.Parameters.Length) {
                         var param = sym.Parameters[i];
+                        if (!param.IsParams && param.Type.TypeKind == TypeKind.Array) {
+                            RecordRefArray(arg.Expression);
+                        }
                         if (param.RefKind == RefKind.Ref) {
                             Args.Add(arg.Expression);
                             ReturnArgs.Add(arg.Expression);
@@ -99,6 +105,9 @@ namespace RoslynTool.CsToLua
                     TryAddExternEnum(ClassKey, arg.Expression, model);
                     if (i < sym.Parameters.Length) {
                         var param = sym.Parameters[i];
+                        if (!param.IsParams && param.Type.TypeKind == TypeKind.Array) {
+                            RecordRefArray(arg.Expression);
+                        }
                         if (param.RefKind == RefKind.Ref) {
                             Args.Add(arg.Expression);
                             ReturnArgs.Add(arg.Expression);
@@ -148,6 +157,10 @@ namespace RoslynTool.CsToLua
             if (null != argList) {
                 for (int i = 0; i < argList.Count; ++i) {
                     var arg = argList[i];
+                    var oper = model.GetOperation(arg);
+                    if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Array) {
+                        RecordRefArray(arg);
+                    }
                     TryAddExternEnum(ClassKey, arg, model);
                 }
                 Args.AddRange(argList);
@@ -168,25 +181,39 @@ namespace RoslynTool.CsToLua
                     codeBuilder.Append(", ");
                     codeBuilder.AppendFormat("{0}, \"{1}\"", fnOfIntf, mname);
                     prestr = ", ";
-                } else {
-                    if (IsBasicValueMethod) {
-                        string ckey = CalcInvokeTarget(ClassKey, cs2lua, exp, model);
-                        codeBuilder.Append("invokeforbasicvalue(");
-                        cs2lua.VisitExpressionSyntax(exp);
-                        codeBuilder.Append(", ");
-                        codeBuilder.AppendFormat("{0}, {1}, \"{2}\"", ClassKey == "System.Enum" ? "true" : "false", ckey, mname);
-                        prestr = ", ";
+                } else if (IsBasicValueMethod) {
+                    string ckey = CalcInvokeTarget(ClassKey, cs2lua, exp, model);
+                    codeBuilder.Append("invokeforbasicvalue(");
+                    cs2lua.VisitExpressionSyntax(exp);
+                    codeBuilder.Append(", ");
+                    codeBuilder.AppendFormat("{0}, {1}, \"{2}\"", ClassKey == "System.Enum" ? "true" : "false", ckey, mname);
+                    prestr = ", ";
+                } else if (IsArrayStaticMethod) {
+                    codeBuilder.Append("invokearraystaticmethod(");
+                    if (null == FirstRefArray) {
+                        codeBuilder.Append("nil, ");
                     } else {
-                        if (sym.IsStatic) {
-                            codeBuilder.Append(ClassKey);
-                            codeBuilder.Append(".");
-                        } else {
-                            cs2lua.VisitExpressionSyntax(exp);
-                            codeBuilder.Append(":");
-                        }
-                        codeBuilder.Append(mname);
-                        codeBuilder.Append("(");
+                        cs2lua.VisitExpressionSyntax(FirstRefArray);
+                        codeBuilder.Append(", ");
                     }
+                    if (null == SecondRefArray) {
+                        codeBuilder.Append("nil, ");
+                    } else {
+                        cs2lua.VisitExpressionSyntax(SecondRefArray);
+                        codeBuilder.Append(", ");
+                    }
+                    codeBuilder.AppendFormat("\"{0}\"", mname);
+                    prestr = ", ";
+                } else {
+                    if (sym.IsStatic) {
+                        codeBuilder.Append(ClassKey);
+                        codeBuilder.Append(".");
+                    } else {
+                        cs2lua.VisitExpressionSyntax(exp);
+                        codeBuilder.Append(":");
+                    }
+                    codeBuilder.Append(mname);
+                    codeBuilder.Append("(");
                 }
             } else {
                 if (sym.MethodKind == MethodKind.DelegateInvoke) {
@@ -226,6 +253,7 @@ namespace RoslynTool.CsToLua
             ClassKey = ClassInfo.GetFullName(sym.ContainingType);
             GenericClassKey = ClassInfo.GetFullNameWithTypeParameters(sym.ContainingType);
             IsBasicValueMethod = SymbolTable.IsBasicValueMethod(sym);
+            IsArrayStaticMethod = ClassKey == "System.Array" && sym.IsStatic;
 
             if ((ClassKey == "UnityEngine.GameObject" || ClassKey == "UnityEngine.Component") && (sym.Name.StartsWith("GetComponent") || sym.Name.StartsWith("AddComponent"))) {
                 IsComponentGetOrAdd = true;
@@ -234,6 +262,17 @@ namespace RoslynTool.CsToLua
             if (sym.IsGenericMethod) {
                 foreach (var arg in sym.TypeArguments) {
                     GenericTypeArgs.Add(arg);
+                }
+            }
+        }
+
+        private void RecordRefArray(ExpressionSyntax exp)
+        {
+            if (IsArrayStaticMethod) {
+                if (null == FirstRefArray) {
+                    FirstRefArray = exp;
+                } else if (null == SecondRefArray) {
+                    SecondRefArray = exp;
                 }
             }
         }

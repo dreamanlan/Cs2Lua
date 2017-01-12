@@ -51,3 +51,27 @@ end;
 
 print(System.PlatformID.Xbox);
 print(invokeforbasicvalue(5, true, System.PlatformID, "ToString"));
+
+local str="123";
+local str0="";
+
+local tab = {
+  str = "",
+};
+
+System.String = setmetatable({},{
+  __call = function(tb, str)
+    local obj_val=str;
+    return setmetatable({},{
+      __index = function(t,k)
+        if k=="Length" then
+          print("call .Length "..type(obj_val));
+          return #obj_val;
+        end;
+      end,
+    });
+  end,
+});
+
+print(getforbasicvalue(tab.str, false, System.String, "Length"));
+print(getforbasicvalue(str0, false, System.String, "Length"));

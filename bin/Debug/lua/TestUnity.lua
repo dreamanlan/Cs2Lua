@@ -43,6 +43,8 @@ TestUnity = {
 				local i; i = getforbasicvalue(this.m_TestString, false, System.String, "Length");
 				local c; c = getexterninstanceindexer(this.m_TestString, nil, "get_Chars", 2);
 				local equal; equal = (this.m_TestString == s);
+				local a; a = wraparray{5, 4, 3, 2, 1};
+				local ix; ix = invokearraystaticmethod(a, nil, "IndexOf", System.Int32, a, 3);
 			end,
 			ctor = function(this)
 			end,

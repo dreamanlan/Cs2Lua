@@ -1319,3 +1319,24 @@ function setforbasicvalue(obj, isEnum, class, property, value)
 	end;
 	return nil;
 end;
+
+function invokearraystaticmethod(firstArray, secondArray, method, ...)
+  if nil~=firstArray then
+    local args = {...};
+    local meta = getmetatable(firstArray);    
+    if meta and meta.__cs2lua_defined then
+      if method=="IndexOf" then
+        return firstArray:IndexOf(args[3]);
+      elseif method=="Sort" then
+        return table.sort(firstArray, args[3]);
+      else
+        return nil;
+      end;
+    else
+      --这种情形认为是外部导出的数组调用，直接调导出接口了（由于System.Array有generic成员，这些方法的调用估计会出错）
+      System.Array[method](...);
+    end;
+  else
+    return nil;
+  end;
+end;

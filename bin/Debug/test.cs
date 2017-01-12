@@ -34,6 +34,8 @@ class TestUnity : MonoBehaviour
         int i = m_TestString.Length;
         char c = m_TestString[2];
         bool equal = m_TestString == s;
+        var a = new int[]{5,4,3,2,1};
+        int ix = System.Array.IndexOf(a, 3);
     }
 
     private string m_TestString = "13579";
