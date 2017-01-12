@@ -21,18 +21,18 @@ TopLevel.SecondLevel.Foo = {
 			remove_StaticEventBridge = function(value)
 			end,
 			op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo = function(self, other)
-				TopLevel.SecondLevel.Foo.m_Test = (TopLevel.SecondLevel.Foo.m_Test + TopLevel.SecondLevel.Foo.m_Test);
+				self.m_Test = (self.m_Test + other.m_Test);
 				return self;
 			end,
 			op_Addition__TopLevel_SecondLevel_Foo__System_Int32 = function(self, val)
-				TopLevel.SecondLevel.Foo.m_Test = (TopLevel.SecondLevel.Foo.m_Test + val);
+				self.m_Test = (self.m_Test + val);
 				return self;
 			end,
 			op_Explicit = function(a)
 				local f; f = newobject(TopLevel.SecondLevel.Foo, "ctor", {});
-				TopLevel.SecondLevel.Foo.m_Test = a;
-				TopLevel.SecondLevel.Foo.Val = newobject(TopLevel.TestStruct, "ctor", {});
-				local ts; ts = TopLevel.SecondLevel.Foo.Val;
+				f.m_Test = a;
+				f.Val = newobject(TopLevel.TestStruct, "ctor", {});
+				local ts; ts = f.Val;
 				ts = wrapvaluetype(ts);
 				setinstanceindexer(f, nil, "set_Item", ts, ts, 123);
 				local r; r = getinstanceindexer(f, nil, "get_Item", ts, ts);
@@ -67,11 +67,11 @@ TopLevel.SecondLevel.Foo = {
 			remove_EventBridge = function(this, value)
 			end,
 			get_Val = function(this)
-				return TopLevel.SecondLevel.Foo.m_TS;
+				return this.m_TS;
 			end,
 			set_Val = function(this, value)
 				value = wrapvaluetype(value);
-				TopLevel.SecondLevel.Foo.m_TS = value;
+				this.m_TS = value;
 			end,
 			get_Item = function(this, ...)
 				local args = wrapvaluetypearray{...};
@@ -90,7 +90,7 @@ TopLevel.SecondLevel.Foo = {
 			ctor__System_Int32 = function(this, v)
 				this.base.ctor(this);
 				this:__ctor();
-				TopLevel.SecondLevel.Foo.m_Test = v;
+				this.m_Test = v;
 				return this;
 			end,
 			ctor__System_Int32__System_Int32 = function(this, a, b)
@@ -124,9 +124,9 @@ TopLevel.SecondLevel.Foo = {
 				local vv; vv, v = this:TestLocal(__cs2lua_out);
 				local ts; ts = newobject(TopLevel.TestStruct, "ctor", {});
 				ts = wrapvaluetype(ts);
-				TopLevel.TestStruct.A = 1;
-				TopLevel.TestStruct.B = 2;
-				TopLevel.TestStruct.C = 3;
+				ts.A = 1;
+				ts.B = 2;
+				ts.C = 3;
 				local ts2; ts2 = ts;
 				ts2 = wrapvaluetype(ts2);
 				local ts3;
@@ -148,9 +148,9 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			TestValueArg = function(this, ts)
 				ts = wrapvaluetype(ts);
-				TopLevel.TestStruct.A = 4;
-				TopLevel.TestStruct.B = 5;
-				TopLevel.TestStruct.C = 6;
+				ts.A = 4;
+				ts.B = 5;
+				ts.C = 6;
 			end,
 			TestContinueAndReturn = function(this)
 				local i; i = 0;

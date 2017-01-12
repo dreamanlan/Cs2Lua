@@ -20,24 +20,24 @@ Extentions = {
 
 		local static_methods = {
 			timeInMillisecond = function(dateTime)
-				return (System.DateTime.Ticks / 10000);
+				return (dateTime.Ticks / 10000);
 			end,
 			timeSince1970 = function(dateTime)
 				return typecast(( (dateTime:timeSince1970InMillisecond() / 1000) ), System.Int64);
 			end,
 			timeSince1970InMillisecond = function(dateTime)
 --return (long)(Time.realtimeSinceStartup * 1000);
-				if (System.DateTime.Ticks == 0) then
+				if (Extentions.dateTime1970.Ticks == 0) then
 --Debug.LogError("Ticks = 0");
 					Extentions.dateTime1970 = System.DateTime.Parse("1970-1-1");
 				end;
 				local ts; ts = (dateTime - Extentions.dateTime1970);
-				return typecast(System.TimeSpan.TotalMilliseconds, System.Int64);
+				return typecast(ts.TotalMilliseconds, System.Int64);
 			end,
 			findChildRecursively = function(transform, childName, maxDepth)
 				local child; child = transform:FindChild(childName);
 				if ((child == nil) and (maxDepth > 0)) then
-					local childCount; childCount = UnityEngine.Transform.childCount;
+					local childCount; childCount = transform.childCount;
 					local i; i = 0;
 					while (i < childCount) do
 						child = transform:GetChild(i):findChildRecursively(childName, (maxDepth - 1));
@@ -53,10 +53,10 @@ Extentions = {
 				return child;
 			end,
 			searchChildRecursively = function(transform, childName, maxDepth)
-				if (invokeforbasicvalue(UnityEngine.Object.name, false, System.String, "IndexOf", childName) ~= -1) then
+				if (invokeforbasicvalue(transform.name, false, System.String, "IndexOf", childName) ~= -1) then
 					return transform;
 				end;
-				local count; count = UnityEngine.Transform.childCount;
+				local count; count = transform.childCount;
 				if (maxDepth > 0) then
 					local i; i = 0;
 					while (i < count) do
@@ -75,11 +75,11 @@ Extentions = {
 				return (isFirstTimeStart == 1);
 			end,
 			AddSorted = function(T, list, item)
-				if (System.Collections.Generic.List_T.Count == 0) then
+				if (list.Count == 0) then
 					list:Add(item);
 					return ;
 				end;
-				if (getexterninstanceindexer(list, nil, "get_Item", (System.Collections.Generic.List_T.Count - 1)):CompareTo(item) <= 0) then
+				if (getexterninstanceindexer(list, nil, "get_Item", (list.Count - 1)):CompareTo(item) <= 0) then
 					list:Add(item);
 					return ;
 				end;

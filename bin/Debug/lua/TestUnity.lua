@@ -25,15 +25,15 @@ TestUnity = {
 		local instance_methods = {
 			Test = function(this, ...)
 				local args = wraparray{...};
-				if (System.Array.Length >= 3) then
+				if (args.Length >= 3) then
 					local sagatObjId; sagatObjId = typecast(args[1], System.Int32);
 					local protectObjId; protectObjId = typecast(args[2], System.Int32);
 					local attackObjId; attackObjId = typecast(args[3], System.Int32);
 				end;
 				local t; t = this.gameObject:GetComponent(UnityEngine.Transform);
 				this.gameObject:SetActive(true);
-				local r; r = UnityEngine.GameObject.renderer;
-				UnityEngine.GameObject.active = true;
+				local r; r = this.gameObject.renderer;
+				this.gameObject.active = true;
 				local v; v = true;
 				local s; s = invokeforbasicvalue(v, false, System.Boolean, "ToString");
 				local i; i = 123;

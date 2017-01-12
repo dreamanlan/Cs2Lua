@@ -338,6 +338,16 @@ __mt_index_of_array = function(t, k)
       end;
       return -1;
     end;
+  elseif k=="FindIndex" then
+  	return function(obj, predicate)
+  		local ix = 0;
+  		for k,v in pairs(obj) do
+  			if predicate(v) then
+  				return k - 1;
+  			end
+  		end
+  		return -1;
+  	end;
   elseif k=="Contains" then
 	  return function(obj, p)
       local ret = false;

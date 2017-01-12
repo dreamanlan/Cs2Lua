@@ -15,8 +15,8 @@ TopLevel.SecondLevel.FooExtension = {
 
 		local static_methods = {
 			Test3__TopLevel_SecondLevel_Foo = function(obj)
-				if (TopLevel.SecondLevel.Foo.m_Test > 0) then
-					TopLevel.SecondLevel.Foo.m_Test2 = 678;
+				if (obj.m_Test > 0) then
+					obj.m_Test2 = 678;
 				end;
 				local f; f = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", (function(obj) System.Collections.Generic.List_T.__install_Extentions(obj); end), {{1, 2}, {2, 3}});
 			end,
@@ -29,9 +29,9 @@ TopLevel.SecondLevel.FooExtension = {
 				LuaConsole.Print(1, 2, 3, 4, 5);
 				local f; f = newobject(TopLevel.SecondLevel.Foo, "ctor", {});
 				local ff; ff = newobject(TopLevel.SecondLevel.Foo, "ctor", {});
-				local f1; f1 = delegationwrap((function() TopLevel.SecondLevel.Foo.Test() end));
+				local f1; f1 = delegationwrap((function() f:Test() end));
 				f1();
-				local f2; f2 = delegationwrap((function() TopLevel.SecondLevel.FooExtension.Test3() end));
+				local f2; f2 = delegationwrap((function() f:Test3() end));
 				f2();
 				TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo(f);
 				local r; r = TopLevel.SecondLevel.Foo.op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo(f, ff);

@@ -284,7 +284,7 @@ namespace RoslynTool.CsToLua
             var sym = symInfo.Symbol;
 
             string className = string.Empty;
-            if (null != sym && null != sym.ContainingType) {
+            if (null != sym && sym.IsStatic && null != sym.ContainingType) {
                 className = ClassInfo.GetFullName(sym.ContainingType);
             }
 
@@ -348,10 +348,11 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.AppendFormat(", \"{0}\", \"{1}\")", fnOfIntf, mname);
                     } else if (propForBasicValueType) {
                         string pname = psym.Name;
-                        string ckey = InvocationInfo.CalcInvokeTarget(className, this, node.Expression, m_Model);
+                        string cname = ClassInfo.GetFullName(psym.ContainingType);
+                        string ckey = InvocationInfo.CalcInvokeTarget(cname, this, node.Expression, m_Model);
                         CodeBuilder.AppendFormat("getforbasicvalue(");
                         VisitExpressionSyntax(node.Expression);
-                        CodeBuilder.AppendFormat(", {0}, {1}, \"{2}\")", className == "System.Enum" ? "true" : "false", ckey, pname);
+                        CodeBuilder.AppendFormat(", {0}, {1}, \"{2}\")", cname == "System.Enum" ? "true" : "false", ckey, pname);
                     } else {
                         if (string.IsNullOrEmpty(className)) {
                             VisitExpressionSyntax(node.Expression);
