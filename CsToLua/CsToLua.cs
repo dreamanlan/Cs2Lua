@@ -150,7 +150,7 @@ namespace RoslynTool.CsToLua
             }
             return ret;
         }
-        internal void OutputArgumentList(IList<ExpressionSyntax> args, IList<ArgDefaultValueInfo> defValArgs, IList<ITypeSymbol> typeArgs, bool arrayToParams, bool useTypeNameString, SyntaxNode node)
+        internal void OutputArgumentList(IList<ExpressionSyntax> args, IList<ArgDefaultValueInfo> defValArgs, IList<ITypeSymbol> typeArgs, bool arrayToParams, bool useTypeNameString, SyntaxNode node, params IConversionExpression[] opds)
         {
             if (typeArgs.Count > 0) {
                 OutputTypeArgumentList(typeArgs, useTypeNameString, node);
@@ -158,7 +158,23 @@ namespace RoslynTool.CsToLua
             if (args.Count + defValArgs.Count > 0) {
                 if (typeArgs.Count > 0)
                     CodeBuilder.Append(", ");
-                OutputExpressionList(args, defValArgs, arrayToParams);
+                OutputExpressionList(args, defValArgs, arrayToParams, opds);
+            }
+        }
+        internal void OutputExpressionSyntax(ExpressionSyntax node)
+        {
+            OutputExpressionSyntax(node, null);
+        }
+        internal void OutputExpressionSyntax(ExpressionSyntax node, IConversionExpression opd)
+        {
+            if (null != opd && opd.UsesOperatorMethod && !(node is CastExpressionSyntax)) {
+                IMethodSymbol msym = opd.OperatorMethod;
+                InvocationInfo ii = new InvocationInfo();
+                var arglist = new List<ExpressionSyntax>() { node };
+                ii.Init(msym, arglist, m_Model);
+                OutputOperatorInvoke(ii, node);
+            } else {
+                VisitExpressionSyntax(node);
             }
         }
         internal ClassInfo GetCurClassInfo()
@@ -272,23 +288,24 @@ namespace RoslynTool.CsToLua
         {
             OutputExpressionList(args, null, false);
         }
-        private void OutputExpressionList(IList<ExpressionSyntax> args, IList<ArgDefaultValueInfo> defValArgs, bool arrayToParams)
+        private void OutputExpressionList(IList<ExpressionSyntax> args, IList<ArgDefaultValueInfo> defValArgs, bool arrayToParams, params IConversionExpression[] opds)
         {
             int ct = args.Count;
             for (int i = 0; i < ct; ++i) {
                 var exp = args[i];
+                var opd = opds.Length > i ? opds[i] : null;
                 //表达式对象为空表明这个是一个out实参，替换为__cs2lua_out
                 if (null == exp) {
                     CodeBuilder.Append("__cs2lua_out");
                 } else if (i < ct - 1) {
-                    VisitExpressionSyntax(exp);
+                    OutputExpressionSyntax(exp, opd);
                 } else {
                     if (arrayToParams) {
                         CodeBuilder.Append("unpack(");
-                        VisitExpressionSyntax(exp);
+                        OutputExpressionSyntax(exp, opd);
                         CodeBuilder.Append(")");
                     } else {
-                        VisitExpressionSyntax(exp);
+                        OutputExpressionSyntax(exp, opd);
                     }
                 }
                 if (i < ct - 1) {
@@ -447,7 +464,71 @@ namespace RoslynTool.CsToLua
                 }
             }
         }
-        private void ProcessAddOrStringConcat(ExpressionSyntax left, ExpressionSyntax right)
+        private void OutputOperatorInvoke(InvocationInfo ii, SyntaxNode node)
+        {
+            if (ii.MethodSymbol.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
+                CodeBuilder.AppendFormat("{0}.", ii.ClassKey);
+                string manglingName = NameMangling(ii.MethodSymbol);
+                CodeBuilder.Append(manglingName);
+                CodeBuilder.Append("(");
+                OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, node, ii.ArgConversions.ToArray());
+                CodeBuilder.Append(")");
+            } else {
+                string method = ii.MethodSymbol.Name;
+                string luaOp = string.Empty;
+                if (SymbolTable.ForSlua) {
+                    //slua导出时把重载操作符导出成lua实例方法了，然后利用lua实例上支持的操作符元方法在运行时绑定到重载实现
+                    //这里把lua支持的操作符方法转成lua操作（可能比invokeexternoperator要快一些）
+                    if (method == "op_Addition") {
+                        luaOp = "+";
+                    } else if (method == "op_Subtraction") {
+                        luaOp = "-";
+                    } else if (method == "op_Multiply") {
+                        luaOp = "*";
+                    } else if (method == "op_Division") {
+                        luaOp = "/";
+                    } else if (method == "op_UnaryNegation") {
+                        luaOp = "-";
+                    } else if (method == "op_UnaryPlus") {
+                        luaOp = "+";
+                    } else if (method == "op_LessThan") {
+                        luaOp = "<";
+                    } else if (method == "op_GreaterThan") {
+                        luaOp = ">";
+                    } else if (method == "op_LessThanOrEqual") {
+                        luaOp = "<=";
+                    } else if (method == "op_GreaterThanOrEqual") {
+                        luaOp = ">= ";
+                    }
+                }
+                if (string.IsNullOrEmpty(luaOp)) {
+                    CodeBuilder.AppendFormat("invokeexternoperator({0}, ", ii.GenericClassKey);
+                    CodeBuilder.AppendFormat("\"{0}\"", method);
+                    CodeBuilder.Append(", ");
+                    OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, node, ii.ArgConversions.ToArray());
+                    CodeBuilder.Append(")");
+                } else {
+                    if (ii.Args.Count == 1) {
+                        if (luaOp == "-") {
+                            CodeBuilder.Append("(");
+                            CodeBuilder.Append(luaOp);
+                            CodeBuilder.Append(" ");
+                            OutputExpressionSyntax(ii.Args[0], ii.ArgConversions[0]);
+                            CodeBuilder.Append(")");
+                        }
+                    } else if (ii.Args.Count == 2) {
+                        CodeBuilder.Append("(");
+                        OutputExpressionSyntax(ii.Args[0], ii.ArgConversions[0]);
+                        CodeBuilder.Append(" ");
+                        CodeBuilder.Append(luaOp);
+                        CodeBuilder.Append(" ");
+                        OutputExpressionSyntax(ii.Args[1], ii.ArgConversions[1]);
+                        CodeBuilder.Append(")");
+                    }
+                }
+            }
+        }
+        private void ProcessAddOrStringConcat(ExpressionSyntax left, ExpressionSyntax right, IConversionExpression lopd, IConversionExpression ropd)
         {
             var leftOper = m_Model.GetOperation(left);
             var rightOper = m_Model.GetOperation(right);
@@ -459,72 +540,72 @@ namespace RoslynTool.CsToLua
             string rightTypeFullName = ClassInfo.GetFullName(rightOper.Type);
             if (leftTypeFullName == "System.String" && rightTypeFullName == "System.String") {
                 CodeBuilder.Append("System.String.Concat(");
-                VisitExpressionSyntax(left);
+                OutputExpressionSyntax(left, lopd);
                 CodeBuilder.Append(", ");
-                VisitExpressionSyntax(right);
+                OutputExpressionSyntax(right, ropd);
                 CodeBuilder.Append(")");
             } else if (leftTypeFullName == "System.String") {
                 CodeBuilder.Append("System.String.Concat(");
-                VisitExpressionSyntax(left);
+                OutputExpressionSyntax(left, lopd);
                 CodeBuilder.Append(", tostring(");
-                VisitExpressionSyntax(right);
+                OutputExpressionSyntax(right, ropd);
                 CodeBuilder.Append("))");
             } else if (rightTypeFullName == "System.String") {
                 CodeBuilder.Append("System.String.Concat(tostring(");
-                VisitExpressionSyntax(left);
+                OutputExpressionSyntax(left, lopd);
                 CodeBuilder.Append("), ");
-                VisitExpressionSyntax(right);
+                OutputExpressionSyntax(right, ropd);
                 CodeBuilder.Append(")");
             } else {
                 CodeBuilder.Append("(");
-                VisitExpressionSyntax(left);
+                OutputExpressionSyntax(left, lopd);
                 CodeBuilder.Append(" + ");
-                VisitExpressionSyntax(right);
+                OutputExpressionSyntax(right, ropd);
                 CodeBuilder.Append(")");
             }
-        }        
-        private void ProcessEqualOrNotEqual(string op, ExpressionSyntax left, ExpressionSyntax right)
+        }
+        private void ProcessEqualOrNotEqual(string op, ExpressionSyntax left, ExpressionSyntax right, IConversionExpression lopd, IConversionExpression ropd)
         {
             var leftOper = m_Model.GetOperation(left);
             var rightOper = m_Model.GetOperation(right);
             if (null != leftOper.Type && leftOper.Type.TypeKind == TypeKind.Delegate && (!leftOper.ConstantValue.HasValue || null != leftOper.ConstantValue.Value) && rightOper.ConstantValue.HasValue && rightOper.ConstantValue.Value == null) {
                 var leftAssembly = leftOper.Type.ContainingAssembly;
                 var sym = m_Model.GetSymbolInfo(left);
-                OutputDelegationCompareWithNull(sym.Symbol, left, leftAssembly == m_SymbolTable.AssemblySymbol, op == "==");
+                OutputDelegationCompareWithNull(sym.Symbol, left, leftAssembly == m_SymbolTable.AssemblySymbol, op == "==", lopd);
             } else if (null != rightOper.Type && rightOper.Type.TypeKind == TypeKind.Delegate && (!rightOper.ConstantValue.HasValue || null != rightOper.ConstantValue.Value) && leftOper.ConstantValue.HasValue && leftOper.ConstantValue.Value == null) {
                 var rightAssembly = rightOper.Type.ContainingAssembly;
                 var sym = m_Model.GetSymbolInfo(right);
-                OutputDelegationCompareWithNull(sym.Symbol, right, rightAssembly == m_SymbolTable.AssemblySymbol, op == "==");
+                OutputDelegationCompareWithNull(sym.Symbol, right, rightAssembly == m_SymbolTable.AssemblySymbol, op == "==", ropd);
             } else if (null != leftOper && null != rightOper && (leftOper.ConstantValue.HasValue && null == leftOper.ConstantValue.Value || rightOper.ConstantValue.HasValue && null == rightOper.ConstantValue.Value || SymbolTable.IsBasicType(leftOper.Type) || SymbolTable.IsBasicType(rightOper.Type))) {
                 CodeBuilder.Append("(");
-                VisitExpressionSyntax(left);
+                OutputExpressionSyntax(left, lopd);
                 CodeBuilder.AppendFormat(" {0} ", op);
-                VisitExpressionSyntax(right);
+                OutputExpressionSyntax(right, ropd);
                 CodeBuilder.Append(")");
             } else {
                 if (op == "==") {
                     CodeBuilder.Append("isequal(");
-                    VisitExpressionSyntax(left);
+                    OutputExpressionSyntax(left, lopd);
                     CodeBuilder.Append(", ");
-                    VisitExpressionSyntax(right);
+                    OutputExpressionSyntax(right, ropd);
                     CodeBuilder.Append(")");
                 } else {
                     CodeBuilder.Append("(not isequal(");
-                    VisitExpressionSyntax(left);
+                    OutputExpressionSyntax(left, lopd);
                     CodeBuilder.Append(", ");
-                    VisitExpressionSyntax(right);
+                    OutputExpressionSyntax(right, ropd);
                     CodeBuilder.Append("))");
                 }
             }
         }
-        private void OutputDelegationCompareWithNull(ISymbol leftSym, ExpressionSyntax left, bool isCs2LuaAssembly, bool isEqual)
+        private void OutputDelegationCompareWithNull(ISymbol leftSym, ExpressionSyntax left, bool isCs2LuaAssembly, bool isEqual, IConversionExpression opd)
         {
             var ci = m_ClassInfoStack.Peek();
             CodeBuilder.AppendFormat("{0}delegationcomparewithnil(", isCs2LuaAssembly ? string.Empty : "extern");
             if (null != leftSym && (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event)) {
                 var memberAccess = left as MemberAccessExpressionSyntax;
                 if (null != memberAccess) {
-                    VisitExpressionSyntax(memberAccess.Expression);
+                    OutputExpressionSyntax(memberAccess.Expression, opd);
                     CodeBuilder.Append(", ");
                     string intf = "nil";
                     string mname = string.Format("\"{0}\"", memberAccess.Name.Identifier.Text);
@@ -534,11 +615,11 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.Append("this, nil, ");
                     CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
                 } else {
-                    VisitExpressionSyntax(left);
+                    OutputExpressionSyntax(left, opd);
                     CodeBuilder.Append(", nil, nil");
                 }
             } else {
-                VisitExpressionSyntax(left);
+                OutputExpressionSyntax(left, opd);
                 CodeBuilder.Append(", nil, nil");
             }
             CodeBuilder.AppendFormat(", {0})", isEqual ? "true" : "false");
@@ -666,74 +747,6 @@ namespace RoslynTool.CsToLua
                 }
             }
             return null;
-        }
-        private void OutputOperatorInvoke(InvocationInfo ii, SyntaxNode node)
-        {
-            if (ii.MethodSymbol.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
-                CodeBuilder.AppendFormat("{0}.", ii.ClassKey);
-                string manglingName = NameMangling(ii.MethodSymbol);
-                CodeBuilder.Append(manglingName);
-                CodeBuilder.Append("(");
-                OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, node);
-                CodeBuilder.Append(")");
-            } else {
-                string method = ii.MethodSymbol.Name;
-                string luaOp = string.Empty;
-                if (SymbolTable.ForSlua) {
-                    //slua导出时把重载操作符导出成lua实例方法了，然后利用lua实例上支持的操作符元方法在运行时绑定到重载实现
-                    //这里把lua支持的操作符方法转成lua操作（可能比invokeexternoperator要快一些）
-                    if (method == "op_Addition") {
-                        luaOp = "+";
-                    } else if (method == "op_Subtraction") {
-                        luaOp = "-";
-                    } else if (method == "op_Multiply") {
-                        luaOp = "*";
-                    } else if (method == "op_Division") {
-                        luaOp = "/";
-                    } else if (method == "op_UnaryNegation") {
-                        luaOp = "-";
-                    } else if (method == "op_UnaryPlus") {
-                        luaOp = "+";
-                    } else if (method == "op_Equality") {
-                        luaOp = "==";
-                    } else if (method == "op_Inequality") {
-                        luaOp = "~=";
-                    } else if (method == "op_LessThan") {
-                        luaOp = "<";
-                    } else if (method == "op_GreaterThan") {
-                        luaOp = "< ";
-                    } else if (method == "op_LessThanOrEqual") {
-                        luaOp = "<=";
-                    } else if (method == "op_GreaterThanOrEqual") {
-                        luaOp = "<= ";
-                    }
-                }
-                if (string.IsNullOrEmpty(luaOp)) {
-                    CodeBuilder.AppendFormat("invokeexternoperator({0}, ", ii.GenericClassKey);
-                    CodeBuilder.AppendFormat("\"{0}\"", method);
-                    CodeBuilder.Append(", ");
-                    OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, node);
-                    CodeBuilder.Append(")");
-                } else {
-                    if (ii.Args.Count == 1) {
-                        if (luaOp == "-") {
-                            CodeBuilder.Append("(");
-                            CodeBuilder.Append(luaOp);
-                            CodeBuilder.Append(" ");
-                            VisitExpressionSyntax(ii.Args[0]);
-                            CodeBuilder.Append(")");
-                        }
-                    } else if (ii.Args.Count == 2) {
-                        CodeBuilder.Append("(");
-                        VisitExpressionSyntax(ii.Args[0]);
-                        CodeBuilder.Append(" ");
-                        CodeBuilder.Append(luaOp);
-                        CodeBuilder.Append(" ");
-                        VisitExpressionSyntax(ii.Args[1]);
-                        CodeBuilder.Append(")");
-                    }
-                }
-            }
         }
         
         private StringBuilder CodeBuilder

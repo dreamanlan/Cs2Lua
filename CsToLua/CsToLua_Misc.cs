@@ -158,7 +158,12 @@ namespace RoslynTool.CsToLua
         }
         public override void VisitArgument(ArgumentSyntax node)
         {
-            VisitExpressionSyntax(node.Expression);
+            var oper = m_Model.GetOperation(node) as IArgument;
+            IConversionExpression opd = null;
+            if (null != oper) {
+                opd = oper.Value as IConversionExpression;
+            }
+            OutputExpressionSyntax(node.Expression, opd);
         }
         public override void VisitPredefinedType(PredefinedTypeSyntax node)
         {

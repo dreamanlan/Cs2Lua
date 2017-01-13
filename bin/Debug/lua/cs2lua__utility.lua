@@ -496,8 +496,12 @@ __mt_index_of_array = function(t, k)
   elseif k=="GetEnumerator" then
     return function(obj)
       return GetArrayEnumerator(obj);
-    end;
-	end;
+    end
+  elseif k=="Sort" then
+	return function(obj, predicate)
+	  table.sort(obj, function(a, b) return predicate(a, b) < 0 end);
+	end
+  end
 end;
 
 __mt_index_of_dictionary = function(t, k)
@@ -1418,7 +1422,7 @@ function invokearraystaticmethod(firstArray, secondArray, method, ...)
       if method=="IndexOf" then
         return firstArray:IndexOf(args[3]);
       elseif method=="Sort" then
-        return table.sort(firstArray, args[3]);
+        return table.sort(firstArray, function(a, b) return args[3](a, b) < 0 end);
       else
         return nil;
       end;

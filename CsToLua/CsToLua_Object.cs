@@ -99,14 +99,14 @@ namespace RoslynTool.CsToLua
                 --m_Indent;
             } else if (null != node.EqualsValue) {
                 CodeBuilder.AppendFormat(" {0} ", node.EqualsValue.EqualsToken.Text);
-                VisitExpressionSyntax(node.EqualsValue.Value);
+                OutputExpressionSyntax(node.EqualsValue.Value);
                 CodeBuilder.AppendLine(",");
                 
                 ++m_Indent;
 
                 ci.CurrentCodeBuilder = ci.EnumValue2StringCodeBuilder;
                 CodeBuilder.AppendFormat("{0}[", GetIndentString());
-                VisitExpressionSyntax(node.EqualsValue.Value);
+                OutputExpressionSyntax(node.EqualsValue.Value);
                 CodeBuilder.AppendFormat("] = \"{0}\",", sym.Name);
                 CodeBuilder.AppendLine();
 
@@ -294,7 +294,7 @@ namespace RoslynTool.CsToLua
                 }
                 CodeBuilder.AppendFormat("{0}{1} = ", GetIndentString(), SymbolTable.GetPropertyName(declSym));
                 if (null != node.Initializer) {
-                    VisitExpressionSyntax(node.Initializer.Value);
+                    OutputExpressionSyntax(node.Initializer.Value);
                     CodeBuilder.Append(",");
                 } else {
                     CodeBuilder.Append("true,");
@@ -557,7 +557,16 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendFormat("{0}end)", GetIndentString());
                 } else {
                     CodeBuilder.Append(") return ");
-                    node.Body.Accept(this);
+                    IConversionExpression opd = null;
+                    var oper = m_Model.GetOperation(node) as ILambdaExpression;
+                    if (null != oper && oper.Body.Statements.Length == 1) {
+                        var iret = oper.Body.Statements[0] as IReturnStatement;
+                        if (null != iret) {
+                            opd = iret.ReturnedValue as IConversionExpression;
+                        }
+                    }
+                    var exp = node.Body as ExpressionSyntax;
+                    OutputExpressionSyntax(exp, opd);
                     CodeBuilder.Append("; end)");
                 }
 

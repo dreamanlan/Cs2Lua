@@ -20,6 +20,7 @@ namespace RoslynTool.CsToLua
         internal string ClassKey = string.Empty;
         internal string GenericClassKey = string.Empty;
         internal List<ExpressionSyntax> Args = new List<ExpressionSyntax>();
+        internal List<IConversionExpression> ArgConversions = new List<IConversionExpression>();
         internal List<ArgDefaultValueInfo> DefaultValueArgs = new List<ArgDefaultValueInfo>();
         internal List<ExpressionSyntax> ReturnArgs = new List<ExpressionSyntax>();
         internal List<ITypeSymbol> GenericTypeArgs = new List<ITypeSymbol>();
@@ -39,14 +40,22 @@ namespace RoslynTool.CsToLua
             Init(sym);
 
             if (null != argList) {
+                var moper = model.GetOperation(argList) as IInvocationExpression;
                 var args = argList.Arguments;
 
+                IConversionExpression lastConv = null;
                 int ct = args.Count;
                 for (int i = 0; i < ct; ++i) {
-                    var arg = args[i];                    
+                    var arg = args[i];
                     TryAddExternEnum(ClassKey, arg.Expression, model);
                     if (i < sym.Parameters.Length) {
                         var param = sym.Parameters[i];
+                        if (null != moper) {
+                            var iarg = moper.GetArgumentMatchingParameter(param);
+                            if (null != iarg) {
+                                lastConv = iarg.Value as IConversionExpression;
+                            }
+                        }
                         if (!param.IsParams && param.Type.TypeKind == TypeKind.Array) {
                             RecordRefArray(arg.Expression);
                         }
@@ -69,6 +78,7 @@ namespace RoslynTool.CsToLua
                     } else {
                         Args.Add(arg.Expression);
                     }
+                    ArgConversions.Add(lastConv);
                 }
                 for (int i = ct; i < sym.Parameters.Length; ++i) {
                     var param = sym.Parameters[i];
@@ -98,13 +108,22 @@ namespace RoslynTool.CsToLua
             Init(sym);
 
             if (null != argList) {
+                var moper = model.GetOperation(argList) as IInvocationExpression;
                 var args = argList.Arguments;
+
+                IConversionExpression lastConv = null;
                 int ct = args.Count;
                 for (int i = 0; i < ct; ++i) {
                     var arg = args[i];
                     TryAddExternEnum(ClassKey, arg.Expression, model);
                     if (i < sym.Parameters.Length) {
                         var param = sym.Parameters[i];
+                        if (null != moper) {
+                            var iarg = moper.GetArgumentMatchingParameter(param);
+                            if (null != iarg) {
+                                lastConv = iarg.Value as IConversionExpression;
+                            }
+                        }
                         if (!param.IsParams && param.Type.TypeKind == TypeKind.Array) {
                             RecordRefArray(arg.Expression);
                         }
@@ -127,6 +146,7 @@ namespace RoslynTool.CsToLua
                     } else {
                         Args.Add(arg.Expression);
                     }
+                    ArgConversions.Add(lastConv);
                 }
                 for (int i = ct; i < sym.Parameters.Length; ++i) {
                     var param = sym.Parameters[i];
@@ -150,7 +170,7 @@ namespace RoslynTool.CsToLua
             }
         }
 
-        internal void Init(IMethodSymbol sym, List<ExpressionSyntax> argList, SemanticModel model)
+        internal void Init(IMethodSymbol sym, List<ExpressionSyntax> argList, SemanticModel model, params IConversionExpression[] opds)
         {
             Init(sym);
 
@@ -162,8 +182,12 @@ namespace RoslynTool.CsToLua
                         RecordRefArray(arg);
                     }
                     TryAddExternEnum(ClassKey, arg, model);
+                    Args.Add(arg);
+                    if (i < opds.Length)
+                        ArgConversions.Add(opds[i]);
+                    else
+                        ArgConversions.Add(null);
                 }
-                Args.AddRange(argList);
             }
         }
         
@@ -177,14 +201,14 @@ namespace RoslynTool.CsToLua
                 bool isExplicitInterfaceInvoke = cs2lua.CheckExplicitInterfaceAccess(sym, ref fnOfIntf);
                 if (isExplicitInterfaceInvoke) {
                     codeBuilder.Append("invokewithinterface(");
-                    cs2lua.VisitExpressionSyntax(exp);
+                    cs2lua.OutputExpressionSyntax(exp);
                     codeBuilder.Append(", ");
                     codeBuilder.AppendFormat("{0}, \"{1}\"", fnOfIntf, mname);
                     prestr = ", ";
                 } else if (IsBasicValueMethod) {
                     string ckey = CalcInvokeTarget(ClassKey, cs2lua, exp, model);
                     codeBuilder.Append("invokeforbasicvalue(");
-                    cs2lua.VisitExpressionSyntax(exp);
+                    cs2lua.OutputExpressionSyntax(exp);
                     codeBuilder.Append(", ");
                     codeBuilder.AppendFormat("{0}, {1}, \"{2}\"", ClassKey == "System.Enum" ? "true" : "false", ckey, mname);
                     prestr = ", ";
@@ -193,13 +217,13 @@ namespace RoslynTool.CsToLua
                     if (null == FirstRefArray) {
                         codeBuilder.Append("nil, ");
                     } else {
-                        cs2lua.VisitExpressionSyntax(FirstRefArray);
+                        cs2lua.OutputExpressionSyntax(FirstRefArray);
                         codeBuilder.Append(", ");
                     }
                     if (null == SecondRefArray) {
                         codeBuilder.Append("nil, ");
                     } else {
-                        cs2lua.VisitExpressionSyntax(SecondRefArray);
+                        cs2lua.OutputExpressionSyntax(SecondRefArray);
                         codeBuilder.Append(", ");
                     }
                     codeBuilder.AppendFormat("\"{0}\"", mname);
@@ -209,7 +233,7 @@ namespace RoslynTool.CsToLua
                         codeBuilder.Append(ClassKey);
                         codeBuilder.Append(".");
                     } else {
-                        cs2lua.VisitExpressionSyntax(exp);
+                        cs2lua.OutputExpressionSyntax(exp);
                         codeBuilder.Append(":");
                     }
                     codeBuilder.Append(mname);
@@ -217,7 +241,7 @@ namespace RoslynTool.CsToLua
                 }
             } else {
                 if (sym.MethodKind == MethodKind.DelegateInvoke) {
-                    cs2lua.VisitExpressionSyntax(exp);
+                    cs2lua.OutputExpressionSyntax(exp);
                 } else if (sym.IsStatic) {
                     codeBuilder.AppendFormat("{0}.", ClassKey);
                     codeBuilder.Append(mname);
@@ -237,7 +261,7 @@ namespace RoslynTool.CsToLua
                     useTypeNameString = true;
                 }
             }
-            cs2lua.OutputArgumentList(Args, DefaultValueArgs, GenericTypeArgs, ArrayToParams, useTypeNameString, node);
+            cs2lua.OutputArgumentList(Args, DefaultValueArgs, GenericTypeArgs, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
             codeBuilder.Append(")");
         }
 
@@ -247,6 +271,7 @@ namespace RoslynTool.CsToLua
             AssemblySymbol = SymbolTable.Instance.AssemblySymbol;;
 
             Args.Clear();
+            ArgConversions.Clear();
             ReturnArgs.Clear();
             GenericTypeArgs.Clear();
             

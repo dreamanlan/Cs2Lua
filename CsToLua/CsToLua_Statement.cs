@@ -88,7 +88,12 @@ namespace RoslynTool.CsToLua
             }
             if (null != node.Expression) {
                 CodeBuilder.Append(prestr);
-                VisitExpressionSyntax(node.Expression);
+                IConversionExpression opd = null;
+                var iret = m_Model.GetOperation(node) as IReturnStatement;
+                if (null != iret) {
+                    opd = iret.ReturnedValue as IConversionExpression;
+                }
+                OutputExpressionSyntax(node.Expression, opd);
                 prestr = ", ";
             }
             var names = mi.ReturnParamNames;
@@ -113,7 +118,12 @@ namespace RoslynTool.CsToLua
             m_ContinueInfoStack.Push(ci);
 
             CodeBuilder.AppendFormat("{0}while ", GetIndentString());
-            VisitExpressionSyntax(node.Condition);
+            var oper = m_Model.GetOperation(node) as IWhileUntilLoopStatement;
+            IConversionExpression opd = null;
+            if (null != oper) {
+                opd = oper.Condition as IConversionExpression;
+            }
+            OutputExpressionSyntax(node.Condition, opd);
             CodeBuilder.AppendLine(" do");
             if (ci.HaveContinue) {
                 if (ci.HaveBreak) {
@@ -167,7 +177,12 @@ namespace RoslynTool.CsToLua
                 }
             }
             CodeBuilder.AppendFormat("{0}until not (", GetIndentString());
-            VisitExpressionSyntax(node.Condition);
+            var oper = m_Model.GetOperation(node) as IWhileUntilLoopStatement;
+            IConversionExpression opd = null;
+            if (null != oper) {
+                opd = oper.Condition as IConversionExpression;
+            }
+            OutputExpressionSyntax(node.Condition, opd);
             CodeBuilder.AppendLine(");");
 
             m_ContinueInfoStack.Pop();
@@ -181,10 +196,16 @@ namespace RoslynTool.CsToLua
             if (null != node.Declaration)
                 VisitVariableDeclaration(node.Declaration);
             CodeBuilder.AppendFormat("{0}while ", GetIndentString());
-            if (null != node.Condition)
-                VisitExpressionSyntax(node.Condition);
-            else
+            if (null != node.Condition) {
+                var oper = m_Model.GetOperation(node) as IForLoopStatement;
+                IConversionExpression opd = null;
+                if (null != oper) {
+                    opd = oper.Condition as IConversionExpression;
+                }
+                OutputExpressionSyntax(node.Condition, opd);
+            } else {
                 CodeBuilder.AppendLine("true");
+            }
             CodeBuilder.AppendLine(" do");
             if (ci.HaveContinue) {
                 if (ci.HaveBreak) {
@@ -222,7 +243,7 @@ namespace RoslynTool.CsToLua
 
             string varName = string.Format("__compiler_foreach_{0}", node.GetLocation().GetLineSpan().StartLinePosition.Line);
             CodeBuilder.AppendFormat("{0}local {1} = (", GetIndentString(), varName);
-            VisitExpressionSyntax(node.Expression);
+            OutputExpressionSyntax(node.Expression);
             CodeBuilder.AppendLine("):GetEnumerator();");
             CodeBuilder.AppendFormat("{0}while {1}:MoveNext() do", GetIndentString(), varName);
             CodeBuilder.AppendLine();
@@ -255,7 +276,12 @@ namespace RoslynTool.CsToLua
         public override void VisitIfStatement(IfStatementSyntax node)
         {
             CodeBuilder.AppendFormat("{0}if ", GetIndentString());
-            VisitExpressionSyntax(node.Condition);
+            var oper = m_Model.GetOperation(node) as IIfStatement;
+            IConversionExpression opd = null;
+            if (null != oper) {
+                opd = oper.Condition as IConversionExpression;
+            }
+            OutputExpressionSyntax(node.Condition, opd);
             CodeBuilder.AppendLine(" then");
             ++m_Indent;
             node.Statement.Accept(this);
@@ -272,7 +298,12 @@ namespace RoslynTool.CsToLua
             IfStatementSyntax ifNode = node.Statement as IfStatementSyntax;
             if (null != ifNode) {
                 CodeBuilder.AppendFormat("{0}elseif ", GetIndentString());
-                VisitExpressionSyntax(ifNode.Condition);
+                var oper = m_Model.GetOperation(node) as IIfStatement;
+                IConversionExpression opd = null;
+                if (null != oper) {
+                    opd = oper.Condition as IConversionExpression;
+                }
+                OutputExpressionSyntax(ifNode.Condition, opd);
                 CodeBuilder.AppendLine(" then");
                 ++m_Indent;
                 ifNode.Statement.Accept(this);
@@ -301,7 +332,7 @@ namespace RoslynTool.CsToLua
             m_SwitchInfoStack.Push(si);
 
             CodeBuilder.AppendFormat("{0}local {1} = ", GetIndentString(), varName);
-            VisitExpressionSyntax(node.Expression);
+            OutputExpressionSyntax(node.Expression);
             CodeBuilder.AppendLine(";");
 
             int ct = node.Sections.Count;
@@ -343,7 +374,7 @@ namespace RoslynTool.CsToLua
                             CodeBuilder.Append("(");
                         }
                         CodeBuilder.AppendFormat("{0} == ", varName);
-                        VisitExpressionSyntax(label.Value);
+                        OutputExpressionSyntax(label.Value);
                         if (lct > 1) {
                             CodeBuilder.Append(")");
                             if (j < lct - 1) {
@@ -453,7 +484,7 @@ namespace RoslynTool.CsToLua
                 if (null != node.Expression) {
                     var oper = m_Model.GetOperation(node.Expression);
                     var type = oper.Type;
-                    VisitExpressionSyntax(node.Expression);
+                    OutputExpressionSyntax(node.Expression);
                     if (null != type && (IsImplementationOfSys(type, "IEnumerable") || IsImplementationOfSys(type, "IEnumerator"))) {
                         CodeBuilder.Append(", true");
                     } else {

@@ -496,8 +496,12 @@ __mt_index_of_array = function(t, k)
   elseif k=="GetEnumerator" then
     return function(obj)
       return GetArrayEnumerator(obj);
-    end;
-	end;
+    end
+  elseif k=="Sort" then
+	return function(obj, predicate)
+	  table.sort(obj, function(a, b) return predicate(a, b) < 0 end);
+	end
+  end
 end;
 
 __mt_index_of_dictionary = function(t, k)
@@ -623,11 +627,13 @@ end;
 __mt_delegation = {
   __is_delegation = true,
   __call = function(t, ...)
+    local ret = nil;
     for k,v in pairs(t) do
       if v then
-        v(...);
+        ret = v(...);
       end;
     end;
+    return ret;
   end,
 };
 
@@ -1130,7 +1136,7 @@ function delegationcomparewithnil(t, inf, k, isequal)
   if k then
     v = t[k];  
   end;
-  local n = table.maxn(t[k]);
+  local n = table.maxn(v);
   if isequal and n==0 then
     return true;
   elseif not isqual and n>0 then
@@ -1142,9 +1148,9 @@ end;
 function delegationset(t, intf, k, handler)
   local v = t;
   if k then
-    v = t[k];  
+    v = t[k];
   end;
-  local n = table.maxn(t[k]);
+  local n = table.maxn(v);
   for i=1,n do
     table.remove(v);
   end;
@@ -1321,6 +1327,30 @@ function invokeexternoperator(class, method, ...)
 	--对slua，对应到lua元表操作符函数的操作符重载cs2lua转lua代码时已经换成对应操作符表达式。
 	--执行到这里的应该是无法对应到lua操作符的操作符重载
 	local argnum = table.maxn(args);
+	if method=="op_Equality" then
+	  if args[1] and args[2] then
+	    return args[1]==args[2];
+	  elseif not args[1] then
+	    return Slua.IsNull(args[2]);
+	  elseif not args[2] then
+	    return Slua.IsNull(args[1]);
+	  else
+	    return true;
+	  end;
+	elseif method=="op_Inequality" then
+	  if args[1] and args[2] then
+	    return args[1]~=args[2];
+	  elseif not args[1] then
+	    return not Slua.IsNull(args[2]);
+	  elseif not args[2] then
+	    return not Slua.IsNull(args[1]);
+	  else
+	    return false;
+	  end;	  
+	elseif method=="op_Implicit" then
+	  --这里就不仔细判断了，就假定是UnityEngine.Object子类了
+	  return not Slua.IsNull(args[1]);
+	end;
 	if argnum == 1 and args[1] then
 	  return args[1][method](...);
 	elseif argnum == 2 then
@@ -1418,7 +1448,7 @@ function invokearraystaticmethod(firstArray, secondArray, method, ...)
       if method=="IndexOf" then
         return firstArray:IndexOf(args[3]);
       elseif method=="Sort" then
-        return table.sort(firstArray, args[3]);
+        return table.sort(firstArray, function(a, b) return args[3](a, b) < 0 end);
       else
         return nil;
       end;
