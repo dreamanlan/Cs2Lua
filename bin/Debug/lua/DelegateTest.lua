@@ -1,6 +1,7 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
+require "ConvTest";
 
 DelegateTest = {
 	__new_object = function(...)
@@ -10,6 +11,13 @@ DelegateTest = {
 		local static = DelegateTest;
 
 		local static_methods = {
+			op_Implicit__DelegateTest = function(thisObj)
+				return 0;
+			end,
+			op_Implicit__System_Int32 = function(v)
+				local dt; dt = newobject(DelegateTest, "ctor", {});
+				return dt;
+			end,
 			cctor = function()
 			end,
 		};
@@ -23,6 +31,16 @@ DelegateTest = {
 		local static_events = nil;
 
 		local instance_methods = {
+			get_Item = function(this, ix)
+				return nil;
+			end,
+			set_Item = function(this, ix, value)
+			end,
+			get_ObjProp = function(this)
+				return nil;
+			end,
+			set_ObjProp = function(this, value)
+			end,
 			NormalEnumerator = wrapenumerable(function(this)
 				local obj; obj = nil;
 				if (not invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)) then
@@ -35,15 +53,16 @@ DelegateTest = {
 				local v2; v2 = invokeexternoperator(UnityEngine.Object, "op_Implicit", obj);
 				local v3;
 				v3 = invokeexternoperator(UnityEngine.Object, "op_Implicit", obj);
+				local vv; vv = this:Test2(invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), false);
 				local v4; v4 = 0;
-				v4 = (v4 + typecast(invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), System.Int32, false));
+				v4 = (v4 + typecast(typecast(invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), System.Object, false), System.Int32, false));
 				return nil;
 			end),
-			Test = function(this)
+			Test = function(this, v)
 				delegationset(this, nil, "Fading", (function() return this:NormalEnumerator(); end));
 				this:StartCoroutine(this.Fading());
 				local obj; obj = nil;
-				local f; f = delegationwrap((function(v) return invokeexternoperator(UnityEngine.Object, "op_Implicit", obj); end));
+				local f; f = delegationwrap((function(vv) return invokeexternoperator(UnityEngine.Object, "op_Implicit", obj); end));
 				if invokeexternoperator(UnityEngine.Object, "op_Implicit", obj) then
 					this:Test2(true, false);
 				end;
@@ -60,6 +79,23 @@ DelegateTest = {
 					UnityEngine.Debug.Log(v1);
 					UnityEngine.Debug.Log(v2);
 				end;
+				local tc; tc = newobject(ConvTest, "ctor", {});
+				local vv; vv = invokeexternoperator(UnityEngine.Object, "op_Implicit", tc:TestConv(1, DelegateTest.op_Implicit__DelegateTest(this)));
+				local vv2;
+				vv2 = invokeexternoperator(UnityEngine.Object, "op_Implicit", (function() local __compiler_assigninvoke_131; __compiler_assigninvoke_131 = tc:TestConv(1, 2); return __compiler_assigninvoke_131; end)());
+				local r;
+				local vv3; vv3 = invokeexternoperator(UnityEngine.Object, "op_Implicit", (function() local __compiler_localdecl_133; __compiler_localdecl_133, r = tc:TestConv2(1, DelegateTest.op_Implicit__DelegateTest(this), __cs2lua_out); return __compiler_localdecl_133; end)());
+				local vv4;
+				vv4 = invokeexternoperator(UnityEngine.Object, "op_Implicit", (function() local __compiler_assigninvoke_135; __compiler_assigninvoke_135, r = tc:TestConv2(2, DelegateTest.op_Implicit__DelegateTest(this), __cs2lua_out); return __compiler_assigninvoke_135; end)());
+				local vv5;
+				vv5 = DelegateTest.op_Implicit__DelegateTest((function() local __compiler_assigninvoke_137; __compiler_assigninvoke_137, r = tc:TestConv3(3, DelegateTest.op_Implicit__DelegateTest(this), __cs2lua_out); return __compiler_assigninvoke_137; end)());
+				tc.Prop = 123;
+				local vvv; vvv = tc.Prop;
+				this:Test(invokeexternoperator(UnityEngine.Object, "op_Implicit", tc:TestConv(DelegateTest.op_Implicit__DelegateTest(this), 2)));
+				local arr; arr = wraparray{nil};
+				this:Test(invokeexternoperator(UnityEngine.Object, "op_Implicit", arr[1]));
+				this:Test(invokeexternoperator(UnityEngine.Object, "op_Implicit", this.ObjProp));
+				this:Test(invokeexternoperator(UnityEngine.Object, "op_Implicit", getinstanceindexer(this, nil, "get_Item", 0)));
 			end,
 			ctor = function(this)
 			end,
@@ -71,7 +107,14 @@ DelegateTest = {
 			};
 			return instance_fields;
 		end;
-		local instance_props = nil;
+
+		local instance_props = {
+			ObjProp = {
+				get = instance_methods.get_ObjProp,
+				set = instance_methods.set_ObjProp,
+			},
+		};
+
 		local instance_events = nil;
 		local interfaces = nil;
 		local interface_map = nil;

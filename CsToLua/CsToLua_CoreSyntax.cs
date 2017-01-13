@@ -544,9 +544,14 @@ namespace RoslynTool.CsToLua
                 }
 
                 var oper = m_Model.GetOperation(node.Initializer) as IVariableDeclarationStatement;
+                IConversionExpression opd = null;
+                if (null != oper && oper.Variables.Length == 1) {
+                    opd = oper.Variables[0].InitialValue as IConversionExpression;
+                }
                 var token = node.Initializer.EqualsToken;
                 var invocation = node.Initializer.Value as InvocationExpressionSyntax;
                 if (null != invocation) {
+                    string localName = string.Format("__compiler_localdecl_{0}", invocation.GetLocation().GetLineSpan().StartLinePosition.Line);
                     SymbolInfo symInfo = m_Model.GetSymbolInfo(invocation);
                     IMethodSymbol sym = symInfo.Symbol as IMethodSymbol;
 
@@ -559,34 +564,53 @@ namespace RoslynTool.CsToLua
                         if (sym.IsStatic) {
                             AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
                         }
-
+                        int ct = ii.ReturnArgs.Count;
+                        bool useOperator = false;
+                        if (null != opd && opd.UsesOperatorMethod) {
+                            useOperator = true;
+                            IMethodSymbol msym = opd.OperatorMethod;
+                            InvocationInfo iop = new InvocationInfo();
+                            iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
+                            CodeBuilder.AppendFormat(" {0} ", token.Text);
+                            OutputConversionInvokePrefix(iop);
+                            if (ct > 0) {
+                                CodeBuilder.AppendFormat("(function() local {0}; {1}", localName, localName);
+                            }
+                        }
                         MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
                         if (null != memberAccess) {
                             if (memberAccess.OperatorToken.Text == "->") {
                                 Log(memberAccess, "Unsupported -> member access !");
                             }
-
-                            int ct = ii.ReturnArgs.Count;
                             if (ct > 0) {
                                 CodeBuilder.Append(", ");
+                                OutputExpressionList(ii.ReturnArgs);
+                                CodeBuilder.AppendFormat(" {0} ", token.Text);
+                            } else if (!useOperator) {
+                                CodeBuilder.AppendFormat(" {0} ", token.Text);
                             }
-                            OutputExpressionList(ii.ReturnArgs);
-                            CodeBuilder.AppendFormat(" {0} ", token.Text);
                             if (isDelegate) {
                                 CodeBuilder.Append("delegationwrap(");
                             }
                             ii.OutputInvocation(CodeBuilder, this, memberAccess.Expression, true, m_Model, memberAccess);
                         } else {
-                            int ct = ii.ReturnArgs.Count;
                             if (ct > 0) {
                                 CodeBuilder.Append(", ");
+                                OutputExpressionList(ii.ReturnArgs);
+                                CodeBuilder.AppendFormat(" {0} ", token.Text);
+                            } else if (!useOperator) {
+                                CodeBuilder.AppendFormat(" {0} ", token.Text);
                             }
-                            OutputExpressionList(ii.ReturnArgs);
-                            CodeBuilder.AppendFormat(" {0} ", token.Text);
                             if (isDelegate) {
                                 CodeBuilder.Append("delegationwrap(");
                             }
                             ii.OutputInvocation(CodeBuilder, this, invocation.Expression, false, m_Model, invocation);
+                        } 
+                        if (useOperator) {
+                            if (ct > 0) {
+                                CodeBuilder.AppendFormat("; return {0}; end)()", localName);
+                            }
+                            CodeBuilder.Append(")");
                         }
                     }
                 } else {
@@ -594,10 +618,6 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendFormat(" {0} ", token.Text);
                     if (isDelegate) {
                         CodeBuilder.Append("delegationwrap(");
-                    }
-                    IConversionExpression opd = null;
-                    if (null != oper && oper.Variables.Length == 1) {
-                        opd = oper.Variables[0].InitialValue as IConversionExpression;
                     }
                     OutputExpressionSyntax(init.Value, opd);
                 }
@@ -610,6 +630,16 @@ namespace RoslynTool.CsToLua
         private void VisitAssignment(ClassInfo ci, string op, string baseOp, AssignmentExpressionSyntax assign, string expTerminater, bool toplevel, IOperation leftOper, ISymbol leftSym, IPropertySymbol leftPsym, MemberAccessExpressionSyntax leftMemberAccess, ElementAccessExpressionSyntax leftElementAccess, ConditionalAccessExpressionSyntax leftCondAccess, SpecialAssignmentType specialType)
         {
             var assignOper = m_Model.GetOperation(assign);
+            IConversionExpression opd = null, lopd = null, ropd = null;
+            var assignInfo = assignOper as IAssignmentExpression;
+            if (null != assignInfo) {
+                opd = assignInfo.Value as IConversionExpression;
+            }
+            var compAssignInfo = assignOper as ICompoundAssignmentExpression;
+            if (null != compAssignInfo) {
+                lopd = compAssignInfo.Target as IConversionExpression;
+                ropd = compAssignInfo.Value as IConversionExpression;
+            }
             InvocationExpressionSyntax invocation = assign.Right as InvocationExpressionSyntax;
             if (specialType == SpecialAssignmentType.PropExplicitImplementInterface) {
                 string fnOfIntf = "nil";
@@ -618,7 +648,7 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.AppendFormat("setwithinterface(");
                 OutputExpressionSyntax(leftMemberAccess.Expression);
                 CodeBuilder.AppendFormat(", {0}, {1}, ", fnOfIntf, mname);
-                OutputExpressionSyntax(assign.Right);
+                OutputExpressionSyntax(assign.Right, opd);
                 CodeBuilder.Append(")");
             } else if (specialType == SpecialAssignmentType.PropForBasicValueType) {
                 string className = ClassInfo.GetFullName(leftPsym.ContainingType);
@@ -627,7 +657,7 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.AppendFormat("setforbasicvalue(");
                 OutputExpressionSyntax(leftMemberAccess.Expression);
                 CodeBuilder.AppendFormat(", {0}, {1}, \"{2}\", ", className == "System.Enum" ? "true" : "false", ckey, pname);
-                OutputExpressionSyntax(assign.Right);
+                OutputExpressionSyntax(assign.Right, opd);
                 CodeBuilder.Append(")");
             } else if (null != leftElementAccess) {
                 if (null != leftSym && leftSym.IsStatic) {
@@ -653,7 +683,7 @@ namespace RoslynTool.CsToLua
                     ii.Init(leftPsym.SetMethod, leftElementAccess.ArgumentList, m_Model);
                     OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, leftElementAccess, ii.ArgConversions.ToArray());
                     CodeBuilder.Append(", ");
-                    OutputExpressionSyntax(assign.Right);
+                    OutputExpressionSyntax(assign.Right, opd);
                     CodeBuilder.Append(")");
                 } else if (leftOper.Kind == OperationKind.ArrayElementReferenceExpression) {
                     if (!toplevel) {
@@ -663,10 +693,10 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.Append("[");
                     VisitBracketedArgumentList(leftElementAccess.ArgumentList);
                     CodeBuilder.Append("] = ");
-                    OutputExpressionSyntax(assign.Right);
+                    OutputExpressionSyntax(assign.Right, opd);
                     if (!toplevel) {
                         CodeBuilder.Append("; return ");
-                        OutputExpressionSyntax(assign.Right);
+                        OutputExpressionSyntax(assign.Right, opd);
                         CodeBuilder.Append("; end)()");
                     }
                 } else if (null != leftSym) {
@@ -681,7 +711,7 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendFormat("\"{0}\", ", leftSym.Name);
                     VisitBracketedArgumentList(leftElementAccess.ArgumentList);
                     CodeBuilder.Append(", ");
-                    OutputExpressionSyntax(assign.Right);
+                    OutputExpressionSyntax(assign.Right, opd);
                     CodeBuilder.Append(")");
                 } else {
                     Log(assign, "unknown set element symbol !");
@@ -721,7 +751,7 @@ namespace RoslynTool.CsToLua
                         ii.Init(psym.SetMethod, args, m_Model);
                         OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, leftCondAccess, ii.ArgConversions.ToArray());
                         CodeBuilder.Append(", ");
-                        OutputExpressionSyntax(assign.Right);
+                        OutputExpressionSyntax(assign.Right, opd);
                         CodeBuilder.Append(")");
                         CodeBuilder.Append("; end)");
                     } else if (bindingOper.Kind == OperationKind.ArrayElementReferenceExpression) {
@@ -729,10 +759,10 @@ namespace RoslynTool.CsToLua
                         OutputExpressionSyntax(leftCondAccess.Expression);
                         CodeBuilder.Append("[");
                         OutputExpressionSyntax(leftCondAccess.WhenNotNull);
-                        CodeBuilder.Append(" + 1] = ");
-                        OutputExpressionSyntax(assign.Right);
+                        CodeBuilder.Append("] = ");
+                        OutputExpressionSyntax(assign.Right, opd);
                         CodeBuilder.Append("; return ");
-                        OutputExpressionSyntax(assign.Right);
+                        OutputExpressionSyntax(assign.Right, opd);
                         CodeBuilder.Append("; end)");
                     } else if (null != sym) {
                         CodeBuilder.Append("(function() return ");
@@ -747,7 +777,7 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.AppendFormat("\"{0}\", ", leftSym.Name);
                         OutputExpressionSyntax(leftCondAccess.WhenNotNull);
                         CodeBuilder.Append(", ");
-                        OutputExpressionSyntax(assign.Right);
+                        OutputExpressionSyntax(assign.Right, opd);
                         CodeBuilder.Append(")");
                         CodeBuilder.Append("; end)");
                     } else {
@@ -758,9 +788,9 @@ namespace RoslynTool.CsToLua
                     OutputExpressionSyntax(leftCondAccess.Expression);
                     OutputExpressionSyntax(leftCondAccess.WhenNotNull);
                     CodeBuilder.Append(" = ");
-                    OutputExpressionSyntax(assign.Right);
+                    OutputExpressionSyntax(assign.Right, opd);
                     CodeBuilder.Append("; return ");
-                    OutputExpressionSyntax(assign.Right);
+                    OutputExpressionSyntax(assign.Right, opd);
                     CodeBuilder.Append("; end)");
                 }
                 CodeBuilder.Append(")");
@@ -770,7 +800,7 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.Append(" = ");
                     CodeBuilder.AppendFormat("delegationwrap");
                     CodeBuilder.Append("(");
-                    OutputExpressionSyntax(assign.Right);
+                    OutputExpressionSyntax(assign.Right, opd);
                     CodeBuilder.Append(")");
                 } else {
                     string prefix;
@@ -813,7 +843,7 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.Append(", nil, nil");
                     }
                     CodeBuilder.Append(", ");
-                    OutputExpressionSyntax(assign.Right);
+                    OutputExpressionSyntax(assign.Right, opd);
                     CodeBuilder.Append(")");
                 }
             } else if (null != invocation) {
@@ -844,12 +874,26 @@ namespace RoslynTool.CsToLua
                             string functor;
                             if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
                                 CodeBuilder.AppendFormat("{0}(", functor);
-                                OutputExpressionSyntax(assign.Left);
+                                OutputExpressionSyntax(assign.Left, lopd);
                                 CodeBuilder.Append(", ");
                             } else {
-                                OutputExpressionSyntax(assign.Left);
+                                OutputExpressionSyntax(assign.Left, lopd);
                                 CodeBuilder.AppendFormat(" {0} ", baseOp);
                             }
+                            if (null != ropd && ropd.UsesOperatorMethod) {
+                                IMethodSymbol msym = ropd.OperatorMethod;
+                                InvocationInfo iop = new InvocationInfo();
+                                iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
+                                OutputConversionInvokePrefix(iop);
+                            }
+                            CodeBuilder.AppendFormat("(function() local {0}; {1}", localName, localName);
+                        } else if (null != opd && opd.UsesOperatorMethod) {
+                            IMethodSymbol msym = opd.OperatorMethod;
+                            InvocationInfo iop = new InvocationInfo();
+                            iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
+                            OutputExpressionSyntax(assign.Left);
+                            CodeBuilder.Append(" = ");
+                            OutputConversionInvokePrefix(iop);
                             CodeBuilder.AppendFormat("(function() local {0}; {1}", localName, localName);
                         } else {
                             OutputExpressionSyntax(assign.Left);
@@ -863,10 +907,16 @@ namespace RoslynTool.CsToLua
                         ii.OutputInvocation(CodeBuilder, this, memberAccess.Expression, true, m_Model, memberAccess);
                         if (op != "=") {
                             CodeBuilder.AppendFormat("; return {0}; end)()", localName);
+                            if (null != ropd && ropd.UsesOperatorMethod) {
+                                CodeBuilder.Append(")");
+                            }
                             string functor;
                             if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
                                 CodeBuilder.Append(")");
                             }
+                        } else if (null != opd && opd.UsesOperatorMethod) {
+                            CodeBuilder.AppendFormat("; return {0}; end)()", localName);
+                            CodeBuilder.Append(")");
                         }
                     } else {
                         int ct = ii.ReturnArgs.Count;
@@ -877,12 +927,26 @@ namespace RoslynTool.CsToLua
                             string functor;
                             if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
                                 CodeBuilder.AppendFormat("{0}(", functor);
-                                OutputExpressionSyntax(assign.Left);
+                                OutputExpressionSyntax(assign.Left, lopd);
                                 CodeBuilder.Append(", ");
                             } else {
-                                OutputExpressionSyntax(assign.Left);
+                                OutputExpressionSyntax(assign.Left, lopd);
                                 CodeBuilder.AppendFormat(" {0} ", baseOp);
                             }
+                            if (null != ropd && ropd.UsesOperatorMethod) {
+                                IMethodSymbol msym = ropd.OperatorMethod;
+                                InvocationInfo iop = new InvocationInfo();
+                                iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
+                                OutputConversionInvokePrefix(iop);
+                            }
+                            CodeBuilder.AppendFormat("(function() local {0}; {1}", localName, localName);
+                        } else if (null != opd && opd.UsesOperatorMethod) {
+                            IMethodSymbol msym = opd.OperatorMethod;
+                            InvocationInfo iop = new InvocationInfo();
+                            iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
+                            OutputExpressionSyntax(assign.Left);
+                            CodeBuilder.Append(" = ");
+                            OutputConversionInvokePrefix(iop);
                             CodeBuilder.AppendFormat("(function() local {0}; {1}", localName, localName);
                         } else {
                             OutputExpressionSyntax(assign.Left);
@@ -896,10 +960,16 @@ namespace RoslynTool.CsToLua
                         ii.OutputInvocation(CodeBuilder, this, invocation.Expression, false, m_Model, invocation);
                         if (op != "=") {
                             CodeBuilder.AppendFormat("; return {0}; end)()", localName);
+                            if (null != ropd && ropd.UsesOperatorMethod) {
+                                CodeBuilder.Append(")");
+                            }
                             string functor;
                             if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
                                 CodeBuilder.Append(")");
                             }
+                        } else if (null != opd && opd.UsesOperatorMethod) {
+                            CodeBuilder.AppendFormat("; return {0}; end)()", localName);
+                            CodeBuilder.Append(")");
                         }
                     }
                 }
@@ -907,18 +977,13 @@ namespace RoslynTool.CsToLua
                 if (op == "=") {
                     OutputExpressionSyntax(assign.Left);
                     CodeBuilder.Append(" = ");
-                    var assignInfo = assignOper as IAssignmentExpression;
-                    var opd = assignInfo.Value as IConversionExpression;
                     OutputExpressionSyntax(assign.Right, opd);
                 } else {
                     OutputExpressionSyntax(assign.Left);
                     CodeBuilder.Append(" = ");
 
-                    var assignInfo = assignOper as ICompoundAssignmentExpression;
-                    var lopd = assignInfo.Target as IConversionExpression;
-                    var ropd = assignInfo.Value as IConversionExpression;
-                    if (null != assignInfo && assignInfo.UsesOperatorMethod) {
-                        IMethodSymbol msym = assignInfo.OperatorMethod;
+                    if (null != compAssignInfo && compAssignInfo.UsesOperatorMethod) {
+                        IMethodSymbol msym = compAssignInfo.OperatorMethod;
                         InvocationInfo ii = new InvocationInfo();
                         var arglist = new List<ExpressionSyntax>() { assign.Left, assign.Right };
                         ii.Init(msym, arglist, m_Model, lopd, ropd);

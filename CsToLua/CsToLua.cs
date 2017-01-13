@@ -528,6 +528,20 @@ namespace RoslynTool.CsToLua
                 }
             }
         }
+        private void OutputConversionInvokePrefix(InvocationInfo ii)
+        {
+            if (ii.MethodSymbol.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
+                CodeBuilder.AppendFormat("{0}.", ii.ClassKey);
+                string manglingName = NameMangling(ii.MethodSymbol);
+                CodeBuilder.Append(manglingName);
+                CodeBuilder.Append("(");
+            } else {
+                string method = ii.MethodSymbol.Name;
+                CodeBuilder.AppendFormat("invokeexternoperator({0}, ", ii.GenericClassKey);
+                CodeBuilder.AppendFormat("\"{0}\"", method);
+                CodeBuilder.Append(", ");
+            }
+        }
         private void ProcessAddOrStringConcat(ExpressionSyntax left, ExpressionSyntax right, IConversionExpression lopd, IConversionExpression ropd)
         {
             var leftOper = m_Model.GetOperation(left);

@@ -1,2 +1,2 @@
 ============<<<Semantic Error:test_delegate>>>============
-test_delegate.cs(25,15): error CS0030: Cannot convert type 'bool' to 'int'
+test_delegate.cs(98,19): error CS0029: Cannot implicitly convert type 'void' to 'bool'

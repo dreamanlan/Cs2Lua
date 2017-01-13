@@ -508,7 +508,7 @@ namespace RoslynTool.CsToLua
                     OutputExpressionSyntax(node.Expression);
                     CodeBuilder.Append("[");
                     OutputExpressionSyntax(node.WhenNotNull);
-                    CodeBuilder.Append(" + 1]");
+                    CodeBuilder.Append("]");
                     CodeBuilder.Append("; end)");
                 } else if (null != sym) {
                     CodeBuilder.Append("(function() return ");

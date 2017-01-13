@@ -36,12 +36,12 @@ Extentions = {
 			end,
 			findChildRecursively = function(transform, childName, maxDepth)
 				local child; child = transform:FindChild(childName);
-				if ((child == nil) and (maxDepth > 0)) then
+				if (invokeexternoperator(UnityEngine.Object, "op_Equality", child, nil) and (maxDepth > 0)) then
 					local childCount; childCount = transform.childCount;
 					local i; i = 0;
 					while (i < childCount) do
 						child = transform:GetChild(i):findChildRecursively(childName, (maxDepth - 1));
-						if (child ~= nil) then
+						if invokeexternoperator(UnityEngine.Object, "op_Inequality", child, nil) then
 							break;
 						end;
 						do
@@ -62,7 +62,7 @@ Extentions = {
 					while (i < count) do
 						local nowNode; nowNode = transform:GetChild(i);
 						local searchRes; searchRes = Extentions.searchChildRecursively(nowNode, childName, (maxDepth - 1));
-						if (searchRes ~= nil) then
+						if invokeexternoperator(UnityEngine.Object, "op_Inequality", searchRes, nil) then
 							return searchRes;
 						end;
 					i = i + 1;
