@@ -1,0 +1,2 @@
+TopLevel = TopLevel or {};
+TopLevel.SecondLevel = TopLevel.SecondLevel or {};

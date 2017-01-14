@@ -243,7 +243,12 @@ namespace RoslynTool.CsToLua
 
             string varName = string.Format("__compiler_foreach_{0}", node.GetLocation().GetLineSpan().StartLinePosition.Line);
             CodeBuilder.AppendFormat("{0}local {1} = (", GetIndentString(), varName);
-            OutputExpressionSyntax(node.Expression);
+            IConversionExpression opd = null;
+            var oper = m_Model.GetOperation(node) as IForEachLoopStatement;
+            if (null != oper) {
+                opd = oper.Collection as IConversionExpression;
+            }
+            OutputExpressionSyntax(node.Expression, opd);
             CodeBuilder.AppendLine("):GetEnumerator();");
             CodeBuilder.AppendFormat("{0}while {1}:MoveNext() do", GetIndentString(), varName);
             CodeBuilder.AppendLine();
@@ -332,7 +337,12 @@ namespace RoslynTool.CsToLua
             m_SwitchInfoStack.Push(si);
 
             CodeBuilder.AppendFormat("{0}local {1} = ", GetIndentString(), varName);
-            OutputExpressionSyntax(node.Expression);
+            IConversionExpression opd = null;
+            var oper = m_Model.GetOperation(node) as ISwitchStatement;
+            if (null != oper) {
+                opd = oper.Value as IConversionExpression;
+            }
+            OutputExpressionSyntax(node.Expression, opd);
             CodeBuilder.AppendLine(";");
 
             int ct = node.Sections.Count;

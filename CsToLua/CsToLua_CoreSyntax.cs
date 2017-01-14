@@ -263,7 +263,15 @@ namespace RoslynTool.CsToLua
                 } else {
                     CodeBuilder.AppendFormat("{0}return ", GetIndentString());
                 }
-                OutputExpressionSyntax(expressionBody.Expression);
+                IConversionExpression opd = null;
+                var oper = m_Model.GetOperation(expressionBody) as IBlockStatement;
+                if (null != oper && oper.Statements.Length == 1) {
+                    var iret = oper.Statements[0] as IReturnStatement;
+                    if (null != iret) {
+                        opd = iret.ReturnedValue as IConversionExpression;
+                    }
+                }
+                OutputExpressionSyntax(expressionBody.Expression, opd);
                 CodeBuilder.AppendLine(";");
             }
             if (!mi.ExistTopLevelReturn && mi.ReturnParamNames.Count > 0) {
@@ -297,6 +305,11 @@ namespace RoslynTool.CsToLua
                 if (isStatic && fieldSym.IsStatic || !isStatic && !fieldSym.IsStatic) {
                     string name = v.Identifier.Text;
                     if (null != v.Initializer) {
+                        IConversionExpression opd = null;
+                        var initOper = m_Model.GetOperation(v.Initializer) as ISymbolInitializer;
+                        if (null != initOper) {
+                            opd = initOper.Value as IConversionExpression;
+                        }
                         var expOper = m_Model.GetOperation(v.Initializer.Value);
                         var constVal = expOper.ConstantValue;
                         if (!constVal.HasValue) {
@@ -316,7 +329,7 @@ namespace RoslynTool.CsToLua
                                 }
                                 CodeBuilder.AppendFormat("{0}{1}.{2}", GetIndentString(), isStatic ? ci.Key : "this", name);
                                 CodeBuilder.AppendFormat(" = {0}", fieldSym.Type.TypeKind == TypeKind.Delegate ? "delegationwrap(" : string.Empty);
-                                OutputExpressionSyntax(v.Initializer.Value);
+                                OutputExpressionSyntax(v.Initializer.Value, opd);
                                 CodeBuilder.AppendFormat("{0};", fieldSym.Type.TypeKind == TypeKind.Delegate ? ")" : string.Empty);
                                 CodeBuilder.AppendLine();
                                 if (isStatic) {
@@ -328,7 +341,7 @@ namespace RoslynTool.CsToLua
                             } else {
                                 CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
                                 CodeBuilder.AppendFormat(" = {0}", fieldSym.Type.TypeKind == TypeKind.Delegate ? "delegationwrap(" : string.Empty);
-                                OutputExpressionSyntax(v.Initializer.Value);
+                                OutputExpressionSyntax(v.Initializer.Value, opd);
                                 CodeBuilder.AppendFormat("{0}", fieldSym.Type.TypeKind == TypeKind.Delegate ? ")" : string.Empty);
                             }
                         } else if (fieldSym.Type.TypeKind == TypeKind.Delegate) {
@@ -381,12 +394,17 @@ namespace RoslynTool.CsToLua
                 if (isStatic && fieldSym.IsStatic || !isStatic && !fieldSym.IsStatic) {
                     string name = v.Identifier.Text;
                     if (null != v.Initializer) {
+                        IConversionExpression opd = null;
+                        var initOper = m_Model.GetOperation(v.Initializer) as ISymbolInitializer;
+                        if (null != initOper) {
+                            opd = initOper.Value as IConversionExpression;
+                        }
                         var expOper = m_Model.GetOperation(v.Initializer.Value);
                         var constVal = expOper.ConstantValue;
                         CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
                         CodeBuilder.Append(" = delegationwrap(");
                         if (!constVal.HasValue || constVal.Value != null) {
-                            OutputExpressionSyntax(v.Initializer.Value);
+                            OutputExpressionSyntax(v.Initializer.Value, opd);
                         }
                         CodeBuilder.Append(")");
                     } else {

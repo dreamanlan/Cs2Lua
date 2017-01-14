@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Reflection;
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Semantics;
 using Microsoft.CodeAnalysis.CSharp;
@@ -97,14 +100,18 @@ namespace RoslynTool.CsToLua
         }
         public override void VisitConditionalExpression(ConditionalExpressionSyntax node)
         {
-            var oper = m_Model.GetOperation(node);
+            IConversionExpression opd = null;
+            var oper = m_Model.GetOperation(node) as IConditionalChoiceExpression;
+            if (null != oper) {
+                opd = oper.Condition as IConversionExpression;
+            }
             var tOper = m_Model.GetOperation(node.WhenTrue);
             var fOper = m_Model.GetOperation(node.WhenFalse);
             bool trueIsConst = null != tOper && tOper.ConstantValue.HasValue;
             bool falseIsConst = null != fOper && fOper.ConstantValue.HasValue;
 
             CodeBuilder.Append("condexp(");
-            OutputExpressionSyntax(node.Condition);
+            OutputExpressionSyntax(node.Condition, opd);
             if (trueIsConst) {
                 CodeBuilder.Append(", true, ");
             } else {
@@ -564,6 +571,8 @@ namespace RoslynTool.CsToLua
                 bool isArray = node.IsKind(SyntaxKind.ArrayInitializerExpression);
                 bool isComplex = node.IsKind(SyntaxKind.ComplexElementInitializerExpression);
                 if (isCollection) {
+                    //调用BoundCollectionInitializerExpression.Initializers
+                    var inits = oper.GetType().InvokeMember("Initializers", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, oper, null) as IList;
                     if (null != oper.Type) {
                         bool isDictionary = IsImplementationOfSys(oper.Type, "IDictionary");
                         bool isList = IsImplementationOfSys(oper.Type, "IList");
@@ -574,10 +583,24 @@ namespace RoslynTool.CsToLua
                             for (int i = 0; i < ct; ++i) {
                                 var exp = args[i] as InitializerExpressionSyntax;
                                 if (null != exp) {
+                                    IConversionExpression opd1 = null, opd2 = null;
+                                    if (null != inits && i < inits.Count) {
+                                        var init = inits[i];
+                                        //调用BoundCollectionElementInitializer.Arguments
+                                        var initOpers = init.GetType().InvokeMember("Arguments", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, init, null) as IList;
+                                        if (null != initOpers) {
+                                            if (0 < initOpers.Count) {
+                                                opd1 = initOpers[0] as IConversionExpression;
+                                            }
+                                            if (1 < initOpers.Count) {
+                                                opd2 = initOpers[1] as IConversionExpression;
+                                            }
+                                        }
+                                    }
                                     CodeBuilder.Append("[tostring(");
-                                    VisitToplevelExpression(exp.Expressions[0], string.Empty);
+                                    OutputExpressionSyntax(exp.Expressions[0], opd1);
                                     CodeBuilder.Append(")] = ");
-                                    VisitToplevelExpression(exp.Expressions[1], string.Empty);
+                                    OutputExpressionSyntax(exp.Expressions[1], opd2);
                                 } else {
                                     Log(args[i], "Dictionary init error !");
                                 }
@@ -591,7 +614,18 @@ namespace RoslynTool.CsToLua
                             var args = node.Expressions;
                             int ct = args.Count;
                             for (int i = 0; i < ct; ++i) {
-                                OutputExpressionSyntax(args[i]);
+                                IConversionExpression opd = null;
+                                if (null != inits && i < inits.Count) {
+                                    var init = inits[i];
+                                    //调用BoundCollectionElementInitializer.Arguments
+                                    var initOpers = init.GetType().InvokeMember("Arguments", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, init, null) as IList;
+                                    if (null != initOpers) {
+                                        if (0 < initOpers.Count) {
+                                            opd = initOpers[0] as IConversionExpression;
+                                        }
+                                    }
+                                }
+                                OutputExpressionSyntax(args[i], opd);
                                 if (i < ct - 1) {
                                     CodeBuilder.Append(", ");
                                 }
@@ -602,7 +636,18 @@ namespace RoslynTool.CsToLua
                             var args = node.Expressions;
                             int ct = args.Count;
                             for (int i = 0; i < ct; ++i) {
-                                OutputExpressionSyntax(args[i]);
+                                IConversionExpression opd = null;
+                                if (null != inits && i < inits.Count) {
+                                    var init = inits[i];
+                                    //调用BoundCollectionElementInitializer.Arguments
+                                    var initOpers = init.GetType().InvokeMember("Arguments", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, init, null) as IList;
+                                    if (null != initOpers) {
+                                        if (0 < initOpers.Count) {
+                                            opd = initOpers[0] as IConversionExpression;
+                                        }
+                                    }
+                                }
+                                OutputExpressionSyntax(args[i], opd);
                                 if (i < ct - 1) {
                                     CodeBuilder.Append(", ");
                                 }
@@ -613,24 +658,37 @@ namespace RoslynTool.CsToLua
                         Log(node, "Can't find operation type ! operation info: {0}", oper.ToString());
                     }
                 } else if (isComplex) {
+                    //ComplexElementInitializer，目前未发现roslyn有实际合法的语法实例，执行到这的一般是存在语义错误的语法
                     CodeBuilder.Append("{");
                     var args = node.Expressions;
                     int ct = args.Count;
                     for (int i = 0; i < ct; ++i) {
-                        OutputExpressionSyntax(args[i]);
+                        OutputExpressionSyntax(args[i], null);
                         if (i < ct - 1) {
                             CodeBuilder.Append(", ");
                         }
                     }
                     CodeBuilder.Append("}");
                 } else {
+                    //isArray或isObjectInitializer
                     if (isArray)
                         CodeBuilder.Append("wraparray{");
                     var args = node.Expressions;
+                    var arrInitOper = oper as IArrayInitializer;
                     int ct = args.Count;
                     for (int i = 0; i < ct; ++i) {
                         var exp = args[i];
-                        VisitToplevelExpression(exp, string.Empty);
+                        IConversionExpression opd = null;
+                        if (null != arrInitOper && i<arrInitOper.ElementValues.Length) {
+                            opd = arrInitOper.ElementValues[i] as IConversionExpression;
+                        } else {
+                            //调用BoundObjectInitializerExpression.Initializers
+                            var inits = oper.GetType().InvokeMember("Initializers", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, oper, null) as IList;
+                            if (null != inits && i < inits.Count) {
+                                opd = inits[i] as IConversionExpression;
+                            }
+                        }
+                        OutputExpressionSyntax(exp, opd);
                         if (i < ct - 1) {
                             CodeBuilder.Append(", ");
                         }

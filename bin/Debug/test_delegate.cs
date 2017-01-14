@@ -4,9 +4,12 @@ using System.Collections.Generic;
 using System.IO;
 
 public delegate IEnumerator FadingCoroutine();
+public delegate void OnHandleDelegation();
 
 public class ConvTest
 {
+    public OnHandleDelegation OnHandleValue;
+    public event OnHandleDelegation OnHandle = OnHandleValue;
     public int this[int ix]
     {
         get
@@ -56,6 +59,14 @@ public class ConvTest
     }
     public Object TestConv2(int a, int b, out int c)
     {
+        Object obj = null;;
+        bool[] arr = new bool[]{obj, obj, obj};
+        Dictionary<string, bool> dict = new Dictionary<string,bool>{{"1",obj},{"2",obj}};
+        List<bool> list = new List<bool>{obj,obj,obj};
+        bool[] tarr; tarr = new bool[]{obj, obj, obj};
+        Dictionary<string, bool> tdict; tdict = new Dictionary<string,bool>{{"1",obj},{"2",obj}};
+        List<bool> tlist; tlist = new List<bool>{obj,obj,obj};
+        List<List<bool>> f = new List<List<bool>> { { obj, obj }, { obj, obj } };
         c = 1;
         return null;
     }
@@ -64,8 +75,9 @@ public class ConvTest
         c = 1;
         return null;
     }
+    public bool TestConv4(int v) => new GameObject();
 
-    private int m_Val = 0;
+    internal int m_Val = new DelegateTest();
 }
 
 public class DelegateTest : MonoBehaviour
@@ -95,7 +107,7 @@ public class DelegateTest : MonoBehaviour
         bool v1 = obj, v2 = obj;
         bool v3;
         v3 = obj;
-        bool vv = Test2(obj, false);
+        bool vv = Test(obj);
         int v4 = 0;
         v4 += (int)(object)(bool)obj;
         yield break;
@@ -106,6 +118,8 @@ public class DelegateTest : MonoBehaviour
         Fading = NormalEnumerator;
         StartCoroutine(Fading());
         GameObject obj = null;
+        int v0 = (obj) ? 1 : 0;
+        System.Func<bool, bool> f0 = vv => obj;
         System.Func<bool, bool> f = (vv) => obj;
         if (obj) {
             Test2(true, false);
@@ -117,6 +131,7 @@ public class DelegateTest : MonoBehaviour
         }
         for (; obj; ) {
         }
+        ConvTest ct = new ConvTest{m_Val = new DelegateTest()};
         return obj;
     }
     
@@ -145,13 +160,6 @@ public class DelegateTest : MonoBehaviour
         Test(this[0]);
     }
 
-    public static implicit operator int(DelegateTest thisObj)
-    {
-        return 0;
-    }
-    public static implicit operator DelegateTest(int v)
-    {
-        DelegateTest dt = new DelegateTest();
-        return dt;
-    }
+    public static implicit operator int(DelegateTest thisObj) => 0;
+    public static implicit operator DelegateTest(int v) => new DelegateTest();
 }

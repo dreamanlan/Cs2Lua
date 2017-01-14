@@ -48,8 +48,8 @@ TopLevel.SecondLevel.FooExtension = {
 				condaccess(list, (function() return listthis:Add(1); end));
 				local v2; v2 = condaccess(list, (function() return setexterninstanceindexer(list, nil, "set_Item", 3, 1); end));
 				local arr2; arr2 = wraparray{1, 2, 3, 4};
-				local v3; v3 = condaccess(arr2, (function() return arr2[3 + 1]; end));
-				condaccess(arr2, (function() arr2[4 + 1] = 345; return 345; end));
+				local v3; v3 = condaccess(arr2, (function() return arr2[3]; end));
+				condaccess(arr2, (function() arr2[4] = 345; return 345; end));
 				local a; a = 1;
 				local b; b = 2;
 				local c; c = 3;

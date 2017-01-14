@@ -145,7 +145,8 @@ namespace RoslynTool.CsToLua
         }
         public override void VisitArgumentList(ArgumentListSyntax node)
         {
-            OutputArgumentList(node.Arguments, ", ", null);
+            var oper = m_Model.GetOperation(node);
+            OutputArgumentList(node.Arguments, ", ", oper);
         }
         public override void VisitBracketedArgumentList(BracketedArgumentListSyntax node)
         {

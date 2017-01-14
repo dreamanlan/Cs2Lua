@@ -63,6 +63,17 @@ ConvTest = {
 				return nil;
 			end,
 			TestConv2 = function(this, a, b, c)
+				local obj; obj = nil;
+				local arr; arr = wraparray{invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)};
+				local dict; dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", nil, {[tostring("1")] = invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), [tostring("2")] = invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)});
+				local list; list = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", nil, {invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)});
+				local tarr;
+				tarr = wraparray{invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)};
+				local tdict;
+				tdict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", nil, {[tostring("1")] = invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), [tostring("2")] = invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)});
+				local tlist;
+				tlist = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", nil, {invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)});
+				local f; f = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", nil, {{obj, obj}, {obj, obj}});
 				c = 1;
 				return nil, c;
 			end,
@@ -70,13 +81,18 @@ ConvTest = {
 				c = 1;
 				return nil, c;
 			end,
+			TestConv4 = function(this, v)
+				return invokeexternoperator(UnityEngine.Object, "op_Implicit", newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", nil, {}));
+			end,
 			ctor = function(this)
 			end,
 		};
 
 		local instance_fields_build = function()
 			local instance_fields = {
-				m_Val = 0,
+				OnHandleValue = wrapdelegation{},
+				OnHandle = delegationwrap(this.OnHandleValue),
+				m_Val = DelegateTest.op_Implicit__DelegateTest(newobject(DelegateTest, "ctor", {})),
 			};
 			return instance_fields;
 		end;
