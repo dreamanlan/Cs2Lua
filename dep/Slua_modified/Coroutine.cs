@@ -113,9 +113,9 @@ UnityEngine.Yield = uCoroutine.yield
         static public int WrapEnumerator(IntPtr l)
         {
             try {
-                LuaFunction f;
-                checkType(l, 1, out f);
-                IEnumerator enumer = buildEnumerator(f);
+                var t = LuaDLL.lua_tothread(l, 1);
+                IEnumerator enumer = buildEnumerator(t);
+                LuaDLL.lua_pop(l, 1);
                 pushValue(l, true);
                 pushValue(l, enumer);
                 return 2;
@@ -124,10 +124,22 @@ UnityEngine.Yield = uCoroutine.yield
             }
         }
         
-        static public IEnumerator buildEnumerator(LuaFunction f)
+        static public IEnumerator buildEnumerator(IntPtr l)
         {
-            f.call();
-            yield break;
+            LuaDLL.lua_resume(l, 0);
+            for (; ; ) {
+                int r = LuaDLL.lua_status(l);
+                if (r == 0) {
+                    if (LuaDLL.lua_gettop(l) == 0)
+                        break;
+                    else
+                        yield return null;
+                } else if (r == (int)LuaInterface.LuaThreadStatus.LUA_YIELD) {
+                    yield return null;
+                } else {
+                    break;
+                }
+            }
         }
 	}
 }

@@ -32,7 +32,7 @@ TopLevel.TestRunnable = {
 				setwithinterface(f, "TopLevel_IRunnable_System_Int32", "TestProp", i);
 				i = getwithinterface(f, ""TopLevel_IRunnable_System_Int32"", ""TestProp"");
 				local pow; pow = delegationwrap((function(v) return (v * v); end));
-				local pow2; pow2 = delegationwrap((function(v1, v2) local __compiler_lambda_181 = (v1 * v2); return __compiler_lambda_181; end));
+				local pow2; pow2 = delegationwrap((function(v1, v2) return (v1 * v2); end));
 				local a; a = delegationwrap((function()
 					i = (i * i);
 					LuaConsole.Print(i);

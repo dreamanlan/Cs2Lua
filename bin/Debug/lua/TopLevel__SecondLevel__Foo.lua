@@ -99,7 +99,7 @@ TopLevel.SecondLevel.Foo = {
 				return this;
 			end,
 			Test123 = function(this, a, b)
-				local __compiler_expbody_385 = (a + b); return __compiler_expbody_385;
+				return (a + b);
 			end,
 			GTest__TopLevel_SecondLevel_GenericClass_System_Int32 = function(this, arg)
 			end,
@@ -170,7 +170,7 @@ TopLevel.SecondLevel.Foo = {
 			TestSwitch = function(this)
 				local i; i = 10;
 				local __compiler_switch_459 = i;
-				if __compiler_switch_459 == 1 then
+				if (__compiler_switch_459 == 1) or (__compiler_switch_459 == 3) then
 					return ;
 				elseif __compiler_switch_459 == 2 then
 					return ;

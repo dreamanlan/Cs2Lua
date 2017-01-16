@@ -459,6 +459,7 @@ namespace TopLevel
                 int i=10;
                 switch (i) {
                     case 1:
+                    case 3:
                         return;
                     case 2:
                         return;

@@ -754,10 +754,9 @@ end;
 function wrapenumerable(func)
 	return function(...)
 		local args = {...};
-		return UnityEngine.WrapEnumerator(function()
-			local f = coroutine.wrap(func);
-			f(unpack(args));
-		end);
+		return UnityEngine.WrapEnumerator(coroutine.create(function()
+			func(unpack(args));
+		end));
 	end;
 end;
 

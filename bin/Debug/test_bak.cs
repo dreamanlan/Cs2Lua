@@ -137,6 +137,8 @@ namespace TopLevel
             {
                 c += a + b;
                 d = c * 2;
+                int a = c+Test(d);
+                a+=Test(2);
                 return c;
             }
 

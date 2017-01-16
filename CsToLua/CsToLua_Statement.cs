@@ -388,7 +388,7 @@ namespace RoslynTool.CsToLua
                         if (lct > 1) {
                             CodeBuilder.Append(")");
                             if (j < lct - 1) {
-                                CodeBuilder.Append(" and ");
+                                CodeBuilder.Append(" or ");
                             }
                         }
                     }
