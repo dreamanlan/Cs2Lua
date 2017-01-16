@@ -5,6 +5,7 @@ using System.IO;
 
 public delegate IEnumerator FadingCoroutine();
 public delegate void OnHandleDelegation();
+public delegate int TestDelegation(int a, ref int b, out int c);
 
 public class ConvTest
 {
@@ -59,7 +60,7 @@ public class ConvTest
     }
     public Object TestConv2(int a, int b, out int c)
     {
-        Object obj = null;;
+        Object obj = null;
         bool[] arr = new bool[]{obj, obj, obj};
         Dictionary<string, bool> dict = new Dictionary<string,bool>{{"1",obj},{"2",obj}};
         List<bool> list = new List<bool>{obj,obj,obj};
@@ -70,12 +71,13 @@ public class ConvTest
         c = 1;
         return null;
     }
+    [Cs2Lua.TranslateTo("MyImpl","myTestConv4")]
     public DelegateTest TestConv3(int a, int b, out int c)
     {
         c = 1;
         return null;
     }
-    public bool TestConv4(int v) => new GameObject();
+    public bool TestConv4(int v, out int v2) => (v2=1)==1 && new GameObject();
 
     internal int m_Val = new DelegateTest();
 }
@@ -121,6 +123,7 @@ public class DelegateTest : MonoBehaviour
         int v0 = (obj) ? 1 : 0;
         System.Func<bool, bool> f0 = vv => obj;
         System.Func<bool, bool> f = (vv) => obj;
+        TestDelegation td = (int a, ref int b, out int c) => a+(b=2)+(c=1);
         if (obj) {
             Test2(true, false);
         }

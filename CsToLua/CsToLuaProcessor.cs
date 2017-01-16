@@ -334,7 +334,12 @@ namespace RoslynTool.CsToLua
                 lualibRefs.Clear();
                 string fileName = BuildLuaClass(classBuilder, pair.Key, pair.Value, lualibRefs);
                 foreach (string lib in lualibRefs) {
-                    File.Copy(Path.Combine(exepath, "lualib/" + lib), Path.Combine(outputDir, string.Format("{0}.{1}", lib, outputExt)), true);
+                    string libFile = Path.Combine(exepath, "lualib/" + lib);
+                    if (File.Exists(libFile)) {
+                        File.Copy(libFile, Path.Combine(outputDir, string.Format("{0}.{1}", lib, outputExt)), true);
+                    } else {
+                        Console.WriteLine("Can't find file '{0}' in lualib, you should copy it to output dir !");
+                    }
                 }
                 File.WriteAllText(Path.Combine(outputDir, Path.ChangeExtension(fileName, outputExt)), classBuilder.ToString());
             }

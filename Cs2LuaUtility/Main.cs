@@ -17,6 +17,19 @@ namespace Cs2Lua
         private string m_LuaModuleName = string.Empty;
     }
 
+    [System.AttributeUsage(System.AttributeTargets.Method)]
+    public sealed class TranslateToAttribute : System.Attribute
+    {
+        public TranslateToAttribute(string luaModuleName, string targetMethodName)
+        {
+            m_LuaModuleName = luaModuleName;
+            m_TargetMethodName = targetMethodName;
+        }
+
+        private string m_LuaModuleName = string.Empty;
+        private string m_TargetMethodName = string.Empty;
+    }
+
     [System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Struct)]
     public sealed class EntryAttribute : System.Attribute
     { }

@@ -99,7 +99,7 @@ TopLevel.SecondLevel.Foo = {
 				return this;
 			end,
 			Test123 = function(this, a, b)
-				return (a + b);
+				local __compiler_expbody_385 = (a + b); return __compiler_expbody_385;
 			end,
 			GTest__TopLevel_SecondLevel_GenericClass_System_Int32 = function(this, arg)
 			end,

@@ -1,6 +1,8 @@
 require "cs2lua__utility";
+require "cs2lua__attributes";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
+require "MyImpl";
 require "DelegateTest";
 
 ConvTest = {
@@ -17,6 +19,7 @@ ConvTest = {
 
 		local static_fields_build = function()
 			local static_fields = {
+				__attributes = ConvTest__Attrs,
 			};
 			return static_fields;
 		end;
@@ -78,11 +81,10 @@ ConvTest = {
 				return nil, c;
 			end,
 			TestConv3 = function(this, a, b, c)
-				c = 1;
-				return nil, c;
+				return myTestConv4(this, a, b, c);
 			end,
-			TestConv4 = function(this, v)
-				return invokeexternoperator(UnityEngine.Object, "op_Implicit", newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", nil, {}));
+			TestConv4 = function(this, v, v2)
+				local __compiler_expbody_79 = ((( (function() v2 = 1; return v2; end)() ) == 1) and invokeexternoperator(UnityEngine.Object, "op_Implicit", newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", nil, {}))); return __compiler_expbody_79, v2;
 			end,
 			ctor = function(this)
 			end,
@@ -93,6 +95,7 @@ ConvTest = {
 				OnHandleValue = wrapdelegation{},
 				OnHandle = delegationwrap(this.OnHandleValue),
 				m_Val = DelegateTest.op_Implicit__DelegateTest(newobject(DelegateTest, "ctor", {})),
+				__attributes = ConvTest__Attrs,
 			};
 			return instance_fields;
 		end;
