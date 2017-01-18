@@ -16,7 +16,7 @@ public class LuaClassProxyBase
     {
         get { return m_Self; }
     }
-    public void Init(string luaClassFileName)
+    public void LoadLua(string luaClassFileName)
     {
         m_LuaClassFileName = luaClassFileName; 
         PrepareSlua();
