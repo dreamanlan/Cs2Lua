@@ -482,9 +482,15 @@ namespace SLua
 		
 		static bool Generate(Type t, string ns, string path)
 		{
+#if ENABLE_USE_INHERIT_INTERFACE
             if (t.IsInterface && null != t.Namespace && (t.Namespace.StartsWith("System") || t.Namespace.StartsWith("UnityEngine"))) {
                 return false;
             }
+#else
+            if (t.IsInterface) {
+                return false;
+            }
+#endif
 			
 			CodeGenerator cg = new CodeGenerator();
 			cg.givenNamespace = ns;

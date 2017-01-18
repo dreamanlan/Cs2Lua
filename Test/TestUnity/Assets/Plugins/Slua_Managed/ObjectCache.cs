@@ -332,6 +332,7 @@ namespace SLua
                 return name;
             }
             name = t.AssemblyQualifiedName;
+#if ENABLE_USE_INHERIT_INTERFACE
             if (l != IntPtr.Zero) {
                 Type rt = t;
                 while (null != rt) {
@@ -358,6 +359,7 @@ namespace SLua
                     }
                 }
             }
+#endif
             aqnameMap[t] = name;
             return name;
         }
