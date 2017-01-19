@@ -64,7 +64,7 @@ DelegateTest = {
 				local v0; v0 = condexp(invokeexternoperator(UnityEngine.Object, "op_Implicit", ( obj )), true, 1, true, 0);
 				local f0; f0 = delegationwrap((function(vv) return invokeexternoperator(UnityEngine.Object, "op_Implicit", obj); end));
 				local f; f = delegationwrap((function(vv) return invokeexternoperator(UnityEngine.Object, "op_Implicit", obj); end));
-				local td; td = delegationwrap((function(a, b, c) local __compiler_lambda_125 = ((a + ( (function() b = 2; return b; end)() )) + ( (function() c = 1; return c; end)() )); return __compiler_lambda_125, b, c; end));
+				local td; td = delegationwrap((function(a, b, c) local __compiler_lambda_134 = ((a + ( (function() b = 2; return b; end)() )) + ( (function() c = 1; return c; end)() )); return __compiler_lambda_134, b, c; end));
 				if invokeexternoperator(UnityEngine.Object, "op_Implicit", obj) then
 					this:Test2(true, false);
 				end;
@@ -87,11 +87,11 @@ DelegateTest = {
 				local vv2;
 				vv2 = invokeexternoperator(UnityEngine.Object, "op_Implicit", tc:TestConv(1, 2));
 				local r;
-				local vv3; vv3 = invokeexternoperator(UnityEngine.Object, "op_Implicit", (function() local __compiler_localdecl_151; __compiler_localdecl_151, r = tc:TestConv2(1, DelegateTest.op_Implicit__DelegateTest(this), __cs2lua_out); return __compiler_localdecl_151; end)());
+				local vv3; vv3 = invokeexternoperator(UnityEngine.Object, "op_Implicit", (function() local __compiler_localdecl_160; __compiler_localdecl_160, r = tc:TestConv2(1, DelegateTest.op_Implicit__DelegateTest(this), __cs2lua_out); return __compiler_localdecl_160; end)());
 				local vv4;
-				vv4 = invokeexternoperator(UnityEngine.Object, "op_Implicit", (function() local __compiler_assigninvoke_153; __compiler_assigninvoke_153, r = tc:TestConv2(2, DelegateTest.op_Implicit__DelegateTest(this), __cs2lua_out); return __compiler_assigninvoke_153; end)());
+				vv4 = invokeexternoperator(UnityEngine.Object, "op_Implicit", (function() local __compiler_assigninvoke_162; __compiler_assigninvoke_162, r = tc:TestConv2(2, DelegateTest.op_Implicit__DelegateTest(this), __cs2lua_out); return __compiler_assigninvoke_162; end)());
 				local vv5;
-				vv5 = DelegateTest.op_Implicit__DelegateTest((function() local __compiler_assigninvoke_155; __compiler_assigninvoke_155, r = tc:TestConv3(3, DelegateTest.op_Implicit__DelegateTest(this), __cs2lua_out); return __compiler_assigninvoke_155; end)());
+				vv5 = DelegateTest.op_Implicit__DelegateTest((function() local __compiler_assigninvoke_164; __compiler_assigninvoke_164, r = tc:TestConv3(3, DelegateTest.op_Implicit__DelegateTest(this), __cs2lua_out); return __compiler_assigninvoke_164; end)());
 				tc.Prop = 123;
 				local vvv; vvv = tc.Prop;
 				this:Test(invokeexternoperator(UnityEngine.Object, "op_Implicit", tc:TestConv(DelegateTest.op_Implicit__DelegateTest(this), 2)));

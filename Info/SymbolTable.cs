@@ -375,6 +375,21 @@ namespace RoslynTool.CsToLua
                 return true;
             return s_BasicTypes.Contains(type);
         }
+        internal static bool IsIntegerType(ITypeSymbol type)
+        {
+            bool ret = false;
+            if (type.TypeKind == TypeKind.Enum || ClassInfo.GetFullName(type) == "System.Enum") {
+                ret = true;
+            } else {
+                string typeName = ClassInfo.GetFullName(type);
+                ret = IsIntegerType(typeName);
+            }
+            return ret;
+        }
+        internal static bool IsIntegerType(string type)
+        {
+            return s_IntegerTypes.Contains(type);
+        }
         internal static bool ForSlua
         {
             get { return s_ForSlua; }
@@ -400,6 +415,9 @@ namespace RoslynTool.CsToLua
         };
         private static HashSet<string> s_BasicTypes = new HashSet<string> {
             "System.Boolean", "System.Byte", "System.SByte", "System.Int16", "System.UInt16", "System.Int32", "System.UInt32", "System.Int64", "System.UInt64", "System.Single", "System.Double"
+        };
+        private static HashSet<string> s_IntegerTypes = new HashSet<string> {
+            "System.Byte", "System.SByte", "System.Int16", "System.UInt16", "System.Int32", "System.UInt32", "System.Int64", "System.UInt64"
         };
     }
 }

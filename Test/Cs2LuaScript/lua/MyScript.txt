@@ -48,7 +48,7 @@ MyScript = {
 					local angle; angle = condexp(((i % 2) == 1), false, (function() return UnityEngine.Time.time; end), true, -5);
 					local b; b = newexternobject(UnityEngine.Vector3, "UnityEngine.Vector3", "ctor", nil, {}, typecast(( (UnityEngine.Mathf.Cos(((((i * 3.141593) * 2) / this.max) + angle)) * nr) ), System.Single, false), typecast(( (UnityEngine.Mathf.Sin(((((i * 3.141593) * 2) / this.max) + angle)) * nr) ), System.Single, false), 0);
 					this.cubes[i + 1].transform.position = b;
-				i = i + 1;
+				i = i+ 1;
 				end;
 				if ((this.fogStart <= 0) or (this.t > 1)) then
 					this.fogStart = UnityEngine.Time.time;
@@ -68,7 +68,7 @@ MyScript = {
 				while (i < 60) do
 					wrapyield(newexternobject(UnityEngine.WaitForSeconds, "UnityEngine.WaitForSeconds", "ctor", nil, {}, 1), false, true);
 					UnityEngine.Debug.Log(System.String.Format("{0} seconds", i));
-				i = i + 1;
+				i = i+ 1;
 				end;
 			end),
 			Reset = function(this)
@@ -76,7 +76,7 @@ MyScript = {
 					local i; i = 0;
 					while (i < this.cubes.Length) do
 						UnityEngine.Object.Destroy(this.cubes[i + 1]);
-					i = i + 1;
+					i = i+ 1;
 					end;
 				end;
 				this.cubes = wraparray{};
@@ -94,7 +94,7 @@ MyScript = {
 					local ix; ix = UnityEngine.Random.Range(0, this.colors.Length);
 					mat.color = this.colors[ix + 1];
 					this.cubes[i + 1] = cube;
-				i = i + 1;
+				i = i+ 1;
 				end;
 			end,
 			ctor = function(this)

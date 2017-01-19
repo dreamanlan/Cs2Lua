@@ -69,6 +69,15 @@ public class ConvTest
         List<bool> tlist; tlist = new List<bool>{obj,obj,obj};
         List<List<bool>> f = new List<List<bool>> { { obj, obj }, { obj, obj } };
         c = 1;
+        c/=2;
+        c=c/2;
+        c%=2;
+        c=c%2;
+        --c;
+        c--;
+        int d = ~c;
+        int cc = (--c);
+        cc = (c--);
         return null;
     }
     [Cs2Lua.TranslateTo("MyImpl","myTestConv4")]

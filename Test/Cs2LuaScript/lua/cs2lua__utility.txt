@@ -1459,3 +1459,14 @@ function invokearraystaticmethod(firstArray, secondArray, method, ...)
     return nil;
   end;
 end;
+
+--暂时只对整数除法进行特殊处理，运算溢出先不在这里处理
+function invokespecialintegerprefixoperator(op, opd, type)
+end;
+function invokespecialintegerpostfixoperator(op, opd, type)
+end;
+function invokespecialintegeroperator(op, opd1, opd2, type1, typ2)
+  if op=='/' then
+    local r = math.floor(opd1/opd2);
+  end;
+end;

@@ -30,12 +30,34 @@ namespace RoslynTool.CsToLua
                 if (null != postfixUnary) {
                     string op = postfixUnary.OperatorToken.Text;
                     if (op == "++" || op == "--") {
+                        op = op == "++" ? "+" : "-";
+                        bool isIntegerOperand = false;
+                        IConversionExpression opd = null;
+                        var assignOper = m_Model.GetOperation(postfixUnary) as ICompoundAssignmentExpression; 
+                        if (null != assignOper && null != assignOper.Target) {
+                            opd = assignOper.Value as IConversionExpression;
+                            isIntegerOperand = s_SpecialIntegerBinaryOperators.Contains(op) && SymbolTable.IsIntegerType(assignOper.Target.Type);
+                        }
                         CodeBuilder.AppendFormat("{0}", GetIndentString());
-                        OutputExpressionSyntax(postfixUnary.Operand);
+                        OutputExpressionSyntax(postfixUnary.Operand, opd);
                         CodeBuilder.Append(" = ");
-                        OutputExpressionSyntax(postfixUnary.Operand);
-                        CodeBuilder.Append(op == "++" ? " + 1" : " - 1");
-                        CodeBuilder.AppendFormat("{0}", expTerminater);
+                        if (null != assignOper && assignOper.UsesOperatorMethod) {
+                            IMethodSymbol msym = assignOper.OperatorMethod;
+                            InvocationInfo ii = new InvocationInfo();
+                            var arglist = new List<ExpressionSyntax>() { postfixUnary.Operand };
+                            ii.Init(msym, arglist, m_Model, opd);
+                            OutputOperatorInvoke(ii, postfixUnary);
+                            CodeBuilder.AppendFormat("{0}", expTerminater);
+                        } else if (isIntegerOperand) {
+                            CodeBuilder.AppendFormat("invokespecialintegerpostfixoperator(\"{0}\", ", op);
+                            OutputExpressionSyntax(postfixUnary.Operand, opd);
+                            CodeBuilder.AppendFormat(", {0}", ClassInfo.GetFullName(assignOper.Target.Type));
+                            CodeBuilder.AppendFormat("){0}", expTerminater);
+                        } else {
+                            OutputExpressionSyntax(postfixUnary.Operand);
+                            CodeBuilder.Append(op);
+                            CodeBuilder.AppendFormat(" 1{0}", expTerminater);
+                        }
                         if (expTerminater.Length > 0)
                             CodeBuilder.AppendLine();
                     }
@@ -501,6 +523,8 @@ namespace RoslynTool.CsToLua
                     ii.Init(msym, arglist, m_Model, opd);
                     OutputOperatorInvoke(ii, prefixUnary);
                 } else if (null != assignOper && assignOper.UsesOperatorMethod) {
+                    OutputExpressionSyntax(prefixUnary.Operand, opd);
+                    CodeBuilder.Append(" = ");
                     IMethodSymbol msym = assignOper.OperatorMethod;
                     InvocationInfo ii = new InvocationInfo();
                     var arglist = new List<ExpressionSyntax>() { prefixUnary.Operand };
@@ -509,26 +533,49 @@ namespace RoslynTool.CsToLua
                 } else {
                     string op = prefixUnary.OperatorToken.Text;
                     if (op == "++" || op == "--") {
+                        op = op == "++" ? "+" : "-";
+                        bool isIntegerOperand = false;
+                        if (null != assignOper && null != assignOper.Target) {
+                            isIntegerOperand = s_SpecialIntegerBinaryOperators.Contains(op) && SymbolTable.IsIntegerType(assignOper.Target.Type);
+                        }
                         OutputExpressionSyntax(prefixUnary.Operand, opd);
                         CodeBuilder.Append(" = ");
-                        OutputExpressionSyntax(prefixUnary.Operand, opd);
-                        CodeBuilder.Append(op == "++" ? " + 1" : " - 1");
-                        CodeBuilder.AppendFormat("{0}", expTerminater);
+                        if (isIntegerOperand) {
+                            CodeBuilder.AppendFormat("invokespecialintegerprefixoperator(\"{0}\", ", op);
+                            OutputExpressionSyntax(prefixUnary.Operand, opd);
+                            CodeBuilder.AppendFormat(", {0}", ClassInfo.GetFullName(assignOper.Target.Type));
+                            CodeBuilder.AppendFormat("){0}", expTerminater);
+                        } else {
+                            OutputExpressionSyntax(prefixUnary.Operand, opd);
+                            CodeBuilder.Append(op);
+                            CodeBuilder.AppendFormat(" 1{0}", expTerminater);
+                        }
                         if (expTerminater.Length > 0)
                             CodeBuilder.AppendLine();
                     } else {
                         ProcessUnaryOperator(expression, ref op);
-                        string functor;
-                        if (s_UnaryFunctor.TryGetValue(op, out functor)) {
-                            CodeBuilder.AppendFormat("{0}(", functor);
-                            OutputExpressionSyntax(prefixUnary.Operand, opd);
-                        } else {
-                            CodeBuilder.Append("(");
-                            CodeBuilder.Append(op);
-                            CodeBuilder.Append(" ");
-                            OutputExpressionSyntax(prefixUnary.Operand, opd);
+                        bool isIntegerOperand = false;
+                        if (null != unaryOper && null != unaryOper.Operand) {
+                            isIntegerOperand = s_SpecialIntegerBinaryOperators.Contains(op) && SymbolTable.IsIntegerType(unaryOper.Operand.Type);
                         }
-                        CodeBuilder.AppendFormat("){0}", expTerminater);
+                        if (isIntegerOperand) {
+                            CodeBuilder.AppendFormat("invokespecialintegerprefixoperator(\"{0}\", ", op);
+                            OutputExpressionSyntax(prefixUnary.Operand, opd);
+                            CodeBuilder.AppendFormat(", {0}", ClassInfo.GetFullName(unaryOper.Operand.Type));
+                            CodeBuilder.AppendFormat("){0}", expTerminater);
+                        } else {
+                            string functor;
+                            if (s_UnaryFunctor.TryGetValue(op, out functor)) {
+                                CodeBuilder.AppendFormat("{0}(", functor);
+                                OutputExpressionSyntax(prefixUnary.Operand, opd);
+                            } else {
+                                CodeBuilder.Append("(");
+                                CodeBuilder.Append(op);
+                                CodeBuilder.Append(" ");
+                                OutputExpressionSyntax(prefixUnary.Operand, opd);
+                            }
+                            CodeBuilder.AppendFormat("){0}", expTerminater);
+                        }
                         if (expTerminater.Length > 0)
                             CodeBuilder.AppendLine();
                     }
@@ -539,21 +586,13 @@ namespace RoslynTool.CsToLua
             if (null != postfixUnary) {
                 var oper = m_Model.GetOperation(postfixUnary);
                 IConversionExpression opd = null;
-                var unaryOper = oper as IUnaryOperatorExpression;
-                if (null != unaryOper) {
-                    opd = unaryOper.Operand as IConversionExpression;
-                }
                 var assignOper = oper as ICompoundAssignmentExpression;
                 if (null != assignOper) {
                     opd = assignOper.Value as IConversionExpression;
                 }
-                if (null != unaryOper && unaryOper.UsesOperatorMethod) {
-                    IMethodSymbol msym = unaryOper.OperatorMethod;
-                    InvocationInfo ii = new InvocationInfo();
-                    var arglist = new List<ExpressionSyntax>() { postfixUnary.Operand };
-                    ii.Init(msym, arglist, m_Model, opd);
-                    OutputOperatorInvoke(ii, postfixUnary);
-                } else if (null != assignOper && assignOper.UsesOperatorMethod) {
+                if (null != assignOper && assignOper.UsesOperatorMethod) {
+                    OutputExpressionSyntax(postfixUnary.Operand, opd);
+                    CodeBuilder.Append(" = ");
                     IMethodSymbol msym = assignOper.OperatorMethod;
                     InvocationInfo ii = new InvocationInfo();
                     var arglist = new List<ExpressionSyntax>() { postfixUnary.Operand };
@@ -562,11 +601,23 @@ namespace RoslynTool.CsToLua
                 } else {
                     string op = postfixUnary.OperatorToken.Text;
                     if (op == "++" || op == "--") {
+                        op = op == "++" ? "+" : "-";
+                        bool isIntegerOperand = false;
+                        if (null != assignOper && null != assignOper.Target) {
+                            isIntegerOperand = s_SpecialIntegerBinaryOperators.Contains(op) && SymbolTable.IsIntegerType(assignOper.Target.Type);
+                        }
                         OutputExpressionSyntax(postfixUnary.Operand, opd);
                         CodeBuilder.Append(" = ");
-                        OutputExpressionSyntax(postfixUnary.Operand, opd);
-                        CodeBuilder.Append(op == "++" ? " + 1" : " - 1");
-                        CodeBuilder.AppendFormat("{0}", expTerminater);
+                        if (isIntegerOperand) {
+                            CodeBuilder.AppendFormat("invokespecialintegerpostfixoperator(\"{0}\", ", op);
+                            OutputExpressionSyntax(postfixUnary.Operand, opd);
+                            CodeBuilder.AppendFormat(", {0}", ClassInfo.GetFullName(assignOper.Target.Type));
+                            CodeBuilder.AppendFormat("){0}", expTerminater);
+                        } else {
+                            OutputExpressionSyntax(postfixUnary.Operand, opd);
+                            CodeBuilder.Append(op);
+                            CodeBuilder.AppendFormat(" 1{0}", expTerminater);
+                        }
                         if (expTerminater.Length > 0)
                             CodeBuilder.AppendLine();
                     }
@@ -895,7 +946,7 @@ namespace RoslynTool.CsToLua
                 string localName = string.Format("__compiler_assigninvoke_{0}", invocation.GetLocation().GetLineSpan().StartLinePosition.Line);
                 SymbolInfo symInfo = m_Model.GetSymbolInfo(invocation);
                 IMethodSymbol sym = symInfo.Symbol as IMethodSymbol;
-                if (null == sym) {
+                if (null == sym || op != "=" && (null == compAssignInfo || null == compAssignInfo.Target || null == compAssignInfo.Value)) {
                     ReportIllegalSymbol(invocation, symInfo);
                 } else {
                     //处理ref/out参数
@@ -903,6 +954,19 @@ namespace RoslynTool.CsToLua
                     ii.Init(sym, invocation.ArgumentList, m_Model);
                     if (sym.IsStatic) {
                         AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
+                    }
+
+                    bool isIntegerOprand = false;
+                    ITypeSymbol ltype = null;
+                    ITypeSymbol rtype = null;
+                    string leftFullTypeName = string.Empty;
+                    string rightFullTypeName = string.Empty;
+                    if (op != "=") {
+                        ltype = compAssignInfo.Target.Type;
+                        rtype = compAssignInfo.Value.Type;
+                        leftFullTypeName = ClassInfo.GetFullName(ltype);
+                        rightFullTypeName = ClassInfo.GetFullName(rtype);
+                        isIntegerOprand = s_SpecialIntegerBinaryOperators.Contains(baseOp) && SymbolTable.IsIntegerType(compAssignInfo.Target.Type) && SymbolTable.IsIntegerType(compAssignInfo.Value.Type);
                     }
 
                     MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
@@ -917,14 +981,27 @@ namespace RoslynTool.CsToLua
                             OutputExpressionSyntax(assign.Left);
                             CodeBuilder.Append(" = ");
                             ProcessBinaryOperator(assign, ref baseOp);
-                            string functor;
-                            if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
-                                CodeBuilder.AppendFormat("{0}(", functor);
+                            if (isIntegerOprand) {
+                                CodeBuilder.AppendFormat("invokespecialintegeroperator(\"{0}\", ", baseOp);
                                 OutputExpressionSyntax(assign.Left, lopd);
                                 CodeBuilder.Append(", ");
                             } else {
-                                OutputExpressionSyntax(assign.Left, lopd);
-                                CodeBuilder.AppendFormat(" {0} ", baseOp);
+                                string functor;
+                                if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
+                                    CodeBuilder.AppendFormat("{0}(", functor);
+                                    OutputExpressionSyntax(assign.Left, lopd);
+                                    CodeBuilder.Append(", ");
+                                } else if (baseOp == "+" && leftFullTypeName == "System.String") {
+                                    CodeBuilder.Append("System.String.Concat(");
+                                    OutputExpressionSyntax(assign.Left, lopd);
+                                    if (rightFullTypeName == "System.String")
+                                        CodeBuilder.Append(", ");
+                                    else
+                                        CodeBuilder.Append(", tostring(");
+                                } else {
+                                    OutputExpressionSyntax(assign.Left, lopd);
+                                    CodeBuilder.AppendFormat(" {0} ", baseOp);
+                                }
                             }
                             if (null != ropd && ropd.UsesOperatorMethod) {
                                 IMethodSymbol msym = ropd.OperatorMethod;
@@ -967,9 +1044,19 @@ namespace RoslynTool.CsToLua
                             if (null != ropd && ropd.UsesOperatorMethod) {
                                 CodeBuilder.Append(")");
                             }
-                            string functor;
-                            if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
+                            if (isIntegerOprand) {
+                                CodeBuilder.AppendFormat(", {0}, {1}", ClassInfo.GetFullName(ltype), ClassInfo.GetFullName(rtype));
                                 CodeBuilder.Append(")");
+                            } else {
+                                string functor;
+                                if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
+                                    CodeBuilder.Append(")");
+                                } else if (baseOp == "+" && leftFullTypeName == "System.String") {
+                                    if (rightFullTypeName != "System.String") {
+                                        CodeBuilder.Append(")");
+                                    }
+                                    CodeBuilder.Append(")");
+                                }
                             }
                         } else if (null != opd && opd.UsesOperatorMethod) {
                             if (ct > 0) {
@@ -984,14 +1071,27 @@ namespace RoslynTool.CsToLua
                             OutputExpressionSyntax(assign.Left);
                             CodeBuilder.Append(" = ");
                             ProcessBinaryOperator(assign, ref baseOp);
-                            string functor;
-                            if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
-                                CodeBuilder.AppendFormat("{0}(", functor);
+                            if (isIntegerOprand) {
+                                CodeBuilder.AppendFormat("invokespecialintegeroperator(\"{0}\", ", baseOp);
                                 OutputExpressionSyntax(assign.Left, lopd);
                                 CodeBuilder.Append(", ");
                             } else {
-                                OutputExpressionSyntax(assign.Left, lopd);
-                                CodeBuilder.AppendFormat(" {0} ", baseOp);
+                                string functor;
+                                if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
+                                    CodeBuilder.AppendFormat("{0}(", functor);
+                                    OutputExpressionSyntax(assign.Left, lopd);
+                                    CodeBuilder.Append(", ");
+                                } else if (baseOp == "+" && leftFullTypeName == "System.String") {
+                                    CodeBuilder.Append("System.String.Concat(");
+                                    OutputExpressionSyntax(assign.Left, lopd);
+                                    if (rightFullTypeName == "System.String")
+                                        CodeBuilder.Append(", ");
+                                    else
+                                        CodeBuilder.Append(", tostring(");
+                                } else {
+                                    OutputExpressionSyntax(assign.Left, lopd);
+                                    CodeBuilder.AppendFormat(" {0} ", baseOp);
+                                }
                             }
                             if (null != ropd && ropd.UsesOperatorMethod) {
                                 IMethodSymbol msym = ropd.OperatorMethod;
@@ -1034,9 +1134,19 @@ namespace RoslynTool.CsToLua
                             if (null != ropd && ropd.UsesOperatorMethod) {
                                 CodeBuilder.Append(")");
                             }
-                            string functor;
-                            if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
+                            if (isIntegerOprand) {
+                                CodeBuilder.AppendFormat(", {0}, {1}", ClassInfo.GetFullName(ltype), ClassInfo.GetFullName(rtype));
                                 CodeBuilder.Append(")");
+                            } else {
+                                string functor;
+                                if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
+                                    CodeBuilder.Append(")");
+                                } else if (baseOp == "+" && leftFullTypeName == "System.String") {
+                                    if (rightFullTypeName != "System.String") {
+                                        CodeBuilder.Append(")");
+                                    }
+                                    CodeBuilder.Append(")");
+                                }
                             }
                         } else if (null != opd && opd.UsesOperatorMethod) {
                             if (ct > 0) {
@@ -1063,19 +1173,34 @@ namespace RoslynTool.CsToLua
                         OutputOperatorInvoke(ii, assign);
                     } else {
                         ProcessBinaryOperator(assign, ref baseOp);
-                        string functor;
-                        if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
-                            CodeBuilder.AppendFormat("{0}(", functor);
+                        bool isIntegerOprand = false;
+                        if (null != compAssignInfo && null != compAssignInfo.Target && null != compAssignInfo.Value) {
+                            isIntegerOprand = s_SpecialIntegerBinaryOperators.Contains(baseOp) && SymbolTable.IsIntegerType(compAssignInfo.Target.Type) && SymbolTable.IsIntegerType(compAssignInfo.Value.Type);
+                        }
+                        if (isIntegerOprand) {
+                            var ltype = compAssignInfo.Target.Type;
+                            var rtype = compAssignInfo.Value.Type;
+                            CodeBuilder.AppendFormat("invokespecialintegeroperator(\"{0}\", ", baseOp);
                             OutputExpressionSyntax(assign.Left, lopd);
                             CodeBuilder.Append(", ");
                             OutputExpressionSyntax(assign.Right, ropd);
+                            CodeBuilder.AppendFormat(", {0}, {1}", ClassInfo.GetFullName(ltype), ClassInfo.GetFullName(rtype));
                             CodeBuilder.Append(")");
-                        } else if (baseOp == "+") {
-                            ProcessAddOrStringConcat(assign.Left, assign.Right, lopd, ropd);
                         } else {
-                            OutputExpressionSyntax(assign.Left, lopd);
-                            CodeBuilder.AppendFormat(" {0} ", baseOp);
-                            OutputExpressionSyntax(assign.Right, ropd);
+                            string functor;
+                            if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
+                                CodeBuilder.AppendFormat("{0}(", functor);
+                                OutputExpressionSyntax(assign.Left, lopd);
+                                CodeBuilder.Append(", ");
+                                OutputExpressionSyntax(assign.Right, ropd);
+                                CodeBuilder.Append(")");
+                            } else if (baseOp == "+") {
+                                ProcessAddOrStringConcat(assign.Left, assign.Right, lopd, ropd);
+                            } else {
+                                OutputExpressionSyntax(assign.Left, lopd);
+                                CodeBuilder.AppendFormat(" {0} ", baseOp);
+                                OutputExpressionSyntax(assign.Right, ropd);
+                            }
                         }
                     }
                 }

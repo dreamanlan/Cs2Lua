@@ -921,6 +921,7 @@ namespace RoslynTool.CsToLua
 
         private static HashSet<string> s_UnsupportedUnaryOperators = new HashSet<string> { "&", "*" };
         private static HashSet<string> s_UnsupportedBinaryOperators = new HashSet<string> { "->" };
+        private static HashSet<string> s_SpecialIntegerBinaryOperators = new HashSet<string> { "/" };
 
         private static Dictionary<string, string> s_UnaryAlias = new Dictionary<string, string> { 
             {"!", "not"}

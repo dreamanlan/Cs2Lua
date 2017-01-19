@@ -53,48 +53,63 @@ namespace RoslynTool.CsToLua
                 var boper = oper as IBinaryOperatorExpression;
                 var lopd = null == boper ? null : boper.LeftOperand as IConversionExpression;
                 var ropd = null == boper ? null : boper.RightOperand as IConversionExpression;
-
+                
                 string op = node.OperatorToken.Text;
                 ProcessBinaryOperator(node, ref op);
-                string functor;
-                if (s_BinaryFunctor.TryGetValue(op, out functor)) {
-                    CodeBuilder.AppendFormat("{0}(", functor);
+                bool isIntegerOprand = false;
+                if (null != boper && null != boper.LeftOperand && null != boper.RightOperand) {
+                    isIntegerOprand = s_SpecialIntegerBinaryOperators.Contains(op) && SymbolTable.IsIntegerType(boper.LeftOperand.Type) && SymbolTable.IsIntegerType(boper.RightOperand.Type);
+                }
+                if (isIntegerOprand) {
+                    var ltype = boper.LeftOperand.Type;
+                    var rtype = boper.RightOperand.Type;
+                    CodeBuilder.AppendFormat("invokespecialintegeroperator(\"{0}\", ", op);
                     OutputExpressionSyntax(node.Left, lopd);
                     CodeBuilder.Append(", ");
-                    if (op == "as" || op == "is") {
-                        var typeInfo = m_Model.GetTypeInfo(node.Right);
-                        var type = typeInfo.Type;
-                        OutputType(type, node, ci, op);
-                        if (type.TypeKind == TypeKind.Enum) {
-                            CodeBuilder.Append(", true");
-                        } else {
-                            CodeBuilder.Append(", false");
-                        }
-                    } else if (op == "??") {
-                        var rightOper = m_Model.GetOperation(node.Right);
-                        bool rightIsConst = null != rightOper && rightOper.ConstantValue.HasValue;
-                        if (rightIsConst) {
-                            CodeBuilder.Append("true, ");
-                            OutputExpressionSyntax(node.Right, ropd);
-                        } else {
-                            CodeBuilder.Append("false, (function() return ");
-                            OutputExpressionSyntax(node.Right, ropd);
-                            CodeBuilder.Append("; end)");
-                        }
-                    } else {
-                        OutputExpressionSyntax(node.Right, ropd);
-                    }
-                    CodeBuilder.Append(")");
-                } else if (op == "+") {
-                    ProcessAddOrStringConcat(node.Left, node.Right, lopd, ropd);
-                } else if (op == "==" || op == "~=") {
-                    ProcessEqualOrNotEqual(op, node.Left, node.Right, lopd, ropd);
-                } else {
-                    CodeBuilder.Append("(");
-                    OutputExpressionSyntax(node.Left, lopd);
-                    CodeBuilder.AppendFormat(" {0} ", op);
                     OutputExpressionSyntax(node.Right, ropd);
+                    CodeBuilder.AppendFormat(", {0}, {1}", ClassInfo.GetFullName(ltype), ClassInfo.GetFullName(rtype));
                     CodeBuilder.Append(")");
+                } else {
+                    string functor = string.Empty;
+                    if (s_BinaryFunctor.TryGetValue(op, out functor)) {
+                        CodeBuilder.AppendFormat("{0}(", functor);
+                        OutputExpressionSyntax(node.Left, lopd);
+                        CodeBuilder.Append(", ");
+                        if (op == "as" || op == "is") {
+                            var typeInfo = m_Model.GetTypeInfo(node.Right);
+                            var type = typeInfo.Type;
+                            OutputType(type, node, ci, op);
+                            if (type.TypeKind == TypeKind.Enum) {
+                                CodeBuilder.Append(", true");
+                            } else {
+                                CodeBuilder.Append(", false");
+                            }
+                        } else if (op == "??") {
+                            var rightOper = m_Model.GetOperation(node.Right);
+                            bool rightIsConst = null != rightOper && rightOper.ConstantValue.HasValue;
+                            if (rightIsConst) {
+                                CodeBuilder.Append("true, ");
+                                OutputExpressionSyntax(node.Right, ropd);
+                            } else {
+                                CodeBuilder.Append("false, (function() return ");
+                                OutputExpressionSyntax(node.Right, ropd);
+                                CodeBuilder.Append("; end)");
+                            }
+                        } else {
+                            OutputExpressionSyntax(node.Right, ropd);
+                        }
+                        CodeBuilder.Append(")");
+                    } else if (op == "+") {
+                        ProcessAddOrStringConcat(node.Left, node.Right, lopd, ropd);
+                    } else if (op == "==" || op == "~=") {
+                        ProcessEqualOrNotEqual(op, node.Left, node.Right, lopd, ropd);
+                    } else {
+                        CodeBuilder.Append("(");
+                        OutputExpressionSyntax(node.Left, lopd);
+                        CodeBuilder.AppendFormat(" {0} ", op);
+                        OutputExpressionSyntax(node.Right, ropd);
+                        CodeBuilder.Append(")");
+                    }
                 }
             }
         }
@@ -168,36 +183,66 @@ namespace RoslynTool.CsToLua
                 ii.Init(msym, arglist, m_Model, opd);
                 OutputOperatorInvoke(ii, node);
             } else if (null != assignOper && assignOper.UsesOperatorMethod) {
+                CodeBuilder.Append("(function() ");
+                OutputExpressionSyntax(node.Operand, opd);
+                CodeBuilder.Append(" = ");
                 IMethodSymbol msym = assignOper.OperatorMethod;
                 InvocationInfo ii = new InvocationInfo();
                 var arglist = new List<ExpressionSyntax>() { node.Operand };
                 ii.Init(msym, arglist, m_Model, opd);
                 OutputOperatorInvoke(ii, node);
+                CodeBuilder.Append("; return ");
+                OutputOperatorInvoke(ii, node);
+                CodeBuilder.Append("; end)()");
             } else {
                 string op = node.OperatorToken.Text;
                 if (op == "++" || op == "--") {
+                    op = op == "++" ? "+" : "-";
+                    bool isIntegerOperand = false;
+                    if (null != assignOper && null != assignOper.Target) {
+                        isIntegerOperand = s_SpecialIntegerBinaryOperators.Contains(op) && SymbolTable.IsIntegerType(assignOper.Target.Type);
+                    }
                     CodeBuilder.Append("(function() ");
                     OutputExpressionSyntax(node.Operand, opd);
                     CodeBuilder.Append(" = ");
-                    OutputExpressionSyntax(node.Operand, opd);
-                    CodeBuilder.Append(" ");
-                    CodeBuilder.Append(op == "++" ? "+" : "-");
-                    CodeBuilder.Append(" 1; return ");
+                    if (isIntegerOperand) {
+                        CodeBuilder.AppendFormat("invokespecialintegerprefixoperator(\"{0}\", ", op);
+                        OutputExpressionSyntax(node.Operand, opd);
+                        CodeBuilder.AppendFormat(", {0}", ClassInfo.GetFullName(assignOper.Target.Type));
+                        CodeBuilder.Append(")");
+                    } else {
+                        OutputExpressionSyntax(node.Operand, opd);
+                        CodeBuilder.Append(" ");
+                        CodeBuilder.Append(op);
+                        CodeBuilder.Append(" 1");
+                    }
+                    CodeBuilder.Append("; return ");
                     OutputExpressionSyntax(node.Operand, opd);
                     CodeBuilder.Append("; end)()");
                 } else {
                     ProcessUnaryOperator(node, ref op);
-                    string functor;
-                    if (s_UnaryFunctor.TryGetValue(op, out functor)) {
-                        CodeBuilder.AppendFormat("{0}(", functor);
-                        OutputExpressionSyntax(node.Operand, opd);
-                    } else {
-                        CodeBuilder.Append("(");
-                        CodeBuilder.Append(op);
-                        CodeBuilder.Append(" ");
-                        OutputExpressionSyntax(node.Operand, opd);
+                    bool isIntegerOperand = false;
+                    if (null != unaryOper && null != unaryOper.Operand) {
+                        isIntegerOperand = s_SpecialIntegerBinaryOperators.Contains(op) && SymbolTable.IsIntegerType(unaryOper.Operand.Type);
                     }
-                    CodeBuilder.Append(")");
+                    if (isIntegerOperand) {
+                        CodeBuilder.AppendFormat("invokespecialintegerprefixoperator(\"{0}\", ", op);
+                        OutputExpressionSyntax(node.Operand, opd);
+                        CodeBuilder.AppendFormat(", {0}", ClassInfo.GetFullName(unaryOper.Operand.Type));
+                        CodeBuilder.Append(")");
+                    } else {
+                        string functor;
+                        if (s_UnaryFunctor.TryGetValue(op, out functor)) {
+                            CodeBuilder.AppendFormat("{0}(", functor);
+                            OutputExpressionSyntax(node.Operand, opd);
+                        } else {
+                            CodeBuilder.Append("(");
+                            CodeBuilder.Append(op);
+                            CodeBuilder.Append(" ");
+                            OutputExpressionSyntax(node.Operand, opd);
+                        }
+                        CodeBuilder.Append(")");
+                    }
                 }
             }
         }
@@ -205,21 +250,11 @@ namespace RoslynTool.CsToLua
         {
             var oper = m_Model.GetOperation(node) as IUnaryOperatorExpression;
             IConversionExpression opd = null;
-            var unaryOper = oper as IUnaryOperatorExpression;
-            if (null != unaryOper) {
-                opd = unaryOper.Operand as IConversionExpression;
-            }
             var assignOper = oper as ICompoundAssignmentExpression;
             if (null != assignOper) {
                 opd = assignOper.Value as IConversionExpression;
             }
-            if (null != unaryOper && unaryOper.UsesOperatorMethod) {
-                IMethodSymbol msym = unaryOper.OperatorMethod;
-                InvocationInfo ii = new InvocationInfo();
-                var arglist = new List<ExpressionSyntax>() { node.Operand };
-                ii.Init(msym, arglist, m_Model, opd);
-                OutputOperatorInvoke(ii, node);
-            } else if (null != assignOper && assignOper.UsesOperatorMethod) {
+            if (null != assignOper && assignOper.UsesOperatorMethod) {
                 IMethodSymbol msym = assignOper.OperatorMethod;
                 InvocationInfo ii = new InvocationInfo();
                 var arglist = new List<ExpressionSyntax>() { node.Operand };
@@ -230,12 +265,6 @@ namespace RoslynTool.CsToLua
                 if (op == "++" || op == "--") {
                     OutputExpressionSyntax(node.Operand, opd);
                     m_PostfixUnaryExpressions.Enqueue(node);
-                } else {
-                    CodeBuilder.Append("(");
-                    CodeBuilder.Append(op);
-                    CodeBuilder.Append(" ");
-                    OutputExpressionSyntax(node.Operand, opd);
-                    CodeBuilder.Append(")");
                 }
             }
         }

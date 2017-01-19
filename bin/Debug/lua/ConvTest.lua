@@ -78,13 +78,23 @@ ConvTest = {
 				tlist = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", nil, {invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)});
 				local f; f = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", nil, {{obj, obj}, {obj, obj}});
 				c = 1;
+				c = invokespecialintegeroperator("/", c, 2, System.Int32, System.Int32);
+				c = invokespecialintegeroperator("/", c, 2, System.Int32, System.Int32);
+				c = c % 2;
+				c = (c % 2);
+				c = c- 1;
+				c = c- 1;
+				local d; d = bitnot(c);
+				local cc; cc = ( (function() c = c - 1; return c; end)() );
+				cc = ( c );
+				c = c- 1;
 				return nil, c;
 			end,
 			TestConv3 = function(this, a, b, c)
 				return myTestConv4(this, a, b, c);
 			end,
 			TestConv4 = function(this, v, v2)
-				local __compiler_expbody_79 = ((( (function() v2 = 1; return v2; end)() ) == 1) and invokeexternoperator(UnityEngine.Object, "op_Implicit", newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", nil, {}))); return __compiler_expbody_79, v2;
+				local __compiler_expbody_88 = ((( (function() v2 = 1; return v2; end)() ) == 1) and invokeexternoperator(UnityEngine.Object, "op_Implicit", newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", nil, {}))); return __compiler_expbody_88, v2;
 			end,
 			ctor = function(this)
 			end,
