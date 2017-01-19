@@ -1467,6 +1467,12 @@ function invokespecialintegerpostfixoperator(op, opd, type)
 end;
 function invokespecialintegeroperator(op, opd1, opd2, type1, typ2)
   if op=='/' then
-    local r = math.floor(opd1/opd2);
+    local r;
+    if opd1*opd2>0 then
+      r = math.floor(opd1/opd2);
+    else
+      r = -math.floor(-opd1/opd2);
+    end;
+    return r;
   end;
 end;

@@ -49,6 +49,12 @@ for k,v in pairs(meta) do
   print(k,v);
 end;
 
+System.PlatformID = {
+  Xbox = 1,
+};
+System.PlatformID.Value2String = {
+  [1] = "Xbox",
+};
 print(System.PlatformID.Xbox);
 print(invokeforbasicvalue(5, true, System.PlatformID, "ToString"));
 
@@ -75,3 +81,9 @@ System.String = setmetatable({},{
 
 print(getforbasicvalue(tab.str, false, System.String, "Length"));
 print(getforbasicvalue(str0, false, System.String, "Length"));
+
+local val = 18765;
+print(val/2, invokespecialintegeroperator('/', val, 2, System.Int32, System.Int32));
+
+val = -18765;
+print(val/2, invokespecialintegeroperator('/', val, 2, System.Int32, System.Int32));
