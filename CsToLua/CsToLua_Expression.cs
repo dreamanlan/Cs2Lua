@@ -55,15 +55,16 @@ namespace RoslynTool.CsToLua
                 var ropd = null == boper ? null : boper.RightOperand as IConversionExpression;
                 
                 string op = node.OperatorToken.Text;
-                ProcessBinaryOperator(node, ref op);
                 bool isIntegerOprand = false;
+                int integerOpIndex = -1;
                 if (null != boper && null != boper.LeftOperand && null != boper.RightOperand) {
-                    isIntegerOprand = s_SpecialIntegerBinaryOperators.Contains(op) && SymbolTable.IsIntegerType(boper.LeftOperand.Type) && SymbolTable.IsIntegerType(boper.RightOperand.Type);
+                    isIntegerOprand = TryGetSpecialIntegerOperatorIndex(op, out integerOpIndex) && SymbolTable.IsIntegerType(boper.LeftOperand.Type) && SymbolTable.IsIntegerType(boper.RightOperand.Type);
                 }
+                ProcessBinaryOperator(node, ref op);
                 if (isIntegerOprand) {
                     var ltype = boper.LeftOperand.Type;
                     var rtype = boper.RightOperand.Type;
-                    CodeBuilder.AppendFormat("invokespecialintegeroperator(\"{0}\", ", op);
+                    CodeBuilder.AppendFormat("invokeintegeroperator({0}, \"{1}\", ", integerOpIndex, op);
                     OutputExpressionSyntax(node.Left, lopd);
                     CodeBuilder.Append(", ");
                     OutputExpressionSyntax(node.Right, ropd);
@@ -199,16 +200,17 @@ namespace RoslynTool.CsToLua
                 if (op == "++" || op == "--") {
                     op = op == "++" ? "+" : "-";
                     bool isIntegerOperand = false;
+                    int integerOpIndex = -1;
                     if (null != assignOper && null != assignOper.Target) {
-                        isIntegerOperand = s_SpecialIntegerBinaryOperators.Contains(op) && SymbolTable.IsIntegerType(assignOper.Target.Type);
+                        isIntegerOperand = TryGetSpecialIntegerOperatorIndex(op, out integerOpIndex) && SymbolTable.IsIntegerType(assignOper.Target.Type);
                     }
                     CodeBuilder.Append("(function() ");
                     OutputExpressionSyntax(node.Operand, opd);
                     CodeBuilder.Append(" = ");
                     if (isIntegerOperand) {
-                        CodeBuilder.AppendFormat("invokespecialintegerprefixoperator(\"{0}\", ", op);
+                        CodeBuilder.AppendFormat("invokeintegeroperator({0}, \"{1}\", ", integerOpIndex, op);
                         OutputExpressionSyntax(node.Operand, opd);
-                        CodeBuilder.AppendFormat(", {0}", ClassInfo.GetFullName(assignOper.Target.Type));
+                        CodeBuilder.AppendFormat(", 1, {0}, {1}", ClassInfo.GetFullName(assignOper.Target.Type), ClassInfo.GetFullName(assignOper.Target.Type));
                         CodeBuilder.Append(")");
                     } else {
                         OutputExpressionSyntax(node.Operand, opd);
@@ -220,15 +222,16 @@ namespace RoslynTool.CsToLua
                     OutputExpressionSyntax(node.Operand, opd);
                     CodeBuilder.Append("; end)()");
                 } else {
-                    ProcessUnaryOperator(node, ref op);
                     bool isIntegerOperand = false;
+                    int integerOpIndex = -1;
                     if (null != unaryOper && null != unaryOper.Operand) {
-                        isIntegerOperand = s_SpecialIntegerBinaryOperators.Contains(op) && SymbolTable.IsIntegerType(unaryOper.Operand.Type);
+                        isIntegerOperand = TryGetSpecialIntegerOperatorIndex(op, out integerOpIndex) && SymbolTable.IsIntegerType(unaryOper.Operand.Type);
                     }
+                    ProcessUnaryOperator(node, ref op);
                     if (isIntegerOperand) {
-                        CodeBuilder.AppendFormat("invokespecialintegerprefixoperator(\"{0}\", ", op);
+                        CodeBuilder.AppendFormat("invokeintegeroperator({0}, \"{1}\", nil, ", integerOpIndex, op);
                         OutputExpressionSyntax(node.Operand, opd);
-                        CodeBuilder.AppendFormat(", {0}", ClassInfo.GetFullName(unaryOper.Operand.Type));
+                        CodeBuilder.AppendFormat(", nil, {0}", ClassInfo.GetFullName(unaryOper.Operand.Type));
                         CodeBuilder.Append(")");
                     } else {
                         string functor;

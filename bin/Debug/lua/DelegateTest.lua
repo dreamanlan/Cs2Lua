@@ -54,7 +54,7 @@ DelegateTest = {
 				v3 = invokeexternoperator(UnityEngine.Object, "op_Implicit", obj);
 				local vv; vv = this:Test(invokeexternoperator(UnityEngine.Object, "op_Implicit", obj));
 				local v4; v4 = 0;
-				v4 = (v4 + typecast(typecast(invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), System.Object, false), System.Int32, false));
+				v4 = invokeintegeroperator(2, "+", v4, typecast(typecast(invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), System.Object, false), System.Int32, false), System.Int32, System.Int32);
 				return nil;
 			end),
 			Test = function(this, v)
@@ -64,7 +64,7 @@ DelegateTest = {
 				local v0; v0 = condexp(invokeexternoperator(UnityEngine.Object, "op_Implicit", ( obj )), true, 1, true, 0);
 				local f0; f0 = delegationwrap((function(vv) return invokeexternoperator(UnityEngine.Object, "op_Implicit", obj); end));
 				local f; f = delegationwrap((function(vv) return invokeexternoperator(UnityEngine.Object, "op_Implicit", obj); end));
-				local td; td = delegationwrap((function(a, b, c) local __compiler_lambda_134 = ((a + ( (function() b = 2; return b; end)() )) + ( (function() c = 1; return c; end)() )); return __compiler_lambda_134, b, c; end));
+				local td; td = delegationwrap((function(a, b, c) local __compiler_lambda_134 = invokeintegeroperator(2, "+", invokeintegeroperator(2, "+", a, ( (function() b = 2; return b; end)() ), System.Int32, System.Int32), ( (function() c = 1; return c; end)() ), System.Int32, System.Int32); return __compiler_lambda_134, b, c; end));
 				if invokeexternoperator(UnityEngine.Object, "op_Implicit", obj) then
 					this:Test2(true, false);
 				end;

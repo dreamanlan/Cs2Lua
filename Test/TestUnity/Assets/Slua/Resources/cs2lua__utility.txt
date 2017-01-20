@@ -38,6 +38,19 @@ System.Collections.Generic.MyDictionary_TKey_TValue = System.Collections.Generic
 __cs2lua_out = (Slua and Slua.out) or {};
 __cs2lua_nil_field_value = {};
 
+__cs2lua_special_integer_operators = { "/", "%", "+", "-", "*", "<<", ">>", "&", "|", "^", "~" };
+__cs2lua_div = 0;
+__cs2lua_mod = 1;
+__cs2lua_add = 2;
+__cs2lua_sub = 3;
+__cs2lua_mul = 4;
+__cs2lua_lshift = 5;
+__cs2lua_rshift = 6;
+__cs2lua_bitand = 7;
+__cs2lua_bitor = 8;
+__cs2lua_bitxor = 9;
+__cs2lua_bitnot = 10;
+
 function lshift(v,n)
   if bit then
     return bit.lshift(v,n);
@@ -1460,13 +1473,54 @@ function invokearraystaticmethod(firstArray, secondArray, method, ...)
   end;
 end;
 
---暂时只对整数除法进行特殊处理，运算溢出先不在这里处理
-function invokespecialintegerprefixoperator(op, opd, type)
-end;
-function invokespecialintegerpostfixoperator(op, opd, type)
-end;
-function invokespecialintegeroperator(op, opd1, opd2, type1, typ2)
-  if op=='/' then
-    local r = math.floor(opd1/opd2);
+--暂时只对整数除法进行特殊处理，运算溢出暂不处理
+--__cs2lua_div = 0;
+--__cs2lua_mod = 1;
+--__cs2lua_add = 2;
+--__cs2lua_sub = 3;
+--__cs2lua_mul = 4;
+--__cs2lua_lshift = 5;
+--__cs2lua_rshift = 6;
+--__cs2lua_bitand = 7;
+--__cs2lua_bitor = 8;
+--__cs2lua_bitxor = 9;
+--__cs2lua_bitnot = 10;
+function invokeintegeroperator(op, luaop, opd1, opd2, type1, type2)
+  if op==__cs2lua_div then
+    local r;
+    if opd1*opd2>0 then
+      r = math.floor(opd1/opd2);
+    else
+      r = -math.floor(-opd1/opd2);
+    end;
+    return r;
+  elseif op==__cs2lua_mod then
+    return opd1 % opd2;
+  elseif op==__cs2lua_add then
+    if type1 then
+      return opd1 + opd2;
+    else
+      return opd2;
+    end;
+  elseif op==__cs2lua_sub then
+    if type1 then
+      return opd1 - opd2;
+    else
+      return -opd2;
+    end;
+  elseif op==__cs2lua_mul then
+    return opd1 * opd2;
+  elseif op==__cs2lua_lshift then
+    return lshift(opd1, opd2);
+  elseif op==__cs2lua_rshift then
+    return rshift(opd1, opd2);
+  elseif op==__cs2lua_bitand then
+    return bitand(opd1, opd2);
+  elseif op==__cs2lua_bitor then
+    return bitor(opd1, opd2);
+  elseif op==__cs2lua_bitxor then
+    return bitxor(opd1, opd2);
+  elseif op==__cs2lua_bitnot then
+    return bitnot(opd1);
   end;
 end;

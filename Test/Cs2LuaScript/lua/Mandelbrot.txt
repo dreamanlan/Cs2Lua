@@ -53,13 +53,13 @@ Mandelbrot = {
 								isInside = false;
 								break;
 							end;
-						until not (((function() i = i - 1; return i; end)() > 0));
+						until not (((function() i = invokeintegeroperator(3, "-", i, 1, System.Int32, System.Int32); return i; end)() > 0));
 						if isInside then
 							this:DrawCube(x, y, width, height);
 						end;
-					x = x+ 1;
+					x = invokeintegeroperator(2, "+", x, 1, System.Int32, System.Int32);
 					end;
-				y = y+ 1;
+				y = invokeintegeroperator(2, "+", y, 1, System.Int32, System.Int32);
 				end;
 			end,
 			DrawCube = function(this, x, y, w, h)

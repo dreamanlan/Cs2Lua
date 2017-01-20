@@ -918,10 +918,16 @@ namespace RoslynTool.CsToLua
                     return c.ToString();
             }
         }
+        private static bool TryGetSpecialIntegerOperatorIndex(string op, out int index)
+        {
+            index = s_SpecialIntegerOperators.IndexOf(op);
+            return index >= 0;
+        }
 
         private static HashSet<string> s_UnsupportedUnaryOperators = new HashSet<string> { "&", "*" };
         private static HashSet<string> s_UnsupportedBinaryOperators = new HashSet<string> { "->" };
-        private static HashSet<string> s_SpecialIntegerBinaryOperators = new HashSet<string> { "/" };
+        //下面这个list的顺序要与utility.lua里的整数操作表__cs2lua_special_integer_operators一致（索引用作操作符识别常量）
+        private static List<string> s_SpecialIntegerOperators = new List<string> { "/", "%", "+", "-", "*", "++", "--", "<<", ">>", "&", "|", "^", "~" };
 
         private static Dictionary<string, string> s_UnaryAlias = new Dictionary<string, string> { 
             {"!", "not"}

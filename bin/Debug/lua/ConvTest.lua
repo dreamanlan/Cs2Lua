@@ -78,16 +78,16 @@ ConvTest = {
 				tlist = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", nil, {invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)});
 				local f; f = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", nil, {{obj, obj}, {obj, obj}});
 				c = 1;
-				c = invokespecialintegeroperator("/", c, 2, System.Int32, System.Int32);
-				c = invokespecialintegeroperator("/", c, 2, System.Int32, System.Int32);
-				c = c % 2;
-				c = (c % 2);
-				c = c- 1;
-				c = c- 1;
-				local d; d = bitnot(c);
-				local cc; cc = ( (function() c = c - 1; return c; end)() );
+				c = invokeintegeroperator(0, "/", c, 2, System.Int32, System.Int32);
+				c = invokeintegeroperator(0, "/", c, 2, System.Int32, System.Int32);
+				c = invokeintegeroperator(1, "%", c, 2, System.Int32, System.Int32);
+				c = invokeintegeroperator(1, "%", c, 2, System.Int32, System.Int32);
+				c = invokeintegeroperator(3, "-", c, 1, System.Int32, System.Int32);
+				c = invokeintegeroperator(3, "-", c, 1, System.Int32, System.Int32);
+				local d; d = invokeintegeroperator(12, "~", nil, c, nil, System.Int32);
+				local cc; cc = ( (function() c = invokeintegeroperator(3, "-", c, 1, System.Int32, System.Int32); return c; end)() );
 				cc = ( c );
-				c = c- 1;
+				c = invokeintegeroperator(3, "-", c, 1, System.Int32, System.Int32);
 				return nil, c;
 			end,
 			TestConv3 = function(this, a, b, c)
