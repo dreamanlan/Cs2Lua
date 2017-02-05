@@ -288,6 +288,8 @@ namespace RoslynTool.CsToLua
                 } else {
                     ci.CurrentCodeBuilder = ci.InstanceFieldCodeBuilder;
                 }
+                
+                ++m_Indent;
                 CodeBuilder.AppendFormat("{0}{1} = ", GetIndentString(), SymbolTable.GetPropertyName(declSym));
                 if (null != node.Initializer) {
                     IConversionExpression opd = null;
@@ -298,9 +300,10 @@ namespace RoslynTool.CsToLua
                     OutputExpressionSyntax(node.Initializer.Value, opd);
                     CodeBuilder.Append(",");
                 } else {
-                    CodeBuilder.Append("true,");
+                    CodeBuilder.Append("__cs2lua_nil_field_value,");
                 }
                 CodeBuilder.AppendLine();
+                --m_Indent;
 
                 ci.CurrentCodeBuilder = curBuilder;
             } else {
