@@ -527,7 +527,10 @@ namespace SLua
             if (typeof(T) == typeof(object) && o is LuaTable) {
                 object[] arr;
                 bool ret = checkArray(l, p, out arr);
-                o = arr as T;
+                var to = arr as T;
+                if (null != to && arr.Length > 0) {
+                    o = to;
+                }
                 return ret;
             }
 			return true;

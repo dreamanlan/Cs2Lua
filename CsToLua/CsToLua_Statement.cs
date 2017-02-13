@@ -241,17 +241,14 @@ namespace RoslynTool.CsToLua
             ci.Init(node.Statement);
             m_ContinueInfoStack.Push(ci);
 
-            string varName = string.Format("__compiler_foreach_{0}", node.GetLocation().GetLineSpan().StartLinePosition.Line);
-            CodeBuilder.AppendFormat("{0}local {1} = (", GetIndentString(), varName);
+            CodeBuilder.AppendFormat("{0}for {1} in getiterator(", GetIndentString(), node.Identifier.Text);
             IConversionExpression opd = null;
             var oper = m_Model.GetOperation(node) as IForEachLoopStatement;
             if (null != oper) {
                 opd = oper.Collection as IConversionExpression;
             }
             OutputExpressionSyntax(node.Expression, opd);
-            CodeBuilder.AppendLine("):GetEnumerator();");
-            CodeBuilder.AppendFormat("{0}while {1}:MoveNext() do", GetIndentString(), varName);
-            CodeBuilder.AppendLine();
+            CodeBuilder.AppendLine(") do");
             if (ci.HaveContinue) {
                 if (ci.HaveBreak) {
                     CodeBuilder.AppendFormat("{0}local {1} = false", GetIndentString(), ci.BreakFlagVarName);
@@ -261,8 +258,6 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.AppendLine();
             }
             ++m_Indent;
-            CodeBuilder.AppendFormat("{0}{1} = {2}.Current;", GetIndentString(), node.Identifier.Text, varName);
-            CodeBuilder.AppendLine();
             node.Statement.Accept(this);
             --m_Indent;
             if (ci.HaveContinue) {
@@ -275,7 +270,6 @@ namespace RoslynTool.CsToLua
             }
             CodeBuilder.AppendFormat("{0}end;", GetIndentString());
             CodeBuilder.AppendLine();
-
             m_ContinueInfoStack.Pop();
         }
         public override void VisitIfStatement(IfStatementSyntax node)

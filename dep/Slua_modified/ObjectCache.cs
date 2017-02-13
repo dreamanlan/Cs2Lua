@@ -341,17 +341,18 @@ namespace SLua
                     bool r = LuaDLL.lua_isnil(l, -1);
                     LuaDLL.lua_pop(l, 1);
                     if (r) {
-                        if (null != rt.BaseType && (null == rt.BaseType.Namespace || !rt.BaseType.Namespace.StartsWith("System"))) {
-                            rt = rt.BaseType;
-                        } else {
-                            Type[] ts = rt.GetInterfaces();
-                            rt = null;
+                        Type[] ts = rt.GetInterfaces();
+                        var temp = rt;
+                        rt = null;
+                        if (null != ts && ts.Length > 0) {
                             foreach (Type tt in ts) {
                                 if (null == tt.Namespace || !tt.Namespace.StartsWith("System") && !tt.Namespace.StartsWith("UnityEngine")) {
                                     rt = tt;
                                     break;
                                 }
                             }
+                        } else if (null != temp.BaseType && (null == temp.BaseType.Namespace || !temp.BaseType.Namespace.StartsWith("System"))) {
+                            rt = temp.BaseType;
                         }
                     } else {
                         name = tn;

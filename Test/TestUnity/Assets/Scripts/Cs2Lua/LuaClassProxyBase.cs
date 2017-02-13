@@ -8,13 +8,18 @@ public class LuaClassProxyBase
     {
         get { return m_LuaClassFileName; }
     }
-    public LuaTable ClassObj
-    {
-        get { return m_ClassObj; }
-    }
     public LuaTable Self
     {
         get { return m_Self; }
+    }
+    public void InitLua(LuaTable self)
+    {
+        m_LuaClassFileName = string.Empty;
+        m_Self = self;
+        if (null != m_Self) {
+            PrepareMembers();
+            m_LuaInited = true;
+        }
     }
     public void LoadLua(string luaClassFileName)
     {
@@ -79,10 +84,10 @@ public class LuaClassProxyBase
         if (!Cs2LuaAssembly.Instance.LuaInited)
             return;
         string className = m_LuaClassFileName.Replace("__", ".");
-        m_Svr = Cs2LuaAssembly.Instance.LuaSvr;
-        m_Svr.luaState.doFile(m_LuaClassFileName);
-        m_ClassObj = (LuaTable)m_Svr.luaState[className];
-        m_Self = (LuaTable)((LuaFunction)m_ClassObj["__new_object"]).call();
+        var svr = Cs2LuaAssembly.Instance.LuaSvr;
+        svr.luaState.doFile(m_LuaClassFileName);
+        var classObj = (LuaTable)svr.luaState[className];
+        m_Self = (LuaTable)((LuaFunction)classObj["__new_object"]).call();
         if (null != m_Self) {
             PrepareMembers();
             m_LuaInited = true;
@@ -91,8 +96,6 @@ public class LuaClassProxyBase
     }
 
     private string m_LuaClassFileName;
-    private LuaSvr m_Svr;
-    private LuaTable m_ClassObj;
     private LuaTable m_Self;
     private bool m_LuaInited;
 }

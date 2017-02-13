@@ -278,6 +278,16 @@ function isequal(v1,v2)
 	end;
 end;
 
+function __get_last_name(ns)  
+  local rns = string.reverse(ns);
+  local ix = string.find(rns, ".", 1, true);
+  if ix~=nil then
+    return string.sub(ns, 1-ix);
+  else
+    return ns;
+  end;
+end;
+
 function __wrap_if_string(val)
   if type(val)=="string" then
     return System.String(val);
@@ -956,6 +966,14 @@ function defineclass(base, className, static, static_methods, static_fields_buil
             elseif base_class then
             	ret = base_class[k];                         
             end;
+            --简单支持反射的属性:Type.Name与Type.FullName
+            if (not ret) then
+              if k=="Name" then
+                ret = __get_last_name(className);
+              elseif k=="FullName" then
+                ret = className;
+              end;
+            end;
             return ret;
         end,
 
@@ -994,7 +1012,7 @@ function newobject(class, ctor, initializer, ...)
   return obj;
 end;
 
-function newexternobject(class, className, ctor, doextension, initializer, ...)
+function newexternobject(class, className, ctor, initializer, ...)
   local obj = nil;
   if class ~= nil then
     obj = class(...);
@@ -1002,9 +1020,6 @@ function newexternobject(class, className, ctor, doextension, initializer, ...)
     obj = Slua.CreateClass(className, ...);
   end;
   if obj then
-    if doextension ~= nil then
-      doextension();
-    end;
 		if initializer ~= nil then
 			for k,v in pairs(initializer) do
 				local sk = __unwrap_if_string(k);
@@ -1485,7 +1500,7 @@ end;
 --__cs2lua_bitor = 8;
 --__cs2lua_bitxor = 9;
 --__cs2lua_bitnot = 10;
-function invokeintegeroperator(op, luaop, opd1, opd2, type1, typ2)
+function invokeintegeroperator(op, luaop, opd1, opd2, type1, type2)
   if op==__cs2lua_div then
     local r;
     if opd1*opd2>0 then
@@ -1497,9 +1512,17 @@ function invokeintegeroperator(op, luaop, opd1, opd2, type1, typ2)
   elseif op==__cs2lua_mod then
     return opd1 % opd2;
   elseif op==__cs2lua_add then
-    return opd1 + opd2;
+    if type1 then
+      return opd1 + opd2;
+    else
+      return opd2;
+    end;
   elseif op==__cs2lua_sub then
-    return opd1 - opd2;
+    if type1 then
+      return opd1 - opd2;
+    else
+      return -opd2;
+    end;
   elseif op==__cs2lua_mul then
     return opd1 * opd2;
   elseif op==__cs2lua_lshift then

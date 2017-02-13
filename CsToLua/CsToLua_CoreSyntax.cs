@@ -236,19 +236,6 @@ namespace RoslynTool.CsToLua
             if (isExtension && declSym.Parameters.Length > 0) {
                 var targetType = declSym.Parameters[0].Type;
                 AddReferenceAndTryDeriveGenericTypeInstance(ci, targetType);
-                string key = ClassInfo.GetFullName(targetType);
-                StringBuilder extensionCodeBuilder;
-                if (!ci.ExtensionCodeBuilders.TryGetValue(key, out extensionCodeBuilder)) {
-                    extensionCodeBuilder = new StringBuilder();
-                    ci.ExtensionCodeBuilders.Add(key, extensionCodeBuilder);
-                }
-
-                ++m_Indent;
-                ++m_Indent;
-                extensionCodeBuilder.AppendFormat("{0}rawset(obj, \"{1}\", {2}.{3});", GetIndentString(), manglingName, ci.Key, manglingName);
-                extensionCodeBuilder.AppendLine();
-                --m_Indent;
-                --m_Indent;
             }
             bool isStatic = declSym.IsStatic;
             CodeBuilder.AppendFormat("{0}{1} = {2}function({3}", GetIndentString(), manglingName, mi.ExistYield ? "wrapenumerable(" : string.Empty, isStatic ? string.Empty : "this");
@@ -661,7 +648,7 @@ namespace RoslynTool.CsToLua
                         //处理ref/out参数
                         InvocationInfo ii = new InvocationInfo();
                         ii.Init(sym, invocation.ArgumentList, m_Model);
-                        if (sym.IsStatic) {
+                        if (sym.IsStatic || sym.IsExtensionMethod) {
                             AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
                         }
                         int ct = ii.ReturnArgs.Count;
@@ -956,7 +943,7 @@ namespace RoslynTool.CsToLua
                     //处理ref/out参数
                     InvocationInfo ii = new InvocationInfo();
                     ii.Init(sym, invocation.ArgumentList, m_Model);
-                    if (sym.IsStatic) {
+                    if (sym.IsStatic || sym.IsExtensionMethod) {
                         AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
                     }
 
@@ -1227,7 +1214,7 @@ namespace RoslynTool.CsToLua
                 //处理ref/out参数
                 InvocationInfo ii = new InvocationInfo();
                 ii.Init(sym, invocation.ArgumentList, m_Model);
-                if (sym.IsStatic) {
+                if (sym.IsStatic || sym.IsExtensionMethod) {
                     AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
                 }
 

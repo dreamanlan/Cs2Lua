@@ -27,7 +27,6 @@ namespace RoslynTool.CsToLua
         internal List<INamedTypeSymbol> InterfaceSymbols = new List<INamedTypeSymbol>();
         internal Dictionary<string, bool> SymbolOverloadFlags = new Dictionary<string, bool>();
         internal HashSet<string> MethodNames = new HashSet<string>();
-        internal Dictionary<string, INamedTypeSymbol> ExtensionClasses = new Dictionary<string, INamedTypeSymbol>();
         internal Dictionary<string, IFieldSymbol> FieldUseExplicitTypeParams = new Dictionary<string, IFieldSymbol>();
         internal Dictionary<string, IFieldSymbol> FieldCreateSelfs = new Dictionary<string, IFieldSymbol>();
 
@@ -99,57 +98,14 @@ namespace RoslynTool.CsToLua
                     if (name[0] == '.')
                         name = name.Substring(1);
                     string manglingName = SymbolTable.CalcMethodMangling(msym, symTable.AssemblySymbol);
-                    if (msym.IsExtensionMethod && msym.Parameters.Length > 0) {
-                        var targetType = msym.Parameters[0].Type as INamedTypeSymbol;
-                        if (null != targetType) {
-                            string key = ClassInfo.GetFullNameWithTypeParameters(targetType);
-                            ClassSymbolInfo csi;
-                            if (!symTable.ClassSymbols.TryGetValue(key, out csi)) {
-                                csi = new ClassSymbolInfo();
-                                symTable.ClassSymbols.Add(key, csi);
-                                csi.Init(targetType, compilation, symTable);
-                            }
-                            if (!csi.ExtensionClasses.ContainsKey(ClassKey)) {
-                                csi.ExtensionClasses.Add(ClassKey, typeSym);
-                                csi.GenerateBasicCtor = true;
-                            }
-                            bool needMangling;
-                            bool isOverloaded;
-                            if (csi.SymbolOverloadFlags.TryGetValue(name, out isOverloaded)) {
-                                if (csi.MethodNames.Contains(manglingName)) {
-                                    continue;
-                                }
-                                csi.SymbolOverloadFlags[name] = true;
-                                needMangling = true;
-                            } else {
-                                if (SymbolOverloadFlags.TryGetValue(name, out isOverloaded)) {
-                                    csi.SymbolOverloadFlags.Add(name, true);
-                                    needMangling = true;
-                                } else {
-                                    csi.SymbolOverloadFlags.Add(name, false);
-                                    needMangling = false;
-                                }
-                            }
-                            if (needMangling) {
-                                csi.MethodNames.Add(manglingName);
+                    if (!SymbolOverloadFlags.ContainsKey(name)) {
+                        SymbolOverloadFlags.Add(name, false);
 
-                                SymbolOverloadFlags[name] = true;
-                                MethodNames.Add(manglingName);
-                            } else {
-                                SymbolOverloadFlags.Add(name, false);
-                                MethodNames.Add(name);
-                            }
-                        }
+                        MethodNames.Add(name);
                     } else {
-                        if (!SymbolOverloadFlags.ContainsKey(name)) {
-                            SymbolOverloadFlags.Add(name, false);
+                        SymbolOverloadFlags[name] = true;
 
-                            MethodNames.Add(name);
-                        } else {
-                            SymbolOverloadFlags[name] = true;
-
-                            MethodNames.Add(manglingName);
-                        }
+                        MethodNames.Add(manglingName);
                     }
                     continue;
                 }

@@ -83,7 +83,13 @@ print(getforbasicvalue(tab.str, false, System.String, "Length"));
 print(getforbasicvalue(str0, false, System.String, "Length"));
 
 local val = 18765;
-print(val/2, invokespecialintegeroperator('/', val, 2, System.Int32, System.Int32));
+print(val/2, invokeintegeroperator('/', val, 2, System.Int32, System.Int32));
 
 val = -18765;
-print(val/2, invokespecialintegeroperator('/', val, 2, System.Int32, System.Int32));
+print(val/2, invokeintegeroperator('/', val, 2, System.Int32, System.Int32));
+
+local fn = "System.Base.Int32";
+print(__get_last_name(fn));
+
+local fn = "Int32";
+print(__get_last_name(fn));

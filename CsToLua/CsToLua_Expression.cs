@@ -795,23 +795,6 @@ namespace RoslynTool.CsToLua
                 } else {
                     CodeBuilder.AppendFormat("\"{0}\"", ctor);
                 }
-                if (isExternal) {
-                    ClassSymbolInfo csi;
-                    if (m_SymbolTable.ClassSymbols.TryGetValue(fullTypeName, out csi)) {
-                        if (csi.ExtensionClasses.Count > 0) {
-                            CodeBuilder.Append(", (function(obj)");
-                            foreach (var pair in csi.ExtensionClasses) {
-                                string refname = pair.Key;
-                                CodeBuilder.AppendFormat(" {0}.__install_{1}(obj);", fullTypeName, refname.Replace(".", "_"));
-                            }
-                            CodeBuilder.Append(" end)");
-                        } else {
-                            CodeBuilder.Append(", nil");
-                        }
-                    } else {
-                        CodeBuilder.Append(", nil");
-                    }
-                }
                 if (null != node.Initializer) {
                     CodeBuilder.Append(", ");
                     if (!isCollection) {

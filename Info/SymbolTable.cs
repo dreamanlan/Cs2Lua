@@ -114,7 +114,7 @@ namespace RoslynTool.CsToLua
         internal string NameMangling(IMethodSymbol sym)
         {
             string ret = GetMethodName(sym);
-            if (ret[0] == '.')
+            if (!string.IsNullOrEmpty(ret) && ret[0] == '.')
                 ret = ret.Substring(1);
             string key = ClassInfo.GetFullNameWithTypeParameters(sym.ContainingType);
             ClassSymbolInfo csi;
@@ -246,7 +246,7 @@ namespace RoslynTool.CsToLua
                 return string.Empty;
             StringBuilder sb = new StringBuilder();
             string name = GetMethodName(methodSym);
-            if (name[0] == '.')
+            if (!string.IsNullOrEmpty(name) && name[0] == '.')
                 name = name.Substring(1);
             sb.Append(name);
             if (methodSym.ContainingAssembly == assemblySym) {

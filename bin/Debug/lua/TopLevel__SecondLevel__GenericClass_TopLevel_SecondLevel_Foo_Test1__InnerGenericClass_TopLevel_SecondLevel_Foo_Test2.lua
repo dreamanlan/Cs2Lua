@@ -3,6 +3,7 @@ require "cs2lua__namespaces";
 require "cs2lua__externenums";
 require "TopLevel__SecondLevel__GenericClass_TopLevel_SecondLevel_Foo_Test1";
 require "TopLevel__SecondLevel__Foo";
+require "TopLevel__SecondLevel__FooExtension";
 
 TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2 = {
 	__new_object = function(...)
@@ -36,7 +37,7 @@ TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericCla
 				local v; v = typeas(g, TopLevel.SecondLevel.Foo.Test1, false);
 				local v; v = typecast(typecast(g, System.Object, false), TopLevel.SecondLevel.Foo.Test1, false);
 				local f; f = newobject(TopLevel.SecondLevel.Foo, "ctor", {});
-				f:Test3();
+				TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo(f);
 			end,
 			Test2 = function(this, GG, t, tt)
 				local t1; t1 = GG;

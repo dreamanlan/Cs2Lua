@@ -4,26 +4,14 @@ require "cs2lua__externenums";
 
 Extentions = {
 	__define_class = function()
-		rawset(System.DateTime, "__install_Extentions", (function(obj)
-					rawset(obj, "timeInMillisecond", Extentions.timeInMillisecond);
-					rawset(obj, "timeSince1970", Extentions.timeSince1970);
-					rawset(obj, "timeSince1970InMillisecond", Extentions.timeSince1970InMillisecond);
-		end));
-		rawset(UnityEngine.Transform, "__install_Extentions", (function(obj)
-					rawset(obj, "findChildRecursively", Extentions.findChildRecursively);
-					rawset(obj, "searchChildRecursively", Extentions.searchChildRecursively);
-		end));
-		rawset(System.Collections.Generic.List_T, "__install_Extentions", (function(obj)
-					rawset(obj, "AddSorted", Extentions.AddSorted);
-		end));
 		local static = Extentions;
 
 		local static_methods = {
 			timeInMillisecond = function(dateTime)
-				return (dateTime.Ticks / 10000);
+				return invokeintegeroperator(0, "/", dateTime.Ticks, 10000, System.Int64, System.Int64);
 			end,
 			timeSince1970 = function(dateTime)
-				return typecast(( (dateTime:timeSince1970InMillisecond() / 1000) ), System.Int64, false);
+				return typecast(( invokeintegeroperator(0, "/", Extentions.timeSince1970InMillisecond(dateTime), 1000, System.Int64, System.Int64) ), System.Int64, false);
 			end,
 			timeSince1970InMillisecond = function(dateTime)
 --return (long)(Time.realtimeSinceStartup * 1000);
@@ -40,14 +28,14 @@ Extentions = {
 					local childCount; childCount = transform.childCount;
 					local i; i = 0;
 					while (i < childCount) do
-						child = transform:GetChild(i):findChildRecursively(childName, (maxDepth - 1));
+						child = Extentions.findChildRecursively(transform:GetChild(i), childName, invokeintegeroperator(3, "-", maxDepth, 1, System.Int32, System.Int32));
 						if invokeexternoperator(UnityEngine.Object, "op_Inequality", child, nil) then
 							break;
 						end;
 						do
 						break;
 						end;
-					i = i + 1;
+					i = invokeintegeroperator(2, "+", i, 1, System.Int32, System.Int32);
 					end;
 				end;
 				return child;
@@ -61,11 +49,11 @@ Extentions = {
 					local i; i = 0;
 					while (i < count) do
 						local nowNode; nowNode = transform:GetChild(i);
-						local searchRes; searchRes = Extentions.searchChildRecursively(nowNode, childName, (maxDepth - 1));
+						local searchRes; searchRes = Extentions.searchChildRecursively(nowNode, childName, invokeintegeroperator(3, "-", maxDepth, 1, System.Int32, System.Int32));
 						if invokeexternoperator(UnityEngine.Object, "op_Inequality", searchRes, nil) then
 							return searchRes;
 						end;
-					i = i + 1;
+					i = invokeintegeroperator(2, "+", i, 1, System.Int32, System.Int32);
 					end;
 				end;
 				return nil;
@@ -79,7 +67,7 @@ Extentions = {
 					list:Add(item);
 					return ;
 				end;
-				if (getexterninstanceindexer(list, nil, "get_Item", (list.Count - 1)):CompareTo(item) <= 0) then
+				if (getexterninstanceindexer(list, nil, "get_Item", invokeintegeroperator(3, "-", list.Count, 1, System.Int32, System.Int32)):CompareTo(item) <= 0) then
 					list:Add(item);
 					return ;
 				end;
@@ -89,7 +77,7 @@ Extentions = {
 				end;
 				local index; index = list:BinarySearch(item);
 				if (index < 0) then
-					index = bitnot(index);
+					index = invokeintegeroperator(12, "~", nil, index, nil, System.Int32);
 				end;
 				list:Insert(index, item);
 			end,

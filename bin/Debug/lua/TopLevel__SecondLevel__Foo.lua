@@ -21,11 +21,11 @@ TopLevel.SecondLevel.Foo = {
 			remove_StaticEventBridge = function(value)
 			end,
 			op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo = function(self, other)
-				self.m_Test = (self.m_Test + other.m_Test);
+				self.m_Test = invokeintegeroperator(2, "+", self.m_Test, other.m_Test, System.Int32, System.Int32);
 				return self;
 			end,
 			op_Addition__TopLevel_SecondLevel_Foo__System_Int32 = function(self, val)
-				self.m_Test = (self.m_Test + val);
+				self.m_Test = invokeintegeroperator(2, "+", self.m_Test, val, System.Int32, System.Int32);
 				return self;
 			end,
 			op_Explicit = function(a)
@@ -84,18 +84,15 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			ctor = function(this)
 				this:ctor__System_Int32(0);
-				this:__ctor();
 				return this;
 			end,
 			ctor__System_Int32 = function(this, v)
 				this.base.ctor(this);
-				this:__ctor();
 				this.m_Test = v;
 				return this;
 			end,
 			ctor__System_Int32__System_Int32 = function(this, a, b)
 				this.base.ctor(this);
-				this:__ctor();
 				return this;
 			end,
 			Test123 = function(this, a, b)
@@ -107,7 +104,7 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			Iterator = wrapenumerable(function(this)
 				wrapyield(nil, false, false);
-				wrapyield(newexternobject(UnityEngine.WaitForSeconds, "UnityEngine.WaitForSeconds", "ctor", nil, {}, 3), false, true);
+				wrapyield(newexternobject(UnityEngine.WaitForSeconds, "UnityEngine.WaitForSeconds", "ctor", {}, 3), false, true);
 				return nil;
 			end),
 			Iterator2 = wrapenumerable(function(this)
@@ -163,7 +160,7 @@ TopLevel.SecondLevel.Foo = {
 					return i;
 					end;
 				until true;
-				i = i + 1;
+				i = invokeintegeroperator(2, "+", i, 1, System.Int32, System.Int32);
 				end;
 				return -1;
 			end,
@@ -184,14 +181,6 @@ TopLevel.SecondLevel.Foo = {
 					return ;
 				end;
 			end,
-			__ctor = function(this)
-				if this.__ctor_called then
-					return;
-				else
-					this.__ctor_called = true;
-				end
-				TopLevel.SecondLevel.Foo.__install_TopLevel_SecondLevel_FooExtension(this);
-			end,
 		};
 
 		local instance_fields_build = function()
@@ -201,9 +190,8 @@ TopLevel.SecondLevel.Foo = {
 				m_Test = 0,
 				m_Test2 = 0,
 				m_TS = 0,
-				m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, "System.Collections.Generic.HashSet_T", "ctor", nil, {"one", "two", "three"}),
+				m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, "System.Collections.Generic.HashSet_T", "ctor", {"one", "two", "three"}),
 				__attributes = TopLevel__SecondLevel__Foo__Attrs,
-				__ctor_called = false,
 			};
 			return instance_fields;
 		end;

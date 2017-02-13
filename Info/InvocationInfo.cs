@@ -25,6 +25,7 @@ namespace RoslynTool.CsToLua
         internal List<ExpressionSyntax> ReturnArgs = new List<ExpressionSyntax>();
         internal List<ITypeSymbol> GenericTypeArgs = new List<ITypeSymbol>();
         internal bool ArrayToParams = false;
+        internal bool IsExtensionMethod = false;
         internal bool IsComponentGetOrAdd = false;
         internal bool IsBasicValueMethod = false;
         internal bool IsArrayStaticMethod = false;
@@ -194,7 +195,7 @@ namespace RoslynTool.CsToLua
         internal void OutputInvocation(StringBuilder codeBuilder, CsLuaTranslater cs2lua, ExpressionSyntax exp, bool isMemberAccess, SemanticModel model, SyntaxNode node)
         {
             IMethodSymbol sym = MethodSymbol;
-            string mname = cs2lua.NameMangling(sym);
+            string mname = cs2lua.NameMangling(IsExtensionMethod && null != sym.ReducedFrom ? sym.ReducedFrom : sym);
             string prestr = string.Empty;
             if (isMemberAccess) {
                 string fnOfIntf = "nil";
@@ -204,6 +205,13 @@ namespace RoslynTool.CsToLua
                     cs2lua.OutputExpressionSyntax(exp);
                     codeBuilder.Append(", ");
                     codeBuilder.AppendFormat("{0}, \"{1}\"", fnOfIntf, mname);
+                    prestr = ", ";
+                } else if (IsExtensionMethod) {
+                    codeBuilder.Append(ClassKey);
+                    codeBuilder.Append(".");
+                    codeBuilder.Append(mname);
+                    codeBuilder.Append("(");
+                    cs2lua.OutputExpressionSyntax(exp);
                     prestr = ", ";
                 } else if (IsBasicValueMethod) {
                     string ckey = CalcInvokeTarget(ClassKey, cs2lua, exp, model);
@@ -277,6 +285,7 @@ namespace RoslynTool.CsToLua
             
             ClassKey = ClassInfo.GetFullName(sym.ContainingType);
             GenericClassKey = ClassInfo.GetFullNameWithTypeParameters(sym.ContainingType);
+            IsExtensionMethod = sym.IsExtensionMethod && sym.ContainingAssembly == AssemblySymbol;
             IsBasicValueMethod = SymbolTable.IsBasicValueMethod(sym);
             IsArrayStaticMethod = ClassKey == "System.Array" && sym.IsStatic;
 

@@ -5,12 +5,6 @@ require "TopLevel__SecondLevel__Foo";
 
 TopLevel.SecondLevel.FooExtension = {
 	__define_class = function()
-		rawset(TopLevel.SecondLevel.Foo, "__install_TopLevel__SecondLevel__FooExtension", (function(obj)
-					rawset(obj, "Test3__TopLevel_SecondLevel_Foo", TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo);
-		end));
-		rawset(UnityEngine.GameObject, "__install_TopLevel__SecondLevel__FooExtension", (function(obj)
-					rawset(obj, "TestExtern", TopLevel.SecondLevel.FooExtension.TestExtern);
-		end));
 		local static = TopLevel.SecondLevel.FooExtension;
 
 		local static_methods = {
@@ -18,7 +12,7 @@ TopLevel.SecondLevel.FooExtension = {
 				if (obj.m_Test > 0) then
 					obj.m_Test2 = 678;
 				end;
-				local f; f = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", (function(obj) System.Collections.Generic.List_T.__install_Extentions(obj); end), {{1, 2}, {2, 3}});
+				local f; f = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", {{1, 2}, {2, 3}});
 			end,
 			Test3__TopLevel_SecondLevel_Foo__System_Int32 = function(__compiler_cs_this, ix)
 				__compiler_cs_this:Test123(123, 456);
@@ -38,10 +32,10 @@ TopLevel.SecondLevel.FooExtension = {
 				f = TopLevel.SecondLevel.Foo.op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo(f, ff);
 				local rr; rr = TopLevel.SecondLevel.Foo.op_Explicit(123);
 				local rrr; rrr = typeas(123, TopLevel.SecondLevel.Foo, false);
-				local obj; obj = newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", (function(obj) UnityEngine.GameObject.__install_TopLevel_SecondLevel_FooExtension(obj); end), {}, "test test test");
+				local obj; obj = newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", {}, "test test test");
 				local arr; arr = wraparray{1, 2, 3, 4, 56};
 				local v; v = arr[3];
-				local dict; dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", nil, {[tostring(1)] = 2, [tostring(3)] = 4});
+				local dict; dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {[tostring(1)] = 2, [tostring(3)] = 4});
 				local v1; v1 = condaccess(dict, (function() return getexterninstanceindexer(dict, nil, "get_Item", 1); end));
 				local list; list = nil;
 				local l; l = condaccess(list, (function() return list.Count; end));
@@ -54,7 +48,7 @@ TopLevel.SecondLevel.FooExtension = {
 				local b; b = 2;
 				local c; c = 3;
 				a = (function() b = c; return b; end)();
-				c = c + 1;
+				c = invokeintegeroperator(2, "+", c, 1, System.Int32, System.Int32);
 			end,
 			cctor = function()
 			end,

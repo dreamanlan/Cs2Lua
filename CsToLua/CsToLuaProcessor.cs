@@ -737,20 +737,7 @@ namespace RoslynTool.CsToLua
                 isEnumClass = csi.TypeSymbol.TypeKind == TypeKind.Enum;
             }
             bool myselfDefinedBaseClass = csi.TypeSymbol.BaseType.ContainingAssembly == symTable.AssemblySymbol;
-
-            //按目标类重新组织扩展代码
-            Dictionary<string, List<StringBuilder>> classExternsions = new Dictionary<string, List<StringBuilder>>();
-            foreach (var ci in classes) {
-                foreach (var pair in ci.ExtensionCodeBuilders) {
-                    List<StringBuilder> list;
-                    if (!classExternsions.TryGetValue(pair.Key, out list)) {
-                        list = new List<StringBuilder>();
-                        classExternsions.Add(pair.Key, list);
-                    }
-                    list.Add(pair.Value);
-                }
-            }
-
+            
             HashSet<string> requiredlibs = new HashSet<string>();
             HashSet<string> lualibs;
             if (symTable.Requires.TryGetValue(key, out lualibs)) {
@@ -868,18 +855,6 @@ namespace RoslynTool.CsToLua
                 sb.AppendFormat("{0}__define_class = function()", GetIndentString(indent));
                 sb.AppendLine();
                 ++indent;
-
-                foreach (var pair in classExternsions) {
-                    sb.AppendFormat("{0}rawset({1}, \"__install_{2}\", (function(obj)", GetIndentString(indent), pair.Key, fileName);
-                    sb.AppendLine();
-                    ++indent;
-                    foreach (var builder in pair.Value) {
-                        sb.AppendFormat(builder.ToString());
-                    }
-                    --indent;
-                    sb.AppendFormat("{0}end));", GetIndentString(indent));
-                    sb.AppendLine();
-                }
 
                 sb.AppendFormat("{0}local static = {1};", GetIndentString(indent), key);
                 sb.AppendLine();
@@ -1074,11 +1049,6 @@ namespace RoslynTool.CsToLua
                         --indent;
                         sb.AppendFormat("{0}end", GetIndentString(indent));
                         sb.AppendLine();
-                        foreach (var pair in csi.ExtensionClasses) {
-                            string refname = pair.Key;
-                            sb.AppendFormat("{0}{1}.__install_{2}(this);", GetIndentString(indent), key, refname.Replace(".", "_"));
-                            sb.AppendLine();
-                        }
                         //instance initializer
                         foreach (var ci in classes) {
                             sb.Append(ci.InstanceInitializerCodeBuilder.ToString());
