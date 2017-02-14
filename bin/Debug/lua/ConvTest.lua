@@ -68,15 +68,15 @@ ConvTest = {
 			TestConv2 = function(this, a, b, c)
 				local obj; obj = nil;
 				local arr; arr = wraparray{invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)};
-				local dict; dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", nil, {[tostring("1")] = invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), [tostring("2")] = invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)});
-				local list; list = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", nil, {invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)});
+				local dict; dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {[tostring("1")] = invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), [tostring("2")] = invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)});
+				local list; list = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", {invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)});
 				local tarr;
 				tarr = wraparray{invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)};
 				local tdict;
-				tdict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", nil, {[tostring("1")] = invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), [tostring("2")] = invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)});
+				tdict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {[tostring("1")] = invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), [tostring("2")] = invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)});
 				local tlist;
-				tlist = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", nil, {invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)});
-				local f; f = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", nil, {{obj, obj}, {obj, obj}});
+				tlist = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", {invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)});
+				local f; f = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", {{obj, obj}, {obj, obj}});
 				c = 1;
 				c = invokeintegeroperator(0, "/", c, 2, System.Int32, System.Int32);
 				c = invokeintegeroperator(0, "/", c, 2, System.Int32, System.Int32);
@@ -94,7 +94,7 @@ ConvTest = {
 				return myTestConv4(this, a, b, c);
 			end,
 			TestConv4 = function(this, v, v2)
-				local __compiler_expbody_88 = ((( (function() v2 = 1; return v2; end)() ) == 1) and invokeexternoperator(UnityEngine.Object, "op_Implicit", newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", nil, {}))); return __compiler_expbody_88, v2;
+				local __compiler_expbody_88 = ((( (function() v2 = 1; return v2; end)() ) == 1) and invokeexternoperator(UnityEngine.Object, "op_Implicit", newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", {}))); return __compiler_expbody_88, v2;
 			end,
 			ctor = function(this)
 			end,

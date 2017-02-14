@@ -42,6 +42,8 @@ print("array size", arr.Length);
 
 arr:Clear();
 
+print(arr:GetType().__class_name);
+
 local abc = "abcdef";
 local meta = getmetatable(abc);
 print(type(abc), meta);

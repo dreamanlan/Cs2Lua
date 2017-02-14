@@ -1,0 +1,4 @@
+============<<<Semantic Error:test_delegate>>>============
+test_delegate.cs(13,48): error CS0236: A field initializer cannot reference the non-static field, method, or property 'ConvTest.OnHandleValue'
+test_delegate.cs(70,53): error CS1501: No overload for method 'Add' takes 2 arguments
+test_delegate.cs(70,67): error CS1501: No overload for method 'Add' takes 2 arguments
