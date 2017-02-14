@@ -720,7 +720,11 @@ namespace RoslynTool.CsToLua
                                 opd = inits[i] as IConversionExpression;
                             }
                         }
-                        OutputExpressionSyntax(exp, opd);
+                        if (!isArray && args[i] is AssignmentExpressionSyntax) {
+                            VisitToplevelExpressionFirstPass(args[i], string.Empty);
+                        } else {
+                            OutputExpressionSyntax(exp, opd);
+                        }
                         if (i < ct - 1) {
                             CodeBuilder.Append(", ");
                         }
