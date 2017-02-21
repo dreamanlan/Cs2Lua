@@ -27,7 +27,7 @@ TopLevel.TestRunnable = {
 			Test = function(this)
 				local f; f = newobject(TopLevel.Runnable, "ctor", {});
 				invokewithinterface(f, "TopLevel_IRunnable0", "Test");
-				local i; i = getinstanceindexer(f, nil, "get_Item", 0);
+				local i; i = getinstanceindexer(f, nil, "get_Item", 4);
 				setinstanceindexer(f, nil, "set_Item", 0, i);
 				setwithinterface(f, "TopLevel_IRunnable_System_Int32", "TestProp", i);
 				i = getwithinterface(f, ""TopLevel_IRunnable_System_Int32"", ""TestProp"");
@@ -35,7 +35,7 @@ TopLevel.TestRunnable = {
 				local pow2; pow2 = delegationwrap((function(v1, v2) return invokeintegeroperator(4, "*", v1, v2, System.Int32, System.Int32); end));
 				local a; a = delegationwrap((function()
 					i = invokeintegeroperator(4, "*", i, i, System.Int32, System.Int32);
-					LuaConsole.Print(i);
+					LuaConsole.Print(invokeintegeroperator(4, "*", i, 4, System.Int32, System.Int32));
 				end));
 				delegationadd(f, "TopLevel_IRunnable_System_Int32", "OnAction", a);
 				delegationremove(f, "TopLevel_IRunnable_System_Int32", "OnAction", a);

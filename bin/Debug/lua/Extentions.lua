@@ -19,6 +19,7 @@ Extentions = {
 --Debug.LogError("Ticks = 0");
 					Extentions.dateTime1970 = System.DateTime.Parse("1970-1-1");
 				end;
+				local v; v = 4;
 				local ts; ts = (dateTime - Extentions.dateTime1970);
 				return typecast(ts.TotalMilliseconds, System.Int64, false);
 			end,

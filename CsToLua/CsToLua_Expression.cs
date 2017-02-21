@@ -271,6 +271,15 @@ namespace RoslynTool.CsToLua
                 }
             }
         }
+        public override void VisitSizeOfExpression(SizeOfExpressionSyntax node)
+        {
+            var oper = m_Model.GetOperation(node) as ISizeOfExpression;
+            if (oper.ConstantValue.HasValue) {
+                OutputConstValue(oper.ConstantValue.Value, oper);
+            } else {
+                ReportIllegalType(oper.Type);
+            }
+        }
         public override void VisitTypeOfExpression(TypeOfExpressionSyntax node)
         {
             var ci = m_ClassInfoStack.Peek();

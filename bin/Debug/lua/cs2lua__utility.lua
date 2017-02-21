@@ -869,7 +869,6 @@ function wrapexternvaluetypearray(arr)
 end;
 
 function defineclass(base, className, static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, is_value_type)
-    
     local base_class = base;
     local mt = getmetatable(base_class);
 
@@ -891,9 +890,29 @@ function defineclass(base, className, static, static_methods, static_fields_buil
     class["__interfaces"] = interfaces;
     class["__interface_map"] = interface_map;
     class["__base_class"] = base_class;
-                
-    function __find_class_key(k)
+        
+    local function __find_base_class_key(k)
+      if base_class then
+      	if rawget(base_class, "__cs2lua_defined") then
+      		local r,v = pcall(function() return base_class.__exist(k); end);
+      		if r then
+      		  return v;
+      		end;
+      	else
+        	local r,ret = pcall(function() return base_class[k]; end);
+        	if r then
+        		return true;
+        	end;
+      	end;
+      end;
+      return false;
+    end;        
+    local function __find_class_key(k)
       local ret;
+      ret = rawget(class, k);
+      if nil~=ret then
+        return true;
+      end;
       ret = class_fields[k];
       if nil~=ret then
       	return true;
@@ -902,21 +921,11 @@ function defineclass(base, className, static, static_methods, static_fields_buil
       if nil~=ret then
         return true;
       end;
-      if base_class then
-      	if rawget(base_class, "__cs2lua_defined") then
-      		local r,v = pcall(function() return base_class.__exist(k); end);
-      		if r then
-      		  return v;
-      		end;
-      	else
-        	local r;
-        	r, ret = pcall(function() return base_class[k]; end);
-        	if r then
-        		return true;
-        	end;
-      	end;
+      ret = class_events[k];
+      if nil~=ret then
+        return true;
       end;
-      return false;
+      return __find_base_class_key(k);
     end;
     
     setmetatable(class, {
@@ -942,27 +951,7 @@ function defineclass(base, className, static, static_methods, static_fields_buil
             local obj_intf_map = interface_map or {};
             obj["base"] = baseObj;
             
-            function __find_obj_key(k)
-              local ret;
-	            ret = obj_fields[k];
-	            if nil~=ret then
-	            	return true;
-	            end;
-              ret = obj_props[k];
-              if nil~=ret then
-                return true;
-              end;
-              ret = obj_intf_map[k];
-              if nil~=ret then
-                ret = obj_fields[ret];
-                if nil~=ret then
-                  return true;
-                end;
-                ret = obj_props[ret];
-                if nil~=ret then
-                  return true;
-                end;
-              end;
+            local function __find_base_obj_key(k)
               if baseObj then
               	local meta = getmetatable(baseObj);
               	if meta and rawget(meta, "__cs2lua_defined") then
@@ -971,14 +960,48 @@ function defineclass(base, className, static, static_methods, static_fields_buil
               		  return v;
               		end;
               	else
-                	local r;
-                	r, ret = pcall(function() return baseObj[k]; end);
+                	local r, ret = pcall(function() return baseObj[k]; end);
                 	if r then
                 		return true;
                 	end;
               	end;
               end;
               return false;
+            end;
+            local function __find_obj_key(k)
+              local ret;
+              ret = rawget(obj, k);
+              if nil~=ret then
+                return true;
+              end;
+	            ret = obj_fields[k];
+	            if nil~=ret then
+	            	return true;
+	            end;
+              ret = obj_props[k];
+              if nil~=ret then
+                return true;
+              end;
+              ret = obj_events[k];
+              if nil~=ret then
+                return true;
+              end;
+              local nk = obj_intf_map[k];
+              if nil~=nk then
+                ret = obj_fields[nk];
+                if nil~=ret then
+                  return true;
+                end;
+                ret = obj_props[nk];
+                if nil~=ret then
+                  return true;
+                end;
+                ret = obj_events[nk];
+                if nil~=ret then
+                  return true;
+                end;
+              end;
+              return __find_base_obj_key(k);
             end;
             
             setmetatable(obj, {
@@ -1023,7 +1046,7 @@ function defineclass(base, className, static, static_methods, static_fields_buil
                         return ret;
                       end;
                     end;
-                    if baseObj and baseObj:__exist(k) then
+                    if __find_base_obj_key(k) then
                       ret = baseObj[k];
                       return ret;
                     end;
@@ -1058,7 +1081,7 @@ function defineclass(base, className, static, static_methods, static_fields_buil
                         return;
                       end;
                     end;
-          					if baseObj and baseObj:__exist(k) then
+          					if __find_base_obj_key(k) then
           					  baseObj[k] = v;
           					  return;
           					end;
@@ -1091,7 +1114,7 @@ function defineclass(base, className, static, static_methods, static_fields_buil
               end;
               return ret;
             end;
-            if base_class and base_class.__exist(k) then
+            if __find_base_class_key(k) then
           		ret = base_class[k];
           		return ret;
             end;
@@ -1118,7 +1141,7 @@ function defineclass(base, className, static, static_methods, static_fields_buil
               end;
               return;
             end;
-  					if base_class and base_class.__exist(k) then
+  					if __find_base_class_key(k) then
   					  base_class[k] = v;
   					  return;
   					end;

@@ -111,7 +111,7 @@ namespace TopLevel
         Invalid = int.MinValue,
         One = 1,
         Two,
-        Three,
+        Three = sizeof(int),
         Four = (int)4.0*9.5,
     }
 
@@ -174,13 +174,13 @@ namespace TopLevel
         {
             IRunnable<int> f = new Runnable();
             f.Test();
-            int i = f[0];
+            int i = f[sizeof(int)];
             f[0]=i;
             f.TestProp = i;
             i = f.TestProp;
             Func<int, int> pow = v=>v*v;
             Func<int, int, int> pow2 = (v1,v2)=>v1*v2;
-            Action a = ()=>{i=i*i;LuaConsole.Print(i);};
+            Action a = ()=>{i=i*i;LuaConsole.Print(i*sizeof(int));};
             f.OnAction+=a;
             f.OnAction-=a;
             float t = float.NegativeInfinity;
@@ -262,7 +262,7 @@ namespace TopLevel
             public GenericClass(ref int v, out int v2)
             {
                 T obj = new T();
-                m_Test = v + 456;
+                m_Test = v + sizeof(int);
                 v2 = 123;
             }
             public void Test<G>()
@@ -519,7 +519,9 @@ namespace TopLevel
 
                 var obj = new GameObject("test test test");
 
-                var arr = new int[] {1,2,3,4,56};
+                Test3(f, sizeof(double));
+
+                var arr = new int[] {1,2,3,4,sizeof(int)};
                 var v = arr[2];
                 var dict = new Dictionary<int,int> {{1,2},{3,4}};
                 var v1 = dict?[1];
@@ -560,6 +562,8 @@ public static class Extentions
 			//Debug.LogError("Ticks = 0");
 			dateTime1970 = DateTime.Parse("1970-1-1");
 		}
+
+        int v = sizeof(int);
 
 		TimeSpan ts = dateTime - dateTime1970;
 		return(long)ts.TotalMilliseconds;

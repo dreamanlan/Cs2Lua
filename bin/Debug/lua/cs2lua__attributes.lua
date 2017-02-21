@@ -1,5 +1,5 @@
-ConvTest__Attrs = {
-	TestConv3 = {
-		{"Cs2Lua.TranslateToAttribute", {luaModuleName = "MyImpl", targetMethodName = "myTestConv4"}, {}},
+TopLevel__SecondLevel__Foo__Attrs = {
+	Class = {
+		{"Cs2Lua.EnableInheritAttribute", {}, {}},
 	},
 };

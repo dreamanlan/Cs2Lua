@@ -33,7 +33,8 @@ TopLevel.SecondLevel.FooExtension = {
 				local rr; rr = TopLevel.SecondLevel.Foo.op_Explicit(123);
 				local rrr; rrr = typeas(123, TopLevel.SecondLevel.Foo, false);
 				local obj; obj = newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", {}, "test test test");
-				local arr; arr = wraparray{1, 2, 3, 4, 56};
+				TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo__System_Int32(f, 8);
+				local arr; arr = wraparray{1, 2, 3, 4, 4};
 				local v; v = arr[3];
 				local dict; dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {[tostring(1)] = 2, [tostring(3)] = 4});
 				local v1; v1 = condaccess(dict, (function() return getexterninstanceindexer(dict, nil, "get_Item", 1); end));

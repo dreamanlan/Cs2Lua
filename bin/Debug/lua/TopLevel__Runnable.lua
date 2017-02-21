@@ -38,7 +38,7 @@ TopLevel.Runnable = {
 			set_Item = function(this, ix, value)
 			end,
 			Test2 = function(this)
-				local s; s = invokeforbasicvalue(3, true, TopLevel.TestEnum, "ToString");
+				local s; s = invokeforbasicvalue(4, true, TopLevel.TestEnum, "ToString");
 				local e; e = 1;
 				System.Enum.Parse(TopLevel.TestEnum, "Two");
 				local ss; ss = invokeforbasicvalue(1, true, System.PlatformID, "ToString");
