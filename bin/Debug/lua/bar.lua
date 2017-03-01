@@ -12,11 +12,22 @@ bar = {
 
 		local static_methods = {
 			cctor = function()
+				bar.__cctor();
+			end,
+			__cctor = function()
+				if bar.__cctor_called then
+					return;
+				else
+					bar.__cctor_called = true;
+				end
+				bar.s_DateTime = newexternobject(System.DateTime, "System.DateTime", nil, {});
 			end,
 		};
 
 		local static_fields_build = function()
 			local static_fields = {
+				s_DateTime = __cs2lua_nil_field_value,
+				__cctor_called = false,
 			};
 			return static_fields;
 		end;
@@ -27,13 +38,28 @@ bar = {
 			test = function(this)
 				local a; a = newobject(foo_System_Int32_System_Int32, "ctor", {});
 				a:parse("123", "456");
+				local b; b = this.m_DateTime:ToString();
+				local c; c = bar.s_DateTime:ToString();
+				local dt;
+				local dt2;
 			end,
 			ctor = function(this)
+				this:__ctor();
+			end,
+			__ctor = function(this)
+				if this.__ctor_called then
+					return;
+				else
+					this.__ctor_called = true;
+				end
+				this.m_DateTime = newexternobject(System.DateTime, "System.DateTime", nil, {});
 			end,
 		};
 
 		local instance_fields_build = function()
 			local instance_fields = {
+				m_DateTime = __cs2lua_nil_field_value,
+				__ctor_called = false,
 			};
 			return instance_fields;
 		end;

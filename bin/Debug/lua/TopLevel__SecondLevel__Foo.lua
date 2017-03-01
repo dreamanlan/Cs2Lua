@@ -166,10 +166,10 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			TestSwitch = function(this)
 				local i; i = 10;
-				local __compiler_switch_459 = i;
-				if (__compiler_switch_459 == 1) or (__compiler_switch_459 == 3) then
+				local __compiler_switch_465 = i;
+				if (__compiler_switch_465 == 1) or (__compiler_switch_465 == 3) then
 					return ;
-				elseif __compiler_switch_459 == 2 then
+				elseif __compiler_switch_465 == 2 then
 					return ;
 				else
 					return ;
@@ -181,6 +181,14 @@ TopLevel.SecondLevel.Foo = {
 					return ;
 				end;
 			end,
+			__ctor = function(this)
+				if this.__ctor_called then
+					return;
+				else
+					this.__ctor_called = true;
+				end
+				this.m_TS = new TopLevel.TestStruct();
+			end,
 		};
 
 		local instance_fields_build = function()
@@ -189,9 +197,10 @@ TopLevel.SecondLevel.Foo = {
 				OnSimple2 = wrapdelegation{},
 				m_Test = 0,
 				m_Test2 = 0,
-				m_TS = 0,
+				m_TS = __cs2lua_nil_field_value,
 				m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, "System.Collections.Generic.HashSet_T", "ctor", {"one", "two", "three"}),
 				__attributes = TopLevel__SecondLevel__Foo__Attrs,
+				__ctor_called = false,
 			};
 			return instance_fields;
 		end;

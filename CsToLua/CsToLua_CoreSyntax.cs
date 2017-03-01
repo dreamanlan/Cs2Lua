@@ -354,15 +354,17 @@ namespace RoslynTool.CsToLua
                             bool createSelf = m_SymbolTable.IsFieldCreateSelf(fieldSym);
                             if (useExplicitTypeParam || createSelf) {
                                 CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
-                                if (fieldSym.Type.IsValueType) {
+                                if (fieldSym.Type.IsValueType && SymbolTable.IsBasicType(fieldSym.Type)) {
                                     CodeBuilder.AppendLine(" = 0,");
                                 } else {
                                     CodeBuilder.AppendLine(" = __cs2lua_nil_field_value,");
                                 }
                                 if (isStatic) {
                                     ci.CurrentCodeBuilder = ci.StaticInitializerCodeBuilder;
+                                    ci.ClassSemanticInfo.GenerateBasicCctor = true;
                                 } else {
                                     ci.CurrentCodeBuilder = ci.InstanceInitializerCodeBuilder;
+                                    ci.ClassSemanticInfo.GenerateBasicCtor = true;
                                 }
                                 CodeBuilder.AppendFormat("{0}{1}.{2}", GetIndentString(), isStatic ? ci.Key : "this", name);
                                 CodeBuilder.AppendFormat(" = {0}", fieldSym.Type.TypeKind == TypeKind.Delegate ? "delegationwrap(" : string.Empty);
@@ -394,7 +396,31 @@ namespace RoslynTool.CsToLua
                             if (null != constVal.Value) {
                                 OutputConstValue(constVal.Value, expOper);
                             } else if (fieldSym.Type.IsValueType) {
-                                CodeBuilder.Append("0");
+                                if (SymbolTable.IsBasicType(fieldSym.Type)) {
+                                    CodeBuilder.Append("0");
+                                } else {
+                                    CodeBuilder.Append("__cs2lua_nil_field_value");
+                                }
+                                if (isStatic) {
+                                    ci.CurrentCodeBuilder = ci.StaticInitializerCodeBuilder;
+                                    ci.ClassSemanticInfo.GenerateBasicCctor = true;
+                                } else {
+                                    ci.CurrentCodeBuilder = ci.InstanceInitializerCodeBuilder;
+                                    ci.ClassSemanticInfo.GenerateBasicCtor = true;
+                                }
+                                CodeBuilder.AppendFormat("{0}{1}.{2}", GetIndentString(), isStatic ? ci.Key : "this", name);
+                                string fullTypeName = ClassInfo.GetFullName(fieldSym.Type);
+                                if (fieldSym.Type.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
+                                    CodeBuilder.AppendFormat(" = new {0}();", fullTypeName);
+                                } else {
+                                    CodeBuilder.AppendFormat(" = newexternobject({0}, \"{0}\", nil, {{}});", fullTypeName);
+                                }
+                                CodeBuilder.AppendLine();
+                                if (isStatic) {
+                                    ci.CurrentCodeBuilder = ci.StaticFieldCodeBuilder;
+                                } else {
+                                    ci.CurrentCodeBuilder = ci.InstanceFieldCodeBuilder;
+                                }
                             } else {
                                 CodeBuilder.Append("__cs2lua_nil_field_value");
                             }
@@ -403,7 +429,31 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
                         CodeBuilder.Append(" = wrapdelegation{}");
                     } else if (fieldSym.Type.IsValueType) {
-                        CodeBuilder.AppendFormat("{0}{1} = 0", GetIndentString(), name);
+                        if (SymbolTable.IsBasicType(fieldSym.Type)) {
+                            CodeBuilder.AppendFormat("{0}{1} = 0", GetIndentString(), name);
+                        } else {
+                            CodeBuilder.AppendFormat("{0}{1} = __cs2lua_nil_field_value", GetIndentString(), name);
+                            if (isStatic) {
+                                ci.CurrentCodeBuilder = ci.StaticInitializerCodeBuilder;
+                                ci.ClassSemanticInfo.GenerateBasicCctor = true;
+                            } else {
+                                ci.CurrentCodeBuilder = ci.InstanceInitializerCodeBuilder;
+                                ci.ClassSemanticInfo.GenerateBasicCtor = true;
+                            }
+                            CodeBuilder.AppendFormat("{0}{1}.{2}", GetIndentString(), isStatic ? ci.Key : "this", name);
+                            string fullTypeName = ClassInfo.GetFullName(fieldSym.Type);
+                            if (fieldSym.Type.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
+                                CodeBuilder.AppendFormat(" = new {0}();", fullTypeName);
+                            } else {
+                                CodeBuilder.AppendFormat(" = newexternobject({0}, \"{0}\", nil, {{}});", fullTypeName);
+                            }
+                            CodeBuilder.AppendLine();
+                            if (isStatic) {
+                                ci.CurrentCodeBuilder = ci.StaticFieldCodeBuilder;
+                            } else {
+                                ci.CurrentCodeBuilder = ci.InstanceFieldCodeBuilder;
+                            }
+                        }
                     } else {
                         CodeBuilder.AppendFormat("{0}{1} = __cs2lua_nil_field_value", GetIndentString(), name);
                     }
@@ -629,7 +679,6 @@ namespace RoslynTool.CsToLua
                 if (null != declSym && declSym.Type.TypeKind == TypeKind.Delegate) {
                     isDelegate = true;
                 }
-
                 var oper = m_Model.GetOperation(node.Initializer) as IVariableDeclarationStatement;
                 IConversionExpression opd = null;
                 if (null != oper && oper.Variables.Length == 1) {

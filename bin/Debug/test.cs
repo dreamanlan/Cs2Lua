@@ -56,7 +56,13 @@ public class bar
     {
         foo<int, int> a = new foo<int, int>();
         a.parse("123", "456");
+        string b = m_DateTime.ToString();
+        string c = s_DateTime.ToString();
+        DateTime dt,dt2;
     }
+
+    private DateTime m_DateTime;
+    private static DateTime s_DateTime;
 }
 
 namespace UIDemo

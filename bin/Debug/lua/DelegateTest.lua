@@ -74,7 +74,7 @@ DelegateTest = {
 				end;
 				while invokeexternoperator(UnityEngine.Object, "op_Implicit", obj) do
 				end;
-				local ct; ct = newobject(ConvTest, "ctor", {(function() m_Val = DelegateTest.op_Implicit__DelegateTest(newobject(DelegateTest, "ctor", {})); return m_Val; end)()});
+				local ct; ct = newobject(ConvTest, "ctor", {m_Val = DelegateTest.op_Implicit__DelegateTest(newobject(DelegateTest, "ctor", {}))});
 				return invokeexternoperator(UnityEngine.Object, "op_Implicit", obj);
 			end,
 			Test2 = function(this, v1, v2)

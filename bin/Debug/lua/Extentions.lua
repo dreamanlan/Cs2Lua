@@ -83,12 +83,22 @@ Extentions = {
 				list:Insert(index, item);
 			end,
 			cctor = function()
+				Extentions.__cctor();
+			end,
+			__cctor = function()
+				if Extentions.__cctor_called then
+					return;
+				else
+					Extentions.__cctor_called = true;
+				end
+				Extentions.dateTime1970 = newexternobject(System.DateTime, "System.DateTime", nil, {});
 			end,
 		};
 
 		local static_fields_build = function()
 			local static_fields = {
-				dateTime1970 = 0,
+				dateTime1970 = __cs2lua_nil_field_value,
+				__cctor_called = false,
 			};
 			return static_fields;
 		end;
