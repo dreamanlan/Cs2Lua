@@ -218,7 +218,7 @@ namespace RoslynTool.CsToLua
                     codeBuilder.Append("invokeforbasicvalue(");
                     cs2lua.OutputExpressionSyntax(exp);
                     codeBuilder.Append(", ");
-                    codeBuilder.AppendFormat("{0}, {1}, \"{2}\"", ClassKey == "System.Enum" ? "true" : "false", ckey, mname);
+                    codeBuilder.AppendFormat("{0}, {1}, \"{2}\"", ClassKey == SymbolTable.PrefixExternClassName("System.Enum") ? "true" : "false", ckey, mname);
                     prestr = ", ";
                 } else if (IsArrayStaticMethod) {
                     codeBuilder.Append("invokearraystaticmethod(");
@@ -287,9 +287,9 @@ namespace RoslynTool.CsToLua
             GenericClassKey = ClassInfo.GetFullNameWithTypeParameters(sym.ContainingType);
             IsExtensionMethod = sym.IsExtensionMethod && sym.ContainingAssembly == AssemblySymbol;
             IsBasicValueMethod = SymbolTable.IsBasicValueMethod(sym);
-            IsArrayStaticMethod = ClassKey == "System.Array" && sym.IsStatic;
+            IsArrayStaticMethod = ClassKey == SymbolTable.PrefixExternClassName("System.Array") && sym.IsStatic;
 
-            if ((ClassKey == "UnityEngine.GameObject" || ClassKey == "UnityEngine.Component") && (sym.Name.StartsWith("GetComponent") || sym.Name.StartsWith("AddComponent"))) {
+            if ((ClassKey == SymbolTable.PrefixExternClassName("UnityEngine.GameObject") || ClassKey == SymbolTable.PrefixExternClassName("UnityEngine.Component")) && (sym.Name.StartsWith("GetComponent") || sym.Name.StartsWith("AddComponent"))) {
                 IsComponentGetOrAdd = true;
             }
 
@@ -313,7 +313,7 @@ namespace RoslynTool.CsToLua
 
         internal static void TryAddExternEnum(string classKey, ExpressionSyntax exp, SemanticModel model)
         {
-            if (classKey == "System.Enum") {
+            if (classKey == SymbolTable.PrefixExternClassName("System.Enum")) {
                 var oper = model.GetOperation(exp);
                 if (oper.Type.ContainingAssembly != SymbolTable.Instance.AssemblySymbol && oper.Type.TypeKind == TypeKind.Enum) {
                     string ckey = ClassInfo.GetFullName(oper.Type);
@@ -332,7 +332,7 @@ namespace RoslynTool.CsToLua
         {
             TryAddExternEnum(classKey, exp, model);
             string ckey = classKey;
-            if (classKey == "System.Enum") {
+            if (classKey == SymbolTable.PrefixExternClassName("System.Enum")) {
                 var oper = model.GetOperation(exp);
                 if (oper.Type.TypeKind == TypeKind.Enum) {
                     var ci = cs2lua.GetCurClassInfo();

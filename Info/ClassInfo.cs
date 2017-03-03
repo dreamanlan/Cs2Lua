@@ -69,7 +69,7 @@ namespace RoslynTool.CsToLua
                         
             Key = GetFullName(sym);
             BaseKey = GetFullName(sym.BaseType);
-            if (BaseKey == "System.Object" || BaseKey == "System.ValueType") {
+            if (BaseKey == SymbolTable.PrefixExternClassName("System.Object") || BaseKey == SymbolTable.PrefixExternClassName("System.ValueType")) {
                 BaseKey = string.Empty;
             }
 
@@ -245,7 +245,7 @@ namespace RoslynTool.CsToLua
                 return CalcFullName(type, true);
             } else {
                 //外部类型不会基于泛型样式导入，只有使用lua实现的集合类会出现这种情况，这里需要用泛型类型名以与utility.lua里的名称一致
-                return CalcFullNameWithTypeParameters(type, true);
+                return SymbolTable.PrefixExternClassName(CalcFullNameWithTypeParameters(type, true));
             }
         }
         internal static string GetNamespaces(ISymbol type)
@@ -262,7 +262,11 @@ namespace RoslynTool.CsToLua
         {
             if (null == type)
                 return string.Empty;
-            return CalcFullNameWithTypeParameters(type, true);
+            if (type.ContainingAssembly == SymbolTable.Instance.AssemblySymbol) {
+                return CalcFullNameWithTypeParameters(type, true);
+            } else {
+                return SymbolTable.PrefixExternClassName(CalcFullNameWithTypeParameters(type, true));
+            }
         }
         internal static string GetNamespacesWithTypeParameters(ISymbol type)
         {

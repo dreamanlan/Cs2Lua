@@ -296,7 +296,11 @@ namespace RoslynTool.CsToLua
                 var opd = opds.Length > i ? opds[i] : null;
                 //表达式对象为空表明这个是一个out实参，替换为__cs2lua_out
                 if (null == exp) {
-                    CodeBuilder.Append("__cs2lua_out");
+                    if (SymbolTable.ForXlua) {
+                        //xlua直接忽略out参数，仅作返回值
+                    } else {
+                        CodeBuilder.Append("__cs2lua_out");
+                    }
                 } else if (i < ct - 1) {
                     OutputExpressionSyntax(exp, opd);
                 } else {
@@ -424,7 +428,7 @@ namespace RoslynTool.CsToLua
                     }
                 } else if (type.TypeKind == TypeKind.Array) {
                     var arrType = type as IArrayTypeSymbol;
-                    CodeBuilder.Append("System.Array");
+                    CodeBuilder.Append(SymbolTable.PrefixExternClassName("System.Array"));
                 } else {
                     var fullName = ClassInfo.GetFullName(type);
                     CodeBuilder.Append(fullName);
@@ -552,20 +556,20 @@ namespace RoslynTool.CsToLua
             string rightNamespace = ClassInfo.GetNamespaces(rightOper.Type);
             string leftTypeFullName = ClassInfo.GetFullName(leftOper.Type);
             string rightTypeFullName = ClassInfo.GetFullName(rightOper.Type);
-            if (leftTypeFullName == "System.String" && rightTypeFullName == "System.String") {
-                CodeBuilder.Append("System.String.Concat(");
+            if (leftTypeFullName == SymbolTable.PrefixExternClassName("System.String") && rightTypeFullName == SymbolTable.PrefixExternClassName("System.String")) {
+                CodeBuilder.Append(SymbolTable.PrefixExternClassName("System.String.Concat("));
                 OutputExpressionSyntax(left, lopd);
                 CodeBuilder.Append(", ");
                 OutputExpressionSyntax(right, ropd);
                 CodeBuilder.Append(")");
-            } else if (leftTypeFullName == "System.String") {
-                CodeBuilder.Append("System.String.Concat(");
+            } else if (leftTypeFullName == SymbolTable.PrefixExternClassName("System.String")) {
+                CodeBuilder.Append(SymbolTable.PrefixExternClassName("System.String.Concat("));
                 OutputExpressionSyntax(left, lopd);
                 CodeBuilder.Append(", tostring(");
                 OutputExpressionSyntax(right, ropd);
                 CodeBuilder.Append("))");
-            } else if (rightTypeFullName == "System.String") {
-                CodeBuilder.Append("System.String.Concat(tostring(");
+            } else if (rightTypeFullName == SymbolTable.PrefixExternClassName("System.String")) {
+                CodeBuilder.Append(SymbolTable.PrefixExternClassName("System.String.Concat(tostring("));
                 OutputExpressionSyntax(left, lopd);
                 CodeBuilder.Append("), ");
                 OutputExpressionSyntax(right, ropd);
@@ -585,11 +589,13 @@ namespace RoslynTool.CsToLua
             if (null != leftOper.Type && leftOper.Type.TypeKind == TypeKind.Delegate && (!leftOper.ConstantValue.HasValue || null != leftOper.ConstantValue.Value) && rightOper.ConstantValue.HasValue && rightOper.ConstantValue.Value == null) {
                 var leftAssembly = leftOper.Type.ContainingAssembly;
                 var sym = m_Model.GetSymbolInfo(left);
-                OutputDelegationCompareWithNull(sym.Symbol, left, leftAssembly == m_SymbolTable.AssemblySymbol, op == "==", lopd);
+                bool isEvent = (null != leftOper && leftOper is IEventReferenceExpression) || (null != rightOper && rightOper is IEventReferenceExpression);
+                OutputDelegationCompareWithNull(sym.Symbol, left, leftAssembly == m_SymbolTable.AssemblySymbol, isEvent, op == "==", lopd);
             } else if (null != rightOper.Type && rightOper.Type.TypeKind == TypeKind.Delegate && (!rightOper.ConstantValue.HasValue || null != rightOper.ConstantValue.Value) && leftOper.ConstantValue.HasValue && leftOper.ConstantValue.Value == null) {
                 var rightAssembly = rightOper.Type.ContainingAssembly;
                 var sym = m_Model.GetSymbolInfo(right);
-                OutputDelegationCompareWithNull(sym.Symbol, right, rightAssembly == m_SymbolTable.AssemblySymbol, op == "==", ropd);
+                bool isEvent = (null != leftOper && leftOper is IEventReferenceExpression) || (null != rightOper && rightOper is IEventReferenceExpression);
+                OutputDelegationCompareWithNull(sym.Symbol, right, rightAssembly == m_SymbolTable.AssemblySymbol, isEvent, op == "==", ropd);
             } else if (null != leftOper && null != rightOper && (leftOper.ConstantValue.HasValue && null == leftOper.ConstantValue.Value || rightOper.ConstantValue.HasValue && null == rightOper.ConstantValue.Value || SymbolTable.IsBasicType(leftOper.Type) || SymbolTable.IsBasicType(rightOper.Type))) {
                 CodeBuilder.Append("(");
                 OutputExpressionSyntax(left, lopd);
@@ -612,10 +618,10 @@ namespace RoslynTool.CsToLua
                 }
             }
         }
-        private void OutputDelegationCompareWithNull(ISymbol leftSym, ExpressionSyntax left, bool isCs2LuaAssembly, bool isEqual, IConversionExpression opd)
+        private void OutputDelegationCompareWithNull(ISymbol leftSym, ExpressionSyntax left, bool isCs2LuaAssembly, bool isEvent, bool isEqual, IConversionExpression opd)
         {
             var ci = m_ClassInfoStack.Peek();
-            CodeBuilder.AppendFormat("{0}delegationcomparewithnil(", isCs2LuaAssembly ? string.Empty : "extern");
+            CodeBuilder.AppendFormat("{0}delegationcomparewithnil({1}, ", isCs2LuaAssembly ? string.Empty : "extern", isEvent ? "true" : "false");
             if (null != leftSym && (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event)) {
                 var memberAccess = left as MemberAccessExpressionSyntax;
                 if (null != memberAccess) {

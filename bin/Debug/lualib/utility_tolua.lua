@@ -10,33 +10,32 @@ function __basic_type_func(v)
 	return v;
 end;
 
-CS = CS or {};
-CS.System = CS.System or {};
-CS.System.Boolean = CS.System.Boolean or __basic_type_func;
-CS.System.SByte = CS.System.SByte or __basic_type_func;
-CS.System.Byte = CS.System.Byte or __basic_type_func;
-CS.System.Char = CS.System.Char or __basic_type_func;
-CS.System.Int16 = CS.System.Int16 or __basic_type_func;
-CS.System.Int32 = CS.System.Int32 or __basic_type_func;
-CS.System.Int64 = CS.System.Int64 or __basic_type_func;
-CS.System.UInt16 = CS.System.UInt16 or __basic_type_func;
-CS.System.UInt32 = CS.System.UInt32 or __basic_type_func;
-CS.System.UInt64 = CS.System.UInt64 or __basic_type_func;
-CS.System.Single = CS.System.Single or __basic_type_func;
-CS.System.Double = CS.System.Double or __basic_type_func;
-CS.System.String = CS.System.String or __basic_type_func;
-CS.System.Collections = CS.System.Collections or {};
-CS.System.Collections.Generic = CS.System.Collections.Generic or {};
-CS.System.Collections.Generic.List_T = {__cs2lua_defined = true, __class_name = "CS.System.Collections.Generic.List_T", __exist = function(k) return false; end};
-CS.System.Collections.Generic.Queue_T = {__cs2lua_defined = true, __class_name = "CS.System.Collections.Generic.Queue_T", __exist = function(k) return false; end};
-CS.System.Collections.Generic.Stack_T = {__cs2lua_defined = true, __class_name = "CS.System.Collections.Generic.Stack_T", __exist = function(k) return false; end};
-CS.System.Collections.Generic.Dictionary_TKey_TValue = {__cs2lua_defined = true, __class_name = "CS.System.Collections.Generic.Dictionary_TKey_TValue", __exist = function(k) return false; end};
-CS.System.Collections.Generic.HashSet_T = {__cs2lua_defined = true, __class_name = "CS.System.Collections.Generic.HashSet_T", __exist = function(k) return false; end};
-CS.System.Array = CS.System.Array or {};
+System = System or {};
+System.Boolean = System.Boolean or __basic_type_func;
+System.SByte = System.SByte or __basic_type_func;
+System.Byte = System.Byte or __basic_type_func;
+System.Char = System.Char or __basic_type_func;
+System.Int16 = System.Int16 or __basic_type_func;
+System.Int32 = System.Int32 or __basic_type_func;
+System.Int64 = System.Int64 or __basic_type_func;
+System.UInt16 = System.UInt16 or __basic_type_func;
+System.UInt32 = System.UInt32 or __basic_type_func;
+System.UInt64 = System.UInt64 or __basic_type_func;
+System.Single = System.Single or __basic_type_func;
+System.Double = System.Double or __basic_type_func;
+System.String = System.String or __basic_type_func;
+System.Collections = System.Collections or {};
+System.Collections.Generic = System.Collections.Generic or {};
+System.Collections.Generic.List_T = {__cs2lua_defined = true, __class_name = "System.Collections.Generic.List_T", __exist = function(k) return false; end};
+System.Collections.Generic.Queue_T = {__cs2lua_defined = true, __class_name = "System.Collections.Generic.Queue_T", __exist = function(k) return false; end};
+System.Collections.Generic.Stack_T = {__cs2lua_defined = true, __class_name = "System.Collections.Generic.Stack_T", __exist = function(k) return false; end};
+System.Collections.Generic.Dictionary_TKey_TValue = {__cs2lua_defined = true, __class_name = "System.Collections.Generic.Dictionary_TKey_TValue", __exist = function(k) return false; end};
+System.Collections.Generic.HashSet_T = {__cs2lua_defined = true, __class_name = "System.Collections.Generic.HashSet_T", __exist = function(k) return false; end};
+System.Array = System.Array or {};
 
-CS.System.Collections.Generic.MyDictionary_TKey_TValue = CS.System.Collections.Generic.Dictionary_TKey_TValue;
+System.Collections.Generic.MyDictionary_TKey_TValue = System.Collections.Generic.Dictionary_TKey_TValue;
 
-__cs2lua_out = (Slua and Slua.out) or {};
+__cs2lua_out = nil;
 __cs2lua_nil_field_value = {};
 
 __cs2lua_special_integer_operators = { "/", "%", "+", "-", "*", "<<", ">>", "&", "|", "^", "~" };
@@ -139,15 +138,15 @@ function bitxor(v1,v2)
 end;
 
 function typecast(obj, t, isEnum)
-	if t == CS.System.String then
+	if t == System.String then
 		return tostring(obj);
-	elseif t == CS.System.Single or t ==	CS.System.Double then
+	elseif t == System.Single or t ==	System.Double then
 	  return tonumber(obj);
-	elseif t == CS.System.Int64 or t == CS.System.UInt64 then
+	elseif t == System.Int64 or t == System.UInt64 then
 	  local v = tonumber(obj);
 	  v = math.floor(v);
 	  return v;
-	elseif t == CS.System.Int32 or t == CS.System.UInt32 then
+	elseif t == System.Int32 or t == System.UInt32 then
 	  local v = tonumber(obj);
 	  v = math.floor(v);
 	  if v > 0 then
@@ -156,7 +155,7 @@ function typecast(obj, t, isEnum)
 	    v = -((-v) % 0x100000000);
 	  end;
 	  return v;
-	elseif t == CS.System.Int16 or t == CS.System.UInt16 or t == CS.System.Char then
+	elseif t == System.Int16 or t == System.UInt16 or t == System.Char then
 	  local v = tonumber(obj);
 	  v = math.floor(v);
 	  if v > 0 then
@@ -165,7 +164,7 @@ function typecast(obj, t, isEnum)
 	    v = -((-v) % 0x10000);
 	  end;
 	  return v;
-	elseif t == CS.System.SByte or t == CS.System.Byte then
+	elseif t == System.SByte or t == System.Byte then
 	  local v = tonumber(obj);
 	  v = math.floor(v);
 	  if v > 0 then
@@ -174,7 +173,7 @@ function typecast(obj, t, isEnum)
 	    v = -((-v) % 0x100);
 	  end;
 	  return v;
-	elseif t == CS.System.Boolean then
+	elseif t == System.Boolean then
 		return obj;
 	elseif isEnum then
 	  return obj;
@@ -186,27 +185,27 @@ function typecast(obj, t, isEnum)
 end;
 
 function typeas(obj, t, isEnum)
-	if t == CS.System.String then
+	if t == System.String then
 		return tostring(obj);
-	elseif t == CS.System.Single or t ==	CS.System.Double then
+	elseif t == System.Single or t ==	System.Double then
 	  return tonumber(obj);
-	elseif t == CS.System.Int64 then
+	elseif t == System.Int64 then
 	  local v = tonumber(obj);
 	  v = math.floor(v);
 	  return v;
-	elseif t == CS.System.Int32 then
+	elseif t == System.Int32 then
 	  local v = tonumber(obj);
 	  v = math.floor(v);
 	  return v % 0x100000000;
-	elseif t == CS.System.Int16 or t == CS.System.Char then
+	elseif t == System.Int16 or t == System.Char then
 	  local v = tonumber(obj);
 	  v = math.floor(v);
 	  return v % 0x10000;
-	elseif t == CS.System.SByte or t == CS.System.Byte then
+	elseif t == System.SByte or t == System.Byte then
 	  local v = tonumber(obj);
 	  v = math.floor(v);
 	  return v % 0x100;
-	elseif t == CS.System.Boolean then
+	elseif t == System.Boolean then
 		return obj;
 	elseif isEnum then
 	  return obj;
@@ -320,7 +319,7 @@ end;
 
 function __wrap_if_string(val)
   if type(val)=="string" then
-    return CS.System.String(val);
+    return System.String(val);
   else
     return val;
   end;
@@ -814,11 +813,11 @@ function wrapchar(char, intVal)
 end;
 
 function wraparray(arr)
-	return setmetatable(arr, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = CS.System.Collections.Generic.List_T });
+	return setmetatable(arr, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = System.Collections.Generic.List_T });
 end;
 
 function wrapdictionary(dict)
-	return setmetatable(dict, { __index = __mt_index_of_dictionary, __cs2lua_defined = true, __class = CS.System.Collections.Generic.Dictionary_TKey_TValue });
+	return setmetatable(dict, { __index = __mt_index_of_dictionary, __cs2lua_defined = true, __class = System.Collections.Generic.Dictionary_TKey_TValue });
 end;
 
 function wrapdelegation(handlers)
@@ -855,7 +854,7 @@ function wrapvaluetypearray(arr)
 	for i,v in ipairs(arr) do
 		arr[i]=wrapvaluetype(v);
 	end;
-	return setmetatable(arr, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = CS.System.Collections.Generic.List_T });
+	return setmetatable(arr, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = System.Collections.Generic.List_T });
 end;
 
 function wrapexternvaluetype(v)
@@ -866,7 +865,7 @@ function wrapexternvaluetypearray(arr)
 	for i,v in ipairs(arr) do
 		arr[i]=wrapexternvaluetype(v);
 	end;
-	return setmetatable(arr, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = CS.System.Collections.Generic.List_T });
+	return setmetatable(arr, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = System.Collections.Generic.List_T });
 end;
 
 function defineclass(base, className, static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, is_value_type)
@@ -1218,7 +1217,7 @@ function newcollection(t, ctor, coll, ...)
 end;
 
 function newexterndictionary(t, className, ctor, dict, ...)
-  if dict and t==CS.System.Collections.Generic.Dictionary_TKey_TValue then
+  if dict and t==System.Collections.Generic.Dictionary_TKey_TValue then
 	  return setmetatable(dict, { __index = __mt_index_of_dictionary, __cs2lua_defined = true, __class = t });
 	else	  
 	  local obj = nil;
@@ -1241,7 +1240,7 @@ function newexterndictionary(t, className, ctor, dict, ...)
 end;
 
 function newexternlist(t, className, ctor, list, ...)
-  if list and t==CS.System.Collections.Generic.List_T then    
+  if list and t==System.Collections.Generic.List_T then    
 	  return setmetatable(list, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = t });
 	else 
 	  local obj = nil;
@@ -1264,9 +1263,9 @@ function newexternlist(t, className, ctor, list, ...)
 end;
 
 function newexterncollection(t, className, ctor, coll, ...)
-  if coll and (t==CS.System.Collections.Generic.Queue_T or t==CS.System.Collections.Generic.Stack_T) then
+  if coll and (t==System.Collections.Generic.Queue_T or t==System.Collections.Generic.Stack_T) then
     return setmetatable(coll, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = t });
-  elseif coll and t==CS.System.Collections.Generic.HashSet_T then
+  elseif coll and t==System.Collections.Generic.HashSet_T then
     return setmetatable(coll, { __index = __mt_index_of_hashset, __cs2lua_defined = true, __class = t });
 	else
 	  local obj = nil;
@@ -1376,17 +1375,17 @@ function externdelegationset(isevent, t, intf, k, handler)
   end;
 end;
 function externdelegationadd(isevent, t, intf, k, handler)
-  if isevent and k then
-    t[k](t, "+", handler);
+  if k then
+    t[k] = {"+=", handler};
   else
-    t + handler;
+    t = {"+=", handler};
   end;
 end;
 function externdelegationremove(isevent, t, intf, k, handler)
-  if isevent and k then
-    t[k](t, "-", handler);
+  if k then
+    t[k] = {"-=", handler};
   else
-    t - handler;
+    t = {"-=", handler};
   end;
 end;
 
@@ -1416,9 +1415,9 @@ function getexterninstanceindexer(obj, intf, name, ...)
 	if meta then
 		local class = rawget(meta, "__class");
 		local typename = rawget(meta, "__typename");
-  	if class == CS.System.Collections.Generic.List_T then
+  	if class == System.Collections.Generic.List_T then
   	  return obj[index+1];
-  	elseif class == CS.System.Collections.Generic.Dictionary_TKey_TValue then
+  	elseif class == System.Collections.Generic.Dictionary_TKey_TValue then
       local v = obj[index];
       if v then
         return v.value;
@@ -1447,9 +1446,9 @@ function setexterninstanceindexer(obj, intf, name, ...)
   if meta then
 		local class = rawget(meta, "__class");
 		local typename = rawget(meta, "__typename");
-    if class == CS.System.Collections.Generic.List_T then
+    if class == System.Collections.Generic.List_T then
       obj[index+1] = val;
-    elseif class == CS.System.Collections.Generic.Dictionary_TKey_TValue then      
+    elseif class == System.Collections.Generic.Dictionary_TKey_TValue then      
       if obj[index] then
         obj[index] = { value=val };
       else
@@ -1577,7 +1576,7 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
 	  return class.Value2String[obj];
 	end;
 	if type(obj)=="string" then
-	  local csstr = CS.System.String(obj);
+	  local csstr = System.String(obj);
 	  return csstr[method](csstr,...);
 	elseif meta then
 		return obj[method](obj,...);
@@ -1591,7 +1590,7 @@ end;
 function getforbasicvalue(obj, isEnum, class, property)
 	local meta = getmetatable(obj);
 	if type(obj)=="string" then
-	  local csstr = CS.System.String(obj);
+	  local csstr = System.String(obj);
 	  return csstr[property];
 	elseif meta then
 		return obj[property];
@@ -1603,7 +1602,7 @@ end;
 function setforbasicvalue(obj, isEnum, class, property, value)
 	local meta = getmetatable(obj);
 	if type(obj)=="string" then
-	  local csstr = CS.System.String(obj);
+	  local csstr = System.String(obj);
 	  csstr[property]=value;
 	elseif meta then
 		obj[property]=value;
@@ -1626,8 +1625,8 @@ function invokearraystaticmethod(firstArray, secondArray, method, ...)
         return nil;
       end;
     else
-      --这种情形认为是外部导出的数组调用，直接调导出接口了（由于CS.System.Array有generic成员，这些方法的调用估计会出错）
-      CS.System.Array[method](...);
+      --这种情形认为是外部导出的数组调用，直接调导出接口了（由于System.Array有generic成员，这些方法的调用估计会出错）
+      System.Array[method](...);
     end;
   else
     return nil;

@@ -1,6 +1,7 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
+require "LuaConsole";
 require "TopLevel__TestEnum";
 
 TopLevel.Runnable = {
@@ -40,8 +41,8 @@ TopLevel.Runnable = {
 			Test2 = function(this)
 				local s; s = invokeforbasicvalue(4, true, TopLevel.TestEnum, "ToString");
 				local e; e = 1;
-				System.Enum.Parse(TopLevel.TestEnum, "Two");
-				local ss; ss = invokeforbasicvalue(1, true, System.PlatformID, "ToString");
+				CS.System.Enum.Parse(typeof(TopLevel.TestEnum), "Two");
+				local ss; ss = invokeforbasicvalue(1, true, CS.System.PlatformID, "ToString");
 			end,
 			Runnable_add_OnAction = function(this, value)
 			end,
@@ -72,7 +73,7 @@ TopLevel.Runnable = {
 		};
 
 		local interfaces = {
-			"TopLevel.IRunnable_System_Int32",
+			"TopLevel.IRunnable_CS_System_Int32",
 			"TopLevel.IRunnable0",
 		};
 

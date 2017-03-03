@@ -35,15 +35,15 @@ TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericCla
 			end,
 			Test = function(this, G, g)
 				local v; v = typeas(g, TopLevel.SecondLevel.Foo.Test1, false);
-				local v; v = typecast(typecast(g, System.Object, false), TopLevel.SecondLevel.Foo.Test1, false);
+				local v; v = typecast(typecast(g, CS.System.Object, false), TopLevel.SecondLevel.Foo.Test1, false);
 				local f; f = newobject(TopLevel.SecondLevel.Foo, "ctor", {});
 				TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo(f);
 			end,
 			Test2 = function(this, GG, t, tt)
-				local t1; t1 = GG;
-				local t2; t2 = TopLevel.SecondLevel.Foo.Test1;
-				local t3; t3 = TopLevel.SecondLevel.Foo.Test2;
-				local t4; t4 = System.Int32;
+				local t1; t1 = typeof(GG);
+				local t2; t2 = typeof(TopLevel.SecondLevel.Foo.Test1);
+				local t3; t3 = typeof(TopLevel.SecondLevel.Foo.Test2);
+				local t4; t4 = typeof(CS.System.Int32);
 				local v; v = typecast(t, TopLevel.SecondLevel.Foo.Test2, false);
 			end,
 			__ctor = function(this)
@@ -59,8 +59,8 @@ TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericCla
 			local instance_fields = {
 				m_T = nil,
 				m_TT = nil,
-				m_TypeT = TopLevel.SecondLevel.Foo.Test1,
-				m_TypeTT = TopLevel.SecondLevel.Foo.Test2,
+				m_TypeT = typeof(TopLevel.SecondLevel.Foo.Test1),
+				m_TypeTT = typeof(TopLevel.SecondLevel.Foo.Test2),
 				__ctor_called = false,
 			};
 			return instance_fields;

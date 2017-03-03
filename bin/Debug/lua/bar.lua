@@ -1,7 +1,7 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
-require "foo_System_Int32_System_Int32";
+require "foo_CS_System_Int32_CS_System_Int32";
 
 bar = {
 	__new_object = function(...)
@@ -20,7 +20,7 @@ bar = {
 				else
 					bar.__cctor_called = true;
 				end
-				bar.s_DateTime = newexternobject(System.DateTime, "System.DateTime", nil, {});
+				bar.s_DateTime = newexternobject(CS.System.DateTime, "CS.System.DateTime", nil, {});
 			end,
 		};
 
@@ -36,7 +36,7 @@ bar = {
 
 		local instance_methods = {
 			test = function(this)
-				local a; a = newobject(foo_System_Int32_System_Int32, "ctor", {});
+				local a; a = newobject(foo_CS_System_Int32_CS_System_Int32, "ctor", {});
 				a:parse("123", "456");
 				local b; b = this.m_DateTime:ToString();
 				local c; c = bar.s_DateTime:ToString();
@@ -52,7 +52,7 @@ bar = {
 				else
 					this.__ctor_called = true;
 				end
-				this.m_DateTime = newexternobject(System.DateTime, "System.DateTime", nil, {});
+				this.m_DateTime = newexternobject(CS.System.DateTime, "CS.System.DateTime", nil, {});
 			end,
 		};
 

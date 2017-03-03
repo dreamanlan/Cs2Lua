@@ -332,7 +332,7 @@ namespace RoslynTool.CsToLua
         {
             bool ret = false;
             if (null != sym && !sym.IsStatic && null != sym.ContainingType) {
-                if (ClassInfo.GetFullName(sym.ContainingType) == "System.Enum") {
+                if (ClassInfo.GetFullName(sym.ContainingType) == SymbolTable.PrefixExternClassName("System.Enum")) {
                     ret = true;
                 } else {
                     string type = ClassInfo.GetFullName(sym.ContainingType);
@@ -345,7 +345,7 @@ namespace RoslynTool.CsToLua
         {
             bool ret = false;
             if (null != sym && !sym.IsStatic && null != sym.ContainingType) {
-                if (ClassInfo.GetFullName(sym.ContainingType) == "System.Enum") {
+                if (ClassInfo.GetFullName(sym.ContainingType) == SymbolTable.PrefixExternClassName("System.Enum")) {
                     ret = true;
                 } else {
                     string type = ClassInfo.GetFullName(sym.ContainingType);
@@ -361,7 +361,7 @@ namespace RoslynTool.CsToLua
         internal static bool IsBasicType(ITypeSymbol type, bool includeString)
         {
             bool ret = false;
-            if (type.TypeKind == TypeKind.Enum || ClassInfo.GetFullName(type) == "System.Enum") {
+            if (type.TypeKind == TypeKind.Enum || ClassInfo.GetFullName(type) == SymbolTable.PrefixExternClassName("System.Enum")) {
                 ret = true;
             } else {
                 string typeName = ClassInfo.GetFullName(type);
@@ -371,14 +371,15 @@ namespace RoslynTool.CsToLua
         }
         internal static bool IsBasicType(string type, bool includeString)
         {
-            if (includeString && type == "System.String")
+            string t = UnPrefixExternClassName(type);
+            if (includeString && t == "System.String")
                 return true;
-            return s_BasicTypes.Contains(type);
+            return s_BasicTypes.Contains(t);
         }
         internal static bool IsIntegerType(ITypeSymbol type)
         {
             bool ret = false;
-            if (type.TypeKind == TypeKind.Enum || ClassInfo.GetFullName(type) == "System.Enum") {
+            if (type.TypeKind == TypeKind.Enum || ClassInfo.GetFullName(type) == SymbolTable.PrefixExternClassName("System.Enum")) {
                 ret = true;
             } else {
                 string typeName = ClassInfo.GetFullName(type);
@@ -388,12 +389,43 @@ namespace RoslynTool.CsToLua
         }
         internal static bool IsIntegerType(string type)
         {
-            return s_IntegerTypes.Contains(type);
+            string t = UnPrefixExternClassName(type);
+            return s_IntegerTypes.Contains(t);
+        }
+        internal static string PrefixExternClassName(string cn)
+        {
+            string prefix = s_ExternClassNamePrefix;
+            if (string.IsNullOrEmpty(prefix))
+                return cn;
+            else
+                return prefix + cn;
+        }
+        internal static string UnPrefixExternClassName(string cn)
+        {
+            string prefix = s_ExternClassNamePrefix;
+            if (cn.StartsWith(prefix))
+                return cn.Substring(prefix.Length);
+            else
+                return cn;
+        }
+        internal static void SetExternClassNamePrefix(string val)
+        {
+            s_ExternClassNamePrefix = val;
         }
         internal static bool ForSlua
         {
             get { return s_ForSlua; }
             set { s_ForSlua = value; }
+        }
+        internal static bool ForXlua
+        {
+            get { return s_ForXlua; }
+            set { s_ForXlua = value; }
+        }
+        internal static bool ForTolua
+        {
+            get { return s_ForTolua; }
+            set { s_ForTolua = value; }
         }
         internal static bool NoAutoRequire
         {
@@ -406,7 +438,10 @@ namespace RoslynTool.CsToLua
             set { s_LuaComponentByString = value; }
         }
 
+        private static string s_ExternClassNamePrefix = string.Empty;
         private static bool s_ForSlua = true;
+        private static bool s_ForXlua = false;
+        private static bool s_ForTolua = false;
         private static bool s_NoAutoRequire = false;
         private static bool s_LuaComponentByString = false;
 

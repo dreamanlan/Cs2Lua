@@ -62,9 +62,17 @@ namespace RoslynTool
                         } else if (0 == string.Compare(args[i], "-enableinherit", true)) {
                             enableInherit = true;
                         } else if (0 == string.Compare(args[i], "-normallua", true)) {
-                            SymbolTable.ForSlua = false;
+                            SetNormalLua();
                         } else if (0 == string.Compare(args[i], "-slua", true)) {
+                            SetNormalLua();
                             SymbolTable.ForSlua = true;
+                        } else if (0 == string.Compare(args[i], "-xlua", true)) {
+                            SetNormalLua();
+                            SymbolTable.SetExternClassNamePrefix("CS.");
+                            SymbolTable.ForXlua = true;
+                        } else if (0 == string.Compare(args[i], "-tolua", true)) {
+                            SetNormalLua();
+                            SymbolTable.ForTolua = true;
                         } else if (0 == string.Compare(args[i], "-outputresult", true)) {
                             outputResult = true;
                         } else if (0 == string.Compare(args[i], "-noautorequire", true)) {
@@ -163,6 +171,13 @@ namespace RoslynTool
                 }
                 return (int)ExitCode.Exception;
             }
+        }
+        private static void SetNormalLua()
+        {
+            SymbolTable.SetExternClassNamePrefix(string.Empty);
+            SymbolTable.ForSlua = false;
+            SymbolTable.ForXlua = false;
+            SymbolTable.ForTolua = false;
         }
     }
 }

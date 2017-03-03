@@ -8,41 +8,41 @@ Extentions = {
 
 		local static_methods = {
 			timeInMillisecond = function(dateTime)
-				return invokeintegeroperator(0, "/", dateTime.Ticks, 10000, System.Int64, System.Int64);
+				return invokeintegeroperator(0, "/", dateTime.Ticks, 10000, CS.System.Int64, CS.System.Int64);
 			end,
 			timeSince1970 = function(dateTime)
-				return typecast(( invokeintegeroperator(0, "/", Extentions.timeSince1970InMillisecond(dateTime), 1000, System.Int64, System.Int64) ), System.Int64, false);
+				return typecast(( invokeintegeroperator(0, "/", Extentions.timeSince1970InMillisecond(dateTime), 1000, CS.System.Int64, CS.System.Int64) ), CS.System.Int64, false);
 			end,
 			timeSince1970InMillisecond = function(dateTime)
 --return (long)(Time.realtimeSinceStartup * 1000);
 				if (Extentions.dateTime1970.Ticks == 0) then
 --Debug.LogError("Ticks = 0");
-					Extentions.dateTime1970 = System.DateTime.Parse("1970-1-1");
+					Extentions.dateTime1970 = CS.System.DateTime.Parse("1970-1-1");
 				end;
 				local v; v = 4;
-				local ts; ts = (dateTime - Extentions.dateTime1970);
-				return typecast(ts.TotalMilliseconds, System.Int64, false);
+				local ts; ts = invokeexternoperator(CS.System.DateTime, "op_Subtraction", dateTime, Extentions.dateTime1970);
+				return typecast(ts.TotalMilliseconds, CS.System.Int64, false);
 			end,
 			findChildRecursively = function(transform, childName, maxDepth)
 				local child; child = transform:FindChild(childName);
-				if (invokeexternoperator(UnityEngine.Object, "op_Equality", child, nil) and (maxDepth > 0)) then
+				if (invokeexternoperator(CS.UnityEngine.Object, "op_Equality", child, nil) and (maxDepth > 0)) then
 					local childCount; childCount = transform.childCount;
 					local i; i = 0;
 					while (i < childCount) do
-						child = Extentions.findChildRecursively(transform:GetChild(i), childName, invokeintegeroperator(3, "-", maxDepth, 1, System.Int32, System.Int32));
-						if invokeexternoperator(UnityEngine.Object, "op_Inequality", child, nil) then
+						child = Extentions.findChildRecursively(transform:GetChild(i), childName, invokeintegeroperator(3, "-", maxDepth, 1, CS.System.Int32, CS.System.Int32));
+						if invokeexternoperator(CS.UnityEngine.Object, "op_Inequality", child, nil) then
 							break;
 						end;
 						do
 						break;
 						end;
-					i = invokeintegeroperator(2, "+", i, 1, System.Int32, System.Int32);
+					i = invokeintegeroperator(2, "+", i, 1, CS.System.Int32, CS.System.Int32);
 					end;
 				end;
 				return child;
 			end,
 			searchChildRecursively = function(transform, childName, maxDepth)
-				if (invokeforbasicvalue(transform.name, false, System.String, "IndexOf", childName) ~= -1) then
+				if (invokeforbasicvalue(transform.name, false, CS.System.String, "IndexOf", childName) ~= -1) then
 					return transform;
 				end;
 				local count; count = transform.childCount;
@@ -50,17 +50,17 @@ Extentions = {
 					local i; i = 0;
 					while (i < count) do
 						local nowNode; nowNode = transform:GetChild(i);
-						local searchRes; searchRes = Extentions.searchChildRecursively(nowNode, childName, invokeintegeroperator(3, "-", maxDepth, 1, System.Int32, System.Int32));
-						if invokeexternoperator(UnityEngine.Object, "op_Inequality", searchRes, nil) then
+						local searchRes; searchRes = Extentions.searchChildRecursively(nowNode, childName, invokeintegeroperator(3, "-", maxDepth, 1, CS.System.Int32, CS.System.Int32));
+						if invokeexternoperator(CS.UnityEngine.Object, "op_Inequality", searchRes, nil) then
 							return searchRes;
 						end;
-					i = invokeintegeroperator(2, "+", i, 1, System.Int32, System.Int32);
+					i = invokeintegeroperator(2, "+", i, 1, CS.System.Int32, CS.System.Int32);
 					end;
 				end;
 				return nil;
 			end,
 			isFirstTimeToStart = function()
-				local isFirstTimeStart; isFirstTimeStart = UnityEngine.PlayerPrefs.GetInt("isFirstTimeToStart", 1);
+				local isFirstTimeStart; isFirstTimeStart = CS.UnityEngine.PlayerPrefs.GetInt("isFirstTimeToStart", 1);
 				return (isFirstTimeStart == 1);
 			end,
 			AddSorted = function(T, list, item)
@@ -68,7 +68,7 @@ Extentions = {
 					list:Add(item);
 					return ;
 				end;
-				if (getexterninstanceindexer(list, nil, "get_Item", invokeintegeroperator(3, "-", list.Count, 1, System.Int32, System.Int32)):CompareTo(item) <= 0) then
+				if (getexterninstanceindexer(list, nil, "get_Item", invokeintegeroperator(3, "-", list.Count, 1, CS.System.Int32, CS.System.Int32)):CompareTo(item) <= 0) then
 					list:Add(item);
 					return ;
 				end;
@@ -78,7 +78,7 @@ Extentions = {
 				end;
 				local index; index = list:BinarySearch(item);
 				if (index < 0) then
-					index = invokeintegeroperator(12, "~", nil, index, nil, System.Int32);
+					index = invokeintegeroperator(12, "~", nil, index, nil, CS.System.Int32);
 				end;
 				list:Insert(index, item);
 			end,
@@ -91,7 +91,7 @@ Extentions = {
 				else
 					Extentions.__cctor_called = true;
 				end
-				Extentions.dateTime1970 = newexternobject(System.DateTime, "System.DateTime", nil, {});
+				Extentions.dateTime1970 = newexternobject(CS.System.DateTime, "CS.System.DateTime", nil, {});
 			end,
 		};
 

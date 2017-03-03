@@ -176,6 +176,7 @@ namespace TopLevel
 
     public class TestRunnable
     {
+    		public Action OnDelegation;
         public void Test()
         {
             IRunnable<int> f = new Runnable();
@@ -189,6 +190,7 @@ namespace TopLevel
             Action a = ()=>{i=i*i;LuaConsole.Print(i*sizeof(int));};
             f.OnAction+=a;
             f.OnAction-=a;
+            OnDelegation += a;
             float t = float.NegativeInfinity;
             t = float.NaN;
         }

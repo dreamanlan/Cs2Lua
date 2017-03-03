@@ -104,7 +104,7 @@ namespace RoslynTool.CsToLua
 
             if (!m_EnableInherit && !ClassInfo.HasAttribute(declSym, "Cs2Lua.EnableInheritAttribute") && !ClassInfo.HasAttribute(declSym.BaseType, "Cs2Lua.EnableInheritAttribute")) {
                 string fullBaseClassName = null != declSym.BaseType ? ClassInfo.GetFullName(declSym.BaseType) : string.Empty;
-                if (!string.IsNullOrEmpty(fullBaseClassName) && fullBaseClassName != "System.Object" && fullBaseClassName != "System.ValueType") {
+                if (!string.IsNullOrEmpty(fullBaseClassName) && fullBaseClassName != SymbolTable.PrefixExternClassName("System.Object") && fullBaseClassName != SymbolTable.PrefixExternClassName("System.ValueType")) {
                     Log(node, "Cs2Lua class/struct can't inherit !");
                 }
             }                     
@@ -792,7 +792,7 @@ namespace RoslynTool.CsToLua
                 string ckey = InvocationInfo.CalcInvokeTarget(className, this, leftMemberAccess.Expression, m_Model);
                 CodeBuilder.AppendFormat("setforbasicvalue(");
                 OutputExpressionSyntax(leftMemberAccess.Expression);
-                CodeBuilder.AppendFormat(", {0}, {1}, \"{2}\", ", className == "System.Enum" ? "true" : "false", ckey, pname);
+                CodeBuilder.AppendFormat(", {0}, {1}, \"{2}\", ", className == SymbolTable.PrefixExternClassName("System.Enum") ? "true" : "false", ckey, pname);
                 OutputExpressionSyntax(assign.Right, opd);
                 CodeBuilder.Append(")");
             } else if (null != leftElementAccess) {
@@ -939,6 +939,7 @@ namespace RoslynTool.CsToLua
                     OutputExpressionSyntax(assign.Right, opd);
                     CodeBuilder.Append(")");
                 } else {
+                    bool isEvent = leftOper is IEventReferenceExpression;
                     string prefix;
                     if (leftSym.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
                         prefix = string.Empty;
@@ -953,11 +954,12 @@ namespace RoslynTool.CsToLua
                     } else if (op == "-=") {
                         postfix = "remove";
                     } else {
-                        Log(assign, "Unsupported delegation operator {0} !");
+                        Log(assign, "Unsupported delegation operator {0} !", op);
                         postfix = "error";
                     }
                     CodeBuilder.AppendFormat("{0}delegation{1}", prefix, postfix);
                     CodeBuilder.Append("(");
+                    CodeBuilder.AppendFormat("{0}, ", isEvent ? "true" : "false");
                     if (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event) {
                         var memberAccess = assign.Left as MemberAccessExpressionSyntax;
                         if (null != memberAccess) {
@@ -1032,10 +1034,10 @@ namespace RoslynTool.CsToLua
                                     CodeBuilder.AppendFormat("{0}(", functor);
                                     OutputExpressionSyntax(assign.Left, lopd);
                                     CodeBuilder.Append(", ");
-                                } else if (baseOp == "+" && leftFullTypeName == "System.String") {
-                                    CodeBuilder.Append("System.String.Concat(");
+                                } else if (baseOp == "+" && leftFullTypeName == SymbolTable.PrefixExternClassName("System.String")) {
+                                    CodeBuilder.Append(SymbolTable.PrefixExternClassName("System.String.Concat("));
                                     OutputExpressionSyntax(assign.Left, lopd);
-                                    if (rightFullTypeName == "System.String")
+                                    if (rightFullTypeName == SymbolTable.PrefixExternClassName("System.String"))
                                         CodeBuilder.Append(", ");
                                     else
                                         CodeBuilder.Append(", tostring(");
@@ -1092,8 +1094,8 @@ namespace RoslynTool.CsToLua
                                 string functor;
                                 if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
                                     CodeBuilder.Append(")");
-                                } else if (baseOp == "+" && leftFullTypeName == "System.String") {
-                                    if (rightFullTypeName != "System.String") {
+                                } else if (baseOp == "+" && leftFullTypeName == SymbolTable.PrefixExternClassName("System.String")) {
+                                    if (rightFullTypeName != SymbolTable.PrefixExternClassName("System.String")) {
                                         CodeBuilder.Append(")");
                                     }
                                     CodeBuilder.Append(")");
@@ -1122,10 +1124,10 @@ namespace RoslynTool.CsToLua
                                     CodeBuilder.AppendFormat("{0}(", functor);
                                     OutputExpressionSyntax(assign.Left, lopd);
                                     CodeBuilder.Append(", ");
-                                } else if (baseOp == "+" && leftFullTypeName == "System.String") {
-                                    CodeBuilder.Append("System.String.Concat(");
+                                } else if (baseOp == "+" && leftFullTypeName == SymbolTable.PrefixExternClassName("System.String")) {
+                                    CodeBuilder.Append(SymbolTable.PrefixExternClassName("System.String.Concat("));
                                     OutputExpressionSyntax(assign.Left, lopd);
-                                    if (rightFullTypeName == "System.String")
+                                    if (rightFullTypeName == SymbolTable.PrefixExternClassName("System.String"))
                                         CodeBuilder.Append(", ");
                                     else
                                         CodeBuilder.Append(", tostring(");
@@ -1182,8 +1184,8 @@ namespace RoslynTool.CsToLua
                                 string functor;
                                 if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
                                     CodeBuilder.Append(")");
-                                } else if (baseOp == "+" && leftFullTypeName == "System.String") {
-                                    if (rightFullTypeName != "System.String") {
+                                } else if (baseOp == "+" && leftFullTypeName == SymbolTable.PrefixExternClassName("System.String")) {
+                                    if (rightFullTypeName != SymbolTable.PrefixExternClassName("System.String")) {
                                         CodeBuilder.Append(")");
                                     }
                                     CodeBuilder.Append(")");

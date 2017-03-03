@@ -325,7 +325,15 @@ namespace RoslynTool.CsToLua
             BuildAttributes(attrBuilder, compilation.Assembly, ignoredClasses);
             StringBuilder enumBuilder = new StringBuilder();
             BuildExternEnums(enumBuilder);
-            File.Copy(Path.Combine(exepath, "lualib/utility.lua"), Path.Combine(outputDir, string.Format("cs2lua__utility.{0}", outputExt)), true);
+            if (SymbolTable.ForSlua) {
+                File.Copy(Path.Combine(exepath, "lualib/utility_slua.lua"), Path.Combine(outputDir, string.Format("cs2lua__utility.{0}", outputExt)), true);
+            } else if (SymbolTable.ForXlua) {
+                File.Copy(Path.Combine(exepath, "lualib/utility_xlua.lua"), Path.Combine(outputDir, string.Format("cs2lua__utility.{0}", outputExt)), true);
+            } else if (SymbolTable.ForTolua) {
+                File.Copy(Path.Combine(exepath, "lualib/utility_tolua.lua"), Path.Combine(outputDir, string.Format("cs2lua__utility.{0}", outputExt)), true);
+            } else {
+                File.Copy(Path.Combine(exepath, "lualib/utility.lua"), Path.Combine(outputDir, string.Format("cs2lua__utility.{0}", outputExt)), true);
+            }
             File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__namespaces.{0}", outputExt)), nsBuilder.ToString());
             File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__attributes.{0}", outputExt)), attrBuilder.ToString());
             File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__externenums.{0}", outputExt)), enumBuilder.ToString());
@@ -795,7 +803,7 @@ namespace RoslynTool.CsToLua
                 if (!SymbolTable.NoAutoRequire) {
                     foreach (var ci in classes) {
                         foreach (string r in ci.References) {
-                            if (!r.StartsWith("System.") && !r.StartsWith("UnityEngine.")) {
+                            if (!r.StartsWith(SymbolTable.PrefixExternClassName("System.")) && !r.StartsWith(SymbolTable.PrefixExternClassName("UnityEngine."))) {
                                 string refname = r.Replace(".", "__");
                                 if (!refs.Contains(refname)) {
                                     sb.AppendFormat("require \"{0}\";", refname);

@@ -286,7 +286,13 @@ namespace RoslynTool.CsToLua
 
             var oper = m_Model.GetOperation(node) as ITypeOfExpression;
             var type = oper.TypeOperand;
+            if (SymbolTable.ForXlua || SymbolTable.ForTolua) {
+                CodeBuilder.Append("typeof(");
+            }
             OutputType(type, node, ci, "typeof");
+            if (SymbolTable.ForXlua || SymbolTable.ForTolua) {
+                CodeBuilder.Append(")");
+            }
         }
         public override void VisitCastExpression(CastExpressionSyntax node)
         {
@@ -449,7 +455,7 @@ namespace RoslynTool.CsToLua
                         string ckey = InvocationInfo.CalcInvokeTarget(cname, this, node.Expression, m_Model);
                         CodeBuilder.AppendFormat("getforbasicvalue(");
                         OutputExpressionSyntax(node.Expression);
-                        CodeBuilder.AppendFormat(", {0}, {1}, \"{2}\")", cname == "System.Enum" ? "true" : "false", ckey, pname);
+                        CodeBuilder.AppendFormat(", {0}, {1}, \"{2}\")", cname == SymbolTable.PrefixExternClassName("System.Enum") ? "true" : "false", ckey, pname);
                     } else {
                         if (string.IsNullOrEmpty(className)) {
                             OutputExpressionSyntax(node.Expression);
