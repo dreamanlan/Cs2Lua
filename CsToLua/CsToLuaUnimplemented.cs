@@ -12,6 +12,78 @@ namespace RoslynTool.CsToLua
 {
     internal partial class CsLuaTranslater
     {
+        #region vs2017新增语法特性
+        public override void VisitCasePatternSwitchLabel(CasePatternSwitchLabelSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitConstantPattern(ConstantPatternSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitDeclarationExpression(DeclarationExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitDeclarationPattern(DeclarationPatternSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitDiscardDesignation(DiscardDesignationSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitForEachVariableStatement(ForEachVariableStatementSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitIsPatternExpression(IsPatternExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitLocalFunctionStatement(LocalFunctionStatementSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitParenthesizedVariableDesignation(ParenthesizedVariableDesignationSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitRefExpression(RefExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitRefType(RefTypeSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitSingleVariableDesignation(SingleVariableDesignationSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitThrowExpression(ThrowExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitTupleElement(TupleElementSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitTupleExpression(TupleExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitTupleType(TupleTypeSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitWhenClause(WhenClauseSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        #endregion
+
         #region 未计划支持的语法特性
         public override void VisitDestructorDeclaration(DestructorDeclarationSyntax node)
         {

@@ -130,11 +130,11 @@ TopLevel.SecondLevel.Foo = {
 				ts3 = ts;
 				ts3 = wrapvaluetype(ts3);
 				this:TestValueArg(ts);
-				if delegationcomparewithnil(this, nil, "OnSimple", false) then
+				if delegationcomparewithnil(true, this, nil, "OnSimple", false) then
 					this.OnSimple();
 				end;
 				local f; f = delegationwrap(this.OnSimple);
-				if delegationcomparewithnil(f, nil, nil, false) then
+				if delegationcomparewithnil(false, f, nil, nil, false) then
 					f();
 				end;
 			end,

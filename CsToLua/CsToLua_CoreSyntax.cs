@@ -302,13 +302,19 @@ namespace RoslynTool.CsToLua
                         opd = iret.ReturnedValue as IConversionExpression;
                     }
                 }
-                OutputExpressionSyntax(expressionBody.Expression, opd);
                 if (declSym.ReturnsVoid) {
+                    CodeBuilder.AppendFormat("{0}", GetIndentString());
+                    if (expressionBody.Expression is AssignmentExpressionSyntax) {
+                        VisitToplevelExpressionFirstPass(expressionBody.Expression, string.Empty);
+                    } else {
+                        OutputExpressionSyntax(expressionBody.Expression, opd);
+                    }
                     if (mi.ReturnParamNames.Count > 0) {
                         CodeBuilder.AppendFormat("; return {0}", string.Join(", ", mi.ReturnParamNames));
                     }
                     CodeBuilder.AppendLine(";");
                 } else {
+                    OutputExpressionSyntax(expressionBody.Expression, opd);
                     if (mi.ReturnParamNames.Count > 0) {
                         CodeBuilder.AppendFormat("; return {0}, {1}", varName, string.Join(", ", mi.ReturnParamNames));
                     }

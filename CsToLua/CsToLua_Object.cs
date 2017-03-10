@@ -235,15 +235,36 @@ namespace RoslynTool.CsToLua
             //再执行构造函数内容（构造函数部分）
             if (null != node.Body) {
                 VisitBlock(node.Body);
-            }
-            if (!mi.ExistTopLevelReturn) {
-                if (mi.ReturnParamNames.Count > 0) {
-                    CodeBuilder.AppendFormat("{0}return this, {1};", GetIndentString(), string.Join(", ", mi.ReturnParamNames));
-                    CodeBuilder.AppendLine();
-                } else if (!isStatic) {
-                    CodeBuilder.AppendFormat("{0}return this;", GetIndentString());
-                    CodeBuilder.AppendLine();
+                if (!mi.ExistTopLevelReturn) {
+                    if (mi.ReturnParamNames.Count > 0) {
+                        CodeBuilder.AppendFormat("{0}return this, {1};", GetIndentString(), string.Join(", ", mi.ReturnParamNames));
+                        CodeBuilder.AppendLine();
+                    } else if (!isStatic) {
+                        CodeBuilder.AppendFormat("{0}return this;", GetIndentString());
+                        CodeBuilder.AppendLine();
+                    }
                 }
+            } else if (null != node.ExpressionBody) {
+                IConversionExpression opd = null;
+                var oper = m_Model.GetOperation(node.ExpressionBody) as IBlockStatement;
+                if (null != oper && oper.Statements.Length == 1) {
+                    var iret = oper.Statements[0] as IReturnStatement;
+                    if (null != iret) {
+                        opd = iret.ReturnedValue as IConversionExpression;
+                    }
+                }
+                CodeBuilder.AppendFormat("{0}", GetIndentString());
+                if (node.ExpressionBody.Expression is AssignmentExpressionSyntax) {
+                    VisitToplevelExpressionFirstPass(node.ExpressionBody.Expression, string.Empty);
+                } else {
+                    OutputExpressionSyntax(node.ExpressionBody.Expression, opd);
+                }
+                if (mi.ReturnParamNames.Count > 0) {
+                    CodeBuilder.AppendFormat("; return this, {0}", string.Join(", ", mi.ReturnParamNames));
+                } else {
+                    CodeBuilder.AppendFormat("; return this");
+                }
+                CodeBuilder.AppendLine(";");
             }
             --m_Indent;
             CodeBuilder.AppendFormat("{0}end,", GetIndentString());
@@ -270,10 +291,77 @@ namespace RoslynTool.CsToLua
                     return;
             }
 
+            if (null != node.ExpressionBody) {
+                //只读特性表达式体初始化写法
+                StringBuilder curBuilder = ci.CurrentCodeBuilder;
+                if (declSym.IsStatic) {
+                    ci.CurrentCodeBuilder = ci.StaticFunctionCodeBuilder;
+                } else {
+                    ci.CurrentCodeBuilder = ci.InstanceFunctionCodeBuilder;
+                }
+               
+                var sym = declSym.GetMethod;
+                if (null != sym) {
+                    var mi = new MethodInfo();
+                    mi.Init(sym, node);
+                    m_MethodInfoStack.Push(mi);
+
+                    string manglingName = NameMangling(sym);
+                    string paramStr = string.Join(", ", mi.ParamNames.ToArray());
+                    if (!declSym.IsStatic) {
+                        if (string.IsNullOrEmpty(paramStr))
+                            paramStr = "this";
+                        else
+                            paramStr = "this, " + paramStr;
+                    }
+                    CodeBuilder.AppendFormat("{0}{1} = function({2})", GetIndentString(), manglingName, paramStr);
+                    CodeBuilder.AppendLine();
+                    ++m_Indent;
+                    if (mi.ValueParams.Count > 0) {
+                        OutputWrapValueParams(CodeBuilder, mi);
+                    }
+                    string varName = string.Format("__compiler_expbody_{0}", node.GetLocation().GetLineSpan().StartLinePosition.Line);
+                    if (mi.ReturnParamNames.Count > 0) {
+                        CodeBuilder.AppendFormat("{0}local {1} = ", GetIndentString(), varName);
+                    } else {
+                        CodeBuilder.AppendFormat("{0}return ", GetIndentString());
+                    }
+                    IConversionExpression opd = null;
+                    var oper = m_Model.GetOperation(node.ExpressionBody) as IBlockStatement;
+                    if (null != oper && oper.Statements.Length == 1) {
+                        var iret = oper.Statements[0] as IReturnStatement;
+                        if (null != iret) {
+                            opd = iret.ReturnedValue as IConversionExpression;
+                        }
+                    }
+                    OutputExpressionSyntax(node.ExpressionBody.Expression, opd);
+                    if (mi.ReturnParamNames.Count > 0) {
+                        CodeBuilder.AppendFormat("; return {0}, {1}", varName, string.Join(", ", mi.ReturnParamNames));
+                    }
+                    CodeBuilder.AppendLine(";");
+                    --m_Indent;
+                    CodeBuilder.AppendFormat("{0}end,", GetIndentString());
+                    CodeBuilder.AppendLine();
+
+                    m_MethodInfoStack.Pop();
+                }
+                ci.CurrentCodeBuilder = curBuilder;
+
+                CodeBuilder.AppendFormat("{0}{1} = {{", GetIndentString(), SymbolTable.GetPropertyName(declSym));
+                CodeBuilder.AppendLine();
+                ++m_Indent;
+                CodeBuilder.AppendFormat("{0}get = {1}.get_{2},", GetIndentString(), declSym.IsStatic ? "static_methods" : "instance_methods", declSym.Name);
+                CodeBuilder.AppendLine();
+                --m_Indent;
+                CodeBuilder.AppendFormat("{0}", GetIndentString());
+                CodeBuilder.AppendLine("},");
+                return;
+            }
+
             bool noimpl = true;
             foreach (var accessor in node.AccessorList.Accessors) {
                 var sym = m_Model.GetDeclaredSymbol(accessor);
-                if (null != accessor.Body) {
+                if (null != accessor.Body || null != accessor.ExpressionBody) {
                     noimpl = false;
                     break;
                 }
@@ -321,7 +409,6 @@ namespace RoslynTool.CsToLua
                         m_MethodInfoStack.Push(mi);
 
                         string manglingName = NameMangling(sym);
-                        string keyword = accessor.Keyword.Text;
                         string paramStr = string.Join(", ", mi.ParamNames.ToArray());
                         if (!declSym.IsStatic) {
                             if (string.IsNullOrEmpty(paramStr))
@@ -356,6 +443,44 @@ namespace RoslynTool.CsToLua
                                 OutputWrapValueParams(CodeBuilder, mi);
                             }
                             VisitBlock(accessor.Body);
+                        } else if (null != accessor.ExpressionBody) {
+                            if (mi.ValueParams.Count > 0) {
+                                OutputWrapValueParams(CodeBuilder, mi);
+                            }
+                            string varName = string.Format("__compiler_expbody_{0}", node.GetLocation().GetLineSpan().StartLinePosition.Line);
+                            if (!sym.ReturnsVoid) {
+                                if (mi.ReturnParamNames.Count > 0) {
+                                    CodeBuilder.AppendFormat("{0}local {1} = ", GetIndentString(), varName);
+                                } else {
+                                    CodeBuilder.AppendFormat("{0}return ", GetIndentString());
+                                }
+                            }
+                            IConversionExpression opd = null;
+                            var oper = m_Model.GetOperation(accessor.ExpressionBody) as IBlockStatement;
+                            if (null != oper && oper.Statements.Length == 1) {
+                                var iret = oper.Statements[0] as IReturnStatement;
+                                if (null != iret) {
+                                    opd = iret.ReturnedValue as IConversionExpression;
+                                }
+                            }
+                            if (sym.ReturnsVoid) {
+                                CodeBuilder.AppendFormat("{0}", GetIndentString());
+                                if (accessor.ExpressionBody.Expression is AssignmentExpressionSyntax) {
+                                    VisitToplevelExpressionFirstPass(accessor.ExpressionBody.Expression, string.Empty);
+                                } else {
+                                    OutputExpressionSyntax(accessor.ExpressionBody.Expression, opd);
+                                }
+                                if (mi.ReturnParamNames.Count > 0) {
+                                    CodeBuilder.AppendFormat("; return {0}", string.Join(", ", mi.ReturnParamNames));
+                                }
+                                CodeBuilder.AppendLine(";");
+                            } else {
+                                OutputExpressionSyntax(accessor.ExpressionBody.Expression, opd);
+                                if (mi.ReturnParamNames.Count > 0) {
+                                    CodeBuilder.AppendFormat("; return {0}, {1}", varName, string.Join(", ", mi.ReturnParamNames));
+                                }
+                                CodeBuilder.AppendLine(";");
+                            }
                         }
                         --m_Indent;
                         CodeBuilder.AppendFormat("{0}end{1},", GetIndentString(), mi.ExistYield ? ")" : string.Empty);
@@ -498,6 +623,74 @@ namespace RoslynTool.CsToLua
                     return;
             }
 
+            if (null != node.ExpressionBody) {
+                //只读特性表达式体初始化写法
+                StringBuilder curBuilder = ci.CurrentCodeBuilder;
+                if (declSym.IsStatic) {
+                    ci.CurrentCodeBuilder = ci.StaticFunctionCodeBuilder;
+                } else {
+                    ci.CurrentCodeBuilder = ci.InstanceFunctionCodeBuilder;
+                }
+
+                var sym = declSym.GetMethod;
+                if (null != sym) {
+                    var mi = new MethodInfo();
+                    mi.Init(sym, node);
+                    m_MethodInfoStack.Push(mi);
+
+                    string manglingName = NameMangling(sym);
+                    string paramStr = string.Join(", ", mi.ParamNames.ToArray());
+                    if (!declSym.IsStatic) {
+                        if (string.IsNullOrEmpty(paramStr))
+                            paramStr = "this";
+                        else
+                            paramStr = "this, " + paramStr;
+                    }
+                    CodeBuilder.AppendFormat("{0}{1} = function(this, {2})", GetIndentString(), manglingName, string.Join(", ", mi.ParamNames.ToArray()));
+                    CodeBuilder.AppendLine();
+                    ++m_Indent;
+                    if (mi.ValueParams.Count > 0) {
+                        OutputWrapValueParams(CodeBuilder, mi);
+                    }
+                    if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
+                        if (mi.ParamsIsValueType) {
+                            CodeBuilder.AppendFormat("{0}local {1} = wrapvaluetypearray{{...}};", GetIndentString(), mi.OriginalParamsName);
+                        } else if (mi.ParamsIsExternValueType) {
+                            CodeBuilder.AppendFormat("{0}local {1} = wrapexternvaluetypearray{{...}};", GetIndentString(), mi.OriginalParamsName);
+                        } else {
+                            CodeBuilder.AppendFormat("{0}local {1} = wraparray{{...}};", GetIndentString(), mi.OriginalParamsName);
+                        }
+                        CodeBuilder.AppendLine();
+                    }
+                    string varName = string.Format("__compiler_expbody_{0}", node.GetLocation().GetLineSpan().StartLinePosition.Line);
+                    if (mi.ReturnParamNames.Count > 0) {
+                        CodeBuilder.AppendFormat("{0}local {1} = ", GetIndentString(), varName);
+                    } else {
+                        CodeBuilder.AppendFormat("{0}return ", GetIndentString());
+                    }
+                    IConversionExpression opd = null;
+                    var oper = m_Model.GetOperation(node.ExpressionBody) as IBlockStatement;
+                    if (null != oper && oper.Statements.Length == 1) {
+                        var iret = oper.Statements[0] as IReturnStatement;
+                        if (null != iret) {
+                            opd = iret.ReturnedValue as IConversionExpression;
+                        }
+                    }
+                    OutputExpressionSyntax(node.ExpressionBody.Expression, opd);
+                    if (mi.ReturnParamNames.Count > 0) {
+                        CodeBuilder.AppendFormat("; return {0}, {1}", varName, string.Join(", ", mi.ReturnParamNames));
+                    }
+                    CodeBuilder.AppendLine(";");
+                    --m_Indent;
+                    CodeBuilder.AppendFormat("{0}end,", GetIndentString());
+                    CodeBuilder.AppendLine();
+
+                    m_MethodInfoStack.Pop();
+                }
+                ci.CurrentCodeBuilder = curBuilder;
+                return;
+            }
+
             StringBuilder currentBuilder = ci.CurrentCodeBuilder;
             if (declSym.IsStatic)
                 ci.CurrentCodeBuilder = ci.StaticFunctionCodeBuilder;
@@ -513,7 +706,7 @@ namespace RoslynTool.CsToLua
 
                     string manglingName = NameMangling(sym);
                     string keyword = accessor.Keyword.Text;
-                    CodeBuilder.AppendFormat("{0}{1} = function(this, {2})", GetIndentString(), manglingName, string.Join(", ", mi.ParamNames.ToArray()));
+                    CodeBuilder.AppendFormat("{0}{1} = {2}function(this, {3})", GetIndentString(), manglingName, mi.ExistYield ? "wrapenumerable(" : string.Empty, string.Join(", ", mi.ParamNames.ToArray()));
                     CodeBuilder.AppendLine();
                     ++m_Indent;
                     bool isStatic = declSym.IsStatic;
@@ -535,7 +728,7 @@ namespace RoslynTool.CsToLua
                             CodeBuilder.Append(string.Join(", ", mi.ParamNames.ToArray()));
                         }
                         CodeBuilder.AppendLine(");");
-                    } else if (null != accessor.Body) {
+                    } else {
                         if (mi.ValueParams.Count > 0) {
                             OutputWrapValueParams(CodeBuilder, mi);
                         }
@@ -564,10 +757,47 @@ namespace RoslynTool.CsToLua
                                 CodeBuilder.AppendLine();
                             }
                         }
-                        VisitBlock(accessor.Body);
+                        if (null != accessor.Body) {
+                            VisitBlock(accessor.Body);
+                        } else if (null != accessor.ExpressionBody) {
+                            string varName = string.Format("__compiler_expbody_{0}", node.GetLocation().GetLineSpan().StartLinePosition.Line);
+                            if (!sym.ReturnsVoid) {
+                                if (mi.ReturnParamNames.Count > 0) {
+                                    CodeBuilder.AppendFormat("{0}local {1} = ", GetIndentString(), varName);
+                                } else {
+                                    CodeBuilder.AppendFormat("{0}return ", GetIndentString());
+                                }
+                            }
+                            IConversionExpression opd = null;
+                            var oper = m_Model.GetOperation(accessor.ExpressionBody) as IBlockStatement;
+                            if (null != oper && oper.Statements.Length == 1) {
+                                var iret = oper.Statements[0] as IReturnStatement;
+                                if (null != iret) {
+                                    opd = iret.ReturnedValue as IConversionExpression;
+                                }
+                            }
+                            if (sym.ReturnsVoid) {
+                                CodeBuilder.AppendFormat("{0}", GetIndentString());
+                                if (accessor.ExpressionBody.Expression is AssignmentExpressionSyntax) {
+                                    VisitToplevelExpressionFirstPass(accessor.ExpressionBody.Expression, string.Empty);
+                                } else {
+                                    OutputExpressionSyntax(accessor.ExpressionBody.Expression, opd);
+                                }
+                                if (mi.ReturnParamNames.Count > 0) {
+                                    CodeBuilder.AppendFormat("; return {0}", string.Join(", ", mi.ReturnParamNames));
+                                }
+                                CodeBuilder.AppendLine(";");
+                            } else {
+                                OutputExpressionSyntax(accessor.ExpressionBody.Expression, opd);
+                                if (mi.ReturnParamNames.Count > 0) {
+                                    CodeBuilder.AppendFormat("; return {0}, {1}", varName, string.Join(", ", mi.ReturnParamNames));
+                                }
+                                CodeBuilder.AppendLine(";");
+                            }
+                        }
                     }
                     --m_Indent;
-                    CodeBuilder.AppendFormat("{0}end,", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}end{1},", GetIndentString(), mi.ExistYield ? ")" : string.Empty);
                     CodeBuilder.AppendLine();
 
                     m_MethodInfoStack.Pop();
