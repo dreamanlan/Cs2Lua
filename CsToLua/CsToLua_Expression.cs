@@ -886,11 +886,15 @@ namespace RoslynTool.CsToLua
             int ct = node.Initializers.Count;
             for (int i = 0; i < ct; ++i) {
                 var init = node.Initializers[i];
-                CodeBuilder.Append(init.NameEquals.Name);
-                CodeBuilder.AppendFormat(" {0} ", init.NameEquals.EqualsToken.Text);
-                VisitToplevelExpression(init.Expression, string.Empty);
-                if (i < ct - 1)
-                    CodeBuilder.Append(", ");
+                if (null != init && null != init.NameEquals) {
+                    CodeBuilder.Append(init.NameEquals.Name);
+                    CodeBuilder.AppendFormat(" {0} ", init.NameEquals.EqualsToken.Text);
+                    VisitToplevelExpression(init.Expression, string.Empty);
+                    if (i < ct - 1)
+                        CodeBuilder.Append(", ");
+                } else {
+                    Log(node, "Unknown AnonymousObjectCreationExpressionSyntax !");
+                }
             }
             CodeBuilder.Append("}");
         }
