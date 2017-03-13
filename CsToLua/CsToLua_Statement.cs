@@ -420,7 +420,11 @@ namespace RoslynTool.CsToLua
                 } else {
                     ci.IsIgnoreBreak = true;
                 }
-                CodeBuilder.AppendFormat("{0}else", GetIndentString());
+                if (ct > 1) {
+                    CodeBuilder.AppendFormat("{0}else", GetIndentString());
+                } else {
+                    CodeBuilder.AppendFormat("{0}do", GetIndentString());
+                }
                 CodeBuilder.AppendLine();
                 if (ba.BreakCount > 1) {
                     CodeBuilder.AppendFormat("{0}repeat", GetIndentString());
@@ -443,7 +447,7 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.AppendLine();
 
                 m_ContinueInfoStack.Pop();
-            } else {
+            } else if (ct > 0) {
                 CodeBuilder.AppendFormat("{0}end;", GetIndentString());
                 CodeBuilder.AppendLine();
             }
