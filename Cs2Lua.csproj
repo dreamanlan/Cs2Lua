@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="AnalysisHelper\BreakAnalysis.cs" />
     <Compile Include="AnalysisHelper\InnerClassAnalysis.cs" />
+    <Compile Include="AnalysisHelper\TypeAnalysis.cs" />
     <Compile Include="AnalysisHelper\YieldAnalysis.cs" />
     <Compile Include="CsToLua\CsToLua_CoreSyntax.cs" />
     <Compile Include="CsToLua\CsToLua_Exception.cs" />

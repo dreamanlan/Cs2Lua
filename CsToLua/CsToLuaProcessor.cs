@@ -230,7 +230,9 @@ namespace RoslynTool.CsToLua
                             }
 
                             if (ignore) {
-                                var symbols = model.LookupNamespacesAndTypes(0);
+                                TypeAnalysis ta = new TypeAnalysis(model);
+                                ta.Visit(root);
+                                var symbols = ta.Symbols;
                                 foreach (var symbol in symbols) {
                                     var type = symbol as INamedTypeSymbol;
                                     if (null != type) {
