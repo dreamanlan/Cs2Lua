@@ -1,7 +1,6 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
-require "LuaConsole";
 
 TestUnity = {
 	__new_object = function(...)
@@ -27,25 +26,25 @@ TestUnity = {
 			Test = function(this, ...)
 				local args = wraparray{...};
 				if (args.Length >= 3) then
-					local sagatObjId; sagatObjId = typecast(args[1], CS.System.Int32, false);
-					local protectObjId; protectObjId = typecast(args[2], CS.System.Int32, false);
-					local attackObjId; attackObjId = typecast(args[3], CS.System.Int32, false);
+					local sagatObjId; sagatObjId = typecast(arrayget(args, 1), System.Int32, false);
+					local protectObjId; protectObjId = typecast(arrayget(args, 2), System.Int32, false);
+					local attackObjId; attackObjId = typecast(arrayget(args, 3), System.Int32, false);
 				end;
-				local t; t = this.gameObject:GetComponent(CS.UnityEngine.Transform);
+				local t; t = this.gameObject:GetComponent(UnityEngine.Transform);
 				this.gameObject:SetActive(true);
 				local r; r = this.gameObject.renderer;
 				this.gameObject.active = true;
 				local v; v = true;
-				local s; s = invokeforbasicvalue(v, false, CS.System.Boolean, "ToString");
+				local s; s = invokeforbasicvalue(v, false, System.Boolean, "ToString");
 				local i; i = 123;
-				local s; s = invokeforbasicvalue(i, false, CS.System.Int32, "ToString");
-				local i; i = invokeforbasicvalue(s, false, CS.System.String, "IndexOf", wrapchar('2', 0x032));
+				local s; s = invokeforbasicvalue(i, false, System.Int32, "ToString");
+				local i; i = invokeforbasicvalue(s, false, System.String, "IndexOf", wrapchar('2', 0x032));
 				LuaConsole.Print(i);
-				local i; i = getforbasicvalue(this.m_TestString, false, CS.System.String, "Length");
+				local i; i = getforbasicvalue(this.m_TestString, false, System.String, "Length");
 				local c; c = getexterninstanceindexer(this.m_TestString, nil, "get_Chars", 2);
 				local equal; equal = (this.m_TestString == s);
 				local a; a = wraparray{5, 4, 3, 2, 1};
-				local ix; ix = invokearraystaticmethod(a, nil, "IndexOf", CS.System.Int32, a, 3);
+				local ix; ix = invokearraystaticmethod(a, nil, "IndexOf", System.Int32, a, 3);
 			end,
 			ctor = function(this)
 			end,
@@ -62,7 +61,7 @@ TestUnity = {
 		local interfaces = nil;
 		local interface_map = nil;
 
-		return defineclass(CS.UnityEngine.MonoBehaviour, "TestUnity", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
+		return defineclass(UnityEngine.MonoBehaviour, "TestUnity", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
 

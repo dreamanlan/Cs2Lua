@@ -1296,7 +1296,7 @@ function delegationwrap(handler)
   end;
 end;
 
-function delegationcomparewithnil(t, inf, k, isequal)
+function delegationcomparewithnil(isEvent, t, inf, k, isequal)
   if not t then
     if isequal then 
       return true;
@@ -1317,7 +1317,7 @@ function delegationcomparewithnil(t, inf, k, isequal)
     return false;
   end;
 end;
-function delegationset(t, intf, k, handler)
+function delegationset(isevent, t, intf, k, handler)
   local v = t;
   if k then
     v = t[k];
@@ -1328,14 +1328,14 @@ function delegationset(t, intf, k, handler)
   end;
   table.insert(v,handler);
 end;
-function delegationadd(t, intf, k, handler)
+function delegationadd(isevent, t, intf, k, handler)
   local v = t;
   if k then
     v = t[k];  
   end;
   table.insert(v, handler);
 end;
-function delegationremove(t, intf, k, handler)
+function delegationremove(isevent, t, intf, k, handler)
   local v = t;
   if k then
     v = t[k];  
@@ -1367,21 +1367,21 @@ function externdelegationcomparewithnil(t, inf, k, isequal)
     return false;
   end;
 end;
-function externdelegationset(t, intf, k, handler)
+function externdelegationset(isevent, t, intf, k, handler)
   if k then
     t[k] = handler;
   else
     t = handler;
   end;
 end;
-function externdelegationadd(t, intf, k, handler)
+function externdelegationadd(isevent, t, intf, k, handler)
   if k then
     t[k] = {"+=", handler};
   else
     t = {"+=", handler};
   end;
 end;
-function externdelegationremove(t, intf, k, handler)
+function externdelegationremove(isevent, t, intf, k, handler)
   if k then
     t[k] = {"-=", handler};
   else

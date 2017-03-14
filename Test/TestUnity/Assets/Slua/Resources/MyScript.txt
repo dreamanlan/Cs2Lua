@@ -98,6 +98,16 @@ MyScript = {
 				end;
 			end,
 			ctor = function(this)
+				this:__ctor();
+			end,
+			__ctor = function(this)
+				if this.__ctor_called then
+					return;
+				else
+					this.__ctor_called = true;
+				end
+				this.bgCurrent = newexternobject(UnityEngine.Color, "UnityEngine.Color", nil, {});
+				this.bgColor = newexternobject(UnityEngine.Color, "UnityEngine.Color", nil, {});
 			end,
 		};
 
@@ -108,11 +118,12 @@ MyScript = {
 				max = 400,
 				t = 0,
 				fogStart = 0,
-				bgCurrent = 0,
-				bgColor = 0,
+				bgCurrent = __cs2lua_nil_field_value,
+				bgColor = __cs2lua_nil_field_value,
 				cubes = __cs2lua_nil_field_value,
 				colors = wraparray{UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black},
 				__attributes = MyScript__Attrs,
+				__ctor_called = false,
 			};
 			return instance_fields;
 		end;

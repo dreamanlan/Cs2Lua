@@ -21,11 +21,11 @@ TopLevel.SecondLevel.Foo = {
 			remove_StaticEventBridge = function(value)
 			end,
 			op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo = function(self, other)
-				self.m_Test = invokeintegeroperator(2, "+", self.m_Test, other.m_Test, CS.System.Int32, CS.System.Int32);
+				self.m_Test = invokeintegeroperator(2, "+", self.m_Test, other.m_Test, System.Int32, System.Int32);
 				return self;
 			end,
-			op_Addition__TopLevel_SecondLevel_Foo__CS_System_Int32 = function(self, val)
-				self.m_Test = invokeintegeroperator(2, "+", self.m_Test, val, CS.System.Int32, CS.System.Int32);
+			op_Addition__TopLevel_SecondLevel_Foo__System_Int32 = function(self, val)
+				self.m_Test = invokeintegeroperator(2, "+", self.m_Test, val, System.Int32, System.Int32);
 				return self;
 			end,
 			op_Explicit = function(a)
@@ -83,28 +83,28 @@ TopLevel.SecondLevel.Foo = {
 				args = wrapvaluetypearray(args);
 			end,
 			ctor = function(this)
-				this:ctor__CS_System_Int32(0);
+				this:ctor__System_Int32(0);
 				return this;
 			end,
-			ctor__CS_System_Int32 = function(this, v)
+			ctor__System_Int32 = function(this, v)
 				this.base.ctor(this);
 				this.m_Test = v;
 				return this;
 			end,
-			ctor__CS_System_Int32__CS_System_Int32 = function(this, a, b)
+			ctor__System_Int32__System_Int32 = function(this, a, b)
 				this.base.ctor(this);
 				return this;
 			end,
 			Test123 = function(this, a, b)
 				return (a + b);
 			end,
-			GTest__TopLevel_SecondLevel_GenericClass_CS_System_Int32 = function(this, arg)
+			GTest__TopLevel_SecondLevel_GenericClass_System_Int32 = function(this, arg)
 			end,
-			GTest__TopLevel_SecondLevel_GenericClass_CS_System_Single = function(this, arg)
+			GTest__TopLevel_SecondLevel_GenericClass_System_Single = function(this, arg)
 			end,
 			Iterator = wrapenumerable(function(this)
 				wrapyield(nil, false, false);
-				wrapyield(newexternobject(CS.UnityEngine.WaitForSeconds, "CS.UnityEngine.WaitForSeconds", "ctor", {}, 3), false, false);
+				wrapyield(newexternobject(UnityEngine.WaitForSeconds, "UnityEngine.WaitForSeconds", "ctor", {}, 3), false, true);
 				return nil;
 			end),
 			Iterator2 = wrapenumerable(function(this)
@@ -112,13 +112,13 @@ TopLevel.SecondLevel.Foo = {
 				return nil;
 			end),
 			Test = function(this)
-				this:Test123(1, wrapconst(CS.System.Single, "NegativeInfinity"));
-				local abc; abc = wrapconst(CS.System.Single, "NegativeInfinity");
+				this:Test123(1, wrapconst(System.Single, "NegativeInfinity"));
+				local abc; abc = wrapconst(System.Single, "NegativeInfinity");
 				local t; t = newobject(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2, "ctor", {}, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
-				t:Test(CS.System.Int32, 123);
-				t:Test2(CS.System.Int32, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
+				t:Test(System.Int32, 123);
+				t:Test2(System.Int32, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
 				local v;
-				local vv; vv, v = this:TestLocal();
+				local vv; vv, v = this:TestLocal(__cs2lua_out);
 				local ts; ts = newobject(TopLevel.TestStruct, "ctor", {});
 				ts = wrapvaluetype(ts);
 				ts.A = 1;
@@ -130,11 +130,11 @@ TopLevel.SecondLevel.Foo = {
 				ts3 = ts;
 				ts3 = wrapvaluetype(ts3);
 				this:TestValueArg(ts);
-				if delegationcomparewithnil(this, nil, "OnSimple", false) then
+				if delegationcomparewithnil(true, this, nil, "OnSimple", false) then
 					this.OnSimple();
 				end;
 				local f; f = delegationwrap(this.OnSimple);
-				if delegationcomparewithnil(f, nil, nil, false) then
+				if delegationcomparewithnil(false, f, nil, nil, false) then
 					f();
 				end;
 			end,
@@ -160,7 +160,7 @@ TopLevel.SecondLevel.Foo = {
 					return i;
 					end;
 				until true;
-				i = invokeintegeroperator(2, "+", i, 1, CS.System.Int32, CS.System.Int32);
+				i = invokeintegeroperator(2, "+", i, 1, System.Int32, System.Int32);
 				end;
 				return -1;
 			end,
@@ -198,7 +198,7 @@ TopLevel.SecondLevel.Foo = {
 				m_Test = 0,
 				m_Test2 = 0,
 				m_TS = __cs2lua_nil_field_value,
-				m_HashSet = newexterncollection(CS.System.Collections.Generic.HashSet_T, "CS.System.Collections.Generic.HashSet_T", "ctor", {"one", "two", "three"}),
+				m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, "System.Collections.Generic.HashSet_T", "ctor", {"one", "two", "three"}),
 				__attributes = TopLevel__SecondLevel__Foo__Attrs,
 				__ctor_called = false,
 			};

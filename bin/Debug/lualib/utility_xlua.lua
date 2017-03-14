@@ -413,7 +413,7 @@ __mt_index_of_array = function(t, k)
   if k=="__exist" then --禁用继承
     return function(tb,fk) return false; end;
 	elseif k=="Length" or k=="Count" then
-		return table.maxn(t);
+		return #t;
 	elseif k=="GetLength" then
 		return function(obj, ix)
       local ret = 0;
@@ -932,7 +932,7 @@ function defineclass(base, className, static, static_methods, static_fields_buil
     setmetatable(class, {
         __call = function()
       			local baseObj = nil;
-      			if base_class == UnityEngine.MonoBehaviour then
+      			if base_class == CS.UnityEngine.MonoBehaviour then
       				baseObj = nil;
       			elseif mt then
       				baseObj = mt.__call();
@@ -1379,14 +1379,14 @@ function externdelegationadd(isevent, t, intf, k, handler)
   if isevent and k then
     t[k](t, "+", handler);
   else
-    t + handler;
+    --t + handler;
   end;
 end;
 function externdelegationremove(isevent, t, intf, k, handler)
   if isevent and k then
     t[k](t, "-", handler);
   else
-    t - handler;
+    --t - handler;
   end;
 end;
 
@@ -1707,4 +1707,31 @@ function getiterator(exp, isExtern)
 			end;
 		end;
 	end;
+end;
+
+--命令行开关-usearraygetset开启后，数组的访问会委托到下面2个函数
+--这里只实现了一维数组的处理
+function arrayget(arr, ...)
+  local args = {...};
+  local num = #args;
+  local ix = args[1];
+  local meta = getmetatable(arr);
+  if meta and rawget(meta, "__cs2lua_defined") then
+    return arr[ix];
+  else
+    return arr[ix-1];
+  end;
+end;
+function arrayset(arr, ...)
+  local args = {...};
+  local num = #args;
+  local ix = args[1];
+  local val = args[num];
+  local meta = getmetatable(arr);
+  if meta and rawget(meta, "__cs2lua_defined") then
+    arr[ix] = val;
+  else
+    arr[ix-1] = val;
+  end;
+  return val;
 end;

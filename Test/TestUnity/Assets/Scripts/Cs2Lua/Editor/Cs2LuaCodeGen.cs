@@ -37,7 +37,7 @@ internal sealed class Cs2LuaMethodInfo
                 ExistReturnParam = true;
                 break;
             }
-        }        
+        }
     }
 
     private static string CalcMethodMangling(MethodInfo mi)
@@ -237,7 +237,19 @@ public static class Cs2LuaCodeGen
         sb.AppendFormat("{0}using SLua;", GetIndentString());
         sb.AppendLine();
         sb.AppendLine();
-        sb.AppendFormat("{0}public class {1} : LuaClassProxyBase, {2}", GetIndentString(), name, type.Name);
+        bool useSpecClone = false;
+        foreach (var method in type.GetMethods(c_BindingFlags)) {
+            if (method.IsSpecialName)
+                continue;
+            if (method.Name == "Clone") {
+                useSpecClone = type.Name.EndsWith("Plugin");
+                break;
+            }
+        }
+        if (useSpecClone || !type.IsInterface)
+            sb.AppendFormat("{0}public class {1} : LuaClassProxyBase", GetIndentString(), name);
+        else
+            sb.AppendFormat("{0}public class {1} : LuaClassProxyBase, {2}", GetIndentString(), name, type.Name);
         sb.AppendLine();
         sb.AppendFormat("{0}", GetIndentString());
         sb.AppendLine("{");
@@ -259,18 +271,54 @@ public static class Cs2LuaCodeGen
                     sb.AppendFormat("{0}", GetIndentString());
                     sb.AppendLine("{");
                     ++s_Indent;
-                    sb.AppendFormat("{0}var err = base.BeginCall(m_Cs2Lua_{1});", GetIndentString(), get.Name);
+                    sb.AppendFormat("{0}var err = LuaFunctionHelper.BeginCall(m_Cs2Lua_{1});", GetIndentString(), get.Name);
                     sb.AppendLine();
-                    sb.AppendFormat("{0}base.PushValue(Self);", GetIndentString());
+                    sb.AppendFormat("{0}LuaFunctionHelper.PushValue(Self);", GetIndentString());
                     sb.AppendLine();
                     OutputArgs(sb, false, ps);
-                    if (IsValueType(prop.PropertyType)) {
-                        sb.AppendFormat("{0}return base.CastTo<{1}>(base.EndCall(err));", GetIndentString(), typeName);
+                    sb.AppendFormat("{0}var end_call_res = LuaFunctionHelper.EndCall(err);", GetIndentString());
+                    sb.AppendLine();
+                    sb.AppendFormat("{0}if (end_call_res) {{", GetIndentString());
+                    sb.AppendLine();
+                    ++s_Indent;
+                    sb.AppendFormat("{0}LuaFunctionHelper.BeginGetResult(err);", GetIndentString());
+                    sb.AppendLine();
+                    if (IsEnumType(prop.PropertyType)) {
+                        sb.AppendFormat("{0}int __cs2lua_ret;", GetIndentString());
+                        sb.AppendLine();
+                        sb.AppendFormat("{0}LuaFunctionHelper.GetResult(out __cs2lua_ret);", GetIndentString());
+                        sb.AppendLine();
+                    } else if (IsValueType(prop.PropertyType)) {
+                        sb.AppendFormat("{0}{1} __cs2lua_ret;", GetIndentString(), typeName);
+                        sb.AppendLine();
+                        sb.AppendFormat("{0}LuaFunctionHelper.GetResult(out __cs2lua_ret);", GetIndentString());
                         sb.AppendLine();
                     } else {
-                        sb.AppendFormat("{0}return base.EndCall(err) as {1};", GetIndentString(), typeName);
+                        sb.AppendFormat("{0}object __cs2lua_ret;", GetIndentString());
+                        sb.AppendLine();
+                        sb.AppendFormat("{0}LuaFunctionHelper.GetResult(out __cs2lua_ret);", GetIndentString());
                         sb.AppendLine();
                     }
+                    sb.AppendFormat("{0}LuaFunctionHelper.EndGetResult();", GetIndentString());
+                    sb.AppendLine();
+                    if (IsEnumType(prop.PropertyType)) {
+                        sb.AppendFormat("{0}return ({1})__cs2lua_ret;", GetIndentString(), typeName);
+                        sb.AppendLine();
+                    } else if (IsValueType(prop.PropertyType) || typeName == "object") {
+                        sb.AppendFormat("{0}return __cs2lua_ret;", GetIndentString());
+                        sb.AppendLine();
+                    } else {
+                        sb.AppendFormat("{0}return __cs2lua_ret as {1};", GetIndentString(), typeName);
+                        sb.AppendLine();
+                    }
+                    --s_Indent;
+                    sb.AppendFormat("{0}", GetIndentString());
+                    sb.AppendLine("} else {");
+                    ++s_Indent;
+                    OutputDefaultReturnValue(sb, prop.PropertyType, typeName);
+                    --s_Indent;
+                    sb.AppendFormat("{0}", GetIndentString());
+                    sb.AppendLine("}");
                     --s_Indent;
                     sb.AppendFormat("{0}", GetIndentString());
                     sb.AppendLine("}");
@@ -282,14 +330,14 @@ public static class Cs2LuaCodeGen
                     sb.AppendFormat("{0}", GetIndentString());
                     sb.AppendLine("{");
                     ++s_Indent;
-                    sb.AppendFormat("{0}var err = base.BeginCall(m_Cs2Lua_{1});", GetIndentString(), set.Name);
+                    sb.AppendFormat("{0}var err = LuaFunctionHelper.BeginCall(m_Cs2Lua_{1});", GetIndentString(), set.Name);
                     sb.AppendLine();
-                    sb.AppendFormat("{0}base.PushValue(Self);", GetIndentString());
+                    sb.AppendFormat("{0}LuaFunctionHelper.PushValue(Self);", GetIndentString());
                     sb.AppendLine();
                     OutputArgs(sb, false, ps);
-                    sb.AppendFormat("{0}base.PushValue(value);", GetIndentString());
+                    sb.AppendFormat("{0}LuaFunctionHelper.PushValue(value);", GetIndentString());
                     sb.AppendLine();
-                    sb.AppendFormat("{0}base.EndCall(err);", GetIndentString());
+                    sb.AppendFormat("{0}LuaFunctionHelper.EndCallAndDiscardResult(err);", GetIndentString());
                     sb.AppendLine();
                     --s_Indent;
                     sb.AppendFormat("{0}", GetIndentString());
@@ -311,18 +359,54 @@ public static class Cs2LuaCodeGen
                     sb.AppendFormat("{0}", GetIndentString());
                     sb.AppendLine("{");
                     ++s_Indent;
-                    sb.AppendFormat("{0}var err = base.BeginCall(m_Cs2Lua_{1});", GetIndentString(), get.Name);
+                    sb.AppendFormat("{0}var err = LuaFunctionHelper.BeginCall(m_Cs2Lua_{1});", GetIndentString(), get.Name);
                     sb.AppendLine();
-                    sb.AppendFormat("{0}base.PushValue(Self);", GetIndentString());
+                    sb.AppendFormat("{0}LuaFunctionHelper.PushValue(Self);", GetIndentString());
                     sb.AppendLine();
                     OutputArgs(sb, false, ps);
-                    if (IsValueType(prop.PropertyType)) {
-                        sb.AppendFormat("{0}return base.CastTo<{1}>(base.EndCall(err));", GetIndentString(), typeName);
+                    sb.AppendFormat("{0}var end_call_res = LuaFunctionHelper.EndCall(err);", GetIndentString());
+                    sb.AppendLine();
+                    sb.AppendFormat("{0}if (end_call_res) {{", GetIndentString());
+                    sb.AppendLine();
+                    ++s_Indent;
+                    sb.AppendFormat("{0}LuaFunctionHelper.BeginGetResult(err);", GetIndentString());
+                    sb.AppendLine();
+                    if (IsEnumType(prop.PropertyType)) {
+                        sb.AppendFormat("{0}int __cs2lua_ret;", GetIndentString());
+                        sb.AppendLine();
+                        sb.AppendFormat("{0}LuaFunctionHelper.GetResult(out __cs2lua_ret);", GetIndentString());
+                        sb.AppendLine();
+                    } else if (IsValueType(prop.PropertyType)) {
+                        sb.AppendFormat("{0}{1} __cs2lua_ret;", GetIndentString(), typeName);
+                        sb.AppendLine();
+                        sb.AppendFormat("{0}LuaFunctionHelper.GetResult(out __cs2lua_ret);", GetIndentString());
                         sb.AppendLine();
                     } else {
-                        sb.AppendFormat("{0}return base.EndCall(err) as {1};", GetIndentString(), typeName);
+                        sb.AppendFormat("{0}object __cs2lua_ret;", GetIndentString());
+                        sb.AppendLine();
+                        sb.AppendFormat("{0}LuaFunctionHelper.GetResult(out __cs2lua_ret);", GetIndentString());
                         sb.AppendLine();
                     }
+                    sb.AppendFormat("{0}LuaFunctionHelper.EndGetResult();", GetIndentString());
+                    sb.AppendLine();
+                    if (IsEnumType(prop.PropertyType)) {
+                        sb.AppendFormat("{0}return ({1})__cs2lua_ret;", GetIndentString(), typeName);
+                        sb.AppendLine();
+                    } else if (IsValueType(prop.PropertyType) || typeName == "object") {
+                        sb.AppendFormat("{0}return __cs2lua_ret;", GetIndentString());
+                        sb.AppendLine();
+                    } else {
+                        sb.AppendFormat("{0}return __cs2lua_ret as {1};", GetIndentString(), typeName);
+                        sb.AppendLine();
+                    }
+                    --s_Indent;
+                    sb.AppendFormat("{0}", GetIndentString());
+                    sb.AppendLine("} else {");
+                    ++s_Indent;
+                    OutputDefaultReturnValue(sb, prop.PropertyType, typeName);
+                    --s_Indent;
+                    sb.AppendFormat("{0}", GetIndentString());
+                    sb.AppendLine("}");
                     --s_Indent;
                     sb.AppendFormat("{0}", GetIndentString());
                     sb.AppendLine("}");
@@ -334,14 +418,14 @@ public static class Cs2LuaCodeGen
                     sb.AppendFormat("{0}", GetIndentString());
                     sb.AppendLine("{");
                     ++s_Indent;
-                    sb.AppendFormat("{0}var err = base.BeginCall(m_Cs2Lua_{1});", GetIndentString(), set.Name);
+                    sb.AppendFormat("{0}var err = LuaFunctionHelper.BeginCall(m_Cs2Lua_{1});", GetIndentString(), set.Name);
                     sb.AppendLine();
-                    sb.AppendFormat("{0}base.PushValue(Self);", GetIndentString());
+                    sb.AppendFormat("{0}LuaFunctionHelper.PushValue(Self);", GetIndentString());
                     sb.AppendLine();
                     OutputArgs(sb, false, ps);
-                    sb.AppendFormat("{0}base.PushValue(value);", GetIndentString());
+                    sb.AppendFormat("{0}LuaFunctionHelper.PushValue(value);", GetIndentString());
                     sb.AppendLine();
-                    sb.AppendFormat("{0}base.EndCall(err);", GetIndentString());
+                    sb.AppendFormat("{0}LuaFunctionHelper.EndCallAndDiscardResult(err);", GetIndentString());
                     sb.AppendLine();
                     --s_Indent;
                     sb.AppendFormat("{0}", GetIndentString());
@@ -358,6 +442,10 @@ public static class Cs2LuaCodeGen
             string retType = SimpleName(method.ReturnType);
             if (retType == "System.Void")
                 retType = "void";
+            else if (retType == "System.Object")
+                retType = "object";
+            if (useSpecClone && method.Name == "Clone")
+                retType = "object";
             Cs2LuaMethodInfo mi = new Cs2LuaMethodInfo();
             mi.Init(method, type);
             var ps = method.GetParameters();
@@ -368,36 +456,14 @@ public static class Cs2LuaCodeGen
             sb.AppendFormat("{0}", GetIndentString());
             sb.AppendLine("{");
             ++s_Indent;
-            OutputPreMethodCall(sb, method.GetParameters());
-            sb.AppendFormat("{0}var err = base.BeginCall(m_Cs2Lua_{1});", GetIndentString(), mi.MethodName);
+            sb.AppendFormat("{0}var err = LuaFunctionHelper.BeginCall(m_Cs2Lua_{1});", GetIndentString(), mi.MethodName);
             sb.AppendLine();
-            sb.AppendFormat("{0}base.PushValue(Self);", GetIndentString());
+            sb.AppendFormat("{0}LuaFunctionHelper.PushValue(Self);", GetIndentString());
             sb.AppendLine();
             OutputArgs(sb, existParams, ps);
-            sb.AppendFormat("{0}", GetIndentString());
-            if (retType != "void" || mi.ExistReturnParam) {
-                sb.Append("var __cs2lua_ret = ");
-            }
-            sb.Append("base.EndCall(err)");
-            if (mi.ExistReturnParam) {
-                sb.Append(" as object[]");
-            }
-            sb.AppendLine(";");
-            OutputPostMethodCall(sb, retType, ps);
-            if (retType != "void") {
-                if (IsValueType(method.ReturnType)) {
-                    if (mi.ExistReturnParam)
-                        sb.AppendFormat("{0}return base.CastTo<{1}>(__cs2lua_ret[0]);", GetIndentString(), retType);
-                    else
-                        sb.AppendFormat("{0}return base.CastTo<{1}>(__cs2lua_ret);", GetIndentString(), retType);
-                } else {
-                    if (mi.ExistReturnParam)
-                        sb.AppendFormat("{0}return __cs2lua_ret[0] as {1};", GetIndentString(), retType);
-                    else
-                        sb.AppendFormat("{0}return __cs2lua_ret as {1};", GetIndentString(), retType);
-                }
-                sb.AppendLine();
-            }
+            sb.AppendFormat("{0}var end_call_res = LuaFunctionHelper.EndCall(err);", GetIndentString());
+            sb.AppendLine();
+            OutputMethodCallResult(sb, method, retType, ps);
             --s_Indent;
             sb.AppendFormat("{0}", GetIndentString());
             sb.AppendLine("}");
@@ -494,40 +560,135 @@ public static class Cs2LuaCodeGen
     {
         for (int ix = 0; ix < ps.Length; ++ix) {
             var pi = ps[ix];
-            if (ix < ps.Length - 1 || !existParams) {
-                sb.AppendFormat("{0}base.PushValue({1});", GetIndentString(), pi.Name);
+            if (pi.IsOut) {
+                if (IsValueType(pi.ParameterType)) {
+                    sb.AppendFormat("{0}LuaFunctionHelper.PushValue(0);", GetIndentString());
+
+                } else {
+                    sb.AppendFormat("{0}LuaFunctionHelper.PushValue(null);", GetIndentString());
+                }
+                sb.AppendLine();
+            } else if (ix < ps.Length - 1 || !existParams) {
+                sb.AppendFormat("{0}LuaFunctionHelper.PushValue({1});", GetIndentString(), pi.Name);
                 sb.AppendLine();
             } else {
-                sb.AppendFormat("{0}base.PushParams({1});", GetIndentString(), pi.Name);
+                sb.AppendFormat("{0}LuaFunctionHelper.PushParams({1});", GetIndentString(), pi.Name);
                 sb.AppendLine();
             }
         }
     }
-    private static void OutputPreMethodCall(StringBuilder sb, params ParameterInfo[] ps)
+    private static void OutputDefaultOutParam(StringBuilder sb, System.Type paramType, string paramTypeName, string paramName)
     {
-        foreach (var pi in ps) {
-            if (pi.IsOut) {
-                sb.AppendFormat("{0}{1} = ({2}){3};", GetIndentString(), pi.Name, SimpleName(pi.ParameterType), IsValueType(pi.ParameterType) ? "0" : "null");
-                sb.AppendLine();
-            }
+        if (IsEnumType(paramType)) {
+            sb.AppendFormat("{0}{1} = ({2})0;", GetIndentString(), paramName, paramTypeName);
+            sb.AppendLine();
+        } else if (IsPrimitiveType(paramType)) {
+            if (paramTypeName == "bool")
+                sb.AppendFormat("{0}{1} = false;", GetIndentString(), paramName);
+            else
+                sb.AppendFormat("{0}{1} = ({2})0;", GetIndentString(), paramName, paramTypeName);
+            sb.AppendLine();
+        } else if (IsValueType(paramType)) {
+            sb.AppendFormat("{0}{1} = new {2}();", GetIndentString(), paramName, paramTypeName);
+            sb.AppendLine();
+        } else {
+            sb.AppendFormat("{0}{1} = null;", GetIndentString(), paramName);
+            sb.AppendLine();
         }
     }
-    private static void OutputPostMethodCall(StringBuilder sb, string retType, params ParameterInfo[] ps)
+    private static void OutputDefaultReturnValue(StringBuilder sb, System.Type retType, string retTypeName)
     {
-        int ix = 0;
+        if (IsEnumType(retType)) {
+            sb.AppendFormat("{0}return ({1})0;", GetIndentString(), retTypeName);
+            sb.AppendLine();
+        } else if (IsPrimitiveType(retType)) {
+            if (retTypeName == "bool")
+                sb.AppendFormat("{0}return false;", GetIndentString());
+            else
+                sb.AppendFormat("{0}return ({1})0;", GetIndentString(), retTypeName);
+            sb.AppendLine();
+        } else if (IsValueType(retType)) {
+            sb.AppendFormat("{0}return new {1}();", GetIndentString(), retTypeName);
+            sb.AppendLine();
+        } else {
+            sb.AppendFormat("{0}return null;", GetIndentString());
+            sb.AppendLine();
+        }
+    }
+    private static void OutputMethodCallResult(StringBuilder sb, MethodInfo mi, string retType, params ParameterInfo[] ps)
+    {
+        sb.AppendFormat("{0}if (end_call_res) {{", GetIndentString());
+        sb.AppendLine();
+        ++s_Indent;
+        sb.AppendFormat("{0}LuaFunctionHelper.BeginGetResult(err);", GetIndentString());
+        sb.AppendLine();
         if (retType != "void") {
-            ix = 1;
+            if (IsEnumType(mi.ReturnType)) {
+                sb.AppendFormat("{0}int __cs2lua_ret;", GetIndentString());
+                sb.AppendLine();
+                sb.AppendFormat("{0}LuaFunctionHelper.GetResult(out __cs2lua_ret);", GetIndentString());
+                sb.AppendLine();
+            } else if (IsValueType(mi.ReturnType)) {
+                sb.AppendFormat("{0}{1} __cs2lua_ret;", GetIndentString(), retType);
+                sb.AppendLine();
+                sb.AppendFormat("{0}LuaFunctionHelper.GetResult(out __cs2lua_ret);", GetIndentString());
+                sb.AppendLine();
+            } else {
+                sb.AppendFormat("{0}object __cs2lua_ret;", GetIndentString());
+                sb.AppendLine();
+                sb.AppendFormat("{0}LuaFunctionHelper.GetResult(out __cs2lua_ret);", GetIndentString());
+                sb.AppendLine();
+            }
         }
         foreach (var pi in ps) {
             if (pi.IsOut || pi.ParameterType.IsByRef) {
-                if (IsValueType(pi.ParameterType))
-                    sb.AppendFormat("{0}{1} = base.CastTo<{2}>(__cs2lua_ret[{3}]);", GetIndentString(), pi.Name, SimpleName(pi.ParameterType), ix);
-                else
-                    sb.AppendFormat("{0}{1} = __cs2lua_ret[{2}] as {3};", GetIndentString(), pi.Name, ix, SimpleName(pi.ParameterType));
+                if (IsEnumType(pi.ParameterType)) {
+                    sb.AppendFormat("{0}int int_for_{1};", GetIndentString(), pi.Name);
+                    sb.AppendLine();
+                    sb.AppendFormat("{0}LuaFunctionHelper.GetResult(out int_for_{1});", GetIndentString(), pi.Name);
+                    sb.AppendLine();
+                    sb.AppendFormat("{0}{1} = ({2})int_for_{3};", GetIndentString(), pi.Name, SimpleName(pi.ParameterType), pi.Name);
+                } else if (IsValueType(pi.ParameterType)) {
+                    sb.AppendFormat("{0}LuaFunctionHelper.GetResult(out {1});", GetIndentString(), pi.Name);
+                } else {
+                    sb.AppendFormat("{0}object obj_for_{1};", GetIndentString(), pi.Name);
+                    sb.AppendLine();
+                    sb.AppendFormat("{0}LuaFunctionHelper.GetResult(out obj_for_{1});", GetIndentString(), pi.Name);
+                    sb.AppendLine();
+                    sb.AppendFormat("{0}{1} = obj_for_{2} as {3};", GetIndentString(), pi.Name, pi.Name, SimpleName(pi.ParameterType));
+                }
                 sb.AppendLine();
-                ++ix;
             }
         }
+        sb.AppendFormat("{0}LuaFunctionHelper.EndGetResult();", GetIndentString());
+        sb.AppendLine();
+        if (retType != "void") {
+            if (IsEnumType(mi.ReturnType)) {
+                sb.AppendFormat("{0}return ({1})__cs2lua_ret;", GetIndentString(), retType);
+                sb.AppendLine();
+            } else if (IsValueType(mi.ReturnType) || retType == "object") {
+                sb.AppendFormat("{0}return __cs2lua_ret;", GetIndentString());
+                sb.AppendLine();
+            } else {
+                sb.AppendFormat("{0}return __cs2lua_ret as {1};", GetIndentString(), retType);
+                sb.AppendLine();
+            }
+        }
+        --s_Indent;
+        sb.AppendFormat("{0}", GetIndentString());
+        sb.AppendLine("} else {");
+        ++s_Indent;
+        foreach (var pi in ps) {
+            if (pi.IsOut) {
+                OutputDefaultOutParam(sb, pi.ParameterType, SimpleName(pi.ParameterType), pi.Name);
+            }
+        }
+        if (retType != "void") {
+            OutputDefaultReturnValue(sb, mi.ReturnType, retType);
+        }
+        --s_Indent;
+        sb.AppendFormat("{0}", GetIndentString());
+        sb.AppendLine("}");
     }
 
     private static string SimpleName(System.Type t)
@@ -624,6 +785,20 @@ public static class Cs2LuaCodeGen
             t = t.GetElementType();
         }
         return t.IsValueType || t.IsEnum || t.IsPrimitive;
+    }
+    private static bool IsEnumType(System.Type t)
+    {
+        if (t.IsByRef) {
+            t = t.GetElementType();
+        }
+        return t.IsEnum;
+    }
+    private static bool IsPrimitiveType(System.Type t)
+    {
+        if (t.IsByRef) {
+            t = t.GetElementType();
+        }
+        return t.IsPrimitive;
     }
     private static string GetIndentString()
     {

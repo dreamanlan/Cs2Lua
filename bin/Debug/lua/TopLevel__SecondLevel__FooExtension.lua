@@ -2,7 +2,6 @@ require "cs2lua__utility";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
 require "TopLevel__SecondLevel__Foo";
-require "LuaConsole";
 
 TopLevel.SecondLevel.FooExtension = {
 	__define_class = function()
@@ -13,9 +12,9 @@ TopLevel.SecondLevel.FooExtension = {
 				if (obj.m_Test > 0) then
 					obj.m_Test2 = 678;
 				end;
-				local f; f = newexternlist(CS.System.Collections.Generic.List_T, "CS.System.Collections.Generic.List_T", "ctor", {{1, 2}, {2, 3}});
+				local f; f = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", {{1, 2}, {2, 3}});
 			end,
-			Test3__TopLevel_SecondLevel_Foo__CS_System_Int32 = function(__compiler_cs_this, ix)
+			Test3__TopLevel_SecondLevel_Foo__System_Int32 = function(__compiler_cs_this, ix)
 				__compiler_cs_this:Test123(123, 456);
 			end,
 			TestExtern = function(obj)
@@ -33,24 +32,24 @@ TopLevel.SecondLevel.FooExtension = {
 				f = TopLevel.SecondLevel.Foo.op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo(f, ff);
 				local rr; rr = TopLevel.SecondLevel.Foo.op_Explicit(123);
 				local rrr; rrr = typeas(123, TopLevel.SecondLevel.Foo, false);
-				local obj; obj = newexternobject(CS.UnityEngine.GameObject, "CS.UnityEngine.GameObject", "ctor", {}, "test test test");
-				TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo__CS_System_Int32(f, 8);
+				local obj; obj = newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", {}, "test test test");
+				TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo__System_Int32(f, 8);
 				local arr; arr = wraparray{1, 2, 3, 4, 4};
-				local v; v = arr[3];
-				local dict; dict = newexterndictionary(CS.System.Collections.Generic.Dictionary_TKey_TValue, "CS.System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {[tostring(1)] = 2, [tostring(3)] = 4});
+				local v; v = arrayget(arr, 3);
+				local dict; dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {[tostring(1)] = 2, [tostring(3)] = 4});
 				local v1; v1 = condaccess(dict, (function() return getexterninstanceindexer(dict, nil, "get_Item", 1); end));
 				local list; list = nil;
 				local l; l = condaccess(list, (function() return list.Count; end));
 				condaccess(list, (function() return listthis:Add(1); end));
 				local v2; v2 = condaccess(list, (function() return setexterninstanceindexer(list, nil, "set_Item", 3, 1); end));
 				local arr2; arr2 = wraparray{1, 2, 3, 4};
-				local v3; v3 = condaccess(arr2, (function() return arr2[3]; end));
-				condaccess(arr2, (function() arr2[4] = 345; return 345; end));
+				local v3; v3 = condaccess(arr2, arrayget(arr2, 3));
+				condaccess(arr2, arrayset(arr2, 4, 345));
 				local a; a = 1;
 				local b; b = 2;
 				local c; c = 3;
 				a = (function() b = c; return b; end)();
-				c = invokeintegeroperator(2, "+", c, 1, CS.System.Int32, CS.System.Int32);
+				c = invokeintegeroperator(2, "+", c, 1, System.Int32, System.Int32);
 			end,
 			cctor = function()
 			end,

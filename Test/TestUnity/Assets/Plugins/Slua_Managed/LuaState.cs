@@ -290,12 +290,53 @@ namespace SLua
 			return null;
 		}
 
-        public object callHelper(int argnum, int error)
+        public bool callAndDiscardResult(int argnum, int error)
         {
-            if (innerCall(argnum, error)) {
-                return state.topObjects(error - 1);
+            LuaDLL.lua_getref(L, valueref);
+
+            if (!LuaDLL.lua_isfunction(L, -1)) {
+                LuaDLL.lua_pop(L, 1);
+                throw new Exception("Call invalid function.");
             }
-            return null;
+
+            bool res = true;
+            LuaDLL.lua_insert(L, -argnum - 1);
+            if (LuaDLL.lua_pcall(L, argnum, -1, error) != 0) {
+                LuaDLL.lua_pop(L, 1);
+                res = false;
+            }
+            LuaDLL.lua_remove(L, error);
+            
+            if (res) {
+                int from = error - 1;
+                int top = LuaDLL.lua_gettop(L);
+                int nArgs = top - from;
+                if (nArgs == 1) {
+                    LuaDLL.lua_pop(L, 1);
+                } else if (nArgs > 1) {
+                    LuaDLL.lua_settop(L, from);
+                }
+            }
+            return res;
+        }
+
+        public bool callForGetResult(int argnum, int error)
+        {
+            LuaDLL.lua_getref(L, valueref);
+
+            if (!LuaDLL.lua_isfunction(L, -1)) {
+                LuaDLL.lua_pop(L, 1);
+                throw new Exception("Call invalid function.");
+            }
+
+            bool res = true;
+            LuaDLL.lua_insert(L, -argnum - 1);
+            if (LuaDLL.lua_pcall(L, argnum, -1, error) != 0) {
+                LuaDLL.lua_pop(L, 1);
+                res = false;
+            }
+            LuaDLL.lua_remove(L, error);
+            return res;
         }
 
 		// you can add call method with specific type rather than object type to avoid gc alloc, like
