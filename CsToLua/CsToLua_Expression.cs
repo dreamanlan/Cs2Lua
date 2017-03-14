@@ -499,10 +499,18 @@ namespace RoslynTool.CsToLua
                 OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, node, ii.ArgConversions.ToArray());
                 CodeBuilder.Append(")");
             } else if (oper.Kind == OperationKind.ArrayElementReferenceExpression) {
-                OutputExpressionSyntax(node.Expression);
-                CodeBuilder.Append("[");
-                VisitBracketedArgumentList(node.ArgumentList);
-                CodeBuilder.Append("]");
+                if (SymbolTable.UseArrayGetSet) {
+                    CodeBuilder.Append("arrayget(");
+                    OutputExpressionSyntax(node.Expression);
+                    CodeBuilder.Append(", ");
+                    VisitBracketedArgumentList(node.ArgumentList);
+                    CodeBuilder.Append(")");
+                } else {
+                    OutputExpressionSyntax(node.Expression);
+                    CodeBuilder.Append("[");
+                    VisitBracketedArgumentList(node.ArgumentList);
+                    CodeBuilder.Append("]");
+                }
             } else if (null != sym) {
                 CodeBuilder.AppendFormat("get{0}{1}element(", sym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", sym.IsStatic ? "static" : "instance");
                 if (sym.IsStatic) {
@@ -558,12 +566,20 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.Append(")");
                     CodeBuilder.Append("; end)");
                 } else if (oper.Kind == OperationKind.ArrayElementReferenceExpression) {
-                    CodeBuilder.Append("(function() return ");
-                    OutputExpressionSyntax(node.Expression);
-                    CodeBuilder.Append("[");
-                    OutputExpressionSyntax(node.WhenNotNull);
-                    CodeBuilder.Append("]");
-                    CodeBuilder.Append("; end)");
+                    if (SymbolTable.UseArrayGetSet) {
+                        CodeBuilder.Append("arrayget(");
+                        OutputExpressionSyntax(node.Expression);
+                        CodeBuilder.Append(", ");
+                        OutputExpressionSyntax(node.WhenNotNull);
+                        CodeBuilder.Append(")");
+                    } else {
+                        CodeBuilder.Append("(function() return ");
+                        OutputExpressionSyntax(node.Expression);
+                        CodeBuilder.Append("[");
+                        OutputExpressionSyntax(node.WhenNotNull);
+                        CodeBuilder.Append("]");
+                        CodeBuilder.Append("; end)");
+                    }
                 } else if (null != sym) {
                     CodeBuilder.Append("(function() return ");
                     CodeBuilder.AppendFormat("get{0}{1}element(", sym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", sym.IsStatic ? "static" : "instance");

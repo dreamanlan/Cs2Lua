@@ -828,18 +828,28 @@ namespace RoslynTool.CsToLua
                     OutputExpressionSyntax(assign.Right, opd);
                     CodeBuilder.Append(")");
                 } else if (leftOper.Kind == OperationKind.ArrayElementReferenceExpression) {
-                    if (!toplevel) {
-                        CodeBuilder.Append("(function() ");
-                    }
-                    OutputExpressionSyntax(leftElementAccess.Expression);
-                    CodeBuilder.Append("[");
-                    VisitBracketedArgumentList(leftElementAccess.ArgumentList);
-                    CodeBuilder.Append("] = ");
-                    OutputExpressionSyntax(assign.Right, opd);
-                    if (!toplevel) {
-                        CodeBuilder.Append("; return ");
+                    if (SymbolTable.UseArrayGetSet) {
+                        CodeBuilder.Append("arrayset(");
+                        OutputExpressionSyntax(leftElementAccess.Expression);
+                        CodeBuilder.Append(", ");
+                        VisitBracketedArgumentList(leftElementAccess.ArgumentList);
+                        CodeBuilder.Append(", ");
                         OutputExpressionSyntax(assign.Right, opd);
-                        CodeBuilder.Append("; end)()");
+                        CodeBuilder.Append(")");
+                    } else {
+                        if (!toplevel) {
+                            CodeBuilder.Append("(function() ");
+                        }
+                        OutputExpressionSyntax(leftElementAccess.Expression);
+                        CodeBuilder.Append("[");
+                        VisitBracketedArgumentList(leftElementAccess.ArgumentList);
+                        CodeBuilder.Append("] = ");
+                        OutputExpressionSyntax(assign.Right, opd);
+                        if (!toplevel) {
+                            CodeBuilder.Append("; return ");
+                            OutputExpressionSyntax(assign.Right, opd);
+                            CodeBuilder.Append("; end)()");
+                        }
                     }
                 } else if (null != leftSym) {
                     CodeBuilder.AppendFormat("set{0}{1}element(", leftSym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", leftSym.IsStatic ? "static" : "instance");
@@ -897,15 +907,25 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.Append(")");
                         CodeBuilder.Append("; end)");
                     } else if (bindingOper.Kind == OperationKind.ArrayElementReferenceExpression) {
-                        CodeBuilder.Append("(function() ");
-                        OutputExpressionSyntax(leftCondAccess.Expression);
-                        CodeBuilder.Append("[");
-                        OutputExpressionSyntax(leftCondAccess.WhenNotNull);
-                        CodeBuilder.Append("] = ");
-                        OutputExpressionSyntax(assign.Right, opd);
-                        CodeBuilder.Append("; return ");
-                        OutputExpressionSyntax(assign.Right, opd);
-                        CodeBuilder.Append("; end)");
+                        if (SymbolTable.UseArrayGetSet) {
+                            CodeBuilder.Append("arrayset(");
+                            OutputExpressionSyntax(leftCondAccess.Expression);
+                            CodeBuilder.Append(", ");
+                            OutputExpressionSyntax(leftCondAccess.WhenNotNull);
+                            CodeBuilder.Append(", ");
+                            OutputExpressionSyntax(assign.Right, opd);
+                            CodeBuilder.Append(")");
+                        } else {
+                            CodeBuilder.Append("(function() ");
+                            OutputExpressionSyntax(leftCondAccess.Expression);
+                            CodeBuilder.Append("[");
+                            OutputExpressionSyntax(leftCondAccess.WhenNotNull);
+                            CodeBuilder.Append("] = ");
+                            OutputExpressionSyntax(assign.Right, opd);
+                            CodeBuilder.Append("; return ");
+                            OutputExpressionSyntax(assign.Right, opd);
+                            CodeBuilder.Append("; end)");
+                        }
                     } else if (null != sym) {
                         CodeBuilder.Append("(function() return ");
                         CodeBuilder.AppendFormat("set{0}{1}element(", sym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", sym.IsStatic ? "static" : "instance");

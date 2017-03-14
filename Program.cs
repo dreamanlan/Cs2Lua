@@ -79,6 +79,8 @@ namespace RoslynTool
                             SymbolTable.NoAutoRequire = true;
                         } else if (0 == string.Compare(args[i], "-luacomponentbystring", true)) {
                             SymbolTable.LuaComponentByString = true;
+                        } else if (0 == string.Compare(args[i], "-usearraygetset", true)) {
+                            SymbolTable.UseArrayGetSet = true;
                         } else if (0 == string.Compare(args[i], "-refbyname", true)) {
                             string name = string.Empty, alias = "global";
                             if (i < args.Length - 1) {
