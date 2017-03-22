@@ -200,7 +200,17 @@ namespace RoslynTool.CsToLua
             if (isMemberAccess) {
                 string fnOfIntf = "nil";
                 bool isExplicitInterfaceInvoke = cs2lua.CheckExplicitInterfaceAccess(sym, ref fnOfIntf);
-                if (isExplicitInterfaceInvoke) {
+                if (sym.MethodKind == MethodKind.DelegateInvoke) {
+                    var memberAccess  = node as MemberAccessExpressionSyntax;
+                    if (null != memberAccess) {
+                        cs2lua.OutputExpressionSyntax(exp);
+                        codeBuilder.Append(".");
+                        codeBuilder.Append(memberAccess.Name);
+                        codeBuilder.Append("(");
+                    } else {
+                        //error;
+                    }
+                } else if (isExplicitInterfaceInvoke) {
                     codeBuilder.Append("invokewithinterface(");
                     cs2lua.OutputExpressionSyntax(exp);
                     codeBuilder.Append(", ");

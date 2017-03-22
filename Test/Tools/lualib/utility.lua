@@ -1159,9 +1159,8 @@ function newobject(class, ctor, initializer, ...)
   if ctor then
     obj[ctor](obj, ...);
   end;
-  for k,v in pairs(initializer) do
-		local sk = __unwrap_if_string(k);
-		obj[sk] = v;
+  if obj and initializer then
+  	initializer(obj);
   end;
   return obj;
 end;
@@ -1173,17 +1172,10 @@ function newexternobject(class, className, ctor, initializer, ...)
   else
     obj = Slua.CreateClass(className, ...);
   end;
-  if obj then
-		if initializer ~= nil then
-			for k,v in pairs(initializer) do
-				local sk = __unwrap_if_string(k);
-			  obj[sk] = v;
-			end;
-		end
-    return obj;
-  else
-    return nil;
+  if obj and initializer then
+  	initializer(obj);
   end;
+  return obj;
 end;
 
 function newtypeparamobject(t)

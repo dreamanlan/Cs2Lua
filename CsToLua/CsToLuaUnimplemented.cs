@@ -49,10 +49,6 @@ namespace RoslynTool.CsToLua
         {
             Log(node, "Unsupported Syntax !");
         }
-        public override void VisitImplicitElementAccess(ImplicitElementAccessSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
         public override void VisitFixedStatement(FixedStatementSyntax node)
         {
             Log(node, "Unsupported Syntax !");
