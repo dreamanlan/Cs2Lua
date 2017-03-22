@@ -419,7 +419,7 @@ __mt_index_of_array = function(t, k)
       local ret = 0;
       local tb = obj;
       for i=0,ix do			       
-        ret = table.maxn(tb);
+        ret = #tb;
         tb = tb[0];
       end;
       return ret;
@@ -470,7 +470,7 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="LastIndexOf" then
 	  return function(obj, p)
-	    local num = table.maxn(obj);
+	    local num = #obj;
       for k=num,1 do
         local v = obj[k];
         if v==p then	          
@@ -502,7 +502,7 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="Peek" then    
     return function(obj)
-      local num = table.maxn(obj);
+      local num = #obj;
       local v = obj[num];
       return v;
     end;
@@ -512,7 +512,7 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="Dequeue" then
     return function(obj)
-      local num = table.maxn(obj);
+      local num = #obj;
       local v = obj[num];
       table.remove(obj,num);
       return v;
@@ -523,7 +523,7 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="Pop" then
     return function(obj)
-      local num = table.maxn(obj);
+      local num = #obj;
       local v = obj[num];
       table.remove(obj,num);
       return v;
@@ -544,7 +544,7 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="Clear" then
     return function(obj)
-    	while table.maxn(obj)>0 do
+    	while #obj>0 do
     		table.remove(obj);
     	end;
     end;
@@ -715,7 +715,7 @@ function GetArrayEnumerator(tb)
   return setmetatable({
     MoveNext = function(this)
       local tb = this.object;
-      local num = table.maxn(tb);
+      local num = #tb;
       if this.index < num then
         this.index = this.index + 1;
         this.current = tb[this.index];
@@ -1309,7 +1309,7 @@ function delegationcomparewithnil(isEvent, t, inf, k, isequal)
   if k then
     v = t[k];  
   end;
-  local n = table.maxn(v);
+  local n = #v;
   if isequal and n==0 then
     return true;
   elseif not isqual and n>0 then
@@ -1323,7 +1323,7 @@ function delegationset(isevent, t, intf, k, handler)
   if k then
     v = t[k];
   end;
-  local n = table.maxn(v);
+  local n = #v;
   for i=1,n do
     table.remove(v);
   end;
@@ -1440,7 +1440,7 @@ function setexternstaticindexer(class, name, ...)
 end;
 function setexterninstanceindexer(obj, intf, name, ...)
   local args = {...};
-  local num = table.maxn(args);
+  local num = #args;
 	local index = __unwrap_if_string(args[1]);
 	local val = args[num];
   local meta = getmetatable(obj);
@@ -1499,7 +1499,7 @@ function invokeexternoperator(class, method, ...)
 	local args = {...};
 	--对slua，对应到lua元表操作符函数的操作符重载cs2lua转lua代码时已经换成对应操作符表达式。
 	--执行到这里的应该是无法对应到lua操作符的操作符重载
-	local argnum = table.maxn(args);
+	local argnum = #args;
 	if method=="op_Equality" then
 	  if args[1] and args[2] then
 	    return args[1]==args[2];

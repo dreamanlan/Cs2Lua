@@ -196,7 +196,7 @@ namespace RoslynTool.CsToLua
                 return false;
             foreach (var attr in sym.GetAttributes()) {
                 string fn = GetFullName(attr.AttributeClass);
-                if (fn == fullName)
+                if (fn == fullName || fn == SymbolTable.PrefixExternClassName(fullName))
                     return true;
             }
             return false;
@@ -207,7 +207,7 @@ namespace RoslynTool.CsToLua
                 return default(T);
             foreach (var attr in sym.GetAttributes()) {
                 string fn = GetFullName(attr.AttributeClass);
-                if (fn == fullName) {
+                if (fn == fullName || fn == SymbolTable.PrefixExternClassName(fullName)) {
                     var args = attr.NamedArguments;
                     foreach (var pair in args) {
                         if (pair.Key == argName) {
@@ -225,7 +225,7 @@ namespace RoslynTool.CsToLua
                 return default(T);
             foreach (var attr in sym.GetAttributes()) {
                 string fn = GetFullName(attr.AttributeClass);
-                if (fn == fullName) {
+                if (fn == fullName || fn == SymbolTable.PrefixExternClassName(fullName)) {
                     var args = attr.ConstructorArguments;
                     int ct = args.Length;
                     if (index >= 0 && index < ct) {
