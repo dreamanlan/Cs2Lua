@@ -625,6 +625,12 @@ namespace RoslynTool.CsToLua
         {
             VisitBracketedArgumentList(node.ArgumentList);
         }
+        public override void VisitImplicitElementAccess(ImplicitElementAccessSyntax node)
+        {
+            CodeBuilder.Append("[");
+            VisitBracketedArgumentList(node.ArgumentList);
+            CodeBuilder.Append("]");
+        }
         public override void VisitInitializerExpression(InitializerExpressionSyntax node)
         {
             var oper = m_Model.GetOperation(node);
@@ -732,36 +738,69 @@ namespace RoslynTool.CsToLua
                         }
                     }
                     CodeBuilder.Append("}");
-                } else {
-                    //isArray或isObjectInitializer
-                    if (isArray)
-                        CodeBuilder.Append("wraparray{");
+                } else if (isArray) {
+                    CodeBuilder.Append("wraparray{");
                     var args = node.Expressions;
                     var arrInitOper = oper as IArrayInitializer;
                     int ct = args.Count;
                     for (int i = 0; i < ct; ++i) {
                         var exp = args[i];
-                        IConversionExpression opd = null;
-                        if (null != arrInitOper && i<arrInitOper.ElementValues.Length) {
-                            opd = arrInitOper.ElementValues[i] as IConversionExpression;
-                        } else {
+                        IConversionExpression opd = arrInitOper.ElementValues[i] as IConversionExpression;
+                        OutputExpressionSyntax(exp, opd);
+                        if (i < ct - 1) {
+                            CodeBuilder.Append(", ");
+                        }
+                    }
+                    CodeBuilder.Append("}");
+                } else {
+                    //isObjectInitializer
+                    bool isCollectionObj = false;
+                    var typeSymInfo = oper.Type;
+                    if (null != typeSymInfo) {
+                        isCollectionObj = IsImplementationOfSys(typeSymInfo, "ICollection");
+                    }
+                    if (isCollectionObj) {
+                        CodeBuilder.Append("{");
+                        var args = node.Expressions;
+                        int ct = args.Count;
+                        for (int i = 0; i < ct; ++i) {
+                            var exp = args[i];
+                            IConversionExpression opd = null;
                             //调用BoundObjectInitializerExpression.Initializers
                             var inits = oper.GetType().InvokeMember("Initializers", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, oper, null) as IList;
                             if (null != inits && i < inits.Count) {
                                 opd = inits[i] as IConversionExpression;
                             }
+                            if (args[i] is AssignmentExpressionSyntax) {
+                                VisitToplevelExpressionFirstPass(args[i], string.Empty);
+                            } else {
+                                OutputExpressionSyntax(exp, opd);
+                            }
+                            if (i < ct - 1)
+                                CodeBuilder.Append(",");
                         }
-                        if (!isArray && args[i] is AssignmentExpressionSyntax) {
-                            VisitToplevelExpressionFirstPass(args[i], string.Empty);
-                        } else {
-                            OutputExpressionSyntax(exp, opd);
-                        }
-                        if (i < ct - 1) {
-                            CodeBuilder.Append(", ");
-                        }
-                    }
-                    if (isArray)
                         CodeBuilder.Append("}");
+                    } else {
+                        CodeBuilder.Append("(function(newobj) ");
+                        var args = node.Expressions;
+                        int ct = args.Count;
+                        for (int i = 0; i < ct; ++i) {
+                            var exp = args[i];
+                            IConversionExpression opd = null;
+                            //调用BoundObjectInitializerExpression.Initializers
+                            var inits = oper.GetType().InvokeMember("Initializers", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, oper, null) as IList;
+                            if (null != inits && i < inits.Count) {
+                                opd = inits[i] as IConversionExpression;
+                            }
+                            if (args[i] is AssignmentExpressionSyntax) {
+                                VisitToplevelExpressionFirstPass(args[i], string.Empty);
+                            } else {
+                                OutputExpressionSyntax(exp, opd);
+                            }
+                            CodeBuilder.Append(";");
+                        }
+                        CodeBuilder.Append(" end)");
+                    }
                 }
             } else {
                 Log(node, "Can't find operation info !");
@@ -832,15 +871,12 @@ namespace RoslynTool.CsToLua
                 }
                 if (null != node.Initializer) {
                     CodeBuilder.Append(", ");
-                    if (!isCollection) {
-                        CodeBuilder.Append("{");
-                    }
                     VisitInitializerExpression(node.Initializer);
-                    if (!isCollection) {
-                        CodeBuilder.Append("}");
-                    }
                 } else {
-                    CodeBuilder.Append(", {}");
+                    if(isCollection)
+                        CodeBuilder.Append(", {}");
+                    else
+                        CodeBuilder.Append(", nil");
                 }
                 if (ii.Args.Count + ii.DefaultValueArgs.Count + ii.GenericTypeArgs.Count > 0) {
                     CodeBuilder.Append(", ");

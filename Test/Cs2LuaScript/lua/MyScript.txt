@@ -6,7 +6,7 @@ require "LuaString";
 
 MyScript = {
 	__new_object = function(...)
-		return newobject(MyScript, nil, {}, ...);
+		return newobject(MyScript, nil, nil, ...);
 	end,
 	__define_class = function()
 		local static = MyScript;
@@ -30,7 +30,7 @@ MyScript = {
 				local s; s = "test test test from cs2lua !";
 				UnityEngine.Debug.Log(s);
 				mb:StartCoroutine(this:TestCoroutine());
-				this.root = newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", {}, "root");
+				this.root = newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", nil, "root");
 				local slider; slider = typeas(UnityEngine.GameObject.Find("Canvas/Slider"):GetComponent(UnityEngine.UI.Slider), UnityEngine.UI.Slider, false);
 				local counttxt; counttxt = typeas(UnityEngine.GameObject.Find("Canvas/Count"):GetComponent(UnityEngine.UI.Text), UnityEngine.UI.Text, false);
 				slider.onValueChanged:AddListener((function(v)
@@ -46,7 +46,7 @@ MyScript = {
 					local offset; offset = condexp((invokeintegeroperator(1, "%", i, 2, System.Int32, System.Int32) == 1), true, 5, true, -5);
 					local nr; nr = (this.r + (UnityEngine.Mathf.Sin(UnityEngine.Time.time) * offset));
 					local angle; angle = condexp((invokeintegeroperator(1, "%", i, 2, System.Int32, System.Int32) == 1), false, (function() return UnityEngine.Time.time; end), true, -5);
-					local b; b = newexternobject(UnityEngine.Vector3, "UnityEngine.Vector3", "ctor", {}, typecast(( (UnityEngine.Mathf.Cos(((((i * 3.141593) * 2) / this.max) + angle)) * nr) ), System.Single, false), typecast(( (UnityEngine.Mathf.Sin(((((i * 3.141593) * 2) / this.max) + angle)) * nr) ), System.Single, false), 0);
+					local b; b = newexternobject(UnityEngine.Vector3, "UnityEngine.Vector3", "ctor", nil, typecast(( (UnityEngine.Mathf.Cos(((((i * 3.141593) * 2) / this.max) + angle)) * nr) ), System.Single, false), typecast(( (UnityEngine.Mathf.Sin(((((i * 3.141593) * 2) / this.max) + angle)) * nr) ), System.Single, false), 0);
 					this.cubes[i + 1].transform.position = b;
 				i = invokeintegeroperator(2, "+", i, 1, System.Int32, System.Int32);
 				end;
@@ -63,10 +63,10 @@ MyScript = {
 				local args = wraparray{...};
 			end,
 			TestCoroutine = wrapenumerable(function(this)
-				wrapyield(newexternobject(UnityEngine.WaitForSeconds, "UnityEngine.WaitForSeconds", "ctor", {}, 10), false, true);
+				wrapyield(newexternobject(UnityEngine.WaitForSeconds, "UnityEngine.WaitForSeconds", "ctor", nil, 10), false, true);
 				local i; i = 0;
 				while (i < 60) do
-					wrapyield(newexternobject(UnityEngine.WaitForSeconds, "UnityEngine.WaitForSeconds", "ctor", {}, 1), false, true);
+					wrapyield(newexternobject(UnityEngine.WaitForSeconds, "UnityEngine.WaitForSeconds", "ctor", nil, 1), false, true);
 					UnityEngine.Debug.Log(System.String.Format("{0} seconds", i));
 				i = invokeintegeroperator(2, "+", i, 1, System.Int32, System.Int32);
 				end;
@@ -84,7 +84,7 @@ MyScript = {
 				local i; i = 0;
 				while (i < this.max) do
 					local cube; cube = UnityEngine.GameObject.CreatePrimitive(3);
-					cube.transform.position = newexternobject(UnityEngine.Vector3, "UnityEngine.Vector3", "ctor", {}, (typecast(UnityEngine.Mathf.Cos((((i * 3.141593) * 2) / this.max)), System.Single, false) * this.r), (typecast(UnityEngine.Mathf.Sin((((i * 3.141593) * 2) / this.max)), System.Single, false) * this.r), 0);
+					cube.transform.position = newexternobject(UnityEngine.Vector3, "UnityEngine.Vector3", "ctor", nil, (typecast(UnityEngine.Mathf.Cos((((i * 3.141593) * 2) / this.max)), System.Single, false) * this.r), (typecast(UnityEngine.Mathf.Sin((((i * 3.141593) * 2) / this.max)), System.Single, false) * this.r), 0);
 					cube.transform:SetParent(this.root.transform);
 					local mat; mat = cube:GetComponent(UnityEngine.Renderer).material;
 					local box; box = cube:GetComponent(UnityEngine.BoxCollider);
@@ -98,6 +98,16 @@ MyScript = {
 				end;
 			end,
 			ctor = function(this)
+				this:__ctor();
+			end,
+			__ctor = function(this)
+				if this.__ctor_called then
+					return;
+				else
+					this.__ctor_called = true;
+				end
+				this.bgCurrent = newexternobject(UnityEngine.Color, "UnityEngine.Color", nil, {});
+				this.bgColor = newexternobject(UnityEngine.Color, "UnityEngine.Color", nil, {});
 			end,
 		};
 
@@ -108,11 +118,12 @@ MyScript = {
 				max = 400,
 				t = 0,
 				fogStart = 0,
-				bgCurrent = 0,
-				bgColor = 0,
+				bgCurrent = __cs2lua_nil_field_value,
+				bgColor = __cs2lua_nil_field_value,
 				cubes = __cs2lua_nil_field_value,
 				colors = wraparray{UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black},
 				__attributes = MyScript__Attrs,
+				__ctor_called = false,
 			};
 			return instance_fields;
 		end;

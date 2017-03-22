@@ -1159,9 +1159,8 @@ function newobject(class, ctor, initializer, ...)
   if ctor then
     obj[ctor](obj, ...);
   end;
-  for k,v in pairs(initializer) do
-		local sk = __unwrap_if_string(k);
-		obj[sk] = v;
+  if obj and initializer then
+  	initializer(obj);
   end;
   return obj;
 end;
@@ -1173,17 +1172,10 @@ function newexternobject(class, className, ctor, initializer, ...)
   else
     obj = Slua.CreateClass(className, ...);
   end;
-  if obj then
-		if initializer ~= nil then
-			for k,v in pairs(initializer) do
-				local sk = __unwrap_if_string(k);
-			  obj[sk] = v;
-			end;
-		end
-    return obj;
-  else
-    return nil;
+  if obj and initializer then
+  	initializer(obj);
   end;
+  return obj;
 end;
 
 function newtypeparamobject(t)
@@ -1296,7 +1288,7 @@ function delegationwrap(handler)
   end;
 end;
 
-function delegationcomparewithnil(t, inf, k, isequal)
+function delegationcomparewithnil(isEvent, t, inf, k, isequal)
   if not t then
     if isequal then 
       return true;
@@ -1317,7 +1309,7 @@ function delegationcomparewithnil(t, inf, k, isequal)
     return false;
   end;
 end;
-function delegationset(t, intf, k, handler)
+function delegationset(isevent, t, intf, k, handler)
   local v = t;
   if k then
     v = t[k];
@@ -1328,14 +1320,14 @@ function delegationset(t, intf, k, handler)
   end;
   table.insert(v,handler);
 end;
-function delegationadd(t, intf, k, handler)
+function delegationadd(isevent, t, intf, k, handler)
   local v = t;
   if k then
     v = t[k];  
   end;
   table.insert(v, handler);
 end;
-function delegationremove(t, intf, k, handler)
+function delegationremove(isevent, t, intf, k, handler)
   local v = t;
   if k then
     v = t[k];  
@@ -1367,21 +1359,21 @@ function externdelegationcomparewithnil(t, inf, k, isequal)
     return false;
   end;
 end;
-function externdelegationset(t, intf, k, handler)
+function externdelegationset(isevent, t, intf, k, handler)
   if k then
     t[k] = handler;
   else
     t = handler;
   end;
 end;
-function externdelegationadd(t, intf, k, handler)
+function externdelegationadd(isevent, t, intf, k, handler)
   if k then
     t[k] = {"+=", handler};
   else
     t = {"+=", handler};
   end;
 end;
-function externdelegationremove(t, intf, k, handler)
+function externdelegationremove(isevent, t, intf, k, handler)
   if k then
     t[k] = {"-=", handler};
   else

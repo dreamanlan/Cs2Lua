@@ -999,8 +999,8 @@ namespace RoslynTool.CsToLua
                             CodeBuilder.Append("this, nil, ");
                             CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
                         } else {
-                            OutputExpressionSyntax(assign.Left);
-                            CodeBuilder.Append(", nil, nil");
+                            CodeBuilder.Append("newobj, nil, ");
+                            CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
                         }
                     } else {
                         OutputExpressionSyntax(assign.Left);

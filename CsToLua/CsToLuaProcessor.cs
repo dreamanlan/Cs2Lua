@@ -837,22 +837,22 @@ namespace RoslynTool.CsToLua
                     ++indent;
 
                     if (string.IsNullOrEmpty(exportConstructor)) {
-                        sb.AppendFormat("{0}return newobject({1}, nil, {{}}, ...);", GetIndentString(indent), key);
+                        sb.AppendFormat("{0}return newobject({1}, nil, nil, ...);", GetIndentString(indent), key);
                         sb.AppendLine();
                     } else {
                         //处理ref/out参数
                         if (exportConstructorInfo.ReturnParamNames.Count > 0) {
                             sb.AppendFormat("{0}return (function(...) ", GetIndentString(indent));
                             string retArgStr = string.Join(", ", exportConstructorInfo.ReturnParamNames.ToArray());
-                            sb.Append("local obj");
+                            sb.Append("local newobj");
                             if (exportConstructorInfo.ReturnParamNames.Count > 0) {
                                 sb.Append(", ");
                                 sb.Append(retArgStr);
                             }
-                            sb.AppendFormat(" = newobject({0}, \"{1}\", {{}}, ...); return obj; end)(...);", key, exportConstructor);
+                            sb.AppendFormat(" = newobject({0}, \"{1}\", nil, ...); return newobj; end)(...);", key, exportConstructor);
                             sb.AppendLine();
                         } else {
-                            sb.AppendFormat("{0}return newobject({1}, \"{2}\", {{}}, ...);", GetIndentString(indent), key, exportConstructor);
+                            sb.AppendFormat("{0}return newobject({1}, \"{2}\", nil, ...);", GetIndentString(indent), key, exportConstructor);
                             sb.AppendLine();
                         }
                     }

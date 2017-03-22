@@ -1160,9 +1160,8 @@ function newobject(class, ctor, initializer, ...)
   if ctor then
     obj[ctor](obj, ...);
   end;
-  for k,v in pairs(initializer) do
-		local sk = __unwrap_if_string(k);
-		obj[sk] = v;
+  if obj and initializer then
+  	initializer(obj);
   end;
   return obj;
 end;
@@ -1174,17 +1173,10 @@ function newexternobject(class, className, ctor, initializer, ...)
   else
     obj = Slua.CreateClass(className, ...);
   end;
-  if obj then
-		if initializer ~= nil then
-			for k,v in pairs(initializer) do
-				local sk = __unwrap_if_string(k);
-			  obj[sk] = v;
-			end;
-		end
-    return obj;
-  else
-    return nil;
+  if obj and initializer then
+  	initializer(obj);
   end;
+  return obj;
 end;
 
 function newtypeparamobject(t)
@@ -1376,17 +1368,25 @@ function externdelegationset(isevent, t, intf, k, handler)
   end;
 end;
 function externdelegationadd(isevent, t, intf, k, handler)
-  if isevent and k then
-    t[k](t, "+", handler);
+  if k then    
+    if isevent then
+      t[k](t, "+", handler);
+    else
+      t[k] = t[k] + handler;
+    end;
   else
-    --t + handler;
+    t = t + handler;
   end;
 end;
 function externdelegationremove(isevent, t, intf, k, handler)
-  if isevent and k then
-    t[k](t, "-", handler);
+  if k then    
+    if isevent then
+      t[k](t, "-", handler);
+    else
+      t[k] = t[k] - handler;
+    end;
   else
-    --t - handler;
+    t = t - handler;
   end;
 end;
 
