@@ -201,7 +201,7 @@ namespace RoslynTool.CsToLua
                             if (null != symInfo) {
                                 var names = symInfo.GetMembers(name);
                                 if (names.Length > 0) {
-                                    CodeBuilder.AppendFormat("{0}", name);
+                                    CodeBuilder.AppendFormat("newobj.{0}", name);
                                     return;
                                 }
                             }
@@ -243,7 +243,7 @@ namespace RoslynTool.CsToLua
                         if (null != symInfo) {
                             var names = symInfo.GetMembers(name);
                             if (names.Length > 0) {
-                                CodeBuilder.AppendFormat("{0}", name);
+                                CodeBuilder.AppendFormat("newobj.{0}", name);
                                 return;
                             }
                         }
