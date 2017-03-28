@@ -286,11 +286,12 @@ namespace RoslynTool.CsToLua
 
             var oper = m_Model.GetOperation(node) as ITypeOfExpression;
             var type = oper.TypeOperand;
-            if (SymbolTable.ForXlua || SymbolTable.ForTolua) {
+            bool useTypeOfFunc = (SymbolTable.ForXlua || SymbolTable.ForTolua) && null != type && type.ContainingAssembly != SymbolTable.Instance.AssemblySymbol;
+            if (useTypeOfFunc) {
                 CodeBuilder.Append("typeof(");
             }
             OutputType(type, node, ci, "typeof");
-            if (SymbolTable.ForXlua || SymbolTable.ForTolua) {
+            if (useTypeOfFunc) {
                 CodeBuilder.Append(")");
             }
         }

@@ -342,7 +342,14 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.Append("\"");
                 } else {
                     var ci = m_ClassInfoStack.Peek();
+                    bool useTypeOfFunc = (SymbolTable.ForXlua || SymbolTable.ForTolua) && null != type && type.ContainingAssembly != SymbolTable.Instance.AssemblySymbol;
+                    if (useTypeOfFunc) {
+                        CodeBuilder.Append("typeof(");
+                    }
                     OutputType(type, node, ci, "invoke");
+                    if (useTypeOfFunc) {
+                        CodeBuilder.Append(")");
+                    }
                 }
                 if (i < ct - 1) {
                     CodeBuilder.Append(", ");
