@@ -88,7 +88,7 @@ namespace RoslynTool.CsToLua
         }
         internal string NameMangling(IMethodSymbol sym)
         {
-            return m_SymbolTable.NameMangling(sym);
+            return SymbolTable.Instance.NameMangling(sym);
         }
         internal bool CheckExplicitInterfaceAccess(ISymbol sym)
         {
@@ -189,7 +189,6 @@ namespace RoslynTool.CsToLua
         internal CsLuaTranslater(SemanticModel model, bool enableInherit)
         {
             m_Model = model;
-            m_SymbolTable = SymbolTable.Instance;
             m_EnableInherit = enableInherit;
         }
 
@@ -242,7 +241,7 @@ namespace RoslynTool.CsToLua
                 while (null != refType && refType.TypeKind != TypeKind.Class && refType.TypeKind != TypeKind.Struct && refType.TypeKind != TypeKind.Structure) {
                     refType = refType.ContainingType;
                 }
-                if (null != refType && refType.IsGenericType && refType.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
+                if (null != refType && refType.IsGenericType && SymbolTable.Instance.IsCs2LuaSymbol(refType)) {
                     if (m_SkipGenericTypeDefine) {
                         SymbolTable.Instance.AddGenericTypeInstance(ClassInfo.GetFullName(refType), refType);
                     } else {
@@ -342,7 +341,7 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.Append("\"");
                 } else {
                     var ci = m_ClassInfoStack.Peek();
-                    bool useTypeOfFunc = (SymbolTable.ForXlua || SymbolTable.ForTolua) && null != type && type.ContainingAssembly != SymbolTable.Instance.AssemblySymbol;
+                    bool useTypeOfFunc = (SymbolTable.ForXlua || SymbolTable.ForTolua) && null != type && !SymbolTable.Instance.IsCs2LuaSymbol(type.ContainingAssembly);
                     if (useTypeOfFunc) {
                         CodeBuilder.Append("typeof(");
                     }
@@ -409,7 +408,7 @@ namespace RoslynTool.CsToLua
                     if (typeParam.TypeParameterKind == TypeParameterKind.Type && !m_SkipGenericTypeDefine && null != m_GenericTypeInstance) {
                         IMethodSymbol sym = FindClassMethodDeclaredSymbol(node);
                         if (null != sym) {
-                            var t = m_SymbolTable.FindTypeArgument(type);
+                            var t = SymbolTable.Instance.FindTypeArgument(type);
                             if (t.TypeKind != TypeKind.TypeParameter) {
                                 CodeBuilder.Append(ClassInfo.GetFullName(t));
                                 AddReferenceAndTryDeriveGenericTypeInstance(ci, t);
@@ -419,7 +418,7 @@ namespace RoslynTool.CsToLua
                         } else {
                             ISymbol varSym = FindVariableDeclaredSymbol(node);
                             if (null != varSym) {
-                                var t = m_SymbolTable.FindTypeArgument(type);
+                                var t = SymbolTable.Instance.FindTypeArgument(type);
                                 if (t.TypeKind != TypeKind.TypeParameter) {
                                     CodeBuilder.Append(ClassInfo.GetFullName(t));
                                     AddReferenceAndTryDeriveGenericTypeInstance(ci, t);
@@ -477,7 +476,7 @@ namespace RoslynTool.CsToLua
         }
         private void OutputOperatorInvoke(InvocationInfo ii, SyntaxNode node)
         {
-            if (ii.MethodSymbol.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
+            if (SymbolTable.Instance.IsCs2LuaSymbol(ii.MethodSymbol)) {
                 CodeBuilder.AppendFormat("{0}.", ii.ClassKey);
                 string manglingName = NameMangling(ii.MethodSymbol);
                 CodeBuilder.Append(manglingName);
@@ -541,7 +540,7 @@ namespace RoslynTool.CsToLua
         }
         private void OutputConversionInvokePrefix(InvocationInfo ii)
         {
-            if (ii.MethodSymbol.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
+            if (SymbolTable.Instance.IsCs2LuaSymbol(ii.MethodSymbol)) {
                 CodeBuilder.AppendFormat("{0}.", ii.ClassKey);
                 string manglingName = NameMangling(ii.MethodSymbol);
                 CodeBuilder.Append(manglingName);
@@ -594,15 +593,13 @@ namespace RoslynTool.CsToLua
             var leftOper = m_Model.GetOperation(left);
             var rightOper = m_Model.GetOperation(right);
             if (null != leftOper.Type && leftOper.Type.TypeKind == TypeKind.Delegate && (!leftOper.ConstantValue.HasValue || null != leftOper.ConstantValue.Value) && rightOper.ConstantValue.HasValue && rightOper.ConstantValue.Value == null) {
-                var leftAssembly = leftOper.Type.ContainingAssembly;
                 var sym = m_Model.GetSymbolInfo(left);
                 bool isEvent = (null != leftOper && leftOper is IEventReferenceExpression) || (null != rightOper && rightOper is IEventReferenceExpression);
-                OutputDelegationCompareWithNull(sym.Symbol, left, leftAssembly == m_SymbolTable.AssemblySymbol, isEvent, op == "==", lopd);
+                OutputDelegationCompareWithNull(sym.Symbol, left, SymbolTable.Instance.IsCs2LuaSymbol(leftOper.Type), isEvent, op == "==", lopd);
             } else if (null != rightOper.Type && rightOper.Type.TypeKind == TypeKind.Delegate && (!rightOper.ConstantValue.HasValue || null != rightOper.ConstantValue.Value) && leftOper.ConstantValue.HasValue && leftOper.ConstantValue.Value == null) {
-                var rightAssembly = rightOper.Type.ContainingAssembly;
                 var sym = m_Model.GetSymbolInfo(right);
                 bool isEvent = (null != leftOper && leftOper is IEventReferenceExpression) || (null != rightOper && rightOper is IEventReferenceExpression);
-                OutputDelegationCompareWithNull(sym.Symbol, right, rightAssembly == m_SymbolTable.AssemblySymbol, isEvent, op == "==", ropd);
+                OutputDelegationCompareWithNull(sym.Symbol, right, SymbolTable.Instance.IsCs2LuaSymbol(rightOper.Type), isEvent, op == "==", ropd);
             } else if (null != leftOper && null != rightOper && (leftOper.ConstantValue.HasValue && null == leftOper.ConstantValue.Value || rightOper.ConstantValue.HasValue && null == rightOper.ConstantValue.Value || SymbolTable.IsBasicType(leftOper.Type) || SymbolTable.IsBasicType(rightOper.Type))) {
                 CodeBuilder.Append("(");
                 OutputExpressionSyntax(left, lopd);
@@ -797,7 +794,6 @@ namespace RoslynTool.CsToLua
 
         private SemanticModel m_Model = null;
         private bool m_EnableInherit = false;
-        private SymbolTable m_SymbolTable = null;
         private StringBuilder m_LogBuilder = new StringBuilder();
         private int m_Indent = 0;
         private StringBuilder m_ToplevelCodeBuilder = new StringBuilder();

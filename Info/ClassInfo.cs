@@ -241,7 +241,7 @@ namespace RoslynTool.CsToLua
         {
             if (null == type)
                 return string.Empty;
-            if (type.ContainingAssembly == SymbolTable.Instance.AssemblySymbol) {
+            if (SymbolTable.Instance.IsCs2LuaSymbol(type)) {
                 return CalcFullName(type, true);
             } else {
                 //外部类型不会基于泛型样式导入，只有使用lua实现的集合类会出现这种情况，这里需要用泛型类型名以与utility.lua里的名称一致
@@ -262,7 +262,7 @@ namespace RoslynTool.CsToLua
         {
             if (null == type)
                 return string.Empty;
-            if (type.ContainingAssembly == SymbolTable.Instance.AssemblySymbol) {
+            if (SymbolTable.Instance.IsCs2LuaSymbol(type)) {
                 return CalcFullNameWithTypeParameters(type, true);
             } else {
                 return SymbolTable.PrefixExternClassName(CalcFullNameWithTypeParameters(type, true));

@@ -137,7 +137,7 @@ namespace RoslynTool.CsToLua
             VisitLocalVariableDeclarator(ci, node);
             if (null != node.Initializer) {
                 var oper = m_Model.GetOperation(node.Initializer.Value);
-                if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && oper.Type.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
+                if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && SymbolTable.Instance.IsCs2LuaSymbol(oper.Type)) {
                     CodeBuilder.AppendFormat("{0}{1} = wrapvaluetype({2});", GetIndentString(), node.Identifier.Text, node.Identifier.Text);
                     CodeBuilder.AppendLine();
                 }

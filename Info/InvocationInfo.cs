@@ -33,11 +33,9 @@ namespace RoslynTool.CsToLua
         internal ExpressionSyntax SecondRefArray = null;
 
         internal IMethodSymbol MethodSymbol = null;
-        internal IAssemblySymbol AssemblySymbol = null;
 
         internal void Init(IMethodSymbol sym, ArgumentListSyntax argList, SemanticModel model)
         {
-            IAssemblySymbol assemblySym = SymbolTable.Instance.AssemblySymbol;
             Init(sym);
 
             if (null != argList) {
@@ -105,7 +103,6 @@ namespace RoslynTool.CsToLua
 
         internal void Init(IMethodSymbol sym, BracketedArgumentListSyntax argList, SemanticModel model)
         {
-            IAssemblySymbol assemblySym = SymbolTable.Instance.AssemblySymbol; 
             Init(sym);
 
             if (null != argList) {
@@ -275,7 +272,7 @@ namespace RoslynTool.CsToLua
             bool useTypeNameString = false;
             if(IsComponentGetOrAdd && SymbolTable.LuaComponentByString){
                 var tArgs = sym.TypeArguments;
-                if (tArgs.Length > 0 && tArgs[0].ContainingAssembly == AssemblySymbol) {
+                if (tArgs.Length > 0 && SymbolTable.Instance.IsCs2LuaSymbol(tArgs[0])) {
                     useTypeNameString = true;
                 }
             }
@@ -286,7 +283,6 @@ namespace RoslynTool.CsToLua
         private void Init(IMethodSymbol sym)
         {
             MethodSymbol = sym;
-            AssemblySymbol = SymbolTable.Instance.AssemblySymbol;;
 
             Args.Clear();
             ArgConversions.Clear();
@@ -295,7 +291,7 @@ namespace RoslynTool.CsToLua
             
             ClassKey = ClassInfo.GetFullName(sym.ContainingType);
             GenericClassKey = ClassInfo.GetFullNameWithTypeParameters(sym.ContainingType);
-            IsExtensionMethod = sym.IsExtensionMethod && sym.ContainingAssembly == AssemblySymbol;
+            IsExtensionMethod = sym.IsExtensionMethod && SymbolTable.Instance.IsCs2LuaSymbol(sym);
             IsBasicValueMethod = SymbolTable.IsBasicValueMethod(sym);
             IsArrayStaticMethod = ClassKey == SymbolTable.PrefixExternClassName("System.Array") && sym.IsStatic;
 
@@ -325,12 +321,12 @@ namespace RoslynTool.CsToLua
         {
             if (classKey == SymbolTable.PrefixExternClassName("System.Enum")) {
                 var oper = model.GetOperation(exp);
-                if (oper.Type.ContainingAssembly != SymbolTable.Instance.AssemblySymbol && oper.Type.TypeKind == TypeKind.Enum) {
+                if (!SymbolTable.Instance.IsCs2LuaSymbol(oper.Type) && oper.Type.TypeKind == TypeKind.Enum) {
                     string ckey = ClassInfo.GetFullName(oper.Type);
                     SymbolTable.Instance.AddExternEnum(ckey, oper.Type);
                 } else {
                     var typeOf = oper as ITypeOfExpression;
-                    if (null != typeOf && typeOf.TypeOperand.ContainingAssembly != SymbolTable.Instance.AssemblySymbol && typeOf.TypeOperand.TypeKind == TypeKind.Enum) {
+                    if (null != typeOf && !SymbolTable.Instance.IsCs2LuaSymbol(typeOf.TypeOperand) && typeOf.TypeOperand.TypeKind == TypeKind.Enum) {
                         string ckey = ClassInfo.GetFullName(typeOf.TypeOperand);
                         SymbolTable.Instance.AddExternEnum(ckey, typeOf.TypeOperand);
                     }

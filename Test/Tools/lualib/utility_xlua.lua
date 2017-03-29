@@ -1504,9 +1504,9 @@ function invokeexternoperator(class, method, ...)
 	  if args[1] and args[2] then
 	    return args[1]==args[2];
 	  elseif not args[1] then
-	    return Slua.IsNull(args[2]);
+	    return CS.XluaExtensions.IsNull(args[2]);
 	  elseif not args[2] then
-	    return Slua.IsNull(args[1]);
+	    return CS.XluaExtensions.IsNull(args[1]);
 	  else
 	    return true;
 	  end;
@@ -1514,15 +1514,15 @@ function invokeexternoperator(class, method, ...)
 	  if args[1] and args[2] then
 	    return args[1]~=args[2];
 	  elseif not args[1] then
-	    return not Slua.IsNull(args[2]);
+	    return not CS.XluaExtensions.IsNull(args[2]);
 	  elseif not args[2] then
-	    return not Slua.IsNull(args[1]);
+	    return not CS.XluaExtensions.IsNull(args[1]);
 	  else
 	    return false;
 	  end;	  
 	elseif method=="op_Implicit" then
 	  --这里就不仔细判断了，就假定是UnityEngine.Object子类了
-	  return not Slua.IsNull(args[1]);
+	  return not CS.XluaExtensions.IsNull(args[1]);
 	end;
 	if argnum == 1 and args[1] then
 	  return args[1][method](...);

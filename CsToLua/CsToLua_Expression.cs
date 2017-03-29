@@ -286,7 +286,7 @@ namespace RoslynTool.CsToLua
 
             var oper = m_Model.GetOperation(node) as ITypeOfExpression;
             var type = oper.TypeOperand;
-            bool useTypeOfFunc = (SymbolTable.ForXlua || SymbolTable.ForTolua) && null != type && type.ContainingAssembly != SymbolTable.Instance.AssemblySymbol;
+            bool useTypeOfFunc = (SymbolTable.ForXlua || SymbolTable.ForTolua) && null != type && !SymbolTable.Instance.IsCs2LuaSymbol(type);
             if (useTypeOfFunc) {
                 CodeBuilder.Append("typeof(");
             }
@@ -368,7 +368,7 @@ namespace RoslynTool.CsToLua
             }
             VisitAssignment(ci, op, baseOp, node, string.Empty, false, leftOper, leftSym, leftPsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType);
             var oper = m_Model.GetOperation(node.Right);
-            if (null != leftSym && leftSym.Kind == SymbolKind.Local && null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && oper.Type.ContainingAssembly == m_SymbolTable.AssemblySymbol) {
+            if (null != leftSym && leftSym.Kind == SymbolKind.Local && null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && SymbolTable.Instance.IsCs2LuaSymbol(oper.Type)) {
                 CodeBuilder.AppendFormat("; {0} = wrapvaluetype({1})", leftSym.Name, leftSym.Name);
             }
             if (needWrapFunction) {
@@ -480,7 +480,7 @@ namespace RoslynTool.CsToLua
                 AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
             }
             if (null != psym && psym.IsIndexer) {
-                CodeBuilder.AppendFormat("get{0}{1}indexer(", psym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
+                CodeBuilder.AppendFormat("get{0}{1}indexer(", SymbolTable.Instance.IsCs2LuaSymbol(psym) ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
                 if (psym.IsStatic) {
                     string fullName = ClassInfo.GetFullName(psym.ContainingType);
                     CodeBuilder.Append(fullName);
@@ -513,7 +513,7 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.Append("]");
                 }
             } else if (null != sym) {
-                CodeBuilder.AppendFormat("get{0}{1}element(", sym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", sym.IsStatic ? "static" : "instance");
+                CodeBuilder.AppendFormat("get{0}{1}element(", SymbolTable.Instance.IsCs2LuaSymbol(sym) ? string.Empty : "extern", sym.IsStatic ? "static" : "instance");
                 if (sym.IsStatic) {
                     string fullName = ClassInfo.GetFullName(sym.ContainingType);
                     CodeBuilder.Append(fullName);
@@ -545,7 +545,7 @@ namespace RoslynTool.CsToLua
                 }
                 if (null != psym && psym.IsIndexer) {
                     CodeBuilder.Append("(function() return ");
-                    CodeBuilder.AppendFormat("get{0}{1}indexer(", psym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
+                    CodeBuilder.AppendFormat("get{0}{1}indexer(", SymbolTable.Instance.IsCs2LuaSymbol(psym) ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
                     if (psym.IsStatic) {
                         string fullName = ClassInfo.GetFullName(psym.ContainingType);
                         CodeBuilder.Append(fullName);
@@ -583,7 +583,7 @@ namespace RoslynTool.CsToLua
                     }
                 } else if (null != sym) {
                     CodeBuilder.Append("(function() return ");
-                    CodeBuilder.AppendFormat("get{0}{1}element(", sym.ContainingAssembly == m_SymbolTable.AssemblySymbol ? string.Empty : "extern", sym.IsStatic ? "static" : "instance");
+                    CodeBuilder.AppendFormat("get{0}{1}element(", SymbolTable.Instance.IsCs2LuaSymbol(sym) ? string.Empty : "extern", sym.IsStatic ? "static" : "instance");
                     if (sym.IsStatic) {
                         string fullName = ClassInfo.GetFullName(sym.ContainingType);
                         CodeBuilder.Append(fullName);
@@ -826,7 +826,7 @@ namespace RoslynTool.CsToLua
                 AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
 
                 bool isCollection = IsImplementationOfSys(typeSymInfo, "ICollection");
-                bool isExternal = typeSymInfo.ContainingAssembly != m_SymbolTable.AssemblySymbol;
+                bool isExternal = !SymbolTable.Instance.IsCs2LuaSymbol(typeSymInfo);
 
                 string ctor = NameMangling(sym);
                 string localName = string.Format("__compiler_newobject_{0}", node.GetLocation().GetLineSpan().StartLinePosition.Line);
