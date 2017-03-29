@@ -72,6 +72,14 @@ namespace RoslynTool.CsToLua
             }
             return ret;
         }
+        internal bool IsCs2LuaSymbol(ISymbol sym)
+        {
+            return sym.ContainingAssembly == m_AssemblySymbol;
+        }
+        internal bool IsCs2LuaSymbol(IAssemblySymbol sym)
+        {
+            return sym == m_AssemblySymbol;
+        }
         internal void Init(CSharpCompilation compilation)
         {
             m_Compilation = compilation;
@@ -122,7 +130,7 @@ namespace RoslynTool.CsToLua
                 bool isMangling;
                 csi.SymbolOverloadFlags.TryGetValue(ret, out isMangling);
                 if (isMangling) {
-                    ret = CalcMethodMangling(sym, m_AssemblySymbol);
+                    ret = CalcMethodMangling(sym);
                 }
             }
             return ret;
@@ -240,8 +248,9 @@ namespace RoslynTool.CsToLua
             }
             return -1;
         }
-        internal static string CalcMethodMangling(IMethodSymbol methodSym, IAssemblySymbol assemblySym)
+        internal static string CalcMethodMangling(IMethodSymbol methodSym)
         {
+            IAssemblySymbol assemblySym = SymbolTable.Instance.AssemblySymbol;
             if (null == methodSym)
                 return string.Empty;
             StringBuilder sb = new StringBuilder();

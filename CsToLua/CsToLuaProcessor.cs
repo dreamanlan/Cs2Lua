@@ -746,7 +746,7 @@ namespace RoslynTool.CsToLua
                 isValueType = csi.TypeSymbol.IsValueType;
                 isEnumClass = csi.TypeSymbol.TypeKind == TypeKind.Enum;
             }
-            bool myselfDefinedBaseClass = csi.TypeSymbol.BaseType.ContainingAssembly == symTable.AssemblySymbol;
+            bool myselfDefinedBaseClass = SymbolTable.Instance.IsCs2LuaSymbol(csi.TypeSymbol.BaseType);
             
             HashSet<string> requiredlibs = new HashSet<string>();
             HashSet<string> lualibs;

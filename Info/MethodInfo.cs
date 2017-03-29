@@ -31,7 +31,6 @@ namespace RoslynTool.CsToLua
 
         internal void Init(IMethodSymbol sym, SyntaxNode node)
         {
-            IAssemblySymbol assemblySym = SymbolTable.Instance.AssemblySymbol;
             ParamNames.Clear();
             ReturnParamNames.Clear();
             RefParamNames.Clear();
@@ -54,7 +53,7 @@ namespace RoslynTool.CsToLua
                     var arrTypeSym = param.Type as IArrayTypeSymbol;
                     if (null != arrTypeSym && arrTypeSym.ElementType.TypeKind == TypeKind.Struct) {
                         string ns = ClassInfo.GetNamespaces(arrTypeSym.ElementType);
-                        if (arrTypeSym.ElementType.ContainingAssembly == assemblySym)
+                        if (SymbolTable.Instance.IsCs2LuaSymbol(arrTypeSym.ElementType))
                             ParamsIsValueType = true;
                         else if (ns != "System") {
                             ParamsIsExternValueType = true;
@@ -73,7 +72,7 @@ namespace RoslynTool.CsToLua
                 } else {
                     if (param.Type.TypeKind == TypeKind.Struct) {
                         string ns = ClassInfo.GetNamespaces(param.Type);
-                        if (param.Type.ContainingAssembly == assemblySym)
+                        if (SymbolTable.Instance.IsCs2LuaSymbol(param.Type))
                             ValueParams.Add(ParamNames.Count);
                         else if (ns != "System")
                             ExternValueParams.Add(ParamNames.Count);
