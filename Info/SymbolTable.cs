@@ -20,6 +20,10 @@ namespace RoslynTool.CsToLua
         {
             get { return m_AssemblySymbol; }
         }
+        internal Dictionary<string, INamedTypeSymbol> ExternTypes
+        {
+            get { return m_ExternTypes; }
+        }
         internal Dictionary<string, INamespaceSymbol> NamespaceSymbols
         {
             get { return m_NamespaceSymbols; }
@@ -74,11 +78,47 @@ namespace RoslynTool.CsToLua
         }
         internal bool IsCs2LuaSymbol(ISymbol sym)
         {
-            return sym.ContainingAssembly == m_AssemblySymbol;
+            if (sym.Kind == SymbolKind.Method) {
+                return IsCs2LuaSymbol(sym as IMethodSymbol);
+            } else if (sym.Kind == SymbolKind.Field) {
+                return IsCs2LuaSymbol(sym as IFieldSymbol);
+            } else if (sym.Kind == SymbolKind.Property) {
+                return IsCs2LuaSymbol(sym as IPropertySymbol);
+            } else if (sym.Kind == SymbolKind.Event) {
+                return IsCs2LuaSymbol(sym as IEventSymbol);
+            } else {
+                var arrSym = sym as IArrayTypeSymbol;
+                if (null != arrSym) {
+                    return IsCs2LuaSymbol(arrSym.ElementType);
+                } else {
+                    var typeSym = sym as ITypeSymbol;
+                    if (null != typeSym) {
+                        return IsCs2LuaSymbol(typeSym);
+                    } else {
+                        return sym.ContainingAssembly == m_AssemblySymbol;
+                    }
+                }
+            }
         }
-        internal bool IsCs2LuaSymbol(IAssemblySymbol sym)
+        internal bool IsCs2LuaSymbol(IMethodSymbol sym)
         {
-            return sym == m_AssemblySymbol;
+            return sym.ContainingAssembly == m_AssemblySymbol && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true));
+        }
+        internal bool IsCs2LuaSymbol(IFieldSymbol sym)
+        {
+            return sym.ContainingAssembly == m_AssemblySymbol && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true));
+        }
+        internal bool IsCs2LuaSymbol(IPropertySymbol sym)
+        {
+            return sym.ContainingAssembly == m_AssemblySymbol && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true));
+        }
+        internal bool IsCs2LuaSymbol(IEventSymbol sym)
+        {
+            return sym.ContainingAssembly == m_AssemblySymbol && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true));
+        }
+        internal bool IsCs2LuaSymbol(ITypeSymbol sym)
+        {
+            return sym.ContainingAssembly == m_AssemblySymbol && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym, true));
         }
         internal void Init(CSharpCompilation compilation)
         {
@@ -185,6 +225,7 @@ namespace RoslynTool.CsToLua
 
         private CSharpCompilation m_Compilation = null;
         private IAssemblySymbol m_AssemblySymbol = null;
+        private Dictionary<string, INamedTypeSymbol> m_ExternTypes = new Dictionary<string, INamedTypeSymbol>();
         private Dictionary<string, INamespaceSymbol> m_NamespaceSymbols = new Dictionary<string, INamespaceSymbol>();
         private Dictionary<string, ClassSymbolInfo> m_ClassSymbols = new Dictionary<string, ClassSymbolInfo>();
         private Dictionary<string, HashSet<string>> m_Requires = new Dictionary<string, HashSet<string>>();
@@ -240,9 +281,9 @@ namespace RoslynTool.CsToLua
         }
         internal static int IndexOfTypeParameter(List<ITypeParameterSymbol> tParams, ITypeSymbol t)
         {
-            string name = ClassInfo.GetFullNameWithTypeParameters(t);
+            string name = ClassInfo.SpecialGetFullTypeNameWithTypeParameters(t);
             for (int i = 0; i < tParams.Count; ++i) {
-                if (name == ClassInfo.GetFullNameWithTypeParameters(tParams[i])) {
+                if (name == ClassInfo.SpecialGetFullTypeNameWithTypeParameters(tParams[i])) {
                     return i;
                 }
             }

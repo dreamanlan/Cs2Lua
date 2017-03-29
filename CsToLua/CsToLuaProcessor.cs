@@ -20,7 +20,7 @@ namespace RoslynTool.CsToLua
     }
     public static class CsToLuaProcessor
     {
-        public static ExitCode Process(string srcFile, string outputExt, IList<string> macros, IList<string> ignoredPath, IDictionary<string, string> _refByNames, IDictionary<string, string> _refByPaths, bool enableInherit, bool outputResult)
+        public static ExitCode Process(string srcFile, string outputExt, IList<string> macros, IList<string> ignoredPath, IList<string> externPath, IDictionary<string, string> _refByNames, IDictionary<string, string> _refByPaths, bool enableInherit, bool outputResult)
         {
             List<string> preprocessors = new List<string>(macros);
             preprocessors.Add("__LUA__");
@@ -33,6 +33,10 @@ namespace RoslynTool.CsToLua
             List<string> ignoredFullPath = new List<string>();
             foreach (string s in ignoredPath) {
                 ignoredFullPath.Add(Path.Combine(path, s));
+            }
+            List<string> externFullPath = new List<string>();
+            foreach (string s in externPath) {
+                externFullPath.Add(Path.Combine(path, s));
             }
 
             string logDir = Path.Combine(path, "log");
@@ -203,6 +207,7 @@ namespace RoslynTool.CsToLua
                     using (StreamWriter sw3 = new StreamWriter(Path.Combine(logDir, "Translation.log"))) {
                         foreach (SyntaxTree tree in newTrees) {
                             bool ignore = IsIgnoredFile(ignoredFullPath, tree.FilePath);
+                            bool isExtern = IsExternFile(externFullPath, tree.FilePath);
                             string fileName = Path.GetFileNameWithoutExtension(tree.FilePath);
                             var root = tree.GetRoot();
                             SemanticModel model = compilation.GetSemanticModel(tree, true);
@@ -229,16 +234,19 @@ namespace RoslynTool.CsToLua
                                 }
                             }
 
-                            if (ignore) {
+                            if (ignore || isExtern) {
                                 TypeAnalysis ta = new TypeAnalysis(model);
                                 ta.Visit(root);
                                 var symbols = ta.Symbols;
                                 foreach (var symbol in symbols) {
                                     var type = symbol as INamedTypeSymbol;
                                     if (null != type) {
-                                        string key = ClassInfo.GetFullName(type);
+                                        string key = ClassInfo.SpecialGetFullTypeName(type, isExtern);
                                         if (!ignoredClasses.ContainsKey(key)) {
                                             ignoredClasses.Add(key, type);
+                                        }
+                                        if (isExtern && !SymbolTable.Instance.ExternTypes.ContainsKey(key)) {
+                                            SymbolTable.Instance.ExternTypes.Add(key, type);
                                         }
                                     }
                                 }
@@ -1262,6 +1270,18 @@ namespace RoslynTool.CsToLua
         {
             bool ret = false;
             foreach (string path in ignoredPath) {
+                if (filePath.StartsWith(path)) {
+                    ret = true;
+                    break;
+                }
+            }
+            return ret;
+        }
+
+        private static bool IsExternFile(IList<string> externPath, string filePath)
+        {
+            bool ret = false;
+            foreach (string path in externPath) {
                 if (filePath.StartsWith(path)) {
                     ret = true;
                     break;

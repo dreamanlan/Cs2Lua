@@ -103,7 +103,7 @@ namespace RoslynTool.CsToLua
                 }
             }
             string key = GetFullName(refType);
-            if (null != refType && refType != SemanticInfo && refType.ContainingAssembly == SemanticInfo.ContainingAssembly && !refType.IsAnonymousType && !refType.IsImplicitClass && !refType.IsImplicitlyDeclared && refType.TypeKind != TypeKind.Delegate && refType.TypeKind != TypeKind.Dynamic && refType.TypeKind != TypeKind.Interface) {
+            if (null != refType && refType != SemanticInfo && SymbolTable.Instance.IsCs2LuaSymbol(refType) && !refType.IsAnonymousType && !refType.IsImplicitClass && !refType.IsImplicitlyDeclared && refType.TypeKind != TypeKind.Delegate && refType.TypeKind != TypeKind.Dynamic && refType.TypeKind != TypeKind.Interface) {
                 if (!string.IsNullOrEmpty(key) && !References.Contains(key) && key != Key) {
                     bool isIgnore = ClassInfo.HasAttribute(refType, "Cs2Lua.IgnoreAttribute");
                     if (isIgnore) {
@@ -245,6 +245,31 @@ namespace RoslynTool.CsToLua
                 return CalcFullName(type, true);
             } else {
                 //外部类型不会基于泛型样式导入，只有使用lua实现的集合类会出现这种情况，这里需要用泛型类型名以与utility.lua里的名称一致
+                return SymbolTable.PrefixExternClassName(CalcFullNameWithTypeParameters(type, true));
+            }
+        }
+        //专门用于SymbolTable::IsCs2LuaSymbol与分析外部文件的类定义时使用的函数(防止递归调用与数据构建过程中查询数据)
+        internal static string SpecialGetFullTypeName(ITypeSymbol type, bool isExtern)
+        {
+            if (null == type)
+                return string.Empty;
+            if (type.ContainingAssembly == SymbolTable.Instance.AssemblySymbol) {
+                if (isExtern) {
+                    return SymbolTable.PrefixExternClassName(CalcFullName(type, true));
+                } else {
+                    return CalcFullName(type, true);
+                }
+            } else {
+                return SymbolTable.PrefixExternClassName(CalcFullNameWithTypeParameters(type, true));
+            }
+        }
+        internal static string SpecialGetFullTypeNameWithTypeParameters(ISymbol type)
+        {
+            if (null == type)
+                return string.Empty;
+            if (type.ContainingAssembly == SymbolTable.Instance.AssemblySymbol) {
+                return CalcFullNameWithTypeParameters(type, true);
+            } else {
                 return SymbolTable.PrefixExternClassName(CalcFullNameWithTypeParameters(type, true));
             }
         }
