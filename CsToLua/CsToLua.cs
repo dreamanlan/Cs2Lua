@@ -341,7 +341,7 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.Append("\"");
                 } else {
                     var ci = m_ClassInfoStack.Peek();
-                    bool useTypeOfFunc = (SymbolTable.ForXlua || SymbolTable.ForTolua) && null != type && !SymbolTable.Instance.IsCs2LuaSymbol(type.ContainingAssembly);
+                    bool useTypeOfFunc = (SymbolTable.ForXlua || SymbolTable.ForTolua) && null != type && !SymbolTable.Instance.IsCs2LuaSymbol(type);
                     if (useTypeOfFunc) {
                         CodeBuilder.Append("typeof(");
                     }
@@ -556,8 +556,6 @@ namespace RoslynTool.CsToLua
         {
             var leftOper = m_Model.GetOperation(left);
             var rightOper = m_Model.GetOperation(right);
-            string leftAssemblyName = leftOper.Type.ContainingAssembly.Name;
-            string rightAssemblyName = rightOper.Type.ContainingAssembly.Name;
             string leftNamespace = ClassInfo.GetNamespaces(leftOper.Type);
             string rightNamespace = ClassInfo.GetNamespaces(rightOper.Type);
             string leftTypeFullName = ClassInfo.GetFullName(leftOper.Type);

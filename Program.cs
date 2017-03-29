@@ -18,6 +18,7 @@ namespace RoslynTool
                 string outputExt = "txt";
                 List<string> macros = new List<string>();
                 List<string> ignoredPath = new List<string>();
+                List<string> externPath = new List<string>();
                 Dictionary<string, string> refByNames = new Dictionary<string, string>();
                 Dictionary<string, string> refByPaths = new Dictionary<string, string>();
                 bool enableInherit = false;
@@ -45,6 +46,14 @@ namespace RoslynTool
                                 string arg = args[i + 1];
                                 if (!arg.StartsWith("-")) {
                                     ignoredPath.Add(arg);
+                                    ++i;
+                                }
+                            }
+                        } else if (0 == string.Compare(args[i], "-externpath", true)) {
+                            if (i < args.Length - 1) {
+                                string arg = args[i + 1];
+                                if (!arg.StartsWith("-")) {
+                                    externPath.Add(arg);
                                     ++i;
                                 }
                             }
@@ -158,7 +167,7 @@ namespace RoslynTool
                     }
                 }
                 if (File.Exists(file)) {
-                    return (int)CsToLuaProcessor.Process(file, outputExt, macros, ignoredPath, refByNames, refByPaths, enableInherit, outputResult);
+                    return (int)CsToLuaProcessor.Process(file, outputExt, macros, ignoredPath, externPath, refByNames, refByPaths, enableInherit, outputResult);
                 } else {
                     return (int)ExitCode.FileNotFound;
                 }
