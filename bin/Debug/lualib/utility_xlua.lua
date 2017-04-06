@@ -828,14 +828,14 @@ end;
 function wrapenumerable(func)
 	return function(...)
 		local args = {...};
-		return UnityEngine.WrapEnumerator(coroutine.create(function()
-			func(unpack(args));
+		return WrapEnumerator(coroutine.create(function()
+			func(table.unpack(args));
 		end));
 	end;
 end;
 
 function wrapyield(yieldVal, isEnumerableOrEnumerator, isUnityYield)
-	UnityEngine.Yield(yieldVal);
+	Yield(yieldVal);
 end;
 
 LuaConsole = {
@@ -1004,6 +1004,25 @@ function defineclass(base, className, static, static_methods, static_fields_buil
               end;
               return __find_base_obj_key(k);
             end;
+			
+			local function __is_monobehaviour_instance(self)
+				local mt = getmetatable(self)
+				if mt == nil then
+					return false;
+				end
+				
+				local clsTbl = mt.__class;
+				local monoBehaviour = CS.UnityEngine.MonoBehaviour;
+				while clsTbl ~= nil do
+					if clsTbl == monoBehaviour then
+						return true;
+					end
+					
+					clsTbl = clsTbl.__base_class;
+				end
+				
+				return false;
+			end
             
             setmetatable(obj, {
             		__class = class,
@@ -1048,7 +1067,18 @@ function defineclass(base, className, static, static_methods, static_fields_buil
                       end;
                     end;
                     if __find_base_obj_key(k) then
-                      ret = baseObj[k];
+                      ret = baseObj[k];					
+					  if type(ret) == 'function' and __is_monobehaviour_instance(t) then
+						
+							function __call_with_monobehaviour(obj, ...)
+								return ret(obj.MonoBehaviour, ...);
+							end
+							return __call_with_monobehaviour;
+						--return function(obj, ...)
+						--	return ret(obj.MonoBehaviour, ...)
+						--end
+					  end
+					
                       return ret;
                     end;
 				            --简单支持反射方法:GetType()
