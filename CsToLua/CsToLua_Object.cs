@@ -82,7 +82,7 @@ namespace RoslynTool.CsToLua
             IFieldSymbol sym = m_Model.GetDeclaredSymbol(node);
 
             ci.CurrentCodeBuilder = ci.StaticFieldCodeBuilder;
-            CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), node.Identifier.Text);
+            CodeBuilder.AppendFormat("{0}[\"{1}\"]", GetIndentString(), node.Identifier.Text);
             if (sym.HasConstantValue) {
                 CodeBuilder.Append(" = ");
                 OutputConstValue(sym.ConstantValue, sym);
