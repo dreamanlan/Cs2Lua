@@ -5,7 +5,7 @@ require "TopLevel__Runnable";
 
 TopLevel.TestRunnable = {
 	__new_object = function(...)
-		return newobject(TopLevel.TestRunnable, nil, {}, ...);
+		return newobject(TopLevel.TestRunnable, nil, nil, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.TestRunnable;
@@ -25,7 +25,7 @@ TopLevel.TestRunnable = {
 
 		local instance_methods = {
 			Test = function(this)
-				local f; f = newobject(TopLevel.Runnable, "ctor", {});
+				local f; f = newobject(TopLevel.Runnable, "ctor", nil);
 				invokewithinterface(f, "TopLevel_IRunnable0", "Test");
 				local i; i = getinstanceindexer(f, nil, "get_Item", 4);
 				setinstanceindexer(f, nil, "set_Item", 0, i);

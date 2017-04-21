@@ -7,7 +7,7 @@ require "TopLevel__SecondLevel__FooExtension";
 
 TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2 = {
 	__new_object = function(...)
-		return newobject(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2, "ctor", {}, ...);
+		return newobject(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2, "ctor", nil, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2;
@@ -36,7 +36,7 @@ TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericCla
 			Test = function(this, G, g)
 				local v; v = typeas(g, TopLevel.SecondLevel.Foo.Test1, false);
 				local v; v = typecast(typecast(g, System.Object, false), TopLevel.SecondLevel.Foo.Test1, false);
-				local f; f = newobject(TopLevel.SecondLevel.Foo, "ctor", {});
+				local f; f = newobject(TopLevel.SecondLevel.Foo, "ctor", nil);
 				TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo(f);
 			end,
 			Test2 = function(this, GG, t, tt)

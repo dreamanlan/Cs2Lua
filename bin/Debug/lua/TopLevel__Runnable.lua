@@ -5,7 +5,7 @@ require "TopLevel__TestEnum";
 
 TopLevel.Runnable = {
 	__new_object = function(...)
-		return newobject(TopLevel.Runnable, nil, {}, ...);
+		return newobject(TopLevel.Runnable, nil, nil, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.Runnable;

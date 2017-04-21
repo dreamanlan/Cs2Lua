@@ -4,7 +4,7 @@ require "cs2lua__externenums";
 
 TopLevel.Singleton_TopLevel_SecondLevel_Foo = {
 	__new_object = function(...)
-		return newobject(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ctor", {}, ...);
+		return newobject(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ctor", nil, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.Singleton_TopLevel_SecondLevel_Foo;

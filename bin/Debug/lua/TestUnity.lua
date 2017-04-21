@@ -4,7 +4,7 @@ require "cs2lua__externenums";
 
 TestUnity = {
 	__new_object = function(...)
-		return newobject(TestUnity, nil, {}, ...);
+		return newobject(TestUnity, nil, nil, ...);
 	end,
 	__define_class = function()
 		local static = TestUnity;
@@ -26,9 +26,9 @@ TestUnity = {
 			Test = function(this, ...)
 				local args = wraparray{...};
 				if (args.Length >= 3) then
-					local sagatObjId; sagatObjId = typecast(arrayget(args, 1), System.Int32, false);
-					local protectObjId; protectObjId = typecast(arrayget(args, 2), System.Int32, false);
-					local attackObjId; attackObjId = typecast(arrayget(args, 3), System.Int32, false);
+					local sagatObjId; sagatObjId = typecast(args[1], System.Int32, false);
+					local protectObjId; protectObjId = typecast(args[2], System.Int32, false);
+					local attackObjId; attackObjId = typecast(args[3], System.Int32, false);
 				end;
 				local t; t = this.gameObject:GetComponent(UnityEngine.Transform);
 				this.gameObject:SetActive(true);

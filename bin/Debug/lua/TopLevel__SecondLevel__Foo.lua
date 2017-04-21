@@ -10,7 +10,7 @@ require "TopLevel__Runnable";
 
 TopLevel.SecondLevel.Foo = {
 	__new_object = function(...)
-		return newobject(TopLevel.SecondLevel.Foo, "ctor", {}, ...);
+		return newobject(TopLevel.SecondLevel.Foo, "ctor", nil, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.Foo;
@@ -29,9 +29,9 @@ TopLevel.SecondLevel.Foo = {
 				return self;
 			end,
 			op_Explicit = function(a)
-				local f; f = newobject(TopLevel.SecondLevel.Foo, "ctor", {});
+				local f; f = newobject(TopLevel.SecondLevel.Foo, "ctor", nil);
 				f.m_Test = a;
-				f.Val = newobject(TopLevel.TestStruct, "ctor", {});
+				f.Val = newobject(TopLevel.TestStruct, "ctor", nil);
 				local ts; ts = f.Val;
 				ts = wrapvaluetype(ts);
 				setinstanceindexer(f, nil, "set_Item", ts, ts, 123);
@@ -104,7 +104,7 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			Iterator = wrapenumerable(function(this)
 				wrapyield(nil, false, false);
-				wrapyield(newexternobject(UnityEngine.WaitForSeconds, "UnityEngine.WaitForSeconds", "ctor", {}, 3), false, true);
+				wrapyield(newexternobject(UnityEngine.WaitForSeconds, "UnityEngine.WaitForSeconds", "ctor", nil, 3), false, true);
 				return nil;
 			end),
 			Iterator2 = wrapenumerable(function(this)
@@ -114,12 +114,12 @@ TopLevel.SecondLevel.Foo = {
 			Test = function(this)
 				this:Test123(1, wrapconst(System.Single, "NegativeInfinity"));
 				local abc; abc = wrapconst(System.Single, "NegativeInfinity");
-				local t; t = newobject(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2, "ctor", {}, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
+				local t; t = newobject(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2, "ctor", nil, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", nil), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", nil));
 				t:Test(System.Int32, 123);
-				t:Test2(System.Int32, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", {}), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", {}));
+				t:Test2(System.Int32, newobject(TopLevel.SecondLevel.Foo.Test1, "ctor", nil), newobject(TopLevel.SecondLevel.Foo.Test2, "ctor", nil));
 				local v;
 				local vv; vv, v = this:TestLocal(__cs2lua_out);
-				local ts; ts = newobject(TopLevel.TestStruct, "ctor", {});
+				local ts; ts = newobject(TopLevel.TestStruct, "ctor", nil);
 				ts = wrapvaluetype(ts);
 				ts.A = 1;
 				ts.B = 2;
@@ -139,7 +139,7 @@ TopLevel.SecondLevel.Foo = {
 				end;
 			end,
 			TestLocal = function(this, v)
-				local ir; ir = newobject(TopLevel.Runnable, "ctor", {});
+				local ir; ir = newobject(TopLevel.Runnable, "ctor", nil);
 								v = 1;
 				return 2, v;
 			end,
@@ -229,7 +229,7 @@ TopLevel.SecondLevel.Foo = {
 
 TopLevel.SecondLevel.Foo.Test1 = {
 	__new_object = function(...)
-		return newobject(TopLevel.SecondLevel.Foo.Test1, nil, {}, ...);
+		return newobject(TopLevel.SecondLevel.Foo.Test1, nil, nil, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.Foo.Test1;
@@ -270,7 +270,7 @@ TopLevel.SecondLevel.Foo.Test1.__define_class();
 
 TopLevel.SecondLevel.Foo.Test2 = {
 	__new_object = function(...)
-		return newobject(TopLevel.SecondLevel.Foo.Test2, nil, {}, ...);
+		return newobject(TopLevel.SecondLevel.Foo.Test2, nil, nil, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.Foo.Test2;
@@ -311,7 +311,7 @@ TopLevel.SecondLevel.Foo.Test2.__define_class();
 
 TopLevel.SecondLevel.Foo.FooChild = {
 	__new_object = function(...)
-		return newobject(TopLevel.SecondLevel.Foo.FooChild, nil, {}, ...);
+		return newobject(TopLevel.SecondLevel.Foo.FooChild, nil, nil, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.Foo.FooChild;

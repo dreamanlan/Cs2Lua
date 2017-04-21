@@ -21,8 +21,8 @@ TopLevel.SecondLevel.FooExtension = {
 			end,
 			NormalMethod = function()
 				LuaConsole.Print(1, 2, 3, 4, 5);
-				local f; f = newobject(TopLevel.SecondLevel.Foo, "ctor", {});
-				local ff; ff = newobject(TopLevel.SecondLevel.Foo, "ctor", {});
+				local f; f = newobject(TopLevel.SecondLevel.Foo, "ctor", nil);
+				local ff; ff = newobject(TopLevel.SecondLevel.Foo, "ctor", nil);
 				local f1; f1 = delegationwrap((function() f:Test() end));
 				f1();
 				local f2; f2 = delegationwrap((function() f:Test3() end));
@@ -32,10 +32,10 @@ TopLevel.SecondLevel.FooExtension = {
 				f = TopLevel.SecondLevel.Foo.op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo(f, ff);
 				local rr; rr = TopLevel.SecondLevel.Foo.op_Explicit(123);
 				local rrr; rrr = typeas(123, TopLevel.SecondLevel.Foo, false);
-				local obj; obj = newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", {}, "test test test");
+				local obj; obj = newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", nil, "test test test");
 				TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo__System_Int32(f, 8);
 				local arr; arr = wraparray{1, 2, 3, 4, 4};
-				local v; v = arrayget(arr, 3);
+				local v; v = arr[3];
 				local dict; dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {[tostring(1)] = 2, [tostring(3)] = 4});
 				local v1; v1 = condaccess(dict, (function() return getexterninstanceindexer(dict, nil, "get_Item", 1); end));
 				local list; list = nil;
@@ -43,8 +43,8 @@ TopLevel.SecondLevel.FooExtension = {
 				condaccess(list, (function() return listthis:Add(1); end));
 				local v2; v2 = condaccess(list, (function() return setexterninstanceindexer(list, nil, "set_Item", 3, 1); end));
 				local arr2; arr2 = wraparray{1, 2, 3, 4};
-				local v3; v3 = condaccess(arr2, arrayget(arr2, 3));
-				condaccess(arr2, arrayset(arr2, 4, 345));
+				local v3; v3 = condaccess(arr2, (function() return arr2[3]; end));
+				condaccess(arr2, (function() arr2[4] = 345; return 345; end));
 				local a; a = 1;
 				local b; b = 2;
 				local c; c = 3;

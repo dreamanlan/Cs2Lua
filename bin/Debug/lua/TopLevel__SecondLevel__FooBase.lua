@@ -4,7 +4,7 @@ require "cs2lua__externenums";
 
 TopLevel.SecondLevel.FooBase = {
 	__new_object = function(...)
-		return newobject(TopLevel.SecondLevel.FooBase, nil, {}, ...);
+		return newobject(TopLevel.SecondLevel.FooBase, nil, nil, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.FooBase;

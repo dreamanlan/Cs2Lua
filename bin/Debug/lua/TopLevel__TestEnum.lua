@@ -3,11 +3,11 @@ require "cs2lua__namespaces";
 require "cs2lua__externenums";
 
 TopLevel.TestEnum = {
-	Invalid = -2147483648,
-	One = 1,
-	Two = 2,
-	Three = 4,
-	Four = 38,
+	["Invalid"] = -2147483648,
+	["One"] = 1,
+	["Two"] = 2,
+	["Three"] = 4,
+	["Four"] = 38,
 };
 
 rawset(TopLevel.TestEnum, "Value2String", {

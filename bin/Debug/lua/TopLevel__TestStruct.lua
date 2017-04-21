@@ -4,7 +4,7 @@ require "cs2lua__externenums";
 
 TopLevel.TestStruct = {
 	__new_object = function(...)
-		return newobject(TopLevel.TestStruct, nil, {}, ...);
+		return newobject(TopLevel.TestStruct, nil, nil, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.TestStruct;

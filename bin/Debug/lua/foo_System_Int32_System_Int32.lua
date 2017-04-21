@@ -4,7 +4,7 @@ require "cs2lua__externenums";
 
 foo_System_Int32_System_Int32 = {
 	__new_object = function(...)
-		return newobject(foo_System_Int32_System_Int32, nil, {}, ...);
+		return newobject(foo_System_Int32_System_Int32, nil, nil, ...);
 	end,
 	__define_class = function()
 		local static = foo_System_Int32_System_Int32;
