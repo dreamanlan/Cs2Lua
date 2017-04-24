@@ -105,8 +105,11 @@ namespace RoslynTool.CsToLua
             string key = GetFullName(refType);
             if (null != refType && refType != SemanticInfo && SymbolTable.Instance.IsCs2LuaSymbol(refType) && !refType.IsAnonymousType && !refType.IsImplicitClass && !refType.IsImplicitlyDeclared && refType.TypeKind != TypeKind.Delegate && refType.TypeKind != TypeKind.Dynamic && refType.TypeKind != TypeKind.Interface) {
                 if (!string.IsNullOrEmpty(key) && !References.Contains(key) && key != Key) {
+                    bool isIgnoreFile = SymbolTable.Instance.IsIgnoredSymbol(refType);
                     bool isIgnore = ClassInfo.HasAttribute(refType, "Cs2Lua.IgnoreAttribute");
-                    if (isIgnore) {
+                    if (isIgnoreFile) {
+                        IgnoreReferences.Add("cs2lua__custom");
+                    } else if (isIgnore) {
                         IgnoreReferences.Add(key);
                     } else {
                         if (!SemanticInfo.IsGenericType || SemanticInfo.TypeArguments.IndexOf(refType) < 0) {

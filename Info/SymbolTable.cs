@@ -24,6 +24,10 @@ namespace RoslynTool.CsToLua
         {
             get { return m_ExternTypes; }
         }
+        internal Dictionary<string, INamedTypeSymbol> IgnoredTypes
+        {
+            get { return m_IgnoredTypes; }
+        }
         internal Dictionary<string, INamespaceSymbol> NamespaceSymbols
         {
             get { return m_NamespaceSymbols; }
@@ -75,6 +79,10 @@ namespace RoslynTool.CsToLua
                 }
             }
             return ret;
+        }
+        internal bool IsIgnoredSymbol(ITypeSymbol sym)
+        {
+            return m_IgnoredTypes.ContainsKey(ClassInfo.GetFullName(sym));
         }
         internal bool IsCs2LuaSymbol(ISymbol sym)
         {
@@ -226,6 +234,7 @@ namespace RoslynTool.CsToLua
         private CSharpCompilation m_Compilation = null;
         private IAssemblySymbol m_AssemblySymbol = null;
         private Dictionary<string, INamedTypeSymbol> m_ExternTypes = new Dictionary<string, INamedTypeSymbol>();
+        private Dictionary<string, INamedTypeSymbol> m_IgnoredTypes = new Dictionary<string, INamedTypeSymbol>();
         private Dictionary<string, INamespaceSymbol> m_NamespaceSymbols = new Dictionary<string, INamespaceSymbol>();
         private Dictionary<string, ClassSymbolInfo> m_ClassSymbols = new Dictionary<string, ClassSymbolInfo>();
         private Dictionary<string, HashSet<string>> m_Requires = new Dictionary<string, HashSet<string>>();
