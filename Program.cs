@@ -153,10 +153,12 @@ namespace RoslynTool
                         }
                     }
                 } else {
-                    Console.WriteLine("[Usage]:Cs2Lua [-ext fileext] [-enableinherit] [-normallua/-slua] [-outputresult] [-noautorequire] [-luacomponentbystring] [-d macro] [-ignorepath path] [-refbyname dllname alias] [-refbypath dllpath alias] [-src] csfile|csprojfile");
+                    Console.WriteLine("[Usage]:Cs2Lua [-ext fileext] [-enableinherit] [-normallua/-slua/-xlua/-tolua] [-outputresult] [-noautorequire] [-luacomponentbystring] [-d macro] [-externpath path] [-ignorepath path] [-refbyname dllname alias] [-refbypath dllpath alias] [-src] csfile|csprojfile");
                     Console.WriteLine("\twhere:");
                     Console.WriteLine("\t\tfileext = file externsion, default is txt for unity3d, maybe lua for other usage.");
                     Console.WriteLine("\t\tmacro = c# macro define, used in your csharp code #if/#elif/#else/#endif etc.");
+                    Console.WriteLine("\t\texternpath = mark c# source file path in the csproj as extern class (API), these classes doesn't translate to lua.");
+                    Console.WriteLine("\t\tignorepath = ignore c# source file path in the csproj, these classes doesn't translate to lua (need translate them by hand, cs2lua use \"require 'cs2lua_custom';\" resolve xref).");
                     Console.WriteLine("\t\tdllname = dotnet system assembly name, referenced by your csharp code.");
                     Console.WriteLine("\t\tdllpath = dotnet assembly path, referenced by your csharp code.");
                     Console.WriteLine("\t\talias = global for default or some dll toplevel namespace alias, used in your csharp code such as 'extern alias ui;'.");

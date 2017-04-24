@@ -199,6 +199,7 @@ namespace RoslynTool.CsToLua
             bool haveSemanticError = false;
             bool haveTranslationError = false;
             SymbolTable.Instance.Init(compilation);
+            SymbolTable.Instance.AddRequire("cs2lua__custom", "cs2lua__custom");
             Dictionary<string, INamedTypeSymbol> ignoredClasses = new Dictionary<string, INamedTypeSymbol>();
             Dictionary<string, MergedClassInfo> toplevelClasses = new Dictionary<string, MergedClassInfo>();
             MergedNamespaceInfo toplevelMni = new MergedNamespaceInfo();
@@ -244,6 +245,9 @@ namespace RoslynTool.CsToLua
                                         string key = ClassInfo.SpecialGetFullTypeName(type, isExtern);
                                         if (!ignoredClasses.ContainsKey(key)) {
                                             ignoredClasses.Add(key, type);
+                                        }
+                                        if (ignore && !SymbolTable.Instance.IgnoredTypes.ContainsKey(key)) {
+                                            SymbolTable.Instance.IgnoredTypes.Add(key, type);
                                         }
                                         if (isExtern && !SymbolTable.Instance.ExternTypes.ContainsKey(key)) {
                                             SymbolTable.Instance.ExternTypes.Add(key, type);

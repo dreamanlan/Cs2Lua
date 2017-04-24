@@ -44,57 +44,57 @@ ConvTest = {
 				this.Prop = DelegateTest.op_Implicit__DelegateTest(dt);
 				setinstanceindexer(this, nil, "set_Item", 0, DelegateTest.op_Implicit__DelegateTest(dt));
 				arr[1] = DelegateTest.op_Implicit__DelegateTest(dt);
-				local v; v = DelegateTest.op_Implicit__System_Int32(this.Prop);
-				local v2; v2 = DelegateTest.op_Implicit__System_Int32(getinstanceindexer(this, nil, "get_Item", 0));
-				local v3; v3 = DelegateTest.op_Implicit__System_Int32(arr[1]);
+				local v; v = DelegateTest.op_Implicit__CS_System_Int32(this.Prop);
+				local v2; v2 = DelegateTest.op_Implicit__CS_System_Int32(getinstanceindexer(this, nil, "get_Item", 0));
+				local v3; v3 = DelegateTest.op_Implicit__CS_System_Int32(arr[1]);
 				local vv;
 				local vv2;
 				local vv3;
-				vv = DelegateTest.op_Implicit__System_Int32(this.Prop);
-				vv2 = DelegateTest.op_Implicit__System_Int32(getinstanceindexer(this, nil, "get_Item", 0));
-				vv3 = DelegateTest.op_Implicit__System_Int32(arr[1]);
-				local v4; v4 = DelegateTest.op_Implicit__System_Int32(arr[1]);
+				vv = DelegateTest.op_Implicit__CS_System_Int32(this.Prop);
+				vv2 = DelegateTest.op_Implicit__CS_System_Int32(getinstanceindexer(this, nil, "get_Item", 0));
+				vv3 = DelegateTest.op_Implicit__CS_System_Int32(arr[1]);
+				local v4; v4 = DelegateTest.op_Implicit__CS_System_Int32(arr[1]);
 				local arr2; arr2 = nil;
-				v4 = DelegateTest.op_Implicit__System_Int32(condaccess(arr2, (function() return arr2[1]; end)));
-				local vv4; vv4 = DelegateTest.op_Implicit__System_Int32(condaccess(arr2, (function() return arr2[1]; end)));
+				v4 = DelegateTest.op_Implicit__CS_System_Int32(condaccess(arr2, (function() return arr2[1]; end)));
+				local vv4; vv4 = DelegateTest.op_Implicit__CS_System_Int32(condaccess(arr2, (function() return arr2[1]; end)));
 				local ct; ct = nil;
-				dt = DelegateTest.op_Implicit__System_Int32(condaccess(ct, (function() return ct.Prop; end)));
-				dt = DelegateTest.op_Implicit__System_Int32(condaccess(ct, (function() return getinstanceindexer(ct, nil, "get_Item", 0); end)));
-				local v5; v5 = DelegateTest.op_Implicit__System_Int32(condaccess(ct, (function() return getinstanceindexer(ct, nil, "get_Item", 0); end)));
+				dt = DelegateTest.op_Implicit__CS_System_Int32(condaccess(ct, (function() return ct.Prop; end)));
+				dt = DelegateTest.op_Implicit__CS_System_Int32(condaccess(ct, (function() return getinstanceindexer(ct, nil, "get_Item", 0); end)));
+				local v5; v5 = DelegateTest.op_Implicit__CS_System_Int32(condaccess(ct, (function() return getinstanceindexer(ct, nil, "get_Item", 0); end)));
 				local vv5;
-				vv5 = DelegateTest.op_Implicit__System_Int32(condaccess(ct, (function() return getinstanceindexer(ct, nil, "get_Item", 0); end)));
+				vv5 = DelegateTest.op_Implicit__CS_System_Int32(condaccess(ct, (function() return getinstanceindexer(ct, nil, "get_Item", 0); end)));
 				return nil;
 			end,
 			TestConv2 = function(this, a, b, c)
 				local obj; obj = nil;
-				local arr; arr = wraparray{invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)};
-				local dict; dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {[tostring("1")] = invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), [tostring("2")] = invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)});
-				local list; list = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", {invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)});
+				local arr; arr = wraparray{invokeexternoperator(CS.UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(CS.UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(CS.UnityEngine.Object, "op_Implicit", obj)};
+				local dict; dict = newexterndictionary(CS.System.Collections.Generic.Dictionary_TKey_TValue, "CS.System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {[tostring("1")] = invokeexternoperator(CS.UnityEngine.Object, "op_Implicit", obj), [tostring("2")] = invokeexternoperator(CS.UnityEngine.Object, "op_Implicit", obj)});
+				local list; list = newexternlist(CS.System.Collections.Generic.List_T, "CS.System.Collections.Generic.List_T", "ctor", {invokeexternoperator(CS.UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(CS.UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(CS.UnityEngine.Object, "op_Implicit", obj)});
 				local tarr;
-				tarr = wraparray{invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)};
+				tarr = wraparray{invokeexternoperator(CS.UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(CS.UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(CS.UnityEngine.Object, "op_Implicit", obj)};
 				local tdict;
-				tdict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {[tostring("1")] = invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), [tostring("2")] = invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)});
+				tdict = newexterndictionary(CS.System.Collections.Generic.Dictionary_TKey_TValue, "CS.System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {[tostring("1")] = invokeexternoperator(CS.UnityEngine.Object, "op_Implicit", obj), [tostring("2")] = invokeexternoperator(CS.UnityEngine.Object, "op_Implicit", obj)});
 				local tlist;
-				tlist = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", {invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)});
-				local f; f = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", {{obj, obj}, {obj, obj}});
+				tlist = newexternlist(CS.System.Collections.Generic.List_T, "CS.System.Collections.Generic.List_T", "ctor", {invokeexternoperator(CS.UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(CS.UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(CS.UnityEngine.Object, "op_Implicit", obj)});
+				local f; f = newexternlist(CS.System.Collections.Generic.List_T, "CS.System.Collections.Generic.List_T", "ctor", {{obj, obj}, {obj, obj}});
 				c = 1;
-				c = invokeintegeroperator(0, "/", c, 2, System.Int32, System.Int32);
-				c = invokeintegeroperator(0, "/", c, 2, System.Int32, System.Int32);
-				c = invokeintegeroperator(1, "%", c, 2, System.Int32, System.Int32);
-				c = invokeintegeroperator(1, "%", c, 2, System.Int32, System.Int32);
-				c = invokeintegeroperator(3, "-", c, 1, System.Int32, System.Int32);
-				c = invokeintegeroperator(3, "-", c, 1, System.Int32, System.Int32);
-				local d; d = invokeintegeroperator(12, "~", nil, c, nil, System.Int32);
-				local cc; cc = ( (function() c = invokeintegeroperator(3, "-", c, 1, System.Int32, System.Int32); return c; end)() );
+				c = invokeintegeroperator(0, "/", c, 2, CS.System.Int32, CS.System.Int32);
+				c = invokeintegeroperator(0, "/", c, 2, CS.System.Int32, CS.System.Int32);
+				c = invokeintegeroperator(1, "%", c, 2, CS.System.Int32, CS.System.Int32);
+				c = invokeintegeroperator(1, "%", c, 2, CS.System.Int32, CS.System.Int32);
+				c = invokeintegeroperator(3, "-", c, 1, CS.System.Int32, CS.System.Int32);
+				c = invokeintegeroperator(3, "-", c, 1, CS.System.Int32, CS.System.Int32);
+				local d; d = invokeintegeroperator(12, "~", nil, c, nil, CS.System.Int32);
+				local cc; cc = ( (function() c = invokeintegeroperator(3, "-", c, 1, CS.System.Int32, CS.System.Int32); return c; end)() );
 				cc = ( c );
-				c = invokeintegeroperator(3, "-", c, 1, System.Int32, System.Int32);
+				c = invokeintegeroperator(3, "-", c, 1, CS.System.Int32, CS.System.Int32);
 				return nil, c;
 			end,
 			TestConv3 = function(this, a, b, c)
 				return myTestConv4(this, a, b, c);
 			end,
 			TestConv4 = function(this, v, v2)
-				local __compiler_expbody_88 = ((( (function() v2 = 1; return v2; end)() ) == 1) and invokeexternoperator(UnityEngine.Object, "op_Implicit", newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", nil))); return __compiler_expbody_88, v2;
+				local __compiler_expbody_88 = ((( (function() v2 = 1; return v2; end)() ) == 1) and invokeexternoperator(CS.UnityEngine.Object, "op_Implicit", newexternobject(CS.UnityEngine.GameObject, "CS.UnityEngine.GameObject", "ctor", nil))); return __compiler_expbody_88, v2;
 			end,
 			ctor = function(this)
 			end,
