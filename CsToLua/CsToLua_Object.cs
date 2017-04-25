@@ -593,7 +593,11 @@ namespace RoslynTool.CsToLua
                     }
                 }
                 var exp = node.Body as ExpressionSyntax;
-                OutputExpressionSyntax(exp, opd);
+                if (null != exp) {
+                    OutputExpressionSyntax(exp, opd);
+                } else {
+                    ReportIllegalSymbol(node, symInfo);
+                }
                 CodeBuilder.Append("; end)");
             } else {
                 ReportIllegalSymbol(node, symInfo);
@@ -650,7 +654,11 @@ namespace RoslynTool.CsToLua
                         }
                     }
                     var exp = node.Body as ExpressionSyntax;
-                    OutputExpressionSyntax(exp, opd);
+                    if (null != exp) {
+                        OutputExpressionSyntax(exp, opd);
+                    } else {
+                        ReportIllegalSymbol(node, symInfo);
+                    }
                     if (mi.ReturnParamNames.Count > 0) {
                         CodeBuilder.AppendFormat("; return {0}, {1}", varName, string.Join(", ", mi.ReturnParamNames));
                     }
@@ -709,12 +717,23 @@ namespace RoslynTool.CsToLua
         }
         public override void VisitUsingStatement(UsingStatementSyntax node)
         {
-            VisitVariableDeclaration(node.Declaration);
-            node.Statement.Accept(this);
-
-            foreach (var decl in node.Declaration.Variables) {
-                CodeBuilder.AppendFormat("{0}{1}:Dispose();", GetIndentString(), decl.Identifier.Text);
-                CodeBuilder.AppendLine();
+            if (null != node.Declaration) {
+                VisitVariableDeclaration(node.Declaration);
+            } else {
+                Log(node, "node.Declaration is null.");
+            }
+            if (null != node.Statement) {
+                node.Statement.Accept(this);
+            } else {
+                Log(node, "node.Statement is null.");
+            }
+            if (null != node.Declaration && null != node.Declaration.Variables) {
+                foreach (var decl in node.Declaration.Variables) {
+                    CodeBuilder.AppendFormat("{0}{1}:Dispose();", GetIndentString(), decl.Identifier.Text);
+                    CodeBuilder.AppendLine();
+                }
+            } else {
+                Log(node, "node.Declaration is null or node.Declaration.Variables is null.");
             }
         }
         #endregion

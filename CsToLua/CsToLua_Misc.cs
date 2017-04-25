@@ -72,37 +72,49 @@ namespace RoslynTool.CsToLua
         }
         public override void DefaultVisit(SyntaxNode node)
         {
-            var nodes = node.ChildNodes();
-            var enumer = nodes.GetEnumerator();
-            while (enumer.MoveNext()) {
-                this.Visit(enumer.Current);
-            }
-            var tokens = node.ChildTokens();
-            var enumer2 = tokens.GetEnumerator();
-            while (enumer2.MoveNext()) {
-                this.VisitToken(enumer2.Current);
+            try {
+                var nodes = node.ChildNodes();
+                var enumer = nodes.GetEnumerator();
+                while (enumer.MoveNext()) {
+                    this.Visit(enumer.Current);
+                }
+                var tokens = node.ChildTokens();
+                var enumer2 = tokens.GetEnumerator();
+                while (enumer2.MoveNext()) {
+                    this.VisitToken(enumer2.Current);
+                }
+            } catch (Exception ex) {
+                Log(node, "DefaultVisit throw exception:{0}\n{1}", ex.Message, ex.StackTrace);
             }
         }
         public override void Visit(SyntaxNode node)
         {
-            bool flag = node != null;
-            if (flag) {
-                if (node.HasLeadingTrivia && !(node is CompilationUnitSyntax)) {
-                    SyntaxTriviaList.Enumerator enumerator = node.GetLeadingTrivia().GetEnumerator();
-                    while (enumerator.MoveNext()) {
-                        SyntaxTrivia current = enumerator.Current;
-                        this.VisitTrivia(current, false);
+            try {
+                bool flag = node != null;
+                if (flag) {
+                    if (node.HasLeadingTrivia && !(node is CompilationUnitSyntax)) {
+                        SyntaxTriviaList.Enumerator enumerator = node.GetLeadingTrivia().GetEnumerator();
+                        while (enumerator.MoveNext()) {
+                            SyntaxTrivia current = enumerator.Current;
+                            this.VisitTrivia(current, false);
+                        }
+                    }
+                    try {
+                        ((CSharpSyntaxNode)node).Accept(this);
+                    } catch (Exception ex) {
+                        Log(node, "CSharpSyntaxNode.Accept throw exception:{0}\n{1}", ex.Message, ex.StackTrace);
+                    }
+                    m_LastComment = string.Empty;
+                    if (node.HasTrailingTrivia) {
+                        SyntaxTriviaList.Enumerator enumerator = node.GetTrailingTrivia().GetEnumerator();
+                        while (enumerator.MoveNext()) {
+                            SyntaxTrivia current = enumerator.Current;
+                            this.VisitTrivia(current, false);
+                        }
                     }
                 }
-                ((CSharpSyntaxNode)node).Accept(this);
-                m_LastComment = string.Empty;
-                if (node.HasTrailingTrivia) {
-                    SyntaxTriviaList.Enumerator enumerator = node.GetTrailingTrivia().GetEnumerator();
-                    while (enumerator.MoveNext()) {
-                        SyntaxTrivia current = enumerator.Current;
-                        this.VisitTrivia(current, false);
-                    }
-                }
+            } catch (Exception ex) {
+                Log(node, "Visit throw exception:{0}\n{1}", ex.Message, ex.StackTrace);
             }
         }
         #endregion
