@@ -61,6 +61,7 @@
     <Compile Include="CsToLua\CsToLua_CoreSyntax.cs" />
     <Compile Include="CsToLua\CsToLua_Exception.cs" />
     <Compile Include="CsToLua\CsToLua_Expression.cs" />
+    <Compile Include="CsToLua\CsToLua_Linq.cs" />
     <Compile Include="CsToLua\CsToLua_Misc.cs" />
     <Compile Include="CsToLua\CsToLua_Object.cs" />
     <Compile Include="CsToLua\CsToLua_Statement.cs" />

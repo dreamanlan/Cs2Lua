@@ -770,7 +770,7 @@ namespace RoslynTool.CsToLua
             }
             return null;
         }
-        
+                
         private StringBuilder CodeBuilder
         {
             get
@@ -802,6 +802,13 @@ namespace RoslynTool.CsToLua
         private Stack<ContinueInfo> m_ContinueInfoStack = new Stack<ContinueInfo>();
         private Stack<SwitchInfo> m_SwitchInfoStack = new Stack<SwitchInfo>();
         private Queue<PostfixUnaryExpressionSyntax> m_PostfixUnaryExpressions = new Queue<PostfixUnaryExpressionSyntax>();
+
+        private class LinqParamInfo
+        {
+            internal List<string> ParamNames = new List<string>();
+            internal string JoinParamName = string.Empty;
+        }
+        private Stack<LinqParamInfo> m_LinqParamInfoStack = new Stack<LinqParamInfo>();
 
         private Dictionary<string, List<ClassInfo>> m_ToplevelClasses = new Dictionary<string, List<ClassInfo>>();
         private ClassInfo m_LastToplevelClass = null;

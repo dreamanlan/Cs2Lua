@@ -133,54 +133,6 @@ namespace RoslynTool.CsToLua
         {
             Log(node, "Unsupported Syntax !");
         }
-        public override void VisitQueryExpression(QueryExpressionSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitQueryBody(QueryBodySyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitFromClause(FromClauseSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitLetClause(LetClauseSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitJoinClause(JoinClauseSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitJoinIntoClause(JoinIntoClauseSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitWhereClause(WhereClauseSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitOrderByClause(OrderByClauseSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitOrdering(OrderingSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitSelectClause(SelectClauseSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitGroupClause(GroupClauseSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitQueryContinuation(QueryContinuationSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
         #endregion
 
         #region 借助语义信息或直接在上层语法里处理过的语法部分，或者不需要翻译到lua而忽略的语法部分

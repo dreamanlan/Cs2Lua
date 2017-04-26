@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 [Cs2Lua.Ignore]
@@ -12,6 +13,18 @@ class LuaConsole
     }
 }
 
+class ZipInputStream
+{
+  public ZipInputStream(MemoryStream ms)
+  {}
+}
+
+class ZipOutputStream
+{
+  public ZipOutputStream(MemoryStream ms)
+  {}
+}
+
 class CUsingHelper : IDisposable
 {
   public CUsingHelper(Action a1, Action a2)
@@ -20,6 +33,22 @@ class CUsingHelper : IDisposable
   public void Dispose()
   {
   }
+  
+	public static byte[] ReadZip(byte[] bytes)
+	{
+		ZipInputStream zipInput = new ZipInputStream(new MemoryStream(bytes));
+		MemoryStream zipMemory = new MemoryStream();
+		ZipOutputStream ZipStream = new ZipOutputStream(zipMemory);
+		try
+		{
+			return null;
+		}
+		catch (Exception)
+		{
+			return null;
+			throw;
+		}
+	}
 }
 
 class TestUnity : MonoBehaviour
@@ -55,8 +84,14 @@ class TestUnity : MonoBehaviour
         {
           LuaConsole.Print("test");
         }
-        
-        
+                
+        Dictionary<int, int> v1s = new Dictionary<int, int> { { 1, 2 }, { 3, 4 }, { 5, 6 } };
+        Dictionary<int, int> v2s = new Dictionary<int, int> { { 1, 3 }, { 5, 4 } };
+        var v0 = from v1 in v1s let v3 = v1.Value let v4 = v3.ToString().Split(' ') from vvvv in (from v2 in v2s select v2) where !string.IsNullOrEmpty(v1.ToString()) select v1.ToString();
+        var v5 = from v1 in v1s join v2 in v2s on v1.Key equals v2.Key into ttt0 select new { v1 = v1, v2 = ttt0.Count() } into ttt group ttt by ttt.v2;
+        foreach (var vv in v5) {
+
+        }
     }
 
     private string m_TestString = "13579";

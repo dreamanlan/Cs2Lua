@@ -1,6 +1,8 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
+require "ZipInputStream";
+require "ZipOutputStream";
 
 CUsingHelper = {
 	__new_object = function(...)
@@ -10,6 +12,14 @@ CUsingHelper = {
 		local static = CUsingHelper;
 
 		local static_methods = {
+			ReadZip = function(bytes)
+				local zipInput; zipInput = newobject(ZipInputStream, "ctor", nil, newexternobject(System.IO.MemoryStream, "System.IO.MemoryStream", "ctor", nil, bytes));
+				local zipMemory; zipMemory = newexternobject(System.IO.MemoryStream, "System.IO.MemoryStream", "ctor", nil);
+				local ZipStream; ZipStream = newobject(ZipOutputStream, "ctor", nil, zipMemory);
+				do
+					return nil;
+				end;
+			end,
 			cctor = function()
 			end,
 		};
