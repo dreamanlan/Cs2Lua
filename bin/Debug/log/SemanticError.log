@@ -1,4 +1,19 @@
-============<<<Semantic Error:test_delegate>>>============
-test_delegate.cs(13,48): error CS0236: A field initializer cannot reference the non-static field, method, or property 'ConvTest.OnHandleValue'
-test_delegate.cs(70,53): error CS1501: No overload for method 'Add' takes 2 arguments
-test_delegate.cs(70,67): error CS1501: No overload for method 'Add' takes 2 arguments
+============<<<Semantic Error:test>>>============
+test.cs(140,16): error CS0266: Cannot implicitly convert type 'double' to 'int'. An explicit conversion exists (are you missing a cast?)
+test.cs(268,27): error CS0413: The type parameter 'T' cannot be used with the 'as' operator because it does not have a class type constraint nor a 'class' constraint
+test.cs(269,23): error CS0128: A local variable named 'v' is already defined in this scope
+test.cs(279,29): error CS0030: Cannot convert type 'T' to 'TT'
+test.cs(517,59): error CS1501: No overload for method 'Add' takes 2 arguments
+test.cs(517,69): error CS1501: No overload for method 'Add' takes 2 arguments
+test.cs(405,17): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
+test.cs(406,21): error CS0266: Cannot implicitly convert type 'int?' to 'int'. An explicit conversion exists (are you missing a cast?)
+test.cs(413,80): error CS0266: Cannot implicitly convert type 'float' to 'int'. An explicit conversion exists (are you missing a cast?)
+test.cs(36,17): error CS0619: 'GameObject.renderer' is obsolete: 'Property renderer has been deprecated. Use GetComponent<Renderer>() instead. (UnityUpgradable)'
+test.cs(41,16): error CS0128: A local variable named 's' is already defined in this scope
+test.cs(42,13): error CS0128: A local variable named 'i' is already defined in this scope
+test.cs(44,13): error CS0128: A local variable named 'i' is already defined in this scope
+test.cs(545,27): error CS0039: Cannot convert type 'int' to 'TopLevel.SecondLevel.Foo' via a reference conversion, boxing conversion, unboxing conversion, wrapping conversion, or null type conversion
+test.cs(558,26): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
+test.cs(561,17): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
+test.cs(463,17): error CS0305: Using the generic type 'IRunnable<T>' requires 1 type arguments
+test.cs(468,25): error CS0161: 'Foo.TestValueArg(TestStruct)': not all code paths return a value

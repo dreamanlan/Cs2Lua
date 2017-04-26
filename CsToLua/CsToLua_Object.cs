@@ -582,23 +582,37 @@ namespace RoslynTool.CsToLua
             var sym = symInfo.Symbol as IMethodSymbol;
 
             if (null != sym && sym.Parameters.Length == 1) {
-                var param = sym.Parameters[0];
-                CodeBuilder.AppendFormat("(function({0}) return ", param.Name);
-                IConversionExpression opd = null;
-                var oper = m_Model.GetOperation(node) as ILambdaExpression;
-                if (null != oper && oper.Body.Statements.Length == 1) {
-                    var iret = oper.Body.Statements[0] as IReturnStatement;
-                    if (null != iret) {
-                        opd = iret.ReturnedValue as IConversionExpression;
+                if (node.Body is BlockSyntax) {
+                    var param = sym.Parameters[0];
+                    CodeBuilder.AppendFormat("(function({0})", param.Name);
+                    CodeBuilder.AppendLine();
+                    ++m_Indent;
+                    node.Body.Accept(this);
+                    if (!sym.ReturnsVoid) {
+                        CodeBuilder.AppendFormat("{0}return {1};", GetIndentString(), param.Name);
+                        CodeBuilder.AppendLine();
                     }
-                }
-                var exp = node.Body as ExpressionSyntax;
-                if (null != exp) {
-                    OutputExpressionSyntax(exp, opd);
+                    --m_Indent;
+                    CodeBuilder.AppendFormat("{0}end)", GetIndentString());
                 } else {
-                    ReportIllegalSymbol(node, symInfo);
+                    var param = sym.Parameters[0];
+                    CodeBuilder.AppendFormat("(function({0}) return ", param.Name);
+                    IConversionExpression opd = null;
+                    var oper = m_Model.GetOperation(node) as ILambdaExpression;
+                    if (null != oper && oper.Body.Statements.Length == 1) {
+                        var iret = oper.Body.Statements[0] as IReturnStatement;
+                        if (null != iret) {
+                            opd = iret.ReturnedValue as IConversionExpression;
+                        }
+                    }
+                    var exp = node.Body as ExpressionSyntax;
+                    if (null != exp) {
+                        OutputExpressionSyntax(exp, opd);
+                    } else {
+                        ReportIllegalSymbol(node, symInfo);
+                    }
+                    CodeBuilder.Append("; end)");
                 }
-                CodeBuilder.Append("; end)");
             } else {
                 ReportIllegalSymbol(node, symInfo);
             }
@@ -717,10 +731,16 @@ namespace RoslynTool.CsToLua
         }
         public override void VisitUsingStatement(UsingStatementSyntax node)
         {
+            string varName = string.Format("__compiler_using_{0}", node.GetLocation().GetLineSpan().StartLinePosition.Line);
             if (null != node.Declaration) {
                 VisitVariableDeclaration(node.Declaration);
+            } else if (null != node.Expression) {
+                CodeBuilder.AppendFormat("{0}local {1} = ", GetIndentString(), varName);
+                IConversionExpression opd = m_Model.GetOperation(node.Expression) as IConversionExpression;
+                OutputExpressionSyntax(node.Expression, opd);
+                CodeBuilder.AppendLine(";");
             } else {
-                Log(node, "node.Declaration is null.");
+                Log(node, "node.Declaration and node.Expression are null.");
             }
             if (null != node.Statement) {
                 node.Statement.Accept(this);
@@ -732,8 +752,11 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendFormat("{0}{1}:Dispose();", GetIndentString(), decl.Identifier.Text);
                     CodeBuilder.AppendLine();
                 }
+            } else if (null != node.Expression) {
+                CodeBuilder.AppendFormat("{0}{1}:Dispose();", GetIndentString(), varName);
+                CodeBuilder.AppendLine();
             } else {
-                Log(node, "node.Declaration is null or node.Declaration.Variables is null.");
+                Log(node, "node.Declaration is null or node.Declaration.Variables is null, and node.Expression is null.");
             }
         }
         #endregion

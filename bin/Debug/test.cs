@@ -12,6 +12,16 @@ class LuaConsole
     }
 }
 
+class CUsingHelper : IDisposable
+{
+  public CUsingHelper(Action a1, Action a2)
+  {    
+  }
+  public void Dispose()
+  {
+  }
+}
+
 class TestUnity : MonoBehaviour
 {
     void Test(params object[] args)
@@ -36,6 +46,17 @@ class TestUnity : MonoBehaviour
         bool equal = m_TestString == s;
         var a = new int[]{5,4,3,2,1};
         int ix = System.Array.IndexOf(a, 3);
+        
+        var f = (Action<int>)(vv => {LuaConsole.Print("test");});
+        f(123);
+                
+        bool isLoadingHeadIcon = false;
+        using (new CUsingHelper(() => { isLoadingHeadIcon = true; }, () => { isLoadingHeadIcon = false; }))
+        {
+          LuaConsole.Print("test");
+        }
+        
+        
     }
 
     private string m_TestString = "13579";

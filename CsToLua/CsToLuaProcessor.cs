@@ -151,7 +151,7 @@ namespace RoslynTool.CsToLua
                 sw.Close();
             }
             if (haveError) {
-                Console.WriteLine("{0}", File.ReadAllText(Path.Combine(logDir, "SemanticError.log")));
+                Console.WriteLine("{0}", File.ReadAllText(Path.Combine(logDir, "SyntaxError.log")));
                 return ExitCode.SyntaxError;
             }
 

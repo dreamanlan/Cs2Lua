@@ -2,12 +2,12 @@ require "cs2lua__utility";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
 
-NormalClass = {
+CUsingHelper = {
 	__new_object = function(...)
-		return newobject(NormalClass, nil, {}, ...);
+		return newobject(CUsingHelper, "ctor", nil, ...);
 	end,
 	__define_class = function()
-		local static = NormalClass;
+		local static = CUsingHelper;
 
 		local static_methods = {
 			cctor = function()
@@ -23,11 +23,10 @@ NormalClass = {
 		local static_events = nil;
 
 		local instance_methods = {
-			TestExtension__System_Int32 = function(this, a)
+			ctor = function(this, a1, a2)
+				return this;
 			end,
-			TestExtension__System_Int32__System_Int32 = function(this, a, b)
-			end,
-			ctor = function(this)
+			Dispose = function(this)
 			end,
 		};
 
@@ -39,13 +38,16 @@ NormalClass = {
 		local instance_props = nil;
 		local instance_events = nil;
 		local interfaces = {
-			"INormal",
+			"System.IDisposable",
 		};
 
-		local interface_map = nil;
+		local interface_map = {
+			IDisposable_Dispose = "Dispose",
+		};
 
-		return defineclass(nil, "NormalClass", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
+
+		return defineclass(nil, "CUsingHelper", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
 
-NormalClass.__define_class();
+CUsingHelper.__define_class();

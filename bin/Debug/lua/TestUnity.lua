@@ -1,6 +1,7 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
+require "CUsingHelper";
 
 TestUnity = {
 	__new_object = function(...)
@@ -45,6 +46,18 @@ TestUnity = {
 				local equal; equal = (this.m_TestString == s);
 				local a; a = wraparray{5, 4, 3, 2, 1};
 				local ix; ix = invokearraystaticmethod(a, nil, "IndexOf", System.Int32, a, 3);
+				local f; f = delegationwrap(typecast(( (function(vv)
+					LuaConsole.Print("test");
+				end) ), System.Action_T, false));
+				f(123);
+				local isLoadingHeadIcon; isLoadingHeadIcon = false;
+				__compiler_using_53 = newobject(CUsingHelper, "ctor", nil, (function()
+					isLoadingHeadIcon = true;
+				end), (function()
+					isLoadingHeadIcon = false;
+				end));
+				LuaConsole.Print("test");
+				__compiler_using_53:Dispose();
 			end,
 			ctor = function(this)
 			end,

@@ -109,6 +109,30 @@ namespace RoslynTool.CsToLua
         {
             Log(node, "Unsupported Syntax !");
         }
+        public override void VisitOmittedArraySizeExpression(OmittedArraySizeExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitInterpolatedStringExpression(InterpolatedStringExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitInterpolatedStringText(InterpolatedStringTextSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitInterpolation(InterpolationSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitInterpolationAlignmentClause(InterpolationAlignmentClauseSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitInterpolationFormatClause(InterpolationFormatClauseSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
         public override void VisitQueryExpression(QueryExpressionSyntax node)
         {
             Log(node, "Unsupported Syntax !");
@@ -154,30 +178,6 @@ namespace RoslynTool.CsToLua
             Log(node, "Unsupported Syntax !");
         }
         public override void VisitQueryContinuation(QueryContinuationSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitOmittedArraySizeExpression(OmittedArraySizeExpressionSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitInterpolatedStringExpression(InterpolatedStringExpressionSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitInterpolatedStringText(InterpolatedStringTextSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitInterpolation(InterpolationSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitInterpolationAlignmentClause(InterpolationAlignmentClauseSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitInterpolationFormatClause(InterpolationFormatClauseSyntax node)
         {
             Log(node, "Unsupported Syntax !");
         }
