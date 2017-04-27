@@ -23,6 +23,7 @@ namespace RoslynTool
                 Dictionary<string, string> refByNames = new Dictionary<string, string>();
                 Dictionary<string, string> refByPaths = new Dictionary<string, string>();
                 bool enableInherit = false;
+                bool enableLinq = false;
                 bool outputResult = false;
                 if (args.Length > 0) {
                     for (int i = 0; i < args.Length; ++i) {
@@ -71,6 +72,8 @@ namespace RoslynTool
                             }
                         } else if (0 == string.Compare(args[i], "-enableinherit", true)) {
                             enableInherit = true;
+                        } else if (0 == string.Compare(args[i], "-enablelinq", true)) {
+                            enableLinq = true;
                         } else if (0 == string.Compare(args[i], "-normallua", true)) {
                             SetNormalLua();
                         } else if (0 == string.Compare(args[i], "-slua", true)) {
@@ -154,7 +157,7 @@ namespace RoslynTool
                         }
                     }
                 } else {
-                    Console.WriteLine("[Usage]:Cs2Lua [-ext fileext] [-enableinherit] [-normallua/-slua/-xlua/-tolua] [-outputresult] [-noautorequire] [-luacomponentbystring] [-d macro] [-externpath path] [-ignorepath path] [-refbyname dllname alias] [-refbypath dllpath alias] [-src] csfile|csprojfile");
+                    Console.WriteLine("[Usage]:Cs2Lua [-ext fileext] [-enableinherit] [-enablelinq] [-normallua/-slua/-xlua/-tolua] [-outputresult] [-noautorequire] [-luacomponentbystring] [-d macro] [-externpath path] [-ignorepath path] [-refbyname dllname alias] [-refbypath dllpath alias] [-src] csfile|csprojfile");
                     Console.WriteLine("\twhere:");
                     Console.WriteLine("\t\tfileext = file externsion, default is txt for unity3d, maybe lua for other usage.");
                     Console.WriteLine("\t\tmacro = c# macro define, used in your csharp code #if/#elif/#else/#endif etc.");
@@ -170,7 +173,7 @@ namespace RoslynTool
                     }
                 }
                 if (File.Exists(file)) {
-                    return (int)CsToLuaProcessor.Process(file, outputExt, macros, ignoredPath, externPath, refByNames, refByPaths, enableInherit, outputResult);
+                    return (int)CsToLuaProcessor.Process(file, outputExt, macros, ignoredPath, externPath, refByNames, refByPaths, enableInherit, enableLinq, outputResult);
                 } else {
                     return (int)ExitCode.FileNotFound;
                 }

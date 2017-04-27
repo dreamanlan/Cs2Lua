@@ -186,10 +186,11 @@ namespace RoslynTool.CsToLua
             return m_MethodInfoStack.Peek();
         }
 
-        internal CsLuaTranslater(SemanticModel model, bool enableInherit)
+        internal CsLuaTranslater(SemanticModel model, bool enableInherit, bool enableLinq)
         {
             m_Model = model;
             m_EnableInherit = enableInherit;
+            m_EnableLinq = enableLinq;
         }
 
         private string GetIndentString()
@@ -792,6 +793,7 @@ namespace RoslynTool.CsToLua
 
         private SemanticModel m_Model = null;
         private bool m_EnableInherit = false;
+        private bool m_EnableLinq = false;
         private StringBuilder m_LogBuilder = new StringBuilder();
         private int m_Indent = 0;
         private StringBuilder m_ToplevelCodeBuilder = new StringBuilder();

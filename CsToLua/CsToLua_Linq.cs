@@ -21,6 +21,10 @@ namespace RoslynTool.CsToLua
         /// </remarks>
         public override void VisitQueryExpression(QueryExpressionSyntax node)
         {
+            if (!m_EnableLinq) {
+                Log(node, "Cs2Lua can't support LINQ, use -enablelinq remove this error! (c# LINQ syntax will translate to use lua LINQ class in utility.lua)");
+            }
+
             m_LinqParamInfoStack.Push(new LinqParamInfo());
 
             CodeBuilder.Append("LINQ.begin()");

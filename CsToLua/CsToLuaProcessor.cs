@@ -20,7 +20,7 @@ namespace RoslynTool.CsToLua
     }
     public static class CsToLuaProcessor
     {
-        public static ExitCode Process(string srcFile, string outputExt, IList<string> macros, IList<string> ignoredPath, IList<string> externPath, IDictionary<string, string> _refByNames, IDictionary<string, string> _refByPaths, bool enableInherit, bool outputResult)
+        public static ExitCode Process(string srcFile, string outputExt, IList<string> macros, IList<string> ignoredPath, IList<string> externPath, IDictionary<string, string> _refByNames, IDictionary<string, string> _refByPaths, bool enableInherit, bool enableLinq, bool outputResult)
         {
             List<string> preprocessors = new List<string>(macros);
             preprocessors.Add("__LUA__");
@@ -255,7 +255,7 @@ namespace RoslynTool.CsToLua
                                     }
                                 }
                             } else {
-                                CsLuaTranslater csToLua = new CsLuaTranslater(model, enableInherit);
+                                CsLuaTranslater csToLua = new CsLuaTranslater(model, enableInherit, enableLinq);
                                 csToLua.Translate(root);
                                 if (csToLua.HaveError) {
                                     sw3.WriteLine("============<<<Translation Error:{0}>>>============", fileName);
@@ -281,7 +281,7 @@ namespace RoslynTool.CsToLua
                         Action<SyntaxNode, INamedTypeSymbol> action = (SyntaxNode node, INamedTypeSymbol typeSym) => {
                             string fileName = Path.GetFileNameWithoutExtension(node.SyntaxTree.FilePath);
                             SemanticModel model = compilation.GetSemanticModel(node.SyntaxTree, true);
-                            CsLuaTranslater csToLua = new CsLuaTranslater(model, enableInherit);
+                            CsLuaTranslater csToLua = new CsLuaTranslater(model, enableInherit, enableLinq);
                             csToLua.Translate(node, typeSym);
                             if (csToLua.HaveError) {
                                 sw3.WriteLine("============<<<Translation Error:{0}>>>============", fileName);
