@@ -649,7 +649,7 @@ namespace RoslynTool.CsToLua
                 foreach (var sym in enumSym.GetMembers()) {
                     if (sym.Kind != SymbolKind.Field) continue;
                     var fsym = sym as IFieldSymbol;
-                    sb.AppendFormat("{0}{1} = ", GetIndentString(indent), fsym.Name);
+                    sb.AppendFormat("{0}[\"{1}\"] = ", GetIndentString(indent), fsym.Name);
                     CsLuaTranslater.OutputConstValue(sb, fsym.ConstantValue, fsym);
                     sb.Append(",");
                     sb.AppendLine();
