@@ -294,6 +294,12 @@ namespace RoslynTool.CsToLua
             for (int i = 0; i < ct; ++i) {
                 var exp = args[i];
                 var opd = opds.Length > i ? opds[i] : null;
+                if (i > 0) {
+                    if (null == exp && SymbolTable.ForXlua) {
+                    } else {
+                        CodeBuilder.Append(", ");
+                    }
+                }
                 //表达式对象为空表明这个是一个out实参，替换为__cs2lua_out
                 if (null == exp) {
                     if (SymbolTable.ForXlua) {
@@ -311,9 +317,6 @@ namespace RoslynTool.CsToLua
                     } else {
                         OutputExpressionSyntax(exp, opd);
                     }
-                }
-                if (i < ct - 1) {
-                    CodeBuilder.Append(", ");
                 }
             }
             if (null != defValArgs) {
@@ -809,6 +812,8 @@ namespace RoslynTool.CsToLua
         {
             internal List<string> ParamNames = new List<string>();
             internal string JoinParamName = string.Empty;
+            internal string Prestr = string.Empty;
+            internal string OrderByPrestr = string.Empty;
         }
         private Stack<LinqParamInfo> m_LinqParamInfoStack = new Stack<LinqParamInfo>();
 

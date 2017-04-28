@@ -1,12 +1,12 @@
 System = System or {};
 System.PlatformID = System.PlatformID or {
-	Win32S = 0,
-	Win32Windows = 1,
-	Win32NT = 2,
-	WinCE = 3,
-	Unix = 4,
-	Xbox = 5,
-	MacOSX = 6,
+	["Win32S"] = 0,
+	["Win32Windows"] = 1,
+	["Win32NT"] = 2,
+	["WinCE"] = 3,
+	["Unix"] = 4,
+	["Xbox"] = 5,
+	["MacOSX"] = 6,
 };
 
 rawset(System.PlatformID, "Value2String", {

@@ -27,10 +27,10 @@ namespace RoslynTool.CsToLua
 
             m_LinqParamInfoStack.Push(new LinqParamInfo());
 
-            CodeBuilder.Append("LINQ.begin()");
+            CodeBuilder.Append("LINQ.exec({");
             node.FromClause.Accept(this);
             node.Body.Accept(this);
-            CodeBuilder.Append(".end()");
+            CodeBuilder.Append("})");
 
             m_LinqParamInfoStack.Pop();
         }
@@ -42,11 +42,13 @@ namespace RoslynTool.CsToLua
         {
             var paramInfo = m_LinqParamInfoStack.Peek();
             var paramNames = paramInfo.ParamNames;
+            string prestr = paramInfo.Prestr;
+            paramInfo.Prestr = ", ";
 
-            CodeBuilder.AppendFormat(".from(function({0}) return ", string.Join(", ", paramNames.ToArray()));
+            CodeBuilder.AppendFormat("{0}{{\"from\", (function({1}) return ", prestr, string.Join(", ", paramNames.ToArray()));
             var opd = m_Model.GetOperation(node.Expression) as IConversionExpression;
             OutputExpressionSyntax(node.Expression, opd);
-            CodeBuilder.Append("; end)");
+            CodeBuilder.Append("; end)}");
 
             paramNames.Add(node.Identifier.Text);
         }
@@ -54,11 +56,13 @@ namespace RoslynTool.CsToLua
         {
             var paramInfo = m_LinqParamInfoStack.Peek();
             var paramNames = paramInfo.ParamNames;
+            string prestr = paramInfo.Prestr;
+            paramInfo.Prestr = ", ";
 
-            CodeBuilder.AppendFormat(".let(function({0}) return ", string.Join(", ", paramNames.ToArray()));
+            CodeBuilder.AppendFormat("{0}{{\"let\", (function({1}) return ", prestr, string.Join(", ", paramNames.ToArray()));
             var opd = m_Model.GetOperation(node.Expression) as IConversionExpression;
             OutputExpressionSyntax(node.Expression, opd);
-            CodeBuilder.Append("; end)");
+            CodeBuilder.Append("; end)}");
 
             paramNames.Add(node.Identifier.Text);
         }
@@ -66,8 +70,10 @@ namespace RoslynTool.CsToLua
         {
             var paramInfo = m_LinqParamInfoStack.Peek();
             var paramNames = paramInfo.ParamNames;
+            string prestr = paramInfo.Prestr;
+            paramInfo.Prestr = ", ";
 
-            CodeBuilder.AppendFormat(".join((function({0}) return ", string.Join(", ", paramNames.ToArray()));            
+            CodeBuilder.AppendFormat("{0}{{\"join\", (function({1}) return ", prestr, string.Join(", ", paramNames.ToArray()));            
             var opd = m_Model.GetOperation(node.InExpression) as IConversionExpression;
             OutputExpressionSyntax(node.InExpression, opd);
             CodeBuilder.Append("; end), ");
@@ -83,7 +89,7 @@ namespace RoslynTool.CsToLua
             CodeBuilder.AppendFormat("(function({0}) return ", string.Join(", ", paramNames.ToArray()));
             var opdr = m_Model.GetOperation(node.RightExpression) as IConversionExpression;
             OutputExpressionSyntax(node.RightExpression, opdr);
-            CodeBuilder.Append("; end))");
+            CodeBuilder.Append("; end)}");
 
             if (null != node.Into) {
                 VisitJoinIntoClause(node.Into);
@@ -93,52 +99,70 @@ namespace RoslynTool.CsToLua
         {
             var paramInfo = m_LinqParamInfoStack.Peek();
             var paramNames = paramInfo.ParamNames;
+            string prestr = paramInfo.Prestr;
+            paramInfo.Prestr = ", ";
 
             paramNames.Remove(paramInfo.JoinParamName);
             paramNames.Add(node.Identifier.Text);
             
-            CodeBuilder.Append(".into()");
+            CodeBuilder.AppendFormat("{0}{{\"into\"}}", prestr);
         }
         public override void VisitWhereClause(WhereClauseSyntax node)
         {
             var paramInfo = m_LinqParamInfoStack.Peek();
             var paramNames = paramInfo.ParamNames;
+            string prestr = paramInfo.Prestr;
+            paramInfo.Prestr = ", ";
 
-            CodeBuilder.AppendFormat(".where(function({0}) return ", string.Join(", ", paramNames.ToArray()));
+            CodeBuilder.AppendFormat("{0}{{\"where\", (function({1}) return ", prestr, string.Join(", ", paramNames.ToArray()));
             var opd = m_Model.GetOperation(node.Condition) as IConversionExpression;
             OutputExpressionSyntax(node.Condition, opd);
-            CodeBuilder.Append("; end)");
+            CodeBuilder.Append("; end)}");
         }
         public override void VisitOrderByClause(OrderByClauseSyntax node)
         {
+            var paramInfo = m_LinqParamInfoStack.Peek();
+            var paramNames = paramInfo.ParamNames;
+            string prestr = paramInfo.Prestr;
+            paramInfo.Prestr = ", ";
+            paramInfo.OrderByPrestr = string.Empty;
+
+            CodeBuilder.AppendFormat("{0}{{\"orderby\", {{", prestr);
             base.VisitOrderByClause(node);
+            CodeBuilder.Append("}}");
         }
         public override void VisitOrdering(OrderingSyntax node)
         {
             var paramInfo = m_LinqParamInfoStack.Peek();
             var paramNames = paramInfo.ParamNames;
+            string prestr = paramInfo.OrderByPrestr;
+            paramInfo.OrderByPrestr = ", ";
 
-            CodeBuilder.AppendFormat(".orderby((function({0}) return ", string.Join(", ", paramNames.ToArray()));
+            CodeBuilder.AppendFormat("{0}{{(function({1}) return ", prestr, string.Join(", ", paramNames.ToArray()));
             var opd = m_Model.GetOperation(node.Expression) as IConversionExpression;
             OutputExpressionSyntax(node.Expression, opd);
-            CodeBuilder.AppendFormat("; end), {0})", node.AscendingOrDescendingKeyword.Text != "descending" ? "true" : "false");
+            CodeBuilder.AppendFormat("; end), {0}}}", node.AscendingOrDescendingKeyword.Text != "descending" ? "true" : "false");
         }
         public override void VisitSelectClause(SelectClauseSyntax node)
         {
             var paramInfo = m_LinqParamInfoStack.Peek();
             var paramNames = paramInfo.ParamNames;
+            string prestr = paramInfo.Prestr;
+            paramInfo.Prestr = ", ";
 
-            CodeBuilder.AppendFormat(".select(function({0}) return ", string.Join(", ", paramNames.ToArray()));
+            CodeBuilder.AppendFormat("{0}{{\"select\", (function({1}) return ", prestr, string.Join(", ", paramNames.ToArray()));
             var opd = m_Model.GetOperation(node.Expression) as IConversionExpression;
             OutputExpressionSyntax(node.Expression, opd);
-            CodeBuilder.Append("; end)");
+            CodeBuilder.Append("; end)}");
         }
         public override void VisitGroupClause(GroupClauseSyntax node)
         {
             var paramInfo = m_LinqParamInfoStack.Peek();
             var paramNames = paramInfo.ParamNames;
+            string prestr = paramInfo.Prestr;
+            paramInfo.Prestr = ", ";
 
-            CodeBuilder.AppendFormat(".groupby((function({0}) return ", string.Join(", ", paramNames.ToArray()));
+            CodeBuilder.AppendFormat("{0}{{\"groupby\", (function({1}) return ", prestr, string.Join(", ", paramNames.ToArray()));
             var opdGroup = m_Model.GetOperation(node.GroupExpression) as IConversionExpression;
             OutputExpressionSyntax(node.GroupExpression, opdGroup);
             CodeBuilder.Append("; end), ");
@@ -146,16 +170,18 @@ namespace RoslynTool.CsToLua
             CodeBuilder.AppendFormat("(function({0}) return ", string.Join(", ", paramNames.ToArray()));
             var opdBy = m_Model.GetOperation(node.ByExpression) as IConversionExpression;
             OutputExpressionSyntax(node.ByExpression, opdBy);
-            CodeBuilder.Append("; end))");
+            CodeBuilder.Append("; end)}");
         }
         public override void VisitQueryContinuation(QueryContinuationSyntax node)
         {
             var paramInfo = m_LinqParamInfoStack.Peek();
             var paramNames = paramInfo.ParamNames;
+            string prestr = paramInfo.Prestr;
+            paramInfo.Prestr = ", ";
             paramNames.Clear();
             paramNames.Add(node.Identifier.Text);
 
-            CodeBuilder.Append(".continuation()");
+            CodeBuilder.AppendFormat("{0}{{\"continuation\"}}", prestr);
             node.Body.Accept(this);
         }
     }
