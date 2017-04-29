@@ -14,8 +14,6 @@ namespace RoslynTool.CsToLua
     {
         internal List<string> ParamNames = new List<string>();
         internal List<string> ReturnParamNames = new List<string>();
-        internal List<string> RefParamNames = new List<string>();
-        internal List<string> OutParamNames = new List<string>();
         internal HashSet<int> ValueParams = new HashSet<int>();
         internal HashSet<int> ExternValueParams = new HashSet<int>();
         internal List<string> GenericTypeTypeParamNames = new List<string>();
@@ -33,8 +31,6 @@ namespace RoslynTool.CsToLua
         {
             ParamNames.Clear();
             ReturnParamNames.Clear();
-            RefParamNames.Clear();
-            OutParamNames.Clear();
             OriginalParamsName = string.Empty;
             ExistYield = false;
             ExistTopLevelReturn = false;
@@ -67,7 +63,6 @@ namespace RoslynTool.CsToLua
                 } else if (param.RefKind == RefKind.Ref || param.RefKind == RefKind.Out) {
                     //ref参数与out参数在形参处理时机制相同，实参时out参数传入__cs2lua_out（适应slua与dotnet反射的调用规则）
                     ParamNames.Add(param.Name);
-                    RefParamNames.Add(param.Name);
                     ReturnParamNames.Add(param.Name);
                 } else {
                     if (param.Type.TypeKind == TypeKind.Struct) {
