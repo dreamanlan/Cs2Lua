@@ -843,14 +843,20 @@ namespace RoslynTool.CsToLua
                 char c2 = sv.Length > 1 ? sv[1] : '\0';
                 char c3 = sv.Length > 2 ? sv[2] : '\0';
                 if (c1 == '-' && c2 == '.' && char.IsNumber(c3) || (c1 == '-' || c1 == '.') && char.IsNumber(c2) || char.IsNumber(c1)) {
-                    sb.Append(val);
+                    if (val is float || val is double)
+                        sb.AppendFormat("{0:f}", val);
+                    else
+                        sb.Append(val);
                 } else {
                     var oper = operOrSym as IFieldReferenceExpression;
                     if (null != oper) {
                         var fieldSym = oper.Field;
                         sb.AppendFormat("wrapconst({0}, \"{1}\")", ClassInfo.GetFullName(fieldSym.Type), fieldSym.Name);
                     } else {
-                        sb.Append(val);
+                        if (val is float || val is double)
+                            sb.AppendFormat("{0:f}", val);
+                        else
+                            sb.Append(val);
                     }
                 }
             }
