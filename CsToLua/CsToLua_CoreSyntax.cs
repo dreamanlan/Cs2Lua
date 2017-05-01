@@ -1307,7 +1307,7 @@ namespace RoslynTool.CsToLua
                     ii.OutputInvocation(CodeBuilder, this, memberAccess.Expression, true, m_Model, memberAccess);
                     if (ii.ReturnArgs.Count > 0) {
                         if (!toplevel) {
-                            CodeBuilder.AppendFormat(" return {0}; end)()", localName);
+                            CodeBuilder.AppendFormat("; return {0}; end)()", localName);
                         }
                     }
                     CodeBuilder.AppendFormat("{0}", expTerminater);
@@ -1326,7 +1326,7 @@ namespace RoslynTool.CsToLua
                     ii.OutputInvocation(CodeBuilder, this, invocation.Expression, false, m_Model, invocation);
                     if (ii.ReturnArgs.Count > 0) {
                         if (!toplevel) {
-                            CodeBuilder.AppendFormat(" return {0}; end)()", localName);
+                            CodeBuilder.AppendFormat("; return {0}; end)()", localName);
                         }
                     }
                     CodeBuilder.AppendFormat("{0}", expTerminater);
