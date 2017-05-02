@@ -793,8 +793,8 @@ namespace RoslynTool.CsToLua
                             if (null != inits && i < inits.Count) {
                                 opd = inits[i] as IConversionExpression;
                             }
-                            if (args[i] is AssignmentExpressionSyntax) {
-                                VisitToplevelExpressionFirstPass(args[i], string.Empty);
+                            if (exp is AssignmentExpressionSyntax) {
+                                VisitToplevelExpressionFirstPass(exp, string.Empty);
                             } else {
                                 OutputExpressionSyntax(exp, opd);
                             }
