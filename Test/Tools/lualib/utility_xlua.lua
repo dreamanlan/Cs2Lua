@@ -1012,13 +1012,10 @@ function defineclass(base, className, static, static_methods, static_fields_buil
 				end
 				
 				local clsTbl = mt.__class;
-				local monoBehaviour = CS.UnityEngine.MonoBehaviour;
-				while clsTbl ~= nil do
-					if clsTbl == monoBehaviour then
-						return true;
-					end
-					
-					clsTbl = clsTbl.__base_class;
+				local baseTbl = clsTbl.__base_class;
+				
+				if baseTbl == CS.UnityEngine.MonoBehaviour then
+					return true;
 				end
 				
 				return false;
