@@ -20,6 +20,7 @@ namespace RoslynTool
                 List<string> macros = new List<string>();
                 List<string> ignoredPath = new List<string>();
                 List<string> externPath = new List<string>();
+                List<string> internPath = new List<string>();
                 Dictionary<string, string> refByNames = new Dictionary<string, string>();
                 Dictionary<string, string> refByPaths = new Dictionary<string, string>();
                 bool enableInherit = false;
@@ -56,6 +57,14 @@ namespace RoslynTool
                                 string arg = args[i + 1];
                                 if (!arg.StartsWith("-")) {
                                     externPath.Add(arg);
+                                    ++i;
+                                }
+                            }
+                        } else if (0 == string.Compare(args[i], "-internpath", true)) {
+                            if (i < args.Length - 1) {
+                                string arg = args[i + 1];
+                                if (!arg.StartsWith("-")) {
+                                    internPath.Add(arg);
                                     ++i;
                                 }
                             }
@@ -161,6 +170,7 @@ namespace RoslynTool
                     Console.WriteLine("\twhere:");
                     Console.WriteLine("\t\tfileext = file externsion, default is txt for unity3d, maybe lua for other usage.");
                     Console.WriteLine("\t\tmacro = c# macro define, used in your csharp code #if/#elif/#else/#endif etc.");
+                    Console.WriteLine("\t\tinternpath = only c# source file path in the csproj as intern class, only these classes translate to lua.");
                     Console.WriteLine("\t\texternpath = mark c# source file path in the csproj as extern class (API), these classes doesn't translate to lua.");
                     Console.WriteLine("\t\tignorepath = ignore c# source file path in the csproj, these classes doesn't translate to lua (need translate them by hand, cs2lua use \"require 'cs2lua_custom';\" resolve xref).");
                     Console.WriteLine("\t\tdllname = dotnet system assembly name, referenced by your csharp code.");
@@ -173,7 +183,7 @@ namespace RoslynTool
                     }
                 }
                 if (File.Exists(file)) {
-                    return (int)CsToLuaProcessor.Process(file, outputExt, macros, ignoredPath, externPath, refByNames, refByPaths, enableInherit, enableLinq, outputResult);
+                    return (int)CsToLuaProcessor.Process(file, outputExt, macros, ignoredPath, externPath, internPath, refByNames, refByPaths, enableInherit, enableLinq, outputResult);
                 } else {
                     return (int)ExitCode.FileNotFound;
                 }

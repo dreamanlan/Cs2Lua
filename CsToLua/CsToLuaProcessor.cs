@@ -20,7 +20,7 @@ namespace RoslynTool.CsToLua
     }
     public static class CsToLuaProcessor
     {
-        public static ExitCode Process(string srcFile, string outputExt, IList<string> macros, IList<string> ignoredPath, IList<string> externPath, IDictionary<string, string> _refByNames, IDictionary<string, string> _refByPaths, bool enableInherit, bool enableLinq, bool outputResult)
+        public static ExitCode Process(string srcFile, string outputExt, IList<string> macros, IList<string> ignoredPath, IList<string> externPath, IList<string> internPath, IDictionary<string, string> _refByNames, IDictionary<string, string> _refByPaths, bool enableInherit, bool enableLinq, bool outputResult)
         {
             List<string> preprocessors = new List<string>(macros);
             preprocessors.Add("__LUA__");
@@ -37,6 +37,10 @@ namespace RoslynTool.CsToLua
             List<string> externFullPath = new List<string>();
             foreach (string s in externPath) {
                 externFullPath.Add(Path.Combine(path, s));
+            }
+            List<string> internFullPath = new List<string>();
+            foreach (string s in internPath) {
+                internFullPath.Add(Path.Combine(path, s));
             }
 
             string logDir = Path.Combine(path, "log");
@@ -209,6 +213,12 @@ namespace RoslynTool.CsToLua
                         foreach (SyntaxTree tree in newTrees) {
                             bool ignore = IsIgnoredFile(ignoredFullPath, tree.FilePath);
                             bool isExtern = IsExternFile(externFullPath, tree.FilePath);
+                            if (internFullPath.Count > 0) {
+                                bool isIntern = IsInternFile(internFullPath, tree.FilePath);
+                                if (!isIntern && !ignore) {
+                                    isExtern = true;
+                                }
+                            }
                             string fileName = Path.GetFileNameWithoutExtension(tree.FilePath);
                             var root = tree.GetRoot();
                             SemanticModel model = compilation.GetSemanticModel(tree, true);
@@ -1286,6 +1296,18 @@ namespace RoslynTool.CsToLua
         {
             bool ret = false;
             foreach (string path in externPath) {
+                if (filePath.StartsWith(path)) {
+                    ret = true;
+                    break;
+                }
+            }
+            return ret;
+        }
+
+        private static bool IsInternFile(IList<string> internPath, string filePath)
+        {
+            bool ret = false;
+            foreach (string path in internPath) {
                 if (filePath.StartsWith(path)) {
                     ret = true;
                     break;
