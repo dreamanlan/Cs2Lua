@@ -308,7 +308,7 @@ namespace RoslynTool.CsToLua
             if (!string.IsNullOrEmpty(name) && name[0] == '.')
                 name = name.Substring(1);
             sb.Append(name);
-            if (methodSym.ContainingAssembly == assemblySym) {
+            if (SymbolTable.Instance.IsCs2LuaSymbol(methodSym)) {
                 foreach (var param in methodSym.Parameters) {
                     sb.Append("__");
                     if (param.RefKind == RefKind.Ref) {

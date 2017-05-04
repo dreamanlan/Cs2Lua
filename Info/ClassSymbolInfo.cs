@@ -26,7 +26,6 @@ namespace RoslynTool.CsToLua
         internal List<IEventSymbol> EventSymbols = new List<IEventSymbol>();
         internal List<INamedTypeSymbol> InterfaceSymbols = new List<INamedTypeSymbol>();
         internal Dictionary<string, bool> SymbolOverloadFlags = new Dictionary<string, bool>();
-        internal HashSet<string> MethodNames = new HashSet<string>();
         internal Dictionary<string, IFieldSymbol> FieldUseExplicitTypeParams = new Dictionary<string, IFieldSymbol>();
         internal Dictionary<string, IFieldSymbol> FieldCreateSelfs = new Dictionary<string, IFieldSymbol>();
 
@@ -100,12 +99,8 @@ namespace RoslynTool.CsToLua
                     string manglingName = SymbolTable.CalcMethodMangling(msym);
                     if (!SymbolOverloadFlags.ContainsKey(name)) {
                         SymbolOverloadFlags.Add(name, false);
-
-                        MethodNames.Add(name);
                     } else {
                         SymbolOverloadFlags[name] = true;
-
-                        MethodNames.Add(manglingName);
                     }
                     continue;
                 }
