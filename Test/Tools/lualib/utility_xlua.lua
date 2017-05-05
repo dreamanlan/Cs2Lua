@@ -1443,21 +1443,21 @@ function getexterninstanceindexer(obj, intf, name, ...)
 	if meta then
 		local class = rawget(meta, "__class");
 		local typename = rawget(meta, "__typename");
-  	if class == CS.System.Collections.Generic.List_T then
-  	  return obj[index+1];
-  	elseif class == CS.System.Collections.Generic.Dictionary_TKey_TValue then
-      local v = obj[index];
-      if v then
-        return v.value;
-      else
-        return nil;
-      end;
-    elseif typename == "LuaArray" then
-    	return obj[index+1];
-    elseif typename == "LuaVarObject" then
-    	return obj[index];
-    else
-    	return obj:getItem(index);
+		if class == CS.System.Collections.Generic.List_T then
+			return obj[index+1];
+		elseif class == CS.System.Collections.Generic.Dictionary_TKey_TValue then
+			local v = obj[index];
+			if v then
+				return v.value;
+			else
+				return nil;
+			end;
+		elseif typename == "LuaArray" then
+			return obj[index+1];	-- todo: fixme
+		elseif typename == "LuaVarObject" then
+			return obj[index];		-- todo: fixme
+		else
+			return obj[index];
     end;
   end;
 end;
@@ -1483,11 +1483,11 @@ function setexterninstanceindexer(obj, intf, name, ...)
         obj:Add(index, val);
       end;
     elseif typename == "LuaArray" then
-    	obj[index+1] = val;
+    	obj[index+1] = val;	--todo: fixme
     elseif typename == "LuaVarObject" then
-    	obj[index] = val;
+    	obj[index] = val;  	--todo: fixme
     else
-    	obj:setItem(index, val);
+    	obj[index] = val;
     end;
   end;
   return nil;
