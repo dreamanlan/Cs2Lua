@@ -96,7 +96,6 @@ namespace RoslynTool.CsToLua
                     string name = msym.Name;
                     if (name[0] == '.')
                         name = name.Substring(1);
-                    string manglingName = SymbolTable.CalcMethodMangling(msym);
                     if (!SymbolOverloadFlags.ContainsKey(name)) {
                         SymbolOverloadFlags.Add(name, false);
                     } else {

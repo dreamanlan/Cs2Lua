@@ -222,6 +222,39 @@ namespace RoslynTool.CsToLua
                             string fileName = Path.GetFileNameWithoutExtension(tree.FilePath);
                             var root = tree.GetRoot();
                             SemanticModel model = compilation.GetSemanticModel(tree, true);
+                            if (ignore || isExtern) {
+                                TypeAnalysis ta = new TypeAnalysis(model);
+                                ta.Visit(root);
+                                var symbols = ta.Symbols;
+                                foreach (var symbol in symbols) {
+                                    var type = symbol as INamedTypeSymbol;
+                                    if (null != type) {
+                                        string key = ClassInfo.SpecialGetFullTypeName(type, isExtern);
+                                        if (!ignoredClasses.ContainsKey(key)) {
+                                            ignoredClasses.Add(key, type);
+                                        }
+                                        if (ignore && !SymbolTable.Instance.IgnoredTypes.ContainsKey(key)) {
+                                            SymbolTable.Instance.IgnoredTypes.Add(key, type);
+                                        }
+                                        if (isExtern && !SymbolTable.Instance.ExternTypes.ContainsKey(key)) {
+                                            SymbolTable.Instance.ExternTypes.Add(key, type);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        foreach (SyntaxTree tree in newTrees) {
+                            bool ignore = IsIgnoredFile(ignoredFullPath, tree.FilePath);
+                            bool isExtern = IsExternFile(externFullPath, tree.FilePath);
+                            if (internFullPath.Count > 0) {
+                                bool isIntern = IsInternFile(internFullPath, tree.FilePath);
+                                if (!isIntern && !ignore) {
+                                    isExtern = true;
+                                }
+                            }
+                            string fileName = Path.GetFileNameWithoutExtension(tree.FilePath);
+                            var root = tree.GetRoot();
+                            SemanticModel model = compilation.GetSemanticModel(tree, true);
                             
                             var diags = model.GetDiagnostics();
                             bool firstError = true;
@@ -245,26 +278,7 @@ namespace RoslynTool.CsToLua
                                 }
                             }
 
-                            if (ignore || isExtern) {
-                                TypeAnalysis ta = new TypeAnalysis(model);
-                                ta.Visit(root);
-                                var symbols = ta.Symbols;
-                                foreach (var symbol in symbols) {
-                                    var type = symbol as INamedTypeSymbol;
-                                    if (null != type) {
-                                        string key = ClassInfo.SpecialGetFullTypeName(type, isExtern);
-                                        if (!ignoredClasses.ContainsKey(key)) {
-                                            ignoredClasses.Add(key, type);
-                                        }
-                                        if (ignore && !SymbolTable.Instance.IgnoredTypes.ContainsKey(key)) {
-                                            SymbolTable.Instance.IgnoredTypes.Add(key, type);
-                                        }
-                                        if (isExtern && !SymbolTable.Instance.ExternTypes.ContainsKey(key)) {
-                                            SymbolTable.Instance.ExternTypes.Add(key, type);
-                                        }
-                                    }
-                                }
-                            } else {
+                            if (!ignore && !isExtern) {
                                 CsLuaTranslater csToLua = new CsLuaTranslater(model, enableInherit, enableLinq);
                                 csToLua.Translate(root);
                                 if (csToLua.HaveError) {
