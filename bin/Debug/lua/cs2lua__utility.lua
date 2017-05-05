@@ -1703,7 +1703,6 @@ LINQ.execRecursively = function(linq, ix, paramList)
 	local finalRs = {};
 	local interRs = {};
 	local itemNum = #linq;
-	ix = 1;
 	while ix <= itemNum do
 		local v = linq[ix];
 		local key = v[1];
@@ -1753,7 +1752,6 @@ LINQ.buildIntermediateResult = function(linq, ix, paramList, coll, interRs, fina
 		while newIx <= itemNum do
 			local v = linq[newIx];
 			local key = v[1];
-			newIx = newIx + 1;
 			
 			if key=="let" then
 				table.insert(newParamList, v[2](unpack(newParamList)));
@@ -1770,10 +1768,12 @@ LINQ.buildIntermediateResult = function(linq, ix, paramList, coll, interRs, fina
 			    table.insert(finalRs, val); 
 			  end;
 			  isMatch = false;
+			  break;
 			else
 			  --其它子句需要在中间结果集完成后再处理，这里跳过
 				break;
 			end;
+			newIx = newIx + 1;
 		end;
 		if isMatch then
 			table.insert(interRs, newParamList);

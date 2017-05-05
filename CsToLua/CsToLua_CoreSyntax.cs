@@ -670,7 +670,6 @@ namespace RoslynTool.CsToLua
             if (expTerminater.Length > 0)
                 CodeBuilder.AppendLine();
         }
-
         private void VisitLocalVariableDeclarator(ClassInfo ci, VariableDeclaratorSyntax node)
         {
             if (null != node.Initializer) {
@@ -796,429 +795,13 @@ namespace RoslynTool.CsToLua
                 OutputExpressionSyntax(assign.Right, opd);
                 CodeBuilder.Append(")");
             } else if (null != leftElementAccess) {
-                if (null != leftSym && leftSym.IsStatic) {
-                    AddReferenceAndTryDeriveGenericTypeInstance(ci, leftSym);
-                }
-                if (null != leftPsym && leftPsym.IsIndexer) {
-                    CodeBuilder.AppendFormat("set{0}{1}indexer(", SymbolTable.Instance.IsCs2LuaSymbol(leftPsym) ? string.Empty : "extern", leftPsym.IsStatic ? "static" : "instance");
-                    if (leftPsym.IsStatic) {
-                        string fullName = ClassInfo.GetFullName(leftPsym.ContainingType);
-                        CodeBuilder.Append(fullName);
-                    } else {
-                        OutputExpressionSyntax(leftElementAccess.Expression);
-                    }
-                    CodeBuilder.Append(", ");
-                    if (!leftPsym.IsStatic) {
-                        string fnOfIntf = "nil";
-                        CheckExplicitInterfaceAccess(leftPsym.SetMethod, ref fnOfIntf);
-                        CodeBuilder.AppendFormat("{0}, ", fnOfIntf);
-                    }
-                    string manglingName = NameMangling(leftPsym.SetMethod);
-                    CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
-                    InvocationInfo ii = new InvocationInfo();
-                    ii.Init(leftPsym.SetMethod, leftElementAccess.ArgumentList, m_Model);
-                    OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, leftElementAccess, ii.ArgConversions.ToArray());
-                    CodeBuilder.Append(", ");
-                    OutputExpressionSyntax(assign.Right, opd);
-                    CodeBuilder.Append(")");
-                } else if (leftOper.Kind == OperationKind.ArrayElementReferenceExpression) {
-                    if (SymbolTable.UseArrayGetSet) {
-                        CodeBuilder.Append("arrayset(");
-                        OutputExpressionSyntax(leftElementAccess.Expression);
-                        CodeBuilder.Append(", ");
-                        VisitBracketedArgumentList(leftElementAccess.ArgumentList);
-                        CodeBuilder.Append(", ");
-                        OutputExpressionSyntax(assign.Right, opd);
-                        CodeBuilder.Append(")");
-                    } else {
-                        if (!toplevel) {
-                            CodeBuilder.Append("(function() ");
-                        }
-                        OutputExpressionSyntax(leftElementAccess.Expression);
-                        CodeBuilder.Append("[");
-                        VisitBracketedArgumentList(leftElementAccess.ArgumentList);
-                        CodeBuilder.Append("] = ");
-                        OutputExpressionSyntax(assign.Right, opd);
-                        if (!toplevel) {
-                            CodeBuilder.Append("; return ");
-                            OutputExpressionSyntax(assign.Right, opd);
-                            CodeBuilder.Append("; end)()");
-                        }
-                    }
-                } else if (null != leftSym) {
-                    CodeBuilder.AppendFormat("set{0}{1}element(", SymbolTable.Instance.IsCs2LuaSymbol(leftSym) ? string.Empty : "extern", leftSym.IsStatic ? "static" : "instance");
-                    if (leftSym.IsStatic) {
-                        string fullName = ClassInfo.GetFullName(leftSym.ContainingType);
-                        CodeBuilder.Append(fullName);
-                    } else {
-                        OutputExpressionSyntax(leftElementAccess.Expression);
-                    }
-                    CodeBuilder.Append(", ");
-                    CodeBuilder.AppendFormat("\"{0}\", ", leftSym.Name);
-                    VisitBracketedArgumentList(leftElementAccess.ArgumentList);
-                    CodeBuilder.Append(", ");
-                    OutputExpressionSyntax(assign.Right, opd);
-                    CodeBuilder.Append(")");
-                } else {
-                    Log(assign, "unknown set element symbol !");
-                }
+                VisitAssignmentLeftElementAccess(ci, assign, toplevel, leftOper, leftSym, leftPsym, leftElementAccess, opd);
             } else if (null != leftCondAccess) {
-                CodeBuilder.Append("condaccess(");
-                OutputExpressionSyntax(leftCondAccess.Expression);
-                CodeBuilder.Append(", ");
-                var elementBinding = leftCondAccess.WhenNotNull as ElementBindingExpressionSyntax;
-                if (null != elementBinding) {
-                    var bindingOper = m_Model.GetOperation(leftCondAccess.WhenNotNull);
-                    var symInfo = m_Model.GetSymbolInfo(leftCondAccess.WhenNotNull);
-                    var sym = symInfo.Symbol;
-                    var psym = sym as IPropertySymbol;
-                    if (null != sym && sym.IsStatic) {
-                        AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
-                    }
-                    if (null != psym && psym.IsIndexer) {
-                        CodeBuilder.Append("(function() return ");
-                        CodeBuilder.AppendFormat("set{0}{1}indexer(", SymbolTable.Instance.IsCs2LuaSymbol(psym) ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
-                        if (psym.IsStatic) {
-                            string fullName = ClassInfo.GetFullName(psym.ContainingType);
-                            CodeBuilder.Append(fullName);
-                        } else {
-                            OutputExpressionSyntax(leftCondAccess.Expression);
-                        }
-                        CodeBuilder.Append(", ");
-                        if (!psym.IsStatic) {
-                            string fnOfIntf = "nil";
-                            CheckExplicitInterfaceAccess(psym.SetMethod, ref fnOfIntf);
-                            CodeBuilder.AppendFormat("{0}, ", fnOfIntf);
-                        }
-                        string manglingName = NameMangling(psym.SetMethod);
-                        CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
-                        InvocationInfo ii = new InvocationInfo();
-                        List<ExpressionSyntax> args = new List<ExpressionSyntax> { leftCondAccess.WhenNotNull };
-                        ii.Init(psym.SetMethod, args, m_Model);
-                        OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, leftCondAccess, ii.ArgConversions.ToArray());
-                        CodeBuilder.Append(", ");
-                        OutputExpressionSyntax(assign.Right, opd);
-                        CodeBuilder.Append(")");
-                        CodeBuilder.Append("; end)");
-                    } else if (bindingOper.Kind == OperationKind.ArrayElementReferenceExpression) {
-                        if (SymbolTable.UseArrayGetSet) {
-                            CodeBuilder.Append("arrayset(");
-                            OutputExpressionSyntax(leftCondAccess.Expression);
-                            CodeBuilder.Append(", ");
-                            OutputExpressionSyntax(leftCondAccess.WhenNotNull);
-                            CodeBuilder.Append(", ");
-                            OutputExpressionSyntax(assign.Right, opd);
-                            CodeBuilder.Append(")");
-                        } else {
-                            CodeBuilder.Append("(function() ");
-                            OutputExpressionSyntax(leftCondAccess.Expression);
-                            CodeBuilder.Append("[");
-                            OutputExpressionSyntax(leftCondAccess.WhenNotNull);
-                            CodeBuilder.Append("] = ");
-                            OutputExpressionSyntax(assign.Right, opd);
-                            CodeBuilder.Append("; return ");
-                            OutputExpressionSyntax(assign.Right, opd);
-                            CodeBuilder.Append("; end)");
-                        }
-                    } else if (null != sym) {
-                        CodeBuilder.Append("(function() return ");
-                        CodeBuilder.AppendFormat("set{0}{1}element(", SymbolTable.Instance.IsCs2LuaSymbol(sym) ? string.Empty : "extern", sym.IsStatic ? "static" : "instance");
-                        if (sym.IsStatic) {
-                            string fullName = ClassInfo.GetFullName(sym.ContainingType);
-                            CodeBuilder.Append(fullName);
-                        } else {
-                            OutputExpressionSyntax(leftCondAccess.Expression);
-                        }
-                        CodeBuilder.Append(", ");
-                        CodeBuilder.AppendFormat("\"{0}\", ", leftSym.Name);
-                        OutputExpressionSyntax(leftCondAccess.WhenNotNull);
-                        CodeBuilder.Append(", ");
-                        OutputExpressionSyntax(assign.Right, opd);
-                        CodeBuilder.Append(")");
-                        CodeBuilder.Append("; end)");
-                    } else {
-                        ReportIllegalSymbol(assign, symInfo);
-                    }
-                } else {
-                    CodeBuilder.Append("(function() ");
-                    OutputExpressionSyntax(leftCondAccess.Expression);
-                    OutputExpressionSyntax(leftCondAccess.WhenNotNull);
-                    CodeBuilder.Append(" = ");
-                    OutputExpressionSyntax(assign.Right, opd);
-                    CodeBuilder.Append("; return ");
-                    OutputExpressionSyntax(assign.Right, opd);
-                    CodeBuilder.Append("; end)");
-                }
-                CodeBuilder.Append(")");
+                VisitAssignmentLeftCondAccess(ci, assign, leftSym, leftCondAccess, opd);
             } else if (leftOper.Type.TypeKind == TypeKind.Delegate) {
-                if (leftSym.Kind == SymbolKind.Local && op == "=") {
-                    OutputExpressionSyntax(assign.Left);
-                    CodeBuilder.Append(" = ");
-                    CodeBuilder.AppendFormat("delegationwrap");
-                    CodeBuilder.Append("(");
-                    OutputExpressionSyntax(assign.Right, opd);
-                    CodeBuilder.Append(")");
-                } else {
-                    bool isEvent = leftOper is IEventReferenceExpression;
-                    string prefix;
-                    if (SymbolTable.Instance.IsCs2LuaSymbol(leftSym)) {
-                        prefix = string.Empty;
-                    } else {
-                        prefix = "extern";
-                    }
-                    string postfix;
-                    if (op == "=") {
-                        postfix = "set";
-                    } else if (op == "+=") {
-                        postfix = "add";
-                    } else if (op == "-=") {
-                        postfix = "remove";
-                    } else {
-                        Log(assign, "Unsupported delegation operator {0} !", op);
-                        postfix = "error";
-                    }
-                    CodeBuilder.AppendFormat("{0}delegation{1}", prefix, postfix);
-                    CodeBuilder.Append("(");
-                    CodeBuilder.AppendFormat("{0}, ", isEvent ? "true" : "false");
-                    if (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event) {
-                        var memberAccess = assign.Left as MemberAccessExpressionSyntax;
-                        if (null != memberAccess) {
-                            OutputExpressionSyntax(memberAccess.Expression);
-                            CodeBuilder.Append(", ");
-                            string intf = "nil";
-                            string mname = string.Format("\"{0}\"", memberAccess.Name.Identifier.Text);
-                            CheckExplicitInterfaceAccess(leftSym, ref intf, ref mname);
-                            CodeBuilder.AppendFormat("{0}, {1}", intf, mname);
-                        } else if (leftSym.ContainingType == ci.SemanticInfo || ci.IsInherit(leftSym.ContainingType)) {
-                            CodeBuilder.Append("this, nil, ");
-                            CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
-                        } else {
-                            CodeBuilder.Append("newobj, nil, ");
-                            CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
-                        }
-                    } else {
-                        OutputExpressionSyntax(assign.Left);
-                        CodeBuilder.Append(", nil, nil");
-                    }
-                    CodeBuilder.Append(", ");
-                    OutputExpressionSyntax(assign.Right, opd);
-                    CodeBuilder.Append(")");
-                }
+                VisitAssignmentDelegation(ci, op, baseOp, assign, leftOper, leftSym, opd);
             } else if (null != invocation) {
-                string localName = string.Format("__compiler_assigninvoke_{0}", invocation.GetLocation().GetLineSpan().StartLinePosition.Line);
-                SymbolInfo symInfo = m_Model.GetSymbolInfo(invocation);
-                IMethodSymbol sym = symInfo.Symbol as IMethodSymbol;
-                if (null == sym || op != "=" && (null == compAssignInfo || null == compAssignInfo.Target || null == compAssignInfo.Value)) {
-                    ReportIllegalSymbol(invocation, symInfo);
-                } else {
-                    //处理ref/out参数
-                    InvocationInfo ii = new InvocationInfo();
-                    ii.Init(sym, invocation.ArgumentList, m_Model);
-                    if (sym.IsStatic || sym.IsExtensionMethod) {
-                        AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
-                    }
-
-                    bool isIntegerOprand = false;
-                    int integerOpIndex = -1;
-                    ITypeSymbol ltype = null;
-                    ITypeSymbol rtype = null;
-                    string leftFullTypeName = string.Empty;
-                    string rightFullTypeName = string.Empty;
-                    if (op != "=") {
-                        ltype = compAssignInfo.Target.Type;
-                        rtype = compAssignInfo.Value.Type;
-                        leftFullTypeName = ClassInfo.GetFullName(ltype);
-                        rightFullTypeName = ClassInfo.GetFullName(rtype);
-                        isIntegerOprand = TryGetSpecialIntegerOperatorIndex(baseOp, out integerOpIndex) && SymbolTable.IsIntegerType(compAssignInfo.Target.Type) && SymbolTable.IsIntegerType(compAssignInfo.Value.Type);
-                    }
-
-                    MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
-                    if (null != memberAccess) {
-                        if (memberAccess.OperatorToken.Text == "->") {
-                            Log(memberAccess, "Unsupported -> member access !");
-                        }
-
-                        bool outputEqualOp = false;
-                        int ct = ii.ReturnArgs.Count;
-                        if (op != "=") {
-                            OutputExpressionSyntax(assign.Left);
-                            CodeBuilder.Append(" = ");
-                            ProcessBinaryOperator(assign, ref baseOp);
-                            if (isIntegerOprand) {
-                                CodeBuilder.AppendFormat("invokeintegeroperator({0}, \"{1}\", ", integerOpIndex, baseOp);
-                                OutputExpressionSyntax(assign.Left, lopd);
-                                CodeBuilder.Append(", ");
-                            } else {
-                                string functor;
-                                if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
-                                    CodeBuilder.AppendFormat("{0}(", functor);
-                                    OutputExpressionSyntax(assign.Left, lopd);
-                                    CodeBuilder.Append(", ");
-                                } else if (baseOp == "+" && leftFullTypeName == SymbolTable.PrefixExternClassName("System.String")) {
-                                    CodeBuilder.Append(SymbolTable.PrefixExternClassName("System.String.Concat("));
-                                    OutputExpressionSyntax(assign.Left, lopd);
-                                    if (rightFullTypeName == SymbolTable.PrefixExternClassName("System.String"))
-                                        CodeBuilder.Append(", ");
-                                    else
-                                        CodeBuilder.Append(", tostring(");
-                                } else {
-                                    OutputExpressionSyntax(assign.Left, lopd);
-                                    CodeBuilder.AppendFormat(" {0} ", baseOp);
-                                }
-                            }
-                            if (null != ropd && ropd.UsesOperatorMethod) {
-                                IMethodSymbol msym = ropd.OperatorMethod;
-                                InvocationInfo iop = new InvocationInfo();
-                                iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
-                                OutputConversionInvokePrefix(iop);
-                            }
-                            if (ct > 0) {
-                                CodeBuilder.AppendFormat("(function() local {0}; {1}", localName, localName);
-                                outputEqualOp = true;
-                            }
-                        } else if (null != opd && opd.UsesOperatorMethod) {
-                            IMethodSymbol msym = opd.OperatorMethod;
-                            InvocationInfo iop = new InvocationInfo();
-                            iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
-                            OutputExpressionSyntax(assign.Left);
-                            CodeBuilder.Append(" = ");
-                            OutputConversionInvokePrefix(iop);
-                            if (ct > 0) {
-                                CodeBuilder.AppendFormat("(function() local {0}; {1}", localName, localName);
-                                outputEqualOp = true;
-                            }
-                        } else {
-                            OutputExpressionSyntax(assign.Left);
-                            outputEqualOp = true;
-                        }
-
-                        if (ct > 0) {
-                            CodeBuilder.Append(", ");
-                            OutputExpressionList(ii.ReturnArgs);
-                        }
-                        if (outputEqualOp) {
-                            CodeBuilder.Append(" = ");
-                        }
-                        ii.OutputInvocation(CodeBuilder, this, memberAccess.Expression, true, m_Model, memberAccess);
-                        if (op != "=") {
-                            if (ct > 0) {
-                                CodeBuilder.AppendFormat("; return {0}; end)()", localName);
-                            }
-                            if (null != ropd && ropd.UsesOperatorMethod) {
-                                CodeBuilder.Append(")");
-                            }
-                            if (isIntegerOprand) {
-                                CodeBuilder.AppendFormat(", {0}, {1}", ClassInfo.GetFullName(ltype), ClassInfo.GetFullName(rtype));
-                                CodeBuilder.Append(")");
-                            } else {
-                                string functor;
-                                if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
-                                    CodeBuilder.Append(")");
-                                } else if (baseOp == "+" && leftFullTypeName == SymbolTable.PrefixExternClassName("System.String")) {
-                                    if (rightFullTypeName != SymbolTable.PrefixExternClassName("System.String")) {
-                                        CodeBuilder.Append(")");
-                                    }
-                                    CodeBuilder.Append(")");
-                                }
-                            }
-                        } else if (null != opd && opd.UsesOperatorMethod) {
-                            if (ct > 0) {
-                                CodeBuilder.AppendFormat("; return {0}; end)()", localName);
-                            }
-                            CodeBuilder.Append(")");
-                        }
-                    } else {
-                        bool outputEqualOp = false;
-                        int ct = ii.ReturnArgs.Count;
-                        if (op != "=") {
-                            OutputExpressionSyntax(assign.Left);
-                            CodeBuilder.Append(" = ");
-                            ProcessBinaryOperator(assign, ref baseOp);
-                            if (isIntegerOprand) {
-                                CodeBuilder.AppendFormat("invokeintegeroperator({0}, \"{1}\", ", integerOpIndex, baseOp);
-                                OutputExpressionSyntax(assign.Left, lopd);
-                                CodeBuilder.Append(", ");
-                            } else {
-                                string functor;
-                                if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
-                                    CodeBuilder.AppendFormat("{0}(", functor);
-                                    OutputExpressionSyntax(assign.Left, lopd);
-                                    CodeBuilder.Append(", ");
-                                } else if (baseOp == "+" && leftFullTypeName == SymbolTable.PrefixExternClassName("System.String")) {
-                                    CodeBuilder.Append(SymbolTable.PrefixExternClassName("System.String.Concat("));
-                                    OutputExpressionSyntax(assign.Left, lopd);
-                                    if (rightFullTypeName == SymbolTable.PrefixExternClassName("System.String"))
-                                        CodeBuilder.Append(", ");
-                                    else
-                                        CodeBuilder.Append(", tostring(");
-                                } else {
-                                    OutputExpressionSyntax(assign.Left, lopd);
-                                    CodeBuilder.AppendFormat(" {0} ", baseOp);
-                                }
-                            }
-                            if (null != ropd && ropd.UsesOperatorMethod) {
-                                IMethodSymbol msym = ropd.OperatorMethod;
-                                InvocationInfo iop = new InvocationInfo();
-                                iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
-                                OutputConversionInvokePrefix(iop);
-                            }
-                            if (ct > 0) {
-                                CodeBuilder.AppendFormat("(function() local {0}; {1}", localName, localName);
-                                outputEqualOp = true;
-                            }
-                        } else if (null != opd && opd.UsesOperatorMethod) {
-                            IMethodSymbol msym = opd.OperatorMethod;
-                            InvocationInfo iop = new InvocationInfo();
-                            iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
-                            OutputExpressionSyntax(assign.Left);
-                            CodeBuilder.Append(" = ");
-                            OutputConversionInvokePrefix(iop);
-                            if (ct > 0) {
-                                CodeBuilder.AppendFormat("(function() local {0}; {1}", localName, localName);
-                                outputEqualOp = true;
-                            }
-                        } else {
-                            OutputExpressionSyntax(assign.Left);
-                            outputEqualOp = true;
-                        }
-
-                        if (ct > 0) {
-                            CodeBuilder.Append(", ");
-                            OutputExpressionList(ii.ReturnArgs);
-                        }
-                        if (outputEqualOp) {
-                            CodeBuilder.Append(" = ");
-                        }
-                        ii.OutputInvocation(CodeBuilder, this, invocation.Expression, false, m_Model, invocation);
-                        if (op != "=") {
-                            if (ct > 0) {
-                                CodeBuilder.AppendFormat("; return {0}; end)()", localName);
-                            }
-                            if (null != ropd && ropd.UsesOperatorMethod) {
-                                CodeBuilder.Append(")");
-                            }
-                            if (isIntegerOprand) {
-                                CodeBuilder.AppendFormat(", {0}, {1}", ClassInfo.GetFullName(ltype), ClassInfo.GetFullName(rtype));
-                                CodeBuilder.Append(")");
-                            } else {
-                                string functor;
-                                if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
-                                    CodeBuilder.Append(")");
-                                } else if (baseOp == "+" && leftFullTypeName == SymbolTable.PrefixExternClassName("System.String")) {
-                                    if (rightFullTypeName != SymbolTable.PrefixExternClassName("System.String")) {
-                                        CodeBuilder.Append(")");
-                                    }
-                                    CodeBuilder.Append(")");
-                                }
-                            }
-                        } else if (null != opd && opd.UsesOperatorMethod) {
-                            if (ct > 0) {
-                                CodeBuilder.AppendFormat("; return {0}; end)()", localName);
-                            }
-                            CodeBuilder.Append(")");
-                        }
-                    }
-                }
+                VisitAssignmentInvocation(ci, op, baseOp, assign, invocation, opd, lopd, ropd, compAssignInfo);
             } else {
                 if (op == "=") {
                     OutputExpressionSyntax(assign.Left);
@@ -1272,6 +855,438 @@ namespace RoslynTool.CsToLua
             CodeBuilder.AppendFormat("{0}", expTerminater);
             if (expTerminater.Length > 0)
                 CodeBuilder.AppendLine();
+        }
+        private void VisitAssignmentLeftElementAccess(ClassInfo ci, AssignmentExpressionSyntax assign, bool toplevel, IOperation leftOper, ISymbol leftSym, IPropertySymbol leftPsym, ElementAccessExpressionSyntax leftElementAccess, IConversionExpression opd)
+        {
+            if (null != leftSym && leftSym.IsStatic) {
+                AddReferenceAndTryDeriveGenericTypeInstance(ci, leftSym);
+            }
+            if (null != leftPsym && leftPsym.IsIndexer) {
+                CodeBuilder.AppendFormat("set{0}{1}indexer(", SymbolTable.Instance.IsCs2LuaSymbol(leftPsym) ? string.Empty : "extern", leftPsym.IsStatic ? "static" : "instance");
+                if (leftPsym.IsStatic) {
+                    string fullName = ClassInfo.GetFullName(leftPsym.ContainingType);
+                    CodeBuilder.Append(fullName);
+                } else {
+                    OutputExpressionSyntax(leftElementAccess.Expression);
+                }
+                CodeBuilder.Append(", ");
+                if (!leftPsym.IsStatic) {
+                    string fnOfIntf = "nil";
+                    CheckExplicitInterfaceAccess(leftPsym.SetMethod, ref fnOfIntf);
+                    CodeBuilder.AppendFormat("{0}, ", fnOfIntf);
+                }
+                string manglingName = NameMangling(leftPsym.SetMethod);
+                CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
+                InvocationInfo ii = new InvocationInfo();
+                ii.Init(leftPsym.SetMethod, leftElementAccess.ArgumentList, m_Model);
+                OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, leftElementAccess, ii.ArgConversions.ToArray());
+                CodeBuilder.Append(", ");
+                OutputExpressionSyntax(assign.Right, opd);
+                CodeBuilder.Append(")");
+            } else if (leftOper.Kind == OperationKind.ArrayElementReferenceExpression) {
+                if (SymbolTable.UseArrayGetSet) {
+                    CodeBuilder.Append("arrayset(");
+                    OutputExpressionSyntax(leftElementAccess.Expression);
+                    CodeBuilder.Append(", ");
+                    VisitBracketedArgumentList(leftElementAccess.ArgumentList);
+                    CodeBuilder.Append(", ");
+                    OutputExpressionSyntax(assign.Right, opd);
+                    CodeBuilder.Append(")");
+                } else {
+                    if (!toplevel) {
+                        CodeBuilder.Append("(function() ");
+                    }
+                    OutputExpressionSyntax(leftElementAccess.Expression);
+                    CodeBuilder.Append("[");
+                    VisitBracketedArgumentList(leftElementAccess.ArgumentList);
+                    CodeBuilder.Append("] = ");
+                    OutputExpressionSyntax(assign.Right, opd);
+                    if (!toplevel) {
+                        CodeBuilder.Append("; return ");
+                        OutputExpressionSyntax(assign.Right, opd);
+                        CodeBuilder.Append("; end)()");
+                    }
+                }
+            } else if (null != leftSym) {
+                CodeBuilder.AppendFormat("set{0}{1}element(", SymbolTable.Instance.IsCs2LuaSymbol(leftSym) ? string.Empty : "extern", leftSym.IsStatic ? "static" : "instance");
+                if (leftSym.IsStatic) {
+                    string fullName = ClassInfo.GetFullName(leftSym.ContainingType);
+                    CodeBuilder.Append(fullName);
+                } else {
+                    OutputExpressionSyntax(leftElementAccess.Expression);
+                }
+                CodeBuilder.Append(", ");
+                CodeBuilder.AppendFormat("\"{0}\", ", leftSym.Name);
+                VisitBracketedArgumentList(leftElementAccess.ArgumentList);
+                CodeBuilder.Append(", ");
+                OutputExpressionSyntax(assign.Right, opd);
+                CodeBuilder.Append(")");
+            } else {
+                Log(assign, "unknown set element symbol !");
+            }
+        }
+        private void VisitAssignmentLeftCondAccess(ClassInfo ci, AssignmentExpressionSyntax assign, ISymbol leftSym, ConditionalAccessExpressionSyntax leftCondAccess, IConversionExpression opd)
+        {
+            CodeBuilder.Append("condaccess(");
+            OutputExpressionSyntax(leftCondAccess.Expression);
+            CodeBuilder.Append(", ");
+            var elementBinding = leftCondAccess.WhenNotNull as ElementBindingExpressionSyntax;
+            if (null != elementBinding) {
+                var bindingOper = m_Model.GetOperation(leftCondAccess.WhenNotNull);
+                var symInfo = m_Model.GetSymbolInfo(leftCondAccess.WhenNotNull);
+                var sym = symInfo.Symbol;
+                var psym = sym as IPropertySymbol;
+                if (null != sym && sym.IsStatic) {
+                    AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
+                }
+                if (null != psym && psym.IsIndexer) {
+                    CodeBuilder.Append("(function() return ");
+                    CodeBuilder.AppendFormat("set{0}{1}indexer(", SymbolTable.Instance.IsCs2LuaSymbol(psym) ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
+                    if (psym.IsStatic) {
+                        string fullName = ClassInfo.GetFullName(psym.ContainingType);
+                        CodeBuilder.Append(fullName);
+                    } else {
+                        OutputExpressionSyntax(leftCondAccess.Expression);
+                    }
+                    CodeBuilder.Append(", ");
+                    if (!psym.IsStatic) {
+                        string fnOfIntf = "nil";
+                        CheckExplicitInterfaceAccess(psym.SetMethod, ref fnOfIntf);
+                        CodeBuilder.AppendFormat("{0}, ", fnOfIntf);
+                    }
+                    string manglingName = NameMangling(psym.SetMethod);
+                    CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
+                    InvocationInfo ii = new InvocationInfo();
+                    List<ExpressionSyntax> args = new List<ExpressionSyntax> { leftCondAccess.WhenNotNull };
+                    ii.Init(psym.SetMethod, args, m_Model);
+                    OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, leftCondAccess, ii.ArgConversions.ToArray());
+                    CodeBuilder.Append(", ");
+                    OutputExpressionSyntax(assign.Right, opd);
+                    CodeBuilder.Append(")");
+                    CodeBuilder.Append("; end)");
+                } else if (bindingOper.Kind == OperationKind.ArrayElementReferenceExpression) {
+                    if (SymbolTable.UseArrayGetSet) {
+                        CodeBuilder.Append("arrayset(");
+                        OutputExpressionSyntax(leftCondAccess.Expression);
+                        CodeBuilder.Append(", ");
+                        OutputExpressionSyntax(leftCondAccess.WhenNotNull);
+                        CodeBuilder.Append(", ");
+                        OutputExpressionSyntax(assign.Right, opd);
+                        CodeBuilder.Append(")");
+                    } else {
+                        CodeBuilder.Append("(function() ");
+                        OutputExpressionSyntax(leftCondAccess.Expression);
+                        CodeBuilder.Append("[");
+                        OutputExpressionSyntax(leftCondAccess.WhenNotNull);
+                        CodeBuilder.Append("] = ");
+                        OutputExpressionSyntax(assign.Right, opd);
+                        CodeBuilder.Append("; return ");
+                        OutputExpressionSyntax(assign.Right, opd);
+                        CodeBuilder.Append("; end)");
+                    }
+                } else if (null != sym) {
+                    CodeBuilder.Append("(function() return ");
+                    CodeBuilder.AppendFormat("set{0}{1}element(", SymbolTable.Instance.IsCs2LuaSymbol(sym) ? string.Empty : "extern", sym.IsStatic ? "static" : "instance");
+                    if (sym.IsStatic) {
+                        string fullName = ClassInfo.GetFullName(sym.ContainingType);
+                        CodeBuilder.Append(fullName);
+                    } else {
+                        OutputExpressionSyntax(leftCondAccess.Expression);
+                    }
+                    CodeBuilder.Append(", ");
+                    CodeBuilder.AppendFormat("\"{0}\", ", leftSym.Name);
+                    OutputExpressionSyntax(leftCondAccess.WhenNotNull);
+                    CodeBuilder.Append(", ");
+                    OutputExpressionSyntax(assign.Right, opd);
+                    CodeBuilder.Append(")");
+                    CodeBuilder.Append("; end)");
+                } else {
+                    ReportIllegalSymbol(assign, symInfo);
+                }
+            } else {
+                CodeBuilder.Append("(function() ");
+                OutputExpressionSyntax(leftCondAccess.Expression);
+                OutputExpressionSyntax(leftCondAccess.WhenNotNull);
+                CodeBuilder.Append(" = ");
+                OutputExpressionSyntax(assign.Right, opd);
+                CodeBuilder.Append("; return ");
+                OutputExpressionSyntax(assign.Right, opd);
+                CodeBuilder.Append("; end)");
+            }
+            CodeBuilder.Append(")");
+        }
+        private void VisitAssignmentInvocation(ClassInfo ci, string op, string baseOp, AssignmentExpressionSyntax assign, InvocationExpressionSyntax invocation, IConversionExpression opd, IConversionExpression lopd, IConversionExpression ropd, ICompoundAssignmentExpression compAssignInfo)
+        {
+            string localName = string.Format("__compiler_assigninvoke_{0}", invocation.GetLocation().GetLineSpan().StartLinePosition.Line);
+            SymbolInfo symInfo = m_Model.GetSymbolInfo(invocation);
+            IMethodSymbol sym = symInfo.Symbol as IMethodSymbol;
+            if (null == sym || op != "=" && (null == compAssignInfo || null == compAssignInfo.Target || null == compAssignInfo.Value)) {
+                ReportIllegalSymbol(invocation, symInfo);
+            } else {
+                //处理ref/out参数
+                InvocationInfo ii = new InvocationInfo();
+                ii.Init(sym, invocation.ArgumentList, m_Model);
+                if (sym.IsStatic || sym.IsExtensionMethod) {
+                    AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
+                }
+
+                bool isIntegerOprand = false;
+                int integerOpIndex = -1;
+                ITypeSymbol ltype = null;
+                ITypeSymbol rtype = null;
+                string leftFullTypeName = string.Empty;
+                string rightFullTypeName = string.Empty;
+                if (op != "=") {
+                    ltype = compAssignInfo.Target.Type;
+                    rtype = compAssignInfo.Value.Type;
+                    leftFullTypeName = ClassInfo.GetFullName(ltype);
+                    rightFullTypeName = ClassInfo.GetFullName(rtype);
+                    isIntegerOprand = TryGetSpecialIntegerOperatorIndex(baseOp, out integerOpIndex) && SymbolTable.IsIntegerType(compAssignInfo.Target.Type) && SymbolTable.IsIntegerType(compAssignInfo.Value.Type);
+                }
+
+                MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
+                if (null != memberAccess) {
+                    if (memberAccess.OperatorToken.Text == "->") {
+                        Log(memberAccess, "Unsupported -> member access !");
+                    }
+
+                    bool outputEqualOp = false;
+                    int ct = ii.ReturnArgs.Count;
+                    if (op != "=") {
+                        OutputExpressionSyntax(assign.Left);
+                        CodeBuilder.Append(" = ");
+                        ProcessBinaryOperator(assign, ref baseOp);
+                        if (isIntegerOprand) {
+                            CodeBuilder.AppendFormat("invokeintegeroperator({0}, \"{1}\", ", integerOpIndex, baseOp);
+                            OutputExpressionSyntax(assign.Left, lopd);
+                            CodeBuilder.Append(", ");
+                        } else {
+                            string functor;
+                            if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
+                                CodeBuilder.AppendFormat("{0}(", functor);
+                                OutputExpressionSyntax(assign.Left, lopd);
+                                CodeBuilder.Append(", ");
+                            } else if (baseOp == "+" && leftFullTypeName == SymbolTable.PrefixExternClassName("System.String")) {
+                                CodeBuilder.Append(SymbolTable.PrefixExternClassName("System.String.Concat("));
+                                OutputExpressionSyntax(assign.Left, lopd);
+                                if (rightFullTypeName == SymbolTable.PrefixExternClassName("System.String"))
+                                    CodeBuilder.Append(", ");
+                                else
+                                    CodeBuilder.Append(", tostring(");
+                            } else {
+                                OutputExpressionSyntax(assign.Left, lopd);
+                                CodeBuilder.AppendFormat(" {0} ", baseOp);
+                            }
+                        }
+                        if (null != ropd && ropd.UsesOperatorMethod) {
+                            IMethodSymbol msym = ropd.OperatorMethod;
+                            InvocationInfo iop = new InvocationInfo();
+                            iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
+                            OutputConversionInvokePrefix(iop);
+                        }
+                        if (ct > 0) {
+                            CodeBuilder.AppendFormat("(function() local {0}; {1}", localName, localName);
+                            outputEqualOp = true;
+                        }
+                    } else if (null != opd && opd.UsesOperatorMethod) {
+                        IMethodSymbol msym = opd.OperatorMethod;
+                        InvocationInfo iop = new InvocationInfo();
+                        iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
+                        OutputExpressionSyntax(assign.Left);
+                        CodeBuilder.Append(" = ");
+                        OutputConversionInvokePrefix(iop);
+                        if (ct > 0) {
+                            CodeBuilder.AppendFormat("(function() local {0}; {1}", localName, localName);
+                            outputEqualOp = true;
+                        }
+                    } else {
+                        OutputExpressionSyntax(assign.Left);
+                        outputEqualOp = true;
+                    }
+
+                    if (ct > 0) {
+                        CodeBuilder.Append(", ");
+                        OutputExpressionList(ii.ReturnArgs);
+                    }
+                    if (outputEqualOp) {
+                        CodeBuilder.Append(" = ");
+                    }
+                    ii.OutputInvocation(CodeBuilder, this, memberAccess.Expression, true, m_Model, memberAccess);
+                    if (op != "=") {
+                        if (ct > 0) {
+                            CodeBuilder.AppendFormat("; return {0}; end)()", localName);
+                        }
+                        if (null != ropd && ropd.UsesOperatorMethod) {
+                            CodeBuilder.Append(")");
+                        }
+                        if (isIntegerOprand) {
+                            CodeBuilder.AppendFormat(", {0}, {1}", ClassInfo.GetFullName(ltype), ClassInfo.GetFullName(rtype));
+                            CodeBuilder.Append(")");
+                        } else {
+                            string functor;
+                            if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
+                                CodeBuilder.Append(")");
+                            } else if (baseOp == "+" && leftFullTypeName == SymbolTable.PrefixExternClassName("System.String")) {
+                                if (rightFullTypeName != SymbolTable.PrefixExternClassName("System.String")) {
+                                    CodeBuilder.Append(")");
+                                }
+                                CodeBuilder.Append(")");
+                            }
+                        }
+                    } else if (null != opd && opd.UsesOperatorMethod) {
+                        if (ct > 0) {
+                            CodeBuilder.AppendFormat("; return {0}; end)()", localName);
+                        }
+                        CodeBuilder.Append(")");
+                    }
+                } else {
+                    bool outputEqualOp = false;
+                    int ct = ii.ReturnArgs.Count;
+                    if (op != "=") {
+                        OutputExpressionSyntax(assign.Left);
+                        CodeBuilder.Append(" = ");
+                        ProcessBinaryOperator(assign, ref baseOp);
+                        if (isIntegerOprand) {
+                            CodeBuilder.AppendFormat("invokeintegeroperator({0}, \"{1}\", ", integerOpIndex, baseOp);
+                            OutputExpressionSyntax(assign.Left, lopd);
+                            CodeBuilder.Append(", ");
+                        } else {
+                            string functor;
+                            if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
+                                CodeBuilder.AppendFormat("{0}(", functor);
+                                OutputExpressionSyntax(assign.Left, lopd);
+                                CodeBuilder.Append(", ");
+                            } else if (baseOp == "+" && leftFullTypeName == SymbolTable.PrefixExternClassName("System.String")) {
+                                CodeBuilder.Append(SymbolTable.PrefixExternClassName("System.String.Concat("));
+                                OutputExpressionSyntax(assign.Left, lopd);
+                                if (rightFullTypeName == SymbolTable.PrefixExternClassName("System.String"))
+                                    CodeBuilder.Append(", ");
+                                else
+                                    CodeBuilder.Append(", tostring(");
+                            } else {
+                                OutputExpressionSyntax(assign.Left, lopd);
+                                CodeBuilder.AppendFormat(" {0} ", baseOp);
+                            }
+                        }
+                        if (null != ropd && ropd.UsesOperatorMethod) {
+                            IMethodSymbol msym = ropd.OperatorMethod;
+                            InvocationInfo iop = new InvocationInfo();
+                            iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
+                            OutputConversionInvokePrefix(iop);
+                        }
+                        if (ct > 0) {
+                            CodeBuilder.AppendFormat("(function() local {0}; {1}", localName, localName);
+                            outputEqualOp = true;
+                        }
+                    } else if (null != opd && opd.UsesOperatorMethod) {
+                        IMethodSymbol msym = opd.OperatorMethod;
+                        InvocationInfo iop = new InvocationInfo();
+                        iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
+                        OutputExpressionSyntax(assign.Left);
+                        CodeBuilder.Append(" = ");
+                        OutputConversionInvokePrefix(iop);
+                        if (ct > 0) {
+                            CodeBuilder.AppendFormat("(function() local {0}; {1}", localName, localName);
+                            outputEqualOp = true;
+                        }
+                    } else {
+                        OutputExpressionSyntax(assign.Left);
+                        outputEqualOp = true;
+                    }
+
+                    if (ct > 0) {
+                        CodeBuilder.Append(", ");
+                        OutputExpressionList(ii.ReturnArgs);
+                    }
+                    if (outputEqualOp) {
+                        CodeBuilder.Append(" = ");
+                    }
+                    ii.OutputInvocation(CodeBuilder, this, invocation.Expression, false, m_Model, invocation);
+                    if (op != "=") {
+                        if (ct > 0) {
+                            CodeBuilder.AppendFormat("; return {0}; end)()", localName);
+                        }
+                        if (null != ropd && ropd.UsesOperatorMethod) {
+                            CodeBuilder.Append(")");
+                        }
+                        if (isIntegerOprand) {
+                            CodeBuilder.AppendFormat(", {0}, {1}", ClassInfo.GetFullName(ltype), ClassInfo.GetFullName(rtype));
+                            CodeBuilder.Append(")");
+                        } else {
+                            string functor;
+                            if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
+                                CodeBuilder.Append(")");
+                            } else if (baseOp == "+" && leftFullTypeName == SymbolTable.PrefixExternClassName("System.String")) {
+                                if (rightFullTypeName != SymbolTable.PrefixExternClassName("System.String")) {
+                                    CodeBuilder.Append(")");
+                                }
+                                CodeBuilder.Append(")");
+                            }
+                        }
+                    } else if (null != opd && opd.UsesOperatorMethod) {
+                        if (ct > 0) {
+                            CodeBuilder.AppendFormat("; return {0}; end)()", localName);
+                        }
+                        CodeBuilder.Append(")");
+                    }
+                }
+            }
+        }
+        private void VisitAssignmentDelegation(ClassInfo ci, string op, string baseOp, AssignmentExpressionSyntax assign, IOperation leftOper, ISymbol leftSym, IConversionExpression opd)
+        {
+            if (leftSym.Kind == SymbolKind.Local && op == "=") {
+                OutputExpressionSyntax(assign.Left);
+                CodeBuilder.Append(" = ");
+                CodeBuilder.AppendFormat("delegationwrap");
+                CodeBuilder.Append("(");
+                OutputExpressionSyntax(assign.Right, opd);
+                CodeBuilder.Append(")");
+            } else {
+                bool isEvent = leftOper is IEventReferenceExpression;
+                string prefix;
+                if (SymbolTable.Instance.IsCs2LuaSymbol(leftSym)) {
+                    prefix = string.Empty;
+                } else {
+                    prefix = "extern";
+                }
+                string postfix;
+                if (op == "=") {
+                    postfix = "set";
+                } else if (baseOp == "+") {
+                    postfix = "add";
+                } else if (baseOp == "-") {
+                    postfix = "remove";
+                } else {
+                    Log(assign, "Unsupported delegation operator {0} !", op);
+                    postfix = "error";
+                }
+                CodeBuilder.AppendFormat("{0}delegation{1}", prefix, postfix);
+                CodeBuilder.Append("(");
+                CodeBuilder.AppendFormat("{0}, ", isEvent ? "true" : "false");
+                if (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event) {
+                    var memberAccess = assign.Left as MemberAccessExpressionSyntax;
+                    if (null != memberAccess) {
+                        OutputExpressionSyntax(memberAccess.Expression);
+                        CodeBuilder.Append(", ");
+                        string intf = "nil";
+                        string mname = string.Format("\"{0}\"", memberAccess.Name.Identifier.Text);
+                        CheckExplicitInterfaceAccess(leftSym, ref intf, ref mname);
+                        CodeBuilder.AppendFormat("{0}, {1}", intf, mname);
+                    } else if (leftSym.ContainingType == ci.SemanticInfo || ci.IsInherit(leftSym.ContainingType)) {
+                        CodeBuilder.Append("this, nil, ");
+                        CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
+                    } else {
+                        CodeBuilder.Append("newobj, nil, ");
+                        CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
+                    }
+                } else {
+                    OutputExpressionSyntax(assign.Left);
+                    CodeBuilder.Append(", nil, nil");
+                }
+                CodeBuilder.Append(", ");
+                OutputExpressionSyntax(assign.Right, opd);
+                CodeBuilder.Append(")");
+            }
         }
         private void VisitInvocation(ClassInfo ci, InvocationExpressionSyntax invocation, string expTerminater, bool toplevel)
         {

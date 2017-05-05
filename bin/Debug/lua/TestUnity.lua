@@ -58,8 +58,8 @@ TestUnity = {
 				end));
 				LuaConsole.Print("test");
 				__compiler_using_82:Dispose();
-				local v1s; v1s = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {[tostring(1)] = 2, [tostring(3)] = 4, [tostring(5)] = 6});
-				local v2s; v2s = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {[tostring(1)] = 3, [tostring(5)] = 4});
+				local v1s; v1s = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {[1] = 2, [3] = 4, [5] = 6});
+				local v2s; v2s = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {[1] = 3, [5] = 4});
 				local v0; v0 = LINQ.exec({{"from", (function() return v1s; end)}, {"let", (function(v1) return v1.Value; end)}, {"let", (function(v1, v3) return invokeforbasicvalue(invokeforbasicvalue(v3, false, System.Int32, "ToString"), false, System.String, "Split", wrapchar(' ', 0x020)); end)}, {"from", (function(v1, v3, v4) return ( LINQ.exec({{"from", (function() return v2s; end)}, {"select", (function(v2) return v2; end)}}) ); end)}, {"where", (function(v1, v3, v4, vvvv) return (not System.String.IsNullOrEmpty(v1:ToString())); end)}, {"select", (function(v1, v3, v4, vvvv) return v1:ToString(); end)}});
 				local v5; v5 = LINQ.exec({{"from", (function() return v1s; end)}, {"join", (function(v1) return v2s; end), (function(v1, v2) return v1.Key; end), (function(v1, v2) return v2.Key; end)}, {"into"}, {"select", (function(v1, ttt0) return wrapdictionary{v1 = v1, v2 = ttt0:Count(System.Collections.Generic.KeyValuePair_TKey_TValue)}; end)}, {"continuation"}, {"groupby", (function(ttt) return ttt; end), (function(ttt) return ttt.v2; end)}});
 				for vv in getiterator(v5) do
