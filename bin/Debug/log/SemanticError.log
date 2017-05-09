@@ -1,20 +1,22 @@
 ============<<<Semantic Error:test>>>============
-test.cs(180,16): error CS0266: Cannot implicitly convert type 'double' to 'int'. An explicit conversion exists (are you missing a cast?)
-test.cs(308,27): error CS0413: The type parameter 'T' cannot be used with the 'as' operator because it does not have a class type constraint nor a 'class' constraint
-test.cs(309,23): error CS0128: A local variable named 'v' is already defined in this scope
-test.cs(319,29): error CS0030: Cannot convert type 'T' to 'TT'
-test.cs(557,59): error CS1501: No overload for method 'Add' takes 2 arguments
-test.cs(557,69): error CS1501: No overload for method 'Add' takes 2 arguments
-test.cs(445,17): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
-test.cs(446,21): error CS0266: Cannot implicitly convert type 'int?' to 'int'. An explicit conversion exists (are you missing a cast?)
-test.cs(453,80): error CS0266: Cannot implicitly convert type 'float' to 'int'. An explicit conversion exists (are you missing a cast?)
-test.cs(585,27): error CS0039: Cannot convert type 'int' to 'TopLevel.SecondLevel.Foo' via a reference conversion, boxing conversion, unboxing conversion, wrapping conversion, or null type conversion
-test.cs(598,26): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
-test.cs(601,17): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
-test.cs(503,17): error CS0305: Using the generic type 'IRunnable<T>' requires 1 type arguments
-test.cs(508,25): error CS0161: 'Foo.TestValueArg(TestStruct)': not all code paths return a value
+test.cs(183,16): error CS0266: Cannot implicitly convert type 'double' to 'int'. An explicit conversion exists (are you missing a cast?)
+test.cs(311,27): error CS0413: The type parameter 'T' cannot be used with the 'as' operator because it does not have a class type constraint nor a 'class' constraint
+test.cs(312,23): error CS0128: A local variable named 'v' is already defined in this scope
+test.cs(322,29): error CS0030: Cannot convert type 'T' to 'TT'
+test.cs(560,59): error CS1501: No overload for method 'Add' takes 2 arguments
+test.cs(560,69): error CS1501: No overload for method 'Add' takes 2 arguments
+test.cs(448,17): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
+test.cs(449,21): error CS0266: Cannot implicitly convert type 'int?' to 'int'. An explicit conversion exists (are you missing a cast?)
+test.cs(456,80): error CS0266: Cannot implicitly convert type 'float' to 'int'. An explicit conversion exists (are you missing a cast?)
+test.cs(588,27): error CS0039: Cannot convert type 'int' to 'TopLevel.SecondLevel.Foo' via a reference conversion, boxing conversion, unboxing conversion, wrapping conversion, or null type conversion
+test.cs(601,26): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
+test.cs(604,17): error CS0131: The left-hand side of an assignment must be a variable, property or indexer
+test.cs(506,17): error CS0305: Using the generic type 'IRunnable<T>' requires 1 type arguments
+test.cs(511,25): error CS0161: 'Foo.TestValueArg(TestStruct)': not all code paths return a value
 test.cs(65,17): error CS0619: 'GameObject.renderer' is obsolete: 'Property renderer has been deprecated. Use GetComponent<Renderer>() instead. (UnityUpgradable)'
 test.cs(70,16): error CS0128: A local variable named 's' is already defined in this scope
 test.cs(71,13): error CS0128: A local variable named 'i' is already defined in this scope
 test.cs(73,13): error CS0128: A local variable named 'i' is already defined in this scope
 test.cs(97,23): error CS1931: The range variable 'v' conflicts with a previous declaration of 'v'
+test.cs(99,16): error CS0128: A local variable named 's' is already defined in this scope
+test.cs(100,14): error CS0128: A local variable named 'c' is already defined in this scope

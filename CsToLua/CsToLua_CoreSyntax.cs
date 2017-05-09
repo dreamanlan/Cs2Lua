@@ -907,20 +907,6 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.Append("; end)()");
                     }
                 }
-            } else if (null != leftSym) {
-                CodeBuilder.AppendFormat("set{0}{1}element(", SymbolTable.Instance.IsCs2LuaSymbol(leftSym) ? string.Empty : "extern", leftSym.IsStatic ? "static" : "instance");
-                if (leftSym.IsStatic) {
-                    string fullName = ClassInfo.GetFullName(leftSym.ContainingType);
-                    CodeBuilder.Append(fullName);
-                } else {
-                    OutputExpressionSyntax(leftElementAccess.Expression);
-                }
-                CodeBuilder.Append(", ");
-                CodeBuilder.AppendFormat("\"{0}\", ", leftSym.Name);
-                VisitBracketedArgumentList(leftElementAccess.ArgumentList);
-                CodeBuilder.Append(", ");
-                OutputExpressionSyntax(assign.Right, opd);
-                CodeBuilder.Append(")");
             } else {
                 Log(assign, "unknown set element symbol !");
             }
@@ -984,22 +970,6 @@ namespace RoslynTool.CsToLua
                         OutputExpressionSyntax(assign.Right, opd);
                         CodeBuilder.Append("; end)");
                     }
-                } else if (null != sym) {
-                    CodeBuilder.Append("(function() return ");
-                    CodeBuilder.AppendFormat("set{0}{1}element(", SymbolTable.Instance.IsCs2LuaSymbol(sym) ? string.Empty : "extern", sym.IsStatic ? "static" : "instance");
-                    if (sym.IsStatic) {
-                        string fullName = ClassInfo.GetFullName(sym.ContainingType);
-                        CodeBuilder.Append(fullName);
-                    } else {
-                        OutputExpressionSyntax(leftCondAccess.Expression);
-                    }
-                    CodeBuilder.Append(", ");
-                    CodeBuilder.AppendFormat("\"{0}\", ", leftSym.Name);
-                    OutputExpressionSyntax(leftCondAccess.WhenNotNull);
-                    CodeBuilder.Append(", ");
-                    OutputExpressionSyntax(assign.Right, opd);
-                    CodeBuilder.Append(")");
-                    CodeBuilder.Append("; end)");
                 } else {
                     ReportIllegalSymbol(assign, symInfo);
                 }

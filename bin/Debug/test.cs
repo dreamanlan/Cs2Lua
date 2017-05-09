@@ -95,6 +95,9 @@ class TestUnity : MonoBehaviour
         
         List<int> vs = new List<int> { 3, 5, 9, 7, 6 };
         var rs = from v in vs from vv in new[] { v, v + 1, v + 2, v + 3 } let v2 = v + 1 where v > 1 let v3 = v2 + 1 where v > 4 where v < 8 select new { v1 = v, v2 = v2, v3 = v3 };
+
+        string s = "1232312321";
+        char c = s[0];
     }
 
     private string m_TestString = "13579";

@@ -512,18 +512,6 @@ namespace RoslynTool.CsToLua
                     VisitBracketedArgumentList(node.ArgumentList);
                     CodeBuilder.Append("]");
                 }
-            } else if (null != sym) {
-                CodeBuilder.AppendFormat("get{0}{1}element(", SymbolTable.Instance.IsCs2LuaSymbol(sym) ? string.Empty : "extern", sym.IsStatic ? "static" : "instance");
-                if (sym.IsStatic) {
-                    string fullName = ClassInfo.GetFullName(sym.ContainingType);
-                    CodeBuilder.Append(fullName);
-                } else {
-                    OutputExpressionSyntax(node.Expression);
-                }
-                CodeBuilder.Append(", ");
-                CodeBuilder.AppendFormat("\"{0}\", ", sym.Name);
-                VisitBracketedArgumentList(node.ArgumentList);
-                CodeBuilder.Append(")");
             } else {
                 ReportIllegalSymbol(node, symInfo);
             }
@@ -581,20 +569,6 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.Append("]");
                         CodeBuilder.Append("; end)");
                     }
-                } else if (null != sym) {
-                    CodeBuilder.Append("(function() return ");
-                    CodeBuilder.AppendFormat("get{0}{1}element(", SymbolTable.Instance.IsCs2LuaSymbol(sym) ? string.Empty : "extern", sym.IsStatic ? "static" : "instance");
-                    if (sym.IsStatic) {
-                        string fullName = ClassInfo.GetFullName(sym.ContainingType);
-                        CodeBuilder.Append(fullName);
-                    } else {
-                        OutputExpressionSyntax(node.Expression);
-                    }
-                    CodeBuilder.Append(", ");
-                    CodeBuilder.AppendFormat("\"{0}\", ", sym.Name);
-                    OutputExpressionSyntax(node.WhenNotNull);
-                    CodeBuilder.Append(")");
-                    CodeBuilder.Append("; end)");
                 } else {
                     ReportIllegalSymbol(node, symInfo);
                 }

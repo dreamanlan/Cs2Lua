@@ -1493,35 +1493,6 @@ function setexterninstanceindexer(obj, intf, name, ...)
   return nil;
 end;
 
-function getstaticelement(class, name, ...)
-  return nil;
-end;
-function getinstanceelement(obj, name, ...)
-  return nil;
-end;
-function setstaticelement(class, name, ...)
-  --为了适应表达式内嵌赋值，这个函数需要返回值
-  return nil;
-end;
-function setinstanceelement(obj, name, ...)
-  --为了适应表达式内嵌赋值，这个函数需要返回值
-  return nil;
-end;
-function getexternstaticelement(class, name, ...)
-  return nil;
-end;
-function getexterninstanceelement(obj, name, ...)
-  return nil;
-end;
-function setexternstaticelement(class, name, ...)
-  --为了适应表达式内嵌赋值，这个函数需要返回值
-  return nil;
-end;
-function setexterninstanceelement(obj, name, ...)
-  --为了适应表达式内嵌赋值，这个函数需要返回值
-  return nil;
-end;
-
 function invokeexternoperator(class, method, ...)
 	local args = {...};
 	--对slua，对应到lua元表操作符函数的操作符重载cs2lua转lua代码时已经换成对应操作符表达式。

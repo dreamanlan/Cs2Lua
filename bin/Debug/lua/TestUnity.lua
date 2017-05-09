@@ -66,6 +66,8 @@ TestUnity = {
 				end;
 				local vs; vs = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", {3, 5, 9, 7, 6});
 				local rs; rs = LINQ.exec({{"from", (function() return vs; end)}, {"from", (function(v) return wraparray{v, invokeintegeroperator(2, "+", v, 1, System.Int32, System.Int32), invokeintegeroperator(2, "+", v, 2, System.Int32, System.Int32), invokeintegeroperator(2, "+", v, 3, System.Int32, System.Int32)}; end)}, {"let", (function(v, vv) return invokeintegeroperator(2, "+", v, 1, System.Int32, System.Int32); end)}, {"where", (function(v, vv, v2) return (v > 1); end)}, {"let", (function(v, vv, v2) return invokeintegeroperator(2, "+", v2, 1, System.Int32, System.Int32); end)}, {"where", (function(v, vv, v2, v3) return (v > 4); end)}, {"where", (function(v, vv, v2, v3) return (v < 8); end)}, {"select", (function(v, vv, v2, v3) return wrapdictionary{v1 = v, v2 = v2, v3 = v3}; end)}});
+				local s; s = "1232312321";
+				local c; c = getexterninstanceindexer(s, nil, "get_Chars", 0);
 			end,
 			ctor = function(this)
 			end,
