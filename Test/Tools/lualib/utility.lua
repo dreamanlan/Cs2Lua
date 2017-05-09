@@ -677,7 +677,7 @@ __mt_index_of_hashset = function(t, k)
   elseif k=="CopyTo" then
     return function(obj, arr)
       for k,v in pairs(obj) do
-	      k = __wrap_if_string(l);
+	      k = __wrap_if_string(k);
         table.insert(arr,k);
       end;
     end;

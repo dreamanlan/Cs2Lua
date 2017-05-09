@@ -35,7 +35,8 @@ System.Array = System.Array or {};
 
 System.Collections.Generic.MyDictionary_TKey_TValue = System.Collections.Generic.Dictionary_TKey_TValue;
 
-__cs2lua_out = (Slua and Slua.out) or {};
+Slua = Slua or {out={}};
+__cs2lua_out = Slua.out;
 __cs2lua_nil_field_value = {};
 
 __cs2lua_special_integer_operators = { "/", "%", "+", "-", "*", "<<", ">>", "&", "|", "^", "~" };
@@ -677,7 +678,7 @@ __mt_index_of_hashset = function(t, k)
   elseif k=="CopyTo" then
     return function(obj, arr)
       for k,v in pairs(obj) do
-	      k = __wrap_if_string(l);
+	      k = __wrap_if_string(k);
         table.insert(arr,k);
       end;
     end;
