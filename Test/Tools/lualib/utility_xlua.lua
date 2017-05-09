@@ -1597,6 +1597,32 @@ function setwithinterface(obj, intf, property, value)
 	return nil;
 end;
 
+function invokeforstring(str, method, ...)
+	if method == "Length" then
+		return string.len(str);
+	elseif method == "ToUpper" then
+		return string.upper(str);
+	elseif method == "ToLower" then
+		return string.lower(str);
+	elseif method == "Substring" then	
+		local pos, length = ...;	
+		if pos > string.len(str) then
+			error("Argument is out of range.");
+			return;
+		elseif length ~= nil and pos + length > string.len(str) then
+			error("Argument is out of range.");
+			return;
+		end
+		if length == nil then
+			return string.sub(str, pos + 1);
+		else
+			return string.sub(str, pos + 1, pos + length);
+		end
+	else
+		error("implement c# string method here" .. method)
+	end	
+end
+
 function invokeforbasicvalue(obj, isEnum, class, method, ...)
 	local args = {...};
 	local meta = getmetatable(obj);
@@ -1604,8 +1630,9 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
 	  return class.Value2String[obj];
 	end;
 	if type(obj)=="string" then
-	  local csstr = CS.System.String(obj);
-	  return csstr[method](csstr,...);
+	  --local csstr = CS.System.String(obj);
+	  --return csstr[method](csstr,...);	
+	  return invokeforstring(obj, method, ...);
 	elseif meta then
 		return obj[method](obj,...);
 	elseif method=="CompareTo" then
@@ -1618,8 +1645,7 @@ end;
 function getforbasicvalue(obj, isEnum, class, property)
 	local meta = getmetatable(obj);
 	if type(obj)=="string" then
-	  local csstr = CS.System.String(obj);
-	  return csstr[property];
+	  return invokeforstring(obj, property);
 	elseif meta then
 		return obj[property];
 	else
@@ -1630,8 +1656,9 @@ end;
 function setforbasicvalue(obj, isEnum, class, property, value)
 	local meta = getmetatable(obj);
 	if type(obj)=="string" then
-	  local csstr = CS.System.String(obj);
-	  csstr[property]=value;
+	  --local csstr = CS.System.String(obj);
+	  --csstr[property]=value;
+	  return invokeforstring(obj, property, value);
 	elseif meta then
 		obj[property]=value;
 	else
