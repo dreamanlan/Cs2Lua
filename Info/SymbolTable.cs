@@ -506,6 +506,11 @@ namespace RoslynTool.CsToLua
             get { return s_UseArrayGetSet; }
             set { s_UseArrayGetSet = value; }
         }
+        internal static string SystemDllPath
+        {
+            get { return s_SystemDllPath; }
+            set { s_SystemDllPath = value; }
+        }
 
         private static string s_ExternClassNamePrefix = string.Empty;
         private static bool s_ForSlua = true;
@@ -514,6 +519,7 @@ namespace RoslynTool.CsToLua
         private static bool s_NoAutoRequire = false;
         private static bool s_LuaComponentByString = false;
         private static bool s_UseArrayGetSet = false;
+        private static string s_SystemDllPath = string.Empty;
 
         private static HashSet<string> s_ExtraLuaKeywords = new HashSet<string> {
             "and", "elseif", "end", "function", "local", "nil", "not", "or", "repeat", "then", "until"

@@ -160,35 +160,46 @@ namespace RoslynTool.CsToLua
             }
 
             List<MetadataReference> refs = new List<MetadataReference>();
-            refs.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
-            refs.Add(MetadataReference.CreateFromFile(typeof(System.Reflection.Metadata.AssemblyDefinition).Assembly.Location));
-            refs.Add(MetadataReference.CreateFromFile(typeof(List<>).Assembly.Location));
-            refs.Add(MetadataReference.CreateFromFile(typeof(Dictionary<,>).Assembly.Location));
-            refs.Add(MetadataReference.CreateFromFile(typeof(Queue<>).Assembly.Location));
-            refs.Add(MetadataReference.CreateFromFile(typeof(HashSet<>).Assembly.Location));
-            refs.Add(MetadataReference.CreateFromFile(typeof(Cs2Lua.IgnoreAttribute).Assembly.Location));
-            /*
-            refs.Add(MetadataReference.CreateFromFile(typeof(System.Collections.Immutable.ImmutableArray).Assembly.Location));
-            refs.Add(MetadataReference.CreateFromFile(typeof(SyntaxTree).Assembly.Location));
-            refs.Add(MetadataReference.CreateFromFile(typeof(CSharpSyntaxTree).Assembly.Location));
-            */
+            if (string.IsNullOrEmpty(SymbolTable.SystemDllPath)) {
+                if (ext == ".cs") {
+                    refs.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
+                    refs.Add(MetadataReference.CreateFromFile(typeof(System.Reflection.Metadata.AssemblyDefinition).Assembly.Location));
+                    refs.Add(MetadataReference.CreateFromFile(typeof(List<>).Assembly.Location));
+                    refs.Add(MetadataReference.CreateFromFile(typeof(Dictionary<,>).Assembly.Location));
+                    refs.Add(MetadataReference.CreateFromFile(typeof(Queue<>).Assembly.Location));
+                    refs.Add(MetadataReference.CreateFromFile(typeof(HashSet<>).Assembly.Location));
+                }
+
+                foreach (var pair in refByNames) {
+#pragma warning disable 618
+                    Assembly assembly = Assembly.LoadWithPartialName(pair.Key);
+#pragma warning restore 618
+                    if (null != assembly) {
+                        var arr = System.Collections.Immutable.ImmutableArray.Create(pair.Value);
+                        refs.Add(MetadataReference.CreateFromFile(assembly.Location, new MetadataReferenceProperties(MetadataImageKind.Assembly, arr)));
+                    }
+                }
+
+                refs.Add(MetadataReference.CreateFromFile(typeof(Cs2Lua.IgnoreAttribute).Assembly.Location));
+            } else {
+                foreach (var pair in refByNames) {
+                    string file = Path.Combine(SymbolTable.SystemDllPath, pair.Key) + ".dll";
+                    var arr = System.Collections.Immutable.ImmutableArray.Create(pair.Value);
+                    refs.Add(MetadataReference.CreateFromFile(file, new MetadataReferenceProperties(MetadataImageKind.Assembly, arr)));
+                }
+
+                refs.Add(MetadataReference.CreateFromFile(typeof(Cs2Lua.IgnoreAttribute).Assembly.Location));
+            }
+
             foreach (var pair in refByPaths) {
                 string fullPath = Path.Combine(path, pair.Key);
                 var arr = System.Collections.Immutable.ImmutableArray.Create(pair.Value);
                 refs.Add(MetadataReference.CreateFromFile(fullPath, new MetadataReferenceProperties(MetadataImageKind.Assembly, arr)));
             }
-            foreach (var pair in refByNames) {
-#pragma warning disable 618
-                Assembly assembly = Assembly.LoadWithPartialName(pair.Key);
-#pragma warning restore 618
-                if (null != assembly) {
-                    var arr = System.Collections.Immutable.ImmutableArray.Create(pair.Value);
-                    refs.Add(MetadataReference.CreateFromFile(assembly.Location, new MetadataReferenceProperties(MetadataImageKind.Assembly, arr)));
-                }
-            }
-
+                        
             List<SyntaxTree> newTrees = new List<SyntaxTree>();
             CSharpCompilationOptions compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
+            compilationOptions = compilationOptions.WithAssemblyIdentityComparer(DesktopAssemblyIdentityComparer.Default);
             CSharpCompilation compilation = CSharpCompilation.Create(name);
             compilation = compilation.WithOptions(compilationOptions);
             compilation = compilation.AddReferences(refs.ToArray());
@@ -597,29 +608,31 @@ namespace RoslynTool.CsToLua
                 string fn = ClassInfo.GetFullName(attr.AttributeClass);
                 sb.AppendFormat("{0}{{", GetIndentString(indent));
                 sb.AppendFormat("\"{0}\", {{", fn);
-                var ps = attr.AttributeConstructor.Parameters;
-                var args = attr.ConstructorArguments;
-                int ct = args.Length < ps.Length ? args.Length : ps.Length;
-                for (int i = 0; i < ct; ++i) {
-                    string name = ps[i].Name;
-                    sb.Append(name);
-                    sb.Append(" = ");
-                    object v = args[i].Value;
-                    if (null == v) {
-                        sb.Append(" nil");
-                    } else if (v is string) {
-                        sb.AppendFormat("\"{0}\"", v.ToString());
-                    } else {
-                        sb.Append(v);
-                    }
-                    if (i < ct - 1) {
-                        sb.Append(", ");
+                if (null != attr.AttributeConstructor) {
+                    var ps = attr.AttributeConstructor.Parameters;
+                    var args = attr.ConstructorArguments;
+                    int ct = args.Length < ps.Length ? args.Length : ps.Length;
+                    for (int i = 0; i < ct; ++i) {
+                        string name = ps[i].Name;
+                        sb.Append(name);
+                        sb.Append(" = ");
+                        object v = args[i].Value;
+                        if (null == v) {
+                            sb.Append(" nil");
+                        } else if (v is string) {
+                            sb.AppendFormat("\"{0}\"", v.ToString());
+                        } else {
+                            sb.Append(v);
+                        }
+                        if (i < ct - 1) {
+                            sb.Append(", ");
+                        }
                     }
                 }
                 sb.Append("}, {");
                 var namedArgs = attr.NamedArguments;
-                ct = namedArgs.Length;
-                for (int i = 0; i < ct; ++i) {
+                int ct2 = namedArgs.Length;
+                for (int i = 0; i < ct2; ++i) {
                     var pair = namedArgs[i];
                     string name = pair.Key;
                     object v = pair.Value.Value;
@@ -632,7 +645,7 @@ namespace RoslynTool.CsToLua
                     } else {
                         sb.Append(v);
                     }
-                    if (i < ct - 1) {
+                    if (i < ct2 - 1) {
                         sb.Append(", ");
                     }
                 }

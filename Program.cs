@@ -68,6 +68,14 @@ namespace RoslynTool
                                     ++i;
                                 }
                             }
+                        } else if (0 == string.Compare(args[i], "-systemdllpath", true)) {
+                            if (i < args.Length - 1) {
+                                string arg = args[i + 1];
+                                if (!arg.StartsWith("-")) {
+                                    SymbolTable.SystemDllPath = arg;
+                                    ++i;
+                                }
+                            }
                         } else if (0 == string.Compare(args[i], "-src", true)) {
                             if (i < args.Length - 1) {
                                 string arg = args[i + 1];
@@ -166,7 +174,7 @@ namespace RoslynTool
                         }
                     }
                 } else {
-                    Console.WriteLine("[Usage]:Cs2Lua [-ext fileext] [-enableinherit] [-enablelinq] [-normallua/-slua/-xlua/-tolua] [-outputresult] [-noautorequire] [-luacomponentbystring] [-d macro] [-externpath path] [-ignorepath path] [-refbyname dllname alias] [-refbypath dllpath alias] [-src] csfile|csprojfile");
+                    Console.WriteLine("[Usage]:Cs2Lua [-ext fileext] [-enableinherit] [-enablelinq] [-normallua/-slua/-xlua/-tolua] [-outputresult] [-noautorequire] [-luacomponentbystring] [-d macro] [-externpath path] [-ignorepath path] [-refbyname dllname alias] [-refbypath dllpath alias] [-systemdllpath dllpath] [-src] csfile|csprojfile");
                     Console.WriteLine("\twhere:");
                     Console.WriteLine("\t\tfileext = file externsion, default is txt for unity3d, maybe lua for other usage.");
                     Console.WriteLine("\t\tmacro = c# macro define, used in your csharp code #if/#elif/#else/#endif etc.");
