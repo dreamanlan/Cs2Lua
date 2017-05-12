@@ -1,6 +1,7 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
+require "cs2lua__interfaces";
 
 Extentions = {
 	__define_class = function()
@@ -279,5 +280,7 @@ Extentions = {
 --}
 --local obj = TopLevel.Child2.Bar:new();
 --obj:Test();
+
+
 
 Extentions.__define_class();

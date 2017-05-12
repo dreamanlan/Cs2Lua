@@ -27,11 +27,11 @@ CS.System.Double = CS.System.Double or __basic_type_func;
 CS.System.String = CS.System.String or __basic_type_func;
 CS.System.Collections = CS.System.Collections or {};
 CS.System.Collections.Generic = CS.System.Collections.Generic or {};
-CS.System.Collections.Generic.List_T = {__cs2lua_defined = true, __class_name = "CS.System.Collections.Generic.List_T", __exist = function(k) return false; end};
-CS.System.Collections.Generic.Queue_T = {__cs2lua_defined = true, __class_name = "CS.System.Collections.Generic.Queue_T", __exist = function(k) return false; end};
-CS.System.Collections.Generic.Stack_T = {__cs2lua_defined = true, __class_name = "CS.System.Collections.Generic.Stack_T", __exist = function(k) return false; end};
-CS.System.Collections.Generic.Dictionary_TKey_TValue = {__cs2lua_defined = true, __class_name = "CS.System.Collections.Generic.Dictionary_TKey_TValue", __exist = function(k) return false; end};
-CS.System.Collections.Generic.HashSet_T = {__cs2lua_defined = true, __class_name = "CS.System.Collections.Generic.HashSet_T", __exist = function(k) return false; end};
+CS.System.Collections.Generic.List_T = {__cs2lua_defined = true, __type_name = "CS.System.Collections.Generic.List_T", __exist = function(k) return false; end};
+CS.System.Collections.Generic.Queue_T = {__cs2lua_defined = true, __type_name = "CS.System.Collections.Generic.Queue_T", __exist = function(k) return false; end};
+CS.System.Collections.Generic.Stack_T = {__cs2lua_defined = true, __type_name = "CS.System.Collections.Generic.Stack_T", __exist = function(k) return false; end};
+CS.System.Collections.Generic.Dictionary_TKey_TValue = {__cs2lua_defined = true, __type_name = "CS.System.Collections.Generic.Dictionary_TKey_TValue", __exist = function(k) return false; end};
+CS.System.Collections.Generic.HashSet_T = {__cs2lua_defined = true, __type_name = "CS.System.Collections.Generic.HashSet_T", __exist = function(k) return false; end};
 CS.System.Array = CS.System.Array or {};
 
 CS.System.Collections.Generic.MyDictionary_TKey_TValue = CS.System.Collections.Generic.Dictionary_TKey_TValue;
@@ -217,82 +217,68 @@ function typeas(obj, t, isEnum)
  	end;
 end;
 
+function __typeis_check_xlua(objType, t)
+	local tType = typeof(t);
+	if objType == tType then
+		return true;
+	end
+	if objType:IsSubclassOf(tType) then
+		return true;
+	end
+	return false;
+end
+
 function typeis(obj, t, isEnum)
-  local meta = getmetatable(obj);
-  local meta2 = getmetatable(t);
-  local tn1 = nil;
-  local tn2 = nil;
-  if meta then
-  	tn1 = rawget(meta, "__fullname");
-  end;
-  if meta2 then
-  	tn2 = rawget(meta2, "__fullname");
-  end;
-  if meta then
-    if type(obj)=="userdata" then
-      if tn1 and tn1==tn2 then
-      	return true;
-      end;
-      --check slua parent metatable chain
-      local parent = rawget(meta, "__parent");
-      while parent ~= nil do
-      	tn1 = rawget(parent, "__fullname");
-      	if tn1 and tn1==tn2 then
-      		return true;
-      	end;
-      	parent = rawget(parent, "__parent");
-      end;
-    else
-  	  if rawget(meta, "__class") == t then
-  		  return true;
-  	  end;
-      local intfs = rawget(meta, "__interfaces");
-      if intfs then
-        for i,v in ipairs(intfs) do
-          if v == tn2 then
-            return true;
-          end;
-        end;
-      end;
-  	  --check cs2lua base class chain
-  	  local baseClass = rawget(meta, "__base_class");
-  	  local lastCheckedClass = meta;
-  	  while baseClass ~= nil do  	  
-    		if baseClass == t then
-    			return true;
-    		end;
-    		intfs = rawget(meta, "__interfaces");
-        if intfs then
-          for i,v in ipairs(intfs) do
-            if v == tn2 then
-              return true;
-            end;
-          end;
-        end;
-    		if rawget(baseClass, "__cs2lua_defined") then
-    			baseClass = rawget(baseClass, "__base_class");
-    		else
-    			lastCheckedClass = baseClass;
-    			break;
-    		end;
-    	end;
-    	--try slua base class and parent metatable chain 
-    	if not rawget(lastCheckedClass, "__cs2lua_defined") then
-    		local meta3 = getmetatable(lastCheckedClass);
-    		if meta3 then
-		      parent = rawget(meta3, "__parent");
-		      while parent ~= nil do
-		      	tn1 = rawget(parent, "__fullname");
-		      	if tn1 and tn1 == tn2 then
-		      		return true;
-		      	end;
-		      	parent = rawget(parent, "__parent");
-		      end;
-	      end;
-    	end;
-    end;
-  end;
-  return false;
+	local meta = getmetatable(obj);
+	local intfsname = nil;
+	if meta then
+		if type(obj)=="userdata" then
+			return __typeis_check_xlua(obj:GetType(), t);
+		else
+			if rawget(meta, "__class") == t then
+				return true;
+			end;
+			local intfs = rawget(meta, "__interfaces");
+			if intfs then
+				intfsname = rawget(t, "__type_name");
+				if intfsname ~= nil then
+					for i,v in ipairs(intfs) do
+						if v == intfsname then
+							return true;
+						end;
+					end;
+				end
+			end;
+			--check cs2lua base class chain
+			local baseClass = rawget(meta, "__base_class");
+			local lastCheckedClass = meta;
+			intfsname = rawget(t, "__type_name");			
+			while baseClass ~= nil do
+				if baseClass == t then
+					return true;
+				end;
+				intfs = rawget(meta, "__interfaces");
+				if intfs ~= nil and intfsname ~= nil then
+					for i,v in ipairs(intfs) do
+						if v == intfsname then
+							return true;
+						end;
+					end;
+				end;
+				if rawget(baseClass, "__cs2lua_defined") then
+					baseClass = rawget(baseClass, "__base_class");
+				else
+					lastCheckedClass = baseClass;
+					break;
+				end;
+			end;
+			--try xlua base class and parent metatable chain
+			if not rawget(lastCheckedClass, "__cs2lua_defined") then
+				return __typeis_check_xlua(typeof(lastCheckedClass), t);
+			end;
+		end;
+	end;
+	return false;
 end;
 
 function __do_eq(v1,v2)
@@ -886,7 +872,7 @@ function defineclass(base, className, static, static_methods, static_fields_buil
     local class_props = static_props or {};
     local class_events = static_events or {};
     class["__cs2lua_defined"] = true;
-    class["__class_name"] = className;
+    class["__type_name"] = className;
     class["__is_value_type"] = is_value_type;
     class["__interfaces"] = interfaces;
     class["__interface_map"] = interface_map;
@@ -1024,7 +1010,7 @@ function defineclass(base, className, static, static_methods, static_fields_buil
             setmetatable(obj, {
             		__class = class,
             		__cs2lua_defined = true,
-            		__class_name = className,
+            		__type_name = className,
             		__is_value_type = is_value_type,
 				    		__interfaces = interfaces,
 				    		__interface_map = interface_map,

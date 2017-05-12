@@ -3,12 +3,12 @@ require "cs2lua__namespaces";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
 
-ZipInputStream = {
+TestInterface = {
 	__new_object = function(...)
-		return newobject(ZipInputStream, "ctor", nil, ...);
+		return newobject(TestInterface, nil, nil, ...);
 	end,
 	__define_class = function()
-		local static = ZipInputStream;
+		local static = TestInterface;
 
 		local static_methods = {
 			cctor = function()
@@ -24,8 +24,7 @@ ZipInputStream = {
 		local static_events = nil;
 
 		local instance_methods = {
-			ctor = function(this, ms)
-				return this;
+			ctor = function(this)
 			end,
 		};
 
@@ -36,13 +35,16 @@ ZipInputStream = {
 		end;
 		local instance_props = nil;
 		local instance_events = nil;
-		local interfaces = nil;
+		local interfaces = {
+			"ITest3",
+			"ITest",
+			"ITest2",
+		};
+
 		local interface_map = nil;
 
-		return defineclass(nil, "ZipInputStream", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
+		return defineclass(nil, "TestInterface", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
 
-
-
-ZipInputStream.__define_class();
+TestInterface.__define_class();

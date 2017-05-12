@@ -26,11 +26,11 @@ System.Double = System.Double or __basic_type_func;
 System.String = System.String or __basic_type_func;
 System.Collections = System.Collections or {};
 System.Collections.Generic = System.Collections.Generic or {};
-System.Collections.Generic.List_T = {__cs2lua_defined = true, __class_name = "System.Collections.Generic.List_T", __exist = function(k) return false; end};
-System.Collections.Generic.Queue_T = {__cs2lua_defined = true, __class_name = "System.Collections.Generic.Queue_T", __exist = function(k) return false; end};
-System.Collections.Generic.Stack_T = {__cs2lua_defined = true, __class_name = "System.Collections.Generic.Stack_T", __exist = function(k) return false; end};
-System.Collections.Generic.Dictionary_TKey_TValue = {__cs2lua_defined = true, __class_name = "System.Collections.Generic.Dictionary_TKey_TValue", __exist = function(k) return false; end};
-System.Collections.Generic.HashSet_T = {__cs2lua_defined = true, __class_name = "System.Collections.Generic.HashSet_T", __exist = function(k) return false; end};
+System.Collections.Generic.List_T = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.List_T", __exist = function(k) return false; end};
+System.Collections.Generic.Queue_T = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.Queue_T", __exist = function(k) return false; end};
+System.Collections.Generic.Stack_T = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.Stack_T", __exist = function(k) return false; end};
+System.Collections.Generic.Dictionary_TKey_TValue = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.Dictionary_TKey_TValue", __exist = function(k) return false; end};
+System.Collections.Generic.HashSet_T = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.HashSet_T", __exist = function(k) return false; end};
 System.Array = System.Array or {};
 
 System.Collections.Generic.MyDictionary_TKey_TValue = System.Collections.Generic.Dictionary_TKey_TValue;
@@ -885,7 +885,7 @@ function defineclass(base, className, static, static_methods, static_fields_buil
     local class_props = static_props or {};
     local class_events = static_events or {};
     class["__cs2lua_defined"] = true;
-    class["__class_name"] = className;
+    class["__type_name"] = className;
     class["__is_value_type"] = is_value_type;
     class["__interfaces"] = interfaces;
     class["__interface_map"] = interface_map;
@@ -1007,7 +1007,7 @@ function defineclass(base, className, static, static_methods, static_fields_buil
             setmetatable(obj, {
             		__class = class,
             		__cs2lua_defined = true,
-            		__class_name = className,
+            		__type_name = className,
             		__is_value_type = is_value_type,
 				    		__interfaces = interfaces,
 				    		__interface_map = interface_map,

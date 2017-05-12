@@ -2,6 +2,7 @@ require "cs2lua__utility";
 require "cs2lua__attributes";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
+require "cs2lua__interfaces";
 require "TopLevel__SecondLevel__FooBase";
 require "TopLevel__TestStruct";
 require "TopLevel__Singleton_TopLevel_SecondLevel_Foo";
@@ -166,10 +167,10 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			TestSwitch = function(this)
 				local i; i = 10;
-				local __compiler_switch_529 = i;
-				if (__compiler_switch_529 == 1) or (__compiler_switch_529 == 3) then
+				local __compiler_switch_538 = i;
+				if (__compiler_switch_538 == 1) or (__compiler_switch_538 == 3) then
 					return ;
-				elseif __compiler_switch_529 == 2 then
+				elseif __compiler_switch_538 == 2 then
 					return ;
 				else
 					return ;
@@ -227,6 +228,8 @@ TopLevel.SecondLevel.Foo = {
 };
 
 
+
+
 TopLevel.SecondLevel.Foo.Test1 = {
 	__new_object = function(...)
 		return newobject(TopLevel.SecondLevel.Foo.Test1, nil, nil, ...);
@@ -265,6 +268,8 @@ TopLevel.SecondLevel.Foo.Test1 = {
 		return defineclass(nil, "TopLevel.SecondLevel.Foo.Test1", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
+
+
 
 TopLevel.SecondLevel.Foo.Test1.__define_class();
 
@@ -306,6 +311,8 @@ TopLevel.SecondLevel.Foo.Test2 = {
 		return defineclass(nil, "TopLevel.SecondLevel.Foo.Test2", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
+
+
 
 TopLevel.SecondLevel.Foo.Test2.__define_class();
 
@@ -349,6 +356,8 @@ TopLevel.SecondLevel.Foo.FooChild = {
 		return defineclass(nil, "TopLevel.SecondLevel.Foo.FooChild", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
+
+
 
 TopLevel.SecondLevel.Foo.FooChild.__define_class();
 TopLevel.SecondLevel.Foo.__define_class();

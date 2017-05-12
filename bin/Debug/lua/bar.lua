@@ -1,6 +1,7 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
+require "cs2lua__interfaces";
 require "foo_System_Int32_System_Int32";
 
 bar = {
@@ -71,5 +72,7 @@ bar = {
 		return defineclass(nil, "bar", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
+
+
 
 bar.__define_class();

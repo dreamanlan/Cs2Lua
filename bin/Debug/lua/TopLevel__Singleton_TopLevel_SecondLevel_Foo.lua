@@ -1,6 +1,7 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
+require "cs2lua__interfaces";
 
 TopLevel.Singleton_TopLevel_SecondLevel_Foo = {
 	__new_object = function(...)
@@ -65,5 +66,7 @@ TopLevel.Singleton_TopLevel_SecondLevel_Foo = {
 		return defineclass(nil, "TopLevel.Singleton_TopLevel_SecondLevel_Foo", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
+
+
 
 TopLevel.Singleton_TopLevel_SecondLevel_Foo.__define_class();

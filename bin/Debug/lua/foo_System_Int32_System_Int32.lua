@@ -1,6 +1,7 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
+require "cs2lua__interfaces";
 
 foo_System_Int32_System_Int32 = {
 	__new_object = function(...)
@@ -44,5 +45,7 @@ foo_System_Int32_System_Int32 = {
 		return defineclass(nil, "foo_System_Int32_System_Int32", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
+
+
 
 foo_System_Int32_System_Int32.__define_class();

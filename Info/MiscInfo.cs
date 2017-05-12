@@ -50,6 +50,7 @@ namespace RoslynTool.CsToLua
     {
         internal string Key = string.Empty;
         internal List<ClassInfo> Classes = new List<ClassInfo>();
+        internal Dictionary<string, List<string>> InnerInterfaces = new Dictionary<string, List<string>>();
         internal Dictionary<string, MergedClassInfo> InnerClasses = new Dictionary<string, MergedClassInfo>();
     }
 }

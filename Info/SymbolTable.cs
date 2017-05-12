@@ -60,6 +60,10 @@ namespace RoslynTool.CsToLua
         {
             get { return m_TypeArguments; }
         }
+        internal Dictionary<string, List<string>> Cs2DslInterfaces
+        {
+            get { return m_Cs2DslInterfaces; }
+        }
         internal void SetTypeParamsAndArgs(List<ITypeParameterSymbol> typeParams, List<ITypeSymbol> typeArgs, INamedTypeSymbol refType)
         {
             m_TypeParameters.Clear();
@@ -245,6 +249,7 @@ namespace RoslynTool.CsToLua
 
         private List<ITypeParameterSymbol> m_TypeParameters = new List<ITypeParameterSymbol>();
         private List<ITypeSymbol> m_TypeArguments = new List<ITypeSymbol>();
+        private Dictionary<string, List<string>> m_Cs2DslInterfaces = new Dictionary<string, List<string>>();
         
         internal static SymbolTable Instance
         {

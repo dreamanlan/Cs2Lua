@@ -1,6 +1,7 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
+require "cs2lua__interfaces";
 require "CUsingHelper";
 
 TestUnity = {
@@ -51,13 +52,13 @@ TestUnity = {
 				end) ), System.Action_T, false));
 				f(123);
 				local isLoadingHeadIcon; isLoadingHeadIcon = false;
-				local __compiler_using_82 = newobject(CUsingHelper, "ctor", nil, (function()
+				local __compiler_using_91 = newobject(CUsingHelper, "ctor", nil, (function()
 					isLoadingHeadIcon = true;
 				end), (function()
 					isLoadingHeadIcon = false;
 				end));
 				LuaConsole.Print("test");
-				__compiler_using_82:Dispose();
+				__compiler_using_91:Dispose();
 				local v1s; v1s = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {[1] = 2, [3] = 4, [5] = 6});
 				local v2s; v2s = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {[1] = 3, [5] = 4});
 				local v0; v0 = LINQ.exec({{"from", (function() return v1s; end)}, {"let", (function(v1) return v1.Value; end)}, {"let", (function(v1, v3) return invokeforbasicvalue(invokeforbasicvalue(v3, false, System.Int32, "ToString"), false, System.String, "Split", wrapchar(' ', 0x020)); end)}, {"from", (function(v1, v3, v4) return ( LINQ.exec({{"from", (function() return v2s; end)}, {"select", (function(v2) return v2; end)}}) ); end)}, {"where", (function(v1, v3, v4, vvvv) return (not System.String.IsNullOrEmpty(v1:ToString())); end)}, {"select", (function(v1, v3, v4, vvvv) return v1:ToString(); end)}});
@@ -88,4 +89,57 @@ TestUnity = {
 	end,
 };
 
+
+TestUnity.ITest = {__cs2lua_defined = true, __type_name = "TestUnity.ITest", __interfaces = {}, __exist = function(k) return false; end};
+TestUnity.ITest2 = {__cs2lua_defined = true, __type_name = "TestUnity.ITest2", __interfaces = {"TestUnity.ITest"}, __exist = function(k) return false; end};
+TestUnity.ITest3 = {__cs2lua_defined = true, __type_name = "TestUnity.ITest3", __interfaces = {"TestUnity.ITest2", "TestUnity.ITest"}, __exist = function(k) return false; end};
+
+
+TestUnity.TestInterface = {
+	__new_object = function(...)
+		return newobject(TestUnity.TestInterface, nil, nil, ...);
+	end,
+	__define_class = function()
+		local static = TestUnity.TestInterface;
+
+		local static_methods = {
+			cctor = function()
+			end,
+		};
+
+		local static_fields_build = function()
+			local static_fields = {
+			};
+			return static_fields;
+		end;
+		local static_props = nil;
+		local static_events = nil;
+
+		local instance_methods = {
+			ctor = function(this)
+			end,
+		};
+
+		local instance_fields_build = function()
+			local instance_fields = {
+			};
+			return instance_fields;
+		end;
+		local instance_props = nil;
+		local instance_events = nil;
+		local interfaces = {
+			"TestUnity.ITest3",
+			"TestUnity.ITest2",
+			"TestUnity.ITest",
+		};
+
+		local interface_map = nil;
+
+		return defineclass(nil, "TestUnity.TestInterface", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
+	end,
+};
+
+
+
+TestUnity.TestInterface.__define_class();
 TestUnity.__define_class();

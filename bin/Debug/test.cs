@@ -52,7 +52,16 @@ class CUsingHelper : IDisposable
 }
 
 class TestUnity : MonoBehaviour
-{
+{    
+    interface ITest
+    {}
+    interface ITest2 : ITest
+    {}
+    interface ITest3 : ITest2
+    {}
+    class TestInterface : ITest3
+    {}
+
     void Test(params object[] args)
     {
         if (args.Length >= 3) {

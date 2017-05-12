@@ -1,6 +1,7 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
+require "cs2lua__interfaces";
 require "TopLevel__Runnable";
 
 TopLevel.TestRunnable = {
@@ -61,5 +62,7 @@ TopLevel.TestRunnable = {
 		return defineclass(nil, "TopLevel.TestRunnable", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
 	end,
 };
+
+
 
 TopLevel.TestRunnable.__define_class();

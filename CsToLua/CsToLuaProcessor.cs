@@ -363,6 +363,8 @@ namespace RoslynTool.CsToLua
             BuildAttributes(attrBuilder, compilation.Assembly, ignoredClasses);
             StringBuilder enumBuilder = new StringBuilder();
             BuildExternEnums(enumBuilder);
+            StringBuilder intfBuilder = new StringBuilder();
+            BuildInterfaces(intfBuilder);
             if (SymbolTable.ForSlua) {
                 File.Copy(Path.Combine(exepath, "lualib/utility_slua.lua"), Path.Combine(outputDir, string.Format("cs2lua__utility.{0}", outputExt)), true);
             } else if (SymbolTable.ForXlua) {
@@ -375,6 +377,7 @@ namespace RoslynTool.CsToLua
             File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__namespaces.{0}", outputExt)), nsBuilder.ToString());
             File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__attributes.{0}", outputExt)), attrBuilder.ToString());
             File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__externenums.{0}", outputExt)), enumBuilder.ToString());
+            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__interfaces.{0}", outputExt)), intfBuilder.ToString());
             foreach (var pair in toplevelClasses) {
                 StringBuilder classBuilder = new StringBuilder();
                 lualibRefs.Clear();
@@ -417,7 +420,18 @@ namespace RoslynTool.CsToLua
                 mci.Key = key;
             }
             mci.Classes.Add(ci);
-
+            foreach (var pair in ci.InnerInterfaces) {
+                List<string> list;
+                if (!mci.InnerInterfaces.TryGetValue(pair.Key, out list)) {
+                    list = new List<string>();
+                    mci.InnerInterfaces.Add(pair.Key, list);
+                }
+                foreach (var intf in pair.Value) {
+                    if (!list.Contains(intf)) {
+                        list.Add(intf);
+                    }
+                }
+            }
             foreach (var pair in ci.InnerClasses) {
                 AddMergedClasses(mci.InnerClasses, pair.Key, pair.Value);
             }
@@ -726,6 +740,26 @@ namespace RoslynTool.CsToLua
                 }
             }
         }
+        private static void BuildInterfaces(StringBuilder sb)
+        {
+            BuildInterfaces(sb, SymbolTable.Instance.Cs2DslInterfaces);
+        }
+        private static void BuildInterfaces(StringBuilder sb, Dictionary<string, List<string>> intfs)
+        {
+            foreach (var pair in intfs) {
+                var name = pair.Key;
+                var list = pair.Value;
+                sb.AppendFormat("{0} = {{__cs2lua_defined = true, __type_name = \"{1}\", __interfaces = {{", name, name);
+                string prestr = string.Empty;
+                foreach (var iname in list) {
+                    sb.Append(prestr);
+                    sb.AppendFormat("\"{0}\"", iname);
+                    prestr = ", ";
+                }
+                sb.Append("}, __exist = function(k) return false; end};");
+                sb.AppendLine();
+            }
+        }
         private static void BuildLuaClass(StringBuilder sb, MergedNamespaceInfo toplevelMni, Dictionary<string, MergedClassInfo> toplevelMcis, HashSet<string> lualibRefs)
         {
             StringBuilder code = new StringBuilder();
@@ -831,6 +865,7 @@ namespace RoslynTool.CsToLua
                     sb.AppendLine("require \"cs2lua__attributes\";");
                 sb.AppendLine("require \"cs2lua__namespaces\";");
                 sb.AppendLine("require \"cs2lua__externenums\";");
+                sb.AppendLine("require \"cs2lua__interfaces\";");
                 foreach (string lib in requiredlibs) {
                     sb.AppendFormat("require \"{0}\";", lib);
                     sb.AppendLine();
@@ -1275,6 +1310,9 @@ namespace RoslynTool.CsToLua
                 sb.AppendFormat("{0}}});", GetIndentString(indent));
                 sb.AppendLine();
             } else {
+                sb.AppendLine();
+                BuildInterfaces(sb, mci.InnerInterfaces);
+                sb.AppendLine();
                 foreach (var pair in mci.InnerClasses) {
                     BuildLuaClass(sb, pair.Key, pair.Value, false, lualibRefs);
                 }

@@ -42,6 +42,29 @@ namespace RoslynTool.CsToLua
         public override void VisitInterfaceDeclaration(InterfaceDeclarationSyntax node)
         {
             //允许在C#里定义与使用接口，lua里隐式支持任何接口
+            INamedTypeSymbol sym = m_Model.GetDeclaredSymbol(node);
+            if (SymbolTable.Instance.IsCs2LuaSymbol(sym)) {
+                var fullName = ClassInfo.GetFullName(sym);
+
+                Dictionary<string, List<string>> intfs;
+                if (m_ClassInfoStack.Count <= 0) {
+                    intfs = SymbolTable.Instance.Cs2DslInterfaces;
+                } else {
+                    intfs = m_ClassInfoStack.Peek().InnerInterfaces;
+                }
+
+                List<string> list;
+                if (!intfs.TryGetValue(fullName, out list)) {
+                    list = new List<string>();
+                    intfs.Add(fullName, list);
+                }
+                foreach (var intf in sym.AllInterfaces) {
+                    var fn = ClassInfo.GetFullName(intf);
+                    if (!list.Contains(fn)) {
+                        list.Add(fn);
+                    }
+                }
+            }
         }
         public override void VisitEnumDeclaration(EnumDeclarationSyntax node)
         {

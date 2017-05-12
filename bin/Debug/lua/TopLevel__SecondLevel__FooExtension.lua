@@ -1,6 +1,7 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
+require "cs2lua__interfaces";
 require "TopLevel__SecondLevel__Foo";
 
 TopLevel.SecondLevel.FooExtension = {
@@ -66,5 +67,7 @@ TopLevel.SecondLevel.FooExtension = {
 		return defineclass(nil, "TopLevel.SecondLevel.FooExtension", static, static_methods, static_fields_build, static_props, static_events, nil, nil, nil, nil, nil, nil, false);
 	end,
 };
+
+
 
 TopLevel.SecondLevel.FooExtension.__define_class();
