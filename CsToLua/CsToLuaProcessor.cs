@@ -159,17 +159,15 @@ namespace RoslynTool.CsToLua
                 return ExitCode.SyntaxError;
             }
 
+            if (!refByNames.ContainsKey("mscorlib")) {
+                refByNames.Add("mscorlib", "global");
+            }
             List<MetadataReference> refs = new List<MetadataReference>();
             if (string.IsNullOrEmpty(SymbolTable.SystemDllPath)) {
                 if (ext == ".cs") {
-                    refs.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
-                    refs.Add(MetadataReference.CreateFromFile(typeof(System.Reflection.Metadata.AssemblyDefinition).Assembly.Location));
-                    refs.Add(MetadataReference.CreateFromFile(typeof(List<>).Assembly.Location));
-                    refs.Add(MetadataReference.CreateFromFile(typeof(Dictionary<,>).Assembly.Location));
                     refs.Add(MetadataReference.CreateFromFile(typeof(Queue<>).Assembly.Location));
                     refs.Add(MetadataReference.CreateFromFile(typeof(HashSet<>).Assembly.Location));
                 }
-
                 foreach (var pair in refByNames) {
 #pragma warning disable 618
                     Assembly assembly = Assembly.LoadWithPartialName(pair.Key);
