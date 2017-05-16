@@ -225,6 +225,8 @@ namespace RoslynTool.CsToLua
                     return;
                 if (declSym.IsAbstract)
                     return;
+                if (null == body && null == expressionBody) //partial method declaration
+                    return;
             }
 
             var mi = new MethodInfo();
@@ -1263,6 +1265,18 @@ namespace RoslynTool.CsToLua
             string localName = string.Format("__compiler_invoke_{0}", invocation.GetLocation().GetLineSpan().StartLinePosition.Line);
             SymbolInfo symInfo = m_Model.GetSymbolInfo(invocation);
             IMethodSymbol sym = symInfo.Symbol as IMethodSymbol;
+
+            if (null != sym && sym.DeclaringSyntaxReferences.Length > 0) {
+                var decl = sym.DeclaringSyntaxReferences[0].GetSyntax() as MethodDeclarationSyntax;
+                if (null != decl && null == decl.Body && null == decl.ExpressionBody) {
+                    //partial method invocation
+                    if (null == sym.PartialDefinitionPart && null == sym.PartialImplementationPart) {
+                        if (expTerminater.Length > 0)
+                            CodeBuilder.AppendLine();
+                        return;
+                    }
+                }
+            }
 
             if (null == sym) {
                 ReportIllegalSymbol(invocation, symInfo);

@@ -27,7 +27,7 @@ TopLevel.TestRunnable = {
 		local instance_methods = {
 			Test = function(this)
 				local f; f = newobject(TopLevel.Runnable, "ctor", nil);
-				invokewithinterface(f, "TopLevel_IRunnable0", "Test");
+				
 				local i; i = getinstanceindexer(f, nil, "get_Item", 4);
 				setinstanceindexer(f, nil, "set_Item", 0, i);
 				setwithinterface(f, "TopLevel_IRunnable_System_Int32", "TestProp", i);

@@ -13,10 +13,22 @@ class LuaConsole
     }
 }
 
-class ZipInputStream
+partial class ZipInputStream
 {
   public ZipInputStream(MemoryStream ms)
-  {}
+  {
+      Test();
+  }
+
+  partial void Test();
+}
+
+partial class ZipInputStream
+{
+    partial void Test()
+    {
+        LuaConsole.Print("test test test");
+    }
 }
 
 class ZipOutputStream

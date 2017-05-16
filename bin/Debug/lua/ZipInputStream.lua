@@ -25,7 +25,11 @@ ZipInputStream = {
 
 		local instance_methods = {
 			ctor = function(this, ms)
+				this:Test();
 				return this;
+			end,
+			Test = function(this)
+				LuaConsole.Print("test test test");
 			end,
 		};
 

@@ -75,7 +75,7 @@ namespace RoslynTool.CsToLua
                     ParamNames.Add(param.Name);
                 }
             }
-
+            
             if (!sym.ReturnsVoid) {
                 var returnType = ClassInfo.GetFullName(sym.ReturnType);
                 if (returnType.StartsWith(SymbolTable.PrefixExternClassName("System.Collections")) && (sym.ReturnType.Name == "IEnumerable" || sym.ReturnType.Name == "IEnumerator")) {
