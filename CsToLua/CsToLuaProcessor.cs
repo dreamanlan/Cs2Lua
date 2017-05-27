@@ -660,7 +660,7 @@ namespace RoslynTool.CsToLua
             } else {
                 object v = tc.Value;
                 if (null == v) {
-                    sb.Append(" nil");
+                    sb.Append("nil");
                 } else if (v is string) {
                     sb.AppendFormat("\"{0}\"", v.ToString());
                 } else {
