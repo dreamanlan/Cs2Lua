@@ -1545,7 +1545,13 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
 	elseif meta then
 		return obj[method](obj,...);
 	elseif method=="CompareTo" then
-	  return obj==args[1];
+	  if obj>args[1] then
+	    return 1;
+	  elseif obj<args[1] then
+	    return -1;
+	  else
+	    return 0;
+	  end;
 	elseif method=="ToString" then
 	  return tostring(obj);
 	end;
