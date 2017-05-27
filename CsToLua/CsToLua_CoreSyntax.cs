@@ -415,7 +415,7 @@ namespace RoslynTool.CsToLua
                                 if (SymbolTable.Instance.IsCs2LuaSymbol(fieldSym.Type)) {
                                     CodeBuilder.AppendFormat(" = new {0}();", fullTypeName);
                                 } else {
-                                    CodeBuilder.AppendFormat(" = newexternobject({0}, \"{0}\", nil, {{}});", fullTypeName);
+                                    CodeBuilder.AppendFormat(" = newexternobject({0}, \"{0}\", nil, nil);", fullTypeName);
                                 }
                                 CodeBuilder.AppendLine();
                                 if (isStatic) {
@@ -447,7 +447,7 @@ namespace RoslynTool.CsToLua
                             if (SymbolTable.Instance.IsCs2LuaSymbol(fieldSym.Type)) {
                                 CodeBuilder.AppendFormat(" = new {0}();", fullTypeName);
                             } else {
-                                CodeBuilder.AppendFormat(" = newexternobject({0}, \"{0}\", nil, {{}});", fullTypeName);
+                                CodeBuilder.AppendFormat(" = newexternobject({0}, \"{0}\", nil, nil);", fullTypeName);
                             }
                             CodeBuilder.AppendLine();
                             if (isStatic) {

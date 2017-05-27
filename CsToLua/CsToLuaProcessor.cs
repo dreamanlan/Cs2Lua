@@ -80,13 +80,15 @@ namespace RoslynTool.CsToLua
                 string prjOutputDir = "bin/Debug/";
                 nodes = SelectNodes(xmlDoc, "PropertyGroup");
                 foreach (XmlElement node in nodes) {
+                    string condition = node.GetAttribute("Condition");
                     var defNode = SelectSingleNode(node, "DefineConstants");
                     var pathNode = SelectSingleNode(node, "OutputPath");
                     if (null != defNode && null != pathNode) {
-                        string text = defNode.InnerText.Trim();                       
-                        if (text == "DEBUG" || text.IndexOf(";DEBUG;") > 0 || text.StartsWith("DEBUG;") || text.EndsWith(";DEBUG")) {
+                        string text = defNode.InnerText.Trim();
+                        if (condition.IndexOf("Debug") > 0 || condition.IndexOf("Release") < 0 && (text == "DEBUG" || text.IndexOf(";DEBUG;") > 0 || text.StartsWith("DEBUG;") || text.EndsWith(";DEBUG"))) {
                             preprocessors.AddRange(text.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
                             prjOutputDir = pathNode.InnerText.Trim();
+                            break;
                         }
                     }
                 }
@@ -621,14 +623,7 @@ namespace RoslynTool.CsToLua
                         string name = ps[i].Name;
                         sb.Append(name);
                         sb.Append(" = ");
-                        object v = args[i].Value;
-                        if (null == v) {
-                            sb.Append(" nil");
-                        } else if (v is string) {
-                            sb.AppendFormat("\"{0}\"", v.ToString());
-                        } else {
-                            sb.Append(v);
-                        }
+                        OutputTypedConstant(sb, args[i]);
                         if (i < ct - 1) {
                             sb.Append(", ");
                         }
@@ -640,21 +635,37 @@ namespace RoslynTool.CsToLua
                 for (int i = 0; i < ct2; ++i) {
                     var pair = namedArgs[i];
                     string name = pair.Key;
-                    object v = pair.Value.Value;
                     sb.Append(name);
                     sb.Append(" = ");
-                    if (null == v) {
-                        sb.Append(" nil");
-                    } else if (v is string) {
-                        sb.AppendFormat("\"{0}\"", v.ToString());
-                    } else {
-                        sb.Append(v);
-                    }
+                    OutputTypedConstant(sb, pair.Value);
                     if (i < ct2 - 1) {
                         sb.Append(", ");
                     }
                 }
                 sb.AppendLine("}},");
+            }
+        }
+        private static void OutputTypedConstant(StringBuilder sb, TypedConstant tc)
+        {
+            if (tc.Kind == TypedConstantKind.Array) {
+                sb.Append("{");
+                var vals = tc.Values;
+                for (int ix = 0; ix < vals.Length; ++ix) {
+                    OutputTypedConstant(sb, vals[ix]);
+                    if (ix < vals.Length - 1) {
+                        sb.Append(", ");
+                    }
+                }
+                sb.Append("}");
+            } else {
+                object v = tc.Value;
+                if (null == v) {
+                    sb.Append(" nil");
+                } else if (v is string) {
+                    sb.AppendFormat("\"{0}\"", v.ToString());
+                } else {
+                    sb.Append(v);
+                }
             }
         }
         private static void BuildExternEnums(StringBuilder sb)
