@@ -1347,7 +1347,7 @@ function delegationremove(isevent, t, intf, k, handler)
   end;
 end;
 
-function externdelegationcomparewithnil(t, inf, k, isequal)
+function externdelegationcomparewithnil(isevent, t, inf, k, isequal)
   local v = t;
   if k then
     v = t[k];
