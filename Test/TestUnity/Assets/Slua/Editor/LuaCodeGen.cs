@@ -1412,7 +1412,8 @@ namespace SLua
 				//if (fi.Name == "Item" || IsObsolete(fi) || MemberInFilter(t,fi) || DontExport(fi))
 				if (IsObsolete(fi) || MemberInFilter(t, fi) || DontExport(fi))
 					continue;
-				if (fi.Name == "Item"
+                if (fi.Name == "Item"
+                    || (t.Name == "StringBuilder" && fi.Name == "Chars")
 				    || (t.Name == "String" && fi.Name == "Chars")) // for string[]
 				{
 					//for this[]
