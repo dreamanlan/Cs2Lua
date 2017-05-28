@@ -891,7 +891,7 @@ namespace RoslynTool.CsToLua
                             CodeBuilder.Append("this:");
                         }
                         CodeBuilder.Append(manglingName);
-                        CodeBuilder.AppendFormat("({0}) end)", paramsString);
+                        CodeBuilder.AppendFormat("({0}); end)", paramsString);
                     } else {
                         VisitArgumentList(node.ArgumentList);
                     }
