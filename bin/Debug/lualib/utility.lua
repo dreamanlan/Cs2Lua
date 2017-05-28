@@ -1670,6 +1670,26 @@ function getiterator(exp)
 	end;
 end;
 
+function defaultvalue(type, typename, isExtern)
+	if type==UnityEngine.Vector3 then
+		return UnityEngine.Vector3.zero;
+	elseif type==UnityEngine.Vector2 then
+		return UnityEngine.Vector2.zero;
+	elseif type==UnityEngine.Vector4 then
+		return UnityEngine.Vector4.zero;
+	elseif type==UnityEngine.Quaternion then
+		return UnityEngine.Quaternion.identity;
+	elseif type==UnityEngine.Color then
+		return UnityEngine.Color.black;
+	elseif type==UnityEngine.Color32 then
+		return UnityEngine.Color32(0,0,0,0);
+	elseif isExtern then
+		return type();
+	else
+		return type.__new_object();
+	end;
+end;
+
 LINQ={};
 LINQ.exec = function(linq)
   local paramList = {};

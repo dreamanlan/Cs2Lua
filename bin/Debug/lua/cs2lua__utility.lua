@@ -1347,7 +1347,7 @@ function delegationremove(isevent, t, intf, k, handler)
   end;
 end;
 
-function externdelegationcomparewithnil(t, inf, k, isequal)
+function externdelegationcomparewithnil(isevent, t, inf, k, isequal)
   local v = t;
   if k then
     v = t[k];
@@ -1545,7 +1545,13 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
 	elseif meta then
 		return obj[method](obj,...);
 	elseif method=="CompareTo" then
-	  return obj==args[1];
+	  if obj>args[1] then
+	    return 1;
+	  elseif obj<args[1] then
+	    return -1;
+	  else
+	    return 0;
+	  end;
 	elseif method=="ToString" then
 	  return tostring(obj);
 	end;
@@ -1662,6 +1668,26 @@ function getiterator(exp)
 		end;
 	else
 		return Slua.iter(exp);
+	end;
+end;
+
+function defaultvalue(type, typename, isExtern)
+	if type==UnityEngine.Vector3 then
+		return UnityEngine.Vector3.zero;
+	elseif type==UnityEngine.Vector2 then
+		return UnityEngine.Vector2.zero;
+	elseif type==UnityEngine.Vector4 then
+		return UnityEngine.Vector4.zero;
+	elseif type==UnityEngine.Quaternion then
+		return UnityEngine.Quaternion.identity;
+	elseif type==UnityEngine.Color then
+		return UnityEngine.Color.black;
+	elseif type==UnityEngine.Color32 then
+		return UnityEngine.Color32(0,0,0,0);
+	elseif isExtern then
+		return type();
+	else
+		return type.__new_object();
 	end;
 end;
 

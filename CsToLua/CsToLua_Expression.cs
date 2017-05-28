@@ -953,7 +953,13 @@ namespace RoslynTool.CsToLua
                                 }
                             }
                             if (etype.IsValueType) {
-                                CodeBuilder.Append("0;");
+                                if (SymbolTable.IsBasicType(etype, false)){
+                                    CodeBuilder.Append("0;");
+                                } else {
+                                    bool isExternal = !SymbolTable.Instance.IsCs2LuaSymbol(etype);
+                                    string fn = ClassInfo.GetFullName(etype);
+                                    CodeBuilder.AppendFormat("defaultvalue({0}, \"{1}\", {2});", fn, fn, isExternal ? "true" : "false");
+                                }
                             } else {
                                 CodeBuilder.Append("__cs2lua_nil_field_value;");
                             }

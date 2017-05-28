@@ -21,7 +21,7 @@ bar = {
 				else
 					bar.__cctor_called = true;
 				end
-				bar.s_DateTime = newexternobject(System.DateTime, "System.DateTime", nil, {});
+				bar.s_DateTime = newexternobject(System.DateTime, "System.DateTime", nil, nil);
 			end,
 		};
 
@@ -53,7 +53,7 @@ bar = {
 				else
 					this.__ctor_called = true;
 				end
-				this.m_DateTime = newexternobject(System.DateTime, "System.DateTime", nil, {});
+				this.m_DateTime = newexternobject(System.DateTime, "System.DateTime", nil, nil);
 			end,
 		};
 

@@ -1726,6 +1726,26 @@ function getiterator(exp)
 	end;
 end;
 
+function defaultvalue(type, typename, isExtern)
+	if type==CS.UnityEngine.Vector3 then
+		return CS.UnityEngine.Vector3.zero;
+	elseif type==CS.UnityEngine.Vector2 then
+		return CS.UnityEngine.Vector2.zero;
+	elseif type==CS.UnityEngine.Vector4 then
+		return CS.UnityEngine.Vector4.zero;
+	elseif type==CS.UnityEngine.Quaternion then
+		return CS.UnityEngine.Quaternion.identity;
+	elseif type==CS.UnityEngine.Color then
+		return CS.UnityEngine.Color.black;
+	elseif type==CS.UnityEngine.Color32 then
+		return CS.UnityEngine.Color32(0,0,0,0);
+	elseif isExtern then
+		return type();
+	else
+		return type.__new_object();
+	end;
+end;
+
 --命令行开关-usearraygetset开启后，数组的访问会委托到下面2个函数
 --这里只实现了一维数组的处理
 function arrayget(arr, ...)

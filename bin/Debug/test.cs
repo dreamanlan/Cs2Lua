@@ -119,6 +119,10 @@ class TestUnity : MonoBehaviour
 
         string s = "1232312321";
         char c = s[0];
+        
+        int[,,] arr = new int[2,3,4];
+        
+        UnityEngine.Vector3[,,] arr2 = new UnityEngine.Vector3[8,8,8];
     }
 
     private string m_TestString = "13579";
