@@ -928,6 +928,7 @@ namespace RoslynTool.CsToLua
         public override void VisitArrayCreationExpression(ArrayCreationExpressionSyntax node)
         {
             if (null == node.Initializer) {
+                var oper = m_Model.GetOperation(node) as IArrayCreationExpression;
                 var rankspecs = node.Type.RankSpecifiers;
                 var rankspec = rankspecs[0];
                 int rank = rankspec.Rank;
@@ -941,8 +942,23 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.AppendFormat("; for i{0} = 1,d{1} do arr{2} = ", i, i, GetArraySubscriptString(i));
                         if (i < ct - 1) {
                             CodeBuilder.Append("{};");
+                        } else if (null != oper && null != oper.ElementType) {
+                            var etype = oper.ElementType;
+                            for (; ; ) {
+                                var t = etype as IArrayTypeSymbol;
+                                if (null != t) {
+                                    etype = t.ElementType;
+                                } else {
+                                    break;
+                                }
+                            }
+                            if (etype.IsValueType) {
+                                CodeBuilder.Append("0;");
+                            } else {
+                                CodeBuilder.Append("__cs2lua_nil_field_value;");
+                            }
                         } else {
-                            CodeBuilder.Append("nil;");
+                            CodeBuilder.Append("0;");
                         }
                     }
                     for (int i = 0; i < ct; ++i) {
