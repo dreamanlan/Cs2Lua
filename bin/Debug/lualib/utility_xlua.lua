@@ -414,14 +414,14 @@ __mt_index_of_array = function(t, k)
     return function(obj, v) table.insert(obj, v); end;
   elseif k=="Remove" then
     return function(obj, p)
-      local pos = 1;
+    	local pos = 0;
       local ret = nil;
-      for k,v in pairs(obj) do		        
+      for i,v in ipairs(obj) do		        
         if isequal(v,p) then
+        	pos = i;
           ret=v;
           break;
         end;
-        pos=pos+1;		        
       end;
       if ret then
         table.remove(obj,pos);
@@ -430,7 +430,19 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="RemoveAt" then
     return function(obj, ix)
-      table.remove(obj,ix+1);
+      table.remove(obj, ix+1);
+    end;
+  elseif k=="RemoveAll" then
+    return function(obj, pred)
+    	local deletes = {};
+      for i,v in ipairs(obj) do		        
+        if pred(v) then
+        	table.insert(deletes, i);
+        end;
+      end;
+      for i,v in ipairs(deletes) do
+      	table.remove(obj, v);
+      end;
     end;
   elseif k=="AddRange" then
     return function(obj, coll)
@@ -1328,11 +1340,16 @@ function delegationset(isevent, t, intf, k, handler)
   if k then
     v = t[k];
   end;
-  local n = #v;
-  for i=1,n do
-    table.remove(v);
+  if not v or type(v)~="table" then
+  	--取不到值或者值不是表，则有可能是普通的特性访问
+  	t[k] = handler;
+  else
+	  local n = #v;
+	  for i=1,n do
+	    table.remove(v);
+	  end;
+	  table.insert(v,handler);
   end;
-  table.insert(v,handler);
 end;
 function delegationadd(isevent, t, intf, k, handler)
   local v = t;

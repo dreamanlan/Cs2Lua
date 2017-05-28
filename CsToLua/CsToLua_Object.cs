@@ -327,7 +327,8 @@ namespace RoslynTool.CsToLua
                 } else if (declSym.Type.TypeKind == TypeKind.Delegate) {
                     CodeBuilder.Append("wrapdelegation{},");
                 } else {
-                    CodeBuilder.Append("__cs2lua_nil_field_value,");
+                    OutputDefaultValue(declSym.Type);
+                    CodeBuilder.Append(",");
                 }
                 CodeBuilder.AppendLine();
                 --m_Indent;

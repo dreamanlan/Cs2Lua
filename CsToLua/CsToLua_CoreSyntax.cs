@@ -356,11 +356,9 @@ namespace RoslynTool.CsToLua
                             bool createSelf = SymbolTable.Instance.IsFieldCreateSelf(fieldSym);
                             if (useExplicitTypeParam || createSelf) {
                                 CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
-                                if (fieldSym.Type.IsValueType && SymbolTable.IsBasicType(fieldSym.Type)) {
-                                    CodeBuilder.AppendLine(" = 0,");
-                                } else {
-                                    CodeBuilder.AppendLine(" = __cs2lua_nil_field_value,");
-                                }
+                                CodeBuilder.Append(" = ");
+                                OutputDefaultValue(fieldSym.Type);
+                                CodeBuilder.AppendLine(",");
                                 if (isStatic) {
                                     ci.CurrentCodeBuilder = ci.StaticInitializerCodeBuilder;
                                     ci.ClassSemanticInfo.GenerateBasicCctor = true;
@@ -398,11 +396,7 @@ namespace RoslynTool.CsToLua
                             if (null != constVal.Value) {
                                 OutputConstValue(constVal.Value, expOper);
                             } else if (fieldSym.Type.IsValueType) {
-                                if (SymbolTable.IsBasicType(fieldSym.Type)) {
-                                    CodeBuilder.Append("0");
-                                } else {
-                                    CodeBuilder.Append("__cs2lua_nil_field_value");
-                                }
+                                OutputDefaultValue(fieldSym.Type);
                                 if (isStatic) {
                                     ci.CurrentCodeBuilder = ci.StaticInitializerCodeBuilder;
                                     ci.ClassSemanticInfo.GenerateBasicCctor = true;
@@ -424,17 +418,19 @@ namespace RoslynTool.CsToLua
                                     ci.CurrentCodeBuilder = ci.InstanceFieldCodeBuilder;
                                 }
                             } else {
-                                CodeBuilder.Append("__cs2lua_nil_field_value");
-                            }
+                                OutputDefaultValue(fieldSym.Type);                            
+							}
                         }
                     } else if (fieldSym.Type.TypeKind == TypeKind.Delegate) {
                         CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
                         CodeBuilder.Append(" = wrapdelegation{}");
                     } else if (fieldSym.Type.IsValueType) {
                         if (SymbolTable.IsBasicType(fieldSym.Type)) {
-                            CodeBuilder.AppendFormat("{0}{1} = 0", GetIndentString(), name);
+                            CodeBuilder.AppendFormat("{0}{1} = ", GetIndentString(), name);
+                            OutputDefaultValue(fieldSym.Type);
                         } else {
-                            CodeBuilder.AppendFormat("{0}{1} = __cs2lua_nil_field_value", GetIndentString(), name);
+                            CodeBuilder.AppendFormat("{0}{1} = ", GetIndentString(), name);
+                            OutputDefaultValue(fieldSym.Type);
                             if (isStatic) {
                                 ci.CurrentCodeBuilder = ci.StaticInitializerCodeBuilder;
                                 ci.ClassSemanticInfo.GenerateBasicCctor = true;
@@ -457,7 +453,8 @@ namespace RoslynTool.CsToLua
                             }
                         }
                     } else {
-                        CodeBuilder.AppendFormat("{0}{1} = __cs2lua_nil_field_value", GetIndentString(), name);
+                        CodeBuilder.AppendFormat("{0}{1} = ", GetIndentString(), name);
+                        OutputDefaultValue(fieldSym.Type);
                     }
                     CodeBuilder.Append(",");
                     CodeBuilder.AppendLine();

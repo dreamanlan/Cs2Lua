@@ -412,13 +412,13 @@ __mt_index_of_array = function(t, k)
   if k=="__exist" then --禁用继承
     return function(tb,fk) return false; end;
 	elseif k=="Length" or k=="Count" then
-		return table.maxn(t);
+		return #t;
 	elseif k=="GetLength" then
 		return function(obj, ix)
       local ret = 0;
       local tb = obj;
       for i=0,ix do			       
-        ret = table.maxn(tb);
+        ret = #tb;
         tb = tb[0];
       end;
       return ret;
@@ -427,14 +427,14 @@ __mt_index_of_array = function(t, k)
     return function(obj, v) table.insert(obj, v); end;
   elseif k=="Remove" then
     return function(obj, p)
-      local pos = 1;
+    	local pos = 0;
       local ret = nil;
-      for k,v in pairs(obj) do		        
+      for i,v in ipairs(obj) do		        
         if isequal(v,p) then
+        	pos = i;
           ret=v;
           break;
         end;
-        pos=pos+1;		        
       end;
       if ret then
         table.remove(obj,pos);
@@ -443,7 +443,19 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="RemoveAt" then
     return function(obj, ix)
-      table.remove(obj,ix+1);
+      table.remove(obj, ix+1);
+    end;
+  elseif k=="RemoveAll" then
+    return function(obj, pred)
+    	local deletes = {};
+      for i,v in ipairs(obj) do		        
+        if pred(v) then
+        	table.insert(deletes, i);
+        end;
+      end;
+      for i,v in ipairs(deletes) do
+      	table.remove(obj, v);
+      end;
     end;
   elseif k=="AddRange" then
     return function(obj, coll)
@@ -469,7 +481,7 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="LastIndexOf" then
 	  return function(obj, p)
-	    local num = table.maxn(obj);
+	    local num = #obj;
       for k=num,1 do
         local v = obj[k];
         if v==p then	          
@@ -501,7 +513,7 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="Peek" then    
     return function(obj)
-      local num = table.maxn(obj);
+      local num = #obj;
       local v = obj[num];
       return v;
     end;
@@ -511,7 +523,7 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="Dequeue" then
     return function(obj)
-      local num = table.maxn(obj);
+      local num = #obj;
       local v = obj[num];
       table.remove(obj,num);
       return v;
@@ -522,7 +534,7 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="Pop" then
     return function(obj)
-      local num = table.maxn(obj);
+      local num = #obj;
       local v = obj[num];
       table.remove(obj,num);
       return v;
@@ -543,7 +555,7 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="Clear" then
     return function(obj)
-    	while table.maxn(obj)>0 do
+    	while #obj>0 do
     		table.remove(obj);
     	end;
     end;
@@ -714,7 +726,7 @@ function GetArrayEnumerator(tb)
   return setmetatable({
     MoveNext = function(this)
       local tb = this.object;
-      local num = table.maxn(tb);
+      local num = #tb;
       if this.index < num then
         this.index = this.index + 1;
         this.current = tb[this.index];
@@ -1300,7 +1312,7 @@ function delegationcomparewithnil(isEvent, t, inf, k, isequal)
   if k then
     v = t[k];  
   end;
-  local n = table.maxn(v);
+  local n = #v;
   if isequal and n==0 then
     return true;
   elseif not isqual and n>0 then
@@ -1314,11 +1326,16 @@ function delegationset(isevent, t, intf, k, handler)
   if k then
     v = t[k];
   end;
-  local n = table.maxn(v);
-  for i=1,n do
-    table.remove(v);
+  if not v or type(v)~="table" then
+  	--取不到值或者值不是表，则有可能是普通的特性访问
+  	t[k] = handler;
+  else
+	  local n = #v;
+	  for i=1,n do
+	    table.remove(v);
+	  end;
+	  table.insert(v,handler);
   end;
-  table.insert(v,handler);
 end;
 function delegationadd(isevent, t, intf, k, handler)
   local v = t;
@@ -1431,7 +1448,7 @@ function setexternstaticindexer(class, name, ...)
 end;
 function setexterninstanceindexer(obj, intf, name, ...)
   local args = {...};
-  local num = table.maxn(args);
+  local num = #args;
 	local index = __unwrap_if_string(args[1]);
 	local val = args[num];
   local meta = getmetatable(obj);
@@ -1461,7 +1478,7 @@ function invokeexternoperator(class, method, ...)
 	local args = {...};
 	--对slua，对应到lua元表操作符函数的操作符重载cs2lua转lua代码时已经换成对应操作符表达式。
 	--执行到这里的应该是无法对应到lua操作符的操作符重载
-	local argnum = table.maxn(args);
+	local argnum = #args;
 	if method=="op_Equality" then
 	  if args[1] and args[2] then
 	    return args[1]==args[2];

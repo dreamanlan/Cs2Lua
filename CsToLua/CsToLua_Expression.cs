@@ -942,29 +942,21 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.AppendFormat("; for i{0} = 1,d{1} do arr{2} = ", i, i, GetArraySubscriptString(i));
                         if (i < ct - 1) {
                             CodeBuilder.Append("{};");
-                        } else if (null != oper && null != oper.ElementType) {
-                            var etype = oper.ElementType;
-                            for (; ; ) {
-                                var t = etype as IArrayTypeSymbol;
-                                if (null != t) {
-                                    etype = t.ElementType;
-                                } else {
-                                    break;
-                                }
-                            }
-                            if (etype.IsValueType) {
-                                if (SymbolTable.IsBasicType(etype, false)){
-                                    CodeBuilder.Append("0;");
-                                } else {
-                                    bool isExternal = !SymbolTable.Instance.IsCs2LuaSymbol(etype);
-                                    string fn = ClassInfo.GetFullName(etype);
-                                    CodeBuilder.AppendFormat("defaultvalue({0}, \"{1}\", {2});", fn, fn, isExternal ? "true" : "false");
-                                }
-                            } else {
-                                CodeBuilder.Append("__cs2lua_nil_field_value;");
-                            }
                         } else {
-                            CodeBuilder.Append("0;");
+                            ITypeSymbol etype = null;
+                            if (null != oper && null != oper.ElementType) {
+                                etype = oper.ElementType;
+                                for (; ; ) {
+                                    var t = etype as IArrayTypeSymbol;
+                                    if (null != t) {
+                                        etype = t.ElementType;
+                                    } else {
+                                        break;
+                                    }
+                                }
+                            }
+                            OutputDefaultValue(etype);
+                            CodeBuilder.Append(";");
                         }
                     }
                     for (int i = 0; i < ct; ++i) {
