@@ -155,6 +155,9 @@ function typecast(obj, t, isEnum)
 	  elseif v < 0 then
 	    v = -((-v) % 0x100000000);
 	  end;
+	  if t==System.Int32 and v>0x7fffffff then
+	    v = v - 0xffffffff - 1;
+	  end;
 	  return v;
 	elseif t == System.Int16 or t == System.UInt16 or t == System.Char then
 	  local v = tonumber(obj);
@@ -164,6 +167,10 @@ function typecast(obj, t, isEnum)
 	  elseif v < 0 then
 	    v = -((-v) % 0x10000);
 	  end;
+	  if t==System.Int16 and v>0x7fff then
+	    v = v - 0xffff - 1;
+	  end;
+	  return v;
 	  return v;
 	elseif t == System.SByte or t == System.Byte then
 	  local v = tonumber(obj);
@@ -172,6 +179,9 @@ function typecast(obj, t, isEnum)
 	    v = v % 0x100;
 	  elseif v < 0 then
 	    v = -((-v) % 0x100);
+	  end;
+	  if t==System.SByte and v>0x7f then
+	    v = v - 0xff - 1;
 	  end;
 	  return v;
 	elseif t == System.Boolean then
@@ -190,22 +200,16 @@ function typeas(obj, t, isEnum)
 		return tostring(obj);
 	elseif t == System.Single or t ==	System.Double then
 	  return tonumber(obj);
-	elseif t == System.Int64 then
+	elseif t == System.Int64 or t == System.UInt64 then
 	  local v = tonumber(obj);
 	  v = math.floor(v);
 	  return v;
-	elseif t == System.Int32 then
-	  local v = tonumber(obj);
-	  v = math.floor(v);
-	  return v % 0x100000000;
-	elseif t == System.Int16 or t == System.Char then
-	  local v = tonumber(obj);
-	  v = math.floor(v);
-	  return v % 0x10000;
+	elseif t == System.Int32 or t == System.UInt32 then
+	  return typecast(obj, t, isEnum);
+	elseif t == System.Int16 or t == System.UInt16 or t == System.Char then
+	  return typecast(obj, t, isEnum);
 	elseif t == System.SByte or t == System.Byte then
-	  local v = tonumber(obj);
-	  v = math.floor(v);
-	  return v % 0x100;
+	  return typecast(obj, t, isEnum);
 	elseif t == System.Boolean then
 		return obj;
 	elseif isEnum then
