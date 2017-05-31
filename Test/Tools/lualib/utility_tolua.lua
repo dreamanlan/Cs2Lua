@@ -170,7 +170,6 @@ function typecast(obj, t, isEnum)
 	    v = v - 0xffff - 1;
 	  end;
 	  return v;
-	  return v;
 	elseif t == System.SByte or t == System.Byte then
 	  local v = tonumber(obj);
 	  v = math.floor(v);
