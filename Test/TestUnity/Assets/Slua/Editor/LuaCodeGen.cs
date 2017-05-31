@@ -1172,6 +1172,7 @@ namespace SLua
 				    && !DontExport(mi)
 				    && !funcname.Contains(fn)
 				    && isUsefullMethod(mi)
+                    && !hasUnsafeParameter(mi.GetParameters())
 				    && !MemberInFilter(t, mi))
 				{
 					WriteFunctionDec(file, fn);
@@ -1869,6 +1870,15 @@ namespace SLua
 			}
 			return false;
 		}
+
+        bool hasUnsafeParameter(ParameterInfo[] pis)
+        {
+            foreach(var pi in pis) {
+                if (pi.ParameterType.IsPointer)
+                    return true;
+            }
+            return false;
+        }
 		
 		void WriteFunctionDec(StreamWriter file, string name)
 		{
@@ -1939,8 +1949,9 @@ namespace SLua
 						MethodInfo mi = cons[n] as MethodInfo;
 						
 						ParameterInfo[] pars = mi.GetParameters();
-						if (isUsefullMethod(mi)
-						    && !mi.ReturnType.ContainsGenericParameters
+                        if (isUsefullMethod(mi)
+                            && !mi.ReturnType.ContainsGenericParameters
+                            && !hasUnsafeParameter(pars)
 						    /*&& !ContainGeneric(pars)*/) // don't support generic method
 						{
 							bool isExtension = IsExtensionMethod(mi) && (bf & BindingFlags.Instance) == BindingFlags.Instance;
