@@ -79,7 +79,7 @@ Extentions = {
 				end;
 				local index; index = list:BinarySearch(item);
 				if (index < 0) then
-					index = invokeintegeroperator(12, "~", nil, index, nil, System.Int32);
+					index = invokeintegeroperator(10, "~", nil, index, nil, System.Int32);
 				end;
 				list:Insert(index, item);
 			end,
@@ -98,7 +98,7 @@ Extentions = {
 
 		local static_fields_build = function()
 			local static_fields = {
-				dateTime1970 = __cs2lua_nil_field_value,
+				dateTime1970 = defaultvalue(System.DateTime, "System.DateTime", true),
 				__cctor_called = false,
 			};
 			return static_fields;

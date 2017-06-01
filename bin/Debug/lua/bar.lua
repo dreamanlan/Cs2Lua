@@ -27,7 +27,7 @@ bar = {
 
 		local static_fields_build = function()
 			local static_fields = {
-				s_DateTime = __cs2lua_nil_field_value,
+				s_DateTime = defaultvalue(System.DateTime, "System.DateTime", true),
 				__cctor_called = false,
 			};
 			return static_fields;
@@ -59,7 +59,7 @@ bar = {
 
 		local instance_fields_build = function()
 			local instance_fields = {
-				m_DateTime = __cs2lua_nil_field_value,
+				m_DateTime = defaultvalue(System.DateTime, "System.DateTime", true),
 				__ctor_called = false,
 			};
 			return instance_fields;

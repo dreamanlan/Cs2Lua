@@ -119,6 +119,8 @@ class TestUnity : MonoBehaviour
 
         string s = "1232312321";
         char c = s[0];
+
+        int[] result = new int[123];
         
         int[,,] arr = new int[2,3,4];
         

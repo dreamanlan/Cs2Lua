@@ -167,10 +167,10 @@ TopLevel.SecondLevel.Foo = {
 			end,
 			TestSwitch = function(this)
 				local i; i = 10;
-				local __compiler_switch_554 = i;
-				if (__compiler_switch_554 == 1) or (__compiler_switch_554 == 3) then
+				local __compiler_switch_556 = i;
+				if (__compiler_switch_556 == 1) or (__compiler_switch_556 == 3) then
 					return ;
-				elseif __compiler_switch_554 == 2 then
+				elseif __compiler_switch_556 == 2 then
 					return ;
 				else
 					return ;
@@ -198,7 +198,7 @@ TopLevel.SecondLevel.Foo = {
 				OnSimple2 = wrapdelegation{},
 				m_Test = 0,
 				m_Test2 = 0,
-				m_TS = __cs2lua_nil_field_value,
+				m_TS = defaultvalue(TopLevel.TestStruct, "TopLevel.TestStruct", false),
 				m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, "System.Collections.Generic.HashSet_T", "ctor", {"one", "two", "three"}),
 				__attributes = TopLevel__SecondLevel__Foo__Attrs,
 				__ctor_called = false,

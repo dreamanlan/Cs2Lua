@@ -932,7 +932,7 @@ namespace RoslynTool.CsToLua
                 var rankspecs = node.Type.RankSpecifiers;
                 var rankspec = rankspecs[0];
                 int rank = rankspec.Rank;
-                if (rank > 1) {
+                if (rank >= 1) {
                     CodeBuilder.Append("(function() local arr = wraparray{};");
                     int ct = rankspec.Sizes.Count;
                     for (int i = 0; i < ct; ++i) {
