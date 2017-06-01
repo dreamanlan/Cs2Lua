@@ -263,6 +263,10 @@ namespace RoslynTool.CsToLua
                 }
                 CodeBuilder.AppendLine();
             }
+            if (SymbolTable.ForXlua && mi.OutParamNames.Count > 0) {
+                CodeBuilder.AppendFormat("{0}local {1};", GetIndentString(), string.Join(", ", mi.OutParamNames.ToArray()));
+                CodeBuilder.AppendLine();
+            }
             string luaModule = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.TranslateToAttribute", 0);
             string luaFuncName = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.TranslateToAttribute", 1);
             if (!string.IsNullOrEmpty(luaModule) || !string.IsNullOrEmpty(luaFuncName)) {
