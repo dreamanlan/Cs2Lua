@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_AccelerationEvent : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.AccelerationEvent o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_AccelerationEvent : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_acceleration(IntPtr l) {
 		try {
 			UnityEngine.AccelerationEvent self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_AccelerationEvent : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_deltaTime(IntPtr l) {
 		try {
 			UnityEngine.AccelerationEvent self;
@@ -42,6 +45,7 @@ public class Lua_UnityEngine_AccelerationEvent : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AccelerationEvent");
 		addMember(l,"acceleration",get_acceleration,null,true);

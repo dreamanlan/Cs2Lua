@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_EventSystems_BaseRaycaster : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Raycast(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.BaseRaycaster self=(UnityEngine.EventSystems.BaseRaycaster)checkSelf(l);
@@ -20,6 +21,7 @@ public class Lua_UnityEngine_EventSystems_BaseRaycaster : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_eventCamera(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.BaseRaycaster self=(UnityEngine.EventSystems.BaseRaycaster)checkSelf(l);
@@ -32,6 +34,7 @@ public class Lua_UnityEngine_EventSystems_BaseRaycaster : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_sortOrderPriority(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.BaseRaycaster self=(UnityEngine.EventSystems.BaseRaycaster)checkSelf(l);
@@ -44,6 +47,7 @@ public class Lua_UnityEngine_EventSystems_BaseRaycaster : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_renderOrderPriority(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.BaseRaycaster self=(UnityEngine.EventSystems.BaseRaycaster)checkSelf(l);
@@ -55,6 +59,7 @@ public class Lua_UnityEngine_EventSystems_BaseRaycaster : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.EventSystems.BaseRaycaster");
 		addMember(l,Raycast);

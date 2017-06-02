@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Plane : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -40,7 +41,7 @@ public class Lua_UnityEngine_Plane : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==0){
+			else if(argc<=1){
 				o=new UnityEngine.Plane();
 				pushValue(l,true);
 				pushObject(l,o);
@@ -53,6 +54,7 @@ public class Lua_UnityEngine_Plane : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetNormalAndPosition(IntPtr l) {
 		try {
 			UnityEngine.Plane self;
@@ -71,6 +73,7 @@ public class Lua_UnityEngine_Plane : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Set3Points(IntPtr l) {
 		try {
 			UnityEngine.Plane self;
@@ -91,6 +94,7 @@ public class Lua_UnityEngine_Plane : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetDistanceToPoint(IntPtr l) {
 		try {
 			UnityEngine.Plane self;
@@ -107,6 +111,7 @@ public class Lua_UnityEngine_Plane : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetSide(IntPtr l) {
 		try {
 			UnityEngine.Plane self;
@@ -123,6 +128,7 @@ public class Lua_UnityEngine_Plane : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SameSide(IntPtr l) {
 		try {
 			UnityEngine.Plane self;
@@ -141,6 +147,7 @@ public class Lua_UnityEngine_Plane : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Raycast(IntPtr l) {
 		try {
 			UnityEngine.Plane self;
@@ -159,6 +166,7 @@ public class Lua_UnityEngine_Plane : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_normal(IntPtr l) {
 		try {
 			UnityEngine.Plane self;
@@ -172,6 +180,7 @@ public class Lua_UnityEngine_Plane : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_normal(IntPtr l) {
 		try {
 			UnityEngine.Plane self;
@@ -188,6 +197,7 @@ public class Lua_UnityEngine_Plane : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_distance(IntPtr l) {
 		try {
 			UnityEngine.Plane self;
@@ -201,6 +211,7 @@ public class Lua_UnityEngine_Plane : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_distance(IntPtr l) {
 		try {
 			UnityEngine.Plane self;
@@ -216,6 +227,7 @@ public class Lua_UnityEngine_Plane : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Plane");
 		addMember(l,SetNormalAndPosition);

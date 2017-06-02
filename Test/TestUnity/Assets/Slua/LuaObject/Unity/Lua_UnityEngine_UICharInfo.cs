@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UICharInfo : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.UICharInfo o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_UICharInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_cursorPos(IntPtr l) {
 		try {
 			UnityEngine.UICharInfo self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_UICharInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_cursorPos(IntPtr l) {
 		try {
 			UnityEngine.UICharInfo self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_UICharInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_charWidth(IntPtr l) {
 		try {
 			UnityEngine.UICharInfo self;
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_UICharInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_charWidth(IntPtr l) {
 		try {
 			UnityEngine.UICharInfo self;
@@ -74,6 +79,7 @@ public class Lua_UnityEngine_UICharInfo : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UICharInfo");
 		addMember(l,"cursorPos",get_cursorPos,set_cursorPos,true);

@@ -1,22 +1,66 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_AnimatorOverrideController : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
+			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.AnimatorOverrideController o;
-			o=new UnityEngine.AnimatorOverrideController();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
+			if(argc==1){
+				o=new UnityEngine.AnimatorOverrideController();
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(argc==2){
+				UnityEngine.RuntimeAnimatorController a1;
+				checkType(l,2,out a1);
+				o=new UnityEngine.AnimatorOverrideController(a1);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			return error(l,"New object failed.");
 		}
 		catch(Exception e) {
 			return error(l,e);
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetOverrides(IntPtr l) {
+		try {
+			UnityEngine.AnimatorOverrideController self=(UnityEngine.AnimatorOverrideController)checkSelf(l);
+			System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<UnityEngine.AnimationClip,UnityEngine.AnimationClip>> a1;
+			checkType(l,2,out a1);
+			self.GetOverrides(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ApplyOverrides(IntPtr l) {
+		try {
+			UnityEngine.AnimatorOverrideController self=(UnityEngine.AnimatorOverrideController)checkSelf(l);
+			System.Collections.Generic.IList<System.Collections.Generic.KeyValuePair<UnityEngine.AnimationClip,UnityEngine.AnimationClip>> a1;
+			checkType(l,2,out a1);
+			self.ApplyOverrides(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_runtimeAnimatorController(IntPtr l) {
 		try {
 			UnityEngine.AnimatorOverrideController self=(UnityEngine.AnimatorOverrideController)checkSelf(l);
@@ -29,6 +73,7 @@ public class Lua_UnityEngine_AnimatorOverrideController : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_runtimeAnimatorController(IntPtr l) {
 		try {
 			UnityEngine.AnimatorOverrideController self=(UnityEngine.AnimatorOverrideController)checkSelf(l);
@@ -43,11 +88,12 @@ public class Lua_UnityEngine_AnimatorOverrideController : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int get_clips(IntPtr l) {
+	[UnityEngine.Scripting.Preserve]
+	static public int get_overridesCount(IntPtr l) {
 		try {
 			UnityEngine.AnimatorOverrideController self=(UnityEngine.AnimatorOverrideController)checkSelf(l);
 			pushValue(l,true);
-			pushValue(l,self.clips);
+			pushValue(l,self.overridesCount);
 			return 2;
 		}
 		catch(Exception e) {
@@ -55,20 +101,7 @@ public class Lua_UnityEngine_AnimatorOverrideController : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int set_clips(IntPtr l) {
-		try {
-			UnityEngine.AnimatorOverrideController self=(UnityEngine.AnimatorOverrideController)checkSelf(l);
-			UnityEngine.AnimationClipPair[] v;
-			checkArray(l,2,out v);
-			self.clips=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int getItem(IntPtr l) {
 		try {
 			UnityEngine.AnimatorOverrideController self=(UnityEngine.AnimatorOverrideController)checkSelf(l);
@@ -98,6 +131,7 @@ public class Lua_UnityEngine_AnimatorOverrideController : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int setItem(IntPtr l) {
 		try {
 			UnityEngine.AnimatorOverrideController self=(UnityEngine.AnimatorOverrideController)checkSelf(l);
@@ -127,12 +161,15 @@ public class Lua_UnityEngine_AnimatorOverrideController : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AnimatorOverrideController");
+		addMember(l,GetOverrides);
+		addMember(l,ApplyOverrides);
 		addMember(l,getItem);
 		addMember(l,setItem);
 		addMember(l,"runtimeAnimatorController",get_runtimeAnimatorController,set_runtimeAnimatorController,true);
-		addMember(l,"clips",get_clips,set_clips,true);
+		addMember(l,"overridesCount",get_overridesCount,null,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.AnimatorOverrideController),typeof(UnityEngine.RuntimeAnimatorController));
 	}
 }

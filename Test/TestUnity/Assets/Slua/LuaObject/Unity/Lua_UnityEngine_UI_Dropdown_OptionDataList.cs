@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_Dropdown_OptionDataList : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown.OptionDataList o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_UI_Dropdown_OptionDataList : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_options(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown.OptionDataList self=(UnityEngine.UI.Dropdown.OptionDataList)checkSelf(l);
@@ -29,6 +31,7 @@ public class Lua_UnityEngine_UI_Dropdown_OptionDataList : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_options(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown.OptionDataList self=(UnityEngine.UI.Dropdown.OptionDataList)checkSelf(l);
@@ -42,6 +45,7 @@ public class Lua_UnityEngine_UI_Dropdown_OptionDataList : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.Dropdown.OptionDataList");
 		addMember(l,"options",get_options,set_options,true);

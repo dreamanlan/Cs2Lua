@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Collision : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.Collision o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_Collision : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_relativeVelocity(IntPtr l) {
 		try {
 			UnityEngine.Collision self=(UnityEngine.Collision)checkSelf(l);
@@ -29,6 +31,7 @@ public class Lua_UnityEngine_Collision : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_rigidbody(IntPtr l) {
 		try {
 			UnityEngine.Collision self=(UnityEngine.Collision)checkSelf(l);
@@ -41,6 +44,7 @@ public class Lua_UnityEngine_Collision : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_collider(IntPtr l) {
 		try {
 			UnityEngine.Collision self=(UnityEngine.Collision)checkSelf(l);
@@ -53,6 +57,7 @@ public class Lua_UnityEngine_Collision : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_transform(IntPtr l) {
 		try {
 			UnityEngine.Collision self=(UnityEngine.Collision)checkSelf(l);
@@ -65,6 +70,7 @@ public class Lua_UnityEngine_Collision : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_gameObject(IntPtr l) {
 		try {
 			UnityEngine.Collision self=(UnityEngine.Collision)checkSelf(l);
@@ -77,6 +83,7 @@ public class Lua_UnityEngine_Collision : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_contacts(IntPtr l) {
 		try {
 			UnityEngine.Collision self=(UnityEngine.Collision)checkSelf(l);
@@ -89,6 +96,7 @@ public class Lua_UnityEngine_Collision : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_impulse(IntPtr l) {
 		try {
 			UnityEngine.Collision self=(UnityEngine.Collision)checkSelf(l);
@@ -100,6 +108,7 @@ public class Lua_UnityEngine_Collision : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Collision");
 		addMember(l,"relativeVelocity",get_relativeVelocity,null,true);

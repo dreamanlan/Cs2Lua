@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Gyroscope : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_rotationRate(IntPtr l) {
 		try {
 			UnityEngine.Gyroscope self=(UnityEngine.Gyroscope)checkSelf(l);
@@ -16,6 +17,7 @@ public class Lua_UnityEngine_Gyroscope : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_rotationRateUnbiased(IntPtr l) {
 		try {
 			UnityEngine.Gyroscope self=(UnityEngine.Gyroscope)checkSelf(l);
@@ -28,6 +30,7 @@ public class Lua_UnityEngine_Gyroscope : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_gravity(IntPtr l) {
 		try {
 			UnityEngine.Gyroscope self=(UnityEngine.Gyroscope)checkSelf(l);
@@ -40,6 +43,7 @@ public class Lua_UnityEngine_Gyroscope : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_userAcceleration(IntPtr l) {
 		try {
 			UnityEngine.Gyroscope self=(UnityEngine.Gyroscope)checkSelf(l);
@@ -52,6 +56,7 @@ public class Lua_UnityEngine_Gyroscope : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_attitude(IntPtr l) {
 		try {
 			UnityEngine.Gyroscope self=(UnityEngine.Gyroscope)checkSelf(l);
@@ -64,6 +69,7 @@ public class Lua_UnityEngine_Gyroscope : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_enabled(IntPtr l) {
 		try {
 			UnityEngine.Gyroscope self=(UnityEngine.Gyroscope)checkSelf(l);
@@ -76,6 +82,7 @@ public class Lua_UnityEngine_Gyroscope : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_enabled(IntPtr l) {
 		try {
 			UnityEngine.Gyroscope self=(UnityEngine.Gyroscope)checkSelf(l);
@@ -90,6 +97,7 @@ public class Lua_UnityEngine_Gyroscope : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_updateInterval(IntPtr l) {
 		try {
 			UnityEngine.Gyroscope self=(UnityEngine.Gyroscope)checkSelf(l);
@@ -102,6 +110,7 @@ public class Lua_UnityEngine_Gyroscope : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_updateInterval(IntPtr l) {
 		try {
 			UnityEngine.Gyroscope self=(UnityEngine.Gyroscope)checkSelf(l);
@@ -115,6 +124,7 @@ public class Lua_UnityEngine_Gyroscope : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Gyroscope");
 		addMember(l,"rotationRate",get_rotationRate,null,true);

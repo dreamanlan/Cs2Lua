@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_WheelJoint2D : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.WheelJoint2D o;
-			o=new UnityEngine.WheelJoint2D();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetMotorTorque(IntPtr l) {
 		try {
 			UnityEngine.WheelJoint2D self=(UnityEngine.WheelJoint2D)checkSelf(l);
@@ -32,6 +20,7 @@ public class Lua_UnityEngine_WheelJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_suspension(IntPtr l) {
 		try {
 			UnityEngine.WheelJoint2D self=(UnityEngine.WheelJoint2D)checkSelf(l);
@@ -44,6 +33,7 @@ public class Lua_UnityEngine_WheelJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_suspension(IntPtr l) {
 		try {
 			UnityEngine.WheelJoint2D self=(UnityEngine.WheelJoint2D)checkSelf(l);
@@ -58,6 +48,7 @@ public class Lua_UnityEngine_WheelJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_useMotor(IntPtr l) {
 		try {
 			UnityEngine.WheelJoint2D self=(UnityEngine.WheelJoint2D)checkSelf(l);
@@ -70,6 +61,7 @@ public class Lua_UnityEngine_WheelJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_useMotor(IntPtr l) {
 		try {
 			UnityEngine.WheelJoint2D self=(UnityEngine.WheelJoint2D)checkSelf(l);
@@ -84,6 +76,7 @@ public class Lua_UnityEngine_WheelJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_motor(IntPtr l) {
 		try {
 			UnityEngine.WheelJoint2D self=(UnityEngine.WheelJoint2D)checkSelf(l);
@@ -96,6 +89,7 @@ public class Lua_UnityEngine_WheelJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_motor(IntPtr l) {
 		try {
 			UnityEngine.WheelJoint2D self=(UnityEngine.WheelJoint2D)checkSelf(l);
@@ -110,6 +104,7 @@ public class Lua_UnityEngine_WheelJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_jointTranslation(IntPtr l) {
 		try {
 			UnityEngine.WheelJoint2D self=(UnityEngine.WheelJoint2D)checkSelf(l);
@@ -122,6 +117,20 @@ public class Lua_UnityEngine_WheelJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_jointLinearSpeed(IntPtr l) {
+		try {
+			UnityEngine.WheelJoint2D self=(UnityEngine.WheelJoint2D)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.jointLinearSpeed);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_jointSpeed(IntPtr l) {
 		try {
 			UnityEngine.WheelJoint2D self=(UnityEngine.WheelJoint2D)checkSelf(l);
@@ -133,6 +142,20 @@ public class Lua_UnityEngine_WheelJoint2D : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_jointAngle(IntPtr l) {
+		try {
+			UnityEngine.WheelJoint2D self=(UnityEngine.WheelJoint2D)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.jointAngle);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.WheelJoint2D");
 		addMember(l,GetMotorTorque);
@@ -140,7 +163,9 @@ public class Lua_UnityEngine_WheelJoint2D : LuaObject {
 		addMember(l,"useMotor",get_useMotor,set_useMotor,true);
 		addMember(l,"motor",get_motor,set_motor,true);
 		addMember(l,"jointTranslation",get_jointTranslation,null,true);
+		addMember(l,"jointLinearSpeed",get_jointLinearSpeed,null,true);
 		addMember(l,"jointSpeed",get_jointSpeed,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.WheelJoint2D),typeof(UnityEngine.AnchoredJoint2D));
+		addMember(l,"jointAngle",get_jointAngle,null,true);
+		createTypeMetatable(l,null, typeof(UnityEngine.WheelJoint2D),typeof(UnityEngine.AnchoredJoint2D));
 	}
 }

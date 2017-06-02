@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_PlayerPrefs : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.PlayerPrefs o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_PlayerPrefs : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetInt_s(IntPtr l) {
 		try {
 			System.String a1;
@@ -32,6 +34,7 @@ public class Lua_UnityEngine_PlayerPrefs : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetInt_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -62,6 +65,7 @@ public class Lua_UnityEngine_PlayerPrefs : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetFloat_s(IntPtr l) {
 		try {
 			System.String a1;
@@ -77,6 +81,7 @@ public class Lua_UnityEngine_PlayerPrefs : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetFloat_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -107,6 +112,7 @@ public class Lua_UnityEngine_PlayerPrefs : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetString_s(IntPtr l) {
 		try {
 			System.String a1;
@@ -122,6 +128,7 @@ public class Lua_UnityEngine_PlayerPrefs : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetString_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -152,6 +159,7 @@ public class Lua_UnityEngine_PlayerPrefs : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int HasKey_s(IntPtr l) {
 		try {
 			System.String a1;
@@ -166,6 +174,7 @@ public class Lua_UnityEngine_PlayerPrefs : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int DeleteKey_s(IntPtr l) {
 		try {
 			System.String a1;
@@ -179,6 +188,7 @@ public class Lua_UnityEngine_PlayerPrefs : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int DeleteAll_s(IntPtr l) {
 		try {
 			UnityEngine.PlayerPrefs.DeleteAll();
@@ -190,6 +200,7 @@ public class Lua_UnityEngine_PlayerPrefs : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Save_s(IntPtr l) {
 		try {
 			UnityEngine.PlayerPrefs.Save();
@@ -200,6 +211,7 @@ public class Lua_UnityEngine_PlayerPrefs : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.PlayerPrefs");
 		addMember(l,SetInt_s);

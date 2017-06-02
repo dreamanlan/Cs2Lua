@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_SpriteState : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.UI.SpriteState o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_UI_SpriteState : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_highlightedSprite(IntPtr l) {
 		try {
 			UnityEngine.UI.SpriteState self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_UI_SpriteState : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_highlightedSprite(IntPtr l) {
 		try {
 			UnityEngine.UI.SpriteState self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_UI_SpriteState : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_pressedSprite(IntPtr l) {
 		try {
 			UnityEngine.UI.SpriteState self;
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_UI_SpriteState : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_pressedSprite(IntPtr l) {
 		try {
 			UnityEngine.UI.SpriteState self;
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_UI_SpriteState : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_disabledSprite(IntPtr l) {
 		try {
 			UnityEngine.UI.SpriteState self;
@@ -88,6 +94,7 @@ public class Lua_UnityEngine_UI_SpriteState : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_disabledSprite(IntPtr l) {
 		try {
 			UnityEngine.UI.SpriteState self;
@@ -103,6 +110,7 @@ public class Lua_UnityEngine_UI_SpriteState : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.SpriteState");
 		addMember(l,"highlightedSprite",get_highlightedSprite,set_highlightedSprite,true);

@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Events_UnityEventBase : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetPersistentEventCount(IntPtr l) {
 		try {
 			UnityEngine.Events.UnityEventBase self=(UnityEngine.Events.UnityEventBase)checkSelf(l);
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_Events_UnityEventBase : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetPersistentTarget(IntPtr l) {
 		try {
 			UnityEngine.Events.UnityEventBase self=(UnityEngine.Events.UnityEventBase)checkSelf(l);
@@ -32,6 +34,7 @@ public class Lua_UnityEngine_Events_UnityEventBase : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetPersistentMethodName(IntPtr l) {
 		try {
 			UnityEngine.Events.UnityEventBase self=(UnityEngine.Events.UnityEventBase)checkSelf(l);
@@ -47,6 +50,7 @@ public class Lua_UnityEngine_Events_UnityEventBase : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetPersistentListenerState(IntPtr l) {
 		try {
 			UnityEngine.Events.UnityEventBase self=(UnityEngine.Events.UnityEventBase)checkSelf(l);
@@ -63,6 +67,7 @@ public class Lua_UnityEngine_Events_UnityEventBase : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RemoveAllListeners(IntPtr l) {
 		try {
 			UnityEngine.Events.UnityEventBase self=(UnityEngine.Events.UnityEventBase)checkSelf(l);
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_Events_UnityEventBase : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetValidMethodInfo_s(IntPtr l) {
 		try {
 			System.Object a1;
@@ -92,6 +98,7 @@ public class Lua_UnityEngine_Events_UnityEventBase : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Events.UnityEventBase");
 		addMember(l,GetPersistentEventCount);

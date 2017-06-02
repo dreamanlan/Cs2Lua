@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_FontUpdateTracker : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int TrackText_s(IntPtr l) {
 		try {
 			UnityEngine.UI.Text a1;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_UI_FontUpdateTracker : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int UntrackText_s(IntPtr l) {
 		try {
 			UnityEngine.UI.Text a1;
@@ -29,6 +31,7 @@ public class Lua_UnityEngine_UI_FontUpdateTracker : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.FontUpdateTracker");
 		addMember(l,TrackText_s);

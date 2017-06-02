@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Logger : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.Logger o;
@@ -19,6 +20,7 @@ public class Lua_UnityEngine_Logger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsLogTypeAllowed(IntPtr l) {
 		try {
 			UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
@@ -34,6 +36,7 @@ public class Lua_UnityEngine_Logger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Log(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -124,6 +127,7 @@ public class Lua_UnityEngine_Logger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int LogWarning(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -158,6 +162,7 @@ public class Lua_UnityEngine_Logger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int LogError(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -192,6 +197,7 @@ public class Lua_UnityEngine_Logger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int LogFormat(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -230,6 +236,7 @@ public class Lua_UnityEngine_Logger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int LogException(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -260,6 +267,7 @@ public class Lua_UnityEngine_Logger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_logHandler(IntPtr l) {
 		try {
 			UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
@@ -272,6 +280,7 @@ public class Lua_UnityEngine_Logger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_logHandler(IntPtr l) {
 		try {
 			UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
@@ -286,6 +295,7 @@ public class Lua_UnityEngine_Logger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_logEnabled(IntPtr l) {
 		try {
 			UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
@@ -298,6 +308,7 @@ public class Lua_UnityEngine_Logger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_logEnabled(IntPtr l) {
 		try {
 			UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
@@ -312,6 +323,7 @@ public class Lua_UnityEngine_Logger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_filterLogType(IntPtr l) {
 		try {
 			UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
@@ -324,6 +336,7 @@ public class Lua_UnityEngine_Logger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_filterLogType(IntPtr l) {
 		try {
 			UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
@@ -337,6 +350,7 @@ public class Lua_UnityEngine_Logger : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Logger");
 		addMember(l,IsLogTypeAllowed);

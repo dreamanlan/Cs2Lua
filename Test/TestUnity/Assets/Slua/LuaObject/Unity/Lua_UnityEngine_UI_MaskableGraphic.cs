@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_MaskableGraphic : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetModifiedMaterial(IntPtr l) {
 		try {
 			UnityEngine.UI.MaskableGraphic self=(UnityEngine.UI.MaskableGraphic)checkSelf(l);
@@ -19,6 +20,7 @@ public class Lua_UnityEngine_UI_MaskableGraphic : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Cull(IntPtr l) {
 		try {
 			UnityEngine.UI.MaskableGraphic self=(UnityEngine.UI.MaskableGraphic)checkSelf(l);
@@ -35,6 +37,7 @@ public class Lua_UnityEngine_UI_MaskableGraphic : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetClipRect(IntPtr l) {
 		try {
 			UnityEngine.UI.MaskableGraphic self=(UnityEngine.UI.MaskableGraphic)checkSelf(l);
@@ -51,6 +54,7 @@ public class Lua_UnityEngine_UI_MaskableGraphic : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RecalculateClipping(IntPtr l) {
 		try {
 			UnityEngine.UI.MaskableGraphic self=(UnityEngine.UI.MaskableGraphic)checkSelf(l);
@@ -63,6 +67,7 @@ public class Lua_UnityEngine_UI_MaskableGraphic : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RecalculateMasking(IntPtr l) {
 		try {
 			UnityEngine.UI.MaskableGraphic self=(UnityEngine.UI.MaskableGraphic)checkSelf(l);
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_UI_MaskableGraphic : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_onCullStateChanged(IntPtr l) {
 		try {
 			UnityEngine.UI.MaskableGraphic self=(UnityEngine.UI.MaskableGraphic)checkSelf(l);
@@ -87,6 +93,7 @@ public class Lua_UnityEngine_UI_MaskableGraphic : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_onCullStateChanged(IntPtr l) {
 		try {
 			UnityEngine.UI.MaskableGraphic self=(UnityEngine.UI.MaskableGraphic)checkSelf(l);
@@ -101,6 +108,7 @@ public class Lua_UnityEngine_UI_MaskableGraphic : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_maskable(IntPtr l) {
 		try {
 			UnityEngine.UI.MaskableGraphic self=(UnityEngine.UI.MaskableGraphic)checkSelf(l);
@@ -113,6 +121,7 @@ public class Lua_UnityEngine_UI_MaskableGraphic : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_maskable(IntPtr l) {
 		try {
 			UnityEngine.UI.MaskableGraphic self=(UnityEngine.UI.MaskableGraphic)checkSelf(l);
@@ -126,6 +135,7 @@ public class Lua_UnityEngine_UI_MaskableGraphic : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.MaskableGraphic");
 		addMember(l,GetModifiedMaterial);

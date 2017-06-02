@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Rebuild(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -18,6 +19,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int LayoutComplete(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GraphicUpdateComplete(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -42,6 +45,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsActive(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -55,6 +59,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int StopMovement(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -67,6 +72,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnScroll(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -81,6 +87,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnInitializePotentialDrag(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -95,6 +102,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnBeginDrag(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -109,6 +117,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnEndDrag(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -123,6 +132,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnDrag(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -137,6 +147,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CalculateLayoutInputHorizontal(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -149,6 +160,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CalculateLayoutInputVertical(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -161,6 +173,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetLayoutHorizontal(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -173,6 +186,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetLayoutVertical(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -185,6 +199,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_content(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -197,6 +212,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_content(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -211,6 +227,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_horizontal(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -223,6 +240,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_horizontal(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -237,6 +255,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_vertical(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -249,6 +268,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_vertical(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -263,6 +283,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_movementType(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -275,6 +296,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_movementType(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -289,6 +311,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_elasticity(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -301,6 +324,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_elasticity(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -315,6 +339,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_inertia(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -327,6 +352,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_inertia(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -341,6 +367,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_decelerationRate(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -353,6 +380,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_decelerationRate(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -367,6 +395,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_scrollSensitivity(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -379,6 +408,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_scrollSensitivity(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -393,6 +423,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_viewport(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -405,6 +436,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_viewport(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -419,6 +451,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_horizontalScrollbar(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -431,6 +464,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_horizontalScrollbar(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -445,6 +479,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_verticalScrollbar(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -457,6 +492,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_verticalScrollbar(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -471,6 +507,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_horizontalScrollbarVisibility(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -483,6 +520,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_horizontalScrollbarVisibility(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -497,6 +535,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_verticalScrollbarVisibility(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -509,6 +548,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_verticalScrollbarVisibility(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -523,6 +563,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_horizontalScrollbarSpacing(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -535,6 +576,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_horizontalScrollbarSpacing(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -549,6 +591,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_verticalScrollbarSpacing(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -561,6 +604,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_verticalScrollbarSpacing(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -575,6 +619,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_onValueChanged(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -587,6 +632,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_onValueChanged(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -601,6 +647,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_velocity(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -613,6 +660,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_velocity(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -627,6 +675,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_normalizedPosition(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -639,6 +688,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_normalizedPosition(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -653,6 +703,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_horizontalNormalizedPosition(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -665,6 +716,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_horizontalNormalizedPosition(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -679,6 +731,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_verticalNormalizedPosition(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -691,6 +744,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_verticalNormalizedPosition(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -705,6 +759,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_minWidth(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -717,6 +772,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_preferredWidth(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -729,6 +785,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_flexibleWidth(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -741,6 +798,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_minHeight(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -753,6 +811,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_preferredHeight(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -765,6 +824,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_flexibleHeight(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -777,6 +837,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_layoutPriority(IntPtr l) {
 		try {
 			UnityEngine.UI.ScrollRect self=(UnityEngine.UI.ScrollRect)checkSelf(l);
@@ -788,6 +849,7 @@ public class Lua_UnityEngine_UI_ScrollRect : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.ScrollRect");
 		addMember(l,Rebuild);

@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnPointerEnter(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventTrigger self=(UnityEngine.EventSystems.EventTrigger)checkSelf(l);
@@ -18,6 +19,7 @@ public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnPointerExit(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventTrigger self=(UnityEngine.EventSystems.EventTrigger)checkSelf(l);
@@ -32,6 +34,7 @@ public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnDrag(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventTrigger self=(UnityEngine.EventSystems.EventTrigger)checkSelf(l);
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnDrop(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventTrigger self=(UnityEngine.EventSystems.EventTrigger)checkSelf(l);
@@ -60,6 +64,7 @@ public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnPointerDown(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventTrigger self=(UnityEngine.EventSystems.EventTrigger)checkSelf(l);
@@ -74,6 +79,7 @@ public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnPointerUp(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventTrigger self=(UnityEngine.EventSystems.EventTrigger)checkSelf(l);
@@ -88,6 +94,7 @@ public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnPointerClick(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventTrigger self=(UnityEngine.EventSystems.EventTrigger)checkSelf(l);
@@ -102,6 +109,7 @@ public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnSelect(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventTrigger self=(UnityEngine.EventSystems.EventTrigger)checkSelf(l);
@@ -116,6 +124,7 @@ public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnDeselect(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventTrigger self=(UnityEngine.EventSystems.EventTrigger)checkSelf(l);
@@ -130,6 +139,7 @@ public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnScroll(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventTrigger self=(UnityEngine.EventSystems.EventTrigger)checkSelf(l);
@@ -144,6 +154,7 @@ public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnMove(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventTrigger self=(UnityEngine.EventSystems.EventTrigger)checkSelf(l);
@@ -158,6 +169,7 @@ public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnUpdateSelected(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventTrigger self=(UnityEngine.EventSystems.EventTrigger)checkSelf(l);
@@ -172,6 +184,7 @@ public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnInitializePotentialDrag(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventTrigger self=(UnityEngine.EventSystems.EventTrigger)checkSelf(l);
@@ -186,6 +199,7 @@ public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnBeginDrag(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventTrigger self=(UnityEngine.EventSystems.EventTrigger)checkSelf(l);
@@ -200,6 +214,7 @@ public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnEndDrag(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventTrigger self=(UnityEngine.EventSystems.EventTrigger)checkSelf(l);
@@ -214,6 +229,7 @@ public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnSubmit(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventTrigger self=(UnityEngine.EventSystems.EventTrigger)checkSelf(l);
@@ -228,6 +244,7 @@ public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnCancel(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventTrigger self=(UnityEngine.EventSystems.EventTrigger)checkSelf(l);
@@ -242,6 +259,7 @@ public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_triggers(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventTrigger self=(UnityEngine.EventSystems.EventTrigger)checkSelf(l);
@@ -254,6 +272,7 @@ public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_triggers(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventTrigger self=(UnityEngine.EventSystems.EventTrigger)checkSelf(l);
@@ -267,6 +286,7 @@ public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.EventSystems.EventTrigger");
 		addMember(l,OnPointerEnter);

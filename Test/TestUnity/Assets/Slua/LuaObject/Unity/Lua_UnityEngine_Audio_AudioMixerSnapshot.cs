@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Audio_AudioMixerSnapshot : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int TransitionTo(IntPtr l) {
 		try {
 			UnityEngine.Audio.AudioMixerSnapshot self=(UnityEngine.Audio.AudioMixerSnapshot)checkSelf(l);
@@ -18,6 +19,7 @@ public class Lua_UnityEngine_Audio_AudioMixerSnapshot : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_audioMixer(IntPtr l) {
 		try {
 			UnityEngine.Audio.AudioMixerSnapshot self=(UnityEngine.Audio.AudioMixerSnapshot)checkSelf(l);
@@ -29,6 +31,7 @@ public class Lua_UnityEngine_Audio_AudioMixerSnapshot : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Audio.AudioMixerSnapshot");
 		addMember(l,TransitionTo);

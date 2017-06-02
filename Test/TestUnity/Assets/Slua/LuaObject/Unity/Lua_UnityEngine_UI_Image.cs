@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_Image : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnBeforeSerialize(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -16,6 +17,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnAfterDeserialize(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -28,6 +30,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetNativeSize(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -40,6 +43,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CalculateLayoutInputHorizontal(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -52,6 +56,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CalculateLayoutInputVertical(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -64,6 +69,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsRaycastLocationValid(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -81,6 +87,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_sprite(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -93,6 +100,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_sprite(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -107,6 +115,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_overrideSprite(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -119,6 +128,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_overrideSprite(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -133,6 +143,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_type(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -145,6 +156,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_type(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -159,6 +171,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_preserveAspect(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -171,6 +184,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_preserveAspect(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -185,6 +199,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_fillCenter(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -197,6 +212,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_fillCenter(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -211,6 +227,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_fillMethod(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -223,6 +240,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_fillMethod(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -237,6 +255,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_fillAmount(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -249,6 +268,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_fillAmount(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -263,6 +283,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_fillClockwise(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -275,6 +296,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_fillClockwise(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -289,6 +311,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_fillOrigin(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -301,6 +324,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_fillOrigin(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -315,11 +339,12 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int get_eventAlphaThreshold(IntPtr l) {
+	[UnityEngine.Scripting.Preserve]
+	static public int get_alphaHitTestMinimumThreshold(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
 			pushValue(l,true);
-			pushValue(l,self.eventAlphaThreshold);
+			pushValue(l,self.alphaHitTestMinimumThreshold);
 			return 2;
 		}
 		catch(Exception e) {
@@ -327,12 +352,13 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int set_eventAlphaThreshold(IntPtr l) {
+	[UnityEngine.Scripting.Preserve]
+	static public int set_alphaHitTestMinimumThreshold(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
 			float v;
 			checkType(l,2,out v);
-			self.eventAlphaThreshold=v;
+			self.alphaHitTestMinimumThreshold=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -341,6 +367,19 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_defaultETC1GraphicMaterial(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.UI.Image.defaultETC1GraphicMaterial);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_mainTexture(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -353,6 +392,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_hasBorder(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -365,6 +405,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_pixelsPerUnit(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -377,6 +418,35 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_material(IntPtr l) {
+		try {
+			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.material);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_material(IntPtr l) {
+		try {
+			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
+			UnityEngine.Material v;
+			checkType(l,2,out v);
+			self.material=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_minWidth(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -389,6 +459,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_preferredWidth(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -401,6 +472,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_flexibleWidth(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -413,6 +485,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_minHeight(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -425,6 +498,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_preferredHeight(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -437,6 +511,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_flexibleHeight(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -449,6 +524,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_layoutPriority(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -460,6 +536,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.Image");
 		addMember(l,OnBeforeSerialize);
@@ -477,10 +554,12 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		addMember(l,"fillAmount",get_fillAmount,set_fillAmount,true);
 		addMember(l,"fillClockwise",get_fillClockwise,set_fillClockwise,true);
 		addMember(l,"fillOrigin",get_fillOrigin,set_fillOrigin,true);
-		addMember(l,"eventAlphaThreshold",get_eventAlphaThreshold,set_eventAlphaThreshold,true);
+		addMember(l,"alphaHitTestMinimumThreshold",get_alphaHitTestMinimumThreshold,set_alphaHitTestMinimumThreshold,true);
+		addMember(l,"defaultETC1GraphicMaterial",get_defaultETC1GraphicMaterial,null,false);
 		addMember(l,"mainTexture",get_mainTexture,null,true);
 		addMember(l,"hasBorder",get_hasBorder,null,true);
 		addMember(l,"pixelsPerUnit",get_pixelsPerUnit,null,true);
+		addMember(l,"material",get_material,set_material,true);
 		addMember(l,"minWidth",get_minWidth,null,true);
 		addMember(l,"preferredWidth",get_preferredWidth,null,true);
 		addMember(l,"flexibleWidth",get_flexibleWidth,null,true);

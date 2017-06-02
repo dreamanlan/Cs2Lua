@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_BoxCollider : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.BoxCollider o;
-			o=new UnityEngine.BoxCollider();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_center(IntPtr l) {
 		try {
 			UnityEngine.BoxCollider self=(UnityEngine.BoxCollider)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_BoxCollider : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_center(IntPtr l) {
 		try {
 			UnityEngine.BoxCollider self=(UnityEngine.BoxCollider)checkSelf(l);
@@ -43,6 +32,7 @@ public class Lua_UnityEngine_BoxCollider : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_size(IntPtr l) {
 		try {
 			UnityEngine.BoxCollider self=(UnityEngine.BoxCollider)checkSelf(l);
@@ -55,6 +45,7 @@ public class Lua_UnityEngine_BoxCollider : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_size(IntPtr l) {
 		try {
 			UnityEngine.BoxCollider self=(UnityEngine.BoxCollider)checkSelf(l);
@@ -68,10 +59,11 @@ public class Lua_UnityEngine_BoxCollider : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.BoxCollider");
 		addMember(l,"center",get_center,set_center,true);
 		addMember(l,"size",get_size,set_size,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.BoxCollider),typeof(UnityEngine.Collider));
+		createTypeMetatable(l,null, typeof(UnityEngine.BoxCollider),typeof(UnityEngine.Collider));
 	}
 }

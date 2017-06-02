@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_ConstantForce : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.ConstantForce o;
-			o=new UnityEngine.ConstantForce();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_force(IntPtr l) {
 		try {
 			UnityEngine.ConstantForce self=(UnityEngine.ConstantForce)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_ConstantForce : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_force(IntPtr l) {
 		try {
 			UnityEngine.ConstantForce self=(UnityEngine.ConstantForce)checkSelf(l);
@@ -43,6 +32,7 @@ public class Lua_UnityEngine_ConstantForce : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_relativeForce(IntPtr l) {
 		try {
 			UnityEngine.ConstantForce self=(UnityEngine.ConstantForce)checkSelf(l);
@@ -55,6 +45,7 @@ public class Lua_UnityEngine_ConstantForce : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_relativeForce(IntPtr l) {
 		try {
 			UnityEngine.ConstantForce self=(UnityEngine.ConstantForce)checkSelf(l);
@@ -69,6 +60,7 @@ public class Lua_UnityEngine_ConstantForce : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_torque(IntPtr l) {
 		try {
 			UnityEngine.ConstantForce self=(UnityEngine.ConstantForce)checkSelf(l);
@@ -81,6 +73,7 @@ public class Lua_UnityEngine_ConstantForce : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_torque(IntPtr l) {
 		try {
 			UnityEngine.ConstantForce self=(UnityEngine.ConstantForce)checkSelf(l);
@@ -95,6 +88,7 @@ public class Lua_UnityEngine_ConstantForce : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_relativeTorque(IntPtr l) {
 		try {
 			UnityEngine.ConstantForce self=(UnityEngine.ConstantForce)checkSelf(l);
@@ -107,6 +101,7 @@ public class Lua_UnityEngine_ConstantForce : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_relativeTorque(IntPtr l) {
 		try {
 			UnityEngine.ConstantForce self=(UnityEngine.ConstantForce)checkSelf(l);
@@ -120,12 +115,13 @@ public class Lua_UnityEngine_ConstantForce : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ConstantForce");
 		addMember(l,"force",get_force,set_force,true);
 		addMember(l,"relativeForce",get_relativeForce,set_relativeForce,true);
 		addMember(l,"torque",get_torque,set_torque,true);
 		addMember(l,"relativeTorque",get_relativeTorque,set_relativeTorque,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ConstantForce),typeof(UnityEngine.Behaviour));
+		createTypeMetatable(l,null, typeof(UnityEngine.ConstantForce),typeof(UnityEngine.Behaviour));
 	}
 }

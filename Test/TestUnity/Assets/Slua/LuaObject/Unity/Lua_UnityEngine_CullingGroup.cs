@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_CullingGroup : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.CullingGroup o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_CullingGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Dispose(IntPtr l) {
 		try {
 			UnityEngine.CullingGroup self=(UnityEngine.CullingGroup)checkSelf(l);
@@ -29,6 +31,7 @@ public class Lua_UnityEngine_CullingGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetBoundingSpheres(IntPtr l) {
 		try {
 			UnityEngine.CullingGroup self=(UnityEngine.CullingGroup)checkSelf(l);
@@ -43,6 +46,7 @@ public class Lua_UnityEngine_CullingGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetBoundingSphereCount(IntPtr l) {
 		try {
 			UnityEngine.CullingGroup self=(UnityEngine.CullingGroup)checkSelf(l);
@@ -57,6 +61,7 @@ public class Lua_UnityEngine_CullingGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int EraseSwapBack(IntPtr l) {
 		try {
 			UnityEngine.CullingGroup self=(UnityEngine.CullingGroup)checkSelf(l);
@@ -71,6 +76,7 @@ public class Lua_UnityEngine_CullingGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int QueryIndices(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -124,6 +130,7 @@ public class Lua_UnityEngine_CullingGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsVisible(IntPtr l) {
 		try {
 			UnityEngine.CullingGroup self=(UnityEngine.CullingGroup)checkSelf(l);
@@ -139,6 +146,7 @@ public class Lua_UnityEngine_CullingGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetDistance(IntPtr l) {
 		try {
 			UnityEngine.CullingGroup self=(UnityEngine.CullingGroup)checkSelf(l);
@@ -154,6 +162,7 @@ public class Lua_UnityEngine_CullingGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetBoundingDistances(IntPtr l) {
 		try {
 			UnityEngine.CullingGroup self=(UnityEngine.CullingGroup)checkSelf(l);
@@ -168,6 +177,7 @@ public class Lua_UnityEngine_CullingGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetDistanceReferencePoint(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -196,6 +206,7 @@ public class Lua_UnityEngine_CullingGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_onStateChanged(IntPtr l) {
 		try {
 			UnityEngine.CullingGroup self=(UnityEngine.CullingGroup)checkSelf(l);
@@ -212,6 +223,7 @@ public class Lua_UnityEngine_CullingGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_enabled(IntPtr l) {
 		try {
 			UnityEngine.CullingGroup self=(UnityEngine.CullingGroup)checkSelf(l);
@@ -224,6 +236,7 @@ public class Lua_UnityEngine_CullingGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_enabled(IntPtr l) {
 		try {
 			UnityEngine.CullingGroup self=(UnityEngine.CullingGroup)checkSelf(l);
@@ -238,6 +251,7 @@ public class Lua_UnityEngine_CullingGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_targetCamera(IntPtr l) {
 		try {
 			UnityEngine.CullingGroup self=(UnityEngine.CullingGroup)checkSelf(l);
@@ -250,6 +264,7 @@ public class Lua_UnityEngine_CullingGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_targetCamera(IntPtr l) {
 		try {
 			UnityEngine.CullingGroup self=(UnityEngine.CullingGroup)checkSelf(l);
@@ -263,6 +278,7 @@ public class Lua_UnityEngine_CullingGroup : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.CullingGroup");
 		addMember(l,Dispose);

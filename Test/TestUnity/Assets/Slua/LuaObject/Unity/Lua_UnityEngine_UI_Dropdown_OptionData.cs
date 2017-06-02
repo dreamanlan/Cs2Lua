@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_Dropdown_OptionData : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -47,6 +48,7 @@ public class Lua_UnityEngine_UI_Dropdown_OptionData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_text(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown.OptionData self=(UnityEngine.UI.Dropdown.OptionData)checkSelf(l);
@@ -59,6 +61,7 @@ public class Lua_UnityEngine_UI_Dropdown_OptionData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_text(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown.OptionData self=(UnityEngine.UI.Dropdown.OptionData)checkSelf(l);
@@ -73,6 +76,7 @@ public class Lua_UnityEngine_UI_Dropdown_OptionData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_image(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown.OptionData self=(UnityEngine.UI.Dropdown.OptionData)checkSelf(l);
@@ -85,6 +89,7 @@ public class Lua_UnityEngine_UI_Dropdown_OptionData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_image(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown.OptionData self=(UnityEngine.UI.Dropdown.OptionData)checkSelf(l);
@@ -98,6 +103,7 @@ public class Lua_UnityEngine_UI_Dropdown_OptionData : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.Dropdown.OptionData");
 		addMember(l,"text",get_text,set_text,true);

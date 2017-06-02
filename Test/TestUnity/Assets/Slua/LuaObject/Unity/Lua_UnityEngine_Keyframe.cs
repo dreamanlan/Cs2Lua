@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Keyframe : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -32,7 +33,7 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==0){
+			else if(argc<=1){
 				o=new UnityEngine.Keyframe();
 				pushValue(l,true);
 				pushObject(l,o);
@@ -45,6 +46,7 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_time(IntPtr l) {
 		try {
 			UnityEngine.Keyframe self;
@@ -58,6 +60,7 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_time(IntPtr l) {
 		try {
 			UnityEngine.Keyframe self;
@@ -74,6 +77,7 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_value(IntPtr l) {
 		try {
 			UnityEngine.Keyframe self;
@@ -87,6 +91,7 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_value(IntPtr l) {
 		try {
 			UnityEngine.Keyframe self;
@@ -103,6 +108,7 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_inTangent(IntPtr l) {
 		try {
 			UnityEngine.Keyframe self;
@@ -116,6 +122,7 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_inTangent(IntPtr l) {
 		try {
 			UnityEngine.Keyframe self;
@@ -132,6 +139,7 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_outTangent(IntPtr l) {
 		try {
 			UnityEngine.Keyframe self;
@@ -145,6 +153,7 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_outTangent(IntPtr l) {
 		try {
 			UnityEngine.Keyframe self;
@@ -161,6 +170,7 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_tangentMode(IntPtr l) {
 		try {
 			UnityEngine.Keyframe self;
@@ -174,6 +184,7 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_tangentMode(IntPtr l) {
 		try {
 			UnityEngine.Keyframe self;
@@ -189,6 +200,7 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Keyframe");
 		addMember(l,"time",get_time,set_time,true);

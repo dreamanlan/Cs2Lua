@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_AudioChorusFilter : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.AudioChorusFilter o;
-			o=new UnityEngine.AudioChorusFilter();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_dryMix(IntPtr l) {
 		try {
 			UnityEngine.AudioChorusFilter self=(UnityEngine.AudioChorusFilter)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_AudioChorusFilter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_dryMix(IntPtr l) {
 		try {
 			UnityEngine.AudioChorusFilter self=(UnityEngine.AudioChorusFilter)checkSelf(l);
@@ -43,6 +32,7 @@ public class Lua_UnityEngine_AudioChorusFilter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_wetMix1(IntPtr l) {
 		try {
 			UnityEngine.AudioChorusFilter self=(UnityEngine.AudioChorusFilter)checkSelf(l);
@@ -55,6 +45,7 @@ public class Lua_UnityEngine_AudioChorusFilter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_wetMix1(IntPtr l) {
 		try {
 			UnityEngine.AudioChorusFilter self=(UnityEngine.AudioChorusFilter)checkSelf(l);
@@ -69,6 +60,7 @@ public class Lua_UnityEngine_AudioChorusFilter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_wetMix2(IntPtr l) {
 		try {
 			UnityEngine.AudioChorusFilter self=(UnityEngine.AudioChorusFilter)checkSelf(l);
@@ -81,6 +73,7 @@ public class Lua_UnityEngine_AudioChorusFilter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_wetMix2(IntPtr l) {
 		try {
 			UnityEngine.AudioChorusFilter self=(UnityEngine.AudioChorusFilter)checkSelf(l);
@@ -95,6 +88,7 @@ public class Lua_UnityEngine_AudioChorusFilter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_wetMix3(IntPtr l) {
 		try {
 			UnityEngine.AudioChorusFilter self=(UnityEngine.AudioChorusFilter)checkSelf(l);
@@ -107,6 +101,7 @@ public class Lua_UnityEngine_AudioChorusFilter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_wetMix3(IntPtr l) {
 		try {
 			UnityEngine.AudioChorusFilter self=(UnityEngine.AudioChorusFilter)checkSelf(l);
@@ -121,6 +116,7 @@ public class Lua_UnityEngine_AudioChorusFilter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_delay(IntPtr l) {
 		try {
 			UnityEngine.AudioChorusFilter self=(UnityEngine.AudioChorusFilter)checkSelf(l);
@@ -133,6 +129,7 @@ public class Lua_UnityEngine_AudioChorusFilter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_delay(IntPtr l) {
 		try {
 			UnityEngine.AudioChorusFilter self=(UnityEngine.AudioChorusFilter)checkSelf(l);
@@ -147,6 +144,7 @@ public class Lua_UnityEngine_AudioChorusFilter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_rate(IntPtr l) {
 		try {
 			UnityEngine.AudioChorusFilter self=(UnityEngine.AudioChorusFilter)checkSelf(l);
@@ -159,6 +157,7 @@ public class Lua_UnityEngine_AudioChorusFilter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_rate(IntPtr l) {
 		try {
 			UnityEngine.AudioChorusFilter self=(UnityEngine.AudioChorusFilter)checkSelf(l);
@@ -173,6 +172,7 @@ public class Lua_UnityEngine_AudioChorusFilter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_depth(IntPtr l) {
 		try {
 			UnityEngine.AudioChorusFilter self=(UnityEngine.AudioChorusFilter)checkSelf(l);
@@ -185,6 +185,7 @@ public class Lua_UnityEngine_AudioChorusFilter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_depth(IntPtr l) {
 		try {
 			UnityEngine.AudioChorusFilter self=(UnityEngine.AudioChorusFilter)checkSelf(l);
@@ -198,6 +199,7 @@ public class Lua_UnityEngine_AudioChorusFilter : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AudioChorusFilter");
 		addMember(l,"dryMix",get_dryMix,set_dryMix,true);
@@ -207,6 +209,6 @@ public class Lua_UnityEngine_AudioChorusFilter : LuaObject {
 		addMember(l,"delay",get_delay,set_delay,true);
 		addMember(l,"rate",get_rate,set_rate,true);
 		addMember(l,"depth",get_depth,set_depth,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.AudioChorusFilter),typeof(UnityEngine.Behaviour));
+		createTypeMetatable(l,null, typeof(UnityEngine.AudioChorusFilter),typeof(UnityEngine.Behaviour));
 	}
 }

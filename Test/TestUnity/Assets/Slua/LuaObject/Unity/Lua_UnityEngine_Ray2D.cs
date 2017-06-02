@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Ray2D : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.Ray2D o;
@@ -21,6 +22,7 @@ public class Lua_UnityEngine_Ray2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetPoint(IntPtr l) {
 		try {
 			UnityEngine.Ray2D self;
@@ -37,6 +39,7 @@ public class Lua_UnityEngine_Ray2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_origin(IntPtr l) {
 		try {
 			UnityEngine.Ray2D self;
@@ -50,6 +53,7 @@ public class Lua_UnityEngine_Ray2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_origin(IntPtr l) {
 		try {
 			UnityEngine.Ray2D self;
@@ -66,6 +70,7 @@ public class Lua_UnityEngine_Ray2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_direction(IntPtr l) {
 		try {
 			UnityEngine.Ray2D self;
@@ -79,6 +84,7 @@ public class Lua_UnityEngine_Ray2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_direction(IntPtr l) {
 		try {
 			UnityEngine.Ray2D self;
@@ -94,6 +100,7 @@ public class Lua_UnityEngine_Ray2D : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Ray2D");
 		addMember(l,GetPoint);

@@ -25,7 +25,7 @@ namespace SLua
 {
 	using UnityEngine;
 	using System.Collections;
-	using LuaInterface;
+	using SLua;
 	using SLua;
 	using System;
 
@@ -134,7 +134,7 @@ UnityEngine.Yield = uCoroutine.yield
                         break;
                     else
                         yield return null;
-                } else if (r == (int)LuaInterface.LuaThreadStatus.LUA_YIELD) {
+                } else if (r == (int)SLua.LuaThreadStatus.LUA_YIELD) {
                     yield return null;
                 } else {
                     break;

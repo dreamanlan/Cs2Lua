@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_JointSuspension2D : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.JointSuspension2D o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_JointSuspension2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_dampingRatio(IntPtr l) {
 		try {
 			UnityEngine.JointSuspension2D self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_JointSuspension2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_dampingRatio(IntPtr l) {
 		try {
 			UnityEngine.JointSuspension2D self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_JointSuspension2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_frequency(IntPtr l) {
 		try {
 			UnityEngine.JointSuspension2D self;
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_JointSuspension2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_frequency(IntPtr l) {
 		try {
 			UnityEngine.JointSuspension2D self;
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_JointSuspension2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_angle(IntPtr l) {
 		try {
 			UnityEngine.JointSuspension2D self;
@@ -88,6 +94,7 @@ public class Lua_UnityEngine_JointSuspension2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_angle(IntPtr l) {
 		try {
 			UnityEngine.JointSuspension2D self;
@@ -103,6 +110,7 @@ public class Lua_UnityEngine_JointSuspension2D : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.JointSuspension2D");
 		addMember(l,"dampingRatio",get_dampingRatio,set_dampingRatio,true);

@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_HingeJoint2D : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.HingeJoint2D o;
-			o=new UnityEngine.HingeJoint2D();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetMotorTorque(IntPtr l) {
 		try {
 			UnityEngine.HingeJoint2D self=(UnityEngine.HingeJoint2D)checkSelf(l);
@@ -32,6 +20,7 @@ public class Lua_UnityEngine_HingeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_useMotor(IntPtr l) {
 		try {
 			UnityEngine.HingeJoint2D self=(UnityEngine.HingeJoint2D)checkSelf(l);
@@ -44,6 +33,7 @@ public class Lua_UnityEngine_HingeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_useMotor(IntPtr l) {
 		try {
 			UnityEngine.HingeJoint2D self=(UnityEngine.HingeJoint2D)checkSelf(l);
@@ -58,6 +48,7 @@ public class Lua_UnityEngine_HingeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_useLimits(IntPtr l) {
 		try {
 			UnityEngine.HingeJoint2D self=(UnityEngine.HingeJoint2D)checkSelf(l);
@@ -70,6 +61,7 @@ public class Lua_UnityEngine_HingeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_useLimits(IntPtr l) {
 		try {
 			UnityEngine.HingeJoint2D self=(UnityEngine.HingeJoint2D)checkSelf(l);
@@ -84,6 +76,7 @@ public class Lua_UnityEngine_HingeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_motor(IntPtr l) {
 		try {
 			UnityEngine.HingeJoint2D self=(UnityEngine.HingeJoint2D)checkSelf(l);
@@ -96,6 +89,7 @@ public class Lua_UnityEngine_HingeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_motor(IntPtr l) {
 		try {
 			UnityEngine.HingeJoint2D self=(UnityEngine.HingeJoint2D)checkSelf(l);
@@ -110,6 +104,7 @@ public class Lua_UnityEngine_HingeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_limits(IntPtr l) {
 		try {
 			UnityEngine.HingeJoint2D self=(UnityEngine.HingeJoint2D)checkSelf(l);
@@ -122,6 +117,7 @@ public class Lua_UnityEngine_HingeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_limits(IntPtr l) {
 		try {
 			UnityEngine.HingeJoint2D self=(UnityEngine.HingeJoint2D)checkSelf(l);
@@ -136,6 +132,7 @@ public class Lua_UnityEngine_HingeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_limitState(IntPtr l) {
 		try {
 			UnityEngine.HingeJoint2D self=(UnityEngine.HingeJoint2D)checkSelf(l);
@@ -148,6 +145,7 @@ public class Lua_UnityEngine_HingeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_referenceAngle(IntPtr l) {
 		try {
 			UnityEngine.HingeJoint2D self=(UnityEngine.HingeJoint2D)checkSelf(l);
@@ -160,6 +158,7 @@ public class Lua_UnityEngine_HingeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_jointAngle(IntPtr l) {
 		try {
 			UnityEngine.HingeJoint2D self=(UnityEngine.HingeJoint2D)checkSelf(l);
@@ -172,6 +171,7 @@ public class Lua_UnityEngine_HingeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_jointSpeed(IntPtr l) {
 		try {
 			UnityEngine.HingeJoint2D self=(UnityEngine.HingeJoint2D)checkSelf(l);
@@ -183,6 +183,7 @@ public class Lua_UnityEngine_HingeJoint2D : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.HingeJoint2D");
 		addMember(l,GetMotorTorque);
@@ -194,6 +195,6 @@ public class Lua_UnityEngine_HingeJoint2D : LuaObject {
 		addMember(l,"referenceAngle",get_referenceAngle,null,true);
 		addMember(l,"jointAngle",get_jointAngle,null,true);
 		addMember(l,"jointSpeed",get_jointSpeed,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.HingeJoint2D),typeof(UnityEngine.AnchoredJoint2D));
+		createTypeMetatable(l,null, typeof(UnityEngine.HingeJoint2D),typeof(UnityEngine.AnchoredJoint2D));
 	}
 }

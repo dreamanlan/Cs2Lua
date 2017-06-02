@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Color32 : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.Color32 o;
@@ -25,6 +26,7 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Lerp_s(IntPtr l) {
 		try {
 			UnityEngine.Color32 a1;
@@ -43,6 +45,7 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int LerpUnclamped_s(IntPtr l) {
 		try {
 			UnityEngine.Color32 a1;
@@ -61,6 +64,7 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_r(IntPtr l) {
 		try {
 			UnityEngine.Color32 self;
@@ -74,6 +78,7 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_r(IntPtr l) {
 		try {
 			UnityEngine.Color32 self;
@@ -90,6 +95,7 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_g(IntPtr l) {
 		try {
 			UnityEngine.Color32 self;
@@ -103,6 +109,7 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_g(IntPtr l) {
 		try {
 			UnityEngine.Color32 self;
@@ -119,6 +126,7 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_b(IntPtr l) {
 		try {
 			UnityEngine.Color32 self;
@@ -132,6 +140,7 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_b(IntPtr l) {
 		try {
 			UnityEngine.Color32 self;
@@ -148,6 +157,7 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_a(IntPtr l) {
 		try {
 			UnityEngine.Color32 self;
@@ -161,6 +171,7 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_a(IntPtr l) {
 		try {
 			UnityEngine.Color32 self;
@@ -176,6 +187,7 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Color32");
 		addMember(l,Lerp_s);

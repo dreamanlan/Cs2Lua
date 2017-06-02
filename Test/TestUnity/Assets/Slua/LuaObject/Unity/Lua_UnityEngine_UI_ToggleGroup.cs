@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_ToggleGroup : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int NotifyToggleOn(IntPtr l) {
 		try {
 			UnityEngine.UI.ToggleGroup self=(UnityEngine.UI.ToggleGroup)checkSelf(l);
@@ -18,6 +19,7 @@ public class Lua_UnityEngine_UI_ToggleGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int UnregisterToggle(IntPtr l) {
 		try {
 			UnityEngine.UI.ToggleGroup self=(UnityEngine.UI.ToggleGroup)checkSelf(l);
@@ -32,6 +34,7 @@ public class Lua_UnityEngine_UI_ToggleGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RegisterToggle(IntPtr l) {
 		try {
 			UnityEngine.UI.ToggleGroup self=(UnityEngine.UI.ToggleGroup)checkSelf(l);
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_UI_ToggleGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int AnyTogglesOn(IntPtr l) {
 		try {
 			UnityEngine.UI.ToggleGroup self=(UnityEngine.UI.ToggleGroup)checkSelf(l);
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_UI_ToggleGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ActiveToggles(IntPtr l) {
 		try {
 			UnityEngine.UI.ToggleGroup self=(UnityEngine.UI.ToggleGroup)checkSelf(l);
@@ -72,6 +77,7 @@ public class Lua_UnityEngine_UI_ToggleGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetAllTogglesOff(IntPtr l) {
 		try {
 			UnityEngine.UI.ToggleGroup self=(UnityEngine.UI.ToggleGroup)checkSelf(l);
@@ -84,6 +90,7 @@ public class Lua_UnityEngine_UI_ToggleGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_allowSwitchOff(IntPtr l) {
 		try {
 			UnityEngine.UI.ToggleGroup self=(UnityEngine.UI.ToggleGroup)checkSelf(l);
@@ -96,6 +103,7 @@ public class Lua_UnityEngine_UI_ToggleGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_allowSwitchOff(IntPtr l) {
 		try {
 			UnityEngine.UI.ToggleGroup self=(UnityEngine.UI.ToggleGroup)checkSelf(l);
@@ -109,6 +117,7 @@ public class Lua_UnityEngine_UI_ToggleGroup : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.ToggleGroup");
 		addMember(l,NotifyToggleOn);

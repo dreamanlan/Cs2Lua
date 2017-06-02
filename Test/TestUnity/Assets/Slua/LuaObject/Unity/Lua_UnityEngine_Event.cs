@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Event : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -37,6 +38,20 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Use(IntPtr l) {
+		try {
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			self.Use();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetTypeForControl(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -52,18 +67,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int Use(IntPtr l) {
-		try {
-			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
-			self.Use();
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int KeyboardEvent_s(IntPtr l) {
 		try {
 			System.String a1;
@@ -78,6 +82,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int PopEvent_s(IntPtr l) {
 		try {
 			UnityEngine.Event a1;
@@ -92,6 +97,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetEventCount_s(IntPtr l) {
 		try {
 			var ret=UnityEngine.Event.GetEventCount();
@@ -104,6 +110,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_mousePosition(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -116,6 +123,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_mousePosition(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -130,6 +138,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_delta(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -142,6 +151,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_delta(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -156,6 +166,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_shift(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -168,6 +179,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_shift(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -182,6 +194,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_control(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -194,6 +207,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_control(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -208,6 +222,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_alt(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -220,6 +235,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_alt(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -234,6 +250,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_command(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -246,6 +263,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_command(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -260,6 +278,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_capsLock(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -272,6 +291,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_capsLock(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -286,6 +306,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_numeric(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -298,6 +319,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_numeric(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -312,6 +334,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_functionKey(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -324,6 +347,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_current(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -335,6 +359,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_current(IntPtr l) {
 		try {
 			UnityEngine.Event v;
@@ -348,6 +373,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_isKey(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -360,6 +386,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_isMouse(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -372,6 +399,20 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_isScrollWheel(IntPtr l) {
+		try {
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.isScrollWheel);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_rawType(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -384,6 +425,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_type(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -396,6 +438,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_type(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -410,6 +453,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_button(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -422,6 +466,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_button(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -436,6 +481,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_modifiers(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -448,6 +494,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_modifiers(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -462,6 +509,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_pressure(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -474,6 +522,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_pressure(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -488,6 +537,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_clickCount(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -500,6 +550,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_clickCount(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -514,6 +565,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_character(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -526,6 +578,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_character(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -540,6 +593,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_commandName(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -552,6 +606,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_commandName(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -566,6 +621,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_keyCode(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -578,6 +634,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_keyCode(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -592,6 +649,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_displayIndex(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -604,6 +662,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_displayIndex(IntPtr l) {
 		try {
 			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
@@ -617,10 +676,11 @@ public class Lua_UnityEngine_Event : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Event");
-		addMember(l,GetTypeForControl);
 		addMember(l,Use);
+		addMember(l,GetTypeForControl);
 		addMember(l,KeyboardEvent_s);
 		addMember(l,PopEvent_s);
 		addMember(l,GetEventCount_s);
@@ -636,6 +696,7 @@ public class Lua_UnityEngine_Event : LuaObject {
 		addMember(l,"current",get_current,set_current,false);
 		addMember(l,"isKey",get_isKey,null,true);
 		addMember(l,"isMouse",get_isMouse,null,true);
+		addMember(l,"isScrollWheel",get_isScrollWheel,null,true);
 		addMember(l,"rawType",get_rawType,null,true);
 		addMember(l,"type",get_type,set_type,true);
 		addMember(l,"button",get_button,set_button,true);

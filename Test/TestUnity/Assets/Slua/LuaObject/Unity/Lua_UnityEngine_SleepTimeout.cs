@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_SleepTimeout : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.SleepTimeout o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_SleepTimeout : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_NeverSleep(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -28,6 +30,7 @@ public class Lua_UnityEngine_SleepTimeout : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_SystemSetting(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -38,6 +41,7 @@ public class Lua_UnityEngine_SleepTimeout : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.SleepTimeout");
 		addMember(l,"NeverSleep",get_NeverSleep,null,false);

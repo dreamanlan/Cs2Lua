@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_StateMachineBehaviour : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnStateEnter(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -42,6 +43,7 @@ public class Lua_UnityEngine_StateMachineBehaviour : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnStateUpdate(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -80,6 +82,7 @@ public class Lua_UnityEngine_StateMachineBehaviour : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnStateExit(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -118,6 +121,7 @@ public class Lua_UnityEngine_StateMachineBehaviour : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnStateMove(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -156,6 +160,7 @@ public class Lua_UnityEngine_StateMachineBehaviour : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnStateIK(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -194,6 +199,7 @@ public class Lua_UnityEngine_StateMachineBehaviour : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnStateMachineEnter(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -228,6 +234,7 @@ public class Lua_UnityEngine_StateMachineBehaviour : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnStateMachineExit(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -261,6 +268,7 @@ public class Lua_UnityEngine_StateMachineBehaviour : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.StateMachineBehaviour");
 		addMember(l,OnStateEnter);

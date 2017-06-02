@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_HorizontalLayoutGroup : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CalculateLayoutInputHorizontal(IntPtr l) {
 		try {
 			UnityEngine.UI.HorizontalLayoutGroup self=(UnityEngine.UI.HorizontalLayoutGroup)checkSelf(l);
@@ -16,6 +17,7 @@ public class Lua_UnityEngine_UI_HorizontalLayoutGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CalculateLayoutInputVertical(IntPtr l) {
 		try {
 			UnityEngine.UI.HorizontalLayoutGroup self=(UnityEngine.UI.HorizontalLayoutGroup)checkSelf(l);
@@ -28,6 +30,7 @@ public class Lua_UnityEngine_UI_HorizontalLayoutGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetLayoutHorizontal(IntPtr l) {
 		try {
 			UnityEngine.UI.HorizontalLayoutGroup self=(UnityEngine.UI.HorizontalLayoutGroup)checkSelf(l);
@@ -40,6 +43,7 @@ public class Lua_UnityEngine_UI_HorizontalLayoutGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetLayoutVertical(IntPtr l) {
 		try {
 			UnityEngine.UI.HorizontalLayoutGroup self=(UnityEngine.UI.HorizontalLayoutGroup)checkSelf(l);
@@ -51,6 +55,7 @@ public class Lua_UnityEngine_UI_HorizontalLayoutGroup : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.HorizontalLayoutGroup");
 		addMember(l,CalculateLayoutInputHorizontal);

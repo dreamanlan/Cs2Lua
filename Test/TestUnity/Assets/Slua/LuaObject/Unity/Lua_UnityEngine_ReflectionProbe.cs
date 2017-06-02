@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.ReflectionProbe o;
-			o=new UnityEngine.ReflectionProbe();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RenderProbe(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -45,6 +33,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsFinishedRendering(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -60,6 +49,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int BlendCubemap_s(IntPtr l) {
 		try {
 			UnityEngine.Texture a1;
@@ -80,32 +70,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int get_type(IntPtr l) {
-		try {
-			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
-			pushValue(l,true);
-			pushEnum(l,(int)self.type);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int set_type(IntPtr l) {
-		try {
-			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
-			UnityEngine.Rendering.ReflectionProbeType v;
-			checkEnum(l,2,out v);
-			self.type=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_hdr(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -118,6 +83,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_hdr(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -132,6 +98,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_size(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -144,6 +111,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_size(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -158,6 +126,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_center(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -170,6 +139,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_center(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -184,6 +154,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_nearClipPlane(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -196,6 +167,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_nearClipPlane(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -210,6 +182,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_farClipPlane(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -222,6 +195,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_farClipPlane(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -236,6 +210,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_shadowDistance(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -248,6 +223,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_shadowDistance(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -262,6 +238,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_resolution(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -274,6 +251,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_resolution(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -288,6 +266,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_cullingMask(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -300,6 +279,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_cullingMask(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -314,6 +294,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_clearFlags(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -326,6 +307,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_clearFlags(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -340,6 +322,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_backgroundColor(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -352,6 +335,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_backgroundColor(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -366,6 +350,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_intensity(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -378,6 +363,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_intensity(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -392,6 +378,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_blendDistance(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -404,6 +391,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_blendDistance(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -418,6 +406,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_boxProjection(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -430,6 +419,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_boxProjection(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -444,6 +434,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_bounds(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -456,6 +447,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_mode(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -468,6 +460,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_mode(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -482,6 +475,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_importance(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -494,6 +488,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_importance(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -508,6 +503,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_refreshMode(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -520,6 +516,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_refreshMode(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -534,6 +531,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_timeSlicingMode(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -546,6 +544,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_timeSlicingMode(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -560,6 +559,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_bakedTexture(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -572,6 +572,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_bakedTexture(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -586,6 +587,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_customBakedTexture(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -598,6 +600,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_customBakedTexture(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -612,6 +615,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_texture(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -623,12 +627,73 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_textureHDRDecodeValues(IntPtr l) {
+		try {
+			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.textureHDRDecodeValues);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_minBakedCubemapResolution(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.ReflectionProbe.minBakedCubemapResolution);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_maxBakedCubemapResolution(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.ReflectionProbe.maxBakedCubemapResolution);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_defaultTextureHDRDecodeValues(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.ReflectionProbe.defaultTextureHDRDecodeValues);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_defaultTexture(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.ReflectionProbe.defaultTexture);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ReflectionProbe");
 		addMember(l,RenderProbe);
 		addMember(l,IsFinishedRendering);
 		addMember(l,BlendCubemap_s);
-		addMember(l,"type",get_type,set_type,true);
 		addMember(l,"hdr",get_hdr,set_hdr,true);
 		addMember(l,"size",get_size,set_size,true);
 		addMember(l,"center",get_center,set_center,true);
@@ -650,6 +715,11 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		addMember(l,"bakedTexture",get_bakedTexture,set_bakedTexture,true);
 		addMember(l,"customBakedTexture",get_customBakedTexture,set_customBakedTexture,true);
 		addMember(l,"texture",get_texture,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ReflectionProbe),typeof(UnityEngine.Behaviour));
+		addMember(l,"textureHDRDecodeValues",get_textureHDRDecodeValues,null,true);
+		addMember(l,"minBakedCubemapResolution",get_minBakedCubemapResolution,null,false);
+		addMember(l,"maxBakedCubemapResolution",get_maxBakedCubemapResolution,null,false);
+		addMember(l,"defaultTextureHDRDecodeValues",get_defaultTextureHDRDecodeValues,null,false);
+		addMember(l,"defaultTexture",get_defaultTexture,null,false);
+		createTypeMetatable(l,null, typeof(UnityEngine.ReflectionProbe),typeof(UnityEngine.Behaviour));
 	}
 }

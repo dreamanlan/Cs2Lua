@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_HumanPoseHandler : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.HumanPoseHandler o;
@@ -21,6 +22,7 @@ public class Lua_UnityEngine_HumanPoseHandler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Dispose(IntPtr l) {
 		try {
 			UnityEngine.HumanPoseHandler self=(UnityEngine.HumanPoseHandler)checkSelf(l);
@@ -33,6 +35,7 @@ public class Lua_UnityEngine_HumanPoseHandler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetHumanPose(IntPtr l) {
 		try {
 			UnityEngine.HumanPoseHandler self=(UnityEngine.HumanPoseHandler)checkSelf(l);
@@ -48,6 +51,7 @@ public class Lua_UnityEngine_HumanPoseHandler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetHumanPose(IntPtr l) {
 		try {
 			UnityEngine.HumanPoseHandler self=(UnityEngine.HumanPoseHandler)checkSelf(l);
@@ -62,6 +66,7 @@ public class Lua_UnityEngine_HumanPoseHandler : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.HumanPoseHandler");
 		addMember(l,Dispose);

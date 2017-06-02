@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_AnimatorStateInfo : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.AnimatorStateInfo o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_AnimatorStateInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsName(IntPtr l) {
 		try {
 			UnityEngine.AnimatorStateInfo self;
@@ -33,6 +35,7 @@ public class Lua_UnityEngine_AnimatorStateInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsTag(IntPtr l) {
 		try {
 			UnityEngine.AnimatorStateInfo self;
@@ -49,6 +52,7 @@ public class Lua_UnityEngine_AnimatorStateInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_fullPathHash(IntPtr l) {
 		try {
 			UnityEngine.AnimatorStateInfo self;
@@ -62,6 +66,7 @@ public class Lua_UnityEngine_AnimatorStateInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_shortNameHash(IntPtr l) {
 		try {
 			UnityEngine.AnimatorStateInfo self;
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_AnimatorStateInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_normalizedTime(IntPtr l) {
 		try {
 			UnityEngine.AnimatorStateInfo self;
@@ -88,6 +94,7 @@ public class Lua_UnityEngine_AnimatorStateInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_length(IntPtr l) {
 		try {
 			UnityEngine.AnimatorStateInfo self;
@@ -101,6 +108,7 @@ public class Lua_UnityEngine_AnimatorStateInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_speed(IntPtr l) {
 		try {
 			UnityEngine.AnimatorStateInfo self;
@@ -114,6 +122,7 @@ public class Lua_UnityEngine_AnimatorStateInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_speedMultiplier(IntPtr l) {
 		try {
 			UnityEngine.AnimatorStateInfo self;
@@ -127,6 +136,7 @@ public class Lua_UnityEngine_AnimatorStateInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_tagHash(IntPtr l) {
 		try {
 			UnityEngine.AnimatorStateInfo self;
@@ -140,6 +150,7 @@ public class Lua_UnityEngine_AnimatorStateInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_loop(IntPtr l) {
 		try {
 			UnityEngine.AnimatorStateInfo self;
@@ -152,6 +163,7 @@ public class Lua_UnityEngine_AnimatorStateInfo : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AnimatorStateInfo");
 		addMember(l,IsName);

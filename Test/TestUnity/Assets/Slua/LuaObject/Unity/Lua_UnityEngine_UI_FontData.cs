@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_FontData : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_defaultFontData(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -28,6 +30,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_font(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -40,6 +43,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_font(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -54,6 +58,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_fontSize(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -66,6 +71,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_fontSize(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -80,6 +86,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_fontStyle(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -92,6 +99,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_fontStyle(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -106,6 +114,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_bestFit(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -118,6 +127,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_bestFit(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -132,6 +142,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_minSize(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -144,6 +155,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_minSize(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -158,6 +170,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_maxSize(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -170,6 +183,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_maxSize(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -184,6 +198,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_alignment(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -196,6 +211,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_alignment(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -210,6 +226,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_alignByGeometry(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -222,6 +239,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_alignByGeometry(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -236,6 +254,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_richText(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -248,6 +267,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_richText(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -262,6 +282,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_horizontalOverflow(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -274,6 +295,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_horizontalOverflow(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -288,6 +310,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_verticalOverflow(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -300,6 +323,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_verticalOverflow(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -314,6 +338,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_lineSpacing(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -326,6 +351,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_lineSpacing(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData self=(UnityEngine.UI.FontData)checkSelf(l);
@@ -339,6 +365,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.FontData");
 		addMember(l,"defaultFontData",get_defaultFontData,null,false);

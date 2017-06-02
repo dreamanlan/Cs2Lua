@@ -25,13 +25,14 @@ namespace SLua
 	using UnityEngine;
 	using System.Collections;
 	using System.Collections.Generic;
+    using System.Linq;
 	using System.IO;
 	using System;
 	using System.Reflection;
 	using UnityEditor;
-	using LuaInterface;
 	using System.Text;
 	using System.Text.RegularExpressions;
+	using System.Runtime.CompilerServices;
 
 	public interface ICustomExportPost { }
 
@@ -547,11 +548,17 @@ namespace SLua
 			"Motion.isAnimatorMotion",
 			"Motion.isHumanMotion",
 #endif
+
+			"Light.lightmappingMode",
+			"MonoBehaviour.runInEditMode",
+			"MonoBehaviour.useGUILayout",
+			"PlayableGraph.CreateScriptPlayable",
         };
 
 
-		static Dictionary<System.Type,List<MethodInfo>> GenerateExtensionMethodsMap(){
-			Dictionary<Type,List<MethodInfo>> dic = new Dictionary<Type, List<MethodInfo>>();
+		static void FilterSpecMethods(out Dictionary<Type,List<MethodInfo>> dic, out Dictionary<Type,Type> overloadedClass){
+			dic = new Dictionary<Type, List<MethodInfo>>();
+			overloadedClass = new Dictionary<Type, Type> ();
 			List<string> asems;
 			CustomExport.OnGetAssemblyToGenerateExtensionMethod(out asems);
 
@@ -582,8 +589,9 @@ namespace SLua
                             bindingFlags |= BindingFlags.DeclaredOnly;
                         }
                         MethodInfo[] methods = type.GetMethods(bindingFlags);
-						foreach (MethodInfo method in methods)
+						foreach (MethodInfo _method in methods)
 						{
+							MethodInfo method = tryFixGenericMethod(_method);
 							if (IsExtensionMethod(method))
 							{
 								Type extendedType = method.GetParameters()[0].ParameterType;
@@ -595,9 +603,18 @@ namespace SLua
 							}
 						}
 					}
+
+
+					if (type.IsDefined(typeof(OverloadLuaClassAttribute),false)) {
+						OverloadLuaClassAttribute olc = type.GetCustomAttributes (typeof(OverloadLuaClassAttribute), false)[0] as OverloadLuaClassAttribute;
+						if (olc != null) {
+							if (overloadedClass.ContainsKey (olc.targetType))
+								throw new Exception ("Can't overload class more than once");
+							overloadedClass.Add (olc.targetType, type);
+						}
+					}
 				}
 			}
-			return dic;
 		}
 
 		static bool IsExtensionMethod(MethodBase method){
@@ -606,11 +623,12 @@ namespace SLua
 
 
 
-		static Dictionary<System.Type,List<MethodInfo>> extensionMethods = new Dictionary<Type, List<MethodInfo>>();
+		static Dictionary<System.Type,List<MethodInfo>> extensionMethods;
+		static Dictionary<Type,Type> overloadedClass;
 
 		static CodeGenerator(){
             try {
-                extensionMethods = GenerateExtensionMethodsMap();
+			FilterSpecMethods(out extensionMethods,out overloadedClass);
             } catch (Exception ex) {
                 UnityEngine.Debug.Log(string.Format("{0}\n{1}", ex.Message, ex.StackTrace));
             }
@@ -694,6 +712,10 @@ namespace SLua
 			if (!t.IsGenericTypeDefinition && (!IsObsolete(t) && t != typeof(YieldInstruction) && t != typeof(Coroutine))
 			    || (t.BaseType != null && t.BaseType == typeof(System.MulticastDelegate)))
 			{
+
+				if (t.IsNested && t.DeclaringType.IsPublic == false)
+					return false;
+
 				if (t.IsEnum)
 				{
 					StreamWriter file = Begin(t);
@@ -755,7 +777,6 @@ namespace SLua
 			string temp = @"
 using System;
 using System.Collections.Generic;
-using LuaInterface;
 
 namespace SLua
 {
@@ -775,12 +796,12 @@ namespace SLua
             }
             LuaDelegate ld;
             checkType(l, -1, out ld);
+			LuaDLL.lua_pop(l,1);
             if(ld.d!=null)
             {
                 ua = ($FN)ld.d;
                 return op;
             }
-			LuaDLL.lua_pop(l,1);
 			
 			l = LuaState.get(l).L;
             ua = ($ARGS) =>
@@ -884,7 +905,7 @@ namespace SLua
 			string temp = @"
 using System;
 using System.Collections.Generic;
-using LuaInterface;
+using SLua;
 
 namespace SLua
 {
@@ -958,12 +979,12 @@ namespace SLua
             LuaDLL.luaL_checktype(l, p, LuaTypes.LUA_TFUNCTION);
             LuaDelegate ld;
             checkType(l, p, out ld);
-						l = LuaState.get(l).L;
             if (ld.d != null)
             {
                 ua = (UnityEngine.Events.UnityAction<$GN>)ld.d;
                 return true;
             }
+			l = LuaState.get(l).L;
             ua = ($ARGS) =>
             {
                 int error = pushTry(l);
@@ -1025,7 +1046,10 @@ namespace SLua
             }
             else if (IsValueType(t))
             {
-                return string.Format("checkValueType(l,{2}{0},out {1});", n, v, prefix);
+                if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    return string.Format("checkNullable(l,{2}{0},out {1});", n, v, prefix);
+                else
+                    return string.Format("checkValueType(l,{2}{0},out {1});", n, v, prefix);
             }
             else if (t.IsArray)
             {
@@ -1098,9 +1122,14 @@ namespace SLua
 		{
 			string clsname = ExportName(t);
 			string f = path + clsname + ".cs";
-			StreamWriter file = new StreamWriter(f, false, Encoding.UTF8);
-			file.NewLine = NewLine;
-			return file;
+            try {
+                StreamWriter file = new StreamWriter(f, false, Encoding.UTF8);
+                file.NewLine = NewLine;
+                return file;
+            } catch (Exception ex) {
+                Debug.LogErrorFormat("new StreamWriter \"{0}\" throw exception:{1}\n{2}", f, ex.Message, ex.StackTrace);
+                throw;
+            }
 		}
 		
 		private void End(StreamWriter file)
@@ -1112,18 +1141,23 @@ namespace SLua
 		
 		private void WriteHead(Type t, StreamWriter file)
 		{
+			HashSet<string> nsset=new HashSet<string>();
 			Write(file, "using System;");
-			Write(file, "using LuaInterface;");
 			Write(file, "using SLua;");
 			Write(file, "using System.Collections.Generic;");
-			WriteExtraNamespace(file,t);
+			nsset.Add("System");
+			nsset.Add("SLua");
+			nsset.Add("System.Collections.Generic");
+			WriteExtraNamespace(file,t, nsset);
+#if UNITY_5_3_OR_NEWER
+			Write (file, "[UnityEngine.Scripting.Preserve]");
+#endif
 			Write(file, "public class {0} : LuaObject {{", ExportName(t));
 		}
 
 		// add namespace for extension method
-		void WriteExtraNamespace(StreamWriter file,Type t) {
+		void WriteExtraNamespace(StreamWriter file,Type t, HashSet<string> nsset) {
 			List<MethodInfo> lstMI;
-			HashSet<string> nsset=new HashSet<string>();
 			if(extensionMethods.TryGetValue(t,out lstMI)) {
 				foreach(MethodInfo m in lstMI) {
 					// if not writed
@@ -1148,7 +1182,8 @@ namespace SLua
 			
 			MethodInfo[] members = t.GetMethods(bf);
 			List<MethodInfo> methods = new List<MethodInfo>();
-			methods.AddRange(members);
+			foreach (MethodInfo mi in members) 
+				methods.Add(tryFixGenericMethod(mi));
 
 			if(!writeStatic && this.includeExtension){
 				if(extensionMethods.ContainsKey(t)){
@@ -1226,8 +1261,24 @@ namespace SLua
 			}
 		}
 
+		bool hasOverloadedVersion(Type t,ref string f) {
+			Type ot;
+			if (overloadedClass.TryGetValue (t, out ot)) {
+				MethodInfo mi = ot.GetMethod (f, BindingFlags.Static | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+				if (mi != null && mi.IsDefined(typeof(MonoPInvokeCallbackAttribute),false)) {
+					f = FullName (ot) + "." + f;
+					return true;
+				}
+			}
+			return false;
+		}
+
 		void RegFunction(Type t, StreamWriter file)
 		{
+#if UNITY_5_3_OR_NEWER
+			Write (file, "[UnityEngine.Scripting.Preserve]");
+#endif
+
 			// Write export function
 			Write(file, "static public void reg(IntPtr l) {");
 			
@@ -1237,9 +1288,13 @@ namespace SLua
 			}
 			
 			Write(file, "getTypeTable(l,\"{0}\");", string.IsNullOrEmpty(givenNamespace) ? FullName(t) : givenNamespace);
-			foreach (string f in funcname)
+			foreach (string i in funcname)
 			{
-				Write(file, "addMember(l,{0});", f);
+				string f = i;
+				if (hasOverloadedVersion (t, ref f))
+					Write (file, "addMember(l,{0});", f);
+				else
+					Write(file, "addMember(l,{0});", f);
 			}
 			foreach (string f in directfunc.Keys)
 			{
@@ -1601,7 +1656,10 @@ namespace SLua
 			else if (t.BaseType == typeof(System.MulticastDelegate))
 				Write(file, "int op=LuaDelegation.checkDelegate(l,{2}{0},out {1});", n, v, nprefix);
 			else if (IsValueType(t))
-				Write(file, "checkValueType(l,{2}{0},out {1});", n, v, nprefix);
+                if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    Write(file, "checkNullable(l,{2}{0},out {1});", n, v, nprefix);
+                else
+                    Write(file, "checkValueType(l,{2}{0},out {1});", n, v, nprefix);
 			else if (t.IsArray)
 				Write(file, "checkArray(l,{2}{0},out {1});", n, v, nprefix);
 			else
@@ -1617,6 +1675,9 @@ namespace SLua
 		private void WriteFunctionAttr(StreamWriter file)
 		{
 			Write(file, "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
+#if UNITY_5_3_OR_NEWER
+			Write (file, "[UnityEngine.Scripting.Preserve]");
+#endif
 		}
 		
 		ConstructorInfo[] GetValidConstructor(Type t)
@@ -1653,6 +1714,14 @@ namespace SLua
 		    var methodString = string.Format("{0}.{1}", mi.DeclaringType, mi.Name);
 		    if (CustomExport.FunctionFilterList.Contains(methodString))
 		        return true;
+            // directly ignore any components .ctor
+            if (mi.DeclaringType.IsSubclassOf(typeof(UnityEngine.Component)))
+            {
+                if (mi.MemberType == MemberTypes.Constructor)
+                {
+                    return true;
+                }
+            }
 
             // Check in custom export function filter list.
             List<object> aFuncFilterList = LuaCodeGen.GetEditorField<ICustomExportPost>("FunctionFilterList");
@@ -1850,7 +1919,56 @@ namespace SLua
 			}
 			return ret;
 		}
-		
+
+		// fill Generic Parameters if needed
+		string MethodDecl(MethodInfo m)
+		{
+			if (m.IsGenericMethod)
+			{
+				string parameters = "";
+				bool first = true;
+				foreach (Type genericType in m.GetGenericArguments())
+				{
+					if (first)
+						first = false;
+					else
+						parameters += ",";
+					parameters += genericType.ToString();
+
+				}
+				return string.Format("{0}<{1}>", m.Name, parameters);
+			}
+			else
+				return m.Name;
+		}
+
+		// try filling generic parameters
+		static MethodInfo tryFixGenericMethod(MethodInfo method)
+		{
+			if (!method.ContainsGenericParameters)
+				return method;
+
+			try
+			{
+				Type[] genericTypes = method.GetGenericArguments();
+				for (int j = 0; j < genericTypes.Length; j++)
+				{
+					Type[] contraints = genericTypes[j].GetGenericParameterConstraints();
+					if (contraints != null && contraints.Length == 1 && contraints[0] != typeof(ValueType))
+						genericTypes[j] = contraints[0];
+					else
+						return method;
+				}
+				// only fixed here
+				return method.MakeGenericMethod(genericTypes);
+			}
+			catch (Exception e)
+			{
+				Debug.LogError(e);
+			}
+			return method;
+		}
+
 		bool isUsefullMethod(MethodInfo method)
 		{
 			if (method.Name != "GetType" && method.Name != "GetHashCode" && method.Name != "Equals" &&
@@ -1860,7 +1978,7 @@ namespace SLua
 			    !method.Name.StartsWith("get_", StringComparison.Ordinal) &&
 			    !method.Name.StartsWith("set_", StringComparison.Ordinal) &&
 			    !method.Name.StartsWith("add_", StringComparison.Ordinal) &&
-			    !IsObsolete(method) && !method.IsGenericMethod &&
+			    !IsObsolete(method) && !method.ContainsGenericParameters  &&
 				method.ToString() != "Int32 Clamp(Int32, Int32, Int32)" &&
 			    !method.Name.StartsWith("remove_", StringComparison.Ordinal))
 			{
@@ -1904,8 +2022,10 @@ namespace SLua
 			}
 
 			MemberInfo[] cons = t.GetMember(name, bf);
-			foreach (MemberInfo m in cons)
+			foreach (MemberInfo _m in cons)
 			{
+				MemberInfo m = _m;
+				if (m.MemberType == MemberTypes.Method) m = tryFixGenericMethod((MethodInfo)m);
 				if (m.MemberType == MemberTypes.Method
 				    && !IsObsolete(m)
 				    && !DontExport(m)
@@ -2061,11 +2181,11 @@ namespace SLua
 				else if (m.Name == "op_GreaterThanOrEqual")
 					Write(file, "{0}(a2<=a1);", ret);
 				else{
-					Write(file, "{3}{2}.{0}({1});", m.Name, FuncCall(m), TypeDecl(t), ret);
+					Write(file, "{3}{2}.{0}({1});", MethodDecl(m), FuncCall(m), TypeDecl(t), ret);
 				}
 			}
 			else{
-				Write(file, "{2}self.{0}({1});", m.Name, FuncCall(m,parOffset), ret);
+				Write(file, "{2}self.{0}({1});", MethodDecl(m), FuncCall(m,parOffset), ret);
 			}
 
 			WriteOk(file);

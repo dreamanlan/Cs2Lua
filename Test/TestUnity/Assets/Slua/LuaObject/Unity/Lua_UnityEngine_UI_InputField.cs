@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_InputField : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int MoveTextEnd(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -18,6 +19,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int MoveTextStart(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -32,6 +34,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnBeginDrag(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnDrag(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -60,6 +64,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnEndDrag(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -74,6 +79,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnPointerDown(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -88,6 +94,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ProcessEvent(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -102,6 +109,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnUpdateSelected(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -116,6 +124,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ForceLabelUpdate(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -128,6 +137,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Rebuild(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -142,6 +152,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int LayoutComplete(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -154,6 +165,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GraphicUpdateComplete(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -166,6 +178,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ActivateInputField(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -178,6 +191,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnSelect(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -192,6 +206,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnPointerClick(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -206,6 +221,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int DeactivateInputField(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -218,6 +234,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnDeselect(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -232,6 +249,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnSubmit(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -246,6 +264,33 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CalculateLayoutInputHorizontal(IntPtr l) {
+		try {
+			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
+			self.CalculateLayoutInputHorizontal();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CalculateLayoutInputVertical(IntPtr l) {
+		try {
+			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
+			self.CalculateLayoutInputVertical();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_shouldHideMobileInput(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -258,6 +303,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_shouldHideMobileInput(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -272,6 +318,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_text(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -284,6 +331,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_text(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -298,6 +346,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_isFocused(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -310,6 +359,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_caretBlinkRate(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -322,6 +372,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_caretBlinkRate(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -336,6 +387,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_caretWidth(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -348,6 +400,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_caretWidth(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -362,6 +415,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_textComponent(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -374,6 +428,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_textComponent(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -388,6 +443,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_placeholder(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -400,6 +456,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_placeholder(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -414,6 +471,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_caretColor(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -426,6 +484,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_caretColor(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -440,6 +499,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_customCaretColor(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -452,6 +512,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_customCaretColor(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -466,6 +527,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_selectionColor(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -478,6 +540,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_selectionColor(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -492,6 +555,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_onEndEdit(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -504,6 +568,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_onEndEdit(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -518,6 +583,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_onValueChanged(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -530,6 +596,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_onValueChanged(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -544,6 +611,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_onValidateInput(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -560,6 +628,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_characterLimit(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -572,6 +641,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_characterLimit(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -586,6 +656,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_contentType(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -598,6 +669,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_contentType(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -612,6 +684,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_lineType(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -624,6 +697,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_lineType(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -638,6 +712,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_inputType(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -650,6 +725,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_inputType(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -664,6 +740,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_keyboardType(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -676,6 +753,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_keyboardType(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -690,6 +768,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_characterValidation(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -702,6 +781,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_characterValidation(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -716,6 +796,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_readOnly(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -728,6 +809,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_readOnly(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -742,6 +824,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_multiLine(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -754,6 +837,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_asteriskChar(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -766,6 +850,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_asteriskChar(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -780,6 +865,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_wasCanceled(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -792,6 +878,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_caretPosition(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -804,6 +891,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_caretPosition(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -818,6 +906,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_selectionAnchorPosition(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -830,6 +919,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_selectionAnchorPosition(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -844,6 +934,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_selectionFocusPosition(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -856,6 +947,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_selectionFocusPosition(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -869,6 +961,98 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_minWidth(IntPtr l) {
+		try {
+			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.minWidth);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_preferredWidth(IntPtr l) {
+		try {
+			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.preferredWidth);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_flexibleWidth(IntPtr l) {
+		try {
+			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.flexibleWidth);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_minHeight(IntPtr l) {
+		try {
+			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.minHeight);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_preferredHeight(IntPtr l) {
+		try {
+			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.preferredHeight);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_flexibleHeight(IntPtr l) {
+		try {
+			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.flexibleHeight);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_layoutPriority(IntPtr l) {
+		try {
+			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.layoutPriority);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.InputField");
 		addMember(l,MoveTextEnd);
@@ -889,6 +1073,8 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		addMember(l,DeactivateInputField);
 		addMember(l,OnDeselect);
 		addMember(l,OnSubmit);
+		addMember(l,CalculateLayoutInputHorizontal);
+		addMember(l,CalculateLayoutInputVertical);
 		addMember(l,"shouldHideMobileInput",get_shouldHideMobileInput,set_shouldHideMobileInput,true);
 		addMember(l,"text",get_text,set_text,true);
 		addMember(l,"isFocused",get_isFocused,null,true);
@@ -915,6 +1101,13 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		addMember(l,"caretPosition",get_caretPosition,set_caretPosition,true);
 		addMember(l,"selectionAnchorPosition",get_selectionAnchorPosition,set_selectionAnchorPosition,true);
 		addMember(l,"selectionFocusPosition",get_selectionFocusPosition,set_selectionFocusPosition,true);
+		addMember(l,"minWidth",get_minWidth,null,true);
+		addMember(l,"preferredWidth",get_preferredWidth,null,true);
+		addMember(l,"flexibleWidth",get_flexibleWidth,null,true);
+		addMember(l,"minHeight",get_minHeight,null,true);
+		addMember(l,"preferredHeight",get_preferredHeight,null,true);
+		addMember(l,"flexibleHeight",get_flexibleHeight,null,true);
+		addMember(l,"layoutPriority",get_layoutPriority,null,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.UI.InputField),typeof(UnityEngine.UI.Selectable));
 	}
 }

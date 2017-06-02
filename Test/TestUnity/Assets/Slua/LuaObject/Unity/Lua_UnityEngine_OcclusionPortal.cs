@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_OcclusionPortal : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.OcclusionPortal o;
-			o=new UnityEngine.OcclusionPortal();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_open(IntPtr l) {
 		try {
 			UnityEngine.OcclusionPortal self=(UnityEngine.OcclusionPortal)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_OcclusionPortal : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_open(IntPtr l) {
 		try {
 			UnityEngine.OcclusionPortal self=(UnityEngine.OcclusionPortal)checkSelf(l);
@@ -42,9 +31,10 @@ public class Lua_UnityEngine_OcclusionPortal : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.OcclusionPortal");
 		addMember(l,"open",get_open,set_open,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.OcclusionPortal),typeof(UnityEngine.Component));
+		createTypeMetatable(l,null, typeof(UnityEngine.OcclusionPortal),typeof(UnityEngine.Component));
 	}
 }

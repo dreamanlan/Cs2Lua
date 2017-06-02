@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Rendering_ReflectionProbeBlendInfo : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.Rendering.ReflectionProbeBlendInfo o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_Rendering_ReflectionProbeBlendInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_probe(IntPtr l) {
 		try {
 			UnityEngine.Rendering.ReflectionProbeBlendInfo self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_Rendering_ReflectionProbeBlendInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_probe(IntPtr l) {
 		try {
 			UnityEngine.Rendering.ReflectionProbeBlendInfo self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_Rendering_ReflectionProbeBlendInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_weight(IntPtr l) {
 		try {
 			UnityEngine.Rendering.ReflectionProbeBlendInfo self;
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_Rendering_ReflectionProbeBlendInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_weight(IntPtr l) {
 		try {
 			UnityEngine.Rendering.ReflectionProbeBlendInfo self;
@@ -74,6 +79,7 @@ public class Lua_UnityEngine_Rendering_ReflectionProbeBlendInfo : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Rendering.ReflectionProbeBlendInfo");
 		addMember(l,"probe",get_probe,set_probe,true);

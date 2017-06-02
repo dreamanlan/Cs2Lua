@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Screen : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.Screen o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetResolution_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -53,6 +55,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_resolutions(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -64,6 +67,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_currentResolution(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -75,6 +79,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_width(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -86,6 +91,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_height(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -97,6 +103,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_dpi(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -108,6 +115,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_fullScreen(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -119,6 +127,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_fullScreen(IntPtr l) {
 		try {
 			bool v;
@@ -132,6 +141,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_autorotateToPortrait(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -143,6 +153,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_autorotateToPortrait(IntPtr l) {
 		try {
 			bool v;
@@ -156,6 +167,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_autorotateToPortraitUpsideDown(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -167,6 +179,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_autorotateToPortraitUpsideDown(IntPtr l) {
 		try {
 			bool v;
@@ -180,6 +193,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_autorotateToLandscapeLeft(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -191,6 +205,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_autorotateToLandscapeLeft(IntPtr l) {
 		try {
 			bool v;
@@ -204,6 +219,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_autorotateToLandscapeRight(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -215,6 +231,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_autorotateToLandscapeRight(IntPtr l) {
 		try {
 			bool v;
@@ -228,6 +245,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_orientation(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -239,6 +257,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_orientation(IntPtr l) {
 		try {
 			UnityEngine.ScreenOrientation v;
@@ -252,6 +271,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_sleepTimeout(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -263,6 +283,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_sleepTimeout(IntPtr l) {
 		try {
 			int v;
@@ -275,6 +296,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Screen");
 		addMember(l,SetResolution_s);

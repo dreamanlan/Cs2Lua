@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_DrivenRectTransformTracker : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.DrivenRectTransformTracker o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_DrivenRectTransformTracker : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Add(IntPtr l) {
 		try {
 			UnityEngine.DrivenRectTransformTracker self;
@@ -37,6 +39,7 @@ public class Lua_UnityEngine_DrivenRectTransformTracker : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Clear(IntPtr l) {
 		try {
 			UnityEngine.DrivenRectTransformTracker self;
@@ -50,6 +53,7 @@ public class Lua_UnityEngine_DrivenRectTransformTracker : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.DrivenRectTransformTracker");
 		addMember(l,Add);

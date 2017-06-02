@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_Navigation : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.UI.Navigation o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_UI_Navigation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_mode(IntPtr l) {
 		try {
 			UnityEngine.UI.Navigation self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_UI_Navigation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_mode(IntPtr l) {
 		try {
 			UnityEngine.UI.Navigation self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_UI_Navigation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_selectOnUp(IntPtr l) {
 		try {
 			UnityEngine.UI.Navigation self;
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_UI_Navigation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_selectOnUp(IntPtr l) {
 		try {
 			UnityEngine.UI.Navigation self;
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_UI_Navigation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_selectOnDown(IntPtr l) {
 		try {
 			UnityEngine.UI.Navigation self;
@@ -88,6 +94,7 @@ public class Lua_UnityEngine_UI_Navigation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_selectOnDown(IntPtr l) {
 		try {
 			UnityEngine.UI.Navigation self;
@@ -104,6 +111,7 @@ public class Lua_UnityEngine_UI_Navigation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_selectOnLeft(IntPtr l) {
 		try {
 			UnityEngine.UI.Navigation self;
@@ -117,6 +125,7 @@ public class Lua_UnityEngine_UI_Navigation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_selectOnLeft(IntPtr l) {
 		try {
 			UnityEngine.UI.Navigation self;
@@ -133,6 +142,7 @@ public class Lua_UnityEngine_UI_Navigation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_selectOnRight(IntPtr l) {
 		try {
 			UnityEngine.UI.Navigation self;
@@ -146,6 +156,7 @@ public class Lua_UnityEngine_UI_Navigation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_selectOnRight(IntPtr l) {
 		try {
 			UnityEngine.UI.Navigation self;
@@ -162,6 +173,7 @@ public class Lua_UnityEngine_UI_Navigation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_defaultNavigation(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -172,6 +184,7 @@ public class Lua_UnityEngine_UI_Navigation : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.Navigation");
 		addMember(l,"mode",get_mode,set_mode,true);

@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Caching : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.Caching o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_Caching : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Authorize_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -59,6 +61,7 @@ public class Lua_UnityEngine_Caching : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CleanCache_s(IntPtr l) {
 		try {
 			var ret=UnityEngine.Caching.CleanCache();
@@ -71,6 +74,7 @@ public class Lua_UnityEngine_Caching : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsVersionCached_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -103,6 +107,7 @@ public class Lua_UnityEngine_Caching : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int MarkAsUsed_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -135,6 +140,7 @@ public class Lua_UnityEngine_Caching : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_spaceFree(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -146,6 +152,7 @@ public class Lua_UnityEngine_Caching : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_maximumAvailableDiskSpace(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -157,6 +164,7 @@ public class Lua_UnityEngine_Caching : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_maximumAvailableDiskSpace(IntPtr l) {
 		try {
 			System.Int64 v;
@@ -170,6 +178,7 @@ public class Lua_UnityEngine_Caching : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_spaceOccupied(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -181,6 +190,7 @@ public class Lua_UnityEngine_Caching : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_expirationDelay(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -192,6 +202,7 @@ public class Lua_UnityEngine_Caching : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_expirationDelay(IntPtr l) {
 		try {
 			int v;
@@ -205,6 +216,7 @@ public class Lua_UnityEngine_Caching : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_enabled(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -216,6 +228,7 @@ public class Lua_UnityEngine_Caching : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_enabled(IntPtr l) {
 		try {
 			bool v;
@@ -229,6 +242,7 @@ public class Lua_UnityEngine_Caching : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_compressionEnabled(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -240,6 +254,7 @@ public class Lua_UnityEngine_Caching : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_compressionEnabled(IntPtr l) {
 		try {
 			bool v;
@@ -253,6 +268,7 @@ public class Lua_UnityEngine_Caching : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_ready(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -263,6 +279,7 @@ public class Lua_UnityEngine_Caching : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Caching");
 		addMember(l,Authorize_s);

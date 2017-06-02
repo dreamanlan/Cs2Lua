@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_PolygonCollider2D : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.PolygonCollider2D o;
-			o=new UnityEngine.PolygonCollider2D();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetPath(IntPtr l) {
 		try {
 			UnityEngine.PolygonCollider2D self=(UnityEngine.PolygonCollider2D)checkSelf(l);
@@ -32,6 +20,7 @@ public class Lua_UnityEngine_PolygonCollider2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetPath(IntPtr l) {
 		try {
 			UnityEngine.PolygonCollider2D self=(UnityEngine.PolygonCollider2D)checkSelf(l);
@@ -48,6 +37,7 @@ public class Lua_UnityEngine_PolygonCollider2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetTotalPointCount(IntPtr l) {
 		try {
 			UnityEngine.PolygonCollider2D self=(UnityEngine.PolygonCollider2D)checkSelf(l);
@@ -61,6 +51,7 @@ public class Lua_UnityEngine_PolygonCollider2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CreatePrimitive(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -103,6 +94,7 @@ public class Lua_UnityEngine_PolygonCollider2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_points(IntPtr l) {
 		try {
 			UnityEngine.PolygonCollider2D self=(UnityEngine.PolygonCollider2D)checkSelf(l);
@@ -115,6 +107,7 @@ public class Lua_UnityEngine_PolygonCollider2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_points(IntPtr l) {
 		try {
 			UnityEngine.PolygonCollider2D self=(UnityEngine.PolygonCollider2D)checkSelf(l);
@@ -129,6 +122,7 @@ public class Lua_UnityEngine_PolygonCollider2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_pathCount(IntPtr l) {
 		try {
 			UnityEngine.PolygonCollider2D self=(UnityEngine.PolygonCollider2D)checkSelf(l);
@@ -141,6 +135,7 @@ public class Lua_UnityEngine_PolygonCollider2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_pathCount(IntPtr l) {
 		try {
 			UnityEngine.PolygonCollider2D self=(UnityEngine.PolygonCollider2D)checkSelf(l);
@@ -154,6 +149,35 @@ public class Lua_UnityEngine_PolygonCollider2D : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_autoTiling(IntPtr l) {
+		try {
+			UnityEngine.PolygonCollider2D self=(UnityEngine.PolygonCollider2D)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.autoTiling);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_autoTiling(IntPtr l) {
+		try {
+			UnityEngine.PolygonCollider2D self=(UnityEngine.PolygonCollider2D)checkSelf(l);
+			bool v;
+			checkType(l,2,out v);
+			self.autoTiling=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.PolygonCollider2D");
 		addMember(l,GetPath);
@@ -162,6 +186,7 @@ public class Lua_UnityEngine_PolygonCollider2D : LuaObject {
 		addMember(l,CreatePrimitive);
 		addMember(l,"points",get_points,set_points,true);
 		addMember(l,"pathCount",get_pathCount,set_pathCount,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.PolygonCollider2D),typeof(UnityEngine.Collider2D));
+		addMember(l,"autoTiling",get_autoTiling,set_autoTiling,true);
+		createTypeMetatable(l,null, typeof(UnityEngine.PolygonCollider2D),typeof(UnityEngine.Collider2D));
 	}
 }

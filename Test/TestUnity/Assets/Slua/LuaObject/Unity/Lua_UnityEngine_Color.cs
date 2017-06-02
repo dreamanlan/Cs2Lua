@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Color : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -34,7 +35,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==0){
+			else if(argc<=1){
 				o=new UnityEngine.Color();
 				pushValue(l,true);
 				pushObject(l,o);
@@ -47,99 +48,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int Lerp_s(IntPtr l) {
-		try {
-			UnityEngine.Color a1;
-			checkType(l,1,out a1);
-			UnityEngine.Color a2;
-			checkType(l,2,out a2);
-			System.Single a3;
-			checkType(l,3,out a3);
-			var ret=UnityEngine.Color.Lerp(a1,a2,a3);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int LerpUnclamped_s(IntPtr l) {
-		try {
-			UnityEngine.Color a1;
-			checkType(l,1,out a1);
-			UnityEngine.Color a2;
-			checkType(l,2,out a2);
-			System.Single a3;
-			checkType(l,3,out a3);
-			var ret=UnityEngine.Color.LerpUnclamped(a1,a2,a3);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int RGBToHSV_s(IntPtr l) {
-		try {
-			UnityEngine.Color a1;
-			checkType(l,1,out a1);
-			System.Single a2;
-			System.Single a3;
-			System.Single a4;
-			UnityEngine.Color.RGBToHSV(a1,out a2,out a3,out a4);
-			pushValue(l,true);
-			pushValue(l,a2);
-			pushValue(l,a3);
-			pushValue(l,a4);
-			return 4;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int HSVToRGB_s(IntPtr l) {
-		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.Single a1;
-				checkType(l,1,out a1);
-				System.Single a2;
-				checkType(l,2,out a2);
-				System.Single a3;
-				checkType(l,3,out a3);
-				var ret=UnityEngine.Color.HSVToRGB(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==4){
-				System.Single a1;
-				checkType(l,1,out a1);
-				System.Single a2;
-				checkType(l,2,out a2);
-				System.Single a3;
-				checkType(l,3,out a3);
-				System.Boolean a4;
-				checkType(l,4,out a4);
-				var ret=UnityEngine.Color.HSVToRGB(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int op_Addition(IntPtr l) {
 		try {
 			UnityEngine.Color a1;
@@ -156,6 +65,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int op_Subtraction(IntPtr l) {
 		try {
 			UnityEngine.Color a1;
@@ -172,6 +82,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int op_Multiply(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -214,6 +125,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int op_Division(IntPtr l) {
 		try {
 			UnityEngine.Color a1;
@@ -230,6 +142,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int op_Equality(IntPtr l) {
 		try {
 			UnityEngine.Color a1;
@@ -246,6 +159,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int op_Inequality(IntPtr l) {
 		try {
 			UnityEngine.Color a1;
@@ -262,6 +176,104 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Lerp_s(IntPtr l) {
+		try {
+			UnityEngine.Color a1;
+			checkType(l,1,out a1);
+			UnityEngine.Color a2;
+			checkType(l,2,out a2);
+			System.Single a3;
+			checkType(l,3,out a3);
+			var ret=UnityEngine.Color.Lerp(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int LerpUnclamped_s(IntPtr l) {
+		try {
+			UnityEngine.Color a1;
+			checkType(l,1,out a1);
+			UnityEngine.Color a2;
+			checkType(l,2,out a2);
+			System.Single a3;
+			checkType(l,3,out a3);
+			var ret=UnityEngine.Color.LerpUnclamped(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int RGBToHSV_s(IntPtr l) {
+		try {
+			UnityEngine.Color a1;
+			checkType(l,1,out a1);
+			System.Single a2;
+			System.Single a3;
+			System.Single a4;
+			UnityEngine.Color.RGBToHSV(a1,out a2,out a3,out a4);
+			pushValue(l,true);
+			pushValue(l,a2);
+			pushValue(l,a3);
+			pushValue(l,a4);
+			return 4;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HSVToRGB_s(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==3){
+				System.Single a1;
+				checkType(l,1,out a1);
+				System.Single a2;
+				checkType(l,2,out a2);
+				System.Single a3;
+				checkType(l,3,out a3);
+				var ret=UnityEngine.Color.HSVToRGB(a1,a2,a3);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==4){
+				System.Single a1;
+				checkType(l,1,out a1);
+				System.Single a2;
+				checkType(l,2,out a2);
+				System.Single a3;
+				checkType(l,3,out a3);
+				System.Boolean a4;
+				checkType(l,4,out a4);
+				var ret=UnityEngine.Color.HSVToRGB(a1,a2,a3,a4);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_r(IntPtr l) {
 		try {
 			UnityEngine.Color self;
@@ -275,6 +287,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_r(IntPtr l) {
 		try {
 			UnityEngine.Color self;
@@ -291,6 +304,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_g(IntPtr l) {
 		try {
 			UnityEngine.Color self;
@@ -304,6 +318,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_g(IntPtr l) {
 		try {
 			UnityEngine.Color self;
@@ -320,6 +335,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_b(IntPtr l) {
 		try {
 			UnityEngine.Color self;
@@ -333,6 +349,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_b(IntPtr l) {
 		try {
 			UnityEngine.Color self;
@@ -349,6 +366,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_a(IntPtr l) {
 		try {
 			UnityEngine.Color self;
@@ -362,6 +380,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_a(IntPtr l) {
 		try {
 			UnityEngine.Color self;
@@ -378,6 +397,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_red(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -389,6 +409,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_green(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -400,6 +421,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_blue(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -411,6 +433,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_white(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -422,6 +445,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_black(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -433,6 +457,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_yellow(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -444,6 +469,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_cyan(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -455,6 +481,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_magenta(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -466,6 +493,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_gray(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -477,6 +505,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_grey(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -488,6 +517,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_clear(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -499,6 +529,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_grayscale(IntPtr l) {
 		try {
 			UnityEngine.Color self;
@@ -512,6 +543,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_linear(IntPtr l) {
 		try {
 			UnityEngine.Color self;
@@ -525,6 +557,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_gamma(IntPtr l) {
 		try {
 			UnityEngine.Color self;
@@ -538,6 +571,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_maxColorComponent(IntPtr l) {
 		try {
 			UnityEngine.Color self;
@@ -551,6 +585,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int getItem(IntPtr l) {
 		try {
 			UnityEngine.Color self;
@@ -567,6 +602,7 @@ public class Lua_UnityEngine_Color : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int setItem(IntPtr l) {
 		try {
 			UnityEngine.Color self;
@@ -583,18 +619,19 @@ public class Lua_UnityEngine_Color : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Color");
-		addMember(l,Lerp_s);
-		addMember(l,LerpUnclamped_s);
-		addMember(l,RGBToHSV_s);
-		addMember(l,HSVToRGB_s);
 		addMember(l,op_Addition);
 		addMember(l,op_Subtraction);
 		addMember(l,op_Multiply);
 		addMember(l,op_Division);
 		addMember(l,op_Equality);
 		addMember(l,op_Inequality);
+		addMember(l,Lerp_s);
+		addMember(l,LerpUnclamped_s);
+		addMember(l,RGBToHSV_s);
+		addMember(l,HSVToRGB_s);
 		addMember(l,getItem);
 		addMember(l,setItem);
 		addMember(l,"r",get_r,set_r,true);

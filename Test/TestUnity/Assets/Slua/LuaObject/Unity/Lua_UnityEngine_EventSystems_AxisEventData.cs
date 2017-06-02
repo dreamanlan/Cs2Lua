@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_EventSystems_AxisEventData : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.AxisEventData o;
@@ -19,6 +20,7 @@ public class Lua_UnityEngine_EventSystems_AxisEventData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_moveVector(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.AxisEventData self=(UnityEngine.EventSystems.AxisEventData)checkSelf(l);
@@ -31,6 +33,7 @@ public class Lua_UnityEngine_EventSystems_AxisEventData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_moveVector(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.AxisEventData self=(UnityEngine.EventSystems.AxisEventData)checkSelf(l);
@@ -45,6 +48,7 @@ public class Lua_UnityEngine_EventSystems_AxisEventData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_moveDir(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.AxisEventData self=(UnityEngine.EventSystems.AxisEventData)checkSelf(l);
@@ -57,6 +61,7 @@ public class Lua_UnityEngine_EventSystems_AxisEventData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_moveDir(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.AxisEventData self=(UnityEngine.EventSystems.AxisEventData)checkSelf(l);
@@ -70,6 +75,7 @@ public class Lua_UnityEngine_EventSystems_AxisEventData : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.EventSystems.AxisEventData");
 		addMember(l,"moveVector",get_moveVector,set_moveVector,true);

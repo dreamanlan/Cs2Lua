@@ -1,7 +1,7 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Rendering_GraphicsDeviceType : LuaObject {
 	static public void reg(IntPtr l) {
 		getEnumTable(l,"UnityEngine.Rendering.GraphicsDeviceType");
@@ -20,7 +20,8 @@ public class Lua_UnityEngine_Rendering_GraphicsDeviceType : LuaObject {
 		addMember(l,16,"Metal");
 		addMember(l,17,"OpenGLCore");
 		addMember(l,18,"Direct3D12");
-		addMember(l,19,"Nintendo3DS");
+		addMember(l,19,"N3DS");
+		addMember(l,21,"Vulkan");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

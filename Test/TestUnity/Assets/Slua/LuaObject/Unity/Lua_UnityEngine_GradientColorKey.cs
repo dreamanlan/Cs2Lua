@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_GradientColorKey : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.GradientColorKey o;
@@ -21,6 +22,7 @@ public class Lua_UnityEngine_GradientColorKey : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_color(IntPtr l) {
 		try {
 			UnityEngine.GradientColorKey self;
@@ -34,6 +36,7 @@ public class Lua_UnityEngine_GradientColorKey : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_color(IntPtr l) {
 		try {
 			UnityEngine.GradientColorKey self;
@@ -50,6 +53,7 @@ public class Lua_UnityEngine_GradientColorKey : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_time(IntPtr l) {
 		try {
 			UnityEngine.GradientColorKey self;
@@ -63,6 +67,7 @@ public class Lua_UnityEngine_GradientColorKey : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_time(IntPtr l) {
 		try {
 			UnityEngine.GradientColorKey self;
@@ -78,6 +83,7 @@ public class Lua_UnityEngine_GradientColorKey : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.GradientColorKey");
 		addMember(l,"color",get_color,set_color,true);

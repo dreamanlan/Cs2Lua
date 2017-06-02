@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_SoftJointLimit : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.SoftJointLimit o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_SoftJointLimit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_limit(IntPtr l) {
 		try {
 			UnityEngine.SoftJointLimit self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_SoftJointLimit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_limit(IntPtr l) {
 		try {
 			UnityEngine.SoftJointLimit self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_SoftJointLimit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_bounciness(IntPtr l) {
 		try {
 			UnityEngine.SoftJointLimit self;
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_SoftJointLimit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_bounciness(IntPtr l) {
 		try {
 			UnityEngine.SoftJointLimit self;
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_SoftJointLimit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_contactDistance(IntPtr l) {
 		try {
 			UnityEngine.SoftJointLimit self;
@@ -88,6 +94,7 @@ public class Lua_UnityEngine_SoftJointLimit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_contactDistance(IntPtr l) {
 		try {
 			UnityEngine.SoftJointLimit self;
@@ -103,6 +110,7 @@ public class Lua_UnityEngine_SoftJointLimit : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.SoftJointLimit");
 		addMember(l,"limit",get_limit,set_limit,true);

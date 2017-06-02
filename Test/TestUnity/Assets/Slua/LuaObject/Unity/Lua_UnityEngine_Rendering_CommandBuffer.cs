@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.Rendering.CommandBuffer o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Dispose(IntPtr l) {
 		try {
 			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
@@ -29,6 +31,7 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Release(IntPtr l) {
 		try {
 			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
@@ -41,6 +44,206 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetComputeFloatParam(IntPtr l) {
+		try {
+			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+			UnityEngine.ComputeShader a1;
+			checkType(l,2,out a1);
+			System.String a2;
+			checkType(l,3,out a2);
+			System.Single a3;
+			checkType(l,4,out a3);
+			self.SetComputeFloatParam(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetComputeIntParam(IntPtr l) {
+		try {
+			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+			UnityEngine.ComputeShader a1;
+			checkType(l,2,out a1);
+			System.String a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			self.SetComputeIntParam(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetComputeVectorParam(IntPtr l) {
+		try {
+			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+			UnityEngine.ComputeShader a1;
+			checkType(l,2,out a1);
+			System.String a2;
+			checkType(l,3,out a2);
+			UnityEngine.Vector4 a3;
+			checkType(l,4,out a3);
+			self.SetComputeVectorParam(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetComputeFloatParams(IntPtr l) {
+		try {
+			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+			UnityEngine.ComputeShader a1;
+			checkType(l,2,out a1);
+			System.String a2;
+			checkType(l,3,out a2);
+			System.Single[] a3;
+			checkParams(l,4,out a3);
+			self.SetComputeFloatParams(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetComputeIntParams(IntPtr l) {
+		try {
+			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+			UnityEngine.ComputeShader a1;
+			checkType(l,2,out a1);
+			System.String a2;
+			checkType(l,3,out a2);
+			System.Int32[] a3;
+			checkParams(l,4,out a3);
+			self.SetComputeIntParams(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetComputeTextureParam(IntPtr l) {
+		try {
+			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+			UnityEngine.ComputeShader a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.String a3;
+			checkType(l,4,out a3);
+			UnityEngine.Rendering.RenderTargetIdentifier a4;
+			checkValueType(l,5,out a4);
+			self.SetComputeTextureParam(a1,a2,a3,a4);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetComputeBufferParam(IntPtr l) {
+		try {
+			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+			UnityEngine.ComputeShader a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.String a3;
+			checkType(l,4,out a3);
+			UnityEngine.ComputeBuffer a4;
+			checkType(l,5,out a4);
+			self.SetComputeBufferParam(a1,a2,a3,a4);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int DispatchCompute(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==5){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				UnityEngine.ComputeShader a1;
+				checkType(l,2,out a1);
+				System.Int32 a2;
+				checkType(l,3,out a2);
+				UnityEngine.ComputeBuffer a3;
+				checkType(l,4,out a3);
+				System.UInt32 a4;
+				checkType(l,5,out a4);
+				self.DispatchCompute(a1,a2,a3,a4);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==6){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				UnityEngine.ComputeShader a1;
+				checkType(l,2,out a1);
+				System.Int32 a2;
+				checkType(l,3,out a2);
+				System.Int32 a3;
+				checkType(l,4,out a3);
+				System.Int32 a4;
+				checkType(l,5,out a4);
+				System.Int32 a5;
+				checkType(l,6,out a5);
+				self.DispatchCompute(a1,a2,a3,a4,a5);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CopyCounterValue(IntPtr l) {
+		try {
+			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+			UnityEngine.ComputeBuffer a1;
+			checkType(l,2,out a1);
+			UnityEngine.ComputeBuffer a2;
+			checkType(l,3,out a2);
+			System.UInt32 a3;
+			checkType(l,4,out a3);
+			self.CopyCounterValue(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Clear(IntPtr l) {
 		try {
 			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
@@ -53,6 +256,7 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int DrawMesh(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -125,6 +329,7 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int DrawRenderer(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -173,6 +378,7 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int DrawProcedural(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -239,6 +445,7 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int DrawProceduralIndirect(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -305,6 +512,141 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int DrawMeshInstanced(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==6){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				UnityEngine.Mesh a1;
+				checkType(l,2,out a1);
+				System.Int32 a2;
+				checkType(l,3,out a2);
+				UnityEngine.Material a3;
+				checkType(l,4,out a3);
+				System.Int32 a4;
+				checkType(l,5,out a4);
+				UnityEngine.Matrix4x4[] a5;
+				checkArray(l,6,out a5);
+				self.DrawMeshInstanced(a1,a2,a3,a4,a5);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==7){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				UnityEngine.Mesh a1;
+				checkType(l,2,out a1);
+				System.Int32 a2;
+				checkType(l,3,out a2);
+				UnityEngine.Material a3;
+				checkType(l,4,out a3);
+				System.Int32 a4;
+				checkType(l,5,out a4);
+				UnityEngine.Matrix4x4[] a5;
+				checkArray(l,6,out a5);
+				System.Int32 a6;
+				checkType(l,7,out a6);
+				self.DrawMeshInstanced(a1,a2,a3,a4,a5,a6);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==8){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				UnityEngine.Mesh a1;
+				checkType(l,2,out a1);
+				System.Int32 a2;
+				checkType(l,3,out a2);
+				UnityEngine.Material a3;
+				checkType(l,4,out a3);
+				System.Int32 a4;
+				checkType(l,5,out a4);
+				UnityEngine.Matrix4x4[] a5;
+				checkArray(l,6,out a5);
+				System.Int32 a6;
+				checkType(l,7,out a6);
+				UnityEngine.MaterialPropertyBlock a7;
+				checkType(l,8,out a7);
+				self.DrawMeshInstanced(a1,a2,a3,a4,a5,a6,a7);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int DrawMeshInstancedIndirect(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==6){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				UnityEngine.Mesh a1;
+				checkType(l,2,out a1);
+				System.Int32 a2;
+				checkType(l,3,out a2);
+				UnityEngine.Material a3;
+				checkType(l,4,out a3);
+				System.Int32 a4;
+				checkType(l,5,out a4);
+				UnityEngine.ComputeBuffer a5;
+				checkType(l,6,out a5);
+				self.DrawMeshInstancedIndirect(a1,a2,a3,a4,a5);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==7){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				UnityEngine.Mesh a1;
+				checkType(l,2,out a1);
+				System.Int32 a2;
+				checkType(l,3,out a2);
+				UnityEngine.Material a3;
+				checkType(l,4,out a3);
+				System.Int32 a4;
+				checkType(l,5,out a4);
+				UnityEngine.ComputeBuffer a5;
+				checkType(l,6,out a5);
+				System.Int32 a6;
+				checkType(l,7,out a6);
+				self.DrawMeshInstancedIndirect(a1,a2,a3,a4,a5,a6);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==8){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				UnityEngine.Mesh a1;
+				checkType(l,2,out a1);
+				System.Int32 a2;
+				checkType(l,3,out a2);
+				UnityEngine.Material a3;
+				checkType(l,4,out a3);
+				System.Int32 a4;
+				checkType(l,5,out a4);
+				UnityEngine.ComputeBuffer a5;
+				checkType(l,6,out a5);
+				System.Int32 a6;
+				checkType(l,7,out a6);
+				UnityEngine.MaterialPropertyBlock a7;
+				checkType(l,8,out a7);
+				self.DrawMeshInstancedIndirect(a1,a2,a3,a4,a5,a6,a7);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetRenderTarget(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -370,7 +712,21 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==5){
+			else if(matchType(l,argc,2,typeof(UnityEngine.Rendering.RenderTargetIdentifier),typeof(int),typeof(UnityEngine.CubemapFace),typeof(int))){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				UnityEngine.Rendering.RenderTargetIdentifier a1;
+				checkValueType(l,2,out a1);
+				System.Int32 a2;
+				checkType(l,3,out a2);
+				UnityEngine.CubemapFace a3;
+				checkEnum(l,4,out a3);
+				System.Int32 a4;
+				checkType(l,5,out a4);
+				self.SetRenderTarget(a1,a2,a3,a4);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(UnityEngine.Rendering.RenderTargetIdentifier),typeof(UnityEngine.Rendering.RenderTargetIdentifier),typeof(int),typeof(UnityEngine.CubemapFace))){
 				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
 				UnityEngine.Rendering.RenderTargetIdentifier a1;
 				checkValueType(l,2,out a1);
@@ -384,6 +740,22 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
+			else if(argc==6){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				UnityEngine.Rendering.RenderTargetIdentifier a1;
+				checkValueType(l,2,out a1);
+				UnityEngine.Rendering.RenderTargetIdentifier a2;
+				checkValueType(l,3,out a2);
+				System.Int32 a3;
+				checkType(l,4,out a3);
+				UnityEngine.CubemapFace a4;
+				checkEnum(l,5,out a4);
+				System.Int32 a5;
+				checkType(l,6,out a5);
+				self.SetRenderTarget(a1,a2,a3,a4,a5);
+				pushValue(l,true);
+				return 1;
+			}
 			pushValue(l,false);
 			LuaDLL.lua_pushstring(l,"No matched override function to call");
 			return 2;
@@ -393,6 +765,107 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CopyTexture(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==3){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				UnityEngine.Rendering.RenderTargetIdentifier a1;
+				checkValueType(l,2,out a1);
+				UnityEngine.Rendering.RenderTargetIdentifier a2;
+				checkValueType(l,3,out a2);
+				self.CopyTexture(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==5){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				UnityEngine.Rendering.RenderTargetIdentifier a1;
+				checkValueType(l,2,out a1);
+				System.Int32 a2;
+				checkType(l,3,out a2);
+				UnityEngine.Rendering.RenderTargetIdentifier a3;
+				checkValueType(l,4,out a3);
+				System.Int32 a4;
+				checkType(l,5,out a4);
+				self.CopyTexture(a1,a2,a3,a4);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==7){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				UnityEngine.Rendering.RenderTargetIdentifier a1;
+				checkValueType(l,2,out a1);
+				System.Int32 a2;
+				checkType(l,3,out a2);
+				System.Int32 a3;
+				checkType(l,4,out a3);
+				UnityEngine.Rendering.RenderTargetIdentifier a4;
+				checkValueType(l,5,out a4);
+				System.Int32 a5;
+				checkType(l,6,out a5);
+				System.Int32 a6;
+				checkType(l,7,out a6);
+				self.CopyTexture(a1,a2,a3,a4,a5,a6);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==13){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				UnityEngine.Rendering.RenderTargetIdentifier a1;
+				checkValueType(l,2,out a1);
+				System.Int32 a2;
+				checkType(l,3,out a2);
+				System.Int32 a3;
+				checkType(l,4,out a3);
+				System.Int32 a4;
+				checkType(l,5,out a4);
+				System.Int32 a5;
+				checkType(l,6,out a5);
+				System.Int32 a6;
+				checkType(l,7,out a6);
+				System.Int32 a7;
+				checkType(l,8,out a7);
+				UnityEngine.Rendering.RenderTargetIdentifier a8;
+				checkValueType(l,9,out a8);
+				System.Int32 a9;
+				checkType(l,10,out a9);
+				System.Int32 a10;
+				checkType(l,11,out a10);
+				System.Int32 a11;
+				checkType(l,12,out a11);
+				System.Int32 a12;
+				checkType(l,13,out a12);
+				self.CopyTexture(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetViewport(IntPtr l) {
+		try {
+			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+			UnityEngine.Rect a1;
+			checkValueType(l,2,out a1);
+			self.SetViewport(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Blit(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -477,6 +950,7 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetTemporaryRT(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -582,6 +1056,30 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
+			else if(argc==10){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				System.Int32 a1;
+				checkType(l,2,out a1);
+				System.Int32 a2;
+				checkType(l,3,out a2);
+				System.Int32 a3;
+				checkType(l,4,out a3);
+				System.Int32 a4;
+				checkType(l,5,out a4);
+				UnityEngine.FilterMode a5;
+				checkEnum(l,6,out a5);
+				UnityEngine.RenderTextureFormat a6;
+				checkEnum(l,7,out a6);
+				UnityEngine.RenderTextureReadWrite a7;
+				checkEnum(l,8,out a7);
+				System.Int32 a8;
+				checkType(l,9,out a8);
+				System.Boolean a9;
+				checkType(l,10,out a9);
+				self.GetTemporaryRT(a1,a2,a3,a4,a5,a6,a7,a8,a9);
+				pushValue(l,true);
+				return 1;
+			}
 			pushValue(l,false);
 			LuaDLL.lua_pushstring(l,"No matched override function to call");
 			return 2;
@@ -591,6 +1089,7 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ReleaseTemporaryRT(IntPtr l) {
 		try {
 			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
@@ -605,6 +1104,7 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ClearRenderTarget(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -643,6 +1143,7 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetGlobalFloat(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -675,6 +1176,7 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetGlobalVector(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -707,6 +1209,7 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetGlobalColor(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -739,6 +1242,7 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetGlobalMatrix(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -771,6 +1275,260 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int EnableShaderKeyword(IntPtr l) {
+		try {
+			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			self.EnableShaderKeyword(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int DisableShaderKeyword(IntPtr l) {
+		try {
+			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			self.DisableShaderKeyword(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetViewMatrix(IntPtr l) {
+		try {
+			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+			UnityEngine.Matrix4x4 a1;
+			checkValueType(l,2,out a1);
+			self.SetViewMatrix(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetProjectionMatrix(IntPtr l) {
+		try {
+			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+			UnityEngine.Matrix4x4 a1;
+			checkValueType(l,2,out a1);
+			self.SetProjectionMatrix(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetViewProjectionMatrices(IntPtr l) {
+		try {
+			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+			UnityEngine.Matrix4x4 a1;
+			checkValueType(l,2,out a1);
+			UnityEngine.Matrix4x4 a2;
+			checkValueType(l,3,out a2);
+			self.SetViewProjectionMatrices(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetGlobalDepthBias(IntPtr l) {
+		try {
+			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+			System.Single a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			self.SetGlobalDepthBias(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetGlobalFloatArray(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(matchType(l,argc,2,typeof(string),typeof(System.Single[]))){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				System.Single[] a2;
+				checkArray(l,3,out a2);
+				self.SetGlobalFloatArray(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(int),typeof(System.Single[]))){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				System.Int32 a1;
+				checkType(l,2,out a1);
+				System.Single[] a2;
+				checkArray(l,3,out a2);
+				self.SetGlobalFloatArray(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(string),typeof(List<System.Single>))){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				System.Collections.Generic.List<System.Single> a2;
+				checkType(l,3,out a2);
+				self.SetGlobalFloatArray(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(int),typeof(List<System.Single>))){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				System.Int32 a1;
+				checkType(l,2,out a1);
+				System.Collections.Generic.List<System.Single> a2;
+				checkType(l,3,out a2);
+				self.SetGlobalFloatArray(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetGlobalVectorArray(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(matchType(l,argc,2,typeof(string),typeof(UnityEngine.Vector4[]))){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				UnityEngine.Vector4[] a2;
+				checkArray(l,3,out a2);
+				self.SetGlobalVectorArray(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(int),typeof(UnityEngine.Vector4[]))){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				System.Int32 a1;
+				checkType(l,2,out a1);
+				UnityEngine.Vector4[] a2;
+				checkArray(l,3,out a2);
+				self.SetGlobalVectorArray(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(string),typeof(List<UnityEngine.Vector4>))){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				System.Collections.Generic.List<UnityEngine.Vector4> a2;
+				checkType(l,3,out a2);
+				self.SetGlobalVectorArray(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(int),typeof(List<UnityEngine.Vector4>))){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				System.Int32 a1;
+				checkType(l,2,out a1);
+				System.Collections.Generic.List<UnityEngine.Vector4> a2;
+				checkType(l,3,out a2);
+				self.SetGlobalVectorArray(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetGlobalMatrixArray(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(matchType(l,argc,2,typeof(string),typeof(UnityEngine.Matrix4x4[]))){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				UnityEngine.Matrix4x4[] a2;
+				checkArray(l,3,out a2);
+				self.SetGlobalMatrixArray(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(int),typeof(UnityEngine.Matrix4x4[]))){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				System.Int32 a1;
+				checkType(l,2,out a1);
+				UnityEngine.Matrix4x4[] a2;
+				checkArray(l,3,out a2);
+				self.SetGlobalMatrixArray(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(string),typeof(List<UnityEngine.Matrix4x4>))){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				System.Collections.Generic.List<UnityEngine.Matrix4x4> a2;
+				checkType(l,3,out a2);
+				self.SetGlobalMatrixArray(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(int),typeof(List<UnityEngine.Matrix4x4>))){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				System.Int32 a1;
+				checkType(l,2,out a1);
+				System.Collections.Generic.List<UnityEngine.Matrix4x4> a2;
+				checkType(l,3,out a2);
+				self.SetGlobalMatrixArray(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetGlobalTexture(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -803,6 +1561,40 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetGlobalBuffer(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(matchType(l,argc,2,typeof(int),typeof(UnityEngine.ComputeBuffer))){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				System.Int32 a1;
+				checkType(l,2,out a1);
+				UnityEngine.ComputeBuffer a2;
+				checkType(l,3,out a2);
+				self.SetGlobalBuffer(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l,argc,2,typeof(string),typeof(UnityEngine.ComputeBuffer))){
+				UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				UnityEngine.ComputeBuffer a2;
+				checkType(l,3,out a2);
+				self.SetGlobalBuffer(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetShadowSamplingMode(IntPtr l) {
 		try {
 			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
@@ -819,6 +1611,7 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IssuePluginEvent(IntPtr l) {
 		try {
 			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
@@ -835,6 +1628,37 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int BeginSample(IntPtr l) {
+		try {
+			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			self.BeginSample(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int EndSample(IntPtr l) {
+		try {
+			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			self.EndSample(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_name(IntPtr l) {
 		try {
 			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
@@ -847,6 +1671,7 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_name(IntPtr l) {
 		try {
 			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
@@ -861,6 +1686,7 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_sizeInBytes(IntPtr l) {
 		try {
 			UnityEngine.Rendering.CommandBuffer self=(UnityEngine.Rendering.CommandBuffer)checkSelf(l);
@@ -872,16 +1698,30 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Rendering.CommandBuffer");
 		addMember(l,Dispose);
 		addMember(l,Release);
+		addMember(l,SetComputeFloatParam);
+		addMember(l,SetComputeIntParam);
+		addMember(l,SetComputeVectorParam);
+		addMember(l,SetComputeFloatParams);
+		addMember(l,SetComputeIntParams);
+		addMember(l,SetComputeTextureParam);
+		addMember(l,SetComputeBufferParam);
+		addMember(l,DispatchCompute);
+		addMember(l,CopyCounterValue);
 		addMember(l,Clear);
 		addMember(l,DrawMesh);
 		addMember(l,DrawRenderer);
 		addMember(l,DrawProcedural);
 		addMember(l,DrawProceduralIndirect);
+		addMember(l,DrawMeshInstanced);
+		addMember(l,DrawMeshInstancedIndirect);
 		addMember(l,SetRenderTarget);
+		addMember(l,CopyTexture);
+		addMember(l,SetViewport);
 		addMember(l,Blit);
 		addMember(l,GetTemporaryRT);
 		addMember(l,ReleaseTemporaryRT);
@@ -890,9 +1730,21 @@ public class Lua_UnityEngine_Rendering_CommandBuffer : LuaObject {
 		addMember(l,SetGlobalVector);
 		addMember(l,SetGlobalColor);
 		addMember(l,SetGlobalMatrix);
+		addMember(l,EnableShaderKeyword);
+		addMember(l,DisableShaderKeyword);
+		addMember(l,SetViewMatrix);
+		addMember(l,SetProjectionMatrix);
+		addMember(l,SetViewProjectionMatrices);
+		addMember(l,SetGlobalDepthBias);
+		addMember(l,SetGlobalFloatArray);
+		addMember(l,SetGlobalVectorArray);
+		addMember(l,SetGlobalMatrixArray);
 		addMember(l,SetGlobalTexture);
+		addMember(l,SetGlobalBuffer);
 		addMember(l,SetShadowSamplingMode);
 		addMember(l,IssuePluginEvent);
+		addMember(l,BeginSample);
+		addMember(l,EndSample);
 		addMember(l,"name",get_name,set_name,true);
 		addMember(l,"sizeInBytes",get_sizeInBytes,null,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.Rendering.CommandBuffer));

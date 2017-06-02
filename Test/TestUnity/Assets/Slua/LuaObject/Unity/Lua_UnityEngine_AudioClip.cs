@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_AudioClip : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.AudioClip o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_AudioClip : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int LoadAudioData(IntPtr l) {
 		try {
 			UnityEngine.AudioClip self=(UnityEngine.AudioClip)checkSelf(l);
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_AudioClip : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int UnloadAudioData(IntPtr l) {
 		try {
 			UnityEngine.AudioClip self=(UnityEngine.AudioClip)checkSelf(l);
@@ -43,6 +46,7 @@ public class Lua_UnityEngine_AudioClip : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetData(IntPtr l) {
 		try {
 			UnityEngine.AudioClip self=(UnityEngine.AudioClip)checkSelf(l);
@@ -60,6 +64,7 @@ public class Lua_UnityEngine_AudioClip : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetData(IntPtr l) {
 		try {
 			UnityEngine.AudioClip self=(UnityEngine.AudioClip)checkSelf(l);
@@ -77,6 +82,7 @@ public class Lua_UnityEngine_AudioClip : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Create_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -143,6 +149,7 @@ public class Lua_UnityEngine_AudioClip : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_length(IntPtr l) {
 		try {
 			UnityEngine.AudioClip self=(UnityEngine.AudioClip)checkSelf(l);
@@ -155,6 +162,7 @@ public class Lua_UnityEngine_AudioClip : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_samples(IntPtr l) {
 		try {
 			UnityEngine.AudioClip self=(UnityEngine.AudioClip)checkSelf(l);
@@ -167,6 +175,7 @@ public class Lua_UnityEngine_AudioClip : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_channels(IntPtr l) {
 		try {
 			UnityEngine.AudioClip self=(UnityEngine.AudioClip)checkSelf(l);
@@ -179,6 +188,7 @@ public class Lua_UnityEngine_AudioClip : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_frequency(IntPtr l) {
 		try {
 			UnityEngine.AudioClip self=(UnityEngine.AudioClip)checkSelf(l);
@@ -191,6 +201,7 @@ public class Lua_UnityEngine_AudioClip : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_loadType(IntPtr l) {
 		try {
 			UnityEngine.AudioClip self=(UnityEngine.AudioClip)checkSelf(l);
@@ -203,6 +214,7 @@ public class Lua_UnityEngine_AudioClip : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_preloadAudioData(IntPtr l) {
 		try {
 			UnityEngine.AudioClip self=(UnityEngine.AudioClip)checkSelf(l);
@@ -215,6 +227,7 @@ public class Lua_UnityEngine_AudioClip : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_loadState(IntPtr l) {
 		try {
 			UnityEngine.AudioClip self=(UnityEngine.AudioClip)checkSelf(l);
@@ -227,6 +240,7 @@ public class Lua_UnityEngine_AudioClip : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_loadInBackground(IntPtr l) {
 		try {
 			UnityEngine.AudioClip self=(UnityEngine.AudioClip)checkSelf(l);
@@ -238,6 +252,7 @@ public class Lua_UnityEngine_AudioClip : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AudioClip");
 		addMember(l,LoadAudioData);

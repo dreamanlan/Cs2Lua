@@ -1,7 +1,7 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_ImagePosition : LuaObject {
 	static public void reg(IntPtr l) {
 		getEnumTable(l,"UnityEngine.ImagePosition");

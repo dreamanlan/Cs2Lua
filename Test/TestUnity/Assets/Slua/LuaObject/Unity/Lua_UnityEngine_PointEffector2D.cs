@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_PointEffector2D : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.PointEffector2D o;
-			o=new UnityEngine.PointEffector2D();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_forceMagnitude(IntPtr l) {
 		try {
 			UnityEngine.PointEffector2D self=(UnityEngine.PointEffector2D)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_PointEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_forceMagnitude(IntPtr l) {
 		try {
 			UnityEngine.PointEffector2D self=(UnityEngine.PointEffector2D)checkSelf(l);
@@ -43,6 +32,7 @@ public class Lua_UnityEngine_PointEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_forceVariation(IntPtr l) {
 		try {
 			UnityEngine.PointEffector2D self=(UnityEngine.PointEffector2D)checkSelf(l);
@@ -55,6 +45,7 @@ public class Lua_UnityEngine_PointEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_forceVariation(IntPtr l) {
 		try {
 			UnityEngine.PointEffector2D self=(UnityEngine.PointEffector2D)checkSelf(l);
@@ -69,6 +60,7 @@ public class Lua_UnityEngine_PointEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_distanceScale(IntPtr l) {
 		try {
 			UnityEngine.PointEffector2D self=(UnityEngine.PointEffector2D)checkSelf(l);
@@ -81,6 +73,7 @@ public class Lua_UnityEngine_PointEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_distanceScale(IntPtr l) {
 		try {
 			UnityEngine.PointEffector2D self=(UnityEngine.PointEffector2D)checkSelf(l);
@@ -95,6 +88,7 @@ public class Lua_UnityEngine_PointEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_drag(IntPtr l) {
 		try {
 			UnityEngine.PointEffector2D self=(UnityEngine.PointEffector2D)checkSelf(l);
@@ -107,6 +101,7 @@ public class Lua_UnityEngine_PointEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_drag(IntPtr l) {
 		try {
 			UnityEngine.PointEffector2D self=(UnityEngine.PointEffector2D)checkSelf(l);
@@ -121,6 +116,7 @@ public class Lua_UnityEngine_PointEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_angularDrag(IntPtr l) {
 		try {
 			UnityEngine.PointEffector2D self=(UnityEngine.PointEffector2D)checkSelf(l);
@@ -133,6 +129,7 @@ public class Lua_UnityEngine_PointEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_angularDrag(IntPtr l) {
 		try {
 			UnityEngine.PointEffector2D self=(UnityEngine.PointEffector2D)checkSelf(l);
@@ -147,6 +144,7 @@ public class Lua_UnityEngine_PointEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_forceSource(IntPtr l) {
 		try {
 			UnityEngine.PointEffector2D self=(UnityEngine.PointEffector2D)checkSelf(l);
@@ -159,6 +157,7 @@ public class Lua_UnityEngine_PointEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_forceSource(IntPtr l) {
 		try {
 			UnityEngine.PointEffector2D self=(UnityEngine.PointEffector2D)checkSelf(l);
@@ -173,6 +172,7 @@ public class Lua_UnityEngine_PointEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_forceTarget(IntPtr l) {
 		try {
 			UnityEngine.PointEffector2D self=(UnityEngine.PointEffector2D)checkSelf(l);
@@ -185,6 +185,7 @@ public class Lua_UnityEngine_PointEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_forceTarget(IntPtr l) {
 		try {
 			UnityEngine.PointEffector2D self=(UnityEngine.PointEffector2D)checkSelf(l);
@@ -199,6 +200,7 @@ public class Lua_UnityEngine_PointEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_forceMode(IntPtr l) {
 		try {
 			UnityEngine.PointEffector2D self=(UnityEngine.PointEffector2D)checkSelf(l);
@@ -211,6 +213,7 @@ public class Lua_UnityEngine_PointEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_forceMode(IntPtr l) {
 		try {
 			UnityEngine.PointEffector2D self=(UnityEngine.PointEffector2D)checkSelf(l);
@@ -224,6 +227,7 @@ public class Lua_UnityEngine_PointEffector2D : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.PointEffector2D");
 		addMember(l,"forceMagnitude",get_forceMagnitude,set_forceMagnitude,true);
@@ -234,6 +238,6 @@ public class Lua_UnityEngine_PointEffector2D : LuaObject {
 		addMember(l,"forceSource",get_forceSource,set_forceSource,true);
 		addMember(l,"forceTarget",get_forceTarget,set_forceTarget,true);
 		addMember(l,"forceMode",get_forceMode,set_forceMode,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.PointEffector2D),typeof(UnityEngine.Effector2D));
+		createTypeMetatable(l,null, typeof(UnityEngine.PointEffector2D),typeof(UnityEngine.Effector2D));
 	}
 }

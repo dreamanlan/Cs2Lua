@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.CanvasRenderer o;
-			o=new UnityEngine.CanvasRenderer();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetColor(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -31,6 +19,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetColor(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -44,6 +33,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetAlpha(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -57,6 +47,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetAlpha(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -71,6 +62,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int EnableRectClipping(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -85,6 +77,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int DisableRectClipping(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -97,6 +90,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetMaterial(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -129,6 +123,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetMaterial(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -157,6 +152,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetPopMaterial(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -173,6 +169,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetPopMaterial(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -188,6 +185,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetTexture(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -202,6 +200,22 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetAlphaTexture(IntPtr l) {
+		try {
+			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
+			UnityEngine.Texture a1;
+			checkType(l,2,out a1);
+			self.SetAlphaTexture(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetMesh(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -216,6 +230,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Clear(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -228,6 +243,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SplitUIVertexStreams_s(IntPtr l) {
 		try {
 			System.Collections.Generic.List<UnityEngine.UIVertex> a1;
@@ -255,6 +271,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CreateUIVertexStream_s(IntPtr l) {
 		try {
 			System.Collections.Generic.List<UnityEngine.UIVertex> a1;
@@ -282,6 +299,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int AddUIVertexStream_s(IntPtr l) {
 		try {
 			System.Collections.Generic.List<UnityEngine.UIVertex> a1;
@@ -307,6 +325,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_hasRectClipping(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -319,6 +338,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_hasPopInstruction(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -331,6 +351,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_hasPopInstruction(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -345,6 +366,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_materialCount(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -357,6 +379,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_materialCount(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -371,6 +394,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_popMaterialCount(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -383,6 +407,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_popMaterialCount(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -397,6 +422,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_relativeDepth(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -409,6 +435,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_cull(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -421,6 +448,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_cull(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -435,6 +463,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_absoluteDepth(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -447,6 +476,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_hasMoved(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -458,6 +488,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.CanvasRenderer");
 		addMember(l,SetColor);
@@ -471,6 +502,7 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		addMember(l,SetPopMaterial);
 		addMember(l,GetPopMaterial);
 		addMember(l,SetTexture);
+		addMember(l,SetAlphaTexture);
 		addMember(l,SetMesh);
 		addMember(l,Clear);
 		addMember(l,SplitUIVertexStreams_s);
@@ -484,6 +516,6 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		addMember(l,"cull",get_cull,set_cull,true);
 		addMember(l,"absoluteDepth",get_absoluteDepth,null,true);
 		addMember(l,"hasMoved",get_hasMoved,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.CanvasRenderer),typeof(UnityEngine.Component));
+		createTypeMetatable(l,null, typeof(UnityEngine.CanvasRenderer),typeof(UnityEngine.Component));
 	}
 }

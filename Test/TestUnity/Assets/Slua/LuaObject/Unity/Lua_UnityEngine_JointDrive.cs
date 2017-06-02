@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_JointDrive : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.JointDrive o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_JointDrive : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_positionSpring(IntPtr l) {
 		try {
 			UnityEngine.JointDrive self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_JointDrive : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_positionSpring(IntPtr l) {
 		try {
 			UnityEngine.JointDrive self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_JointDrive : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_positionDamper(IntPtr l) {
 		try {
 			UnityEngine.JointDrive self;
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_JointDrive : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_positionDamper(IntPtr l) {
 		try {
 			UnityEngine.JointDrive self;
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_JointDrive : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_maximumForce(IntPtr l) {
 		try {
 			UnityEngine.JointDrive self;
@@ -88,6 +94,7 @@ public class Lua_UnityEngine_JointDrive : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_maximumForce(IntPtr l) {
 		try {
 			UnityEngine.JointDrive self;
@@ -103,6 +110,7 @@ public class Lua_UnityEngine_JointDrive : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.JointDrive");
 		addMember(l,"positionSpring",get_positionSpring,set_positionSpring,true);

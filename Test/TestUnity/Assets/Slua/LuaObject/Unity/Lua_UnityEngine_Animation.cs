@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Animation : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.Animation o;
-			o=new UnityEngine.Animation();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Stop(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -43,6 +31,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Rewind(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -69,6 +58,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Sample(IntPtr l) {
 		try {
 			UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
@@ -81,6 +71,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsPlaying(IntPtr l) {
 		try {
 			UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
@@ -96,6 +87,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Play(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -144,6 +136,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CrossFade(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -186,6 +179,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Blend(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -228,6 +222,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CrossFadeQueued(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -288,6 +283,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int PlayQueued(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -333,6 +329,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int AddClip(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -385,6 +382,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RemoveClip(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -413,6 +411,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetClipCount(IntPtr l) {
 		try {
 			UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
@@ -426,6 +425,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SyncLayer(IntPtr l) {
 		try {
 			UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
@@ -440,6 +440,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetClip(IntPtr l) {
 		try {
 			UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
@@ -455,6 +456,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_clip(IntPtr l) {
 		try {
 			UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
@@ -467,6 +469,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_clip(IntPtr l) {
 		try {
 			UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
@@ -481,6 +484,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_playAutomatically(IntPtr l) {
 		try {
 			UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
@@ -493,6 +497,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_playAutomatically(IntPtr l) {
 		try {
 			UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
@@ -507,6 +512,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_wrapMode(IntPtr l) {
 		try {
 			UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
@@ -519,6 +525,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_wrapMode(IntPtr l) {
 		try {
 			UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
@@ -533,6 +540,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_isPlaying(IntPtr l) {
 		try {
 			UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
@@ -545,6 +553,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_animatePhysics(IntPtr l) {
 		try {
 			UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
@@ -557,6 +566,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_animatePhysics(IntPtr l) {
 		try {
 			UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
@@ -571,6 +581,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_cullingType(IntPtr l) {
 		try {
 			UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
@@ -583,6 +594,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_cullingType(IntPtr l) {
 		try {
 			UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
@@ -597,6 +609,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_localBounds(IntPtr l) {
 		try {
 			UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
@@ -609,6 +622,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_localBounds(IntPtr l) {
 		try {
 			UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
@@ -623,6 +637,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int getItem(IntPtr l) {
 		try {
 			UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
@@ -637,6 +652,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Animation");
 		addMember(l,Stop);
@@ -661,6 +677,6 @@ public class Lua_UnityEngine_Animation : LuaObject {
 		addMember(l,"animatePhysics",get_animatePhysics,set_animatePhysics,true);
 		addMember(l,"cullingType",get_cullingType,set_cullingType,true);
 		addMember(l,"localBounds",get_localBounds,set_localBounds,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Animation),typeof(UnityEngine.Behaviour));
+		createTypeMetatable(l,null, typeof(UnityEngine.Animation),typeof(UnityEngine.Behaviour));
 	}
 }

@@ -98,31 +98,48 @@ namespace RoslynTool.CsToLua
         }
         internal void AddReference(INamedTypeSymbol refType)
         {
+            if (!SymbolTable.Instance.IsCs2LuaSymbol(refType)) {
+                AddExternReference(refType);
+            }
             if (!IsInnerClassOfGenericType(refType)) {
                 while (null != refType.ContainingType) {
                     refType = refType.ContainingType;
                 }
             }
             string key = GetFullName(refType);
-            if (null != refType && refType != SemanticInfo && SymbolTable.Instance.IsCs2LuaSymbol(refType) && !refType.IsAnonymousType && !refType.IsImplicitClass && !refType.IsImplicitlyDeclared && refType.TypeKind != TypeKind.Delegate && refType.TypeKind != TypeKind.Dynamic && refType.TypeKind != TypeKind.Interface) {
-                if (!string.IsNullOrEmpty(key) && !References.Contains(key) && key != Key) {
-                    bool isIgnoreFile = SymbolTable.Instance.IsIgnoredSymbol(refType);
-                    bool isIgnore = ClassInfo.HasAttribute(refType, "Cs2Lua.IgnoreAttribute");
-                    if (isIgnoreFile) {
-                        IgnoreReferences.Add("cs2lua__custom");
-                    } else if (isIgnore) {
-                        IgnoreReferences.Add(key);
-                    } else {
-                        if (!SemanticInfo.IsGenericType || SemanticInfo.TypeArguments.IndexOf(refType) < 0) {
-                            References.Add(key);
-                            if (refType.IsGenericType) {
-                                foreach (var sym in refType.TypeArguments) {
-                                    AddReference(sym);
+            if (null != refType && refType != SemanticInfo && SymbolTable.Instance.IsCs2LuaSymbol(refType)) {
+                if (!refType.IsAnonymousType && !refType.IsImplicitClass && !refType.IsImplicitlyDeclared && refType.TypeKind != TypeKind.Delegate && refType.TypeKind != TypeKind.Dynamic && refType.TypeKind != TypeKind.Interface) {
+                    if (!string.IsNullOrEmpty(key) && !References.Contains(key) && key != Key) {
+                        bool isIgnoreFile = SymbolTable.Instance.IsIgnoredSymbol(refType);
+                        bool isIgnore = ClassInfo.HasAttribute(refType, "Cs2Lua.IgnoreAttribute");
+                        if (isIgnoreFile) {
+                            IgnoreReferences.Add("cs2lua__custom");
+                        } else if (isIgnore) {
+                            IgnoreReferences.Add(key);
+                        } else {
+                            if (!SemanticInfo.IsGenericType || SemanticInfo.TypeArguments.IndexOf(refType) < 0) {
+                                References.Add(key);
+                                if (refType.IsGenericType) {
+                                    foreach (var sym in refType.TypeArguments) {
+                                        AddReference(sym);
+                                    }
                                 }
                             }
                         }
                     }
                 }
+            }
+        }
+        internal void AddExternReference(INamedTypeSymbol refType)
+        {
+            while (null != refType) {
+                if (!refType.IsGenericType && !IsInnerClassOfGenericType(refType)) {
+                    string key = GetFullName(refType);
+                    if (!SymbolTable.Instance.ReferencedExternTypes.Contains(key)) {
+                        SymbolTable.Instance.ReferencedExternTypes.Add(key);
+                    }
+                }
+                refType = refType.ContainingType;
             }
         }
         internal bool IsInherit(INamedTypeSymbol type)

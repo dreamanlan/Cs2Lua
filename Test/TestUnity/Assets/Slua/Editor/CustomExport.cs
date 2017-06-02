@@ -176,6 +176,13 @@ namespace SLua
 			    "EventProvider",
 			    "Apple",
 			    "ClusterInput",
+				"Motion",
+                "UnityEngine.UI.ReflectionMethodsCache",
+                "CullingParameters",
+                "CullResults",
+                "ShadowSplitData",
+                "DisposeSentinel",
+                "ReflectionMethodsCache",
             };
         }
     }

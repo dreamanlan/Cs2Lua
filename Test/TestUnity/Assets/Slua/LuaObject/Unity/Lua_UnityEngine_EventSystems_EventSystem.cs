@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_EventSystems_EventSystem : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int UpdateModules(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventSystem self=(UnityEngine.EventSystems.EventSystem)checkSelf(l);
@@ -16,6 +17,7 @@ public class Lua_UnityEngine_EventSystems_EventSystem : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetSelectedGameObject(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -46,6 +48,7 @@ public class Lua_UnityEngine_EventSystems_EventSystem : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RaycastAll(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventSystem self=(UnityEngine.EventSystems.EventSystem)checkSelf(l);
@@ -62,6 +65,7 @@ public class Lua_UnityEngine_EventSystems_EventSystem : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsPointerOverGameObject(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -90,6 +94,7 @@ public class Lua_UnityEngine_EventSystems_EventSystem : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_current(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -101,6 +106,7 @@ public class Lua_UnityEngine_EventSystems_EventSystem : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_current(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventSystem v;
@@ -114,6 +120,7 @@ public class Lua_UnityEngine_EventSystems_EventSystem : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_sendNavigationEvents(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventSystem self=(UnityEngine.EventSystems.EventSystem)checkSelf(l);
@@ -126,6 +133,7 @@ public class Lua_UnityEngine_EventSystems_EventSystem : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_sendNavigationEvents(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventSystem self=(UnityEngine.EventSystems.EventSystem)checkSelf(l);
@@ -140,6 +148,7 @@ public class Lua_UnityEngine_EventSystems_EventSystem : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_pixelDragThreshold(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventSystem self=(UnityEngine.EventSystems.EventSystem)checkSelf(l);
@@ -152,6 +161,7 @@ public class Lua_UnityEngine_EventSystems_EventSystem : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_pixelDragThreshold(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventSystem self=(UnityEngine.EventSystems.EventSystem)checkSelf(l);
@@ -166,6 +176,7 @@ public class Lua_UnityEngine_EventSystems_EventSystem : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_currentInputModule(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventSystem self=(UnityEngine.EventSystems.EventSystem)checkSelf(l);
@@ -178,6 +189,7 @@ public class Lua_UnityEngine_EventSystems_EventSystem : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_firstSelectedGameObject(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventSystem self=(UnityEngine.EventSystems.EventSystem)checkSelf(l);
@@ -190,6 +202,7 @@ public class Lua_UnityEngine_EventSystems_EventSystem : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_firstSelectedGameObject(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventSystem self=(UnityEngine.EventSystems.EventSystem)checkSelf(l);
@@ -204,6 +217,7 @@ public class Lua_UnityEngine_EventSystems_EventSystem : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_currentSelectedGameObject(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventSystem self=(UnityEngine.EventSystems.EventSystem)checkSelf(l);
@@ -216,6 +230,7 @@ public class Lua_UnityEngine_EventSystems_EventSystem : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_alreadySelecting(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventSystem self=(UnityEngine.EventSystems.EventSystem)checkSelf(l);
@@ -227,6 +242,7 @@ public class Lua_UnityEngine_EventSystems_EventSystem : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.EventSystems.EventSystem");
 		addMember(l,UpdateModules);

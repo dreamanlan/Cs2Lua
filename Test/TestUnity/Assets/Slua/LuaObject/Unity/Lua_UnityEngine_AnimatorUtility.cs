@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_AnimatorUtility : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.AnimatorUtility o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_AnimatorUtility : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OptimizeTransformHierarchy_s(IntPtr l) {
 		try {
 			UnityEngine.GameObject a1;
@@ -32,6 +34,7 @@ public class Lua_UnityEngine_AnimatorUtility : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int DeoptimizeTransformHierarchy_s(IntPtr l) {
 		try {
 			UnityEngine.GameObject a1;
@@ -44,6 +47,7 @@ public class Lua_UnityEngine_AnimatorUtility : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AnimatorUtility");
 		addMember(l,OptimizeTransformHierarchy_s);

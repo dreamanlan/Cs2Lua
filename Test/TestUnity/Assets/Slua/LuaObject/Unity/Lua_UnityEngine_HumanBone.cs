@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_HumanBone : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.HumanBone o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_HumanBone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_limit(IntPtr l) {
 		try {
 			UnityEngine.HumanBone self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_HumanBone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_limit(IntPtr l) {
 		try {
 			UnityEngine.HumanBone self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_HumanBone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_boneName(IntPtr l) {
 		try {
 			UnityEngine.HumanBone self;
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_HumanBone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_boneName(IntPtr l) {
 		try {
 			UnityEngine.HumanBone self;
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_HumanBone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_humanName(IntPtr l) {
 		try {
 			UnityEngine.HumanBone self;
@@ -88,6 +94,7 @@ public class Lua_UnityEngine_HumanBone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_humanName(IntPtr l) {
 		try {
 			UnityEngine.HumanBone self;
@@ -103,6 +110,7 @@ public class Lua_UnityEngine_HumanBone : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.HumanBone");
 		addMember(l,"limit",get_limit,set_limit,true);

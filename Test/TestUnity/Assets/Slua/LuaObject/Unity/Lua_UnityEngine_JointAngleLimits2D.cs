@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_JointAngleLimits2D : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.JointAngleLimits2D o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_JointAngleLimits2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_min(IntPtr l) {
 		try {
 			UnityEngine.JointAngleLimits2D self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_JointAngleLimits2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_min(IntPtr l) {
 		try {
 			UnityEngine.JointAngleLimits2D self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_JointAngleLimits2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_max(IntPtr l) {
 		try {
 			UnityEngine.JointAngleLimits2D self;
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_JointAngleLimits2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_max(IntPtr l) {
 		try {
 			UnityEngine.JointAngleLimits2D self;
@@ -74,6 +79,7 @@ public class Lua_UnityEngine_JointAngleLimits2D : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.JointAngleLimits2D");
 		addMember(l,"min",get_min,set_min,true);

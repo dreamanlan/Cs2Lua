@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_RenderBuffer : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.RenderBuffer o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_RenderBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetNativeRenderBufferPtr(IntPtr l) {
 		try {
 			UnityEngine.RenderBuffer self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_RenderBuffer : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.RenderBuffer");
 		addMember(l,GetNativeRenderBufferPtr);

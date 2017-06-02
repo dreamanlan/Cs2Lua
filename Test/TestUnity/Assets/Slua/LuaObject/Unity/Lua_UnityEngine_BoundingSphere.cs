@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_BoundingSphere : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -26,7 +27,7 @@ public class Lua_UnityEngine_BoundingSphere : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==0){
+			else if(argc<=1){
 				o=new UnityEngine.BoundingSphere();
 				pushValue(l,true);
 				pushObject(l,o);
@@ -39,6 +40,7 @@ public class Lua_UnityEngine_BoundingSphere : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_position(IntPtr l) {
 		try {
 			UnityEngine.BoundingSphere self;
@@ -52,6 +54,7 @@ public class Lua_UnityEngine_BoundingSphere : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_position(IntPtr l) {
 		try {
 			UnityEngine.BoundingSphere self;
@@ -68,6 +71,7 @@ public class Lua_UnityEngine_BoundingSphere : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_radius(IntPtr l) {
 		try {
 			UnityEngine.BoundingSphere self;
@@ -81,6 +85,7 @@ public class Lua_UnityEngine_BoundingSphere : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_radius(IntPtr l) {
 		try {
 			UnityEngine.BoundingSphere self;
@@ -96,6 +101,7 @@ public class Lua_UnityEngine_BoundingSphere : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.BoundingSphere");
 		addMember(l,"position",get_position,set_position,true);

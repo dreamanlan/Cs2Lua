@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_CanvasGroup : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.CanvasGroup o;
-			o=new UnityEngine.CanvasGroup();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsRaycastLocationValid(IntPtr l) {
 		try {
 			UnityEngine.CanvasGroup self=(UnityEngine.CanvasGroup)checkSelf(l);
@@ -34,6 +22,7 @@ public class Lua_UnityEngine_CanvasGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_alpha(IntPtr l) {
 		try {
 			UnityEngine.CanvasGroup self=(UnityEngine.CanvasGroup)checkSelf(l);
@@ -46,6 +35,7 @@ public class Lua_UnityEngine_CanvasGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_alpha(IntPtr l) {
 		try {
 			UnityEngine.CanvasGroup self=(UnityEngine.CanvasGroup)checkSelf(l);
@@ -60,6 +50,7 @@ public class Lua_UnityEngine_CanvasGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_interactable(IntPtr l) {
 		try {
 			UnityEngine.CanvasGroup self=(UnityEngine.CanvasGroup)checkSelf(l);
@@ -72,6 +63,7 @@ public class Lua_UnityEngine_CanvasGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_interactable(IntPtr l) {
 		try {
 			UnityEngine.CanvasGroup self=(UnityEngine.CanvasGroup)checkSelf(l);
@@ -86,6 +78,7 @@ public class Lua_UnityEngine_CanvasGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_blocksRaycasts(IntPtr l) {
 		try {
 			UnityEngine.CanvasGroup self=(UnityEngine.CanvasGroup)checkSelf(l);
@@ -98,6 +91,7 @@ public class Lua_UnityEngine_CanvasGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_blocksRaycasts(IntPtr l) {
 		try {
 			UnityEngine.CanvasGroup self=(UnityEngine.CanvasGroup)checkSelf(l);
@@ -112,6 +106,7 @@ public class Lua_UnityEngine_CanvasGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_ignoreParentGroups(IntPtr l) {
 		try {
 			UnityEngine.CanvasGroup self=(UnityEngine.CanvasGroup)checkSelf(l);
@@ -124,6 +119,7 @@ public class Lua_UnityEngine_CanvasGroup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_ignoreParentGroups(IntPtr l) {
 		try {
 			UnityEngine.CanvasGroup self=(UnityEngine.CanvasGroup)checkSelf(l);
@@ -137,6 +133,7 @@ public class Lua_UnityEngine_CanvasGroup : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.CanvasGroup");
 		addMember(l,IsRaycastLocationValid);
@@ -144,6 +141,6 @@ public class Lua_UnityEngine_CanvasGroup : LuaObject {
 		addMember(l,"interactable",get_interactable,set_interactable,true);
 		addMember(l,"blocksRaycasts",get_blocksRaycasts,set_blocksRaycasts,true);
 		addMember(l,"ignoreParentGroups",get_ignoreParentGroups,set_ignoreParentGroups,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.CanvasGroup),typeof(UnityEngine.Component));
+		createTypeMetatable(l,null, typeof(UnityEngine.CanvasGroup),typeof(UnityEngine.Component));
 	}
 }

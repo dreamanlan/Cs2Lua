@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -66,6 +67,22 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
+			else if(argc==6){
+				UnityEngine.RenderBuffer a1;
+				checkValueType(l,2,out a1);
+				UnityEngine.RenderBuffer a2;
+				checkValueType(l,3,out a2);
+				System.Int32 a3;
+				checkType(l,4,out a3);
+				UnityEngine.CubemapFace a4;
+				checkEnum(l,5,out a4);
+				System.Int32 a5;
+				checkType(l,6,out a5);
+				o=new UnityEngine.RenderTargetSetup(a1,a2,a3,a4,a5);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
 			else if(matchType(l,argc,2,typeof(UnityEngine.RenderBuffer[]),typeof(UnityEngine.RenderBuffer))){
 				UnityEngine.RenderBuffer[] a1;
 				checkArray(l,2,out a1);
@@ -102,7 +119,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==0){
+			else if(argc<=1){
 				o=new UnityEngine.RenderTargetSetup();
 				pushValue(l,true);
 				pushObject(l,o);
@@ -115,6 +132,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_color(IntPtr l) {
 		try {
 			UnityEngine.RenderTargetSetup self;
@@ -128,6 +146,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_color(IntPtr l) {
 		try {
 			UnityEngine.RenderTargetSetup self;
@@ -144,6 +163,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_depth(IntPtr l) {
 		try {
 			UnityEngine.RenderTargetSetup self;
@@ -157,6 +177,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_depth(IntPtr l) {
 		try {
 			UnityEngine.RenderTargetSetup self;
@@ -173,6 +194,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_mipLevel(IntPtr l) {
 		try {
 			UnityEngine.RenderTargetSetup self;
@@ -186,6 +208,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_mipLevel(IntPtr l) {
 		try {
 			UnityEngine.RenderTargetSetup self;
@@ -202,6 +225,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_cubemapFace(IntPtr l) {
 		try {
 			UnityEngine.RenderTargetSetup self;
@@ -215,6 +239,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_cubemapFace(IntPtr l) {
 		try {
 			UnityEngine.RenderTargetSetup self;
@@ -231,6 +256,38 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_depthSlice(IntPtr l) {
+		try {
+			UnityEngine.RenderTargetSetup self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.depthSlice);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_depthSlice(IntPtr l) {
+		try {
+			UnityEngine.RenderTargetSetup self;
+			checkValueType(l,1,out self);
+			System.Int32 v;
+			checkType(l,2,out v);
+			self.depthSlice=v;
+			setBack(l,self);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_colorLoad(IntPtr l) {
 		try {
 			UnityEngine.RenderTargetSetup self;
@@ -244,6 +301,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_colorLoad(IntPtr l) {
 		try {
 			UnityEngine.RenderTargetSetup self;
@@ -260,6 +318,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_colorStore(IntPtr l) {
 		try {
 			UnityEngine.RenderTargetSetup self;
@@ -273,6 +332,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_colorStore(IntPtr l) {
 		try {
 			UnityEngine.RenderTargetSetup self;
@@ -289,6 +349,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_depthLoad(IntPtr l) {
 		try {
 			UnityEngine.RenderTargetSetup self;
@@ -302,6 +363,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_depthLoad(IntPtr l) {
 		try {
 			UnityEngine.RenderTargetSetup self;
@@ -318,6 +380,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_depthStore(IntPtr l) {
 		try {
 			UnityEngine.RenderTargetSetup self;
@@ -331,6 +394,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_depthStore(IntPtr l) {
 		try {
 			UnityEngine.RenderTargetSetup self;
@@ -346,12 +410,14 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.RenderTargetSetup");
 		addMember(l,"color",get_color,set_color,true);
 		addMember(l,"depth",get_depth,set_depth,true);
 		addMember(l,"mipLevel",get_mipLevel,set_mipLevel,true);
 		addMember(l,"cubemapFace",get_cubemapFace,set_cubemapFace,true);
+		addMember(l,"depthSlice",get_depthSlice,set_depthSlice,true);
 		addMember(l,"colorLoad",get_colorLoad,set_colorLoad,true);
 		addMember(l,"colorStore",get_colorStore,set_colorStore,true);
 		addMember(l,"depthLoad",get_depthLoad,set_depthLoad,true);

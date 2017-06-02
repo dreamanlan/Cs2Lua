@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_Slider_SliderEvent : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.UI.Slider.SliderEvent o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_UI_Slider_SliderEvent : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int AddListener(IntPtr l) {
 		try {
 			UnityEngine.UI.Slider.SliderEvent self=(UnityEngine.UI.Slider.SliderEvent)checkSelf(l);
@@ -31,6 +33,7 @@ public class Lua_UnityEngine_UI_Slider_SliderEvent : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RemoveListener(IntPtr l) {
 		try {
 			UnityEngine.UI.Slider.SliderEvent self=(UnityEngine.UI.Slider.SliderEvent)checkSelf(l);
@@ -45,6 +48,7 @@ public class Lua_UnityEngine_UI_Slider_SliderEvent : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Invoke(IntPtr l) {
 		try {
 			UnityEngine.UI.Slider.SliderEvent self=(UnityEngine.UI.Slider.SliderEvent)checkSelf(l);
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_UI_Slider_SliderEvent : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetPersistentEventCount(IntPtr l) {
 		try {
 			UnityEngine.UI.Slider.SliderEvent self=(UnityEngine.UI.Slider.SliderEvent)checkSelf(l);
@@ -72,6 +77,7 @@ public class Lua_UnityEngine_UI_Slider_SliderEvent : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetPersistentTarget(IntPtr l) {
 		try {
 			UnityEngine.UI.Slider.SliderEvent self=(UnityEngine.UI.Slider.SliderEvent)checkSelf(l);
@@ -87,6 +93,7 @@ public class Lua_UnityEngine_UI_Slider_SliderEvent : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetPersistentMethodName(IntPtr l) {
 		try {
 			UnityEngine.UI.Slider.SliderEvent self=(UnityEngine.UI.Slider.SliderEvent)checkSelf(l);
@@ -102,6 +109,7 @@ public class Lua_UnityEngine_UI_Slider_SliderEvent : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetPersistentListenerState(IntPtr l) {
 		try {
 			UnityEngine.UI.Slider.SliderEvent self=(UnityEngine.UI.Slider.SliderEvent)checkSelf(l);
@@ -118,6 +126,7 @@ public class Lua_UnityEngine_UI_Slider_SliderEvent : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RemoveAllListeners(IntPtr l) {
 		try {
 			UnityEngine.UI.Slider.SliderEvent self=(UnityEngine.UI.Slider.SliderEvent)checkSelf(l);
@@ -129,6 +138,7 @@ public class Lua_UnityEngine_UI_Slider_SliderEvent : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		LuaUnityEvent_float.reg(l);
 		getTypeTable(l,"UnityEngine.UI.Slider.SliderEvent");

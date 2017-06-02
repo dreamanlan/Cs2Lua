@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_TextAsset : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.TextAsset o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_TextAsset : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_text(IntPtr l) {
 		try {
 			UnityEngine.TextAsset self=(UnityEngine.TextAsset)checkSelf(l);
@@ -29,6 +31,7 @@ public class Lua_UnityEngine_TextAsset : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_bytes(IntPtr l) {
 		try {
 			UnityEngine.TextAsset self=(UnityEngine.TextAsset)checkSelf(l);
@@ -40,6 +43,7 @@ public class Lua_UnityEngine_TextAsset : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.TextAsset");
 		addMember(l,"text",get_text,null,true);

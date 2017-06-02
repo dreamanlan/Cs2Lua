@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using LuaInterface;
 using SLua;
 
 public static class LuaFunctionHelper

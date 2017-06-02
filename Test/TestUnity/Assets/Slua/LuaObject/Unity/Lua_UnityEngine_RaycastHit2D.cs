@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_RaycastHit2D : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.RaycastHit2D o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_RaycastHit2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CompareTo(IntPtr l) {
 		try {
 			UnityEngine.RaycastHit2D self;
@@ -33,6 +35,7 @@ public class Lua_UnityEngine_RaycastHit2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_centroid(IntPtr l) {
 		try {
 			UnityEngine.RaycastHit2D self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_RaycastHit2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_centroid(IntPtr l) {
 		try {
 			UnityEngine.RaycastHit2D self;
@@ -62,6 +66,7 @@ public class Lua_UnityEngine_RaycastHit2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_point(IntPtr l) {
 		try {
 			UnityEngine.RaycastHit2D self;
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_RaycastHit2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_point(IntPtr l) {
 		try {
 			UnityEngine.RaycastHit2D self;
@@ -91,6 +97,7 @@ public class Lua_UnityEngine_RaycastHit2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_normal(IntPtr l) {
 		try {
 			UnityEngine.RaycastHit2D self;
@@ -104,6 +111,7 @@ public class Lua_UnityEngine_RaycastHit2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_normal(IntPtr l) {
 		try {
 			UnityEngine.RaycastHit2D self;
@@ -120,6 +128,7 @@ public class Lua_UnityEngine_RaycastHit2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_distance(IntPtr l) {
 		try {
 			UnityEngine.RaycastHit2D self;
@@ -133,6 +142,7 @@ public class Lua_UnityEngine_RaycastHit2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_distance(IntPtr l) {
 		try {
 			UnityEngine.RaycastHit2D self;
@@ -149,6 +159,7 @@ public class Lua_UnityEngine_RaycastHit2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_fraction(IntPtr l) {
 		try {
 			UnityEngine.RaycastHit2D self;
@@ -162,6 +173,7 @@ public class Lua_UnityEngine_RaycastHit2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_fraction(IntPtr l) {
 		try {
 			UnityEngine.RaycastHit2D self;
@@ -178,6 +190,7 @@ public class Lua_UnityEngine_RaycastHit2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_collider(IntPtr l) {
 		try {
 			UnityEngine.RaycastHit2D self;
@@ -191,6 +204,7 @@ public class Lua_UnityEngine_RaycastHit2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_rigidbody(IntPtr l) {
 		try {
 			UnityEngine.RaycastHit2D self;
@@ -204,6 +218,7 @@ public class Lua_UnityEngine_RaycastHit2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_transform(IntPtr l) {
 		try {
 			UnityEngine.RaycastHit2D self;
@@ -216,6 +231,7 @@ public class Lua_UnityEngine_RaycastHit2D : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.RaycastHit2D");
 		addMember(l,CompareTo);

@@ -1,7 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using LuaInterface;
+using SLua;
 
 namespace SLua
 {
@@ -73,12 +73,12 @@ namespace SLua
             LuaDLL.luaL_checktype(l, p, LuaTypes.LUA_TFUNCTION);
             LuaDelegate ld;
             checkType(l, p, out ld);
-						l = LuaState.get(l).L;
             if (ld.d != null)
             {
                 ua = (UnityEngine.Events.UnityAction<int>)ld.d;
                 return true;
             }
+			l = LuaState.get(l).L;
             ua = (int v0) =>
             {
                 int error = pushTry(l);

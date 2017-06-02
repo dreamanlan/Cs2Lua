@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_EventSystems_AbstractEventData : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Reset(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.AbstractEventData self=(UnityEngine.EventSystems.AbstractEventData)checkSelf(l);
@@ -16,6 +17,7 @@ public class Lua_UnityEngine_EventSystems_AbstractEventData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Use(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.AbstractEventData self=(UnityEngine.EventSystems.AbstractEventData)checkSelf(l);
@@ -28,6 +30,7 @@ public class Lua_UnityEngine_EventSystems_AbstractEventData : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_used(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.AbstractEventData self=(UnityEngine.EventSystems.AbstractEventData)checkSelf(l);
@@ -39,6 +42,7 @@ public class Lua_UnityEngine_EventSystems_AbstractEventData : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.EventSystems.AbstractEventData");
 		addMember(l,Reset);

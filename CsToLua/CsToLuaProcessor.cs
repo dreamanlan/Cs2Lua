@@ -383,6 +383,8 @@ namespace RoslynTool.CsToLua
             BuildExternEnums(enumBuilder);
             StringBuilder intfBuilder = new StringBuilder();
             BuildInterfaces(intfBuilder);
+            StringBuilder refExternBuilder = new StringBuilder();
+            BuildReferencedExternTypes(refExternBuilder);
             if (SymbolTable.ForSlua) {
                 File.Copy(Path.Combine(exepath, "lualib/utility_slua.lua"), Path.Combine(outputDir, string.Format("cs2lua__utility.{0}", outputExt)), true);
             } else if (SymbolTable.ForXlua) {
@@ -396,6 +398,7 @@ namespace RoslynTool.CsToLua
             File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__attributes.{0}", outputExt)), attrBuilder.ToString());
             File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__externenums.{0}", outputExt)), enumBuilder.ToString());
             File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__interfaces.{0}", outputExt)), intfBuilder.ToString());
+            File.WriteAllText(Path.Combine(outputDir, "cs2lua__references.txt"), refExternBuilder.ToString());
             foreach (var pair in toplevelClasses) {
                 StringBuilder classBuilder = new StringBuilder();
                 lualibRefs.Clear();
@@ -787,6 +790,12 @@ namespace RoslynTool.CsToLua
                 }
                 sb.Append("}, __exist = function(k) return false; end};");
                 sb.AppendLine();
+            }
+        }
+        private static void BuildReferencedExternTypes(StringBuilder sb)
+        {
+            foreach (var key in SymbolTable.Instance.ReferencedExternTypes) {
+                sb.AppendLine(key);
             }
         }
         private static void BuildLuaClass(StringBuilder sb, MergedNamespaceInfo toplevelMni, Dictionary<string, MergedClassInfo> toplevelMcis, HashSet<string> lualibRefs)

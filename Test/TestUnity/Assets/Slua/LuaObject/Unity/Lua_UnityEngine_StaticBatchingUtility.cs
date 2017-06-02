@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_StaticBatchingUtility : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.StaticBatchingUtility o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_StaticBatchingUtility : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Combine_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -44,6 +46,7 @@ public class Lua_UnityEngine_StaticBatchingUtility : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.StaticBatchingUtility");
 		addMember(l,Combine_s);

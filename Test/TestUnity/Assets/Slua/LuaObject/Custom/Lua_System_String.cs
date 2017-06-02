@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_System_String : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -45,6 +46,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetTypeCode(IntPtr l) {
 		try {
 			System.String self=(System.String)checkSelf(l);
@@ -58,6 +60,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ToCharArray(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -88,6 +91,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Split(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -168,6 +172,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Substring(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -200,6 +205,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Trim(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -228,6 +234,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int TrimStart(IntPtr l) {
 		try {
 			System.String self=(System.String)checkSelf(l);
@@ -243,6 +250,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int TrimEnd(IntPtr l) {
 		try {
 			System.String self=(System.String)checkSelf(l);
@@ -258,6 +266,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CompareTo(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -288,6 +297,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int EndsWith(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -333,6 +343,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IndexOfAny(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -378,6 +389,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IndexOf(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -495,6 +507,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int LastIndexOf(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -612,6 +625,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int LastIndexOfAny(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -657,6 +671,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Contains(IntPtr l) {
 		try {
 			System.String self=(System.String)checkSelf(l);
@@ -672,6 +687,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Normalize(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -700,6 +716,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsNormalized(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -728,6 +745,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Remove(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -760,6 +778,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int PadLeft(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -792,6 +811,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int PadRight(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -824,6 +844,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int StartsWith(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -869,6 +890,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Replace(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -903,6 +925,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ToLower(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -931,6 +954,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ToLowerInvariant(IntPtr l) {
 		try {
 			System.String self=(System.String)checkSelf(l);
@@ -944,6 +968,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ToUpper(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -972,6 +997,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ToUpperInvariant(IntPtr l) {
 		try {
 			System.String self=(System.String)checkSelf(l);
@@ -985,6 +1011,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Insert(IntPtr l) {
 		try {
 			System.String self=(System.String)checkSelf(l);
@@ -1002,6 +1029,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Compare_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -1168,6 +1196,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CompareOrdinal_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -1206,6 +1235,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsNullOrEmpty_s(IntPtr l) {
 		try {
 			System.String a1;
@@ -1220,6 +1250,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Format_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -1290,6 +1321,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Copy_s(IntPtr l) {
 		try {
 			System.String a1;
@@ -1304,6 +1336,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Concat_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -1412,6 +1445,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Intern_s(IntPtr l) {
 		try {
 			System.String a1;
@@ -1426,6 +1460,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsInterned_s(IntPtr l) {
 		try {
 			System.String a1;
@@ -1440,6 +1475,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Join_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -1476,6 +1512,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int op_Equality(IntPtr l) {
 		try {
 			System.String a1;
@@ -1492,6 +1529,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int op_Inequality(IntPtr l) {
 		try {
 			System.String a1;
@@ -1508,6 +1546,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_Empty(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -1519,6 +1558,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_Length(IntPtr l) {
 		try {
 			System.String self=(System.String)checkSelf(l);
@@ -1531,6 +1571,7 @@ public class Lua_System_String : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int getItem(IntPtr l) {
 		try {
 			System.String self=(System.String)checkSelf(l);
@@ -1545,6 +1586,7 @@ public class Lua_System_String : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"System.String");
 		addMember(l,GetTypeCode);

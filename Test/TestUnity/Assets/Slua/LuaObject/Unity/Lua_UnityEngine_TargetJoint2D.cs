@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_TargetJoint2D : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.TargetJoint2D o;
-			o=new UnityEngine.TargetJoint2D();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_anchor(IntPtr l) {
 		try {
 			UnityEngine.TargetJoint2D self=(UnityEngine.TargetJoint2D)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_TargetJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_anchor(IntPtr l) {
 		try {
 			UnityEngine.TargetJoint2D self=(UnityEngine.TargetJoint2D)checkSelf(l);
@@ -43,6 +32,7 @@ public class Lua_UnityEngine_TargetJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_target(IntPtr l) {
 		try {
 			UnityEngine.TargetJoint2D self=(UnityEngine.TargetJoint2D)checkSelf(l);
@@ -55,6 +45,7 @@ public class Lua_UnityEngine_TargetJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_target(IntPtr l) {
 		try {
 			UnityEngine.TargetJoint2D self=(UnityEngine.TargetJoint2D)checkSelf(l);
@@ -69,6 +60,7 @@ public class Lua_UnityEngine_TargetJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_autoConfigureTarget(IntPtr l) {
 		try {
 			UnityEngine.TargetJoint2D self=(UnityEngine.TargetJoint2D)checkSelf(l);
@@ -81,6 +73,7 @@ public class Lua_UnityEngine_TargetJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_autoConfigureTarget(IntPtr l) {
 		try {
 			UnityEngine.TargetJoint2D self=(UnityEngine.TargetJoint2D)checkSelf(l);
@@ -95,6 +88,7 @@ public class Lua_UnityEngine_TargetJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_maxForce(IntPtr l) {
 		try {
 			UnityEngine.TargetJoint2D self=(UnityEngine.TargetJoint2D)checkSelf(l);
@@ -107,6 +101,7 @@ public class Lua_UnityEngine_TargetJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_maxForce(IntPtr l) {
 		try {
 			UnityEngine.TargetJoint2D self=(UnityEngine.TargetJoint2D)checkSelf(l);
@@ -121,6 +116,7 @@ public class Lua_UnityEngine_TargetJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_dampingRatio(IntPtr l) {
 		try {
 			UnityEngine.TargetJoint2D self=(UnityEngine.TargetJoint2D)checkSelf(l);
@@ -133,6 +129,7 @@ public class Lua_UnityEngine_TargetJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_dampingRatio(IntPtr l) {
 		try {
 			UnityEngine.TargetJoint2D self=(UnityEngine.TargetJoint2D)checkSelf(l);
@@ -147,6 +144,7 @@ public class Lua_UnityEngine_TargetJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_frequency(IntPtr l) {
 		try {
 			UnityEngine.TargetJoint2D self=(UnityEngine.TargetJoint2D)checkSelf(l);
@@ -159,6 +157,7 @@ public class Lua_UnityEngine_TargetJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_frequency(IntPtr l) {
 		try {
 			UnityEngine.TargetJoint2D self=(UnityEngine.TargetJoint2D)checkSelf(l);
@@ -172,6 +171,7 @@ public class Lua_UnityEngine_TargetJoint2D : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.TargetJoint2D");
 		addMember(l,"anchor",get_anchor,set_anchor,true);
@@ -180,6 +180,6 @@ public class Lua_UnityEngine_TargetJoint2D : LuaObject {
 		addMember(l,"maxForce",get_maxForce,set_maxForce,true);
 		addMember(l,"dampingRatio",get_dampingRatio,set_dampingRatio,true);
 		addMember(l,"frequency",get_frequency,set_frequency,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.TargetJoint2D),typeof(UnityEngine.Joint2D));
+		createTypeMetatable(l,null, typeof(UnityEngine.TargetJoint2D),typeof(UnityEngine.Joint2D));
 	}
 }

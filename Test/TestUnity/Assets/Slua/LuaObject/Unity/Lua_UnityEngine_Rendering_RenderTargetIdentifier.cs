@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Rendering_RenderTargetIdentifier : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -32,15 +33,15 @@ public class Lua_UnityEngine_Rendering_RenderTargetIdentifier : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.RenderTexture))){
-				UnityEngine.RenderTexture a1;
+			else if(matchType(l,argc,2,typeof(UnityEngine.Texture))){
+				UnityEngine.Texture a1;
 				checkType(l,2,out a1);
 				o=new UnityEngine.Rendering.RenderTargetIdentifier(a1);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==0){
+			else if(argc<=1){
 				o=new UnityEngine.Rendering.RenderTargetIdentifier();
 				pushValue(l,true);
 				pushObject(l,o);
@@ -52,8 +53,45 @@ public class Lua_UnityEngine_Rendering_RenderTargetIdentifier : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Equality(IntPtr l) {
+		try {
+			UnityEngine.Rendering.RenderTargetIdentifier a1;
+			checkValueType(l,1,out a1);
+			UnityEngine.Rendering.RenderTargetIdentifier a2;
+			checkValueType(l,2,out a2);
+			var ret=(a1==a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Inequality(IntPtr l) {
+		try {
+			UnityEngine.Rendering.RenderTargetIdentifier a1;
+			checkValueType(l,1,out a1);
+			UnityEngine.Rendering.RenderTargetIdentifier a2;
+			checkValueType(l,2,out a2);
+			var ret=(a1!=a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Rendering.RenderTargetIdentifier");
+		addMember(l,op_Equality);
+		addMember(l,op_Inequality);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.Rendering.RenderTargetIdentifier),typeof(System.ValueType));
 	}
 }

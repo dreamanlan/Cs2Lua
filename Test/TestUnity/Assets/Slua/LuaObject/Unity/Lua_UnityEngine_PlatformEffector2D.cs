@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_PlatformEffector2D : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.PlatformEffector2D o;
-			o=new UnityEngine.PlatformEffector2D();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_useOneWay(IntPtr l) {
 		try {
 			UnityEngine.PlatformEffector2D self=(UnityEngine.PlatformEffector2D)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_PlatformEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_useOneWay(IntPtr l) {
 		try {
 			UnityEngine.PlatformEffector2D self=(UnityEngine.PlatformEffector2D)checkSelf(l);
@@ -43,6 +32,7 @@ public class Lua_UnityEngine_PlatformEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_useOneWayGrouping(IntPtr l) {
 		try {
 			UnityEngine.PlatformEffector2D self=(UnityEngine.PlatformEffector2D)checkSelf(l);
@@ -55,6 +45,7 @@ public class Lua_UnityEngine_PlatformEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_useOneWayGrouping(IntPtr l) {
 		try {
 			UnityEngine.PlatformEffector2D self=(UnityEngine.PlatformEffector2D)checkSelf(l);
@@ -69,6 +60,7 @@ public class Lua_UnityEngine_PlatformEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_useSideFriction(IntPtr l) {
 		try {
 			UnityEngine.PlatformEffector2D self=(UnityEngine.PlatformEffector2D)checkSelf(l);
@@ -81,6 +73,7 @@ public class Lua_UnityEngine_PlatformEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_useSideFriction(IntPtr l) {
 		try {
 			UnityEngine.PlatformEffector2D self=(UnityEngine.PlatformEffector2D)checkSelf(l);
@@ -95,6 +88,7 @@ public class Lua_UnityEngine_PlatformEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_useSideBounce(IntPtr l) {
 		try {
 			UnityEngine.PlatformEffector2D self=(UnityEngine.PlatformEffector2D)checkSelf(l);
@@ -107,6 +101,7 @@ public class Lua_UnityEngine_PlatformEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_useSideBounce(IntPtr l) {
 		try {
 			UnityEngine.PlatformEffector2D self=(UnityEngine.PlatformEffector2D)checkSelf(l);
@@ -121,6 +116,7 @@ public class Lua_UnityEngine_PlatformEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_surfaceArc(IntPtr l) {
 		try {
 			UnityEngine.PlatformEffector2D self=(UnityEngine.PlatformEffector2D)checkSelf(l);
@@ -133,6 +129,7 @@ public class Lua_UnityEngine_PlatformEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_surfaceArc(IntPtr l) {
 		try {
 			UnityEngine.PlatformEffector2D self=(UnityEngine.PlatformEffector2D)checkSelf(l);
@@ -147,6 +144,7 @@ public class Lua_UnityEngine_PlatformEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_sideArc(IntPtr l) {
 		try {
 			UnityEngine.PlatformEffector2D self=(UnityEngine.PlatformEffector2D)checkSelf(l);
@@ -159,6 +157,7 @@ public class Lua_UnityEngine_PlatformEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_sideArc(IntPtr l) {
 		try {
 			UnityEngine.PlatformEffector2D self=(UnityEngine.PlatformEffector2D)checkSelf(l);
@@ -172,6 +171,35 @@ public class Lua_UnityEngine_PlatformEffector2D : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_rotationalOffset(IntPtr l) {
+		try {
+			UnityEngine.PlatformEffector2D self=(UnityEngine.PlatformEffector2D)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.rotationalOffset);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_rotationalOffset(IntPtr l) {
+		try {
+			UnityEngine.PlatformEffector2D self=(UnityEngine.PlatformEffector2D)checkSelf(l);
+			float v;
+			checkType(l,2,out v);
+			self.rotationalOffset=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.PlatformEffector2D");
 		addMember(l,"useOneWay",get_useOneWay,set_useOneWay,true);
@@ -180,6 +208,7 @@ public class Lua_UnityEngine_PlatformEffector2D : LuaObject {
 		addMember(l,"useSideBounce",get_useSideBounce,set_useSideBounce,true);
 		addMember(l,"surfaceArc",get_surfaceArc,set_surfaceArc,true);
 		addMember(l,"sideArc",get_sideArc,set_sideArc,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.PlatformEffector2D),typeof(UnityEngine.Effector2D));
+		addMember(l,"rotationalOffset",get_rotationalOffset,set_rotationalOffset,true);
+		createTypeMetatable(l,null, typeof(UnityEngine.PlatformEffector2D),typeof(UnityEngine.Effector2D));
 	}
 }

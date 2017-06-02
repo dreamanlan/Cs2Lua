@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_SoftJointLimitSpring : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.SoftJointLimitSpring o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_SoftJointLimitSpring : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_spring(IntPtr l) {
 		try {
 			UnityEngine.SoftJointLimitSpring self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_SoftJointLimitSpring : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_spring(IntPtr l) {
 		try {
 			UnityEngine.SoftJointLimitSpring self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_SoftJointLimitSpring : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_damper(IntPtr l) {
 		try {
 			UnityEngine.SoftJointLimitSpring self;
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_SoftJointLimitSpring : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_damper(IntPtr l) {
 		try {
 			UnityEngine.SoftJointLimitSpring self;
@@ -74,6 +79,7 @@ public class Lua_UnityEngine_SoftJointLimitSpring : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.SoftJointLimitSpring");
 		addMember(l,"spring",get_spring,set_spring,true);

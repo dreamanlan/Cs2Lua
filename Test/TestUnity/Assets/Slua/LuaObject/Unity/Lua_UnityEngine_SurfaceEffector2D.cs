@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_SurfaceEffector2D : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.SurfaceEffector2D o;
-			o=new UnityEngine.SurfaceEffector2D();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_speed(IntPtr l) {
 		try {
 			UnityEngine.SurfaceEffector2D self=(UnityEngine.SurfaceEffector2D)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_SurfaceEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_speed(IntPtr l) {
 		try {
 			UnityEngine.SurfaceEffector2D self=(UnityEngine.SurfaceEffector2D)checkSelf(l);
@@ -43,6 +32,7 @@ public class Lua_UnityEngine_SurfaceEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_speedVariation(IntPtr l) {
 		try {
 			UnityEngine.SurfaceEffector2D self=(UnityEngine.SurfaceEffector2D)checkSelf(l);
@@ -55,6 +45,7 @@ public class Lua_UnityEngine_SurfaceEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_speedVariation(IntPtr l) {
 		try {
 			UnityEngine.SurfaceEffector2D self=(UnityEngine.SurfaceEffector2D)checkSelf(l);
@@ -69,6 +60,7 @@ public class Lua_UnityEngine_SurfaceEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_forceScale(IntPtr l) {
 		try {
 			UnityEngine.SurfaceEffector2D self=(UnityEngine.SurfaceEffector2D)checkSelf(l);
@@ -81,6 +73,7 @@ public class Lua_UnityEngine_SurfaceEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_forceScale(IntPtr l) {
 		try {
 			UnityEngine.SurfaceEffector2D self=(UnityEngine.SurfaceEffector2D)checkSelf(l);
@@ -95,6 +88,7 @@ public class Lua_UnityEngine_SurfaceEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_useContactForce(IntPtr l) {
 		try {
 			UnityEngine.SurfaceEffector2D self=(UnityEngine.SurfaceEffector2D)checkSelf(l);
@@ -107,6 +101,7 @@ public class Lua_UnityEngine_SurfaceEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_useContactForce(IntPtr l) {
 		try {
 			UnityEngine.SurfaceEffector2D self=(UnityEngine.SurfaceEffector2D)checkSelf(l);
@@ -121,6 +116,7 @@ public class Lua_UnityEngine_SurfaceEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_useFriction(IntPtr l) {
 		try {
 			UnityEngine.SurfaceEffector2D self=(UnityEngine.SurfaceEffector2D)checkSelf(l);
@@ -133,6 +129,7 @@ public class Lua_UnityEngine_SurfaceEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_useFriction(IntPtr l) {
 		try {
 			UnityEngine.SurfaceEffector2D self=(UnityEngine.SurfaceEffector2D)checkSelf(l);
@@ -147,6 +144,7 @@ public class Lua_UnityEngine_SurfaceEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_useBounce(IntPtr l) {
 		try {
 			UnityEngine.SurfaceEffector2D self=(UnityEngine.SurfaceEffector2D)checkSelf(l);
@@ -159,6 +157,7 @@ public class Lua_UnityEngine_SurfaceEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_useBounce(IntPtr l) {
 		try {
 			UnityEngine.SurfaceEffector2D self=(UnityEngine.SurfaceEffector2D)checkSelf(l);
@@ -172,6 +171,7 @@ public class Lua_UnityEngine_SurfaceEffector2D : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.SurfaceEffector2D");
 		addMember(l,"speed",get_speed,set_speed,true);
@@ -180,6 +180,6 @@ public class Lua_UnityEngine_SurfaceEffector2D : LuaObject {
 		addMember(l,"useContactForce",get_useContactForce,set_useContactForce,true);
 		addMember(l,"useFriction",get_useFriction,set_useFriction,true);
 		addMember(l,"useBounce",get_useBounce,set_useBounce,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.SurfaceEffector2D),typeof(UnityEngine.Effector2D));
+		createTypeMetatable(l,null, typeof(UnityEngine.SurfaceEffector2D),typeof(UnityEngine.Effector2D));
 	}
 }

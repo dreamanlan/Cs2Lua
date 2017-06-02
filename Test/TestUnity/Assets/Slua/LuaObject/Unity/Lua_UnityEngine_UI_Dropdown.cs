@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RefreshShownValue(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -16,6 +17,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int AddOptions(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -52,6 +54,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ClearOptions(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -64,6 +67,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnPointerClick(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -78,6 +82,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnSubmit(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -92,6 +97,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnCancel(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -106,6 +112,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Show(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -118,6 +125,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Hide(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -130,6 +138,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_template(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -142,6 +151,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_template(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -156,6 +166,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_captionText(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -168,6 +179,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_captionText(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -182,6 +194,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_captionImage(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -194,6 +207,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_captionImage(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -208,6 +222,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_itemText(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -220,6 +235,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_itemText(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -234,6 +250,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_itemImage(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -246,6 +263,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_itemImage(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -260,6 +278,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_options(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -272,6 +291,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_options(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -286,6 +306,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_onValueChanged(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -298,6 +319,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_onValueChanged(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -312,6 +334,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_value(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -324,6 +347,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_value(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -337,6 +361,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.Dropdown");
 		addMember(l,RefreshShownValue);

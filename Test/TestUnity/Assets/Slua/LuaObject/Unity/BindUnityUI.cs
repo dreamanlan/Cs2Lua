@@ -21,6 +21,7 @@ namespace SLua {
 				Lua_UnityEngine_EventSystems_PointerEventData.reg,
 				Lua_UnityEngine_EventSystems_PointerEventData_InputButton.reg,
 				Lua_UnityEngine_EventSystems_PointerEventData_FramePressState.reg,
+				Lua_UnityEngine_EventSystems_BaseInput.reg,
 				Lua_UnityEngine_EventSystems_BaseInputModule.reg,
 				Lua_UnityEngine_EventSystems_PointerInputModule.reg,
 				Lua_UnityEngine_EventSystems_PointerInputModule_MouseButtonEventData.reg,

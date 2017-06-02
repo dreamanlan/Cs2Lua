@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_System_UInt32 : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			System.UInt32 o;
@@ -17,6 +18,7 @@ public class Lua_System_UInt32 : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CompareTo(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -49,6 +51,7 @@ public class Lua_System_UInt32 : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetTypeCode(IntPtr l) {
 		try {
 			System.UInt32 self;
@@ -63,6 +66,7 @@ public class Lua_System_UInt32 : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Parse_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -115,6 +119,7 @@ public class Lua_System_UInt32 : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int TryParse_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -151,6 +156,7 @@ public class Lua_System_UInt32 : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_MaxValue(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -162,6 +168,7 @@ public class Lua_System_UInt32 : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_MinValue(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -172,6 +179,7 @@ public class Lua_System_UInt32 : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"System.UInt32");
 		addMember(l,CompareTo);

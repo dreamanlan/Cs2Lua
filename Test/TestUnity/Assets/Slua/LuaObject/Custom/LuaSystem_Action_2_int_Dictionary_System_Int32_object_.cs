@@ -1,7 +1,6 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using LuaInterface;
 
 namespace SLua
 {
@@ -21,20 +20,20 @@ namespace SLua
             }
             LuaDelegate ld;
             checkType(l, -1, out ld);
+			LuaDLL.lua_pop(l,1);
             if(ld.d!=null)
             {
                 ua = (System.Action<System.Int32,Dictionary<System.Int32,object>>)ld.d;
                 return op;
             }
-			LuaDLL.lua_pop(l,1);
 			
 			l = LuaState.get(l).L;
             ua = (int a1,Dictionary<System.Int32,object> a2) =>
             {
                 int error = pushTry(l);
 
-				pushValue(l,a1);
-				pushValue(l,a2);
+				pushValue(l, a1);
+				pushValue(l, a2);
 				ld.pcall(2, error);
 				LuaDLL.lua_settop(l, error-1);
 			};

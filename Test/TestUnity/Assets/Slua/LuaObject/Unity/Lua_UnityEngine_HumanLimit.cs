@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_HumanLimit : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.HumanLimit o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_HumanLimit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_useDefaultValues(IntPtr l) {
 		try {
 			UnityEngine.HumanLimit self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_HumanLimit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_useDefaultValues(IntPtr l) {
 		try {
 			UnityEngine.HumanLimit self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_HumanLimit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_min(IntPtr l) {
 		try {
 			UnityEngine.HumanLimit self;
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_HumanLimit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_min(IntPtr l) {
 		try {
 			UnityEngine.HumanLimit self;
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_HumanLimit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_max(IntPtr l) {
 		try {
 			UnityEngine.HumanLimit self;
@@ -88,6 +94,7 @@ public class Lua_UnityEngine_HumanLimit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_max(IntPtr l) {
 		try {
 			UnityEngine.HumanLimit self;
@@ -104,6 +111,7 @@ public class Lua_UnityEngine_HumanLimit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_center(IntPtr l) {
 		try {
 			UnityEngine.HumanLimit self;
@@ -117,6 +125,7 @@ public class Lua_UnityEngine_HumanLimit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_center(IntPtr l) {
 		try {
 			UnityEngine.HumanLimit self;
@@ -133,6 +142,7 @@ public class Lua_UnityEngine_HumanLimit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_axisLength(IntPtr l) {
 		try {
 			UnityEngine.HumanLimit self;
@@ -146,6 +156,7 @@ public class Lua_UnityEngine_HumanLimit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_axisLength(IntPtr l) {
 		try {
 			UnityEngine.HumanLimit self;
@@ -161,6 +172,7 @@ public class Lua_UnityEngine_HumanLimit : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.HumanLimit");
 		addMember(l,"useDefaultValues",get_useDefaultValues,set_useDefaultValues,true);

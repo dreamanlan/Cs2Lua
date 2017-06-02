@@ -1,6 +1,7 @@
 require "cs2lua__utility";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
+require "cs2lua__interfaces";
 
 Mandelbrot = {
 	__new_object = function(...)
@@ -34,20 +35,20 @@ Mandelbrot = {
 				local width; width = 50;
 				local height; height = width;
 				local maxiter; maxiter = 50;
-				local limit; limit = 4;
+				local limit; limit = 4.00;
 				local y; y = 0;
 				while (y < height) do
-					local Ci; Ci = (((2 * y) / height) - 1);
+					local Ci; Ci = (((2.00 * y) / height) - 1.00);
 					local x; x = 0;
 					while (x < width) do
-						local Zr; Zr = 0;
-						local Zi; Zi = 0;
-						local Cr; Cr = (((2 * x) / width) - 1.5);
+						local Zr; Zr = 0.00;
+						local Zi; Zi = 0.00;
+						local Cr; Cr = (((2.00 * x) / width) - 1.50);
 						local i; i = maxiter;
 						local isInside; isInside = true;
 						repeat
 							local Tr; Tr = (((Zr * Zr) - (Zi * Zi)) + Cr);
-							Zi = (((2 * Zr) * Zi) + Ci);
+							Zi = (((2.00 * Zr) * Zi) + Ci);
 							Zr = Tr;
 							if (((Zr * Zr) + (Zi * Zi)) > limit) then
 								isInside = false;
@@ -79,7 +80,7 @@ Mandelbrot = {
 				root = __cs2lua_nil_field_value,
 				colors = wraparray{UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black},
 				r = 10,
-				scale = 3,
+				scale = 3.00,
 			};
 			return instance_fields;
 		end;
@@ -99,5 +100,7 @@ Mandelbrot = {
 	end,
 };
 --Mandelbrot.Exec();
+
+
 
 Mandelbrot.__define_class();

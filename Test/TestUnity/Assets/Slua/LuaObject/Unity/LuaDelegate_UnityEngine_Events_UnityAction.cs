@@ -1,7 +1,6 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using LuaInterface;
 
 namespace SLua
 {
@@ -21,12 +20,12 @@ namespace SLua
             }
             LuaDelegate ld;
             checkType(l, -1, out ld);
+			LuaDLL.lua_pop(l,1);
             if(ld.d!=null)
             {
                 ua = (UnityEngine.Events.UnityAction)ld.d;
                 return op;
             }
-			LuaDLL.lua_pop(l,1);
 			
 			l = LuaState.get(l).L;
             ua = () =>

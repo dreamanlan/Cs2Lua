@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Projector : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.Projector o;
-			o=new UnityEngine.Projector();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_nearClipPlane(IntPtr l) {
 		try {
 			UnityEngine.Projector self=(UnityEngine.Projector)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_Projector : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_nearClipPlane(IntPtr l) {
 		try {
 			UnityEngine.Projector self=(UnityEngine.Projector)checkSelf(l);
@@ -43,6 +32,7 @@ public class Lua_UnityEngine_Projector : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_farClipPlane(IntPtr l) {
 		try {
 			UnityEngine.Projector self=(UnityEngine.Projector)checkSelf(l);
@@ -55,6 +45,7 @@ public class Lua_UnityEngine_Projector : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_farClipPlane(IntPtr l) {
 		try {
 			UnityEngine.Projector self=(UnityEngine.Projector)checkSelf(l);
@@ -69,6 +60,7 @@ public class Lua_UnityEngine_Projector : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_fieldOfView(IntPtr l) {
 		try {
 			UnityEngine.Projector self=(UnityEngine.Projector)checkSelf(l);
@@ -81,6 +73,7 @@ public class Lua_UnityEngine_Projector : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_fieldOfView(IntPtr l) {
 		try {
 			UnityEngine.Projector self=(UnityEngine.Projector)checkSelf(l);
@@ -95,6 +88,7 @@ public class Lua_UnityEngine_Projector : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_aspectRatio(IntPtr l) {
 		try {
 			UnityEngine.Projector self=(UnityEngine.Projector)checkSelf(l);
@@ -107,6 +101,7 @@ public class Lua_UnityEngine_Projector : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_aspectRatio(IntPtr l) {
 		try {
 			UnityEngine.Projector self=(UnityEngine.Projector)checkSelf(l);
@@ -121,6 +116,7 @@ public class Lua_UnityEngine_Projector : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_orthographic(IntPtr l) {
 		try {
 			UnityEngine.Projector self=(UnityEngine.Projector)checkSelf(l);
@@ -133,6 +129,7 @@ public class Lua_UnityEngine_Projector : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_orthographic(IntPtr l) {
 		try {
 			UnityEngine.Projector self=(UnityEngine.Projector)checkSelf(l);
@@ -147,6 +144,7 @@ public class Lua_UnityEngine_Projector : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_orthographicSize(IntPtr l) {
 		try {
 			UnityEngine.Projector self=(UnityEngine.Projector)checkSelf(l);
@@ -159,6 +157,7 @@ public class Lua_UnityEngine_Projector : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_orthographicSize(IntPtr l) {
 		try {
 			UnityEngine.Projector self=(UnityEngine.Projector)checkSelf(l);
@@ -173,6 +172,7 @@ public class Lua_UnityEngine_Projector : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_ignoreLayers(IntPtr l) {
 		try {
 			UnityEngine.Projector self=(UnityEngine.Projector)checkSelf(l);
@@ -185,6 +185,7 @@ public class Lua_UnityEngine_Projector : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_ignoreLayers(IntPtr l) {
 		try {
 			UnityEngine.Projector self=(UnityEngine.Projector)checkSelf(l);
@@ -199,6 +200,7 @@ public class Lua_UnityEngine_Projector : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_material(IntPtr l) {
 		try {
 			UnityEngine.Projector self=(UnityEngine.Projector)checkSelf(l);
@@ -211,6 +213,7 @@ public class Lua_UnityEngine_Projector : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_material(IntPtr l) {
 		try {
 			UnityEngine.Projector self=(UnityEngine.Projector)checkSelf(l);
@@ -224,6 +227,7 @@ public class Lua_UnityEngine_Projector : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Projector");
 		addMember(l,"nearClipPlane",get_nearClipPlane,set_nearClipPlane,true);
@@ -234,6 +238,6 @@ public class Lua_UnityEngine_Projector : LuaObject {
 		addMember(l,"orthographicSize",get_orthographicSize,set_orthographicSize,true);
 		addMember(l,"ignoreLayers",get_ignoreLayers,set_ignoreLayers,true);
 		addMember(l,"material",get_material,set_material,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Projector),typeof(UnityEngine.Behaviour));
+		createTypeMetatable(l,null, typeof(UnityEngine.Projector),typeof(UnityEngine.Behaviour));
 	}
 }

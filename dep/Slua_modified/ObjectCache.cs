@@ -28,7 +28,6 @@ namespace SLua
     using System;
     using System.Runtime.InteropServices;
     using System.Collections.Generic;
-    using LuaInterface;
     using System.Runtime.CompilerServices;
 
     public class ObjectCache
@@ -277,39 +276,57 @@ namespace SLua
             push(l, o, true);
         }
 
-        internal void push(IntPtr l, Array o)
-        {
-            push(l, o, true, true);
-        }
+		internal void push(IntPtr l, Array o)
+		{
+			int index = allocID (l, o);
+			if (index < 0)
+				return;
 
-        internal void push(IntPtr l, object o, bool checkReflect, bool isArray = false)
-        {
-            if (o == null) {
-                LuaDLL.lua_pushnil(l);
-                return;
-            }
+			LuaDLL.luaS_pushobject(l, index, "LuaArray", true, udCacheRef);
+		}
 
-            int index = -1;
+		internal int allocID(IntPtr l,object o) {
 
-            bool gco = isGcObject(o);
-            bool found = gco && objMap.TryGetValue(o, out index);
-            if (found) {
-                if (LuaDLL.luaS_getcacheud(l, index, udCacheRef) == 1)
-                    return;
-            }
+			int index = -1;
 
-            index = add(o);
+			if (o == null)
+			{
+				LuaDLL.lua_pushnil(l);
+				return index;
+			}
+
+			bool gco = isGcObject(o);
+			bool found = gco && objMap.TryGetValue(o, out index);
+			if (found)
+			{
+				if (LuaDLL.luaS_getcacheud(l, index, udCacheRef) == 1)
+					return -1;
+			}
+
+			index = add(o);
+			return index;
+		}
+
+		internal void push(IntPtr l, object o, bool checkReflect)
+		{
+			
+			int index = allocID (l, o);
+			if (index < 0)
+				return;
+
+			bool gco = isGcObject(o);
+
 #if SLUA_CHECK_REFLECTION
-			int isReflect = LuaDLL.luaS_pushobject(l, index, isArray ? "LuaArray" : getAQName(o, l), gco, udCacheRef);
-			if (isReflect != 0 && checkReflect && !isArray)
+			int isReflect = LuaDLL.luaS_pushobject(l, index, getAQName(o), gco, udCacheRef);
+			if (isReflect != 0 && checkReflect)
 			{
 				Logger.LogWarning(string.Format("{0} not exported, using reflection instead", o.ToString()));
 			}
 #else
-            LuaDLL.luaS_pushobject(l, index, isArray ? "LuaArray" : getAQName(o, l), gco, udCacheRef);
+			LuaDLL.luaS_pushobject(l, index, getAQName(o), gco, udCacheRef);
 #endif
 
-        }
+		}
 
         static Dictionary<Type, string> aqnameMap = new Dictionary<Type, string>();
         internal static string getAQName(object o)

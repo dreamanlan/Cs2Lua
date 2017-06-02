@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_SpringJoint2D : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.SpringJoint2D o;
-			o=new UnityEngine.SpringJoint2D();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_autoConfigureDistance(IntPtr l) {
 		try {
 			UnityEngine.SpringJoint2D self=(UnityEngine.SpringJoint2D)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_SpringJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_autoConfigureDistance(IntPtr l) {
 		try {
 			UnityEngine.SpringJoint2D self=(UnityEngine.SpringJoint2D)checkSelf(l);
@@ -43,6 +32,7 @@ public class Lua_UnityEngine_SpringJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_distance(IntPtr l) {
 		try {
 			UnityEngine.SpringJoint2D self=(UnityEngine.SpringJoint2D)checkSelf(l);
@@ -55,6 +45,7 @@ public class Lua_UnityEngine_SpringJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_distance(IntPtr l) {
 		try {
 			UnityEngine.SpringJoint2D self=(UnityEngine.SpringJoint2D)checkSelf(l);
@@ -69,6 +60,7 @@ public class Lua_UnityEngine_SpringJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_dampingRatio(IntPtr l) {
 		try {
 			UnityEngine.SpringJoint2D self=(UnityEngine.SpringJoint2D)checkSelf(l);
@@ -81,6 +73,7 @@ public class Lua_UnityEngine_SpringJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_dampingRatio(IntPtr l) {
 		try {
 			UnityEngine.SpringJoint2D self=(UnityEngine.SpringJoint2D)checkSelf(l);
@@ -95,6 +88,7 @@ public class Lua_UnityEngine_SpringJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_frequency(IntPtr l) {
 		try {
 			UnityEngine.SpringJoint2D self=(UnityEngine.SpringJoint2D)checkSelf(l);
@@ -107,6 +101,7 @@ public class Lua_UnityEngine_SpringJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_frequency(IntPtr l) {
 		try {
 			UnityEngine.SpringJoint2D self=(UnityEngine.SpringJoint2D)checkSelf(l);
@@ -120,12 +115,13 @@ public class Lua_UnityEngine_SpringJoint2D : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.SpringJoint2D");
 		addMember(l,"autoConfigureDistance",get_autoConfigureDistance,set_autoConfigureDistance,true);
 		addMember(l,"distance",get_distance,set_distance,true);
 		addMember(l,"dampingRatio",get_dampingRatio,set_dampingRatio,true);
 		addMember(l,"frequency",get_frequency,set_frequency,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.SpringJoint2D),typeof(UnityEngine.AnchoredJoint2D));
+		createTypeMetatable(l,null, typeof(UnityEngine.SpringJoint2D),typeof(UnityEngine.AnchoredJoint2D));
 	}
 }

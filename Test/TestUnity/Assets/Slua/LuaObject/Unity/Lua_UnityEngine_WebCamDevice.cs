@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_WebCamDevice : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.WebCamDevice o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_WebCamDevice : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_name(IntPtr l) {
 		try {
 			UnityEngine.WebCamDevice self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_WebCamDevice : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_isFrontFacing(IntPtr l) {
 		try {
 			UnityEngine.WebCamDevice self;
@@ -42,6 +45,7 @@ public class Lua_UnityEngine_WebCamDevice : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.WebCamDevice");
 		addMember(l,"name",get_name,null,true);

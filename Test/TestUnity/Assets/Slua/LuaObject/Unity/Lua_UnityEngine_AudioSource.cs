@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_AudioSource : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.AudioSource o;
-			o=new UnityEngine.AudioSource();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Play(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -43,6 +31,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int PlayDelayed(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -57,6 +46,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int PlayScheduled(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -71,6 +61,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetScheduledStartTime(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -85,6 +76,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetScheduledEndTime(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -99,6 +91,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Stop(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -111,6 +104,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Pause(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -123,6 +117,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int UnPause(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -135,6 +130,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int PlayOneShot(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -165,6 +161,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetCustomCurve(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -181,6 +178,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetCustomCurve(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -196,6 +194,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetOutputData(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -212,6 +211,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetSpectrumData(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -230,6 +230,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetSpatializerFloat(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -247,6 +248,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetSpatializerFloat(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -264,6 +266,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int PlayClipAtPoint_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -296,6 +299,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_volume(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -308,6 +312,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_volume(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -322,6 +327,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_pitch(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -334,6 +340,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_pitch(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -348,6 +355,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_time(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -360,6 +368,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_time(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -374,6 +383,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_timeSamples(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -386,6 +396,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_timeSamples(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -400,6 +411,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_clip(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -412,6 +424,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_clip(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -426,6 +439,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_outputAudioMixerGroup(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -438,6 +452,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_outputAudioMixerGroup(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -452,6 +467,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_isPlaying(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -464,6 +480,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_isVirtual(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -476,6 +493,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_loop(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -488,6 +506,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_loop(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -502,6 +521,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_ignoreListenerVolume(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -514,6 +534,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_ignoreListenerVolume(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -528,6 +549,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_playOnAwake(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -540,6 +562,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_playOnAwake(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -554,6 +577,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_ignoreListenerPause(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -566,6 +590,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_ignoreListenerPause(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -580,6 +605,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_velocityUpdateMode(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -592,6 +618,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_velocityUpdateMode(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -606,6 +633,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_panStereo(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -618,6 +646,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_panStereo(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -632,6 +661,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_spatialBlend(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -644,6 +674,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_spatialBlend(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -658,6 +689,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_spatialize(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -670,6 +702,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_spatialize(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -684,6 +717,35 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_spatializePostEffects(IntPtr l) {
+		try {
+			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.spatializePostEffects);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_spatializePostEffects(IntPtr l) {
+		try {
+			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
+			bool v;
+			checkType(l,2,out v);
+			self.spatializePostEffects=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_reverbZoneMix(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -696,6 +758,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_reverbZoneMix(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -710,6 +773,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_bypassEffects(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -722,6 +786,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_bypassEffects(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -736,6 +801,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_bypassListenerEffects(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -748,6 +814,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_bypassListenerEffects(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -762,6 +829,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_bypassReverbZones(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -774,6 +842,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_bypassReverbZones(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -788,6 +857,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_dopplerLevel(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -800,6 +870,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_dopplerLevel(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -814,6 +885,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_spread(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -826,6 +898,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_spread(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -840,6 +913,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_priority(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -852,6 +926,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_priority(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -866,6 +941,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_mute(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -878,6 +954,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_mute(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -892,6 +969,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_minDistance(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -904,6 +982,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_minDistance(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -918,6 +997,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_maxDistance(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -930,6 +1010,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_maxDistance(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -944,6 +1025,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_rolloffMode(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -956,6 +1038,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_rolloffMode(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -969,6 +1052,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AudioSource");
 		addMember(l,Play);
@@ -1003,6 +1087,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		addMember(l,"panStereo",get_panStereo,set_panStereo,true);
 		addMember(l,"spatialBlend",get_spatialBlend,set_spatialBlend,true);
 		addMember(l,"spatialize",get_spatialize,set_spatialize,true);
+		addMember(l,"spatializePostEffects",get_spatializePostEffects,set_spatializePostEffects,true);
 		addMember(l,"reverbZoneMix",get_reverbZoneMix,set_reverbZoneMix,true);
 		addMember(l,"bypassEffects",get_bypassEffects,set_bypassEffects,true);
 		addMember(l,"bypassListenerEffects",get_bypassListenerEffects,set_bypassListenerEffects,true);
@@ -1014,6 +1099,6 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		addMember(l,"minDistance",get_minDistance,set_minDistance,true);
 		addMember(l,"maxDistance",get_maxDistance,set_maxDistance,true);
 		addMember(l,"rolloffMode",get_rolloffMode,set_rolloffMode,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.AudioSource),typeof(UnityEngine.Behaviour));
+		createTypeMetatable(l,null, typeof(UnityEngine.AudioSource),typeof(UnityEngine.Behaviour));
 	}
 }

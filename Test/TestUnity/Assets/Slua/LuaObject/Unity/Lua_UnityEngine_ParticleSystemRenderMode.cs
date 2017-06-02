@@ -1,7 +1,7 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_ParticleSystemRenderMode : LuaObject {
 	static public void reg(IntPtr l) {
 		getEnumTable(l,"UnityEngine.ParticleSystemRenderMode");
@@ -10,6 +10,7 @@ public class Lua_UnityEngine_ParticleSystemRenderMode : LuaObject {
 		addMember(l,2,"HorizontalBillboard");
 		addMember(l,3,"VerticalBillboard");
 		addMember(l,4,"Mesh");
+		addMember(l,5,"None");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

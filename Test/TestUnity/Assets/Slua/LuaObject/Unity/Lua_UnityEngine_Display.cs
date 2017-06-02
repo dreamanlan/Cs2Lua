@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Display : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Activate(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -34,6 +35,7 @@ public class Lua_UnityEngine_Display : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetParams(IntPtr l) {
 		try {
 			UnityEngine.Display self=(UnityEngine.Display)checkSelf(l);
@@ -54,6 +56,7 @@ public class Lua_UnityEngine_Display : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetRenderingResolution(IntPtr l) {
 		try {
 			UnityEngine.Display self=(UnityEngine.Display)checkSelf(l);
@@ -70,6 +73,7 @@ public class Lua_UnityEngine_Display : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RelativeMouseAt_s(IntPtr l) {
 		try {
 			UnityEngine.Vector3 a1;
@@ -84,6 +88,7 @@ public class Lua_UnityEngine_Display : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_displays(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -95,6 +100,7 @@ public class Lua_UnityEngine_Display : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_displays(IntPtr l) {
 		try {
 			UnityEngine.Display[] v;
@@ -108,6 +114,7 @@ public class Lua_UnityEngine_Display : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_renderingWidth(IntPtr l) {
 		try {
 			UnityEngine.Display self=(UnityEngine.Display)checkSelf(l);
@@ -120,6 +127,7 @@ public class Lua_UnityEngine_Display : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_renderingHeight(IntPtr l) {
 		try {
 			UnityEngine.Display self=(UnityEngine.Display)checkSelf(l);
@@ -132,6 +140,7 @@ public class Lua_UnityEngine_Display : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_systemWidth(IntPtr l) {
 		try {
 			UnityEngine.Display self=(UnityEngine.Display)checkSelf(l);
@@ -144,6 +153,7 @@ public class Lua_UnityEngine_Display : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_systemHeight(IntPtr l) {
 		try {
 			UnityEngine.Display self=(UnityEngine.Display)checkSelf(l);
@@ -156,6 +166,7 @@ public class Lua_UnityEngine_Display : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_colorBuffer(IntPtr l) {
 		try {
 			UnityEngine.Display self=(UnityEngine.Display)checkSelf(l);
@@ -168,6 +179,7 @@ public class Lua_UnityEngine_Display : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_depthBuffer(IntPtr l) {
 		try {
 			UnityEngine.Display self=(UnityEngine.Display)checkSelf(l);
@@ -180,6 +192,20 @@ public class Lua_UnityEngine_Display : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_active(IntPtr l) {
+		try {
+			UnityEngine.Display self=(UnityEngine.Display)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.active);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_main(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -190,6 +216,7 @@ public class Lua_UnityEngine_Display : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Display");
 		addMember(l,Activate);
@@ -203,6 +230,7 @@ public class Lua_UnityEngine_Display : LuaObject {
 		addMember(l,"systemHeight",get_systemHeight,null,true);
 		addMember(l,"colorBuffer",get_colorBuffer,null,true);
 		addMember(l,"depthBuffer",get_depthBuffer,null,true);
+		addMember(l,"active",get_active,null,true);
 		addMember(l,"main",get_main,null,false);
 		createTypeMetatable(l,null, typeof(UnityEngine.Display));
 	}

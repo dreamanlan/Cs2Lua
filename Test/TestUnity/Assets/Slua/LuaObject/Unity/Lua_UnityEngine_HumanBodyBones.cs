@@ -1,7 +1,7 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_HumanBodyBones : LuaObject {
 	static public void reg(IntPtr l) {
 		getEnumTable(l,"UnityEngine.HumanBodyBones");
@@ -59,7 +59,8 @@ public class Lua_UnityEngine_HumanBodyBones : LuaObject {
 		addMember(l,51,"RightLittleProximal");
 		addMember(l,52,"RightLittleIntermediate");
 		addMember(l,53,"RightLittleDistal");
-		addMember(l,54,"LastBone");
+		addMember(l,54,"UpperChest");
+		addMember(l,55,"LastBone");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

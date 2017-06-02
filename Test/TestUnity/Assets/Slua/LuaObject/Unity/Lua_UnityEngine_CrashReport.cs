@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_CrashReport : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Remove(IntPtr l) {
 		try {
 			UnityEngine.CrashReport self=(UnityEngine.CrashReport)checkSelf(l);
@@ -16,6 +17,7 @@ public class Lua_UnityEngine_CrashReport : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RemoveAll_s(IntPtr l) {
 		try {
 			UnityEngine.CrashReport.RemoveAll();
@@ -27,6 +29,7 @@ public class Lua_UnityEngine_CrashReport : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_time(IntPtr l) {
 		try {
 			UnityEngine.CrashReport self=(UnityEngine.CrashReport)checkSelf(l);
@@ -39,6 +42,7 @@ public class Lua_UnityEngine_CrashReport : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_text(IntPtr l) {
 		try {
 			UnityEngine.CrashReport self=(UnityEngine.CrashReport)checkSelf(l);
@@ -51,6 +55,7 @@ public class Lua_UnityEngine_CrashReport : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_reports(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -62,6 +67,7 @@ public class Lua_UnityEngine_CrashReport : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_lastReport(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -72,6 +78,7 @@ public class Lua_UnityEngine_CrashReport : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.CrashReport");
 		addMember(l,Remove);

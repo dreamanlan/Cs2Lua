@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -29,6 +30,7 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Clear(IntPtr l) {
 		try {
 			UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
@@ -41,6 +43,7 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int PopulateUIVertex(IntPtr l) {
 		try {
 			UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
@@ -58,6 +61,7 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetUIVertex(IntPtr l) {
 		try {
 			UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
@@ -74,6 +78,7 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int FillMesh(IntPtr l) {
 		try {
 			UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
@@ -88,6 +93,7 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Dispose(IntPtr l) {
 		try {
 			UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
@@ -100,6 +106,7 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int AddVert(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -150,6 +157,7 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int AddTriangle(IntPtr l) {
 		try {
 			UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
@@ -168,6 +176,7 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int AddUIVertexQuad(IntPtr l) {
 		try {
 			UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
@@ -182,6 +191,7 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int AddUIVertexStream(IntPtr l) {
 		try {
 			UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
@@ -198,6 +208,7 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int AddUIVertexTriangleStream(IntPtr l) {
 		try {
 			UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
@@ -212,6 +223,7 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetUIVertexStream(IntPtr l) {
 		try {
 			UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
@@ -226,6 +238,7 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_currentVertCount(IntPtr l) {
 		try {
 			UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
@@ -238,6 +251,7 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_currentIndexCount(IntPtr l) {
 		try {
 			UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
@@ -249,6 +263,7 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.VertexHelper");
 		addMember(l,Clear);

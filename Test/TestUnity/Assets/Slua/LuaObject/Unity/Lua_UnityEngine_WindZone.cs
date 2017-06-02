@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_WindZone : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.WindZone o;
-			o=new UnityEngine.WindZone();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_mode(IntPtr l) {
 		try {
 			UnityEngine.WindZone self=(UnityEngine.WindZone)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_WindZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_mode(IntPtr l) {
 		try {
 			UnityEngine.WindZone self=(UnityEngine.WindZone)checkSelf(l);
@@ -43,6 +32,7 @@ public class Lua_UnityEngine_WindZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_radius(IntPtr l) {
 		try {
 			UnityEngine.WindZone self=(UnityEngine.WindZone)checkSelf(l);
@@ -55,6 +45,7 @@ public class Lua_UnityEngine_WindZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_radius(IntPtr l) {
 		try {
 			UnityEngine.WindZone self=(UnityEngine.WindZone)checkSelf(l);
@@ -69,6 +60,7 @@ public class Lua_UnityEngine_WindZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_windMain(IntPtr l) {
 		try {
 			UnityEngine.WindZone self=(UnityEngine.WindZone)checkSelf(l);
@@ -81,6 +73,7 @@ public class Lua_UnityEngine_WindZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_windMain(IntPtr l) {
 		try {
 			UnityEngine.WindZone self=(UnityEngine.WindZone)checkSelf(l);
@@ -95,6 +88,7 @@ public class Lua_UnityEngine_WindZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_windTurbulence(IntPtr l) {
 		try {
 			UnityEngine.WindZone self=(UnityEngine.WindZone)checkSelf(l);
@@ -107,6 +101,7 @@ public class Lua_UnityEngine_WindZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_windTurbulence(IntPtr l) {
 		try {
 			UnityEngine.WindZone self=(UnityEngine.WindZone)checkSelf(l);
@@ -121,6 +116,7 @@ public class Lua_UnityEngine_WindZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_windPulseMagnitude(IntPtr l) {
 		try {
 			UnityEngine.WindZone self=(UnityEngine.WindZone)checkSelf(l);
@@ -133,6 +129,7 @@ public class Lua_UnityEngine_WindZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_windPulseMagnitude(IntPtr l) {
 		try {
 			UnityEngine.WindZone self=(UnityEngine.WindZone)checkSelf(l);
@@ -147,6 +144,7 @@ public class Lua_UnityEngine_WindZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_windPulseFrequency(IntPtr l) {
 		try {
 			UnityEngine.WindZone self=(UnityEngine.WindZone)checkSelf(l);
@@ -159,6 +157,7 @@ public class Lua_UnityEngine_WindZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_windPulseFrequency(IntPtr l) {
 		try {
 			UnityEngine.WindZone self=(UnityEngine.WindZone)checkSelf(l);
@@ -172,6 +171,7 @@ public class Lua_UnityEngine_WindZone : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.WindZone");
 		addMember(l,"mode",get_mode,set_mode,true);
@@ -180,6 +180,6 @@ public class Lua_UnityEngine_WindZone : LuaObject {
 		addMember(l,"windTurbulence",get_windTurbulence,set_windTurbulence,true);
 		addMember(l,"windPulseMagnitude",get_windPulseMagnitude,set_windPulseMagnitude,true);
 		addMember(l,"windPulseFrequency",get_windPulseFrequency,set_windPulseFrequency,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.WindZone),typeof(UnityEngine.Component));
+		createTypeMetatable(l,null, typeof(UnityEngine.WindZone),typeof(UnityEngine.Component));
 	}
 }

@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_LayoutRebuilder : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutRebuilder o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_UI_LayoutRebuilder : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsDestroyed(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutRebuilder self=(UnityEngine.UI.LayoutRebuilder)checkSelf(l);
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_UI_LayoutRebuilder : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Rebuild(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutRebuilder self=(UnityEngine.UI.LayoutRebuilder)checkSelf(l);
@@ -44,6 +47,7 @@ public class Lua_UnityEngine_UI_LayoutRebuilder : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int LayoutComplete(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutRebuilder self=(UnityEngine.UI.LayoutRebuilder)checkSelf(l);
@@ -56,6 +60,7 @@ public class Lua_UnityEngine_UI_LayoutRebuilder : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GraphicUpdateComplete(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutRebuilder self=(UnityEngine.UI.LayoutRebuilder)checkSelf(l);
@@ -68,6 +73,7 @@ public class Lua_UnityEngine_UI_LayoutRebuilder : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ForceRebuildLayoutImmediate_s(IntPtr l) {
 		try {
 			UnityEngine.RectTransform a1;
@@ -81,6 +87,7 @@ public class Lua_UnityEngine_UI_LayoutRebuilder : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int MarkLayoutForRebuild_s(IntPtr l) {
 		try {
 			UnityEngine.RectTransform a1;
@@ -94,6 +101,7 @@ public class Lua_UnityEngine_UI_LayoutRebuilder : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_transform(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutRebuilder self=(UnityEngine.UI.LayoutRebuilder)checkSelf(l);
@@ -105,6 +113,7 @@ public class Lua_UnityEngine_UI_LayoutRebuilder : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.LayoutRebuilder");
 		addMember(l,IsDestroyed);

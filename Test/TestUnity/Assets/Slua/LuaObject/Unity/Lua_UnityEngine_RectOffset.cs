@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_RectOffset : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -35,6 +36,7 @@ public class Lua_UnityEngine_RectOffset : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Add(IntPtr l) {
 		try {
 			UnityEngine.RectOffset self=(UnityEngine.RectOffset)checkSelf(l);
@@ -50,6 +52,7 @@ public class Lua_UnityEngine_RectOffset : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Remove(IntPtr l) {
 		try {
 			UnityEngine.RectOffset self=(UnityEngine.RectOffset)checkSelf(l);
@@ -65,6 +68,7 @@ public class Lua_UnityEngine_RectOffset : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_left(IntPtr l) {
 		try {
 			UnityEngine.RectOffset self=(UnityEngine.RectOffset)checkSelf(l);
@@ -77,6 +81,7 @@ public class Lua_UnityEngine_RectOffset : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_left(IntPtr l) {
 		try {
 			UnityEngine.RectOffset self=(UnityEngine.RectOffset)checkSelf(l);
@@ -91,6 +96,7 @@ public class Lua_UnityEngine_RectOffset : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_right(IntPtr l) {
 		try {
 			UnityEngine.RectOffset self=(UnityEngine.RectOffset)checkSelf(l);
@@ -103,6 +109,7 @@ public class Lua_UnityEngine_RectOffset : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_right(IntPtr l) {
 		try {
 			UnityEngine.RectOffset self=(UnityEngine.RectOffset)checkSelf(l);
@@ -117,6 +124,7 @@ public class Lua_UnityEngine_RectOffset : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_top(IntPtr l) {
 		try {
 			UnityEngine.RectOffset self=(UnityEngine.RectOffset)checkSelf(l);
@@ -129,6 +137,7 @@ public class Lua_UnityEngine_RectOffset : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_top(IntPtr l) {
 		try {
 			UnityEngine.RectOffset self=(UnityEngine.RectOffset)checkSelf(l);
@@ -143,6 +152,7 @@ public class Lua_UnityEngine_RectOffset : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_bottom(IntPtr l) {
 		try {
 			UnityEngine.RectOffset self=(UnityEngine.RectOffset)checkSelf(l);
@@ -155,6 +165,7 @@ public class Lua_UnityEngine_RectOffset : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_bottom(IntPtr l) {
 		try {
 			UnityEngine.RectOffset self=(UnityEngine.RectOffset)checkSelf(l);
@@ -169,6 +180,7 @@ public class Lua_UnityEngine_RectOffset : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_horizontal(IntPtr l) {
 		try {
 			UnityEngine.RectOffset self=(UnityEngine.RectOffset)checkSelf(l);
@@ -181,6 +193,7 @@ public class Lua_UnityEngine_RectOffset : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_vertical(IntPtr l) {
 		try {
 			UnityEngine.RectOffset self=(UnityEngine.RectOffset)checkSelf(l);
@@ -192,6 +205,7 @@ public class Lua_UnityEngine_RectOffset : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.RectOffset");
 		addMember(l,Add);

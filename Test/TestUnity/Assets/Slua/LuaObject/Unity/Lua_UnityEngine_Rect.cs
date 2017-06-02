@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Rect : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -40,7 +41,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==0){
+			else if(argc<=1){
 				o=new UnityEngine.Rect();
 				pushValue(l,true);
 				pushObject(l,o);
@@ -53,6 +54,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Set(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -75,6 +77,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Contains(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -119,6 +122,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Overlaps(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -153,6 +157,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int MinMaxRect_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -173,6 +178,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int NormalizedToPoint_s(IntPtr l) {
 		try {
 			UnityEngine.Rect a1;
@@ -189,6 +195,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int PointToNormalized_s(IntPtr l) {
 		try {
 			UnityEngine.Rect a1;
@@ -205,6 +212,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int op_Inequality(IntPtr l) {
 		try {
 			UnityEngine.Rect a1;
@@ -221,6 +229,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int op_Equality(IntPtr l) {
 		try {
 			UnityEngine.Rect a1;
@@ -237,6 +246,19 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_zero(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Rect.zero);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_x(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -250,6 +272,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_x(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -266,6 +289,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_y(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -279,6 +303,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_y(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -295,6 +320,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_position(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -308,6 +334,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_position(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -324,6 +351,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_center(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -337,6 +365,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_center(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -353,6 +382,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_min(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -366,6 +396,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_min(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -382,6 +413,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_max(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -395,6 +427,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_max(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -411,6 +444,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_width(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -424,6 +458,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_width(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -440,6 +475,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_height(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -453,6 +489,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_height(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -469,6 +506,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_size(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -482,6 +520,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_size(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -498,6 +537,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_xMin(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -511,6 +551,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_xMin(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -527,6 +568,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_yMin(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -540,6 +582,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_yMin(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -556,6 +599,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_xMax(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -569,6 +613,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_xMax(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -585,6 +630,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_yMax(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -598,6 +644,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_yMax(IntPtr l) {
 		try {
 			UnityEngine.Rect self;
@@ -613,6 +660,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Rect");
 		addMember(l,Set);
@@ -623,6 +671,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		addMember(l,PointToNormalized_s);
 		addMember(l,op_Inequality);
 		addMember(l,op_Equality);
+		addMember(l,"zero",get_zero,null,false);
 		addMember(l,"x",get_x,set_x,true);
 		addMember(l,"y",get_y,set_y,true);
 		addMember(l,"position",get_position,set_position,true);

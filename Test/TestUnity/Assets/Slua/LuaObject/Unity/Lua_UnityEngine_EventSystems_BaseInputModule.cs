@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_EventSystems_BaseInputModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Process(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.BaseInputModule self=(UnityEngine.EventSystems.BaseInputModule)checkSelf(l);
@@ -16,6 +17,7 @@ public class Lua_UnityEngine_EventSystems_BaseInputModule : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsPointerOverGameObject(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.BaseInputModule self=(UnityEngine.EventSystems.BaseInputModule)checkSelf(l);
@@ -31,6 +33,7 @@ public class Lua_UnityEngine_EventSystems_BaseInputModule : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ShouldActivateModule(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.BaseInputModule self=(UnityEngine.EventSystems.BaseInputModule)checkSelf(l);
@@ -44,6 +47,7 @@ public class Lua_UnityEngine_EventSystems_BaseInputModule : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int DeactivateModule(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.BaseInputModule self=(UnityEngine.EventSystems.BaseInputModule)checkSelf(l);
@@ -56,6 +60,7 @@ public class Lua_UnityEngine_EventSystems_BaseInputModule : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ActivateModule(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.BaseInputModule self=(UnityEngine.EventSystems.BaseInputModule)checkSelf(l);
@@ -68,6 +73,7 @@ public class Lua_UnityEngine_EventSystems_BaseInputModule : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int UpdateModule(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.BaseInputModule self=(UnityEngine.EventSystems.BaseInputModule)checkSelf(l);
@@ -80,6 +86,7 @@ public class Lua_UnityEngine_EventSystems_BaseInputModule : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsModuleSupported(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.BaseInputModule self=(UnityEngine.EventSystems.BaseInputModule)checkSelf(l);
@@ -92,6 +99,20 @@ public class Lua_UnityEngine_EventSystems_BaseInputModule : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_input(IntPtr l) {
+		try {
+			UnityEngine.EventSystems.BaseInputModule self=(UnityEngine.EventSystems.BaseInputModule)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.input);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.EventSystems.BaseInputModule");
 		addMember(l,Process);
@@ -101,6 +122,7 @@ public class Lua_UnityEngine_EventSystems_BaseInputModule : LuaObject {
 		addMember(l,ActivateModule);
 		addMember(l,UpdateModule);
 		addMember(l,IsModuleSupported);
+		addMember(l,"input",get_input,null,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.EventSystems.BaseInputModule),typeof(UnityEngine.EventSystems.UIBehaviour));
 	}
 }

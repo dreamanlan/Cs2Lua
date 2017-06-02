@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.UI.DefaultControls.Resources o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_standard(IntPtr l) {
 		try {
 			UnityEngine.UI.DefaultControls.Resources self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_standard(IntPtr l) {
 		try {
 			UnityEngine.UI.DefaultControls.Resources self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_background(IntPtr l) {
 		try {
 			UnityEngine.UI.DefaultControls.Resources self;
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_background(IntPtr l) {
 		try {
 			UnityEngine.UI.DefaultControls.Resources self;
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_inputField(IntPtr l) {
 		try {
 			UnityEngine.UI.DefaultControls.Resources self;
@@ -88,6 +94,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_inputField(IntPtr l) {
 		try {
 			UnityEngine.UI.DefaultControls.Resources self;
@@ -104,6 +111,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_knob(IntPtr l) {
 		try {
 			UnityEngine.UI.DefaultControls.Resources self;
@@ -117,6 +125,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_knob(IntPtr l) {
 		try {
 			UnityEngine.UI.DefaultControls.Resources self;
@@ -133,6 +142,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_checkmark(IntPtr l) {
 		try {
 			UnityEngine.UI.DefaultControls.Resources self;
@@ -146,6 +156,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_checkmark(IntPtr l) {
 		try {
 			UnityEngine.UI.DefaultControls.Resources self;
@@ -162,6 +173,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_dropdown(IntPtr l) {
 		try {
 			UnityEngine.UI.DefaultControls.Resources self;
@@ -175,6 +187,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_dropdown(IntPtr l) {
 		try {
 			UnityEngine.UI.DefaultControls.Resources self;
@@ -191,6 +204,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_mask(IntPtr l) {
 		try {
 			UnityEngine.UI.DefaultControls.Resources self;
@@ -204,6 +218,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_mask(IntPtr l) {
 		try {
 			UnityEngine.UI.DefaultControls.Resources self;
@@ -219,6 +234,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.DefaultControls.Resources");
 		addMember(l,"standard",get_standard,set_standard,true);

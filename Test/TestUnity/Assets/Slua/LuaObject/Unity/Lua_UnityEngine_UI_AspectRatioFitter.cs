@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_AspectRatioFitter : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetLayoutHorizontal(IntPtr l) {
 		try {
 			UnityEngine.UI.AspectRatioFitter self=(UnityEngine.UI.AspectRatioFitter)checkSelf(l);
@@ -16,6 +17,7 @@ public class Lua_UnityEngine_UI_AspectRatioFitter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetLayoutVertical(IntPtr l) {
 		try {
 			UnityEngine.UI.AspectRatioFitter self=(UnityEngine.UI.AspectRatioFitter)checkSelf(l);
@@ -28,6 +30,7 @@ public class Lua_UnityEngine_UI_AspectRatioFitter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_aspectMode(IntPtr l) {
 		try {
 			UnityEngine.UI.AspectRatioFitter self=(UnityEngine.UI.AspectRatioFitter)checkSelf(l);
@@ -40,6 +43,7 @@ public class Lua_UnityEngine_UI_AspectRatioFitter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_aspectMode(IntPtr l) {
 		try {
 			UnityEngine.UI.AspectRatioFitter self=(UnityEngine.UI.AspectRatioFitter)checkSelf(l);
@@ -54,6 +58,7 @@ public class Lua_UnityEngine_UI_AspectRatioFitter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_aspectRatio(IntPtr l) {
 		try {
 			UnityEngine.UI.AspectRatioFitter self=(UnityEngine.UI.AspectRatioFitter)checkSelf(l);
@@ -66,6 +71,7 @@ public class Lua_UnityEngine_UI_AspectRatioFitter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_aspectRatio(IntPtr l) {
 		try {
 			UnityEngine.UI.AspectRatioFitter self=(UnityEngine.UI.AspectRatioFitter)checkSelf(l);
@@ -79,6 +85,7 @@ public class Lua_UnityEngine_UI_AspectRatioFitter : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.AspectRatioFitter");
 		addMember(l,SetLayoutHorizontal);

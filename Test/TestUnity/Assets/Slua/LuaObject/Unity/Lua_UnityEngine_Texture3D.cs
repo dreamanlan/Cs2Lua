@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Texture3D : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.Texture3D o;
@@ -27,6 +28,7 @@ public class Lua_UnityEngine_Texture3D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetPixels(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -55,6 +57,7 @@ public class Lua_UnityEngine_Texture3D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetPixels32(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -83,6 +86,7 @@ public class Lua_UnityEngine_Texture3D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetPixels(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -113,6 +117,7 @@ public class Lua_UnityEngine_Texture3D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetPixels32(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -143,6 +148,7 @@ public class Lua_UnityEngine_Texture3D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Apply(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -160,6 +166,16 @@ public class Lua_UnityEngine_Texture3D : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
+			else if(argc==3){
+				UnityEngine.Texture3D self=(UnityEngine.Texture3D)checkSelf(l);
+				System.Boolean a1;
+				checkType(l,2,out a1);
+				System.Boolean a2;
+				checkType(l,3,out a2);
+				self.Apply(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
 			pushValue(l,false);
 			LuaDLL.lua_pushstring(l,"No matched override function to call");
 			return 2;
@@ -169,6 +185,7 @@ public class Lua_UnityEngine_Texture3D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_depth(IntPtr l) {
 		try {
 			UnityEngine.Texture3D self=(UnityEngine.Texture3D)checkSelf(l);
@@ -181,6 +198,7 @@ public class Lua_UnityEngine_Texture3D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_format(IntPtr l) {
 		try {
 			UnityEngine.Texture3D self=(UnityEngine.Texture3D)checkSelf(l);
@@ -192,6 +210,7 @@ public class Lua_UnityEngine_Texture3D : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Texture3D");
 		addMember(l,GetPixels);

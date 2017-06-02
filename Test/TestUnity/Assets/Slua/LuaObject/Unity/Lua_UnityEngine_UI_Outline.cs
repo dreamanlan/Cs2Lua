@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_Outline : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ModifyMesh(IntPtr l) {
 		try {
 			UnityEngine.UI.Outline self=(UnityEngine.UI.Outline)checkSelf(l);
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_UI_Outline : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.Outline");
 		addMember(l,ModifyMesh);

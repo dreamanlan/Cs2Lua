@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Effector2D : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.Effector2D o;
-			o=new UnityEngine.Effector2D();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_useColliderMask(IntPtr l) {
 		try {
 			UnityEngine.Effector2D self=(UnityEngine.Effector2D)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_Effector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_useColliderMask(IntPtr l) {
 		try {
 			UnityEngine.Effector2D self=(UnityEngine.Effector2D)checkSelf(l);
@@ -43,6 +32,7 @@ public class Lua_UnityEngine_Effector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_colliderMask(IntPtr l) {
 		try {
 			UnityEngine.Effector2D self=(UnityEngine.Effector2D)checkSelf(l);
@@ -55,6 +45,7 @@ public class Lua_UnityEngine_Effector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_colliderMask(IntPtr l) {
 		try {
 			UnityEngine.Effector2D self=(UnityEngine.Effector2D)checkSelf(l);
@@ -68,10 +59,11 @@ public class Lua_UnityEngine_Effector2D : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Effector2D");
 		addMember(l,"useColliderMask",get_useColliderMask,set_useColliderMask,true);
 		addMember(l,"colliderMask",get_colliderMask,set_colliderMask,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Effector2D),typeof(UnityEngine.Behaviour));
+		createTypeMetatable(l,null, typeof(UnityEngine.Effector2D),typeof(UnityEngine.Behaviour));
 	}
 }

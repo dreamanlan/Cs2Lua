@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_HumanDescription : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_human(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_human(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_skeleton(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription self;
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_skeleton(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription self;
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_upperArmTwist(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription self;
@@ -88,6 +94,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_upperArmTwist(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription self;
@@ -104,6 +111,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_lowerArmTwist(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription self;
@@ -117,6 +125,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_lowerArmTwist(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription self;
@@ -133,6 +142,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_upperLegTwist(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription self;
@@ -146,6 +156,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_upperLegTwist(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription self;
@@ -162,6 +173,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_lowerLegTwist(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription self;
@@ -175,6 +187,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_lowerLegTwist(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription self;
@@ -191,6 +204,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_armStretch(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription self;
@@ -204,6 +218,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_armStretch(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription self;
@@ -220,6 +235,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_legStretch(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription self;
@@ -233,6 +249,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_legStretch(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription self;
@@ -249,6 +266,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_feetSpacing(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription self;
@@ -262,6 +280,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_feetSpacing(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription self;
@@ -278,6 +297,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_hasTranslationDoF(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription self;
@@ -291,6 +311,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_hasTranslationDoF(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription self;
@@ -306,6 +327,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.HumanDescription");
 		addMember(l,"human",get_human,set_human,true);

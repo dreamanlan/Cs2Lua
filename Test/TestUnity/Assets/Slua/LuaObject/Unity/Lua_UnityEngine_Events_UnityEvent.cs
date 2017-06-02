@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Events_UnityEvent : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.Events.UnityEvent o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_Events_UnityEvent : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int AddListener(IntPtr l) {
 		try {
 			UnityEngine.Events.UnityEvent self=(UnityEngine.Events.UnityEvent)checkSelf(l);
@@ -31,6 +33,7 @@ public class Lua_UnityEngine_Events_UnityEvent : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RemoveListener(IntPtr l) {
 		try {
 			UnityEngine.Events.UnityEvent self=(UnityEngine.Events.UnityEvent)checkSelf(l);
@@ -45,6 +48,7 @@ public class Lua_UnityEngine_Events_UnityEvent : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Invoke(IntPtr l) {
 		try {
 			UnityEngine.Events.UnityEvent self=(UnityEngine.Events.UnityEvent)checkSelf(l);
@@ -56,6 +60,7 @@ public class Lua_UnityEngine_Events_UnityEvent : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Events.UnityEvent");
 		addMember(l,AddListener);

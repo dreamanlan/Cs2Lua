@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.AudioReverbZone o;
-			o=new UnityEngine.AudioReverbZone();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_minDistance(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_minDistance(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -43,6 +32,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_maxDistance(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -55,6 +45,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_maxDistance(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -69,6 +60,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_reverbPreset(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -81,6 +73,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_reverbPreset(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -95,6 +88,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_room(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -107,6 +101,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_room(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -121,6 +116,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_roomHF(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -133,6 +129,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_roomHF(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -147,6 +144,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_roomLF(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -159,6 +157,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_roomLF(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -173,6 +172,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_decayTime(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -185,6 +185,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_decayTime(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -199,6 +200,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_decayHFRatio(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -211,6 +213,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_decayHFRatio(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -225,6 +228,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_reflections(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -237,6 +241,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_reflections(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -251,6 +256,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_reflectionsDelay(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -263,6 +269,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_reflectionsDelay(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -277,6 +284,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_reverb(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -289,6 +297,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_reverb(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -303,6 +312,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_reverbDelay(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -315,6 +325,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_reverbDelay(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -329,6 +340,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_HFReference(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -341,6 +353,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_HFReference(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -355,6 +368,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_LFReference(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -367,6 +381,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_LFReference(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -381,32 +396,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int get_roomRolloffFactor(IntPtr l) {
-		try {
-			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.roomRolloffFactor);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int set_roomRolloffFactor(IntPtr l) {
-		try {
-			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
-			float v;
-			checkType(l,2,out v);
-			self.roomRolloffFactor=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_diffusion(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -419,6 +409,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_diffusion(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -433,6 +424,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_density(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -445,6 +437,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_density(IntPtr l) {
 		try {
 			UnityEngine.AudioReverbZone self=(UnityEngine.AudioReverbZone)checkSelf(l);
@@ -458,6 +451,7 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AudioReverbZone");
 		addMember(l,"minDistance",get_minDistance,set_minDistance,true);
@@ -474,9 +468,8 @@ public class Lua_UnityEngine_AudioReverbZone : LuaObject {
 		addMember(l,"reverbDelay",get_reverbDelay,set_reverbDelay,true);
 		addMember(l,"HFReference",get_HFReference,set_HFReference,true);
 		addMember(l,"LFReference",get_LFReference,set_LFReference,true);
-		addMember(l,"roomRolloffFactor",get_roomRolloffFactor,set_roomRolloffFactor,true);
 		addMember(l,"diffusion",get_diffusion,set_diffusion,true);
 		addMember(l,"density",get_density,set_density,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.AudioReverbZone),typeof(UnityEngine.Behaviour));
+		createTypeMetatable(l,null, typeof(UnityEngine.AudioReverbZone),typeof(UnityEngine.Behaviour));
 	}
 }

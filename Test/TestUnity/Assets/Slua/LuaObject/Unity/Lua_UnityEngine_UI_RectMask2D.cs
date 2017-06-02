@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_RectMask2D : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsRaycastLocationValid(IntPtr l) {
 		try {
 			UnityEngine.UI.RectMask2D self=(UnityEngine.UI.RectMask2D)checkSelf(l);
@@ -21,6 +22,7 @@ public class Lua_UnityEngine_UI_RectMask2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int PerformClipping(IntPtr l) {
 		try {
 			UnityEngine.UI.RectMask2D self=(UnityEngine.UI.RectMask2D)checkSelf(l);
@@ -33,6 +35,7 @@ public class Lua_UnityEngine_UI_RectMask2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int AddClippable(IntPtr l) {
 		try {
 			UnityEngine.UI.RectMask2D self=(UnityEngine.UI.RectMask2D)checkSelf(l);
@@ -47,6 +50,7 @@ public class Lua_UnityEngine_UI_RectMask2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RemoveClippable(IntPtr l) {
 		try {
 			UnityEngine.UI.RectMask2D self=(UnityEngine.UI.RectMask2D)checkSelf(l);
@@ -61,6 +65,7 @@ public class Lua_UnityEngine_UI_RectMask2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_canvasRect(IntPtr l) {
 		try {
 			UnityEngine.UI.RectMask2D self=(UnityEngine.UI.RectMask2D)checkSelf(l);
@@ -73,6 +78,7 @@ public class Lua_UnityEngine_UI_RectMask2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_rectTransform(IntPtr l) {
 		try {
 			UnityEngine.UI.RectMask2D self=(UnityEngine.UI.RectMask2D)checkSelf(l);
@@ -84,6 +90,7 @@ public class Lua_UnityEngine_UI_RectMask2D : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.RectMask2D");
 		addMember(l,IsRaycastLocationValid);

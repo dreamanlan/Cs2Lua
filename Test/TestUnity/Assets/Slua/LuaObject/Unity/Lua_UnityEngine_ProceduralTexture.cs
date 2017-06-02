@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_ProceduralTexture : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.ProceduralTexture o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_ProceduralTexture : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetProceduralOutputType(IntPtr l) {
 		try {
 			UnityEngine.ProceduralTexture self=(UnityEngine.ProceduralTexture)checkSelf(l);
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_ProceduralTexture : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetPixels32(IntPtr l) {
 		try {
 			UnityEngine.ProceduralTexture self=(UnityEngine.ProceduralTexture)checkSelf(l);
@@ -51,6 +54,7 @@ public class Lua_UnityEngine_ProceduralTexture : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_hasAlpha(IntPtr l) {
 		try {
 			UnityEngine.ProceduralTexture self=(UnityEngine.ProceduralTexture)checkSelf(l);
@@ -63,6 +67,7 @@ public class Lua_UnityEngine_ProceduralTexture : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_format(IntPtr l) {
 		try {
 			UnityEngine.ProceduralTexture self=(UnityEngine.ProceduralTexture)checkSelf(l);
@@ -74,6 +79,7 @@ public class Lua_UnityEngine_ProceduralTexture : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ProceduralTexture");
 		addMember(l,GetProceduralOutputType);

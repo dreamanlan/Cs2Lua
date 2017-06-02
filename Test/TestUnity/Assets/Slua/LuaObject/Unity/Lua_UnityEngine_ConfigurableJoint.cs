@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.ConfigurableJoint o;
-			o=new UnityEngine.ConfigurableJoint();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_secondaryAxis(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_secondaryAxis(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -43,6 +32,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_xMotion(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -55,6 +45,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_xMotion(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -69,6 +60,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_yMotion(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -81,6 +73,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_yMotion(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -95,6 +88,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_zMotion(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -107,6 +101,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_zMotion(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -121,6 +116,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_angularXMotion(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -133,6 +129,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_angularXMotion(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -147,6 +144,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_angularYMotion(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -159,6 +157,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_angularYMotion(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -173,6 +172,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_angularZMotion(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -185,6 +185,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_angularZMotion(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -199,6 +200,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_linearLimitSpring(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -211,6 +213,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_linearLimitSpring(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -225,6 +228,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_angularXLimitSpring(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -237,6 +241,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_angularXLimitSpring(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -251,6 +256,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_angularYZLimitSpring(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -263,6 +269,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_angularYZLimitSpring(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -277,6 +284,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_linearLimit(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -289,6 +297,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_linearLimit(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -303,6 +312,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_lowAngularXLimit(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -315,6 +325,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_lowAngularXLimit(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -329,6 +340,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_highAngularXLimit(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -341,6 +353,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_highAngularXLimit(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -355,6 +368,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_angularYLimit(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -367,6 +381,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_angularYLimit(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -381,6 +396,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_angularZLimit(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -393,6 +409,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_angularZLimit(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -407,6 +424,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_targetPosition(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -419,6 +437,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_targetPosition(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -433,6 +452,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_targetVelocity(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -445,6 +465,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_targetVelocity(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -459,6 +480,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_xDrive(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -471,6 +493,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_xDrive(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -485,6 +508,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_yDrive(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -497,6 +521,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_yDrive(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -511,6 +536,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_zDrive(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -523,6 +549,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_zDrive(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -537,6 +564,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_targetRotation(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -549,6 +577,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_targetRotation(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -563,6 +592,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_targetAngularVelocity(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -575,6 +605,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_targetAngularVelocity(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -589,6 +620,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_rotationDriveMode(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -601,6 +633,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_rotationDriveMode(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -615,6 +648,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_angularXDrive(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -627,6 +661,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_angularXDrive(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -641,6 +676,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_angularYZDrive(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -653,6 +689,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_angularYZDrive(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -667,6 +704,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_slerpDrive(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -679,6 +717,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_slerpDrive(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -693,6 +732,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_projectionMode(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -705,6 +745,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_projectionMode(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -719,6 +760,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_projectionDistance(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -731,6 +773,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_projectionDistance(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -745,6 +788,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_projectionAngle(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -757,6 +801,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_projectionAngle(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -771,6 +816,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_configuredInWorldSpace(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -783,6 +829,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_configuredInWorldSpace(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -797,6 +844,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_swapBodies(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -809,6 +857,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_swapBodies(IntPtr l) {
 		try {
 			UnityEngine.ConfigurableJoint self=(UnityEngine.ConfigurableJoint)checkSelf(l);
@@ -822,6 +871,7 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ConfigurableJoint");
 		addMember(l,"secondaryAxis",get_secondaryAxis,set_secondaryAxis,true);
@@ -855,6 +905,6 @@ public class Lua_UnityEngine_ConfigurableJoint : LuaObject {
 		addMember(l,"projectionAngle",get_projectionAngle,set_projectionAngle,true);
 		addMember(l,"configuredInWorldSpace",get_configuredInWorldSpace,set_configuredInWorldSpace,true);
 		addMember(l,"swapBodies",get_swapBodies,set_swapBodies,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ConfigurableJoint),typeof(UnityEngine.Joint));
+		createTypeMetatable(l,null, typeof(UnityEngine.ConfigurableJoint),typeof(UnityEngine.Joint));
 	}
 }

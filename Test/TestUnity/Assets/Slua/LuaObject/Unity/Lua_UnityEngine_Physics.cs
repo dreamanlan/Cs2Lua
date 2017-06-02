@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Physics : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.Physics o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Raycast_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -237,6 +239,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RaycastAll_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -345,6 +348,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RaycastNonAlloc_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -469,6 +473,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Linecast_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -559,6 +564,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OverlapSphere_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -607,6 +613,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OverlapSphereNonAlloc_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -661,6 +668,123 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int OverlapCapsule_s(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==3){
+				UnityEngine.Vector3 a1;
+				checkType(l,1,out a1);
+				UnityEngine.Vector3 a2;
+				checkType(l,2,out a2);
+				System.Single a3;
+				checkType(l,3,out a3);
+				var ret=UnityEngine.Physics.OverlapCapsule(a1,a2,a3);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==4){
+				UnityEngine.Vector3 a1;
+				checkType(l,1,out a1);
+				UnityEngine.Vector3 a2;
+				checkType(l,2,out a2);
+				System.Single a3;
+				checkType(l,3,out a3);
+				System.Int32 a4;
+				checkType(l,4,out a4);
+				var ret=UnityEngine.Physics.OverlapCapsule(a1,a2,a3,a4);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==5){
+				UnityEngine.Vector3 a1;
+				checkType(l,1,out a1);
+				UnityEngine.Vector3 a2;
+				checkType(l,2,out a2);
+				System.Single a3;
+				checkType(l,3,out a3);
+				System.Int32 a4;
+				checkType(l,4,out a4);
+				UnityEngine.QueryTriggerInteraction a5;
+				checkEnum(l,5,out a5);
+				var ret=UnityEngine.Physics.OverlapCapsule(a1,a2,a3,a4,a5);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int OverlapCapsuleNonAlloc_s(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==4){
+				UnityEngine.Vector3 a1;
+				checkType(l,1,out a1);
+				UnityEngine.Vector3 a2;
+				checkType(l,2,out a2);
+				System.Single a3;
+				checkType(l,3,out a3);
+				UnityEngine.Collider[] a4;
+				checkArray(l,4,out a4);
+				var ret=UnityEngine.Physics.OverlapCapsuleNonAlloc(a1,a2,a3,a4);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==5){
+				UnityEngine.Vector3 a1;
+				checkType(l,1,out a1);
+				UnityEngine.Vector3 a2;
+				checkType(l,2,out a2);
+				System.Single a3;
+				checkType(l,3,out a3);
+				UnityEngine.Collider[] a4;
+				checkArray(l,4,out a4);
+				System.Int32 a5;
+				checkType(l,5,out a5);
+				var ret=UnityEngine.Physics.OverlapCapsuleNonAlloc(a1,a2,a3,a4,a5);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==6){
+				UnityEngine.Vector3 a1;
+				checkType(l,1,out a1);
+				UnityEngine.Vector3 a2;
+				checkType(l,2,out a2);
+				System.Single a3;
+				checkType(l,3,out a3);
+				UnityEngine.Collider[] a4;
+				checkArray(l,4,out a4);
+				System.Int32 a5;
+				checkType(l,5,out a5);
+				UnityEngine.QueryTriggerInteraction a6;
+				checkEnum(l,6,out a6);
+				var ret=UnityEngine.Physics.OverlapCapsuleNonAlloc(a1,a2,a3,a4,a5,a6);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CapsuleCast_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -817,6 +941,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SphereCast_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -1009,6 +1134,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CapsuleCastAll_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -1089,6 +1215,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CapsuleCastNonAlloc_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -1177,6 +1304,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SphereCastAll_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -1301,6 +1429,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SphereCastNonAlloc_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -1441,6 +1570,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CheckSphere_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -1489,6 +1619,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CheckCapsule_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -1543,6 +1674,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CheckBox_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -1607,6 +1739,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OverlapBox_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -1671,6 +1804,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OverlapBoxNonAlloc_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -1743,6 +1877,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int BoxCastAll_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -1835,6 +1970,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int BoxCastNonAlloc_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -1937,6 +2073,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int BoxCast_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -2119,6 +2256,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IgnoreCollision_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -2151,6 +2289,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IgnoreLayerCollision_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -2183,6 +2322,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetIgnoreLayerCollision_s(IntPtr l) {
 		try {
 			System.Int32 a1;
@@ -2199,6 +2339,57 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ComputePenetration_s(IntPtr l) {
+		try {
+			UnityEngine.Collider a1;
+			checkType(l,1,out a1);
+			UnityEngine.Vector3 a2;
+			checkType(l,2,out a2);
+			UnityEngine.Quaternion a3;
+			checkType(l,3,out a3);
+			UnityEngine.Collider a4;
+			checkType(l,4,out a4);
+			UnityEngine.Vector3 a5;
+			checkType(l,5,out a5);
+			UnityEngine.Quaternion a6;
+			checkType(l,6,out a6);
+			UnityEngine.Vector3 a7;
+			System.Single a8;
+			var ret=UnityEngine.Physics.ComputePenetration(a1,a2,a3,a4,a5,a6,out a7,out a8);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a7);
+			pushValue(l,a8);
+			return 4;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ClosestPoint_s(IntPtr l) {
+		try {
+			UnityEngine.Vector3 a1;
+			checkType(l,1,out a1);
+			UnityEngine.Collider a2;
+			checkType(l,2,out a2);
+			UnityEngine.Vector3 a3;
+			checkType(l,3,out a3);
+			UnityEngine.Quaternion a4;
+			checkType(l,4,out a4);
+			var ret=UnityEngine.Physics.ClosestPoint(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_IgnoreRaycastLayer(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -2210,6 +2401,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_DefaultRaycastLayers(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -2221,6 +2413,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_AllLayers(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -2232,6 +2425,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_gravity(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -2243,6 +2437,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_gravity(IntPtr l) {
 		try {
 			UnityEngine.Vector3 v;
@@ -2256,6 +2451,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_defaultContactOffset(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -2267,6 +2463,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_defaultContactOffset(IntPtr l) {
 		try {
 			float v;
@@ -2280,6 +2477,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_bounceThreshold(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -2291,6 +2489,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_bounceThreshold(IntPtr l) {
 		try {
 			float v;
@@ -2304,10 +2503,11 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int get_solverIterationCount(IntPtr l) {
+	[UnityEngine.Scripting.Preserve]
+	static public int get_defaultSolverIterations(IntPtr l) {
 		try {
 			pushValue(l,true);
-			pushValue(l,UnityEngine.Physics.solverIterationCount);
+			pushValue(l,UnityEngine.Physics.defaultSolverIterations);
 			return 2;
 		}
 		catch(Exception e) {
@@ -2315,11 +2515,12 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int set_solverIterationCount(IntPtr l) {
+	[UnityEngine.Scripting.Preserve]
+	static public int set_defaultSolverIterations(IntPtr l) {
 		try {
 			int v;
 			checkType(l,2,out v);
-			UnityEngine.Physics.solverIterationCount=v;
+			UnityEngine.Physics.defaultSolverIterations=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -2328,6 +2529,33 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_defaultSolverVelocityIterations(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Physics.defaultSolverVelocityIterations);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_defaultSolverVelocityIterations(IntPtr l) {
+		try {
+			int v;
+			checkType(l,2,out v);
+			UnityEngine.Physics.defaultSolverVelocityIterations=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_sleepThreshold(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -2339,6 +2567,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_sleepThreshold(IntPtr l) {
 		try {
 			float v;
@@ -2352,6 +2581,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_queriesHitTriggers(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -2363,6 +2593,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_queriesHitTriggers(IntPtr l) {
 		try {
 			bool v;
@@ -2375,6 +2606,33 @@ public class Lua_UnityEngine_Physics : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_queriesHitBackfaces(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Physics.queriesHitBackfaces);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_queriesHitBackfaces(IntPtr l) {
+		try {
+			bool v;
+			checkType(l,2,out v);
+			UnityEngine.Physics.queriesHitBackfaces=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Physics");
 		addMember(l,Raycast_s);
@@ -2383,6 +2641,8 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		addMember(l,Linecast_s);
 		addMember(l,OverlapSphere_s);
 		addMember(l,OverlapSphereNonAlloc_s);
+		addMember(l,OverlapCapsule_s);
+		addMember(l,OverlapCapsuleNonAlloc_s);
 		addMember(l,CapsuleCast_s);
 		addMember(l,SphereCast_s);
 		addMember(l,CapsuleCastAll_s);
@@ -2400,15 +2660,19 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		addMember(l,IgnoreCollision_s);
 		addMember(l,IgnoreLayerCollision_s);
 		addMember(l,GetIgnoreLayerCollision_s);
+		addMember(l,ComputePenetration_s);
+		addMember(l,ClosestPoint_s);
 		addMember(l,"IgnoreRaycastLayer",get_IgnoreRaycastLayer,null,false);
 		addMember(l,"DefaultRaycastLayers",get_DefaultRaycastLayers,null,false);
 		addMember(l,"AllLayers",get_AllLayers,null,false);
 		addMember(l,"gravity",get_gravity,set_gravity,false);
 		addMember(l,"defaultContactOffset",get_defaultContactOffset,set_defaultContactOffset,false);
 		addMember(l,"bounceThreshold",get_bounceThreshold,set_bounceThreshold,false);
-		addMember(l,"solverIterationCount",get_solverIterationCount,set_solverIterationCount,false);
+		addMember(l,"defaultSolverIterations",get_defaultSolverIterations,set_defaultSolverIterations,false);
+		addMember(l,"defaultSolverVelocityIterations",get_defaultSolverVelocityIterations,set_defaultSolverVelocityIterations,false);
 		addMember(l,"sleepThreshold",get_sleepThreshold,set_sleepThreshold,false);
 		addMember(l,"queriesHitTriggers",get_queriesHitTriggers,set_queriesHitTriggers,false);
+		addMember(l,"queriesHitBackfaces",get_queriesHitBackfaces,set_queriesHitBackfaces,false);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.Physics));
 	}
 }

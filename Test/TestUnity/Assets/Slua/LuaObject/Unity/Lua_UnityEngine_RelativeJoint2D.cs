@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_RelativeJoint2D : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.RelativeJoint2D o;
-			o=new UnityEngine.RelativeJoint2D();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_maxForce(IntPtr l) {
 		try {
 			UnityEngine.RelativeJoint2D self=(UnityEngine.RelativeJoint2D)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_RelativeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_maxForce(IntPtr l) {
 		try {
 			UnityEngine.RelativeJoint2D self=(UnityEngine.RelativeJoint2D)checkSelf(l);
@@ -43,6 +32,7 @@ public class Lua_UnityEngine_RelativeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_maxTorque(IntPtr l) {
 		try {
 			UnityEngine.RelativeJoint2D self=(UnityEngine.RelativeJoint2D)checkSelf(l);
@@ -55,6 +45,7 @@ public class Lua_UnityEngine_RelativeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_maxTorque(IntPtr l) {
 		try {
 			UnityEngine.RelativeJoint2D self=(UnityEngine.RelativeJoint2D)checkSelf(l);
@@ -69,6 +60,7 @@ public class Lua_UnityEngine_RelativeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_correctionScale(IntPtr l) {
 		try {
 			UnityEngine.RelativeJoint2D self=(UnityEngine.RelativeJoint2D)checkSelf(l);
@@ -81,6 +73,7 @@ public class Lua_UnityEngine_RelativeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_correctionScale(IntPtr l) {
 		try {
 			UnityEngine.RelativeJoint2D self=(UnityEngine.RelativeJoint2D)checkSelf(l);
@@ -95,6 +88,7 @@ public class Lua_UnityEngine_RelativeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_autoConfigureOffset(IntPtr l) {
 		try {
 			UnityEngine.RelativeJoint2D self=(UnityEngine.RelativeJoint2D)checkSelf(l);
@@ -107,6 +101,7 @@ public class Lua_UnityEngine_RelativeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_autoConfigureOffset(IntPtr l) {
 		try {
 			UnityEngine.RelativeJoint2D self=(UnityEngine.RelativeJoint2D)checkSelf(l);
@@ -121,6 +116,7 @@ public class Lua_UnityEngine_RelativeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_linearOffset(IntPtr l) {
 		try {
 			UnityEngine.RelativeJoint2D self=(UnityEngine.RelativeJoint2D)checkSelf(l);
@@ -133,6 +129,7 @@ public class Lua_UnityEngine_RelativeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_linearOffset(IntPtr l) {
 		try {
 			UnityEngine.RelativeJoint2D self=(UnityEngine.RelativeJoint2D)checkSelf(l);
@@ -147,6 +144,7 @@ public class Lua_UnityEngine_RelativeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_angularOffset(IntPtr l) {
 		try {
 			UnityEngine.RelativeJoint2D self=(UnityEngine.RelativeJoint2D)checkSelf(l);
@@ -159,6 +157,7 @@ public class Lua_UnityEngine_RelativeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_angularOffset(IntPtr l) {
 		try {
 			UnityEngine.RelativeJoint2D self=(UnityEngine.RelativeJoint2D)checkSelf(l);
@@ -173,6 +172,7 @@ public class Lua_UnityEngine_RelativeJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_target(IntPtr l) {
 		try {
 			UnityEngine.RelativeJoint2D self=(UnityEngine.RelativeJoint2D)checkSelf(l);
@@ -184,6 +184,7 @@ public class Lua_UnityEngine_RelativeJoint2D : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.RelativeJoint2D");
 		addMember(l,"maxForce",get_maxForce,set_maxForce,true);
@@ -193,6 +194,6 @@ public class Lua_UnityEngine_RelativeJoint2D : LuaObject {
 		addMember(l,"linearOffset",get_linearOffset,set_linearOffset,true);
 		addMember(l,"angularOffset",get_angularOffset,set_angularOffset,true);
 		addMember(l,"target",get_target,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.RelativeJoint2D),typeof(UnityEngine.Joint2D));
+		createTypeMetatable(l,null, typeof(UnityEngine.RelativeJoint2D),typeof(UnityEngine.Joint2D));
 	}
 }

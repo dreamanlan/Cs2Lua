@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_LayoutElement : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CalculateLayoutInputHorizontal(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutElement self=(UnityEngine.UI.LayoutElement)checkSelf(l);
@@ -16,6 +17,7 @@ public class Lua_UnityEngine_UI_LayoutElement : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CalculateLayoutInputVertical(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutElement self=(UnityEngine.UI.LayoutElement)checkSelf(l);
@@ -28,6 +30,7 @@ public class Lua_UnityEngine_UI_LayoutElement : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_ignoreLayout(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutElement self=(UnityEngine.UI.LayoutElement)checkSelf(l);
@@ -40,6 +43,7 @@ public class Lua_UnityEngine_UI_LayoutElement : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_ignoreLayout(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutElement self=(UnityEngine.UI.LayoutElement)checkSelf(l);
@@ -54,6 +58,7 @@ public class Lua_UnityEngine_UI_LayoutElement : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_minWidth(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutElement self=(UnityEngine.UI.LayoutElement)checkSelf(l);
@@ -66,6 +71,7 @@ public class Lua_UnityEngine_UI_LayoutElement : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_minWidth(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutElement self=(UnityEngine.UI.LayoutElement)checkSelf(l);
@@ -80,6 +86,7 @@ public class Lua_UnityEngine_UI_LayoutElement : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_minHeight(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutElement self=(UnityEngine.UI.LayoutElement)checkSelf(l);
@@ -92,6 +99,7 @@ public class Lua_UnityEngine_UI_LayoutElement : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_minHeight(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutElement self=(UnityEngine.UI.LayoutElement)checkSelf(l);
@@ -106,6 +114,7 @@ public class Lua_UnityEngine_UI_LayoutElement : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_preferredWidth(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutElement self=(UnityEngine.UI.LayoutElement)checkSelf(l);
@@ -118,6 +127,7 @@ public class Lua_UnityEngine_UI_LayoutElement : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_preferredWidth(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutElement self=(UnityEngine.UI.LayoutElement)checkSelf(l);
@@ -132,6 +142,7 @@ public class Lua_UnityEngine_UI_LayoutElement : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_preferredHeight(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutElement self=(UnityEngine.UI.LayoutElement)checkSelf(l);
@@ -144,6 +155,7 @@ public class Lua_UnityEngine_UI_LayoutElement : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_preferredHeight(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutElement self=(UnityEngine.UI.LayoutElement)checkSelf(l);
@@ -158,6 +170,7 @@ public class Lua_UnityEngine_UI_LayoutElement : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_flexibleWidth(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutElement self=(UnityEngine.UI.LayoutElement)checkSelf(l);
@@ -170,6 +183,7 @@ public class Lua_UnityEngine_UI_LayoutElement : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_flexibleWidth(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutElement self=(UnityEngine.UI.LayoutElement)checkSelf(l);
@@ -184,6 +198,7 @@ public class Lua_UnityEngine_UI_LayoutElement : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_flexibleHeight(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutElement self=(UnityEngine.UI.LayoutElement)checkSelf(l);
@@ -196,6 +211,7 @@ public class Lua_UnityEngine_UI_LayoutElement : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_flexibleHeight(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutElement self=(UnityEngine.UI.LayoutElement)checkSelf(l);
@@ -210,6 +226,7 @@ public class Lua_UnityEngine_UI_LayoutElement : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_layoutPriority(IntPtr l) {
 		try {
 			UnityEngine.UI.LayoutElement self=(UnityEngine.UI.LayoutElement)checkSelf(l);
@@ -221,6 +238,7 @@ public class Lua_UnityEngine_UI_LayoutElement : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.LayoutElement");
 		addMember(l,CalculateLayoutInputHorizontal);

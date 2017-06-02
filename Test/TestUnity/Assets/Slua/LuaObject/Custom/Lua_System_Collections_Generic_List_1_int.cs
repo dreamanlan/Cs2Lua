@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -37,6 +38,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Add(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -51,6 +53,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int AddRange(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -65,6 +68,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int AsReadOnly(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -78,6 +82,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int BinarySearch(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -125,6 +130,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Clear(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -137,6 +143,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Contains(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -152,6 +159,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Exists(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -167,6 +175,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Find(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -182,6 +191,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int FindAll(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -197,6 +207,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int FindIndex(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -242,6 +253,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int FindLast(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -257,6 +269,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int FindLastIndex(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -302,6 +315,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ForEach(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -316,6 +330,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetRange(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -333,6 +348,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IndexOf(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -378,6 +394,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Insert(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -394,6 +411,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int InsertRange(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -410,6 +428,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int LastIndexOf(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -455,6 +474,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Remove(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -470,6 +490,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RemoveAll(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -485,6 +506,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RemoveAt(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -499,6 +521,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RemoveRange(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -515,6 +538,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Reverse(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -543,6 +567,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Sort(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -589,6 +614,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ToArray(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -602,6 +628,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int TrimExcess(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -614,6 +641,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int TrueForAll(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -629,6 +657,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_Capacity(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -641,6 +670,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_Capacity(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -655,6 +685,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_Count(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -667,6 +698,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int getItem(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -682,6 +714,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int setItem(IntPtr l) {
 		try {
 			System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
@@ -697,6 +730,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"ListInt");
 		addMember(l,Add);

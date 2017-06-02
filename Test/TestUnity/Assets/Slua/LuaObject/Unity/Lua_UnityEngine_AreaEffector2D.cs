@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_AreaEffector2D : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.AreaEffector2D o;
-			o=new UnityEngine.AreaEffector2D();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_forceAngle(IntPtr l) {
 		try {
 			UnityEngine.AreaEffector2D self=(UnityEngine.AreaEffector2D)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_AreaEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_forceAngle(IntPtr l) {
 		try {
 			UnityEngine.AreaEffector2D self=(UnityEngine.AreaEffector2D)checkSelf(l);
@@ -43,6 +32,7 @@ public class Lua_UnityEngine_AreaEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_useGlobalAngle(IntPtr l) {
 		try {
 			UnityEngine.AreaEffector2D self=(UnityEngine.AreaEffector2D)checkSelf(l);
@@ -55,6 +45,7 @@ public class Lua_UnityEngine_AreaEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_useGlobalAngle(IntPtr l) {
 		try {
 			UnityEngine.AreaEffector2D self=(UnityEngine.AreaEffector2D)checkSelf(l);
@@ -69,6 +60,7 @@ public class Lua_UnityEngine_AreaEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_forceMagnitude(IntPtr l) {
 		try {
 			UnityEngine.AreaEffector2D self=(UnityEngine.AreaEffector2D)checkSelf(l);
@@ -81,6 +73,7 @@ public class Lua_UnityEngine_AreaEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_forceMagnitude(IntPtr l) {
 		try {
 			UnityEngine.AreaEffector2D self=(UnityEngine.AreaEffector2D)checkSelf(l);
@@ -95,6 +88,7 @@ public class Lua_UnityEngine_AreaEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_forceVariation(IntPtr l) {
 		try {
 			UnityEngine.AreaEffector2D self=(UnityEngine.AreaEffector2D)checkSelf(l);
@@ -107,6 +101,7 @@ public class Lua_UnityEngine_AreaEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_forceVariation(IntPtr l) {
 		try {
 			UnityEngine.AreaEffector2D self=(UnityEngine.AreaEffector2D)checkSelf(l);
@@ -121,6 +116,7 @@ public class Lua_UnityEngine_AreaEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_drag(IntPtr l) {
 		try {
 			UnityEngine.AreaEffector2D self=(UnityEngine.AreaEffector2D)checkSelf(l);
@@ -133,6 +129,7 @@ public class Lua_UnityEngine_AreaEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_drag(IntPtr l) {
 		try {
 			UnityEngine.AreaEffector2D self=(UnityEngine.AreaEffector2D)checkSelf(l);
@@ -147,6 +144,7 @@ public class Lua_UnityEngine_AreaEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_angularDrag(IntPtr l) {
 		try {
 			UnityEngine.AreaEffector2D self=(UnityEngine.AreaEffector2D)checkSelf(l);
@@ -159,6 +157,7 @@ public class Lua_UnityEngine_AreaEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_angularDrag(IntPtr l) {
 		try {
 			UnityEngine.AreaEffector2D self=(UnityEngine.AreaEffector2D)checkSelf(l);
@@ -173,6 +172,7 @@ public class Lua_UnityEngine_AreaEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_forceTarget(IntPtr l) {
 		try {
 			UnityEngine.AreaEffector2D self=(UnityEngine.AreaEffector2D)checkSelf(l);
@@ -185,6 +185,7 @@ public class Lua_UnityEngine_AreaEffector2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_forceTarget(IntPtr l) {
 		try {
 			UnityEngine.AreaEffector2D self=(UnityEngine.AreaEffector2D)checkSelf(l);
@@ -198,6 +199,7 @@ public class Lua_UnityEngine_AreaEffector2D : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AreaEffector2D");
 		addMember(l,"forceAngle",get_forceAngle,set_forceAngle,true);
@@ -207,6 +209,6 @@ public class Lua_UnityEngine_AreaEffector2D : LuaObject {
 		addMember(l,"drag",get_drag,set_drag,true);
 		addMember(l,"angularDrag",get_angularDrag,set_angularDrag,true);
 		addMember(l,"forceTarget",get_forceTarget,set_forceTarget,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.AreaEffector2D),typeof(UnityEngine.Effector2D));
+		createTypeMetatable(l,null, typeof(UnityEngine.AreaEffector2D),typeof(UnityEngine.Effector2D));
 	}
 }

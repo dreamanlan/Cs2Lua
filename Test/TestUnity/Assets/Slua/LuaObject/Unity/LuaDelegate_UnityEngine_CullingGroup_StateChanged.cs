@@ -1,7 +1,6 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using LuaInterface;
 
 namespace SLua
 {
@@ -21,19 +20,19 @@ namespace SLua
             }
             LuaDelegate ld;
             checkType(l, -1, out ld);
+			LuaDLL.lua_pop(l,1);
             if(ld.d!=null)
             {
                 ua = (UnityEngine.CullingGroup.StateChanged)ld.d;
                 return op;
             }
-			LuaDLL.lua_pop(l,1);
 			
 			l = LuaState.get(l).L;
             ua = (UnityEngine.CullingGroupEvent a1) =>
             {
                 int error = pushTry(l);
 
-				pushValue(l,a1);
+				pushValue(l, a1);
 				ld.pcall(1, error);
 				LuaDLL.lua_settop(l, error-1);
 			};

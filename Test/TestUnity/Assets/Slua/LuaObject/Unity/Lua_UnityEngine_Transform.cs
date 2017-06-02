@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Transform : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetParent(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -34,6 +35,24 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetPositionAndRotation(IntPtr l) {
+		try {
+			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Quaternion a2;
+			checkType(l,3,out a2);
+			self.SetPositionAndRotation(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Translate(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -114,6 +133,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Rotate(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -192,6 +212,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RotateAround(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -210,6 +231,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int LookAt(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -258,6 +280,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int TransformDirection(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -292,6 +315,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int InverseTransformDirection(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -326,6 +350,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int TransformVector(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -360,6 +385,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int InverseTransformVector(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -394,6 +420,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int TransformPoint(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -428,6 +455,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int InverseTransformPoint(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -462,6 +490,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int DetachChildren(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -474,6 +503,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetAsFirstSibling(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -486,6 +516,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetAsLastSibling(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -498,6 +529,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetSiblingIndex(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -512,6 +544,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetSiblingIndex(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -525,6 +558,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Find(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -540,6 +574,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsChildOf(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -555,6 +590,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int FindChild(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -570,6 +606,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetChild(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -585,6 +622,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_position(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -597,6 +635,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_position(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -611,6 +650,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_localPosition(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -623,6 +663,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_localPosition(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -637,6 +678,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_eulerAngles(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -649,6 +691,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_eulerAngles(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -663,6 +706,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_localEulerAngles(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -675,6 +719,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_localEulerAngles(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -689,6 +734,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_right(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -701,6 +747,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_right(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -715,6 +762,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_up(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -727,6 +775,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_up(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -741,6 +790,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_forward(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -753,6 +803,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_forward(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -767,6 +818,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_rotation(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -779,6 +831,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_rotation(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -793,6 +846,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_localRotation(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -805,6 +859,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_localRotation(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -819,6 +874,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_localScale(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -831,6 +887,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_localScale(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -845,6 +902,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_parent(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -857,6 +915,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_parent(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -871,6 +930,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_worldToLocalMatrix(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -883,6 +943,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_localToWorldMatrix(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -895,6 +956,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_root(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -907,6 +969,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_childCount(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -919,6 +982,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_lossyScale(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -931,6 +995,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_hasChanged(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -943,6 +1008,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_hasChanged(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -956,9 +1022,52 @@ public class Lua_UnityEngine_Transform : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_hierarchyCapacity(IntPtr l) {
+		try {
+			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.hierarchyCapacity);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_hierarchyCapacity(IntPtr l) {
+		try {
+			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
+			int v;
+			checkType(l,2,out v);
+			self.hierarchyCapacity=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_hierarchyCount(IntPtr l) {
+		try {
+			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.hierarchyCount);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Transform");
 		addMember(l,SetParent);
+		addMember(l,SetPositionAndRotation);
 		addMember(l,Translate);
 		addMember(l,Rotate);
 		addMember(l,RotateAround);
@@ -995,6 +1104,8 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		addMember(l,"childCount",get_childCount,null,true);
 		addMember(l,"lossyScale",get_lossyScale,null,true);
 		addMember(l,"hasChanged",get_hasChanged,set_hasChanged,true);
+		addMember(l,"hierarchyCapacity",get_hierarchyCapacity,set_hierarchyCapacity,true);
+		addMember(l,"hierarchyCount",get_hierarchyCount,null,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.Transform),typeof(UnityEngine.Component));
 	}
 }

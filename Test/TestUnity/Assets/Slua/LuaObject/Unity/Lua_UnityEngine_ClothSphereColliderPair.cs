@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_ClothSphereColliderPair : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -26,7 +27,7 @@ public class Lua_UnityEngine_ClothSphereColliderPair : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==0){
+			else if(argc<=1){
 				o=new UnityEngine.ClothSphereColliderPair();
 				pushValue(l,true);
 				pushObject(l,o);
@@ -39,6 +40,7 @@ public class Lua_UnityEngine_ClothSphereColliderPair : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_first(IntPtr l) {
 		try {
 			UnityEngine.ClothSphereColliderPair self;
@@ -52,6 +54,7 @@ public class Lua_UnityEngine_ClothSphereColliderPair : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_first(IntPtr l) {
 		try {
 			UnityEngine.ClothSphereColliderPair self;
@@ -68,6 +71,7 @@ public class Lua_UnityEngine_ClothSphereColliderPair : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_second(IntPtr l) {
 		try {
 			UnityEngine.ClothSphereColliderPair self;
@@ -81,6 +85,7 @@ public class Lua_UnityEngine_ClothSphereColliderPair : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_second(IntPtr l) {
 		try {
 			UnityEngine.ClothSphereColliderPair self;
@@ -96,6 +101,7 @@ public class Lua_UnityEngine_ClothSphereColliderPair : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ClothSphereColliderPair");
 		addMember(l,"first",get_first,set_first,true);

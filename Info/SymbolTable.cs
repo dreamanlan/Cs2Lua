@@ -40,6 +40,10 @@ namespace RoslynTool.CsToLua
         {
             get { return m_Requires; }
         }
+        public HashSet<string> ReferencedExternTypes
+        {
+            get { return m_ReferencedExternTypes; }
+        }
         internal Dictionary<string, ITypeSymbol> ExternEnums
         {
             get { return m_ExternEnums; }
@@ -242,6 +246,7 @@ namespace RoslynTool.CsToLua
         private Dictionary<string, INamespaceSymbol> m_NamespaceSymbols = new Dictionary<string, INamespaceSymbol>();
         private Dictionary<string, ClassSymbolInfo> m_ClassSymbols = new Dictionary<string, ClassSymbolInfo>();
         private Dictionary<string, HashSet<string>> m_Requires = new Dictionary<string, HashSet<string>>();
+        private HashSet<string> m_ReferencedExternTypes = new HashSet<string>();
         private Dictionary<string, ITypeSymbol> m_ExternEnums = new Dictionary<string, ITypeSymbol>();
         
         private Dictionary<string, List<SyntaxNode>> m_GenericTypeDefines = new Dictionary<string, List<SyntaxNode>>();

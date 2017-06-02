@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -65,6 +66,7 @@ public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject 
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Add(IntPtr l) {
 		try {
 			System.Collections.Generic.Dictionary<System.Int32,System.String> self=(System.Collections.Generic.Dictionary<System.Int32,System.String>)checkSelf(l);
@@ -81,6 +83,7 @@ public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject 
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Clear(IntPtr l) {
 		try {
 			System.Collections.Generic.Dictionary<System.Int32,System.String> self=(System.Collections.Generic.Dictionary<System.Int32,System.String>)checkSelf(l);
@@ -93,6 +96,7 @@ public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject 
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ContainsKey(IntPtr l) {
 		try {
 			System.Collections.Generic.Dictionary<System.Int32,System.String> self=(System.Collections.Generic.Dictionary<System.Int32,System.String>)checkSelf(l);
@@ -108,6 +112,7 @@ public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject 
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ContainsValue(IntPtr l) {
 		try {
 			System.Collections.Generic.Dictionary<System.Int32,System.String> self=(System.Collections.Generic.Dictionary<System.Int32,System.String>)checkSelf(l);
@@ -123,6 +128,7 @@ public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject 
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetObjectData(IntPtr l) {
 		try {
 			System.Collections.Generic.Dictionary<System.Int32,System.String> self=(System.Collections.Generic.Dictionary<System.Int32,System.String>)checkSelf(l);
@@ -139,6 +145,7 @@ public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject 
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnDeserialization(IntPtr l) {
 		try {
 			System.Collections.Generic.Dictionary<System.Int32,System.String> self=(System.Collections.Generic.Dictionary<System.Int32,System.String>)checkSelf(l);
@@ -153,6 +160,7 @@ public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject 
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Remove(IntPtr l) {
 		try {
 			System.Collections.Generic.Dictionary<System.Int32,System.String> self=(System.Collections.Generic.Dictionary<System.Int32,System.String>)checkSelf(l);
@@ -168,6 +176,7 @@ public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject 
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int TryGetValue(IntPtr l) {
 		try {
 			System.Collections.Generic.Dictionary<System.Int32,System.String> self=(System.Collections.Generic.Dictionary<System.Int32,System.String>)checkSelf(l);
@@ -185,6 +194,7 @@ public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject 
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_Count(IntPtr l) {
 		try {
 			System.Collections.Generic.Dictionary<System.Int32,System.String> self=(System.Collections.Generic.Dictionary<System.Int32,System.String>)checkSelf(l);
@@ -197,6 +207,7 @@ public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject 
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_Comparer(IntPtr l) {
 		try {
 			System.Collections.Generic.Dictionary<System.Int32,System.String> self=(System.Collections.Generic.Dictionary<System.Int32,System.String>)checkSelf(l);
@@ -209,6 +220,7 @@ public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject 
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_Keys(IntPtr l) {
 		try {
 			System.Collections.Generic.Dictionary<System.Int32,System.String> self=(System.Collections.Generic.Dictionary<System.Int32,System.String>)checkSelf(l);
@@ -221,6 +233,7 @@ public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject 
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_Values(IntPtr l) {
 		try {
 			System.Collections.Generic.Dictionary<System.Int32,System.String> self=(System.Collections.Generic.Dictionary<System.Int32,System.String>)checkSelf(l);
@@ -233,6 +246,7 @@ public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject 
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int getItem(IntPtr l) {
 		try {
 			System.Collections.Generic.Dictionary<System.Int32,System.String> self=(System.Collections.Generic.Dictionary<System.Int32,System.String>)checkSelf(l);
@@ -248,6 +262,7 @@ public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject 
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int setItem(IntPtr l) {
 		try {
 			System.Collections.Generic.Dictionary<System.Int32,System.String> self=(System.Collections.Generic.Dictionary<System.Int32,System.String>)checkSelf(l);
@@ -263,6 +278,7 @@ public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject 
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"DictIntStr");
 		addMember(l,Add);

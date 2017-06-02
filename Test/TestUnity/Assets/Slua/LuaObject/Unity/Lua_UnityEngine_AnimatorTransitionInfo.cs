@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_AnimatorTransitionInfo : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.AnimatorTransitionInfo o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_AnimatorTransitionInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsName(IntPtr l) {
 		try {
 			UnityEngine.AnimatorTransitionInfo self;
@@ -33,6 +35,7 @@ public class Lua_UnityEngine_AnimatorTransitionInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsUserName(IntPtr l) {
 		try {
 			UnityEngine.AnimatorTransitionInfo self;
@@ -49,6 +52,7 @@ public class Lua_UnityEngine_AnimatorTransitionInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_fullPathHash(IntPtr l) {
 		try {
 			UnityEngine.AnimatorTransitionInfo self;
@@ -62,6 +66,7 @@ public class Lua_UnityEngine_AnimatorTransitionInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_nameHash(IntPtr l) {
 		try {
 			UnityEngine.AnimatorTransitionInfo self;
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_AnimatorTransitionInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_userNameHash(IntPtr l) {
 		try {
 			UnityEngine.AnimatorTransitionInfo self;
@@ -88,6 +94,7 @@ public class Lua_UnityEngine_AnimatorTransitionInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_normalizedTime(IntPtr l) {
 		try {
 			UnityEngine.AnimatorTransitionInfo self;
@@ -101,6 +108,7 @@ public class Lua_UnityEngine_AnimatorTransitionInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_anyState(IntPtr l) {
 		try {
 			UnityEngine.AnimatorTransitionInfo self;
@@ -113,6 +121,7 @@ public class Lua_UnityEngine_AnimatorTransitionInfo : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AnimatorTransitionInfo");
 		addMember(l,IsName);

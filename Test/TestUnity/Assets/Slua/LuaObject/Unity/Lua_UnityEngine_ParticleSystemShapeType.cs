@@ -1,7 +1,7 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_ParticleSystemShapeType : LuaObject {
 	static public void reg(IntPtr l) {
 		getEnumTable(l,"UnityEngine.ParticleSystemShapeType");
@@ -20,6 +20,8 @@ public class Lua_UnityEngine_ParticleSystemShapeType : LuaObject {
 		addMember(l,12,"SingleSidedEdge");
 		addMember(l,13,"MeshRenderer");
 		addMember(l,14,"SkinnedMeshRenderer");
+		addMember(l,15,"BoxShell");
+		addMember(l,16,"BoxEdge");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

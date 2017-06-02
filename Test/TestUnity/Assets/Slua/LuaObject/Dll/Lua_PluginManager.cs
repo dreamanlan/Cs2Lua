@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_PluginManager : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			PluginManager o;
@@ -17,6 +18,7 @@ public class Lua_PluginManager : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CreateObject(IntPtr l) {
 		try {
 			PluginManager self=(PluginManager)checkSelf(l);
@@ -32,6 +34,7 @@ public class Lua_PluginManager : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CreateStartup(IntPtr l) {
 		try {
 			PluginManager self=(PluginManager)checkSelf(l);
@@ -47,6 +50,7 @@ public class Lua_PluginManager : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CreateTick(IntPtr l) {
 		try {
 			PluginManager self=(PluginManager)checkSelf(l);
@@ -62,6 +66,7 @@ public class Lua_PluginManager : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RegisterObjectFactory(IntPtr l) {
 		try {
 			PluginManager self=(PluginManager)checkSelf(l);
@@ -78,6 +83,7 @@ public class Lua_PluginManager : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RegisterStartupFactory(IntPtr l) {
 		try {
 			PluginManager self=(PluginManager)checkSelf(l);
@@ -94,6 +100,7 @@ public class Lua_PluginManager : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RegisterTickFactory(IntPtr l) {
 		try {
 			PluginManager self=(PluginManager)checkSelf(l);
@@ -110,6 +117,7 @@ public class Lua_PluginManager : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_Instance(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -120,6 +128,7 @@ public class Lua_PluginManager : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"PluginManager");
 		addMember(l,CreateObject);

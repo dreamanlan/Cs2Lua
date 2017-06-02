@@ -1,7 +1,7 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_RuntimePlatform : LuaObject {
 	static public void reg(IntPtr l) {
 		getEnumTable(l,"UnityEngine.RuntimePlatform");
@@ -19,6 +19,7 @@ public class Lua_UnityEngine_RuntimePlatform : LuaObject {
 		addMember(l,12,"NaCl");
 		addMember(l,13,"LinuxPlayer");
 		addMember(l,15,"FlashPlayer");
+		addMember(l,16,"LinuxEditor");
 		addMember(l,17,"WebGLPlayer");
 		addMember(l,18,"WSAPlayerX86");
 		addMember(l,18,"MetroPlayerX86");
@@ -37,6 +38,7 @@ public class Lua_UnityEngine_RuntimePlatform : LuaObject {
 		addMember(l,28,"SamsungTVPlayer");
 		addMember(l,30,"WiiU");
 		addMember(l,31,"tvOS");
+		addMember(l,32,"Switch");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_Button : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnPointerClick(IntPtr l) {
 		try {
 			UnityEngine.UI.Button self=(UnityEngine.UI.Button)checkSelf(l);
@@ -18,6 +19,7 @@ public class Lua_UnityEngine_UI_Button : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnSubmit(IntPtr l) {
 		try {
 			UnityEngine.UI.Button self=(UnityEngine.UI.Button)checkSelf(l);
@@ -32,6 +34,7 @@ public class Lua_UnityEngine_UI_Button : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_onClick(IntPtr l) {
 		try {
 			UnityEngine.UI.Button self=(UnityEngine.UI.Button)checkSelf(l);
@@ -44,6 +47,7 @@ public class Lua_UnityEngine_UI_Button : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_onClick(IntPtr l) {
 		try {
 			UnityEngine.UI.Button self=(UnityEngine.UI.Button)checkSelf(l);
@@ -57,6 +61,7 @@ public class Lua_UnityEngine_UI_Button : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.Button");
 		addMember(l,OnPointerClick);

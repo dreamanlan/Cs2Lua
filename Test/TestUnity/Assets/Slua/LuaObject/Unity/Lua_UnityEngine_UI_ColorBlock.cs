@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.UI.ColorBlock o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int op_Equality(IntPtr l) {
 		try {
 			UnityEngine.UI.ColorBlock a1;
@@ -33,6 +35,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int op_Inequality(IntPtr l) {
 		try {
 			UnityEngine.UI.ColorBlock a1;
@@ -49,6 +52,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_normalColor(IntPtr l) {
 		try {
 			UnityEngine.UI.ColorBlock self;
@@ -62,6 +66,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_normalColor(IntPtr l) {
 		try {
 			UnityEngine.UI.ColorBlock self;
@@ -78,6 +83,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_highlightedColor(IntPtr l) {
 		try {
 			UnityEngine.UI.ColorBlock self;
@@ -91,6 +97,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_highlightedColor(IntPtr l) {
 		try {
 			UnityEngine.UI.ColorBlock self;
@@ -107,6 +114,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_pressedColor(IntPtr l) {
 		try {
 			UnityEngine.UI.ColorBlock self;
@@ -120,6 +128,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_pressedColor(IntPtr l) {
 		try {
 			UnityEngine.UI.ColorBlock self;
@@ -136,6 +145,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_disabledColor(IntPtr l) {
 		try {
 			UnityEngine.UI.ColorBlock self;
@@ -149,6 +159,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_disabledColor(IntPtr l) {
 		try {
 			UnityEngine.UI.ColorBlock self;
@@ -165,6 +176,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_colorMultiplier(IntPtr l) {
 		try {
 			UnityEngine.UI.ColorBlock self;
@@ -178,6 +190,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_colorMultiplier(IntPtr l) {
 		try {
 			UnityEngine.UI.ColorBlock self;
@@ -194,6 +207,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_fadeDuration(IntPtr l) {
 		try {
 			UnityEngine.UI.ColorBlock self;
@@ -207,6 +221,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_fadeDuration(IntPtr l) {
 		try {
 			UnityEngine.UI.ColorBlock self;
@@ -223,6 +238,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_defaultColorBlock(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -233,6 +249,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.ColorBlock");
 		addMember(l,op_Equality);

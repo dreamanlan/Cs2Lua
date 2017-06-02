@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Avatar : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_isValid(IntPtr l) {
 		try {
 			UnityEngine.Avatar self=(UnityEngine.Avatar)checkSelf(l);
@@ -16,6 +17,7 @@ public class Lua_UnityEngine_Avatar : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_isHuman(IntPtr l) {
 		try {
 			UnityEngine.Avatar self=(UnityEngine.Avatar)checkSelf(l);
@@ -27,6 +29,7 @@ public class Lua_UnityEngine_Avatar : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Avatar");
 		addMember(l,"isValid",get_isValid,null,true);

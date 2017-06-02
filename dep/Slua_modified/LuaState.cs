@@ -27,7 +27,6 @@ namespace SLua
 	using System;
 	using System.Collections.Generic;
 	using System.Collections;
-	using LuaInterface;
 	using System.IO;
 	using System.Text;
 	using System.Runtime.InteropServices;
@@ -738,13 +737,16 @@ end
 			LuaDLL.lua_pushnumber(L, 2);
 			LuaDLL.lua_call(L, 2, 1);
 			LuaDLL.lua_remove(L, -2);
-			Logger.LogError(LuaDLL.lua_tostring(L, -1));
-			if (errorDelegate != null)
-			{
-				errorDelegate(LuaDLL.lua_tostring(L, -1));
-			}
+            string error = LuaDLL.lua_tostring(L, -1);
 			LuaDLL.lua_pop(L, 1);
-			return 0;
+
+            Logger.LogError(error, true);
+            if (errorDelegate != null)
+            {
+                errorDelegate(error);
+            }
+
+            return 0;
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.EmissionModule o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetBursts(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -51,6 +53,7 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetBursts(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.EmissionModule self;
@@ -67,6 +70,7 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_enabled(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.EmissionModule self;
@@ -80,6 +84,7 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_enabled(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.EmissionModule self;
@@ -96,12 +101,13 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int get_rate(IntPtr l) {
+	[UnityEngine.Scripting.Preserve]
+	static public int get_rateOverTime(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.EmissionModule self;
 			checkValueType(l,1,out self);
 			pushValue(l,true);
-			pushValue(l,self.rate);
+			pushValue(l,self.rateOverTime);
 			return 2;
 		}
 		catch(Exception e) {
@@ -109,13 +115,14 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int set_rate(IntPtr l) {
+	[UnityEngine.Scripting.Preserve]
+	static public int set_rateOverTime(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.EmissionModule self;
 			checkValueType(l,1,out self);
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
-			self.rate=v;
+			self.rateOverTime=v;
 			setBack(l,self);
 			pushValue(l,true);
 			return 1;
@@ -125,12 +132,13 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int get_type(IntPtr l) {
+	[UnityEngine.Scripting.Preserve]
+	static public int get_rateOverTimeMultiplier(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.EmissionModule self;
 			checkValueType(l,1,out self);
 			pushValue(l,true);
-			pushEnum(l,(int)self.type);
+			pushValue(l,self.rateOverTimeMultiplier);
 			return 2;
 		}
 		catch(Exception e) {
@@ -138,13 +146,14 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int set_type(IntPtr l) {
+	[UnityEngine.Scripting.Preserve]
+	static public int set_rateOverTimeMultiplier(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.EmissionModule self;
 			checkValueType(l,1,out self);
-			UnityEngine.ParticleSystemEmissionType v;
-			checkEnum(l,2,out v);
-			self.type=v;
+			float v;
+			checkType(l,2,out v);
+			self.rateOverTimeMultiplier=v;
 			setBack(l,self);
 			pushValue(l,true);
 			return 1;
@@ -154,6 +163,69 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_rateOverDistance(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.EmissionModule self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.rateOverDistance);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_rateOverDistance(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.EmissionModule self;
+			checkValueType(l,1,out self);
+			UnityEngine.ParticleSystem.MinMaxCurve v;
+			checkValueType(l,2,out v);
+			self.rateOverDistance=v;
+			setBack(l,self);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_rateOverDistanceMultiplier(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.EmissionModule self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.rateOverDistanceMultiplier);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_rateOverDistanceMultiplier(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.EmissionModule self;
+			checkValueType(l,1,out self);
+			float v;
+			checkType(l,2,out v);
+			self.rateOverDistanceMultiplier=v;
+			setBack(l,self);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_burstCount(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.EmissionModule self;
@@ -166,13 +238,16 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.EmissionModule");
 		addMember(l,SetBursts);
 		addMember(l,GetBursts);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
-		addMember(l,"rate",get_rate,set_rate,true);
-		addMember(l,"type",get_type,set_type,true);
+		addMember(l,"rateOverTime",get_rateOverTime,set_rateOverTime,true);
+		addMember(l,"rateOverTimeMultiplier",get_rateOverTimeMultiplier,set_rateOverTimeMultiplier,true);
+		addMember(l,"rateOverDistance",get_rateOverDistance,set_rateOverDistance,true);
+		addMember(l,"rateOverDistanceMultiplier",get_rateOverDistanceMultiplier,set_rateOverDistanceMultiplier,true);
 		addMember(l,"burstCount",get_burstCount,null,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.EmissionModule),typeof(System.ValueType));
 	}

@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_AsyncOperation : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.AsyncOperation o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_AsyncOperation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_isDone(IntPtr l) {
 		try {
 			UnityEngine.AsyncOperation self=(UnityEngine.AsyncOperation)checkSelf(l);
@@ -29,6 +31,7 @@ public class Lua_UnityEngine_AsyncOperation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_progress(IntPtr l) {
 		try {
 			UnityEngine.AsyncOperation self=(UnityEngine.AsyncOperation)checkSelf(l);
@@ -41,6 +44,7 @@ public class Lua_UnityEngine_AsyncOperation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_priority(IntPtr l) {
 		try {
 			UnityEngine.AsyncOperation self=(UnityEngine.AsyncOperation)checkSelf(l);
@@ -53,6 +57,7 @@ public class Lua_UnityEngine_AsyncOperation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_priority(IntPtr l) {
 		try {
 			UnityEngine.AsyncOperation self=(UnityEngine.AsyncOperation)checkSelf(l);
@@ -67,6 +72,7 @@ public class Lua_UnityEngine_AsyncOperation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_allowSceneActivation(IntPtr l) {
 		try {
 			UnityEngine.AsyncOperation self=(UnityEngine.AsyncOperation)checkSelf(l);
@@ -79,6 +85,7 @@ public class Lua_UnityEngine_AsyncOperation : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_allowSceneActivation(IntPtr l) {
 		try {
 			UnityEngine.AsyncOperation self=(UnityEngine.AsyncOperation)checkSelf(l);
@@ -92,6 +99,7 @@ public class Lua_UnityEngine_AsyncOperation : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AsyncOperation");
 		addMember(l,"isDone",get_isDone,null,true);

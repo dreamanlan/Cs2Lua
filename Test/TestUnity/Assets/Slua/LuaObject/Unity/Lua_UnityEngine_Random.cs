@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Random : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.Random o;
@@ -17,6 +18,21 @@ public class Lua_UnityEngine_Random : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int InitState_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			UnityEngine.Random.InitState(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Range_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -49,6 +65,7 @@ public class Lua_UnityEngine_Random : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ColorHSV_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -131,10 +148,11 @@ public class Lua_UnityEngine_Random : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int get_seed(IntPtr l) {
+	[UnityEngine.Scripting.Preserve]
+	static public int get_state(IntPtr l) {
 		try {
 			pushValue(l,true);
-			pushValue(l,UnityEngine.Random.seed);
+			pushValue(l,UnityEngine.Random.state);
 			return 2;
 		}
 		catch(Exception e) {
@@ -142,11 +160,12 @@ public class Lua_UnityEngine_Random : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int set_seed(IntPtr l) {
+	[UnityEngine.Scripting.Preserve]
+	static public int set_state(IntPtr l) {
 		try {
-			int v;
-			checkType(l,2,out v);
-			UnityEngine.Random.seed=v;
+			UnityEngine.Random.State v;
+			checkValueType(l,2,out v);
+			UnityEngine.Random.state=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -155,6 +174,7 @@ public class Lua_UnityEngine_Random : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_value(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -166,6 +186,7 @@ public class Lua_UnityEngine_Random : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_insideUnitSphere(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -177,6 +198,7 @@ public class Lua_UnityEngine_Random : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_insideUnitCircle(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -188,6 +210,7 @@ public class Lua_UnityEngine_Random : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_onUnitSphere(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -199,6 +222,7 @@ public class Lua_UnityEngine_Random : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_rotation(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -210,6 +234,7 @@ public class Lua_UnityEngine_Random : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_rotationUniform(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -220,11 +245,13 @@ public class Lua_UnityEngine_Random : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Random");
+		addMember(l,InitState_s);
 		addMember(l,Range_s);
 		addMember(l,ColorHSV_s);
-		addMember(l,"seed",get_seed,set_seed,false);
+		addMember(l,"state",get_state,set_state,false);
 		addMember(l,"value",get_value,null,false);
 		addMember(l,"insideUnitSphere",get_insideUnitSphere,null,false);
 		addMember(l,"insideUnitCircle",get_insideUnitCircle,null,false);

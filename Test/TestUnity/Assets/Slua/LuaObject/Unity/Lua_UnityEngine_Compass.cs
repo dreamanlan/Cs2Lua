@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Compass : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.Compass o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_Compass : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_magneticHeading(IntPtr l) {
 		try {
 			UnityEngine.Compass self=(UnityEngine.Compass)checkSelf(l);
@@ -29,6 +31,7 @@ public class Lua_UnityEngine_Compass : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_trueHeading(IntPtr l) {
 		try {
 			UnityEngine.Compass self=(UnityEngine.Compass)checkSelf(l);
@@ -41,6 +44,7 @@ public class Lua_UnityEngine_Compass : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_headingAccuracy(IntPtr l) {
 		try {
 			UnityEngine.Compass self=(UnityEngine.Compass)checkSelf(l);
@@ -53,6 +57,7 @@ public class Lua_UnityEngine_Compass : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_rawVector(IntPtr l) {
 		try {
 			UnityEngine.Compass self=(UnityEngine.Compass)checkSelf(l);
@@ -65,6 +70,7 @@ public class Lua_UnityEngine_Compass : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_timestamp(IntPtr l) {
 		try {
 			UnityEngine.Compass self=(UnityEngine.Compass)checkSelf(l);
@@ -77,6 +83,7 @@ public class Lua_UnityEngine_Compass : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_enabled(IntPtr l) {
 		try {
 			UnityEngine.Compass self=(UnityEngine.Compass)checkSelf(l);
@@ -89,6 +96,7 @@ public class Lua_UnityEngine_Compass : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_enabled(IntPtr l) {
 		try {
 			UnityEngine.Compass self=(UnityEngine.Compass)checkSelf(l);
@@ -102,6 +110,7 @@ public class Lua_UnityEngine_Compass : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Compass");
 		addMember(l,"magneticHeading",get_magneticHeading,null,true);

@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_JointLimits : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.JointLimits o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_JointLimits : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_min(IntPtr l) {
 		try {
 			UnityEngine.JointLimits self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_JointLimits : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_min(IntPtr l) {
 		try {
 			UnityEngine.JointLimits self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_JointLimits : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_max(IntPtr l) {
 		try {
 			UnityEngine.JointLimits self;
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_JointLimits : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_max(IntPtr l) {
 		try {
 			UnityEngine.JointLimits self;
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_JointLimits : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_bounciness(IntPtr l) {
 		try {
 			UnityEngine.JointLimits self;
@@ -88,6 +94,7 @@ public class Lua_UnityEngine_JointLimits : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_bounciness(IntPtr l) {
 		try {
 			UnityEngine.JointLimits self;
@@ -104,6 +111,7 @@ public class Lua_UnityEngine_JointLimits : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_bounceMinVelocity(IntPtr l) {
 		try {
 			UnityEngine.JointLimits self;
@@ -117,6 +125,7 @@ public class Lua_UnityEngine_JointLimits : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_bounceMinVelocity(IntPtr l) {
 		try {
 			UnityEngine.JointLimits self;
@@ -133,6 +142,7 @@ public class Lua_UnityEngine_JointLimits : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_contactDistance(IntPtr l) {
 		try {
 			UnityEngine.JointLimits self;
@@ -146,6 +156,7 @@ public class Lua_UnityEngine_JointLimits : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_contactDistance(IntPtr l) {
 		try {
 			UnityEngine.JointLimits self;
@@ -161,6 +172,7 @@ public class Lua_UnityEngine_JointLimits : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.JointLimits");
 		addMember(l,"min",get_min,set_min,true);

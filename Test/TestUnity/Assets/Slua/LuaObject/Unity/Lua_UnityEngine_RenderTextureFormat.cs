@@ -1,7 +1,7 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_RenderTextureFormat : LuaObject {
 	static public void reg(IntPtr l) {
 		getEnumTable(l,"UnityEngine.RenderTextureFormat");
@@ -15,6 +15,7 @@ public class Lua_UnityEngine_RenderTextureFormat : LuaObject {
 		addMember(l,7,"Default");
 		addMember(l,8,"ARGB2101010");
 		addMember(l,9,"DefaultHDR");
+		addMember(l,10,"ARGB64");
 		addMember(l,11,"ARGBFloat");
 		addMember(l,12,"RGFloat");
 		addMember(l,13,"RGHalf");
@@ -24,6 +25,9 @@ public class Lua_UnityEngine_RenderTextureFormat : LuaObject {
 		addMember(l,17,"ARGBInt");
 		addMember(l,18,"RGInt");
 		addMember(l,19,"RInt");
+		addMember(l,20,"BGRA32");
+		addMember(l,22,"RGB111110Float");
+		addMember(l,23,"RG32");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

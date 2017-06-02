@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_TextMesh : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.TextMesh o;
-			o=new UnityEngine.TextMesh();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_text(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_text(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -43,6 +32,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_font(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -55,6 +45,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_font(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -69,6 +60,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_fontSize(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -81,6 +73,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_fontSize(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -95,6 +88,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_fontStyle(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -107,6 +101,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_fontStyle(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -121,6 +116,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_offsetZ(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -133,6 +129,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_offsetZ(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -147,6 +144,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_alignment(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -159,6 +157,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_alignment(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -173,6 +172,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_anchor(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -185,6 +185,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_anchor(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -199,6 +200,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_characterSize(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -211,6 +213,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_characterSize(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -225,6 +228,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_lineSpacing(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -237,6 +241,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_lineSpacing(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -251,6 +256,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_tabSize(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -263,6 +269,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_tabSize(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -277,6 +284,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_richText(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -289,6 +297,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_richText(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -303,6 +312,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_color(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -315,6 +325,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_color(IntPtr l) {
 		try {
 			UnityEngine.TextMesh self=(UnityEngine.TextMesh)checkSelf(l);
@@ -328,6 +339,7 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.TextMesh");
 		addMember(l,"text",get_text,set_text,true);
@@ -342,6 +354,6 @@ public class Lua_UnityEngine_TextMesh : LuaObject {
 		addMember(l,"tabSize",get_tabSize,set_tabSize,true);
 		addMember(l,"richText",get_richText,set_richText,true);
 		addMember(l,"color",get_color,set_color,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.TextMesh),typeof(UnityEngine.Component));
+		createTypeMetatable(l,null, typeof(UnityEngine.TextMesh),typeof(UnityEngine.Component));
 	}
 }

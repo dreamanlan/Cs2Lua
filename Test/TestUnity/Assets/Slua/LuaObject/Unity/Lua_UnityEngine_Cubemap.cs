@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Cubemap : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.Cubemap o;
@@ -23,6 +24,7 @@ public class Lua_UnityEngine_Cubemap : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetPixel(IntPtr l) {
 		try {
 			UnityEngine.Cubemap self=(UnityEngine.Cubemap)checkSelf(l);
@@ -43,6 +45,7 @@ public class Lua_UnityEngine_Cubemap : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetPixel(IntPtr l) {
 		try {
 			UnityEngine.Cubemap self=(UnityEngine.Cubemap)checkSelf(l);
@@ -62,6 +65,7 @@ public class Lua_UnityEngine_Cubemap : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetPixels(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -94,6 +98,7 @@ public class Lua_UnityEngine_Cubemap : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetPixels(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -128,6 +133,7 @@ public class Lua_UnityEngine_Cubemap : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Apply(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -164,6 +170,7 @@ public class Lua_UnityEngine_Cubemap : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SmoothEdges(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -190,6 +197,7 @@ public class Lua_UnityEngine_Cubemap : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_mipmapCount(IntPtr l) {
 		try {
 			UnityEngine.Cubemap self=(UnityEngine.Cubemap)checkSelf(l);
@@ -202,6 +210,7 @@ public class Lua_UnityEngine_Cubemap : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_format(IntPtr l) {
 		try {
 			UnityEngine.Cubemap self=(UnityEngine.Cubemap)checkSelf(l);
@@ -213,6 +222,7 @@ public class Lua_UnityEngine_Cubemap : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Cubemap");
 		addMember(l,SetPixel);

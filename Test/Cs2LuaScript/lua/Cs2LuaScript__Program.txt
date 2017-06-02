@@ -2,6 +2,7 @@ require "cs2lua__utility";
 require "cs2lua__attributes";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
+require "cs2lua__interfaces";
 
 Cs2LuaScript.Program = {
 	__define_class = function()
@@ -31,6 +32,8 @@ Cs2LuaScript.Program = {
 		return defineclass(nil, "Cs2LuaScript.Program", static, static_methods, static_fields_build, static_props, static_events, nil, nil, nil, nil, nil, nil, false);
 	end,
 };
+
+
 
 Cs2LuaScript.Program.__define_class();
 defineentry(Cs2LuaScript.Program);

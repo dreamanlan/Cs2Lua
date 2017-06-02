@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_JointSpring : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.JointSpring o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_JointSpring : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_spring(IntPtr l) {
 		try {
 			UnityEngine.JointSpring self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_JointSpring : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_spring(IntPtr l) {
 		try {
 			UnityEngine.JointSpring self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_JointSpring : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_damper(IntPtr l) {
 		try {
 			UnityEngine.JointSpring self;
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_JointSpring : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_damper(IntPtr l) {
 		try {
 			UnityEngine.JointSpring self;
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_JointSpring : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_targetPosition(IntPtr l) {
 		try {
 			UnityEngine.JointSpring self;
@@ -88,6 +94,7 @@ public class Lua_UnityEngine_JointSpring : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_targetPosition(IntPtr l) {
 		try {
 			UnityEngine.JointSpring self;
@@ -103,6 +110,7 @@ public class Lua_UnityEngine_JointSpring : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.JointSpring");
 		addMember(l,"spring",get_spring,set_spring,true);

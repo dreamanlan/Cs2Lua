@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_CharacterJoint : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.CharacterJoint o;
-			o=new UnityEngine.CharacterJoint();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_swingAxis(IntPtr l) {
 		try {
 			UnityEngine.CharacterJoint self=(UnityEngine.CharacterJoint)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_CharacterJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_swingAxis(IntPtr l) {
 		try {
 			UnityEngine.CharacterJoint self=(UnityEngine.CharacterJoint)checkSelf(l);
@@ -43,6 +32,7 @@ public class Lua_UnityEngine_CharacterJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_twistLimitSpring(IntPtr l) {
 		try {
 			UnityEngine.CharacterJoint self=(UnityEngine.CharacterJoint)checkSelf(l);
@@ -55,6 +45,7 @@ public class Lua_UnityEngine_CharacterJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_twistLimitSpring(IntPtr l) {
 		try {
 			UnityEngine.CharacterJoint self=(UnityEngine.CharacterJoint)checkSelf(l);
@@ -69,6 +60,7 @@ public class Lua_UnityEngine_CharacterJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_swingLimitSpring(IntPtr l) {
 		try {
 			UnityEngine.CharacterJoint self=(UnityEngine.CharacterJoint)checkSelf(l);
@@ -81,6 +73,7 @@ public class Lua_UnityEngine_CharacterJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_swingLimitSpring(IntPtr l) {
 		try {
 			UnityEngine.CharacterJoint self=(UnityEngine.CharacterJoint)checkSelf(l);
@@ -95,6 +88,7 @@ public class Lua_UnityEngine_CharacterJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_lowTwistLimit(IntPtr l) {
 		try {
 			UnityEngine.CharacterJoint self=(UnityEngine.CharacterJoint)checkSelf(l);
@@ -107,6 +101,7 @@ public class Lua_UnityEngine_CharacterJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_lowTwistLimit(IntPtr l) {
 		try {
 			UnityEngine.CharacterJoint self=(UnityEngine.CharacterJoint)checkSelf(l);
@@ -121,6 +116,7 @@ public class Lua_UnityEngine_CharacterJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_highTwistLimit(IntPtr l) {
 		try {
 			UnityEngine.CharacterJoint self=(UnityEngine.CharacterJoint)checkSelf(l);
@@ -133,6 +129,7 @@ public class Lua_UnityEngine_CharacterJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_highTwistLimit(IntPtr l) {
 		try {
 			UnityEngine.CharacterJoint self=(UnityEngine.CharacterJoint)checkSelf(l);
@@ -147,6 +144,7 @@ public class Lua_UnityEngine_CharacterJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_swing1Limit(IntPtr l) {
 		try {
 			UnityEngine.CharacterJoint self=(UnityEngine.CharacterJoint)checkSelf(l);
@@ -159,6 +157,7 @@ public class Lua_UnityEngine_CharacterJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_swing1Limit(IntPtr l) {
 		try {
 			UnityEngine.CharacterJoint self=(UnityEngine.CharacterJoint)checkSelf(l);
@@ -173,6 +172,7 @@ public class Lua_UnityEngine_CharacterJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_swing2Limit(IntPtr l) {
 		try {
 			UnityEngine.CharacterJoint self=(UnityEngine.CharacterJoint)checkSelf(l);
@@ -185,6 +185,7 @@ public class Lua_UnityEngine_CharacterJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_swing2Limit(IntPtr l) {
 		try {
 			UnityEngine.CharacterJoint self=(UnityEngine.CharacterJoint)checkSelf(l);
@@ -199,6 +200,7 @@ public class Lua_UnityEngine_CharacterJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_enableProjection(IntPtr l) {
 		try {
 			UnityEngine.CharacterJoint self=(UnityEngine.CharacterJoint)checkSelf(l);
@@ -211,6 +213,7 @@ public class Lua_UnityEngine_CharacterJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_enableProjection(IntPtr l) {
 		try {
 			UnityEngine.CharacterJoint self=(UnityEngine.CharacterJoint)checkSelf(l);
@@ -225,6 +228,7 @@ public class Lua_UnityEngine_CharacterJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_projectionDistance(IntPtr l) {
 		try {
 			UnityEngine.CharacterJoint self=(UnityEngine.CharacterJoint)checkSelf(l);
@@ -237,6 +241,7 @@ public class Lua_UnityEngine_CharacterJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_projectionDistance(IntPtr l) {
 		try {
 			UnityEngine.CharacterJoint self=(UnityEngine.CharacterJoint)checkSelf(l);
@@ -251,6 +256,7 @@ public class Lua_UnityEngine_CharacterJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_projectionAngle(IntPtr l) {
 		try {
 			UnityEngine.CharacterJoint self=(UnityEngine.CharacterJoint)checkSelf(l);
@@ -263,6 +269,7 @@ public class Lua_UnityEngine_CharacterJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_projectionAngle(IntPtr l) {
 		try {
 			UnityEngine.CharacterJoint self=(UnityEngine.CharacterJoint)checkSelf(l);
@@ -276,6 +283,7 @@ public class Lua_UnityEngine_CharacterJoint : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.CharacterJoint");
 		addMember(l,"swingAxis",get_swingAxis,set_swingAxis,true);
@@ -288,6 +296,6 @@ public class Lua_UnityEngine_CharacterJoint : LuaObject {
 		addMember(l,"enableProjection",get_enableProjection,set_enableProjection,true);
 		addMember(l,"projectionDistance",get_projectionDistance,set_projectionDistance,true);
 		addMember(l,"projectionAngle",get_projectionAngle,set_projectionAngle,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.CharacterJoint),typeof(UnityEngine.Joint));
+		createTypeMetatable(l,null, typeof(UnityEngine.CharacterJoint),typeof(UnityEngine.Joint));
 	}
 }

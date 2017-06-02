@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Cloth : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.Cloth o;
-			o=new UnityEngine.Cloth();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ClearTransformMotion(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetEnabledFading(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -59,6 +48,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_sleepThreshold(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -71,6 +61,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_sleepThreshold(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -85,6 +76,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_bendingStiffness(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -97,6 +89,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_bendingStiffness(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -111,6 +104,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_stretchingStiffness(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -123,6 +117,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_stretchingStiffness(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -137,6 +132,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_damping(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -149,6 +145,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_damping(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -163,6 +160,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_externalAcceleration(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -175,6 +173,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_externalAcceleration(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -189,6 +188,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_randomAcceleration(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -201,6 +201,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_randomAcceleration(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -215,6 +216,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_useGravity(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -227,6 +229,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_useGravity(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -241,6 +244,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_enabled(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -253,6 +257,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_enabled(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -267,6 +272,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_vertices(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -279,6 +285,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_normals(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -291,6 +298,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_friction(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -303,6 +311,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_friction(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -317,6 +326,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_collisionMassScale(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -329,6 +339,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_collisionMassScale(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -343,6 +354,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_useContinuousCollision(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -355,6 +367,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_useContinuousCollision(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -369,6 +382,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_useVirtualParticles(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -381,6 +395,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_useVirtualParticles(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -395,6 +410,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_coefficients(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -407,6 +423,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_coefficients(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -421,6 +438,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_worldVelocityScale(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -433,6 +451,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_worldVelocityScale(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -447,6 +466,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_worldAccelerationScale(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -459,6 +479,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_worldAccelerationScale(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -473,6 +494,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_solverFrequency(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -485,6 +507,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_solverFrequency(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -499,6 +522,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_capsuleColliders(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -511,6 +535,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_capsuleColliders(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -525,6 +550,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_sphereColliders(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -537,6 +563,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_sphereColliders(IntPtr l) {
 		try {
 			UnityEngine.Cloth self=(UnityEngine.Cloth)checkSelf(l);
@@ -550,6 +577,7 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Cloth");
 		addMember(l,ClearTransformMotion);
@@ -574,6 +602,6 @@ public class Lua_UnityEngine_Cloth : LuaObject {
 		addMember(l,"solverFrequency",get_solverFrequency,set_solverFrequency,true);
 		addMember(l,"capsuleColliders",get_capsuleColliders,set_capsuleColliders,true);
 		addMember(l,"sphereColliders",get_sphereColliders,set_sphereColliders,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Cloth),typeof(UnityEngine.Component));
+		createTypeMetatable(l,null, typeof(UnityEngine.Cloth),typeof(UnityEngine.Component));
 	}
 }

@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_CanvasScaler : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_uiScaleMode(IntPtr l) {
 		try {
 			UnityEngine.UI.CanvasScaler self=(UnityEngine.UI.CanvasScaler)checkSelf(l);
@@ -16,6 +17,7 @@ public class Lua_UnityEngine_UI_CanvasScaler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_uiScaleMode(IntPtr l) {
 		try {
 			UnityEngine.UI.CanvasScaler self=(UnityEngine.UI.CanvasScaler)checkSelf(l);
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_UI_CanvasScaler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_referencePixelsPerUnit(IntPtr l) {
 		try {
 			UnityEngine.UI.CanvasScaler self=(UnityEngine.UI.CanvasScaler)checkSelf(l);
@@ -42,6 +45,7 @@ public class Lua_UnityEngine_UI_CanvasScaler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_referencePixelsPerUnit(IntPtr l) {
 		try {
 			UnityEngine.UI.CanvasScaler self=(UnityEngine.UI.CanvasScaler)checkSelf(l);
@@ -56,6 +60,7 @@ public class Lua_UnityEngine_UI_CanvasScaler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_scaleFactor(IntPtr l) {
 		try {
 			UnityEngine.UI.CanvasScaler self=(UnityEngine.UI.CanvasScaler)checkSelf(l);
@@ -68,6 +73,7 @@ public class Lua_UnityEngine_UI_CanvasScaler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_scaleFactor(IntPtr l) {
 		try {
 			UnityEngine.UI.CanvasScaler self=(UnityEngine.UI.CanvasScaler)checkSelf(l);
@@ -82,6 +88,7 @@ public class Lua_UnityEngine_UI_CanvasScaler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_referenceResolution(IntPtr l) {
 		try {
 			UnityEngine.UI.CanvasScaler self=(UnityEngine.UI.CanvasScaler)checkSelf(l);
@@ -94,6 +101,7 @@ public class Lua_UnityEngine_UI_CanvasScaler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_referenceResolution(IntPtr l) {
 		try {
 			UnityEngine.UI.CanvasScaler self=(UnityEngine.UI.CanvasScaler)checkSelf(l);
@@ -108,6 +116,7 @@ public class Lua_UnityEngine_UI_CanvasScaler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_screenMatchMode(IntPtr l) {
 		try {
 			UnityEngine.UI.CanvasScaler self=(UnityEngine.UI.CanvasScaler)checkSelf(l);
@@ -120,6 +129,7 @@ public class Lua_UnityEngine_UI_CanvasScaler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_screenMatchMode(IntPtr l) {
 		try {
 			UnityEngine.UI.CanvasScaler self=(UnityEngine.UI.CanvasScaler)checkSelf(l);
@@ -134,6 +144,7 @@ public class Lua_UnityEngine_UI_CanvasScaler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_matchWidthOrHeight(IntPtr l) {
 		try {
 			UnityEngine.UI.CanvasScaler self=(UnityEngine.UI.CanvasScaler)checkSelf(l);
@@ -146,6 +157,7 @@ public class Lua_UnityEngine_UI_CanvasScaler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_matchWidthOrHeight(IntPtr l) {
 		try {
 			UnityEngine.UI.CanvasScaler self=(UnityEngine.UI.CanvasScaler)checkSelf(l);
@@ -160,6 +172,7 @@ public class Lua_UnityEngine_UI_CanvasScaler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_physicalUnit(IntPtr l) {
 		try {
 			UnityEngine.UI.CanvasScaler self=(UnityEngine.UI.CanvasScaler)checkSelf(l);
@@ -172,6 +185,7 @@ public class Lua_UnityEngine_UI_CanvasScaler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_physicalUnit(IntPtr l) {
 		try {
 			UnityEngine.UI.CanvasScaler self=(UnityEngine.UI.CanvasScaler)checkSelf(l);
@@ -186,6 +200,7 @@ public class Lua_UnityEngine_UI_CanvasScaler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_fallbackScreenDPI(IntPtr l) {
 		try {
 			UnityEngine.UI.CanvasScaler self=(UnityEngine.UI.CanvasScaler)checkSelf(l);
@@ -198,6 +213,7 @@ public class Lua_UnityEngine_UI_CanvasScaler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_fallbackScreenDPI(IntPtr l) {
 		try {
 			UnityEngine.UI.CanvasScaler self=(UnityEngine.UI.CanvasScaler)checkSelf(l);
@@ -212,6 +228,7 @@ public class Lua_UnityEngine_UI_CanvasScaler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_defaultSpriteDPI(IntPtr l) {
 		try {
 			UnityEngine.UI.CanvasScaler self=(UnityEngine.UI.CanvasScaler)checkSelf(l);
@@ -224,6 +241,7 @@ public class Lua_UnityEngine_UI_CanvasScaler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_defaultSpriteDPI(IntPtr l) {
 		try {
 			UnityEngine.UI.CanvasScaler self=(UnityEngine.UI.CanvasScaler)checkSelf(l);
@@ -238,6 +256,7 @@ public class Lua_UnityEngine_UI_CanvasScaler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_dynamicPixelsPerUnit(IntPtr l) {
 		try {
 			UnityEngine.UI.CanvasScaler self=(UnityEngine.UI.CanvasScaler)checkSelf(l);
@@ -250,6 +269,7 @@ public class Lua_UnityEngine_UI_CanvasScaler : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_dynamicPixelsPerUnit(IntPtr l) {
 		try {
 			UnityEngine.UI.CanvasScaler self=(UnityEngine.UI.CanvasScaler)checkSelf(l);
@@ -263,6 +283,7 @@ public class Lua_UnityEngine_UI_CanvasScaler : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.CanvasScaler");
 		addMember(l,"uiScaleMode",get_uiScaleMode,set_uiScaleMode,true);

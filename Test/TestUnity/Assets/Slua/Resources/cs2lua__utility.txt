@@ -26,16 +26,17 @@ System.Double = System.Double or __basic_type_func;
 System.String = System.String or __basic_type_func;
 System.Collections = System.Collections or {};
 System.Collections.Generic = System.Collections.Generic or {};
-System.Collections.Generic.List_T = {__cs2lua_defined = true, __class_name = "System.Collections.Generic.List_T", __exist = function(k) return false; end};
-System.Collections.Generic.Queue_T = {__cs2lua_defined = true, __class_name = "System.Collections.Generic.Queue_T", __exist = function(k) return false; end};
-System.Collections.Generic.Stack_T = {__cs2lua_defined = true, __class_name = "System.Collections.Generic.Stack_T", __exist = function(k) return false; end};
-System.Collections.Generic.Dictionary_TKey_TValue = {__cs2lua_defined = true, __class_name = "System.Collections.Generic.Dictionary_TKey_TValue", __exist = function(k) return false; end};
-System.Collections.Generic.HashSet_T = {__cs2lua_defined = true, __class_name = "System.Collections.Generic.HashSet_T", __exist = function(k) return false; end};
+System.Collections.Generic.List_T = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.List_T", __exist = function(k) return false; end};
+System.Collections.Generic.Queue_T = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.Queue_T", __exist = function(k) return false; end};
+System.Collections.Generic.Stack_T = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.Stack_T", __exist = function(k) return false; end};
+System.Collections.Generic.Dictionary_TKey_TValue = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.Dictionary_TKey_TValue", __exist = function(k) return false; end};
+System.Collections.Generic.HashSet_T = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.HashSet_T", __exist = function(k) return false; end};
 System.Array = System.Array or {};
 
 System.Collections.Generic.MyDictionary_TKey_TValue = System.Collections.Generic.Dictionary_TKey_TValue;
 
-__cs2lua_out = (Slua and Slua.out) or {};
+Slua = Slua or {out={}};
+__cs2lua_out = Slua.out;
 __cs2lua_nil_field_value = {};
 
 __cs2lua_special_integer_operators = { "/", "%", "+", "-", "*", "<<", ">>", "&", "|", "^", "~" };
@@ -154,6 +155,9 @@ function typecast(obj, t, isEnum)
 	  elseif v < 0 then
 	    v = -((-v) % 0x100000000);
 	  end;
+	  if t==System.Int32 and v>0x7fffffff then
+	    v = v - 0xffffffff - 1;
+	  end;
 	  return v;
 	elseif t == System.Int16 or t == System.UInt16 or t == System.Char then
 	  local v = tonumber(obj);
@@ -163,6 +167,9 @@ function typecast(obj, t, isEnum)
 	  elseif v < 0 then
 	    v = -((-v) % 0x10000);
 	  end;
+	  if t==System.Int16 and v>0x7fff then
+	    v = v - 0xffff - 1;
+	  end;
 	  return v;
 	elseif t == System.SByte or t == System.Byte then
 	  local v = tonumber(obj);
@@ -171,6 +178,9 @@ function typecast(obj, t, isEnum)
 	    v = v % 0x100;
 	  elseif v < 0 then
 	    v = -((-v) % 0x100);
+	  end;
+	  if t==System.SByte and v>0x7f then
+	    v = v - 0xff - 1;
 	  end;
 	  return v;
 	elseif t == System.Boolean then
@@ -189,22 +199,16 @@ function typeas(obj, t, isEnum)
 		return tostring(obj);
 	elseif t == System.Single or t ==	System.Double then
 	  return tonumber(obj);
-	elseif t == System.Int64 then
+	elseif t == System.Int64 or t == System.UInt64 then
 	  local v = tonumber(obj);
 	  v = math.floor(v);
 	  return v;
-	elseif t == System.Int32 then
-	  local v = tonumber(obj);
-	  v = math.floor(v);
-	  return v % 0x100000000;
-	elseif t == System.Int16 or t == System.Char then
-	  local v = tonumber(obj);
-	  v = math.floor(v);
-	  return v % 0x10000;
+	elseif t == System.Int32 or t == System.UInt32 then
+	  return typecast(obj, t, isEnum);
+	elseif t == System.Int16 or t == System.UInt16 or t == System.Char then
+	  return typecast(obj, t, isEnum);
 	elseif t == System.SByte or t == System.Byte then
-	  local v = tonumber(obj);
-	  v = math.floor(v);
-	  return v % 0x100;
+	  return typecast(obj, t, isEnum);
 	elseif t == System.Boolean then
 		return obj;
 	elseif isEnum then
@@ -412,13 +416,13 @@ __mt_index_of_array = function(t, k)
   if k=="__exist" then --禁用继承
     return function(tb,fk) return false; end;
 	elseif k=="Length" or k=="Count" then
-		return table.maxn(t);
+		return #t;
 	elseif k=="GetLength" then
 		return function(obj, ix)
       local ret = 0;
       local tb = obj;
       for i=0,ix do			       
-        ret = table.maxn(tb);
+        ret = #tb;
         tb = tb[0];
       end;
       return ret;
@@ -427,14 +431,14 @@ __mt_index_of_array = function(t, k)
     return function(obj, v) table.insert(obj, v); end;
   elseif k=="Remove" then
     return function(obj, p)
-      local pos = 1;
+    	local pos = 0;
       local ret = nil;
-      for k,v in pairs(obj) do		        
+      for i,v in ipairs(obj) do		        
         if isequal(v,p) then
+        	pos = i;
           ret=v;
           break;
         end;
-        pos=pos+1;		        
       end;
       if ret then
         table.remove(obj,pos);
@@ -443,7 +447,19 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="RemoveAt" then
     return function(obj, ix)
-      table.remove(obj,ix+1);
+      table.remove(obj, ix+1);
+    end;
+  elseif k=="RemoveAll" then
+    return function(obj, pred)
+    	local deletes = {};
+      for i,v in ipairs(obj) do		        
+        if pred(v) then
+        	table.insert(deletes, i);
+        end;
+      end;
+      for i,v in ipairs(deletes) do
+      	table.remove(obj, v);
+      end;
     end;
   elseif k=="AddRange" then
     return function(obj, coll)
@@ -469,7 +485,7 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="LastIndexOf" then
 	  return function(obj, p)
-	    local num = table.maxn(obj);
+	    local num = #obj;
       for k=num,1 do
         local v = obj[k];
         if v==p then	          
@@ -501,7 +517,7 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="Peek" then    
     return function(obj)
-      local num = table.maxn(obj);
+      local num = #obj;
       local v = obj[num];
       return v;
     end;
@@ -511,7 +527,7 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="Dequeue" then
     return function(obj)
-      local num = table.maxn(obj);
+      local num = #obj;
       local v = obj[num];
       table.remove(obj,num);
       return v;
@@ -522,7 +538,7 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="Pop" then
     return function(obj)
-      local num = table.maxn(obj);
+      local num = #obj;
       local v = obj[num];
       table.remove(obj,num);
       return v;
@@ -543,7 +559,7 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="Clear" then
     return function(obj)
-    	while table.maxn(obj)>0 do
+    	while #obj>0 do
     		table.remove(obj);
     	end;
     end;
@@ -677,7 +693,7 @@ __mt_index_of_hashset = function(t, k)
   elseif k=="CopyTo" then
     return function(obj, arr)
       for k,v in pairs(obj) do
-	      k = __wrap_if_string(l);
+	      k = __wrap_if_string(k);
         table.insert(arr,k);
       end;
     end;
@@ -714,7 +730,7 @@ function GetArrayEnumerator(tb)
   return setmetatable({
     MoveNext = function(this)
       local tb = this.object;
-      local num = table.maxn(tb);
+      local num = #tb;
       if this.index < num then
         this.index = this.index + 1;
         this.current = tb[this.index];
@@ -885,7 +901,7 @@ function defineclass(base, className, static, static_methods, static_fields_buil
     local class_props = static_props or {};
     local class_events = static_events or {};
     class["__cs2lua_defined"] = true;
-    class["__class_name"] = className;
+    class["__type_name"] = className;
     class["__is_value_type"] = is_value_type;
     class["__interfaces"] = interfaces;
     class["__interface_map"] = interface_map;
@@ -1007,7 +1023,7 @@ function defineclass(base, className, static, static_methods, static_fields_buil
             setmetatable(obj, {
             		__class = class,
             		__cs2lua_defined = true,
-            		__class_name = className,
+            		__type_name = className,
             		__is_value_type = is_value_type,
 				    		__interfaces = interfaces,
 				    		__interface_map = interface_map,
@@ -1300,7 +1316,7 @@ function delegationcomparewithnil(isEvent, t, inf, k, isequal)
   if k then
     v = t[k];  
   end;
-  local n = table.maxn(v);
+  local n = #v;
   if isequal and n==0 then
     return true;
   elseif not isqual and n>0 then
@@ -1314,11 +1330,16 @@ function delegationset(isevent, t, intf, k, handler)
   if k then
     v = t[k];
   end;
-  local n = table.maxn(v);
-  for i=1,n do
-    table.remove(v);
+  if not v or type(v)~="table" then
+  	--取不到值或者值不是表，则有可能是普通的特性访问
+  	t[k] = handler;
+  else
+	  local n = #v;
+	  for i=1,n do
+	    table.remove(v);
+	  end;
+	  table.insert(v,handler);
   end;
-  table.insert(v,handler);
 end;
 function delegationadd(isevent, t, intf, k, handler)
   local v = t;
@@ -1346,7 +1367,7 @@ function delegationremove(isevent, t, intf, k, handler)
   end;
 end;
 
-function externdelegationcomparewithnil(t, inf, k, isequal)
+function externdelegationcomparewithnil(isevent, t, inf, k, isequal)
   local v = t;
   if k then
     v = t[k];
@@ -1431,7 +1452,7 @@ function setexternstaticindexer(class, name, ...)
 end;
 function setexterninstanceindexer(obj, intf, name, ...)
   local args = {...};
-  local num = table.maxn(args);
+  local num = #args;
 	local index = __unwrap_if_string(args[1]);
 	local val = args[num];
   local meta = getmetatable(obj);
@@ -1457,40 +1478,11 @@ function setexterninstanceindexer(obj, intf, name, ...)
   return nil;
 end;
 
-function getstaticelement(class, name, ...)
-  return nil;
-end;
-function getinstanceelement(obj, name, ...)
-  return nil;
-end;
-function setstaticelement(class, name, ...)
-  --为了适应表达式内嵌赋值，这个函数需要返回值
-  return nil;
-end;
-function setinstanceelement(obj, name, ...)
-  --为了适应表达式内嵌赋值，这个函数需要返回值
-  return nil;
-end;
-function getexternstaticelement(class, name, ...)
-  return nil;
-end;
-function getexterninstanceelement(obj, name, ...)
-  return nil;
-end;
-function setexternstaticelement(class, name, ...)
-  --为了适应表达式内嵌赋值，这个函数需要返回值
-  return nil;
-end;
-function setexterninstanceelement(obj, name, ...)
-  --为了适应表达式内嵌赋值，这个函数需要返回值
-  return nil;
-end;
-
 function invokeexternoperator(class, method, ...)
 	local args = {...};
 	--对slua，对应到lua元表操作符函数的操作符重载cs2lua转lua代码时已经换成对应操作符表达式。
 	--执行到这里的应该是无法对应到lua操作符的操作符重载
-	local argnum = table.maxn(args);
+	local argnum = #args;
 	if method=="op_Equality" then
 	  if args[1] and args[2] then
 	    return args[1]==args[2];
@@ -1573,7 +1565,13 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
 	elseif meta then
 		return obj[method](obj,...);
 	elseif method=="CompareTo" then
-	  return obj==args[1];
+	  if obj>args[1] then
+	    return 1;
+	  elseif obj<args[1] then
+	    return -1;
+	  else
+	    return 0;
+	  end;
 	elseif method=="ToString" then
 	  return tostring(obj);
 	end;
@@ -1677,7 +1675,7 @@ function invokeintegeroperator(op, luaop, opd1, opd2, type1, type2)
   end;
 end;
 
-function getiterator(exp, isExtern)
+function getiterator(exp)
 	local meta = getmetatable(exp);
 	if meta and rawget(meta, "__cs2lua_defined") then
 		local enumer = exp:GetEnumerator();
@@ -1691,4 +1689,143 @@ function getiterator(exp, isExtern)
 	else
 		return Slua.iter(exp);
 	end;
+end;
+
+function defaultvalue(type, typename, isExtern)
+	if type==UnityEngine.Vector3 then
+		return UnityEngine.Vector3.zero;
+	elseif type==UnityEngine.Vector2 then
+		return UnityEngine.Vector2.zero;
+	elseif type==UnityEngine.Vector4 then
+		return UnityEngine.Vector4.zero;
+	elseif type==UnityEngine.Quaternion then
+		return UnityEngine.Quaternion.identity;
+	elseif type==UnityEngine.Color then
+		return UnityEngine.Color.black;
+	elseif type==UnityEngine.Color32 then
+		return UnityEngine.Color32(0,0,0,0);
+	elseif isExtern then
+		return type();
+	else
+		return type.__new_object();
+	end;
+end;
+
+LINQ={};
+LINQ.exec = function(linq)
+  local paramList = {};
+  local ix = 1;
+  return LINQ.execRecursively(linq, ix, paramList);
+end;
+LINQ.execRecursively = function(linq, ix, paramList)
+	local finalRs = {};
+	local interRs = {};
+	local itemNum = #linq;
+	while ix <= itemNum do
+		local v = linq[ix];
+		local key = v[1];
+		ix = ix + 1;
+		
+		if key=="from" then
+		  local nextIx = LINQ.getNextIndex(linq, ix);
+		  
+		  --获取目标集合
+			local coll = v[2](unpack(paramList));
+			LINQ.buildIntermediateResult(linq, ix, paramList, coll, interRs, finalRs);
+			
+			ix = nextIx;
+		elseif key=="where" then
+		  --在中间结果集上进行过滤处理
+		  local temp = interRs;
+		  interRs = {};
+		  for i,val in ipairs(temp) do
+		    if v[2](unpack(val)) then
+		      table.insert(interRs, val);
+		    end;
+		  end;
+		elseif key=="orderby" then
+		  --排序（多关键字）
+			table.sort(interRs, (function(l1, l2) return LINQ.compare(l1, l2, v[2]); end));
+		elseif key=="select" then
+		  --生成最终结果集
+		  for i,val in ipairs(interRs) do
+		    local r = v[2](unpack(val));
+		    table.insert(finalRs, r);
+		  end;
+		else
+			--其它子句暂不支持。。
+		end;
+	end;
+	return finalRs;
+end;
+LINQ.buildIntermediateResult = function(linq, ix, paramList, coll, interRs, finalRs)
+  --遍历目标集合，处理连续的let与where (这时where条件可以在单个元素遍历时进行，不用等中间结果集构建后再过滤)
+	--如果又遇到from，则递归调用自身来获取子集并合并到当前结果集
+	for cv in getiterator(coll) do
+		local newParamList = {unpack(paramList)};
+		table.insert(newParamList, cv);
+		local isMatch = true;
+		local newIx = ix;
+    local itemNum = #linq;
+		while newIx <= itemNum do
+			local v = linq[newIx];
+			local key = v[1];
+			
+			if key=="let" then
+				table.insert(newParamList, v[2](unpack(newParamList)));
+			elseif key=="where" then
+				if not v[2](unpack(newParamList)) then
+				  --不符合条件的记录不放到中间结果集
+					isMatch = false;
+					break;
+				end;
+			elseif key=="from" then
+			  --再次遇到from，递归调用再合并结果集
+			  local ts = LINQ.execRecursively(linq, newIx, newParamList);
+			  for i,val in ipairs(ts) do
+			    table.insert(finalRs, val); 
+			  end;
+			  isMatch = false;
+			  break;
+			else
+			  --其它子句需要在中间结果集完成后再处理，这里跳过
+				break;
+			end;
+			newIx = newIx + 1;
+		end;
+		if isMatch then
+			table.insert(interRs, newParamList);
+		end;
+	end;
+end;
+LINQ.compare = function(l1, l2, list)
+  for i,v in ipairs(list) do
+    local v1 = v[1](unpack(l1));
+    local v2 = v[1](unpack(l2));
+    local asc = v[2];
+    if v1~=v2 then
+      if asc then
+        return v1<v2;
+      else
+        return v1>v2;
+      end;
+    end;
+  end;
+  return true;
+end;
+LINQ.getNextIndex = function(linq, ix)
+  local itemNum = #linq;
+	while ix <= itemNum do
+		local v = linq[ix];
+		local key = v[1];
+		if key=="let" then
+		elseif key=="where" then
+		elseif key=="from" then
+		  return itemNum + 1;
+		else
+		  return ix;
+		end;
+		ix = ix + 1;
+	end;
+	return ix;
 end;

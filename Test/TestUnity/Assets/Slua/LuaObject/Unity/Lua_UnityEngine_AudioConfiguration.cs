@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_AudioConfiguration : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.AudioConfiguration o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_AudioConfiguration : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_speakerMode(IntPtr l) {
 		try {
 			UnityEngine.AudioConfiguration self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_AudioConfiguration : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_speakerMode(IntPtr l) {
 		try {
 			UnityEngine.AudioConfiguration self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_AudioConfiguration : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_dspBufferSize(IntPtr l) {
 		try {
 			UnityEngine.AudioConfiguration self;
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_AudioConfiguration : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_dspBufferSize(IntPtr l) {
 		try {
 			UnityEngine.AudioConfiguration self;
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_AudioConfiguration : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_sampleRate(IntPtr l) {
 		try {
 			UnityEngine.AudioConfiguration self;
@@ -88,6 +94,7 @@ public class Lua_UnityEngine_AudioConfiguration : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_sampleRate(IntPtr l) {
 		try {
 			UnityEngine.AudioConfiguration self;
@@ -104,6 +111,7 @@ public class Lua_UnityEngine_AudioConfiguration : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_numRealVoices(IntPtr l) {
 		try {
 			UnityEngine.AudioConfiguration self;
@@ -117,6 +125,7 @@ public class Lua_UnityEngine_AudioConfiguration : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_numRealVoices(IntPtr l) {
 		try {
 			UnityEngine.AudioConfiguration self;
@@ -133,6 +142,7 @@ public class Lua_UnityEngine_AudioConfiguration : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_numVirtualVoices(IntPtr l) {
 		try {
 			UnityEngine.AudioConfiguration self;
@@ -146,6 +156,7 @@ public class Lua_UnityEngine_AudioConfiguration : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_numVirtualVoices(IntPtr l) {
 		try {
 			UnityEngine.AudioConfiguration self;
@@ -161,6 +172,7 @@ public class Lua_UnityEngine_AudioConfiguration : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AudioConfiguration");
 		addMember(l,"speakerMode",get_speakerMode,set_speakerMode,true);

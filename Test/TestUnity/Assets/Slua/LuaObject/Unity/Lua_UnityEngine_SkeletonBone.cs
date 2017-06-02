@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_SkeletonBone : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.SkeletonBone o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_SkeletonBone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_name(IntPtr l) {
 		try {
 			UnityEngine.SkeletonBone self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_SkeletonBone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_name(IntPtr l) {
 		try {
 			UnityEngine.SkeletonBone self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_SkeletonBone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_position(IntPtr l) {
 		try {
 			UnityEngine.SkeletonBone self;
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_SkeletonBone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_position(IntPtr l) {
 		try {
 			UnityEngine.SkeletonBone self;
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_SkeletonBone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_rotation(IntPtr l) {
 		try {
 			UnityEngine.SkeletonBone self;
@@ -88,6 +94,7 @@ public class Lua_UnityEngine_SkeletonBone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_rotation(IntPtr l) {
 		try {
 			UnityEngine.SkeletonBone self;
@@ -104,6 +111,7 @@ public class Lua_UnityEngine_SkeletonBone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_scale(IntPtr l) {
 		try {
 			UnityEngine.SkeletonBone self;
@@ -117,6 +125,7 @@ public class Lua_UnityEngine_SkeletonBone : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_scale(IntPtr l) {
 		try {
 			UnityEngine.SkeletonBone self;
@@ -132,42 +141,13 @@ public class Lua_UnityEngine_SkeletonBone : LuaObject {
 			return error(l,e);
 		}
 	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int get_transformModified(IntPtr l) {
-		try {
-			UnityEngine.SkeletonBone self;
-			checkValueType(l,1,out self);
-			pushValue(l,true);
-			pushValue(l,self.transformModified);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int set_transformModified(IntPtr l) {
-		try {
-			UnityEngine.SkeletonBone self;
-			checkValueType(l,1,out self);
-			System.Int32 v;
-			checkType(l,2,out v);
-			self.transformModified=v;
-			setBack(l,self);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.SkeletonBone");
 		addMember(l,"name",get_name,set_name,true);
 		addMember(l,"position",get_position,set_position,true);
 		addMember(l,"rotation",get_rotation,set_rotation,true);
 		addMember(l,"scale",get_scale,set_scale,true);
-		addMember(l,"transformModified",get_transformModified,set_transformModified,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.SkeletonBone),typeof(System.ValueType));
 	}
 }

@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_LocationService : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.LocationService o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_LocationService : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Start(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -53,6 +55,7 @@ public class Lua_UnityEngine_LocationService : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Stop(IntPtr l) {
 		try {
 			UnityEngine.LocationService self=(UnityEngine.LocationService)checkSelf(l);
@@ -65,6 +68,7 @@ public class Lua_UnityEngine_LocationService : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_isEnabledByUser(IntPtr l) {
 		try {
 			UnityEngine.LocationService self=(UnityEngine.LocationService)checkSelf(l);
@@ -77,6 +81,7 @@ public class Lua_UnityEngine_LocationService : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_status(IntPtr l) {
 		try {
 			UnityEngine.LocationService self=(UnityEngine.LocationService)checkSelf(l);
@@ -89,6 +94,7 @@ public class Lua_UnityEngine_LocationService : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_lastData(IntPtr l) {
 		try {
 			UnityEngine.LocationService self=(UnityEngine.LocationService)checkSelf(l);
@@ -100,6 +106,7 @@ public class Lua_UnityEngine_LocationService : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.LocationService");
 		addMember(l,Start);

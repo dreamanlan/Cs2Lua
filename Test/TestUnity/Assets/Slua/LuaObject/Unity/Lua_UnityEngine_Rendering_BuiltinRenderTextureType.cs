@@ -1,7 +1,7 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Rendering_BuiltinRenderTextureType : LuaObject {
 	static public void reg(IntPtr l) {
 		getEnumTable(l,"UnityEngine.Rendering.BuiltinRenderTextureType");
@@ -10,6 +10,7 @@ public class Lua_UnityEngine_Rendering_BuiltinRenderTextureType : LuaObject {
 		addMember(l,2,"CameraTarget");
 		addMember(l,3,"Depth");
 		addMember(l,4,"DepthNormals");
+		addMember(l,5,"ResolvedDepth");
 		addMember(l,7,"PrepassNormalsSpec");
 		addMember(l,8,"PrepassLight");
 		addMember(l,9,"PrepassLightSpec");
@@ -18,6 +19,12 @@ public class Lua_UnityEngine_Rendering_BuiltinRenderTextureType : LuaObject {
 		addMember(l,12,"GBuffer2");
 		addMember(l,13,"GBuffer3");
 		addMember(l,14,"Reflections");
+		addMember(l,15,"MotionVectors");
+		addMember(l,16,"GBuffer4");
+		addMember(l,17,"GBuffer5");
+		addMember(l,18,"GBuffer6");
+		addMember(l,19,"GBuffer7");
+		addMember(l,-1,"BindableTexture");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

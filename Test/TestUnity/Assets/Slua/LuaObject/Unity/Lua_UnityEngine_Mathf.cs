@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Mathf : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.Mathf o;
@@ -17,6 +18,144 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ClosestPowerOfTwo_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Mathf.ClosestPowerOfTwo(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GammaToLinearSpace_s(IntPtr l) {
+		try {
+			System.Single a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Mathf.GammaToLinearSpace(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int LinearToGammaSpace_s(IntPtr l) {
+		try {
+			System.Single a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Mathf.LinearToGammaSpace(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CorrelatedColorTemperatureToRGB_s(IntPtr l) {
+		try {
+			System.Single a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Mathf.CorrelatedColorTemperatureToRGB(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int IsPowerOfTwo_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Mathf.IsPowerOfTwo(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int NextPowerOfTwo_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Mathf.NextPowerOfTwo(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int PerlinNoise_s(IntPtr l) {
+		try {
+			System.Single a1;
+			checkType(l,1,out a1);
+			System.Single a2;
+			checkType(l,2,out a2);
+			var ret=UnityEngine.Mathf.PerlinNoise(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int FloatToHalf_s(IntPtr l) {
+		try {
+			System.Single a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Mathf.FloatToHalf(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HalfToFloat_s(IntPtr l) {
+		try {
+			System.UInt16 a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Mathf.HalfToFloat(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Sin_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -31,6 +170,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Cos_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -45,6 +185,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Tan_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -59,6 +200,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Asin_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -73,6 +215,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Acos_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -87,6 +230,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Atan_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -101,6 +245,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Atan2_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -117,6 +262,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Sqrt_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -131,6 +277,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Abs_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -159,6 +306,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Min_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -207,6 +355,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Max_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -255,6 +404,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Pow_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -271,6 +421,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Exp_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -285,6 +436,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Log_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -315,6 +467,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Log10_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -329,6 +482,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Ceil_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -343,6 +497,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Floor_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -357,6 +512,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Round_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -371,6 +527,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CeilToInt_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -385,6 +542,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int FloorToInt_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -399,6 +557,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RoundToInt_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -413,6 +572,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Sign_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -427,6 +587,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Clamp_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -445,6 +606,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Clamp01_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -459,6 +621,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Lerp_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -477,6 +640,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int LerpUnclamped_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -495,6 +659,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int LerpAngle_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -513,6 +678,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int MoveTowards_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -531,6 +697,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int MoveTowardsAngle_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -549,6 +716,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SmoothStep_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -567,6 +735,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Gamma_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -585,6 +754,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Approximately_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -601,6 +771,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SmoothDamp_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -664,6 +835,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SmoothDampAngle_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -727,6 +899,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Repeat_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -743,6 +916,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int PingPong_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -759,6 +933,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int InverseLerp_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -777,76 +952,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int ClosestPowerOfTwo_s(IntPtr l) {
-		try {
-			System.Int32 a1;
-			checkType(l,1,out a1);
-			var ret=UnityEngine.Mathf.ClosestPowerOfTwo(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int GammaToLinearSpace_s(IntPtr l) {
-		try {
-			System.Single a1;
-			checkType(l,1,out a1);
-			var ret=UnityEngine.Mathf.GammaToLinearSpace(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int LinearToGammaSpace_s(IntPtr l) {
-		try {
-			System.Single a1;
-			checkType(l,1,out a1);
-			var ret=UnityEngine.Mathf.LinearToGammaSpace(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int IsPowerOfTwo_s(IntPtr l) {
-		try {
-			System.Int32 a1;
-			checkType(l,1,out a1);
-			var ret=UnityEngine.Mathf.IsPowerOfTwo(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int NextPowerOfTwo_s(IntPtr l) {
-		try {
-			System.Int32 a1;
-			checkType(l,1,out a1);
-			var ret=UnityEngine.Mathf.NextPowerOfTwo(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int DeltaAngle_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -863,50 +969,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int PerlinNoise_s(IntPtr l) {
-		try {
-			System.Single a1;
-			checkType(l,1,out a1);
-			System.Single a2;
-			checkType(l,2,out a2);
-			var ret=UnityEngine.Mathf.PerlinNoise(a1,a2);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int FloatToHalf_s(IntPtr l) {
-		try {
-			System.Single a1;
-			checkType(l,1,out a1);
-			var ret=UnityEngine.Mathf.FloatToHalf(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int HalfToFloat_s(IntPtr l) {
-		try {
-			System.UInt16 a1;
-			checkType(l,1,out a1);
-			var ret=UnityEngine.Mathf.HalfToFloat(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_PI(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -918,6 +981,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_Infinity(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -929,6 +993,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_NegativeInfinity(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -940,6 +1005,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_Deg2Rad(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -951,6 +1017,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_Rad2Deg(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -962,6 +1029,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_Epsilon(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -972,8 +1040,18 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Mathf");
+		addMember(l,ClosestPowerOfTwo_s);
+		addMember(l,GammaToLinearSpace_s);
+		addMember(l,LinearToGammaSpace_s);
+		addMember(l,CorrelatedColorTemperatureToRGB_s);
+		addMember(l,IsPowerOfTwo_s);
+		addMember(l,NextPowerOfTwo_s);
+		addMember(l,PerlinNoise_s);
+		addMember(l,FloatToHalf_s);
+		addMember(l,HalfToFloat_s);
 		addMember(l,Sin_s);
 		addMember(l,Cos_s);
 		addMember(l,Tan_s);
@@ -1011,15 +1089,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 		addMember(l,Repeat_s);
 		addMember(l,PingPong_s);
 		addMember(l,InverseLerp_s);
-		addMember(l,ClosestPowerOfTwo_s);
-		addMember(l,GammaToLinearSpace_s);
-		addMember(l,LinearToGammaSpace_s);
-		addMember(l,IsPowerOfTwo_s);
-		addMember(l,NextPowerOfTwo_s);
 		addMember(l,DeltaAngle_s);
-		addMember(l,PerlinNoise_s);
-		addMember(l,FloatToHalf_s);
-		addMember(l,HalfToFloat_s);
 		addMember(l,"PI",get_PI,null,false);
 		addMember(l,"Infinity",get_Infinity,null,false);
 		addMember(l,"NegativeInfinity",get_NegativeInfinity,null,false);

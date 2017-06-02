@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Resolution : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.Resolution o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_Resolution : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_width(IntPtr l) {
 		try {
 			UnityEngine.Resolution self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_Resolution : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_width(IntPtr l) {
 		try {
 			UnityEngine.Resolution self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_Resolution : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_height(IntPtr l) {
 		try {
 			UnityEngine.Resolution self;
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_Resolution : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_height(IntPtr l) {
 		try {
 			UnityEngine.Resolution self;
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_Resolution : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_refreshRate(IntPtr l) {
 		try {
 			UnityEngine.Resolution self;
@@ -88,6 +94,7 @@ public class Lua_UnityEngine_Resolution : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_refreshRate(IntPtr l) {
 		try {
 			UnityEngine.Resolution self;
@@ -103,6 +110,7 @@ public class Lua_UnityEngine_Resolution : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Resolution");
 		addMember(l,"width",get_width,set_width,true);

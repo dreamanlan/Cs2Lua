@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_WheelFrictionCurve : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.WheelFrictionCurve o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_WheelFrictionCurve : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_extremumSlip(IntPtr l) {
 		try {
 			UnityEngine.WheelFrictionCurve self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_WheelFrictionCurve : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_extremumSlip(IntPtr l) {
 		try {
 			UnityEngine.WheelFrictionCurve self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_WheelFrictionCurve : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_extremumValue(IntPtr l) {
 		try {
 			UnityEngine.WheelFrictionCurve self;
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_WheelFrictionCurve : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_extremumValue(IntPtr l) {
 		try {
 			UnityEngine.WheelFrictionCurve self;
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_WheelFrictionCurve : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_asymptoteSlip(IntPtr l) {
 		try {
 			UnityEngine.WheelFrictionCurve self;
@@ -88,6 +94,7 @@ public class Lua_UnityEngine_WheelFrictionCurve : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_asymptoteSlip(IntPtr l) {
 		try {
 			UnityEngine.WheelFrictionCurve self;
@@ -104,6 +111,7 @@ public class Lua_UnityEngine_WheelFrictionCurve : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_asymptoteValue(IntPtr l) {
 		try {
 			UnityEngine.WheelFrictionCurve self;
@@ -117,6 +125,7 @@ public class Lua_UnityEngine_WheelFrictionCurve : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_asymptoteValue(IntPtr l) {
 		try {
 			UnityEngine.WheelFrictionCurve self;
@@ -133,6 +142,7 @@ public class Lua_UnityEngine_WheelFrictionCurve : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_stiffness(IntPtr l) {
 		try {
 			UnityEngine.WheelFrictionCurve self;
@@ -146,6 +156,7 @@ public class Lua_UnityEngine_WheelFrictionCurve : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_stiffness(IntPtr l) {
 		try {
 			UnityEngine.WheelFrictionCurve self;
@@ -161,6 +172,7 @@ public class Lua_UnityEngine_WheelFrictionCurve : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.WheelFrictionCurve");
 		addMember(l,"extremumSlip",get_extremumSlip,set_extremumSlip,true);

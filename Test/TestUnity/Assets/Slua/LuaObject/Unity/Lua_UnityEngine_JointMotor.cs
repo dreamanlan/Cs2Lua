@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_JointMotor : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.JointMotor o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_JointMotor : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_targetVelocity(IntPtr l) {
 		try {
 			UnityEngine.JointMotor self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_JointMotor : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_targetVelocity(IntPtr l) {
 		try {
 			UnityEngine.JointMotor self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_JointMotor : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_force(IntPtr l) {
 		try {
 			UnityEngine.JointMotor self;
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_JointMotor : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_force(IntPtr l) {
 		try {
 			UnityEngine.JointMotor self;
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_JointMotor : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_freeSpin(IntPtr l) {
 		try {
 			UnityEngine.JointMotor self;
@@ -88,6 +94,7 @@ public class Lua_UnityEngine_JointMotor : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_freeSpin(IntPtr l) {
 		try {
 			UnityEngine.JointMotor self;
@@ -103,6 +110,7 @@ public class Lua_UnityEngine_JointMotor : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.JointMotor");
 		addMember(l,"targetVelocity",get_targetVelocity,set_targetVelocity,true);

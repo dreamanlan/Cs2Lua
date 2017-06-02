@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Texture2D : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -55,6 +56,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int UpdateExternalTexture(IntPtr l) {
 		try {
 			UnityEngine.Texture2D self=(UnityEngine.Texture2D)checkSelf(l);
@@ -69,6 +71,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetPixel(IntPtr l) {
 		try {
 			UnityEngine.Texture2D self=(UnityEngine.Texture2D)checkSelf(l);
@@ -87,6 +90,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetPixel(IntPtr l) {
 		try {
 			UnityEngine.Texture2D self=(UnityEngine.Texture2D)checkSelf(l);
@@ -104,6 +108,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetPixelBilinear(IntPtr l) {
 		try {
 			UnityEngine.Texture2D self=(UnityEngine.Texture2D)checkSelf(l);
@@ -121,6 +126,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetPixels(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -185,6 +191,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetPixels32(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -249,6 +256,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int LoadImage(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -281,6 +289,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int LoadRawTextureData(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -311,6 +320,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetRawTextureData(IntPtr l) {
 		try {
 			UnityEngine.Texture2D self=(UnityEngine.Texture2D)checkSelf(l);
@@ -324,6 +334,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetPixels(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -384,6 +395,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetPixels32(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -412,6 +424,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Apply(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -448,6 +461,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Resize(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -486,6 +500,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Compress(IntPtr l) {
 		try {
 			UnityEngine.Texture2D self=(UnityEngine.Texture2D)checkSelf(l);
@@ -500,6 +515,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int PackTextures(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -551,6 +567,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ReadPixels(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -589,6 +606,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int EncodeToPNG(IntPtr l) {
 		try {
 			UnityEngine.Texture2D self=(UnityEngine.Texture2D)checkSelf(l);
@@ -602,6 +620,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int EncodeToJPG(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -630,6 +649,36 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int EncodeToEXR(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==1){
+				UnityEngine.Texture2D self=(UnityEngine.Texture2D)checkSelf(l);
+				var ret=self.EncodeToEXR();
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==2){
+				UnityEngine.Texture2D self=(UnityEngine.Texture2D)checkSelf(l);
+				UnityEngine.Texture2D.EXRFlags a1;
+				checkEnum(l,2,out a1);
+				var ret=self.EncodeToEXR(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CreateExternalTexture_s(IntPtr l) {
 		try {
 			System.Int32 a1;
@@ -654,6 +703,28 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GenerateAtlas_s(IntPtr l) {
+		try {
+			UnityEngine.Vector2[] a1;
+			checkArray(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			System.Collections.Generic.List<UnityEngine.Rect> a4;
+			checkType(l,4,out a4);
+			var ret=UnityEngine.Texture2D.GenerateAtlas(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_mipmapCount(IntPtr l) {
 		try {
 			UnityEngine.Texture2D self=(UnityEngine.Texture2D)checkSelf(l);
@@ -666,6 +737,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_format(IntPtr l) {
 		try {
 			UnityEngine.Texture2D self=(UnityEngine.Texture2D)checkSelf(l);
@@ -678,6 +750,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_whiteTexture(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -689,6 +762,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_blackTexture(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -699,6 +773,7 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Texture2D");
 		addMember(l,UpdateExternalTexture);
@@ -719,7 +794,9 @@ public class Lua_UnityEngine_Texture2D : LuaObject {
 		addMember(l,ReadPixels);
 		addMember(l,EncodeToPNG);
 		addMember(l,EncodeToJPG);
+		addMember(l,EncodeToEXR);
 		addMember(l,CreateExternalTexture_s);
+		addMember(l,GenerateAtlas_s);
 		addMember(l,"mipmapCount",get_mipmapCount,null,true);
 		addMember(l,"format",get_format,null,true);
 		addMember(l,"whiteTexture",get_whiteTexture,null,false);

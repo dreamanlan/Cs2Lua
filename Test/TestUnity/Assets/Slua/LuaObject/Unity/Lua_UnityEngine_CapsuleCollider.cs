@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_CapsuleCollider : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.CapsuleCollider o;
-			o=new UnityEngine.CapsuleCollider();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_center(IntPtr l) {
 		try {
 			UnityEngine.CapsuleCollider self=(UnityEngine.CapsuleCollider)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_CapsuleCollider : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_center(IntPtr l) {
 		try {
 			UnityEngine.CapsuleCollider self=(UnityEngine.CapsuleCollider)checkSelf(l);
@@ -43,6 +32,7 @@ public class Lua_UnityEngine_CapsuleCollider : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_radius(IntPtr l) {
 		try {
 			UnityEngine.CapsuleCollider self=(UnityEngine.CapsuleCollider)checkSelf(l);
@@ -55,6 +45,7 @@ public class Lua_UnityEngine_CapsuleCollider : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_radius(IntPtr l) {
 		try {
 			UnityEngine.CapsuleCollider self=(UnityEngine.CapsuleCollider)checkSelf(l);
@@ -69,6 +60,7 @@ public class Lua_UnityEngine_CapsuleCollider : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_height(IntPtr l) {
 		try {
 			UnityEngine.CapsuleCollider self=(UnityEngine.CapsuleCollider)checkSelf(l);
@@ -81,6 +73,7 @@ public class Lua_UnityEngine_CapsuleCollider : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_height(IntPtr l) {
 		try {
 			UnityEngine.CapsuleCollider self=(UnityEngine.CapsuleCollider)checkSelf(l);
@@ -95,6 +88,7 @@ public class Lua_UnityEngine_CapsuleCollider : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_direction(IntPtr l) {
 		try {
 			UnityEngine.CapsuleCollider self=(UnityEngine.CapsuleCollider)checkSelf(l);
@@ -107,6 +101,7 @@ public class Lua_UnityEngine_CapsuleCollider : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_direction(IntPtr l) {
 		try {
 			UnityEngine.CapsuleCollider self=(UnityEngine.CapsuleCollider)checkSelf(l);
@@ -120,12 +115,13 @@ public class Lua_UnityEngine_CapsuleCollider : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.CapsuleCollider");
 		addMember(l,"center",get_center,set_center,true);
 		addMember(l,"radius",get_radius,set_radius,true);
 		addMember(l,"height",get_height,set_height,true);
 		addMember(l,"direction",get_direction,set_direction,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.CapsuleCollider),typeof(UnityEngine.Collider));
+		createTypeMetatable(l,null, typeof(UnityEngine.CapsuleCollider),typeof(UnityEngine.Collider));
 	}
 }

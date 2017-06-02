@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_System_Double : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			System.Double o;
@@ -17,6 +18,7 @@ public class Lua_System_Double : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CompareTo(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -49,6 +51,7 @@ public class Lua_System_Double : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetTypeCode(IntPtr l) {
 		try {
 			System.Double self;
@@ -63,6 +66,7 @@ public class Lua_System_Double : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsInfinity_s(IntPtr l) {
 		try {
 			System.Double a1;
@@ -77,6 +81,7 @@ public class Lua_System_Double : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsNaN_s(IntPtr l) {
 		try {
 			System.Double a1;
@@ -91,6 +96,7 @@ public class Lua_System_Double : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsNegativeInfinity_s(IntPtr l) {
 		try {
 			System.Double a1;
@@ -105,6 +111,7 @@ public class Lua_System_Double : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsPositiveInfinity_s(IntPtr l) {
 		try {
 			System.Double a1;
@@ -119,6 +126,7 @@ public class Lua_System_Double : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Parse_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -171,6 +179,7 @@ public class Lua_System_Double : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int TryParse_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -207,6 +216,7 @@ public class Lua_System_Double : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_Epsilon(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -218,6 +228,7 @@ public class Lua_System_Double : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_MaxValue(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -229,6 +240,7 @@ public class Lua_System_Double : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_MinValue(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -240,6 +252,7 @@ public class Lua_System_Double : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_NaN(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -251,6 +264,7 @@ public class Lua_System_Double : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_NegativeInfinity(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -262,6 +276,7 @@ public class Lua_System_Double : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_PositiveInfinity(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -272,6 +287,7 @@ public class Lua_System_Double : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"System.Double");
 		addMember(l,CompareTo);

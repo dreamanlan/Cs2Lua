@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_HumanTrait : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.HumanTrait o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_HumanTrait : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int MuscleFromBone_s(IntPtr l) {
 		try {
 			System.Int32 a1;
@@ -33,6 +35,7 @@ public class Lua_UnityEngine_HumanTrait : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int BoneFromMuscle_s(IntPtr l) {
 		try {
 			System.Int32 a1;
@@ -47,6 +50,7 @@ public class Lua_UnityEngine_HumanTrait : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RequiredBone_s(IntPtr l) {
 		try {
 			System.Int32 a1;
@@ -61,6 +65,7 @@ public class Lua_UnityEngine_HumanTrait : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetMuscleDefaultMin_s(IntPtr l) {
 		try {
 			System.Int32 a1;
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_HumanTrait : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetMuscleDefaultMax_s(IntPtr l) {
 		try {
 			System.Int32 a1;
@@ -89,6 +95,7 @@ public class Lua_UnityEngine_HumanTrait : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetParentBone_s(IntPtr l) {
 		try {
 			System.Int32 a1;
@@ -103,6 +110,7 @@ public class Lua_UnityEngine_HumanTrait : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_MuscleCount(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -114,6 +122,7 @@ public class Lua_UnityEngine_HumanTrait : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_MuscleName(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -125,6 +134,7 @@ public class Lua_UnityEngine_HumanTrait : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_BoneCount(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -136,6 +146,7 @@ public class Lua_UnityEngine_HumanTrait : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_BoneName(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -147,6 +158,7 @@ public class Lua_UnityEngine_HumanTrait : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_RequiredBoneCount(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -157,6 +169,7 @@ public class Lua_UnityEngine_HumanTrait : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.HumanTrait");
 		addMember(l,MuscleFromBone_s);

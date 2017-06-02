@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_ControllerColliderHit : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.ControllerColliderHit o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_ControllerColliderHit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_controller(IntPtr l) {
 		try {
 			UnityEngine.ControllerColliderHit self=(UnityEngine.ControllerColliderHit)checkSelf(l);
@@ -29,6 +31,7 @@ public class Lua_UnityEngine_ControllerColliderHit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_collider(IntPtr l) {
 		try {
 			UnityEngine.ControllerColliderHit self=(UnityEngine.ControllerColliderHit)checkSelf(l);
@@ -41,6 +44,7 @@ public class Lua_UnityEngine_ControllerColliderHit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_rigidbody(IntPtr l) {
 		try {
 			UnityEngine.ControllerColliderHit self=(UnityEngine.ControllerColliderHit)checkSelf(l);
@@ -53,6 +57,7 @@ public class Lua_UnityEngine_ControllerColliderHit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_gameObject(IntPtr l) {
 		try {
 			UnityEngine.ControllerColliderHit self=(UnityEngine.ControllerColliderHit)checkSelf(l);
@@ -65,6 +70,7 @@ public class Lua_UnityEngine_ControllerColliderHit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_transform(IntPtr l) {
 		try {
 			UnityEngine.ControllerColliderHit self=(UnityEngine.ControllerColliderHit)checkSelf(l);
@@ -77,6 +83,7 @@ public class Lua_UnityEngine_ControllerColliderHit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_point(IntPtr l) {
 		try {
 			UnityEngine.ControllerColliderHit self=(UnityEngine.ControllerColliderHit)checkSelf(l);
@@ -89,6 +96,7 @@ public class Lua_UnityEngine_ControllerColliderHit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_normal(IntPtr l) {
 		try {
 			UnityEngine.ControllerColliderHit self=(UnityEngine.ControllerColliderHit)checkSelf(l);
@@ -101,6 +109,7 @@ public class Lua_UnityEngine_ControllerColliderHit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_moveDirection(IntPtr l) {
 		try {
 			UnityEngine.ControllerColliderHit self=(UnityEngine.ControllerColliderHit)checkSelf(l);
@@ -113,6 +122,7 @@ public class Lua_UnityEngine_ControllerColliderHit : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_moveLength(IntPtr l) {
 		try {
 			UnityEngine.ControllerColliderHit self=(UnityEngine.ControllerColliderHit)checkSelf(l);
@@ -124,6 +134,7 @@ public class Lua_UnityEngine_ControllerColliderHit : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ControllerColliderHit");
 		addMember(l,"controller",get_controller,null,true);

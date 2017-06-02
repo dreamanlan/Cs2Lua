@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_ParticleSystem_SubEmittersModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.SubEmittersModule o;
@@ -17,6 +18,153 @@ public class Lua_UnityEngine_ParticleSystem_SubEmittersModule : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AddSubEmitter(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.SubEmittersModule self;
+			checkValueType(l,1,out self);
+			UnityEngine.ParticleSystem a1;
+			checkType(l,2,out a1);
+			UnityEngine.ParticleSystemSubEmitterType a2;
+			checkEnum(l,3,out a2);
+			UnityEngine.ParticleSystemSubEmitterProperties a3;
+			checkEnum(l,4,out a3);
+			self.AddSubEmitter(a1,a2,a3);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int RemoveSubEmitter(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.SubEmittersModule self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			self.RemoveSubEmitter(a1);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetSubEmitterSystem(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.SubEmittersModule self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			UnityEngine.ParticleSystem a2;
+			checkType(l,3,out a2);
+			self.SetSubEmitterSystem(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetSubEmitterType(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.SubEmittersModule self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			UnityEngine.ParticleSystemSubEmitterType a2;
+			checkEnum(l,3,out a2);
+			self.SetSubEmitterType(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetSubEmitterProperties(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.SubEmittersModule self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			UnityEngine.ParticleSystemSubEmitterProperties a2;
+			checkEnum(l,3,out a2);
+			self.SetSubEmitterProperties(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetSubEmitterSystem(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.SubEmittersModule self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetSubEmitterSystem(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetSubEmitterType(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.SubEmittersModule self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetSubEmitterType(a1);
+			pushValue(l,true);
+			pushEnum(l,(int)ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetSubEmitterProperties(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.SubEmittersModule self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetSubEmitterProperties(a1);
+			pushValue(l,true);
+			pushEnum(l,(int)ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_enabled(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.SubEmittersModule self;
@@ -30,6 +178,7 @@ public class Lua_UnityEngine_ParticleSystem_SubEmittersModule : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_enabled(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.SubEmittersModule self;
@@ -46,188 +195,32 @@ public class Lua_UnityEngine_ParticleSystem_SubEmittersModule : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int get_birth0(IntPtr l) {
+	[UnityEngine.Scripting.Preserve]
+	static public int get_subEmittersCount(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.SubEmittersModule self;
 			checkValueType(l,1,out self);
 			pushValue(l,true);
-			pushValue(l,self.birth0);
+			pushValue(l,self.subEmittersCount);
 			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
 		}
 	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int set_birth0(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystem.SubEmittersModule self;
-			checkValueType(l,1,out self);
-			UnityEngine.ParticleSystem v;
-			checkType(l,2,out v);
-			self.birth0=v;
-			setBack(l,self);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int get_birth1(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystem.SubEmittersModule self;
-			checkValueType(l,1,out self);
-			pushValue(l,true);
-			pushValue(l,self.birth1);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int set_birth1(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystem.SubEmittersModule self;
-			checkValueType(l,1,out self);
-			UnityEngine.ParticleSystem v;
-			checkType(l,2,out v);
-			self.birth1=v;
-			setBack(l,self);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int get_collision0(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystem.SubEmittersModule self;
-			checkValueType(l,1,out self);
-			pushValue(l,true);
-			pushValue(l,self.collision0);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int set_collision0(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystem.SubEmittersModule self;
-			checkValueType(l,1,out self);
-			UnityEngine.ParticleSystem v;
-			checkType(l,2,out v);
-			self.collision0=v;
-			setBack(l,self);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int get_collision1(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystem.SubEmittersModule self;
-			checkValueType(l,1,out self);
-			pushValue(l,true);
-			pushValue(l,self.collision1);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int set_collision1(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystem.SubEmittersModule self;
-			checkValueType(l,1,out self);
-			UnityEngine.ParticleSystem v;
-			checkType(l,2,out v);
-			self.collision1=v;
-			setBack(l,self);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int get_death0(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystem.SubEmittersModule self;
-			checkValueType(l,1,out self);
-			pushValue(l,true);
-			pushValue(l,self.death0);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int set_death0(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystem.SubEmittersModule self;
-			checkValueType(l,1,out self);
-			UnityEngine.ParticleSystem v;
-			checkType(l,2,out v);
-			self.death0=v;
-			setBack(l,self);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int get_death1(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystem.SubEmittersModule self;
-			checkValueType(l,1,out self);
-			pushValue(l,true);
-			pushValue(l,self.death1);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int set_death1(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystem.SubEmittersModule self;
-			checkValueType(l,1,out self);
-			UnityEngine.ParticleSystem v;
-			checkType(l,2,out v);
-			self.death1=v;
-			setBack(l,self);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.SubEmittersModule");
+		addMember(l,AddSubEmitter);
+		addMember(l,RemoveSubEmitter);
+		addMember(l,SetSubEmitterSystem);
+		addMember(l,SetSubEmitterType);
+		addMember(l,SetSubEmitterProperties);
+		addMember(l,GetSubEmitterSystem);
+		addMember(l,GetSubEmitterType);
+		addMember(l,GetSubEmitterProperties);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
-		addMember(l,"birth0",get_birth0,set_birth0,true);
-		addMember(l,"birth1",get_birth1,set_birth1,true);
-		addMember(l,"collision0",get_collision0,set_collision0,true);
-		addMember(l,"collision1",get_collision1,set_collision1,true);
-		addMember(l,"death0",get_death0,set_death0,true);
-		addMember(l,"death1",get_death1,set_death1,true);
+		addMember(l,"subEmittersCount",get_subEmittersCount,null,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.SubEmittersModule),typeof(System.ValueType));
 	}
 }

@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.ProceduralPropertyDescription o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_name(IntPtr l) {
 		try {
 			UnityEngine.ProceduralPropertyDescription self=(UnityEngine.ProceduralPropertyDescription)checkSelf(l);
@@ -29,6 +31,7 @@ public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_name(IntPtr l) {
 		try {
 			UnityEngine.ProceduralPropertyDescription self=(UnityEngine.ProceduralPropertyDescription)checkSelf(l);
@@ -43,6 +46,7 @@ public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_label(IntPtr l) {
 		try {
 			UnityEngine.ProceduralPropertyDescription self=(UnityEngine.ProceduralPropertyDescription)checkSelf(l);
@@ -55,6 +59,7 @@ public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_label(IntPtr l) {
 		try {
 			UnityEngine.ProceduralPropertyDescription self=(UnityEngine.ProceduralPropertyDescription)checkSelf(l);
@@ -69,6 +74,7 @@ public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_group(IntPtr l) {
 		try {
 			UnityEngine.ProceduralPropertyDescription self=(UnityEngine.ProceduralPropertyDescription)checkSelf(l);
@@ -81,6 +87,7 @@ public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_group(IntPtr l) {
 		try {
 			UnityEngine.ProceduralPropertyDescription self=(UnityEngine.ProceduralPropertyDescription)checkSelf(l);
@@ -95,6 +102,7 @@ public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_type(IntPtr l) {
 		try {
 			UnityEngine.ProceduralPropertyDescription self=(UnityEngine.ProceduralPropertyDescription)checkSelf(l);
@@ -107,6 +115,7 @@ public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_type(IntPtr l) {
 		try {
 			UnityEngine.ProceduralPropertyDescription self=(UnityEngine.ProceduralPropertyDescription)checkSelf(l);
@@ -121,6 +130,7 @@ public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_hasRange(IntPtr l) {
 		try {
 			UnityEngine.ProceduralPropertyDescription self=(UnityEngine.ProceduralPropertyDescription)checkSelf(l);
@@ -133,6 +143,7 @@ public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_hasRange(IntPtr l) {
 		try {
 			UnityEngine.ProceduralPropertyDescription self=(UnityEngine.ProceduralPropertyDescription)checkSelf(l);
@@ -147,6 +158,7 @@ public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_minimum(IntPtr l) {
 		try {
 			UnityEngine.ProceduralPropertyDescription self=(UnityEngine.ProceduralPropertyDescription)checkSelf(l);
@@ -159,6 +171,7 @@ public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_minimum(IntPtr l) {
 		try {
 			UnityEngine.ProceduralPropertyDescription self=(UnityEngine.ProceduralPropertyDescription)checkSelf(l);
@@ -173,6 +186,7 @@ public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_maximum(IntPtr l) {
 		try {
 			UnityEngine.ProceduralPropertyDescription self=(UnityEngine.ProceduralPropertyDescription)checkSelf(l);
@@ -185,6 +199,7 @@ public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_maximum(IntPtr l) {
 		try {
 			UnityEngine.ProceduralPropertyDescription self=(UnityEngine.ProceduralPropertyDescription)checkSelf(l);
@@ -199,6 +214,7 @@ public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_step(IntPtr l) {
 		try {
 			UnityEngine.ProceduralPropertyDescription self=(UnityEngine.ProceduralPropertyDescription)checkSelf(l);
@@ -211,6 +227,7 @@ public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_step(IntPtr l) {
 		try {
 			UnityEngine.ProceduralPropertyDescription self=(UnityEngine.ProceduralPropertyDescription)checkSelf(l);
@@ -225,6 +242,7 @@ public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_enumOptions(IntPtr l) {
 		try {
 			UnityEngine.ProceduralPropertyDescription self=(UnityEngine.ProceduralPropertyDescription)checkSelf(l);
@@ -237,6 +255,7 @@ public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_enumOptions(IntPtr l) {
 		try {
 			UnityEngine.ProceduralPropertyDescription self=(UnityEngine.ProceduralPropertyDescription)checkSelf(l);
@@ -251,6 +270,7 @@ public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_componentLabels(IntPtr l) {
 		try {
 			UnityEngine.ProceduralPropertyDescription self=(UnityEngine.ProceduralPropertyDescription)checkSelf(l);
@@ -263,6 +283,7 @@ public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_componentLabels(IntPtr l) {
 		try {
 			UnityEngine.ProceduralPropertyDescription self=(UnityEngine.ProceduralPropertyDescription)checkSelf(l);
@@ -276,6 +297,7 @@ public class Lua_UnityEngine_ProceduralPropertyDescription : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ProceduralPropertyDescription");
 		addMember(l,"name",get_name,set_name,true);

@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_ComputeBuffer : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -37,6 +38,7 @@ public class Lua_UnityEngine_ComputeBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Dispose(IntPtr l) {
 		try {
 			UnityEngine.ComputeBuffer self=(UnityEngine.ComputeBuffer)checkSelf(l);
@@ -49,6 +51,7 @@ public class Lua_UnityEngine_ComputeBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Release(IntPtr l) {
 		try {
 			UnityEngine.ComputeBuffer self=(UnityEngine.ComputeBuffer)checkSelf(l);
@@ -61,6 +64,7 @@ public class Lua_UnityEngine_ComputeBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetData(IntPtr l) {
 		try {
 			UnityEngine.ComputeBuffer self=(UnityEngine.ComputeBuffer)checkSelf(l);
@@ -75,6 +79,22 @@ public class Lua_UnityEngine_ComputeBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetCounterValue(IntPtr l) {
+		try {
+			UnityEngine.ComputeBuffer self=(UnityEngine.ComputeBuffer)checkSelf(l);
+			System.UInt32 a1;
+			checkType(l,2,out a1);
+			self.SetCounterValue(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetData(IntPtr l) {
 		try {
 			UnityEngine.ComputeBuffer self=(UnityEngine.ComputeBuffer)checkSelf(l);
@@ -89,6 +109,21 @@ public class Lua_UnityEngine_ComputeBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetNativeBufferPtr(IntPtr l) {
+		try {
+			UnityEngine.ComputeBuffer self=(UnityEngine.ComputeBuffer)checkSelf(l);
+			var ret=self.GetNativeBufferPtr();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CopyCount_s(IntPtr l) {
 		try {
 			UnityEngine.ComputeBuffer a1;
@@ -106,6 +141,7 @@ public class Lua_UnityEngine_ComputeBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_count(IntPtr l) {
 		try {
 			UnityEngine.ComputeBuffer self=(UnityEngine.ComputeBuffer)checkSelf(l);
@@ -118,6 +154,7 @@ public class Lua_UnityEngine_ComputeBuffer : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_stride(IntPtr l) {
 		try {
 			UnityEngine.ComputeBuffer self=(UnityEngine.ComputeBuffer)checkSelf(l);
@@ -129,12 +166,15 @@ public class Lua_UnityEngine_ComputeBuffer : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ComputeBuffer");
 		addMember(l,Dispose);
 		addMember(l,Release);
 		addMember(l,SetData);
+		addMember(l,SetCounterValue);
 		addMember(l,GetData);
+		addMember(l,GetNativeBufferPtr);
 		addMember(l,CopyCount_s);
 		addMember(l,"count",get_count,null,true);
 		addMember(l,"stride",get_stride,null,true);

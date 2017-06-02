@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_font(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_font(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -46,6 +49,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_color(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -59,6 +63,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_color(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -75,6 +80,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_fontSize(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -88,6 +94,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_fontSize(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -104,6 +111,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_lineSpacing(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -117,6 +125,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_lineSpacing(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -133,6 +142,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_richText(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -146,6 +156,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_richText(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -162,6 +173,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_scaleFactor(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -175,6 +187,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_scaleFactor(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -191,6 +204,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_fontStyle(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -204,6 +218,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_fontStyle(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -220,6 +235,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_textAnchor(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -233,6 +249,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_textAnchor(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -249,6 +266,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_alignByGeometry(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -262,6 +280,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_alignByGeometry(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -278,6 +297,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_resizeTextForBestFit(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -291,6 +311,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_resizeTextForBestFit(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -307,6 +328,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_resizeTextMinSize(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -320,6 +342,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_resizeTextMinSize(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -336,6 +359,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_resizeTextMaxSize(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -349,6 +373,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_resizeTextMaxSize(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -365,6 +390,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_updateBounds(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -378,6 +404,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_updateBounds(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -394,6 +421,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_verticalOverflow(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -407,6 +435,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_verticalOverflow(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -423,6 +452,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_horizontalOverflow(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -436,6 +466,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_horizontalOverflow(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -452,6 +483,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_generationExtents(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -465,6 +497,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_generationExtents(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -481,6 +514,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_pivot(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -494,6 +528,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_pivot(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -510,6 +545,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_generateOutOfBounds(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -523,6 +559,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_generateOutOfBounds(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings self;
@@ -538,6 +575,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.TextGenerationSettings");
 		addMember(l,"font",get_font,set_font,true);

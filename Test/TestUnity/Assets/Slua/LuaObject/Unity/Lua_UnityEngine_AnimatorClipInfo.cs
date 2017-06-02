@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_AnimatorClipInfo : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.AnimatorClipInfo o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_AnimatorClipInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_clip(IntPtr l) {
 		try {
 			UnityEngine.AnimatorClipInfo self;
@@ -30,6 +32,7 @@ public class Lua_UnityEngine_AnimatorClipInfo : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_weight(IntPtr l) {
 		try {
 			UnityEngine.AnimatorClipInfo self;
@@ -42,6 +45,7 @@ public class Lua_UnityEngine_AnimatorClipInfo : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AnimatorClipInfo");
 		addMember(l,"clip",get_clip,null,true);

@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_AudioEchoFilter : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.AudioEchoFilter o;
-			o=new UnityEngine.AudioEchoFilter();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_delay(IntPtr l) {
 		try {
 			UnityEngine.AudioEchoFilter self=(UnityEngine.AudioEchoFilter)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_AudioEchoFilter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_delay(IntPtr l) {
 		try {
 			UnityEngine.AudioEchoFilter self=(UnityEngine.AudioEchoFilter)checkSelf(l);
@@ -43,6 +32,7 @@ public class Lua_UnityEngine_AudioEchoFilter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_decayRatio(IntPtr l) {
 		try {
 			UnityEngine.AudioEchoFilter self=(UnityEngine.AudioEchoFilter)checkSelf(l);
@@ -55,6 +45,7 @@ public class Lua_UnityEngine_AudioEchoFilter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_decayRatio(IntPtr l) {
 		try {
 			UnityEngine.AudioEchoFilter self=(UnityEngine.AudioEchoFilter)checkSelf(l);
@@ -69,6 +60,7 @@ public class Lua_UnityEngine_AudioEchoFilter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_dryMix(IntPtr l) {
 		try {
 			UnityEngine.AudioEchoFilter self=(UnityEngine.AudioEchoFilter)checkSelf(l);
@@ -81,6 +73,7 @@ public class Lua_UnityEngine_AudioEchoFilter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_dryMix(IntPtr l) {
 		try {
 			UnityEngine.AudioEchoFilter self=(UnityEngine.AudioEchoFilter)checkSelf(l);
@@ -95,6 +88,7 @@ public class Lua_UnityEngine_AudioEchoFilter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_wetMix(IntPtr l) {
 		try {
 			UnityEngine.AudioEchoFilter self=(UnityEngine.AudioEchoFilter)checkSelf(l);
@@ -107,6 +101,7 @@ public class Lua_UnityEngine_AudioEchoFilter : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_wetMix(IntPtr l) {
 		try {
 			UnityEngine.AudioEchoFilter self=(UnityEngine.AudioEchoFilter)checkSelf(l);
@@ -120,12 +115,13 @@ public class Lua_UnityEngine_AudioEchoFilter : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AudioEchoFilter");
 		addMember(l,"delay",get_delay,set_delay,true);
 		addMember(l,"decayRatio",get_decayRatio,set_decayRatio,true);
 		addMember(l,"dryMix",get_dryMix,set_dryMix,true);
 		addMember(l,"wetMix",get_wetMix,set_wetMix,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.AudioEchoFilter),typeof(UnityEngine.Behaviour));
+		createTypeMetatable(l,null, typeof(UnityEngine.AudioEchoFilter),typeof(UnityEngine.Behaviour));
 	}
 }

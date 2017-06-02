@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_AvatarBuilder : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.AvatarBuilder o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_AvatarBuilder : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int BuildHumanAvatar_s(IntPtr l) {
 		try {
 			UnityEngine.GameObject a1;
@@ -33,6 +35,7 @@ public class Lua_UnityEngine_AvatarBuilder : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int BuildGenericAvatar_s(IntPtr l) {
 		try {
 			UnityEngine.GameObject a1;
@@ -48,6 +51,7 @@ public class Lua_UnityEngine_AvatarBuilder : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AvatarBuilder");
 		addMember(l,BuildHumanAvatar_s);

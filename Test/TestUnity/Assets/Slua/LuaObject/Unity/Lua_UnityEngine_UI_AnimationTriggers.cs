@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_AnimationTriggers : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.UI.AnimationTriggers o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_UI_AnimationTriggers : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_normalTrigger(IntPtr l) {
 		try {
 			UnityEngine.UI.AnimationTriggers self=(UnityEngine.UI.AnimationTriggers)checkSelf(l);
@@ -29,6 +31,7 @@ public class Lua_UnityEngine_UI_AnimationTriggers : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_normalTrigger(IntPtr l) {
 		try {
 			UnityEngine.UI.AnimationTriggers self=(UnityEngine.UI.AnimationTriggers)checkSelf(l);
@@ -43,6 +46,7 @@ public class Lua_UnityEngine_UI_AnimationTriggers : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_highlightedTrigger(IntPtr l) {
 		try {
 			UnityEngine.UI.AnimationTriggers self=(UnityEngine.UI.AnimationTriggers)checkSelf(l);
@@ -55,6 +59,7 @@ public class Lua_UnityEngine_UI_AnimationTriggers : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_highlightedTrigger(IntPtr l) {
 		try {
 			UnityEngine.UI.AnimationTriggers self=(UnityEngine.UI.AnimationTriggers)checkSelf(l);
@@ -69,6 +74,7 @@ public class Lua_UnityEngine_UI_AnimationTriggers : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_pressedTrigger(IntPtr l) {
 		try {
 			UnityEngine.UI.AnimationTriggers self=(UnityEngine.UI.AnimationTriggers)checkSelf(l);
@@ -81,6 +87,7 @@ public class Lua_UnityEngine_UI_AnimationTriggers : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_pressedTrigger(IntPtr l) {
 		try {
 			UnityEngine.UI.AnimationTriggers self=(UnityEngine.UI.AnimationTriggers)checkSelf(l);
@@ -95,6 +102,7 @@ public class Lua_UnityEngine_UI_AnimationTriggers : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_disabledTrigger(IntPtr l) {
 		try {
 			UnityEngine.UI.AnimationTriggers self=(UnityEngine.UI.AnimationTriggers)checkSelf(l);
@@ -107,6 +115,7 @@ public class Lua_UnityEngine_UI_AnimationTriggers : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_disabledTrigger(IntPtr l) {
 		try {
 			UnityEngine.UI.AnimationTriggers self=(UnityEngine.UI.AnimationTriggers)checkSelf(l);
@@ -120,6 +129,7 @@ public class Lua_UnityEngine_UI_AnimationTriggers : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.AnimationTriggers");
 		addMember(l,"normalTrigger",get_normalTrigger,set_normalTrigger,true);

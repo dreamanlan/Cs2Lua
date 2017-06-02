@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_RawImage : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetNativeSize(IntPtr l) {
 		try {
 			UnityEngine.UI.RawImage self=(UnityEngine.UI.RawImage)checkSelf(l);
@@ -16,6 +17,7 @@ public class Lua_UnityEngine_UI_RawImage : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_mainTexture(IntPtr l) {
 		try {
 			UnityEngine.UI.RawImage self=(UnityEngine.UI.RawImage)checkSelf(l);
@@ -28,6 +30,7 @@ public class Lua_UnityEngine_UI_RawImage : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_texture(IntPtr l) {
 		try {
 			UnityEngine.UI.RawImage self=(UnityEngine.UI.RawImage)checkSelf(l);
@@ -40,6 +43,7 @@ public class Lua_UnityEngine_UI_RawImage : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_texture(IntPtr l) {
 		try {
 			UnityEngine.UI.RawImage self=(UnityEngine.UI.RawImage)checkSelf(l);
@@ -54,6 +58,7 @@ public class Lua_UnityEngine_UI_RawImage : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_uvRect(IntPtr l) {
 		try {
 			UnityEngine.UI.RawImage self=(UnityEngine.UI.RawImage)checkSelf(l);
@@ -66,6 +71,7 @@ public class Lua_UnityEngine_UI_RawImage : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_uvRect(IntPtr l) {
 		try {
 			UnityEngine.UI.RawImage self=(UnityEngine.UI.RawImage)checkSelf(l);
@@ -79,6 +85,7 @@ public class Lua_UnityEngine_UI_RawImage : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.RawImage");
 		addMember(l,SetNativeSize);

@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_FrictionJoint2D : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.FrictionJoint2D o;
-			o=new UnityEngine.FrictionJoint2D();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_maxForce(IntPtr l) {
 		try {
 			UnityEngine.FrictionJoint2D self=(UnityEngine.FrictionJoint2D)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_FrictionJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_maxForce(IntPtr l) {
 		try {
 			UnityEngine.FrictionJoint2D self=(UnityEngine.FrictionJoint2D)checkSelf(l);
@@ -43,6 +32,7 @@ public class Lua_UnityEngine_FrictionJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_maxTorque(IntPtr l) {
 		try {
 			UnityEngine.FrictionJoint2D self=(UnityEngine.FrictionJoint2D)checkSelf(l);
@@ -55,6 +45,7 @@ public class Lua_UnityEngine_FrictionJoint2D : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_maxTorque(IntPtr l) {
 		try {
 			UnityEngine.FrictionJoint2D self=(UnityEngine.FrictionJoint2D)checkSelf(l);
@@ -68,10 +59,11 @@ public class Lua_UnityEngine_FrictionJoint2D : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.FrictionJoint2D");
 		addMember(l,"maxForce",get_maxForce,set_maxForce,true);
 		addMember(l,"maxTorque",get_maxTorque,set_maxTorque,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.FrictionJoint2D),typeof(UnityEngine.AnchoredJoint2D));
+		createTypeMetatable(l,null, typeof(UnityEngine.FrictionJoint2D),typeof(UnityEngine.AnchoredJoint2D));
 	}
 }

@@ -29,7 +29,6 @@ namespace SLua
 	using System.Collections;
 	using System.Collections.Generic;
 	using System;
-	using LuaInterface;
 	using System.Reflection;
 	using System.Runtime.InteropServices;
 
@@ -68,6 +67,13 @@ namespace SLua
 		}
 	}
 
+	public class OverloadLuaClassAttribute : System.Attribute {
+		public OverloadLuaClassAttribute(Type target) {
+			targetType = target;
+		}
+		public Type targetType;
+	}
+
     public class LuaOut { }
 
 	public partial class LuaObject
@@ -91,7 +97,7 @@ namespace SLua
 		delegate void PushVarDelegate(IntPtr l, object o);
 		static Dictionary<Type, PushVarDelegate> typePushMap = new Dictionary<Type, PushVarDelegate>();
 
-		internal const int VersionNumber = 0x1011;
+		internal const int VersionNumber = 0x1201;
 
 		public static void init(IntPtr l)
 		{
@@ -558,22 +564,35 @@ return index
 
 		public static void createTypeMetatable(IntPtr l, LuaCSFunction con, Type self, Type parent)
 		{
-            checkMethodValid(con);
+			checkMethodValid(con);
 
 			// set parent
-			if (parent != null && parent != typeof(object) && parent != typeof(ValueType))
+			bool parentSet = false;
+			LuaDLL.lua_pushstring(l, "__parent");
+			while (parent != null && parent != typeof(object) && parent != typeof(ValueType))
 			{
-				LuaDLL.lua_pushstring(l, "__parent");
 				LuaDLL.luaL_getmetatable(l, ObjectCache.getAQName(parent));
-				LuaDLL.lua_rawset(l, -3);
+				// if parentType is not exported to lua
+				if (LuaDLL.lua_isnil(l, -1))
+				{
+					LuaDLL.lua_pop(l, 1);
+					parent = parent.BaseType;
+				}
+				else
+				{
+					LuaDLL.lua_rawset(l, -3);
 
-				LuaDLL.lua_pushstring(l, "__parent");
-				LuaDLL.luaL_getmetatable(l, parent.FullName);
-				LuaDLL.lua_rawset(l, -4);
+					LuaDLL.lua_pushstring(l, "__parent");
+					LuaDLL.luaL_getmetatable(l, parent.FullName);
+					LuaDLL.lua_rawset(l, -4);
+
+					parentSet = true;
+					break;
+				}
 			}
-			else
+
+			if(!parentSet)
 			{
-				LuaDLL.lua_pushstring(l, "__parent");
 				LuaDLL.luaL_getmetatable(l, "__luabaseobject");
 				LuaDLL.lua_rawset(l, -3);
 			}
@@ -794,15 +813,23 @@ return index
 			oc.push(l, t, false);
 		}
 
+		static private int errorRef = 0;
+
 		public static int pushTry(IntPtr l)
 		{
 			if (!LuaState.get(l).isMainThread())
 			{
-                Logger.LogError("Can't call lua function in bg thread");
+				Logger.LogError("Can't call lua function in bg thread");
 				return 0;
 			}
 
-			LuaDLL.lua_pushcfunction(l, LuaState.errorFunc);
+			if (errorRef == 0) {
+				LuaDLL.lua_pushcfunction (l, LuaState.errorFunc);
+				LuaDLL.lua_pushvalue (l, -1);
+				errorRef = LuaDLL.luaL_ref (l, LuaIndexes.LUA_REGISTRYINDEX);
+			} else {
+				LuaDLL.lua_getref(l,errorRef);
+			}
 			return LuaDLL.lua_gettop(l);
 		}
 
@@ -1081,6 +1108,8 @@ return index
 			else
 			{
 				Array array = checkObj(l, p) as Array;
+				if (array == null)
+					throw new ArgumentException ("expect array");
 				ta = array as T[];
 				return ta!=null;
 			}
@@ -1325,7 +1354,8 @@ return index
 					return null;
 			}
 		}
-        
+
+
 		public static void pushValue(IntPtr l, object o)
 		{
 			pushVar(l, o);
@@ -1361,6 +1391,8 @@ return index
 				pushObject(l, o);
          
 		}
+
+
 
 		public static T checkSelf<T>(IntPtr l)
 		{
@@ -1444,7 +1476,8 @@ return index
 			}
 			return op;
 		}
-        
+
+
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 		static public int noConstructor(IntPtr l)
 		{
@@ -1520,4 +1553,5 @@ return index
             }
 	    }
 	}
+
 }

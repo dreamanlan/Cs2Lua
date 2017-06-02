@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_SpringJoint : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.SpringJoint o;
-			o=new UnityEngine.SpringJoint();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_spring(IntPtr l) {
 		try {
 			UnityEngine.SpringJoint self=(UnityEngine.SpringJoint)checkSelf(l);
@@ -29,6 +17,7 @@ public class Lua_UnityEngine_SpringJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_spring(IntPtr l) {
 		try {
 			UnityEngine.SpringJoint self=(UnityEngine.SpringJoint)checkSelf(l);
@@ -43,6 +32,7 @@ public class Lua_UnityEngine_SpringJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_damper(IntPtr l) {
 		try {
 			UnityEngine.SpringJoint self=(UnityEngine.SpringJoint)checkSelf(l);
@@ -55,6 +45,7 @@ public class Lua_UnityEngine_SpringJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_damper(IntPtr l) {
 		try {
 			UnityEngine.SpringJoint self=(UnityEngine.SpringJoint)checkSelf(l);
@@ -69,6 +60,7 @@ public class Lua_UnityEngine_SpringJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_minDistance(IntPtr l) {
 		try {
 			UnityEngine.SpringJoint self=(UnityEngine.SpringJoint)checkSelf(l);
@@ -81,6 +73,7 @@ public class Lua_UnityEngine_SpringJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_minDistance(IntPtr l) {
 		try {
 			UnityEngine.SpringJoint self=(UnityEngine.SpringJoint)checkSelf(l);
@@ -95,6 +88,7 @@ public class Lua_UnityEngine_SpringJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_maxDistance(IntPtr l) {
 		try {
 			UnityEngine.SpringJoint self=(UnityEngine.SpringJoint)checkSelf(l);
@@ -107,6 +101,7 @@ public class Lua_UnityEngine_SpringJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_maxDistance(IntPtr l) {
 		try {
 			UnityEngine.SpringJoint self=(UnityEngine.SpringJoint)checkSelf(l);
@@ -121,6 +116,7 @@ public class Lua_UnityEngine_SpringJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_tolerance(IntPtr l) {
 		try {
 			UnityEngine.SpringJoint self=(UnityEngine.SpringJoint)checkSelf(l);
@@ -133,6 +129,7 @@ public class Lua_UnityEngine_SpringJoint : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_tolerance(IntPtr l) {
 		try {
 			UnityEngine.SpringJoint self=(UnityEngine.SpringJoint)checkSelf(l);
@@ -146,6 +143,7 @@ public class Lua_UnityEngine_SpringJoint : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.SpringJoint");
 		addMember(l,"spring",get_spring,set_spring,true);
@@ -153,6 +151,6 @@ public class Lua_UnityEngine_SpringJoint : LuaObject {
 		addMember(l,"minDistance",get_minDistance,set_minDistance,true);
 		addMember(l,"maxDistance",get_maxDistance,set_maxDistance,true);
 		addMember(l,"tolerance",get_tolerance,set_tolerance,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.SpringJoint),typeof(UnityEngine.Joint));
+		createTypeMetatable(l,null, typeof(UnityEngine.SpringJoint),typeof(UnityEngine.Joint));
 	}
 }

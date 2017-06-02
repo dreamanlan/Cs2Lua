@@ -1,22 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_AudioListener : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.AudioListener o;
-			o=new UnityEngine.AudioListener();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetOutputData_s(IntPtr l) {
 		try {
 			System.Single[] a1;
@@ -32,6 +20,7 @@ public class Lua_UnityEngine_AudioListener : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetSpectrumData_s(IntPtr l) {
 		try {
 			System.Single[] a1;
@@ -49,6 +38,7 @@ public class Lua_UnityEngine_AudioListener : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_volume(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -60,6 +50,7 @@ public class Lua_UnityEngine_AudioListener : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_volume(IntPtr l) {
 		try {
 			float v;
@@ -73,6 +64,7 @@ public class Lua_UnityEngine_AudioListener : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_pause(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -84,6 +76,7 @@ public class Lua_UnityEngine_AudioListener : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_pause(IntPtr l) {
 		try {
 			bool v;
@@ -97,6 +90,7 @@ public class Lua_UnityEngine_AudioListener : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_velocityUpdateMode(IntPtr l) {
 		try {
 			UnityEngine.AudioListener self=(UnityEngine.AudioListener)checkSelf(l);
@@ -109,6 +103,7 @@ public class Lua_UnityEngine_AudioListener : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_velocityUpdateMode(IntPtr l) {
 		try {
 			UnityEngine.AudioListener self=(UnityEngine.AudioListener)checkSelf(l);
@@ -122,6 +117,7 @@ public class Lua_UnityEngine_AudioListener : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AudioListener");
 		addMember(l,GetOutputData_s);
@@ -129,6 +125,6 @@ public class Lua_UnityEngine_AudioListener : LuaObject {
 		addMember(l,"volume",get_volume,set_volume,false);
 		addMember(l,"pause",get_pause,set_pause,false);
 		addMember(l,"velocityUpdateMode",get_velocityUpdateMode,set_velocityUpdateMode,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.AudioListener),typeof(UnityEngine.Behaviour));
+		createTypeMetatable(l,null, typeof(UnityEngine.AudioListener),typeof(UnityEngine.Behaviour));
 	}
 }

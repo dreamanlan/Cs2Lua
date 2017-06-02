@@ -1,7 +1,7 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_TextureFormat : LuaObject {
 	static public void reg(IntPtr l) {
 		getEnumTable(l,"UnityEngine.TextureFormat");
@@ -23,6 +23,11 @@ public class Lua_UnityEngine_TextureFormat : LuaObject {
 		addMember(l,19,"RGFloat");
 		addMember(l,20,"RGBAFloat");
 		addMember(l,21,"YUY2");
+		addMember(l,22,"RGB9e5Float");
+		addMember(l,24,"BC6H");
+		addMember(l,25,"BC7");
+		addMember(l,26,"BC4");
+		addMember(l,27,"BC5");
 		addMember(l,28,"DXT1Crunched");
 		addMember(l,29,"DXT5Crunched");
 		addMember(l,30,"PVRTC_RGB2");

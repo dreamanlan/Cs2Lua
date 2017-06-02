@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_MatchTargetWeightMask : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.MatchTargetWeightMask o;
@@ -21,6 +22,7 @@ public class Lua_UnityEngine_MatchTargetWeightMask : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_positionXYZWeight(IntPtr l) {
 		try {
 			UnityEngine.MatchTargetWeightMask self;
@@ -34,6 +36,7 @@ public class Lua_UnityEngine_MatchTargetWeightMask : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_positionXYZWeight(IntPtr l) {
 		try {
 			UnityEngine.MatchTargetWeightMask self;
@@ -50,6 +53,7 @@ public class Lua_UnityEngine_MatchTargetWeightMask : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_rotationWeight(IntPtr l) {
 		try {
 			UnityEngine.MatchTargetWeightMask self;
@@ -63,6 +67,7 @@ public class Lua_UnityEngine_MatchTargetWeightMask : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int set_rotationWeight(IntPtr l) {
 		try {
 			UnityEngine.MatchTargetWeightMask self;
@@ -78,6 +83,7 @@ public class Lua_UnityEngine_MatchTargetWeightMask : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.MatchTargetWeightMask");
 		addMember(l,"positionXYZWeight",get_positionXYZWeight,set_positionXYZWeight,true);

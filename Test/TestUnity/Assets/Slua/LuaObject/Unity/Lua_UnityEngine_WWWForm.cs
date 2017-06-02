@@ -1,9 +1,10 @@
 ﻿using System;
-using LuaInterface;
 using SLua;
 using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_WWWForm : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.WWWForm o;
@@ -17,6 +18,7 @@ public class Lua_UnityEngine_WWWForm : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int AddField(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -61,6 +63,7 @@ public class Lua_UnityEngine_WWWForm : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int AddBinaryData(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -109,6 +112,7 @@ public class Lua_UnityEngine_WWWForm : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_headers(IntPtr l) {
 		try {
 			UnityEngine.WWWForm self=(UnityEngine.WWWForm)checkSelf(l);
@@ -121,6 +125,7 @@ public class Lua_UnityEngine_WWWForm : LuaObject {
 		}
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_data(IntPtr l) {
 		try {
 			UnityEngine.WWWForm self=(UnityEngine.WWWForm)checkSelf(l);
@@ -132,6 +137,7 @@ public class Lua_UnityEngine_WWWForm : LuaObject {
 			return error(l,e);
 		}
 	}
+	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.WWWForm");
 		addMember(l,AddField);
