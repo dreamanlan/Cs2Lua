@@ -225,7 +225,7 @@ function __typeis_check_xlua(objType, t)
 	if objType == tType then
 		return true;
 	end
-	if objType:IsSubclassOf(tType) then
+	if tType:IsAssignableFrom(objType) then
 		return true;
 	end
 	return false;

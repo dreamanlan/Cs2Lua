@@ -1269,7 +1269,7 @@ namespace RoslynTool.CsToLua
 
             if (null != sym && sym.DeclaringSyntaxReferences.Length > 0) {
                 var decl = sym.DeclaringSyntaxReferences[0].GetSyntax() as MethodDeclarationSyntax;
-                if (null != decl && null == decl.Body && null == decl.ExpressionBody) {
+                if (null != decl && null == decl.Body && null == decl.ExpressionBody && sym.ReceiverType.TypeKind != TypeKind.Interface && !sym.IsAbstract) {
                     //partial method invocation
                     if (null == sym.PartialDefinitionPart && null == sym.PartialImplementationPart) {
                         if (expTerminater.Length > 0)
