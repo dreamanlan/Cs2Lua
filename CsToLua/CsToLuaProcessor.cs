@@ -252,8 +252,10 @@ namespace RoslynTool.CsToLua
                                     var type = symbol as INamedTypeSymbol;
                                     if (null != type) {
                                         string key = ClassInfo.SpecialGetFullTypeName(type, isExtern);
-                                        if (!ignoredClasses.ContainsKey(key)) {
-                                            ignoredClasses.Add(key, type);
+                                        lock (ignoredClasses) {
+                                            if (!ignoredClasses.ContainsKey(key)) {
+                                                ignoredClasses.Add(key, type);
+                                            }
                                         }
                                         if (ignore && !SymbolTable.Instance.IgnoredTypes.ContainsKey(key)) {
                                             SymbolTable.Instance.IgnoredTypes.TryAdd(key, type);
