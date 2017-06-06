@@ -231,8 +231,9 @@ namespace RoslynTool.CsToLua
                         foreach (SyntaxTree tree in newTrees) {
                             bool ignore = IsIgnoredFile(ignoredFullPath, tree.FilePath);
                             bool isExtern = IsExternFile(externFullPath, tree.FilePath);
+                            bool isIntern = false;
                             if (internFullPath.Count > 0) {
-                                bool isIntern = IsInternFile(internFullPath, tree.FilePath);
+                                isIntern = IsInternFile(internFullPath, tree.FilePath);
                                 if (!isIntern && !ignore) {
                                     isExtern = true;
                                 }
@@ -259,8 +260,22 @@ namespace RoslynTool.CsToLua
                                         }
                                     }
                                 }
+                            } else {
+                                TypeAnalysis ta = new TypeAnalysis(model);
+                                ta.Visit(root);
+                                var symbols = ta.Symbols;
+                                foreach (var symbol in symbols) {
+                                    var type = symbol as INamedTypeSymbol;
+                                    if (null != type) {
+                                        string key = ClassInfo.SpecialGetFullTypeName(type, isExtern);
+                                        if (!SymbolTable.Instance.InternTypes.ContainsKey(key)) {
+                                            SymbolTable.Instance.InternTypes.Add(key, type);
+                                        }
+                                    }
+                                }
                             }
                         }
+                        SymbolTable.Instance.SymbolClassified();
                         foreach (SyntaxTree tree in newTrees) {
                             bool ignore = IsIgnoredFile(ignoredFullPath, tree.FilePath);
                             bool isExtern = IsExternFile(externFullPath, tree.FilePath);
