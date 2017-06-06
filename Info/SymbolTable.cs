@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.IO;
 using System.Text;
@@ -20,15 +21,15 @@ namespace RoslynTool.CsToLua
         {
             get { return m_AssemblySymbol; }
         }
-        internal Dictionary<string, INamedTypeSymbol> ExternTypes
+        internal ConcurrentDictionary<string, INamedTypeSymbol> ExternTypes
         {
             get { return m_ExternTypes; }
         }
-        internal Dictionary<string, INamedTypeSymbol> InternTypes
+        internal ConcurrentDictionary<string, INamedTypeSymbol> InternTypes
         {
             get { return m_InternTypes; }
         }
-        internal Dictionary<string, INamedTypeSymbol> IgnoredTypes
+        internal ConcurrentDictionary<string, INamedTypeSymbol> IgnoredTypes
         {
             get { return m_IgnoredTypes; }
         }
@@ -261,9 +262,9 @@ namespace RoslynTool.CsToLua
         private CSharpCompilation m_Compilation = null;
         private IAssemblySymbol m_AssemblySymbol = null;
         private bool m_UseExternTypes = true;
-        private Dictionary<string, INamedTypeSymbol> m_ExternTypes = new Dictionary<string, INamedTypeSymbol>();
-        private Dictionary<string, INamedTypeSymbol> m_InternTypes = new Dictionary<string, INamedTypeSymbol>();
-        private Dictionary<string, INamedTypeSymbol> m_IgnoredTypes = new Dictionary<string, INamedTypeSymbol>();
+        private ConcurrentDictionary<string, INamedTypeSymbol> m_ExternTypes = new ConcurrentDictionary<string, INamedTypeSymbol>();
+        private ConcurrentDictionary<string, INamedTypeSymbol> m_InternTypes = new ConcurrentDictionary<string, INamedTypeSymbol>();
+        private ConcurrentDictionary<string, INamedTypeSymbol> m_IgnoredTypes = new ConcurrentDictionary<string, INamedTypeSymbol>();
         private Dictionary<string, INamespaceSymbol> m_NamespaceSymbols = new Dictionary<string, INamespaceSymbol>();
         private Dictionary<string, ClassSymbolInfo> m_ClassSymbols = new Dictionary<string, ClassSymbolInfo>();
         private Dictionary<string, HashSet<string>> m_Requires = new Dictionary<string, HashSet<string>>();

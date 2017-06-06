@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Text;
 using System.IO;
 using System.Xml;
@@ -228,7 +231,7 @@ namespace RoslynTool.CsToLua
             using (StreamWriter sw = new StreamWriter(Path.Combine(logDir, "SemanticError.log"))) {
                 using (StreamWriter sw2 = new StreamWriter(Path.Combine(logDir, "SemanticWarning.log"))) {
                     using (StreamWriter sw3 = new StreamWriter(Path.Combine(logDir, "Translation.log"))) {
-                        foreach (SyntaxTree tree in newTrees) {
+                        Parallel.ForEach(newTrees, (tree) => {
                             bool ignore = IsIgnoredFile(ignoredFullPath, tree.FilePath);
                             bool isExtern = IsExternFile(externFullPath, tree.FilePath);
                             bool isIntern = false;
@@ -253,10 +256,10 @@ namespace RoslynTool.CsToLua
                                             ignoredClasses.Add(key, type);
                                         }
                                         if (ignore && !SymbolTable.Instance.IgnoredTypes.ContainsKey(key)) {
-                                            SymbolTable.Instance.IgnoredTypes.Add(key, type);
+                                            SymbolTable.Instance.IgnoredTypes.TryAdd(key, type);
                                         }
                                         if (isExtern && !SymbolTable.Instance.ExternTypes.ContainsKey(key)) {
-                                            SymbolTable.Instance.ExternTypes.Add(key, type);
+                                            SymbolTable.Instance.ExternTypes.TryAdd(key, type);
                                         }
                                     }
                                 }
@@ -269,14 +272,14 @@ namespace RoslynTool.CsToLua
                                     if (null != type) {
                                         string key = ClassInfo.SpecialGetFullTypeName(type, isExtern);
                                         if (!SymbolTable.Instance.InternTypes.ContainsKey(key)) {
-                                            SymbolTable.Instance.InternTypes.Add(key, type);
+                                            SymbolTable.Instance.InternTypes.TryAdd(key, type);
                                         }
                                     }
                                 }
                             }
-                        }
+                        });
                         SymbolTable.Instance.SymbolClassified();
-                        foreach (SyntaxTree tree in newTrees) {
+                        Parallel.ForEach(newTrees, (tree) => {
                             bool ignore = IsIgnoredFile(ignoredFullPath, tree.FilePath);
                             bool isExtern = IsExternFile(externFullPath, tree.FilePath);
                             if (internFullPath.Count > 0) {
@@ -288,26 +291,26 @@ namespace RoslynTool.CsToLua
                             string fileName = Path.GetFileNameWithoutExtension(tree.FilePath);
                             var root = tree.GetRoot();
                             SemanticModel model = compilation.GetSemanticModel(tree, true);
-                            
+
                             var diags = model.GetDiagnostics();
                             bool firstError = true;
                             bool firstWarning = true;
                             foreach (var diag in diags) {
                                 if (diag.Severity == DiagnosticSeverity.Error) {
                                     if (firstError) {
-                                        sw.WriteLine("============<<<Semantic Error:{0}>>>============", fileName);
+                                        LockWriteLine(sw, "============<<<Semantic Error:{0}>>>============", fileName);
                                         firstError = false;
                                     }
                                     string msg = diag.ToString();
-                                    sw.WriteLine("{0}", msg);
+                                    LockWriteLine(sw, "{0}", msg);
                                     haveSemanticError = true;
                                 } else {
                                     if (firstWarning) {
-                                        sw2.WriteLine("============<<<Semantic Warning:{0}>>>============", fileName);
+                                        LockWriteLine(sw2, "============<<<Semantic Warning:{0}>>>============", fileName);
                                         firstWarning = false;
                                     }
                                     string msg = diag.ToString();
-                                    sw2.WriteLine("{0}", msg);
+                                    LockWriteLine(sw2, "{0}", msg);
                                 }
                             }
 
@@ -315,8 +318,10 @@ namespace RoslynTool.CsToLua
                                 CsLuaTranslater csToLua = new CsLuaTranslater(model, enableInherit, enableLinq);
                                 csToLua.Translate(root);
                                 if (csToLua.HaveError) {
-                                    sw3.WriteLine("============<<<Translation Error:{0}>>>============", fileName);
-                                    csToLua.SaveLog(sw3);
+                                    LockWriteLine(sw3, "============<<<Translation Error:{0}>>>============", fileName);
+                                    lock (sw3) {
+                                        csToLua.SaveLog(sw3);
+                                    }
                                     haveTranslationError = true;
                                 }
 
@@ -325,14 +330,18 @@ namespace RoslynTool.CsToLua
                                     var cis = pair.Value;
 
                                     foreach (var ci in cis) {
-                                        AddMergedClasses(toplevelClasses, key, ci);
+                                        lock (toplevelClasses) {
+                                            AddMergedClasses(toplevelClasses, key, ci);
+                                        }
                                     }
 
                                     string[] nss = key.Split('.');
-                                    AddMergedNamespaces(toplevelMni, nss);
+                                    lock (toplevelMni) {
+                                        AddMergedNamespaces(toplevelMni, nss);
+                                    }
                                 }
                             }
-                        }
+                        });
                         HashSet<string> handledTypes = new HashSet<string>();
                         var typeSyms = new Queue<DerivedGenericTypeInstanceInfo>();
                         Action<SyntaxNode, INamedTypeSymbol> action = (SyntaxNode node, INamedTypeSymbol typeSym) => {
@@ -1383,6 +1392,13 @@ namespace RoslynTool.CsToLua
         private static string GetIndentString(int indent)
         {
             return CsLuaTranslater.GetIndentString(indent);
+        }
+
+        private static void LockWriteLine(StreamWriter sw, string fmt, params object[] args)
+        {
+            lock (sw) {
+                sw.WriteLine(fmt, args);
+            }
         }
 
         private static bool IsIgnoredFile(IList<string> ignoredPath, string filePath)
