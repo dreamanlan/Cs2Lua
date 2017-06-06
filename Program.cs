@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using RoslynTool.CsToLua;
+using System.Diagnostics;
 
 namespace RoslynTool
 {
@@ -191,7 +192,11 @@ namespace RoslynTool
                     }
                 }
                 if (File.Exists(file)) {
-                    return (int)CsToLuaProcessor.Process(file, outputExt, macros, ignoredPath, externPath, internPath, refByNames, refByPaths, enableInherit, enableLinq, outputResult);
+                    var stopwatch = Stopwatch.StartNew();
+                    var result = (int)CsToLuaProcessor.Process(file, outputExt, macros, ignoredPath, externPath, internPath, refByNames, refByPaths, enableInherit, enableLinq, outputResult);
+                    stopwatch.Stop();
+                    Console.WriteLine("RunningTime: {0}s", stopwatch.Elapsed.TotalSeconds);
+                    return result;
                 } else {
                     return (int)ExitCode.FileNotFound;
                 }

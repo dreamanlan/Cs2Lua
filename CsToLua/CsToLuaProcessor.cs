@@ -124,14 +124,16 @@ namespace RoslynTool.CsToLua
             List<SyntaxTree> trees = new List<SyntaxTree>();
             using (StreamWriter sw = new StreamWriter(Path.Combine(logDir, "SyntaxError.log"))) {
                 using (StreamWriter sw2 = new StreamWriter(Path.Combine(logDir, "SyntaxWarning.log"))) {
-                    foreach (string file in files) {
+                    Parallel.ForEach(files, (file) => {
                         string filePath = Path.Combine(path, file);
                         string fileName = Path.GetFileNameWithoutExtension(filePath);
                         CSharpParseOptions options = new CSharpParseOptions();
                         options = options.WithPreprocessorSymbols(preprocessors);
                         options = options.WithFeatures(new Dictionary<string, string> { { "IOperation", "true" } });
                         SyntaxTree tree = CSharpSyntaxTree.ParseText(File.ReadAllText(filePath), options, filePath);
-                        trees.Add(tree);
+                        lock (trees) {
+                            trees.Add(tree);
+                        }
 
                         var diags = tree.GetDiagnostics();
                         bool firstError = true;
@@ -139,22 +141,22 @@ namespace RoslynTool.CsToLua
                         foreach (var diag in diags) {
                             if (diag.Severity == DiagnosticSeverity.Error) {
                                 if (firstError) {
-                                    sw.WriteLine("============<<<Syntax Error:{0}>>>============", fileName);
+                                    LockWriteLine(sw, "============<<<Syntax Error:{0}>>>============", fileName);
                                     firstError = false;
                                 }
                                 string msg = diag.ToString();
-                                sw.WriteLine("{0}", msg);
+                                LockWriteLine(sw, "{0}", msg);
                                 haveError = true;
                             } else {
                                 if (firstWarning) {
-                                    sw2.WriteLine("============<<<Syntax Warning:{0}>>>============", fileName);
+                                    LockWriteLine(sw2, "============<<<Syntax Warning:{0}>>>============", fileName);
                                     firstWarning = false;
                                 }
                                 string msg = diag.ToString();
-                                sw2.WriteLine("{0}", msg);
+                                LockWriteLine(sw2, "{0}", msg);
                             }
                         }
-                    }
+                    });
                     sw2.Close();
                 }
                 sw.Close();
@@ -257,6 +259,7 @@ namespace RoslynTool.CsToLua
                                                 ignoredClasses.Add(key, type);
                                             }
                                         }
+
                                         if (ignore && !SymbolTable.Instance.IgnoredTypes.ContainsKey(key)) {
                                             SymbolTable.Instance.IgnoredTypes.TryAdd(key, type);
                                         }
