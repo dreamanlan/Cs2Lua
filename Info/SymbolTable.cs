@@ -130,31 +130,31 @@ namespace RoslynTool.CsToLua
         {
             return sym.ContainingAssembly == m_AssemblySymbol && 
                 (m_UseExternTypes && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true)) || 
-                !m_UseExternTypes && !m_InternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true)));
+                !m_UseExternTypes && m_InternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true)));
         }
         internal bool IsCs2LuaSymbol(IFieldSymbol sym)
         {
             return sym.ContainingAssembly == m_AssemblySymbol &&
                 (m_UseExternTypes && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true)) ||
-                !m_UseExternTypes && !m_InternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true)));
+                !m_UseExternTypes && m_InternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true)));
         }
         internal bool IsCs2LuaSymbol(IPropertySymbol sym)
         {
             return sym.ContainingAssembly == m_AssemblySymbol &&
                 (m_UseExternTypes && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true)) ||
-                !m_UseExternTypes && !m_InternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true)));
+                !m_UseExternTypes && m_InternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true)));
         }
         internal bool IsCs2LuaSymbol(IEventSymbol sym)
         {
             return sym.ContainingAssembly == m_AssemblySymbol &&
                 (m_UseExternTypes && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true)) ||
-                !m_UseExternTypes && !m_InternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true)));
+                !m_UseExternTypes && m_InternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true)));
         }
         internal bool IsCs2LuaSymbol(ITypeSymbol sym)
         {
             return sym.ContainingAssembly == m_AssemblySymbol && 
                 (m_UseExternTypes && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym, true)) || 
-                !m_UseExternTypes && !m_InternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym, true)));
+                !m_UseExternTypes && m_InternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym, true)));
         }
         internal void Init(CSharpCompilation compilation)
         {

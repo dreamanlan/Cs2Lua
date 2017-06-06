@@ -236,9 +236,8 @@ namespace RoslynTool.CsToLua
                         Parallel.ForEach(newTrees, (tree) => {
                             bool ignore = IsIgnoredFile(ignoredFullPath, tree.FilePath);
                             bool isExtern = IsExternFile(externFullPath, tree.FilePath);
-                            bool isIntern = false;
                             if (internFullPath.Count > 0) {
-                                isIntern = IsInternFile(internFullPath, tree.FilePath);
+                                bool isIntern = IsInternFile(internFullPath, tree.FilePath);
                                 if (!isIntern && !ignore) {
                                     isExtern = true;
                                 }
