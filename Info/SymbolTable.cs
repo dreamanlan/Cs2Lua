@@ -96,7 +96,6 @@ namespace RoslynTool.CsToLua
         internal void SymbolClassified()
         {
             Console.WriteLine("Symbol size, Extern:{0} Intern:{1} Ignore:{2}", m_ExternTypes.Count, m_InternTypes.Count, m_IgnoredTypes.Count);
-            m_UseExternTypes = m_ExternTypes.Count < m_InternTypes.Count;
         }
         internal bool IsIgnoredSymbol(ITypeSymbol sym)
         {
@@ -128,33 +127,23 @@ namespace RoslynTool.CsToLua
         }
         internal bool IsCs2LuaSymbol(IMethodSymbol sym)
         {
-            return sym.ContainingAssembly == m_AssemblySymbol && 
-                (m_UseExternTypes && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true)) || 
-                !m_UseExternTypes && m_InternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true)));
+            return sym.ContainingAssembly == m_AssemblySymbol && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true));
         }
         internal bool IsCs2LuaSymbol(IFieldSymbol sym)
         {
-            return sym.ContainingAssembly == m_AssemblySymbol &&
-                (m_UseExternTypes && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true)) ||
-                !m_UseExternTypes && m_InternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true)));
+            return sym.ContainingAssembly == m_AssemblySymbol && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true));
         }
         internal bool IsCs2LuaSymbol(IPropertySymbol sym)
         {
-            return sym.ContainingAssembly == m_AssemblySymbol &&
-                (m_UseExternTypes && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true)) ||
-                !m_UseExternTypes && m_InternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true)));
+            return sym.ContainingAssembly == m_AssemblySymbol && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true));
         }
         internal bool IsCs2LuaSymbol(IEventSymbol sym)
         {
-            return sym.ContainingAssembly == m_AssemblySymbol &&
-                (m_UseExternTypes && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true)) ||
-                !m_UseExternTypes && m_InternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true)));
+            return sym.ContainingAssembly == m_AssemblySymbol && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true));
         }
         internal bool IsCs2LuaSymbol(ITypeSymbol sym)
         {
-            return sym.ContainingAssembly == m_AssemblySymbol && 
-                (m_UseExternTypes && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym, true)) || 
-                !m_UseExternTypes && m_InternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym, true)));
+            return sym.ContainingAssembly == m_AssemblySymbol && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym, true));
         }
         internal void Init(CSharpCompilation compilation)
         {
@@ -261,7 +250,6 @@ namespace RoslynTool.CsToLua
 
         private CSharpCompilation m_Compilation = null;
         private IAssemblySymbol m_AssemblySymbol = null;
-        private bool m_UseExternTypes = true;
         private ConcurrentDictionary<string, INamedTypeSymbol> m_ExternTypes = new ConcurrentDictionary<string, INamedTypeSymbol>();
         private ConcurrentDictionary<string, INamedTypeSymbol> m_InternTypes = new ConcurrentDictionary<string, INamedTypeSymbol>();
         private ConcurrentDictionary<string, INamedTypeSymbol> m_IgnoredTypes = new ConcurrentDictionary<string, INamedTypeSymbol>();
