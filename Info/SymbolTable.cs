@@ -21,6 +21,14 @@ namespace RoslynTool.CsToLua
         {
             get { return m_AssemblySymbol; }
         }
+        internal Dictionary<string, INamespaceSymbol> NamespaceSymbols
+        {
+            get { return m_NamespaceSymbols; }
+        }
+        internal Dictionary<string, ClassSymbolInfo> ClassSymbols
+        {
+            get { return m_ClassSymbols; }
+        }
         internal ConcurrentDictionary<string, INamedTypeSymbol> ExternTypes
         {
             get { return m_ExternTypes; }
@@ -33,14 +41,6 @@ namespace RoslynTool.CsToLua
         {
             get { return m_IgnoredTypes; }
         }
-        internal Dictionary<string, INamespaceSymbol> NamespaceSymbols
-        {
-            get { return m_NamespaceSymbols; }
-        }
-        internal Dictionary<string, ClassSymbolInfo> ClassSymbols
-        {
-            get { return m_ClassSymbols; }
-        }
         internal Dictionary<string, HashSet<string>> Requires
         {
             get { return m_Requires; }
@@ -49,7 +49,7 @@ namespace RoslynTool.CsToLua
         {
             get { return m_ReferencedExternTypes; }
         }
-        internal Dictionary<string, ITypeSymbol> ExternEnums
+        internal ConcurrentDictionary<string, ITypeSymbol> ExternEnums
         {
             get { return m_ExternEnums; }
         }
@@ -69,9 +69,9 @@ namespace RoslynTool.CsToLua
         {
             get { return m_TypeArguments; }
         }
-        internal Dictionary<string, List<string>> Cs2DslInterfaces
+        internal Dictionary<string, List<string>> Cs2LuaInterfaces
         {
-            get { return m_Cs2DslInterfaces; }
+            get { return m_Cs2LuaInterfaces; }
         }
         internal void SetTypeParamsAndArgs(List<ITypeParameterSymbol> typeParams, List<ITypeSymbol> typeArgs, INamedTypeSymbol refType)
         {
@@ -154,34 +154,48 @@ namespace RoslynTool.CsToLua
         }
         internal void AddRequire(string refClass, string moduleName)
         {
-            HashSet<string> hashset;
-            if (!m_Requires.TryGetValue(refClass, out hashset)) {
-                hashset = new HashSet<string>();
-                m_Requires.Add(refClass, hashset);
-            }
-            if (!hashset.Contains(moduleName)) {
-                hashset.Add(moduleName);
+            lock (m_Requires) {
+                HashSet<string> hashset;
+                if (!m_Requires.TryGetValue(refClass, out hashset)) {
+                    hashset = new HashSet<string>();
+                    m_Requires.Add(refClass, hashset);
+                }
+                if (!hashset.Contains(moduleName)) {
+                    hashset.Add(moduleName);
+                }
             }
         }
         internal void AddExternEnum(string enumKey, ITypeSymbol sym)
         {
             if (!m_ExternEnums.ContainsKey(enumKey)) {
-                m_ExternEnums.Add(enumKey, sym);
+                m_ExternEnums.TryAdd(enumKey, sym);
+            }
+        }
+        internal void AddReferencedExternType(string key)
+        {
+            lock (m_ReferencedExternTypes) {
+                if (!m_ReferencedExternTypes.Contains(key)) {
+                    m_ReferencedExternTypes.Add(key);
+                }
             }
         }
         internal void AddGenericTypeDefine(string key, SyntaxNode node)
         {
-            List<SyntaxNode> defines;
-            if (!m_GenericTypeDefines.TryGetValue(key, out defines)) {
-                defines = new List<SyntaxNode>();
-                m_GenericTypeDefines.Add(key, defines);
+            lock (m_GenericTypeDefines) {
+                List<SyntaxNode> defines;
+                if (!m_GenericTypeDefines.TryGetValue(key, out defines)) {
+                    defines = new List<SyntaxNode>();
+                    m_GenericTypeDefines.Add(key, defines);
+                }
+                defines.Add(node);
             }
-            defines.Add(node);
         }
         internal void AddGenericTypeInstance(string key, INamedTypeSymbol sym)
         {
-            if (!m_GenericTypeInstances.ContainsKey(key)) {
-                m_GenericTypeInstances.Add(key, sym);
+            lock (m_GenericTypeInstances) {
+                if (!m_GenericTypeInstances.ContainsKey(key)) {
+                    m_GenericTypeInstances.Add(key, sym);
+                }
             }
         }
         internal string NameMangling(IMethodSymbol sym)
@@ -250,21 +264,22 @@ namespace RoslynTool.CsToLua
 
         private CSharpCompilation m_Compilation = null;
         private IAssemblySymbol m_AssemblySymbol = null;
+        private Dictionary<string, INamespaceSymbol> m_NamespaceSymbols = new Dictionary<string, INamespaceSymbol>();
+        private Dictionary<string, ClassSymbolInfo> m_ClassSymbols = new Dictionary<string, ClassSymbolInfo>();
+
         private ConcurrentDictionary<string, INamedTypeSymbol> m_ExternTypes = new ConcurrentDictionary<string, INamedTypeSymbol>();
         private ConcurrentDictionary<string, INamedTypeSymbol> m_InternTypes = new ConcurrentDictionary<string, INamedTypeSymbol>();
         private ConcurrentDictionary<string, INamedTypeSymbol> m_IgnoredTypes = new ConcurrentDictionary<string, INamedTypeSymbol>();
-        private Dictionary<string, INamespaceSymbol> m_NamespaceSymbols = new Dictionary<string, INamespaceSymbol>();
-        private Dictionary<string, ClassSymbolInfo> m_ClassSymbols = new Dictionary<string, ClassSymbolInfo>();
         private Dictionary<string, HashSet<string>> m_Requires = new Dictionary<string, HashSet<string>>();
         private SortedSet<string> m_ReferencedExternTypes = new SortedSet<string>();
-        private Dictionary<string, ITypeSymbol> m_ExternEnums = new Dictionary<string, ITypeSymbol>();
-        
+        private ConcurrentDictionary<string, ITypeSymbol> m_ExternEnums = new ConcurrentDictionary<string, ITypeSymbol>();        
         private Dictionary<string, List<SyntaxNode>> m_GenericTypeDefines = new Dictionary<string, List<SyntaxNode>>();
         private Dictionary<string, INamedTypeSymbol> m_GenericTypeInstances = new Dictionary<string, INamedTypeSymbol>();
+        private Dictionary<string, List<string>> m_Cs2LuaInterfaces = new Dictionary<string, List<string>>();
 
         private List<ITypeParameterSymbol> m_TypeParameters = new List<ITypeParameterSymbol>();
         private List<ITypeSymbol> m_TypeArguments = new List<ITypeSymbol>();
-        private Dictionary<string, List<string>> m_Cs2DslInterfaces = new Dictionary<string, List<string>>();
+
         
         internal static SymbolTable Instance
         {

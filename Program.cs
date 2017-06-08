@@ -27,6 +27,7 @@ namespace RoslynTool
                 bool enableInherit = false;
                 bool enableLinq = false;
                 bool outputResult = false;
+                bool parallel = false;
                 if (args.Length > 0) {
                     for (int i = 0; i < args.Length; ++i) {
                         if (0 == string.Compare(args[i], "-ext", true)) {
@@ -106,6 +107,8 @@ namespace RoslynTool
                             SymbolTable.ForTolua = true;
                         } else if (0 == string.Compare(args[i], "-outputresult", true)) {
                             outputResult = true;
+                        } else if (0 == string.Compare(args[i], "-parallel", true)) {
+                            parallel = true;
                         } else if (0 == string.Compare(args[i], "-noautorequire", true)) {
                             SymbolTable.NoAutoRequire = true;
                         } else if (0 == string.Compare(args[i], "-luacomponentbystring", true)) {
@@ -193,7 +196,7 @@ namespace RoslynTool
                 }
                 if (File.Exists(file)) {
                     var stopwatch = Stopwatch.StartNew();
-                    var result = (int)CsToLuaProcessor.Process(file, outputExt, macros, ignoredPath, externPath, internPath, refByNames, refByPaths, enableInherit, enableLinq, outputResult);
+                    var result = (int)CsToLuaProcessor.Process(file, outputExt, macros, ignoredPath, externPath, internPath, refByNames, refByPaths, enableInherit, enableLinq, outputResult, parallel);
                     stopwatch.Stop();
                     Console.WriteLine("RunningTime: {0}s", stopwatch.Elapsed.TotalSeconds);
                     return result;

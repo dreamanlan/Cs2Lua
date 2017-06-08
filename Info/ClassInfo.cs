@@ -135,9 +135,7 @@ namespace RoslynTool.CsToLua
             while (null != refType) {
                 if (!refType.IsGenericType && !IsInnerClassOfGenericType(refType)) {
                     string key = GetFullName(refType);
-                    if (!SymbolTable.Instance.ReferencedExternTypes.Contains(key)) {
-                        SymbolTable.Instance.ReferencedExternTypes.Add(key);
-                    }
+                    SymbolTable.Instance.AddReferencedExternType(key);
                 }
                 refType = refType.ContainingType;
             }

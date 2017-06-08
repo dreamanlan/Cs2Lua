@@ -48,20 +48,21 @@ namespace RoslynTool.CsToLua
 
                 Dictionary<string, List<string>> intfs;
                 if (m_ClassInfoStack.Count <= 0) {
-                    intfs = SymbolTable.Instance.Cs2DslInterfaces;
+                    intfs = SymbolTable.Instance.Cs2LuaInterfaces;
                 } else {
                     intfs = m_ClassInfoStack.Peek().InnerInterfaces;
                 }
-
-                List<string> list;
-                if (!intfs.TryGetValue(fullName, out list)) {
-                    list = new List<string>();
-                    intfs.Add(fullName, list);
-                }
-                foreach (var intf in sym.AllInterfaces) {
-                    var fn = ClassInfo.GetFullName(intf);
-                    if (!list.Contains(fn)) {
-                        list.Add(fn);
+                lock (intfs) {
+                    List<string> list;
+                    if (!intfs.TryGetValue(fullName, out list)) {
+                        list = new List<string>();
+                        intfs.Add(fullName, list);
+                    }
+                    foreach (var intf in sym.AllInterfaces) {
+                        var fn = ClassInfo.GetFullName(intf);
+                        if (!list.Contains(fn)) {
+                            list.Add(fn);
+                        }
                     }
                 }
             }
