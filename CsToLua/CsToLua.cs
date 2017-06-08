@@ -863,14 +863,6 @@ namespace RoslynTool.CsToLua
             } else if (null == val) {
                 sb.Append("nil");
             } else {
-                if (SymbolTable.ForXlua) {
-                    var enumOper = operOrSym as IMemberReferenceExpression;
-                    if (null != enumOper && enumOper.Type.TypeKind == TypeKind.Enum && !SymbolTable.Instance.IsCs2LuaSymbol(enumOper.Type)) {
-                        var fn = ClassInfo.GetFullName(enumOper.Member);
-                        sb.Append(fn);
-                        return;
-                    }
-                }
                 string sv = val.ToString();
                 char c1 = sv.Length > 0 ? sv[0] : '\0';
                 char c2 = sv.Length > 1 ? sv[1] : '\0';
