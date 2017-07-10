@@ -418,6 +418,9 @@ namespace RoslynTool.CsToLua
                     var mi = new MethodInfo();
                     mi.Init(msym, node);
 
+                    string delegationKey = string.Format("{0}:{1}", ClassInfo.GetFullName(msym.ContainingType), manglingName);
+                    CodeBuilder.Append("(function() local f = ");
+
                     CodeBuilder.Append("(function(");
                     string paramsString = string.Join(", ", mi.ParamNames.ToArray());
                     CodeBuilder.Append(paramsString);
@@ -433,7 +436,9 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.Append(".");
                     }
                     CodeBuilder.Append(manglingName);
-                    CodeBuilder.AppendFormat("({0}) end)", paramsString);
+                    CodeBuilder.AppendFormat("({0}); end)", paramsString);
+
+                    CodeBuilder.AppendFormat("; debug.setmetatable(f, {{cs2lua_delegation_key = \"{0}\"}}); return f; end)()", delegationKey);
                 } else {
                     var psym = sym as IPropertySymbol;
                     string fnOfIntf = string.Empty;
@@ -873,6 +878,11 @@ namespace RoslynTool.CsToLua
                         string manglingName = NameMangling(msym);
                         var mi = new MethodInfo();
                         mi.Init(msym, node);
+                        
+                        AddReferenceAndTryDeriveGenericTypeInstance(ci, msym);
+                        string className = ClassInfo.GetFullName(msym.ContainingType);
+                        string delegationKey = string.Format("{0}:{1}", className, manglingName);
+                        CodeBuilder.Append("(function() local f = ");
 
                         CodeBuilder.Append("(function(");
                         string paramsString = string.Join(", ", mi.ParamNames.ToArray());
@@ -882,9 +892,6 @@ namespace RoslynTool.CsToLua
                             CodeBuilder.Append("return ");
                         }
                         if (msym.IsStatic) {
-                            AddReferenceAndTryDeriveGenericTypeInstance(ci, msym);
-
-                            string className = ClassInfo.GetFullName(msym.ContainingType);
                             CodeBuilder.Append(className);
                             CodeBuilder.Append(".");
                         } else {
@@ -892,6 +899,8 @@ namespace RoslynTool.CsToLua
                         }
                         CodeBuilder.Append(manglingName);
                         CodeBuilder.AppendFormat("({0}); end)", paramsString);
+
+                        CodeBuilder.AppendFormat("; debug.setmetatable(f, {{cs2lua_delegation_key = \"{0}\"}}); return f; end)()", delegationKey);
                     } else {
                         VisitArgumentList(node.ArgumentList);
                     }

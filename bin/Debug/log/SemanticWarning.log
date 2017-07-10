@@ -1,13 +1,2 @@
-============<<<Semantic Warning:test>>>============
-test.cs(150,18): warning CS0168: The variable 'dt' is declared but never used
-test.cs(150,21): warning CS0168: The variable 'dt2' is declared but never used
-test.cs(255,22): warning CS0219: The variable 'e' is assigned but its value is never used
-test.cs(663,13): warning CS0219: The variable 'v' is assigned but its value is never used
-test.cs(283,19): warning CS0219: The variable 't' is assigned but its value is never used
-test.cs(504,23): warning CS0219: The variable 'abc' is assigned but its value is never used
-test.cs(684,32): warning CS0162: Unreachable code detected
-test.cs(566,17): warning CS0162: Unreachable code detected
-test.cs(87,9): warning CS0618: 'GameObject.active' is obsolete: 'GameObject.active is obsolete. Use GameObject.SetActive(), GameObject.activeSelf or GameObject.activeInHierarchy.'
-test.cs(103,14): warning CS0219: The variable 'isLoadingHeadIcon' is assigned but its value is never used
-test.cs(120,16): warning CS0219: The variable 's' is assigned but its value is never used
-test.cs(202,5): hidden CS8019: Unnecessary using directive.
+============<<<Semantic Warning:test_delegate>>>============
+test_delegate.cs(4,1): hidden CS8019: Unnecessary using directive.

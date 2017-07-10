@@ -238,6 +238,10 @@ namespace RoslynTool.CsToLua
                                 CodeBuilder.AppendFormat("this:{0}", manglingName);
                             }
                         } else {
+                            string className = ClassInfo.GetFullName(msym.ContainingType);
+                            string delegationKey = string.Format("{0}:{1}", className, manglingName);
+                            CodeBuilder.Append("(function() local f = ");
+                            
                             CodeBuilder.Append("(function(");
                             string paramsString = string.Join(", ", mi.ParamNames.ToArray());
                             CodeBuilder.Append(paramsString);
@@ -246,6 +250,8 @@ namespace RoslynTool.CsToLua
                             } else {
                                 CodeBuilder.AppendFormat(") {0}this:{1}({2}); end)", msym.ReturnsVoid ? string.Empty : "return ", manglingName, paramsString);
                             }
+
+                            CodeBuilder.AppendFormat("; debug.setmetatable(f, {{cs2lua_delegation_key = \"{0}\"}}); return f; end)()", delegationKey);
                         }
                         return;
                     }

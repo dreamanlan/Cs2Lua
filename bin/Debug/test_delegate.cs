@@ -154,6 +154,8 @@ public class DelegateTest : MonoBehaviour
             Debug.Log(v2);
         }
         ConvTest tc = new ConvTest();
+        tc.OnHandleValue += this.Test3;
+        tc.OnHandleValue -= this.Test3;
         bool vv = tc.TestConv(1, this);
         bool vv2;
         vv2 = tc.TestConv(1, 2);
@@ -170,6 +172,11 @@ public class DelegateTest : MonoBehaviour
         Test(arr[0]);
         Test(this.ObjProp);
         Test(this[0]);
+    }
+
+    private void Test3()
+    {
+
     }
 
     public static implicit operator int(DelegateTest thisObj) => 0;

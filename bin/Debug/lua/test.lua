@@ -130,3 +130,8 @@ for i,vs in ipairs(rs) do
   end;
   print("}");
 end;
+
+local f = function() return 123; end;
+debug.setmetatable(f, {key = "test"});
+local tb = debug.getmetatable(f);
+print(tb.key);
