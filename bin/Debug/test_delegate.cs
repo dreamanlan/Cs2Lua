@@ -10,7 +10,7 @@ public delegate int TestDelegation(int a, ref int b, out int c);
 public class ConvTest
 {
     public OnHandleDelegation OnHandleValue;
-    public event OnHandleDelegation OnHandle = OnHandleValue;
+    public event OnHandleDelegation OnHandle;
     public int this[int ix]
     {
         get
@@ -67,7 +67,7 @@ public class ConvTest
         bool[] tarr; tarr = new bool[]{obj, obj, obj};
         Dictionary<string, bool> tdict; tdict = new Dictionary<string,bool>{{"1",obj},{"2",obj}};
         List<bool> tlist; tlist = new List<bool>{obj,obj,obj};
-        List<List<bool>> f = new List<List<bool>> { { obj, obj }, { obj, obj } };
+        List<List<bool>> f = new List<List<bool>> { new List<bool> { obj, obj }, new List<bool> { obj, obj } };
         c = 1;
         c/=2;
         c=c/2;

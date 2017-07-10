@@ -77,7 +77,7 @@ ConvTest = {
 				tdict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {["1"] = invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), ["2"] = invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)});
 				local tlist;
 				tlist = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", {invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)});
-				local f; f = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", {{obj, obj}, {obj, obj}});
+				local f; f = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", {newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", {invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)}), newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", {invokeexternoperator(UnityEngine.Object, "op_Implicit", obj), invokeexternoperator(UnityEngine.Object, "op_Implicit", obj)})});
 				c = 1;
 				c = invokeintegeroperator(0, "/", c, 2, System.Int32, System.Int32);
 				c = invokeintegeroperator(0, "/", c, 2, System.Int32, System.Int32);
@@ -104,7 +104,7 @@ ConvTest = {
 		local instance_fields_build = function()
 			local instance_fields = {
 				OnHandleValue = wrapdelegation{},
-				OnHandle = delegationwrap(this.OnHandleValue),
+				OnHandle = wrapdelegation{},
 				m_Val = DelegateTest.op_Implicit__DelegateTest(newobject(DelegateTest, "ctor", nil)),
 				__attributes = ConvTest__Attrs,
 			};

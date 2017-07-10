@@ -134,4 +134,8 @@ end;
 local f = function() return 123; end;
 debug.setmetatable(f, {key = "test"});
 local tb = debug.getmetatable(f);
-print(tb.key);
+print(tb.key, type(f), f());
+
+local ff = (function() local __compiler_delegation_128 = (function() return f(); end); debug.setmetatable(__compiler_delegation_128, {__cs2lua_delegation_key = "DelegateTest:NormalEnumerator"}); return __compiler_delegation_128; end)();
+tb = debug.getmetatable(ff);
+print(tb.__cs2lua_delegation_key, type(ff), ff());

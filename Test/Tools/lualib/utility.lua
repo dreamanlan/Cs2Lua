@@ -1358,6 +1358,17 @@ function delegationremove(isevent, t, intf, k, handler)
     if v==handler then
       find=true;
       break;
+    else
+    	local tb1 = debug.getmetatable(v);
+    	local tb2 = debug.getmetatable(handler);
+    	if tb1 and tb2 then
+    		local key1 = rawget(tb1, "__cs2lua_delegation_key");
+    		local key2 = rawget(tb2, "__cs2lua_delegation_key");
+    		if key1 and key2 and key1 == key2 then
+    			find=true;
+    			break;
+    		end;
+    	end;
     end;
     pos = pos + 1;
   end;

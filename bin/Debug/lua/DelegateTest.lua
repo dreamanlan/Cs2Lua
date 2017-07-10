@@ -59,7 +59,7 @@ DelegateTest = {
 				return nil;
 			end),
 			Test = function(this, v)
-				delegationset(false, this, nil, "Fading", (function() local f = (function() return this:NormalEnumerator(); end); debug.setmetatable(f, {cs2lua_delegation_key = "DelegateTest:NormalEnumerator"}); return f; end)());
+				delegationset(false, this, nil, "Fading", (function() local __compiler_delegation_128 = (function() return this:NormalEnumerator(); end); debug.setmetatable(__compiler_delegation_128, {__cs2lua_delegation_key = "DelegateTest:NormalEnumerator"}); return __compiler_delegation_128; end)());
 				this:StartCoroutine(this.Fading());
 				local obj; obj = nil;
 				local v0; v0 = condexp(invokeexternoperator(UnityEngine.Object, "op_Implicit", ( obj )), true, 1, true, 0);
@@ -84,8 +84,8 @@ DelegateTest = {
 					UnityEngine.Debug.Log(v2);
 				end;
 				local tc; tc = newobject(ConvTest, "ctor", nil);
-				delegationadd(false, tc, nil, "OnHandleValue", (function() local f = (function() this:Test3(); end); debug.setmetatable(f, {cs2lua_delegation_key = "DelegateTest:Test3"}); return f; end)());
-				delegationremove(false, tc, nil, "OnHandleValue", (function() local f = (function() this:Test3(); end); debug.setmetatable(f, {cs2lua_delegation_key = "DelegateTest:Test3"}); return f; end)());
+				delegationadd(false, tc, nil, "OnHandleValue", (function() local __compiler_delegation_156 = (function() this:Test3(); end); debug.setmetatable(__compiler_delegation_156, {__cs2lua_delegation_key = "DelegateTest:Test3"}); return __compiler_delegation_156; end)());
+				delegationremove(false, tc, nil, "OnHandleValue", (function() local __compiler_delegation_157 = (function() this:Test3(); end); debug.setmetatable(__compiler_delegation_157, {__cs2lua_delegation_key = "DelegateTest:Test3"}); return __compiler_delegation_157; end)());
 				local vv; vv = invokeexternoperator(UnityEngine.Object, "op_Implicit", tc:TestConv(1, DelegateTest.op_Implicit__DelegateTest(this)));
 				local vv2;
 				vv2 = invokeexternoperator(UnityEngine.Object, "op_Implicit", tc:TestConv(1, 2));
