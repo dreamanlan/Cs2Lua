@@ -131,11 +131,20 @@ for i,vs in ipairs(rs) do
   print("}");
 end;
 
-local f = function() return 123; end;
-debug.setmetatable(f, {key = "test"});
-local tb = debug.getmetatable(f);
-print(tb.key, type(f), f());
+__delegation_keys = {};
 
-local ff = (function() local __compiler_delegation_128 = (function() return f(); end); debug.setmetatable(__compiler_delegation_128, {__cs2lua_delegation_key = "DelegateTest:NormalEnumerator"}); return __compiler_delegation_128; end)();
-tb = debug.getmetatable(ff);
-print(tb.__cs2lua_delegation_key, type(ff), ff());
+function setdelegationkey(func, key)
+  rawset(__delegation_keys, func, key);
+end;
+function getdelegationkey(func)
+  return rawget(__delegation_keys, func);
+end;
+
+local f = function() return 123; end;
+setdelegationkey(f, "test");
+local key = getdelegationkey(f);
+print(key, type(f), f());
+
+local ff = (function() local __compiler_delegation_156 = (function() f(); end); setdelegationkey(__compiler_delegation_156, "DelegateTest:Test3"); return __compiler_delegation_156; end)();
+key = getdelegationkey(ff);
+print(key, type(ff), ff());

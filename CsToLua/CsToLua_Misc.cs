@@ -252,7 +252,7 @@ namespace RoslynTool.CsToLua
                                 CodeBuilder.AppendFormat(") {0}this:{1}({2}); end)", msym.ReturnsVoid ? string.Empty : "return ", manglingName, paramsString);
                             }
 
-                            CodeBuilder.AppendFormat("; debug.setmetatable({0}, {{__cs2lua_delegation_key = \"{1}\"}}); return {2}; end)()", varName, delegationKey, varName);
+                            CodeBuilder.AppendFormat("; setdelegationkey({0}, \"{1}\"); return {2}; end)()", varName, delegationKey, varName);
                         }
                         return;
                     }

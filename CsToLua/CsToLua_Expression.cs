@@ -439,7 +439,7 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.Append(manglingName);
                     CodeBuilder.AppendFormat("({0}); end)", paramsString);
 
-                    CodeBuilder.AppendFormat("; debug.setmetatable({0}, {{__cs2lua_delegation_key = \"{1}\"}}); return {2}; end)()", varName, delegationKey, varName);
+                    CodeBuilder.AppendFormat("; setdelegationkey({0}, \"{1}\"); return {2}; end)()", varName, delegationKey, varName);
                 } else {
                     var psym = sym as IPropertySymbol;
                     string fnOfIntf = string.Empty;
@@ -902,7 +902,7 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.Append(manglingName);
                         CodeBuilder.AppendFormat("({0}); end)", paramsString);
 
-                        CodeBuilder.AppendFormat("; debug.setmetatable({0}, {{__cs2lua_delegation_key = \"{1}\"}}); return {2}; end)()", varName, delegationKey, varName);
+                        CodeBuilder.AppendFormat("; setdelegationkey({0}, \"{1}\"); return {2}; end)()", varName, delegationKey, varName);
                     } else {
                         VisitArgumentList(node.ArgumentList);
                     }
