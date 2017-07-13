@@ -1296,7 +1296,7 @@ end;
 
 __delegation_keys = {};
 
-function setdelegationkey(func, key)
+function setdelegationkey(func, key, obj, member)
   rawset(__delegation_keys, func, key);
 end;
 function getdelegationkey(func)

@@ -251,8 +251,18 @@ namespace RoslynTool.CsToLua
                             } else {
                                 CodeBuilder.AppendFormat(") {0}this:{1}({2}); end)", msym.ReturnsVoid ? string.Empty : "return ", manglingName, paramsString);
                             }
-
-                            CodeBuilder.AppendFormat("; setdelegationkey({0}, \"{1}\"); return {2}; end)()", varName, delegationKey, varName);
+                            
+                            CodeBuilder.AppendFormat("; setdelegationkey({0}, \"{1}\", ", varName, delegationKey);
+                            if (sym.IsStatic) {
+                                CodeBuilder.Append(classInfo.Key);
+                                CodeBuilder.Append(", ");
+                                CodeBuilder.Append(classInfo.Key);
+                            } else {
+                                CodeBuilder.Append("this, this");
+                            }
+                            CodeBuilder.Append(".");
+                            CodeBuilder.Append(manglingName);
+                            CodeBuilder.AppendFormat("); return {0}; end)()", varName);
                         }
                         return;
                     }

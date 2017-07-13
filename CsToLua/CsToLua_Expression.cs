@@ -439,7 +439,19 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.Append(manglingName);
                     CodeBuilder.AppendFormat("({0}); end)", paramsString);
 
-                    CodeBuilder.AppendFormat("; setdelegationkey({0}, \"{1}\"); return {2}; end)()", varName, delegationKey, varName);
+                    CodeBuilder.AppendFormat("; setdelegationkey({0}, \"{1}\", ", varName, delegationKey);
+                    if (string.IsNullOrEmpty(className)) {
+                        OutputExpressionSyntax(node.Expression);
+                        CodeBuilder.Append(", ");
+                        OutputExpressionSyntax(node.Expression);
+                    } else {
+                        CodeBuilder.Append(className);
+                        CodeBuilder.Append(", ");
+                        CodeBuilder.Append(className);
+                    }
+                    CodeBuilder.Append(".");
+                    CodeBuilder.Append(manglingName);
+                    CodeBuilder.AppendFormat("); return {0}; end)()", varName);
                 } else {
                     var psym = sym as IPropertySymbol;
                     string fnOfIntf = string.Empty;
@@ -902,7 +914,17 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.Append(manglingName);
                         CodeBuilder.AppendFormat("({0}); end)", paramsString);
 
-                        CodeBuilder.AppendFormat("; setdelegationkey({0}, \"{1}\"); return {2}; end)()", varName, delegationKey, varName);
+                        CodeBuilder.AppendFormat("; setdelegationkey({0}, \"{1}\", ", varName, delegationKey);
+                        if (msym.IsStatic) {
+                            CodeBuilder.Append(className);
+                            CodeBuilder.Append(", ");
+                            CodeBuilder.Append(className);
+                        } else {
+                            CodeBuilder.Append("this, this");
+                        }
+                        CodeBuilder.Append(".");
+                        CodeBuilder.Append(manglingName);
+                        CodeBuilder.AppendFormat("); return {0}; end)()", varName);
                     } else {
                         VisitArgumentList(node.ArgumentList);
                     }

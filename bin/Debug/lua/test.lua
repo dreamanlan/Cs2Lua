@@ -133,7 +133,7 @@ end;
 
 __delegation_keys = {};
 
-function setdelegationkey(func, key)
+function setdelegationkey(func, key, obj, member)
   rawset(__delegation_keys, func, key);
 end;
 function getdelegationkey(func)
@@ -145,6 +145,12 @@ setdelegationkey(f, "test");
 local key = getdelegationkey(f);
 print(key, type(f), f());
 
-local ff = (function() local __compiler_delegation_156 = (function() f(); end); setdelegationkey(__compiler_delegation_156, "DelegateTest:Test3"); return __compiler_delegation_156; end)();
+local tb = {
+	mf = function(this)
+		return f();
+	end,
+};
+
+local ff = (function() local __compiler_delegation_128 = (function() return tb:mf(); end); setdelegationkey(__compiler_delegation_128, "DelegateTest:NormalEnumerator", tb, tb.mf); return __compiler_delegation_128; end)();
 key = getdelegationkey(ff);
 print(key, type(ff), ff());
