@@ -1419,7 +1419,11 @@ end;
 function externdelegationadd(isevent, isStatic, t, intf, k, handler)
   if k then    
     if isevent then
-      t[k](t, "+", handler);
+      if isStatic then
+        t[k]("+", handler);
+      else
+        t[k](t, "+", handler);
+      end;
     else
       t[k] = t[k] + handler;
     end;
@@ -1430,7 +1434,11 @@ end;
 function externdelegationremove(isevent, isStatic, t, intf, k, handler)
   if k then    
     if isevent then
-      t[k](t, "-", handler);
+      if isStatic then
+        t[k]("-", handler);
+      else
+        t[k](t, "-", handler);
+      end;
     else
       t[k] = t[k] - handler;
     end;
