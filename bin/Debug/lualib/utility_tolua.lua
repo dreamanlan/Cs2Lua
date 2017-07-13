@@ -1312,7 +1312,7 @@ function delegationwrap(handler)
   end;
 end;
 
-function delegationcomparewithnil(isEvent, isStatic, t, inf, k, isequal)
+function delegationcomparewithnil(isevent, isStatic, key, t, inf, k, isequal)
   if not t then
     if isequal then 
       return true;
@@ -1333,7 +1333,7 @@ function delegationcomparewithnil(isEvent, isStatic, t, inf, k, isequal)
     return false;
   end;
 end;
-function delegationset(isevent, isStatic, t, intf, k, handler)
+function delegationset(isevent, isStatic, key, t, intf, k, handler)
   local v = t;
   if k then
     v = t[k];
@@ -1349,14 +1349,14 @@ function delegationset(isevent, isStatic, t, intf, k, handler)
 	  table.insert(v,handler);
   end;
 end;
-function delegationadd(isevent, isStatic, t, intf, k, handler)
+function delegationadd(isevent, isStatic, key, t, intf, k, handler)
   local v = t;
   if k then
     v = t[k];  
   end;
   table.insert(v, handler);
 end;
-function delegationremove(isevent, isStatic, t, intf, k, handler)
+function delegationremove(isevent, isStatic, key, t, intf, k, handler)
   local v = t;
   if k then
     v = t[k];  
@@ -1382,7 +1382,7 @@ function delegationremove(isevent, isStatic, t, intf, k, handler)
   end;
 end;
 
-function externdelegationcomparewithnil(isevent, isStatic, t, inf, k, isequal)
+function externdelegationcomparewithnil(isevent, isStatic, key, t, inf, k, isequal)
   local v = t;
   if k then
     v = t[k];
@@ -1395,21 +1395,21 @@ function externdelegationcomparewithnil(isevent, isStatic, t, inf, k, isequal)
     return false;
   end;
 end;
-function externdelegationset(isevent, isStatic, t, intf, k, handler)
+function externdelegationset(isevent, isStatic, key, t, intf, k, handler)
   if k then
     t[k] = handler;
   else
     t = handler;
   end;
 end;
-function externdelegationadd(isevent, isStatic, t, intf, k, handler)
+function externdelegationadd(isevent, isStatic, key, t, intf, k, handler)
   if k then
     t[k] = {"+=", handler};
   else
     t = {"+=", handler};
   end;
 end;
-function externdelegationremove(isevent, isStatic, t, intf, k, handler)
+function externdelegationremove(isevent, isStatic, key, t, intf, k, handler)
   if k then
     t[k] = {"-=", handler};
   else

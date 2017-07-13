@@ -630,12 +630,18 @@ namespace RoslynTool.CsToLua
         }
         private void OutputDelegationCompareWithNull(ISymbol leftSym, ExpressionSyntax left, bool isCs2LuaAssembly, bool isEvent, bool isEqual, IConversionExpression opd)
         {
-            bool isStatic = null != leftSym ? leftSym.IsStatic : false;
+            if (null == leftSym) {
+                Log(left, "delegation compare with null, left symbol == null");
+                return;
+            }
+            bool isStatic = leftSym.IsStatic;
             var ci = m_ClassInfoStack.Peek();
             CodeBuilder.AppendFormat("{0}delegationcomparewithnil({1}, {2}, ", isCs2LuaAssembly ? string.Empty : "extern", isEvent ? "true" : "false", isStatic ? "true" : "false");
-            if (null != leftSym && (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event)) {
+            if (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event) {
+                string containingName = ClassInfo.GetFullName(leftSym.ContainingType);
                 var memberAccess = left as MemberAccessExpressionSyntax;
                 if (null != memberAccess) {
+                    CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, memberAccess.Name.Identifier.Text);
                     OutputExpressionSyntax(memberAccess.Expression, opd);
                     CodeBuilder.Append(", ");
                     string intf = "nil";
@@ -643,16 +649,20 @@ namespace RoslynTool.CsToLua
                     CheckExplicitInterfaceAccess(leftSym, ref intf, ref mname);
                     CodeBuilder.AppendFormat("{0}, {1}", intf, mname);
                 } else if (leftSym.ContainingType == ci.SemanticInfo || ci.IsInherit(leftSym.ContainingType)) {
+                    CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
                     if (isStatic)
                         CodeBuilder.AppendFormat("{0}, nil, ", ClassInfo.GetFullName(leftSym.ContainingType));
                     else
                         CodeBuilder.Append("this, nil, ");
                     CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
                 } else {
+                    CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
                     OutputExpressionSyntax(left, opd);
                     CodeBuilder.Append(", nil, nil");
                 }
             } else {
+                string containingName = ClassInfo.GetFullName(leftSym.ContainingType);
+                CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
                 OutputExpressionSyntax(left, opd);
                 CodeBuilder.Append(", nil, nil");
             }
