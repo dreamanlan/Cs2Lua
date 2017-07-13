@@ -1316,6 +1316,22 @@ end;
 function getdelegationkey(func)
   return rawget(__delegation_keys, func);
 end;
+function removedelegationkey(func)
+  rawset(__delegation_keys, func, nil);
+end;
+function dumpdelegationtable()
+  print("dumpdelegationtable");
+  
+  if next(__delegation_keys) == nil then
+	print("dumpdelegationtable empty");
+	return;
+  end
+  
+  for k, v in pairs(__delegation_keys) do
+      print(k);
+      print(v);
+  end
+end
 
 function delegationwrap(handler)
   local meta = getmetatable(handler);
@@ -1392,9 +1408,35 @@ function delegationremove(isevent, isStatic, key, t, intf, k, handler)
     pos = pos + 1;
   end;
   if find then
+    removedelegationkey(v[pos]);
     table.remove(v, pos);
+    removedelegationkey(handler);
   end;
 end;
+
+__extern_delegation_str_func = {}
+function getexterndelegationfunc(str)
+	return rawget(__extern_delegation_str_func, str);
+end
+function setexterndelegationfunc(str, func)
+	rawset(__extern_delegation_str_func, str, func);
+end
+function removeexterndelegationfunc(str)
+	rawset(__extern_delegation_str_func, str, nil);
+end
+function dumpexterndelegationtable()
+  print("dumpexterndelegationtable");
+  
+  if next(__extern_delegation_str_func) == nil then
+	print("dumpexterndelegationtable empty");
+	return;
+  end
+  
+  for k, v in pairs(__extern_delegation_str_func) do
+      print(k);
+      print(v);
+  end
+end
 
 function externdelegationcomparewithnil(isevent, isStatic, key, t, inf, k, isequal)
   local v = t;
@@ -1417,6 +1459,8 @@ function externdelegationset(isevent, isStatic, key, t, intf, k, handler)
   end;
 end;
 function externdelegationadd(isevent, isStatic, key, t, intf, k, handler)
+  local str = getdelegationkey(handler);
+  setexterndelegationfunc(str .. key, handler);
   if k then    
     if isevent then
       if isStatic then
@@ -1432,19 +1476,23 @@ function externdelegationadd(isevent, isStatic, key, t, intf, k, handler)
   end;
 end;
 function externdelegationremove(isevent, isStatic, key, t, intf, k, handler)
+  local str = getdelegationkey(handler);
+  local trueHandler = getexterndelegationfunc(str .. key);
   if k then    
     if isevent then
       if isStatic then
-        t[k]("-", handler);
+        t[k]("-", trueHandler);
       else
-        t[k](t, "-", handler);
+        t[k](t, "-", trueHandler);
       end;
     else
-      t[k] = t[k] - handler;
+      t[k] = t[k] - trueHandler;
     end;
   else
-    t = t - handler;
+    t = t - trueHandler;
   end;
+  removedelegationkey(handler);
+  removeexterndelegationfunc(str .. key);
 end;
 
 function getstaticindexer(class, name, ...)
