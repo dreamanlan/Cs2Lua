@@ -598,11 +598,11 @@ namespace RoslynTool.CsToLua
         {
             var leftOper = m_Model.GetOperation(left);
             var rightOper = m_Model.GetOperation(right);
-            if (null != leftOper.Type && leftOper.Type.TypeKind == TypeKind.Delegate && (!leftOper.ConstantValue.HasValue || null != leftOper.ConstantValue.Value) && rightOper.ConstantValue.HasValue && rightOper.ConstantValue.Value == null) {
+            if (null != leftOper && null != rightOper && null != leftOper.Type && leftOper.Type.TypeKind == TypeKind.Delegate && (!leftOper.ConstantValue.HasValue || null != leftOper.ConstantValue.Value) && rightOper.ConstantValue.HasValue && rightOper.ConstantValue.Value == null) {
                 var sym = m_Model.GetSymbolInfo(left);
                 bool isEvent = (null != leftOper && leftOper is IEventReferenceExpression) || (null != rightOper && rightOper is IEventReferenceExpression);
                 OutputDelegationCompareWithNull(sym.Symbol, left, SymbolTable.Instance.IsCs2LuaSymbol(leftOper.Type), isEvent, op == "==", lopd);
-            } else if (null != rightOper.Type && rightOper.Type.TypeKind == TypeKind.Delegate && (!rightOper.ConstantValue.HasValue || null != rightOper.ConstantValue.Value) && leftOper.ConstantValue.HasValue && leftOper.ConstantValue.Value == null) {
+            } else if (null != leftOper && null != rightOper && null != rightOper.Type && rightOper.Type.TypeKind == TypeKind.Delegate && (!rightOper.ConstantValue.HasValue || null != rightOper.ConstantValue.Value) && leftOper.ConstantValue.HasValue && leftOper.ConstantValue.Value == null) {
                 var sym = m_Model.GetSymbolInfo(right);
                 bool isEvent = (null != leftOper && leftOper is IEventReferenceExpression) || (null != rightOper && rightOper is IEventReferenceExpression);
                 OutputDelegationCompareWithNull(sym.Symbol, right, SymbolTable.Instance.IsCs2LuaSymbol(rightOper.Type), isEvent, op == "==", ropd);
@@ -630,8 +630,9 @@ namespace RoslynTool.CsToLua
         }
         private void OutputDelegationCompareWithNull(ISymbol leftSym, ExpressionSyntax left, bool isCs2LuaAssembly, bool isEvent, bool isEqual, IConversionExpression opd)
         {
+            bool isStatic = null != leftSym ? leftSym.IsStatic : false;
             var ci = m_ClassInfoStack.Peek();
-            CodeBuilder.AppendFormat("{0}delegationcomparewithnil({1}, ", isCs2LuaAssembly ? string.Empty : "extern", isEvent ? "true" : "false");
+            CodeBuilder.AppendFormat("{0}delegationcomparewithnil({1}, {2}, ", isCs2LuaAssembly ? string.Empty : "extern", isEvent ? "true" : "false", isStatic ? "true" : "false");
             if (null != leftSym && (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event)) {
                 var memberAccess = left as MemberAccessExpressionSyntax;
                 if (null != memberAccess) {
@@ -642,7 +643,10 @@ namespace RoslynTool.CsToLua
                     CheckExplicitInterfaceAccess(leftSym, ref intf, ref mname);
                     CodeBuilder.AppendFormat("{0}, {1}", intf, mname);
                 } else if (leftSym.ContainingType == ci.SemanticInfo || ci.IsInherit(leftSym.ContainingType)) {
-                    CodeBuilder.Append("this, nil, ");
+                    if (isStatic)
+                        CodeBuilder.AppendFormat("{0}, nil, ", ClassInfo.GetFullName(leftSym.ContainingType));
+                    else
+                        CodeBuilder.Append("this, nil, ");
                     CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
                 } else {
                     OutputExpressionSyntax(left, opd);

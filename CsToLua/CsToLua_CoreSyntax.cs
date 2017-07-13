@@ -1235,7 +1235,7 @@ namespace RoslynTool.CsToLua
                 }
                 CodeBuilder.AppendFormat("{0}delegation{1}", prefix, postfix);
                 CodeBuilder.Append("(");
-                CodeBuilder.AppendFormat("{0}, ", isEvent ? "true" : "false");
+                CodeBuilder.AppendFormat("{0}, {1}, ", isEvent ? "true" : "false", leftSym.IsStatic ? "true" : "false");
                 if (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event) {
                     var memberAccess = assign.Left as MemberAccessExpressionSyntax;
                     if (null != memberAccess) {
@@ -1246,7 +1246,10 @@ namespace RoslynTool.CsToLua
                         CheckExplicitInterfaceAccess(leftSym, ref intf, ref mname);
                         CodeBuilder.AppendFormat("{0}, {1}", intf, mname);
                     } else if (leftSym.ContainingType == ci.SemanticInfo || ci.IsInherit(leftSym.ContainingType)) {
-                        CodeBuilder.Append("this, nil, ");
+                        if(leftSym.IsStatic)
+                            CodeBuilder.AppendFormat("{0}, nil, ", ClassInfo.GetFullName(leftSym.ContainingType));
+                        else
+                            CodeBuilder.Append("this, nil, ");
                         CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
                     } else {
                         CodeBuilder.Append("newobj, nil, ");
