@@ -3,7 +3,7 @@
 
 local rawrequire = require;
 require = function(file)  
-  return package.loaded[file] or rawrequire(file);
+  return package.searchers[file] or rawrequire(file);
 end;
 
 function __basic_type_func(v)
@@ -1310,8 +1310,20 @@ end;
 
 __delegation_keys = {};
 
+local function __get_obj_string(obj)
+  if type(obj) == "table" then
+    local oldTblMeta = getmetatable(obj);    
+    setmetatable(obj, nil);
+    local s = tostring(obj);
+    setmetatable(obj, oldTblMeta);
+    return s;
+  else
+    return tostring(obj);
+  end
+end
+
 function setdelegationkey(func, key, obj, member)
-  rawset(__delegation_keys, func, key);
+  rawset(__delegation_keys, func, key .. __get_obj_string(obj));
 end;
 function getdelegationkey(func)
   return rawget(__delegation_keys, func);
@@ -1416,13 +1428,35 @@ end;
 
 __extern_delegation_str_func = {}
 function getexterndelegationfunc(str)
-	return rawget(__extern_delegation_str_func, str);
+  local tbl = rawget(__extern_delegation_str_func, str);
+  if tbl ~= nil then
+    return tbl[1];
+  end;
+  return nil;
 end
 function setexterndelegationfunc(str, func)
-	rawset(__extern_delegation_str_func, str, func);
+  local tbl = rawget(__extern_delegation_str_func, str);  
+  if tbl ~= nil then
+    table.insert(tbl, func);
+  else
+    tbl = { func };
+  end  
+	rawset(__extern_delegation_str_func, str, tbl);
 end
-function removeexterndelegationfunc(str)
-	rawset(__extern_delegation_str_func, str, nil);
+function removeexterndelegationfunc(str, handler)
+  local tbl = rawget(__extern_delegation_str_func, str);
+  if tbl == nil then
+    return;
+  end;  
+  for k, v in pairs(tbl) do
+    if v == handler then
+      table.remove(tbl, k);
+      break;
+    end;
+  end  
+  if next(tbl) == nil then
+    rawset(__extern_delegation_str_func, str, nil);
+  end;
 end
 function dumpexterndelegationtable()
   print("dumpexterndelegationtable");
@@ -1434,7 +1468,9 @@ function dumpexterndelegationtable()
   
   for k, v in pairs(__extern_delegation_str_func) do
       print(k);
-      print(v);
+      for a, b in pairs(v) do
+        print(b);
+      end
   end
 end
 
@@ -1492,7 +1528,7 @@ function externdelegationremove(isevent, isStatic, key, t, intf, k, handler)
     t = t - trueHandler;
   end;
   removedelegationkey(handler);
-  removeexterndelegationfunc(str .. key);
+  removeexterndelegationfunc(str .. key, trueHandler);
 end;
 
 function getstaticindexer(class, name, ...)

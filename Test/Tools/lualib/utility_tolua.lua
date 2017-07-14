@@ -1296,12 +1296,40 @@ end;
 
 __delegation_keys = {};
 
+local function __get_obj_string(obj)
+  if type(obj) == "table" then
+    local oldTblMeta = getmetatable(obj);    
+    setmetatable(obj, nil);
+    local s = tostring(obj);
+    setmetatable(obj, oldTblMeta);
+    return s;
+  else
+    return tostring(obj);
+  end
+end
+
 function setdelegationkey(func, key, obj, member)
-  rawset(__delegation_keys, func, key);
+  rawset(__delegation_keys, func, key .. __get_obj_string(obj));
 end;
 function getdelegationkey(func)
   return rawget(__delegation_keys, func);
 end;
+function removedelegationkey(func)
+  rawset(__delegation_keys, func, nil);
+end;
+function dumpdelegationtable()
+  print("dumpdelegationtable");
+  
+  if next(__delegation_keys) == nil then
+	print("dumpdelegationtable empty");
+	return;
+  end
+  
+  for k, v in pairs(__delegation_keys) do
+      print(k);
+      print(v);
+  end
+end
 
 function delegationwrap(handler)
   local meta = getmetatable(handler);
@@ -1378,9 +1406,59 @@ function delegationremove(isevent, isStatic, key, t, intf, k, handler)
     pos = pos + 1;
   end;
   if find then
+    removedelegationkey(v[pos]);
     table.remove(v, pos);
+    removedelegationkey(handler);
   end;
 end;
+
+__extern_delegation_str_func = {}
+function getexterndelegationfunc(str)
+  local tbl = rawget(__extern_delegation_str_func, str);
+  if tbl ~= nil then
+    return tbl[1];
+  end;
+  return nil;
+end
+function setexterndelegationfunc(str, func)
+  local tbl = rawget(__extern_delegation_str_func, str);  
+  if tbl ~= nil then
+    table.insert(tbl, func);
+  else
+    tbl = { func };
+  end  
+	rawset(__extern_delegation_str_func, str, tbl);
+end
+function removeexterndelegationfunc(str, handler)
+  local tbl = rawget(__extern_delegation_str_func, str);
+  if tbl == nil then
+    return;
+  end;  
+  for k, v in pairs(tbl) do
+    if v == handler then
+      table.remove(tbl, k);
+      break;
+    end;
+  end  
+  if next(tbl) == nil then
+    rawset(__extern_delegation_str_func, str, nil);
+  end;
+end
+function dumpexterndelegationtable()
+  print("dumpexterndelegationtable");
+  
+  if next(__extern_delegation_str_func) == nil then
+	print("dumpexterndelegationtable empty");
+	return;
+  end
+  
+  for k, v in pairs(__extern_delegation_str_func) do
+      print(k);
+      for a, b in pairs(v) do
+        print(b);
+      end
+  end
+end
 
 function externdelegationcomparewithnil(isevent, isStatic, key, t, inf, k, isequal)
   local v = t;
@@ -1403,6 +1481,8 @@ function externdelegationset(isevent, isStatic, key, t, intf, k, handler)
   end;
 end;
 function externdelegationadd(isevent, isStatic, key, t, intf, k, handler)
+  local str = getdelegationkey(handler);
+  setexterndelegationfunc(str .. key, handler);
   if k then
     t[k] = {"+=", handler};
   else
@@ -1410,11 +1490,15 @@ function externdelegationadd(isevent, isStatic, key, t, intf, k, handler)
   end;
 end;
 function externdelegationremove(isevent, isStatic, key, t, intf, k, handler)
+  local str = getdelegationkey(handler);
+  local trueHandler = getexterndelegationfunc(str .. key);
   if k then
-    t[k] = {"-=", handler};
+    t[k] = {"-=", trueHandler};
   else
-    t = {"-=", handler};
+    t = {"-=", trueHandler};
   end;
+  removedelegationkey(handler);
+  removeexterndelegationfunc(str .. key, trueHandler);
 end;
 
 function getstaticindexer(class, name, ...)
