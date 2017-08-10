@@ -2,7 +2,7 @@ require "cs2lua__utility";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
-require "ConvTest";
+require "convtest";
 
 DelegateTest = {
 	__new_object = function(...)

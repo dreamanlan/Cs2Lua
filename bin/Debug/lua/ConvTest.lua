@@ -3,8 +3,8 @@ require "cs2lua__attributes";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
-require "MyImpl";
-require "DelegateTest";
+require "myimpl";
+require "delegatetest";
 
 ConvTest = {
 	__new_object = function(...)
