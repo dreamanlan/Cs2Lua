@@ -3,7 +3,7 @@ require "cs2lua__attributes";
 require "cs2lua__namespaces";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
-require "LuaString";
+require "luastring";
 
 MyScript = {
 	__new_object = function(...)

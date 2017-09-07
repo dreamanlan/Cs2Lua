@@ -1,2 +1,3 @@
 ============<<<Semantic Warning:test_delegate>>>============
+test_delegate.cs(1,1): hidden CS8019: Unnecessary using directive.
 test_delegate.cs(4,1): hidden CS8019: Unnecessary using directive.

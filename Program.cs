@@ -17,6 +17,7 @@ namespace RoslynTool
         {
             try {
                 string file = "test.cs";
+                string outputDir = string.Empty;
                 string outputExt = "txt";
                 List<string> macros = new List<string>();
                 List<string> ignoredPath = new List<string>();
@@ -35,6 +36,14 @@ namespace RoslynTool
                                 string arg = args[i + 1];
                                 if (!arg.StartsWith("-")) {
                                     outputExt = arg;
+                                    ++i;
+                                }
+                            }
+                        } else if (0 == string.Compare(args[i], "-out", true)) {
+                            if (i < args.Length - 1) {
+                                string arg = args[i + 1];
+                                if (!arg.StartsWith("-")) {
+                                    outputDir = arg;
                                     ++i;
                                 }
                             }
@@ -178,7 +187,7 @@ namespace RoslynTool
                         }
                     }
                 } else {
-                    Console.WriteLine("[Usage]:Cs2Lua [-ext fileext] [-enableinherit] [-enablelinq] [-normallua/-slua/-xlua/-tolua] [-outputresult] [-noautorequire] [-luacomponentbystring] [-d macro] [-externpath path] [-ignorepath path] [-refbyname dllname alias] [-refbypath dllpath alias] [-systemdllpath dllpath] [-src] csfile|csprojfile");
+                    Console.WriteLine("[Usage]:Cs2Lua [-out dir] [-ext fileext] [-enableinherit] [-enablelinq] [-normallua/-slua/-xlua/-tolua] [-outputresult] [-noautorequire] [-luacomponentbystring] [-d macro] [-externpath path] [-ignorepath path] [-refbyname dllname alias] [-refbypath dllpath alias] [-systemdllpath dllpath] [-src] csfile|csprojfile");
                     Console.WriteLine("\twhere:");
                     Console.WriteLine("\t\tfileext = file externsion, default is txt for unity3d, maybe lua for other usage.");
                     Console.WriteLine("\t\tmacro = c# macro define, used in your csharp code #if/#elif/#else/#endif etc.");
@@ -196,7 +205,7 @@ namespace RoslynTool
                 }
                 if (File.Exists(file)) {
                     var stopwatch = Stopwatch.StartNew();
-                    var result = (int)CsToLuaProcessor.Process(file, outputExt, macros, ignoredPath, externPath, internPath, refByNames, refByPaths, enableInherit, enableLinq, outputResult, parallel);
+                    var result = (int)CsToLuaProcessor.Process(file, outputDir, outputExt, macros, ignoredPath, externPath, internPath, refByNames, refByPaths, enableInherit, enableLinq, outputResult, parallel);
                     stopwatch.Stop();
                     Console.WriteLine("RunningTime: {0}s", stopwatch.Elapsed.TotalSeconds);
                     return result;
