@@ -1868,23 +1868,23 @@ function getiterator(exp)
 	end;
 end;
 
-function defaultvalue(type, typename, isExtern)
-	if type==CS.UnityEngine.Vector3 then
+function defaultvalue(t, typename, isExtern)
+	if t==CS.UnityEngine.Vector3 then
 		return CS.UnityEngine.Vector3.zero;
-	elseif type==CS.UnityEngine.Vector2 then
+	elseif t==CS.UnityEngine.Vector2 then
 		return CS.UnityEngine.Vector2.zero;
-	elseif type==CS.UnityEngine.Vector4 then
+	elseif t==CS.UnityEngine.Vector4 then
 		return CS.UnityEngine.Vector4.zero;
-	elseif type==CS.UnityEngine.Quaternion then
+	elseif t==CS.UnityEngine.Quaternion then
 		return CS.UnityEngine.Quaternion.identity;
-	elseif type==CS.UnityEngine.Color then
+	elseif t==CS.UnityEngine.Color then
 		return CS.UnityEngine.Color.black;
-	elseif type==CS.UnityEngine.Color32 then
+	elseif t==CS.UnityEngine.Color32 then
 		return CS.UnityEngine.Color32(0,0,0,0);
 	elseif isExtern then
-		return type();
+		return t();
 	else
-		return type.__new_object();
+		return t.__new_object();
 	end;
 end;
 

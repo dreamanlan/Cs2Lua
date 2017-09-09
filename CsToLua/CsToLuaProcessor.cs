@@ -1045,7 +1045,7 @@ namespace RoslynTool.CsToLua
                     sb.AppendLine();
                     ++indent;
                     if (!string.IsNullOrEmpty(baseClass) && myselfDefinedBaseClass) {
-                        sb.AppendFormat("{0}{1}.cctor(this);", GetIndentString(indent), baseClass);
+                        sb.AppendFormat("{0}{1}.cctor();", GetIndentString(indent), baseClass);
                         sb.AppendLine();
                     }
                     if (generateBasicCctor) {
