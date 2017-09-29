@@ -832,7 +832,12 @@ function wraparray(arr)
 end;
 
 function wrapdictionary(dict)
-	return setmetatable(dict, { __index = __mt_index_of_dictionary, __cs2lua_defined = true, __class = System.Collections.Generic.Dictionary_TKey_TValue });
+  local obj = {};
+  setmetatable(obj, { __index = __mt_index_of_dictionary, __cs2lua_defined = true, __class = System.Collections.Generic.Dictionary_TKey_TValue });
+	for k,v in pairs(dict) do
+	  obj:Add(k, v);
+	end;
+  return obj;
 end;
 
 function wrapdelegation(handlers)
@@ -1207,7 +1212,12 @@ end;
 
 function newdictionary(t, ctor, dict, ...)
   if dict then
-	  return setmetatable(dict, { __index = __mt_index_of_dictionary, __cs2lua_defined = true, __class = t });
+    local obj = {};
+	  setmetatable(obj, { __index = __mt_index_of_dictionary, __cs2lua_defined = true, __class = t });
+		for k,v in pairs(dict) do
+		  obj:Add(k, v);
+		end;
+    return obj;
 	end;
 end;
 
@@ -1225,7 +1235,12 @@ end;
 
 function newexterndictionary(t, className, ctor, dict, ...)
   if dict and t==System.Collections.Generic.Dictionary_TKey_TValue then
-	  return setmetatable(dict, { __index = __mt_index_of_dictionary, __cs2lua_defined = true, __class = t });
+    local obj = {};
+	  setmetatable(obj, { __index = __mt_index_of_dictionary, __cs2lua_defined = true, __class = t });
+		for k,v in pairs(dict) do
+		  obj:Add(k, v);
+		end;
+    return obj;
 	else	  
 	  local obj = nil;
 	  if t ~= nil then
