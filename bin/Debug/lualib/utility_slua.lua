@@ -1,10 +1,21 @@
 --remove comments for debug with ZeroBrane
 --require "luadebug";
 
+if not package.loading then package.loading = {} end
+
 local rawrequire = require;
-require = function(file)  
-  return package.loaded[file] or rawrequire(file);
-end;
+-- a chatty version of the actual import function above
+function require(x)
+  if package.loading[x] == nil then
+    package.loading[x]=true
+    --print('loading started for ' .. x)
+    rawrequire(x)
+    --print('loading ended for ' .. x)
+    package.loading[x]=nil
+  else
+    --print('already loading ' .. x)
+  end
+end
 
 function __basic_type_func(v)
 	return v;

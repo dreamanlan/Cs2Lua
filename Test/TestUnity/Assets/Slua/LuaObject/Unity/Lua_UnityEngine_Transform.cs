@@ -596,7 +596,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
 			System.String a1;
 			checkType(l,2,out a1);
-			var ret=self.FindChild(a1);
+			var ret=self.Find(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;

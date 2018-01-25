@@ -833,7 +833,12 @@ function wraparray(arr)
 end;
 
 function wrapdictionary(dict)
-	return setmetatable(dict, { __index = __mt_index_of_dictionary, __cs2lua_defined = true, __class = System.Collections.Generic.Dictionary_TKey_TValue });
+  local obj = {};
+  setmetatable(obj, { __index = __mt_index_of_dictionary, __cs2lua_defined = true, __class = System.Collections.Generic.Dictionary_TKey_TValue });
+	for k,v in pairs(dict) do
+	  obj:Add(k, v);
+	end;
+  return obj;
 end;
 
 function wrapdelegation(handlers)
@@ -1208,7 +1213,12 @@ end;
 
 function newdictionary(t, ctor, dict, ...)
   if dict then
-	  return setmetatable(dict, { __index = __mt_index_of_dictionary, __cs2lua_defined = true, __class = t });
+    local obj = {};
+	  setmetatable(obj, { __index = __mt_index_of_dictionary, __cs2lua_defined = true, __class = t });
+		for k,v in pairs(dict) do
+		  obj:Add(k, v);
+		end;
+    return obj;
 	end;
 end;
 
@@ -1226,7 +1236,12 @@ end;
 
 function newexterndictionary(t, className, ctor, dict, ...)
   if dict and t==System.Collections.Generic.Dictionary_TKey_TValue then
-	  return setmetatable(dict, { __index = __mt_index_of_dictionary, __cs2lua_defined = true, __class = t });
+    local obj = {};
+	  setmetatable(obj, { __index = __mt_index_of_dictionary, __cs2lua_defined = true, __class = t });
+		for k,v in pairs(dict) do
+		  obj:Add(k, v);
+		end;
+    return obj;
 	else	  
 	  local obj = nil;
 	  if t ~= nil then
@@ -1791,23 +1806,23 @@ function getiterator(exp)
 	end;
 end;
 
-function defaultvalue(type, typename, isExtern)
-	if type==UnityEngine.Vector3 then
+function defaultvalue(t, typename, isExtern)
+	if t==UnityEngine.Vector3 then
 		return UnityEngine.Vector3.zero;
-	elseif type==UnityEngine.Vector2 then
+	elseif t==UnityEngine.Vector2 then
 		return UnityEngine.Vector2.zero;
-	elseif type==UnityEngine.Vector4 then
+	elseif t==UnityEngine.Vector4 then
 		return UnityEngine.Vector4.zero;
-	elseif type==UnityEngine.Quaternion then
+	elseif t==UnityEngine.Quaternion then
 		return UnityEngine.Quaternion.identity;
-	elseif type==UnityEngine.Color then
+	elseif t==UnityEngine.Color then
 		return UnityEngine.Color.black;
-	elseif type==UnityEngine.Color32 then
+	elseif t==UnityEngine.Color32 then
 		return UnityEngine.Color32(0,0,0,0);
 	elseif isExtern then
-		return type();
+		return t();
 	else
-		return type.__new_object();
+		return t.__new_object();
 	end;
 end;
 

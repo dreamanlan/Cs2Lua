@@ -965,18 +965,7 @@ namespace RoslynTool.CsToLua
 
                 //references
                 if (!SymbolTable.NoAutoRequire) {
-                    foreach (var ci in classes) {
-                        foreach (string r in ci.References) {
-                            if (!r.StartsWith(SymbolTable.PrefixExternClassName("System.")) && !r.StartsWith(SymbolTable.PrefixExternClassName("UnityEngine."))) {
-                                string refname = r.Replace(".", "__");
-                                if (!refs.Contains(refname)) {
-                                    sb.AppendFormat("require \"{0}\";", refname.ToLower());
-                                    sb.AppendLine();
-                                    refs.Add(refname);
-                                }
-                            }
-                        }
-                    }
+                    BuildReferences(sb, key, mci, refs);            
                 }
             }
             
@@ -1417,7 +1406,25 @@ namespace RoslynTool.CsToLua
 
             return fileName;
         }
-
+        private static void BuildReferences(StringBuilder sb, string key, MergedClassInfo mci, HashSet<string> refs)
+        {
+            var classes = mci.Classes;
+            foreach (var ci in classes) {
+                foreach (string r in ci.References) {
+                    if (!r.StartsWith(SymbolTable.PrefixExternClassName("System.")) && !r.StartsWith(SymbolTable.PrefixExternClassName("UnityEngine."))) {
+                        string refname = r.Replace(".", "__");
+                        if (!refs.Contains(refname)) {
+                            sb.AppendFormat("require \"{0}\";", refname.ToLower());
+                            sb.AppendLine();
+                            refs.Add(refname);
+                        }
+                    }
+                }
+            }
+            foreach (var pair in mci.InnerClasses) {
+                BuildReferences(sb, pair.Key, pair.Value, refs);
+            }
+        }
         private static string GetIndentString(int indent)
         {
             return CsLuaTranslater.GetIndentString(indent);
