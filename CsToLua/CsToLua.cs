@@ -892,6 +892,17 @@ namespace RoslynTool.CsToLua
         }
         internal static void OutputConstValue(StringBuilder sb, object val, object operOrSym)
         {
+            if (SymbolTable.ForXlua) { 
+                var ioper = operOrSym as IFieldReferenceExpression;
+                var fSym = operOrSym as IFieldSymbol;
+                if (null != ioper && ioper.Type.TypeKind == TypeKind.Enum) {
+                    fSym = ioper.Field;
+                }
+                if (null != fSym && fSym.Type.TypeKind == TypeKind.Enum && !SymbolTable.Instance.IsCs2LuaSymbol(fSym)) {
+                    sb.AppendFormat("wrapconst({0}, \"{1}\")", ClassInfo.GetFullName(fSym.Type), fSym.Name);
+                    return;
+                }
+            }
             string v = val as string;
             if (null != v) {
                 sb.AppendFormat("\"{0}\"", Escape(v));
