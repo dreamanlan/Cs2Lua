@@ -361,7 +361,7 @@ namespace RoslynTool.CsToLua
                             if (useExplicitTypeParam || createSelf) {
                                 CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
                                 CodeBuilder.Append(" = ");
-                                OutputDefaultValue(fieldSym.Type);
+                                OutputFieldDefaultValue(fieldSym.Type);
                                 CodeBuilder.AppendLine(",");
                                 if (isStatic) {
                                     ci.CurrentCodeBuilder = ci.StaticInitializerCodeBuilder;
@@ -400,7 +400,7 @@ namespace RoslynTool.CsToLua
                             if (null != constVal.Value) {
                                 OutputConstValue(constVal.Value, expOper);
                             } else if (fieldSym.Type.IsValueType) {
-                                OutputDefaultValue(fieldSym.Type);
+                                OutputFieldDefaultValue(fieldSym.Type);
                                 if (isStatic) {
                                     ci.CurrentCodeBuilder = ci.StaticInitializerCodeBuilder;
                                     ci.ClassSemanticInfo.GenerateBasicCctor = true;
@@ -422,7 +422,7 @@ namespace RoslynTool.CsToLua
                                     ci.CurrentCodeBuilder = ci.InstanceFieldCodeBuilder;
                                 }
                             } else {
-                                OutputDefaultValue(fieldSym.Type);                            
+                                OutputFieldDefaultValue(fieldSym.Type);                            
 							}
                         }
                     } else if (fieldSym.Type.TypeKind == TypeKind.Delegate) {
@@ -431,10 +431,10 @@ namespace RoslynTool.CsToLua
                     } else if (fieldSym.Type.IsValueType) {
                         if (SymbolTable.IsBasicType(fieldSym.Type)) {
                             CodeBuilder.AppendFormat("{0}{1} = ", GetIndentString(), name);
-                            OutputDefaultValue(fieldSym.Type);
+                            OutputFieldDefaultValue(fieldSym.Type);
                         } else {
                             CodeBuilder.AppendFormat("{0}{1} = ", GetIndentString(), name);
-                            OutputDefaultValue(fieldSym.Type);
+                            OutputFieldDefaultValue(fieldSym.Type);
                             if (isStatic) {
                                 ci.CurrentCodeBuilder = ci.StaticInitializerCodeBuilder;
                                 ci.ClassSemanticInfo.GenerateBasicCctor = true;
@@ -458,7 +458,7 @@ namespace RoslynTool.CsToLua
                         }
                     } else {
                         CodeBuilder.AppendFormat("{0}{1} = ", GetIndentString(), name);
-                        OutputDefaultValue(fieldSym.Type);
+                        OutputFieldDefaultValue(fieldSym.Type);
                     }
                     CodeBuilder.Append(",");
                     CodeBuilder.AppendLine();

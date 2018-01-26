@@ -400,9 +400,13 @@ namespace RoslynTool.CsToLua
                 }
             }
         }
-        private void OutputDefaultValue(ITypeSymbol type)
+        private void OutputFieldDefaultValue(ITypeSymbol type)
         {
-            OutputDefaultValue(CodeBuilder, type);
+            OutputFieldDefaultValue(CodeBuilder, type);
+        }
+        private void OutputArrayDefaultValue(ITypeSymbol type)
+        {
+            OutputArrayDefaultValue(CodeBuilder, type);
         }
         private void OutputConstValue(object val, object operOrSym)
         {
@@ -844,7 +848,7 @@ namespace RoslynTool.CsToLua
             const string c_IndentString = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
             return c_IndentString.Substring(0, indent);
         }
-        internal static void OutputDefaultValue(StringBuilder sb, ITypeSymbol type)
+        internal static void OutputFieldDefaultValue(StringBuilder sb, ITypeSymbol type)
         {
             if (null != type) {
                 if (type.IsValueType) {
@@ -863,6 +867,27 @@ namespace RoslynTool.CsToLua
                 }
             } else {
                 sb.Append("__cs2lua_nil_field_value");
+            }
+        }
+        internal static void OutputArrayDefaultValue(StringBuilder sb, ITypeSymbol type)
+        {
+            if (null != type) {
+                if (type.IsValueType) {
+                    if (SymbolTable.IsBasicType(type, false)) {
+                        if (type.Name == "Boolean")
+                            sb.Append("false");
+                        else
+                            sb.Append("0");
+                    } else {
+                        bool isExternal = !SymbolTable.Instance.IsCs2LuaSymbol(type);
+                        string fn = ClassInfo.GetFullName(type);
+                        sb.AppendFormat("defaultvalue({0}, \"{1}\", {2})", fn, fn, isExternal ? "true" : "false");
+                    }
+                } else {
+                    sb.Append("nil");
+                }
+            } else {
+                sb.Append("nil");
             }
         }
         internal static void OutputConstValue(StringBuilder sb, object val, object operOrSym)

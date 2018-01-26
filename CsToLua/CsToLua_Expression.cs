@@ -988,7 +988,7 @@ namespace RoslynTool.CsToLua
                                     }
                                 }
                             }
-                            OutputDefaultValue(etype);
+                            OutputArrayDefaultValue(etype);
                             CodeBuilder.Append(";");
                         }
                     }

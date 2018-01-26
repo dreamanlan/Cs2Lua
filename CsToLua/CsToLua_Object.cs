@@ -332,7 +332,7 @@ namespace RoslynTool.CsToLua
                 } else if (declSym.Type.TypeKind == TypeKind.Delegate) {
                     CodeBuilder.Append("wrapdelegation{},");
                 } else {
-                    OutputDefaultValue(declSym.Type);
+                    OutputFieldDefaultValue(declSym.Type);
                     CodeBuilder.Append(",");
                 }
                 CodeBuilder.AppendLine();
