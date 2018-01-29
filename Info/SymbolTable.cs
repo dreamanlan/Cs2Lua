@@ -150,6 +150,7 @@ namespace RoslynTool.CsToLua
             m_Compilation = compilation;
             m_AssemblySymbol = compilation.Assembly;
             INamespaceSymbol nssym = m_AssemblySymbol.GlobalNamespace;
+            BuildInheritTypeTreeRecursively(nssym);
             InitRecursively(nssym);
         }
         internal void AddRequire(string refClass, string moduleName)
@@ -235,6 +236,92 @@ namespace RoslynTool.CsToLua
             return ret;
         }
 
+        internal void CalcMemberCount(string key, Dictionary<string, int> memberCounts)
+        {
+            TypeTreeNode typeTreeNode;
+            if (m_TypeTreeNodes.TryGetValue(key, out typeTreeNode)) {
+                var baseTypeNode = typeTreeNode.BaseTypeNode;
+                while (null != baseTypeNode) {
+                    var members = baseTypeNode.Type.GetMembers();
+                    foreach (var sym in members) {
+                        var msym = sym as IMethodSymbol;
+                        if (null != msym) {
+                            string name = msym.Name;
+                            if (name[0] == '.')
+                                name = name.Substring(1);
+                            if (memberCounts.ContainsKey(name)) {
+                                ++memberCounts[name];
+                            } else {
+                                memberCounts.Add(name, 1);
+                            }
+                        }
+                    }
+                    baseTypeNode = baseTypeNode.BaseTypeNode;
+                }
+                CalcMemberCountRecursively(typeTreeNode, memberCounts);
+            }
+        }
+        private void CalcMemberCountRecursively(TypeTreeNode typeTreeNode, Dictionary<string, int> memberCounts)
+        {
+            var members = typeTreeNode.Type.GetMembers();
+            foreach (var sym in members) {
+                var msym = sym as IMethodSymbol;
+                if (null != msym) {
+                    string name = msym.Name;
+                    if (name[0] == '.')
+                        name = name.Substring(1);
+                    if (memberCounts.ContainsKey(name)) {
+                        ++memberCounts[name];
+                    } else {
+                        memberCounts.Add(name, 1);
+                    }
+                }
+            }
+            foreach (var cnode in typeTreeNode.ChildTypeNodes) {
+                CalcMemberCountRecursively(cnode, memberCounts);
+            }
+        }
+
+        private void BuildInheritTypeTreeRecursively(INamespaceSymbol nssym)
+        {
+            if (null != nssym) {
+                foreach (var typeSym in nssym.GetTypeMembers()) {
+                    BuildInheritTypeTreeRecursively(typeSym);
+                }
+                foreach (var newSym in nssym.GetNamespaceMembers()) {
+                    BuildInheritTypeTreeRecursively(newSym);
+                }
+            }
+        }
+        private void BuildInheritTypeTreeRecursively(INamedTypeSymbol typeSym)
+        {
+            string key = ClassInfo.GetFullName(typeSym);
+            TypeTreeNode typeTreeNode;
+            if (!m_TypeTreeNodes.TryGetValue(key, out typeTreeNode)) {
+                typeTreeNode = new TypeTreeNode();
+                typeTreeNode.Type = typeSym;
+                m_TypeTreeNodes.Add(key, typeTreeNode);
+            }
+            var baseType = typeSym.BaseType;
+            if (null != baseType) {
+                string baseClassKey = ClassInfo.GetFullName(baseType);
+                if (baseClassKey == SymbolTable.PrefixExternClassName("System.Object") || baseClassKey == SymbolTable.PrefixExternClassName("System.ValueType")) {
+                } else {
+                    TypeTreeNode baseTypeTreeNode;
+                    if (!m_TypeTreeNodes.TryGetValue(baseClassKey, out baseTypeTreeNode)) {
+                        baseTypeTreeNode = new TypeTreeNode();
+                        baseTypeTreeNode.Type = baseType;
+                        m_TypeTreeNodes.Add(baseClassKey, baseTypeTreeNode);
+                    }
+                    typeTreeNode.BaseTypeNode = baseTypeTreeNode;
+                    baseTypeTreeNode.ChildTypeNodes.Add(typeTreeNode);
+                }
+            }
+            foreach (var newSym in typeSym.GetTypeMembers()) {
+                BuildInheritTypeTreeRecursively(newSym);
+            }
+        }
+
         private void InitRecursively(INamespaceSymbol nssym)
         {
             if (null != nssym) {
@@ -260,6 +347,7 @@ namespace RoslynTool.CsToLua
                 InitRecursively(newSym);
             }
         }
+
         private SymbolTable() { }
 
         private CSharpCompilation m_Compilation = null;
@@ -280,6 +368,13 @@ namespace RoslynTool.CsToLua
         private List<ITypeParameterSymbol> m_TypeParameters = new List<ITypeParameterSymbol>();
         private List<ITypeSymbol> m_TypeArguments = new List<ITypeSymbol>();
 
+        private class TypeTreeNode
+        {
+            internal INamedTypeSymbol Type;
+            internal TypeTreeNode BaseTypeNode;
+            internal List<TypeTreeNode> ChildTypeNodes = new List<TypeTreeNode>();
+        }
+        private Dictionary<string, TypeTreeNode> m_TypeTreeNodes = new Dictionary<string, TypeTreeNode>();
         
         internal static SymbolTable Instance
         {

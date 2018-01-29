@@ -65,10 +65,14 @@ namespace RoslynTool.CsToLua
                 ExistAttributes = true;
             }
 
+            Dictionary<string, int> memberCounts = new Dictionary<string, int>();
+            SymbolTable.Instance.CalcMemberCount(ClassKey, memberCounts);
+
             bool fieldUseExplicitTypeParams = false;
             bool staticUseExplicitTypeParams = false;
-            TypeSymbol = typeSym;
-            foreach (var sym in TypeSymbol.GetMembers()) {
+            TypeSymbol = typeSym;            
+            var members = typeSym.GetMembers();
+            foreach (var sym in members) {
                 var fsym = sym as IFieldSymbol;
                 if (null != fsym) {
                     FieldSymbols.Add(fsym);
@@ -79,7 +83,7 @@ namespace RoslynTool.CsToLua
                     CheckFieldUseExplicitTypeParam(fsym, compilation, ref fieldUseExplicitTypeParams, ref staticUseExplicitTypeParams);
                 }
             }
-            foreach (var sym in TypeSymbol.GetMembers()) {
+            foreach (var sym in members) {
                 var msym = sym as IMethodSymbol;
                 if (null != msym) {
                     if (msym.MethodKind == MethodKind.Constructor && !msym.IsImplicitlyDeclared) {
@@ -96,10 +100,17 @@ namespace RoslynTool.CsToLua
                     string name = msym.Name;
                     if (name[0] == '.')
                         name = name.Substring(1);
-                    if (!SymbolOverloadFlags.ContainsKey(name)) {
-                        SymbolOverloadFlags.Add(name, false);
+                    bool isOverloaded;
+                    int count;
+                    if (memberCounts.TryGetValue(name, out count)) {
+                        isOverloaded = count > 1;
                     } else {
-                        SymbolOverloadFlags[name] = true;
+                        isOverloaded = false;
+                    }
+                    if (!SymbolOverloadFlags.ContainsKey(name)) {
+                        SymbolOverloadFlags.Add(name, isOverloaded);
+                    } else {
+                        SymbolOverloadFlags[name] = isOverloaded;
                     }
                     continue;
                 }
