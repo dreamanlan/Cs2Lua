@@ -288,6 +288,7 @@ namespace RoslynTool.CsToLua
         private void Init(IMethodSymbol sym)
         {
             MethodSymbol = sym;
+            CheckInvocation(sym);
 
             Args.Clear();
             ArgConversions.Clear();
@@ -307,6 +308,36 @@ namespace RoslynTool.CsToLua
             if (sym.IsGenericMethod) {
                 foreach (var arg in sym.TypeArguments) {
                     GenericTypeArgs.Add(arg);
+                }
+            }
+        }
+        
+        private void CheckInvocation(IMethodSymbol sym)
+        {
+            if (!SymbolTable.Instance.IsCs2LuaSymbol(sym)) {
+                var ckey = ClassInfo.GetFullName(sym.ContainingType);
+                var mkey = SymbolTable.Instance.NameMangling(sym);
+                var id = string.Format("{0}.{1}", ckey, mkey);
+                if (!SymbolTable.Instance.CheckedInvocations.Contains(id)) {
+                    SymbolTable.Instance.CheckedInvocations.Add(id);
+
+                    foreach (var param in sym.Parameters) {
+                        if (param.HasExplicitDefaultValue) {
+                            Logger.Instance.Log("Invocation Check", "extern method {0}.{1} parameter {2} has default value, please replace with overload method !", ckey, sym.Name, param.Name);
+                            continue;
+                        }
+                        var namedType = param.Type as INamedTypeSymbol;
+                        if (null != namedType) {
+                            if (namedType.IsGenericType) {
+                                Logger.Instance.Log("Invocation Check", "extern method {0}.{1} parameter {2} is generic type, please replace with non generic type !", ckey, sym.Name, param.Name);
+                                continue;
+                            }
+                            if (namedType.OriginalDefinition.IsGenericType) {
+                                Logger.Instance.Log("Invocation Check", "extern method {0}.{1} parameter {2} has default value, please replace with non generic type !", ckey, sym.Name, param.Name);
+                                continue;
+                            }
+                        }
+                    }
                 }
             }
         }

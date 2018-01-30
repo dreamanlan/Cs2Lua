@@ -73,6 +73,10 @@ namespace RoslynTool.CsToLua
         {
             get { return m_Cs2LuaInterfaces; }
         }
+        internal HashSet<string> CheckedInvocations
+        {
+            get { return m_CheckedInvocations; }
+        }
         internal void SetTypeParamsAndArgs(List<ITypeParameterSymbol> typeParams, List<ITypeSymbol> typeArgs, INamedTypeSymbol refType)
         {
             m_TypeParameters.Clear();
@@ -375,6 +379,7 @@ namespace RoslynTool.CsToLua
             internal List<TypeTreeNode> ChildTypeNodes = new List<TypeTreeNode>();
         }
         private Dictionary<string, TypeTreeNode> m_TypeTreeNodes = new Dictionary<string, TypeTreeNode>();
+        private HashSet<string> m_CheckedInvocations = new HashSet<string>();
         
         internal static SymbolTable Instance
         {

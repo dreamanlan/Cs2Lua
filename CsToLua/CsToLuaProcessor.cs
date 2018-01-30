@@ -343,6 +343,7 @@ namespace RoslynTool.CsToLua
                                     LockWriteLine(sw3, "============<<<Translation Error:{0}>>>============", fileName);
                                     lock (sw3) {
                                         csToLua.SaveLog(sw3);
+                                        csToLua.ClearLog();
                                     }
                                     haveTranslationError = true;
                                 }
@@ -381,6 +382,7 @@ namespace RoslynTool.CsToLua
                             if (csToLua.HaveError) {
                                 sw3.WriteLine("============<<<Translation Error:{0}>>>============", fileName);
                                 csToLua.SaveLog(sw3);
+                                csToLua.ClearLog();
                                 haveTranslationError = true;
                             } else {
                                 while (csToLua.DerivedGenericTypeInstances.Count > 0) {

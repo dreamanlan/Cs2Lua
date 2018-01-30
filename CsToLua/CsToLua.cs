@@ -78,6 +78,10 @@ namespace RoslynTool.CsToLua
                 m_ToplevelCodeBuilder.Clear();
             }
         }
+        internal void ClearLog()
+        {
+            Logger.Instance.ClearLog();
+        }
         internal void SaveLog(TextWriter writer)
         {
             Logger.Instance.SaveLog(writer);
@@ -196,6 +200,10 @@ namespace RoslynTool.CsToLua
         private string GetIndentString()
         {
             return GetIndentString(m_Indent);
+        }
+        private void Log(string tag, string format, params object[] args)
+        {
+            Logger.Instance.Log(tag, format, args);
         }
         private void Log(SyntaxNode node, string format, params object[] args)
         {

@@ -26,6 +26,10 @@ namespace RoslynTool.CsToLua
                 return m_LogBuilder.ToString();
             }
         }
+        public void ClearLog()
+        {
+            m_LogBuilder.Length = 0;
+        }
         public void SaveLog(TextWriter writer)
         {
             writer.Write(m_LogBuilder.ToString());
@@ -34,10 +38,16 @@ namespace RoslynTool.CsToLua
         {
             File.WriteAllText(path, m_LogBuilder.ToString());
         }
+        public void Log(string tag, string format, params object[] args)
+        {
+            m_LogBuilder.AppendFormat("<<<[Log]>>> [{0}] ", tag);
+            m_LogBuilder.AppendFormat(format, args);
+            m_LogBuilder.AppendLine();
+        }
         public void Log(Location location, string format, params object[] args)
         {
             if (null != location) {
-                m_LogBuilder.AppendFormat("<<<[Log]>>> [location: {0}]", location.GetLineSpan());
+                m_LogBuilder.AppendFormat("<<<[Log]>>> [location: {0}] ", location.GetLineSpan());
             } else {
                 LogCallStack("Log: location == null !");
             }
@@ -49,7 +59,7 @@ namespace RoslynTool.CsToLua
             if (null != node) {
                 string[] lines = node.ToString().Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
                 string line = lines.Length > 0 ? lines[0] : string.Empty;
-                m_LogBuilder.AppendFormat("<<<[Log for {0}]>>> [code:[ {1} ] location: {2}]", node.GetType().Name, line, node.GetLocation().GetLineSpan());
+                m_LogBuilder.AppendFormat("<<<[Log for {0}]>>> [code:[ {1} ] location: {2}] ", node.GetType().Name, line, node.GetLocation().GetLineSpan());
             } else {
                 LogCallStack("Log: node == null !");
             }
