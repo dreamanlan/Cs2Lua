@@ -83,6 +83,7 @@ namespace RoslynTool.CsToLua
                     var param = sym.Parameters[i];
                     if (param.HasExplicitDefaultValue) {
                         var decl = param.DeclaringSyntaxReferences;
+                        bool handled = false;
                         if (decl.Length == 1) {
                             var node = param.DeclaringSyntaxReferences[0].GetSyntax() as ParameterSyntax;
                             if (null != node) {
@@ -93,8 +94,12 @@ namespace RoslynTool.CsToLua
                                     var oper = newModel.GetOperation(exp);
                                     //var dsym = newModel.GetSymbolInfo(exp).Symbol;
                                     DefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, OperOrSym = oper });
+                                    handled = true;
                                 }
                             }
+                        }
+                        if (!handled) {
+                            DefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, OperOrSym = null });
                         }
                     }
                 }
@@ -150,6 +155,7 @@ namespace RoslynTool.CsToLua
                     var param = sym.Parameters[i];
                     if (param.HasExplicitDefaultValue) {
                         var decl = param.DeclaringSyntaxReferences;
+                        bool handled = false;
                         if (decl.Length == 1) {
                             var node = param.DeclaringSyntaxReferences[0].GetSyntax() as ParameterSyntax;
                             if (null != node) {
@@ -160,8 +166,12 @@ namespace RoslynTool.CsToLua
                                     var oper = newModel.GetOperation(exp);
                                     //var dsym = newModel.GetSymbolInfo(exp).Symbol;
                                     DefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, OperOrSym = oper });
+                                    handled = true;
                                 }
                             }
+                        }
+                        if (!handled) {
+                            DefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, OperOrSym = null });
                         }
                     }
                 }
@@ -321,21 +331,25 @@ namespace RoslynTool.CsToLua
                 if (!SymbolTable.Instance.CheckedInvocations.Contains(id)) {
                     SymbolTable.Instance.CheckedInvocations.Add(id);
 
+                    bool isOverload = false;
+                    ClassSymbolInfo info;
+                    if (SymbolTable.Instance.ClassSymbols.TryGetValue(ckey, out info)) {
+                        info.SymbolOverloadFlags.TryGetValue(sym.Name, out isOverload);
+                    }
+
+                    if (sym.IsGenericMethod) {
+                        Logger.Instance.Log("Invocation Check", "extern method {0}.{1} is generic method, please insure a overloaded non generic method exist !", ckey, sym.Name);
+                    }
+
                     foreach (var param in sym.Parameters) {
-                        if (param.HasExplicitDefaultValue) {
-                            Logger.Instance.Log("Invocation Check", "extern method {0}.{1} parameter {2} has default value, please replace with overload method !", ckey, sym.Name, param.Name);
+                        if (param.IsParams && isOverload) {
+                            Logger.Instance.Log("Invocation Check", "extern overloaded method {0}.{1} parameter {2} is params, please check export api code !", ckey, sym.Name, param.Name);
                             continue;
                         }
                         var namedType = param.Type as INamedTypeSymbol;
-                        if (null != namedType) {
-                            if (namedType.IsGenericType) {
-                                Logger.Instance.Log("Invocation Check", "extern method {0}.{1} parameter {2} is generic type, please replace with non generic type !", ckey, sym.Name, param.Name);
-                                continue;
-                            }
-                            if (namedType.OriginalDefinition.IsGenericType) {
-                                Logger.Instance.Log("Invocation Check", "extern method {0}.{1} parameter {2} has default value, please replace with non generic type !", ckey, sym.Name, param.Name);
-                                continue;
-                            }
+                        if (null != namedType && namedType.IsGenericType) {
+                            Logger.Instance.Log("Invocation Check", "extern method {0}.{1} parameter {2} is generic type, please replace with non generic type !", ckey, sym.Name, param.Name);
+                            continue;
                         }
                     }
                 }
