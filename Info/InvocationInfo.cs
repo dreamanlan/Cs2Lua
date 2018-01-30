@@ -218,8 +218,6 @@ namespace RoslynTool.CsToLua
                     codeBuilder.Append(".");
                     codeBuilder.Append(mname);
                     codeBuilder.Append("(");
-                    cs2lua.OutputExpressionSyntax(exp);
-                    prestr = ", ";
                 } else if (IsBasicValueMethod) {
                     string ckey = CalcInvokeTarget(ClassKey, cs2lua, exp, model);
                     codeBuilder.Append("invokeforbasicvalue(");
@@ -276,7 +274,14 @@ namespace RoslynTool.CsToLua
                     useTypeNameString = true;
                 }
             }
-            cs2lua.OutputArgumentList(Args, DefaultValueArgs, GenericTypeArgs, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
+            if (IsExtensionMethod) {
+                var args = new List<ExpressionSyntax>();
+                args.Add(exp);
+                args.AddRange(Args);
+                cs2lua.OutputArgumentList(args, DefaultValueArgs, GenericTypeArgs, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
+            } else {
+                cs2lua.OutputArgumentList(Args, DefaultValueArgs, GenericTypeArgs, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
+            }
             codeBuilder.Append(")");
         }
 

@@ -457,7 +457,7 @@ namespace RoslynTool.CsToLua
                 lualibRefs.Clear();
                 string fileName = BuildLuaClass(classBuilder, pair.Key, pair.Value, lualibRefs);
                 foreach (string lib in lualibRefs) {
-                    string libFile = Path.Combine(exepath, "lualib/" + lib.ToLower());
+                    string libFile = Path.Combine(exepath, "lualib/" + lib.ToLower() + ".lua");
                     if (File.Exists(libFile)) {
                         File.Copy(libFile, Path.Combine(outputDir, string.Format("{0}.{1}", lib.ToLower(), outputExt)), true);
                     } else {
