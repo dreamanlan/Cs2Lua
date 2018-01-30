@@ -347,7 +347,7 @@ namespace RoslynTool.CsToLua
                             continue;
                         }
                         var namedType = param.Type as INamedTypeSymbol;
-                        if (null != namedType && namedType.IsGenericType) {
+                        if (null != namedType && namedType.IsGenericType && namedType.TypeKind != TypeKind.Delegate) {
                             Logger.Instance.Log("Invocation Check", "extern method {0}.{1} parameter {2} is generic type, please replace with non generic type !", ckey, sym.Name, param.Name);
                             continue;
                         }
