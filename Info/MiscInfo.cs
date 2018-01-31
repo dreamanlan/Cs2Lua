@@ -34,7 +34,7 @@ namespace RoslynTool.CsToLua
             cont.Visit(syntax);
             HaveContinue = cont.ContinueCount > 0;
             HaveBreak = cont.BreakCount > 0;
-            BreakFlagVarName = string.Format("__compiler_continue_{0}", syntax.GetLocation().GetLineSpan().StartLinePosition.Line);
+            BreakFlagVarName = string.Format("__compiler_continue_{0}", CsLuaTranslater.GetSourcePosInfo(syntax));
         }
     }
     internal class SwitchInfo

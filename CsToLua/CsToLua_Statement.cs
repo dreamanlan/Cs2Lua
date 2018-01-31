@@ -325,7 +325,7 @@ namespace RoslynTool.CsToLua
         }
         public override void VisitSwitchStatement(SwitchStatementSyntax node)
         {
-            string varName = string.Format("__compiler_switch_{0}", node.GetLocation().GetLineSpan().StartLinePosition.Line);
+            string varName = string.Format("__compiler_switch_{0}", GetSourcePosInfo(node));
             SwitchInfo si = new SwitchInfo();
             si.SwitchVarName = varName;
             m_SwitchInfoStack.Push(si);

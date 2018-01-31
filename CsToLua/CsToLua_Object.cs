@@ -689,7 +689,7 @@ namespace RoslynTool.CsToLua
                     --m_Indent;
                     CodeBuilder.AppendFormat("{0}end)", GetIndentString());
                 } else {
-                    string varName = string.Format("__compiler_lambda_{0}", node.GetLocation().GetLineSpan().StartLinePosition.Line);
+                    string varName = string.Format("__compiler_lambda_{0}", GetSourcePosInfo(node));
                     CodeBuilder.AppendFormat(") ");
                     if (mi.ReturnParamNames.Count > 0) {
                         CodeBuilder.AppendFormat("local {0} = ", varName);
@@ -768,7 +768,7 @@ namespace RoslynTool.CsToLua
         }
         public override void VisitUsingStatement(UsingStatementSyntax node)
         {
-            string varName = string.Format("__compiler_using_{0}", node.GetLocation().GetLineSpan().StartLinePosition.Line);
+            string varName = string.Format("__compiler_using_{0}", GetSourcePosInfo(node));
             if (null != node.Declaration) {
                 VisitVariableDeclaration(node.Declaration);
             } else if (null != node.Expression) {

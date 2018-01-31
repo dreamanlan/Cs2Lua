@@ -240,7 +240,7 @@ namespace RoslynTool.CsToLua
                         } else {
                             string className = ClassInfo.GetFullName(msym.ContainingType);
                             string delegationKey = string.Format("{0}:{1}", className, manglingName);
-                            string varName = string.Format("__compiler_delegation_{0}", node.GetLocation().GetLineSpan().StartLinePosition.Line);
+                            string varName = string.Format("__compiler_delegation_{0}", GetSourcePosInfo(node));
                             CodeBuilder.AppendFormat("(function() local {0} = ", varName);
                             
                             CodeBuilder.Append("(function(");
