@@ -472,7 +472,7 @@ __mt_index_of_array = function(t, k)
       local tb = obj;
       for i=0,ix do			       
         ret = __get_array_count(tb);
-        tb = tb[0];
+        tb = rawget(tb,0);
       end;
       return ret;
     end;
@@ -484,7 +484,7 @@ __mt_index_of_array = function(t, k)
       local ret = nil;
     	local ct = __get_array_count(obj);
       for i = 1,ct do
-        local v = obj[i];
+        local v = rawget(obj,i);
         if isequal(v,p) then
         	pos = i;
           ret=v;
@@ -507,7 +507,7 @@ __mt_index_of_array = function(t, k)
     	local deletes = {};
     	local ct = __get_array_count(obj);
       for i = 1,ct do		        
-        if pred(obj[i]) then
+        if pred(rawget(obj,i)) then
         	table.insert(deletes, i);
         end;
       end;
@@ -533,7 +533,7 @@ __mt_index_of_array = function(t, k)
 	  return function(obj, p)
     	local ct = __get_array_count(obj);
       for i = 1,ct do
-        local v = obj[i];
+        local v = rawget(obj,i);
         if v==p then	          
           return i-1;
         end;
@@ -544,7 +544,7 @@ __mt_index_of_array = function(t, k)
 	  return function(obj, p)
     	local ct = __get_array_count(obj);
       for k=ct,1 do
-        local v = obj[k];
+        local v = rawget(obj,k);
         if v==p then	          
           return k-1;
         end;
@@ -555,7 +555,7 @@ __mt_index_of_array = function(t, k)
   	return function(obj, predicate)
     	local ct = __get_array_count(obj);
       for i = 1,ct do
-        local v = obj[i];
+        local v = rawget(obj,i);
   			if predicate(v) then
   				return i-1;
   			end
@@ -566,7 +566,7 @@ __mt_index_of_array = function(t, k)
   	return function(obj, predicate)
     	local ct = __get_array_count(obj);
       for i = 1,ct do
-        local v = obj[i];
+        local v = rawget(obj,i);
   			if predicate(v) then
   				return v;
   			end
@@ -578,7 +578,7 @@ __mt_index_of_array = function(t, k)
       local ret = false;
     	local ct = __get_array_count(obj);
       for i = 1,ct do
-        local v = obj[i];
+        local v = rawget(obj,i);
         if v==p then
           ret=true;
           break;
@@ -589,7 +589,7 @@ __mt_index_of_array = function(t, k)
   elseif k=="Peek" then    
     return function(obj)
     	local ct = __get_array_count(obj);
-      local v = obj[ct];
+      local v = rawget(obj,ct);
       return v;
     end;
   elseif k=="Enqueue" then
@@ -600,7 +600,7 @@ __mt_index_of_array = function(t, k)
   elseif k=="Dequeue" then
     return function(obj)
     	local ct = __get_array_count(obj);
-      local v = obj[ct];
+      local v = rawget(obj,ct);
       table.remove(obj,ct);
       __dec_array_count(obj);
       return v;
@@ -613,7 +613,7 @@ __mt_index_of_array = function(t, k)
   elseif k=="Pop" then
     return function(obj)
     	local ct = __get_array_count(obj);
-      local v = obj[ct];
+      local v = rawget(obj,ct);
       table.remove(obj,num);
       __dec_array_count(obj);
       return v;
@@ -622,7 +622,7 @@ __mt_index_of_array = function(t, k)
     return function(obj, arr)
     	local ct = __get_array_count(obj);
       for k = 1,ct do
-        arr[k] = obj[k];
+        arr[k] = rawget(obj,k);
       end;
     end;
   elseif k=="ToArray" then
@@ -630,7 +630,7 @@ __mt_index_of_array = function(t, k)
     	local ct = __get_array_count(obj);
       local ret = wraparray({}, ct);
       for k = 1,ct do
-        ret[k] = obj[k];
+        ret[k] = rawget(obj,k);
       end;
       return ret;
     end;
@@ -673,7 +673,7 @@ __mt_index_of_dictionary = function(t, k)
 	elseif k=="Remove" then
 	  return function(obj, p)
 	    p = __unwrap_if_string(p);
-	    local v = obj[p];
+	    local v = rawget(obj,p);
 	    local ret = nil;
 	    if v then
 	      ret = v.value;
@@ -685,7 +685,7 @@ __mt_index_of_dictionary = function(t, k)
 	elseif k=="ContainsKey" then
 	  return function(obj, p)
 	    p = __unwrap_if_string(p);
-      if obj[p] then
+      if rawget(obj,p) then
         return true;
       end;
       return false;
@@ -704,7 +704,7 @@ __mt_index_of_dictionary = function(t, k)
   elseif k=="TryGetValue" then
     return function(obj, p)
 	    p = __unwrap_if_string(p);
-      local v = obj[p];
+      local v = rawget(obj,p);
       if v then
         return true, v.value;
       end;
@@ -768,7 +768,7 @@ __mt_index_of_hashset = function(t, k)
 	elseif k=="Remove" then
 	  return function(obj, p)
 	    p = __unwrap_if_string(p);
-	    local ret = obj[p];
+	    local ret = rawget(obj,p);
 	    if ret then
         rawset(obj, p, nil);
       end;
@@ -778,7 +778,7 @@ __mt_index_of_hashset = function(t, k)
 	elseif k=="Contains" then
 	  return function(obj, p)
 	    p = __unwrap_if_string(p);
-      if obj[p] then
+      if rawget(obj,p) then
         return true;
       end;
       return false;
@@ -823,10 +823,10 @@ function GetArrayEnumerator(tb)
   return setmetatable({
     MoveNext = function(this)
       local tb = this.object;
-      local num = #tb;
+      local num = __get_array_count(tb);
       if this.index < num then
         this.index = this.index + 1;
-        this.current = tb[this.index];
+        this.current = rawget(tb,this.index);
         return true;
       else
         return false;
@@ -971,7 +971,8 @@ function wrapvaluetypearray(arr)
 	for i,v in ipairs(arr) do
 		arr[i]=wrapvaluetype(v);
 	end;
-	return setmetatable(arr, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = System.Collections.Generic.List_T });
+	local size = #arr;
+	return setmetatable(arr, { __index = __mt_index_of_array, __Count = size, __cs2lua_defined = true, __class = System.Collections.Generic.List_T });
 end;
 
 function wrapexternvaluetype(v)
@@ -982,7 +983,8 @@ function wrapexternvaluetypearray(arr)
 	for i,v in ipairs(arr) do
 		arr[i]=wrapexternvaluetype(v);
 	end;
-	return setmetatable(arr, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = System.Collections.Generic.List_T });
+	local size = #arr;
+	return setmetatable(arr, { __index = __mt_index_of_array, __Count = size, __cs2lua_defined = true, __class = System.Collections.Generic.List_T });
 end;
 
 function defineclass(base, className, static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, is_value_type)
