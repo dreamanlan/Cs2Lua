@@ -739,7 +739,7 @@ namespace RoslynTool.CsToLua
                     }
                     CodeBuilder.Append("}");
                 } else if (isArray) {
-                    CodeBuilder.Append("wraparray{");
+                    CodeBuilder.Append("wraparray({");
                     var args = node.Expressions;
                     var arrInitOper = oper as IArrayInitializer;
                     int ct = args.Count;
@@ -751,7 +751,7 @@ namespace RoslynTool.CsToLua
                             CodeBuilder.Append(", ");
                         }
                     }
-                    CodeBuilder.Append("}");
+                    CodeBuilder.AppendFormat("}}, {0})", ct);
                 } else {
                     //isObjectInitializer
                     bool isCollectionObj = false;
@@ -973,15 +973,21 @@ namespace RoslynTool.CsToLua
                 var rankspec = rankspecs[0];
                 int rank = rankspec.Rank;
                 if (rank >= 1) {
-                    CodeBuilder.Append("(function() local arr = wraparray{};");
+                    CodeBuilder.Append("(function()");
                     int ct = rankspec.Sizes.Count;
                     for (int i = 0; i < ct; ++i) {
                         CodeBuilder.AppendFormat(" local d{0} = ", i);
                         var exp = rankspec.Sizes[i];
                         OutputExpressionSyntax(exp);
+                        if (i == 0) {
+                            CodeBuilder.Append("; local arr = wraparray({}, d0)");
+                        }
                         CodeBuilder.AppendFormat("; for i{0} = 1,d{1} do arr{2} = ", i, i, GetArraySubscriptString(i));
                         if (i < ct - 1) {
-                            CodeBuilder.Append("{};");
+                            CodeBuilder.Append("wraparray({}, ");
+                            exp = rankspec.Sizes[i + 1];
+                            OutputExpressionSyntax(exp);
+                            CodeBuilder.Append(");");
                         } else {
                             ITypeSymbol etype = null;
                             if (null != oper && null != oper.ElementType) {

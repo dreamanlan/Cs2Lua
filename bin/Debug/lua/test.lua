@@ -154,3 +154,7 @@ local tb = {
 local ff = (function() local __compiler_delegation_128 = (function() return tb:mf(); end); setdelegationkey(__compiler_delegation_128, "DelegateTest:NormalEnumerator", tb, tb.mf); return __compiler_delegation_128; end)();
 key = getdelegationkey(ff);
 print(key, type(ff), ff());
+
+
+local v = {1,nil,3};
+print(#v, v[1], v[2], v[3]);

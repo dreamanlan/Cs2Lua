@@ -345,6 +345,13 @@ function __calc_table_count(tb)
   return count;
 end;
 
+function __set_table_count(tb, count)
+  local meta = getmetatable(tb);
+  if meta then
+    meta.__count = count;
+  end;
+end;
+
 function __get_table_count(tb)
   local count = 0;
   local meta = getmetatable(tb);
@@ -411,28 +418,73 @@ function __unwrap_table_field(v)
 	end;
 end;
 
+function __set_array_count(tb, count)
+  local meta = getmetatable(tb);
+  if meta then
+    meta.__count = count;
+  end;
+end;
+
+function __get_array_count(tb)
+  local count = 0;
+  local meta = getmetatable(tb);
+  if meta then
+    if meta.__count then
+      count = meta.__count;
+    else
+      count = #tb;
+      meta.__count = count;
+    end;
+  end;
+  return count;
+end;
+
+function __inc_array_count(tb)
+  local meta = getmetatable(tb);
+  if meta then
+  	if nil ~= meta.__count then
+	    meta.__count = meta.__count + 1;
+	  else
+	  	meta.__count = #tb;
+	  end;
+	end;
+end;
+
+function __dec_array_count(tb)
+  local meta = getmetatable(tb);
+  if meta then
+  	if meta.__count and meta.__count > 0 then
+    	meta.__count = meta.__count - 1;    
+    else
+    	meta.__count = #tb;
+    end;
+  end;
+end;
+
 __mt_index_of_array = function(t, k)
   if k=="__exist" then --½ûÓÃ¼Ì³Ð
     return function(tb,fk) return false; end;
 	elseif k=="Length" or k=="Count" then
-		return #t;
+		return __get_array_count(t);
 	elseif k=="GetLength" then
 		return function(obj, ix)
       local ret = 0;
       local tb = obj;
       for i=0,ix do			       
-        ret = #tb;
+        ret = __get_array_count(tb);
         tb = tb[0];
       end;
       return ret;
     end;
   elseif k=="Add" then
-    return function(obj, v) table.insert(obj, v); end;
+    return function(obj, v) table.insert(obj, v);__inc_array_count(obj); end;
   elseif k=="Remove" then
     return function(obj, p)
     	local pos = 0;
       local ret = nil;
-      for i,v in ipairs(obj) do		        
+    	local ct = __get_array_count(obj);
+      for i = 1,ct do
+        local v = obj[i];
         if isequal(v,p) then
         	pos = i;
           ret=v;
@@ -441,23 +493,27 @@ __mt_index_of_array = function(t, k)
       end;
       if ret then
         table.remove(obj,pos);
+        __dec_array_count(obj);
       end;
       return ret;
     end;
   elseif k=="RemoveAt" then
     return function(obj, ix)
       table.remove(obj, ix+1);
+      __dec_array_count(obj);
     end;
   elseif k=="RemoveAll" then
     return function(obj, pred)
     	local deletes = {};
-      for i,v in ipairs(obj) do		        
-        if pred(v) then
+    	local ct = __get_array_count(obj);
+      for i = 1,ct do		        
+        if pred(obj[i]) then
         	table.insert(deletes, i);
         end;
       end;
       for i,v in ipairs(deletes) do
       	table.remove(obj, v);
+      	__dec_array_count(obj);
       end;
     end;
   elseif k=="AddRange" then
@@ -465,27 +521,29 @@ __mt_index_of_array = function(t, k)
       local enumer = coll:GetEnumerator();
       while enumer:MoveNext() do
         table.insert(obj, enumer.Current);
+        __inc_array_count(obj);
       end;
     end;
   elseif k=="Insert" then
     return function(obj, ix, p)
       table.insert(obj,ix+1,p);
+      __inc_array_count(obj);
     end;
   elseif k=="IndexOf" then
 	  return function(obj, p)
-	    local ix = 0;
-      for k,v in pairs(obj) do
+    	local ct = __get_array_count(obj);
+      for i = 1,ct do
+        local v = obj[i];
         if v==p then	          
-          return ix;
+          return i-1;
         end;
-        ix = ix + 1;
       end;
       return -1;
     end;
   elseif k=="LastIndexOf" then
 	  return function(obj, p)
-	    local num = #obj;
-      for k=num,1 do
+    	local ct = __get_array_count(obj);
+      for k=ct,1 do
         local v = obj[k];
         if v==p then	          
           return k-1;
@@ -495,16 +553,20 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="FindIndex" then
   	return function(obj, predicate)
-  		for k,v in pairs(obj) do
+    	local ct = __get_array_count(obj);
+      for i = 1,ct do
+        local v = obj[i];
   			if predicate(v) then
-  				return k - 1;
+  				return i-1;
   			end
   		end
   		return -1;
   	end;
   elseif k=="Find" then
   	return function(obj, predicate)
-  		for k,v in pairs(obj) do
+    	local ct = __get_array_count(obj);
+      for i = 1,ct do
+        local v = obj[i];
   			if predicate(v) then
   				return v;
   			end
@@ -514,7 +576,9 @@ __mt_index_of_array = function(t, k)
   elseif k=="Contains" then
 	  return function(obj, p)
       local ret = false;
-      for k,v in pairs(obj) do		        
+    	local ct = __get_array_count(obj);
+      for i = 1,ct do
+        local v = obj[i];
         if v==p then
           ret=true;
           break;
@@ -524,51 +588,59 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="Peek" then    
     return function(obj)
-      local num = #obj;
-      local v = obj[num];
+    	local ct = __get_array_count(obj);
+      local v = obj[ct];
       return v;
     end;
   elseif k=="Enqueue" then
     return function(obj,v)
       table.insert(obj,1,v);
+      __inc_array_count(obj);
     end;
   elseif k=="Dequeue" then
     return function(obj)
-      local num = #obj;
-      local v = obj[num];
-      table.remove(obj,num);
+    	local ct = __get_array_count(obj);
+      local v = obj[ct];
+      table.remove(obj,ct);
+      __dec_array_count(obj);
       return v;
     end;
   elseif k=="Push" then
     return function(obj,v)
       table.insert(obj,v);
+      __inc_array_count(obj);
     end;
   elseif k=="Pop" then
     return function(obj)
-      local num = #obj;
-      local v = obj[num];
+    	local ct = __get_array_count(obj);
+      local v = obj[ct];
       table.remove(obj,num);
+      __dec_array_count(obj);
       return v;
     end;
   elseif k=="CopyTo" then
     return function(obj, arr)
-      for k,v in pairs(obj) do
-        arr[k]=v;
+    	local ct = __get_array_count(obj);
+      for k = 1,ct do
+        arr[k] = obj[k];
       end;
     end;
   elseif k=="ToArray" then
     return function(obj)
-      local ret = wraparray{};
-      for k,v in pairs(obj) do
-        ret[k]=v;
+    	local ct = __get_array_count(obj);
+      local ret = wraparray({}, ct);
+      for k = 1,ct do
+        ret[k] = obj[k];
       end;
       return ret;
     end;
   elseif k=="Clear" then
     return function(obj)
-    	while #obj>0 do
-    		table.remove(obj);
+    	local ct = __get_array_count(obj);
+    	for i = ct,1 do
+    		table.remove(obj, i);
     	end;
+    	__set_array_count(obj, 0);
     end;
   elseif k=="GetEnumerator" then
     return function(obj)
@@ -594,7 +666,7 @@ __mt_index_of_dictionary = function(t, k)
 	elseif k=="Add" then
 	  return function(obj, p1, p2)
 	    p1 = __unwrap_if_string(p1);		    
-	    obj[p1] = { value=p2 };
+	    rawset(obj, p1, { value=p2 });
 	    __inc_table_count(obj);
 	    return p2;
 	  end;
@@ -605,7 +677,7 @@ __mt_index_of_dictionary = function(t, k)
 	    local ret = nil;
 	    if v then
 	      ret = v.value;
-        obj[p]=nil;
+        rawset(obj, p, nil);
       end;
       __dec_table_count(obj);
       return ret;
@@ -664,7 +736,21 @@ __mt_index_of_dictionary = function(t, k)
    		local meta = getmetatable(obj);   		
    		return meta.__class;
    	end;
+  else
+    local v = rawget(t,k);
+    if v then
+  	  return v.value;
+    end;
+    return nil;    
 	end;
+end;
+
+__mt_newindex_of_dictionary = function(t, k, val)  
+  local v = rawget(t,k);
+  if not v then
+	  __inc_table_count(t);
+  end;
+  rawset(t, k, { value = val });
 end;
 
 __mt_index_of_hashset = function(t, k)
@@ -675,7 +761,7 @@ __mt_index_of_hashset = function(t, k)
 	elseif k=="Add" then
 	  return function(obj, p)
 	    p = __unwrap_if_string(p);
-	    obj[p]=true;
+	    rawset(obj, p, true);
 	    __inc_table_count(obj);
 	    return true;
 	  end;
@@ -684,7 +770,7 @@ __mt_index_of_hashset = function(t, k)
 	    p = __unwrap_if_string(p);
 	    local ret = obj[p];
 	    if ret then
-        obj[p]=nil;
+        rawset(obj, p, nil);
       end;
       __dec_table_count(obj);
       return ret;
@@ -835,13 +921,16 @@ function wrapchar(char, intVal)
   end;
 end;
 
-function wraparray(arr)
-	return setmetatable(arr, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = System.Collections.Generic.List_T });
+function wraparray(arr, size)
+  if not size then
+    size = #arr;
+  end;
+	return setmetatable(arr, { __index = __mt_index_of_array, __count = size, __cs2lua_defined = true, __class = System.Collections.Generic.List_T });
 end;
 
 function wrapdictionary(dict)
   local obj = {};
-  setmetatable(obj, { __index = __mt_index_of_dictionary, __cs2lua_defined = true, __class = System.Collections.Generic.Dictionary_TKey_TValue });
+  setmetatable(obj, { __index = __mt_index_of_dictionary, __newindex = __mt_newindex_of_dictionary, __cs2lua_defined = true, __class = System.Collections.Generic.Dictionary_TKey_TValue });
 	for k,v in pairs(dict) do
 	  obj:Add(k, v);
 	end;
@@ -1221,7 +1310,7 @@ end;
 function newdictionary(t, ctor, dict, ...)
   if dict then
     local obj = {};
-	  setmetatable(obj, { __index = __mt_index_of_dictionary, __cs2lua_defined = true, __class = t });
+	  setmetatable(obj, { __index = __mt_index_of_dictionary, __newindex = __mt_newindex_of_dictionary, __cs2lua_defined = true, __class = t });
 		for k,v in pairs(dict) do
 		  obj:Add(k, v);
 		end;
@@ -1244,7 +1333,7 @@ end;
 function newexterndictionary(t, className, ctor, dict, ...)
   if dict and t==System.Collections.Generic.Dictionary_TKey_TValue then
     local obj = {};
-	  setmetatable(obj, { __index = __mt_index_of_dictionary, __cs2lua_defined = true, __class = t });
+	  setmetatable(obj, { __index = __mt_index_of_dictionary, __newindex = __mt_newindex_of_dictionary, __cs2lua_defined = true, __class = t });
 		for k,v in pairs(dict) do
 		  obj:Add(k, v);
 		end;
