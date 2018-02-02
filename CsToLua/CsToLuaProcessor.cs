@@ -865,6 +865,7 @@ namespace RoslynTool.CsToLua
             sb.AppendLine("require \"cs2lua__utility\";");
             sb.AppendLine("require \"cs2lua__attributes\";");
             sb.AppendLine("require \"cs2lua__externenums\";");
+            sb.AppendLine("require \"cs2lua__interfaces\";");
             foreach (string lib in lualibRefs) {
                 sb.AppendFormat("require \"{0}\";", lib.ToLower());
                 sb.AppendLine();
@@ -966,7 +967,9 @@ namespace RoslynTool.CsToLua
                 }
 
                 //references
-                if (!SymbolTable.NoAutoRequire) {
+                if (SymbolTable.NoAutoRequire) {
+                    sb.AppendLine("require \"cs2lua__custom\";");
+                } else {
                     BuildReferences(sb, key, mci, refs);            
                 }
             }
