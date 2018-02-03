@@ -660,7 +660,7 @@ namespace RoslynTool.CsToLua
                     string mname = string.Format("\"{0}\"", memberAccess.Name.Identifier.Text);
                     CheckExplicitInterfaceAccess(leftSym, ref intf, ref mname);
                     CodeBuilder.AppendFormat("{0}, {1}", intf, mname);
-                } else if (leftSym.ContainingType == ci.SemanticInfo || ci.IsInherit(leftSym.ContainingType)) {
+                } else if (leftSym.ContainingType == ci.SemanticInfo || leftSym.ContainingType == ci.SemanticInfo.OriginalDefinition || ci.IsInherit(leftSym.ContainingType)) {
                     CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
                     if (isStatic)
                         CodeBuilder.AppendFormat("{0}, nil, ", ClassInfo.GetFullName(leftSym.ContainingType));

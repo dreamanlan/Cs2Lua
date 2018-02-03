@@ -1596,7 +1596,9 @@ function externdelegationset(isevent, isStatic, key, t, intf, k, handler)
 end;
 function externdelegationadd(isevent, isStatic, key, t, intf, k, handler)
   local str = getdelegationkey(handler);
-  setexterndelegationfunc(str .. key, handler);
+  if str then
+    setexterndelegationfunc(str .. key, handler);
+  end;
   if k then
     t[k] = {"+=", handler};
   else
@@ -1605,14 +1607,19 @@ function externdelegationadd(isevent, isStatic, key, t, intf, k, handler)
 end;
 function externdelegationremove(isevent, isStatic, key, t, intf, k, handler)
   local str = getdelegationkey(handler);
-  local trueHandler = getexterndelegationfunc(str .. key);
+  local trueHandler = handler;
+  if str then
+    trueHandler = getexterndelegationfunc(str .. key);
+  end;
   if k then
     t[k] = {"-=", trueHandler};
   else
     t = {"-=", trueHandler};
   end;
   removedelegationkey(handler);
-  removeexterndelegationfunc(str .. key, trueHandler);
+  if str then
+    removeexterndelegationfunc(str .. key, trueHandler);
+  end;
 end;
 
 function getstaticindexer(class, name, ...)
@@ -1774,7 +1781,11 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
 	end;
 	if type(obj)=="string" then
 	  local csstr = System.String(obj);
-	  return csstr[method](csstr,...);
+	  if method=="Split" then
+	    return csstr:Split(string.char(...));
+	  else
+	    return csstr[method](csstr,...);
+	  end;
 	elseif meta then
 		return obj[method](obj,...);
 	elseif method=="CompareTo" then
@@ -1787,6 +1798,8 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
 	  end;
 	elseif method=="ToString" then
 	  return tostring(obj);
+	elseif method=="Split" then
+	  return obj:Split(string.char(...));
 	end;
 	return nil;
 end;

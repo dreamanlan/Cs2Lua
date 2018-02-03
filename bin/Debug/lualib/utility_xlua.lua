@@ -1621,7 +1621,9 @@ function externdelegationset(isevent, isStatic, key, t, intf, k, handler)
 end;
 function externdelegationadd(isevent, isStatic, key, t, intf, k, handler)
   local str = getdelegationkey(handler);
-  setexterndelegationfunc(str .. key, handler);
+  if str then
+    setexterndelegationfunc(str .. key, handler);
+  end;
   if k then    
     if isevent then
       if isStatic then
@@ -1638,7 +1640,10 @@ function externdelegationadd(isevent, isStatic, key, t, intf, k, handler)
 end;
 function externdelegationremove(isevent, isStatic, key, t, intf, k, handler)
   local str = getdelegationkey(handler);
-  local trueHandler = getexterndelegationfunc(str .. key);
+  local trueHandler = handler;
+  if str then
+    trueHandler = getexterndelegationfunc(str .. key);
+  end;
   if k then    
     if isevent then
       if isStatic then
@@ -1653,7 +1658,9 @@ function externdelegationremove(isevent, isStatic, key, t, intf, k, handler)
     t = t - trueHandler;
   end;
   removedelegationkey(handler);
-  removeexterndelegationfunc(str .. key, trueHandler);
+  if str then
+    removeexterndelegationfunc(str .. key, trueHandler);
+  end;
 end;
 
 function getstaticindexer(class, name, ...)
@@ -1814,7 +1821,7 @@ function invokeforstring(str, method, ...)
 		return string.upper(str);
 	elseif method == "ToLower" then
 		return string.lower(str);
-	elseif method =="Equals" then
+	elseif method == "Equals" then
 		local otherStr=...;
 		return str==otherStr;
 	elseif method == "Substring" then	
@@ -1831,6 +1838,9 @@ function invokeforstring(str, method, ...)
 		else
 			return string.sub(str, pos + 1, pos + length);
 		end
+	elseif method == "Split" then
+	  local csstr = CS.System.String(obj);
+	  return csstr:Split(string.char(...));
 	else
 		error("implement c# string method here" .. method)
 	end	
@@ -1842,9 +1852,7 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
 	if isEnum and method=="ToString" then
 	  return class.Value2String[obj];
 	end;
-	if type(obj)=="string" then
-	  --local csstr = CS.System.String(obj);
-	  --return csstr[method](csstr,...);	
+	if type(obj)=="string" then	
 	  return invokeforstring(obj, method, ...);
 	elseif meta then
 		return obj[method](obj,...);
@@ -1858,6 +1866,8 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
 	  end;
 	elseif method=="ToString" then
 	  return tostring(obj);
+	elseif method=="Split" then
+	  return obj:Split(string.char(...));
 	end;
 	return nil;
 end;
@@ -1875,8 +1885,6 @@ end;
 function setforbasicvalue(obj, isEnum, class, property, value)
 	local meta = getmetatable(obj);
 	if type(obj)=="string" then
-	  --local csstr = CS.System.String(obj);
-	  --csstr[property]=value;
 	  return invokeforstring(obj, property, value);
 	elseif meta then
 		obj[property]=value;
