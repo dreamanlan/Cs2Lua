@@ -338,17 +338,17 @@ namespace RoslynTool.CsToLua
                     }
 
                     if (sym.IsGenericMethod) {
-                        Logger.Instance.Log("Invocation Check", "extern method {0}.{1} is generic method, please insure a overloaded non generic method exist !", ckey, sym.Name);
+                        Logger.Instance.Log("Translation Warning", "extern method {0}.{1} is generic method, please insure a overloaded non generic method exist !", ckey, sym.Name);
                     }
 
                     foreach (var param in sym.Parameters) {
                         if (param.IsParams && isOverload) {
-                            Logger.Instance.Log("Invocation Check", "extern overloaded method {0}.{1} parameter {2} is params, please check export api code !", ckey, sym.Name, param.Name);
+                            Logger.Instance.Log("Translation Warning", "extern overloaded method {0}.{1} parameter {2} is params, please check export api code !", ckey, sym.Name, param.Name);
                             continue;
                         }
                         var namedType = param.Type as INamedTypeSymbol;
                         if (null != namedType && namedType.IsGenericType && namedType.TypeKind != TypeKind.Delegate) {
-                            Logger.Instance.Log("Invocation Check", "extern method {0}.{1} parameter {2} is generic type, please replace with non generic type !", ckey, sym.Name, param.Name);
+                            Logger.Instance.Log("Translation Warning", "extern method {0}.{1} parameter {2} is generic type, please replace with non generic type !", ckey, sym.Name, param.Name);
                             continue;
                         }
                     }

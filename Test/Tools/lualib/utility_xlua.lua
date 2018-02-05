@@ -2037,6 +2037,17 @@ function arrayset(arr, ...)
   return val;
 end;
 
+function luatry(func)
+  return pcall(func);
+end;
+
+function luacatch(handled, ret, err, func)
+  if not handled and not ret then
+    handled = func(handled, {Message=err,StackTrace=""});
+  end; 
+  return handled;
+end;
+
 LINQ={};
 LINQ.exec = function(linq)
   local paramList = {};
