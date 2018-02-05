@@ -16,7 +16,10 @@ namespace RoslynTool.CsToLua
 
         public override void VisitThrowStatement(ThrowStatementSyntax node)
         {
-            //忽略
+            CodeBuilder.AppendFormat("{0}luathrow(", GetIndentString());
+            IConversionExpression opd = m_Model.GetOperation(node.Expression) as IConversionExpression;
+            OutputExpressionSyntax(node.Expression, opd);
+            CodeBuilder.AppendLine(");");
         }
         public override void VisitTryStatement(TryStatementSyntax node)
         {

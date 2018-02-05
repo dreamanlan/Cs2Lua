@@ -1948,6 +1948,14 @@ function luacatch(handled, ret, err, func)
   return handled;
 end;
 
+function luathrow(obj)
+  if type(obj)=="string" then
+    error(obj);
+  else
+    error(obj.Message);
+  end;
+end;
+
 LINQ={};
 LINQ.exec = function(linq)
   local paramList = {};
