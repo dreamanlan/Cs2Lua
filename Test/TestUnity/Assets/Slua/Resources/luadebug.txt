@@ -1,3 +1,3 @@
-package.cpath = package.cpath..";?.dll;"; 
+package.cpath = package.cpath..";?.dll;?.so"; 
 package.path = package.path..";./?.lua;./lualibs/?.lua;./lualibs/?/?.lua;";
 require("mobdebug").start();
