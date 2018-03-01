@@ -727,12 +727,14 @@ __mt_index_of_dictionary = function(t, k)
     for k,v in pairs(t) do
       k = __wrap_if_string(k);
       table.insert(ret, k);
+      __inc_array_count(ret);
     end;
     return ret;
   elseif k=="Values" then
     local ret = wraparray{};
     for k,v in pairs(t) do
       table.insert(ret, v.value);
+      __inc_array_count(ret);
     end;
     return ret;
   elseif k=="Clear" then

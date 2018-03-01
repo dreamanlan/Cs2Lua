@@ -158,3 +158,15 @@ print(key, type(ff), ff());
 
 local v = {1,nil,3};
 print(#v, v[1], v[2], v[3]);
+
+function test(a,b,c)  
+  local aaa = function()
+    print(a,b,c);
+  end;
+  aaa();
+end;
+
+for i=1,100000 do
+test(1,2,3);
+test(4,5,6);
+end;
