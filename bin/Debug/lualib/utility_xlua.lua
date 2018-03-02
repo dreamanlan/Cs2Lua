@@ -899,7 +899,12 @@ function GetHashsetEnumerator(tb)
 end;
 
 function wrapconst(t, name)
-  return t[name];
+  if name then
+    return t[name];
+  else
+    CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+  end;
+  return nil;
 end;
 
 function wrapchar(char, intVal)
@@ -1011,6 +1016,10 @@ function defineclass(base, className, static, static_methods, static_fields_buil
     class["__base_class"] = base_class;
         
     local function __find_base_class_key(k)
+      if nil==k then
+        CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+        return false;
+      end;
       if base_class then
       	if rawget(base_class, "__cs2lua_defined") then
       		local r,v = pcall(function() return base_class.__exist(k); end);
@@ -1027,6 +1036,10 @@ function defineclass(base, className, static, static_methods, static_fields_buil
       return false;
     end;        
     local function __find_class_key(k)
+      if nil==k then
+        CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+        return false;
+      end;
       local ret;
       ret = rawget(class, k);
       if nil~=ret then
@@ -1071,6 +1084,10 @@ function defineclass(base, className, static, static_methods, static_fields_buil
             obj["base"] = baseObj;
             
             local function __find_base_obj_key(k)
+              if nil==k then
+                CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+                return false;
+              end;
               if baseObj then
               	local meta = getmetatable(baseObj);
               	if meta and rawget(meta, "__cs2lua_defined") then
@@ -1088,6 +1105,10 @@ function defineclass(base, className, static, static_methods, static_fields_buil
               return false;
             end;
             local function __find_obj_key(k)
+              if nil==k then
+                CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+                return false;
+              end;
               local ret;
               ret = rawget(obj, k);
               if nil~=ret then
@@ -1151,6 +1172,10 @@ function defineclass(base, className, static, static_methods, static_fields_buil
                     if k=="__exist" then
                       return function(tb, fk) return __find_obj_key(fk); end;
                     end;
+                    if nil==k then
+                      CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+                      return nil;
+                    end;
                     local ret;
 				            ret = obj_fields[k];
 				            if nil~=ret then
@@ -1204,6 +1229,10 @@ function defineclass(base, className, static, static_methods, static_fields_buil
                 end,
 
                 __newindex = function(t, k, v)
+                    if nil==k then
+                      CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+                      return;
+                    end;
                     local ret;
 				            ret = obj_fields[k];
 				            if nil~=ret then
@@ -1246,6 +1275,10 @@ function defineclass(base, className, static, static_methods, static_fields_buil
             if k=="__exist" then
               return function(fk) return __find_class_key(fk); end;
             end;
+            if nil==k then
+              CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+              return nil;
+            end;
             local ret;
             ret = class_fields[k];
             if nil~=ret then
@@ -1274,6 +1307,10 @@ function defineclass(base, className, static, static_methods, static_fields_buil
         end,
 
         __newindex = function(t, k, v)
+            if nil==k then
+              CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+              return;
+            end;
             local ret;
             ret = class_fields[k];
             if nil~=ret then
@@ -1666,18 +1703,36 @@ function externdelegationremove(isevent, isStatic, key, t, intf, k, handler)
 end;
 
 function getstaticindexer(class, name, ...)
-	return class[name](...);
+  if name then
+	  return class[name](...);
+	else
+    CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+    return nil;
+	end;
 end;
 function getinstanceindexer(obj, intf, name, ...)
-	return obj[name](obj, ...);
+  if name then
+	  return obj[name](obj, ...);
+	else
+    CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+    return nil;
+	end;
 end;
 
 function setstaticindexer(class, name, ...)
-	class[name](...);
+  if name then
+	  class[name](...);
+	else
+    CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+	end;
 	return nil;
 end;
 function setinstanceindexer(obj, intf, name, ...)
-	obj[name](obj, ...);
+  if name then
+	  obj[name](obj, ...);
+	else
+    CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+	end;
 	return nil;
 end;
 
@@ -1687,6 +1742,10 @@ end;
 function getexterninstanceindexer(obj, intf, name, ...)  
 	local args = {...};
 	local index = __unwrap_if_string(args[1]);
+	if nil==index then
+    CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+    return nil;
+  end;
 	local meta = getmetatable(obj);
 	if meta then
 		local class = rawget(meta, "__class");
@@ -1717,6 +1776,10 @@ function setexterninstanceindexer(obj, intf, name, ...)
   local args = {...};
   local num = #args;
 	local index = __unwrap_if_string(args[1]);
+	if nil==index then
+    CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+    return;
+  end;
 	local val = args[num];
   local meta = getmetatable(obj);
   if meta then
@@ -1770,14 +1833,18 @@ function invokeexternoperator(class, method, ...)
 	  --这里就不仔细判断了，就假定是UnityEngine.Object子类了
 	  return not CS.XLuaExtensions.IsNull(args[1]);
 	end;
-	if argnum == 1 and args[1] then
-	  return args[1][method](...);
-	elseif argnum == 2 then
-	  if args[1] then
-	    return args[1][method](...);
-	  elseif args[2] then
-	    return args[2][method](...);
-	  end;
+	if method then
+  	if argnum == 1 and args[1] then
+  	  return args[1][method](...);
+  	elseif argnum == 2 then
+  	  if args[1] then
+  	    return args[1][method](...);
+  	  elseif args[2] then
+  	    return args[2][method](...);
+  	  end;
+  	end;  
+	else
+    CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
 	end;
 	return nil;
 end;
@@ -1790,29 +1857,41 @@ end;
 
 function invokewithinterface(obj, intf, method, ...)
 	local meta = getmetatable(obj);
-	if meta and rawget(meta, "__cs2lua_defined") then
-		return obj[method](obj,...);
+	if method then
+  	if meta and rawget(meta, "__cs2lua_defined") then
+  		return obj[method](obj,...);
+  	else
+  		return obj[method](obj,...);
+  	end;
 	else
-		return obj[method](obj,...);
-	end;
+    CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+  end;
 	return nil;
 end;
 function getwithinterface(obj, intf, property)
 	local meta = getmetatable(obj);
-	if meta and rawget(meta, "__cs2lua_defined") then
-		return obj[property];
+	if property then
+  	if meta and rawget(meta, "__cs2lua_defined") then
+  		return obj[property];
+  	else
+  		return obj[property];
+  	end;
 	else
-		return obj[property];
-	end;
+    CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+  end;
 	return nil;
 end;
 function setwithinterface(obj, intf, property, value)
 	local meta = getmetatable(obj);
-	if meta and rawget(meta, "__cs2lua_defined") then
-		obj[property]=value;
+	if property then
+  	if meta and rawget(meta, "__cs2lua_defined") then
+  		obj[property]=value;
+  	else
+  		obj[property]=value;
+  	end;
 	else
-		obj[property]=value;
-	end;
+    CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+  end;
 	return nil;
 end;
 
@@ -1851,9 +1930,10 @@ end
 function invokeforbasicvalue(obj, isEnum, class, method, ...)
 	local args = {...};
 	local meta = getmetatable(obj);
-	if isEnum and method=="ToString" then
+	if isEnum and obj and method=="ToString" then
 	  return class.Value2String[obj];
 	end;
+	if method then
 	if type(obj)=="string" then	
 	  return invokeforstring(obj, method, ...);
 	elseif meta then
@@ -1871,10 +1951,14 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
 	elseif method=="Split" then
 	  return obj:Split(string.char(...));
 	end;
+	else
+    CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+  end;
 	return nil;
 end;
 function getforbasicvalue(obj, isEnum, class, property)
 	local meta = getmetatable(obj);
+	if property then
 	if type(obj)=="string" then
 	  return invokeforstring(obj, property);
 	elseif meta then
@@ -1882,10 +1966,14 @@ function getforbasicvalue(obj, isEnum, class, property)
 	else
 		return obj[property];
 	end;
+	else
+    CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+  end;
 	return nil;
 end;
 function setforbasicvalue(obj, isEnum, class, property, value)
 	local meta = getmetatable(obj);
+	if property then
 	if type(obj)=="string" then
 	  return invokeforstring(obj, property, value);
 	elseif meta then
@@ -1893,11 +1981,14 @@ function setforbasicvalue(obj, isEnum, class, property, value)
 	else
 		obj[property]=value;
 	end;
+	else
+    CS.UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+  end;
 	return nil;
 end;
 
 function invokearraystaticmethod(firstArray, secondArray, method, ...)
-  if nil~=firstArray then
+  if nil~=firstArray and nil~=method then
     local args = {...};
     local meta = getmetatable(firstArray);    
 		if meta and rawget(meta, "__cs2lua_defined") then
@@ -2040,12 +2131,16 @@ function arrayset(arr, ...)
 end;
 
 function luatry(func)
-  return pcall(func);
+  return xpcall(func, function(e)
+    local err = tostring(e);
+    local trace = debug.traceback(err); 
+    return {err, trace};
+  end);
 end;
 
 function luacatch(handled, ret, err, func)
   if not handled and not ret then
-    handled = func(handled, {Message=err,StackTrace=""});
+    handled = func(handled, {Message=err[1],StackTrace=err[2]});
   end; 
   return handled;
 end;
