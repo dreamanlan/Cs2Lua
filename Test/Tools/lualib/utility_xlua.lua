@@ -1834,8 +1834,14 @@ function invokeexternoperator(class, method, ...)
 	    return false;
 	  end;	  
 	elseif method=="op_Implicit" then
-	  --这里就不仔细判断了，就假定是UnityEngine.Object子类了
-	  return not CS.XLuaExtensions.IsNull(args[1]);
+	  if class==UnityEngine.Vector2 then
+	    return Slua.CreateClass("UnityEngine.Vector2", args[1].x, args[1].y);
+	  elseif class==UnityEngine.Vector3 then
+	    return Slua.CreateClass("UnityEngine.Vector3", args[1].x, args[1].y, 0);
+	  else
+	    --这里就不仔细判断了，就假定是UnityEngine.Object子类了
+	    return not CS.XLuaExtensions.IsNull(args[1]);
+	  end;
 	end;
 	if method then
   	if argnum == 1 and args[1] then
