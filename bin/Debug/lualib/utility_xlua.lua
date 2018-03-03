@@ -1510,11 +1510,15 @@ function dumpdelegationtable()
 end
 
 function delegationwrap(handler)
-  local meta = getmetatable(handler);
-  if meta and rawget(meta, "__is_delegation") then
-    return handler;
+  if handler then
+    local meta = getmetatable(handler);
+    if meta and rawget(meta, "__is_delegation") then
+      return handler;
+    else
+      return wrapdelegation{ handler };
+    end;
   else
-    return wrapdelegation{ handler };
+    return wrapdelegation{};
   end;
 end;
 
