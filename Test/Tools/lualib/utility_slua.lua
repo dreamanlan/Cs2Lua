@@ -1829,6 +1829,10 @@ function invokeexternoperator(class, method, ...)
 	    return Slua.CreateClass("UnityEngine.Vector2", args[1].x, args[1].y);
 	  elseif class==UnityEngine.Vector3 then
 	    return Slua.CreateClass("UnityEngine.Vector3", args[1].x, args[1].y, 0);
+	  elseif class==UnityEngine.Color then
+	    return Slua.CreateClass("UnityEngine.Color", args[1].r/255.0, args[1].g/255.0, args[1].b/255.0, args[1].a/255.0);
+	  elseif class==UnityEngine.Color32 then
+	    return Slua.CreateClass("UnityEngine.Color32", math.floor(args[1].r*255), math.floor(args[1].g*255), math.floor(args[1].b*255), math.floor(args[1].a*255));
 	  else
 	    --这里就不仔细判断了，就假定是UnityEngine.Object子类了
 	    return not Slua.IsNull(args[1]);
