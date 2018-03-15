@@ -204,7 +204,7 @@ namespace RoslynTool.CsToLua
                 }
                 OutputExpressionSyntax(node.Condition, opd);
             } else {
-                CodeBuilder.AppendLine("true");
+                CodeBuilder.Append("true");
             }
             CodeBuilder.AppendLine(" do");
             if (ci.HaveContinue) {
