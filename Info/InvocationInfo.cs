@@ -324,6 +324,9 @@ namespace RoslynTool.CsToLua
         
         private void CheckInvocation(IMethodSymbol sym)
         {
+            if (!SymbolTable.EnableTranslationCheck) {
+                return;
+            }
             if (!SymbolTable.Instance.IsCs2LuaSymbol(sym)) {
                 var ckey = ClassInfo.GetFullName(sym.ContainingType);
                 var mkey = SymbolTable.Instance.NameMangling(sym);

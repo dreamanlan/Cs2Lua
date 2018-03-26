@@ -49,7 +49,9 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.AppendLine();
                     }
                     if (node.Catches.Count > 1) {
-                        Logger.Instance.Log("Translation Warning", "try have multiple catch ! location: {0}", GetSourcePosForLog(node));
+                        if (SymbolTable.EnableTranslationCheck) {
+                            Logger.Instance.Log("Translation Warning", "try have multiple catch ! location: {0}", GetSourcePosForLog(node));
+                        }
                     }
                 }
             }

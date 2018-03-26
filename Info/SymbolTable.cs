@@ -636,6 +636,11 @@ namespace RoslynTool.CsToLua
             get { return s_UseArrayGetSet; }
             set { s_UseArrayGetSet = value; }
         }
+        internal static bool EnableTranslationCheck
+        {
+            get { return s_EnableTranslationCheck; }
+            set { s_EnableTranslationCheck = value; }
+        }
         internal static string SystemDllPath
         {
             get { return s_SystemDllPath; }
@@ -649,6 +654,7 @@ namespace RoslynTool.CsToLua
         private static bool s_NoAutoRequire = false;
         private static bool s_LuaComponentByString = false;
         private static bool s_UseArrayGetSet = false;
+        private static bool s_EnableTranslationCheck = false;
         private static string s_SystemDllPath = string.Empty;
 
         private static HashSet<string> s_ExtraLuaKeywords = new HashSet<string> {
