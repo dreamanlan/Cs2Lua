@@ -23,7 +23,7 @@ namespace RoslynTool.CsToLua
     }
     public static class CsToLuaProcessor
     {
-        public static ExitCode Process(string srcFile, string outputDir, string outputExt, IList<string> macros, IList<string> ignoredPath, IList<string> externPath, IList<string> internPath, IDictionary<string, string> _refByNames, IDictionary<string, string> _refByPaths, bool enableInherit, bool enableLinq, bool outputResult, bool parallel)
+        public static ExitCode Process(string srcFile, string outputDir, string outputExt, IList<string> macros, IList<string> undefMacros, IList<string> ignoredPath, IList<string> externPath, IList<string> internPath, IDictionary<string, string> _refByNames, IDictionary<string, string> _refByPaths, bool enableInherit, bool enableLinq, bool outputResult, bool parallel)
         {
             List<string> preprocessors = new List<string>(macros);
             preprocessors.Add("__LUA__");
@@ -122,6 +122,10 @@ namespace RoslynTool.CsToLua
                 }
             } else {
                 files.Add(srcFile);
+            }
+
+            foreach(string m in undefMacros){
+                preprocessors.Remove(m);
             }
 
             bool haveError = false;
