@@ -25,6 +25,10 @@ namespace RoslynTool.CsToLua
         internal bool ExistYield = false;
         internal bool ExistTopLevelReturn = false;
 
+        internal bool ExistTryCatch = false;
+        internal int TryCatchLayer = 0;
+        internal string ReturnVarName = string.Empty;
+
         internal IMethodSymbol SemanticInfo = null;
         internal IPropertySymbol PropertySemanticInfo = null;
 
@@ -36,6 +40,10 @@ namespace RoslynTool.CsToLua
             OriginalParamsName = string.Empty;
             ExistYield = false;
             ExistTopLevelReturn = false;
+
+            ExistTryCatch = false;
+            TryCatchLayer = 0;
+            ReturnVarName = string.Empty;
 
             SemanticInfo = sym;
 

@@ -24,6 +24,8 @@ namespace RoslynTool.CsToLua
         public override void VisitTryStatement(TryStatementSyntax node)
         {
             if (null != node.Block) {
+                MethodInfo mi = m_MethodInfoStack.Peek();
+
                 string retVar = string.Format("__compiler_try_ret_{0}", GetSourcePosForVar(node));
                 string errVar = string.Format("__compiler_try_err_{0}", GetSourcePosForVar(node));
                 string handledVar = string.Format("__compiler_try_handled_{0}", GetSourcePosForVar(node));
@@ -31,7 +33,9 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.AppendFormat("{0}local {1}, {2} = luatry((function()", GetIndentString(), retVar, errVar);
                 CodeBuilder.AppendLine();
                 ++m_Indent;
+                ++mi.TryCatchLayer;
                 VisitBlock(node.Block);
+                --mi.TryCatchLayer;
                 --m_Indent;
                 CodeBuilder.AppendFormat("{0}end));", GetIndentString());
                 CodeBuilder.AppendLine();
@@ -43,7 +47,9 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.AppendFormat("{0}{1} = luacatch({1}, {2}, {3},", GetIndentString(), handledVar, retVar, errVar);
                         CodeBuilder.AppendLine();
                         ++m_Indent;
+                        ++mi.TryCatchLayer;
                         VisitCatchClause(clause);
+                        --mi.TryCatchLayer;
                         --m_Indent;
                         CodeBuilder.AppendFormat("{0});", GetIndentString());
                         CodeBuilder.AppendLine();
