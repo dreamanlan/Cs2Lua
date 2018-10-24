@@ -33,6 +33,14 @@ namespace RoslynTool.CsToLua
         internal ExpressionSyntax SecondRefArray = null;
 
         internal IMethodSymbol MethodSymbol = null;
+        internal IMethodSymbol CallerMethodSymbol = null;
+        internal INamedTypeSymbol CallerTypeSymbol = null;
+
+        internal InvocationInfo(IMethodSymbol caller)
+        {
+            CallerMethodSymbol = caller;
+            CallerTypeSymbol = caller.ContainingType;
+        }
 
         internal void Init(IMethodSymbol sym, ArgumentListSyntax argList, SemanticModel model)
         {
@@ -328,6 +336,12 @@ namespace RoslynTool.CsToLua
                 return;
             }
             if (ClassInfo.HasAttribute(sym, "Cs2Lua.DontCheckAttribute")) {
+                return;
+            }
+            if (ClassInfo.HasAttribute(CallerMethodSymbol, "Cs2Lua.DontCheckAttribute")) {
+                return;
+            }
+            if (ClassInfo.HasAttribute(CallerTypeSymbol, "Cs2Lua.DontCheckAttribute")) {
                 return;
             }
 

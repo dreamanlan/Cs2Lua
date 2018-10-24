@@ -173,7 +173,7 @@ namespace RoslynTool.CsToLua
         {
             if (null != opd && opd.UsesOperatorMethod && !(node is CastExpressionSyntax)) {
                 IMethodSymbol msym = opd.OperatorMethod;
-                InvocationInfo ii = new InvocationInfo();
+                InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
                 var arglist = new List<ExpressionSyntax>() { node };
                 ii.Init(msym, arglist, m_Model);
                 OutputOperatorInvoke(ii, node);
@@ -185,9 +185,29 @@ namespace RoslynTool.CsToLua
         {
             return m_ClassInfoStack.Peek();
         }
+        internal INamedTypeSymbol GetCurClassSemanticInfo()
+        {
+            if (m_ClassInfoStack.Count > 0) {
+                var info = m_ClassInfoStack.Peek();
+                if (null != info) {
+                    return info.SemanticInfo;
+                }
+            }
+            return null;
+        }
         internal MethodInfo GetCurMethodInfo()
         {
             return m_MethodInfoStack.Peek();
+        }
+        internal IMethodSymbol GetCurMethodSemanticInfo()
+        {
+            if (m_MethodInfoStack.Count > 0) {
+                var info = m_MethodInfoStack.Peek();
+                if (null != info) {
+                    return info.SemanticInfo;
+                }
+            }
+            return null;
         }
 
         internal CsLuaTranslater(SemanticModel model, bool enableInherit, bool enableLinq)
