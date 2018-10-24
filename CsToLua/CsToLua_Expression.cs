@@ -864,10 +864,13 @@ namespace RoslynTool.CsToLua
                     if (isExternal) {
                         CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
                     }
-                    if (null != namedTypeSym && SymbolTable.EnableTranslationCheck && !ClassInfo.HasAttribute(namedTypeSym, "Cs2Lua.DontCheckAttribute") 
-                        && !ClassInfo.HasAttribute(GetCurMethodSemanticInfo(), "Cs2Lua.DontCheckAttribute") 
-                        && !ClassInfo.HasAttribute(GetCurClassSemanticInfo(), "Cs2Lua.DontCheckAttribute")) {
-                        if (namedTypeSym.IsGenericType && !SymbolTable.Instance.IsCs2LuaSymbol(namedTypeSym)) {
+                    if (null != namedTypeSym && SymbolTable.EnableTranslationCheck){
+                        var callerMethodSym = GetCurMethodSemanticInfo();
+                        var callerTypeSym = GetCurClassSemanticInfo();
+                        if (ClassInfo.HasAttribute(namedTypeSym, "Cs2Lua.DontCheckAttribute")) {
+                        } else if (null != callerMethodSym && !ClassInfo.HasAttribute(callerMethodSym, "Cs2Lua.DontCheckAttribute")) {
+                        } else if (null != callerTypeSym && !ClassInfo.HasAttribute(callerTypeSym, "Cs2Lua.DontCheckAttribute")) {
+                        } else if (namedTypeSym.IsGenericType && !SymbolTable.Instance.IsCs2LuaSymbol(namedTypeSym)) {
                             Logger.Instance.Log("Translation Warning", "extern class {0} is generic class, can't create object !", fullTypeName);
                         }
                     }

@@ -38,8 +38,10 @@ namespace RoslynTool.CsToLua
 
         internal InvocationInfo(IMethodSymbol caller)
         {
-            CallerMethodSymbol = caller;
-            CallerTypeSymbol = caller.ContainingType;
+            if (null != caller) {
+                CallerMethodSymbol = caller;
+                CallerTypeSymbol = caller.ContainingType;
+            }
         }
 
         internal void Init(IMethodSymbol sym, ArgumentListSyntax argList, SemanticModel model)
@@ -338,10 +340,10 @@ namespace RoslynTool.CsToLua
             if (ClassInfo.HasAttribute(sym, "Cs2Lua.DontCheckAttribute")) {
                 return;
             }
-            if (ClassInfo.HasAttribute(CallerMethodSymbol, "Cs2Lua.DontCheckAttribute")) {
+            if (null != CallerMethodSymbol && ClassInfo.HasAttribute(CallerMethodSymbol, "Cs2Lua.DontCheckAttribute")) {
                 return;
             }
-            if (ClassInfo.HasAttribute(CallerTypeSymbol, "Cs2Lua.DontCheckAttribute")) {
+            if (null != CallerTypeSymbol && ClassInfo.HasAttribute(CallerTypeSymbol, "Cs2Lua.DontCheckAttribute")) {
                 return;
             }
 
