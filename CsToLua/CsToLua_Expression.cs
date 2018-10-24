@@ -814,6 +814,7 @@ namespace RoslynTool.CsToLua
             if (null != objectCreate) {
                 var typeSymInfo = objectCreate.Type;
                 var sym = objectCreate.Constructor;
+                var namedTypeSym = typeSymInfo as INamedTypeSymbol;
 
                 m_ObjectCreateStack.Push(typeSymInfo);
 
@@ -862,6 +863,11 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendFormat("new{0}object({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
                     if (isExternal) {
                         CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
+                    }
+                    if (null != namedTypeSym && SymbolTable.EnableTranslationCheck && !ClassInfo.HasAttribute(namedTypeSym, "Cs2Lua.DontCheckAttribute")) {
+                        if (namedTypeSym.IsGenericType && !SymbolTable.Instance.IsCs2LuaSymbol(namedTypeSym)) {
+                            Logger.Instance.Log("Translation Warning", "extern class {0} is generic class, can't create object !", fullTypeName);
+                        }
                     }
                 }
                 if (string.IsNullOrEmpty(ctor)) {

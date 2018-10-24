@@ -3,6 +3,10 @@
 namespace Cs2Lua
 {
     [System.AttributeUsage(System.AttributeTargets.All)]
+    public sealed class DontCheckAttribute : System.Attribute
+    { }
+
+    [System.AttributeUsage(System.AttributeTargets.All)]
     public sealed class IgnoreAttribute : System.Attribute
     { }
 

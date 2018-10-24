@@ -367,6 +367,7 @@ namespace RoslynTool.CsToLua
                     }
                 }
             }
+            bool first = true;
             for (int i = 0; i < ct; ++i) {
                 var section = node.Sections[i];
                 if (section == defaultSection) {
@@ -384,7 +385,7 @@ namespace RoslynTool.CsToLua
                     ci.IsIgnoreBreak = true;
                 }
 
-                CodeBuilder.AppendFormat("{0}{1} ", GetIndentString(), i == 0 ? "if" : "elseif");
+                CodeBuilder.AppendFormat("{0}{1} ", GetIndentString(), first ? "if" : "elseif");
                 int lct = section.Labels.Count;
                 for (int j = 0; j < lct; ++j) {
                     var label = section.Labels[j] as CaseSwitchLabelSyntax;
@@ -422,6 +423,7 @@ namespace RoslynTool.CsToLua
                 }
 
                 m_ContinueInfoStack.Pop();
+                first = false;
             }
             if (null != defaultSection) {
                 ContinueInfo ci = new ContinueInfo();
@@ -532,6 +534,10 @@ namespace RoslynTool.CsToLua
 
                 CodeBuilder.AppendFormat("{0}return nil;", GetIndentString());
                 CodeBuilder.AppendLine();
+
+                if (IsLastNodeOfMethod(node)) {
+                    mi.ExistTopLevelReturn = true;
+                }
 
                 if (!isLastNode) {
                     CodeBuilder.AppendFormat("{0}end;", GetIndentString());
