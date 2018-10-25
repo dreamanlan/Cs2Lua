@@ -448,8 +448,6 @@ namespace RoslynTool.CsToLua
                 File.Copy(Path.Combine(exepath, "lualib/utility_slua.lua"), Path.Combine(outputDir, string.Format("cs2lua__utility.{0}", outputExt)), true);
             } else if (SymbolTable.ForXlua) {
                 File.Copy(Path.Combine(exepath, "lualib/utility_xlua.lua"), Path.Combine(outputDir, string.Format("cs2lua__utility.{0}", outputExt)), true);
-            } else if (SymbolTable.ForTolua) {
-                File.Copy(Path.Combine(exepath, "lualib/utility_tolua.lua"), Path.Combine(outputDir, string.Format("cs2lua__utility.{0}", outputExt)), true);
             } else {
                 File.Copy(Path.Combine(exepath, "lualib/utility.lua"), Path.Combine(outputDir, string.Format("cs2lua__utility.{0}", outputExt)), true);
             }

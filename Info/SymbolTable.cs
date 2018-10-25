@@ -616,11 +616,6 @@ namespace RoslynTool.CsToLua
             get { return s_ForXlua; }
             set { s_ForXlua = value; }
         }
-        internal static bool ForTolua
-        {
-            get { return s_ForTolua; }
-            set { s_ForTolua = value; }
-        }
         internal static bool NoAutoRequire
         {
             get { return s_NoAutoRequire; }
@@ -650,7 +645,6 @@ namespace RoslynTool.CsToLua
         private static string s_ExternClassNamePrefix = string.Empty;
         private static bool s_ForSlua = true;
         private static bool s_ForXlua = false;
-        private static bool s_ForTolua = false;
         private static bool s_NoAutoRequire = false;
         private static bool s_LuaComponentByString = false;
         private static bool s_UseArrayGetSet = false;

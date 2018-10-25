@@ -370,7 +370,8 @@ namespace RoslynTool.CsToLua
                             continue;
                         }
                         var namedType = param.Type as INamedTypeSymbol;
-                        if (null != namedType && namedType.IsGenericType && namedType.TypeKind != TypeKind.Delegate) {
+                        if (null != namedType && !SymbolTable.Instance.IsCs2LuaSymbol(namedType) && namedType.IsGenericType && namedType.TypeKind != TypeKind.Delegate) {
+                            var fullName = ClassInfo.GetFullName(namedType);
                             Logger.Instance.Log("Translation Warning", "extern method {0}.{1} parameter {2} is generic type, please replace with non generic type !", ckey, sym.Name, param.Name);
                             continue;
                         }

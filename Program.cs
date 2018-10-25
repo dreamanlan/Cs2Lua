@@ -120,9 +120,6 @@ namespace RoslynTool
                             SetNormalLua();
                             SymbolTable.SetExternClassNamePrefix("CS.");
                             SymbolTable.ForXlua = true;
-                        } else if (0 == string.Compare(args[i], "-tolua", true)) {
-                            SetNormalLua();
-                            SymbolTable.ForTolua = true;
                         } else if (0 == string.Compare(args[i], "-outputresult", true)) {
                             outputResult = true;
                         } else if (0 == string.Compare(args[i], "-parallel", true)) {
@@ -240,7 +237,6 @@ namespace RoslynTool
             SymbolTable.SetExternClassNamePrefix(string.Empty);
             SymbolTable.ForSlua = false;
             SymbolTable.ForXlua = false;
-            SymbolTable.ForTolua = false;
         }
     }
 }

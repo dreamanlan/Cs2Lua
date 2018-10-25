@@ -373,7 +373,7 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.Append("\"");
                 } else {
                     var ci = m_ClassInfoStack.Peek();
-                    bool useTypeOfFunc = (SymbolTable.ForXlua || SymbolTable.ForTolua) && null != type && !SymbolTable.Instance.IsCs2LuaSymbol(type);
+                    bool useTypeOfFunc = SymbolTable.ForXlua && null != type && !SymbolTable.Instance.IsCs2LuaSymbol(type);
                     if (useTypeOfFunc) {
                         CodeBuilder.Append("typeof(");
                     }
@@ -999,7 +999,7 @@ namespace RoslynTool.CsToLua
                 }
             }
         }
-        private static bool IsSubclassOf(ITypeSymbol symInfo, string name)
+        internal static bool IsSubclassOf(ITypeSymbol symInfo, string name)
         {
             bool ret = false;
             INamedTypeSymbol baseType = symInfo.BaseType;
@@ -1013,7 +1013,7 @@ namespace RoslynTool.CsToLua
             }
             return ret;
         }
-        private static bool IsImplementationOfSys(ITypeSymbol symInfo, string name)
+        internal static bool IsImplementationOfSys(ITypeSymbol symInfo, string name)
         {
             if (null != symInfo) {
                 foreach (var intf in symInfo.AllInterfaces) {
@@ -1027,7 +1027,7 @@ namespace RoslynTool.CsToLua
             }
             return false;
         }
-        private static bool IsImplementationOf(ITypeSymbol symInfo, string name)
+        internal static bool IsImplementationOf(ITypeSymbol symInfo, string name)
         {
             if (null != symInfo) {
                 foreach (var intf in symInfo.AllInterfaces) {
@@ -1038,6 +1038,7 @@ namespace RoslynTool.CsToLua
             }
             return false;
         }
+
         private static string GetArraySubscriptString(int index)
         {
             StringBuilder sb = new StringBuilder();

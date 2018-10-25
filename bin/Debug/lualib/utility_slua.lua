@@ -62,6 +62,7 @@ System.Collections.Generic.Queue_T = {__cs2lua_defined = true, __type_name = "Sy
 System.Collections.Generic.Stack_T = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.Stack_T", __exist = function(k) return false; end};
 System.Collections.Generic.Dictionary_TKey_TValue = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.Dictionary_TKey_TValue", __exist = function(k) return false; end};
 System.Collections.Generic.HashSet_T = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.HashSet_T", __exist = function(k) return false; end};
+System.Collections.Generic.KeyValuePair_TKey_TValue = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.KeyValuePair_TKey_TValue", __exist = function(k) return false; end};
 System.Array = System.Array or {};
 
 System.Collections.Generic.MyDictionary_TKey_TValue = System.Collections.Generic.Dictionary_TKey_TValue;
@@ -1357,6 +1358,10 @@ end;
 
 function newexternobject(class, className, ctor, initializer, ...)
   local obj = nil;
+	local args = {...};
+  if class == System.Collections.Generic.KeyValuePair_TKey_TValue then
+  	return { Key=args[1], Value=args[2] };
+  end;
   if class ~= nil then
     obj = class(...);
   else

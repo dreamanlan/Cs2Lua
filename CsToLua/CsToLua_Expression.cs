@@ -286,7 +286,7 @@ namespace RoslynTool.CsToLua
 
             var oper = m_Model.GetOperation(node) as ITypeOfExpression;
             var type = oper.TypeOperand;
-            bool useTypeOfFunc = (SymbolTable.ForXlua || SymbolTable.ForTolua) && null != type && !SymbolTable.Instance.IsCs2LuaSymbol(type);
+            bool useTypeOfFunc = SymbolTable.ForXlua && null != type && !SymbolTable.Instance.IsCs2LuaSymbol(type);
             if (useTypeOfFunc) {
                 CodeBuilder.Append("typeof(");
             }
@@ -870,6 +870,7 @@ namespace RoslynTool.CsToLua
                         if (ClassInfo.HasAttribute(namedTypeSym, "Cs2Lua.DontCheckAttribute")) {
                         } else if (null != callerMethodSym && !ClassInfo.HasAttribute(callerMethodSym, "Cs2Lua.DontCheckAttribute")) {
                         } else if (null != callerTypeSym && !ClassInfo.HasAttribute(callerTypeSym, "Cs2Lua.DontCheckAttribute")) {
+                        } else if (fullTypeName == SymbolTable.PrefixExternClassName("System.Collections.Generic.KeyValuePair_TKey_TValue")) {
                         } else if (namedTypeSym.IsGenericType && !SymbolTable.Instance.IsCs2LuaSymbol(namedTypeSym)) {
                             Logger.Instance.Log("Translation Warning", "extern class {0} is generic class, can't create object !", fullTypeName);
                         }
