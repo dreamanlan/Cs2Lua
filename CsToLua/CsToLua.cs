@@ -1080,6 +1080,8 @@ namespace RoslynTool.CsToLua
                     return "\\\"";
                 case '\'':
                     return "\\'";
+                case '\0':
+                    return "\\0";
                 default:
                     return c.ToString();
             }
