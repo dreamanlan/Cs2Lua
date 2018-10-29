@@ -1068,7 +1068,7 @@ namespace RoslynTool.CsToLua
                     sb.AppendFormat("{0}{1}.__cctor_called = true;", GetIndentString(indent), key);
                     sb.AppendLine();
                     --indent;
-                    sb.AppendFormat("{0}end", GetIndentString(indent));
+                    sb.AppendFormat("{0}end;", GetIndentString(indent));
                     sb.AppendLine();
                     //static initializer
                     foreach (var ci in classes) {
@@ -1215,7 +1215,7 @@ namespace RoslynTool.CsToLua
                         sb.AppendFormat("{0}this.__ctor_called = true;", GetIndentString(indent));
                         sb.AppendLine();
                         --indent;
-                        sb.AppendFormat("{0}end", GetIndentString(indent));
+                        sb.AppendFormat("{0}end;", GetIndentString(indent));
                         sb.AppendLine();
                         //instance initializer
                         foreach (var ci in classes) {
