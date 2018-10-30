@@ -437,6 +437,7 @@ namespace RoslynTool.CsToLua
             StringBuilder nsBuilder = new StringBuilder();
             BuildNamespaces(nsBuilder, toplevelMni);
             StringBuilder attrBuilder = new StringBuilder();
+            attrBuilder.AppendLine("__cs2lua__AllAttrs = {};");
             BuildAttributes(attrBuilder, compilation.Assembly, ignoredClasses);
             StringBuilder enumBuilder = new StringBuilder();
             BuildExternEnums(enumBuilder);
@@ -616,7 +617,8 @@ namespace RoslynTool.CsToLua
             foreach (var sym in typesym.GetMembers()) {
                 var msym = sym as IMethodSymbol;
                 if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Lua.IgnoreAttribute")) {
-                    temp.AppendFormat("{0}{1} = {{", GetIndentString(indent), sym.Name);
+                    string mname = SymbolTable.Instance.NameMangling(msym);
+                    temp.AppendFormat("{0}{1} = {{", GetIndentString(indent), mname);
                     temp.AppendLine();
                     ++indent;
                     BuildAttributes(temp, indent, msym.GetAttributes());
@@ -662,7 +664,7 @@ namespace RoslynTool.CsToLua
             }
             --indent;
             if (csb.Length > 0) {
-                sb.AppendFormat("{0}__Attrs = {{", ClassInfo.GetFullName(typesym).Replace(".", "__"));
+                sb.AppendFormat("__cs2lua__AllAttrs[\"{0}\"] = {{", ClassInfo.GetFullName(typesym));
                 sb.AppendLine();
                 sb.Append(csb.ToString());
                 sb.Append("};");
