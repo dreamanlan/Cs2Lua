@@ -1510,6 +1510,13 @@ function delegationcomparewithnil(isevent, isStatic, key, t, inf, k, isequal)
       return false;
     end;
   end;
+  if type(t)=="function" then
+  	if isequal then 
+      return false;
+    else
+      return true;
+    end;
+  end;
   local v = t;
   if k then
     v = t[k];  
