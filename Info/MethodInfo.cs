@@ -71,13 +71,12 @@ namespace RoslynTool.CsToLua
                     //遇到变参直接结束（变参set_Item会出现后面带一个value参数的情形，在函数实现里处理）
                     break;
                 } else if (param.RefKind == RefKind.Ref) {
-                    ParamNames.Add(param.Name);
+                    //ref参数与out参数在形参处理时机制相同，实参时out参数传入__cs2lua_out（适应脚本引擎与dotnet反射的调用规则）
+                    ParamNames.Add(string.Format("ref({0})", param.Name));
                     ReturnParamNames.Add(param.Name);
                 } else if (param.RefKind == RefKind.Out) {
-                    //实参时out参数传入__cs2lua_out（适应slua与dotnet反射的调用规则，xlua忽略out参数）
-                    if (!SymbolTable.ForXlua) {
-                        ParamNames.Add(param.Name);
-                    }
+                    //ref参数与out参数在形参处理时机制相同，实参时out参数传入__cs2lua_out（适应脚本引擎与dotnet反射的调用规则）
+                    ParamNames.Add(string.Format("out({0})", param.Name));
                     ReturnParamNames.Add(param.Name);
                     OutParamNames.Add(param.Name);
                 } else {

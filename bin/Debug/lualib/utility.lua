@@ -1,10 +1,41 @@
 --remove comments for debug with ZeroBrane
 --require "luadebug";
 
-local rawrequire = require;
-require = function(file)  
-  return package.loaded[file] or rawrequire(file);
+function printJitStatus()
+  local infos = Slua.CreateClass("System.Text.StringBuilder");
+  local results = { jit.status() };  
+  Utility.AppendFormat(infos, "jit status count {0}", #results);
+  infos:AppendLine();
+  for i,v in ipairs(results) do
+    if i==1 then
+      Utility.AppendFormat(infos, "jit status {0}", v);
+    else
+      Utility.AppendFormat(infos, " {0}", v);
+    end;
+    infos:AppendLine();
+  end;
+  UnityEngine.Debug.Log(infos:ToString());
 end;
+
+jit.off();
+jit.flush();
+printJitStatus();
+
+if not package.loading then package.loading = {} end
+
+local rawrequire = require;
+-- a chatty version of the actual import function above
+function require(x)
+  if package.loading[x] == nil then
+    package.loading[x]=true
+    --print('loading started for ' .. x)
+    rawrequire(x)
+    --print('loading ended for ' .. x)
+    package.loading[x]=nil
+  else
+    --print('already loading ' .. x)
+  end
+end
 
 function __basic_type_func(v)
 	return v;
@@ -36,7 +67,8 @@ System.Array = System.Array or {};
 
 System.Collections.Generic.MyDictionary_TKey_TValue = System.Collections.Generic.Dictionary_TKey_TValue;
 
-__cs2lua_out = nil;
+Slua = Slua or {out={}};
+__cs2lua_out = Slua.out;
 __cs2lua_nil_field_value = {};
 
 __cs2lua_special_integer_operators = { "/", "%", "+", "-", "*", "<<", ">>", "&", "|", "^", "~" };

@@ -16,7 +16,7 @@ namespace RoslynTool.CsToLua
 
         public override void VisitThrowStatement(ThrowStatementSyntax node)
         {
-            CodeBuilder.AppendFormat("{0}luathrow(", GetIndentString());
+            CodeBuilder.AppendFormat("{0}dslthrow(", GetIndentString());
             IConversionExpression opd = m_Model.GetOperation(node.Expression) as IConversionExpression;
             OutputExpressionSyntax(node.Expression, opd);
             CodeBuilder.AppendLine(");");
@@ -30,21 +30,21 @@ namespace RoslynTool.CsToLua
                 string errVar = string.Format("__compiler_try_err_{0}", GetSourcePosForVar(node));
                 string handledVar = string.Format("__compiler_try_handled_{0}", GetSourcePosForVar(node));
 
-                CodeBuilder.AppendFormat("{0}local {1}, {2} = luatry((function()", GetIndentString(), retVar, errVar);
+                CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}) = dsltry(function(){{", GetIndentString(), retVar, errVar);
                 CodeBuilder.AppendLine();
                 ++m_Indent;
                 ++mi.TryCatchLayer;
                 VisitBlock(node.Block);
                 --mi.TryCatchLayer;
                 --m_Indent;
-                CodeBuilder.AppendFormat("{0}end));", GetIndentString());
+                CodeBuilder.AppendFormat("{0}}});", GetIndentString());
                 CodeBuilder.AppendLine();
-
+                
                 if (node.Catches.Count > 0) {
-                    CodeBuilder.AppendFormat("{0}local {1} = false;", GetIndentString(), handledVar);
+                    CodeBuilder.AppendFormat("{0}local({1}); {1} = false;", GetIndentString(), handledVar);
                     CodeBuilder.AppendLine();
                     foreach (var clause in node.Catches) {
-                        CodeBuilder.AppendFormat("{0}{1} = luacatch({1}, {2}, {3},", GetIndentString(), handledVar, retVar, errVar);
+                        CodeBuilder.AppendFormat("{0}{1} = dslcatch({1}, {2}, {3},", GetIndentString(), handledVar, retVar, errVar);
                         CodeBuilder.AppendLine();
                         ++m_Indent;
                         ++mi.TryCatchLayer;
@@ -73,14 +73,14 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.Append(", ");
                 CodeBuilder.Append(node.Declaration.Identifier.Text);
             }
-            CodeBuilder.Append(")");
+            CodeBuilder.Append("){");
             CodeBuilder.AppendLine();
             ++m_Indent;
             if (null != node.Filter) {
-                CodeBuilder.Append("if ");
+                CodeBuilder.Append("if(");
                 IConversionExpression opd = m_Model.GetOperation(node.Filter.FilterExpression) as IConversionExpression;
                 OutputExpressionSyntax(node.Filter.FilterExpression, opd);
-                CodeBuilder.Append(" then");
+                CodeBuilder.Append("){");
                 CodeBuilder.AppendLine();
                 ++m_Indent;
             }
@@ -90,13 +90,13 @@ namespace RoslynTool.CsToLua
             CodeBuilder.AppendLine();
             if (null != node.Filter) {
                 --m_Indent;
-                CodeBuilder.AppendFormat("{0}end;", GetIndentString());
+                CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                 CodeBuilder.AppendLine();
             }
             CodeBuilder.AppendFormat("{0}return {1};", GetIndentString(), handledVar);
             CodeBuilder.AppendLine();
             --m_Indent;
-            CodeBuilder.AppendFormat("{0}end)", GetIndentString());
+            CodeBuilder.AppendFormat("{0}}})", GetIndentString());
             CodeBuilder.AppendLine();
         }
         public override void VisitCatchDeclaration(CatchDeclarationSyntax node)
@@ -109,12 +109,12 @@ namespace RoslynTool.CsToLua
         }
         public override void VisitFinallyClause(FinallyClauseSyntax node)
         {
-            CodeBuilder.AppendFormat("{0}do", GetIndentString());
+            CodeBuilder.AppendFormat("{0}block{{", GetIndentString());
             CodeBuilder.AppendLine();
             ++m_Indent;
             VisitBlock(node.Block);
             --m_Indent;
-            CodeBuilder.AppendFormat("{0}end;", GetIndentString());
+            CodeBuilder.AppendFormat("{0}}};", GetIndentString());
             CodeBuilder.AppendLine();
         }
         #endregion

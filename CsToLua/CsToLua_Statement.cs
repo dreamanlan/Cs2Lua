@@ -28,7 +28,7 @@ namespace RoslynTool.CsToLua
 
                 bool isLastNode = IsLastNodeOfFor(node);
                 if (isLastNode) {
-                    CodeBuilder.AppendFormat("{0}do", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}block{{", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
                 
@@ -36,7 +36,7 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.AppendLine();
 
                 if (isLastNode) {
-                    CodeBuilder.AppendFormat("{0}end;", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
             }
@@ -54,7 +54,7 @@ namespace RoslynTool.CsToLua
                 
                 bool isLastNode = IsLastNodeOfFor(node);
                 if (isLastNode) {
-                    CodeBuilder.AppendFormat("{0}do", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}block{{", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
                 
@@ -62,7 +62,7 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.AppendLine();
                 
                 if (isLastNode) {
-                    CodeBuilder.AppendFormat("{0}end;", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
             }
@@ -74,7 +74,7 @@ namespace RoslynTool.CsToLua
             
             bool isLastNode = IsLastNodeOfParent(node);
             if (!isLastNode || mi.TryCatchLayer > 0) {
-                CodeBuilder.AppendFormat("{0}do", GetIndentString());
+                CodeBuilder.AppendFormat("{0}block{{", GetIndentString());
                 CodeBuilder.AppendLine();
             }
 
@@ -89,15 +89,15 @@ namespace RoslynTool.CsToLua
                     OutputExpressionSyntax(node.Expression, opd);
                     CodeBuilder.AppendLine(";");
                 }
-                CodeBuilder.AppendFormat("{0}return true;", GetIndentString());
+                CodeBuilder.AppendFormat("{0}return(true);", GetIndentString());
                 CodeBuilder.AppendLine();
             } else {
                 string prestr;
                 if (mi.SemanticInfo.MethodKind == MethodKind.Constructor) {
-                    CodeBuilder.AppendFormat("{0}return this", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}return(this", GetIndentString());
                     prestr = ", ";
                 } else {
-                    CodeBuilder.AppendFormat("{0}return ", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}return(", GetIndentString());
                     prestr = string.Empty;
                 }
                 if (null != node.Expression) {
@@ -118,11 +118,11 @@ namespace RoslynTool.CsToLua
                         prestr = ", ";
                     }
                 }
-                CodeBuilder.AppendLine(";");
+                CodeBuilder.AppendLine(");");
             }
 
             if (!isLastNode || mi.TryCatchLayer > 0) {
-                CodeBuilder.AppendFormat("{0}end;", GetIndentString());
+                CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                 CodeBuilder.AppendLine();
             }
         }
@@ -132,34 +132,34 @@ namespace RoslynTool.CsToLua
             ci.Init(node.Statement);
             m_ContinueInfoStack.Push(ci);
 
-            CodeBuilder.AppendFormat("{0}while ", GetIndentString());
+            CodeBuilder.AppendFormat("{0}while( ", GetIndentString());
             var oper = m_Model.GetOperation(node) as IWhileUntilLoopStatement;
             IConversionExpression opd = null;
             if (null != oper) {
                 opd = oper.Condition as IConversionExpression;
             }
             OutputExpressionSyntax(node.Condition, opd);
-            CodeBuilder.AppendLine(" do");
+            CodeBuilder.AppendLine(" ){");
             if (ci.HaveContinue) {
                 if (ci.HaveBreak) {
-                    CodeBuilder.AppendFormat("{0}local {1} = false", GetIndentString(), ci.BreakFlagVarName);
+                    CodeBuilder.AppendFormat("{0}local{{{1} = false;}};", GetIndentString(), ci.BreakFlagVarName);
                     CodeBuilder.AppendLine();
                 }
-                CodeBuilder.AppendFormat("{0}repeat", GetIndentString());
+                CodeBuilder.AppendFormat("{0}do{{", GetIndentString());
                 CodeBuilder.AppendLine();
             }
             ++m_Indent;
             node.Statement.Accept(this);
             --m_Indent;
             if (ci.HaveContinue) {
-                CodeBuilder.AppendFormat("{0}until true;", GetIndentString());
+                CodeBuilder.AppendFormat("{0}}}while(false);", GetIndentString());
                 CodeBuilder.AppendLine();
                 if (ci.HaveBreak) {
-                    CodeBuilder.AppendFormat("{0}if {1} then break; end;", GetIndentString(), ci.BreakFlagVarName);
+                    CodeBuilder.AppendFormat("{0}if({1}){{break;}};", GetIndentString(), ci.BreakFlagVarName);
                     CodeBuilder.AppendLine();
                 }
             }
-            CodeBuilder.AppendFormat("{0}end;", GetIndentString());
+            CodeBuilder.AppendFormat("{0}}};", GetIndentString());
             CodeBuilder.AppendLine();
 
             m_ContinueInfoStack.Pop();
@@ -170,28 +170,28 @@ namespace RoslynTool.CsToLua
             ci.Init(node.Statement);
             m_ContinueInfoStack.Push(ci);
 
-            CodeBuilder.AppendFormat("{0}repeat", GetIndentString());
+            CodeBuilder.AppendFormat("{0}do{{", GetIndentString());
             CodeBuilder.AppendLine();
             if (ci.HaveContinue) {
                 if (ci.HaveBreak) {
-                    CodeBuilder.AppendFormat("{0}local {1} = false", GetIndentString(), ci.BreakFlagVarName);
+                    CodeBuilder.AppendFormat("{0}local{{{1} = false;}};", GetIndentString(), ci.BreakFlagVarName);
                     CodeBuilder.AppendLine();
                 }
-                CodeBuilder.AppendFormat("{0}repeat", GetIndentString());
+                CodeBuilder.AppendFormat("{0}do{{", GetIndentString());
                 CodeBuilder.AppendLine();
             }
             ++m_Indent;
             node.Statement.Accept(this);
             --m_Indent;
             if (ci.HaveContinue) {
-                CodeBuilder.AppendFormat("{0}until true;", GetIndentString());
+                CodeBuilder.AppendFormat("{0}}}while(false);", GetIndentString());
                 CodeBuilder.AppendLine();
                 if (ci.HaveBreak) {
-                    CodeBuilder.AppendFormat("{0}if {1} then break; end;", GetIndentString(), ci.BreakFlagVarName);
+                    CodeBuilder.AppendFormat("{0}if({1}){{break;}};", GetIndentString(), ci.BreakFlagVarName);
                     CodeBuilder.AppendLine();
                 }
             }
-            CodeBuilder.AppendFormat("{0}until not (", GetIndentString());
+            CodeBuilder.AppendFormat("{0}}}while(", GetIndentString());
             var oper = m_Model.GetOperation(node) as IWhileUntilLoopStatement;
             IConversionExpression opd = null;
             if (null != oper) {
@@ -210,7 +210,7 @@ namespace RoslynTool.CsToLua
 
             if (null != node.Declaration)
                 VisitVariableDeclaration(node.Declaration);
-            CodeBuilder.AppendFormat("{0}while ", GetIndentString());
+            CodeBuilder.AppendFormat("{0}while( ", GetIndentString());
             if (null != node.Condition) {
                 var oper = m_Model.GetOperation(node) as IForLoopStatement;
                 IConversionExpression opd = null;
@@ -221,23 +221,23 @@ namespace RoslynTool.CsToLua
             } else {
                 CodeBuilder.Append("true");
             }
-            CodeBuilder.AppendLine(" do");
+            CodeBuilder.AppendLine(" ){");
             if (ci.HaveContinue) {
                 if (ci.HaveBreak) {
-                    CodeBuilder.AppendFormat("{0}local {1} = false", GetIndentString(), ci.BreakFlagVarName);
+                    CodeBuilder.AppendFormat("{0}local{{{1} = false;}};", GetIndentString(), ci.BreakFlagVarName);
                     CodeBuilder.AppendLine();
                 }
-                CodeBuilder.AppendFormat("{0}repeat", GetIndentString());
+                CodeBuilder.AppendFormat("{0}do{{", GetIndentString());
                 CodeBuilder.AppendLine();
             }
             ++m_Indent;
             node.Statement.Accept(this);
             --m_Indent;
             if (ci.HaveContinue) {
-                CodeBuilder.AppendFormat("{0}until true;", GetIndentString());
+                CodeBuilder.AppendFormat("{0}}}while(false);", GetIndentString());
                 CodeBuilder.AppendLine();
                 if (ci.HaveBreak) {
-                    CodeBuilder.AppendFormat("{0}if {1} then break; end;", GetIndentString(), ci.BreakFlagVarName);
+                    CodeBuilder.AppendFormat("{0}if({1}){{break;}};", GetIndentString(), ci.BreakFlagVarName);
                     CodeBuilder.AppendLine();
                 }
             }
@@ -245,7 +245,7 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.AppendFormat("{0}", GetIndentString());
                 VisitToplevelExpression(exp, ";");
             }
-            CodeBuilder.AppendFormat("{0}end;", GetIndentString());
+            CodeBuilder.AppendFormat("{0}}};", GetIndentString());
             CodeBuilder.AppendLine();
 
             m_ContinueInfoStack.Pop();
@@ -256,54 +256,54 @@ namespace RoslynTool.CsToLua
             ci.Init(node.Statement);
             m_ContinueInfoStack.Push(ci);
 
-            CodeBuilder.AppendFormat("{0}for {1} in getiterator(", GetIndentString(), node.Identifier.Text);
+            CodeBuilder.AppendFormat("{0}foreach({1}, getiterator(", GetIndentString(), node.Identifier.Text);
             IConversionExpression opd = null;
             var oper = m_Model.GetOperation(node) as IForEachLoopStatement;
             if (null != oper) {
                 opd = oper.Collection as IConversionExpression;
             }
             OutputExpressionSyntax(node.Expression, opd);
-            CodeBuilder.AppendLine(") do");
+            CodeBuilder.AppendLine(")){");
             if (ci.HaveContinue) {
                 if (ci.HaveBreak) {
-                    CodeBuilder.AppendFormat("{0}local {1} = false", GetIndentString(), ci.BreakFlagVarName);
+                    CodeBuilder.AppendFormat("{0}local{{{1} = false;}};", GetIndentString(), ci.BreakFlagVarName);
                     CodeBuilder.AppendLine();
                 }
-                CodeBuilder.AppendFormat("{0}repeat", GetIndentString());
+                CodeBuilder.AppendFormat("{0}do{{", GetIndentString());
                 CodeBuilder.AppendLine();
             }
             ++m_Indent;
             node.Statement.Accept(this);
             --m_Indent;
             if (ci.HaveContinue) {
-                CodeBuilder.AppendFormat("{0}until true;", GetIndentString());
+                CodeBuilder.AppendFormat("{0}}}while(false);", GetIndentString());
                 CodeBuilder.AppendLine();
                 if (ci.HaveBreak) {
-                    CodeBuilder.AppendFormat("{0}if {1} then break; end;", GetIndentString(), ci.BreakFlagVarName);
+                    CodeBuilder.AppendFormat("{0}if({1}){{break;}};", GetIndentString(), ci.BreakFlagVarName);
                     CodeBuilder.AppendLine();
                 }
             }
-            CodeBuilder.AppendFormat("{0}end;", GetIndentString());
+            CodeBuilder.AppendFormat("{0}}};", GetIndentString());
             CodeBuilder.AppendLine();
             m_ContinueInfoStack.Pop();
         }
         public override void VisitIfStatement(IfStatementSyntax node)
         {
-            CodeBuilder.AppendFormat("{0}if ", GetIndentString());
+            CodeBuilder.AppendFormat("{0}if( ", GetIndentString());
             var oper = m_Model.GetOperation(node) as IIfStatement;
             IConversionExpression opd = null;
             if (null != oper) {
                 opd = oper.Condition as IConversionExpression;
             }
             OutputExpressionSyntax(node.Condition, opd);
-            CodeBuilder.AppendLine(" then");
+            CodeBuilder.AppendLine(" ){");
             ++m_Indent;
             node.Statement.Accept(this);
             --m_Indent;
             if (null != node.Else) {
                 VisitElseClause(node.Else);
             } else {
-                CodeBuilder.AppendFormat("{0}end;", GetIndentString());
+                CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                 CodeBuilder.AppendLine();
             }
         }
@@ -311,30 +311,30 @@ namespace RoslynTool.CsToLua
         {
             IfStatementSyntax ifNode = node.Statement as IfStatementSyntax;
             if (null != ifNode) {
-                CodeBuilder.AppendFormat("{0}elseif ", GetIndentString());
+                CodeBuilder.AppendFormat("{0}}}elseif( ", GetIndentString());
                 var oper = m_Model.GetOperation(node) as IIfStatement;
                 IConversionExpression opd = null;
                 if (null != oper) {
                     opd = oper.Condition as IConversionExpression;
                 }
                 OutputExpressionSyntax(ifNode.Condition, opd);
-                CodeBuilder.AppendLine(" then");
+                CodeBuilder.AppendLine(" ){");
                 ++m_Indent;
                 ifNode.Statement.Accept(this);
                 --m_Indent;
                 if (null != ifNode.Else) {
                     VisitElseClause(ifNode.Else);
                 } else {
-                    CodeBuilder.AppendFormat("{0}end;", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
             } else {
-                CodeBuilder.AppendFormat("{0}else", GetIndentString());
+                CodeBuilder.AppendFormat("{0}}}else{{", GetIndentString());
                 CodeBuilder.AppendLine();
                 ++m_Indent;
                 node.Statement.Accept(this);
                 --m_Indent;
-                CodeBuilder.AppendFormat("{0}end;", GetIndentString());
+                CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                 CodeBuilder.AppendLine();
             }
         }
@@ -345,14 +345,14 @@ namespace RoslynTool.CsToLua
             si.SwitchVarName = varName;
             m_SwitchInfoStack.Push(si);
 
-            CodeBuilder.AppendFormat("{0}local {1} = ", GetIndentString(), varName);
+            CodeBuilder.AppendFormat("{0}local{{{1} = ", GetIndentString(), varName);
             IConversionExpression opd = null;
             var oper = m_Model.GetOperation(node) as ISwitchStatement;
             if (null != oper) {
                 opd = oper.Value as IConversionExpression;
             }
             OutputExpressionSyntax(node.Expression, opd);
-            CodeBuilder.AppendLine(";");
+            CodeBuilder.AppendLine(";};");
 
             int ct = node.Sections.Count;
             SwitchSectionSyntax defaultSection = null;
@@ -385,7 +385,7 @@ namespace RoslynTool.CsToLua
                     ci.IsIgnoreBreak = true;
                 }
 
-                CodeBuilder.AppendFormat("{0}{1} ", GetIndentString(), first ? "if" : "elseif");
+                CodeBuilder.AppendFormat("{0}{1} ", GetIndentString(), first ? "if(" : "}elseif(");
                 int lct = section.Labels.Count;
                 for (int j = 0; j < lct; ++j) {
                     var label = section.Labels[j] as CaseSwitchLabelSyntax;
@@ -398,14 +398,14 @@ namespace RoslynTool.CsToLua
                         if (lct > 1) {
                             CodeBuilder.Append(")");
                             if (j < lct - 1) {
-                                CodeBuilder.Append(" or ");
+                                CodeBuilder.Append(" || ");
                             }
                         }
                     }
                 }
-                CodeBuilder.AppendLine(" then");
+                CodeBuilder.AppendLine(" ){");
                 if (ba.BreakCount > 1) {
-                    CodeBuilder.AppendFormat("{0}repeat", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}repeat{{", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
                 ++m_Indent;
@@ -418,7 +418,7 @@ namespace RoslynTool.CsToLua
 
                 --m_Indent;
                 if (ba.BreakCount > 1) {
-                    CodeBuilder.AppendFormat("{0}until 0 ~= 0;", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}}}until(0 != 0);", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
 
@@ -438,13 +438,13 @@ namespace RoslynTool.CsToLua
                     ci.IsIgnoreBreak = true;
                 }
                 if (ct > 1) {
-                    CodeBuilder.AppendFormat("{0}else", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}}}else{{", GetIndentString());
                 } else {
-                    CodeBuilder.AppendFormat("{0}do", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}block{{", GetIndentString());
                 }
                 CodeBuilder.AppendLine();
                 if (ba.BreakCount > 1) {
-                    CodeBuilder.AppendFormat("{0}repeat", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}repeat{{", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
                 ++m_Indent;
@@ -457,15 +457,15 @@ namespace RoslynTool.CsToLua
 
                 --m_Indent;
                 if (ba.BreakCount > 1) {
-                    CodeBuilder.AppendFormat("{0}until 0 ~= 0;", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}}}until(0 != 0);", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
-                CodeBuilder.AppendFormat("{0}end;", GetIndentString());
+                CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                 CodeBuilder.AppendLine();
 
                 m_ContinueInfoStack.Pop();
             } else if (ct > 0) {
-                CodeBuilder.AppendFormat("{0}end;", GetIndentString());
+                CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                 CodeBuilder.AppendLine();
             }
 
@@ -476,12 +476,12 @@ namespace RoslynTool.CsToLua
             //Log(node, "Unsupported Syntax, ignore it !");
             //忽略
             if (null != node.Block) {
-                CodeBuilder.AppendFormat("{0}do", GetIndentString());
+                CodeBuilder.AppendFormat("{0}unsafe{{", GetIndentString());
                 CodeBuilder.AppendLine();
                 ++m_Indent;
                 VisitBlock(node.Block);
                 --m_Indent;
-                CodeBuilder.AppendFormat("{0}end;", GetIndentString());
+                CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                 CodeBuilder.AppendLine();
             }
         }
@@ -490,12 +490,12 @@ namespace RoslynTool.CsToLua
             //Log(node, "Unsupported Syntax, ignore it !");
             //忽略
             if (null != node.Statement) {
-                CodeBuilder.AppendFormat("{0}do", GetIndentString());
+                CodeBuilder.AppendFormat("{0}lock{{", GetIndentString());
                 CodeBuilder.AppendLine();
                 ++m_Indent;
                 node.Statement.Accept(this);
                 --m_Indent;
-                CodeBuilder.AppendFormat("{0}end;", GetIndentString());
+                CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                 CodeBuilder.AppendLine();
             }
         }
@@ -521,18 +521,18 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.Append(", false");
                     }
                 } else {
-                    CodeBuilder.Append("nil, false, false");
+                    CodeBuilder.Append("null, false, false");
                 }
                 CodeBuilder.Append(");");
                 CodeBuilder.AppendLine();
             } else {
                 bool isLastNode = IsLastNodeOfParent(node);
                 if (!isLastNode) {
-                    CodeBuilder.AppendFormat("{0}do", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}block{{", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
 
-                CodeBuilder.AppendFormat("{0}return nil;", GetIndentString());
+                CodeBuilder.AppendFormat("{0}return(null);", GetIndentString());
                 CodeBuilder.AppendLine();
 
                 if (IsLastNodeOfMethod(node)) {
@@ -540,7 +540,7 @@ namespace RoslynTool.CsToLua
                 }
 
                 if (!isLastNode) {
-                    CodeBuilder.AppendFormat("{0}end;", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
             }

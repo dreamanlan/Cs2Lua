@@ -35,6 +35,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dsl">
+      <HintPath>dep\Dsl.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeAnalysis">
       <HintPath>dep\Microsoft.CodeAnalysis.dll</HintPath>
     </Reference>
@@ -59,6 +62,9 @@
     <Compile Include="AnalysisHelper\TryCatchAnalysis.cs" />
     <Compile Include="AnalysisHelper\TypeAnalysis.cs" />
     <Compile Include="AnalysisHelper\YieldAnalysis.cs" />
+    <Compile Include="CsToLua\CsToLua.cs" />
+    <Compile Include="CsToLua\CsToLuaProcessor.cs" />
+    <Compile Include="CsToLua\CsToLuaUnimplemented.cs" />
     <Compile Include="CsToLua\CsToLua_CoreSyntax.cs" />
     <Compile Include="CsToLua\CsToLua_Exception.cs" />
     <Compile Include="CsToLua\CsToLua_Expression.cs" />
@@ -69,9 +75,6 @@
     <Compile Include="CsToLua\Logger.cs" />
     <Compile Include="Info\ClassInfo.cs" />
     <Compile Include="AnalysisHelper\ContinueAnalysis.cs" />
-    <Compile Include="CsToLua\CsToLua.cs" />
-    <Compile Include="CsToLua\CsToLuaProcessor.cs" />
-    <Compile Include="CsToLua\CsToLuaUnimplemented.cs" />
     <Compile Include="AnalysisHelper\FieldInitializerAnalysis.cs" />
     <Compile Include="AnalysisHelper\LuaKeywordsReplacer.cs" />
     <Compile Include="Info\ClassSymbolInfo.cs" />
@@ -79,11 +82,14 @@
     <Compile Include="Info\MethodInfo.cs" />
     <Compile Include="Info\MiscInfo.cs" />
     <Compile Include="Info\SymbolTable.cs" />
+    <Compile Include="LuaGenerator\LuaGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Cs2LuaUtility\Cs2LuaUtility.csproj">

@@ -631,6 +631,11 @@ namespace RoslynTool.CsToLua
             get { return s_UseArrayGetSet; }
             set { s_UseArrayGetSet = value; }
         }
+        internal static bool ArrayLowerBoundIsOne
+        {
+            get { return s_ArrayLowerBoundIsOne; }
+            set { s_ArrayLowerBoundIsOne = value; }
+        }
         internal static bool EnableTranslationCheck
         {
             get { return s_EnableTranslationCheck; }
@@ -648,6 +653,7 @@ namespace RoslynTool.CsToLua
         private static bool s_NoAutoRequire = false;
         private static bool s_LuaComponentByString = false;
         private static bool s_UseArrayGetSet = false;
+        private static bool s_ArrayLowerBoundIsOne = true;
         private static bool s_EnableTranslationCheck = false;
         private static string s_SystemDllPath = string.Empty;
 

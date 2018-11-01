@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-[Cs2Lua.Ignore]
+[Cs2Dsl.Ignore]
 class LuaConsole
 {
     public static void Print(params object[] args)

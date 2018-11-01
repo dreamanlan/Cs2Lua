@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-[Cs2Lua.Ignore]
+[Cs2Dsl.Ignore]
 class LuaConsole
 {
     public static void Print(params object[] args)
@@ -174,10 +174,10 @@ namespace TopLevel
             Two,
             Three,
         }
-        [Cs2Lua.Ignore]
+        [Cs2Dsl.Ignore]
         struct Point
         {
-            [Cs2Lua.Ignore]
+            [Cs2Dsl.Ignore]
             public static float X;
             public static float Y;
         }

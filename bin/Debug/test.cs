@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 
-[Cs2Lua.Ignore]
+[Cs2Dsl.Ignore]
 class LuaConsole
 {
     public static void Print(params object[] args)
@@ -13,22 +13,10 @@ class LuaConsole
     }
 }
 
-partial class ZipInputStream
+class ZipInputStream
 {
   public ZipInputStream(MemoryStream ms)
-  {
-      Test();
-  }
-
-  partial void Test();
-}
-
-partial class ZipInputStream
-{
-    partial void Test()
-    {
-        LuaConsole.Print("test test test");
-    }
+  {}
 }
 
 class ZipOutputStream
@@ -39,13 +27,14 @@ class ZipOutputStream
 
 class CUsingHelper : IDisposable
 {
-  public CUsingHelper(Action a1, Action a2)
-  {    
-  }
-  public void Dispose()
-  {
-  }
+    public CUsingHelper(Action a1, Action a2)
+    {    
+    }
+    public void Dispose()
+    {
+    }
   
+    [System.CLSCompliant(true)]
 	public static byte[] ReadZip(byte[] bytes)
 	{
 		ZipInputStream zipInput = new ZipInputStream(new MemoryStream(bytes));
@@ -64,16 +53,7 @@ class CUsingHelper : IDisposable
 }
 
 class TestUnity : MonoBehaviour
-{    
-    interface ITest
-    {}
-    interface ITest2 : ITest
-    {}
-    interface ITest3 : ITest2
-    {}
-    class TestInterface : ITest3
-    {}
-
+{
     void Test(params object[] args)
     {
         if (args.Length >= 3) {
@@ -83,15 +63,15 @@ class TestUnity : MonoBehaviour
         }
         var t = gameObject.GetComponent<Transform>();
         gameObject.SetActive(true);
-        var r = gameObject.renderer;
+        var r = gameObject.GetComponent<Renderer>();
         gameObject.active=true;
         bool v = true;
         string s = v.ToString();
         int i = 123;
-        string s = i.ToString();     
-        int i = s.IndexOf('2');
-        LuaConsole.Print(i);
-        int i = m_TestString.Length;
+        string s2 = i.ToString();     
+        int i2 = s2.IndexOf('2');
+        LuaConsole.Print(i2);
+        int i3 = m_TestString.Length;
         char c = m_TestString[2];
         bool equal = m_TestString == s;
         var a = new int[]{5,4,3,2,1};
@@ -113,18 +93,6 @@ class TestUnity : MonoBehaviour
         foreach (var vv in v5) {
 
         }
-        
-        List<int> vs = new List<int> { 3, 5, 9, 7, 6 };
-        var rs = from v in vs from vv in new[] { v, v + 1, v + 2, v + 3 } let v2 = v + 1 where v > 1 let v3 = v2 + 1 where v > 4 where v < 8 select new { v1 = v, v2 = v2, v3 = v3 };
-
-        string s = "1232312321";
-        char c = s[0];
-
-        int[] result = new int[123];
-        
-        int[,,] arr = new int[2,3,4];
-        
-        UnityEngine.Vector3[,,] arr2 = new UnityEngine.Vector3[8,8,8];
     }
 
     private string m_TestString = "13579";
@@ -207,7 +175,7 @@ namespace TopLevel
         One = 1,
         Two,
         Three = sizeof(int),
-        Four = (int)4.0*9.5,
+        Four = (int)(4.0*9.5),
     }
 
     struct TestStruct
@@ -322,9 +290,9 @@ namespace TopLevel
     
     namespace SecondLevel
     {
-        public class GenericClass<T> where T : new()
+        public class GenericClass<T> where T : class, new()
         {
-            public class InnerGenericClass<TT> where TT : new()
+            public class InnerGenericClass<TT> where TT : class, new()
             {
                 public InnerGenericClass(T v, TT vv)
                 {
@@ -336,7 +304,7 @@ namespace TopLevel
                 public void Test<G>(G g)
                 {
                     T v = g as T;
-                    T v = (T)(object)g;
+                    T v2 = (T)(object)g;
                     Foo f = new Foo();
                     f.Test3();
                 }
@@ -346,7 +314,7 @@ namespace TopLevel
                     Type t2 = typeof(T);
                     Type t3 = typeof(TT);
                     Type t4 = typeof(int);
-                    var v = (TT)t;
+                    var v = (TT)(object)t;
                 }
 
                 private T m_T = default(T);
@@ -383,7 +351,7 @@ namespace TopLevel
         {
             internal int m_Ttt = 6789;
         }
-        [Cs2Lua.EnableInherit]
+        [Cs2Dsl.EnableInherit]
         class Foo : FooBase
         {
             class Test1
@@ -472,18 +440,16 @@ namespace TopLevel
                 var ts = f.Val;
                 f[ts,ts]=123;
                 int r = f[ts,ts];
-                f?[ts,ts]=123;
-                r = f?[ts,ts];
 
                 int result = Singleton<Foo>.instance.Test123(1,2);
                 Singleton<Foo>.instance = null;
                 return f;
             }
 
-            public int Test123(int a = 1, float b = float.NegativeInfinity) => a+b;
+            public int Test123(int a = 1, float b = float.NegativeInfinity) => (int)(a+b);
 
-            public void GTest(GenericClass<int> arg){}
-            public void GTest(GenericClass<float> arg){}
+            public void GTest(GenericClass<bar> arg){}
+            public void GTest(GenericClass<Runnable> arg){}
 
             public IEnumerable Iterator()
             {
@@ -530,7 +496,7 @@ namespace TopLevel
 
             private int TestLocal(out int v)
             {
-                IRunnable ir = new Runnable();
+                IRunnable0 ir = new Runnable();
                 ir.Test();
                 v = 1;
                 return 2;
@@ -540,6 +506,7 @@ namespace TopLevel
                 ts.A=4;
                 ts.B=5;
                 ts.C=6;
+                return 0;
             }
             private int TestContinueAndReturn()
             {
@@ -584,7 +551,7 @@ namespace TopLevel
                 if (obj.m_Test > 0) {
                     obj.m_Test2 = 678;
                 }
-                List<List<int>> f = new List<List<int>> { { 1, 2 }, { 2, 3 } };
+                List<List<int>> f = new List<List<int>> { new List<int>{ 1, 2 }, new List<int>{ 2, 3 } };
             }
             public static void Test3(Foo @this, int ix)
             {
@@ -612,7 +579,7 @@ namespace TopLevel
                 
                 var rr = (Foo)123;
 
-                var rrr = 123 as Foo;
+                var rrr = f as Foo;
 
                 var obj = new GameObject("test test test");
 
@@ -624,11 +591,8 @@ namespace TopLevel
                 var v1 = dict?[1];
                 List<int> list = null;
                 var l = list?.Count;
-                list?.Add(1);
-                var v2 = list?[3]=1;
                 int[] arr2 = new int[]{1,2,3,4};
-                var v3 = arr2?[2]; 
-                arr2?[3]=345;
+                var v3 = arr2?[2];
                 int a=1,b=2,c=3;
                 a=b=c++;
             }

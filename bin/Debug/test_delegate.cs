@@ -10,7 +10,7 @@ public delegate int TestDelegation(int a, ref int b, out int c);
 public class ConvTest
 {
     public OnHandleDelegation OnHandleValue;
-    public event OnHandleDelegation OnHandle;
+    public event OnHandleDelegation OnHandle = OnHandleValue;
     public int this[int ix]
     {
         get
@@ -67,7 +67,7 @@ public class ConvTest
         bool[] tarr; tarr = new bool[]{obj, obj, obj};
         Dictionary<string, bool> tdict; tdict = new Dictionary<string,bool>{{"1",obj},{"2",obj}};
         List<bool> tlist; tlist = new List<bool>{obj,obj,obj};
-        List<List<bool>> f = new List<List<bool>> { new List<bool> { obj, obj }, new List<bool> { obj, obj } };
+        List<List<bool>> f = new List<List<bool>> { { obj, obj }, { obj, obj } };
         c = 1;
         c/=2;
         c=c/2;
@@ -80,7 +80,7 @@ public class ConvTest
         cc = (c--);
         return null;
     }
-    [Cs2Lua.TranslateTo("MyImpl","myTestConv4")]
+    [Cs2Dsl.TranslateTo("MyImpl","myTestConv4")]
     public DelegateTest TestConv3(int a, int b, out int c)
     {
         c = 1;
@@ -154,8 +154,6 @@ public class DelegateTest : MonoBehaviour
             Debug.Log(v2);
         }
         ConvTest tc = new ConvTest();
-        tc.OnHandleValue += this.Test3;
-        tc.OnHandleValue -= this.Test3;
         bool vv = tc.TestConv(1, this);
         bool vv2;
         vv2 = tc.TestConv(1, 2);
@@ -172,11 +170,6 @@ public class DelegateTest : MonoBehaviour
         Test(arr[0]);
         Test(this.ObjProp);
         Test(this[0]);
-    }
-
-    private void Test3()
-    {
-
     }
 
     public static implicit operator int(DelegateTest thisObj) => 0;

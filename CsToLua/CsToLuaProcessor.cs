@@ -23,8 +23,9 @@ namespace RoslynTool.CsToLua
     }
     public static class CsToLuaProcessor
     {
-        public static ExitCode Process(string srcFile, string outputDir, string outputExt, IList<string> macros, IList<string> undefMacros, IList<string> ignoredPath, IList<string> externPath, IList<string> internPath, IDictionary<string, string> _refByNames, IDictionary<string, string> _refByPaths, bool enableInherit, bool enableLinq, bool outputResult, bool parallel)
+        public static ExitCode Process(string srcFile, IList<string> macros, IList<string> undefMacros, IList<string> ignoredPath, IList<string> externPath, IList<string> internPath, IDictionary<string, string> _refByNames, IDictionary<string, string> _refByPaths, bool enableInherit, bool enableLinq, bool outputResult, bool parallel)
         {
+            const string c_OutputExt = "dsl";
             List<string> preprocessors = new List<string>(macros);
             preprocessors.Add("__LUA__");
 
@@ -50,11 +51,7 @@ namespace RoslynTool.CsToLua
             if (!Directory.Exists(logDir)) {
                 Directory.CreateDirectory(logDir);
             }
-            if (string.IsNullOrEmpty(outputDir)) {
-                outputDir = Path.Combine(path, "lua");
-            } else if (!Path.IsPathRooted(outputDir)) {
-                outputDir = Path.Combine(path, outputDir);
-            }
+            string outputDir = Path.Combine(path, "dsl");
             if (!Directory.Exists(outputDir)) {
                 Directory.CreateDirectory(outputDir);
             }
@@ -223,7 +220,7 @@ namespace RoslynTool.CsToLua
                 var arr = System.Collections.Immutable.ImmutableArray.Create(pair.Value);
                 refs.Add(MetadataReference.CreateFromFile(fullPath, new MetadataReferenceProperties(MetadataImageKind.Assembly, arr)));
             }
-                        
+
             List<SyntaxTree> newTrees = new List<SyntaxTree>();
             CSharpCompilationOptions compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
             compilationOptions = compilationOptions.WithAssemblyIdentityComparer(DesktopAssemblyIdentityComparer.Default);
@@ -273,7 +270,6 @@ namespace RoslynTool.CsToLua
                                                 ignoredClasses.Add(key, type);
                                             }
                                         }
-
                                         if (ignore && !SymbolTable.Instance.IgnoredTypes.ContainsKey(key)) {
                                             SymbolTable.Instance.IgnoredTypes.TryAdd(key, type);
                                         }
@@ -433,11 +429,9 @@ namespace RoslynTool.CsToLua
                 }
                 sw.Close();
             }
-            HashSet<string> lualibRefs = new HashSet<string>();
             StringBuilder nsBuilder = new StringBuilder();
             BuildNamespaces(nsBuilder, toplevelMni);
             StringBuilder attrBuilder = new StringBuilder();
-            attrBuilder.AppendLine("__cs2lua__AllAttrs = {};");
             BuildAttributes(attrBuilder, compilation.Assembly, ignoredClasses);
             StringBuilder enumBuilder = new StringBuilder();
             BuildExternEnums(enumBuilder);
@@ -445,35 +439,18 @@ namespace RoslynTool.CsToLua
             BuildInterfaces(intfBuilder);
             StringBuilder refExternBuilder = new StringBuilder();
             BuildReferencedExternTypes(refExternBuilder);
-            if (SymbolTable.ForSlua) {
-                File.Copy(Path.Combine(exepath, "lualib/utility_slua.lua"), Path.Combine(outputDir, string.Format("cs2lua__utility.{0}", outputExt)), true);
-            } else if (SymbolTable.ForXlua) {
-                File.Copy(Path.Combine(exepath, "lualib/utility_xlua.lua"), Path.Combine(outputDir, string.Format("cs2lua__utility.{0}", outputExt)), true);
-            } else {
-                File.Copy(Path.Combine(exepath, "lualib/utility.lua"), Path.Combine(outputDir, string.Format("cs2lua__utility.{0}", outputExt)), true);
-            }
-            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__namespaces.{0}", outputExt)), nsBuilder.ToString());
-            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__attributes.{0}", outputExt)), attrBuilder.ToString());
-            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__externenums.{0}", outputExt)), enumBuilder.ToString());
-            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__interfaces.{0}", outputExt)), intfBuilder.ToString());
+            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__namespaces.{0}", c_OutputExt)), nsBuilder.ToString());
+            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__attributes.{0}", c_OutputExt)), attrBuilder.ToString());
+            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__externenums.{0}", c_OutputExt)), enumBuilder.ToString());
+            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__interfaces.{0}", c_OutputExt)), intfBuilder.ToString());
             File.WriteAllText(Path.Combine(outputDir, "cs2lua__references.txt"), refExternBuilder.ToString());
             foreach (var pair in toplevelClasses) {
                 StringBuilder classBuilder = new StringBuilder();
-                lualibRefs.Clear();
-                string fileName = BuildLuaClass(classBuilder, pair.Key, pair.Value, lualibRefs);
-                foreach (string lib in lualibRefs) {
-                    string libFile = Path.Combine(exepath, "lualib/" + lib.ToLower() + ".lua");
-                    if (File.Exists(libFile)) {
-                        File.Copy(libFile, Path.Combine(outputDir, string.Format("{0}.{1}", lib.ToLower(), outputExt)), true);
-                    } else {
-                        Console.WriteLine("Can't find file '{0}' in lualib, you should copy it to output dir !", libFile);
-                    }
-                }
-                File.WriteAllText(Path.Combine(outputDir, Path.ChangeExtension(fileName.ToLower(), outputExt)), classBuilder.ToString());
+                string fileName = BuildLuaClass(classBuilder, pair.Key, pair.Value);
+                File.WriteAllText(Path.Combine(outputDir, Path.ChangeExtension(fileName.ToLower(), c_OutputExt)), classBuilder.ToString());
             }
             StringBuilder allClassBuilder = new StringBuilder();
-            lualibRefs.Clear();
-            BuildLuaClass(allClassBuilder, toplevelMni, toplevelClasses, lualibRefs);
+            BuildLuaClass(allClassBuilder, toplevelMni, toplevelClasses);
             if (haveSemanticError || haveTranslationError) {
                 if (haveSemanticError) {
                     Console.WriteLine("{0}", File.ReadAllText(Path.Combine(logDir, "SemanticError.log")));
@@ -490,6 +467,10 @@ namespace RoslynTool.CsToLua
             }
         }
 
+        private static void Log(string file, string msg)
+        {
+            Console.WriteLine("[{0}]:{1}", file, msg);
+        }
         private static void AddMergedClasses(Dictionary<string, MergedClassInfo> mergedClasses, string key, ClassInfo ci)
         {
             MergedClassInfo mci;
@@ -543,7 +524,7 @@ namespace RoslynTool.CsToLua
                     nsname = upperns + "." + mni.Name;
                 }
                 if (!string.IsNullOrEmpty(nsname)) {
-                    sb.AppendFormat("{0} = {1} or {{}};", nsname, nsname);
+                    sb.AppendFormat("namespace({0});", nsname);
                     sb.AppendLine();
                 }
                 foreach (var npair in mni.Namespaces) {
@@ -581,7 +562,7 @@ namespace RoslynTool.CsToLua
             if (ignoredClasses.ContainsKey(key)) {
                 return;
             }
-            if (ClassInfo.HasAttribute(typesym, "Cs2Lua.IgnoreAttribute")) {
+            if (ClassInfo.HasAttribute(typesym, "CsToLua.IgnoreAttribute")) {
                 return;
             }
             StringBuilder csb = new StringBuilder();
@@ -589,24 +570,24 @@ namespace RoslynTool.CsToLua
             int indent = 0;
             ++indent;
             if (typesym.GetAttributes().Length > 0) {
-                csb.AppendFormat("{0}Class = {{", GetIndentString(indent));
+                csb.AppendFormat("{0}class{{", GetIndentString(indent));
                 csb.AppendLine();
                 ++indent;
                 BuildAttributes(csb, indent, typesym.GetAttributes());
                 --indent;
-                csb.AppendFormat("{0}}},", GetIndentString(indent));
+                csb.AppendFormat("{0}}};", GetIndentString(indent));
                 csb.AppendLine();
             }
             temp.Length = 0;
             foreach (var sym in typesym.GetMembers()) {
                 var msym = sym as IFieldSymbol;
-                if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Lua.IgnoreAttribute")) {
-                    temp.AppendFormat("{0}{1} = {{", GetIndentString(indent), sym.Name);
+                if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "CsToLua.IgnoreAttribute")) {
+                    temp.AppendFormat("{0}field({1}){{", GetIndentString(indent), sym.Name);
                     temp.AppendLine();
                     ++indent;
                     BuildAttributes(temp, indent, msym.GetAttributes());
                     --indent;
-                    temp.AppendFormat("{0}}},", GetIndentString(indent));
+                    temp.AppendFormat("{0}}};", GetIndentString(indent));
                     temp.AppendLine();
                 }
             }
@@ -616,14 +597,14 @@ namespace RoslynTool.CsToLua
             temp.Length = 0;
             foreach (var sym in typesym.GetMembers()) {
                 var msym = sym as IMethodSymbol;
-                if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Lua.IgnoreAttribute")) {
+                if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "CsToLua.IgnoreAttribute")) {
                     string mname = SymbolTable.Instance.NameMangling(msym);
-                    temp.AppendFormat("{0}{1} = {{", GetIndentString(indent), mname);
+                    temp.AppendFormat("{0}method({1}){{", GetIndentString(indent), mname);
                     temp.AppendLine();
                     ++indent;
                     BuildAttributes(temp, indent, msym.GetAttributes());
                     --indent;
-                    temp.AppendFormat("{0}}},", GetIndentString(indent));
+                    temp.AppendFormat("{0}}};", GetIndentString(indent));
                     temp.AppendLine();
                 }
             }
@@ -633,13 +614,13 @@ namespace RoslynTool.CsToLua
             temp.Length = 0;
             foreach (var sym in typesym.GetMembers()) {
                 var msym = sym as IPropertySymbol;
-                if (null != msym && !msym.IsIndexer && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Lua.IgnoreAttribute")) {
-                    temp.AppendFormat("{0}{1} = {{", GetIndentString(indent), sym.Name);
+                if (null != msym && !msym.IsIndexer && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "CsToLua.IgnoreAttribute")) {
+                    temp.AppendFormat("{0}property({1}){{", GetIndentString(indent), sym.Name);
                     temp.AppendLine();
                     ++indent;
                     BuildAttributes(temp, indent, msym.GetAttributes());
                     --indent;
-                    temp.AppendFormat("{0}}},", GetIndentString(indent));
+                    temp.AppendFormat("{0}}};", GetIndentString(indent));
                     temp.AppendLine();
                 }
             }
@@ -649,13 +630,13 @@ namespace RoslynTool.CsToLua
             temp.Length = 0;
             foreach (var sym in typesym.GetMembers()) {
                 var msym = sym as IEventSymbol;
-                if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Lua.IgnoreAttribute")) {
-                    temp.AppendFormat("{0}{1} = {{", GetIndentString(indent), sym.Name);
+                if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "CsToLua.IgnoreAttribute")) {
+                    temp.AppendFormat("{0}event({1}){{", GetIndentString(indent), sym.Name);
                     temp.AppendLine();
                     ++indent;
                     BuildAttributes(temp, indent, msym.GetAttributes());
                     --indent;
-                    temp.AppendFormat("{0}}},", GetIndentString(indent));
+                    temp.AppendFormat("{0}}};", GetIndentString(indent));
                     temp.AppendLine();
                 }
             }
@@ -664,7 +645,7 @@ namespace RoslynTool.CsToLua
             }
             --indent;
             if (csb.Length > 0) {
-                sb.AppendFormat("__cs2lua__AllAttrs[\"{0}\"] = {{", ClassInfo.GetFullName(typesym));
+                sb.AppendFormat("attributes({0}){{", ClassInfo.GetFullName(typesym));
                 sb.AppendLine();
                 sb.Append(csb.ToString());
                 sb.Append("};");
@@ -675,8 +656,8 @@ namespace RoslynTool.CsToLua
         {
             foreach (var attr in attrs) {
                 string fn = ClassInfo.GetFullName(attr.AttributeClass);
-                sb.AppendFormat("{0}{{", GetIndentString(indent));
-                sb.AppendFormat("\"{0}\", {{", fn);
+                sb.AppendFormat("{0}attribute(", GetIndentString(indent));
+                sb.AppendFormat("{0}([", fn);
                 if (null != attr.AttributeConstructor) {
                     var ps = attr.AttributeConstructor.Parameters;
                     var args = attr.ConstructorArguments;
@@ -684,33 +665,35 @@ namespace RoslynTool.CsToLua
                     for (int i = 0; i < ct; ++i) {
                         string name = ps[i].Name;
                         sb.Append(name);
-                        sb.Append(" = ");
+                        sb.Append("(");
                         OutputTypedConstant(sb, args[i]);
+                        sb.Append(")");
                         if (i < ct - 1) {
                             sb.Append(", ");
                         }
                     }
                 }
-                sb.Append("}, {");
+                sb.Append("], [");
                 var namedArgs = attr.NamedArguments;
                 int ct2 = namedArgs.Length;
                 for (int i = 0; i < ct2; ++i) {
                     var pair = namedArgs[i];
                     string name = pair.Key;
                     sb.Append(name);
-                    sb.Append(" = ");
+                    sb.Append("(");
                     OutputTypedConstant(sb, pair.Value);
+                    sb.Append(")");
                     if (i < ct2 - 1) {
                         sb.Append(", ");
                     }
                 }
-                sb.AppendLine("}},");
+                sb.AppendLine("]));");
             }
         }
         private static void OutputTypedConstant(StringBuilder sb, TypedConstant tc)
         {
             if (tc.Kind == TypedConstantKind.Array) {
-                sb.Append("{");
+                sb.Append("[");
                 var vals = tc.Values;
                 for (int ix = 0; ix < vals.Length; ++ix) {
                     OutputTypedConstant(sb, vals[ix]);
@@ -718,11 +701,11 @@ namespace RoslynTool.CsToLua
                         sb.Append(", ");
                     }
                 }
-                sb.Append("}");
+                sb.Append("]");
             } else {
                 object v = tc.Value;
                 if (null == v) {
-                    sb.Append("nil");
+                    sb.Append("null");
                 } else if (v is string) {
                     sb.AppendFormat("\"{0}\"", v.ToString());
                 } else {
@@ -740,24 +723,6 @@ namespace RoslynTool.CsToLua
                 BuildExternEnumNamespace(sb, indent, typeSym);
 
                 sb.AppendLine();
-                sb.AppendFormat("{0}rawset({1}, \"Value2String\", {{", GetIndentString(indent), key);
-                sb.AppendLine();
-                ++indent;
-
-                foreach (var sym in typeSym.GetMembers()) {
-                    if (sym.Kind != SymbolKind.Field) continue;
-                    var fsym = sym as IFieldSymbol;
-                    sb.AppendFormat("{0}[", GetIndentString(indent));
-                    CsLuaTranslater.OutputConstValue(sb, fsym.ConstantValue, fsym);
-                    sb.AppendFormat("] = \"{0}\",", fsym.Name);
-                    sb.AppendLine();
-                }
-
-                --indent;
-                sb.AppendFormat("{0}}});", GetIndentString(indent));
-                sb.AppendLine();
-
-                sb.AppendLine();
             }
         }
         private static void BuildExternEnumNamespace(StringBuilder sb, int indent, ITypeSymbol enumSym)
@@ -771,16 +736,16 @@ namespace RoslynTool.CsToLua
                 ns = string.Empty;
             }
             if (!string.IsNullOrEmpty(ns)) {
-                sb.AppendFormat("{0}{1}.{2} = {3}.{4} or {{", GetIndentString(indent), ns, enumSym.Name, ns, enumSym.Name);
+                sb.AppendFormat("{0}enum({1}.{2}) {{", GetIndentString(indent), ns, enumSym.Name);
                 sb.AppendLine();
                 ++indent;
 
                 foreach (var sym in enumSym.GetMembers()) {
                     if (sym.Kind != SymbolKind.Field) continue;
                     var fsym = sym as IFieldSymbol;
-                    sb.AppendFormat("{0}[\"{1}\"] = ", GetIndentString(indent), fsym.Name);
+                    sb.AppendFormat("{0}member(\"{1}\", ", GetIndentString(indent), fsym.Name);
                     CsLuaTranslater.OutputConstValue(sb, fsym.ConstantValue, fsym);
-                    sb.Append(",");
+                    sb.Append(");");
                     sb.AppendLine();
                 }
 
@@ -800,12 +765,8 @@ namespace RoslynTool.CsToLua
                 ns = string.Empty;
             }
             if (string.IsNullOrEmpty(ns)) {
-                sb.AppendFormat("{0}{1} = {2} or {{}};", GetIndentString(indent), typeSym.Name, typeSym.Name);
-                sb.AppendLine();
                 return typeSym.Name;
             } else {
-                sb.AppendFormat("{0}{1}.{2} = {3}.{4} or {{}};", GetIndentString(indent), ns, typeSym.Name, ns, typeSym.Name);
-                sb.AppendLine();
                 return ns + "." + typeSym.Name;
             }
         }
@@ -821,12 +782,8 @@ namespace RoslynTool.CsToLua
                     ns = string.Empty;
                 }
                 if (string.IsNullOrEmpty(ns)) {
-                    sb.AppendFormat("{0}{1} = {2} or {{}};", GetIndentString(indent), nsSym.Name, nsSym.Name);
-                    sb.AppendLine();
                     return nsSym.Name;
                 } else {
-                    sb.AppendFormat("{0}{1}.{2} = {3}.{4} or {{}};", GetIndentString(indent), ns, nsSym.Name, ns, nsSym.Name);
-                    sb.AppendLine();
                     return ns + "." + nsSym.Name;
                 }
             }
@@ -840,14 +797,14 @@ namespace RoslynTool.CsToLua
             foreach (var pair in intfs) {
                 var name = pair.Key;
                 var list = pair.Value;
-                sb.AppendFormat("{0} = {{__cs2lua_defined = true, __type_name = \"{1}\", __interfaces = {{", name, name);
+                sb.AppendFormat("interface({0}) {{ interfaces {{", name);
                 string prestr = string.Empty;
                 foreach (var iname in list) {
                     sb.Append(prestr);
                     sb.AppendFormat("\"{0}\"", iname);
-                    prestr = ", ";
+                    prestr = "; ";
                 }
-                sb.Append("}, __exist = function(k) return false; end};");
+                sb.Append("}; };");
                 sb.AppendLine();
             }
         }
@@ -857,27 +814,29 @@ namespace RoslynTool.CsToLua
                 sb.AppendLine(key);
             }
         }
-        private static void BuildLuaClass(StringBuilder sb, MergedNamespaceInfo toplevelMni, Dictionary<string, MergedClassInfo> toplevelMcis, HashSet<string> lualibRefs)
+        private static void BuildLuaClass(StringBuilder sb, MergedNamespaceInfo toplevelMni, Dictionary<string, MergedClassInfo> toplevelMcis)
         {
             StringBuilder code = new StringBuilder();
+            HashSet<string> lualibRefs = new HashSet<string>();
             BuildNamespaces(code, toplevelMni);
             foreach (var pair in toplevelMcis) {
                 StringBuilder classBuilder = new StringBuilder();
                 string fileName = BuildLuaClass(classBuilder, pair.Key, pair.Value, false, lualibRefs);
                 code.Append(classBuilder.ToString());
             }
-            sb.AppendLine("require \"cs2lua__utility\";");
-            sb.AppendLine("require \"cs2lua__attributes\";");
-            sb.AppendLine("require \"cs2lua__externenums\";");
-            sb.AppendLine("require \"cs2lua__interfaces\";");
+            sb.AppendLine("require(\"cs2lua__utility\");");
+            sb.AppendLine("require(\"cs2lua__attributes\");");
+            sb.AppendLine("require(\"cs2lua__externenums\");");
+            sb.AppendLine("require(\"cs2lua__interfaces\");");
             foreach (string lib in lualibRefs) {
-                sb.AppendFormat("require \"{0}\";", lib.ToLower());
+                sb.AppendFormat("require(\"{0}\");", lib.ToLower());
                 sb.AppendLine();
             }
             sb.Append(code.ToString());
         }
-        private static string BuildLuaClass(StringBuilder sb, string key, MergedClassInfo mci, HashSet<string> lualibRefs)
+        private static string BuildLuaClass(StringBuilder sb, string key, MergedClassInfo mci)
         {
+            HashSet<string> lualibRefs = new HashSet<string>();
             return BuildLuaClass(sb, key, mci, true, lualibRefs);
         }
         private static string BuildLuaClass(StringBuilder sb, string key, MergedClassInfo mci, bool isAlone, HashSet<string> lualibRefs)
@@ -958,30 +917,34 @@ namespace RoslynTool.CsToLua
 
             HashSet<string> refs = new HashSet<string>();
             if (isAlone) {
-                sb.AppendLine("require \"cs2lua__utility\";");
+                sb.AppendLine("require(\"cs2lua__utility\");");
                 if (existAttributes)
-                    sb.AppendLine("require \"cs2lua__attributes\";");
-                sb.AppendLine("require \"cs2lua__namespaces\";");
-                sb.AppendLine("require \"cs2lua__externenums\";");
-                sb.AppendLine("require \"cs2lua__interfaces\";");
+                    sb.AppendLine("require(\"cs2lua__attributes\");");
+                sb.AppendLine("require(\"cs2lua__namespaces\");");
+                sb.AppendLine("require(\"cs2lua__externenums\");");
+                sb.AppendLine("require(\"cs2lua__interfaces\");");
                 foreach (string lib in requiredlibs) {
-                    sb.AppendFormat("require \"{0}\";", lib.ToLower());
+                    sb.AppendFormat("require(\"{0}\");", lib.ToLower());
                     sb.AppendLine();
                     refs.Add(lib);
                 }
 
                 //references
                 if (SymbolTable.NoAutoRequire) {
-                    sb.AppendLine("require \"cs2lua__custom\";");
+                    sb.AppendLine("require(\"cs2lua__custom\");");
                 } else {
-                    BuildReferences(sb, key, mci, refs);            
+                    BuildReferences(sb, key, mci, refs);
                 }
             }
             
             sb.AppendLine();
 
             int indent = 0;
-            sb.AppendFormat("{0}{1} = {{", GetIndentString(indent), key);
+            if (string.IsNullOrEmpty(baseClass)) {
+                sb.AppendFormat("{0}{1}({2}) {{", GetIndentString(indent), isEnumClass ? "enum" : (isValueType ? "struct" : "class"), key);
+            } else {
+                sb.AppendFormat("{0}{1}({2}, {3}) {{", GetIndentString(indent), isEnumClass ? "enum" : (isValueType ? "struct" : "class"), key, baseClass);
+            }
             sb.AppendLine();
             ++indent;
 
@@ -991,47 +954,40 @@ namespace RoslynTool.CsToLua
                     sb.Append(ci.StaticFieldCodeBuilder.ToString());
                 }
             } else {
+                sb.AppendFormat("{0}static_methods {{", GetIndentString(indent));
+                sb.AppendLine();
+                ++indent;
+
                 if (!isStaticClass) {
-                    sb.AppendFormat("{0}__new_object = function(...)", GetIndentString(indent));
+                    sb.AppendFormat("{0}__new_object = function(...){{", GetIndentString(indent));
                     sb.AppendLine();
                     ++indent;
 
                     if (string.IsNullOrEmpty(exportConstructor)) {
-                        sb.AppendFormat("{0}return newobject({1}, nil, nil, ...);", GetIndentString(indent), key);
+                        sb.AppendFormat("{0}return(newobject({1}, null, null, ...));", GetIndentString(indent), key);
                         sb.AppendLine();
                     } else {
                         //处理ref/out参数
                         if (exportConstructorInfo.ReturnParamNames.Count > 0) {
-                            sb.AppendFormat("{0}return (function(...) ", GetIndentString(indent));
+                            sb.AppendFormat("{0}return((function(...){{ ", GetIndentString(indent));
                             string retArgStr = string.Join(", ", exportConstructorInfo.ReturnParamNames.ToArray());
-                            sb.Append("local newobj");
+                            sb.AppendFormat("local(newobj, {0}); multiassign(newobj", retArgStr);
                             if (exportConstructorInfo.ReturnParamNames.Count > 0) {
                                 sb.Append(", ");
                                 sb.Append(retArgStr);
                             }
-                            sb.AppendFormat(" = newobject({0}, \"{1}\", nil, ...); return newobj; end)(...);", key, exportConstructor);
+                            sb.AppendFormat(") = newobject({0}, \"{1}\", null, ...); return(newobj); }})(...));", key, exportConstructor);
                             sb.AppendLine();
                         } else {
-                            sb.AppendFormat("{0}return newobject({1}, \"{2}\", nil, ...);", GetIndentString(indent), key, exportConstructor);
+                            sb.AppendFormat("{0}return(newobject({1}, \"{2}\", null, ...));", GetIndentString(indent), key, exportConstructor);
                             sb.AppendLine();
                         }
                     }
 
                     --indent;
-                    sb.AppendFormat("{0}end,", GetIndentString(indent));
+                    sb.AppendFormat("{0}}};", GetIndentString(indent));
                     sb.AppendLine();
                 }
-
-                sb.AppendFormat("{0}__define_class = function()", GetIndentString(indent));
-                sb.AppendLine();
-                ++indent;
-
-                sb.AppendFormat("{0}local static = {1};", GetIndentString(indent), key);
-                sb.AppendLine();
-                sb.AppendLine();
-                sb.AppendFormat("{0}local static_methods = {{", GetIndentString(indent));
-                sb.AppendLine();
-                ++indent;
 
                 //static function
                 foreach (var ci in classes) {
@@ -1039,60 +995,53 @@ namespace RoslynTool.CsToLua
                 }
 
                 if (!haveCctor) {
-                    sb.AppendFormat("{0}cctor = function()", GetIndentString(indent));
+                    sb.AppendFormat("{0}cctor = function(){{", GetIndentString(indent));
                     sb.AppendLine();
                     ++indent;
                     if (!string.IsNullOrEmpty(baseClass) && myselfDefinedBaseClass) {
-                        sb.AppendFormat("{0}{1}.cctor();", GetIndentString(indent), baseClass);
+                        sb.AppendFormat("{0}callstatic({1}, \"cctor\");", GetIndentString(indent), baseClass);
                         sb.AppendLine();
                     }
                     if (generateBasicCctor) {
-                        sb.AppendFormat("{0}{1}.__cctor();", GetIndentString(indent), key);
+                        sb.AppendFormat("{0}callstatic({1}, \"__cctor\");", GetIndentString(indent), key);
                         sb.AppendLine();
                     }
                     --indent;
-                    sb.AppendFormat("{0}end,", GetIndentString(indent));
+                    sb.AppendFormat("{0}}};", GetIndentString(indent));
                     sb.AppendLine();
                 }
                 if (generateBasicCctor) {
-                    sb.AppendFormat("{0}__cctor = function()", GetIndentString(indent));
+                    sb.AppendFormat("{0}__cctor = function(){{", GetIndentString(indent));
                     sb.AppendLine();
                     ++indent;
-                    sb.AppendFormat("{0}if {1}.__cctor_called then", GetIndentString(indent), key);
+                    sb.AppendFormat("{0}if({1}.__cctor_called){{", GetIndentString(indent), key);
                     sb.AppendLine();
                     ++indent;
                     sb.AppendFormat("{0}return;", GetIndentString(indent));
                     sb.AppendLine();
                     --indent;
-                    sb.AppendFormat("{0}else", GetIndentString(indent));
+                    sb.AppendFormat("{0}}}else{{", GetIndentString(indent));
                     sb.AppendLine();
                     ++indent;
                     sb.AppendFormat("{0}{1}.__cctor_called = true;", GetIndentString(indent), key);
                     sb.AppendLine();
                     --indent;
-                    sb.AppendFormat("{0}end;", GetIndentString(indent));
+                    sb.AppendFormat("{0}}};", GetIndentString(indent));
                     sb.AppendLine();
                     //static initializer
                     foreach (var ci in classes) {
                         sb.Append(ci.StaticInitializerCodeBuilder.ToString());
                     }
                     --indent;
-                    sb.AppendFormat("{0}end,", GetIndentString(indent));
+                    sb.AppendFormat("{0}}};", GetIndentString(indent));
                     sb.AppendLine();
                 }
 
                 --indent;
                 sb.AppendFormat("{0}}};", GetIndentString(indent));
                 sb.AppendLine();
-
-                sb.AppendLine();
-
-                //静态实例构造函数（主要用以支持generic的实例化）
-                sb.AppendFormat("{0}local static_fields_build = function()", GetIndentString(indent));
-                sb.AppendLine();
-                ++indent;
-
-                sb.AppendFormat("{0}local static_fields = {{", GetIndentString(indent));
+                
+                sb.AppendFormat("{0}static_fields {{", GetIndentString(indent));
                 sb.AppendLine();
                 ++indent;
 
@@ -1102,23 +1051,17 @@ namespace RoslynTool.CsToLua
                 }
 
                 if (existAttributes) {
-                    sb.AppendFormat("{0}__attributes = {1},", GetIndentString(indent), attributesName);
+                    sb.AppendFormat("{0}__attributes = {1};", GetIndentString(indent), attributesName);
                     sb.AppendLine();
                 }
 
                 if (generateBasicCctor) {
-                    sb.AppendFormat("{0}__cctor_called = false,", GetIndentString(indent));
+                    sb.AppendFormat("{0}__cctor_called = false;", GetIndentString(indent));
                     sb.AppendLine();
                 }
                     
                 --indent;
                 sb.AppendFormat("{0}}};", GetIndentString(indent));
-                sb.AppendLine();
-
-                sb.AppendFormat("{0}return static_fields;", GetIndentString(indent));
-                sb.AppendLine();
-                --indent;
-                sb.AppendFormat("{0}end;", GetIndentString(indent));
                 sb.AppendLine();
 
                 bool hasStaticProp = false;
@@ -1127,9 +1070,7 @@ namespace RoslynTool.CsToLua
                         hasStaticProp = true;
                 }
                 if (hasStaticProp) {
-                    sb.AppendLine();
-
-                    sb.AppendFormat("{0}local static_props = {{", GetIndentString(indent));
+                    sb.AppendFormat("{0}static_props {{", GetIndentString(indent));
                     sb.AppendLine();
 
                     ++indent;
@@ -1142,10 +1083,8 @@ namespace RoslynTool.CsToLua
                     --indent;
                     sb.AppendFormat("{0}}};", GetIndentString(indent));
                     sb.AppendLine();
-
-                    sb.AppendLine();
                 } else {
-                    sb.AppendFormat("{0}local static_props = nil;", GetIndentString(indent));
+                    sb.AppendFormat("{0}static_props {{}};", GetIndentString(indent));
                     sb.AppendLine();
                 }
 
@@ -1155,7 +1094,7 @@ namespace RoslynTool.CsToLua
                         hasStaticEvent = true;
                 }
                 if (hasStaticEvent) {
-                    sb.AppendFormat("{0}local static_events = {{", GetIndentString(indent));
+                    sb.AppendFormat("{0}static_events {{", GetIndentString(indent));
                     sb.AppendLine();
 
                     ++indent;
@@ -1169,14 +1108,14 @@ namespace RoslynTool.CsToLua
                     sb.AppendFormat("{0}}};", GetIndentString(indent));
                     sb.AppendLine();
                 } else {
-                    sb.AppendFormat("{0}local static_events = nil;", GetIndentString(indent));
+                    sb.AppendFormat("{0}static_events {{}};", GetIndentString(indent));
                     sb.AppendLine();
                 }
 
                 sb.AppendLine();
 
                 if (!isStaticClass) {
-                    sb.AppendFormat("{0}local instance_methods = {{", GetIndentString(indent));
+                    sb.AppendFormat("{0}instance_methods {{", GetIndentString(indent));
                     sb.AppendLine();
                     ++indent;
 
@@ -1186,45 +1125,45 @@ namespace RoslynTool.CsToLua
                     }
 
                     if (!haveCtor) {
-                        sb.AppendFormat("{0}ctor = function(this)", GetIndentString(indent));
+                        sb.AppendFormat("{0}ctor = function(this){{", GetIndentString(indent));
                         sb.AppendLine();
                         ++indent;
                         if (!string.IsNullOrEmpty(baseClass) && myselfDefinedBaseClass) {
-                            sb.AppendFormat("{0}this.base.ctor(this);", GetIndentString(indent));
+                            sb.AppendFormat("{0}callstatic(getinstance(this, \"base\"), \"ctor\", this);", GetIndentString(indent));
                             sb.AppendLine();
                         }
                         if (generateBasicCtor) {
-                            sb.AppendFormat("{0}this:__ctor();", GetIndentString(indent));
+                            sb.AppendFormat("{0}callinstance(this, \"__ctor\");", GetIndentString(indent));
                             sb.AppendLine();
                         }
                         --indent;
-                        sb.AppendFormat("{0}end,", GetIndentString(indent));
+                        sb.AppendFormat("{0}}};", GetIndentString(indent));
                         sb.AppendLine();
                     }
                     if (generateBasicCtor) {
-                        sb.AppendFormat("{0}__ctor = function(this)", GetIndentString(indent));
+                        sb.AppendFormat("{0}__ctor = function(this){{", GetIndentString(indent));
                         sb.AppendLine();
                         ++indent;
-                        sb.AppendFormat("{0}if this.__ctor_called then", GetIndentString(indent));
+                        sb.AppendFormat("{0}if(getinstance(this, \"__ctor_called\")){{", GetIndentString(indent));
                         sb.AppendLine();
                         ++indent;
                         sb.AppendFormat("{0}return;", GetIndentString(indent));
                         sb.AppendLine();
                         --indent;
-                        sb.AppendFormat("{0}else", GetIndentString(indent));
+                        sb.AppendFormat("{0}}}else{{", GetIndentString(indent));
                         sb.AppendLine();
                         ++indent;
-                        sb.AppendFormat("{0}this.__ctor_called = true;", GetIndentString(indent));
+                        sb.AppendFormat("{0}setinstance(this, \"__ctor_called\", true);", GetIndentString(indent));
                         sb.AppendLine();
                         --indent;
-                        sb.AppendFormat("{0}end;", GetIndentString(indent));
+                        sb.AppendFormat("{0}}};", GetIndentString(indent));
                         sb.AppendLine();
                         //instance initializer
                         foreach (var ci in classes) {
                             sb.Append(ci.InstanceInitializerCodeBuilder.ToString());
                         }
                         --indent;
-                        sb.AppendFormat("{0}end,", GetIndentString(indent));
+                        sb.AppendFormat("{0}}};", GetIndentString(indent));
                         sb.AppendLine();
                     }
 
@@ -1232,14 +1171,7 @@ namespace RoslynTool.CsToLua
                     sb.AppendFormat("{0}}};", GetIndentString(indent));
                     sb.AppendLine();
 
-                    sb.AppendLine();
-
-                    //实例构造函数（每次new都应该产生一个新实例，所以必须提供一个工厂函数）
-                    sb.AppendFormat("{0}local instance_fields_build = function()", GetIndentString(indent));
-                    sb.AppendLine();
-                    ++indent;
-
-                    sb.AppendFormat("{0}local instance_fields = {{", GetIndentString(indent));
+                    sb.AppendFormat("{0}instance_fields {{", GetIndentString(indent));
                     sb.AppendLine();
                     ++indent;
 
@@ -1249,23 +1181,17 @@ namespace RoslynTool.CsToLua
                     }
                     
                     if (existAttributes) {
-                        sb.AppendFormat("{0}__attributes = {1},", GetIndentString(indent), attributesName);
+                        sb.AppendFormat("{0}__attributes = {1};", GetIndentString(indent), attributesName);
                         sb.AppendLine();
                     }
 
                     if (generateBasicCtor) {
-                        sb.AppendFormat("{0}__ctor_called = false,", GetIndentString(indent));
+                        sb.AppendFormat("{0}__ctor_called = false;", GetIndentString(indent));
                         sb.AppendLine();
                     }
 
                     --indent;
                     sb.AppendFormat("{0}}};", GetIndentString(indent));
-                    sb.AppendLine();
-                    sb.AppendFormat("{0}return instance_fields;", GetIndentString(indent));
-                    sb.AppendLine();
-
-                    --indent;
-                    sb.AppendFormat("{0}end;", GetIndentString(indent));
                     sb.AppendLine();
 
                     bool hasInstanceProp = false;
@@ -1274,9 +1200,7 @@ namespace RoslynTool.CsToLua
                             hasInstanceProp = true;
                     }
                     if (hasInstanceProp) {
-                        sb.AppendLine();
-
-                        sb.AppendFormat("{0}local instance_props = {{", GetIndentString(indent));
+                        sb.AppendFormat("{0}instance_props {{", GetIndentString(indent));
                         sb.AppendLine();
 
                         ++indent;
@@ -1289,10 +1213,8 @@ namespace RoslynTool.CsToLua
                         --indent;
                         sb.AppendFormat("{0}}};", GetIndentString(indent));
                         sb.AppendLine();
-
-                        sb.AppendLine();
                     } else {
-                        sb.AppendFormat("{0}local instance_props = nil;", GetIndentString(indent));
+                        sb.AppendFormat("{0}instance_props {{}};", GetIndentString(indent));
                         sb.AppendLine();
                     }
 
@@ -1302,7 +1224,7 @@ namespace RoslynTool.CsToLua
                             hasInstanceEvent = true;
                     }
                     if (hasInstanceEvent) {
-                        sb.AppendFormat("{0}local instance_events = {{", GetIndentString(indent));
+                        sb.AppendFormat("{0}instance_events {{", GetIndentString(indent));
                         sb.AppendLine();
 
                         ++indent;
@@ -1315,65 +1237,49 @@ namespace RoslynTool.CsToLua
                         --indent;
                         sb.AppendFormat("{0}}};", GetIndentString(indent));
                         sb.AppendLine();
-
-                        sb.AppendLine();
                     } else {
-                        sb.AppendFormat("{0}local instance_events = nil;", GetIndentString(indent));
+                        sb.AppendFormat("{0}instance_events {{}};", GetIndentString(indent));
                         sb.AppendLine();
                     }
 
+                    sb.AppendLine();
+
                     if (csi.InterfaceSymbols.Count > 0) {
-                        sb.AppendFormat("{0}local interfaces = {{", GetIndentString(indent));
+                        sb.AppendFormat("{0}interfaces {{", GetIndentString(indent));
                         sb.AppendLine();
                         ++indent;
 
                         foreach (var intf in csi.InterfaceSymbols) {
-                            sb.AppendFormat("{0}\"{1}\",", GetIndentString(indent), ClassInfo.GetFullName(intf));
+                            sb.AppendFormat("{0}\"{1}\";", GetIndentString(indent), ClassInfo.GetFullName(intf));
                             sb.AppendLine();
                         }
 
                         --indent;
                         sb.AppendFormat("{0}}};", GetIndentString(indent));
                         sb.AppendLine();
-
-                        sb.AppendLine();
                     } else {
-                        sb.AppendFormat("{0}local interfaces = nil;", GetIndentString(indent));
+                        sb.AppendFormat("{0}interfaces {{}};", GetIndentString(indent));
                         sb.AppendLine();
                     }
 
                     if (csi.InterfaceMethodMap.Count > 0) {
-                        sb.AppendFormat("{0}local interface_map = {{", GetIndentString(indent));
+                        sb.AppendFormat("{0}interface_map {{", GetIndentString(indent));
                         sb.AppendLine();
                         ++indent;
 
                         foreach (var pair in csi.InterfaceMethodMap) {
-                            sb.AppendFormat("{0}{1} = \"{2}\",", GetIndentString(indent), pair.Key, pair.Value);
+                            sb.AppendFormat("{0}{1} = \"{2}\";", GetIndentString(indent), pair.Key, pair.Value);
                             sb.AppendLine();
                         }
 
                         --indent;
                         sb.AppendFormat("{0}}};", GetIndentString(indent));
                         sb.AppendLine();
-
-                        sb.AppendLine();
                     } else {
-                        sb.AppendFormat("{0}local interface_map = nil;", GetIndentString(indent));
+                        sb.AppendFormat("{0}interface_map {{}};", GetIndentString(indent));
                         sb.AppendLine();
                     }
-
-                    sb.AppendLine();
-                    
-                    sb.AppendFormat("{0}return defineclass({1}, \"{2}\", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, {3});", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass, key, isValueType ? "true" : "false");
-                    sb.AppendLine();
-                } else {
-                    sb.AppendFormat("{0}return defineclass({1}, \"{2}\", static, static_methods, static_fields_build, static_props, static_events, nil, nil, nil, nil, nil, nil, {3});", GetIndentString(indent), string.IsNullOrEmpty(baseClass) ? "nil" : baseClass, key, isValueType ? "true" : "false");
-                    sb.AppendLine();
                 }
-
-                --indent;
-                sb.AppendFormat("{0}end,", GetIndentString(indent));
-                sb.AppendLine();
             }
 
             --indent;
@@ -1385,32 +1291,16 @@ namespace RoslynTool.CsToLua
             }
             sb.AppendLine();
 
-            if (isEnumClass) {
-                //生成枚举值与字符串的双向转换表
-                sb.AppendFormat("{0}rawset({1}, \"Value2String\", {{", GetIndentString(indent), key);
-                sb.AppendLine();
-                ++indent;
+            sb.AppendLine();
+            BuildInterfaces(sb, mci.InnerInterfaces);
+            sb.AppendLine();
 
-                foreach (var ci in classes) {
-                    sb.Append(ci.EnumValue2StringCodeBuilder.ToString());
-                }
-
-                --indent; 
-                sb.AppendFormat("{0}}});", GetIndentString(indent));
+            foreach (var pair in mci.InnerClasses) {
+                BuildLuaClass(sb, pair.Key, pair.Value, false, lualibRefs);
+            }
+            if (isEntryClass) {
+                sb.AppendFormat("defineentry({0});", key);
                 sb.AppendLine();
-            } else {
-                sb.AppendLine();
-                BuildInterfaces(sb, mci.InnerInterfaces);
-                sb.AppendLine();
-                foreach (var pair in mci.InnerClasses) {
-                    BuildLuaClass(sb, pair.Key, pair.Value, false, lualibRefs);
-                }
-                sb.AppendFormat("{0}.__define_class();", key);
-                sb.AppendLine();
-                if (isEntryClass) {
-                    sb.AppendFormat("defineentry({0});", key);
-                    sb.AppendLine();
-                }
             }
 
             return fileName;
@@ -1423,7 +1313,7 @@ namespace RoslynTool.CsToLua
                     if (!r.StartsWith(SymbolTable.PrefixExternClassName("System.")) && !r.StartsWith(SymbolTable.PrefixExternClassName("UnityEngine."))) {
                         string refname = r.Replace(".", "__");
                         if (!refs.Contains(refname)) {
-                            sb.AppendFormat("require \"{0}\";", refname.ToLower());
+                            sb.AppendFormat("require(\"{0}\");", refname.ToLower());
                             sb.AppendLine();
                             refs.Add(refname);
                         }
@@ -1434,6 +1324,7 @@ namespace RoslynTool.CsToLua
                 BuildReferences(sb, pair.Key, pair.Value, refs);
             }
         }
+
         private static string GetIndentString(int indent)
         {
             return CsLuaTranslater.GetIndentString(indent);

@@ -13,7 +13,7 @@ namespace RoslynTool
 {
     partial class Program
     {
-        static int Main(string[] args)
+        static void Main(string[] args)
         {
             try {
                 string file = "test.cs";
@@ -213,12 +213,13 @@ namespace RoslynTool
                 }
                 if (File.Exists(file)) {
                     var stopwatch = Stopwatch.StartNew();
-                    var result = (int)CsToLuaProcessor.Process(file, outputDir, outputExt, macros, undefMacros, ignoredPath, externPath, internPath, refByNames, refByPaths, enableInherit, enableLinq, outputResult, parallel);
+                    var result = (int)CsToLuaProcessor.Process(file, macros, undefMacros, ignoredPath, externPath, internPath, refByNames, refByPaths, enableInherit, enableLinq, outputResult, parallel);
                     stopwatch.Stop();
                     Console.WriteLine("RunningTime: {0}s", stopwatch.Elapsed.TotalSeconds);
-                    return result;
+                    LuaGenerator.LuaGenerator.Generate(Path.GetDirectoryName(file), outputDir, outputExt);
+                    Environment.Exit(result);
                 } else {
-                    return (int)ExitCode.FileNotFound;
+                    Environment.Exit((int)ExitCode.FileNotFound);
                 }
             } catch (Exception ex) {
                 Console.WriteLine("exception:{0}", ex.Message);
@@ -229,7 +230,7 @@ namespace RoslynTool
                     Console.WriteLine("inner exception:{0}", ex.Message);
                     Console.WriteLine("{0}", ex.StackTrace);
                 }
-                return (int)ExitCode.Exception;
+                Environment.Exit((int)ExitCode.Exception);
             }
         }
         private static void SetNormalLua()

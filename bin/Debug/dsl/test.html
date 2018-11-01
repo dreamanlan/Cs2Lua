@@ -1,0 +1,217 @@
+<html>
+	<head>
+		<script language="javascript">
+			function getParams(args, start){
+				var arr = new Array();
+				for(var i=start;i<args.length;++i){
+					arr.push(args[i]);
+				}
+				return arr;
+			}
+			function require(file){			
+			}
+			function defnamespace(v){
+				if(!v || v=="undefined")
+					return {};
+				else
+					return v;
+			}
+			
+			System = defnamespace(typeof(System));
+			System.Collections = defnamespace(System.Collections);
+			System.Collections.Generic = defnamespace(System.Collections.Generic);
+			System.Collections.Generic.Dictionary_TKey_TValue = {};
+			
+			function condexp(cv, tfIsConst, tf, ffIsConst, ff){
+			}			
+			function condaccess(v, func){
+			}			
+			function nullcoalescing(v, isConst, func){
+			}			
+			function typecast(obj, t, isEnum){
+			}			
+			function typeas(obj, t, isEnum){
+			}			
+			function typeis(obj, t, isEnum){
+			}			
+			function wrapconst(t, name){
+			}			
+			function wrapchar(char, intVal){
+			}			
+			function wrapdelegation(handlers){
+			}			
+			function wrapenumerable(func){
+			}			
+			function wrapyield(yieldVal, isEnumerableOrEnumerator, isUnityYield){
+			}			
+			function wrapparams(arr){	
+			}			
+			function paramsremove(arr){	
+			}			
+			function wraparray(arr){
+			}			
+			function wrapvaluetype(v){
+			}			
+			function wrapvaluetypearray(arr){
+			}			
+			function wrapexternvaluetype(v){
+			}			
+			function wrapexternvaluetypearray(arr){
+			}			
+			function newobject(classObj, ctor, initializer){
+				var args = getParams(3);
+				var obj = new classObj();
+				if(null != ctor){
+					obj[ctor](args);
+				}
+				return obj;
+			}			
+			function newexternobject(classObj, className, ctor, initializer){
+			}			
+			function newtypeparamobject(t){
+			}			
+			function newdictionary(t, ctor, dict){
+			}			
+			function newlist(t, ctor, list){
+			}			
+			function newcollection(t, ctor, coll){
+			}			
+			function newexterndictionary(t, className, ctor, dict){
+			}			
+			function newexternlist(t, className, ctor, list){
+			}			
+			function newexterncollection(t, className, ctor, coll){
+			}
+			function setdelegationkey(func, key, obj, member){
+			}
+			function getdelegationkey(func){
+			}
+			function delegationwrap(handler){
+			}			
+			function delegationset(isevent, isstatic, key, t, intf, k, handler){
+			}			
+			function delegationadd(isevent, isstatic, key, t, intf, k, handler){
+			}			
+			function delegationremove (isevent, isstatic, key, t, intf, k, handler){
+			}			
+			function externdelegationset(isevent, isstatic, key, t, intf, k, handler){
+			}			
+			function externdelegationadd(isevent, isstatic, key, t, intf, k, handler){
+			}			
+			function externdelegationremove(isevent, isstatic, key, t, intf, k, handler){
+			}			
+			function getstaticindexer(classObj, name){
+			}
+			function getinstanceindexer(obj, intf, name){
+			}
+			function setstaticindexer(classObj, name){
+			}
+			function setinstanceindexer(obj, intf, name){
+			}			
+			function getexternstaticindexer(classObj, name){
+			}
+			function getexterninstanceindexer(obj, intf, name){
+			}
+			function setexternstaticindexer(classObj, name){
+			}
+			function setexterninstanceindexer(obj, intf, name){
+			}			
+			function getstaticelement(classObj, name){
+			}
+			function getinstanceelement(obj, name){
+			}
+			function setstaticelement(classObj, name){
+			}
+			function setinstanceelement(obj, name){
+			}			
+			function getexternstaticelement(classObj, name){
+			}
+			function getexterninstanceelement(obj, name){
+			}
+			function setexternstaticelement(classObj, name){
+			}
+			function setexterninstanceelement(obj, name){
+			}			
+			function invokeoperator(classObj, method){
+			}
+			function invokeexternoperator(classObj, method){
+			}
+			function execunary(op, opd, type, typeKind, isCs2Lua){
+			}
+			function execbinary(op, opd1, opd2, type1, type2, typeKind1, typeKind2, isCs2Dsl1, isCs2Dsl2){
+			}			
+			function invokewithinterface(obj, intf, method){
+			}
+			function getwithinterface(obj, intf, property){
+			}
+			function setwithinterface(obj, intf, property, value){
+			}			
+			function invokeforbasicvalue(obj, isEnum, classObj, method){
+			}
+			function getforbasicvalue(obj, isEnum, classObj, property){
+			}
+			function setforbasicvalue(obj, isEnum, classObj, property, value){
+			}			
+			function invokearraystaticmethod(firstArray, secondArray, method){
+			}			
+			function getiterator(exp){
+			}
+			
+			function JsConsole(){
+			}
+			(function(){
+				var points = new Array();
+				JsConsole.Print = function(){
+					var x = arguments[0];
+					var y = arguments[1];		
+					points.push(new Array(x,y));
+					window.setTimeout(function(){JsConsole.drawPoint(x,y);}, 0);
+				}
+				JsConsole.drawPoint = function(x,y){
+					var obj = document.getElementById("infoArea");
+					var ctx = obj.getContext('2d');
+					var w = obj.width;
+					var h = obj.height;
+          ctx.beginPath();
+          ctx.lineWidth = "3";
+          ctx.strokeStyle = "blue";
+          ctx.fillStyle = "red";
+					//ctx.ellipse(x*w, y*h, 5, 5, 0, 0, Math.PI*2, true);
+					ctx.arc(x*w, y*h, 5, 0, Math.PI*2, true);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+				}
+				JsConsole.redraw = function(){
+					var obj = document.getElementById("infoArea");
+					var ctx = obj.getContext('2d');
+					var w = obj.width;
+					var h = obj.height;
+					ctx.clearRect(0, 0, w, h);
+					for(var i in points){
+						var x = points[i][0];
+						var y = points[i][1];
+	          ctx.beginPath();
+	          ctx.lineWidth = "3";
+	          ctx.strokeStyle = "blue";
+	          ctx.fillStyle = "red";
+						//ctx.ellipse(x*w, y*h, 5, 5, 0, 0, Math.PI*2, true);
+						ctx.arc(x*w, y*h, 5, 0, Math.PI*2, true);
+	          ctx.closePath();
+	          ctx.fill();
+	          ctx.stroke();
+	        }
+				}				
+			})();
+		</script>
+		<script src="Mandelbrot.js"></script>
+	</head>
+	<body>
+		<canvas id="infoArea" style="width:800px;height:800px" width="800" height="800">
+		</canvas>
+		<script language="javascript">
+			Mandelbrot.Test();
+			//JsConsole.redraw();
+		</script>
+	</body>
+</html>

@@ -2,4 +2,10 @@ rem working directory
 set workdir=%~dp0
 
 cd %workdir%
-Cs2Lua -ext lua -enableinherit -enablelinq -refbypath ..\..\dep\UnityEngine.dll -src test_delegate.cs
+del /s/f/q dsl\*.dsl
+del /s/f/q dsl\*.txt
+del /s/f/q dsl\*.js
+Cs2Dsl -enableinherit -enablelinq -refbypath ..\..\dep\UnityEngine.dll -src test_js.cs
+..\..\Generator\JsGenerator\bin\Debug\JsGenerator dsl
+
+

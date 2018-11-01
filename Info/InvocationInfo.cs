@@ -94,7 +94,7 @@ namespace RoslynTool.CsToLua
                     if (param.HasExplicitDefaultValue) {
                         var decl = param.DeclaringSyntaxReferences;
                         bool handled = false;
-                        if (decl.Length == 1) {
+                        if (decl.Length >= 1) {
                             var node = param.DeclaringSyntaxReferences[0].GetSyntax() as ParameterSyntax;
                             if (null != node) {
                                 var exp = node.Default.Value;
@@ -166,7 +166,7 @@ namespace RoslynTool.CsToLua
                     if (param.HasExplicitDefaultValue) {
                         var decl = param.DeclaringSyntaxReferences;
                         bool handled = false;
-                        if (decl.Length == 1) {
+                        if (decl.Length >= 1) {
                             var node = param.DeclaringSyntaxReferences[0].GetSyntax() as ParameterSyntax;
                             if (null != node) {
                                 var exp = node.Default.Value;
@@ -215,15 +215,15 @@ namespace RoslynTool.CsToLua
             string mname = cs2lua.NameMangling(IsExtensionMethod && null != sym.ReducedFrom ? sym.ReducedFrom : sym);
             string prestr = string.Empty;
             if (isMemberAccess) {
-                string fnOfIntf = "nil";
+                string fnOfIntf = "null";
                 bool isExplicitInterfaceInvoke = cs2lua.CheckExplicitInterfaceAccess(sym, ref fnOfIntf);
                 if (sym.MethodKind == MethodKind.DelegateInvoke) {
                     var memberAccess  = node as MemberAccessExpressionSyntax;
                     if (null != memberAccess) {
+                        codeBuilder.Append("callinstance(");
                         cs2lua.OutputExpressionSyntax(exp);
-                        codeBuilder.Append(".");
-                        codeBuilder.Append(memberAccess.Name);
-                        codeBuilder.Append("(");
+                        codeBuilder.AppendFormat(", \"{0}\"", memberAccess.Name);
+                        prestr = ", ";
                     } else {
                         //error;
                     }
@@ -234,10 +234,8 @@ namespace RoslynTool.CsToLua
                     codeBuilder.AppendFormat("{0}, \"{1}\"", fnOfIntf, mname);
                     prestr = ", ";
                 } else if (IsExtensionMethod) {
-                    codeBuilder.Append(ClassKey);
-                    codeBuilder.Append(".");
-                    codeBuilder.Append(mname);
-                    codeBuilder.Append("(");
+                    codeBuilder.Append("callstatic(");
+                    codeBuilder.AppendFormat("{0}, \"{1}\", ", ClassKey, mname);
                 } else if (IsBasicValueMethod) {
                     string ckey = CalcInvokeTarget(ClassKey, cs2lua, exp, model);
                     codeBuilder.Append("invokeforbasicvalue(");
@@ -248,13 +246,13 @@ namespace RoslynTool.CsToLua
                 } else if (IsArrayStaticMethod) {
                     codeBuilder.Append("invokearraystaticmethod(");
                     if (null == FirstRefArray) {
-                        codeBuilder.Append("nil, ");
+                        codeBuilder.Append("null, ");
                     } else {
                         cs2lua.OutputExpressionSyntax(FirstRefArray);
                         codeBuilder.Append(", ");
                     }
                     if (null == SecondRefArray) {
-                        codeBuilder.Append("nil, ");
+                        codeBuilder.Append("null, ");
                     } else {
                         cs2lua.OutputExpressionSyntax(SecondRefArray);
                         codeBuilder.Append(", ");
@@ -263,26 +261,30 @@ namespace RoslynTool.CsToLua
                     prestr = ", ";
                 } else {
                     if (sym.IsStatic) {
+                        codeBuilder.Append("callstatic(");
                         codeBuilder.Append(ClassKey);
-                        codeBuilder.Append(".");
                     } else {
+                        codeBuilder.Append("callinstance(");
                         cs2lua.OutputExpressionSyntax(exp);
-                        codeBuilder.Append(":");
                     }
-                    codeBuilder.Append(mname);
-                    codeBuilder.Append("(");
+                    codeBuilder.AppendFormat(", \"{0}\"", mname);
+                    prestr = ", ";
                 }
             } else {
                 if (sym.MethodKind == MethodKind.DelegateInvoke) {
                     cs2lua.OutputExpressionSyntax(exp);
+                    codeBuilder.Append("(");
                 } else if (sym.IsStatic) {
-                    codeBuilder.AppendFormat("{0}.", ClassKey);
-                    codeBuilder.Append(mname);
+                    codeBuilder.Append("callstatic(");
+                    codeBuilder.Append(ClassKey);
+                    codeBuilder.AppendFormat(", \"{0}\"", mname);
+                    prestr = ", ";
                 } else {
-                    codeBuilder.Append("this:");
-                    codeBuilder.Append(mname);
+                    codeBuilder.Append("callinstance(");
+                    codeBuilder.Append("this");
+                    codeBuilder.AppendFormat(", \"{0}\"", mname);
+                    prestr = ", ";
                 }
-                codeBuilder.Append("(");
             }
             if (Args.Count + DefaultValueArgs.Count + GenericTypeArgs.Count > 0) {
                 codeBuilder.Append(prestr);
