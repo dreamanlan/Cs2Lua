@@ -614,6 +614,7 @@ namespace LuaGenerator
                     GenerateSyntaxComponent(param1, sb, indent, false);
                     sb.Append(")");
                 } else if (paramNum == 2) {
+                    ++indent;
                     var param1 = data.GetParam(0);
                     var param2 = data.GetParam(1);
                     bool handled = false;
@@ -935,7 +936,9 @@ namespace LuaGenerator
                 sb.AppendFormat("local {0}; {0} = ", varName);
                 sb.Append("(function(");
                 sb.Append(paramsString);
-                sb.Append(") ");
+                sb.AppendLine(")");
+                ++indent;
+                sb.AppendFormat("{0}", GetIndentString(indent));
                 if (needReturn) {
                     sb.Append("return ");
                 }
@@ -946,10 +949,12 @@ namespace LuaGenerator
                     sb.Append(":");
                 }
                 sb.Append(methodName);
-                sb.AppendFormat("({0}); end)", paramsString);
-
-                sb.AppendFormat("; setdelegationkey({0}, \"{1}\", {2}, {3}.{4});", varName, delegationKey, objOrClassName, objOrClassName, methodName);
-                sb.AppendFormat(" return {0}", varName);
+                sb.AppendFormatLine("({0});", paramsString);
+                --indent;
+                sb.AppendFormatLine("{0}end);", GetIndentString(indent));
+                sb.AppendFormat("{0}", GetIndentString(indent));
+                sb.AppendFormatLine("setdelegationkey({0}, \"{1}\", {2}, {3}.{4});", varName, delegationKey, objOrClassName, objOrClassName, methodName);
+                sb.AppendFormat("{0}return {1}", GetIndentString(indent), varName);
             } else if (id == "anonymousobject") {
                 sb.Append("wrapdictionary{");
                 string prestr = string.Empty;
@@ -967,7 +972,7 @@ namespace LuaGenerator
                     var param = data.Params[ix] as Dsl.CallData;
                     sb.Append(prestr);
                     var k = param.GetParamId(0);
-                    var v = param.GetParam(1);                    
+                    var v = param.GetParam(1);
                     sb.AppendFormat("[\"{0}\"] = ", Escape(k));
                     GenerateSyntaxComponent(v, sb, indent, false);
                     prestr = ", ";
@@ -1184,7 +1189,7 @@ namespace LuaGenerator
                             sb.AppendFormat("{0}until true", GetIndentString(indent));
                         } else {
                             sb.AppendFormat("{0}until not (", GetIndentString(indent));
-                            GenerateSyntaxComponent(param0, sb, indent, true);
+                            GenerateSyntaxComponent(param0, sb, indent, false);
                             sb.Append(")");
                         }
                     }
