@@ -1,0 +1,36 @@
+============<<<Semantic Error:test>>>============
+test.cs(55,19): error CS0246: The type or namespace name 'MonoBehaviour' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(8,2): error CS0246: The type or namespace name 'Cs2Dsl' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(642,52): error CS0246: The type or namespace name 'Transform' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(642,16): error CS0246: The type or namespace name 'Transform' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(669,57): error CS0246: The type or namespace name 'Transform' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(669,19): error CS0246: The type or namespace name 'Transform' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(129,72): error CS0246: The type or namespace name 'Transform' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(147,59): error CS0246: The type or namespace name 'Transform' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(354,10): error CS0246: The type or namespace name 'Cs2Dsl' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(560,48): error CS0246: The type or namespace name 'GameObject' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(6,7): error CS0246: The type or namespace name 'UnityEngine' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(127,35): error CS0246: The type or namespace name 'Component' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(147,88): error CS0246: The type or namespace name 'Component' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(129,101): error CS0246: The type or namespace name 'Component' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(131,13): error CS0246: The type or namespace name 'GameObject' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(131,35): error CS0246: The type or namespace name 'GameObject' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(143,17): error CS0103: The name 'Debug' does not exist in the current context
+test.cs(145,20): error CS0403: Cannot convert null to type parameter 'T' because it could be a non-nullable value type. Consider using 'default(T)' instead.
+test.cs(149,13): error CS0246: The type or namespace name 'GameObject' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(149,35): error CS0246: The type or namespace name 'GameObject' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(161,17): error CS0103: The name 'Debug' does not exist in the current context
+test.cs(163,20): error CS0403: Cannot convert null to type parameter 'T' because it could be a non-nullable value type. Consider using 'default(T)' instead.
+test.cs(279,17): error CS0103: The name 'Debug' does not exist in the current context
+test.cs(457,34): error CS0246: The type or namespace name 'UnityEngine' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(584,31): error CS0246: The type or namespace name 'GameObject' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(644,3): error CS0246: The type or namespace name 'Transform' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(681,17): error CS0246: The type or namespace name 'Transform' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(682,17): error CS0246: The type or namespace name 'Transform' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(693,26): error CS0103: The name 'PlayerPrefs' does not exist in the current context
+test.cs(64,17): error CS0103: The name 'gameObject' does not exist in the current context
+test.cs(64,41): error CS0246: The type or namespace name 'Transform' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(65,9): error CS0103: The name 'gameObject' does not exist in the current context
+test.cs(66,17): error CS0103: The name 'gameObject' does not exist in the current context
+test.cs(66,41): error CS0246: The type or namespace name 'Renderer' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(67,9): error CS0103: The name 'gameObject' does not exist in the current context

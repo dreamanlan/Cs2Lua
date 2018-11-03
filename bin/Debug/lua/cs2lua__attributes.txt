@@ -1,0 +1,17 @@
+__cs2lua__AllAttrs = {};
+__cs2lua__AllAttrs["LuaConsole"] = {
+	Class = {
+		{"Cs2Dsl.Ignore", {}, {}};
+	};
+};
+__cs2lua__AllAttrs["CUsingHelper"] = {
+	ReadZip = {
+		{"System.CLSCompliantAttribute", {isCompliant = "True"}, {}};
+	};
+};
+__cs2lua__AllAttrs["TopLevel.SecondLevel.Foo"] = {
+	Class = {
+		{"Cs2Dsl.EnableInherit", {}, {}};
+	};
+};
+

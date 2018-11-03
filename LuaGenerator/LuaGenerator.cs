@@ -1148,7 +1148,28 @@ namespace LuaGenerator
                 sb.AppendFormat("{0}", GetIndentString(indent));
             }
             string id = data.GetId();
-            if (id == "do") {
+            if (id == "linq") {
+                string prestr = string.Empty;
+                foreach (var funcData in data.Functions) {
+                    var fcall = funcData.Call;
+                    var linqId = fcall.GetId();
+                    if (linqId=="linq") {
+                        sb.Append("LINQ.exec({");
+                    } else if (linqId == "end") {
+                        sb.Append("})");
+                    } else {
+                        sb.AppendFormat("{0}{{\"{1}\"", prestr, linqId);
+                        prestr = ", ";
+                        ++indent;
+                        foreach (var comp in fcall.Params) {
+                            sb.Append(prestr);
+                            GenerateSyntaxComponent(comp, sb, indent, false);
+                        }
+                        --indent;
+                        sb.Append("}");
+                    }
+                }
+            } else if (id == "do") {
                 foreach (var funcData in data.Functions) {
                     var fcall = funcData.Call;
                     if (funcData == data.First) {

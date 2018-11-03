@@ -27,10 +27,10 @@ namespace RoslynTool.CsToLua
 
             m_LinqParamInfoStack.Push(new LinqParamInfo());
 
-            CodeBuilder.Append("LINQ.begin()");
+            CodeBuilder.Append("linq()");
             node.FromClause.Accept(this);
             node.Body.Accept(this);
-            CodeBuilder.Append(".end()");
+            CodeBuilder.Append("end()");
 
             m_LinqParamInfoStack.Pop();
         }
@@ -43,7 +43,7 @@ namespace RoslynTool.CsToLua
             var paramInfo = m_LinqParamInfoStack.Peek();
             var paramNames = paramInfo.ParamNames;
 
-            CodeBuilder.AppendFormat(".from(function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
+            CodeBuilder.AppendFormat("from(function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
             var opd = m_Model.GetOperation(node.Expression) as IConversionExpression;
             OutputExpressionSyntax(node.Expression, opd);
             CodeBuilder.Append("); })");
@@ -55,7 +55,7 @@ namespace RoslynTool.CsToLua
             var paramInfo = m_LinqParamInfoStack.Peek();
             var paramNames = paramInfo.ParamNames;
 
-            CodeBuilder.AppendFormat(".let(function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
+            CodeBuilder.AppendFormat("let(function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
             var opd = m_Model.GetOperation(node.Expression) as IConversionExpression;
             OutputExpressionSyntax(node.Expression, opd);
             CodeBuilder.Append("); })");
@@ -67,7 +67,7 @@ namespace RoslynTool.CsToLua
             var paramInfo = m_LinqParamInfoStack.Peek();
             var paramNames = paramInfo.ParamNames;
 
-            CodeBuilder.AppendFormat(".join((function({0}){{ return(", string.Join(", ", paramNames.ToArray()));            
+            CodeBuilder.AppendFormat("join((function({0}){{ return(", string.Join(", ", paramNames.ToArray()));            
             var opd = m_Model.GetOperation(node.InExpression) as IConversionExpression;
             OutputExpressionSyntax(node.InExpression, opd);
             CodeBuilder.Append("); }), ");
@@ -97,14 +97,14 @@ namespace RoslynTool.CsToLua
             paramNames.Remove(paramInfo.JoinParamName);
             paramNames.Add(node.Identifier.Text);
 
-            CodeBuilder.Append(".into()");
+            CodeBuilder.Append("into()");
         }
         public override void VisitWhereClause(WhereClauseSyntax node)
         {
             var paramInfo = m_LinqParamInfoStack.Peek();
             var paramNames = paramInfo.ParamNames;
 
-            CodeBuilder.AppendFormat(".where(function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
+            CodeBuilder.AppendFormat("where(function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
             var opd = m_Model.GetOperation(node.Condition) as IConversionExpression;
             OutputExpressionSyntax(node.Condition, opd);
             CodeBuilder.Append("); })");
@@ -118,7 +118,7 @@ namespace RoslynTool.CsToLua
             var paramInfo = m_LinqParamInfoStack.Peek();
             var paramNames = paramInfo.ParamNames;
 
-            CodeBuilder.AppendFormat(".orderby((function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
+            CodeBuilder.AppendFormat("orderby((function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
             var opd = m_Model.GetOperation(node.Expression) as IConversionExpression;
             OutputExpressionSyntax(node.Expression, opd);
             CodeBuilder.AppendFormat("); }}), {0})", node.AscendingOrDescendingKeyword.Text != "descending" ? "true" : "false");
@@ -128,7 +128,7 @@ namespace RoslynTool.CsToLua
             var paramInfo = m_LinqParamInfoStack.Peek();
             var paramNames = paramInfo.ParamNames;
 
-            CodeBuilder.AppendFormat(".select(function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
+            CodeBuilder.AppendFormat("select(function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
             var opd = m_Model.GetOperation(node.Expression) as IConversionExpression;
             OutputExpressionSyntax(node.Expression, opd);
             CodeBuilder.Append("); })");
@@ -138,7 +138,7 @@ namespace RoslynTool.CsToLua
             var paramInfo = m_LinqParamInfoStack.Peek();
             var paramNames = paramInfo.ParamNames;
 
-            CodeBuilder.AppendFormat(".groupby((function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
+            CodeBuilder.AppendFormat("groupby((function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
             var opdGroup = m_Model.GetOperation(node.GroupExpression) as IConversionExpression;
             OutputExpressionSyntax(node.GroupExpression, opdGroup);
             CodeBuilder.Append("); }), ");
@@ -155,7 +155,7 @@ namespace RoslynTool.CsToLua
             paramNames.Clear();
             paramNames.Add(node.Identifier.Text);
 
-            CodeBuilder.Append(".continuation()");
+            CodeBuilder.Append("continuation()");
             node.Body.Accept(this);
         }
     }

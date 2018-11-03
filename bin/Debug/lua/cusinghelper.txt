@@ -1,0 +1,85 @@
+require "cs2lua__utility";
+require "cs2lua__attributes";
+require "cs2lua__namespaces";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+require "zipinputstream";
+require "zipoutputstream";
+
+CUsingHelper = {
+	__new_object = function(...)
+		return newobject(CUsingHelper, "ctor", nil, ...);
+	end,
+	__define_class = function()
+		local static = CUsingHelper;
+		local static_methods = {
+			ReadZip = function(bytes)
+				local __compiler_method_ret_36_4_51_2;
+				__compiler_method_ret_36_4_51_2 = nil;
+				local zipInput;
+				zipInput = newobject(ZipInputStream, "ctor", nil, newexternobject(System.IO.MemoryStream, "System.IO.MemoryStream", "ctor", nil, bytes));
+				local zipMemory;
+				zipMemory = newexternobject(System.IO.MemoryStream, "System.IO.MemoryStream", "ctor", nil);
+				local ZipStream;
+				ZipStream = newobject(ZipOutputStream, "ctor", nil, zipMemory);
+				local __compiler_try_ret_42_2_50_3, __compiler_try_err_42_2_50_3;
+				__compiler_try_ret_42_2_50_3,__compiler_try_err_42_2_50_3 = luatry(function()
+					do
+						__compiler_method_ret_36_4_51_2 = nil;
+						return true;
+					end;
+				end);
+				local __compiler_try_handled_42_2_50_3;
+				__compiler_try_handled_42_2_50_3 = false;
+				__compiler_try_handled_42_2_50_3 = luacatch(__compiler_try_handled_42_2_50_3, __compiler_try_ret_42_2_50_3, __compiler_try_err_42_2_50_3, (function(__compiler_catch_handled_46_2_50_3)
+					do
+						__compiler_method_ret_36_4_51_2 = nil;
+						return true;
+					end;
+					luathrow();
+					__compiler_catch_handled_46_2_50_3 = true;
+					return  					__compiler_catch_handled_46_2_50_3 ;
+				end));
+				return __compiler_method_ret_36_4_51_2;
+			end,
+			cctor = function()
+			end,
+		};
+
+		local static_fields_build = function()
+			local static_fields = {
+				__attributes = CUsingHelper__Attrs,
+			};
+			return static_fields;
+		end;
+		local static_props = nil;
+		local static_events = nil;
+
+		local instance_methods = {
+			ctor = function(this, a1, a2)
+				return this;
+			end,
+			Dispose = function(this)
+			end,
+		};
+		local instance_fields_build = function()
+			local instance_fields = {
+				__attributes = CUsingHelper__Attrs,
+			};
+			return instance_fields;
+		end;
+		local instance_props = nil;
+		local instance_events = nil;
+
+		local interfaces = {
+			"System.IDisposable",
+		};
+		local interface_map = {
+			IDisposable_Dispose = "Dispose",
+		};
+
+		return defineclass(nil, "CUsingHelper", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
+	end,
+};
+
+CUsingHelper.__define_class();

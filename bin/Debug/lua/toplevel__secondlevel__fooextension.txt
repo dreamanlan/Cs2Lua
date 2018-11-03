@@ -1,0 +1,117 @@
+require "cs2lua__utility";
+require "cs2lua__namespaces";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+require "toplevel__secondlevel__foo";
+require "gameobject";
+require "luaconsole";
+
+TopLevel.SecondLevel.FooExtension = {
+	__define_class = function()
+		local static = TopLevel.SecondLevel.FooExtension;
+		local static_methods = {
+			Test3__TopLevel_SecondLevel_Foo = function(obj)
+				if (obj.m_Test > 0) then 
+					obj.m_Test2 = 678;
+				end;
+				local f;
+				f = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", {newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", {1, 2}), newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", {2, 3})});
+			end,
+			Test3__TopLevel_SecondLevel_Foo__System_Int32 = function(__compiler_cs_this, ix)
+				__compiler_cs_this:Test123(123, 456);
+			end,
+			TestExtern = function(obj)
+			end,
+			NormalMethod = function()
+				LuaConsole.Print(1, 2, 3, 4, 5);
+				local f;
+				f = newobject(TopLevel.SecondLevel.Foo, "ctor", nil);
+				local ff;
+				ff = newobject(TopLevel.SecondLevel.Foo, "ctor", nil);
+				local f1;
+				f1 = delegationwrap((function()
+					local __compiler_delegation_obj_567_28_567_34;
+					__compiler_delegation_obj_567_28_567_34 = f;
+					local __compiler_delegation_567_28_567_34; __compiler_delegation_567_28_567_34 = (function() __compiler_delegation_obj_567_28_567_34:Test(); end); setdelegationkey(__compiler_delegation_567_28_567_34, "TopLevel.SecondLevel.Foo:Test", __compiler_delegation_obj_567_28_567_34, __compiler_delegation_obj_567_28_567_34.Test); return __compiler_delegation_567_28_567_34;
+				end)());
+				f1();
+				local f2;
+				f2 = delegationwrap((function()
+					local __compiler_delegation_obj_570_28_570_35;
+					__compiler_delegation_obj_570_28_570_35 = f;
+					local __compiler_delegation_570_28_570_35; __compiler_delegation_570_28_570_35 = (function() __compiler_delegation_obj_570_28_570_35:Test3(); end); setdelegationkey(__compiler_delegation_570_28_570_35, "TopLevel.SecondLevel.FooExtension:Test3", __compiler_delegation_obj_570_28_570_35, __compiler_delegation_obj_570_28_570_35.Test3); return __compiler_delegation_570_28_570_35;
+				end)());
+				f2();
+				TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo(TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo, f);
+				local r;
+				r = invokeoperator(TopLevel.SecondLevel.Foo, "op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo", f, ff);
+				f = invokeoperator(TopLevel.SecondLevel.Foo, "op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo", f, ff);
+				local rr;
+				rr = invokeoperator(TopLevel.SecondLevel.Foo, "op_Explicit", 123);
+				local rrr;
+				rrr = typeas(f, TopLevel.SecondLevel.Foo, false);
+				local obj;
+				(= obj);
+				TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo__System_Int32(f, 8);
+				local arr;
+				arr = wraparray({1, 2, 3, 4, 4});
+				local v;
+				v = arr[3];
+				local dict;
+				dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {["1"] = 2, ["3"] = 4});
+				local v1;
+				v1 = condaccess(dict, (function()
+					return getexterninstanceindexer(dict, nil, "get_Item", 1);
+				end));
+				local list;
+				list = nil;
+				local l;
+				l = condaccess(list, (function()
+					return list.Count;
+				end));
+				local arr2;
+				arr2 = wraparray({1, 2, 3, 4});
+				local v3;
+				v3 = condaccess(arr2, (function()
+					return arr2[3];
+				end));
+				local a;
+				a = 1;
+				local b;
+				b = 2;
+				local c;
+				c = 3;
+				a = (function()
+					b = c;
+					return b;
+				end)();
+				c = invokeintegeroperator(2, "+", c, 1, System.Int32, System.Int32);
+			end,
+			cctor = function()
+			end,
+		};
+
+		local static_fields_build = function()
+			local static_fields = {
+			};
+			return static_fields;
+		end;
+		local static_props = nil;
+		local static_events = nil;
+
+		local instance_fields_build = function()
+			local instance_fields = {
+			};
+			return instance_fields;
+		end;
+		local instance_props = nil;
+		local instance_events = nil;
+
+		local interfaces = nil;
+		local interface_map = nil;
+
+		return defineclass(nil, "TopLevel.SecondLevel.FooExtension", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
+	end,
+};
+
+TopLevel.SecondLevel.FooExtension.__define_class();
