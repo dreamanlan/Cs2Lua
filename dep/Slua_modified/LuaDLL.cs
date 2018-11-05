@@ -81,7 +81,7 @@ namespace SLua
     public class LuaDLL
     {
         public static int LUA_MULTRET = -1;
-#if UNITY_IPHONE && !UNITY_EDITOR
+#if UNITY_IOS
 		const string LUADLL = "__Internal";
 #else
         const string LUADLL = "slua";
@@ -497,7 +497,9 @@ namespace SLua
             LuaTypes ct = LuaDLL.lua_type(luaState, p);
             if (ct != t)
             {
-                throw new Exception(string.Format("arg {0} expect {1}, got {2}", p, lua_typenamestr(luaState, t), lua_typenamestr(luaState, ct)));
+                if (LuaTypes.LUA_TNIL != ct || LuaTypes.LUA_TNIL == ct && LuaTypes.LUA_TFUNCTION != t) {
+                    throw new Exception(string.Format("arg {0} expect {1}, got {2}", p, lua_typenamestr(luaState, t), lua_typenamestr(luaState, ct)));
+                }
             }
         }
 

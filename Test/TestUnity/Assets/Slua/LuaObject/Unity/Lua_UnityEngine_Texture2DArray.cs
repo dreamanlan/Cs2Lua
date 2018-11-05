@@ -9,23 +9,7 @@ public class Lua_UnityEngine_Texture2DArray : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Texture2DArray o;
-			if(argc==6){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				UnityEngine.TextureFormat a4;
-				checkEnum(l,5,out a4);
-				System.Boolean a5;
-				checkType(l,6,out a5);
-				o=new UnityEngine.Texture2DArray(a1,a2,a3,a4,a5);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==7){
+			if(argc==7){
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -43,6 +27,22 @@ public class Lua_UnityEngine_Texture2DArray : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
+			else if(argc==6){
+				System.Int32 a1;
+				checkType(l,2,out a1);
+				System.Int32 a2;
+				checkType(l,3,out a2);
+				System.Int32 a3;
+				checkType(l,4,out a3);
+				UnityEngine.TextureFormat a4;
+				checkEnum(l,5,out a4);
+				System.Boolean a5;
+				checkType(l,6,out a5);
+				o=new UnityEngine.Texture2DArray(a1,a2,a3,a4,a5);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
 			return error(l,"New object failed.");
 		}
 		catch(Exception e) {
@@ -54,9 +54,13 @@ public class Lua_UnityEngine_Texture2DArray : LuaObject {
 	static public int Apply(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
+			if(argc==3){
 				UnityEngine.Texture2DArray self=(UnityEngine.Texture2DArray)checkSelf(l);
-				self.Apply();
+				System.Boolean a1;
+				checkType(l,2,out a1);
+				System.Boolean a2;
+				checkType(l,3,out a2);
+				self.Apply(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
@@ -68,13 +72,9 @@ public class Lua_UnityEngine_Texture2DArray : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==3){
+			else if(argc==1){
 				UnityEngine.Texture2DArray self=(UnityEngine.Texture2DArray)checkSelf(l);
-				System.Boolean a1;
-				checkType(l,2,out a1);
-				System.Boolean a2;
-				checkType(l,3,out a2);
-				self.Apply(a1,a2);
+				self.Apply();
 				pushValue(l,true);
 				return 1;
 			}
@@ -91,17 +91,7 @@ public class Lua_UnityEngine_Texture2DArray : LuaObject {
 	static public int SetPixels(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				UnityEngine.Texture2DArray self=(UnityEngine.Texture2DArray)checkSelf(l);
-				UnityEngine.Color[] a1;
-				checkArray(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				self.SetPixels(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==4){
+			if(argc==4){
 				UnityEngine.Texture2DArray self=(UnityEngine.Texture2DArray)checkSelf(l);
 				UnityEngine.Color[] a1;
 				checkArray(l,2,out a1);
@@ -110,6 +100,16 @@ public class Lua_UnityEngine_Texture2DArray : LuaObject {
 				System.Int32 a3;
 				checkType(l,4,out a3);
 				self.SetPixels(a1,a2,a3);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==3){
+				UnityEngine.Texture2DArray self=(UnityEngine.Texture2DArray)checkSelf(l);
+				UnityEngine.Color[] a1;
+				checkArray(l,2,out a1);
+				System.Int32 a2;
+				checkType(l,3,out a2);
+				self.SetPixels(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
@@ -126,17 +126,7 @@ public class Lua_UnityEngine_Texture2DArray : LuaObject {
 	static public int SetPixels32(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				UnityEngine.Texture2DArray self=(UnityEngine.Texture2DArray)checkSelf(l);
-				UnityEngine.Color32[] a1;
-				checkArray(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				self.SetPixels32(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==4){
+			if(argc==4){
 				UnityEngine.Texture2DArray self=(UnityEngine.Texture2DArray)checkSelf(l);
 				UnityEngine.Color32[] a1;
 				checkArray(l,2,out a1);
@@ -145,6 +135,16 @@ public class Lua_UnityEngine_Texture2DArray : LuaObject {
 				System.Int32 a3;
 				checkType(l,4,out a3);
 				self.SetPixels32(a1,a2,a3);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==3){
+				UnityEngine.Texture2DArray self=(UnityEngine.Texture2DArray)checkSelf(l);
+				UnityEngine.Color32[] a1;
+				checkArray(l,2,out a1);
+				System.Int32 a2;
+				checkType(l,3,out a2);
+				self.SetPixels32(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
@@ -161,22 +161,22 @@ public class Lua_UnityEngine_Texture2DArray : LuaObject {
 	static public int GetPixels(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
-				UnityEngine.Texture2DArray self=(UnityEngine.Texture2DArray)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				var ret=self.GetPixels(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
+			if(argc==3){
 				UnityEngine.Texture2DArray self=(UnityEngine.Texture2DArray)checkSelf(l);
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
 				checkType(l,3,out a2);
 				var ret=self.GetPixels(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==2){
+				UnityEngine.Texture2DArray self=(UnityEngine.Texture2DArray)checkSelf(l);
+				System.Int32 a1;
+				checkType(l,2,out a1);
+				var ret=self.GetPixels(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -194,22 +194,22 @@ public class Lua_UnityEngine_Texture2DArray : LuaObject {
 	static public int GetPixels32(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
-				UnityEngine.Texture2DArray self=(UnityEngine.Texture2DArray)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				var ret=self.GetPixels32(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
+			if(argc==3){
 				UnityEngine.Texture2DArray self=(UnityEngine.Texture2DArray)checkSelf(l);
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
 				checkType(l,3,out a2);
 				var ret=self.GetPixels32(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==2){
+				UnityEngine.Texture2DArray self=(UnityEngine.Texture2DArray)checkSelf(l);
+				System.Int32 a1;
+				checkType(l,2,out a1);
+				var ret=self.GetPixels32(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;

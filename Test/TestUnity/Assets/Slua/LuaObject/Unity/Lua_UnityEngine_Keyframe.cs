@@ -9,17 +9,7 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Keyframe o;
-			if(argc==3){
-				System.Single a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				o=new UnityEngine.Keyframe(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==5){
+			if(argc==5){
 				System.Single a1;
 				checkType(l,2,out a1);
 				System.Single a2;
@@ -29,6 +19,16 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 				System.Single a4;
 				checkType(l,5,out a4);
 				o=new UnityEngine.Keyframe(a1,a2,a3,a4);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(argc==3){
+				System.Single a1;
+				checkType(l,2,out a1);
+				System.Single a2;
+				checkType(l,3,out a2);
+				o=new UnityEngine.Keyframe(a1,a2);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;

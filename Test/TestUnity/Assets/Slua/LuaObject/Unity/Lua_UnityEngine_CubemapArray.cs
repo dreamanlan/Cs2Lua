@@ -9,21 +9,7 @@ public class Lua_UnityEngine_CubemapArray : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.CubemapArray o;
-			if(argc==5){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				UnityEngine.TextureFormat a3;
-				checkEnum(l,4,out a3);
-				System.Boolean a4;
-				checkType(l,5,out a4);
-				o=new UnityEngine.CubemapArray(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==6){
+			if(argc==6){
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -39,6 +25,20 @@ public class Lua_UnityEngine_CubemapArray : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
+			else if(argc==5){
+				System.Int32 a1;
+				checkType(l,2,out a1);
+				System.Int32 a2;
+				checkType(l,3,out a2);
+				UnityEngine.TextureFormat a3;
+				checkEnum(l,4,out a3);
+				System.Boolean a4;
+				checkType(l,5,out a4);
+				o=new UnityEngine.CubemapArray(a1,a2,a3,a4);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
 			return error(l,"New object failed.");
 		}
 		catch(Exception e) {
@@ -50,9 +50,13 @@ public class Lua_UnityEngine_CubemapArray : LuaObject {
 	static public int Apply(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
+			if(argc==3){
 				UnityEngine.CubemapArray self=(UnityEngine.CubemapArray)checkSelf(l);
-				self.Apply();
+				System.Boolean a1;
+				checkType(l,2,out a1);
+				System.Boolean a2;
+				checkType(l,3,out a2);
+				self.Apply(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
@@ -64,13 +68,9 @@ public class Lua_UnityEngine_CubemapArray : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==3){
+			else if(argc==1){
 				UnityEngine.CubemapArray self=(UnityEngine.CubemapArray)checkSelf(l);
-				System.Boolean a1;
-				checkType(l,2,out a1);
-				System.Boolean a2;
-				checkType(l,3,out a2);
-				self.Apply(a1,a2);
+				self.Apply();
 				pushValue(l,true);
 				return 1;
 			}
@@ -87,19 +87,7 @@ public class Lua_UnityEngine_CubemapArray : LuaObject {
 	static public int SetPixels(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.CubemapArray self=(UnityEngine.CubemapArray)checkSelf(l);
-				UnityEngine.Color[] a1;
-				checkArray(l,2,out a1);
-				UnityEngine.CubemapFace a2;
-				checkEnum(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				self.SetPixels(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==5){
+			if(argc==5){
 				UnityEngine.CubemapArray self=(UnityEngine.CubemapArray)checkSelf(l);
 				UnityEngine.Color[] a1;
 				checkArray(l,2,out a1);
@@ -110,6 +98,18 @@ public class Lua_UnityEngine_CubemapArray : LuaObject {
 				System.Int32 a4;
 				checkType(l,5,out a4);
 				self.SetPixels(a1,a2,a3,a4);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==4){
+				UnityEngine.CubemapArray self=(UnityEngine.CubemapArray)checkSelf(l);
+				UnityEngine.Color[] a1;
+				checkArray(l,2,out a1);
+				UnityEngine.CubemapFace a2;
+				checkEnum(l,3,out a2);
+				System.Int32 a3;
+				checkType(l,4,out a3);
+				self.SetPixels(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
@@ -126,19 +126,7 @@ public class Lua_UnityEngine_CubemapArray : LuaObject {
 	static public int SetPixels32(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.CubemapArray self=(UnityEngine.CubemapArray)checkSelf(l);
-				UnityEngine.Color32[] a1;
-				checkArray(l,2,out a1);
-				UnityEngine.CubemapFace a2;
-				checkEnum(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				self.SetPixels32(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==5){
+			if(argc==5){
 				UnityEngine.CubemapArray self=(UnityEngine.CubemapArray)checkSelf(l);
 				UnityEngine.Color32[] a1;
 				checkArray(l,2,out a1);
@@ -149,6 +137,18 @@ public class Lua_UnityEngine_CubemapArray : LuaObject {
 				System.Int32 a4;
 				checkType(l,5,out a4);
 				self.SetPixels32(a1,a2,a3,a4);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==4){
+				UnityEngine.CubemapArray self=(UnityEngine.CubemapArray)checkSelf(l);
+				UnityEngine.Color32[] a1;
+				checkArray(l,2,out a1);
+				UnityEngine.CubemapFace a2;
+				checkEnum(l,3,out a2);
+				System.Int32 a3;
+				checkType(l,4,out a3);
+				self.SetPixels32(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
@@ -165,18 +165,7 @@ public class Lua_UnityEngine_CubemapArray : LuaObject {
 	static public int GetPixels(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				UnityEngine.CubemapArray self=(UnityEngine.CubemapArray)checkSelf(l);
-				UnityEngine.CubemapFace a1;
-				checkEnum(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				var ret=self.GetPixels(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==4){
+			if(argc==4){
 				UnityEngine.CubemapArray self=(UnityEngine.CubemapArray)checkSelf(l);
 				UnityEngine.CubemapFace a1;
 				checkEnum(l,2,out a1);
@@ -185,6 +174,17 @@ public class Lua_UnityEngine_CubemapArray : LuaObject {
 				System.Int32 a3;
 				checkType(l,4,out a3);
 				var ret=self.GetPixels(a1,a2,a3);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==3){
+				UnityEngine.CubemapArray self=(UnityEngine.CubemapArray)checkSelf(l);
+				UnityEngine.CubemapFace a1;
+				checkEnum(l,2,out a1);
+				System.Int32 a2;
+				checkType(l,3,out a2);
+				var ret=self.GetPixels(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -202,18 +202,7 @@ public class Lua_UnityEngine_CubemapArray : LuaObject {
 	static public int GetPixels32(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				UnityEngine.CubemapArray self=(UnityEngine.CubemapArray)checkSelf(l);
-				UnityEngine.CubemapFace a1;
-				checkEnum(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				var ret=self.GetPixels32(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==4){
+			if(argc==4){
 				UnityEngine.CubemapArray self=(UnityEngine.CubemapArray)checkSelf(l);
 				UnityEngine.CubemapFace a1;
 				checkEnum(l,2,out a1);
@@ -222,6 +211,17 @@ public class Lua_UnityEngine_CubemapArray : LuaObject {
 				System.Int32 a3;
 				checkType(l,4,out a3);
 				var ret=self.GetPixels32(a1,a2,a3);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==3){
+				UnityEngine.CubemapArray self=(UnityEngine.CubemapArray)checkSelf(l);
+				UnityEngine.CubemapFace a1;
+				checkEnum(l,2,out a1);
+				System.Int32 a2;
+				checkType(l,3,out a2);
+				var ret=self.GetPixels32(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;

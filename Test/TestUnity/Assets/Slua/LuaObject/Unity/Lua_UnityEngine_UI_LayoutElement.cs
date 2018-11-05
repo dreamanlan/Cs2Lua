@@ -238,6 +238,21 @@ public class Lua_UnityEngine_UI_LayoutElement : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_layoutPriority(IntPtr l) {
+		try {
+			UnityEngine.UI.LayoutElement self=(UnityEngine.UI.LayoutElement)checkSelf(l);
+			int v;
+			checkType(l,2,out v);
+			self.layoutPriority=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.LayoutElement");
@@ -250,7 +265,7 @@ public class Lua_UnityEngine_UI_LayoutElement : LuaObject {
 		addMember(l,"preferredHeight",get_preferredHeight,set_preferredHeight,true);
 		addMember(l,"flexibleWidth",get_flexibleWidth,set_flexibleWidth,true);
 		addMember(l,"flexibleHeight",get_flexibleHeight,set_flexibleHeight,true);
-		addMember(l,"layoutPriority",get_layoutPriority,null,true);
+		addMember(l,"layoutPriority",get_layoutPriority,set_layoutPriority,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.UI.LayoutElement),typeof(UnityEngine.EventSystems.UIBehaviour));
 	}
 }

@@ -8,23 +8,7 @@ public class Lua_UnityEngine_UI_StencilMaterial : LuaObject {
 	static public int Add_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				UnityEngine.Material a1;
-				checkType(l,1,out a1);
-				System.Int32 a2;
-				checkType(l,2,out a2);
-				UnityEngine.Rendering.StencilOp a3;
-				checkEnum(l,3,out a3);
-				UnityEngine.Rendering.CompareFunction a4;
-				checkEnum(l,4,out a4);
-				UnityEngine.Rendering.ColorWriteMask a5;
-				checkEnum(l,5,out a5);
-				var ret=UnityEngine.UI.StencilMaterial.Add(a1,a2,a3,a4,a5);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==7){
+			if(argc==7){
 				UnityEngine.Material a1;
 				checkType(l,1,out a1);
 				System.Int32 a2;
@@ -40,6 +24,22 @@ public class Lua_UnityEngine_UI_StencilMaterial : LuaObject {
 				System.Int32 a7;
 				checkType(l,7,out a7);
 				var ret=UnityEngine.UI.StencilMaterial.Add(a1,a2,a3,a4,a5,a6,a7);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==5){
+				UnityEngine.Material a1;
+				checkType(l,1,out a1);
+				System.Int32 a2;
+				checkType(l,2,out a2);
+				UnityEngine.Rendering.StencilOp a3;
+				checkEnum(l,3,out a3);
+				UnityEngine.Rendering.CompareFunction a4;
+				checkEnum(l,4,out a4);
+				UnityEngine.Rendering.ColorWriteMask a5;
+				checkEnum(l,5,out a5);
+				var ret=UnityEngine.UI.StencilMaterial.Add(a1,a2,a3,a4,a5);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;

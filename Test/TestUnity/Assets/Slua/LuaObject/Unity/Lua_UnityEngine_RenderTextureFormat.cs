@@ -28,6 +28,10 @@ public class Lua_UnityEngine_RenderTextureFormat : LuaObject {
 		addMember(l,20,"BGRA32");
 		addMember(l,22,"RGB111110Float");
 		addMember(l,23,"RG32");
+		addMember(l,24,"RGBAUShort");
+		addMember(l,25,"RG16");
+		addMember(l,26,"BGRA10101010_XR");
+		addMember(l,27,"BGR101010_XR");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

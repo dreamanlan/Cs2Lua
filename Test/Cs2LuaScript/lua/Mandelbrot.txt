@@ -78,7 +78,7 @@ Mandelbrot = {
 		local instance_fields_build = function()
 			local instance_fields = {
 				root = __cs2lua_nil_field_value,
-				colors = wraparray{UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black},
+				colors = wraparray({UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black}, 9),
 				r = 10,
 				scale = 3.00,
 			};

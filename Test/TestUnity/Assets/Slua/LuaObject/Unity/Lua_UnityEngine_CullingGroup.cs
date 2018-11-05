@@ -80,15 +80,17 @@ public class Lua_UnityEngine_CullingGroup : LuaObject {
 	static public int QueryIndices(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,2,typeof(int),typeof(System.Int32[]),typeof(int))){
+			if(argc==5){
 				UnityEngine.CullingGroup self=(UnityEngine.CullingGroup)checkSelf(l);
-				System.Int32 a1;
+				System.Boolean a1;
 				checkType(l,2,out a1);
-				System.Int32[] a2;
-				checkArray(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				var ret=self.QueryIndices(a1,a2,a3);
+				System.Int32 a2;
+				checkType(l,3,out a2);
+				System.Int32[] a3;
+				checkArray(l,4,out a3);
+				System.Int32 a4;
+				checkType(l,5,out a4);
+				var ret=self.QueryIndices(a1,a2,a3,a4);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -106,17 +108,15 @@ public class Lua_UnityEngine_CullingGroup : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==5){
+			else if(matchType(l,argc,2,typeof(int),typeof(System.Int32[]),typeof(int))){
 				UnityEngine.CullingGroup self=(UnityEngine.CullingGroup)checkSelf(l);
-				System.Boolean a1;
+				System.Int32 a1;
 				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.Int32[] a3;
-				checkArray(l,4,out a3);
-				System.Int32 a4;
-				checkType(l,5,out a4);
-				var ret=self.QueryIndices(a1,a2,a3,a4);
+				System.Int32[] a2;
+				checkArray(l,3,out a2);
+				System.Int32 a3;
+				checkType(l,4,out a3);
+				var ret=self.QueryIndices(a1,a2,a3);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -181,15 +181,7 @@ public class Lua_UnityEngine_CullingGroup : LuaObject {
 	static public int SetDistanceReferencePoint(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,2,typeof(UnityEngine.Transform))){
-				UnityEngine.CullingGroup self=(UnityEngine.CullingGroup)checkSelf(l);
-				UnityEngine.Transform a1;
-				checkType(l,2,out a1);
-				self.SetDistanceReferencePoint(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.Vector3))){
+			if(matchType(l,argc,2,typeof(UnityEngine.Vector3))){
 				UnityEngine.CullingGroup self=(UnityEngine.CullingGroup)checkSelf(l);
 				UnityEngine.Vector3 a1;
 				checkType(l,2,out a1);
@@ -197,6 +189,27 @@ public class Lua_UnityEngine_CullingGroup : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
+			else if(matchType(l,argc,2,typeof(UnityEngine.Transform))){
+				UnityEngine.CullingGroup self=(UnityEngine.CullingGroup)checkSelf(l);
+				UnityEngine.Transform a1;
+				checkType(l,2,out a1);
+				self.SetDistanceReferencePoint(a1);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Dispose_s(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
 			pushValue(l,false);
 			LuaDLL.lua_pushstring(l,"No matched override function to call");
 			return 2;
@@ -290,6 +303,7 @@ public class Lua_UnityEngine_CullingGroup : LuaObject {
 		addMember(l,GetDistance);
 		addMember(l,SetBoundingDistances);
 		addMember(l,SetDistanceReferencePoint);
+		addMember(l,Dispose_s);
 		addMember(l,"onStateChanged",null,set_onStateChanged,true);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
 		addMember(l,"targetCamera",get_targetCamera,set_targetCamera,true);

@@ -19,22 +19,50 @@ public class Lua_UnityEngine_Profiling_Profiler : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int BeginThreadProfiling_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			UnityEngine.Profiling.Profiler.BeginThreadProfiling(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int EndThreadProfiling_s(IntPtr l) {
+		try {
+			UnityEngine.Profiling.Profiler.EndThreadProfiling();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int BeginSample_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
-				System.String a1;
-				checkType(l,1,out a1);
-				UnityEngine.Profiling.Profiler.BeginSample(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
+			if(argc==2){
 				System.String a1;
 				checkType(l,1,out a1);
 				UnityEngine.Object a2;
 				checkType(l,2,out a2);
 				UnityEngine.Profiling.Profiler.BeginSample(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==1){
+				System.String a1;
+				checkType(l,1,out a1);
+				UnityEngine.Profiling.Profiler.BeginSample(a1);
 				pushValue(l,true);
 				return 1;
 			}
@@ -272,6 +300,8 @@ public class Lua_UnityEngine_Profiling_Profiler : LuaObject {
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Profiling.Profiler");
 		addMember(l,AddFramesFromFile_s);
+		addMember(l,BeginThreadProfiling_s);
+		addMember(l,EndThreadProfiling_s);
 		addMember(l,BeginSample_s);
 		addMember(l,EndSample_s);
 		addMember(l,GetRuntimeMemorySizeLong_s);

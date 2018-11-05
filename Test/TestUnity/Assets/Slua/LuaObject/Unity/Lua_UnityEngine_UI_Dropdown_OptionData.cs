@@ -9,16 +9,12 @@ public class Lua_UnityEngine_UI_Dropdown_OptionData : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.UI.Dropdown.OptionData o;
-			if(argc==1){
-				o=new UnityEngine.UI.Dropdown.OptionData();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l,argc,2,typeof(string))){
+			if(argc==3){
 				System.String a1;
 				checkType(l,2,out a1);
-				o=new UnityEngine.UI.Dropdown.OptionData(a1);
+				UnityEngine.Sprite a2;
+				checkType(l,3,out a2);
+				o=new UnityEngine.UI.Dropdown.OptionData(a1,a2);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
@@ -31,12 +27,16 @@ public class Lua_UnityEngine_UI_Dropdown_OptionData : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==3){
+			else if(matchType(l,argc,2,typeof(string))){
 				System.String a1;
 				checkType(l,2,out a1);
-				UnityEngine.Sprite a2;
-				checkType(l,3,out a2);
-				o=new UnityEngine.UI.Dropdown.OptionData(a1,a2);
+				o=new UnityEngine.UI.Dropdown.OptionData(a1);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(argc==1){
+				o=new UnityEngine.UI.Dropdown.OptionData();
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;

@@ -22,9 +22,13 @@ public class Lua_UnityEngine_LocationService : LuaObject {
 	static public int Start(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
+			if(argc==3){
 				UnityEngine.LocationService self=(UnityEngine.LocationService)checkSelf(l);
-				self.Start();
+				System.Single a1;
+				checkType(l,2,out a1);
+				System.Single a2;
+				checkType(l,3,out a2);
+				self.Start(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
@@ -36,13 +40,9 @@ public class Lua_UnityEngine_LocationService : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==3){
+			else if(argc==1){
 				UnityEngine.LocationService self=(UnityEngine.LocationService)checkSelf(l);
-				System.Single a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				self.Start(a1,a2);
+				self.Start();
 				pushValue(l,true);
 				return 1;
 			}

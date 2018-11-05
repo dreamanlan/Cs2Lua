@@ -21,21 +21,21 @@ public class Lua_UnityEngine_EventSystems_EventSystem : LuaObject {
 	static public int SetSelectedGameObject(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
-				UnityEngine.EventSystems.EventSystem self=(UnityEngine.EventSystems.EventSystem)checkSelf(l);
-				UnityEngine.GameObject a1;
-				checkType(l,2,out a1);
-				self.SetSelectedGameObject(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
+			if(argc==3){
 				UnityEngine.EventSystems.EventSystem self=(UnityEngine.EventSystems.EventSystem)checkSelf(l);
 				UnityEngine.GameObject a1;
 				checkType(l,2,out a1);
 				UnityEngine.EventSystems.BaseEventData a2;
 				checkType(l,3,out a2);
 				self.SetSelectedGameObject(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==2){
+				UnityEngine.EventSystems.EventSystem self=(UnityEngine.EventSystems.EventSystem)checkSelf(l);
+				UnityEngine.GameObject a1;
+				checkType(l,2,out a1);
+				self.SetSelectedGameObject(a1);
 				pushValue(l,true);
 				return 1;
 			}
@@ -69,18 +69,18 @@ public class Lua_UnityEngine_EventSystems_EventSystem : LuaObject {
 	static public int IsPointerOverGameObject(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
-				UnityEngine.EventSystems.EventSystem self=(UnityEngine.EventSystems.EventSystem)checkSelf(l);
-				var ret=self.IsPointerOverGameObject();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
+			if(argc==2){
 				UnityEngine.EventSystems.EventSystem self=(UnityEngine.EventSystems.EventSystem)checkSelf(l);
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				var ret=self.IsPointerOverGameObject(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==1){
+				UnityEngine.EventSystems.EventSystem self=(UnityEngine.EventSystems.EventSystem)checkSelf(l);
+				var ret=self.IsPointerOverGameObject();
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -231,6 +231,19 @@ public class Lua_UnityEngine_EventSystems_EventSystem : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_isFocused(IntPtr l) {
+		try {
+			UnityEngine.EventSystems.EventSystem self=(UnityEngine.EventSystems.EventSystem)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.isFocused);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_alreadySelecting(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventSystem self=(UnityEngine.EventSystems.EventSystem)checkSelf(l);
@@ -255,6 +268,7 @@ public class Lua_UnityEngine_EventSystems_EventSystem : LuaObject {
 		addMember(l,"currentInputModule",get_currentInputModule,null,true);
 		addMember(l,"firstSelectedGameObject",get_firstSelectedGameObject,set_firstSelectedGameObject,true);
 		addMember(l,"currentSelectedGameObject",get_currentSelectedGameObject,null,true);
+		addMember(l,"isFocused",get_isFocused,null,true);
 		addMember(l,"alreadySelecting",get_alreadySelecting,null,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.EventSystems.EventSystem),typeof(UnityEngine.EventSystems.UIBehaviour));
 	}

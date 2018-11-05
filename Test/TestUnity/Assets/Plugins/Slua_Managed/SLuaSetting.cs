@@ -21,11 +21,11 @@
 // THE SOFTWARE.
 
 using System.Collections;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 #if !SLUA_STANDALONE
 using UnityEngine;
+#endif
+#if UNITY_EDITOR
+using UnityEditor;
 #endif
 
 namespace SLua{
@@ -49,33 +49,42 @@ namespace SLua{
 		// public int debugPort=10240;
 		// public string debugIP="0.0.0.0"; // no longer debugger built-in
 
-		private static SLuaSetting _instance=null;
+
 		public static SLuaSetting Instance{
 			get{
 #if !SLUA_STANDALONE
-				if(_instance == null){
-					_instance = Resources.Load<SLuaSetting>("setting");
+                if (_instance == null) {
+                    _instance = Resources.Load<SLuaSetting>("setting");
 
 #if UNITY_EDITOR
-					if(_instance == null){
-						_instance =  SLuaSetting.CreateInstance<SLuaSetting>();
-						AssetDatabase.CreateAsset(_instance,"Assets/Slua/Resources/setting.asset");
-					}
+                    if (_instance == null) {
+                        _instance = SLuaSetting.CreateInstance<SLuaSetting>();
+                        AssetDatabase.CreateAsset(_instance, "Assets/Slua/Resources/setting.asset");
+                    }
 #endif
-
-				}
+                }
 #endif
 				return _instance;
-			}
+            }
+            set
+            {
+                _instance = value;
+            }
 		}
+        public static bool IsEditor
+        {
+            get { return _isEditor; }
+            set { _isEditor = value; }
+        }
+        public static bool IsPlaying
+        {
+            get { return _isPlaying; }
+            set { _isPlaying = value; }
+        }
 
-#if UNITY_EDITOR && !SLUA_STANDALONE
-		[MenuItem("SLua/Setting")]
-		public static void Open(){
-			Selection.activeObject = Instance;
-		}
-#endif
-
+        private static SLuaSetting _instance = null;
+        private static bool _isEditor = false;
+        private static bool _isPlaying = true;
 	}
 
 }

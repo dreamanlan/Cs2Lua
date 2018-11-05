@@ -310,18 +310,12 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 	static public int Min_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,1,typeof(System.Int32[]))){
-				System.Int32[] a1;
-				checkParams(l,1,out a1);
-				var ret=UnityEngine.Mathf.Min(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l,argc,1,typeof(System.Single[]))){
-				System.Single[] a1;
-				checkParams(l,1,out a1);
-				var ret=UnityEngine.Mathf.Min(a1);
+			if(matchType(l,argc,1,typeof(int),typeof(int))){
+				System.Int32 a1;
+				checkType(l,1,out a1);
+				System.Int32 a2;
+				checkType(l,2,out a2);
+				var ret=UnityEngine.Mathf.Min(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -336,12 +330,18 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,1,typeof(int),typeof(int))){
-				System.Int32 a1;
-				checkType(l,1,out a1);
-				System.Int32 a2;
-				checkType(l,2,out a2);
-				var ret=UnityEngine.Mathf.Min(a1,a2);
+			else if(matchType(l,argc,1,typeof(System.Int32[]))){
+				System.Int32[] a1;
+				checkParams(l,1,out a1);
+				var ret=UnityEngine.Mathf.Min(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(matchType(l,argc,1,typeof(System.Single[]))){
+				System.Single[] a1;
+				checkParams(l,1,out a1);
+				var ret=UnityEngine.Mathf.Min(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -359,18 +359,12 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 	static public int Max_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,1,typeof(System.Int32[]))){
-				System.Int32[] a1;
-				checkParams(l,1,out a1);
-				var ret=UnityEngine.Mathf.Max(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l,argc,1,typeof(System.Single[]))){
-				System.Single[] a1;
-				checkParams(l,1,out a1);
-				var ret=UnityEngine.Mathf.Max(a1);
+			if(matchType(l,argc,1,typeof(int),typeof(int))){
+				System.Int32 a1;
+				checkType(l,1,out a1);
+				System.Int32 a2;
+				checkType(l,2,out a2);
+				var ret=UnityEngine.Mathf.Max(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -385,12 +379,18 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,1,typeof(int),typeof(int))){
-				System.Int32 a1;
-				checkType(l,1,out a1);
-				System.Int32 a2;
-				checkType(l,2,out a2);
-				var ret=UnityEngine.Mathf.Max(a1,a2);
+			else if(matchType(l,argc,1,typeof(System.Int32[]))){
+				System.Int32[] a1;
+				checkParams(l,1,out a1);
+				var ret=UnityEngine.Mathf.Max(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(matchType(l,argc,1,typeof(System.Single[]))){
+				System.Single[] a1;
+				checkParams(l,1,out a1);
+				var ret=UnityEngine.Mathf.Max(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -440,20 +440,20 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 	static public int Log_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
-				System.Single a1;
-				checkType(l,1,out a1);
-				var ret=UnityEngine.Mathf.Log(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
+			if(argc==2){
 				System.Single a1;
 				checkType(l,1,out a1);
 				System.Single a2;
 				checkType(l,2,out a2);
 				var ret=UnityEngine.Mathf.Log(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==1){
+				System.Single a1;
+				checkType(l,1,out a1);
+				var ret=UnityEngine.Mathf.Log(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -775,7 +775,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 	static public int SmoothDamp_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
+			if(argc==6){
 				System.Single a1;
 				checkType(l,1,out a1);
 				System.Single a2;
@@ -784,7 +784,11 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 				checkType(l,3,out a3);
 				System.Single a4;
 				checkType(l,4,out a4);
-				var ret=UnityEngine.Mathf.SmoothDamp(a1,a2,ref a3,a4);
+				System.Single a5;
+				checkType(l,5,out a5);
+				System.Single a6;
+				checkType(l,6,out a6);
+				var ret=UnityEngine.Mathf.SmoothDamp(a1,a2,ref a3,a4,a5,a6);
 				pushValue(l,true);
 				pushValue(l,ret);
 				pushValue(l,a3);
@@ -807,7 +811,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 				pushValue(l,a3);
 				return 3;
 			}
-			else if(argc==6){
+			else if(argc==4){
 				System.Single a1;
 				checkType(l,1,out a1);
 				System.Single a2;
@@ -816,11 +820,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 				checkType(l,3,out a3);
 				System.Single a4;
 				checkType(l,4,out a4);
-				System.Single a5;
-				checkType(l,5,out a5);
-				System.Single a6;
-				checkType(l,6,out a6);
-				var ret=UnityEngine.Mathf.SmoothDamp(a1,a2,ref a3,a4,a5,a6);
+				var ret=UnityEngine.Mathf.SmoothDamp(a1,a2,ref a3,a4);
 				pushValue(l,true);
 				pushValue(l,ret);
 				pushValue(l,a3);
@@ -839,7 +839,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 	static public int SmoothDampAngle_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
+			if(argc==6){
 				System.Single a1;
 				checkType(l,1,out a1);
 				System.Single a2;
@@ -848,7 +848,11 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 				checkType(l,3,out a3);
 				System.Single a4;
 				checkType(l,4,out a4);
-				var ret=UnityEngine.Mathf.SmoothDampAngle(a1,a2,ref a3,a4);
+				System.Single a5;
+				checkType(l,5,out a5);
+				System.Single a6;
+				checkType(l,6,out a6);
+				var ret=UnityEngine.Mathf.SmoothDampAngle(a1,a2,ref a3,a4,a5,a6);
 				pushValue(l,true);
 				pushValue(l,ret);
 				pushValue(l,a3);
@@ -871,7 +875,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 				pushValue(l,a3);
 				return 3;
 			}
-			else if(argc==6){
+			else if(argc==4){
 				System.Single a1;
 				checkType(l,1,out a1);
 				System.Single a2;
@@ -880,11 +884,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 				checkType(l,3,out a3);
 				System.Single a4;
 				checkType(l,4,out a4);
-				System.Single a5;
-				checkType(l,5,out a5);
-				System.Single a6;
-				checkType(l,6,out a6);
-				var ret=UnityEngine.Mathf.SmoothDampAngle(a1,a2,ref a3,a4,a5,a6);
+				var ret=UnityEngine.Mathf.SmoothDampAngle(a1,a2,ref a3,a4);
 				pushValue(l,true);
 				pushValue(l,ret);
 				pushValue(l,a3);

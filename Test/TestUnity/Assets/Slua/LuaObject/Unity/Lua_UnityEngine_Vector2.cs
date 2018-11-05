@@ -214,6 +214,23 @@ public class Lua_UnityEngine_Vector2 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int SignedAngle_s(IntPtr l) {
+		try {
+			UnityEngine.Vector2 a1;
+			checkType(l,1,out a1);
+			UnityEngine.Vector2 a2;
+			checkType(l,2,out a2);
+			var ret=UnityEngine.Vector2.SignedAngle(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Distance_s(IntPtr l) {
 		try {
 			UnityEngine.Vector2 a1;
@@ -375,20 +392,20 @@ public class Lua_UnityEngine_Vector2 : LuaObject {
 	static public int op_Multiply(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,1,typeof(float),typeof(UnityEngine.Vector2))){
-				System.Single a1;
+			if(matchType(l,argc,1,typeof(UnityEngine.Vector2),typeof(float))){
+				UnityEngine.Vector2 a1;
 				checkType(l,1,out a1);
-				UnityEngine.Vector2 a2;
+				System.Single a2;
 				checkType(l,2,out a2);
 				var ret=a1*a2;
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,1,typeof(UnityEngine.Vector2),typeof(float))){
-				UnityEngine.Vector2 a1;
+			else if(matchType(l,argc,1,typeof(float),typeof(UnityEngine.Vector2))){
+				System.Single a1;
 				checkType(l,1,out a1);
-				System.Single a2;
+				UnityEngine.Vector2 a2;
 				checkType(l,2,out a2);
 				var ret=a1*a2;
 				pushValue(l,true);
@@ -644,6 +661,30 @@ public class Lua_UnityEngine_Vector2 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_positiveInfinity(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Vector2.positiveInfinity);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_negativeInfinity(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Vector2.negativeInfinity);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int getItem(IntPtr l) {
 		try {
 			UnityEngine.Vector2 self;
@@ -691,6 +732,7 @@ public class Lua_UnityEngine_Vector2 : LuaObject {
 		addMember(l,Reflect_s);
 		addMember(l,Dot_s);
 		addMember(l,Angle_s);
+		addMember(l,SignedAngle_s);
 		addMember(l,Distance_s);
 		addMember(l,ClampMagnitude_s);
 		addMember(l,SqrMagnitude_s);
@@ -718,6 +760,8 @@ public class Lua_UnityEngine_Vector2 : LuaObject {
 		addMember(l,"down",get_down,null,false);
 		addMember(l,"left",get_left,null,false);
 		addMember(l,"right",get_right,null,false);
+		addMember(l,"positiveInfinity",get_positiveInfinity,null,false);
+		addMember(l,"negativeInfinity",get_negativeInfinity,null,false);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.Vector2),typeof(System.ValueType));
 	}
 }

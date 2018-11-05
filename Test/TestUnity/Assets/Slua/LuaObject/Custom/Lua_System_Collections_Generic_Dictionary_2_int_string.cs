@@ -9,8 +9,30 @@ public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject 
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			System.Collections.Generic.Dictionary<System.Int32,System.String> o;
-			if(argc==1){
-				o=new System.Collections.Generic.Dictionary<System.Int32,System.String>();
+			if(matchType(l,argc,2,typeof(IDictionary<System.Int32,System.String>),typeof(IEqualityComparer<System.Int32>))){
+				System.Collections.Generic.IDictionary<System.Int32,System.String> a1;
+				checkType(l,2,out a1);
+				System.Collections.Generic.IEqualityComparer<System.Int32> a2;
+				checkType(l,3,out a2);
+				o=new System.Collections.Generic.Dictionary<System.Int32,System.String>(a1,a2);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(matchType(l,argc,2,typeof(int),typeof(IEqualityComparer<System.Int32>))){
+				System.Int32 a1;
+				checkType(l,2,out a1);
+				System.Collections.Generic.IEqualityComparer<System.Int32> a2;
+				checkType(l,3,out a2);
+				o=new System.Collections.Generic.Dictionary<System.Int32,System.String>(a1,a2);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(matchType(l,argc,2,typeof(int))){
+				System.Int32 a1;
+				checkType(l,2,out a1);
+				o=new System.Collections.Generic.Dictionary<System.Int32,System.String>(a1);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
@@ -31,30 +53,8 @@ public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject 
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(int))){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				o=new System.Collections.Generic.Dictionary<System.Int32,System.String>(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l,argc,2,typeof(IDictionary<System.Int32,System.String>),typeof(IEqualityComparer<System.Int32>))){
-				System.Collections.Generic.IDictionary<System.Int32,System.String> a1;
-				checkType(l,2,out a1);
-				System.Collections.Generic.IEqualityComparer<System.Int32> a2;
-				checkType(l,3,out a2);
-				o=new System.Collections.Generic.Dictionary<System.Int32,System.String>(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l,argc,2,typeof(int),typeof(IEqualityComparer<System.Int32>))){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Collections.Generic.IEqualityComparer<System.Int32> a2;
-				checkType(l,3,out a2);
-				o=new System.Collections.Generic.Dictionary<System.Int32,System.String>(a1,a2);
+			else if(argc==1){
+				o=new System.Collections.Generic.Dictionary<System.Int32,System.String>();
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;

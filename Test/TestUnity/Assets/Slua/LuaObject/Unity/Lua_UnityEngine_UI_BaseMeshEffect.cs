@@ -8,17 +8,17 @@ public class Lua_UnityEngine_UI_BaseMeshEffect : LuaObject {
 	static public int ModifyMesh(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,2,typeof(UnityEngine.UI.VertexHelper))){
+			if(matchType(l,argc,2,typeof(UnityEngine.Mesh))){
 				UnityEngine.UI.BaseMeshEffect self=(UnityEngine.UI.BaseMeshEffect)checkSelf(l);
-				UnityEngine.UI.VertexHelper a1;
+				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				self.ModifyMesh(a1);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.Mesh))){
+			else if(matchType(l,argc,2,typeof(UnityEngine.UI.VertexHelper))){
 				UnityEngine.UI.BaseMeshEffect self=(UnityEngine.UI.BaseMeshEffect)checkSelf(l);
-				UnityEngine.Mesh a1;
+				UnityEngine.UI.VertexHelper a1;
 				checkType(l,2,out a1);
 				self.ModifyMesh(a1);
 				pushValue(l,true);

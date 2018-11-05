@@ -22,16 +22,16 @@ public class Lua_UnityEngine_Resources : LuaObject {
 	static public int FindObjectsOfTypeAll_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==0){
-				var ret=UnityEngine.Resources.FindObjectsOfTypeAll<UnityEngine.Object>();
+			if(argc==1){
+				System.Type a1;
+				checkType(l,1,out a1);
+				var ret=UnityEngine.Resources.FindObjectsOfTypeAll(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==1){
-				System.Type a1;
-				checkType(l,1,out a1);
-				var ret=UnityEngine.Resources.FindObjectsOfTypeAll(a1);
+			else if(argc==0){
+				var ret=UnityEngine.Resources.FindObjectsOfTypeAll<UnityEngine.Object>();
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -49,10 +49,12 @@ public class Lua_UnityEngine_Resources : LuaObject {
 	static public int Load_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,1,typeof(string))){
+			if(argc==2){
 				System.String a1;
 				checkType(l,1,out a1);
-				var ret=UnityEngine.Resources.Load<UnityEngine.Object>(a1);
+				System.Type a2;
+				checkType(l,2,out a2);
+				var ret=UnityEngine.Resources.Load(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -65,12 +67,10 @@ public class Lua_UnityEngine_Resources : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==2){
+			else if(matchType(l,argc,1,typeof(string))){
 				System.String a1;
 				checkType(l,1,out a1);
-				System.Type a2;
-				checkType(l,2,out a2);
-				var ret=UnityEngine.Resources.Load(a1,a2);
+				var ret=UnityEngine.Resources.Load<UnityEngine.Object>(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -88,10 +88,12 @@ public class Lua_UnityEngine_Resources : LuaObject {
 	static public int LoadAsync_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,1,typeof(string))){
+			if(argc==2){
 				System.String a1;
 				checkType(l,1,out a1);
-				var ret=UnityEngine.Resources.LoadAsync<UnityEngine.Object>(a1);
+				System.Type a2;
+				checkType(l,2,out a2);
+				var ret=UnityEngine.Resources.LoadAsync(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -104,12 +106,10 @@ public class Lua_UnityEngine_Resources : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==2){
+			else if(matchType(l,argc,1,typeof(string))){
 				System.String a1;
 				checkType(l,1,out a1);
-				System.Type a2;
-				checkType(l,2,out a2);
-				var ret=UnityEngine.Resources.LoadAsync(a1,a2);
+				var ret=UnityEngine.Resources.LoadAsync<UnityEngine.Object>(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -127,10 +127,12 @@ public class Lua_UnityEngine_Resources : LuaObject {
 	static public int LoadAll_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,1,typeof(string))){
+			if(argc==2){
 				System.String a1;
 				checkType(l,1,out a1);
-				var ret=UnityEngine.Resources.LoadAll<UnityEngine.Object>(a1);
+				System.Type a2;
+				checkType(l,2,out a2);
+				var ret=UnityEngine.Resources.LoadAll(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -143,12 +145,10 @@ public class Lua_UnityEngine_Resources : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==2){
+			else if(matchType(l,argc,1,typeof(string))){
 				System.String a1;
 				checkType(l,1,out a1);
-				System.Type a2;
-				checkType(l,2,out a2);
-				var ret=UnityEngine.Resources.LoadAll(a1,a2);
+				var ret=UnityEngine.Resources.LoadAll<UnityEngine.Object>(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -166,20 +166,20 @@ public class Lua_UnityEngine_Resources : LuaObject {
 	static public int GetBuiltinResource_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
-				System.String a1;
-				checkType(l,1,out a1);
-				var ret=UnityEngine.Resources.GetBuiltinResource<UnityEngine.Object>(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
+			if(argc==2){
 				System.Type a1;
 				checkType(l,1,out a1);
 				System.String a2;
 				checkType(l,2,out a2);
 				var ret=UnityEngine.Resources.GetBuiltinResource(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==1){
+				System.String a1;
+				checkType(l,1,out a1);
+				var ret=UnityEngine.Resources.GetBuiltinResource<UnityEngine.Object>(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;

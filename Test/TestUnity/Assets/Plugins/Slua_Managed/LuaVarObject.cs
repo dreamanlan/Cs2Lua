@@ -162,6 +162,7 @@ namespace SLua
 				object[] args;
 				checkArgs(l, 1, m, out args);
 				object ret = m.Invoke(m.IsStatic ? null : self, args);
+                Logger.LogWarning(string.Format("forceInvoke {0}.{1}", m.DeclaringType.Name, m.Name));
 				var pis = m.GetParameters();
 				pushValue(l, true);
 				if (ret != null)

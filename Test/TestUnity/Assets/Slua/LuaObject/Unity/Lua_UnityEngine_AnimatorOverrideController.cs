@@ -9,16 +9,16 @@ public class Lua_UnityEngine_AnimatorOverrideController : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.AnimatorOverrideController o;
-			if(argc==1){
-				o=new UnityEngine.AnimatorOverrideController();
+			if(argc==2){
+				UnityEngine.RuntimeAnimatorController a1;
+				checkType(l,2,out a1);
+				o=new UnityEngine.AnimatorOverrideController(a1);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==2){
-				UnityEngine.RuntimeAnimatorController a1;
-				checkType(l,2,out a1);
-				o=new UnityEngine.AnimatorOverrideController(a1);
+			else if(argc==1){
+				o=new UnityEngine.AnimatorOverrideController();
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;

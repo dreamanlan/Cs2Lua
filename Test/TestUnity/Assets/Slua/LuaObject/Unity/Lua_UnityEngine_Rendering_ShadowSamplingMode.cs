@@ -7,6 +7,7 @@ public class Lua_UnityEngine_Rendering_ShadowSamplingMode : LuaObject {
 		getEnumTable(l,"UnityEngine.Rendering.ShadowSamplingMode");
 		addMember(l,0,"CompareDepths");
 		addMember(l,1,"RawDepth");
+		addMember(l,2,"None");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

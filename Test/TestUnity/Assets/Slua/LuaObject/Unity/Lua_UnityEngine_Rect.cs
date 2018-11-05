@@ -81,12 +81,14 @@ public class Lua_UnityEngine_Rect : LuaObject {
 	static public int Contains(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,2,typeof(UnityEngine.Vector3))){
+			if(argc==3){
 				UnityEngine.Rect self;
 				checkValueType(l,1,out self);
 				UnityEngine.Vector3 a1;
 				checkType(l,2,out a1);
-				var ret=self.Contains(a1);
+				System.Boolean a2;
+				checkType(l,3,out a2);
+				var ret=self.Contains(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -101,14 +103,12 @@ public class Lua_UnityEngine_Rect : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==3){
+			else if(matchType(l,argc,2,typeof(UnityEngine.Vector3))){
 				UnityEngine.Rect self;
 				checkValueType(l,1,out self);
 				UnityEngine.Vector3 a1;
 				checkType(l,2,out a1);
-				System.Boolean a2;
-				checkType(l,3,out a2);
-				var ret=self.Contains(a1,a2);
+				var ret=self.Contains(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -126,17 +126,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 	static public int Overlaps(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
-				UnityEngine.Rect self;
-				checkValueType(l,1,out self);
-				UnityEngine.Rect a1;
-				checkValueType(l,2,out a1);
-				var ret=self.Overlaps(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
+			if(argc==3){
 				UnityEngine.Rect self;
 				checkValueType(l,1,out self);
 				UnityEngine.Rect a1;
@@ -144,6 +134,16 @@ public class Lua_UnityEngine_Rect : LuaObject {
 				System.Boolean a2;
 				checkType(l,3,out a2);
 				var ret=self.Overlaps(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==2){
+				UnityEngine.Rect self;
+				checkValueType(l,1,out self);
+				UnityEngine.Rect a1;
+				checkValueType(l,2,out a1);
+				var ret=self.Overlaps(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;

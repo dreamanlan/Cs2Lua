@@ -87,6 +87,34 @@ public class Lua_UnityEngine_EventSystems_PhysicsRaycaster : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_maxRayIntersections(IntPtr l) {
+		try {
+			UnityEngine.EventSystems.PhysicsRaycaster self=(UnityEngine.EventSystems.PhysicsRaycaster)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.maxRayIntersections);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_maxRayIntersections(IntPtr l) {
+		try {
+			UnityEngine.EventSystems.PhysicsRaycaster self=(UnityEngine.EventSystems.PhysicsRaycaster)checkSelf(l);
+			int v;
+			checkType(l,2,out v);
+			self.maxRayIntersections=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.EventSystems.PhysicsRaycaster");
@@ -95,6 +123,7 @@ public class Lua_UnityEngine_EventSystems_PhysicsRaycaster : LuaObject {
 		addMember(l,"depth",get_depth,null,true);
 		addMember(l,"finalEventMask",get_finalEventMask,null,true);
 		addMember(l,"eventMask",get_eventMask,set_eventMask,true);
+		addMember(l,"maxRayIntersections",get_maxRayIntersections,set_maxRayIntersections,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.EventSystems.PhysicsRaycaster),typeof(UnityEngine.EventSystems.BaseRaycaster));
 	}
 }

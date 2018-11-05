@@ -22,6 +22,8 @@ public class Lua_UnityEngine_Rendering_GraphicsDeviceType : LuaObject {
 		addMember(l,18,"Direct3D12");
 		addMember(l,19,"N3DS");
 		addMember(l,21,"Vulkan");
+		addMember(l,22,"Switch");
+		addMember(l,23,"XboxOneD3D12");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

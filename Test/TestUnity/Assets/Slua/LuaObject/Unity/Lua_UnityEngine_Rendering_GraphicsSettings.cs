@@ -81,6 +81,37 @@ public class Lua_UnityEngine_Rendering_GraphicsSettings : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int HasShaderDefine_s(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==2){
+				UnityEngine.Rendering.GraphicsTier a1;
+				checkEnum(l,1,out a1);
+				UnityEngine.Rendering.BuiltinShaderDefine a2;
+				checkEnum(l,2,out a2);
+				var ret=UnityEngine.Rendering.GraphicsSettings.HasShaderDefine(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==1){
+				UnityEngine.Rendering.BuiltinShaderDefine a1;
+				checkEnum(l,1,out a1);
+				var ret=UnityEngine.Rendering.GraphicsSettings.HasShaderDefine(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_renderPipelineAsset(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -216,6 +247,7 @@ public class Lua_UnityEngine_Rendering_GraphicsSettings : LuaObject {
 		addMember(l,GetShaderMode_s);
 		addMember(l,SetCustomShader_s);
 		addMember(l,GetCustomShader_s);
+		addMember(l,HasShaderDefine_s);
 		addMember(l,"renderPipelineAsset",get_renderPipelineAsset,set_renderPipelineAsset,false);
 		addMember(l,"transparencySortMode",get_transparencySortMode,set_transparencySortMode,false);
 		addMember(l,"transparencySortAxis",get_transparencySortAxis,set_transparencySortAxis,false);

@@ -95,6 +95,34 @@ public class Lua_UnityEngine_AnimatorTransitionInfo : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_durationUnit(IntPtr l) {
+		try {
+			UnityEngine.AnimatorTransitionInfo self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushEnum(l,(int)self.durationUnit);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_duration(IntPtr l) {
+		try {
+			UnityEngine.AnimatorTransitionInfo self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.duration);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_normalizedTime(IntPtr l) {
 		try {
 			UnityEngine.AnimatorTransitionInfo self;
@@ -129,6 +157,8 @@ public class Lua_UnityEngine_AnimatorTransitionInfo : LuaObject {
 		addMember(l,"fullPathHash",get_fullPathHash,null,true);
 		addMember(l,"nameHash",get_nameHash,null,true);
 		addMember(l,"userNameHash",get_userNameHash,null,true);
+		addMember(l,"durationUnit",get_durationUnit,null,true);
+		addMember(l,"duration",get_duration,null,true);
 		addMember(l,"normalizedTime",get_normalizedTime,null,true);
 		addMember(l,"anyState",get_anyState,null,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.AnimatorTransitionInfo),typeof(System.ValueType));

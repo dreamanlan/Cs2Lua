@@ -8,19 +8,19 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 	static public int IsTrue_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
-				System.Boolean a1;
-				checkType(l,1,out a1);
-				UnityEngine.Assertions.Assert.IsTrue(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
+			if(argc==2){
 				System.Boolean a1;
 				checkType(l,1,out a1);
 				System.String a2;
 				checkType(l,2,out a2);
 				UnityEngine.Assertions.Assert.IsTrue(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==1){
+				System.Boolean a1;
+				checkType(l,1,out a1);
+				UnityEngine.Assertions.Assert.IsTrue(a1);
 				pushValue(l,true);
 				return 1;
 			}
@@ -37,19 +37,19 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 	static public int IsFalse_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
-				System.Boolean a1;
-				checkType(l,1,out a1);
-				UnityEngine.Assertions.Assert.IsFalse(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
+			if(argc==2){
 				System.Boolean a1;
 				checkType(l,1,out a1);
 				System.String a2;
 				checkType(l,2,out a2);
 				UnityEngine.Assertions.Assert.IsFalse(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==1){
+				System.Boolean a1;
+				checkType(l,1,out a1);
+				UnityEngine.Assertions.Assert.IsFalse(a1);
 				pushValue(l,true);
 				return 1;
 			}
@@ -66,23 +66,16 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 	static public int AreApproximatelyEqual_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
-				System.Single a1;
-				checkType(l,1,out a1);
-				System.Single a2;
-				checkType(l,2,out a2);
-				UnityEngine.Assertions.Assert.AreApproximatelyEqual(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l,argc,1,typeof(float),typeof(float),typeof(float))){
+			if(argc==4){
 				System.Single a1;
 				checkType(l,1,out a1);
 				System.Single a2;
 				checkType(l,2,out a2);
 				System.Single a3;
 				checkType(l,3,out a3);
-				UnityEngine.Assertions.Assert.AreApproximatelyEqual(a1,a2,a3);
+				System.String a4;
+				checkType(l,4,out a4);
+				UnityEngine.Assertions.Assert.AreApproximatelyEqual(a1,a2,a3,a4);
 				pushValue(l,true);
 				return 1;
 			}
@@ -97,16 +90,23 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==4){
+			else if(matchType(l,argc,1,typeof(float),typeof(float),typeof(float))){
 				System.Single a1;
 				checkType(l,1,out a1);
 				System.Single a2;
 				checkType(l,2,out a2);
 				System.Single a3;
 				checkType(l,3,out a3);
-				System.String a4;
-				checkType(l,4,out a4);
-				UnityEngine.Assertions.Assert.AreApproximatelyEqual(a1,a2,a3,a4);
+				UnityEngine.Assertions.Assert.AreApproximatelyEqual(a1,a2,a3);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==2){
+				System.Single a1;
+				checkType(l,1,out a1);
+				System.Single a2;
+				checkType(l,2,out a2);
+				UnityEngine.Assertions.Assert.AreApproximatelyEqual(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
@@ -123,23 +123,16 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 	static public int AreNotApproximatelyEqual_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
-				System.Single a1;
-				checkType(l,1,out a1);
-				System.Single a2;
-				checkType(l,2,out a2);
-				UnityEngine.Assertions.Assert.AreNotApproximatelyEqual(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l,argc,1,typeof(float),typeof(float),typeof(float))){
+			if(argc==4){
 				System.Single a1;
 				checkType(l,1,out a1);
 				System.Single a2;
 				checkType(l,2,out a2);
 				System.Single a3;
 				checkType(l,3,out a3);
-				UnityEngine.Assertions.Assert.AreNotApproximatelyEqual(a1,a2,a3);
+				System.String a4;
+				checkType(l,4,out a4);
+				UnityEngine.Assertions.Assert.AreNotApproximatelyEqual(a1,a2,a3,a4);
 				pushValue(l,true);
 				return 1;
 			}
@@ -154,16 +147,23 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==4){
+			else if(matchType(l,argc,1,typeof(float),typeof(float),typeof(float))){
 				System.Single a1;
 				checkType(l,1,out a1);
 				System.Single a2;
 				checkType(l,2,out a2);
 				System.Single a3;
 				checkType(l,3,out a3);
-				System.String a4;
-				checkType(l,4,out a4);
-				UnityEngine.Assertions.Assert.AreNotApproximatelyEqual(a1,a2,a3,a4);
+				UnityEngine.Assertions.Assert.AreNotApproximatelyEqual(a1,a2,a3);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==2){
+				System.Single a1;
+				checkType(l,1,out a1);
+				System.Single a2;
+				checkType(l,2,out a2);
+				UnityEngine.Assertions.Assert.AreNotApproximatelyEqual(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}

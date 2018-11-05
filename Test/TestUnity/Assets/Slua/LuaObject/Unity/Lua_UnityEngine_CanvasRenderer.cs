@@ -94,21 +94,21 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 	static public int SetMaterial(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,2,typeof(UnityEngine.Material),typeof(UnityEngine.Texture))){
+			if(matchType(l,argc,2,typeof(UnityEngine.Material),typeof(int))){
 				UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
 				UnityEngine.Material a1;
 				checkType(l,2,out a1);
-				UnityEngine.Texture a2;
+				System.Int32 a2;
 				checkType(l,3,out a2);
 				self.SetMaterial(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.Material),typeof(int))){
+			else if(matchType(l,argc,2,typeof(UnityEngine.Material),typeof(UnityEngine.Texture))){
 				UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
 				UnityEngine.Material a1;
 				checkType(l,2,out a1);
-				System.Int32 a2;
+				UnityEngine.Texture a2;
 				checkType(l,3,out a2);
 				self.SetMaterial(a1,a2);
 				pushValue(l,true);
@@ -127,18 +127,18 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 	static public int GetMaterial(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
-				UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
-				var ret=self.GetMaterial();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
+			if(argc==2){
 				UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				var ret=self.GetMaterial(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==1){
+				UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
+				var ret=self.GetMaterial();
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -246,25 +246,56 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int SplitUIVertexStreams_s(IntPtr l) {
 		try {
-			System.Collections.Generic.List<UnityEngine.UIVertex> a1;
-			checkType(l,1,out a1);
-			System.Collections.Generic.List<UnityEngine.Vector3> a2;
-			checkType(l,2,out a2);
-			System.Collections.Generic.List<UnityEngine.Color32> a3;
-			checkType(l,3,out a3);
-			System.Collections.Generic.List<UnityEngine.Vector2> a4;
-			checkType(l,4,out a4);
-			System.Collections.Generic.List<UnityEngine.Vector2> a5;
-			checkType(l,5,out a5);
-			System.Collections.Generic.List<UnityEngine.Vector3> a6;
-			checkType(l,6,out a6);
-			System.Collections.Generic.List<UnityEngine.Vector4> a7;
-			checkType(l,7,out a7);
-			System.Collections.Generic.List<System.Int32> a8;
-			checkType(l,8,out a8);
-			UnityEngine.CanvasRenderer.SplitUIVertexStreams(a1,a2,a3,a4,a5,a6,a7,a8);
-			pushValue(l,true);
-			return 1;
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==10){
+				System.Collections.Generic.List<UnityEngine.UIVertex> a1;
+				checkType(l,1,out a1);
+				System.Collections.Generic.List<UnityEngine.Vector3> a2;
+				checkType(l,2,out a2);
+				System.Collections.Generic.List<UnityEngine.Color32> a3;
+				checkType(l,3,out a3);
+				System.Collections.Generic.List<UnityEngine.Vector2> a4;
+				checkType(l,4,out a4);
+				System.Collections.Generic.List<UnityEngine.Vector2> a5;
+				checkType(l,5,out a5);
+				System.Collections.Generic.List<UnityEngine.Vector2> a6;
+				checkType(l,6,out a6);
+				System.Collections.Generic.List<UnityEngine.Vector2> a7;
+				checkType(l,7,out a7);
+				System.Collections.Generic.List<UnityEngine.Vector3> a8;
+				checkType(l,8,out a8);
+				System.Collections.Generic.List<UnityEngine.Vector4> a9;
+				checkType(l,9,out a9);
+				System.Collections.Generic.List<System.Int32> a10;
+				checkType(l,10,out a10);
+				UnityEngine.CanvasRenderer.SplitUIVertexStreams(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==8){
+				System.Collections.Generic.List<UnityEngine.UIVertex> a1;
+				checkType(l,1,out a1);
+				System.Collections.Generic.List<UnityEngine.Vector3> a2;
+				checkType(l,2,out a2);
+				System.Collections.Generic.List<UnityEngine.Color32> a3;
+				checkType(l,3,out a3);
+				System.Collections.Generic.List<UnityEngine.Vector2> a4;
+				checkType(l,4,out a4);
+				System.Collections.Generic.List<UnityEngine.Vector2> a5;
+				checkType(l,5,out a5);
+				System.Collections.Generic.List<UnityEngine.Vector3> a6;
+				checkType(l,6,out a6);
+				System.Collections.Generic.List<UnityEngine.Vector4> a7;
+				checkType(l,7,out a7);
+				System.Collections.Generic.List<System.Int32> a8;
+				checkType(l,8,out a8);
+				UnityEngine.CanvasRenderer.SplitUIVertexStreams(a1,a2,a3,a4,a5,a6,a7,a8);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -274,25 +305,56 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int CreateUIVertexStream_s(IntPtr l) {
 		try {
-			System.Collections.Generic.List<UnityEngine.UIVertex> a1;
-			checkType(l,1,out a1);
-			System.Collections.Generic.List<UnityEngine.Vector3> a2;
-			checkType(l,2,out a2);
-			System.Collections.Generic.List<UnityEngine.Color32> a3;
-			checkType(l,3,out a3);
-			System.Collections.Generic.List<UnityEngine.Vector2> a4;
-			checkType(l,4,out a4);
-			System.Collections.Generic.List<UnityEngine.Vector2> a5;
-			checkType(l,5,out a5);
-			System.Collections.Generic.List<UnityEngine.Vector3> a6;
-			checkType(l,6,out a6);
-			System.Collections.Generic.List<UnityEngine.Vector4> a7;
-			checkType(l,7,out a7);
-			System.Collections.Generic.List<System.Int32> a8;
-			checkType(l,8,out a8);
-			UnityEngine.CanvasRenderer.CreateUIVertexStream(a1,a2,a3,a4,a5,a6,a7,a8);
-			pushValue(l,true);
-			return 1;
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==10){
+				System.Collections.Generic.List<UnityEngine.UIVertex> a1;
+				checkType(l,1,out a1);
+				System.Collections.Generic.List<UnityEngine.Vector3> a2;
+				checkType(l,2,out a2);
+				System.Collections.Generic.List<UnityEngine.Color32> a3;
+				checkType(l,3,out a3);
+				System.Collections.Generic.List<UnityEngine.Vector2> a4;
+				checkType(l,4,out a4);
+				System.Collections.Generic.List<UnityEngine.Vector2> a5;
+				checkType(l,5,out a5);
+				System.Collections.Generic.List<UnityEngine.Vector2> a6;
+				checkType(l,6,out a6);
+				System.Collections.Generic.List<UnityEngine.Vector2> a7;
+				checkType(l,7,out a7);
+				System.Collections.Generic.List<UnityEngine.Vector3> a8;
+				checkType(l,8,out a8);
+				System.Collections.Generic.List<UnityEngine.Vector4> a9;
+				checkType(l,9,out a9);
+				System.Collections.Generic.List<System.Int32> a10;
+				checkType(l,10,out a10);
+				UnityEngine.CanvasRenderer.CreateUIVertexStream(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==8){
+				System.Collections.Generic.List<UnityEngine.UIVertex> a1;
+				checkType(l,1,out a1);
+				System.Collections.Generic.List<UnityEngine.Vector3> a2;
+				checkType(l,2,out a2);
+				System.Collections.Generic.List<UnityEngine.Color32> a3;
+				checkType(l,3,out a3);
+				System.Collections.Generic.List<UnityEngine.Vector2> a4;
+				checkType(l,4,out a4);
+				System.Collections.Generic.List<UnityEngine.Vector2> a5;
+				checkType(l,5,out a5);
+				System.Collections.Generic.List<UnityEngine.Vector3> a6;
+				checkType(l,6,out a6);
+				System.Collections.Generic.List<UnityEngine.Vector4> a7;
+				checkType(l,7,out a7);
+				System.Collections.Generic.List<System.Int32> a8;
+				checkType(l,8,out a8);
+				UnityEngine.CanvasRenderer.CreateUIVertexStream(a1,a2,a3,a4,a5,a6,a7,a8);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -302,23 +364,52 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int AddUIVertexStream_s(IntPtr l) {
 		try {
-			System.Collections.Generic.List<UnityEngine.UIVertex> a1;
-			checkType(l,1,out a1);
-			System.Collections.Generic.List<UnityEngine.Vector3> a2;
-			checkType(l,2,out a2);
-			System.Collections.Generic.List<UnityEngine.Color32> a3;
-			checkType(l,3,out a3);
-			System.Collections.Generic.List<UnityEngine.Vector2> a4;
-			checkType(l,4,out a4);
-			System.Collections.Generic.List<UnityEngine.Vector2> a5;
-			checkType(l,5,out a5);
-			System.Collections.Generic.List<UnityEngine.Vector3> a6;
-			checkType(l,6,out a6);
-			System.Collections.Generic.List<UnityEngine.Vector4> a7;
-			checkType(l,7,out a7);
-			UnityEngine.CanvasRenderer.AddUIVertexStream(a1,a2,a3,a4,a5,a6,a7);
-			pushValue(l,true);
-			return 1;
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==9){
+				System.Collections.Generic.List<UnityEngine.UIVertex> a1;
+				checkType(l,1,out a1);
+				System.Collections.Generic.List<UnityEngine.Vector3> a2;
+				checkType(l,2,out a2);
+				System.Collections.Generic.List<UnityEngine.Color32> a3;
+				checkType(l,3,out a3);
+				System.Collections.Generic.List<UnityEngine.Vector2> a4;
+				checkType(l,4,out a4);
+				System.Collections.Generic.List<UnityEngine.Vector2> a5;
+				checkType(l,5,out a5);
+				System.Collections.Generic.List<UnityEngine.Vector2> a6;
+				checkType(l,6,out a6);
+				System.Collections.Generic.List<UnityEngine.Vector2> a7;
+				checkType(l,7,out a7);
+				System.Collections.Generic.List<UnityEngine.Vector3> a8;
+				checkType(l,8,out a8);
+				System.Collections.Generic.List<UnityEngine.Vector4> a9;
+				checkType(l,9,out a9);
+				UnityEngine.CanvasRenderer.AddUIVertexStream(a1,a2,a3,a4,a5,a6,a7,a8,a9);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==7){
+				System.Collections.Generic.List<UnityEngine.UIVertex> a1;
+				checkType(l,1,out a1);
+				System.Collections.Generic.List<UnityEngine.Vector3> a2;
+				checkType(l,2,out a2);
+				System.Collections.Generic.List<UnityEngine.Color32> a3;
+				checkType(l,3,out a3);
+				System.Collections.Generic.List<UnityEngine.Vector2> a4;
+				checkType(l,4,out a4);
+				System.Collections.Generic.List<UnityEngine.Vector2> a5;
+				checkType(l,5,out a5);
+				System.Collections.Generic.List<UnityEngine.Vector3> a6;
+				checkType(l,6,out a6);
+				System.Collections.Generic.List<UnityEngine.Vector4> a7;
+				checkType(l,7,out a7);
+				UnityEngine.CanvasRenderer.AddUIVertexStream(a1,a2,a3,a4,a5,a6,a7);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);

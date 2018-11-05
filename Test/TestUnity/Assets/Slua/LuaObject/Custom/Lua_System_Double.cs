@@ -22,20 +22,20 @@ public class Lua_System_Double : LuaObject {
 	static public int CompareTo(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,2,typeof(double))){
+			if(matchType(l,argc,2,typeof(System.Object))){
 				System.Double self;
 				checkType(l,1,out self);
-				System.Double a1;
+				System.Object a1;
 				checkType(l,2,out a1);
 				var ret=self.CompareTo(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(System.Object))){
+			else if(matchType(l,argc,2,typeof(double))){
 				System.Double self;
 				checkType(l,1,out self);
-				System.Object a1;
+				System.Double a1;
 				checkType(l,2,out a1);
 				var ret=self.CompareTo(a1);
 				pushValue(l,true);
@@ -130,20 +130,14 @@ public class Lua_System_Double : LuaObject {
 	static public int Parse_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
-				System.String a1;
-				checkType(l,1,out a1);
-				var ret=System.Double.Parse(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l,argc,1,typeof(string),typeof(System.Globalization.NumberStyles))){
+			if(argc==3){
 				System.String a1;
 				checkType(l,1,out a1);
 				System.Globalization.NumberStyles a2;
 				checkEnum(l,2,out a2);
-				var ret=System.Double.Parse(a1,a2);
+				System.IFormatProvider a3;
+				checkType(l,3,out a3);
+				var ret=System.Double.Parse(a1,a2,a3);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -158,14 +152,20 @@ public class Lua_System_Double : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==3){
+			else if(matchType(l,argc,1,typeof(string),typeof(System.Globalization.NumberStyles))){
 				System.String a1;
 				checkType(l,1,out a1);
 				System.Globalization.NumberStyles a2;
 				checkEnum(l,2,out a2);
-				System.IFormatProvider a3;
-				checkType(l,3,out a3);
-				var ret=System.Double.Parse(a1,a2,a3);
+				var ret=System.Double.Parse(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==1){
+				System.String a1;
+				checkType(l,1,out a1);
+				var ret=System.Double.Parse(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -183,17 +183,7 @@ public class Lua_System_Double : LuaObject {
 	static public int TryParse_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
-				System.String a1;
-				checkType(l,1,out a1);
-				System.Double a2;
-				var ret=System.Double.TryParse(a1,out a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				pushValue(l,a2);
-				return 3;
-			}
-			else if(argc==4){
+			if(argc==4){
 				System.String a1;
 				checkType(l,1,out a1);
 				System.Globalization.NumberStyles a2;
@@ -205,6 +195,16 @@ public class Lua_System_Double : LuaObject {
 				pushValue(l,true);
 				pushValue(l,ret);
 				pushValue(l,a4);
+				return 3;
+			}
+			else if(argc==2){
+				System.String a1;
+				checkType(l,1,out a1);
+				System.Double a2;
+				var ret=System.Double.TryParse(a1,out a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				pushValue(l,a2);
 				return 3;
 			}
 			pushValue(l,false);

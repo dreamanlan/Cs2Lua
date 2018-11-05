@@ -9,16 +9,16 @@ public class Lua_UnityEngine_PhysicMaterial : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.PhysicMaterial o;
-			if(argc==1){
-				o=new UnityEngine.PhysicMaterial();
+			if(argc==2){
+				System.String a1;
+				checkType(l,2,out a1);
+				o=new UnityEngine.PhysicMaterial(a1);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==2){
-				System.String a1;
-				checkType(l,2,out a1);
-				o=new UnityEngine.PhysicMaterial(a1);
+			else if(argc==1){
+				o=new UnityEngine.PhysicMaterial();
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;

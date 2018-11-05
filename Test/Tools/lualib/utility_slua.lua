@@ -1,26 +1,6 @@
 --remove comments for debug with ZeroBrane
 --require "luadebug";
 
-function printJitStatus()
-  local infos = Slua.CreateClass("System.Text.StringBuilder");
-  local results = { jit.status() };  
-  Utility.AppendFormat(infos, "jit status count {0}", #results);
-  infos:AppendLine();
-  for i,v in ipairs(results) do
-    if i==1 then
-      Utility.AppendFormat(infos, "jit status {0}", v);
-    else
-      Utility.AppendFormat(infos, " {0}", v);
-    end;
-    infos:AppendLine();
-  end;
-  UnityEngine.Debug.Log(infos:ToString());
-end;
-
-jit.off();
-jit.flush();
-printJitStatus();
-
 if not package.loading then package.loading = {} end
 
 local rawrequire = require;

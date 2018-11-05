@@ -37,7 +37,7 @@ public class Lua_UnityEngine_Experimental_Rendering_LODParameters : LuaObject {
 		try {
 			UnityEngine.Experimental.Rendering.LODParameters self;
 			checkValueType(l,1,out self);
-			System.Boolean v;
+			bool v;
 			checkType(l,2,out v);
 			self.isOrthographic=v;
 			setBack(l,self);
@@ -99,7 +99,7 @@ public class Lua_UnityEngine_Experimental_Rendering_LODParameters : LuaObject {
 		try {
 			UnityEngine.Experimental.Rendering.LODParameters self;
 			checkValueType(l,1,out self);
-			System.Single v;
+			float v;
 			checkType(l,2,out v);
 			self.fieldOfView=v;
 			setBack(l,self);
@@ -130,7 +130,7 @@ public class Lua_UnityEngine_Experimental_Rendering_LODParameters : LuaObject {
 		try {
 			UnityEngine.Experimental.Rendering.LODParameters self;
 			checkValueType(l,1,out self);
-			System.Single v;
+			float v;
 			checkType(l,2,out v);
 			self.orthoSize=v;
 			setBack(l,self);
@@ -161,7 +161,7 @@ public class Lua_UnityEngine_Experimental_Rendering_LODParameters : LuaObject {
 		try {
 			UnityEngine.Experimental.Rendering.LODParameters self;
 			checkValueType(l,1,out self);
-			System.Int32 v;
+			int v;
 			checkType(l,2,out v);
 			self.cameraPixelHeight=v;
 			setBack(l,self);

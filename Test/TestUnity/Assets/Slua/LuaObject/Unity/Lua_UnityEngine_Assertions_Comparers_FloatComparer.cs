@@ -9,8 +9,12 @@ public class Lua_UnityEngine_Assertions_Comparers_FloatComparer : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Assertions.Comparers.FloatComparer o;
-			if(argc==1){
-				o=new UnityEngine.Assertions.Comparers.FloatComparer();
+			if(argc==3){
+				System.Single a1;
+				checkType(l,2,out a1);
+				System.Boolean a2;
+				checkType(l,3,out a2);
+				o=new UnityEngine.Assertions.Comparers.FloatComparer(a1,a2);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
@@ -31,12 +35,8 @@ public class Lua_UnityEngine_Assertions_Comparers_FloatComparer : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==3){
-				System.Single a1;
-				checkType(l,2,out a1);
-				System.Boolean a2;
-				checkType(l,3,out a2);
-				o=new UnityEngine.Assertions.Comparers.FloatComparer(a1,a2);
+			else if(argc==1){
+				o=new UnityEngine.Assertions.Comparers.FloatComparer();
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;

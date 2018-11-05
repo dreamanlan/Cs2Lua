@@ -104,15 +104,24 @@ namespace LuaGenerator
                     sb.AppendFormatLine("{0}{1} = {1} or {{}};", GetIndentString(indent), ns, ns);
                 } else if (id == "interface") {
                     string intfName = CalcTypeString(callData.GetParam(0));
-                    sb.AppendFormat("{0}{1} = {{__cs2lua_defined = true, __type_name = \"{2}\", __interfaces = {{", GetIndentString(indent), intfName, intfName);
+                    sb.AppendFormatLine("{0}{1} = {{", GetIndentString(indent), intfName);
+                    ++indent;
+                    sb.AppendFormatLine("{0}__cs2lua_defined = true, ", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}__type_name = \"{1}\", ", GetIndentString(indent), intfName);
+                    sb.AppendFormatLine("{0}__interfaces = {{", GetIndentString(indent));
+                    ++indent;
                     var intfs = FindStatement(funcData, "interfaces") as Dsl.FunctionData;
                     if (null != intfs) {
                         foreach (var comp in intfs.Statements) {
-                            sb.AppendFormat("{0}\"{1}\"", prestr, comp.GetId());
+                            sb.AppendFormatLine("{0}\"{1}\"", prestr, comp.GetId());
                             prestr = ", ";
                         }
                     }
-                    sb.AppendLine("}, __exist = function(k) return false; end};");
+                    --indent;
+                    sb.AppendFormatLine("{0}}}, ", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}__exist = function(k) return false; end", GetIndentString(indent));
+                    --indent;
+                    sb.AppendFormatLine("{0}}};", GetIndentString(indent));
                 } else if (id == "defineentry") {
                     string className = CalcTypeString(callData.GetParam(0));
                     sb.AppendFormatLine("{0}defineentry({1});", GetIndentString(indent), className);

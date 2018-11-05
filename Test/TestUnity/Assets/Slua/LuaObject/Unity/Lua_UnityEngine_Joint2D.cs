@@ -37,6 +37,19 @@ public class Lua_UnityEngine_Joint2D : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_attachedRigidbody(IntPtr l) {
+		try {
+			UnityEngine.Joint2D self=(UnityEngine.Joint2D)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.attachedRigidbody);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_connectedBody(IntPtr l) {
 		try {
 			UnityEngine.Joint2D self=(UnityEngine.Joint2D)checkSelf(l);
@@ -178,6 +191,7 @@ public class Lua_UnityEngine_Joint2D : LuaObject {
 		getTypeTable(l,"UnityEngine.Joint2D");
 		addMember(l,GetReactionForce);
 		addMember(l,GetReactionTorque);
+		addMember(l,"attachedRigidbody",get_attachedRigidbody,null,true);
 		addMember(l,"connectedBody",get_connectedBody,set_connectedBody,true);
 		addMember(l,"enableCollision",get_enableCollision,set_enableCollision,true);
 		addMember(l,"breakForce",get_breakForce,set_breakForce,true);

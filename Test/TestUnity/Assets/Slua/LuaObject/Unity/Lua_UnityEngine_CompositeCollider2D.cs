@@ -5,6 +5,24 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_CompositeCollider2D : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int GetPath(IntPtr l) {
+		try {
+			UnityEngine.CompositeCollider2D self=(UnityEngine.CompositeCollider2D)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Vector2[] a2;
+			checkArray(l,3,out a2);
+			var ret=self.GetPath(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GenerateGeometry(IntPtr l) {
 		try {
 			UnityEngine.CompositeCollider2D self=(UnityEngine.CompositeCollider2D)checkSelf(l);
@@ -24,24 +42,6 @@ public class Lua_UnityEngine_CompositeCollider2D : LuaObject {
 			System.Int32 a1;
 			checkType(l,2,out a1);
 			var ret=self.GetPathPointCount(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetPath(IntPtr l) {
-		try {
-			UnityEngine.CompositeCollider2D self=(UnityEngine.CompositeCollider2D)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			UnityEngine.Vector2[] a2;
-			checkArray(l,3,out a2);
-			var ret=self.GetPath(a1,a2);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -191,9 +191,9 @@ public class Lua_UnityEngine_CompositeCollider2D : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.CompositeCollider2D");
+		addMember(l,GetPath);
 		addMember(l,GenerateGeometry);
 		addMember(l,GetPathPointCount);
-		addMember(l,GetPath);
 		addMember(l,"geometryType",get_geometryType,set_geometryType,true);
 		addMember(l,"generationType",get_generationType,set_generationType,true);
 		addMember(l,"vertexDistance",get_vertexDistance,set_vertexDistance,true);

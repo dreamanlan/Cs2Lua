@@ -18,6 +18,10 @@ namespace SLua
                 ua = (UnityEngine.EventSystems.ExecuteEvents.EventFunction<UnityEngine.EventSystems.IBeginDragHandler>)checkObj(l, p);
                 return op;
             }
+            if(LuaDLL.lua_isnil(l,-1)) {
+				ua=null;
+				return op;
+			}
             LuaDelegate ld;
             checkType(l, -1, out ld);
 			LuaDLL.lua_pop(l,1);

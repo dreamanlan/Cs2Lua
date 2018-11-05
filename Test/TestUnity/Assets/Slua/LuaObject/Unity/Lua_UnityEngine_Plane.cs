@@ -9,7 +9,19 @@ public class Lua_UnityEngine_Plane : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Plane o;
-			if(matchType(l,argc,2,typeof(UnityEngine.Vector3),typeof(UnityEngine.Vector3))){
+			if(argc==4){
+				UnityEngine.Vector3 a1;
+				checkType(l,2,out a1);
+				UnityEngine.Vector3 a2;
+				checkType(l,3,out a2);
+				UnityEngine.Vector3 a3;
+				checkType(l,4,out a3);
+				o=new UnityEngine.Plane(a1,a2,a3);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(matchType(l,argc,2,typeof(UnityEngine.Vector3),typeof(UnityEngine.Vector3))){
 				UnityEngine.Vector3 a1;
 				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
@@ -25,18 +37,6 @@ public class Lua_UnityEngine_Plane : LuaObject {
 				System.Single a2;
 				checkType(l,3,out a2);
 				o=new UnityEngine.Plane(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==4){
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				UnityEngine.Vector3 a2;
-				checkType(l,3,out a2);
-				UnityEngine.Vector3 a3;
-				checkType(l,4,out a3);
-				o=new UnityEngine.Plane(a1,a2,a3);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
@@ -88,6 +88,55 @@ public class Lua_UnityEngine_Plane : LuaObject {
 			pushValue(l,true);
 			setBack(l,self);
 			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Flip(IntPtr l) {
+		try {
+			UnityEngine.Plane self;
+			checkValueType(l,1,out self);
+			self.Flip();
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Translate(IntPtr l) {
+		try {
+			UnityEngine.Plane self;
+			checkValueType(l,1,out self);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			self.Translate(a1);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ClosestPointOnPlane(IntPtr l) {
+		try {
+			UnityEngine.Plane self;
+			checkValueType(l,1,out self);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			var ret=self.ClosestPointOnPlane(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -167,6 +216,23 @@ public class Lua_UnityEngine_Plane : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int Translate_s(IntPtr l) {
+		try {
+			UnityEngine.Plane a1;
+			checkValueType(l,1,out a1);
+			UnityEngine.Vector3 a2;
+			checkType(l,2,out a2);
+			var ret=UnityEngine.Plane.Translate(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_normal(IntPtr l) {
 		try {
 			UnityEngine.Plane self;
@@ -227,17 +293,36 @@ public class Lua_UnityEngine_Plane : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_flipped(IntPtr l) {
+		try {
+			UnityEngine.Plane self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.flipped);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Plane");
 		addMember(l,SetNormalAndPosition);
 		addMember(l,Set3Points);
+		addMember(l,Flip);
+		addMember(l,Translate);
+		addMember(l,ClosestPointOnPlane);
 		addMember(l,GetDistanceToPoint);
 		addMember(l,GetSide);
 		addMember(l,SameSide);
 		addMember(l,Raycast);
+		addMember(l,Translate_s);
 		addMember(l,"normal",get_normal,set_normal,true);
 		addMember(l,"distance",get_distance,set_distance,true);
+		addMember(l,"flipped",get_flipped,null,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.Plane),typeof(System.ValueType));
 	}
 }

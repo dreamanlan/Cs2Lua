@@ -9,8 +9,12 @@ public class Lua_UnityEngine_UnassignedReferenceException : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.UnassignedReferenceException o;
-			if(argc==1){
-				o=new UnityEngine.UnassignedReferenceException();
+			if(argc==3){
+				System.String a1;
+				checkType(l,2,out a1);
+				System.Exception a2;
+				checkType(l,3,out a2);
+				o=new UnityEngine.UnassignedReferenceException(a1,a2);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
@@ -23,12 +27,8 @@ public class Lua_UnityEngine_UnassignedReferenceException : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Exception a2;
-				checkType(l,3,out a2);
-				o=new UnityEngine.UnassignedReferenceException(a1,a2);
+			else if(argc==1){
+				o=new UnityEngine.UnassignedReferenceException();
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;

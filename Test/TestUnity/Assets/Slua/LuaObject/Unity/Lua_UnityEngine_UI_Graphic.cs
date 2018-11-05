@@ -57,6 +57,19 @@ public class Lua_UnityEngine_UI_Graphic : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int OnCullingChanged(IntPtr l) {
+		try {
+			UnityEngine.UI.Graphic self=(UnityEngine.UI.Graphic)checkSelf(l);
+			self.OnCullingChanged();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Rebuild(IntPtr l) {
 		try {
 			UnityEngine.UI.Graphic self=(UnityEngine.UI.Graphic)checkSelf(l);
@@ -162,21 +175,7 @@ public class Lua_UnityEngine_UI_Graphic : LuaObject {
 	static public int CrossFadeColor(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				UnityEngine.UI.Graphic self=(UnityEngine.UI.Graphic)checkSelf(l);
-				UnityEngine.Color a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				System.Boolean a3;
-				checkType(l,4,out a3);
-				System.Boolean a4;
-				checkType(l,5,out a4);
-				self.CrossFadeColor(a1,a2,a3,a4);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==6){
+			if(argc==6){
 				UnityEngine.UI.Graphic self=(UnityEngine.UI.Graphic)checkSelf(l);
 				UnityEngine.Color a1;
 				checkType(l,2,out a1);
@@ -189,6 +188,20 @@ public class Lua_UnityEngine_UI_Graphic : LuaObject {
 				System.Boolean a5;
 				checkType(l,6,out a5);
 				self.CrossFadeColor(a1,a2,a3,a4,a5);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==5){
+				UnityEngine.UI.Graphic self=(UnityEngine.UI.Graphic)checkSelf(l);
+				UnityEngine.Color a1;
+				checkType(l,2,out a1);
+				System.Single a2;
+				checkType(l,3,out a2);
+				System.Boolean a3;
+				checkType(l,4,out a3);
+				System.Boolean a4;
+				checkType(l,5,out a4);
+				self.CrossFadeColor(a1,a2,a3,a4);
 				pushValue(l,true);
 				return 1;
 			}
@@ -503,6 +516,7 @@ public class Lua_UnityEngine_UI_Graphic : LuaObject {
 		addMember(l,SetLayoutDirty);
 		addMember(l,SetVerticesDirty);
 		addMember(l,SetMaterialDirty);
+		addMember(l,OnCullingChanged);
 		addMember(l,Rebuild);
 		addMember(l,LayoutComplete);
 		addMember(l,GraphicUpdateComplete);

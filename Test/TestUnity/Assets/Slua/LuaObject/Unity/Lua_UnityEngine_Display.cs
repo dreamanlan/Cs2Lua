@@ -8,13 +8,7 @@ public class Lua_UnityEngine_Display : LuaObject {
 	static public int Activate(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
-				UnityEngine.Display self=(UnityEngine.Display)checkSelf(l);
-				self.Activate();
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==4){
+			if(argc==4){
 				UnityEngine.Display self=(UnityEngine.Display)checkSelf(l);
 				System.Int32 a1;
 				checkType(l,2,out a1);
@@ -23,6 +17,12 @@ public class Lua_UnityEngine_Display : LuaObject {
 				System.Int32 a3;
 				checkType(l,4,out a3);
 				self.Activate(a1,a2,a3);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==1){
+				UnityEngine.Display self=(UnityEngine.Display)checkSelf(l);
+				self.Activate();
 				pushValue(l,true);
 				return 1;
 			}

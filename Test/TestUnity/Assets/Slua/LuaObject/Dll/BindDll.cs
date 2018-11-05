@@ -5,6 +5,11 @@ namespace SLua {
 	public class BindDll {
 		public static Action<IntPtr>[] GetBindList() {
 			Action<IntPtr>[] list= {
+				Lua_IStartupPlugin.reg,
+				Lua_IStartupPluginFactory.reg,
+				Lua_ITickPlugin.reg,
+				Lua_ITickPluginFactory.reg,
+				Lua_IObjectPluginFactory.reg,
 				Lua_PluginManager.reg,
 			};
 			return list;

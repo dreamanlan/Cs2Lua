@@ -28,6 +28,8 @@ public class Lua_UnityEngine_Rendering_CameraEvent : LuaObject {
 		addMember(l,20,"AfterEverything");
 		addMember(l,21,"BeforeReflections");
 		addMember(l,22,"AfterReflections");
+		addMember(l,23,"BeforeHaloAndLensFlares");
+		addMember(l,24,"AfterHaloAndLensFlares");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

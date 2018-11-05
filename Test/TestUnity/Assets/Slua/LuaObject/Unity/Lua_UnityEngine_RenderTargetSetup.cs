@@ -31,24 +31,32 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.RenderBuffer),typeof(UnityEngine.RenderBuffer))){
-				UnityEngine.RenderBuffer a1;
-				checkValueType(l,2,out a1);
-				UnityEngine.RenderBuffer a2;
-				checkValueType(l,3,out a2);
-				o=new UnityEngine.RenderTargetSetup(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.RenderBuffer),typeof(UnityEngine.RenderBuffer),typeof(int))){
+			else if(argc==6){
 				UnityEngine.RenderBuffer a1;
 				checkValueType(l,2,out a1);
 				UnityEngine.RenderBuffer a2;
 				checkValueType(l,3,out a2);
 				System.Int32 a3;
 				checkType(l,4,out a3);
-				o=new UnityEngine.RenderTargetSetup(a1,a2,a3);
+				UnityEngine.CubemapFace a4;
+				checkEnum(l,5,out a4);
+				System.Int32 a5;
+				checkType(l,6,out a5);
+				o=new UnityEngine.RenderTargetSetup(a1,a2,a3,a4,a5);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(matchType(l,argc,2,typeof(UnityEngine.RenderBuffer[]),typeof(UnityEngine.RenderBuffer),typeof(int),typeof(UnityEngine.CubemapFace))){
+				UnityEngine.RenderBuffer[] a1;
+				checkArray(l,2,out a1);
+				UnityEngine.RenderBuffer a2;
+				checkValueType(l,3,out a2);
+				System.Int32 a3;
+				checkType(l,4,out a3);
+				UnityEngine.CubemapFace a4;
+				checkEnum(l,5,out a4);
+				o=new UnityEngine.RenderTargetSetup(a1,a2,a3,a4);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
@@ -67,32 +75,6 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==6){
-				UnityEngine.RenderBuffer a1;
-				checkValueType(l,2,out a1);
-				UnityEngine.RenderBuffer a2;
-				checkValueType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				UnityEngine.CubemapFace a4;
-				checkEnum(l,5,out a4);
-				System.Int32 a5;
-				checkType(l,6,out a5);
-				o=new UnityEngine.RenderTargetSetup(a1,a2,a3,a4,a5);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.RenderBuffer[]),typeof(UnityEngine.RenderBuffer))){
-				UnityEngine.RenderBuffer[] a1;
-				checkArray(l,2,out a1);
-				UnityEngine.RenderBuffer a2;
-				checkValueType(l,3,out a2);
-				o=new UnityEngine.RenderTargetSetup(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
 			else if(matchType(l,argc,2,typeof(UnityEngine.RenderBuffer[]),typeof(UnityEngine.RenderBuffer),typeof(int))){
 				UnityEngine.RenderBuffer[] a1;
 				checkArray(l,2,out a1);
@@ -105,16 +87,34 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.RenderBuffer[]),typeof(UnityEngine.RenderBuffer),typeof(int),typeof(UnityEngine.CubemapFace))){
-				UnityEngine.RenderBuffer[] a1;
-				checkArray(l,2,out a1);
+			else if(matchType(l,argc,2,typeof(UnityEngine.RenderBuffer),typeof(UnityEngine.RenderBuffer),typeof(int))){
+				UnityEngine.RenderBuffer a1;
+				checkValueType(l,2,out a1);
 				UnityEngine.RenderBuffer a2;
 				checkValueType(l,3,out a2);
 				System.Int32 a3;
 				checkType(l,4,out a3);
-				UnityEngine.CubemapFace a4;
-				checkEnum(l,5,out a4);
-				o=new UnityEngine.RenderTargetSetup(a1,a2,a3,a4);
+				o=new UnityEngine.RenderTargetSetup(a1,a2,a3);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(matchType(l,argc,2,typeof(UnityEngine.RenderBuffer),typeof(UnityEngine.RenderBuffer))){
+				UnityEngine.RenderBuffer a1;
+				checkValueType(l,2,out a1);
+				UnityEngine.RenderBuffer a2;
+				checkValueType(l,3,out a2);
+				o=new UnityEngine.RenderTargetSetup(a1,a2);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(matchType(l,argc,2,typeof(UnityEngine.RenderBuffer[]),typeof(UnityEngine.RenderBuffer))){
+				UnityEngine.RenderBuffer[] a1;
+				checkArray(l,2,out a1);
+				UnityEngine.RenderBuffer a2;
+				checkValueType(l,3,out a2);
+				o=new UnityEngine.RenderTargetSetup(a1,a2);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;

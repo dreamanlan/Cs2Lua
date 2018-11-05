@@ -9,13 +9,7 @@ public class Lua_UnityEngine_RectOffset : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.RectOffset o;
-			if(argc==1){
-				o=new UnityEngine.RectOffset();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==5){
+			if(argc==5){
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -25,6 +19,12 @@ public class Lua_UnityEngine_RectOffset : LuaObject {
 				System.Int32 a4;
 				checkType(l,5,out a4);
 				o=new UnityEngine.RectOffset(a1,a2,a3,a4);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(argc==1){
+				o=new UnityEngine.RectOffset();
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;

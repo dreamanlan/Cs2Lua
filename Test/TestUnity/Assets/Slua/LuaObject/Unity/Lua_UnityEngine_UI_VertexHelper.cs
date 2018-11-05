@@ -9,16 +9,16 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.UI.VertexHelper o;
-			if(argc==1){
-				o=new UnityEngine.UI.VertexHelper();
+			if(argc==2){
+				UnityEngine.Mesh a1;
+				checkType(l,2,out a1);
+				o=new UnityEngine.UI.VertexHelper(a1);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==2){
-				UnityEngine.Mesh a1;
-				checkType(l,2,out a1);
-				o=new UnityEngine.UI.VertexHelper(a1);
+			else if(argc==1){
+				o=new UnityEngine.UI.VertexHelper();
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
@@ -110,11 +110,21 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 	static public int AddVert(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==7){
 				UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
-				UnityEngine.UIVertex a1;
-				checkValueType(l,2,out a1);
-				self.AddVert(a1);
+				UnityEngine.Vector3 a1;
+				checkType(l,2,out a1);
+				UnityEngine.Color32 a2;
+				checkValueType(l,3,out a2);
+				UnityEngine.Vector2 a3;
+				checkType(l,4,out a3);
+				UnityEngine.Vector2 a4;
+				checkType(l,5,out a4);
+				UnityEngine.Vector3 a5;
+				checkType(l,6,out a5);
+				UnityEngine.Vector4 a6;
+				checkType(l,7,out a6);
+				self.AddVert(a1,a2,a3,a4,a5,a6);
 				pushValue(l,true);
 				return 1;
 			}
@@ -130,21 +140,11 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==7){
+			else if(argc==2){
 				UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				UnityEngine.Color32 a2;
-				checkValueType(l,3,out a2);
-				UnityEngine.Vector2 a3;
-				checkType(l,4,out a3);
-				UnityEngine.Vector2 a4;
-				checkType(l,5,out a4);
-				UnityEngine.Vector3 a5;
-				checkType(l,6,out a5);
-				UnityEngine.Vector4 a6;
-				checkType(l,7,out a6);
-				self.AddVert(a1,a2,a3,a4,a5,a6);
+				UnityEngine.UIVertex a1;
+				checkValueType(l,2,out a1);
+				self.AddVert(a1);
 				pushValue(l,true);
 				return 1;
 			}
@@ -239,6 +239,19 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int Dispose_s(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_currentVertCount(IntPtr l) {
 		try {
 			UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
@@ -277,6 +290,7 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 		addMember(l,AddUIVertexStream);
 		addMember(l,AddUIVertexTriangleStream);
 		addMember(l,GetUIVertexStream);
+		addMember(l,Dispose_s);
 		addMember(l,"currentVertCount",get_currentVertCount,null,true);
 		addMember(l,"currentIndexCount",get_currentIndexCount,null,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.UI.VertexHelper));

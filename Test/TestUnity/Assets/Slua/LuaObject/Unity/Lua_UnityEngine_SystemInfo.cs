@@ -34,6 +34,21 @@ public class Lua_UnityEngine_SystemInfo : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int SupportsBlendingOnRenderTextureFormat_s(IntPtr l) {
+		try {
+			UnityEngine.RenderTextureFormat a1;
+			checkEnum(l,1,out a1);
+			var ret=UnityEngine.SystemInfo.SupportsBlendingOnRenderTextureFormat(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SupportsTextureFormat_s(IntPtr l) {
 		try {
 			UnityEngine.TextureFormat a1;
@@ -445,6 +460,30 @@ public class Lua_UnityEngine_SystemInfo : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_supportsMultisampledTextures(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.SystemInfo.supportsMultisampledTextures);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_supportsTextureWrapMirrorOnce(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.SystemInfo.supportsTextureWrapMirrorOnce);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_usesReversedZBuffer(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -599,10 +638,35 @@ public class Lua_UnityEngine_SystemInfo : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_supportsAsyncCompute(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.SystemInfo.supportsAsyncCompute);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_supportsGPUFence(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.SystemInfo.supportsGPUFence);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.SystemInfo");
 		addMember(l,SupportsRenderTextureFormat_s);
+		addMember(l,SupportsBlendingOnRenderTextureFormat_s);
 		addMember(l,SupportsTextureFormat_s);
 		addMember(l,"unsupportedIdentifier",get_unsupportedIdentifier,null,false);
 		addMember(l,"batteryLevel",get_batteryLevel,null,false);
@@ -637,6 +701,8 @@ public class Lua_UnityEngine_SystemInfo : LuaObject {
 		addMember(l,"supportsInstancing",get_supportsInstancing,null,false);
 		addMember(l,"supportsSparseTextures",get_supportsSparseTextures,null,false);
 		addMember(l,"supportedRenderTargetCount",get_supportedRenderTargetCount,null,false);
+		addMember(l,"supportsMultisampledTextures",get_supportsMultisampledTextures,null,false);
+		addMember(l,"supportsTextureWrapMirrorOnce",get_supportsTextureWrapMirrorOnce,null,false);
 		addMember(l,"usesReversedZBuffer",get_usesReversedZBuffer,null,false);
 		addMember(l,"npotSupport",get_npotSupport,null,false);
 		addMember(l,"deviceUniqueIdentifier",get_deviceUniqueIdentifier,null,false);
@@ -650,6 +716,8 @@ public class Lua_UnityEngine_SystemInfo : LuaObject {
 		addMember(l,"deviceType",get_deviceType,null,false);
 		addMember(l,"maxTextureSize",get_maxTextureSize,null,false);
 		addMember(l,"maxCubemapSize",get_maxCubemapSize,null,false);
+		addMember(l,"supportsAsyncCompute",get_supportsAsyncCompute,null,false);
+		addMember(l,"supportsGPUFence",get_supportsGPUFence,null,false);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.SystemInfo));
 	}
 }

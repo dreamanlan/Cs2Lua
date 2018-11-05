@@ -19,35 +19,19 @@ public class Lua_UnityEngine_Caching : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Authorize_s(IntPtr l) {
+	static public int ClearCache_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				System.String a1;
+			if(argc==1){
+				System.Int32 a1;
 				checkType(l,1,out a1);
-				System.String a2;
-				checkType(l,2,out a2);
-				System.Int64 a3;
-				checkType(l,3,out a3);
-				System.String a4;
-				checkType(l,4,out a4);
-				var ret=UnityEngine.Caching.Authorize(a1,a2,a3,a4);
+				var ret=UnityEngine.Caching.ClearCache(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==5){
-				System.String a1;
-				checkType(l,1,out a1);
-				System.String a2;
-				checkType(l,2,out a2);
-				System.Int64 a3;
-				checkType(l,3,out a3);
-				System.Int32 a4;
-				checkType(l,4,out a4);
-				System.String a5;
-				checkType(l,5,out a5);
-				var ret=UnityEngine.Caching.Authorize(a1,a2,a3,a4,a5);
+			else if(argc==0){
+				var ret=UnityEngine.Caching.ClearCache();
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -62,9 +46,13 @@ public class Lua_UnityEngine_Caching : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int CleanCache_s(IntPtr l) {
+	static public int ClearCachedVersion_s(IntPtr l) {
 		try {
-			var ret=UnityEngine.Caching.CleanCache();
+			System.String a1;
+			checkType(l,1,out a1);
+			UnityEngine.Hash128 a2;
+			checkValueType(l,2,out a2);
+			var ret=UnityEngine.Caching.ClearCachedVersion(a1,a2);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -75,10 +63,58 @@ public class Lua_UnityEngine_Caching : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int ClearOtherCachedVersions_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			UnityEngine.Hash128 a2;
+			checkValueType(l,2,out a2);
+			var ret=UnityEngine.Caching.ClearOtherCachedVersions(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ClearAllCachedVersions_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Caching.ClearAllCachedVersions(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetCachedVersions_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Collections.Generic.List<UnityEngine.Hash128> a2;
+			checkType(l,2,out a2);
+			UnityEngine.Caching.GetCachedVersions(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsVersionCached_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,1,typeof(string),typeof(UnityEngine.Hash128))){
+			if(argc==2){
 				System.String a1;
 				checkType(l,1,out a1);
 				UnityEngine.Hash128 a2;
@@ -88,12 +124,10 @@ public class Lua_UnityEngine_Caching : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,1,typeof(string),typeof(int))){
-				System.String a1;
-				checkType(l,1,out a1);
-				System.Int32 a2;
-				checkType(l,2,out a2);
-				var ret=UnityEngine.Caching.IsVersionCached(a1,a2);
+			else if(argc==1){
+				UnityEngine.CachedAssetBundle a1;
+				checkValueType(l,1,out a1);
+				var ret=UnityEngine.Caching.IsVersionCached(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -111,7 +145,7 @@ public class Lua_UnityEngine_Caching : LuaObject {
 	static public int MarkAsUsed_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,1,typeof(string),typeof(UnityEngine.Hash128))){
+			if(argc==2){
 				System.String a1;
 				checkType(l,1,out a1);
 				UnityEngine.Hash128 a2;
@@ -121,12 +155,10 @@ public class Lua_UnityEngine_Caching : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,1,typeof(string),typeof(int))){
-				System.String a1;
-				checkType(l,1,out a1);
-				System.Int32 a2;
-				checkType(l,2,out a2);
-				var ret=UnityEngine.Caching.MarkAsUsed(a1,a2);
+			else if(argc==1){
+				UnityEngine.CachedAssetBundle a1;
+				checkValueType(l,1,out a1);
+				var ret=UnityEngine.Caching.MarkAsUsed(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -141,10 +173,13 @@ public class Lua_UnityEngine_Caching : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_spaceFree(IntPtr l) {
+	static public int AddCache_s(IntPtr l) {
 		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Caching.AddCache(a1);
 			pushValue(l,true);
-			pushValue(l,UnityEngine.Caching.spaceFree);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -153,10 +188,13 @@ public class Lua_UnityEngine_Caching : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_maximumAvailableDiskSpace(IntPtr l) {
+	static public int GetCacheAt_s(IntPtr l) {
 		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Caching.GetCacheAt(a1);
 			pushValue(l,true);
-			pushValue(l,UnityEngine.Caching.maximumAvailableDiskSpace);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -165,11 +203,26 @@ public class Lua_UnityEngine_Caching : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int set_maximumAvailableDiskSpace(IntPtr l) {
+	static public int GetCacheByPath_s(IntPtr l) {
 		try {
-			System.Int64 v;
-			checkType(l,2,out v);
-			UnityEngine.Caching.maximumAvailableDiskSpace=v;
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Caching.GetCacheByPath(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetAllCachePaths_s(IntPtr l) {
+		try {
+			System.Collections.Generic.List<System.String> a1;
+			checkType(l,1,out a1);
+			UnityEngine.Caching.GetAllCachePaths(a1);
 			pushValue(l,true);
 			return 1;
 		}
@@ -179,10 +232,13 @@ public class Lua_UnityEngine_Caching : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_spaceOccupied(IntPtr l) {
+	static public int RemoveCache_s(IntPtr l) {
 		try {
+			UnityEngine.Cache a1;
+			checkValueType(l,1,out a1);
+			var ret=UnityEngine.Caching.RemoveCache(a1);
 			pushValue(l,true);
-			pushValue(l,UnityEngine.Caching.spaceOccupied);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -191,23 +247,13 @@ public class Lua_UnityEngine_Caching : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_expirationDelay(IntPtr l) {
+	static public int MoveCacheBefore_s(IntPtr l) {
 		try {
-			pushValue(l,true);
-			pushValue(l,UnityEngine.Caching.expirationDelay);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_expirationDelay(IntPtr l) {
-		try {
-			int v;
-			checkType(l,2,out v);
-			UnityEngine.Caching.expirationDelay=v;
+			UnityEngine.Cache a1;
+			checkValueType(l,1,out a1);
+			UnityEngine.Cache a2;
+			checkValueType(l,2,out a2);
+			UnityEngine.Caching.MoveCacheBefore(a1,a2);
 			pushValue(l,true);
 			return 1;
 		}
@@ -217,23 +263,13 @@ public class Lua_UnityEngine_Caching : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_enabled(IntPtr l) {
+	static public int MoveCacheAfter_s(IntPtr l) {
 		try {
-			pushValue(l,true);
-			pushValue(l,UnityEngine.Caching.enabled);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_enabled(IntPtr l) {
-		try {
-			bool v;
-			checkType(l,2,out v);
-			UnityEngine.Caching.enabled=v;
+			UnityEngine.Cache a1;
+			checkValueType(l,1,out a1);
+			UnityEngine.Cache a2;
+			checkValueType(l,2,out a2);
+			UnityEngine.Caching.MoveCacheAfter(a1,a2);
 			pushValue(l,true);
 			return 1;
 		}
@@ -279,20 +315,78 @@ public class Lua_UnityEngine_Caching : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_cacheCount(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Caching.cacheCount);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_defaultCache(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Caching.defaultCache);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_currentCacheForWriting(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Caching.currentCacheForWriting);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_currentCacheForWriting(IntPtr l) {
+		try {
+			UnityEngine.Cache v;
+			checkValueType(l,2,out v);
+			UnityEngine.Caching.currentCacheForWriting=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Caching");
-		addMember(l,Authorize_s);
-		addMember(l,CleanCache_s);
+		addMember(l,ClearCache_s);
+		addMember(l,ClearCachedVersion_s);
+		addMember(l,ClearOtherCachedVersions_s);
+		addMember(l,ClearAllCachedVersions_s);
+		addMember(l,GetCachedVersions_s);
 		addMember(l,IsVersionCached_s);
 		addMember(l,MarkAsUsed_s);
-		addMember(l,"spaceFree",get_spaceFree,null,false);
-		addMember(l,"maximumAvailableDiskSpace",get_maximumAvailableDiskSpace,set_maximumAvailableDiskSpace,false);
-		addMember(l,"spaceOccupied",get_spaceOccupied,null,false);
-		addMember(l,"expirationDelay",get_expirationDelay,set_expirationDelay,false);
-		addMember(l,"enabled",get_enabled,set_enabled,false);
+		addMember(l,AddCache_s);
+		addMember(l,GetCacheAt_s);
+		addMember(l,GetCacheByPath_s);
+		addMember(l,GetAllCachePaths_s);
+		addMember(l,RemoveCache_s);
+		addMember(l,MoveCacheBefore_s);
+		addMember(l,MoveCacheAfter_s);
 		addMember(l,"compressionEnabled",get_compressionEnabled,set_compressionEnabled,false);
 		addMember(l,"ready",get_ready,null,false);
+		addMember(l,"cacheCount",get_cacheCount,null,false);
+		addMember(l,"defaultCache",get_defaultCache,null,false);
+		addMember(l,"currentCacheForWriting",get_currentCacheForWriting,set_currentCacheForWriting,false);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.Caching));
 	}
 }

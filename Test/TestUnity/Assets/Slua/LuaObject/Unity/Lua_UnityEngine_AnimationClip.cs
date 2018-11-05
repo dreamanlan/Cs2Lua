@@ -236,6 +236,19 @@ public class Lua_UnityEngine_AnimationClip : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_empty(IntPtr l) {
+		try {
+			UnityEngine.AnimationClip self=(UnityEngine.AnimationClip)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.empty);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_events(IntPtr l) {
 		try {
 			UnityEngine.AnimationClip self=(UnityEngine.AnimationClip)checkSelf(l);
@@ -276,6 +289,7 @@ public class Lua_UnityEngine_AnimationClip : LuaObject {
 		addMember(l,"localBounds",get_localBounds,set_localBounds,true);
 		addMember(l,"legacy",get_legacy,set_legacy,true);
 		addMember(l,"humanMotion",get_humanMotion,null,true);
+		addMember(l,"empty",get_empty,null,true);
 		addMember(l,"events",get_events,set_events,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.AnimationClip),typeof(UnityEngine.Motion));
 	}

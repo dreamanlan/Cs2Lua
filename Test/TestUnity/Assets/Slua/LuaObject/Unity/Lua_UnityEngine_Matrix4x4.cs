@@ -8,9 +8,32 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 	static public int constructor(IntPtr l) {
 		try {
 			UnityEngine.Matrix4x4 o;
-			o=new UnityEngine.Matrix4x4();
+			UnityEngine.Vector4 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Vector4 a2;
+			checkType(l,3,out a2);
+			UnityEngine.Vector4 a3;
+			checkType(l,4,out a3);
+			UnityEngine.Vector4 a4;
+			checkType(l,5,out a4);
+			o=new UnityEngine.Matrix4x4(a1,a2,a3,a4);
 			pushValue(l,true);
 			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ValidTRS(IntPtr l) {
+		try {
+			UnityEngine.Matrix4x4 self;
+			checkValueType(l,1,out self);
+			var ret=self.ValidTRS();
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -163,6 +186,23 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int TransformPlane(IntPtr l) {
+		try {
+			UnityEngine.Matrix4x4 self;
+			checkValueType(l,1,out self);
+			UnityEngine.Plane a1;
+			checkValueType(l,2,out a1);
+			var ret=self.TransformPlane(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Inverse_s(IntPtr l) {
 		try {
 			UnityEngine.Matrix4x4 a1;
@@ -292,24 +332,63 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int Frustum_s(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==6){
+				System.Single a1;
+				checkType(l,1,out a1);
+				System.Single a2;
+				checkType(l,2,out a2);
+				System.Single a3;
+				checkType(l,3,out a3);
+				System.Single a4;
+				checkType(l,4,out a4);
+				System.Single a5;
+				checkType(l,5,out a5);
+				System.Single a6;
+				checkType(l,6,out a6);
+				var ret=UnityEngine.Matrix4x4.Frustum(a1,a2,a3,a4,a5,a6);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==1){
+				UnityEngine.FrustumPlanes a1;
+				checkValueType(l,1,out a1);
+				var ret=UnityEngine.Matrix4x4.Frustum(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int op_Multiply(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,1,typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Vector4))){
+			if(matchType(l,argc,1,typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Matrix4x4))){
 				UnityEngine.Matrix4x4 a1;
 				checkValueType(l,1,out a1);
-				UnityEngine.Vector4 a2;
-				checkType(l,2,out a2);
+				UnityEngine.Matrix4x4 a2;
+				checkValueType(l,2,out a2);
 				var ret=a1*a2;
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,1,typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Matrix4x4))){
+			else if(matchType(l,argc,1,typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Vector4))){
 				UnityEngine.Matrix4x4 a1;
 				checkValueType(l,1,out a1);
-				UnityEngine.Matrix4x4 a2;
-				checkValueType(l,2,out a2);
+				UnityEngine.Vector4 a2;
+				checkType(l,2,out a2);
 				var ret=a1*a2;
 				pushValue(l,true);
 				pushValue(l,ret);
@@ -379,6 +458,21 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			UnityEngine.Vector3 a1;
 			checkType(l,1,out a1);
 			var ret=UnityEngine.Matrix4x4.Translate(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Rotate_s(IntPtr l) {
+		try {
+			UnityEngine.Quaternion a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Matrix4x4.Rotate(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -913,6 +1007,34 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_rotation(IntPtr l) {
+		try {
+			UnityEngine.Matrix4x4 self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.rotation);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_lossyScale(IntPtr l) {
+		try {
+			UnityEngine.Matrix4x4 self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.lossyScale);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_isIdentity(IntPtr l) {
 		try {
 			UnityEngine.Matrix4x4 self;
@@ -933,6 +1055,20 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			checkValueType(l,1,out self);
 			pushValue(l,true);
 			pushValue(l,self.determinant);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_decomposeProjection(IntPtr l) {
+		try {
+			UnityEngine.Matrix4x4 self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.decomposeProjection);
 			return 2;
 		}
 		catch(Exception e) {
@@ -1001,6 +1137,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Matrix4x4");
+		addMember(l,ValidTRS);
 		addMember(l,SetTRS);
 		addMember(l,GetColumn);
 		addMember(l,GetRow);
@@ -1009,6 +1146,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 		addMember(l,MultiplyPoint);
 		addMember(l,MultiplyPoint3x4);
 		addMember(l,MultiplyVector);
+		addMember(l,TransformPlane);
 		addMember(l,Inverse_s);
 		addMember(l,Transpose_s);
 		addMember(l,Determinant_s);
@@ -1016,11 +1154,13 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 		addMember(l,Ortho_s);
 		addMember(l,Perspective_s);
 		addMember(l,LookAt_s);
+		addMember(l,Frustum_s);
 		addMember(l,op_Multiply);
 		addMember(l,op_Equality);
 		addMember(l,op_Inequality);
 		addMember(l,Scale_s);
 		addMember(l,Translate_s);
+		addMember(l,Rotate_s);
 		addMember(l,getItem);
 		addMember(l,setItem);
 		addMember(l,"m00",get_m00,set_m00,true);
@@ -1041,8 +1181,11 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 		addMember(l,"m33",get_m33,set_m33,true);
 		addMember(l,"inverse",get_inverse,null,true);
 		addMember(l,"transpose",get_transpose,null,true);
+		addMember(l,"rotation",get_rotation,null,true);
+		addMember(l,"lossyScale",get_lossyScale,null,true);
 		addMember(l,"isIdentity",get_isIdentity,null,true);
 		addMember(l,"determinant",get_determinant,null,true);
+		addMember(l,"decomposeProjection",get_decomposeProjection,null,true);
 		addMember(l,"zero",get_zero,null,false);
 		addMember(l,"identity",get_identity,null,false);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.Matrix4x4),typeof(System.ValueType));

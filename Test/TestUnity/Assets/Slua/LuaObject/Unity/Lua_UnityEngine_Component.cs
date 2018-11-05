@@ -22,18 +22,18 @@ public class Lua_UnityEngine_Component : LuaObject {
 	static public int GetComponent(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,2,typeof(string))){
+			if(matchType(l,argc,2,typeof(System.Type))){
 				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.String a1;
+				System.Type a1;
 				checkType(l,2,out a1);
 				var ret=self.GetComponent(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(System.Type))){
+			else if(matchType(l,argc,2,typeof(string))){
 				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.Type a1;
+				System.String a1;
 				checkType(l,2,out a1);
 				var ret=self.GetComponent(a1);
 				pushValue(l,true);
@@ -53,22 +53,22 @@ public class Lua_UnityEngine_Component : LuaObject {
 	static public int GetComponentInChildren(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.Type a1;
-				checkType(l,2,out a1);
-				var ret=self.GetComponentInChildren(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
+			if(argc==3){
 				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
 				System.Type a1;
 				checkType(l,2,out a1);
 				System.Boolean a2;
 				checkType(l,3,out a2);
 				var ret=self.GetComponentInChildren(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==2){
+				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				var ret=self.GetComponentInChildren(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -86,22 +86,22 @@ public class Lua_UnityEngine_Component : LuaObject {
 	static public int GetComponentsInChildren(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.Type a1;
-				checkType(l,2,out a1);
-				var ret=self.GetComponentsInChildren(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
+			if(argc==3){
 				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
 				System.Type a1;
 				checkType(l,2,out a1);
 				System.Boolean a2;
 				checkType(l,3,out a2);
 				var ret=self.GetComponentsInChildren(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==2){
+				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				var ret=self.GetComponentsInChildren(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -135,22 +135,22 @@ public class Lua_UnityEngine_Component : LuaObject {
 	static public int GetComponentsInParent(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.Type a1;
-				checkType(l,2,out a1);
-				var ret=self.GetComponentsInParent(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
+			if(argc==3){
 				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
 				System.Type a1;
 				checkType(l,2,out a1);
 				System.Boolean a2;
 				checkType(l,3,out a2);
 				var ret=self.GetComponentsInParent(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==2){
+				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				var ret=self.GetComponentsInParent(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -168,16 +168,7 @@ public class Lua_UnityEngine_Component : LuaObject {
 	static public int GetComponents(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.Type a1;
-				checkType(l,2,out a1);
-				var ret=self.GetComponents(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
+			if(argc==3){
 				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
 				System.Type a1;
 				checkType(l,2,out a1);
@@ -186,6 +177,15 @@ public class Lua_UnityEngine_Component : LuaObject {
 				self.GetComponents(a1,a2);
 				pushValue(l,true);
 				return 1;
+			}
+			else if(argc==2){
+				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+				System.Type a1;
+				checkType(l,2,out a1);
+				var ret=self.GetComponents(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
 			}
 			pushValue(l,false);
 			LuaDLL.lua_pushstring(l,"No matched override function to call");
@@ -216,21 +216,15 @@ public class Lua_UnityEngine_Component : LuaObject {
 	static public int SendMessageUpwards(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==4){
 				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
 				System.String a1;
 				checkType(l,2,out a1);
-				self.SendMessageUpwards(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l,argc,2,typeof(string),typeof(UnityEngine.SendMessageOptions))){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.String a1;
-				checkType(l,2,out a1);
-				UnityEngine.SendMessageOptions a2;
-				checkEnum(l,3,out a2);
-				self.SendMessageUpwards(a1,a2);
+				System.Object a2;
+				checkType(l,3,out a2);
+				UnityEngine.SendMessageOptions a3;
+				checkEnum(l,4,out a3);
+				self.SendMessageUpwards(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
@@ -244,15 +238,21 @@ public class Lua_UnityEngine_Component : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==4){
+			else if(matchType(l,argc,2,typeof(string),typeof(UnityEngine.SendMessageOptions))){
 				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
 				System.String a1;
 				checkType(l,2,out a1);
-				System.Object a2;
-				checkType(l,3,out a2);
-				UnityEngine.SendMessageOptions a3;
-				checkEnum(l,4,out a3);
-				self.SendMessageUpwards(a1,a2,a3);
+				UnityEngine.SendMessageOptions a2;
+				checkEnum(l,3,out a2);
+				self.SendMessageUpwards(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==2){
+				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				self.SendMessageUpwards(a1);
 				pushValue(l,true);
 				return 1;
 			}
@@ -269,21 +269,15 @@ public class Lua_UnityEngine_Component : LuaObject {
 	static public int SendMessage(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==4){
 				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
 				System.String a1;
 				checkType(l,2,out a1);
-				self.SendMessage(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l,argc,2,typeof(string),typeof(UnityEngine.SendMessageOptions))){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.String a1;
-				checkType(l,2,out a1);
-				UnityEngine.SendMessageOptions a2;
-				checkEnum(l,3,out a2);
-				self.SendMessage(a1,a2);
+				System.Object a2;
+				checkType(l,3,out a2);
+				UnityEngine.SendMessageOptions a3;
+				checkEnum(l,4,out a3);
+				self.SendMessage(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
@@ -297,15 +291,21 @@ public class Lua_UnityEngine_Component : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==4){
+			else if(matchType(l,argc,2,typeof(string),typeof(UnityEngine.SendMessageOptions))){
 				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
 				System.String a1;
 				checkType(l,2,out a1);
-				System.Object a2;
-				checkType(l,3,out a2);
-				UnityEngine.SendMessageOptions a3;
-				checkEnum(l,4,out a3);
-				self.SendMessage(a1,a2,a3);
+				UnityEngine.SendMessageOptions a2;
+				checkEnum(l,3,out a2);
+				self.SendMessage(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==2){
+				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				self.SendMessage(a1);
 				pushValue(l,true);
 				return 1;
 			}
@@ -322,21 +322,15 @@ public class Lua_UnityEngine_Component : LuaObject {
 	static public int BroadcastMessage(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==4){
 				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
 				System.String a1;
 				checkType(l,2,out a1);
-				self.BroadcastMessage(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l,argc,2,typeof(string),typeof(UnityEngine.SendMessageOptions))){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.String a1;
-				checkType(l,2,out a1);
-				UnityEngine.SendMessageOptions a2;
-				checkEnum(l,3,out a2);
-				self.BroadcastMessage(a1,a2);
+				System.Object a2;
+				checkType(l,3,out a2);
+				UnityEngine.SendMessageOptions a3;
+				checkEnum(l,4,out a3);
+				self.BroadcastMessage(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
@@ -350,15 +344,21 @@ public class Lua_UnityEngine_Component : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==4){
+			else if(matchType(l,argc,2,typeof(string),typeof(UnityEngine.SendMessageOptions))){
 				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
 				System.String a1;
 				checkType(l,2,out a1);
-				System.Object a2;
-				checkType(l,3,out a2);
-				UnityEngine.SendMessageOptions a3;
-				checkEnum(l,4,out a3);
-				self.BroadcastMessage(a1,a2,a3);
+				UnityEngine.SendMessageOptions a2;
+				checkEnum(l,3,out a2);
+				self.BroadcastMessage(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==2){
+				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				self.BroadcastMessage(a1);
 				pushValue(l,true);
 				return 1;
 			}

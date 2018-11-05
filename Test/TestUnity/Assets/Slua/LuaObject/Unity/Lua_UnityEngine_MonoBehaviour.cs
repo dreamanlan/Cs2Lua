@@ -44,17 +44,17 @@ public class Lua_UnityEngine_MonoBehaviour : LuaObject {
 	static public int CancelInvoke(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
-				UnityEngine.MonoBehaviour self=(UnityEngine.MonoBehaviour)checkSelf(l);
-				self.CancelInvoke();
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
+			if(argc==2){
 				UnityEngine.MonoBehaviour self=(UnityEngine.MonoBehaviour)checkSelf(l);
 				System.String a1;
 				checkType(l,2,out a1);
 				self.CancelInvoke(a1);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==1){
+				UnityEngine.MonoBehaviour self=(UnityEngine.MonoBehaviour)checkSelf(l);
+				self.CancelInvoke();
 				pushValue(l,true);
 				return 1;
 			}
@@ -71,18 +71,18 @@ public class Lua_UnityEngine_MonoBehaviour : LuaObject {
 	static public int IsInvoking(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
-				UnityEngine.MonoBehaviour self=(UnityEngine.MonoBehaviour)checkSelf(l);
-				var ret=self.IsInvoking();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
+			if(argc==2){
 				UnityEngine.MonoBehaviour self=(UnityEngine.MonoBehaviour)checkSelf(l);
 				System.String a1;
 				checkType(l,2,out a1);
 				var ret=self.IsInvoking(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==1){
+				UnityEngine.MonoBehaviour self=(UnityEngine.MonoBehaviour)checkSelf(l);
+				var ret=self.IsInvoking();
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -100,11 +100,13 @@ public class Lua_UnityEngine_MonoBehaviour : LuaObject {
 	static public int StartCoroutine(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,2,typeof(string))){
+			if(argc==3){
 				UnityEngine.MonoBehaviour self=(UnityEngine.MonoBehaviour)checkSelf(l);
 				System.String a1;
 				checkType(l,2,out a1);
-				var ret=self.StartCoroutine(a1);
+				System.Object a2;
+				checkType(l,3,out a2);
+				var ret=self.StartCoroutine(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -118,13 +120,11 @@ public class Lua_UnityEngine_MonoBehaviour : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==3){
+			else if(matchType(l,argc,2,typeof(string))){
 				UnityEngine.MonoBehaviour self=(UnityEngine.MonoBehaviour)checkSelf(l);
 				System.String a1;
 				checkType(l,2,out a1);
-				System.Object a2;
-				checkType(l,3,out a2);
-				var ret=self.StartCoroutine(a1,a2);
+				var ret=self.StartCoroutine(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -142,9 +142,9 @@ public class Lua_UnityEngine_MonoBehaviour : LuaObject {
 	static public int StopCoroutine(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,2,typeof(UnityEngine.Coroutine))){
+			if(matchType(l,argc,2,typeof(string))){
 				UnityEngine.MonoBehaviour self=(UnityEngine.MonoBehaviour)checkSelf(l);
-				UnityEngine.Coroutine a1;
+				System.String a1;
 				checkType(l,2,out a1);
 				self.StopCoroutine(a1);
 				pushValue(l,true);
@@ -158,9 +158,9 @@ public class Lua_UnityEngine_MonoBehaviour : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l,argc,2,typeof(string))){
+			else if(matchType(l,argc,2,typeof(UnityEngine.Coroutine))){
 				UnityEngine.MonoBehaviour self=(UnityEngine.MonoBehaviour)checkSelf(l);
-				System.String a1;
+				UnityEngine.Coroutine a1;
 				checkType(l,2,out a1);
 				self.StopCoroutine(a1);
 				pushValue(l,true);

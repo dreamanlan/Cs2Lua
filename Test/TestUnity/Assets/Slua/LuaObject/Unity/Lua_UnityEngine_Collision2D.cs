@@ -19,6 +19,22 @@ public class Lua_UnityEngine_Collision2D : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int GetContacts(IntPtr l) {
+		try {
+			UnityEngine.Collision2D self=(UnityEngine.Collision2D)checkSelf(l);
+			UnityEngine.ContactPoint2D[] a1;
+			checkArray(l,2,out a1);
+			var ret=self.GetContacts(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_collider(IntPtr l) {
 		try {
 			UnityEngine.Collision2D self=(UnityEngine.Collision2D)checkSelf(l);
@@ -137,6 +153,7 @@ public class Lua_UnityEngine_Collision2D : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Collision2D");
+		addMember(l,GetContacts);
 		addMember(l,"collider",get_collider,null,true);
 		addMember(l,"otherCollider",get_otherCollider,null,true);
 		addMember(l,"rigidbody",get_rigidbody,null,true);

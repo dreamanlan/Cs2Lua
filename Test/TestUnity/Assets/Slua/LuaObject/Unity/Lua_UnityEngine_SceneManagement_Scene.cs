@@ -37,15 +37,7 @@ public class Lua_UnityEngine_SceneManagement_Scene : LuaObject {
 	static public int GetRootGameObjects(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
-				UnityEngine.SceneManagement.Scene self;
-				checkValueType(l,1,out self);
-				var ret=self.GetRootGameObjects();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
+			if(argc==2){
 				UnityEngine.SceneManagement.Scene self;
 				checkValueType(l,1,out self);
 				System.Collections.Generic.List<UnityEngine.GameObject> a1;
@@ -54,6 +46,14 @@ public class Lua_UnityEngine_SceneManagement_Scene : LuaObject {
 				pushValue(l,true);
 				setBack(l,self);
 				return 1;
+			}
+			else if(argc==1){
+				UnityEngine.SceneManagement.Scene self;
+				checkValueType(l,1,out self);
+				var ret=self.GetRootGameObjects();
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
 			}
 			pushValue(l,false);
 			LuaDLL.lua_pushstring(l,"No matched override function to call");

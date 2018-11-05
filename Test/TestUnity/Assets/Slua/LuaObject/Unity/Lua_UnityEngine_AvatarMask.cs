@@ -55,21 +55,21 @@ public class Lua_UnityEngine_AvatarMask : LuaObject {
 	static public int AddTransformPath(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
-				UnityEngine.AvatarMask self=(UnityEngine.AvatarMask)checkSelf(l);
-				UnityEngine.Transform a1;
-				checkType(l,2,out a1);
-				self.AddTransformPath(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
+			if(argc==3){
 				UnityEngine.AvatarMask self=(UnityEngine.AvatarMask)checkSelf(l);
 				UnityEngine.Transform a1;
 				checkType(l,2,out a1);
 				System.Boolean a2;
 				checkType(l,3,out a2);
 				self.AddTransformPath(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==2){
+				UnityEngine.AvatarMask self=(UnityEngine.AvatarMask)checkSelf(l);
+				UnityEngine.Transform a1;
+				checkType(l,2,out a1);
+				self.AddTransformPath(a1);
 				pushValue(l,true);
 				return 1;
 			}
@@ -86,21 +86,21 @@ public class Lua_UnityEngine_AvatarMask : LuaObject {
 	static public int RemoveTransformPath(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
-				UnityEngine.AvatarMask self=(UnityEngine.AvatarMask)checkSelf(l);
-				UnityEngine.Transform a1;
-				checkType(l,2,out a1);
-				self.RemoveTransformPath(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
+			if(argc==3){
 				UnityEngine.AvatarMask self=(UnityEngine.AvatarMask)checkSelf(l);
 				UnityEngine.Transform a1;
 				checkType(l,2,out a1);
 				System.Boolean a2;
 				checkType(l,3,out a2);
 				self.RemoveTransformPath(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==2){
+				UnityEngine.AvatarMask self=(UnityEngine.AvatarMask)checkSelf(l);
+				UnityEngine.Transform a1;
+				checkType(l,2,out a1);
+				self.RemoveTransformPath(a1);
 				pushValue(l,true);
 				return 1;
 			}

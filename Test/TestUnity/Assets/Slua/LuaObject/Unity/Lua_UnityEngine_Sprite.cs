@@ -36,36 +36,73 @@ public class Lua_UnityEngine_Sprite : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int GetPhysicsShapeCount(IntPtr l) {
+		try {
+			UnityEngine.Sprite self=(UnityEngine.Sprite)checkSelf(l);
+			var ret=self.GetPhysicsShapeCount();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetPhysicsShapePointCount(IntPtr l) {
+		try {
+			UnityEngine.Sprite self=(UnityEngine.Sprite)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetPhysicsShapePointCount(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetPhysicsShape(IntPtr l) {
+		try {
+			UnityEngine.Sprite self=(UnityEngine.Sprite)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Collections.Generic.List<UnityEngine.Vector2> a2;
+			checkType(l,3,out a2);
+			var ret=self.GetPhysicsShape(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int OverridePhysicsShape(IntPtr l) {
+		try {
+			UnityEngine.Sprite self=(UnityEngine.Sprite)checkSelf(l);
+			System.Collections.Generic.IList<UnityEngine.Vector2[]> a1;
+			checkType(l,2,out a1);
+			self.OverridePhysicsShape(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Create_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				UnityEngine.Texture2D a1;
-				checkType(l,1,out a1);
-				UnityEngine.Rect a2;
-				checkValueType(l,2,out a2);
-				UnityEngine.Vector2 a3;
-				checkType(l,3,out a3);
-				var ret=UnityEngine.Sprite.Create(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==4){
-				UnityEngine.Texture2D a1;
-				checkType(l,1,out a1);
-				UnityEngine.Rect a2;
-				checkValueType(l,2,out a2);
-				UnityEngine.Vector2 a3;
-				checkType(l,3,out a3);
-				System.Single a4;
-				checkType(l,4,out a4);
-				var ret=UnityEngine.Sprite.Create(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==5){
+			if(argc==8){
 				UnityEngine.Texture2D a1;
 				checkType(l,1,out a1);
 				UnityEngine.Rect a2;
@@ -76,7 +113,33 @@ public class Lua_UnityEngine_Sprite : LuaObject {
 				checkType(l,4,out a4);
 				System.UInt32 a5;
 				checkType(l,5,out a5);
-				var ret=UnityEngine.Sprite.Create(a1,a2,a3,a4,a5);
+				UnityEngine.SpriteMeshType a6;
+				checkEnum(l,6,out a6);
+				UnityEngine.Vector4 a7;
+				checkType(l,7,out a7);
+				System.Boolean a8;
+				checkType(l,8,out a8);
+				var ret=UnityEngine.Sprite.Create(a1,a2,a3,a4,a5,a6,a7,a8);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==7){
+				UnityEngine.Texture2D a1;
+				checkType(l,1,out a1);
+				UnityEngine.Rect a2;
+				checkValueType(l,2,out a2);
+				UnityEngine.Vector2 a3;
+				checkType(l,3,out a3);
+				System.Single a4;
+				checkType(l,4,out a4);
+				System.UInt32 a5;
+				checkType(l,5,out a5);
+				UnityEngine.SpriteMeshType a6;
+				checkEnum(l,6,out a6);
+				UnityEngine.Vector4 a7;
+				checkType(l,7,out a7);
+				var ret=UnityEngine.Sprite.Create(a1,a2,a3,a4,a5,a6,a7);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -99,7 +162,7 @@ public class Lua_UnityEngine_Sprite : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==7){
+			else if(argc==5){
 				UnityEngine.Texture2D a1;
 				checkType(l,1,out a1);
 				UnityEngine.Rect a2;
@@ -110,11 +173,33 @@ public class Lua_UnityEngine_Sprite : LuaObject {
 				checkType(l,4,out a4);
 				System.UInt32 a5;
 				checkType(l,5,out a5);
-				UnityEngine.SpriteMeshType a6;
-				checkEnum(l,6,out a6);
-				UnityEngine.Vector4 a7;
-				checkType(l,7,out a7);
-				var ret=UnityEngine.Sprite.Create(a1,a2,a3,a4,a5,a6,a7);
+				var ret=UnityEngine.Sprite.Create(a1,a2,a3,a4,a5);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==4){
+				UnityEngine.Texture2D a1;
+				checkType(l,1,out a1);
+				UnityEngine.Rect a2;
+				checkValueType(l,2,out a2);
+				UnityEngine.Vector2 a3;
+				checkType(l,3,out a3);
+				System.Single a4;
+				checkType(l,4,out a4);
+				var ret=UnityEngine.Sprite.Create(a1,a2,a3,a4);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==3){
+				UnityEngine.Texture2D a1;
+				checkType(l,1,out a1);
+				UnityEngine.Rect a2;
+				checkValueType(l,2,out a2);
+				UnityEngine.Vector2 a3;
+				checkType(l,3,out a3);
+				var ret=UnityEngine.Sprite.Create(a1,a2,a3);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -147,19 +232,6 @@ public class Lua_UnityEngine_Sprite : LuaObject {
 			UnityEngine.Sprite self=(UnityEngine.Sprite)checkSelf(l);
 			pushValue(l,true);
 			pushValue(l,self.rect);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_pixelsPerUnit(IntPtr l) {
-		try {
-			UnityEngine.Sprite self=(UnityEngine.Sprite)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.pixelsPerUnit);
 			return 2;
 		}
 		catch(Exception e) {
@@ -322,14 +394,30 @@ public class Lua_UnityEngine_Sprite : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_pixelsPerUnit(IntPtr l) {
+		try {
+			UnityEngine.Sprite self=(UnityEngine.Sprite)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.pixelsPerUnit);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Sprite");
 		addMember(l,OverrideGeometry);
+		addMember(l,GetPhysicsShapeCount);
+		addMember(l,GetPhysicsShapePointCount);
+		addMember(l,GetPhysicsShape);
+		addMember(l,OverridePhysicsShape);
 		addMember(l,Create_s);
 		addMember(l,"bounds",get_bounds,null,true);
 		addMember(l,"rect",get_rect,null,true);
-		addMember(l,"pixelsPerUnit",get_pixelsPerUnit,null,true);
 		addMember(l,"texture",get_texture,null,true);
 		addMember(l,"associatedAlphaSplitTexture",get_associatedAlphaSplitTexture,null,true);
 		addMember(l,"textureRect",get_textureRect,null,true);
@@ -342,6 +430,7 @@ public class Lua_UnityEngine_Sprite : LuaObject {
 		addMember(l,"vertices",get_vertices,null,true);
 		addMember(l,"triangles",get_triangles,null,true);
 		addMember(l,"uv",get_uv,null,true);
+		addMember(l,"pixelsPerUnit",get_pixelsPerUnit,null,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.Sprite),typeof(UnityEngine.Object));
 	}
 }

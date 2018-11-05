@@ -38,20 +38,20 @@ public class Lua_UnityEngine_PlayerPrefs : LuaObject {
 	static public int GetInt_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
-				System.String a1;
-				checkType(l,1,out a1);
-				var ret=UnityEngine.PlayerPrefs.GetInt(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
+			if(argc==2){
 				System.String a1;
 				checkType(l,1,out a1);
 				System.Int32 a2;
 				checkType(l,2,out a2);
 				var ret=UnityEngine.PlayerPrefs.GetInt(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==1){
+				System.String a1;
+				checkType(l,1,out a1);
+				var ret=UnityEngine.PlayerPrefs.GetInt(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -85,20 +85,20 @@ public class Lua_UnityEngine_PlayerPrefs : LuaObject {
 	static public int GetFloat_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
-				System.String a1;
-				checkType(l,1,out a1);
-				var ret=UnityEngine.PlayerPrefs.GetFloat(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
+			if(argc==2){
 				System.String a1;
 				checkType(l,1,out a1);
 				System.Single a2;
 				checkType(l,2,out a2);
 				var ret=UnityEngine.PlayerPrefs.GetFloat(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==1){
+				System.String a1;
+				checkType(l,1,out a1);
+				var ret=UnityEngine.PlayerPrefs.GetFloat(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -132,20 +132,20 @@ public class Lua_UnityEngine_PlayerPrefs : LuaObject {
 	static public int GetString_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
-				System.String a1;
-				checkType(l,1,out a1);
-				var ret=UnityEngine.PlayerPrefs.GetString(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
+			if(argc==2){
 				System.String a1;
 				checkType(l,1,out a1);
 				System.String a2;
 				checkType(l,2,out a2);
 				var ret=UnityEngine.PlayerPrefs.GetString(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==1){
+				System.String a1;
+				checkType(l,1,out a1);
+				var ret=UnityEngine.PlayerPrefs.GetString(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;

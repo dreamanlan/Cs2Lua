@@ -8,18 +8,18 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 	static public int RenderProbe(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
-				UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
-				var ret=self.RenderProbe();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
+			if(argc==2){
 				UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
 				UnityEngine.RenderTexture a1;
 				checkType(l,2,out a1);
 				var ret=self.RenderProbe(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==1){
+				UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
+				var ret=self.RenderProbe();
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;

@@ -58,16 +58,16 @@ public class Lua_UnityEngine_Application : LuaObject {
 	static public int GetStreamProgressForLevel_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,1,typeof(string))){
-				System.String a1;
+			if(matchType(l,argc,1,typeof(int))){
+				System.Int32 a1;
 				checkType(l,1,out a1);
 				var ret=UnityEngine.Application.GetStreamProgressForLevel(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,1,typeof(int))){
-				System.Int32 a1;
+			else if(matchType(l,argc,1,typeof(string))){
+				System.String a1;
 				checkType(l,1,out a1);
 				var ret=UnityEngine.Application.GetStreamProgressForLevel(a1);
 				pushValue(l,true);
@@ -87,16 +87,16 @@ public class Lua_UnityEngine_Application : LuaObject {
 	static public int CanStreamedLevelBeLoaded_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,1,typeof(string))){
-				System.String a1;
+			if(matchType(l,argc,1,typeof(int))){
+				System.Int32 a1;
 				checkType(l,1,out a1);
 				var ret=UnityEngine.Application.CanStreamedLevelBeLoaded(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,1,typeof(int))){
-				System.Int32 a1;
+			else if(matchType(l,argc,1,typeof(string))){
+				System.String a1;
 				checkType(l,1,out a1);
 				var ret=UnityEngine.Application.CanStreamedLevelBeLoaded(a1);
 				pushValue(l,true);
@@ -126,28 +126,13 @@ public class Lua_UnityEngine_Application : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int CaptureScreenshot_s(IntPtr l) {
+	static public int SetBuildTags_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
-				System.String a1;
-				checkType(l,1,out a1);
-				UnityEngine.Application.CaptureScreenshot(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				System.String a1;
-				checkType(l,1,out a1);
-				System.Int32 a2;
-				checkType(l,2,out a2);
-				UnityEngine.Application.CaptureScreenshot(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			System.String[] a1;
+			checkArray(l,1,out a1);
+			UnityEngine.Application.SetBuildTags(a1);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -161,22 +146,6 @@ public class Lua_UnityEngine_Application : LuaObject {
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int ExternalCall_s(IntPtr l) {
-		try {
-			System.String a1;
-			checkType(l,1,out a1);
-			System.Object[] a2;
-			checkParams(l,2,out a2);
-			UnityEngine.Application.ExternalCall(a1,a2);
-			pushValue(l,true);
-			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -322,18 +291,6 @@ public class Lua_UnityEngine_Application : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_isWebPlayer(IntPtr l) {
-		try {
-			pushValue(l,true);
-			pushValue(l,UnityEngine.Application.isWebPlayer);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_platform(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -448,18 +405,6 @@ public class Lua_UnityEngine_Application : LuaObject {
 		try {
 			pushValue(l,true);
 			pushValue(l,UnityEngine.Application.temporaryCachePath);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_srcValue(IntPtr l) {
-		try {
-			pushValue(l,true);
-			pushValue(l,UnityEngine.Application.srcValue);
 			return 2;
 		}
 		catch(Exception e) {
@@ -695,9 +640,8 @@ public class Lua_UnityEngine_Application : LuaObject {
 		addMember(l,GetStreamProgressForLevel_s);
 		addMember(l,CanStreamedLevelBeLoaded_s);
 		addMember(l,GetBuildTags_s);
-		addMember(l,CaptureScreenshot_s);
+		addMember(l,SetBuildTags_s);
 		addMember(l,HasProLicense_s);
-		addMember(l,ExternalCall_s);
 		addMember(l,RequestAdvertisingIdentifierAsync_s);
 		addMember(l,OpenURL_s);
 		addMember(l,GetStackTraceLogType_s);
@@ -708,7 +652,6 @@ public class Lua_UnityEngine_Application : LuaObject {
 		addMember(l,"isPlaying",get_isPlaying,null,false);
 		addMember(l,"isFocused",get_isFocused,null,false);
 		addMember(l,"isEditor",get_isEditor,null,false);
-		addMember(l,"isWebPlayer",get_isWebPlayer,null,false);
 		addMember(l,"platform",get_platform,null,false);
 		addMember(l,"buildGUID",get_buildGUID,null,false);
 		addMember(l,"isMobilePlatform",get_isMobilePlatform,null,false);
@@ -718,7 +661,6 @@ public class Lua_UnityEngine_Application : LuaObject {
 		addMember(l,"streamingAssetsPath",get_streamingAssetsPath,null,false);
 		addMember(l,"persistentDataPath",get_persistentDataPath,null,false);
 		addMember(l,"temporaryCachePath",get_temporaryCachePath,null,false);
-		addMember(l,"srcValue",get_srcValue,null,false);
 		addMember(l,"absoluteURL",get_absoluteURL,null,false);
 		addMember(l,"unityVersion",get_unityVersion,null,false);
 		addMember(l,"version",get_version,null,false);

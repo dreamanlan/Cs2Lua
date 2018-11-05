@@ -269,6 +269,90 @@ public class Lua_UnityEngine_Texture : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_wrapModeU(IntPtr l) {
+		try {
+			UnityEngine.Texture self=(UnityEngine.Texture)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.wrapModeU);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_wrapModeU(IntPtr l) {
+		try {
+			UnityEngine.Texture self=(UnityEngine.Texture)checkSelf(l);
+			UnityEngine.TextureWrapMode v;
+			checkEnum(l,2,out v);
+			self.wrapModeU=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_wrapModeV(IntPtr l) {
+		try {
+			UnityEngine.Texture self=(UnityEngine.Texture)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.wrapModeV);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_wrapModeV(IntPtr l) {
+		try {
+			UnityEngine.Texture self=(UnityEngine.Texture)checkSelf(l);
+			UnityEngine.TextureWrapMode v;
+			checkEnum(l,2,out v);
+			self.wrapModeV=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_wrapModeW(IntPtr l) {
+		try {
+			UnityEngine.Texture self=(UnityEngine.Texture)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.wrapModeW);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_wrapModeW(IntPtr l) {
+		try {
+			UnityEngine.Texture self=(UnityEngine.Texture)checkSelf(l);
+			UnityEngine.TextureWrapMode v;
+			checkEnum(l,2,out v);
+			self.wrapModeW=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_mipMapBias(IntPtr l) {
 		try {
 			UnityEngine.Texture self=(UnityEngine.Texture)checkSelf(l);
@@ -308,6 +392,34 @@ public class Lua_UnityEngine_Texture : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_imageContentsHash(IntPtr l) {
+		try {
+			UnityEngine.Texture self=(UnityEngine.Texture)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.imageContentsHash);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_imageContentsHash(IntPtr l) {
+		try {
+			UnityEngine.Texture self=(UnityEngine.Texture)checkSelf(l);
+			UnityEngine.Hash128 v;
+			checkValueType(l,2,out v);
+			self.imageContentsHash=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Texture");
@@ -321,8 +433,12 @@ public class Lua_UnityEngine_Texture : LuaObject {
 		addMember(l,"filterMode",get_filterMode,set_filterMode,true);
 		addMember(l,"anisoLevel",get_anisoLevel,set_anisoLevel,true);
 		addMember(l,"wrapMode",get_wrapMode,set_wrapMode,true);
+		addMember(l,"wrapModeU",get_wrapModeU,set_wrapModeU,true);
+		addMember(l,"wrapModeV",get_wrapModeV,set_wrapModeV,true);
+		addMember(l,"wrapModeW",get_wrapModeW,set_wrapModeW,true);
 		addMember(l,"mipMapBias",get_mipMapBias,set_mipMapBias,true);
 		addMember(l,"texelSize",get_texelSize,null,true);
+		addMember(l,"imageContentsHash",get_imageContentsHash,set_imageContentsHash,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.Texture),typeof(UnityEngine.Object));
 	}
 }

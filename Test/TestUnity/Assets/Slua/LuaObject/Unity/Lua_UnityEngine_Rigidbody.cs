@@ -23,21 +23,17 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 	static public int AddForce(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==5){
 				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				UnityEngine.Vector3 a1;
+				System.Single a1;
 				checkType(l,2,out a1);
-				self.AddForce(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				UnityEngine.ForceMode a2;
-				checkEnum(l,3,out a2);
-				self.AddForce(a1,a2);
+				System.Single a2;
+				checkType(l,3,out a2);
+				System.Single a3;
+				checkType(l,4,out a3);
+				UnityEngine.ForceMode a4;
+				checkEnum(l,5,out a4);
+				self.AddForce(a1,a2,a3,a4);
 				pushValue(l,true);
 				return 1;
 			}
@@ -53,17 +49,21 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==5){
+			else if(argc==3){
 				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				System.Single a1;
+				UnityEngine.Vector3 a1;
 				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				System.Single a3;
-				checkType(l,4,out a3);
-				UnityEngine.ForceMode a4;
-				checkEnum(l,5,out a4);
-				self.AddForce(a1,a2,a3,a4);
+				UnityEngine.ForceMode a2;
+				checkEnum(l,3,out a2);
+				self.AddForce(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==2){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				UnityEngine.Vector3 a1;
+				checkType(l,2,out a1);
+				self.AddForce(a1);
 				pushValue(l,true);
 				return 1;
 			}
@@ -80,21 +80,17 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 	static public int AddRelativeForce(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==5){
 				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				UnityEngine.Vector3 a1;
+				System.Single a1;
 				checkType(l,2,out a1);
-				self.AddRelativeForce(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				UnityEngine.ForceMode a2;
-				checkEnum(l,3,out a2);
-				self.AddRelativeForce(a1,a2);
+				System.Single a2;
+				checkType(l,3,out a2);
+				System.Single a3;
+				checkType(l,4,out a3);
+				UnityEngine.ForceMode a4;
+				checkEnum(l,5,out a4);
+				self.AddRelativeForce(a1,a2,a3,a4);
 				pushValue(l,true);
 				return 1;
 			}
@@ -110,17 +106,21 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==5){
+			else if(argc==3){
 				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				System.Single a1;
+				UnityEngine.Vector3 a1;
 				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				System.Single a3;
-				checkType(l,4,out a3);
-				UnityEngine.ForceMode a4;
-				checkEnum(l,5,out a4);
-				self.AddRelativeForce(a1,a2,a3,a4);
+				UnityEngine.ForceMode a2;
+				checkEnum(l,3,out a2);
+				self.AddRelativeForce(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==2){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				UnityEngine.Vector3 a1;
+				checkType(l,2,out a1);
+				self.AddRelativeForce(a1);
 				pushValue(l,true);
 				return 1;
 			}
@@ -137,21 +137,17 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 	static public int AddTorque(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==5){
 				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				UnityEngine.Vector3 a1;
+				System.Single a1;
 				checkType(l,2,out a1);
-				self.AddTorque(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				UnityEngine.ForceMode a2;
-				checkEnum(l,3,out a2);
-				self.AddTorque(a1,a2);
+				System.Single a2;
+				checkType(l,3,out a2);
+				System.Single a3;
+				checkType(l,4,out a3);
+				UnityEngine.ForceMode a4;
+				checkEnum(l,5,out a4);
+				self.AddTorque(a1,a2,a3,a4);
 				pushValue(l,true);
 				return 1;
 			}
@@ -167,17 +163,21 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==5){
+			else if(argc==3){
 				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				System.Single a1;
+				UnityEngine.Vector3 a1;
 				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				System.Single a3;
-				checkType(l,4,out a3);
-				UnityEngine.ForceMode a4;
-				checkEnum(l,5,out a4);
-				self.AddTorque(a1,a2,a3,a4);
+				UnityEngine.ForceMode a2;
+				checkEnum(l,3,out a2);
+				self.AddTorque(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==2){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				UnityEngine.Vector3 a1;
+				checkType(l,2,out a1);
+				self.AddTorque(a1);
 				pushValue(l,true);
 				return 1;
 			}
@@ -194,21 +194,17 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 	static public int AddRelativeTorque(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==5){
 				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				UnityEngine.Vector3 a1;
+				System.Single a1;
 				checkType(l,2,out a1);
-				self.AddRelativeTorque(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				UnityEngine.ForceMode a2;
-				checkEnum(l,3,out a2);
-				self.AddRelativeTorque(a1,a2);
+				System.Single a2;
+				checkType(l,3,out a2);
+				System.Single a3;
+				checkType(l,4,out a3);
+				UnityEngine.ForceMode a4;
+				checkEnum(l,5,out a4);
+				self.AddRelativeTorque(a1,a2,a3,a4);
 				pushValue(l,true);
 				return 1;
 			}
@@ -224,17 +220,21 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==5){
+			else if(argc==3){
 				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				System.Single a1;
+				UnityEngine.Vector3 a1;
 				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				System.Single a3;
-				checkType(l,4,out a3);
-				UnityEngine.ForceMode a4;
-				checkEnum(l,5,out a4);
-				self.AddRelativeTorque(a1,a2,a3,a4);
+				UnityEngine.ForceMode a2;
+				checkEnum(l,3,out a2);
+				self.AddRelativeTorque(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==2){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				UnityEngine.Vector3 a1;
+				checkType(l,2,out a1);
+				self.AddRelativeTorque(a1);
 				pushValue(l,true);
 				return 1;
 			}
@@ -251,17 +251,7 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 	static public int AddForceAtPosition(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				UnityEngine.Vector3 a2;
-				checkType(l,3,out a2);
-				self.AddForceAtPosition(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==4){
+			if(argc==4){
 				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
 				UnityEngine.Vector3 a1;
 				checkType(l,2,out a1);
@@ -270,6 +260,16 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 				UnityEngine.ForceMode a3;
 				checkEnum(l,4,out a3);
 				self.AddForceAtPosition(a1,a2,a3);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==3){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				UnityEngine.Vector3 a1;
+				checkType(l,2,out a1);
+				UnityEngine.Vector3 a2;
+				checkType(l,3,out a2);
+				self.AddForceAtPosition(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
@@ -286,7 +286,7 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 	static public int AddExplosionForce(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
+			if(argc==6){
 				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
 				System.Single a1;
 				checkType(l,2,out a1);
@@ -294,7 +294,11 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 				checkType(l,3,out a2);
 				System.Single a3;
 				checkType(l,4,out a3);
-				self.AddExplosionForce(a1,a2,a3);
+				System.Single a4;
+				checkType(l,5,out a4);
+				UnityEngine.ForceMode a5;
+				checkEnum(l,6,out a5);
+				self.AddExplosionForce(a1,a2,a3,a4,a5);
 				pushValue(l,true);
 				return 1;
 			}
@@ -312,7 +316,7 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==6){
+			else if(argc==4){
 				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
 				System.Single a1;
 				checkType(l,2,out a1);
@@ -320,11 +324,7 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 				checkType(l,3,out a2);
 				System.Single a3;
 				checkType(l,4,out a3);
-				System.Single a4;
-				checkType(l,5,out a4);
-				UnityEngine.ForceMode a5;
-				checkEnum(l,6,out a5);
-				self.AddExplosionForce(a1,a2,a3,a4,a5);
+				self.AddExplosionForce(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
@@ -485,12 +485,16 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 	static public int SweepTest(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
+			if(argc==5){
 				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
 				UnityEngine.Vector3 a1;
 				checkType(l,2,out a1);
 				UnityEngine.RaycastHit a2;
-				var ret=self.SweepTest(a1,out a2);
+				System.Single a3;
+				checkType(l,4,out a3);
+				UnityEngine.QueryTriggerInteraction a4;
+				checkEnum(l,5,out a4);
+				var ret=self.SweepTest(a1,out a2,a3,a4);
 				pushValue(l,true);
 				pushValue(l,ret);
 				pushValue(l,a2);
@@ -509,16 +513,12 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 				pushValue(l,a2);
 				return 3;
 			}
-			else if(argc==5){
+			else if(argc==3){
 				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
 				UnityEngine.Vector3 a1;
 				checkType(l,2,out a1);
 				UnityEngine.RaycastHit a2;
-				System.Single a3;
-				checkType(l,4,out a3);
-				UnityEngine.QueryTriggerInteraction a4;
-				checkEnum(l,5,out a4);
-				var ret=self.SweepTest(a1,out a2,a3,a4);
+				var ret=self.SweepTest(a1,out a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				pushValue(l,a2);
@@ -537,11 +537,15 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 	static public int SweepTestAll(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==4){
 				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
 				UnityEngine.Vector3 a1;
 				checkType(l,2,out a1);
-				var ret=self.SweepTestAll(a1);
+				System.Single a2;
+				checkType(l,3,out a2);
+				UnityEngine.QueryTriggerInteraction a3;
+				checkEnum(l,4,out a3);
+				var ret=self.SweepTestAll(a1,a2,a3);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -557,15 +561,11 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==4){
+			else if(argc==2){
 				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
 				UnityEngine.Vector3 a1;
 				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				UnityEngine.QueryTriggerInteraction a3;
-				checkEnum(l,4,out a3);
-				var ret=self.SweepTestAll(a1,a2,a3);
+				var ret=self.SweepTestAll(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;

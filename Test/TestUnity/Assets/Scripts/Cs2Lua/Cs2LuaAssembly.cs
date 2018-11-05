@@ -29,11 +29,11 @@ internal class Cs2LuaAssembly
 #if CS2LUA_DEBUG || UNITY_IOS
         Cs2LuaScript.Program.Init();
 #else
-            Load(Path.Combine(Application.streamingAssetsPath, "Cs2LuaScript.dll"));
-            if (null != m_Assembly) {
-                var type = m_Assembly.GetType("Cs2LuaScript.Program");
-                type.InvokeMember("Init", BindingFlags.Public | BindingFlags.Static | BindingFlags.InvokeMethod, null, null, null);
-            }
+        Load(Path.Combine(Application.streamingAssetsPath, "Cs2LuaScript.dll"));
+        if (null != m_Assembly) {
+            var type = m_Assembly.GetType("Cs2LuaScript.Program");
+            type.InvokeMember("Init", BindingFlags.Public | BindingFlags.Static | BindingFlags.InvokeMethod, null, null, null);
+        }
 #endif
     }
     internal void Load(string assembly)

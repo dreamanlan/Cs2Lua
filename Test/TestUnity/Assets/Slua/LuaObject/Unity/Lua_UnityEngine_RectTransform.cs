@@ -71,6 +71,19 @@ public class Lua_UnityEngine_RectTransform : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int ForceUpdateRectTransforms(IntPtr l) {
+		try {
+			UnityEngine.RectTransform self=(UnityEngine.RectTransform)checkSelf(l);
+			self.ForceUpdateRectTransforms();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_rect(IntPtr l) {
 		try {
 			UnityEngine.RectTransform self=(UnityEngine.RectTransform)checkSelf(l);
@@ -313,6 +326,7 @@ public class Lua_UnityEngine_RectTransform : LuaObject {
 		addMember(l,GetWorldCorners);
 		addMember(l,SetInsetAndSizeFromParentEdge);
 		addMember(l,SetSizeWithCurrentAnchors);
+		addMember(l,ForceUpdateRectTransforms);
 		addMember(l,"rect",get_rect,null,true);
 		addMember(l,"anchorMin",get_anchorMin,set_anchorMin,true);
 		addMember(l,"anchorMax",get_anchorMax,set_anchorMax,true);

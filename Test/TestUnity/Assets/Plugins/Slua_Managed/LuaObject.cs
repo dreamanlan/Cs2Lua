@@ -554,17 +554,16 @@ return index
 
         static void checkMethodValid(LuaCSFunction f)
         {
-#if UNITY_EDITOR
-            if (f != null && !Attribute.IsDefined(f.Method, typeof(MonoPInvokeCallbackAttribute)))
-            {
-				Logger.LogError(string.Format("MonoPInvokeCallbackAttribute not defined for LuaCSFunction {0}.", f.Method));
+            if (SLuaSetting.IsEditor) {
+                if (f != null && !Attribute.IsDefined(f.Method, typeof(MonoPInvokeCallbackAttribute))) {
+                    Logger.LogError(string.Format("MonoPInvokeCallbackAttribute not defined for LuaCSFunction {0}.", f.Method));
+                }
             }
-#endif
         }
 
 		public static void createTypeMetatable(IntPtr l, LuaCSFunction con, Type self, Type parent)
 		{
-			checkMethodValid(con);
+            checkMethodValid(con);
 
 			// set parent
 			bool parentSet = false;
@@ -1065,7 +1064,7 @@ return index
 		{
 			LuaState state = LuaState.get(l);
 
-			LuaDLL.lua_pushvalue(l, p); // push function
+            LuaDLL.lua_pushvalue(l, p); // push function
 
 			int fref = LuaDLL.luaL_ref(l, LuaIndexes.LUA_REGISTRYINDEX); // new ref function
 			LuaDelegate f = new LuaDelegate(l, fref);
@@ -1107,11 +1106,12 @@ return index
 			}
 			else
 			{
-				Array array = checkObj(l, p) as Array;
-				if (array == null)
+                var obj = checkObj(l, p);
+				Array array = obj as Array;
+                if (null != obj && null == array)
 					throw new ArgumentException ("expect array");
 				ta = array as T[];
-				return ta!=null;
+                return ta != null;
 			}
 		}
 
@@ -1354,8 +1354,7 @@ return index
 					return null;
 			}
 		}
-
-
+        
 		public static void pushValue(IntPtr l, object o)
 		{
 			pushVar(l, o);
@@ -1391,8 +1390,6 @@ return index
 				pushObject(l, o);
          
 		}
-
-
 
 		public static T checkSelf<T>(IntPtr l)
 		{
@@ -1460,13 +1457,20 @@ return index
 
 					LuaDLL.lua_rawgeti(l, p, 1);
 					LuaDLL.lua_pushstring(l, "+=");
-					if (LuaDLL.lua_rawequal(l, -1, -2) == 1)
-						op = 1;
-					else
-						op = 2;
+					LuaDLL.lua_pushstring(l, "-=");
+                    if (LuaDLL.lua_rawequal(l, -2, -3) == 1)
+                        op = 1;
+                    else if (LuaDLL.lua_rawequal(l, -1, -3) == 1)
+                        op = 2;
+                    else
+                        op = 0;
 
-					LuaDLL.lua_pop(l, 2);
-					LuaDLL.lua_rawgeti(l, p, 2);
+					LuaDLL.lua_pop(l, 3);
+                    if (op == 0) {
+                        LuaDLL.lua_rawgeti(l, p, 1);
+                    } else {
+                        LuaDLL.lua_rawgeti(l, p, 2);
+                    }
 					break;
 				case LuaTypes.LUA_TFUNCTION:
 					LuaDLL.lua_pushvalue(l, p);
@@ -1476,8 +1480,7 @@ return index
 			}
 			return op;
 		}
-
-
+        
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 		static public int noConstructor(IntPtr l)
 		{
@@ -1553,5 +1556,4 @@ return index
             }
 	    }
 	}
-
 }

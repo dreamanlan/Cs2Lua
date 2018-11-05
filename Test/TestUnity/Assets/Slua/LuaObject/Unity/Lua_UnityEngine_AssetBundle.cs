@@ -38,11 +38,13 @@ public class Lua_UnityEngine_AssetBundle : LuaObject {
 	static public int LoadAsset(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,2,typeof(string))){
+			if(argc==3){
 				UnityEngine.AssetBundle self=(UnityEngine.AssetBundle)checkSelf(l);
 				System.String a1;
 				checkType(l,2,out a1);
-				var ret=self.LoadAsset<UnityEngine.Object>(a1);
+				System.Type a2;
+				checkType(l,3,out a2);
+				var ret=self.LoadAsset(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -56,13 +58,11 @@ public class Lua_UnityEngine_AssetBundle : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==3){
+			else if(matchType(l,argc,2,typeof(string))){
 				UnityEngine.AssetBundle self=(UnityEngine.AssetBundle)checkSelf(l);
 				System.String a1;
 				checkType(l,2,out a1);
-				System.Type a2;
-				checkType(l,3,out a2);
-				var ret=self.LoadAsset(a1,a2);
+				var ret=self.LoadAsset<UnityEngine.Object>(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -80,22 +80,22 @@ public class Lua_UnityEngine_AssetBundle : LuaObject {
 	static public int LoadAssetAsync(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
-				UnityEngine.AssetBundle self=(UnityEngine.AssetBundle)checkSelf(l);
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=self.LoadAssetAsync(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
+			if(argc==3){
 				UnityEngine.AssetBundle self=(UnityEngine.AssetBundle)checkSelf(l);
 				System.String a1;
 				checkType(l,2,out a1);
 				System.Type a2;
 				checkType(l,3,out a2);
 				var ret=self.LoadAssetAsync(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==2){
+				UnityEngine.AssetBundle self=(UnityEngine.AssetBundle)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				var ret=self.LoadAssetAsync(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -113,11 +113,13 @@ public class Lua_UnityEngine_AssetBundle : LuaObject {
 	static public int LoadAssetWithSubAssets(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,2,typeof(string))){
+			if(argc==3){
 				UnityEngine.AssetBundle self=(UnityEngine.AssetBundle)checkSelf(l);
 				System.String a1;
 				checkType(l,2,out a1);
-				var ret=self.LoadAssetWithSubAssets<UnityEngine.Object>(a1);
+				System.Type a2;
+				checkType(l,3,out a2);
+				var ret=self.LoadAssetWithSubAssets(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -131,13 +133,11 @@ public class Lua_UnityEngine_AssetBundle : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==3){
+			else if(matchType(l,argc,2,typeof(string))){
 				UnityEngine.AssetBundle self=(UnityEngine.AssetBundle)checkSelf(l);
 				System.String a1;
 				checkType(l,2,out a1);
-				System.Type a2;
-				checkType(l,3,out a2);
-				var ret=self.LoadAssetWithSubAssets(a1,a2);
+				var ret=self.LoadAssetWithSubAssets<UnityEngine.Object>(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -155,22 +155,22 @@ public class Lua_UnityEngine_AssetBundle : LuaObject {
 	static public int LoadAssetWithSubAssetsAsync(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
-				UnityEngine.AssetBundle self=(UnityEngine.AssetBundle)checkSelf(l);
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=self.LoadAssetWithSubAssetsAsync(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
+			if(argc==3){
 				UnityEngine.AssetBundle self=(UnityEngine.AssetBundle)checkSelf(l);
 				System.String a1;
 				checkType(l,2,out a1);
 				System.Type a2;
 				checkType(l,3,out a2);
 				var ret=self.LoadAssetWithSubAssetsAsync(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==2){
+				UnityEngine.AssetBundle self=(UnityEngine.AssetBundle)checkSelf(l);
+				System.String a1;
+				checkType(l,2,out a1);
+				var ret=self.LoadAssetWithSubAssetsAsync(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -188,9 +188,11 @@ public class Lua_UnityEngine_AssetBundle : LuaObject {
 	static public int LoadAllAssets(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,2)){
+			if(argc==2){
 				UnityEngine.AssetBundle self=(UnityEngine.AssetBundle)checkSelf(l);
-				var ret=self.LoadAllAssets<UnityEngine.Object>();
+				System.Type a1;
+				checkType(l,2,out a1);
+				var ret=self.LoadAllAssets(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -202,11 +204,9 @@ public class Lua_UnityEngine_AssetBundle : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==2){
+			else if(matchType(l,argc,2)){
 				UnityEngine.AssetBundle self=(UnityEngine.AssetBundle)checkSelf(l);
-				System.Type a1;
-				checkType(l,2,out a1);
-				var ret=self.LoadAllAssets(a1);
+				var ret=self.LoadAllAssets<UnityEngine.Object>();
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -224,18 +224,18 @@ public class Lua_UnityEngine_AssetBundle : LuaObject {
 	static public int LoadAllAssetsAsync(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
-				UnityEngine.AssetBundle self=(UnityEngine.AssetBundle)checkSelf(l);
-				var ret=self.LoadAllAssetsAsync();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
+			if(argc==2){
 				UnityEngine.AssetBundle self=(UnityEngine.AssetBundle)checkSelf(l);
 				System.Type a1;
 				checkType(l,2,out a1);
 				var ret=self.LoadAllAssetsAsync(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==1){
+				UnityEngine.AssetBundle self=(UnityEngine.AssetBundle)checkSelf(l);
+				var ret=self.LoadAllAssetsAsync();
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -293,13 +293,44 @@ public class Lua_UnityEngine_AssetBundle : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int UnloadAllAssetBundles_s(IntPtr l) {
+		try {
+			System.Boolean a1;
+			checkType(l,1,out a1);
+			UnityEngine.AssetBundle.UnloadAllAssetBundles(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetAllLoadedAssetBundles_s(IntPtr l) {
+		try {
+			var ret=UnityEngine.AssetBundle.GetAllLoadedAssetBundles();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int LoadFromFileAsync_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
+			if(argc==3){
 				System.String a1;
 				checkType(l,1,out a1);
-				var ret=UnityEngine.AssetBundle.LoadFromFileAsync(a1);
+				System.UInt32 a2;
+				checkType(l,2,out a2);
+				System.UInt64 a3;
+				checkType(l,3,out a3);
+				var ret=UnityEngine.AssetBundle.LoadFromFileAsync(a1,a2,a3);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -314,14 +345,10 @@ public class Lua_UnityEngine_AssetBundle : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==3){
+			else if(argc==1){
 				System.String a1;
 				checkType(l,1,out a1);
-				System.UInt32 a2;
-				checkType(l,2,out a2);
-				System.UInt64 a3;
-				checkType(l,3,out a3);
-				var ret=UnityEngine.AssetBundle.LoadFromFileAsync(a1,a2,a3);
+				var ret=UnityEngine.AssetBundle.LoadFromFileAsync(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -339,10 +366,14 @@ public class Lua_UnityEngine_AssetBundle : LuaObject {
 	static public int LoadFromFile_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
+			if(argc==3){
 				System.String a1;
 				checkType(l,1,out a1);
-				var ret=UnityEngine.AssetBundle.LoadFromFile(a1);
+				System.UInt32 a2;
+				checkType(l,2,out a2);
+				System.UInt64 a3;
+				checkType(l,3,out a3);
+				var ret=UnityEngine.AssetBundle.LoadFromFile(a1,a2,a3);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -357,14 +388,10 @@ public class Lua_UnityEngine_AssetBundle : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==3){
+			else if(argc==1){
 				System.String a1;
 				checkType(l,1,out a1);
-				System.UInt32 a2;
-				checkType(l,2,out a2);
-				System.UInt64 a3;
-				checkType(l,3,out a3);
-				var ret=UnityEngine.AssetBundle.LoadFromFile(a1,a2,a3);
+				var ret=UnityEngine.AssetBundle.LoadFromFile(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -382,20 +409,20 @@ public class Lua_UnityEngine_AssetBundle : LuaObject {
 	static public int LoadFromMemoryAsync_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
-				System.Byte[] a1;
-				checkArray(l,1,out a1);
-				var ret=UnityEngine.AssetBundle.LoadFromMemoryAsync(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
+			if(argc==2){
 				System.Byte[] a1;
 				checkArray(l,1,out a1);
 				System.UInt32 a2;
 				checkType(l,2,out a2);
 				var ret=UnityEngine.AssetBundle.LoadFromMemoryAsync(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==1){
+				System.Byte[] a1;
+				checkArray(l,1,out a1);
+				var ret=UnityEngine.AssetBundle.LoadFromMemoryAsync(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -413,7 +440,17 @@ public class Lua_UnityEngine_AssetBundle : LuaObject {
 	static public int LoadFromMemory_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
+			if(argc==2){
+				System.Byte[] a1;
+				checkArray(l,1,out a1);
+				System.UInt32 a2;
+				checkType(l,2,out a2);
+				var ret=UnityEngine.AssetBundle.LoadFromMemory(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==1){
 				System.Byte[] a1;
 				checkArray(l,1,out a1);
 				var ret=UnityEngine.AssetBundle.LoadFromMemory(a1);
@@ -421,12 +458,88 @@ public class Lua_UnityEngine_AssetBundle : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==2){
-				System.Byte[] a1;
-				checkArray(l,1,out a1);
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int LoadFromStreamAsync_s(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==3){
+				System.IO.Stream a1;
+				checkType(l,1,out a1);
 				System.UInt32 a2;
 				checkType(l,2,out a2);
-				var ret=UnityEngine.AssetBundle.LoadFromMemory(a1,a2);
+				System.UInt32 a3;
+				checkType(l,3,out a3);
+				var ret=UnityEngine.AssetBundle.LoadFromStreamAsync(a1,a2,a3);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==2){
+				System.IO.Stream a1;
+				checkType(l,1,out a1);
+				System.UInt32 a2;
+				checkType(l,2,out a2);
+				var ret=UnityEngine.AssetBundle.LoadFromStreamAsync(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==1){
+				System.IO.Stream a1;
+				checkType(l,1,out a1);
+				var ret=UnityEngine.AssetBundle.LoadFromStreamAsync(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int LoadFromStream_s(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==3){
+				System.IO.Stream a1;
+				checkType(l,1,out a1);
+				System.UInt32 a2;
+				checkType(l,2,out a2);
+				System.UInt32 a3;
+				checkType(l,3,out a3);
+				var ret=UnityEngine.AssetBundle.LoadFromStream(a1,a2,a3);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==2){
+				System.IO.Stream a1;
+				checkType(l,1,out a1);
+				System.UInt32 a2;
+				checkType(l,2,out a2);
+				var ret=UnityEngine.AssetBundle.LoadFromStream(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==1){
+				System.IO.Stream a1;
+				checkType(l,1,out a1);
+				var ret=UnityEngine.AssetBundle.LoadFromStream(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -478,10 +591,14 @@ public class Lua_UnityEngine_AssetBundle : LuaObject {
 		addMember(l,Unload);
 		addMember(l,GetAllAssetNames);
 		addMember(l,GetAllScenePaths);
+		addMember(l,UnloadAllAssetBundles_s);
+		addMember(l,GetAllLoadedAssetBundles_s);
 		addMember(l,LoadFromFileAsync_s);
 		addMember(l,LoadFromFile_s);
 		addMember(l,LoadFromMemoryAsync_s);
 		addMember(l,LoadFromMemory_s);
+		addMember(l,LoadFromStreamAsync_s);
+		addMember(l,LoadFromStream_s);
 		addMember(l,"mainAsset",get_mainAsset,null,true);
 		addMember(l,"isStreamedSceneAssetBundle",get_isStreamedSceneAssetBundle,null,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.AssetBundle),typeof(UnityEngine.Object));

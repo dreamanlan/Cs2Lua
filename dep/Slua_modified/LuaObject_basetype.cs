@@ -465,8 +465,34 @@ namespace SLua
                     {
                         LuaDLL.lua_pushstring(l, "__fullname");
                         LuaDLL.lua_rawget(l, p);
-                        tname = LuaDLL.lua_tostring(l, -1);
-                        LuaDLL.lua_pop(l, 2);
+						if (!LuaDLL.lua_isnil (l, -1)) {
+							tname = LuaDLL.lua_tostring (l, -1);
+							LuaDLL.lua_pop (l, 2);
+						} else {
+							LuaDLL.lua_pushstring(l, "__raw");
+							LuaDLL.lua_rawget(l, p);
+							if (!LuaDLL.lua_isnil (l, -1)) {
+								LuaDLL.lua_pushstring (l, "__type");
+								LuaDLL.lua_rawget (l, -2);
+								if (!LuaDLL.lua_isnil (l, -1)) {
+									t = (Type)checkObj (l, -1);
+									LuaDLL.lua_pop (l, 4);
+									return true;
+								} else {
+									LuaDLL.lua_pushstring (l, "__fullname");
+									LuaDLL.lua_rawget (l, -3);
+									tname = LuaDLL.lua_tostring (l, -1);
+									LuaDLL.lua_pop (l, 5);
+								}
+							} else {
+								LuaDLL.lua_pop (l, 3);
+							}
+						}
+                    }
+                    if (tname == null) {
+                        Logger.LogError("use LuaTable as param");
+                        t = typeof(LuaTable);
+                        return true;
                     }
                     break;
 
@@ -510,9 +536,20 @@ namespace SLua
 			return true;
 		}
 
-		#region object
+        #region object
 		static public bool checkType<T>(IntPtr l, int p, out T o) where T:class
 		{
+            if (typeof(T) == typeof(Type)) {
+                Type t;
+                bool ret = checkType(l, p, out t);
+                o = t as T;
+                return ret;
+            } else if (typeof(T) == typeof(LuaDelegate)) {
+                LuaDelegate t;
+                bool ret = checkType(l, p, out t);
+                o = t as T;
+                return ret;
+            }
 			object obj = checkVar(l, p);
 			if (obj == null)
 			{
@@ -546,12 +583,15 @@ namespace SLua
                 }
                 return true;
             } else {
-                Array array = checkObj(l, p) as Array;
+                var obj = checkObj(l, p);
+                Array array = obj as Array;
                 if (null != array) {
                     ta = new object[array.Length];
                     array.CopyTo(ta, 0);
-                } else {
+                } else if (null == obj) {
                     ta = null;
+                } else {
+                    throw new ArgumentException("expect array");
                 }
                 return null != array;
             }

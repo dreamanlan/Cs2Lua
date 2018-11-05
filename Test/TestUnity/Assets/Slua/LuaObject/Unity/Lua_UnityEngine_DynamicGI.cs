@@ -35,6 +35,20 @@ public class Lua_UnityEngine_DynamicGI : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int SetEnvironmentData_s(IntPtr l) {
+		try {
+			System.Single[] a1;
+			checkArray(l,1,out a1);
+			UnityEngine.DynamicGI.SetEnvironmentData(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int UpdateEnvironment_s(IntPtr l) {
 		try {
 			UnityEngine.DynamicGI.UpdateEnvironment();
@@ -123,14 +137,28 @@ public class Lua_UnityEngine_DynamicGI : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_isConverged(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.DynamicGI.isConverged);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.DynamicGI");
 		addMember(l,SetEmissive_s);
+		addMember(l,SetEnvironmentData_s);
 		addMember(l,UpdateEnvironment_s);
 		addMember(l,"indirectScale",get_indirectScale,set_indirectScale,false);
 		addMember(l,"updateThreshold",get_updateThreshold,set_updateThreshold,false);
 		addMember(l,"synchronousMode",get_synchronousMode,set_synchronousMode,false);
+		addMember(l,"isConverged",get_isConverged,null,false);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.DynamicGI));
 	}
 }

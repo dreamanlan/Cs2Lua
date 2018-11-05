@@ -9,8 +9,10 @@ public class Lua_UnityEngine_Event : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Event o;
-			if(argc==1){
-				o=new UnityEngine.Event();
+			if(matchType(l,argc,2,typeof(UnityEngine.Event))){
+				UnityEngine.Event a1;
+				checkType(l,2,out a1);
+				o=new UnityEngine.Event(a1);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
@@ -23,28 +25,13 @@ public class Lua_UnityEngine_Event : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.Event))){
-				UnityEngine.Event a1;
-				checkType(l,2,out a1);
-				o=new UnityEngine.Event(a1);
+			else if(argc==1){
+				o=new UnityEngine.Event();
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
 			return error(l,"New object failed.");
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Use(IntPtr l) {
-		try {
-			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
-			self.Use();
-			pushValue(l,true);
-			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -68,14 +55,12 @@ public class Lua_UnityEngine_Event : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int KeyboardEvent_s(IntPtr l) {
+	static public int Use(IntPtr l) {
 		try {
-			System.String a1;
-			checkType(l,1,out a1);
-			var ret=UnityEngine.Event.KeyboardEvent(a1);
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			self.Use();
 			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -104,6 +89,286 @@ public class Lua_UnityEngine_Event : LuaObject {
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int KeyboardEvent_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Event.KeyboardEvent(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_rawType(IntPtr l) {
+		try {
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.rawType);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_type(IntPtr l) {
+		try {
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.type);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_type(IntPtr l) {
+		try {
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			UnityEngine.EventType v;
+			checkEnum(l,2,out v);
+			self.type=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_button(IntPtr l) {
+		try {
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.button);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_button(IntPtr l) {
+		try {
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			int v;
+			checkType(l,2,out v);
+			self.button=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_modifiers(IntPtr l) {
+		try {
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.modifiers);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_modifiers(IntPtr l) {
+		try {
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			UnityEngine.EventModifiers v;
+			checkEnum(l,2,out v);
+			self.modifiers=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_pressure(IntPtr l) {
+		try {
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.pressure);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_pressure(IntPtr l) {
+		try {
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			float v;
+			checkType(l,2,out v);
+			self.pressure=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_clickCount(IntPtr l) {
+		try {
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.clickCount);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_clickCount(IntPtr l) {
+		try {
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			int v;
+			checkType(l,2,out v);
+			self.clickCount=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_character(IntPtr l) {
+		try {
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.character);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_character(IntPtr l) {
+		try {
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			System.Char v;
+			checkType(l,2,out v);
+			self.character=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_commandName(IntPtr l) {
+		try {
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.commandName);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_commandName(IntPtr l) {
+		try {
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			string v;
+			checkType(l,2,out v);
+			self.commandName=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_keyCode(IntPtr l) {
+		try {
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.keyCode);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_keyCode(IntPtr l) {
+		try {
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			UnityEngine.KeyCode v;
+			checkEnum(l,2,out v);
+			self.keyCode=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_displayIndex(IntPtr l) {
+		try {
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.displayIndex);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_displayIndex(IntPtr l) {
+		try {
+			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
+			int v;
+			checkType(l,2,out v);
+			self.displayIndex=v;
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -411,279 +676,24 @@ public class Lua_UnityEngine_Event : LuaObject {
 			return error(l,e);
 		}
 	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_rawType(IntPtr l) {
-		try {
-			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
-			pushValue(l,true);
-			pushEnum(l,(int)self.rawType);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_type(IntPtr l) {
-		try {
-			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
-			pushValue(l,true);
-			pushEnum(l,(int)self.type);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_type(IntPtr l) {
-		try {
-			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
-			UnityEngine.EventType v;
-			checkEnum(l,2,out v);
-			self.type=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_button(IntPtr l) {
-		try {
-			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.button);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_button(IntPtr l) {
-		try {
-			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
-			int v;
-			checkType(l,2,out v);
-			self.button=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_modifiers(IntPtr l) {
-		try {
-			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
-			pushValue(l,true);
-			pushEnum(l,(int)self.modifiers);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_modifiers(IntPtr l) {
-		try {
-			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
-			UnityEngine.EventModifiers v;
-			checkEnum(l,2,out v);
-			self.modifiers=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_pressure(IntPtr l) {
-		try {
-			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.pressure);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_pressure(IntPtr l) {
-		try {
-			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
-			float v;
-			checkType(l,2,out v);
-			self.pressure=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_clickCount(IntPtr l) {
-		try {
-			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.clickCount);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_clickCount(IntPtr l) {
-		try {
-			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
-			int v;
-			checkType(l,2,out v);
-			self.clickCount=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_character(IntPtr l) {
-		try {
-			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.character);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_character(IntPtr l) {
-		try {
-			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
-			System.Char v;
-			checkType(l,2,out v);
-			self.character=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_commandName(IntPtr l) {
-		try {
-			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.commandName);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_commandName(IntPtr l) {
-		try {
-			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
-			string v;
-			checkType(l,2,out v);
-			self.commandName=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_keyCode(IntPtr l) {
-		try {
-			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
-			pushValue(l,true);
-			pushEnum(l,(int)self.keyCode);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_keyCode(IntPtr l) {
-		try {
-			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
-			UnityEngine.KeyCode v;
-			checkEnum(l,2,out v);
-			self.keyCode=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_displayIndex(IntPtr l) {
-		try {
-			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.displayIndex);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_displayIndex(IntPtr l) {
-		try {
-			UnityEngine.Event self=(UnityEngine.Event)checkSelf(l);
-			int v;
-			checkType(l,2,out v);
-			self.displayIndex=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Event");
-		addMember(l,Use);
 		addMember(l,GetTypeForControl);
-		addMember(l,KeyboardEvent_s);
+		addMember(l,Use);
 		addMember(l,PopEvent_s);
 		addMember(l,GetEventCount_s);
+		addMember(l,KeyboardEvent_s);
+		addMember(l,"rawType",get_rawType,null,true);
+		addMember(l,"type",get_type,set_type,true);
+		addMember(l,"button",get_button,set_button,true);
+		addMember(l,"modifiers",get_modifiers,set_modifiers,true);
+		addMember(l,"pressure",get_pressure,set_pressure,true);
+		addMember(l,"clickCount",get_clickCount,set_clickCount,true);
+		addMember(l,"character",get_character,set_character,true);
+		addMember(l,"commandName",get_commandName,set_commandName,true);
+		addMember(l,"keyCode",get_keyCode,set_keyCode,true);
+		addMember(l,"displayIndex",get_displayIndex,set_displayIndex,true);
 		addMember(l,"mousePosition",get_mousePosition,set_mousePosition,true);
 		addMember(l,"delta",get_delta,set_delta,true);
 		addMember(l,"shift",get_shift,set_shift,true);
@@ -697,16 +707,6 @@ public class Lua_UnityEngine_Event : LuaObject {
 		addMember(l,"isKey",get_isKey,null,true);
 		addMember(l,"isMouse",get_isMouse,null,true);
 		addMember(l,"isScrollWheel",get_isScrollWheel,null,true);
-		addMember(l,"rawType",get_rawType,null,true);
-		addMember(l,"type",get_type,set_type,true);
-		addMember(l,"button",get_button,set_button,true);
-		addMember(l,"modifiers",get_modifiers,set_modifiers,true);
-		addMember(l,"pressure",get_pressure,set_pressure,true);
-		addMember(l,"clickCount",get_clickCount,set_clickCount,true);
-		addMember(l,"character",get_character,set_character,true);
-		addMember(l,"commandName",get_commandName,set_commandName,true);
-		addMember(l,"keyCode",get_keyCode,set_keyCode,true);
-		addMember(l,"displayIndex",get_displayIndex,set_displayIndex,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.Event));
 	}
 }
