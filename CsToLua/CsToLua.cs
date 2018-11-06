@@ -802,6 +802,29 @@ namespace RoslynTool.CsToLua
             const string c_IndentString = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
             return c_IndentString.Substring(0, indent);
         }
+        internal static void OutputTypeArgsInfo(StringBuilder sb, INamedTypeSymbol namedTypeSym)
+        {
+            if (null != namedTypeSym) {
+                sb.Append("typeargs(");
+                string prestr = string.Empty;
+                foreach (var ta in namedTypeSym.TypeArguments) {
+                    sb.Append(prestr);
+                    sb.Append(ClassInfo.GetFullName(ta));
+                    prestr = ", ";
+                }
+                sb.Append("), typekinds(");
+                prestr = string.Empty;
+                foreach (var ta in namedTypeSym.TypeArguments) {
+                    sb.Append(prestr);
+                    sb.Append("TypeKind.");
+                    sb.Append(ta.TypeKind);
+                    prestr = ", ";
+                }
+                sb.Append("), ");
+            } else {
+                sb.Append("typeargs(), typekinds(), ");
+            }
+        }
         internal static void OutputDefaultValue(StringBuilder sb, ITypeSymbol type)
         {
             if (null != type) {

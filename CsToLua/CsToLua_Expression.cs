@@ -63,12 +63,12 @@ namespace RoslynTool.CsToLua
                     if (null != boper.LeftOperand) {
                         var ltype = boper.LeftOperand.Type;
                         leftType = ClassInfo.GetFullName(ltype);
-                        leftTypeKind = ltype.TypeKind.ToString();
+                        leftTypeKind = "TypeKind." + ltype.TypeKind.ToString();
                     }
                     if (null != boper.RightOperand) {
                         var rtype = boper.RightOperand.Type;
                         rightType = ClassInfo.GetFullName(rtype);
-                        rightTypeKind = rtype.TypeKind.ToString();
+                        rightTypeKind = "TypeKind." + rtype.TypeKind.ToString();
                     }
                 }
                 ProcessBinaryOperator(node, ref op);
@@ -81,11 +81,7 @@ namespace RoslynTool.CsToLua
                         var typeInfo = m_Model.GetTypeInfo(node.Right);
                         var type = typeInfo.Type;
                         OutputType(type, node, ci, op);
-                        if (type.TypeKind == TypeKind.Enum) {
-                            CodeBuilder.Append(", true");
-                        } else {
-                            CodeBuilder.Append(", false");
-                        }
+                        CodeBuilder.AppendFormat(", TypeKind.{0}", type.TypeKind);
                     } else if (op == "??") {
                         var rightOper = m_Model.GetOperation(node.Right);
                         bool rightIsConst = null != rightOper && rightOper.ConstantValue.HasValue;
@@ -191,7 +187,7 @@ namespace RoslynTool.CsToLua
             }
             if (null != typeSym) {
                 type = ClassInfo.GetFullName(typeSym);
-                typeKind = typeSym.TypeKind.ToString();
+                typeKind = "TypeKind." + typeSym.TypeKind.ToString();
             }
             if (null != unaryOper && unaryOper.UsesOperatorMethod) {
                 IMethodSymbol msym = unaryOper.OperatorMethod;
@@ -305,11 +301,7 @@ namespace RoslynTool.CsToLua
                 var type = typeInfo.Type;
                 CodeBuilder.Append(", ");
                 OutputType(type, node, ci, "cast");
-                if (type.TypeKind == TypeKind.Enum) {
-                    CodeBuilder.Append(", true");
-                } else {
-                    CodeBuilder.Append(", false");
-                }
+                CodeBuilder.AppendFormat(", TypeKind.{0}", type.TypeKind);
                 CodeBuilder.Append(")");
             }
         }
@@ -793,6 +785,7 @@ namespace RoslynTool.CsToLua
                 m_ObjectCreateStack.Push(typeSymInfo);
 
                 string fullTypeName = ClassInfo.GetFullName(typeSymInfo);
+                var namedTypeSym = typeSymInfo as INamedTypeSymbol;
 
                 //处理ref/out参数
                 InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
@@ -817,24 +810,28 @@ namespace RoslynTool.CsToLua
                     if (isDictionary) {
                         //字典对象的处理
                         CodeBuilder.AppendFormat("new{0}dictionary({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                        CsLuaTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
                         if (isExternal) {
                             CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
                         }
                     } else if (isList) {
                         //列表对象的处理
                         CodeBuilder.AppendFormat("new{0}list({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                        CsLuaTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
                         if (isExternal) {
                             CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
                         }
                     } else {
                         //集合对象的处理
                         CodeBuilder.AppendFormat("new{0}collection({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                        CsLuaTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
                         if (isExternal) {
                             CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
                         }
                     }
                 } else {
                     CodeBuilder.AppendFormat("new{0}object({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                    CsLuaTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
                     if (isExternal) {
                         CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
                     }

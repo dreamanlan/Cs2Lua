@@ -50,6 +50,23 @@ CS.System.Collections.Generic.MyDictionary_TKey_TValue = CS.System.Collections.G
 __cs2lua_out = {};
 __cs2lua_nil_field_value = {};
 
+TypeKind = {
+	Unknown = 0,
+	Array = 1,
+	Class = 2,
+	Delegate = 3,
+	Dynamic = 4,
+	Enum = 5,
+	Error = 6,
+	Interface = 7,
+	Module = 8,
+	Pointer = 9,
+	Struct = 10,
+	Structure = 10,
+	TypeParameter = 11,
+	Submission = 12
+};
+
 __cs2lua_special_integer_operators = { "/", "%", "+", "-", "*", "<<", ">>", "&", "|", "^", "~" };
 __cs2lua_div = 0;
 __cs2lua_mod = 1;
@@ -149,7 +166,7 @@ function bitxor(v1,v2)
 	end;
 end;
 
-function typecast(obj, t, isEnum)
+function typecast(obj, t, tk)
 	if t == CS.System.String then
 		return tostring(obj);
 	elseif t == CS.System.Single or t ==	CS.System.Double then
@@ -196,16 +213,16 @@ function typecast(obj, t, isEnum)
 	  return v;
 	elseif t == CS.System.Boolean then
 		return obj;
-	elseif isEnum then
+	elseif tk == TypeKind.Enum then
 	  return obj;
-	elseif typeis(obj, t, isEnum) then
+	elseif typeis(obj, t, tk) then
 		return obj;
 	else
   	return obj;
  	end;
 end;
 
-function typeas(obj, t, isEnum)
+function typeas(obj, t, tk)
 	if t == CS.System.String then
 		return tostring(obj);
 	elseif t == CS.System.Single or t ==	CS.System.Double then
@@ -215,16 +232,16 @@ function typeas(obj, t, isEnum)
 	  v = math.floor(v);
 	  return v;
 	elseif t == CS.System.Int32 or t == CS.System.UInt32 then
-	  return typecast(obj, t, isEnum);
+	  return typecast(obj, t, tk);
 	elseif t == CS.System.Int16 or t == CS.System.UInt16 or t == CS.System.Char then
-	  return typecast(obj, t, isEnum);
+	  return typecast(obj, t, tk);
 	elseif t == CS.System.SByte or t == CS.System.Byte then
-	  return typecast(obj, t, isEnum);
+	  return typecast(obj, t, tk);
 	elseif t == CS.System.Boolean then
 		return obj;
-	elseif isEnum then
+	elseif tk==TypeKind.Enum then
 	  return obj;
-	elseif typeis(obj, t, isEnum) then
+	elseif typeis(obj, t, tk) then
 		return obj;
 	else
 		return nil;
@@ -242,7 +259,7 @@ function __typeis_check_xlua(objType, t)
 	return false;
 end
 
-function typeis(obj, t, isEnum)
+function typeis(obj, t, tk)
 	local meta = getmetatable(obj);
 	local intfsname = nil;
 	if meta then
@@ -1337,7 +1354,7 @@ function defineclass(base, className, static, static_methods, static_fields_buil
     return class;
 end;
 
-function newobject(class, ctor, initializer, ...)
+function newobject(class, typeargs, typekinds, ctor, initializer, ...)
   local obj = class();
   if ctor then
     obj[ctor](obj, ...);
@@ -1348,7 +1365,7 @@ function newobject(class, ctor, initializer, ...)
   return obj;
 end;
 
-function newexternobject(class, className, ctor, initializer, ...)
+function newexternobject(class, typeargs, typekinds, className, ctor, initializer, ...)
   local obj = nil;
   if class ~= nil then
     obj = class(...);
@@ -1373,7 +1390,7 @@ function newtypeparamobject(t)
   end;
 end;
 
-function newdictionary(t, ctor, dict, ...)
+function newdictionary(t, typeargs, typekinds, ctor, dict, ...)
   if dict then
     local obj = {};
 	  setmetatable(obj, { __index = __mt_index_of_dictionary, __newindex = __mt_newindex_of_dictionary, __cs2lua_defined = true, __class = t });
@@ -1384,20 +1401,20 @@ function newdictionary(t, ctor, dict, ...)
 	end;
 end;
 
-function newlist(t, ctor, list, ...)
+function newlist(t, typeargs, typekinds, ctor, list, ...)
   if list then
     return setmetatable(list, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = t });
   end;
 end;
 
-function newcollection(t, ctor, coll, ...)
+function newcollection(t, typeargs, typekinds, ctor, coll, ...)
   if coll then
     return setmetatable(coll, { __index = __mt_index_of_hashset, __cs2lua_defined = true, __class = t });
   end;
 end;
 
-function newexterndictionary(t, className, ctor, dict, ...)
-  if dict and t==CS.System.Collections.Generic.Dictionary_TKey_TValue then
+function newexterndictionary(t, typeargs, typekinds, className, ctor, dict, ...)
+  if dict and t==System.Collections.Generic.Dictionary_TKey_TValue then
     local obj = {};
 	  setmetatable(obj, { __index = __mt_index_of_dictionary, __newindex = __mt_newindex_of_dictionary, __cs2lua_defined = true, __class = t });
 		for k,v in pairs(dict) do
@@ -1424,7 +1441,7 @@ function newexterndictionary(t, className, ctor, dict, ...)
 	end;
 end;
 
-function newexternlist(t, className, ctor, list, ...)
+function newexternlist(t, typeargs, typekinds, className, ctor, list, ...)
   if list and t==CS.System.Collections.Generic.List_T then    
 	  return setmetatable(list, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = t });
 	else 
@@ -1447,7 +1464,7 @@ function newexternlist(t, className, ctor, list, ...)
   end;
 end;
 
-function newexterncollection(t, className, ctor, coll, ...)
+function newexterncollection(t, typeargs, typekinds, className, ctor, coll, ...)
   if coll and (t==CS.System.Collections.Generic.Queue_T or t==CS.System.Collections.Generic.Stack_T) then
     return setmetatable(coll, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = t });
   elseif coll and t==CS.System.Collections.Generic.HashSet_T then

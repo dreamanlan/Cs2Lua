@@ -684,7 +684,7 @@ namespace LuaGenerator
                 string op = data.GetParamId(0);
                 var p1 = data.GetParam(1);
                 string type1 = CalcTypeString(data.GetParam(2));
-                string typeKind1 = data.GetParamId(3);
+                string typeKind1 = CalcTypeString(data.GetParam(3));
                 string intOp = op;
                 if (op == "++")
                     intOp = "+";
@@ -714,8 +714,8 @@ namespace LuaGenerator
                 var p2 = data.GetParam(2);
                 string type1 = CalcTypeString(data.GetParam(3));
                 string type2 = CalcTypeString(data.GetParam(4));
-                string typeKind1 = data.GetParamId(5);
-                string typeKind2 = data.GetParamId(6);
+                string typeKind1 = CalcTypeString(data.GetParam(5));
+                string typeKind2 = CalcTypeString(data.GetParam(6));
                 int intOpIndex;
                 if (IsIntegerType(type1, typeKind1) && IsIntegerType(type2, typeKind2) && TryGetSpecialIntegerOperatorIndex(op, out intOpIndex)) {
                     sb.AppendFormat("invokeintegeroperator({0}, \"{1}\", ", intOpIndex, op);
@@ -931,6 +931,26 @@ namespace LuaGenerator
                 }
             } else if (id == "paramsremove") {
                 sb.AppendFormat("table.remove({0})", data.GetParamId(0));
+            } else if (id == "typeargs") {
+                sb.Append("{");
+                string prestr = string.Empty;
+                for (int ix = 0; ix < data.Params.Count; ++ix) {
+                    var param = data.Params[ix];
+                    sb.Append(prestr);
+                    GenerateSyntaxComponent(param, sb, indent, false);
+                    prestr = ", ";
+                }
+                sb.Append("}");
+            } else if (id == "typekinds") {
+                sb.Append("{");
+                string prestr = string.Empty;
+                for (int ix = 0; ix < data.Params.Count; ++ix) {
+                    var param = data.Params[ix];
+                    sb.Append(prestr);
+                    GenerateSyntaxComponent(param, sb, indent, false);
+                    prestr = ", ";
+                }
+                sb.Append("}");
             } else if (id == "initdelegation") {
                 sb.Append("wrapdelegation{}");
             } else if (id == "builddelegation") {
@@ -1384,7 +1404,7 @@ namespace LuaGenerator
         }
         private static bool IsBasicType(string t, string typeKind, bool includeString)
         {
-            if (typeKind == "Enum")
+            if (typeKind == "TypeKind.Enum" || t == "System.Enum")
                 return true;
             if (includeString && t == "System.String")
                 return true;
@@ -1392,7 +1412,7 @@ namespace LuaGenerator
         }
         private static bool IsIntegerType(string t, string typeKind)
         {
-            if (typeKind == "Enum")
+            if (typeKind == "TypeKind.Enum" || t == "System.Enum")
                 return true;
             return s_IntegerTypes.Contains(t);
         }
