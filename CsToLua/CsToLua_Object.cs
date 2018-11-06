@@ -323,7 +323,7 @@ namespace RoslynTool.CsToLua
                     if (mi.ValueParams.Count > 0) {
                         OutputWrapValueParams(CodeBuilder, mi);
                     }
-                    string varName = string.Format("__compiler_expbody_{0}", GetSourcePosForVar(node));
+                    string varName = string.Format("__expbody_{0}", GetSourcePosForVar(node));
                     if (mi.ReturnParamNames.Count > 0) {
                         CodeBuilder.AppendFormat("{0}local({1}); {1} = ", GetIndentString(), varName);
                     } else {
@@ -437,7 +437,7 @@ namespace RoslynTool.CsToLua
                         string luaFuncName = ClassInfo.GetAttributeArgument<string>(sym, "CsToLua.TranslateToAttribute", 1);
                         if (string.IsNullOrEmpty(luaModule) && string.IsNullOrEmpty(luaFuncName)) {
                             if (!sym.ReturnsVoid && mi.ExistTryCatch) {
-                                string retVar = string.Format("__compiler_method_ret_{0}", GetSourcePosForVar(node));
+                                string retVar = string.Format("__method_ret_{0}", GetSourcePosForVar(node));
                                 mi.ReturnVarName = retVar;
 
                                 CodeBuilder.AppendFormat("{0}local({1}); {1} = nil;", GetIndentString(), retVar);
@@ -482,7 +482,7 @@ namespace RoslynTool.CsToLua
                             if (mi.ValueParams.Count > 0) {
                                 OutputWrapValueParams(CodeBuilder, mi);
                             }
-                            string varName = string.Format("__compiler_expbody_{0}", GetSourcePosForVar(node));
+                            string varName = string.Format("__expbody_{0}", GetSourcePosForVar(node));
                             if (!sym.ReturnsVoid) {
                                 if (mi.ReturnParamNames.Count > 0) {
                                     CodeBuilder.AppendFormat("{0}local({1}); {1} = ", GetIndentString(), varName);
@@ -699,7 +699,7 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.AppendFormat("{0}local{{{1} = params({2});}};", GetIndentString(), mi.OriginalParamsName, mi.ParamsIsExternValueType ? 2 : (mi.ParamsIsValueType ? 1 : 0));
                         CodeBuilder.AppendLine();
                     }
-                    string varName = string.Format("__compiler_expbody_{0}", GetSourcePosForVar(node));
+                    string varName = string.Format("__expbody_{0}", GetSourcePosForVar(node));
                     if (mi.ReturnParamNames.Count > 0) {
                         CodeBuilder.AppendFormat("{0}local({1}); {1} = ", GetIndentString(), varName);
                     } else {
@@ -757,7 +757,7 @@ namespace RoslynTool.CsToLua
                     string luaFuncName = ClassInfo.GetAttributeArgument<string>(sym, "CsToLua.TranslateToAttribute", 1);
                     if (string.IsNullOrEmpty(luaModule) && string.IsNullOrEmpty(luaFuncName)) {
                         if (!sym.ReturnsVoid && mi.ExistTryCatch) {
-                            string retVar = string.Format("__compiler_method_ret_{0}", GetSourcePosForVar(node));
+                            string retVar = string.Format("__method_ret_{0}", GetSourcePosForVar(node));
                             mi.ReturnVarName = retVar;
 
                             CodeBuilder.AppendFormat("{0}local({1}); {1} = nil;", GetIndentString(), retVar);
@@ -821,7 +821,7 @@ namespace RoslynTool.CsToLua
                                 }
                             }
                         } else if (null != accessor.ExpressionBody) {
-                            string varName = string.Format("__compiler_expbody_{0}", GetSourcePosForVar(node));
+                            string varName = string.Format("__expbody_{0}", GetSourcePosForVar(node));
                             if (!sym.ReturnsVoid) {
                                 if (mi.ReturnParamNames.Count > 0) {
                                     CodeBuilder.AppendFormat("{0}local({1}); {1} = ", GetIndentString(), varName);
@@ -929,7 +929,7 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendLine("){");
                     ++m_Indent;
                     if (!sym.ReturnsVoid && mi.ExistTryCatch) {
-                        string retVar = string.Format("__compiler_method_ret_{0}", GetSourcePosForVar(node));
+                        string retVar = string.Format("__method_ret_{0}", GetSourcePosForVar(node));
                         mi.ReturnVarName = retVar;
 
                         CodeBuilder.AppendFormat("{0}local({1}); {1} = nil;", GetIndentString(), retVar);
@@ -965,7 +965,7 @@ namespace RoslynTool.CsToLua
                     --m_Indent;
                     CodeBuilder.AppendFormat("{0}}})", GetIndentString());
                 } else {
-                    string varName = string.Format("__compiler_lambda_{0}", GetSourcePosForVar(node));
+                    string varName = string.Format("__lambda_{0}", GetSourcePosForVar(node));
                     CodeBuilder.Append("){ ");
                     if (mi.ReturnParamNames.Count > 0) {
                         CodeBuilder.AppendFormat("local({0}); {0} = ", varName);
@@ -1025,7 +1025,7 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.AppendLine("){");
                 ++m_Indent;
                 if (!sym.ReturnsVoid && mi.ExistTryCatch) {
-                    string retVar = string.Format("__compiler_method_ret_{0}", GetSourcePosForVar(node));
+                    string retVar = string.Format("__method_ret_{0}", GetSourcePosForVar(node));
                     mi.ReturnVarName = retVar;
 
                     CodeBuilder.AppendFormat("{0}local({1}); {1} = nil;", GetIndentString(), retVar);
@@ -1076,7 +1076,7 @@ namespace RoslynTool.CsToLua
         }
         public override void VisitUsingStatement(UsingStatementSyntax node)
         {
-            string varName = string.Format("__compiler_using_{0}", GetSourcePosForVar(node));
+            string varName = string.Format("__using_{0}", GetSourcePosForVar(node));
             if (null != node.Declaration) {
                 VisitVariableDeclaration(node.Declaration);
             } else if (null != node.Expression) {

@@ -252,7 +252,7 @@ namespace RoslynTool.CsToLua
             string luaFuncName = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.TranslateToAttribute", 1);
             if (string.IsNullOrEmpty(luaModule) && string.IsNullOrEmpty(luaFuncName)) {
                 if (!declSym.ReturnsVoid && mi.ExistTryCatch) {
-                    string retVar = string.Format("__compiler_method_ret_{0}", GetSourcePosForVar(node));
+                    string retVar = string.Format("__method_ret_{0}", GetSourcePosForVar(node));
                     mi.ReturnVarName = retVar;
 
                     CodeBuilder.AppendFormat("{0}local({1}); {1} = nil;", GetIndentString(), retVar);
@@ -307,7 +307,7 @@ namespace RoslynTool.CsToLua
                     }
                 }
             } else if (null != expressionBody) {
-                string varName = string.Format("__compiler_expbody_{0}", GetSourcePosForVar(node));
+                string varName = string.Format("__expbody_{0}", GetSourcePosForVar(node));
                 if (!declSym.ReturnsVoid) {
                     if (mi.ReturnParamNames.Count > 0) {
                         CodeBuilder.AppendFormat("{0}local({1}); {1} = ", GetIndentString(), varName);
@@ -718,7 +718,7 @@ namespace RoslynTool.CsToLua
                 var token = node.Initializer.EqualsToken;
                 var invocation = node.Initializer.Value as InvocationExpressionSyntax;
                 if (null != invocation) {
-                    string localName = string.Format("__compiler_localdecl_{0}", GetSourcePosForVar(invocation));
+                    string localName = string.Format("__localdecl_{0}", GetSourcePosForVar(invocation));
                     SymbolInfo symInfo = m_Model.GetSymbolInfo(invocation);
                     IMethodSymbol sym = symInfo.Symbol as IMethodSymbol;
 
@@ -1059,7 +1059,7 @@ namespace RoslynTool.CsToLua
         }
         private void VisitAssignmentInvocation(ClassInfo ci, string op, string baseOp, AssignmentExpressionSyntax assign, InvocationExpressionSyntax invocation, IConversionExpression opd, IConversionExpression lopd, IConversionExpression ropd, ICompoundAssignmentExpression compAssignInfo)
         {
-            string localName = string.Format("__compiler_assigninvoke_{0}", GetSourcePosForVar(invocation));
+            string localName = string.Format("__assigninvoke_{0}", GetSourcePosForVar(invocation));
             SymbolInfo symInfo = m_Model.GetSymbolInfo(invocation);
             IMethodSymbol sym = symInfo.Symbol as IMethodSymbol;
             if (null == sym || op != "=" && (null == compAssignInfo || null == compAssignInfo.Target || null == compAssignInfo.Value)) {
@@ -1312,7 +1312,7 @@ namespace RoslynTool.CsToLua
         }
         private void VisitInvocation(ClassInfo ci, InvocationExpressionSyntax invocation, string expTerminater, bool toplevel)
         {
-            string localName = string.Format("__compiler_invoke_{0}", GetSourcePosForVar(invocation));
+            string localName = string.Format("__invoke_{0}", GetSourcePosForVar(invocation));
             SymbolInfo symInfo = m_Model.GetSymbolInfo(invocation);
             IMethodSymbol sym = symInfo.Symbol as IMethodSymbol;
 

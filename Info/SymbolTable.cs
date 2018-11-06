@@ -513,10 +513,10 @@ namespace RoslynTool.CsToLua
         {
             if (name.StartsWith("@")) {
                 change = true;
-                return "__compiler_cs_" + name.Substring(1);
+                return "__cs_" + name.Substring(1);
             } else if (s_ExtraLuaKeywords.Contains(name)) {
                 change = true;
-                return "__compiler_lua_" + name;
+                return "__lua_" + name;
             } else {
                 change = false;                
                 return name;

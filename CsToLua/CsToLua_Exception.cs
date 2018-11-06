@@ -28,9 +28,9 @@ namespace RoslynTool.CsToLua
             if (null != node.Block) {
                 MethodInfo mi = m_MethodInfoStack.Peek();
 
-                string retVar = string.Format("__compiler_try_ret_{0}", GetSourcePosForVar(node));
-                string errVar = string.Format("__compiler_try_err_{0}", GetSourcePosForVar(node));
-                string handledVar = string.Format("__compiler_try_handled_{0}", GetSourcePosForVar(node));
+                string retVar = string.Format("__try_ret_{0}", GetSourcePosForVar(node));
+                string errVar = string.Format("__try_err_{0}", GetSourcePosForVar(node));
+                string handledVar = string.Format("__try_handled_{0}", GetSourcePosForVar(node));
 
                 CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}) = dsltry(function(){{", GetIndentString(), retVar, errVar);
                 CodeBuilder.AppendLine();
@@ -69,7 +69,7 @@ namespace RoslynTool.CsToLua
         }
         public override void VisitCatchClause(CatchClauseSyntax node)
         {
-            string handledVar = string.Format("__compiler_catch_handled_{0}", GetSourcePosForVar(node));
+            string handledVar = string.Format("__catch_handled_{0}", GetSourcePosForVar(node));
             CodeBuilder.AppendFormat("{0}(function({1}", GetIndentString(), handledVar);
             if (null != node.Declaration) {
                 CodeBuilder.Append(", ");

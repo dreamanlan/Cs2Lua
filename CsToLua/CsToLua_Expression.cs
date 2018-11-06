@@ -403,8 +403,8 @@ namespace RoslynTool.CsToLua
                     mi.Init(msym, node);
 
                     string delegationKey = string.Format("{0}:{1}", ClassInfo.GetFullName(msym.ContainingType), manglingName);
-                    string varName = string.Format("__compiler_delegation_{0}", GetSourcePosForVar(node));
-                    string varObjName = string.Format("__compiler_delegation_obj_{0}", GetSourcePosForVar(node));
+                    string varName = string.Format("__delegation_{0}", GetSourcePosForVar(node));
+                    string varObjName = string.Format("__delegation_obj_{0}", GetSourcePosForVar(node));
                     CodeBuilder.Append("(function(){ ");
                     if (string.IsNullOrEmpty(className)) {
                         CodeBuilder.AppendFormat("local({0}); {0} = ", varObjName);
@@ -796,7 +796,7 @@ namespace RoslynTool.CsToLua
                 bool isExternal = !SymbolTable.Instance.IsCs2LuaSymbol(typeSymInfo);
 
                 string ctor = NameMangling(sym);
-                string localName = string.Format("__compiler_newobject_{0}", GetSourcePosForVar(node));
+                string localName = string.Format("__newobject_{0}", GetSourcePosForVar(node));
                 if (ii.ReturnArgs.Count > 0) {
                     CodeBuilder.Append("(function(){ ");
                     CodeBuilder.AppendFormat("local({0}); {1}", localName, localName);
@@ -883,7 +883,7 @@ namespace RoslynTool.CsToLua
                         string className = ClassInfo.GetFullName(msym.ContainingType);
 
                         string delegationKey = string.Format("{0}:{1}", className, manglingName);
-                        string varName = string.Format("__compiler_delegation_{0}", GetSourcePosForVar(node));
+                        string varName = string.Format("__delegation_{0}", GetSourcePosForVar(node));
 
                         CodeBuilder.Append("(function(){ ");
 
