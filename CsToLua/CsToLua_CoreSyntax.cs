@@ -704,9 +704,10 @@ namespace RoslynTool.CsToLua
         }
         private void VisitLocalVariableDeclarator(ClassInfo ci, VariableDeclaratorSyntax node)
         {
+            var declSym = m_Model.GetDeclaredSymbol(node) as ILocalSymbol;
+            var namedTypeSym = null != declSym ? declSym.Type as INamedTypeSymbol : null;
             if (null != node.Initializer) {
                 bool isDelegate = false;
-                var declSym = m_Model.GetDeclaredSymbol(node) as ILocalSymbol;
                 if (null != declSym && declSym.Type.TypeKind == TypeKind.Delegate) {
                     isDelegate = true;
                 }
@@ -798,6 +799,74 @@ namespace RoslynTool.CsToLua
                 if (isDelegate) {
                     CodeBuilder.Append(")");
                 }
+            } else if (null != namedTypeSym && namedTypeSym.IsValueType && !SymbolTable.IsBasicType(namedTypeSym)) {
+                bool isCollection = IsImplementationOfSys(namedTypeSym, "ICollection");
+                bool isExternal = !SymbolTable.Instance.IsCs2LuaSymbol(namedTypeSym);
+                string fullTypeName = ClassInfo.GetFullName(namedTypeSym);
+
+                IMethodSymbol sym = null;
+                foreach (var c in namedTypeSym.InstanceConstructors) {
+                    if (!c.IsGenericMethod && c.Parameters.Length == 0) {
+                        sym = c;
+                    }
+                }
+
+                string ctor = null;
+                if (null != sym) {
+                    ctor = NameMangling(sym);
+                }
+                CodeBuilder.AppendFormat("{0}local{{{1} = ", GetIndentString(), node.Identifier.Text);
+
+                if (isCollection) {
+                    bool isDictionary = IsImplementationOfSys(namedTypeSym, "IDictionary");
+                    bool isList = IsImplementationOfSys(namedTypeSym, "IList");
+                    if (isDictionary) {
+                        //字典对象的处理
+                        CodeBuilder.AppendFormat("new{0}dictionary({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                        CsLuaTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                        if (isExternal) {
+                            CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
+                        }
+                    } else if (isList) {
+                        //列表对象的处理
+                        CodeBuilder.AppendFormat("new{0}list({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                        CsLuaTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                        if (isExternal) {
+                            CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
+                        }
+                    } else {
+                        //集合对象的处理
+                        CodeBuilder.AppendFormat("new{0}collection({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                        CsLuaTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                        if (isExternal) {
+                            CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
+                        }
+                    }
+                } else {
+                    CodeBuilder.AppendFormat("new{0}object({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                    CsLuaTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                    if (isExternal) {
+                        CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
+                    }
+                }
+                if (string.IsNullOrEmpty(ctor)) {
+                    CodeBuilder.Append("null");
+                } else {
+                    CodeBuilder.AppendFormat("\"{0}\"", ctor);
+                }
+                if (isCollection) {
+                    bool isDictionary = IsImplementationOfSys(namedTypeSym, "IDictionary");
+                    bool isList = IsImplementationOfSys(namedTypeSym, "IList");
+                    if (isDictionary)
+                        CodeBuilder.Append(", builddictionary()");
+                    else if (isList)
+                        CodeBuilder.Append(", buildlist()");
+                    else
+                        CodeBuilder.Append(", buildcollection()");
+                } else {
+                    CodeBuilder.Append(", null");
+                }
+                CodeBuilder.Append(");}");
             } else {
                 CodeBuilder.AppendFormat("{0}local({1})", GetIndentString(), node.Identifier.Text);
             }
