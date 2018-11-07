@@ -226,7 +226,8 @@ namespace LuaGenerator
                             var mdef = def as Dsl.CallData;
                             if (mdef.GetId() == "=") {
                                 string mname = mdef.GetParamId(0);
-                                var fdef = mdef.GetParam(1) as Dsl.FunctionData;
+                                var param1 = mdef.GetParam(1);
+                                var fdef = param1 as Dsl.FunctionData;
                                 if (mname != "__new_object" && null != fdef) {
                                     var fcall = fdef.Call;
                                     sb.AppendFormat("{0}{1} = {2}(", GetIndentString(indent), mname, fcall.GetId());
@@ -258,6 +259,13 @@ namespace LuaGenerator
                                     }
                                     --indent;
                                     sb.AppendFormatLine("{0}end,", GetIndentString(indent));
+                                } else {
+                                    var cdef = param1 as Dsl.CallData;
+                                    if (null != cdef) {
+                                        sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
+                                        GenerateSyntaxComponent(cdef, sb, indent, false);
+                                        sb.AppendFormatLine(",");
+                                    }
                                 }
                             }
                         }
