@@ -405,9 +405,9 @@ namespace RoslynTool.CsToLua
                                 }
                                 ++m_Indent;
                                 CodeBuilder.AppendFormat("{0}{1}.{2}", GetIndentString(), isStatic ? ci.Key : "this", name);
-                                CodeBuilder.AppendFormat(" = {0}", type.TypeKind == TypeKind.Delegate ? "delegationwrap(" : string.Empty);
+                                CodeBuilder.Append(" = ");
                                 OutputExpressionSyntax(v.Initializer.Value, opd);
-                                CodeBuilder.AppendFormat("{0};", type.TypeKind == TypeKind.Delegate ? ")" : string.Empty);
+                                CodeBuilder.Append(";");
                                 CodeBuilder.AppendLine();
                                 --m_Indent;
                                 if (isStatic) {
@@ -418,17 +418,17 @@ namespace RoslynTool.CsToLua
                                 continue;
                             } else {
                                 CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
-                                CodeBuilder.AppendFormat(" = {0}", type.TypeKind == TypeKind.Delegate ? "delegationwrap(" : string.Empty);
+                                CodeBuilder.Append(" = ");
                                 OutputExpressionSyntax(v.Initializer.Value, opd);
-                                CodeBuilder.AppendFormat("{0}", type.TypeKind == TypeKind.Delegate ? ")" : string.Empty);
                             }
                         } else if (type.TypeKind == TypeKind.Delegate) {
                             CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
-                            CodeBuilder.Append(" = delegationwrap(");
+                            CodeBuilder.Append(" = ");
                             if (null != constVal.Value) {
                                 OutputConstValue(constVal.Value, expOper);
+                            } else {
+                                CodeBuilder.Append("null");
                             }
-                            CodeBuilder.Append(")");
                         } else {
                             CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
                             CodeBuilder.Append(" = ");
@@ -462,9 +462,6 @@ namespace RoslynTool.CsToLua
                                 OutputDefaultValue(type);                            
 							}
                         }
-                    } else if (type.TypeKind == TypeKind.Delegate) {
-                        CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
-                        CodeBuilder.Append(" = initdelegation()");
                     } else if (type.IsValueType) {
                         if (SymbolTable.IsBasicType(type)) {
                             CodeBuilder.AppendFormat("{0}{1} = ", GetIndentString(), name);
@@ -531,13 +528,12 @@ namespace RoslynTool.CsToLua
                         var expOper = m_Model.GetOperation(v.Initializer.Value);
                         var constVal = expOper.ConstantValue;
                         CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), name);
-                        CodeBuilder.Append(" = delegationwrap(");
+                        CodeBuilder.Append(" = ");
                         if (!constVal.HasValue || constVal.Value != null) {
                             OutputExpressionSyntax(v.Initializer.Value, opd);
                         }
-                        CodeBuilder.Append(")");
                     } else {
-                        CodeBuilder.AppendFormat("{0}{1} = initdelegation()", GetIndentString(), name);
+                        CodeBuilder.AppendFormat("{0}{1} = null", GetIndentString(), name);
                     }
                     CodeBuilder.Append(";");
                     CodeBuilder.AppendLine();
@@ -556,6 +552,8 @@ namespace RoslynTool.CsToLua
                 var leftSymbolInfo = m_Model.GetSymbolInfo(assign.Left);
                 var leftSym = leftSymbolInfo.Symbol;
                 var leftPsym = leftSym as IPropertySymbol;
+                var leftEsym = leftSym as IEventSymbol;
+                var leftFsym = leftSym as IFieldSymbol;
                 var leftMemberAccess = assign.Left as MemberAccessExpressionSyntax;
                 var leftElementAccess = assign.Left as ElementAccessExpressionSyntax;
                 var leftCondAccess = assign.Left as ConditionalAccessExpressionSyntax;
@@ -570,7 +568,7 @@ namespace RoslynTool.CsToLua
                         }
                     }
                 }
-                VisitAssignment(ci, op, baseOp, assign, expTerminater, true, leftOper, leftSym, leftPsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType);
+                VisitAssignment(ci, op, baseOp, assign, expTerminater, true, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType);
                 var oper = m_Model.GetOperation(assign.Right);
                 if (null != leftSym && leftSym.Kind == SymbolKind.Local && null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && SymbolTable.Instance.IsCs2LuaSymbol(oper.Type)) {
                     CodeBuilder.AppendFormat("{0}{1} = wrapvaluetype({2});", GetIndentString(), leftSym.Name, leftSym.Name);
@@ -707,10 +705,6 @@ namespace RoslynTool.CsToLua
             var declSym = m_Model.GetDeclaredSymbol(node) as ILocalSymbol;
             var namedTypeSym = null != declSym ? declSym.Type as INamedTypeSymbol : null;
             if (null != node.Initializer) {
-                bool isDelegate = false;
-                if (null != declSym && declSym.Type.TypeKind == TypeKind.Delegate) {
-                    isDelegate = true;
-                }
                 var oper = m_Model.GetOperation(node.Initializer) as IVariableDeclarationStatement;
                 IConversionExpression opd = null;
                 if (null != oper && oper.Variables.Length == 1) {
@@ -763,9 +757,6 @@ namespace RoslynTool.CsToLua
                             } else if (!useOperator) {
                                 CodeBuilder.AppendFormat(" {0} ", token.Text);
                             }
-                            if (isDelegate) {
-                                CodeBuilder.Append("delegationwrap(");
-                            }
                             ii.OutputInvocation(CodeBuilder, this, memberAccess.Expression, true, m_Model, memberAccess);
                         } else {
                             if (ct > 0) {
@@ -774,9 +765,6 @@ namespace RoslynTool.CsToLua
                                 CodeBuilder.AppendFormat(") {0} ", token.Text);
                             } else if (!useOperator) {
                                 CodeBuilder.AppendFormat(" {0} ", token.Text);
-                            }
-                            if (isDelegate) {
-                                CodeBuilder.Append("delegationwrap(");
                             }
                             ii.OutputInvocation(CodeBuilder, this, invocation.Expression, false, m_Model, invocation);
                         } 
@@ -790,14 +778,8 @@ namespace RoslynTool.CsToLua
                 } else {
                     CodeBuilder.AppendFormat("{0}local({1}); {2}", GetIndentString(), node.Identifier.Text, node.Identifier.Text);
                     CodeBuilder.AppendFormat(" {0} ", token.Text);
-                    if (isDelegate) {
-                        CodeBuilder.Append("delegationwrap(");
-                    }
                     var init = node.Initializer;
                     OutputExpressionSyntax(init.Value, opd);
-                }
-                if (isDelegate) {
-                    CodeBuilder.Append(")");
                 }
             } else if (null != namedTypeSym && namedTypeSym.IsValueType && !SymbolTable.IsBasicType(namedTypeSym)) {
                 bool isCollection = IsImplementationOfSys(namedTypeSym, "ICollection");
@@ -872,7 +854,7 @@ namespace RoslynTool.CsToLua
             }
             CodeBuilder.AppendLine(";");
         }
-        private void VisitAssignment(ClassInfo ci, string op, string baseOp, AssignmentExpressionSyntax assign, string expTerminater, bool toplevel, IOperation leftOper, ISymbol leftSym, IPropertySymbol leftPsym, MemberAccessExpressionSyntax leftMemberAccess, ElementAccessExpressionSyntax leftElementAccess, ConditionalAccessExpressionSyntax leftCondAccess, SpecialAssignmentType specialType)
+        private void VisitAssignment(ClassInfo ci, string op, string baseOp, AssignmentExpressionSyntax assign, string expTerminater, bool toplevel, IOperation leftOper, ISymbol leftSym, IPropertySymbol leftPsym, IEventSymbol leftEsym, IFieldSymbol leftFsym, MemberAccessExpressionSyntax leftMemberAccess, ElementAccessExpressionSyntax leftElementAccess, ConditionalAccessExpressionSyntax leftCondAccess, SpecialAssignmentType specialType)
         {
             var assignOper = m_Model.GetOperation(assign);
             IConversionExpression opd = null, lopd = null, ropd = null;
@@ -909,23 +891,49 @@ namespace RoslynTool.CsToLua
             } else if (null != leftCondAccess) {
                 VisitAssignmentLeftCondAccess(ci, assign, leftSym, leftCondAccess, opd);
             } else if (leftOper.Type.TypeKind == TypeKind.Delegate) {
+                bool isMemberAccess = null != leftPsym || null != leftEsym || null != leftFsym;
+                if (isMemberAccess) {
+                    string className = ClassInfo.GetFullName(leftSym.ContainingType);
+                    string memberName = leftSym.Name;
+                    if (leftSym.IsStatic) {
+                        CodeBuilder.Append("setstatic(");
+                        CodeBuilder.Append(className);
+                        CodeBuilder.AppendFormat(", \"{0}\", ", memberName);
+                    } else {
+                        CodeBuilder.Append("setinstance(");
+                        if (null != leftMemberAccess)
+                            OutputExpressionSyntax(leftMemberAccess.Expression);
+                        else
+                            CodeBuilder.Append("this");
+                        CodeBuilder.AppendFormat(", \"{0}\", ", memberName);
+                    }
+                } else {
+                    OutputExpressionSyntax(assign.Left);
+                    CodeBuilder.Append(" = ");
+                }
                 VisitAssignmentDelegation(ci, op, baseOp, assign, leftOper, leftSym, opd);
+                if (isMemberAccess) {
+                    CodeBuilder.Append(")");
+                }
             } else if (null != invocation) {
                 VisitAssignmentInvocation(ci, op, baseOp, assign, invocation, opd, lopd, ropd, compAssignInfo);
             } else {
-                bool isPropSet = null != leftPsym && null != leftMemberAccess;
+                bool isMemberAccess = null != leftPsym || null != leftEsym || null != leftFsym;
                 if (op == "=") {
-                    if (isPropSet) {
-                        string className = ClassInfo.GetFullName(leftPsym.ContainingType);
-                        string pname = leftPsym.Name;
-                        if (leftPsym.IsStatic) {
+                    if (isMemberAccess) {
+                        string className = ClassInfo.GetFullName(leftSym.ContainingType);
+                        string memberName = leftSym.Name;
+                        if (leftSym.IsStatic) {
                             CodeBuilder.Append("setstatic(");
                             CodeBuilder.Append(className);
-                            CodeBuilder.AppendFormat(", \"{0}\", ", pname);
+                            CodeBuilder.AppendFormat(", \"{0}\", ", memberName);
                         } else {
                             CodeBuilder.Append("setinstance(");
-                            OutputExpressionSyntax(leftMemberAccess.Expression);
-                            CodeBuilder.AppendFormat(", \"{0}\", ", pname);
+                            if (null != leftMemberAccess)
+                                OutputExpressionSyntax(leftMemberAccess.Expression);
+                            else
+                                CodeBuilder.Append("this");
+                            CodeBuilder.AppendFormat(", \"{0}\", ", memberName);
                         }
                     } else {
                         OutputExpressionSyntax(assign.Left);
@@ -933,17 +941,20 @@ namespace RoslynTool.CsToLua
                     }
                     OutputExpressionSyntax(assign.Right, opd);
                 } else {
-                    if (isPropSet) {
-                        string className = ClassInfo.GetFullName(leftPsym.ContainingType);
-                        string pname = leftPsym.Name;
-                        if (leftPsym.IsStatic) {
+                    if (isMemberAccess) {
+                        string className = ClassInfo.GetFullName(leftSym.ContainingType);
+                        string memberName = leftSym.Name;
+                        if (leftSym.IsStatic) {
                             CodeBuilder.Append("setstatic(");
                             CodeBuilder.Append(className);
-                            CodeBuilder.AppendFormat(", \"{0}\", ", pname);
+                            CodeBuilder.AppendFormat(", \"{0}\", ", memberName);
                         } else {
                             CodeBuilder.Append("setinstance(");
-                            OutputExpressionSyntax(leftMemberAccess.Expression);
-                            CodeBuilder.AppendFormat(", \"{0}\", ", pname);
+                            if (null != leftMemberAccess)
+                                OutputExpressionSyntax(leftMemberAccess.Expression);
+                            else
+                                CodeBuilder.Append("this");
+                            CodeBuilder.AppendFormat(", \"{0}\", ", memberName);
                         }
                     } else {
                         OutputExpressionSyntax(assign.Left);
@@ -989,7 +1000,7 @@ namespace RoslynTool.CsToLua
                         }
                     }
                 }
-                if (isPropSet) {
+                if (isMemberAccess) {
                     CodeBuilder.Append(")");
                 }
             }
@@ -1316,68 +1327,59 @@ namespace RoslynTool.CsToLua
                 Log(assign, "assignment delegation, left symbol == null");
                 return;
             }
-            if (leftSym.Kind == SymbolKind.Local && op == "=") {
-                OutputExpressionSyntax(assign.Left);
-                CodeBuilder.Append(" = ");
-                CodeBuilder.AppendFormat("delegationwrap");
-                CodeBuilder.Append("(");
-                OutputExpressionSyntax(assign.Right, opd);
-                CodeBuilder.Append(")");
+            bool isEvent = leftOper is IEventReferenceExpression;
+            string prefix;
+            if (SymbolTable.Instance.IsCs2LuaSymbol(leftSym)) {
+                prefix = string.Empty;
             } else {
-                bool isEvent = leftOper is IEventReferenceExpression;
-                string prefix;
-                if (SymbolTable.Instance.IsCs2LuaSymbol(leftSym)) {
-                    prefix = string.Empty;
-                } else {
-                    prefix = "extern";
-                }
-                string postfix;
-                if (op == "=") {
-                    postfix = "set";
-                } else if (baseOp == "+") {
-                    postfix = "add";
-                } else if (baseOp == "-") {
-                    postfix = "remove";
-                } else {
-                    Log(assign, "Unsupported delegation operator {0} !", op);
-                    postfix = "error";
-                }
-                bool isStatic = leftSym.IsStatic;
-                string containingName = ClassInfo.GetFullName(leftSym.ContainingType);
-                CodeBuilder.AppendFormat("{0}delegation{1}", prefix, postfix);
-                CodeBuilder.Append("(");
-                CodeBuilder.AppendFormat("{0}, {1}, ", isEvent ? "true" : "false", isStatic ? "true" : "false");
-                if (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event) {
-                    var memberAccess = assign.Left as MemberAccessExpressionSyntax;
-                    if (null != memberAccess) {
-                        CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, memberAccess.Name.Identifier.Text);
-                        OutputExpressionSyntax(memberAccess.Expression);
-                        CodeBuilder.Append(", ");
-                        string intf = "null";
-                        string mname = string.Format("\"{0}\"", memberAccess.Name.Identifier.Text);
-                        CheckExplicitInterfaceAccess(leftSym, ref intf, ref mname);
-                        CodeBuilder.AppendFormat("{0}, {1}", intf, mname);
-                    } else if (leftSym.ContainingType == ci.SemanticInfo || leftSym.ContainingType == ci.SemanticInfo.OriginalDefinition || ci.IsInherit(leftSym.ContainingType)) {
-                        CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
-                        if (leftSym.IsStatic)
-                            CodeBuilder.AppendFormat("{0}, nil, ", ClassInfo.GetFullName(leftSym.ContainingType));
-                        else
-                            CodeBuilder.Append("this, null, ");
-                        CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
-                    } else {
-                        CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
-                        CodeBuilder.Append("newobj, null, ");
-                        CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
-                    }
+                prefix = "extern";
+            }
+            string postfix;
+            if (op == "=") {
+                postfix = "set";
+            } else if (baseOp == "+") {
+                postfix = "add";
+            } else if (baseOp == "-") {
+                postfix = "remove";
+            } else {
+                Log(assign, "Unsupported delegation operator {0} !", op);
+                postfix = "error";
+            }
+            bool isStatic = leftSym.IsStatic;
+            string containingName = ClassInfo.GetFullName(leftSym.ContainingType);
+            CodeBuilder.AppendFormat("{0}delegation{1}", prefix, postfix);
+            CodeBuilder.Append("(");
+            CodeBuilder.AppendFormat("{0}, {1}, ", isEvent ? "true" : "false", isStatic ? "true" : "false");
+            if (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event) {
+                var memberAccess = assign.Left as MemberAccessExpressionSyntax;
+                if (null != memberAccess) {
+                    CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, memberAccess.Name.Identifier.Text);
+                    OutputExpressionSyntax(memberAccess.Expression);
+                    CodeBuilder.Append(", ");
+                    string intf = "null";
+                    string mname = string.Format("\"{0}\"", memberAccess.Name.Identifier.Text);
+                    CheckExplicitInterfaceAccess(leftSym, ref intf, ref mname);
+                    CodeBuilder.AppendFormat("{0}, {1}", intf, mname);
+                } else if (leftSym.ContainingType == ci.SemanticInfo || leftSym.ContainingType == ci.SemanticInfo.OriginalDefinition || ci.IsInherit(leftSym.ContainingType)) {
+                    CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
+                    if (leftSym.IsStatic)
+                        CodeBuilder.AppendFormat("{0}, nil, ", ClassInfo.GetFullName(leftSym.ContainingType));
+                    else
+                        CodeBuilder.Append("this, null, ");
+                    CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
                 } else {
                     CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
-                    OutputExpressionSyntax(assign.Left);
-                    CodeBuilder.Append(", null, null");
+                    CodeBuilder.Append("newobj, null, ");
+                    CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
                 }
-                CodeBuilder.Append(", ");
-                OutputExpressionSyntax(assign.Right, opd);
-                CodeBuilder.Append(")");
+            } else {
+                CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
+                OutputExpressionSyntax(assign.Left);
+                CodeBuilder.Append(", null, null");
             }
+            CodeBuilder.Append(", ");
+            OutputExpressionSyntax(assign.Right, opd);
+            CodeBuilder.Append(")");
         }
         private void VisitInvocation(ClassInfo ci, InvocationExpressionSyntax invocation, string expTerminater, bool toplevel)
         {

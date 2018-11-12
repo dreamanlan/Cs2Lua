@@ -959,8 +959,6 @@ namespace LuaGenerator
                     prestr = ", ";
                 }
                 sb.Append("}");
-            } else if (id == "initdelegation") {
-                sb.Append("wrapdelegation{}");
             } else if (id == "builddelegation") {
                 var paramsString = data.GetParamId(0);
                 var varName = data.GetParamId(1);

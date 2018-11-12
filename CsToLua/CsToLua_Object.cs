@@ -390,11 +390,7 @@ namespace RoslynTool.CsToLua
                     if (null != oper) {
                         opd = oper.Value as IConversionExpression;
                     }
-                    CodeBuilder.AppendFormat("{0}", declSym.Type.TypeKind == TypeKind.Delegate ? "delegationwrap(" : string.Empty);
                     OutputExpressionSyntax(node.Initializer.Value, opd);
-                    CodeBuilder.AppendFormat("{0};", declSym.Type.TypeKind == TypeKind.Delegate ? ")" : string.Empty);
-                } else if (declSym.Type.TypeKind == TypeKind.Delegate) {
-                    CodeBuilder.Append("initdelegation();");
                 } else {
                     OutputDefaultValue(declSym.Type);
                     CodeBuilder.Append(";");

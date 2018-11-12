@@ -324,6 +324,8 @@ namespace RoslynTool.CsToLua
             var leftSymbolInfo = m_Model.GetSymbolInfo(node.Left);
             var leftSym = leftSymbolInfo.Symbol;
             var leftPsym = leftSym as IPropertySymbol;
+            var leftEsym = leftSym as IEventSymbol;
+            var leftFsym = leftSym as IFieldSymbol;
             var leftMemberAccess = node.Left as MemberAccessExpressionSyntax;
             var leftElementAccess = node.Left as ElementAccessExpressionSyntax;
             var leftCondAccess = node.Left as ConditionalAccessExpressionSyntax;
@@ -347,7 +349,7 @@ namespace RoslynTool.CsToLua
                 //顶层的赋值语句已经处理，这里的赋值都需要包装成lambda函数的样式
                 CodeBuilder.Append("(function(){ ");
             }
-            VisitAssignment(ci, op, baseOp, node, string.Empty, false, leftOper, leftSym, leftPsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType);
+            VisitAssignment(ci, op, baseOp, node, string.Empty, false, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType);
             var oper = m_Model.GetOperation(node.Right);
             if (null != leftSym && leftSym.Kind == SymbolKind.Local && null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && SymbolTable.Instance.IsCs2LuaSymbol(oper.Type)) {
                 CodeBuilder.AppendFormat("; {0} = wrapvaluetype({1})", leftSym.Name, leftSym.Name);
