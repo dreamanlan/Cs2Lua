@@ -6,7 +6,7 @@ using System.IO;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using RoslynTool.CsToLua;
+using RoslynTool.CsToDsl;
 using System.Diagnostics;
 
 namespace RoslynTool
@@ -127,7 +127,7 @@ namespace RoslynTool
                         } else if (0 == string.Compare(args[i], "-noautorequire", true)) {
                             SymbolTable.NoAutoRequire = true;
                         } else if (0 == string.Compare(args[i], "-luacomponentbystring", true)) {
-                            SymbolTable.LuaComponentByString = true;
+                            SymbolTable.DslComponentByString = true;
                         } else if (0 == string.Compare(args[i], "-usearraygetset", true)) {
                             SymbolTable.UseArrayGetSet = true;
                         } else if (0 == string.Compare(args[i], "-enabletranslationcheck", true)) {
@@ -201,7 +201,7 @@ namespace RoslynTool
                     Console.WriteLine("\t\tmacro = c# macro define, used in your csharp code #if/#elif/#else/#endif etc.");
                     Console.WriteLine("\t\tinternpath = only c# source file path in the csproj as intern class, only these classes translate to lua.");
                     Console.WriteLine("\t\texternpath = mark c# source file path in the csproj as extern class (API), these classes doesn't translate to lua.");
-                    Console.WriteLine("\t\tignorepath = ignore c# source file path in the csproj, these classes doesn't translate to lua (need translate them by hand, cs2lua use \"require 'cs2lua_custom';\" resolve xref).");
+                    Console.WriteLine("\t\tignorepath = ignore c# source file path in the csproj, these classes doesn't translate to lua (need translate them by hand, cs2dsl use \"require 'cs2lua_custom';\" resolve xref).");
                     Console.WriteLine("\t\tdllname = dotnet system assembly name, referenced by your csharp code.");
                     Console.WriteLine("\t\tdllpath = dotnet assembly path, referenced by your csharp code.");
                     Console.WriteLine("\t\talias = global for default or some dll toplevel namespace alias, used in your csharp code such as 'extern alias ui;'.");
@@ -213,7 +213,7 @@ namespace RoslynTool
                 }
                 if (File.Exists(file)) {
                     var stopwatch = Stopwatch.StartNew();
-                    var result = (int)CsToLuaProcessor.Process(file, macros, undefMacros, ignoredPath, externPath, internPath, refByNames, refByPaths, enableInherit, enableLinq, outputResult, parallel);
+                    var result = (int)CsToDslProcessor.Process(file, macros, undefMacros, ignoredPath, externPath, internPath, refByNames, refByPaths, enableInherit, enableLinq, outputResult, parallel);
                     stopwatch.Stop();
                     Console.WriteLine("RunningTime: {0}s", stopwatch.Elapsed.TotalSeconds);
                     LuaGenerator.LuaGenerator.Generate(Path.GetDirectoryName(file), outputDir, outputExt);

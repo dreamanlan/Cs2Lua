@@ -11,9 +11,9 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 
-namespace RoslynTool.CsToLua
+namespace RoslynTool.CsToDsl
 {
-    internal partial class CsLuaTranslater
+    internal partial class CsDslTranslater
     {
         #region 相对简单的表达式
         public override void VisitExpressionStatement(ExpressionStatementSyntax node)
@@ -351,7 +351,7 @@ namespace RoslynTool.CsToLua
             }
             VisitAssignment(ci, op, baseOp, node, string.Empty, false, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType);
             var oper = m_Model.GetOperation(node.Right);
-            if (null != leftSym && leftSym.Kind == SymbolKind.Local && null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && SymbolTable.Instance.IsCs2LuaSymbol(oper.Type)) {
+            if (null != leftSym && leftSym.Kind == SymbolKind.Local && null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
                 CodeBuilder.AppendFormat("; {0} = wrapvaluetype({1})", leftSym.Name, leftSym.Name);
             }
             if (needWrapFunction) {
@@ -479,7 +479,7 @@ namespace RoslynTool.CsToLua
                 AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
             }
             if (null != psym && psym.IsIndexer) {
-                CodeBuilder.AppendFormat("get{0}{1}indexer(", SymbolTable.Instance.IsCs2LuaSymbol(psym) ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
+                CodeBuilder.AppendFormat("get{0}{1}indexer(", SymbolTable.Instance.IsCs2DslSymbol(psym) ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
                 if (psym.IsStatic) {
                     string fullName = ClassInfo.GetFullName(psym.ContainingType);
                     CodeBuilder.Append(fullName);
@@ -532,7 +532,7 @@ namespace RoslynTool.CsToLua
                 }
                 if (null != psym && psym.IsIndexer) {
                     CodeBuilder.Append("(function(){ return(");
-                    CodeBuilder.AppendFormat("get{0}{1}indexer(", SymbolTable.Instance.IsCs2LuaSymbol(psym) ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
+                    CodeBuilder.AppendFormat("get{0}{1}indexer(", SymbolTable.Instance.IsCs2DslSymbol(psym) ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
                     if (psym.IsStatic) {
                         string fullName = ClassInfo.GetFullName(psym.ContainingType);
                         CodeBuilder.Append(fullName);
@@ -795,7 +795,7 @@ namespace RoslynTool.CsToLua
                 AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
 
                 bool isCollection = IsImplementationOfSys(typeSymInfo, "ICollection");
-                bool isExternal = !SymbolTable.Instance.IsCs2LuaSymbol(typeSymInfo);
+                bool isExternal = !SymbolTable.Instance.IsCs2DslSymbol(typeSymInfo);
 
                 string ctor = NameMangling(sym);
                 string localName = string.Format("__newobject_{0}", GetSourcePosForVar(node));
@@ -812,28 +812,28 @@ namespace RoslynTool.CsToLua
                     if (isDictionary) {
                         //字典对象的处理
                         CodeBuilder.AppendFormat("new{0}dictionary({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                        CsLuaTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                        CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
                         if (isExternal) {
                             CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
                         }
                     } else if (isList) {
                         //列表对象的处理
                         CodeBuilder.AppendFormat("new{0}list({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                        CsLuaTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                        CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
                         if (isExternal) {
                             CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
                         }
                     } else {
                         //集合对象的处理
                         CodeBuilder.AppendFormat("new{0}collection({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                        CsLuaTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                        CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
                         if (isExternal) {
                             CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
                         }
                     }
                 } else {
                     CodeBuilder.AppendFormat("new{0}object({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                    CsLuaTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
                     if (isExternal) {
                         CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
                     }

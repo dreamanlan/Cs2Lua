@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 
-namespace RoslynTool.CsToLua
+namespace RoslynTool.CsToDsl
 {
     internal class BreakAnalysis : CSharpSyntaxWalker
     {

@@ -8,9 +8,9 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 
-namespace RoslynTool.CsToLua
+namespace RoslynTool.CsToDsl
 {
-    internal partial class CsLuaTranslater
+    internal partial class CsDslTranslater
     {
         /// <remarks>
         /// dsl实现的LINQ类里的所有lambda函数参数都是按顺序生成的，这里假定LINQ类内部有一个与这里翻译时相似的参数名栈与参数名列表
@@ -22,7 +22,7 @@ namespace RoslynTool.CsToLua
         public override void VisitQueryExpression(QueryExpressionSyntax node)
         {
             if (!m_EnableLinq) {
-                Log(node, "Cs2Lua can't support LINQ, use -enablelinq remove this error! (c# LINQ syntax will translate to use script LINQ class in utility.lua)");
+                Log(node, "Cs2Dsl can't support LINQ, use -enablelinq remove this error! (c# LINQ syntax will translate to use script LINQ class in utility.dsl)");
             }
 
             m_LinqParamInfoStack.Push(new LinqParamInfo());

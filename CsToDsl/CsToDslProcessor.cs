@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace RoslynTool.CsToLua
+namespace RoslynTool.CsToDsl
 {
     public enum ExitCode : int
     {
@@ -21,7 +21,7 @@ namespace RoslynTool.CsToLua
         FileNotFound = 3,
         Exception = 4,
     }
-    public static class CsToLuaProcessor
+    public static class CsToDslProcessor
     {
         public static ExitCode Process(string srcFile, IList<string> macros, IList<string> undefMacros, IList<string> ignoredPath, IList<string> externPath, IList<string> internPath, IDictionary<string, string> _refByNames, IDictionary<string, string> _refByPaths, bool enableInherit, bool enableLinq, bool outputResult, bool parallel)
         {
@@ -228,7 +228,7 @@ namespace RoslynTool.CsToLua
             compilation = compilation.WithOptions(compilationOptions);
             compilation = compilation.AddReferences(refs.ToArray());
             foreach (SyntaxTree tree in trees) {
-                LuaKeywordsReplacer replacer = new LuaKeywordsReplacer();
+                DslKeywordsReplacer replacer = new DslKeywordsReplacer();
                 var newRoot = replacer.Visit(tree.GetRoot()) as CSharpSyntaxNode;
                 var newTree = CSharpSyntaxTree.Create(newRoot, tree.Options as CSharpParseOptions, tree.FilePath, tree.Encoding);
                 newTrees.Add(newTree);
@@ -337,18 +337,18 @@ namespace RoslynTool.CsToLua
                             }
 
                             if (!ignore && !isExtern) {
-                                CsLuaTranslater csToLua = new CsLuaTranslater(model, enableInherit, enableLinq);
-                                csToLua.Translate(root);
-                                if (csToLua.HaveError) {
+                                CsDslTranslater csToDsl = new CsDslTranslater(model, enableInherit, enableLinq);
+                                csToDsl.Translate(root);
+                                if (csToDsl.HaveError) {
                                     LockWriteLine(sw3, "============<<<Translation Error:{0}>>>============", fileName);
                                     lock (sw3) {
-                                        csToLua.SaveLog(sw3);
-                                        csToLua.ClearLog();
+                                        csToDsl.SaveLog(sw3);
+                                        csToDsl.ClearLog();
                                     }
                                     haveTranslationError = true;
                                 }
 
-                                foreach (var pair in csToLua.ToplevelClasses) {
+                                foreach (var pair in csToDsl.ToplevelClasses) {
                                     var key = pair.Key;
                                     var cis = pair.Value;
 
@@ -377,21 +377,21 @@ namespace RoslynTool.CsToLua
                         Action<SyntaxNode, INamedTypeSymbol> action = (SyntaxNode node, INamedTypeSymbol typeSym) => {
                             string fileName = Path.GetFileNameWithoutExtension(node.SyntaxTree.FilePath);
                             SemanticModel model = compilation.GetSemanticModel(node.SyntaxTree, true);
-                            CsLuaTranslater csToLua = new CsLuaTranslater(model, enableInherit, enableLinq);
-                            csToLua.Translate(node, typeSym);
-                            if (csToLua.HaveError) {
+                            CsDslTranslater csToDsl = new CsDslTranslater(model, enableInherit, enableLinq);
+                            csToDsl.Translate(node, typeSym);
+                            if (csToDsl.HaveError) {
                                 sw3.WriteLine("============<<<Translation Error:{0}>>>============", fileName);
-                                csToLua.SaveLog(sw3);
-                                csToLua.ClearLog();
+                                csToDsl.SaveLog(sw3);
+                                csToDsl.ClearLog();
                                 haveTranslationError = true;
                             } else {
-                                while (csToLua.DerivedGenericTypeInstances.Count > 0) {
-                                    var t = csToLua.DerivedGenericTypeInstances.Dequeue();
+                                while (csToDsl.DerivedGenericTypeInstances.Count > 0) {
+                                    var t = csToDsl.DerivedGenericTypeInstances.Dequeue();
                                     typeSyms.Enqueue(t);
                                 }
                             }
 
-                            foreach (var cpair in csToLua.ToplevelClasses) {
+                            foreach (var cpair in csToDsl.ToplevelClasses) {
                                 var ckey = cpair.Key;
                                 var cis = cpair.Value;
 
@@ -446,11 +446,11 @@ namespace RoslynTool.CsToLua
             File.WriteAllText(Path.Combine(outputDir, "cs2lua__references.txt"), refExternBuilder.ToString());
             foreach (var pair in toplevelClasses) {
                 StringBuilder classBuilder = new StringBuilder();
-                string fileName = BuildLuaClass(classBuilder, pair.Key, pair.Value);
+                string fileName = BuildDslClass(classBuilder, pair.Key, pair.Value);
                 File.WriteAllText(Path.Combine(outputDir, Path.ChangeExtension(fileName.ToLower(), c_OutputExt)), classBuilder.ToString());
             }
             StringBuilder allClassBuilder = new StringBuilder();
-            BuildLuaClass(allClassBuilder, toplevelMni, toplevelClasses);
+            BuildDslClass(allClassBuilder, toplevelMni, toplevelClasses);
             if (haveSemanticError || haveTranslationError) {
                 if (haveSemanticError) {
                     Console.WriteLine("{0}", File.ReadAllText(Path.Combine(logDir, "SemanticError.log")));
@@ -562,7 +562,7 @@ namespace RoslynTool.CsToLua
             if (ignoredClasses.ContainsKey(key)) {
                 return;
             }
-            if (ClassInfo.HasAttribute(typesym, "CsToLua.IgnoreAttribute")) {
+            if (ClassInfo.HasAttribute(typesym, "Cs2Lua.IgnoreAttribute")) {
                 return;
             }
             StringBuilder csb = new StringBuilder();
@@ -581,7 +581,7 @@ namespace RoslynTool.CsToLua
             temp.Length = 0;
             foreach (var sym in typesym.GetMembers()) {
                 var msym = sym as IFieldSymbol;
-                if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "CsToLua.IgnoreAttribute")) {
+                if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Lua.IgnoreAttribute")) {
                     temp.AppendFormat("{0}field({1}){{", GetIndentString(indent), sym.Name);
                     temp.AppendLine();
                     ++indent;
@@ -597,7 +597,7 @@ namespace RoslynTool.CsToLua
             temp.Length = 0;
             foreach (var sym in typesym.GetMembers()) {
                 var msym = sym as IMethodSymbol;
-                if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "CsToLua.IgnoreAttribute")) {
+                if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Lua.IgnoreAttribute")) {
                     string mname = SymbolTable.Instance.NameMangling(msym);
                     temp.AppendFormat("{0}method({1}){{", GetIndentString(indent), mname);
                     temp.AppendLine();
@@ -614,7 +614,7 @@ namespace RoslynTool.CsToLua
             temp.Length = 0;
             foreach (var sym in typesym.GetMembers()) {
                 var msym = sym as IPropertySymbol;
-                if (null != msym && !msym.IsIndexer && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "CsToLua.IgnoreAttribute")) {
+                if (null != msym && !msym.IsIndexer && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Lua.IgnoreAttribute")) {
                     temp.AppendFormat("{0}property({1}){{", GetIndentString(indent), sym.Name);
                     temp.AppendLine();
                     ++indent;
@@ -630,7 +630,7 @@ namespace RoslynTool.CsToLua
             temp.Length = 0;
             foreach (var sym in typesym.GetMembers()) {
                 var msym = sym as IEventSymbol;
-                if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "CsToLua.IgnoreAttribute")) {
+                if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Lua.IgnoreAttribute")) {
                     temp.AppendFormat("{0}event({1}){{", GetIndentString(indent), sym.Name);
                     temp.AppendLine();
                     ++indent;
@@ -744,7 +744,7 @@ namespace RoslynTool.CsToLua
                     if (sym.Kind != SymbolKind.Field) continue;
                     var fsym = sym as IFieldSymbol;
                     sb.AppendFormat("{0}member(\"{1}\", ", GetIndentString(indent), fsym.Name);
-                    CsLuaTranslater.OutputConstValue(sb, fsym.ConstantValue, fsym);
+                    CsDslTranslater.OutputConstValue(sb, fsym.ConstantValue, fsym);
                     sb.Append(");");
                     sb.AppendLine();
                 }
@@ -790,7 +790,7 @@ namespace RoslynTool.CsToLua
         }
         private static void BuildInterfaces(StringBuilder sb)
         {
-            BuildInterfaces(sb, SymbolTable.Instance.Cs2LuaInterfaces);
+            BuildInterfaces(sb, SymbolTable.Instance.Cs2DslInterfaces);
         }
         private static void BuildInterfaces(StringBuilder sb, Dictionary<string, List<string>> intfs)
         {
@@ -814,32 +814,32 @@ namespace RoslynTool.CsToLua
                 sb.AppendLine(key);
             }
         }
-        private static void BuildLuaClass(StringBuilder sb, MergedNamespaceInfo toplevelMni, Dictionary<string, MergedClassInfo> toplevelMcis)
+        private static void BuildDslClass(StringBuilder sb, MergedNamespaceInfo toplevelMni, Dictionary<string, MergedClassInfo> toplevelMcis)
         {
             StringBuilder code = new StringBuilder();
-            HashSet<string> lualibRefs = new HashSet<string>();
+            HashSet<string> dsllibRefs = new HashSet<string>();
             BuildNamespaces(code, toplevelMni);
             foreach (var pair in toplevelMcis) {
                 StringBuilder classBuilder = new StringBuilder();
-                string fileName = BuildLuaClass(classBuilder, pair.Key, pair.Value, false, lualibRefs);
+                string fileName = BuildDslClass(classBuilder, pair.Key, pair.Value, false, dsllibRefs);
                 code.Append(classBuilder.ToString());
             }
             sb.AppendLine("require(\"cs2lua__utility\");");
             sb.AppendLine("require(\"cs2lua__attributes\");");
             sb.AppendLine("require(\"cs2lua__externenums\");");
             sb.AppendLine("require(\"cs2lua__interfaces\");");
-            foreach (string lib in lualibRefs) {
+            foreach (string lib in dsllibRefs) {
                 sb.AppendFormat("require(\"{0}\");", lib.ToLower());
                 sb.AppendLine();
             }
             sb.Append(code.ToString());
         }
-        private static string BuildLuaClass(StringBuilder sb, string key, MergedClassInfo mci)
+        private static string BuildDslClass(StringBuilder sb, string key, MergedClassInfo mci)
         {
-            HashSet<string> lualibRefs = new HashSet<string>();
-            return BuildLuaClass(sb, key, mci, true, lualibRefs);
+            HashSet<string> dsllibRefs = new HashSet<string>();
+            return BuildDslClass(sb, key, mci, true, dsllibRefs);
         }
-        private static string BuildLuaClass(StringBuilder sb, string key, MergedClassInfo mci, bool isAlone, HashSet<string> lualibRefs)
+        private static string BuildDslClass(StringBuilder sb, string key, MergedClassInfo mci, bool isAlone, HashSet<string> dsllibRefs)
         {
             SymbolTable symTable = SymbolTable.Instance;
             var classes = mci.Classes;
@@ -873,14 +873,14 @@ namespace RoslynTool.CsToLua
                 isValueType = csi.TypeSymbol.IsValueType;
                 isEnumClass = csi.TypeSymbol.TypeKind == TypeKind.Enum;
             }
-            bool myselfDefinedBaseClass = SymbolTable.Instance.IsCs2LuaSymbol(csi.TypeSymbol.BaseType);
+            bool myselfDefinedBaseClass = SymbolTable.Instance.IsCs2DslSymbol(csi.TypeSymbol.BaseType);
             
             HashSet<string> requiredlibs = new HashSet<string>();
-            HashSet<string> lualibs;
-            if (symTable.Requires.TryGetValue(key, out lualibs)) {
-                foreach (string lib in lualibs) {
-                    if (!lualibRefs.Contains(lib)) {
-                        lualibRefs.Add(lib);
+            HashSet<string> dsllibs;
+            if (symTable.Requires.TryGetValue(key, out dsllibs)) {
+                foreach (string lib in dsllibs) {
+                    if (!dsllibRefs.Contains(lib)) {
+                        dsllibRefs.Add(lib);
                     }
                     if (!requiredlibs.Contains(lib)) {
                         requiredlibs.Add(lib);
@@ -889,10 +889,10 @@ namespace RoslynTool.CsToLua
             }
             foreach (var ci in classes) {
                 foreach (string r in ci.IgnoreReferences) {
-                    if (symTable.Requires.TryGetValue(r, out lualibs)) {
-                        foreach (string lib in lualibs) {
-                            if (!lualibRefs.Contains(lib)) {
-                                lualibRefs.Add(lib);
+                    if (symTable.Requires.TryGetValue(r, out dsllibs)) {
+                        foreach (string lib in dsllibs) {
+                            if (!dsllibRefs.Contains(lib)) {
+                                dsllibRefs.Add(lib);
                             }
                             if (!requiredlibs.Contains(lib)) {
                                 requiredlibs.Add(lib);
@@ -966,7 +966,7 @@ namespace RoslynTool.CsToLua
                     if (string.IsNullOrEmpty(exportConstructor)) {
                         sb.AppendFormat("{0}return(newobject({1}, ", GetIndentString(indent), key);
                         var namedTypeSym = csi.TypeSymbol;
-                        CsLuaTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
+                        CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
                         sb.Append("null, null, ...));");
                         sb.AppendLine();
                     } else {
@@ -981,13 +981,13 @@ namespace RoslynTool.CsToLua
                             }
                             sb.AppendFormat(") = newobject({0}, ", key);
                             var namedTypeSym = csi.TypeSymbol;
-                            CsLuaTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
+                            CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
                             sb.AppendFormat("\"{0}\", null, ...); return(newobj); }})(...));", exportConstructor);
                             sb.AppendLine();
                         } else {
                             sb.AppendFormat("{0}return(newobject({1}, ", GetIndentString(indent), key);
                             var namedTypeSym = csi.TypeSymbol;
-                            CsLuaTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
+                            CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
                             sb.AppendFormat("\"{0}\", null, ...));", exportConstructor);
                             sb.AppendLine();
                         }
@@ -1305,7 +1305,7 @@ namespace RoslynTool.CsToLua
             sb.AppendLine();
 
             foreach (var pair in mci.InnerClasses) {
-                BuildLuaClass(sb, pair.Key, pair.Value, false, lualibRefs);
+                BuildDslClass(sb, pair.Key, pair.Value, false, dsllibRefs);
             }
             if (isEntryClass) {
                 sb.AppendFormat("defineentry({0});", key);
@@ -1336,7 +1336,7 @@ namespace RoslynTool.CsToLua
 
         private static string GetIndentString(int indent)
         {
-            return CsLuaTranslater.GetIndentString(indent);
+            return CsDslTranslater.GetIndentString(indent);
         }
 
         private static void LockWriteLine(StreamWriter sw, string fmt, params object[] args)

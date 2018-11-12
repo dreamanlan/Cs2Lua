@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.Semantics;
 
-namespace RoslynTool.CsToLua
+namespace RoslynTool.CsToDsl
 {
     internal class ClassInfo
     {
@@ -98,7 +98,7 @@ namespace RoslynTool.CsToLua
         }
         internal void AddReference(INamedTypeSymbol refType)
         {
-            if (!SymbolTable.Instance.IsCs2LuaSymbol(refType)) {
+            if (!SymbolTable.Instance.IsCs2DslSymbol(refType)) {
                 AddExternReference(refType);
             }
             if (!IsInnerClassOfGenericType(refType)) {
@@ -107,7 +107,7 @@ namespace RoslynTool.CsToLua
                 }
             }
             string key = GetFullName(refType);
-            if (null != refType && refType != SemanticInfo && SymbolTable.Instance.IsCs2LuaSymbol(refType)) {
+            if (null != refType && refType != SemanticInfo && SymbolTable.Instance.IsCs2DslSymbol(refType)) {
                 if (!refType.IsAnonymousType && !refType.IsImplicitClass && !refType.IsImplicitlyDeclared && refType.TypeKind != TypeKind.Delegate && refType.TypeKind != TypeKind.Dynamic && refType.TypeKind != TypeKind.Interface) {
                     if (!string.IsNullOrEmpty(key) && !References.Contains(key) && key != Key) {
                         bool isIgnoreFile = SymbolTable.Instance.IsIgnoredSymbol(refType);
@@ -260,14 +260,14 @@ namespace RoslynTool.CsToLua
         {
             if (null == type)
                 return string.Empty;
-            if (SymbolTable.Instance.IsCs2LuaSymbol(type)) {
+            if (SymbolTable.Instance.IsCs2DslSymbol(type)) {
                 return CalcFullName(type, true);
             } else {
-                //外部类型不会基于泛型样式导入，只有使用lua实现的集合类会出现这种情况，这里需要用泛型类型名以与utility.lua里的名称一致
+                //外部类型不会基于泛型样式导入，只有使用脚本语言实现的集合类会出现这种情况，这里需要用泛型类型名以与utility.dsl里的名称一致
                 return SymbolTable.PrefixExternClassName(CalcFullNameWithTypeParameters(type, true));
             }
         }
-        //专门用于SymbolTable::IsCs2LuaSymbol与分析外部文件的类定义时使用的函数(防止递归调用与数据构建过程中查询数据)
+        //专门用于SymbolTable::IsCs2DslSymbol与分析外部文件的类定义时使用的函数(防止递归调用与数据构建过程中查询数据)
         internal static string SpecialGetFullTypeName(ITypeSymbol type, bool isExtern)
         {
             if (null == type)
@@ -306,7 +306,7 @@ namespace RoslynTool.CsToLua
         {
             if (null == type)
                 return string.Empty;
-            if (SymbolTable.Instance.IsCs2LuaSymbol(type)) {
+            if (SymbolTable.Instance.IsCs2DslSymbol(type)) {
                 return CalcFullNameWithTypeParameters(type, true);
             } else {
                 return SymbolTable.PrefixExternClassName(CalcFullNameWithTypeParameters(type, true));

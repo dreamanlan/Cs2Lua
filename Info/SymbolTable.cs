@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 
-namespace RoslynTool.CsToLua
+namespace RoslynTool.CsToDsl
 {
     internal class SymbolTable
     {
@@ -69,9 +69,9 @@ namespace RoslynTool.CsToLua
         {
             get { return m_TypeArguments; }
         }
-        internal Dictionary<string, List<string>> Cs2LuaInterfaces
+        internal Dictionary<string, List<string>> Cs2DslInterfaces
         {
-            get { return m_Cs2LuaInterfaces; }
+            get { return m_Cs2DslInterfaces; }
         }
         internal HashSet<string> CheckedInvocations
         {
@@ -105,47 +105,47 @@ namespace RoslynTool.CsToLua
         {
             return m_IgnoredTypes.ContainsKey(ClassInfo.GetFullName(sym));
         }
-        internal bool IsCs2LuaSymbol(ISymbol sym)
+        internal bool IsCs2DslSymbol(ISymbol sym)
         {
             if (sym.Kind == SymbolKind.Method) {
-                return IsCs2LuaSymbol(sym as IMethodSymbol);
+                return IsCs2DslSymbol(sym as IMethodSymbol);
             } else if (sym.Kind == SymbolKind.Field) {
-                return IsCs2LuaSymbol(sym as IFieldSymbol);
+                return IsCs2DslSymbol(sym as IFieldSymbol);
             } else if (sym.Kind == SymbolKind.Property) {
-                return IsCs2LuaSymbol(sym as IPropertySymbol);
+                return IsCs2DslSymbol(sym as IPropertySymbol);
             } else if (sym.Kind == SymbolKind.Event) {
-                return IsCs2LuaSymbol(sym as IEventSymbol);
+                return IsCs2DslSymbol(sym as IEventSymbol);
             } else {
                 var arrSym = sym as IArrayTypeSymbol;
                 if (null != arrSym) {
-                    return IsCs2LuaSymbol(arrSym.ElementType);
+                    return IsCs2DslSymbol(arrSym.ElementType);
                 } else {
                     var typeSym = sym as ITypeSymbol;
                     if (null != typeSym) {
-                        return IsCs2LuaSymbol(typeSym);
+                        return IsCs2DslSymbol(typeSym);
                     } else {
                         return sym.ContainingAssembly == m_AssemblySymbol;
                     }
                 }
             }
         }
-        internal bool IsCs2LuaSymbol(IMethodSymbol sym)
+        internal bool IsCs2DslSymbol(IMethodSymbol sym)
         {
             return sym.ContainingAssembly == m_AssemblySymbol && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true));
         }
-        internal bool IsCs2LuaSymbol(IFieldSymbol sym)
+        internal bool IsCs2DslSymbol(IFieldSymbol sym)
         {
             return sym.ContainingAssembly == m_AssemblySymbol && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true));
         }
-        internal bool IsCs2LuaSymbol(IPropertySymbol sym)
+        internal bool IsCs2DslSymbol(IPropertySymbol sym)
         {
             return sym.ContainingAssembly == m_AssemblySymbol && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true));
         }
-        internal bool IsCs2LuaSymbol(IEventSymbol sym)
+        internal bool IsCs2DslSymbol(IEventSymbol sym)
         {
             return sym.ContainingAssembly == m_AssemblySymbol && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym.ContainingType, true));
         }
-        internal bool IsCs2LuaSymbol(ITypeSymbol sym)
+        internal bool IsCs2DslSymbol(ITypeSymbol sym)
         {
             return sym.ContainingAssembly == m_AssemblySymbol && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym, true));
         }
@@ -367,7 +367,7 @@ namespace RoslynTool.CsToLua
         private ConcurrentDictionary<string, ITypeSymbol> m_ExternEnums = new ConcurrentDictionary<string, ITypeSymbol>();        
         private Dictionary<string, List<SyntaxNode>> m_GenericTypeDefines = new Dictionary<string, List<SyntaxNode>>();
         private Dictionary<string, INamedTypeSymbol> m_GenericTypeInstances = new Dictionary<string, INamedTypeSymbol>();
-        private Dictionary<string, List<string>> m_Cs2LuaInterfaces = new Dictionary<string, List<string>>();
+        private Dictionary<string, List<string>> m_Cs2DslInterfaces = new Dictionary<string, List<string>>();
 
         private List<ITypeParameterSymbol> m_TypeParameters = new List<ITypeParameterSymbol>();
         private List<ITypeSymbol> m_TypeArguments = new List<ITypeSymbol>();
@@ -443,7 +443,7 @@ namespace RoslynTool.CsToLua
             if (!string.IsNullOrEmpty(name) && name[0] == '.')
                 name = name.Substring(1);
             sb.Append(name);
-            if (SymbolTable.Instance.IsCs2LuaSymbol(methodSym)) {
+            if (SymbolTable.Instance.IsCs2DslSymbol(methodSym)) {
                 foreach (var param in methodSym.Parameters) {
                     sb.Append("__");
                     if (param.RefKind == RefKind.Ref) {
@@ -509,14 +509,14 @@ namespace RoslynTool.CsToLua
                 return sym.Name;
             }
         }
-        internal static string CheckLuaKeyword(string name, out bool change)
+        internal static string CheckDslKeyword(string name, out bool change)
         {
             if (name.StartsWith("@")) {
                 change = true;
                 return "__cs_" + name.Substring(1);
-            } else if (s_ExtraLuaKeywords.Contains(name)) {
+            } else if (s_ExtraDslKeywords.Contains(name)) {
                 change = true;
-                return "__lua_" + name;
+                return "__dsl_" + name;
             } else {
                 change = false;                
                 return name;
@@ -621,10 +621,10 @@ namespace RoslynTool.CsToLua
             get { return s_NoAutoRequire; }
             set { s_NoAutoRequire = value; }
         }
-        internal static bool LuaComponentByString
+        internal static bool DslComponentByString
         {
-            get { return s_LuaComponentByString; }
-            set { s_LuaComponentByString = value; }
+            get { return s_DslComponentByString; }
+            set { s_DslComponentByString = value; }
         }
         internal static bool UseArrayGetSet
         {
@@ -651,13 +651,13 @@ namespace RoslynTool.CsToLua
         private static bool s_ForSlua = true;
         private static bool s_ForXlua = false;
         private static bool s_NoAutoRequire = false;
-        private static bool s_LuaComponentByString = false;
+        private static bool s_DslComponentByString = false;
         private static bool s_UseArrayGetSet = false;
         private static bool s_ArrayLowerBoundIsOne = true;
         private static bool s_EnableTranslationCheck = false;
         private static string s_SystemDllPath = string.Empty;
 
-        private static HashSet<string> s_ExtraLuaKeywords = new HashSet<string> {
+        private static HashSet<string> s_ExtraDslKeywords = new HashSet<string> {
             "and", "elseif", "end", "function", "local", "nil", "not", "or", "repeat", "then", "until"
         };
         private static HashSet<string> s_BasicTypes = new HashSet<string> {

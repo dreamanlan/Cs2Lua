@@ -8,9 +8,9 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 
-namespace RoslynTool.CsToLua
+namespace RoslynTool.CsToDsl
 {
-    internal partial class CsLuaTranslater
+    internal partial class CsDslTranslater
     {
         #region 基础遍历机制部分
         public void VisitToken(SyntaxToken token)
@@ -154,7 +154,7 @@ namespace RoslynTool.CsToLua
             VisitLocalVariableDeclarator(ci, node);
             if (null != node.Initializer) {
                 var oper = m_Model.GetOperation(node.Initializer.Value);
-                if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && SymbolTable.Instance.IsCs2LuaSymbol(oper.Type)) {
+                if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
                     CodeBuilder.AppendFormat("{0}{1} = wrapvaluetype({2});", GetIndentString(), node.Identifier.Text, node.Identifier.Text);
                     CodeBuilder.AppendLine();
                 }

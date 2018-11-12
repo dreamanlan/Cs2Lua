@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.Semantics;
 
-namespace RoslynTool.CsToLua
+namespace RoslynTool.CsToDsl
 {
     internal class MethodInfo
     {
@@ -59,7 +59,7 @@ namespace RoslynTool.CsToLua
                     var arrTypeSym = param.Type as IArrayTypeSymbol;
                     if (null != arrTypeSym && arrTypeSym.ElementType.TypeKind == TypeKind.Struct) {
                         string ns = ClassInfo.GetNamespaces(arrTypeSym.ElementType);
-                        if (SymbolTable.Instance.IsCs2LuaSymbol(arrTypeSym.ElementType))
+                        if (SymbolTable.Instance.IsCs2DslSymbol(arrTypeSym.ElementType))
                             ParamsIsValueType = true;
                         else if (ns != "System") {
                             ParamsIsExternValueType = true;
@@ -71,18 +71,18 @@ namespace RoslynTool.CsToLua
                     //遇到变参直接结束（变参set_Item会出现后面带一个value参数的情形，在函数实现里处理）
                     break;
                 } else if (param.RefKind == RefKind.Ref) {
-                    //ref参数与out参数在形参处理时机制相同，实参时out参数传入__cs2lua_out（适应脚本引擎与dotnet反射的调用规则）
+                    //ref参数与out参数在形参处理时机制相同，实参时out参数传入__cs2dsl_out（适应脚本引擎与dotnet反射的调用规则）
                     ParamNames.Add(string.Format("ref({0})", param.Name));
                     ReturnParamNames.Add(param.Name);
                 } else if (param.RefKind == RefKind.Out) {
-                    //ref参数与out参数在形参处理时机制相同，实参时out参数传入__cs2lua_out（适应脚本引擎与dotnet反射的调用规则）
+                    //ref参数与out参数在形参处理时机制相同，实参时out参数传入__cs2dsl_out（适应脚本引擎与dotnet反射的调用规则）
                     ParamNames.Add(string.Format("out({0})", param.Name));
                     ReturnParamNames.Add(param.Name);
                     OutParamNames.Add(param.Name);
                 } else {
                     if (param.Type.TypeKind == TypeKind.Struct) {
                         string ns = ClassInfo.GetNamespaces(param.Type);
-                        if (SymbolTable.Instance.IsCs2LuaSymbol(param.Type))
+                        if (SymbolTable.Instance.IsCs2DslSymbol(param.Type))
                             ValueParams.Add(ParamNames.Count);
                         else if (ns != "System")
                             ExternValueParams.Add(ParamNames.Count);

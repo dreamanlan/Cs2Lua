@@ -8,9 +8,9 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 
-namespace RoslynTool.CsToLua
+namespace RoslynTool.CsToDsl
 {
-    internal partial class CsLuaTranslater
+    internal partial class CsDslTranslater
     {
         #region vs2017新增语法特性
         public override void VisitCasePatternSwitchLabel(CasePatternSwitchLabelSyntax node)
@@ -207,7 +207,7 @@ namespace RoslynTool.CsToLua
         }
         #endregion
 
-        #region 借助语义信息或直接在上层语法里处理过的语法部分，或者不需要翻译到lua而忽略的语法部分
+        #region 借助语义信息或直接在上层语法里处理过的语法部分，或者不需要翻译到脚本语言而忽略的语法部分
         public override void VisitArrowExpressionClause(ArrowExpressionClauseSyntax node)
         { }
         public override void VisitConstructorInitializer(ConstructorInitializerSyntax node)

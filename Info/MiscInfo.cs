@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.Semantics;
 
-namespace RoslynTool.CsToLua
+namespace RoslynTool.CsToDsl
 {
     internal class ContinueInfo
     {
@@ -34,7 +34,7 @@ namespace RoslynTool.CsToLua
             cont.Visit(syntax);
             HaveContinue = cont.ContinueCount > 0;
             HaveBreak = cont.BreakCount > 0;
-            BreakFlagVarName = string.Format("__continue_{0}", CsLuaTranslater.GetSourcePosForVar(syntax));
+            BreakFlagVarName = string.Format("__continue_{0}", CsDslTranslater.GetSourcePosForVar(syntax));
         }
     }
     internal class SwitchInfo

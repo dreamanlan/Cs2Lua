@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 
-namespace RoslynTool.CsToLua
+namespace RoslynTool.CsToDsl
 {
     internal sealed class DerivedGenericTypeInstanceInfo
     {
@@ -25,7 +25,7 @@ namespace RoslynTool.CsToLua
             SymbolTable.MergeTypeParamsAndArgs(TypeParameters, TypeArguments, refType);
         }
     }
-    internal sealed partial class CsLuaTranslater : CSharpSyntaxVisitor
+    internal sealed partial class CsDslTranslater : CSharpSyntaxVisitor
     {
         internal enum SpecialAssignmentType
         {
@@ -210,7 +210,7 @@ namespace RoslynTool.CsToLua
             return null;
         }
 
-        internal CsLuaTranslater(SemanticModel model, bool enableInherit, bool enableLinq)
+        internal CsDslTranslater(SemanticModel model, bool enableInherit, bool enableLinq)
         {
             m_Model = model;
             m_EnableInherit = enableInherit;
@@ -270,7 +270,7 @@ namespace RoslynTool.CsToLua
                 while (null != refType && refType.TypeKind != TypeKind.Class && refType.TypeKind != TypeKind.Struct && refType.TypeKind != TypeKind.Structure) {
                     refType = refType.ContainingType;
                 }
-                if (null != refType && refType.IsGenericType && SymbolTable.Instance.IsCs2LuaSymbol(refType)) {
+                if (null != refType && refType.IsGenericType && SymbolTable.Instance.IsCs2DslSymbol(refType)) {
                     if (m_SkipGenericTypeDefine) {
                         SymbolTable.Instance.AddGenericTypeInstance(ClassInfo.GetFullName(refType), refType);
                     } else {
@@ -322,7 +322,7 @@ namespace RoslynTool.CsToLua
             for (int i = 0; i < ct; ++i) {
                 var exp = args[i];
                 var opd = opds.Length > i ? opds[i] : null;
-                //表达式对象为空表明这个是一个out实参，替换为__cs2lua_out
+                //表达式对象为空表明这个是一个out实参，替换为__cs2dsl_out
                 if (null == exp) {
                     CodeBuilder.Append("__cs2lua_out");
                 } else if (i < ct - 1) {
@@ -482,7 +482,7 @@ namespace RoslynTool.CsToLua
         private void ProcessUnaryOperator(CSharpSyntaxNode node, ref string op)
         {
             if (s_UnsupportedUnaryOperators.Contains(op)) {
-                Log(node, "Cs2Lua can't support {0} unary operators !", op);
+                Log(node, "Cs2Dsl can't support {0} unary operators !", op);
             } else {
                 string nop;
                 if (s_UnaryAlias.TryGetValue(op, out nop)) {
@@ -493,7 +493,7 @@ namespace RoslynTool.CsToLua
         private void ProcessBinaryOperator(CSharpSyntaxNode node, ref string op)
         {
             if (s_UnsupportedBinaryOperators.Contains(op)) {
-                Log(node, "Cs2Lua can't support {0} binary operators !", op);
+                Log(node, "Cs2Dsl can't support {0} binary operators !", op);
             } else {
                 string nop;
                 if (s_BinaryAlias.TryGetValue(op, out nop)) {
@@ -503,7 +503,7 @@ namespace RoslynTool.CsToLua
         }
         private void OutputOperatorInvoke(InvocationInfo ii, SyntaxNode node)
         {
-            if (SymbolTable.Instance.IsCs2LuaSymbol(ii.MethodSymbol)) {
+            if (SymbolTable.Instance.IsCs2DslSymbol(ii.MethodSymbol)) {
                 CodeBuilder.AppendFormat("invokeoperator({0}, ", ii.ClassKey);
                 string manglingName = NameMangling(ii.MethodSymbol);
                 CodeBuilder.AppendFormat("\"{0}\"", manglingName);
@@ -521,7 +521,7 @@ namespace RoslynTool.CsToLua
         }
         private void OutputConversionInvokePrefix(InvocationInfo ii)
         {
-            if (SymbolTable.Instance.IsCs2LuaSymbol(ii.MethodSymbol)) {
+            if (SymbolTable.Instance.IsCs2DslSymbol(ii.MethodSymbol)) {
                 CodeBuilder.AppendFormat("invokeoperator({0}, ", ii.ClassKey);
                 string manglingName = NameMangling(ii.MethodSymbol);
                 CodeBuilder.AppendFormat("\"{0}\"", manglingName);
@@ -541,12 +541,12 @@ namespace RoslynTool.CsToLua
             if (null != leftOper && null != rightOper && null != leftOper.Type && leftOper.Type.TypeKind == TypeKind.Delegate && (!leftOper.ConstantValue.HasValue || null != leftOper.ConstantValue.Value) && rightOper.ConstantValue.HasValue && rightOper.ConstantValue.Value == null) {
                 var sym = m_Model.GetSymbolInfo(left);
                 bool isEvent = (null != leftOper && leftOper is IEventReferenceExpression) || (null != rightOper && rightOper is IEventReferenceExpression);
-                OutputDelegationCompareWithNull(sym.Symbol, left, SymbolTable.Instance.IsCs2LuaSymbol(leftOper.Type), isEvent, op == "==", lopd);
+                OutputDelegationCompareWithNull(sym.Symbol, left, SymbolTable.Instance.IsCs2DslSymbol(leftOper.Type), isEvent, op == "==", lopd);
                 handled = true;
             } else if (null != leftOper && null != rightOper && null != rightOper.Type && rightOper.Type.TypeKind == TypeKind.Delegate && (!rightOper.ConstantValue.HasValue || null != rightOper.ConstantValue.Value) && leftOper.ConstantValue.HasValue && leftOper.ConstantValue.Value == null) {
                 var sym = m_Model.GetSymbolInfo(right);
                 bool isEvent = (null != leftOper && leftOper is IEventReferenceExpression) || (null != rightOper && rightOper is IEventReferenceExpression);
-                OutputDelegationCompareWithNull(sym.Symbol, right, SymbolTable.Instance.IsCs2LuaSymbol(rightOper.Type), isEvent, op == "==", ropd);
+                OutputDelegationCompareWithNull(sym.Symbol, right, SymbolTable.Instance.IsCs2DslSymbol(rightOper.Type), isEvent, op == "==", ropd);
                 handled = true;
             }
             return handled;
@@ -835,7 +835,7 @@ namespace RoslynTool.CsToLua
                         else
                             sb.Append("0");
                     } else {
-                        bool isExternal = !SymbolTable.Instance.IsCs2LuaSymbol(type);
+                        bool isExternal = !SymbolTable.Instance.IsCs2DslSymbol(type);
                         string fn = ClassInfo.GetFullName(type);
                         sb.AppendFormat("defaultvalue({0}, \"{1}\", {2})", fn, fn, isExternal ? "true" : "false");
                     }
@@ -854,7 +854,7 @@ namespace RoslynTool.CsToLua
                 if (null != ioper && ioper.Type.TypeKind == TypeKind.Enum) {
                     fSym = ioper.Field;
                 }
-                if (null != fSym && fSym.Type.TypeKind == TypeKind.Enum && !SymbolTable.Instance.IsCs2LuaSymbol(fSym)) {
+                if (null != fSym && fSym.Type.TypeKind == TypeKind.Enum && !SymbolTable.Instance.IsCs2DslSymbol(fSym)) {
                     sb.AppendFormat("wrapconst({0}, \"{1}\")", ClassInfo.GetFullName(fSym.Type), fSym.Name);
                     return;
                 }

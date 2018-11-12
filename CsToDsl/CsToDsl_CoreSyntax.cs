@@ -8,9 +8,9 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 
-namespace RoslynTool.CsToLua
+namespace RoslynTool.CsToDsl
 {
-    internal partial class CsLuaTranslater
+    internal partial class CsDslTranslater
     {
         internal void VisitExpressionSyntax(ExpressionSyntax node)
         {
@@ -104,7 +104,7 @@ namespace RoslynTool.CsToLua
             if (!m_EnableInherit && !ClassInfo.HasAttribute(declSym, "Cs2Lua.EnableInheritAttribute") && !ClassInfo.HasAttribute(declSym.BaseType, "Cs2Lua.EnableInheritAttribute")) {
                 string fullBaseClassName = null != declSym.BaseType ? ClassInfo.GetFullName(declSym.BaseType) : string.Empty;
                 if (!string.IsNullOrEmpty(fullBaseClassName) && fullBaseClassName != SymbolTable.PrefixExternClassName("System.Object") && fullBaseClassName != SymbolTable.PrefixExternClassName("System.ValueType")) {
-                    Log(node, "Cs2Lua class/struct can't inherit !");
+                    Log(node, "Cs2Dsl class/struct can't inherit !");
                 }
             }                     
 
@@ -248,9 +248,9 @@ namespace RoslynTool.CsToLua
             CodeBuilder.AppendLine();
             ++m_Indent;
 
-            string luaModule = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.TranslateToAttribute", 0);
-            string luaFuncName = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.TranslateToAttribute", 1);
-            if (string.IsNullOrEmpty(luaModule) && string.IsNullOrEmpty(luaFuncName)) {
+            string dslModule = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.TranslateToAttribute", 0);
+            string dslFuncName = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.TranslateToAttribute", 1);
+            if (string.IsNullOrEmpty(dslModule) && string.IsNullOrEmpty(dslFuncName)) {
                 if (!declSym.ReturnsVoid && mi.ExistTryCatch) {
                     string retVar = string.Format("__method_ret_{0}", GetSourcePosForVar(node));
                     mi.ReturnVarName = retVar;
@@ -266,14 +266,14 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendLine();
                 }
             }
-            if (!string.IsNullOrEmpty(luaModule) || !string.IsNullOrEmpty(luaFuncName)) {
-                if (!string.IsNullOrEmpty(luaModule)) {
-                    SymbolTable.Instance.AddRequire(ci.Key, luaModule);
+            if (!string.IsNullOrEmpty(dslModule) || !string.IsNullOrEmpty(dslFuncName)) {
+                if (!string.IsNullOrEmpty(dslModule)) {
+                    SymbolTable.Instance.AddRequire(ci.Key, dslModule);
                 }
                 if (declSym.ReturnsVoid && mi.ReturnParamNames.Count <= 0) {
-                    CodeBuilder.AppendFormat("{0}{1}({2}", GetIndentString(), luaFuncName, isStatic ? string.Empty : "this");
+                    CodeBuilder.AppendFormat("{0}{1}({2}", GetIndentString(), dslFuncName, isStatic ? string.Empty : "this");
                 } else {
-                    CodeBuilder.AppendFormat("{0}return({1}({2}", GetIndentString(), luaFuncName, isStatic ? string.Empty : "this");
+                    CodeBuilder.AppendFormat("{0}return({1}({2}", GetIndentString(), dslFuncName, isStatic ? string.Empty : "this");
                 }
                 if (mi.ParamNames.Count > 0) {
                     if (!isStatic) {
@@ -446,7 +446,7 @@ namespace RoslynTool.CsToLua
                                 ++m_Indent;
                                 CodeBuilder.AppendFormat("{0}{1}.{2}", GetIndentString(), isStatic ? ci.Key : "this", name);
                                 string fullTypeName = ClassInfo.GetFullName(type);
-                                if (SymbolTable.Instance.IsCs2LuaSymbol(type)) {
+                                if (SymbolTable.Instance.IsCs2DslSymbol(type)) {
                                     CodeBuilder.AppendFormat(" = new {0}();", fullTypeName);
                                 } else {
                                     CodeBuilder.AppendFormat(" = newexternobject({0}, \"{0}\", null, null);", fullTypeName);
@@ -479,7 +479,7 @@ namespace RoslynTool.CsToLua
                             ++m_Indent;
                             CodeBuilder.AppendFormat("{0}{1}.{2}", GetIndentString(), isStatic ? ci.Key : "this", name);
                             string fullTypeName = ClassInfo.GetFullName(type);
-                            if (SymbolTable.Instance.IsCs2LuaSymbol(type)) {
+                            if (SymbolTable.Instance.IsCs2DslSymbol(type)) {
                                 CodeBuilder.AppendFormat(" = new {0}();", fullTypeName);
                             } else {
                                 CodeBuilder.AppendFormat(" = newexternobject({0}, \"{0}\", null, null);", fullTypeName);
@@ -570,7 +570,7 @@ namespace RoslynTool.CsToLua
                 }
                 VisitAssignment(ci, op, baseOp, assign, expTerminater, true, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType);
                 var oper = m_Model.GetOperation(assign.Right);
-                if (null != leftSym && leftSym.Kind == SymbolKind.Local && null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && SymbolTable.Instance.IsCs2LuaSymbol(oper.Type)) {
+                if (null != leftSym && leftSym.Kind == SymbolKind.Local && null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
                     CodeBuilder.AppendFormat("{0}{1} = wrapvaluetype({2});", GetIndentString(), leftSym.Name, leftSym.Name);
                     CodeBuilder.AppendLine();
                 }
@@ -783,7 +783,7 @@ namespace RoslynTool.CsToLua
                 }
             } else if (null != namedTypeSym && namedTypeSym.IsValueType && !SymbolTable.IsBasicType(namedTypeSym)) {
                 bool isCollection = IsImplementationOfSys(namedTypeSym, "ICollection");
-                bool isExternal = !SymbolTable.Instance.IsCs2LuaSymbol(namedTypeSym);
+                bool isExternal = !SymbolTable.Instance.IsCs2DslSymbol(namedTypeSym);
                 string fullTypeName = ClassInfo.GetFullName(namedTypeSym);
 
                 IMethodSymbol sym = null;
@@ -805,28 +805,28 @@ namespace RoslynTool.CsToLua
                     if (isDictionary) {
                         //字典对象的处理
                         CodeBuilder.AppendFormat("new{0}dictionary({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                        CsLuaTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                        CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
                         if (isExternal) {
                             CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
                         }
                     } else if (isList) {
                         //列表对象的处理
                         CodeBuilder.AppendFormat("new{0}list({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                        CsLuaTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                        CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
                         if (isExternal) {
                             CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
                         }
                     } else {
                         //集合对象的处理
                         CodeBuilder.AppendFormat("new{0}collection({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                        CsLuaTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                        CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
                         if (isExternal) {
                             CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
                         }
                     }
                 } else {
                     CodeBuilder.AppendFormat("new{0}object({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                    CsLuaTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
                     if (isExternal) {
                         CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
                     }
@@ -1014,7 +1014,7 @@ namespace RoslynTool.CsToLua
                 AddReferenceAndTryDeriveGenericTypeInstance(ci, leftSym);
             }
             if (null != leftPsym && leftPsym.IsIndexer) {
-                CodeBuilder.AppendFormat("set{0}{1}indexer(", SymbolTable.Instance.IsCs2LuaSymbol(leftPsym) ? string.Empty : "extern", leftPsym.IsStatic ? "static" : "instance");
+                CodeBuilder.AppendFormat("set{0}{1}indexer(", SymbolTable.Instance.IsCs2DslSymbol(leftPsym) ? string.Empty : "extern", leftPsym.IsStatic ? "static" : "instance");
                 if (leftPsym.IsStatic) {
                     string fullName = ClassInfo.GetFullName(leftPsym.ContainingType);
                     CodeBuilder.Append(fullName);
@@ -1079,7 +1079,7 @@ namespace RoslynTool.CsToLua
                 }
                 if (null != psym && psym.IsIndexer) {
                     CodeBuilder.Append("(function(){ return(");
-                    CodeBuilder.AppendFormat("set{0}{1}indexer(", SymbolTable.Instance.IsCs2LuaSymbol(psym) ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
+                    CodeBuilder.AppendFormat("set{0}{1}indexer(", SymbolTable.Instance.IsCs2DslSymbol(psym) ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
                     if (psym.IsStatic) {
                         string fullName = ClassInfo.GetFullName(psym.ContainingType);
                         CodeBuilder.Append(fullName);
@@ -1329,7 +1329,7 @@ namespace RoslynTool.CsToLua
             }
             bool isEvent = leftOper is IEventReferenceExpression;
             string prefix;
-            if (SymbolTable.Instance.IsCs2LuaSymbol(leftSym)) {
+            if (SymbolTable.Instance.IsCs2DslSymbol(leftSym)) {
                 prefix = string.Empty;
             } else {
                 prefix = "extern";

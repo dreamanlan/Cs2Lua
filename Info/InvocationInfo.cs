@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.Semantics;
 
-namespace RoslynTool.CsToLua
+namespace RoslynTool.CsToDsl
 {
     internal class ArgDefaultValueInfo
     {
@@ -209,19 +209,19 @@ namespace RoslynTool.CsToLua
             }
         }
         
-        internal void OutputInvocation(StringBuilder codeBuilder, CsLuaTranslater cs2lua, ExpressionSyntax exp, bool isMemberAccess, SemanticModel model, SyntaxNode node)
+        internal void OutputInvocation(StringBuilder codeBuilder, CsDslTranslater cs2dsl, ExpressionSyntax exp, bool isMemberAccess, SemanticModel model, SyntaxNode node)
         {
             IMethodSymbol sym = MethodSymbol;
-            string mname = cs2lua.NameMangling(IsExtensionMethod && null != sym.ReducedFrom ? sym.ReducedFrom : sym);
+            string mname = cs2dsl.NameMangling(IsExtensionMethod && null != sym.ReducedFrom ? sym.ReducedFrom : sym);
             string prestr = string.Empty;
             if (isMemberAccess) {
                 string fnOfIntf = "null";
-                bool isExplicitInterfaceInvoke = cs2lua.CheckExplicitInterfaceAccess(sym, ref fnOfIntf);
+                bool isExplicitInterfaceInvoke = cs2dsl.CheckExplicitInterfaceAccess(sym, ref fnOfIntf);
                 if (sym.MethodKind == MethodKind.DelegateInvoke) {
                     var memberAccess  = node as MemberAccessExpressionSyntax;
                     if (null != memberAccess) {
                         codeBuilder.Append("callinstance(");
-                        cs2lua.OutputExpressionSyntax(exp);
+                        cs2dsl.OutputExpressionSyntax(exp);
                         codeBuilder.AppendFormat(", \"{0}\"", memberAccess.Name);
                         prestr = ", ";
                     } else {
@@ -229,7 +229,7 @@ namespace RoslynTool.CsToLua
                     }
                 } else if (isExplicitInterfaceInvoke) {
                     codeBuilder.Append("invokewithinterface(");
-                    cs2lua.OutputExpressionSyntax(exp);
+                    cs2dsl.OutputExpressionSyntax(exp);
                     codeBuilder.Append(", ");
                     codeBuilder.AppendFormat("{0}, \"{1}\"", fnOfIntf, mname);
                     prestr = ", ";
@@ -237,24 +237,24 @@ namespace RoslynTool.CsToLua
                     codeBuilder.Append("callstatic(");
                     codeBuilder.AppendFormat("{0}, \"{1}\", ", ClassKey, mname);
                 } else if (IsBasicValueMethod) {
-                    string ckey = CalcInvokeTarget(ClassKey, cs2lua, exp, model);
+                    string ckey = CalcInvokeTarget(ClassKey, cs2dsl, exp, model);
                     codeBuilder.Append("invokeforbasicvalue(");
-                    cs2lua.OutputExpressionSyntax(exp);
+                    cs2dsl.OutputExpressionSyntax(exp);
                     codeBuilder.Append(", ");
-                    codeBuilder.AppendFormat("{0}, {1}, \"{2}\"", ClassKey == SymbolTable.PrefixExternClassName("System.Enum") ? "true" : "false", ckey, mname);
+                    codeBuilder.AppendFormat("{0}, {1}, \"{2}\"", ckey == SymbolTable.PrefixExternClassName("System.Enum") ? "true" : "false", ckey, mname);
                     prestr = ", ";
                 } else if (IsArrayStaticMethod) {
                     codeBuilder.Append("invokearraystaticmethod(");
                     if (null == FirstRefArray) {
                         codeBuilder.Append("null, ");
                     } else {
-                        cs2lua.OutputExpressionSyntax(FirstRefArray);
+                        cs2dsl.OutputExpressionSyntax(FirstRefArray);
                         codeBuilder.Append(", ");
                     }
                     if (null == SecondRefArray) {
                         codeBuilder.Append("null, ");
                     } else {
-                        cs2lua.OutputExpressionSyntax(SecondRefArray);
+                        cs2dsl.OutputExpressionSyntax(SecondRefArray);
                         codeBuilder.Append(", ");
                     }
                     codeBuilder.AppendFormat("\"{0}\"", mname);
@@ -265,14 +265,14 @@ namespace RoslynTool.CsToLua
                         codeBuilder.Append(ClassKey);
                     } else {
                         codeBuilder.Append("callinstance(");
-                        cs2lua.OutputExpressionSyntax(exp);
+                        cs2dsl.OutputExpressionSyntax(exp);
                     }
                     codeBuilder.AppendFormat(", \"{0}\"", mname);
                     prestr = ", ";
                 }
             } else {
                 if (sym.MethodKind == MethodKind.DelegateInvoke) {
-                    cs2lua.OutputExpressionSyntax(exp);
+                    cs2dsl.OutputExpressionSyntax(exp);
                     codeBuilder.Append("(");
                 } else if (sym.IsStatic) {
                     codeBuilder.Append("callstatic(");
@@ -290,9 +290,9 @@ namespace RoslynTool.CsToLua
                 codeBuilder.Append(prestr);
             }
             bool useTypeNameString = false;
-            if(IsComponentGetOrAdd && SymbolTable.LuaComponentByString){
+            if(IsComponentGetOrAdd && SymbolTable.DslComponentByString){
                 var tArgs = sym.TypeArguments;
-                if (tArgs.Length > 0 && SymbolTable.Instance.IsCs2LuaSymbol(tArgs[0])) {
+                if (tArgs.Length > 0 && SymbolTable.Instance.IsCs2DslSymbol(tArgs[0])) {
                     useTypeNameString = true;
                 }
             }
@@ -300,9 +300,9 @@ namespace RoslynTool.CsToLua
                 var args = new List<ExpressionSyntax>();
                 args.Add(exp);
                 args.AddRange(Args);
-                cs2lua.OutputArgumentList(args, DefaultValueArgs, GenericTypeArgs, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
+                cs2dsl.OutputArgumentList(args, DefaultValueArgs, GenericTypeArgs, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
             } else {
-                cs2lua.OutputArgumentList(Args, DefaultValueArgs, GenericTypeArgs, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
+                cs2dsl.OutputArgumentList(Args, DefaultValueArgs, GenericTypeArgs, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
             }
             codeBuilder.Append(")");
         }
@@ -319,7 +319,7 @@ namespace RoslynTool.CsToLua
             
             ClassKey = ClassInfo.GetFullName(sym.ContainingType);
             GenericClassKey = ClassInfo.GetFullNameWithTypeParameters(sym.ContainingType);
-            IsExtensionMethod = sym.IsExtensionMethod && SymbolTable.Instance.IsCs2LuaSymbol(sym);
+            IsExtensionMethod = sym.IsExtensionMethod && SymbolTable.Instance.IsCs2DslSymbol(sym);
             IsBasicValueMethod = SymbolTable.IsBasicValueMethod(sym);
             IsArrayStaticMethod = ClassKey == SymbolTable.PrefixExternClassName("System.Array") && sym.IsStatic;
 
@@ -349,7 +349,7 @@ namespace RoslynTool.CsToLua
                 return;
             }
 
-            if (!SymbolTable.Instance.IsCs2LuaSymbol(sym)) {
+            if (!SymbolTable.Instance.IsCs2DslSymbol(sym)) {
                 var ckey = ClassInfo.GetFullName(sym.ContainingType);
                 var mkey = SymbolTable.Instance.NameMangling(sym);
                 var id = string.Format("{0}.{1}", ckey, mkey);
@@ -372,7 +372,7 @@ namespace RoslynTool.CsToLua
                             continue;
                         }
                         var namedType = param.Type as INamedTypeSymbol;
-                        if (null != namedType && !SymbolTable.Instance.IsCs2LuaSymbol(namedType) && namedType.IsGenericType && namedType.TypeKind != TypeKind.Delegate) {
+                        if (null != namedType && !SymbolTable.Instance.IsCs2DslSymbol(namedType) && namedType.IsGenericType && namedType.TypeKind != TypeKind.Delegate) {
                             var fullName = ClassInfo.GetFullName(namedType);
                             Logger.Instance.Log("Translation Warning", "extern method {0}.{1} parameter {2} is generic type, please replace with non generic type !", ckey, sym.Name, param.Name);
                             continue;
@@ -397,12 +397,12 @@ namespace RoslynTool.CsToLua
         {
             if (classKey == SymbolTable.PrefixExternClassName("System.Enum")) {
                 var oper = model.GetOperation(exp);
-                if (!SymbolTable.Instance.IsCs2LuaSymbol(oper.Type) && oper.Type.TypeKind == TypeKind.Enum) {
+                if (!SymbolTable.Instance.IsCs2DslSymbol(oper.Type) && oper.Type.TypeKind == TypeKind.Enum) {
                     string ckey = ClassInfo.GetFullName(oper.Type);
                     SymbolTable.Instance.AddExternEnum(ckey, oper.Type);
                 } else {
                     var typeOf = oper as ITypeOfExpression;
-                    if (null != typeOf && !SymbolTable.Instance.IsCs2LuaSymbol(typeOf.TypeOperand) && typeOf.TypeOperand.TypeKind == TypeKind.Enum) {
+                    if (null != typeOf && !SymbolTable.Instance.IsCs2DslSymbol(typeOf.TypeOperand) && typeOf.TypeOperand.TypeKind == TypeKind.Enum) {
                         string ckey = ClassInfo.GetFullName(typeOf.TypeOperand);
                         SymbolTable.Instance.AddExternEnum(ckey, typeOf.TypeOperand);
                     }
@@ -410,14 +410,14 @@ namespace RoslynTool.CsToLua
             }
         }
 
-        internal static string CalcInvokeTarget(string classKey, CsLuaTranslater cs2lua, ExpressionSyntax exp, SemanticModel model)
+        internal static string CalcInvokeTarget(string classKey, CsDslTranslater cs2dsl, ExpressionSyntax exp, SemanticModel model)
         {
             TryAddExternEnum(classKey, exp, model);
             string ckey = classKey;
             if (classKey == SymbolTable.PrefixExternClassName("System.Enum")) {
                 var oper = model.GetOperation(exp);
                 if (oper.Type.TypeKind == TypeKind.Enum) {
-                    var ci = cs2lua.GetCurClassInfo();
+                    var ci = cs2dsl.GetCurClassInfo();
                     ci.AddReference(oper.Type);
 
                     ckey = ClassInfo.GetFullName(oper.Type);

@@ -8,9 +8,9 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 
-namespace RoslynTool.CsToLua
+namespace RoslynTool.CsToDsl
 {
-    internal partial class CsLuaTranslater
+    internal partial class CsDslTranslater
     {
         #region OO语法框架部分
         public override void VisitCompilationUnit(CompilationUnitSyntax node)
@@ -41,14 +41,14 @@ namespace RoslynTool.CsToLua
         }
         public override void VisitInterfaceDeclaration(InterfaceDeclarationSyntax node)
         {
-            //允许在C#里定义与使用接口，lua里隐式支持任何接口
+            //允许在C#里定义与使用接口，动态语言里隐式支持任何接口
             INamedTypeSymbol sym = m_Model.GetDeclaredSymbol(node);
-            if (SymbolTable.Instance.IsCs2LuaSymbol(sym)) {
+            if (SymbolTable.Instance.IsCs2DslSymbol(sym)) {
                 var fullName = ClassInfo.GetFullName(sym);
 
                 Dictionary<string, List<string>> intfs;
                 if (m_ClassInfoStack.Count <= 0) {
-                    intfs = SymbolTable.Instance.Cs2LuaInterfaces;
+                    intfs = SymbolTable.Instance.Cs2DslInterfaces;
                 } else {
                     intfs = m_ClassInfoStack.Peek().InnerInterfaces;
                 }
@@ -132,15 +132,15 @@ namespace RoslynTool.CsToLua
             var ci = m_ClassInfoStack.Peek();
             IMethodSymbol declSym = m_Model.GetDeclaredSymbol(node);
             if (null != declSym) {
-                string require = ClassInfo.GetAttributeArgument<string>(declSym, "CsToLua.RequireAttribute", 0);
+                string require = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.RequireAttribute", 0);
                 if (!string.IsNullOrEmpty(require)) {
                     SymbolTable.Instance.AddRequire(ci.Key, require);
                 }
-                if (ClassInfo.HasAttribute(declSym, "CsToLua.IgnoreAttribute"))
+                if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
                     return;
                 if (declSym.IsAbstract)
                     return;
-                isExportConstructor = ClassInfo.HasAttribute(declSym, "CsToLua.ExportAttribute");
+                isExportConstructor = ClassInfo.HasAttribute(declSym, "Cs2Lua.ExportAttribute");
             }
 
             bool generateBasicCtor = false;
@@ -176,7 +176,7 @@ namespace RoslynTool.CsToLua
                 }
             }
 
-            bool myselfDefinedBaseClass = SymbolTable.Instance.IsCs2LuaSymbol(ci.SemanticInfo.BaseType);
+            bool myselfDefinedBaseClass = SymbolTable.Instance.IsCs2DslSymbol(ci.SemanticInfo.BaseType);
             CodeBuilder.AppendFormat("{0}{1} = function({2}", GetIndentString(), manglingName, isStatic ? string.Empty : "this");
             if (mi.ParamNames.Count > 0) {
                 if (!isStatic) {
@@ -280,11 +280,11 @@ namespace RoslynTool.CsToLua
             var ci = m_ClassInfoStack.Peek();
             IPropertySymbol declSym = m_Model.GetDeclaredSymbol(node);
             if (null != declSym) {
-                string require = ClassInfo.GetAttributeArgument<string>(declSym, "CsToLua.RequireAttribute", 0);
+                string require = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.RequireAttribute", 0);
                 if (!string.IsNullOrEmpty(require)) {
                     SymbolTable.Instance.AddRequire(ci.Key, require);
                 }
-                if (ClassInfo.HasAttribute(declSym, "CsToLua.IgnoreAttribute"))
+                if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
                     return;
                 if (declSym.IsAbstract)
                     return;
@@ -429,9 +429,9 @@ namespace RoslynTool.CsToLua
                         CodeBuilder.AppendLine();
                         ++m_Indent;
                         bool isStatic = declSym.IsStatic;
-                        string luaModule = ClassInfo.GetAttributeArgument<string>(sym, "CsToLua.TranslateToAttribute", 0);
-                        string luaFuncName = ClassInfo.GetAttributeArgument<string>(sym, "CsToLua.TranslateToAttribute", 1);
-                        if (string.IsNullOrEmpty(luaModule) && string.IsNullOrEmpty(luaFuncName)) {
+                        string dslModule = ClassInfo.GetAttributeArgument<string>(sym, "Cs2Lua.TranslateToAttribute", 0);
+                        string dslFuncName = ClassInfo.GetAttributeArgument<string>(sym, "Cs2Lua.TranslateToAttribute", 1);
+                        if (string.IsNullOrEmpty(dslModule) && string.IsNullOrEmpty(dslFuncName)) {
                             if (!sym.ReturnsVoid && mi.ExistTryCatch) {
                                 string retVar = string.Format("__method_ret_{0}", GetSourcePosForVar(node));
                                 mi.ReturnVarName = retVar;
@@ -440,14 +440,14 @@ namespace RoslynTool.CsToLua
                                 CodeBuilder.AppendLine();
                             }
                         }
-                        if (!string.IsNullOrEmpty(luaModule) || !string.IsNullOrEmpty(luaFuncName)) {
-                            if (!string.IsNullOrEmpty(luaModule)) {
-                                SymbolTable.Instance.AddRequire(ci.Key, luaModule);
+                        if (!string.IsNullOrEmpty(dslModule) || !string.IsNullOrEmpty(dslFuncName)) {
+                            if (!string.IsNullOrEmpty(dslModule)) {
+                                SymbolTable.Instance.AddRequire(ci.Key, dslModule);
                             }
                             if (sym.ReturnsVoid && mi.ReturnParamNames.Count <= 0) {
-                                CodeBuilder.AppendFormat("{0}{1}({2}", GetIndentString(), luaFuncName, isStatic ? string.Empty : "this");
+                                CodeBuilder.AppendFormat("{0}{1}({2}", GetIndentString(), dslFuncName, isStatic ? string.Empty : "this");
                             } else {
-                                CodeBuilder.AppendFormat("{0}return({1}({2}", GetIndentString(), luaFuncName, isStatic ? string.Empty : "this");
+                                CodeBuilder.AppendFormat("{0}return({1}({2}", GetIndentString(), dslFuncName, isStatic ? string.Empty : "this");
                             }
                             if (mi.ParamNames.Count > 0) {
                                 if (!isStatic) {
@@ -546,11 +546,11 @@ namespace RoslynTool.CsToLua
             var ci = m_ClassInfoStack.Peek();
             IEventSymbol declSym = m_Model.GetDeclaredSymbol(node);
             if (null != declSym) {
-                string require = ClassInfo.GetAttributeArgument<string>(declSym, "CsToLua.RequireAttribute", 0);
+                string require = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.RequireAttribute", 0);
                 if (!string.IsNullOrEmpty(require)) {
                     SymbolTable.Instance.AddRequire(ci.Key, require);
                 }
-                if (ClassInfo.HasAttribute(declSym, "CsToLua.IgnoreAttribute"))
+                if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
                     return;
                 if (declSym.IsAbstract)
                     return;
@@ -586,13 +586,13 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendLine();
                     ++m_Indent;
                     bool isStatic = declSym.IsStatic;
-                    string luaModule = ClassInfo.GetAttributeArgument<string>(sym, "CsToLua.TranslateToAttribute", 0);
-                    string luaFuncName = ClassInfo.GetAttributeArgument<string>(sym, "CsToLua.TranslateToAttribute", 1);
-                    if (!string.IsNullOrEmpty(luaModule) || !string.IsNullOrEmpty(luaFuncName)) {
-                        if (!string.IsNullOrEmpty(luaModule)) {
-                            SymbolTable.Instance.AddRequire(ci.Key, luaModule);
+                    string dslModule = ClassInfo.GetAttributeArgument<string>(sym, "Cs2Lua.TranslateToAttribute", 0);
+                    string dslFuncName = ClassInfo.GetAttributeArgument<string>(sym, "Cs2Lua.TranslateToAttribute", 1);
+                    if (!string.IsNullOrEmpty(dslModule) || !string.IsNullOrEmpty(dslFuncName)) {
+                        if (!string.IsNullOrEmpty(dslModule)) {
+                            SymbolTable.Instance.AddRequire(ci.Key, dslModule);
                         }
-                        CodeBuilder.AppendFormat("{0}{1}({2}", GetIndentString(), luaFuncName, isStatic ? string.Empty : "this");
+                        CodeBuilder.AppendFormat("{0}{1}({2}", GetIndentString(), dslFuncName, isStatic ? string.Empty : "this");
                         if (mi.ParamNames.Count > 0) {
                             if (!isStatic) {
                                 CodeBuilder.Append(", ");
@@ -648,11 +648,11 @@ namespace RoslynTool.CsToLua
             var ci = m_ClassInfoStack.Peek();
             var declSym = m_Model.GetDeclaredSymbol(node);
             if (null != declSym) {
-                string require = ClassInfo.GetAttributeArgument<string>(declSym, "CsToLua.RequireAttribute", 0);
+                string require = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.RequireAttribute", 0);
                 if (!string.IsNullOrEmpty(require)) {
                     SymbolTable.Instance.AddRequire(ci.Key, require);
                 }
-                if (ClassInfo.HasAttribute(declSym, "CsToLua.IgnoreAttribute"))
+                if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
                     return;
                 if (declSym.IsAbstract)
                     return;
@@ -749,9 +749,9 @@ namespace RoslynTool.CsToLua
                     CodeBuilder.AppendLine();
                     ++m_Indent;
                     bool isStatic = declSym.IsStatic;
-                    string luaModule = ClassInfo.GetAttributeArgument<string>(sym, "CsToLua.TranslateToAttribute", 0);
-                    string luaFuncName = ClassInfo.GetAttributeArgument<string>(sym, "CsToLua.TranslateToAttribute", 1);
-                    if (string.IsNullOrEmpty(luaModule) && string.IsNullOrEmpty(luaFuncName)) {
+                    string dslModule = ClassInfo.GetAttributeArgument<string>(sym, "Cs2Lua.TranslateToAttribute", 0);
+                    string dslFuncName = ClassInfo.GetAttributeArgument<string>(sym, "Cs2Lua.TranslateToAttribute", 1);
+                    if (string.IsNullOrEmpty(dslModule) && string.IsNullOrEmpty(dslFuncName)) {
                         if (!sym.ReturnsVoid && mi.ExistTryCatch) {
                             string retVar = string.Format("__method_ret_{0}", GetSourcePosForVar(node));
                             mi.ReturnVarName = retVar;
@@ -760,14 +760,14 @@ namespace RoslynTool.CsToLua
                             CodeBuilder.AppendLine();
                         }
                     }
-                    if (!string.IsNullOrEmpty(luaModule) || !string.IsNullOrEmpty(luaFuncName)) {
-                        if (!string.IsNullOrEmpty(luaModule)) {
-                            SymbolTable.Instance.AddRequire(ci.Key, luaModule);
+                    if (!string.IsNullOrEmpty(dslModule) || !string.IsNullOrEmpty(dslFuncName)) {
+                        if (!string.IsNullOrEmpty(dslModule)) {
+                            SymbolTable.Instance.AddRequire(ci.Key, dslModule);
                         }
                         if (sym.ReturnsVoid && mi.ReturnParamNames.Count <= 0) {
-                            CodeBuilder.AppendFormat("{0}{1}({2}", GetIndentString(), luaFuncName, isStatic ? string.Empty : "this");
+                            CodeBuilder.AppendFormat("{0}{1}({2}", GetIndentString(), dslFuncName, isStatic ? string.Empty : "this");
                         } else {
-                            CodeBuilder.AppendFormat("{0}return({1}({2}", GetIndentString(), luaFuncName, isStatic ? string.Empty : "this");
+                            CodeBuilder.AppendFormat("{0}return({1}({2}", GetIndentString(), dslFuncName, isStatic ? string.Empty : "this");
                         }
                         if (mi.ParamNames.Count > 0) {
                             if (!isStatic) {
