@@ -990,6 +990,31 @@ namespace LuaGenerator
                 sb.AppendFormat("{0}", GetIndentString(indent));
                 sb.AppendFormatLine("setdelegationkey({0}, \"{1}\", {2}, {3}.{4});", varName, delegationKey, objOrClassName, objOrClassName, methodName);
                 sb.AppendFormat("{0}return {1}", GetIndentString(indent), varName);
+            } else if (id == "setdelegation") {
+                //这里可以对xlua的delegation用法进行特殊转换
+                var obj = data.Params[0];
+                var val = data.Params[1];
+                GenerateSyntaxComponent(obj, sb, indent, false);
+                sb.Append(" = ");
+                GenerateSyntaxComponent(val, sb, indent, false);
+            } else if (id == "setstaticdelegation") {
+                //这里可以对xlua的delegation用法进行特殊转换
+                var obj = data.Params[0];
+                var member = data.Params[1];
+                var val = data.Params[2];
+                GenerateSyntaxComponent(obj, sb, indent, false);
+                sb.AppendFormat(".{0}", member.GetId());
+                sb.Append(" = ");
+                GenerateSyntaxComponent(val, sb, indent, false);
+            } else if (id == "setinstancedelegation") {
+                //这里可以对xlua的delegation用法进行特殊转换
+                var obj = data.Params[0];
+                var member = data.Params[1];
+                var val = data.Params[2];
+                GenerateSyntaxComponent(obj, sb, indent, false);
+                sb.AppendFormat(".{0}", member.GetId());
+                sb.Append(" = ");
+                GenerateSyntaxComponent(val, sb, indent, false);
             } else if (id == "anonymousobject") {
                 sb.Append("wrapdictionary{");
                 string prestr = string.Empty;

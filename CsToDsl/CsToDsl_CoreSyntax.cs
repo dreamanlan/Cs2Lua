@@ -896,11 +896,11 @@ namespace RoslynTool.CsToDsl
                     string className = ClassInfo.GetFullName(leftSym.ContainingType);
                     string memberName = leftSym.Name;
                     if (leftSym.IsStatic) {
-                        CodeBuilder.Append("setstatic(");
+                        CodeBuilder.Append("setstaticdelegation(");
                         CodeBuilder.Append(className);
                         CodeBuilder.AppendFormat(", \"{0}\", ", memberName);
                     } else {
-                        CodeBuilder.Append("setinstance(");
+                        CodeBuilder.Append("setinstancedelegation(");
                         if (null != leftMemberAccess)
                             OutputExpressionSyntax(leftMemberAccess.Expression);
                         else
@@ -908,13 +908,12 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendFormat(", \"{0}\", ", memberName);
                     }
                 } else {
+                    CodeBuilder.Append("setdelegation(");
                     OutputExpressionSyntax(assign.Left);
-                    CodeBuilder.Append(" = ");
+                    CodeBuilder.Append(", ");
                 }
                 VisitAssignmentDelegation(ci, op, baseOp, assign, leftOper, leftSym, opd);
-                if (isMemberAccess) {
-                    CodeBuilder.Append(")");
-                }
+                CodeBuilder.Append(")");
             } else if (null != invocation) {
                 VisitAssignmentInvocation(ci, op, baseOp, assign, invocation, opd, lopd, ropd, compAssignInfo);
             } else {
