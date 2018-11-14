@@ -797,58 +797,63 @@ namespace RoslynTool.CsToDsl
                 if (null != sym) {
                     ctor = NameMangling(sym);
                 }
-                CodeBuilder.AppendFormat("{0}local{{{1} = ", GetIndentString(), node.Identifier.Text);
 
-                if (isCollection) {
-                    bool isDictionary = IsImplementationOfSys(namedTypeSym, "IDictionary");
-                    bool isList = IsImplementationOfSys(namedTypeSym, "IList");
-                    if (isDictionary) {
-                        //字典对象的处理
-                        CodeBuilder.AppendFormat("new{0}dictionary({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                        CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
-                        if (isExternal) {
-                            CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
-                        }
-                    } else if (isList) {
-                        //列表对象的处理
-                        CodeBuilder.AppendFormat("new{0}list({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                        CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
-                        if (isExternal) {
-                            CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
+                if (null != sym || isCollection) {
+                    CodeBuilder.AppendFormat("{0}local{{{1} = ", GetIndentString(), node.Identifier.Text);
+
+                    if (isCollection) {
+                        bool isDictionary = IsImplementationOfSys(namedTypeSym, "IDictionary");
+                        bool isList = IsImplementationOfSys(namedTypeSym, "IList");
+                        if (isDictionary) {
+                            //字典对象的处理
+                            CodeBuilder.AppendFormat("new{0}dictionary({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                            CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                            if (isExternal) {
+                                CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
+                            }
+                        } else if (isList) {
+                            //列表对象的处理
+                            CodeBuilder.AppendFormat("new{0}list({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                            CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                            if (isExternal) {
+                                CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
+                            }
+                        } else {
+                            //集合对象的处理
+                            CodeBuilder.AppendFormat("new{0}collection({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                            CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                            if (isExternal) {
+                                CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
+                            }
                         }
                     } else {
-                        //集合对象的处理
-                        CodeBuilder.AppendFormat("new{0}collection({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                        CodeBuilder.AppendFormat("new{0}object({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
                         CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
                         if (isExternal) {
                             CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
                         }
                     }
-                } else {
-                    CodeBuilder.AppendFormat("new{0}object({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
-                    if (isExternal) {
-                        CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
+                    if (string.IsNullOrEmpty(ctor)) {
+                        CodeBuilder.Append("null");
+                    } else {
+                        CodeBuilder.AppendFormat("\"{0}\"", ctor);
                     }
-                }
-                if (string.IsNullOrEmpty(ctor)) {
-                    CodeBuilder.Append("null");
+                    if (isCollection) {
+                        bool isDictionary = IsImplementationOfSys(namedTypeSym, "IDictionary");
+                        bool isList = IsImplementationOfSys(namedTypeSym, "IList");
+                        if (isDictionary)
+                            CodeBuilder.Append(", builddictionary()");
+                        else if (isList)
+                            CodeBuilder.Append(", buildlist()");
+                        else
+                            CodeBuilder.Append(", buildcollection()");
+                    } else {
+                        CodeBuilder.Append(", null");
+                    }
+                    CodeBuilder.Append(");}");
                 } else {
-                    CodeBuilder.AppendFormat("\"{0}\"", ctor);
+                    CodeBuilder.AppendFormat("{0}local({1})", GetIndentString(), node.Identifier.Text);
                 }
-                if (isCollection) {
-                    bool isDictionary = IsImplementationOfSys(namedTypeSym, "IDictionary");
-                    bool isList = IsImplementationOfSys(namedTypeSym, "IList");
-                    if (isDictionary)
-                        CodeBuilder.Append(", builddictionary()");
-                    else if (isList)
-                        CodeBuilder.Append(", buildlist()");
-                    else
-                        CodeBuilder.Append(", buildcollection()");
-                } else {
-                    CodeBuilder.Append(", null");
-                }
-                CodeBuilder.Append(");}");
             } else {
                 CodeBuilder.AppendFormat("{0}local({1})", GetIndentString(), node.Identifier.Text);
             }
