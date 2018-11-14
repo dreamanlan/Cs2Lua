@@ -1609,7 +1609,11 @@ function delegationadd(isevent, isStatic, key, t, intf, k, handler)
   if k then
     v = t[k];  
   end;
-  table.insert(v, handler);
+  if v == nil then
+    v = delegationwrap(handler);
+  else
+    table.insert(v, handler);
+  end;
   return v;
 end;
 function delegationremove(isevent, isStatic, key, t, intf, k, handler)
