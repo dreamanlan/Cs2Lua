@@ -132,9 +132,11 @@ namespace RoslynTool.CsToDsl
             var ci = m_ClassInfoStack.Peek();
             IMethodSymbol declSym = m_Model.GetDeclaredSymbol(node);
             if (null != declSym) {
-                string require = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.RequireAttribute", 0);
-                if (!string.IsNullOrEmpty(require)) {
-                    SymbolTable.Instance.AddRequire(ci.Key, require);
+                string[] requires = ClassInfo.GetAttributeArguments<string>(declSym, "Cs2Lua.RequireAttribute", 0);
+                if (null != requires) {
+                    foreach (var req in requires) {
+                        SymbolTable.Instance.AddRequire(ci.Key, req);
+                    }
                 }
                 if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
                     return;
@@ -280,9 +282,11 @@ namespace RoslynTool.CsToDsl
             var ci = m_ClassInfoStack.Peek();
             IPropertySymbol declSym = m_Model.GetDeclaredSymbol(node);
             if (null != declSym) {
-                string require = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.RequireAttribute", 0);
-                if (!string.IsNullOrEmpty(require)) {
-                    SymbolTable.Instance.AddRequire(ci.Key, require);
+                string[] requires = ClassInfo.GetAttributeArguments<string>(declSym, "Cs2Lua.RequireAttribute", 0);
+                if (null != requires) {
+                    foreach (var req in requires) {
+                        SymbolTable.Instance.AddRequire(ci.Key, req);
+                    }
                 }
                 if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
                     return;
@@ -546,9 +550,11 @@ namespace RoslynTool.CsToDsl
             var ci = m_ClassInfoStack.Peek();
             IEventSymbol declSym = m_Model.GetDeclaredSymbol(node);
             if (null != declSym) {
-                string require = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.RequireAttribute", 0);
-                if (!string.IsNullOrEmpty(require)) {
-                    SymbolTable.Instance.AddRequire(ci.Key, require);
+                string[] requires = ClassInfo.GetAttributeArguments<string>(declSym, "Cs2Lua.RequireAttribute", 0);
+                if (null != requires) {
+                    foreach (var req in requires) {
+                        SymbolTable.Instance.AddRequire(ci.Key, req);
+                    }
                 }
                 if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
                     return;
@@ -648,9 +654,11 @@ namespace RoslynTool.CsToDsl
             var ci = m_ClassInfoStack.Peek();
             var declSym = m_Model.GetDeclaredSymbol(node);
             if (null != declSym) {
-                string require = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.RequireAttribute", 0);
-                if (!string.IsNullOrEmpty(require)) {
-                    SymbolTable.Instance.AddRequire(ci.Key, require);
+                string[] requires = ClassInfo.GetAttributeArguments<string>(declSym, "Cs2Lua.RequireAttribute", 0);
+                if (null != requires) {
+                    foreach (var req in requires) {
+                        SymbolTable.Instance.AddRequire(ci.Key, req);
+                    }
                 }
                 if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
                     return;

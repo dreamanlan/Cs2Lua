@@ -213,8 +213,8 @@ namespace RoslynTool.CsToDsl
                         }
                         return;
                     } else if (sym.Kind == SymbolKind.Field || sym.Kind == SymbolKind.Property || sym.Kind == SymbolKind.Event) {
-                        if (m_ObjectCreateStack.Count > 0) {
-                            ITypeSymbol symInfo = m_ObjectCreateStack.Peek();
+                        if (m_ObjectInitializerStack.Count > 0) {
+                            ITypeSymbol symInfo = m_ObjectInitializerStack.Peek();
                             if (null != symInfo) {
                                 var names = symInfo.GetMembers(name);
                                 if (names.Length > 0) {
@@ -261,8 +261,8 @@ namespace RoslynTool.CsToDsl
                         return;
                     }
                 } else {
-                    if (m_ObjectCreateStack.Count > 0) {
-                        ITypeSymbol symInfo = m_ObjectCreateStack.Peek();
+                    if (m_ObjectInitializerStack.Count > 0) {
+                        ITypeSymbol symInfo = m_ObjectInitializerStack.Peek();
                         if (null != symInfo) {
                             var names = symInfo.GetMembers(name);
                             if (names.Length > 0) {

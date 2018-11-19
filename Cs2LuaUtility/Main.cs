@@ -13,12 +13,12 @@ namespace Cs2Lua
     [System.AttributeUsage(System.AttributeTargets.All)]
     public sealed class RequireAttribute : System.Attribute
     {
-        public RequireAttribute(string luaModuleName)
+        public RequireAttribute(params string[] luaModuleNames)
         {
-            m_LuaModuleName = luaModuleName;
+            m_LuaModuleNames = luaModuleNames;
         }
 
-        private string m_LuaModuleName = string.Empty;
+        private string[] m_LuaModuleNames = null;
     }
 
     [System.AttributeUsage(System.AttributeTargets.Method)]

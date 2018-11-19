@@ -750,6 +750,7 @@ namespace RoslynTool.CsToDsl
                         }
                         CodeBuilder.Append(")");
                     } else {
+                        m_ObjectInitializerStack.Push(typeSymInfo);
                         CodeBuilder.Append("(function(newobj){ ");
                         var args = node.Expressions;
                         int ct = args.Count;
@@ -769,6 +770,7 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.Append(";");
                         }
                         CodeBuilder.Append(" })");
+                        m_ObjectInitializerStack.Pop();
                     }
                 }
             } else {
@@ -783,8 +785,6 @@ namespace RoslynTool.CsToDsl
             if (null != objectCreate) {
                 var typeSymInfo = objectCreate.Type;
                 var sym = objectCreate.Constructor;
-
-                m_ObjectCreateStack.Push(typeSymInfo);
 
                 string fullTypeName = ClassInfo.GetFullName(typeSymInfo);
                 var namedTypeSym = typeSymInfo as INamedTypeSymbol;
@@ -869,8 +869,6 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.Append("; ");
                     CodeBuilder.AppendFormat("return({0}); }})()", localName);
                 }
-
-                m_ObjectCreateStack.Pop();
             } else {
                 var methodBinding = oper as IMethodBindingExpression;
                 if (null != methodBinding) {

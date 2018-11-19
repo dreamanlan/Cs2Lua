@@ -86,9 +86,11 @@ namespace RoslynTool.CsToDsl
             SymbolTable.Instance.ClassSymbols.TryGetValue(ClassInfo.GetFullNameWithTypeParameters(declSym), out info);
             ci.Init(declSym, info);
             if (null != declSym) {
-                string require = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.RequireAttribute", 0);
-                if (!string.IsNullOrEmpty(require)) {
-                    SymbolTable.Instance.AddRequire(ci.Key, require);
+                string[] requires = ClassInfo.GetAttributeArguments<string>(declSym, "Cs2Lua.RequireAttribute", 0);
+                if (null != requires) {
+                    foreach (var req in requires) {
+                        SymbolTable.Instance.AddRequire(ci.Key, req);
+                    }
                 }
                 if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
                     return;
@@ -210,9 +212,11 @@ namespace RoslynTool.CsToDsl
             var ci = m_ClassInfoStack.Peek();
 
             if (null != declSym) {
-                string require = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.RequireAttribute", 0);
-                if (!string.IsNullOrEmpty(require)) {
-                    SymbolTable.Instance.AddRequire(ci.Key, require);
+                string[] requires = ClassInfo.GetAttributeArguments<string>(declSym, "Cs2Lua.RequireAttribute", 0);
+                if (null != requires) {
+                    foreach (var req in requires) {
+                        SymbolTable.Instance.AddRequire(ci.Key, req);
+                    }
                 }
                 if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
                     return;
@@ -354,9 +358,11 @@ namespace RoslynTool.CsToDsl
             foreach (var v in fieldDecl.Declaration.Variables) {
                 var baseSym = m_Model.GetDeclaredSymbol(v);
                 if (null != baseSym) {
-                    string require = ClassInfo.GetAttributeArgument<string>(baseSym, "Cs2Lua.RequireAttribute", 0);
-                    if (!string.IsNullOrEmpty(require)) {
-                        SymbolTable.Instance.AddRequire(ci.Key, require);
+                    string[] requires = ClassInfo.GetAttributeArguments<string>(baseSym, "Cs2Lua.RequireAttribute", 0);
+                    if (null != requires) {
+                        foreach (var req in requires) {
+                            SymbolTable.Instance.AddRequire(ci.Key, req);
+                        }
                     }
                     if (ClassInfo.HasAttribute(baseSym, "Cs2Lua.IgnoreAttribute"))
                         continue;
@@ -506,9 +512,11 @@ namespace RoslynTool.CsToDsl
             foreach (var v in eventFieldDecl.Declaration.Variables) {
                 var baseSym = m_Model.GetDeclaredSymbol(v);
                 if (null != baseSym) {
-                    string require = ClassInfo.GetAttributeArgument<string>(baseSym, "Cs2Lua.RequireAttribute", 0);
-                    if (!string.IsNullOrEmpty(require)) {
-                        SymbolTable.Instance.AddRequire(ci.Key, require);
+                    string[] requires = ClassInfo.GetAttributeArguments<string>(baseSym, "Cs2Lua.RequireAttribute", 0);
+                    if (null != requires) {
+                        foreach (var req in requires) {
+                            SymbolTable.Instance.AddRequire(ci.Key, req);
+                        }
                     }
                     if (ClassInfo.HasAttribute(baseSym, "Cs2Lua.IgnoreAttribute"))
                         continue;
@@ -782,23 +790,26 @@ namespace RoslynTool.CsToDsl
                     OutputExpressionSyntax(init.Value, opd);
                 }
             } else if (null != namedTypeSym && namedTypeSym.IsValueType && !SymbolTable.IsBasicType(namedTypeSym)) {
-                bool isCollection = IsImplementationOfSys(namedTypeSym, "ICollection");
-                bool isExternal = !SymbolTable.Instance.IsCs2DslSymbol(namedTypeSym);
-                string fullTypeName = ClassInfo.GetFullName(namedTypeSym);
+                var block = GetParentBlockNode(node);
+                LocalVariableAccessAnalysis analysis = new LocalVariableAccessAnalysis(node.Identifier.Text);
+                analysis.Visit(block);
+                if (analysis.NeedInitOnDeclaration) {
+                    bool isCollection = IsImplementationOfSys(namedTypeSym, "ICollection");
+                    bool isExternal = !SymbolTable.Instance.IsCs2DslSymbol(namedTypeSym);
+                    string fullTypeName = ClassInfo.GetFullName(namedTypeSym);
 
-                IMethodSymbol sym = null;
-                foreach (var c in namedTypeSym.InstanceConstructors) {
-                    if (!c.IsGenericMethod && c.Parameters.Length == 0) {
-                        sym = c;
+                    IMethodSymbol sym = null;
+                    foreach (var c in namedTypeSym.InstanceConstructors) {
+                        if (!c.IsGenericMethod && c.Parameters.Length == 0) {
+                            sym = c;
+                        }
                     }
-                }
 
-                string ctor = null;
-                if (null != sym) {
-                    ctor = NameMangling(sym);
-                }
+                    string ctor = null;
+                    if (null != sym) {
+                        ctor = NameMangling(sym);
+                    }
 
-                if (null != sym || isCollection) {
                     CodeBuilder.AppendFormat("{0}local{{{1} = ", GetIndentString(), node.Identifier.Text);
 
                     if (isCollection) {

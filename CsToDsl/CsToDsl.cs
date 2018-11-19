@@ -719,6 +719,16 @@ namespace RoslynTool.CsToDsl
                 return false;
             }
         }
+        private SyntaxNode GetParentBlockNode(SyntaxNode node)
+        {
+            var parent = node.Parent;
+            while (null != parent) {
+                if (parent.IsKind(SyntaxKind.Block))
+                    return parent;
+                parent = parent.Parent;
+            }
+            return null;
+        }
         private SyntaxNode GetNextNode(SyntaxNode node, SyntaxNode parent)
         {
             if (null != node && null != parent) {
@@ -767,7 +777,7 @@ namespace RoslynTool.CsToDsl
 
         private Stack<ClassInfo> m_ClassInfoStack = new Stack<ClassInfo>();
         private Stack<MethodInfo> m_MethodInfoStack = new Stack<MethodInfo>();
-        private Stack<ITypeSymbol> m_ObjectCreateStack = new Stack<ITypeSymbol>();
+        private Stack<ITypeSymbol> m_ObjectInitializerStack = new Stack<ITypeSymbol>();
         private Stack<ContinueInfo> m_ContinueInfoStack = new Stack<ContinueInfo>();
         private Stack<SwitchInfo> m_SwitchInfoStack = new Stack<SwitchInfo>();
         private Queue<PostfixUnaryExpressionSyntax> m_PostfixUnaryExpressions = new Queue<PostfixUnaryExpressionSyntax>();

@@ -255,6 +255,28 @@ namespace RoslynTool.CsToDsl
             }
             return default(T);
         }
+        internal static T[] GetAttributeArguments<T>(ISymbol sym, string fullName, int index)
+        {
+            if (null == sym)
+                return null;
+            foreach (var attr in sym.GetAttributes()) {
+                string fn = GetFullName(attr.AttributeClass);
+                if (fn == fullName || fn == SymbolTable.PrefixExternClassName(fullName)) {
+                    var args = attr.ConstructorArguments;
+                    int ct = args.Length;
+                    if (index >= 0 && index < ct) {
+                        var arg = args[index];
+                        var ret = new T[arg.Values.Length];
+                        for (int i = 0; i < arg.Values.Length; ++i) {
+                            var v = arg.Values[i];
+                            ret[i] = (T)Convert.ChangeType(v.Value, typeof(T));
+                        }
+                        return ret;
+                    }
+                }
+            }
+            return null;
+        }
 
         internal static string GetFullName(ISymbol type)
         {
