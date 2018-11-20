@@ -919,6 +919,8 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append("setinstancedelegation(");
                         if (null != leftMemberAccess)
                             OutputExpressionSyntax(leftMemberAccess.Expression);
+                        else if (IsNewObjMember(memberName))
+                            CodeBuilder.Append("newobj");
                         else
                             CodeBuilder.Append("this");
                         CodeBuilder.AppendFormat(", \"{0}\", ", memberName);
@@ -946,6 +948,8 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.Append("setinstance(");
                             if (null != leftMemberAccess)
                                 OutputExpressionSyntax(leftMemberAccess.Expression);
+                            else if (IsNewObjMember(memberName))
+                                CodeBuilder.Append("newobj");
                             else
                                 CodeBuilder.Append("this");
                             CodeBuilder.AppendFormat(", \"{0}\", ", memberName);
@@ -967,6 +971,8 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.Append("setinstance(");
                             if (null != leftMemberAccess)
                                 OutputExpressionSyntax(leftMemberAccess.Expression);
+                            else if (IsNewObjMember(memberName))
+                                CodeBuilder.Append("newobj");
                             else
                                 CodeBuilder.Append("this");
                             CodeBuilder.AppendFormat(", \"{0}\", ", memberName);

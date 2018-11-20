@@ -601,6 +601,19 @@ namespace RoslynTool.CsToDsl
             list.Add(ci);
             m_LastToplevelClass = ci;
         }
+        private bool IsNewObjMember(string name)
+        {
+            if (m_ObjectInitializerStack.Count > 0) {
+                ITypeSymbol symInfo = m_ObjectInitializerStack.Peek();
+                if (null != symInfo) {
+                    var names = symInfo.GetMembers(name);
+                    if (names.Length > 0) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
         private IMethodSymbol FindClassMethodDeclaredSymbol(SyntaxNode node)
         {
             while (null != node) {

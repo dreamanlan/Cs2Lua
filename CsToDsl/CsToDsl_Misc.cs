@@ -213,15 +213,9 @@ namespace RoslynTool.CsToDsl
                         }
                         return;
                     } else if (sym.Kind == SymbolKind.Field || sym.Kind == SymbolKind.Property || sym.Kind == SymbolKind.Event) {
-                        if (m_ObjectInitializerStack.Count > 0) {
-                            ITypeSymbol symInfo = m_ObjectInitializerStack.Peek();
-                            if (null != symInfo) {
-                                var names = symInfo.GetMembers(name);
-                                if (names.Length > 0) {
-                                    CodeBuilder.AppendFormat("getinstance(newobj, \"{0}\")", name);
-                                    return;
-                                }
-                            }
+                        if (IsNewObjMember(name)) {
+                            CodeBuilder.AppendFormat("getinstance(newobj, \"{0}\")", name);
+                            return;
                         }
                         if (sym.ContainingType == classInfo.SemanticInfo || sym.ContainingType == classInfo.SemanticInfo.OriginalDefinition || classInfo.IsInherit(sym.ContainingType)) {
                             if (sym.IsStatic) {
@@ -261,18 +255,11 @@ namespace RoslynTool.CsToDsl
                         return;
                     }
                 } else {
-                    if (m_ObjectInitializerStack.Count > 0) {
-                        ITypeSymbol symInfo = m_ObjectInitializerStack.Peek();
-                        if (null != symInfo) {
-                            var names = symInfo.GetMembers(name);
-                            if (names.Length > 0) {
-                                CodeBuilder.AppendFormat("getinstance(newobj, \"{0}\")", name);
-                                return;
-                            }
-                        }
-                    } else {
-                        ReportIllegalSymbol(node, symbolInfo);
+                    if (IsNewObjMember(name)) {
+                        CodeBuilder.AppendFormat("getinstance(newobj, \"{0}\")", name);
+                        return;
                     }
+                    ReportIllegalSymbol(node, symbolInfo);
                 }
             }
             CodeBuilder.Append(name);
