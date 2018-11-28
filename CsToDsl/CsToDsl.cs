@@ -347,7 +347,7 @@ namespace RoslynTool.CsToDsl
                 }
                 for (int i = 0; i < dvCt; ++i) {
                     var info = defValArgs[i];
-                    OutputConstValue(info.Value, info.OperOrSym);
+                    OutputArgumentDefaultValue(info.Value, info.OperOrSym);
                     if (i < dvCt - 1) {
                         CodeBuilder.Append(", ");
                     }
@@ -422,6 +422,162 @@ namespace RoslynTool.CsToDsl
         private void OutputDefaultValue(ITypeSymbol type)
         {
             OutputDefaultValue(CodeBuilder, type);
+        }
+        private void OutputArgumentDefaultValue(object val, object operOrSym)
+        {
+            if (null == val) {
+                bool handled = false;
+                var oper = operOrSym as IOperation;
+                if (null != oper) {
+                    var tree = oper.Syntax.SyntaxTree;
+                    var newModel = m_Model.Compilation.GetSemanticModel(tree, true);
+                    if (null != newModel) {
+                        CsToDsl.CsDslTranslater trans = new CsDslTranslater(newModel, m_EnableInherit, m_EnableLinq);
+                        
+                        var ci = new ClassInfo();
+                        trans.m_ClassInfoStack.Push(ci);
+                        var curCi = m_ClassInfoStack.Peek();
+                        ci.Init(curCi.SemanticInfo, curCi.ClassSemanticInfo);
+
+                        var mi = new MethodInfo();
+                        trans.m_MethodInfoStack.Push(mi);
+                        var curMi = m_MethodInfoStack.Peek();
+                        mi.Init(curMi.SemanticInfo, curMi.SyntaxNode);
+
+                        trans.Visit(oper.Syntax);
+                        CodeBuilder.Append(trans.CodeBuilder.ToString());
+
+                        trans.m_MethodInfoStack.Pop();
+                        trans.m_ClassInfoStack.Pop();
+                        handled = true;
+                    }
+                }
+                if (!handled) {
+                    var objCreate = operOrSym as IObjectCreationExpression;
+                    var arrCreate = operOrSym as IArrayCreationExpression;
+                    var fieldRef = operOrSym as IFieldReferenceExpression;
+                    var propRef = operOrSym as IPropertyReferenceExpression;
+                    if (null != objCreate) {
+                        var namedTypeSym = objCreate.Type as INamedTypeSymbol;
+                        var sym = objCreate.Constructor;
+                        var args = objCreate.ArgumentsInParameterOrder;
+                        var memberInit = objCreate.MemberInitializers;
+
+                        bool isCollection = IsImplementationOfSys(namedTypeSym, "ICollection");
+                        bool isExternal = !SymbolTable.Instance.IsCs2DslSymbol(namedTypeSym);
+                        string fullTypeName = ClassInfo.GetFullName(namedTypeSym);
+
+                        string ctor = null;
+                        if (null != sym) {
+                            ctor = NameMangling(sym);
+                        }
+
+                        if (isCollection) {
+                            bool isDictionary = IsImplementationOfSys(namedTypeSym, "IDictionary");
+                            bool isList = IsImplementationOfSys(namedTypeSym, "IList");
+                            if (isDictionary) {
+                                //字典对象的处理
+                                CodeBuilder.AppendFormat("new{0}dictionary({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                                CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                                if (isExternal) {
+                                    CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
+                                }
+                            } else if (isList) {
+                                //列表对象的处理
+                                CodeBuilder.AppendFormat("new{0}list({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                                CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                                if (isExternal) {
+                                    CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
+                                }
+                            } else {
+                                //集合对象的处理
+                                CodeBuilder.AppendFormat("new{0}collection({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                                CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                                if (isExternal) {
+                                    CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
+                                }
+                            }
+                        } else {
+                            CodeBuilder.AppendFormat("new{0}object({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                            CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                            if (isExternal) {
+                                CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
+                            }
+                        }
+                        if (string.IsNullOrEmpty(ctor)) {
+                            CodeBuilder.Append("null");
+                        } else {
+                            CodeBuilder.AppendFormat("\"{0}\"", ctor);
+                        }
+                        if (null == memberInit || memberInit.Length <= 0) {
+                            if (isCollection) {
+                                bool isDictionary = IsImplementationOfSys(namedTypeSym, "IDictionary");
+                                bool isList = IsImplementationOfSys(namedTypeSym, "IList");
+                                if (isDictionary)
+                                    CodeBuilder.Append(", builddictionary()");
+                                else if (isList)
+                                    CodeBuilder.Append(", buildlist()");
+                                else
+                                    CodeBuilder.Append(", buildcollection()");
+                            } else {
+                                CodeBuilder.Append(", null");
+                            }
+                        } else {
+                            Log(objCreate.Syntax, "Too complex default parameter value of extern method !");
+                        }
+                        if (null != args) {
+                            foreach (var arg in args) {
+                                CodeBuilder.Append(", ");
+                                if (arg.Value.ConstantValue.HasValue) {
+                                    OutputConstValue(arg.Value.ConstantValue.Value, arg.Value);
+                                } else {
+                                    Log(objCreate.Syntax, "Too complex default parameter value of extern method !");
+                                }
+                            }
+                        }
+                        CodeBuilder.Append(" );}");
+                    } else if (null != arrCreate) {
+                        if (arrCreate.DimensionSizes.Length == 1) {
+                            if (null == arrCreate.Initializer || arrCreate.Initializer.ElementValues.Length == 0) {
+                                CodeBuilder.Append("initarray()");
+                            } else {
+                                CodeBuilder.Append("buildarray(");
+                                string prestr = string.Empty;
+                                foreach (var arg in arrCreate.Initializer.ElementValues) {
+                                    CodeBuilder.Append(prestr);
+                                    prestr = ", ";
+                                    if (arg.ConstantValue.HasValue) {
+                                        OutputConstValue(arg.ConstantValue.Value, arg);
+                                    } else {
+                                        Log(arrCreate.Syntax, "Too complex default parameter value of extern method !");
+                                    }
+                                }
+                                CodeBuilder.Append(")");
+                            }
+                        } else {
+                            Log(arrCreate.Syntax, "Too complex default parameter value of extern method !");
+                        }
+                    } else if (null != fieldRef) {
+                        var field = fieldRef.Field;
+                        CodeBuilder.Append("getstatic(");
+                        CodeBuilder.Append(ClassInfo.GetFullName(field.Type));
+                        CodeBuilder.Append(", \"");
+                        CodeBuilder.Append(field.Name);
+                        CodeBuilder.Append("\")");
+                    } else if (null != propRef) {
+                        var property = propRef.Property;
+                        CodeBuilder.Append("getstatic(");
+                        CodeBuilder.Append(ClassInfo.GetFullName(property.Type));
+                        CodeBuilder.Append(", \"");
+                        CodeBuilder.Append(property.Name);
+                        CodeBuilder.Append("\")");
+                    } else {
+                        OutputConstValue(val, operOrSym);
+                    }
+                }
+            } else {
+                OutputConstValue(val, operOrSym);
+            }
         }
         private void OutputConstValue(object val, object operOrSym)
         {
