@@ -441,10 +441,11 @@ namespace RoslynTool.CsToDsl
                     } else if (propForBasicValueType) {
                         string pname = psym.Name;
                         string cname = ClassInfo.GetFullName(psym.ContainingType);
-                        string ckey = InvocationInfo.CalcInvokeTarget(cname, this, node.Expression, m_Model);
+                        bool isEnumClass = psym.ContainingType.TypeKind == TypeKind.Enum || cname == SymbolTable.PrefixExternClassName("System.Enum");
+                        string ckey = InvocationInfo.CalcInvokeTarget(isEnumClass, cname, this, node.Expression, m_Model);
                         CodeBuilder.AppendFormat("getforbasicvalue(");
                         OutputExpressionSyntax(node.Expression);
-                        CodeBuilder.AppendFormat(", {0}, {1}, \"{2}\")", cname == SymbolTable.PrefixExternClassName("System.Enum") ? "true" : "false", ckey, pname);
+                        CodeBuilder.AppendFormat(", {0}, {1}, \"{2}\")", isEnumClass ? "true" : "false", ckey, pname);
                     } else if (null != psym) {
                         if (string.IsNullOrEmpty(className)) {
                             CodeBuilder.Append("getinstance(");
