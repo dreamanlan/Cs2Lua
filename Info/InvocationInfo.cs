@@ -25,6 +25,7 @@ namespace RoslynTool.CsToLua
         internal List<ExpressionSyntax> ReturnArgs = new List<ExpressionSyntax>();
         internal List<ITypeSymbol> GenericTypeArgs = new List<ITypeSymbol>();
         internal bool ArrayToParams = false;
+        internal bool IsEnumClass = false;
         internal bool IsExtensionMethod = false;
         internal bool IsComponentGetOrAdd = false;
         internal bool IsBasicValueMethod = false;
@@ -56,7 +57,7 @@ namespace RoslynTool.CsToLua
                 int ct = args.Count;
                 for (int i = 0; i < ct; ++i) {
                     var arg = args[i];
-                    TryAddExternEnum(ClassKey, arg.Expression, model);
+                    TryAddExternEnum(IsEnumClass, arg.Expression, model);
                     if (i < sym.Parameters.Length) {
                         var param = sym.Parameters[i];
                         if (null != moper) {
@@ -128,7 +129,7 @@ namespace RoslynTool.CsToLua
                 int ct = args.Count;
                 for (int i = 0; i < ct; ++i) {
                     var arg = args[i];
-                    TryAddExternEnum(ClassKey, arg.Expression, model);
+                    TryAddExternEnum(IsEnumClass, arg.Expression, model);
                     if (i < sym.Parameters.Length) {
                         var param = sym.Parameters[i];
                         if (null != moper) {
@@ -199,7 +200,7 @@ namespace RoslynTool.CsToLua
                     if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Array) {
                         RecordRefArray(arg);
                     }
-                    TryAddExternEnum(ClassKey, arg, model);
+                    TryAddExternEnum(IsEnumClass, arg, model);
                     Args.Add(arg);
                     if (i < opds.Length)
                         ArgConversions.Add(opds[i]);
@@ -239,11 +240,11 @@ namespace RoslynTool.CsToLua
                     codeBuilder.Append(mname);
                     codeBuilder.Append("(");
                 } else if (IsBasicValueMethod) {
-                    string ckey = CalcInvokeTarget(ClassKey, cs2lua, exp, model);
+                    string ckey = CalcInvokeTarget(IsEnumClass, ClassKey, cs2lua, exp, model);
                     codeBuilder.Append("invokeforbasicvalue(");
                     cs2lua.OutputExpressionSyntax(exp);
                     codeBuilder.Append(", ");
-                    codeBuilder.AppendFormat("{0}, {1}, \"{2}\"", ClassKey == SymbolTable.PrefixExternClassName("System.Enum") ? "true" : "false", ckey, mname);
+                    codeBuilder.AppendFormat("{0}, {1}, \"{2}\"", IsEnumClass ? "true" : "false", ckey, mname);
                     prestr = ", ";
                 } else if (IsArrayStaticMethod) {
                     codeBuilder.Append("invokearraystaticmethod(");
@@ -317,6 +318,7 @@ namespace RoslynTool.CsToLua
             
             ClassKey = ClassInfo.GetFullName(sym.ContainingType);
             GenericClassKey = ClassInfo.GetFullNameWithTypeParameters(sym.ContainingType);
+            IsEnumClass = sym.ContainingType.TypeKind == TypeKind.Enum || ClassKey == SymbolTable.PrefixExternClassName("System.Enum");
             IsExtensionMethod = sym.IsExtensionMethod && SymbolTable.Instance.IsCs2LuaSymbol(sym);
             IsBasicValueMethod = SymbolTable.IsBasicValueMethod(sym);
             IsArrayStaticMethod = ClassKey == SymbolTable.PrefixExternClassName("System.Array") && sym.IsStatic;
@@ -391,9 +393,9 @@ namespace RoslynTool.CsToLua
             }
         }
 
-        internal static void TryAddExternEnum(string classKey, ExpressionSyntax exp, SemanticModel model)
+        internal static void TryAddExternEnum(bool isEnumClass, ExpressionSyntax exp, SemanticModel model)
         {
-            if (classKey == SymbolTable.PrefixExternClassName("System.Enum")) {
+            if (isEnumClass) {
                 var oper = model.GetOperation(exp);
                 if (!SymbolTable.Instance.IsCs2LuaSymbol(oper.Type) && oper.Type.TypeKind == TypeKind.Enum) {
                     string ckey = ClassInfo.GetFullName(oper.Type);
@@ -408,11 +410,11 @@ namespace RoslynTool.CsToLua
             }
         }
 
-        internal static string CalcInvokeTarget(string classKey, CsLuaTranslater cs2lua, ExpressionSyntax exp, SemanticModel model)
+        internal static string CalcInvokeTarget(bool isEnumClass, string classKey, CsLuaTranslater cs2lua, ExpressionSyntax exp, SemanticModel model)
         {
-            TryAddExternEnum(classKey, exp, model);
+            TryAddExternEnum(isEnumClass, exp, model);
             string ckey = classKey;
-            if (classKey == SymbolTable.PrefixExternClassName("System.Enum")) {
+            if (isEnumClass) {
                 var oper = model.GetOperation(exp);
                 if (oper.Type.TypeKind == TypeKind.Enum) {
                     var ci = cs2lua.GetCurClassInfo();

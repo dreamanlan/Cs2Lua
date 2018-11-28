@@ -839,11 +839,12 @@ namespace RoslynTool.CsToLua
                 CodeBuilder.Append(")");
             } else if (specialType == SpecialAssignmentType.PropForBasicValueType) {
                 string className = ClassInfo.GetFullName(leftPsym.ContainingType);
+                bool isEnumClass = leftPsym.ContainingType.TypeKind == TypeKind.Enum || className == SymbolTable.PrefixExternClassName("System.Enum");
                 string pname = leftPsym.Name;
-                string ckey = InvocationInfo.CalcInvokeTarget(className, this, leftMemberAccess.Expression, m_Model);
+                string ckey = InvocationInfo.CalcInvokeTarget(isEnumClass, className, this, leftMemberAccess.Expression, m_Model);
                 CodeBuilder.AppendFormat("setforbasicvalue(");
                 OutputExpressionSyntax(leftMemberAccess.Expression);
-                CodeBuilder.AppendFormat(", {0}, {1}, \"{2}\", ", className == SymbolTable.PrefixExternClassName("System.Enum") ? "true" : "false", ckey, pname);
+                CodeBuilder.AppendFormat(", {0}, {1}, \"{2}\", ", isEnumClass ? "true" : "false", ckey, pname);
                 OutputExpressionSyntax(assign.Right, opd);
                 CodeBuilder.Append(")");
             } else if (null != leftElementAccess) {

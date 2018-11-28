@@ -526,7 +526,7 @@ namespace RoslynTool.CsToLua
         {
             bool ret = false;
             if (null != sym && !sym.IsStatic && null != sym.ContainingType) {
-                if (ClassInfo.GetFullName(sym.ContainingType) == SymbolTable.PrefixExternClassName("System.Enum")) {
+                if (sym.ContainingType.TypeKind == TypeKind.Enum || ClassInfo.GetFullName(sym.ContainingType) == SymbolTable.PrefixExternClassName("System.Enum")) {
                     ret = true;
                 } else {
                     string type = ClassInfo.GetFullName(sym.ContainingType);
@@ -539,7 +539,7 @@ namespace RoslynTool.CsToLua
         {
             bool ret = false;
             if (null != sym && !sym.IsStatic && null != sym.ContainingType) {
-                if (ClassInfo.GetFullName(sym.ContainingType) == SymbolTable.PrefixExternClassName("System.Enum")) {
+                if (sym.ContainingType.TypeKind == TypeKind.Enum || ClassInfo.GetFullName(sym.ContainingType) == SymbolTable.PrefixExternClassName("System.Enum")) {
                     ret = true;
                 } else {
                     string type = ClassInfo.GetFullName(sym.ContainingType);
