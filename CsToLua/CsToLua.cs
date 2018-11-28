@@ -354,7 +354,7 @@ namespace RoslynTool.CsToLua
                 }
                 for (int i = 0; i < dvCt; ++i) {
                     var info = defValArgs[i];
-                    OutputConstValue(info.Value, info.OperOrSym);
+                    OutputArgumentDefaultValue(info.Value, info.OperOrSym);
                     if (i < dvCt - 1) {
                         CodeBuilder.Append(", ");
                     }
@@ -435,6 +435,58 @@ namespace RoslynTool.CsToLua
         private void OutputArrayDefaultValue(ITypeSymbol type)
         {
             OutputArrayDefaultValue(CodeBuilder, type);
+        }
+        private void OutputArgumentDefaultValue(object val, object operOrSym)
+        {
+            if (null == val) {
+                bool handled = false;
+                var oper = operOrSym as IOperation;
+                if (null != oper) {
+                    var tree = oper.Syntax.SyntaxTree;
+                    var newModel = m_Model.Compilation.GetSemanticModel(tree, true);
+                    if (null != newModel) {
+                        CsLuaTranslater trans = new CsLuaTranslater(newModel, m_EnableInherit, m_EnableLinq);
+                        
+                        var ci = new ClassInfo();
+                        trans.m_ClassInfoStack.Push(ci);
+                        var curCi = m_ClassInfoStack.Peek();
+                        ci.Init(curCi.SemanticInfo, curCi.ClassSemanticInfo);
+
+                        var mi = new MethodInfo();
+                        trans.m_MethodInfoStack.Push(mi);
+                        var curMi = m_MethodInfoStack.Peek();
+                        mi.Init(curMi.SemanticInfo, curMi.SyntaxNode);
+
+                        trans.Visit(oper.Syntax);
+                        CodeBuilder.Append(trans.CodeBuilder.ToString());
+
+                        trans.m_MethodInfoStack.Pop();
+                        trans.m_ClassInfoStack.Pop();
+                        handled = true;
+                    }
+                }
+                if (!handled) {
+                    var fieldRef = operOrSym as IFieldReferenceExpression;
+                    var propRef = operOrSym as IPropertyReferenceExpression;
+                    if (null != fieldRef) {
+                        var field = fieldRef.Field;
+                        CodeBuilder.Append(ClassInfo.GetFullName(field.Type));
+                        CodeBuilder.Append(".");
+                        CodeBuilder.Append(field.Name);
+                    } else if (null != propRef) {
+                        var property = propRef.Property;
+                        CodeBuilder.Append(ClassInfo.GetFullName(property.Type));
+                        CodeBuilder.Append(".");
+                        CodeBuilder.Append(property.Name);
+                    } else if (null != oper) {
+                        Log(oper.Syntax, "Too complex default parameter value of extern method !");
+                    } else {
+                        OutputConstValue(val, operOrSym);
+                    }
+                }
+            } else {
+                OutputConstValue(val, operOrSym);
+            }
         }
         private void OutputConstValue(object val, object operOrSym)
         {

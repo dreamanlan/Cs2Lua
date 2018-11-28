@@ -30,7 +30,7 @@ namespace RoslynTool.CsToLua
         internal string ReturnVarName = string.Empty;
 
         internal IMethodSymbol SemanticInfo = null;
-        internal IPropertySymbol PropertySemanticInfo = null;
+        internal SyntaxNode SyntaxNode = null;
 
         internal void Init(IMethodSymbol sym, SyntaxNode node)
         {
@@ -46,6 +46,7 @@ namespace RoslynTool.CsToLua
             ReturnVarName = string.Empty;
 
             SemanticInfo = sym;
+            SyntaxNode = node;
 
             if (sym.IsGenericMethod) {
                 foreach (var param in sym.TypeParameters) {
