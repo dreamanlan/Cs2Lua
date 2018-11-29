@@ -1025,7 +1025,7 @@ namespace LuaGenerator
                     prestr = ", ";
                 }
                 sb.Append("}");
-            } else if (id == "builddictionary") {
+            } else if (id == "literaldictionary") {
                 sb.Append("{");
                 string prestr = string.Empty;
                 for (int ix = 0; ix < data.Params.Count; ++ix) {
@@ -1038,7 +1038,7 @@ namespace LuaGenerator
                     prestr = ", ";
                 }
                 sb.Append("}");
-            } else if (id == "buildlist" || id == "buildcollection" || id == "buildcomplex" || id == "buildobject") {
+            } else if (id == "literallist" || id == "literalcollection" || id == "literalcomplex" || id == "literalobject") {
                 sb.Append("{");
                 string prestr = string.Empty;
                 for (int ix = 0; ix < data.Params.Count; ++ix) {
@@ -1049,18 +1049,32 @@ namespace LuaGenerator
                 }
                 sb.Append("}");
             } else if (id == "buildarray") {
-                sb.Append("wraparray({");
-                string prestr = string.Empty;
-                for (int ix = 0; ix < data.Params.Count; ++ix) {
-                    var param = data.Params[ix];
-                    sb.Append(prestr);
-                    GenerateSyntaxComponent(param, sb, indent, false);
-                    prestr = ", ";
+                var typeStr = CalcTypeString(data.GetParam(0));
+                if (typeStr == "System.Char") {
+                    sb.Append("chararraytostring({");
+                    string prestr = string.Empty;
+                    for (int ix = 1; ix < data.Params.Count; ++ix) {
+                        var param = data.Params[ix];
+                        sb.Append(prestr);
+                        GenerateSyntaxComponent(param, sb, indent, false);
+                        prestr = ", ";
+                    }
+                    sb.Append("})");
+                } else {
+                    sb.Append("wraparray({");
+                    string prestr = string.Empty;
+                    for (int ix = 1; ix < data.Params.Count; ++ix) {
+                        var param = data.Params[ix];
+                        sb.Append(prestr);
+                        GenerateSyntaxComponent(param, sb, indent, false);
+                        prestr = ", ";
+                    }
+                    sb.Append("})");
                 }
-                sb.Append("})");
-            } else if (id == "initarray") {
-                if (data.GetParamNum() > 0) {
-                    var vname = data.GetParamId(0);
+            } else if (id == "newarray") {
+                var typeStr = CalcTypeString(data.GetParam(0));
+                if (data.GetParamNum() > 1) {
+                    var vname = data.GetParamId(1);
                     sb.AppendFormat("wraparray({{}}, {0})", vname);
                 } else {
                     sb.Append("wraparray{}");
@@ -1102,6 +1116,8 @@ namespace LuaGenerator
                     sb.Append("until ");
                 } else if (id == "block") {
                     sb.Append("do");
+                } else if (id == "dslunpack") {
+                    sb.Append("luaunpack");
                 } else if (id == "dsltry") {
                     sb.Append("luatry");
                 } else if (id == "dslcatch") {

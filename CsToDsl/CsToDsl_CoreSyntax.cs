@@ -853,11 +853,11 @@ namespace RoslynTool.CsToDsl
                         bool isDictionary = IsImplementationOfSys(namedTypeSym, "IDictionary");
                         bool isList = IsImplementationOfSys(namedTypeSym, "IList");
                         if (isDictionary)
-                            CodeBuilder.Append(", builddictionary()");
+                            CodeBuilder.Append(", literaldictionary()");
                         else if (isList)
-                            CodeBuilder.Append(", buildlist()");
+                            CodeBuilder.Append(", literallist()");
                         else
-                            CodeBuilder.Append(", buildcollection()");
+                            CodeBuilder.Append(", literalcollection()");
                     } else {
                         CodeBuilder.Append(", null");
                     }

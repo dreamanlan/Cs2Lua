@@ -329,7 +329,7 @@ namespace RoslynTool.CsToDsl
                     OutputExpressionSyntax(exp, opd);
                 } else {
                     if (arrayToParams) {
-                        CodeBuilder.Append("unpack(");
+                        CodeBuilder.Append("dslunpack(");
                         OutputExpressionSyntax(exp, opd);
                         CodeBuilder.Append(")");
                     } else {
@@ -514,11 +514,11 @@ namespace RoslynTool.CsToDsl
                                 bool isDictionary = IsImplementationOfSys(namedTypeSym, "IDictionary");
                                 bool isList = IsImplementationOfSys(namedTypeSym, "IList");
                                 if (isDictionary)
-                                    CodeBuilder.Append(", builddictionary()");
+                                    CodeBuilder.Append(", literaldictionary()");
                                 else if (isList)
-                                    CodeBuilder.Append(", buildlist()");
+                                    CodeBuilder.Append(", literallist()");
                                 else
-                                    CodeBuilder.Append(", buildcollection()");
+                                    CodeBuilder.Append(", literalcollection()");
                             } else {
                                 CodeBuilder.Append(", null");
                             }
@@ -537,11 +537,12 @@ namespace RoslynTool.CsToDsl
                         }
                         CodeBuilder.Append(" );}");
                     } else if (null != arrCreate) {
+                        string elementType = ClassInfo.GetFullName(arrCreate.ElementType);
                         if (arrCreate.DimensionSizes.Length == 1) {
                             if (null == arrCreate.Initializer || arrCreate.Initializer.ElementValues.Length == 0) {
-                                CodeBuilder.Append("initarray()");
+                                CodeBuilder.AppendFormat("newarray({0})", elementType);
                             } else {
-                                CodeBuilder.Append("buildarray(");
+                                CodeBuilder.AppendFormat("buildarray({0}, ", elementType);
                                 string prestr = string.Empty;
                                 foreach (var arg in arrCreate.Initializer.ElementValues) {
                                     CodeBuilder.Append(prestr);

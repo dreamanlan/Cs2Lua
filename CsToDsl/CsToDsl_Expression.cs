@@ -617,7 +617,7 @@ namespace RoslynTool.CsToDsl
                         bool isDictionary = IsImplementationOfSys(oper.Type, "IDictionary");
                         bool isList = IsImplementationOfSys(oper.Type, "IList");
                         if (isDictionary) {
-                            CodeBuilder.Append("builddictionary(");
+                            CodeBuilder.Append("literaldictionary(");
                             var args = node.Expressions;
                             int ct = args.Count;
                             for (int i = 0; i < ct; ++i) {
@@ -649,7 +649,7 @@ namespace RoslynTool.CsToDsl
                             }
                             CodeBuilder.Append(")");
                         } else if (isList) {
-                            CodeBuilder.Append("buildlist(");
+                            CodeBuilder.Append("literallist(");
                             var args = node.Expressions;
                             int ct = args.Count;
                             for (int i = 0; i < ct; ++i) {
@@ -671,7 +671,7 @@ namespace RoslynTool.CsToDsl
                             }
                             CodeBuilder.Append(")");
                         } else {
-                            CodeBuilder.Append("buildcollection(");
+                            CodeBuilder.Append("literalcollection(");
                             var args = node.Expressions;
                             int ct = args.Count;
                             for (int i = 0; i < ct; ++i) {
@@ -698,7 +698,7 @@ namespace RoslynTool.CsToDsl
                     }
                 } else if (isComplex) {
                     //ComplexElementInitializer，目前未发现roslyn有实际合法的语法实例，执行到这的一般是存在语义错误的语法
-                    CodeBuilder.Append("buildcomplex(");
+                    CodeBuilder.Append("literalcomplex(");
                     var args = node.Expressions;
                     int ct = args.Count;
                     for (int i = 0; i < ct; ++i) {
@@ -709,19 +709,31 @@ namespace RoslynTool.CsToDsl
                     }
                     CodeBuilder.Append(")");
                 } else if (isArray) {
-                    CodeBuilder.Append("buildarray(");
                     var args = node.Expressions;
                     var arrInitOper = oper as IArrayInitializer;
                     int ct = args.Count;
-                    for (int i = 0; i < ct; ++i) {
-                        var exp = args[i];
-                        IConversionExpression opd = arrInitOper.ElementValues[i] as IConversionExpression;
-                        OutputExpressionSyntax(exp, opd);
-                        if (i < ct - 1) {
-                            CodeBuilder.Append(", ");
-                        }
+                    string elementType = "null";
+                    var arrCreateExp = node.Parent as ArrayCreationExpressionSyntax;
+                    if (null != arrCreateExp) {
+                        var arrCreate = m_Model.GetOperation(arrCreateExp) as IArrayCreationExpression;
+                        elementType = ClassInfo.GetFullName(arrCreate.ElementType);
+                    } else if (ct > 0) {
+                        elementType = ClassInfo.GetFullName(arrInitOper.ElementValues[0].Type);
                     }
-                    CodeBuilder.Append(")");
+                    if (ct > 0) {
+                        CodeBuilder.AppendFormat("buildarray({0}, ", elementType);
+                        for (int i = 0; i < ct; ++i) {
+                            var exp = args[i];
+                            IConversionExpression opd = arrInitOper.ElementValues[i] as IConversionExpression;
+                            OutputExpressionSyntax(exp, opd);
+                            if (i < ct - 1) {
+                                CodeBuilder.Append(", ");
+                            }
+                        }
+                        CodeBuilder.Append(")");
+                    } else {
+                        CodeBuilder.AppendFormat("newarray({0})", elementType);
+                    }
                 } else {
                     //isObjectInitializer
                     bool isCollectionObj = false;
@@ -730,7 +742,7 @@ namespace RoslynTool.CsToDsl
                         isCollectionObj = IsImplementationOfSys(typeSymInfo, "ICollection");
                     }
                     if (isCollectionObj) {
-                        CodeBuilder.Append("buildobject(");
+                        CodeBuilder.Append("literalobject(");
                         var args = node.Expressions;
                         int ct = args.Count;
                         for (int i = 0; i < ct; ++i) {
@@ -852,11 +864,11 @@ namespace RoslynTool.CsToDsl
                         bool isDictionary = IsImplementationOfSys(typeSymInfo, "IDictionary");
                         bool isList = IsImplementationOfSys(typeSymInfo, "IList");
                         if (isDictionary)
-                            CodeBuilder.Append(", builddictionary()");
+                            CodeBuilder.Append(", literaldictionary()");
                         else if(isList)
-                            CodeBuilder.Append(", buildlist()");
+                            CodeBuilder.Append(", literallist()");
                         else
-                            CodeBuilder.Append(", buildcollection()");
+                            CodeBuilder.Append(", literalcollection()");
                     } else {
                         CodeBuilder.Append(", null");
                     }
@@ -933,6 +945,7 @@ namespace RoslynTool.CsToDsl
         {
             if (null == node.Initializer) {
                 var oper = m_Model.GetOperation(node) as IArrayCreationExpression;
+                string elementType = ClassInfo.GetFullName(oper.ElementType);
                 var rankspecs = node.Type.RankSpecifiers;
                 var rankspec = rankspecs[0];
                 int rank = rankspec.Rank;
@@ -944,11 +957,11 @@ namespace RoslynTool.CsToDsl
                         var exp = rankspec.Sizes[i];
                         OutputExpressionSyntax(exp);
                         if (i == 0) {
-                            CodeBuilder.Append("; local{arr = initarray(d0);}");
+                            CodeBuilder.AppendFormat("; local{{arr = newarray({0}, d0);}}", elementType);
                         }
                         CodeBuilder.AppendFormat("; for(i{0}, 1, d{1}){{ arr{2} = ", i, i, GetArraySubscriptString(i));
                         if (i < ct - 1) {
-                            CodeBuilder.Append("initarray(");
+                            CodeBuilder.AppendFormat("newarray({0}, ", elementType);
                             exp = rankspec.Sizes[i + 1];
                             OutputExpressionSyntax(exp);
                             CodeBuilder.Append(");");
@@ -974,7 +987,7 @@ namespace RoslynTool.CsToDsl
                     }
                     CodeBuilder.Append(" return(arr); })()");
                 } else {
-                    CodeBuilder.Append("initarray()");
+                    CodeBuilder.AppendFormat("newarray({0})", elementType);
                 }
             } else {
                 VisitInitializerExpression(node.Initializer);
