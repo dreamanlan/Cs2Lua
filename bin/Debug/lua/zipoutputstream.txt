@@ -5,7 +5,7 @@ require "cs2lua__interfaces";
 
 ZipOutputStream = {
 	__new_object = function(...)
-		return newobject(ZipOutputStream, "ctor", nil, ...);
+		return newobject(ZipOutputStream, {}, {}, "ctor", nil, ...);
 	end,
 	__define_class = function()
 		local static = ZipOutputStream;

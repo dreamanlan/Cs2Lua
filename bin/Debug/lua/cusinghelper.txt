@@ -8,39 +8,39 @@ require "zipoutputstream";
 
 CUsingHelper = {
 	__new_object = function(...)
-		return newobject(CUsingHelper, "ctor", nil, ...);
+		return newobject(CUsingHelper, {}, {}, "ctor", nil, ...);
 	end,
 	__define_class = function()
 		local static = CUsingHelper;
 		local static_methods = {
 			ReadZip = function(bytes)
-				local __compiler_method_ret_36_4_51_2;
-				__compiler_method_ret_36_4_51_2 = nil;
+				local __method_ret_36_4_51_2;
+				__method_ret_36_4_51_2 = nil;
 				local zipInput;
-				zipInput = newobject(ZipInputStream, "ctor", nil, newexternobject(System.IO.MemoryStream, "System.IO.MemoryStream", "ctor", nil, bytes));
+				zipInput = newobject(ZipInputStream, {}, {}, "ctor", nil, newexternobject(System.IO.MemoryStream, {}, {}, "System.IO.MemoryStream", "ctor", nil, bytes));
 				local zipMemory;
-				zipMemory = newexternobject(System.IO.MemoryStream, "System.IO.MemoryStream", "ctor", nil);
+				zipMemory = newexternobject(System.IO.MemoryStream, {}, {}, "System.IO.MemoryStream", "ctor", nil);
 				local ZipStream;
-				ZipStream = newobject(ZipOutputStream, "ctor", nil, zipMemory);
-				local __compiler_try_ret_42_2_50_3, __compiler_try_err_42_2_50_3;
-				__compiler_try_ret_42_2_50_3,__compiler_try_err_42_2_50_3 = luatry(function()
-					do
-						__compiler_method_ret_36_4_51_2 = nil;
-						return true;
-					end;
-				end);
-				local __compiler_try_handled_42_2_50_3;
-				__compiler_try_handled_42_2_50_3 = false;
-				__compiler_try_handled_42_2_50_3 = luacatch(__compiler_try_handled_42_2_50_3, __compiler_try_ret_42_2_50_3, __compiler_try_err_42_2_50_3, (function(__compiler_catch_handled_46_2_50_3)
-					do
-						__compiler_method_ret_36_4_51_2 = nil;
-						return true;
-					end;
-					luathrow();
-					__compiler_catch_handled_46_2_50_3 = true;
-					return  					__compiler_catch_handled_46_2_50_3 ;
-				end));
-				return __compiler_method_ret_36_4_51_2;
+				ZipStream = newobject(ZipOutputStream, {}, {}, "ctor", nil, zipMemory);
+				local __try_ret_42_2_50_3, __try_err_42_2_50_3;
+				__try_ret_42_2_50_3,__try_err_42_2_50_3 = luatry(function()
+						do
+							__method_ret_36_4_51_2 = nil;
+							return true;
+						end;
+					end);
+				local __try_handled_42_2_50_3;
+				__try_handled_42_2_50_3 = false;
+				__try_handled_42_2_50_3 = luacatch(__try_handled_42_2_50_3, __try_ret_42_2_50_3, __try_err_42_2_50_3, (function(__catch_handled_46_2_50_3)
+						do
+							__method_ret_36_4_51_2 = nil;
+							return true;
+						end;
+						luathrow();
+						__catch_handled_46_2_50_3 = true;
+						return  						__catch_handled_46_2_50_3 ;
+					end));
+				return __method_ret_36_4_51_2;
 			end,
 			cctor = function()
 			end,

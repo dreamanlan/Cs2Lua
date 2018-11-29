@@ -6,7 +6,7 @@ require("cs2lua__interfaces");
 class(TopLevel.SecondLevel.FooBase) {
 	static_methods {
 		__new_object = function(...){
-			return(newobject(TopLevel.SecondLevel.FooBase, null, null, ...));
+			return(newobject(TopLevel.SecondLevel.FooBase, typeargs(), typekinds(), null, null, ...));
 		};
 		cctor = function(){
 		};

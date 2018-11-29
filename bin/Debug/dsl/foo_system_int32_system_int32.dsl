@@ -6,7 +6,7 @@ require("cs2lua__interfaces");
 class(foo_System_Int32_System_Int32) {
 	static_methods {
 		__new_object = function(...){
-			return(newobject(foo_System_Int32_System_Int32, null, null, ...));
+			return(newobject(foo_System_Int32_System_Int32, typeargs(foo_T_K.T, foo_T_K.K), typekinds(TypeKind.TypeParameter, TypeKind.TypeParameter), null, null, ...));
 		};
 		cctor = function(){
 		};

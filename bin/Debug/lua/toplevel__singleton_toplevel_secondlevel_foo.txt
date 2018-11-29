@@ -5,7 +5,7 @@ require "cs2lua__interfaces";
 
 TopLevel.Singleton_TopLevel_SecondLevel_Foo = {
 	__new_object = function(...)
-		return newobject(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ctor", nil, ...);
+		return newobject(TopLevel.Singleton_TopLevel_SecondLevel_Foo, {TopLevel.Singleton_T.T}, {TypeKind.TypeParameter}, "ctor", nil, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.Singleton_TopLevel_SecondLevel_Foo;
@@ -42,9 +42,10 @@ TopLevel.Singleton_TopLevel_SecondLevel_Foo = {
 		local instance_methods = {
 			ctor = function(this)
 				if (not isequal(TopLevel.Singleton_TopLevel_SecondLevel_Foo.ms_instance, nil)) then 
+					UnityEngine.Debug.LogError("Cannot have two instances in singleton");
 					return this;
 				end;
-				TopLevel.Singleton_TopLevel_SecondLevel_Foo.ms_instance = typecast(typecast(this, System.Object, false), TopLevel.SecondLevel.Foo, false);
+				TopLevel.Singleton_TopLevel_SecondLevel_Foo.ms_instance = typecast(typecast(this, System.Object, TypeKind.Class), TopLevel.SecondLevel.Foo, TypeKind.TypeParameter);
 				return this;
 			end,
 		};

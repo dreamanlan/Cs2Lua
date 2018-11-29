@@ -7,7 +7,7 @@ require("cs2lua__interfaces");
 class(LuaConsole) {
 	static_methods {
 		__new_object = function(...){
-			return(newobject(LuaConsole, null, null, ...));
+			return(newobject(LuaConsole, typeargs(), typekinds(), null, null, ...));
 		};
 		Print = function(...){
 			local{args = params(0);};

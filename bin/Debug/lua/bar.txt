@@ -6,7 +6,7 @@ require "foo_system_int32_system_int32";
 
 bar = {
 	__new_object = function(...)
-		return newobject(bar, nil, nil, ...);
+		return newobject(bar, {}, {}, nil, nil, ...);
 	end,
 	__define_class = function()
 		local static = bar;
@@ -37,7 +37,7 @@ bar = {
 		local instance_methods = {
 			test = function(this)
 				local a;
-				a = newobject(foo_System_Int32_System_Int32, "ctor", nil);
+				a = newobject(foo_System_Int32_System_Int32, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, "ctor", nil);
 				a:parse("123", "456");
 				local b;
 				b = this.m_DateTime:ToString();

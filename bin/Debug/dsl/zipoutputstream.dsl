@@ -6,7 +6,7 @@ require("cs2lua__interfaces");
 class(ZipOutputStream) {
 	static_methods {
 		__new_object = function(...){
-			return(newobject(ZipOutputStream, "ctor", null, ...));
+			return(newobject(ZipOutputStream, typeargs(), typekinds(), "ctor", null, ...));
 		};
 		cctor = function(){
 		};

@@ -6,7 +6,7 @@ require "cs2lua__interfaces";
 
 LuaConsole = {
 	__new_object = function(...)
-		return newobject(LuaConsole, nil, nil, ...);
+		return newobject(LuaConsole, {}, {}, nil, nil, ...);
 	end,
 	__define_class = function()
 		local static = LuaConsole;

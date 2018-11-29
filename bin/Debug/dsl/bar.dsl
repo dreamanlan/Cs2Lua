@@ -7,7 +7,7 @@ require("foo_system_int32_system_int32");
 class(bar) {
 	static_methods {
 		__new_object = function(...){
-			return(newobject(bar, null, null, ...));
+			return(newobject(bar, typeargs(), typekinds(), null, null, ...));
 		};
 		cctor = function(){
 			callstatic(bar, "__cctor");
@@ -30,7 +30,7 @@ class(bar) {
 
 	instance_methods {
 		test = function(this){
-			local(a); a = newobject(foo_System_Int32_System_Int32, "ctor", null);
+			local(a); a = newobject(foo_System_Int32_System_Int32, typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct), "ctor", null);
 			callinstance(a, "parse", "123", "456");
 			local(b); b = callinstance(getinstance(this, "m_DateTime"), "ToString");
 			local(c); c = callinstance(getstatic(bar, "s_DateTime"), "ToString");

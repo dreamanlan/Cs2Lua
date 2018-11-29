@@ -7,10 +7,10 @@ require("toplevel__secondlevel__foo");
 class(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1) {
 	static_methods {
 		__new_object = function(...){
-			return((function(...){ local(newobj, v, v2); multiassign(newobj, v, v2) = newobject(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1, "ctor", null, ...); return(newobj); })(...));
+			return((function(...){ local(newobj, v, v2); multiassign(newobj, v, v2) = newobject(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1, typeargs(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.T), typekinds(TypeKind.TypeParameter), "ctor", null, ...); return(newobj); })(...));
 		};
 		cctor = function(){
-			getstatic(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1, "s_Test") = 9876;
+			setstatic(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1, "s_Test", 9876);
 		},
 		__cctor = function(){
 			if(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.__cctor_called){
@@ -33,7 +33,7 @@ class(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1) {
 	instance_methods {
 		ctor = function(this, ref(v), out(v2)){
 			local(obj); obj = newtypeparamobject(TopLevel.SecondLevel.Foo.Test1);
-			getinstance(this, "m_Test") = execbinary("+", v, 4, System.Int32, System.Int32, Struct, Struct);
+			setinstance(this, "m_Test", execbinary("+", v, 4, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
 			v2 = 123;
 			return(this, v, v2);
 		},
@@ -50,7 +50,7 @@ class(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1) {
 	};
 	instance_fields {
 		m_Test = 123;
-		m_Test2 = execbinary("+", getstatic(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1, "TTT"), 1, System.Int32, System.Int32, Struct, Struct);
+		m_Test2 = execbinary("+", getstatic(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1, "TTT"), 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
 		m_Inst = newtypeparamobject(TopLevel.SecondLevel.Foo.Test1);
 		__ctor_called = false;
 	};

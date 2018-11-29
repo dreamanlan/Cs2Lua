@@ -7,7 +7,7 @@ require "luaconsole";
 
 TopLevel.TestRunnable = {
 	__new_object = function(...)
-		return newobject(TopLevel.TestRunnable, nil, nil, ...);
+		return newobject(TopLevel.TestRunnable, {}, {}, nil, nil, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.TestRunnable;
@@ -27,29 +27,29 @@ TopLevel.TestRunnable = {
 		local instance_methods = {
 			Test = function(this)
 				local f;
-				f = newobject(TopLevel.Runnable, "ctor", nil);
+				f = newobject(TopLevel.Runnable, {}, {}, "ctor", nil);
 				invokewithinterface(f, "TopLevel_IRunnable0", "Test");
 				local i;
 				i = getinstanceindexer(f, nil, "get_Item", 4);
 				setinstanceindexer(f, nil, "set_Item", 0, i);
 				setwithinterface(f, "TopLevel_IRunnable_System_Int32", "TestProp", i);
-				i = getwithinterface(f,  				TopLevel_IRunnable_System_Int32"" ,  				TestProp"" );
+				i = getwithinterface(f,  					TopLevel_IRunnable_System_Int32"" ,  					TestProp"" );
 				local pow;
-				pow = delegationwrap((function(v)
-					return invokeintegeroperator(4, "*", v, v, System.Int32, System.Int32);
-				end));
+				pow = (function(v)
+						return invokeintegeroperator(4, "*", v, v, System.Int32, System.Int32);
+					end);
 				local pow2;
-				pow2 = delegationwrap((function(v1, v2)
-					return invokeintegeroperator(4, "*", v1, v2, System.Int32, System.Int32);
-				end));
+				pow2 = (function(v1, v2)
+						return invokeintegeroperator(4, "*", v1, v2, System.Int32, System.Int32);
+					end);
 				local a;
-				a = delegationwrap((function()
-					i = invokeintegeroperator(4, "*", i, i, System.Int32, System.Int32);
-					LuaConsole.Print(invokeintegeroperator(4, "*", i, 4, System.Int32, System.Int32));
-				end));
-				delegationadd(true, false, "TopLevel.IRunnable_System_Int32:OnAction", f, "TopLevel_IRunnable_System_Int32", "OnAction", a);
-				delegationremove(true, false, "TopLevel.IRunnable_System_Int32:OnAction", f, "TopLevel_IRunnable_System_Int32", "OnAction", a);
-				delegationadd(false, false, "TopLevel.TestRunnable:OnDelegation", this, nil, "OnDelegation", a);
+				a = (function()
+						i = invokeintegeroperator(4, "*", i, i, System.Int32, System.Int32);
+						LuaConsole.Print(invokeintegeroperator(4, "*", i, 4, System.Int32, System.Int32));
+					end);
+				f.OnAction = delegationadd(true, false, "TopLevel.IRunnable_System_Int32:OnAction", f, "TopLevel_IRunnable_System_Int32", "OnAction", a);
+				f.OnAction = delegationremove(true, false, "TopLevel.IRunnable_System_Int32:OnAction", f, "TopLevel_IRunnable_System_Int32", "OnAction", a);
+				this.OnDelegation = delegationadd(false, false, "TopLevel.TestRunnable:OnDelegation", this, nil, "OnDelegation", a);
 				local t;
 				t = wrapconst(System.Single, "NegativeInfinity");
 				t = wrapconst(System.Single, "NaN");
@@ -59,7 +59,7 @@ TopLevel.TestRunnable = {
 		};
 		local instance_fields_build = function()
 			local instance_fields = {
-				OnDelegation = wrapdelegation{},
+				OnDelegation = __cs2lua_nil_field_value,
 			};
 			return instance_fields;
 		end;

@@ -1,7 +1,0 @@
-System.Boolean
-System.Int32
-System.Object
-UnityEngine.Debug
-UnityEngine.GameObject
-UnityEngine.MonoBehaviour
-UnityEngine.Object

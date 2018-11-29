@@ -7,7 +7,7 @@ require "toplevel__testenum";
 
 TopLevel.Runnable = {
 	__new_object = function(...)
-		return newobject(TopLevel.Runnable, nil, nil, ...);
+		return newobject(TopLevel.Runnable, {}, {}, nil, nil, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.Runnable;

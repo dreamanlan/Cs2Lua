@@ -9,32 +9,32 @@ require("zipoutputstream");
 class(CUsingHelper) {
 	static_methods {
 		__new_object = function(...){
-			return(newobject(CUsingHelper, "ctor", null, ...));
+			return(newobject(CUsingHelper, typeargs(), typekinds(), "ctor", null, ...));
 		};
 		ReadZip = function(bytes){
-			local(__compiler_method_ret_36_4_51_2); __compiler_method_ret_36_4_51_2 = nil;
-			local(zipInput); zipInput = newobject(ZipInputStream, "ctor", null, newexternobject(System.IO.MemoryStream, "System.IO.MemoryStream", "ctor", null, bytes));
-			local(zipMemory); zipMemory = newexternobject(System.IO.MemoryStream, "System.IO.MemoryStream", "ctor", null);
-			local(ZipStream); ZipStream = newobject(ZipOutputStream, "ctor", null, zipMemory);
-			local(__compiler_try_ret_42_2_50_3, __compiler_try_err_42_2_50_3); multiassign(__compiler_try_ret_42_2_50_3, __compiler_try_err_42_2_50_3) = dsltry(function(){
+			local(__method_ret_36_4_51_2); __method_ret_36_4_51_2 = nil;
+			local(zipInput); zipInput = newobject(ZipInputStream, typeargs(), typekinds(), "ctor", null, newexternobject(System.IO.MemoryStream, typeargs(), typekinds(), "System.IO.MemoryStream", "ctor", null, bytes));
+			local(zipMemory); zipMemory = newexternobject(System.IO.MemoryStream, typeargs(), typekinds(), "System.IO.MemoryStream", "ctor", null);
+			local(ZipStream); ZipStream = newobject(ZipOutputStream, typeargs(), typekinds(), "ctor", null, zipMemory);
+			local(__try_ret_42_2_50_3, __try_err_42_2_50_3); multiassign(__try_ret_42_2_50_3, __try_err_42_2_50_3) = dsltry(function(){
 				block{
-				__compiler_method_ret_36_4_51_2 = null;
+				__method_ret_36_4_51_2 = null;
 				return(true);
 				};
 			});
-			local(__compiler_try_handled_42_2_50_3); __compiler_try_handled_42_2_50_3 = false;
-			__compiler_try_handled_42_2_50_3 = dslcatch(__compiler_try_handled_42_2_50_3, __compiler_try_ret_42_2_50_3, __compiler_try_err_42_2_50_3,
-				(function(__compiler_catch_handled_46_2_50_3, ){
+			local(__try_handled_42_2_50_3); __try_handled_42_2_50_3 = false;
+			__try_handled_42_2_50_3 = dslcatch(__try_handled_42_2_50_3, __try_ret_42_2_50_3, __try_err_42_2_50_3,
+				(function(__catch_handled_46_2_50_3, ){
 					block{
-					__compiler_method_ret_36_4_51_2 = null;
+					__method_ret_36_4_51_2 = null;
 					return(true);
 					};
 					dslthrow();
-					__compiler_catch_handled_46_2_50_3 = true;
-					return __compiler_catch_handled_46_2_50_3;
+					__catch_handled_46_2_50_3 = true;
+					return __catch_handled_46_2_50_3;
 				})
 			);
-			return(__compiler_method_ret_36_4_51_2, );
+			return(__method_ret_36_4_51_2, );
 		};
 		cctor = function(){
 		};

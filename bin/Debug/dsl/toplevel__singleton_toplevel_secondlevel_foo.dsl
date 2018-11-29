@@ -6,18 +6,18 @@ require("cs2lua__interfaces");
 class(TopLevel.Singleton_TopLevel_SecondLevel_Foo) {
 	static_methods {
 		__new_object = function(...){
-			return(newobject(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ctor", null, ...));
+			return(newobject(TopLevel.Singleton_TopLevel_SecondLevel_Foo, typeargs(TopLevel.Singleton_T.T), typekinds(TypeKind.TypeParameter), "ctor", null, ...));
 		};
 		get_instance = function(){
-			if( execbinary("==", getstatic(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance"), null, System.Object, System.Object, Class, Class) ){
-				getstatic(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance") = newtypeparamobject(TopLevel.SecondLevel.Foo);
+			if( execbinary("==", getstatic(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance"), null, System.Object, System.Object, TypeKind.Class, TypeKind.Class) ){
+				setstatic(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance", newtypeparamobject(TopLevel.SecondLevel.Foo));
 			};
 			return(getstatic(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance"));
 		};
 		set_instance = function(value){
 		};
 		Delete = function(){
-			getstatic(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance") = null;
+			setstatic(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance", null);
 		};
 		cctor = function(){
 		};
@@ -35,10 +35,11 @@ class(TopLevel.Singleton_TopLevel_SecondLevel_Foo) {
 
 	instance_methods {
 		ctor = function(this){
-			if( execbinary("!=", getstatic(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance"), null, System.Object, System.Object, Class, Class) ){
-								return(this);
+			if( execbinary("!=", getstatic(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance"), null, System.Object, System.Object, TypeKind.Class, TypeKind.Class) ){
+				callstatic(UnityEngine.Debug, "LogError", "Cannot have two instances in singleton");
+				return(this);
 			};
-			getstatic(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance") = typecast(typecast(this, System.Object, false), TopLevel.SecondLevel.Foo, false);
+			setstatic(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance", typecast(typecast(this, System.Object, TypeKind.Class), TopLevel.SecondLevel.Foo, TypeKind.TypeParameter));
 			return(this);
 		},
 	};

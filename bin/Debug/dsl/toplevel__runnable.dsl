@@ -8,7 +8,7 @@ require("toplevel__testenum");
 class(TopLevel.Runnable) {
 	static_methods {
 		__new_object = function(...){
-			return(newobject(TopLevel.Runnable, null, null, ...));
+			return(newobject(TopLevel.Runnable, typeargs(), typekinds(), null, null, ...));
 		};
 		cctor = function(){
 		};

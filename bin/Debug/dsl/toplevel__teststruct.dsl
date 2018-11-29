@@ -6,7 +6,7 @@ require("cs2lua__interfaces");
 struct(TopLevel.TestStruct) {
 	static_methods {
 		__new_object = function(...){
-			return(newobject(TopLevel.TestStruct, null, null, ...));
+			return(newobject(TopLevel.TestStruct, typeargs(), typekinds(), null, null, ...));
 		};
 		cctor = function(){
 		};

@@ -8,7 +8,7 @@ TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1 = {
 	__new_object = function(...)
 		return (function(...)
 			local newobj, v, v2;
-			newobj,v,v2 = newobject(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1, "ctor", nil, ...);
+			newobj,v,v2 = newobject(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1, {TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.T}, {TypeKind.TypeParameter}, "ctor", nil, ...);
 			return newobj;
 		end)(...);
 	end,

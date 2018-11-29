@@ -3,7 +3,6 @@ require "cs2lua__namespaces";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
 require "toplevel__secondlevel__foo";
-require "gameobject";
 require "luaconsole";
 
 TopLevel.SecondLevel.FooExtension = {
@@ -15,32 +14,40 @@ TopLevel.SecondLevel.FooExtension = {
 					obj.m_Test2 = 678;
 				end;
 				local f;
-				f = newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", {newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", {1, 2}), newexternlist(System.Collections.Generic.List_T, "System.Collections.Generic.List_T", "ctor", {2, 3})});
+				f = newexternlist(System.Collections.Generic.List_T, {System.Collections.Generic.List_T}, {TypeKind.Class}, "System.Collections.Generic.List_T", "ctor", {newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, "System.Collections.Generic.List_T", "ctor", {1, 2}), newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, "System.Collections.Generic.List_T", "ctor", {2, 3})});
 			end,
-			Test3__TopLevel_SecondLevel_Foo__System_Int32 = function(__compiler_cs_this, ix)
-				__compiler_cs_this:Test123(123, 456);
+			Test3__TopLevel_SecondLevel_Foo__System_Int32 = function(__cs_this, ix)
+				__cs_this:Test123(123, 456);
 			end,
 			TestExtern = function(obj)
 			end,
 			NormalMethod = function()
 				LuaConsole.Print(1, 2, 3, 4, 5);
 				local f;
-				f = newobject(TopLevel.SecondLevel.Foo, "ctor", nil);
+				f = newobject(TopLevel.SecondLevel.Foo, {}, {}, "ctor", nil);
 				local ff;
-				ff = newobject(TopLevel.SecondLevel.Foo, "ctor", nil);
+				ff = newobject(TopLevel.SecondLevel.Foo, {}, {}, "ctor", nil);
 				local f1;
-				f1 = delegationwrap((function()
-					local __compiler_delegation_obj_567_28_567_34;
-					__compiler_delegation_obj_567_28_567_34 = f;
-					local __compiler_delegation_567_28_567_34; __compiler_delegation_567_28_567_34 = (function() __compiler_delegation_obj_567_28_567_34:Test(); end); setdelegationkey(__compiler_delegation_567_28_567_34, "TopLevel.SecondLevel.Foo:Test", __compiler_delegation_obj_567_28_567_34, __compiler_delegation_obj_567_28_567_34.Test); return __compiler_delegation_567_28_567_34;
-				end)());
+				f1 = (function()
+						local __delegation_obj_567_28_567_34;
+						__delegation_obj_567_28_567_34 = f;
+						local __delegation_567_28_567_34; __delegation_567_28_567_34 = (function()
+							__delegation_obj_567_28_567_34:Test();
+						end);
+						setdelegationkey(__delegation_567_28_567_34, "TopLevel.SecondLevel.Foo:Test", __delegation_obj_567_28_567_34, __delegation_obj_567_28_567_34.Test);
+						return __delegation_567_28_567_34;
+					end)();
 				f1();
 				local f2;
-				f2 = delegationwrap((function()
-					local __compiler_delegation_obj_570_28_570_35;
-					__compiler_delegation_obj_570_28_570_35 = f;
-					local __compiler_delegation_570_28_570_35; __compiler_delegation_570_28_570_35 = (function() __compiler_delegation_obj_570_28_570_35:Test3(); end); setdelegationkey(__compiler_delegation_570_28_570_35, "TopLevel.SecondLevel.FooExtension:Test3", __compiler_delegation_obj_570_28_570_35, __compiler_delegation_obj_570_28_570_35.Test3); return __compiler_delegation_570_28_570_35;
-				end)());
+				f2 = (function()
+						local __delegation_obj_570_28_570_35;
+						__delegation_obj_570_28_570_35 = f;
+						local __delegation_570_28_570_35; __delegation_570_28_570_35 = (function()
+							__delegation_obj_570_28_570_35:Test3();
+						end);
+						setdelegationkey(__delegation_570_28_570_35, "TopLevel.SecondLevel.FooExtension:Test3", __delegation_obj_570_28_570_35, __delegation_obj_570_28_570_35.Test3);
+						return __delegation_570_28_570_35;
+					end)();
 				f2();
 				TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo(TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo, f);
 				local r;
@@ -49,32 +56,32 @@ TopLevel.SecondLevel.FooExtension = {
 				local rr;
 				rr = invokeoperator(TopLevel.SecondLevel.Foo, "op_Explicit", 123);
 				local rrr;
-				rrr = typeas(f, TopLevel.SecondLevel.Foo, false);
+				rrr = typeas(f, TopLevel.SecondLevel.Foo, TypeKind.Class);
 				local obj;
-				(= obj);
+				obj = newexternobject(UnityEngine.GameObject, {}, {}, "UnityEngine.GameObject", "ctor", nil, "test test test");
 				TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo__System_Int32(f, 8);
 				local arr;
 				arr = wraparray({1, 2, 3, 4, 4});
 				local v;
 				v = arr[3];
 				local dict;
-				dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {["1"] = 2, ["3"] = 4});
+				dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {["1"] = 2, ["3"] = 4});
 				local v1;
 				v1 = condaccess(dict, (function()
-					return getexterninstanceindexer(dict, nil, "get_Item", 1);
-				end));
+						return getexterninstanceindexer(dict, nil, "get_Item", 1);
+					end));
 				local list;
 				list = nil;
 				local l;
 				l = condaccess(list, (function()
-					return list.Count;
-				end));
+						return list.Count;
+					end));
 				local arr2;
 				arr2 = wraparray({1, 2, 3, 4});
 				local v3;
 				v3 = condaccess(arr2, (function()
-					return arr2[3];
-				end));
+						return arr2[3];
+					end));
 				local a;
 				a = 1;
 				local b;
@@ -82,9 +89,9 @@ TopLevel.SecondLevel.FooExtension = {
 				local c;
 				c = 3;
 				a = (function()
-					b = c;
-					return b;
-				end)();
+						b = c;
+						return b;
+					end)();
 				c = invokeintegeroperator(2, "+", c, 1, System.Int32, System.Int32);
 			end,
 			cctor = function()

@@ -8,7 +8,7 @@ require "toplevel__secondlevel__fooextension";
 
 TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2 = {
 	__new_object = function(...)
-		return newobject(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2, "ctor", nil, ...);
+		return newobject(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2, {TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2.TT}, {TypeKind.TypeParameter}, "ctor", nil, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2;
@@ -37,11 +37,11 @@ TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericCla
 			end,
 			Test = function(this, G, g)
 				local v;
-				v = typeas(g, TopLevel.SecondLevel.Foo.Test1, false);
+				v = typeas(g, TopLevel.SecondLevel.Foo.Test1, TypeKind.TypeParameter);
 				local v2;
-				v2 = typecast(typecast(g, System.Object, false), TopLevel.SecondLevel.Foo.Test1, false);
+				v2 = typecast(typecast(g, System.Object, TypeKind.Class), TopLevel.SecondLevel.Foo.Test1, TypeKind.TypeParameter);
 				local f;
-				f = newobject(TopLevel.SecondLevel.Foo, "ctor", nil);
+				f = newobject(TopLevel.SecondLevel.Foo, {}, {}, "ctor", nil);
 				TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo(f);
 			end,
 			Test2 = function(this, GG, t, tt)
@@ -54,7 +54,7 @@ TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericCla
 				local t4;
 				t4 = System.Int32;
 				local v;
-				v = typecast(typecast(t, System.Object, false), TopLevel.SecondLevel.Foo.Test2, false);
+				v = typecast(typecast(t, System.Object, TypeKind.Class), TopLevel.SecondLevel.Foo.Test2, TypeKind.TypeParameter);
 			end,
 			__ctor = function(this)
 				if this.__ctor_called then 

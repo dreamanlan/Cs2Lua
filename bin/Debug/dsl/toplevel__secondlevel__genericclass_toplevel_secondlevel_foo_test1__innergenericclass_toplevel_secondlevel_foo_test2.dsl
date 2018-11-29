@@ -9,7 +9,7 @@ require("toplevel__secondlevel__fooextension");
 class(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2) {
 	static_methods {
 		__new_object = function(...){
-			return(newobject(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2, "ctor", null, ...));
+			return(newobject(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2, typeargs(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2.TT), typekinds(TypeKind.TypeParameter), "ctor", null, ...));
 		};
 		cctor = function(){
 		};
@@ -21,16 +21,16 @@ class(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGene
 
 	instance_methods {
 		ctor = function(this, v, vv){
-			getinstance(this, "m_T") = v;
-			getinstance(this, "m_TT") = vv;
+			setinstance(this, "m_T", v);
+			setinstance(this, "m_TT", vv);
 			local(obj1); obj1 = newtypeparamobject(TopLevel.SecondLevel.Foo.Test1);
 			local(obj2); obj2 = newtypeparamobject(TopLevel.SecondLevel.Foo.Test2);
 			return(this);
 		},
 		Test = function(this, G, g){
-			local(v); v = typeas(g, TopLevel.SecondLevel.Foo.Test1, false);
-			local(v2); v2 = typecast(typecast(g, System.Object, false), TopLevel.SecondLevel.Foo.Test1, false);
-			local(f); f = newobject(TopLevel.SecondLevel.Foo, "ctor", null);
+			local(v); v = typeas(g, TopLevel.SecondLevel.Foo.Test1, TypeKind.TypeParameter);
+			local(v2); v2 = typecast(typecast(g, System.Object, TypeKind.Class), TopLevel.SecondLevel.Foo.Test1, TypeKind.TypeParameter);
+			local(f); f = newobject(TopLevel.SecondLevel.Foo, typeargs(), typekinds(), "ctor", null);
 			callstatic(TopLevel.SecondLevel.FooExtension, "Test3__TopLevel_SecondLevel_Foo", f);
 		};
 		Test2 = function(this, GG, t, tt){
@@ -38,7 +38,7 @@ class(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGene
 			local(t2); t2 = typeof(TopLevel.SecondLevel.Foo.Test1);
 			local(t3); t3 = typeof(TopLevel.SecondLevel.Foo.Test2);
 			local(t4); t4 = typeof(System.Int32);
-			local(v); v = typecast(typecast(t, System.Object, false), TopLevel.SecondLevel.Foo.Test2, false);
+			local(v); v = typecast(typecast(t, System.Object, TypeKind.Class), TopLevel.SecondLevel.Foo.Test2, TypeKind.TypeParameter);
 		};
 		__ctor = function(this){
 			if(getinstance(this, "__ctor_called")){
