@@ -339,7 +339,7 @@ namespace RoslynTool.CsToLua
                     OutputExpressionSyntax(exp, opd);
                 } else {
                     if (arrayToParams) {
-                        CodeBuilder.Append("unpack(");
+                        CodeBuilder.Append("luaunpack(");
                         OutputExpressionSyntax(exp, opd);
                         CodeBuilder.Append(")");
                     } else {
