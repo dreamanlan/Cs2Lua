@@ -59,6 +59,13 @@ namespace SLua
             // typename used for simplify generic type name or rename, like List<int> named to "ListInt", if not a generic type keep typename as null or rename as new type name
         }
 
+        public static HashSet<string> OnAddCustomNamespace()
+        {
+            return new HashSet<string> {
+                //"NLuaTest.Mock"
+            };
+        }
+
         public static void OnAddCustomAssembly(ref List<string> list)
         {
             // add your custom assembly here
@@ -68,21 +75,11 @@ namespace SLua
             //list.Add("NGUI");
             list.Add("CustomApi");
         }
-
-        public static HashSet<string> OnAddCustomNamespace()
-        {
-            return new HashSet<string>
-            {
-                //"NLuaTest.Mock"
-            };
-        }
-
-        // if uselist return a white list, don't check noUseList(black list) again
-        public static void OnGetUseList(out List<string> list)
+        
+        public static void OnGetCustomAssemblyNoUseList(out List<string> list)
         {
             list = new List<string>
             {
-                //"UnityEngine.GameObject",
             };
         }
 

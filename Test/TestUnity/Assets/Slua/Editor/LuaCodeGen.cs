@@ -43,7 +43,6 @@ namespace SLua
         static public string GenPath = SLuaSetting.Instance.UnityEngineGeneratePath;
         public delegate void ExportGenericDelegate(Type t, string ns);
 
-        static bool autoRefresh = true;
         static bool IsCompiling
         {
             get {
@@ -126,32 +125,33 @@ namespace SLua
             "UnityEngine.AnimationModule",
             "UnityEngine.IMGUIModule",
             "UnityEngine.PhysicsModule",
-            "UnityEngine.UI"
+            "UnityEngine.ImageConversionModule",
+            "UnityEngine.ParticleSystemModule",
+            "UnityEngine.VideoModule",
         };
 #else
         public static string[] unityModule = null;
 #endif
 
-        static bool filterType(Type t, List<string> noUseList, List<string> uselist)
+        static bool filterType(Type t, List<string> noUseList)
         {
             if (t.IsDefined(typeof(CompilerGeneratedAttribute), false)) {
                 Debug.Log(t.Name + " is filtered out");
                 return false;
             }
-
-            // check type in uselist
-            string fullName = t.FullName;
-            if (uselist != null && uselist.Count > 0) {
-                return uselist.Contains(fullName);
-            } else {
-                // check type not in nouselist
-                foreach (string str in noUseList) {
-                    if (fullName.Contains(str)) {
-                        return false;
-                    }
-                }
-                return true;
+            if (t.IsDefined(typeof(SLua.DoNotToLuaAttribute), false)) {
+                Debug.Log(t.Name + " is filtered out");
+                return false;
             }
+
+            string fullName = t.FullName;
+            // check type not in nouselist
+            foreach (string str in noUseList) {
+                if (fullName.Contains(str)) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         static void GenerateModule(string[] target = null)
@@ -173,13 +173,14 @@ namespace SLua
         [MenuItem("SLua/All/Make")]
         static public void GenerateAll()
         {
-            autoRefresh = false;
+            if (!Directory.Exists(GenPath)) {
+                Directory.CreateDirectory(GenPath);
+            }
             GenerateModule(unityModule);
             GenerateUI();
             GenerateAds();
             Custom();
             Generate3rdDll();
-            autoRefresh = true;
             AssetDatabase.Refresh();
         }
 
@@ -212,24 +213,12 @@ namespace SLua
 
                 Type[] types = assembly.GetExportedTypes();
 
-                List<string> uselist;
                 List<string> noUseList;
 
                 CustomExport.OnGetNoUseList(out noUseList);
-                CustomExport.OnGetUseList(out uselist);
 
                 // Get use and nouse list from custom export.
                 object[] aCustomExport = new object[1];
-                InvokeEditorMethod<ICustomExportPost>("OnGetUseList", ref aCustomExport);
-                if (null != aCustomExport[0]) {
-                    if (null != uselist) {
-                        uselist.AddRange((List<string>)aCustomExport[0]);
-                    } else {
-                        uselist = (List<string>)aCustomExport[0];
-                    }
-                }
-
-                aCustomExport[0] = null;
                 InvokeEditorMethod<ICustomExportPost>("OnGetNoUseList", ref aCustomExport);
                 if (null != aCustomExport[0]) {
                     if ((null != noUseList)) {
@@ -241,7 +230,7 @@ namespace SLua
 
                 string path = GenPath + genAtPath;
                 foreach (Type t in types) {
-                    if (filterType(t, noUseList, uselist) && Generate(t, path))
+                    if (filterType(t, noUseList) && Generate(t, path))
                         exports.Add(t);
                 }
                 Debug.Log("Generate interface finished: " + asemblyName);
@@ -258,8 +247,6 @@ namespace SLua
             List<Type> exports = GetExportsType(asemblyNames, genAtPath);
             string path = GenPath + genAtPath;
             GenerateBind(exports, bindMethod, genOrder, path);
-            if (autoRefresh)
-                AssetDatabase.Refresh();
         }
 
         static public void GenerateFor(string asemblyName, string genAtPath, int genOrder, string bindMethod)
@@ -267,14 +254,10 @@ namespace SLua
             if (IsCompiling) {
                 return;
             }
-
-
+            
             List<Type> exports = GetExportsType(new string[] { asemblyName }, genAtPath);
             string path = GenPath + genAtPath;
             GenerateBind(exports, bindMethod, genOrder, path);
-            if (autoRefresh)
-                AssetDatabase.Refresh();
-
         }
 
         static String FixPathName(string path)
@@ -352,8 +335,6 @@ namespace SLua
             InvokeEditorMethod<ICustomExportPost>("OnAddCustomClass", ref aCustomExport);
 
             GenerateBind(exports, "BindCustom", 3, path);
-            if (autoRefresh)
-                AssetDatabase.Refresh();
 
             Debug.Log("Generate custom interface finished");
         }
@@ -413,6 +394,9 @@ namespace SLua
             object[] aCustomExport = new object[] { assemblyList };
             InvokeEditorMethod<ICustomExportPost>("OnAddCustomAssembly", ref aCustomExport);
 
+            List<string> noUseList;
+            CustomExport.OnGetCustomAssemblyNoUseList(out noUseList);
+
             foreach (string assemblyItem in assemblyList) {
                 Assembly assembly = Assembly.Load(assemblyItem);
                 Type[] types = assembly.GetExportedTypes();
@@ -427,12 +411,10 @@ namespace SLua
                     Directory.CreateDirectory(path);
                 }
                 foreach (Type t in cust) {
-                    if (Generate(t, path))
+                    if (filterType(t, noUseList) && Generate(t, path))
                         exports.Add(t);
                 }
                 GenerateBind(exports, "BindDll", 2, path);
-                if (autoRefresh)
-                    AssetDatabase.Refresh();
                 Debug.Log("Generate 3rdDll interface finished");
             }
         }
@@ -453,6 +435,7 @@ namespace SLua
         static public void ClearALL()
         {
             clear(new string[] { Path.GetDirectoryName(GenPath) });
+            AssetDatabase.Refresh();
             Debug.Log("Clear all complete.");
         }
 
@@ -461,13 +444,10 @@ namespace SLua
             try {
                 foreach (string path in paths) {
                     System.IO.Directory.Delete(path, true);
-                    AssetDatabase.DeleteAsset(path);
                 }
             } catch {
 
             }
-
-            AssetDatabase.Refresh();
         }
 
         static bool Generate(Type t, string path)
@@ -570,7 +550,8 @@ namespace SLua
 
             foreach (string assstr in asems) {
                 Assembly assembly = Assembly.Load(assstr);
-                foreach (Type type in assembly.GetExportedTypes()) {
+                var types = assembly.GetExportedTypes();
+                foreach (Type type in types) {
                     if (type.IsSealed && !type.IsGenericType && !type.IsNested) {
                         BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.Public;
                         if (null == type.BaseType || !type.BaseType.IsGenericType) {
@@ -1729,7 +1710,10 @@ namespace SLua
                 }
             }
 
-            return mi.IsDefined(typeof(DoNotToLuaAttribute), false);
+            if (mi.IsDefined(typeof(DoNotToLuaAttribute), false))
+                return true;
+
+            return false;
         }
 
         private int CompareParameters(ParameterInfo[] a, ParameterInfo[] b)
