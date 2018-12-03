@@ -29,6 +29,9 @@ namespace LuaGenerator
             s_SrcPath = Path.Combine(csprojPath, "dsl");
             s_OutPath = outPath;
             s_Ext = ext;
+            if (!Directory.Exists(s_OutPath)) {
+                Directory.CreateDirectory(s_OutPath);
+            }
             File.Copy(Path.Combine(s_ExePath, "lualib/utility.lua"), Path.Combine(s_OutPath, "cs2lua__utility." + s_Ext), true);
             var files = Directory.GetFiles(s_SrcPath, "*.dsl", SearchOption.TopDirectoryOnly);
             foreach (string file in files) {
