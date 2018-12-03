@@ -50,6 +50,12 @@ CS.System.Collections.Generic.MyDictionary_TKey_TValue = CS.System.Collections.G
 __cs2lua_out = {};
 __cs2lua_nil_field_value = {};
 
+Cs2LuaLibrary = {
+	ToString = function(T, val)
+		return tostring(val);
+	end,
+};
+
 TypeKind = {
 	Unknown = 0,
 	Array = 1,
@@ -65,6 +71,29 @@ TypeKind = {
 	Structure = 10,
 	TypeParameter = 11,
 	Submission = 12
+};
+
+MethodKind = {
+	AnonymousFunction = 0,
+	LambdaMethod = 0,
+	Constructor = 1,
+	Conversion = 2,
+	DelegateInvoke = 3,
+	Destructor = 4,
+	EventAdd = 5,
+	EventRaise = 6,
+	EventRemove = 7,
+	ExplicitInterfaceImplementation = 8,
+	UserDefinedOperator = 9,
+	Ordinary = 10,
+	PropertyGet = 11,
+	PropertySet = 12,
+	ReducedExtension = 13,
+	StaticConstructor = 14,
+	SharedConstructor = 14,
+	BuiltinOperator = 15,
+	DeclareMethod = 16,
+	LocalFunction = 17
 };
 
 __cs2lua_special_integer_operators = { "/", "%", "+", "-", "*", "<<", ">>", "&", "|", "^", "~" };
@@ -1009,7 +1038,7 @@ function wrapexternvaluetypearray(arr)
 	return setmetatable(arr, { __index = __mt_index_of_array, __Count = size, __cs2lua_defined = true, __class = CS.System.Collections.Generic.List_T });
 end;
 
-function defineclass(base, className, static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, is_value_type)
+function defineclass(base, className, static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, is_value_type)
     local base_class = base;
     local mt = getmetatable(base_class);
 
@@ -1088,6 +1117,18 @@ function defineclass(base, className, static, static_methods, static_fields_buil
             local obj = {};
 						for k,v in pairs(instance_methods) do
 							obj[k] = v;
+						end;
+						for k,v in pairs(instance_methods) do
+							local minfo = method_info[k];
+							if not minfo then
+								if k~="__ctor" then
+									UnityEngine.Debug.LogError("can't found method "..tostring(k));
+								end;
+							else
+								if (not method_info[k]["private"]) and (not method_info[k]["sealed"]) then
+									obj["__self__"..k] = v;
+								end;
+							end;
 						end;
             local obj_fields;
             if instance_fields_build then

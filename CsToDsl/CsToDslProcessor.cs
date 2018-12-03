@@ -1280,12 +1280,233 @@ namespace RoslynTool.CsToDsl
                             sb.AppendFormat("{0}{1} = \"{2}\";", GetIndentString(indent), pair.Key, pair.Value);
                             sb.AppendLine();
                         }
-
+                        
                         --indent;
                         sb.AppendFormat("{0}}};", GetIndentString(indent));
                         sb.AppendLine();
                     } else {
                         sb.AppendFormat("{0}interface_map {{}};", GetIndentString(indent));
+                        sb.AppendLine();
+                    }
+
+                    sb.AppendLine();
+
+                    //修饰信息
+                    var tsym = csi.TypeSymbol;
+                    sb.AppendFormat("{0}class_info(TypeKind.{1}, Accessibility.{2}) {{", GetIndentString(indent), tsym.TypeKind, tsym.DeclaredAccessibility);
+                    sb.AppendLine();
+                    ++indent;
+
+                    if (tsym.IsAbstract) {
+                        sb.AppendFormat("{0}abstract(true);", GetIndentString(indent));
+                        sb.AppendLine();
+                    }
+                    if (tsym.IsSealed) {
+                        sb.AppendFormat("{0}sealed(true);", GetIndentString(indent));
+                        sb.AppendLine();
+                    }
+                    if (tsym.IsStatic) {
+                        sb.AppendFormat("{0}static(true);", GetIndentString(indent));
+                        sb.AppendLine();
+                    }
+
+                    --indent;
+                    sb.AppendFormat("{0}}};", GetIndentString(indent));
+                    sb.AppendLine();
+
+                    if (csi.MethodSymbols.Count > 0) {
+                        sb.AppendFormat("{0}method_info {{", GetIndentString(indent));
+                        sb.AppendLine();
+                        ++indent;
+
+                        foreach (var msym in csi.MethodSymbols) {
+                            var name = SymbolTable.Instance.NameMangling(msym);
+                            sb.AppendFormat("{0}{1}(MethodKind.{2}, Accessibility.{3}){{", GetIndentString(indent), name, msym.MethodKind, msym.DeclaredAccessibility);
+                            sb.AppendLine();
+                            ++indent;
+                            string prestr = string.Empty;
+                            if (msym.IsAbstract) {
+                                sb.AppendFormat("{0}abstract(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            if (msym.IsVirtual) {
+                                sb.AppendFormat("{0}virtual(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            if (msym.IsOverride) {
+                                sb.AppendFormat("{0}override(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            if (msym.IsStatic) {
+                                sb.AppendFormat("{0}static(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            if (msym.IsExtensionMethod) {
+                                sb.AppendFormat("{0}extension(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            if (msym.IsGenericMethod) {
+                                sb.AppendFormat("{0}generic(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            if (msym.IsSealed) {
+                                sb.AppendFormat("{0}sealed(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            if (msym.IsVararg) {
+                                sb.AppendFormat("{0}vararg(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            --indent;
+                            sb.AppendFormat("{0}}};", GetIndentString(indent));
+                            sb.AppendLine();
+                        }
+
+                        --indent;
+                        sb.AppendFormat("{0}}};", GetIndentString(indent));
+                        sb.AppendLine();
+                    } else {
+                        sb.AppendFormat("{0}method_info {{}};", GetIndentString(indent));
+                        sb.AppendLine();
+                    }
+
+                    if (csi.PropertySymbols.Count > 0) {
+                        sb.AppendFormat("{0}property_info {{", GetIndentString(indent));
+                        sb.AppendLine();
+                        ++indent;
+
+                        foreach (var psym in csi.PropertySymbols) {
+                            var name = psym.Name;
+                            sb.AppendFormat("{0}{1}(Accessibility.{2}){{", GetIndentString(indent), name, psym.DeclaredAccessibility);
+                            sb.AppendLine();
+                            ++indent;
+                            string prestr = string.Empty;
+                            if (psym.IsAbstract) {
+                                sb.AppendFormat("{0}abstract(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            if (psym.IsVirtual) {
+                                sb.AppendFormat("{0}virtual(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            if (psym.IsOverride) {
+                                sb.AppendFormat("{0}override(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            if (psym.IsStatic) {
+                                sb.AppendFormat("{0}static(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            if (psym.IsSealed) {
+                                sb.AppendFormat("{0}sealed(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            if (psym.IsIndexer) {
+                                sb.AppendFormat("{0}indexer(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            if (psym.IsReadOnly) {
+                                sb.AppendFormat("{0}readonly(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            if (psym.IsWriteOnly) {
+                                sb.AppendFormat("{0}writeonly(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            --indent;
+                            sb.AppendFormat("{0}}};", GetIndentString(indent));
+                            sb.AppendLine();
+                        }
+
+                        --indent;
+                        sb.AppendFormat("{0}}};", GetIndentString(indent));
+                        sb.AppendLine();
+                    } else {
+                        sb.AppendFormat("{0}property_info {{}};", GetIndentString(indent));
+                        sb.AppendLine();
+                    }
+
+                    if (csi.EventSymbols.Count > 0) {
+                        sb.AppendFormat("{0}event_info {{", GetIndentString(indent));
+                        sb.AppendLine();
+                        ++indent;
+
+                        foreach (var esym in csi.EventSymbols) {
+                            var name = esym.Name;
+                            sb.AppendFormat("{0}{1}(Accessibility.{2}){{", GetIndentString(indent), name, esym.DeclaredAccessibility);
+                            sb.AppendLine();
+                            ++indent;
+                            string prestr = string.Empty;
+                            if (esym.IsAbstract) {
+                                sb.AppendFormat("{0}abstract(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            if (esym.IsVirtual) {
+                                sb.AppendFormat("{0}virtual(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            if (esym.IsOverride) {
+                                sb.AppendFormat("{0}override(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            if (esym.IsStatic) {
+                                sb.AppendFormat("{0}static(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            if (esym.IsSealed) {
+                                sb.AppendFormat("{0}sealed(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            --indent;
+                            sb.AppendFormat("{0}}};", GetIndentString(indent));
+                            sb.AppendLine();
+                        }
+
+                        --indent;
+                        sb.AppendFormat("{0}}};", GetIndentString(indent));
+                        sb.AppendLine();
+                    } else {
+                        sb.AppendFormat("{0}event_info {{}};", GetIndentString(indent));
+                        sb.AppendLine();
+                    }
+
+                    if (csi.FieldSymbols.Count > 0) {
+                        sb.AppendFormat("{0}field_info {{", GetIndentString(indent));
+                        sb.AppendLine();
+                        ++indent;
+
+                        foreach (var fsym in csi.FieldSymbols) {
+                            var name = fsym.Name;
+                            sb.AppendFormat("{0}{1}(Accessibility.{2}){{", GetIndentString(indent), name, fsym.DeclaredAccessibility);
+                            sb.AppendLine();
+                            ++indent;
+                            string prestr = string.Empty;
+                            if (fsym.IsStatic) {
+                                sb.AppendFormat("{0}static(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            if (fsym.IsReadOnly) {
+                                sb.AppendFormat("{0}readonly(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            if (fsym.IsConst) {
+                                sb.AppendFormat("{0}const(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            if (fsym.IsVolatile) {
+                                sb.AppendFormat("{0}volatile(true);", GetIndentString(indent));
+                                sb.AppendLine();
+                            }
+                            --indent;
+                            sb.AppendFormat("{0}}};", GetIndentString(indent));
+                            sb.AppendLine();
+                        }
+
+                        --indent;
+                        sb.AppendFormat("{0}}};", GetIndentString(indent));
+                        sb.AppendLine();
+                    } else {
+                        sb.AppendFormat("{0}field_info {{}};", GetIndentString(indent));
                         sb.AppendLine();
                     }
                 }

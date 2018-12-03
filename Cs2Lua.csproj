@@ -83,7 +83,7 @@
     <Compile Include="Info\MethodInfo.cs" />
     <Compile Include="Info\MiscInfo.cs" />
     <Compile Include="Info\SymbolTable.cs" />
-    <Compile Include="LuaGenerator\LuaGenerator.cs" />
+    <Compile Include="Generator\LuaGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

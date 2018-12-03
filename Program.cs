@@ -216,7 +216,7 @@ namespace RoslynTool
                     var result = (int)CsToDslProcessor.Process(file, macros, undefMacros, ignoredPath, externPath, internPath, refByNames, refByPaths, enableInherit, enableLinq, outputResult, parallel);
                     stopwatch.Stop();
                     Console.WriteLine("RunningTime: {0}s", stopwatch.Elapsed.TotalSeconds);
-                    LuaGenerator.LuaGenerator.Generate(Path.GetDirectoryName(file), outputDir, outputExt);
+                    Generator.LuaGenerator.Generate(Path.GetDirectoryName(file), outputDir, outputExt);
                     Environment.Exit(result);
                 } else {
                     Environment.Exit((int)ExitCode.FileNotFound);
