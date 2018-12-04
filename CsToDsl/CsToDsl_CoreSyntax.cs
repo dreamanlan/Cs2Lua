@@ -819,30 +819,18 @@ namespace RoslynTool.CsToDsl
                             //字典对象的处理
                             CodeBuilder.AppendFormat("new{0}dictionary({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
                             CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
-                            if (isExternal) {
-                                CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
-                            }
                         } else if (isList) {
                             //列表对象的处理
                             CodeBuilder.AppendFormat("new{0}list({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
                             CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
-                            if (isExternal) {
-                                CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
-                            }
                         } else {
                             //集合对象的处理
                             CodeBuilder.AppendFormat("new{0}collection({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
                             CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
-                            if (isExternal) {
-                                CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
-                            }
                         }
                     } else {
                         CodeBuilder.AppendFormat("new{0}object({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
                         CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
-                        if (isExternal) {
-                            CodeBuilder.AppendFormat("\"{0}\", ", fullTypeName);
-                        }
                     }
                     if (string.IsNullOrEmpty(ctor)) {
                         CodeBuilder.Append("null");

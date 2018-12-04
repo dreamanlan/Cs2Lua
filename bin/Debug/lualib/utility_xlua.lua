@@ -1406,13 +1406,8 @@ function newobject(class, typeargs, typekinds, ctor, initializer, ...)
   return obj;
 end;
 
-function newexternobject(class, typeargs, typekinds, className, ctor, initializer, ...)
-  local obj = nil;
-  if class ~= nil then
-    obj = class(...);
-  else
-    obj = Slua.CreateClass(className, ...);
-  end;
+function newexternobject(class, typeargs, typekinds, ctor, initializer, ...)
+  local obj = class(...);
   if obj and initializer then
   	initializer(obj);
   end;
@@ -1454,7 +1449,7 @@ function newcollection(t, typeargs, typekinds, ctor, coll, ...)
   end;
 end;
 
-function newexterndictionary(t, typeargs, typekinds, className, ctor, dict, ...)
+function newexterndictionary(t, typeargs, typekinds, ctor, dict, ...)
   if dict and t==System.Collections.Generic.Dictionary_TKey_TValue then
     local obj = {};
 	  setmetatable(obj, { __index = __mt_index_of_dictionary, __newindex = __mt_newindex_of_dictionary, __cs2lua_defined = true, __class = t });
@@ -1463,12 +1458,7 @@ function newexterndictionary(t, typeargs, typekinds, className, ctor, dict, ...)
 		end;
     return obj;
 	else	  
-	  local obj = nil;
-	  if t ~= nil then
-	    obj = t(...);
-	  else
-	    obj = Slua.CreateClass(className, ...);
-	  end;
+	  local obj = t(...);
 	  if obj then
 			if dict ~= nil then
 				for k,v in pairs(dict) do
@@ -1482,16 +1472,11 @@ function newexterndictionary(t, typeargs, typekinds, className, ctor, dict, ...)
 	end;
 end;
 
-function newexternlist(t, typeargs, typekinds, className, ctor, list, ...)
+function newexternlist(t, typeargs, typekinds, ctor, list, ...)
   if list and t==CS.System.Collections.Generic.List_T then    
 	  return setmetatable(list, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = t });
 	else 
-	  local obj = nil;
-	  if t ~= nil then
-	    obj = t(...);
-	  else
-	    obj = Slua.CreateClass(className, ...);
-	  end;
+	  local obj = t(...);
 	  if obj then
 			if list ~= nil then
 				for i,v in ipairs(list) do
@@ -1505,18 +1490,13 @@ function newexternlist(t, typeargs, typekinds, className, ctor, list, ...)
   end;
 end;
 
-function newexterncollection(t, typeargs, typekinds, className, ctor, coll, ...)
+function newexterncollection(t, typeargs, typekinds, ctor, coll, ...)
   if coll and (t==CS.System.Collections.Generic.Queue_T or t==CS.System.Collections.Generic.Stack_T) then
     return setmetatable(coll, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = t });
   elseif coll and t==CS.System.Collections.Generic.HashSet_T then
     return setmetatable(coll, { __index = __mt_index_of_hashset, __cs2lua_defined = true, __class = t });
 	else
-	  local obj = nil;
-	  if t ~= nil then
-	    obj = t(...);
-	  else
-	    obj = Slua.CreateClass(className, ...);
-	  end;
+	  local obj = t(...);
 	  if obj then
 			if coll ~= nil then
 				for i,v in ipairs(coll) do
