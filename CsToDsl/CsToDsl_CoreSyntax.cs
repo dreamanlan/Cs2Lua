@@ -832,10 +832,13 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendFormat("new{0}object({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
                         CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
                     }
-                    if (string.IsNullOrEmpty(ctor)) {
-                        CodeBuilder.Append("null");
-                    } else {
-                        CodeBuilder.AppendFormat("\"{0}\"", ctor);
+                    if (!isExternal) {
+                        //外部对象函数名不会换名，所以没必要提供名字，总是ctor
+                        if (string.IsNullOrEmpty(ctor)) {
+                            CodeBuilder.Append(", null");
+                        } else {
+                            CodeBuilder.AppendFormat(", \"{0}\"", ctor);
+                        }
                     }
                     if (isCollection) {
                         bool isDictionary = IsImplementationOfSys(namedTypeSym, "IDictionary");

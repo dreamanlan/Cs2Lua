@@ -1414,7 +1414,7 @@ function newobject(class, typeargs, typekinds, ctor, initializer, ...)
   return obj;
 end;
 
-function newexternobject(class, typeargs, typekinds, ctor, initializer, ...)
+function newexternobject(class, typeargs, typekinds, initializer, ...)
   local obj = nil;
 	local args = {...};
   if class == System.Collections.Generic.KeyValuePair_TKey_TValue then
@@ -1462,7 +1462,7 @@ function newcollection(t, typeargs, typekinds, ctor, coll, ...)
   end;
 end;
 
-function newexterndictionary(t, typeargs, typekinds, ctor, dict, ...)
+function newexterndictionary(t, typeargs, typekinds, dict, ...)
   if dict and t==System.Collections.Generic.Dictionary_TKey_TValue then
     local obj = {};
 	  setmetatable(obj, { __index = __mt_index_of_dictionary, __newindex = __mt_newindex_of_dictionary, __cs2lua_defined = true, __class = t });
@@ -1485,7 +1485,7 @@ function newexterndictionary(t, typeargs, typekinds, ctor, dict, ...)
 	end;
 end;
 
-function newexternlist(t, typeargs, typekinds, ctor, list, ...)
+function newexternlist(t, typeargs, typekinds, list, ...)
   if list and t==System.Collections.Generic.List_T then    
 	  return setmetatable(list, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = t });
 	else 
@@ -1503,7 +1503,7 @@ function newexternlist(t, typeargs, typekinds, ctor, list, ...)
   end;
 end;
 
-function newexterncollection(t, typeargs, typekinds, ctor, coll, ...)
+function newexterncollection(t, typeargs, typekinds, coll, ...)
   if coll and (t==System.Collections.Generic.Queue_T or t==System.Collections.Generic.Stack_T) then
     return setmetatable(coll, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = t });
   elseif coll and t==System.Collections.Generic.HashSet_T then
@@ -1848,7 +1848,10 @@ function setexterninstanceindexer(obj, intf, name, ...)
     UnityEngine.Debug.LogError("[cs2lua] table index is nil");
     return;
   end;
-	local val = args[num];
+  local val = nil;
+  if num>1 then
+  	val = args[num];
+  end;
   local meta = getmetatable(obj);
   if meta then
 		local class = rawget(meta, "__class");
