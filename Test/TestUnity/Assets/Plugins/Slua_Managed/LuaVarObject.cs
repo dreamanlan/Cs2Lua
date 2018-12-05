@@ -26,6 +26,7 @@ namespace SLua
     using System.Collections;
     using System.Collections.Generic;
     using System;
+    using System.Text;
     using System.Reflection;
     using System.Runtime.InteropServices;
 
@@ -162,7 +163,21 @@ namespace SLua
 				object[] args;
 				checkArgs(l, 1, m, out args);
 				object ret = m.Invoke(m.IsStatic ? null : self, args);
-                Logger.LogWarning(string.Format("forceInvoke {0}.{1}", m.DeclaringType.Name, m.Name));
+                string typeParams = string.Empty;
+                if (m.DeclaringType.IsGenericType) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("<");
+                    var argTypes = m.DeclaringType.GetGenericArguments();
+                    string prestr = string.Empty;
+                    foreach (var argType in argTypes) {
+                        sb.Append(prestr);
+                        prestr = ",";
+                        sb.Append(argType.Name);
+                    }
+                    sb.Append(">");
+                    typeParams = sb.ToString();
+                }
+                Logger.LogWarning(string.Format("forceInvoke {0}{1}.{2}", m.DeclaringType.Name, typeParams, m.Name));
 				var pis = m.GetParameters();
 				pushValue(l, true);
 				if (ret != null)
@@ -235,6 +250,22 @@ namespace SLua
 
         static int indexObject(IntPtr l, object self, object key)
         {
+            var objType = getType(self);
+            string typeParams = string.Empty;
+            if (objType.IsGenericType) {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("<");
+                var argTypes = objType.GetGenericArguments();
+                string prestr = string.Empty;
+                foreach (var argType in argTypes) {
+                    sb.Append(prestr);
+                    prestr = ",";
+                    sb.Append(argType.Name);
+                }
+                sb.Append(">");
+                typeParams = sb.ToString();
+            }
+            Logger.LogWarning(string.Format("luaIndex {0}{1}.{2}", objType.Name, typeParams, key));
 
             if (self is IDictionary)
             {
@@ -260,6 +291,23 @@ namespace SLua
         {
             Type t = getType(self);
 
+            var objType = t;
+            string typeParams = string.Empty;
+            if (objType.IsGenericType) {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("<");
+                var argTypes = objType.GetGenericArguments();
+                string prestr = string.Empty;
+                foreach (var argType in argTypes) {
+                    sb.Append(prestr);
+                    prestr = ",";
+                    sb.Append(argType.Name);
+                }
+                sb.Append(">");
+                typeParams = sb.ToString();
+            }
+            Logger.LogWarning(string.Format("luaIndex {0}{1}.{2}", objType.Name, typeParams, key));
+            
             if (self is IDictionary)
             {
                 if (t.IsGenericType && t.GetGenericArguments()[0] != typeof(string))
@@ -355,6 +403,25 @@ namespace SLua
 
         static int newindexString(IntPtr l, object self, string key)
         {
+            Type t = getType(self);
+
+            var objType = t;
+            string typeParams = string.Empty;
+            if (objType.IsGenericType) {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("<");
+                var argTypes = objType.GetGenericArguments();
+                string prestr = string.Empty;
+                foreach (var argType in argTypes) {
+                    sb.Append(prestr);
+                    prestr = ",";
+                    sb.Append(argType.Name);
+                }
+                sb.Append(">");
+                typeParams = sb.ToString();
+            }
+            Logger.LogWarning(string.Format("luaNewIndex {0}{1}.{2}", objType.Name, typeParams, key));
+
             if (self is IDictionary)
             {
                 var dictType = getType(self);
@@ -363,7 +430,6 @@ namespace SLua
                 return ok(l);
             }
 
-            Type t = getType(self);
             //MemberInfo[] mis = t.GetMember(key, BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             //if (mis.Length == 0)
             //{
@@ -406,6 +472,24 @@ namespace SLua
         static int indexInt(IntPtr l, object self, int index)
         {
             Type type = getType(self);
+
+            var objType = type;
+            string typeParams = string.Empty;
+            if (objType.IsGenericType) {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("<");
+                var argTypes = objType.GetGenericArguments();
+                string prestr = string.Empty;
+                foreach (var argType in argTypes) {
+                    sb.Append(prestr);
+                    prestr = ",";
+                    sb.Append(argType.Name);
+                }
+                sb.Append(">");
+                typeParams = sb.ToString();
+            }
+            Logger.LogWarning(string.Format("luaIndex {0}{1}.{2}", objType.Name, typeParams, index));
+
             if (self is IList)
             {
                 pushValue(l, true);
@@ -441,6 +525,24 @@ namespace SLua
         static int newindexInt(IntPtr l, object self, int index)
         {
             Type type = getType(self);
+
+            var objType = type;
+            string typeParams = string.Empty;
+            if (objType.IsGenericType) {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("<");
+                var argTypes = objType.GetGenericArguments();
+                string prestr = string.Empty;
+                foreach (var argType in argTypes) {
+                    sb.Append(prestr);
+                    prestr = ",";
+                    sb.Append(argType.Name);
+                }
+                sb.Append(">");
+                typeParams = sb.ToString();
+            }
+            Logger.LogWarning(string.Format("luaNewIndex {0}{1}.{2}", objType.Name, typeParams, index));
+
             if (self is IList)
             {
                 if (type.IsGenericType)
@@ -472,6 +574,23 @@ namespace SLua
 
         static int newindexObject(IntPtr l, object self, object k, object v)
         {
+            var objType = getType(self);
+            string typeParams = string.Empty;
+            if (objType.IsGenericType) {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("<");
+                var argTypes = objType.GetGenericArguments();
+                string prestr = string.Empty;
+                foreach (var argType in argTypes) {
+                    sb.Append(prestr);
+                    prestr = ",";
+                    sb.Append(argType.Name);
+                }
+                sb.Append(">");
+                typeParams = sb.ToString();
+            }
+            Logger.LogWarning(string.Format("luaNewIndex {0}{1}.{2}", objType.Name, typeParams, k));
+
             if (self is IDictionary)
             {
                 var dict = self as IDictionary;

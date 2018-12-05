@@ -490,7 +490,6 @@ namespace SLua
 						}
                     }
                     if (tname == null) {
-                        Logger.LogError("use LuaTable as param");
                         t = typeof(LuaTable);
                         return true;
                     }
