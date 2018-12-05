@@ -1027,13 +1027,8 @@ namespace Generator
             } else if (id == "callstatic") {
                 var obj = data.Params[0];
                 var member = data.Params[1];
-                var objCd = member as Dsl.CallData;
                 GenerateSyntaxComponent(obj, sb, indent, false);
-                if (null != objCd && objCd.GetId() == "getinstance" && objCd.GetParamNum() == 2 && objCd.GetParamId(1) == "base") {
-                    sb.AppendFormat(".__self__{0}", member.GetId());
-                } else {
-                    sb.AppendFormat(".{0}", member.GetId());
-                }
+                sb.AppendFormat(".{0}", member.GetId());
                 sb.Append("(");
                 string prestr = string.Empty;
                 for (int ix = 2; ix < data.Params.Count; ++ix) {
@@ -1051,8 +1046,13 @@ namespace Generator
             } else if (id == "callinstance") {
                 var obj = data.Params[0];
                 var member = data.Params[1];
+                var objCd = obj as Dsl.CallData;
                 GenerateSyntaxComponent(obj, sb, indent, false);
-                sb.AppendFormat(":{0}", member.GetId());
+                if (null != objCd && objCd.GetId() == "getinstance" && objCd.GetParamNum() == 2 && objCd.GetParamId(1) == "base") {
+                    sb.AppendFormat(":__self__{0}", member.GetId());
+                } else {
+                    sb.AppendFormat(":{0}", member.GetId());
+                }
                 sb.Append("(");
                 string prestr = string.Empty;
                 for (int ix = 2; ix < data.Params.Count; ++ix) {

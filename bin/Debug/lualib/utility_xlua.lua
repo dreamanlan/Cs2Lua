@@ -1125,7 +1125,7 @@ function defineclass(base, className, static, static_methods, static_fields_buil
 									UnityEngine.Debug.LogError("can't found method "..tostring(k));
 								end;
 							else
-								if (not method_info[k]["private"]) and (not method_info[k]["sealed"]) then
+								if k=="ctor" || (not method_info[k]["private"]) and (not method_info[k]["sealed"]) then
 									obj["__self__"..k] = v;
 								end;
 							end;

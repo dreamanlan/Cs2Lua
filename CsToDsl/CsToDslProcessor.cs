@@ -1138,7 +1138,7 @@ namespace RoslynTool.CsToDsl
                         sb.AppendLine();
                         ++indent;
                         if (!string.IsNullOrEmpty(baseClass) && myselfDefinedBaseClass) {
-                            sb.AppendFormat("{0}callstatic(getinstance(this, \"base\"), \"ctor\", this);", GetIndentString(indent));
+                            sb.AppendFormat("{0}callinstance(getinstance(this, \"base\"), \"ctor\");", GetIndentString(indent));
                             sb.AppendLine();
                         }
                         if (generateBasicCtor) {
