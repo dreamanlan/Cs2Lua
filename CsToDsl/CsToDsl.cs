@@ -980,7 +980,11 @@ namespace RoslynTool.CsToDsl
                 string prestr = string.Empty;
                 foreach (var ta in namedTypeSym.TypeArguments) {
                     sb.Append(prestr);
-                    sb.Append(ClassInfo.GetFullName(ta));
+                    if (ta.TypeKind == TypeKind.TypeParameter) {
+                        sb.Append(ta.Name);
+                    } else {
+                        sb.Append(ClassInfo.GetFullName(ta));
+                    }
                     prestr = ", ";
                 }
                 sb.Append("), typekinds(");
