@@ -7,7 +7,7 @@ https://github.com/dreamanlan/Cs2Lua/tree/master/Test
 
 【命令行】
 
-    Cs2Lua [-ext fileext] [-enableinherit] [-normallua/-slua] [-outputresult] [-d macro] [-refbyname dllname alias] [-refbypath dllpath alias] [-src] csfile|csprojfile
+    Cs2Lua [-out dir] [-ext fileext] [-enableinherit] [-enablelinq] [-normallua/-slua/-xlua] [-outputresult] [-noautorequire] [-luacomponentbystring] [-usearraygetset] [-enabletranslationcheck] [-d macro] [-u macro] [-externpath path] [-ignorepath path] [-refbyname dllname alias] [-refbypath dllpath alias] [-systemdllpath dllpath] [-src] csfile|csprojfile
 
 其中:
 
