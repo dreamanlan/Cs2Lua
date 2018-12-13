@@ -225,7 +225,7 @@ namespace RoslynTool.CsToDsl
                             }
                             return;
                         }
-                    } else if (sym.Kind == SymbolKind.Method && sym.ContainingType == classInfo.SemanticInfo) {
+                    } else if (sym.Kind == SymbolKind.Method && (sym.ContainingType == classInfo.SemanticInfo || sym.ContainingType == classInfo.SemanticInfo.OriginalDefinition || classInfo.IsInherit(sym.ContainingType))) {
                         var msym = sym as IMethodSymbol;
                         string manglingName = NameMangling(msym);
                         var mi = new MethodInfo();
