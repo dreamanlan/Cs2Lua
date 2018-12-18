@@ -1200,9 +1200,16 @@ namespace Generator
                 for (int ix = 0; ix < data.Params.Count; ++ix) {
                     var param = data.Params[ix] as Dsl.CallData;
                     sb.Append(prestr);
-                    var k = param.GetParamId(0);
+                    var k = param.GetParam(0);
+                    var kcd = k as Dsl.CallData;
                     var v = param.GetParam(1);
-                    sb.AppendFormat("[\"{0}\"] = ", Escape(k));
+                    if (null != kcd) {
+                        sb.AppendFormat("[{0}] = ", CalcTypeString(k));
+                    } else if (k.GetIdType() == Dsl.ValueData.STRING_TOKEN) {
+                        sb.AppendFormat("[\"{0}\"] = ", Escape(k.GetId()));
+                    } else {
+                        sb.AppendFormat("[{0}] = ", k.GetId());
+                    }
                     GenerateSyntaxComponent(v, sb, indent, false);
                     prestr = ", ";
                 }
