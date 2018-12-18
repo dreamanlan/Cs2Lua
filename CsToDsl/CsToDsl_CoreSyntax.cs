@@ -573,6 +573,8 @@ namespace RoslynTool.CsToDsl
                             specialType = SpecialAssignmentType.PropExplicitImplementInterface;
                         } else if (SymbolTable.IsBasicValueProperty(leftPsym)) {
                             specialType = SpecialAssignmentType.PropForBasicValueType;
+                        } else if (null != leftOper && SymbolTable.IsBasicType(leftOper.Type)) {
+                            specialType = SpecialAssignmentType.PropForBasicValueType;
                         }
                     }
                 }

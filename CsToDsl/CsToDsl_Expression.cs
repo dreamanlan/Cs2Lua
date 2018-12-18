@@ -337,6 +337,8 @@ namespace RoslynTool.CsToDsl
                         specialType = SpecialAssignmentType.PropExplicitImplementInterface;
                     } else if (SymbolTable.IsBasicValueProperty(leftPsym)) {
                         specialType = SpecialAssignmentType.PropForBasicValueType;
+                    } else if (null != leftOper && SymbolTable.IsBasicType(leftOper.Type)) {
+                        specialType = SpecialAssignmentType.PropForBasicValueType;
                     }
                 }
             }
@@ -431,7 +433,12 @@ namespace RoslynTool.CsToDsl
                     if (null != psym){
                         if (!psym.IsStatic) {
                             propExplicitImplementInterface = CheckExplicitInterfaceAccess(psym, ref fnOfIntf, ref mname);
-                            propForBasicValueType = SymbolTable.IsBasicValueProperty(psym);
+                            var expOper = m_Model.GetOperation(node.Expression);
+                            bool expIsBasicType = false;
+                            if (null != expOper && SymbolTable.IsBasicType(expOper.Type)) {
+                                expIsBasicType = true;
+                            }
+                            propForBasicValueType = SymbolTable.IsBasicValueProperty(psym) || expIsBasicType;
                         }
                     }
                     if (propExplicitImplementInterface) {

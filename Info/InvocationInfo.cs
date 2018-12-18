@@ -217,7 +217,12 @@ namespace RoslynTool.CsToDsl
             string prestr = string.Empty;
             if (isMemberAccess) {
                 string fnOfIntf = "null";
+                var expOper = model.GetOperation(exp);
                 bool isExplicitInterfaceInvoke = cs2dsl.CheckExplicitInterfaceAccess(sym, ref fnOfIntf);
+                bool expIsBasicType = false;
+                if (!sym.IsStatic && null != expOper && SymbolTable.IsBasicType(expOper.Type)) {
+                    expIsBasicType = true;
+                }
                 if (sym.MethodKind == MethodKind.DelegateInvoke) {
                     var memberAccess  = node as MemberAccessExpressionSyntax;
                     if (null != memberAccess) {
@@ -237,7 +242,7 @@ namespace RoslynTool.CsToDsl
                 } else if (IsExtensionMethod) {
                     codeBuilder.Append("callstatic(");
                     codeBuilder.AppendFormat("{0}, \"{1}\", ", ClassKey, mname);
-                } else if (IsBasicValueMethod) {
+                } else if (IsBasicValueMethod || expIsBasicType) {
                     string ckey = CalcInvokeTarget(IsEnumClass, ClassKey, cs2dsl, exp, model);
                     codeBuilder.Append("invokeforbasicvalue(");
                     cs2dsl.OutputExpressionSyntax(exp);
