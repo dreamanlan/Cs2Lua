@@ -568,12 +568,15 @@ namespace RoslynTool.CsToDsl
 
                 SpecialAssignmentType specialType = SpecialAssignmentType.None;
                 if (null != leftMemberAccess && null != leftPsym) {
-                    if(!leftPsym.IsStatic) {
+                    if (!leftPsym.IsStatic) {
+                        bool expIsBasicType = false;
+                        var expOper = m_Model.GetOperation(leftMemberAccess.Expression);
+                        if (null != expOper && SymbolTable.IsBasicType(expOper.Type)) {
+                            expIsBasicType = true;
+                        }
                         if (CheckExplicitInterfaceAccess(leftPsym)) {
                             specialType = SpecialAssignmentType.PropExplicitImplementInterface;
-                        } else if (SymbolTable.IsBasicValueProperty(leftPsym)) {
-                            specialType = SpecialAssignmentType.PropForBasicValueType;
-                        } else if (null != leftOper && SymbolTable.IsBasicType(leftOper.Type)) {
+                        } else if (SymbolTable.IsBasicValueProperty(leftPsym) || expIsBasicType) {
                             specialType = SpecialAssignmentType.PropForBasicValueType;
                         }
                     }
