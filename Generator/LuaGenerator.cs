@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -29,6 +30,7 @@ namespace Generator
             s_SrcPath = Path.Combine(csprojPath, "dsl");
             s_OutPath = outPath;
             s_Ext = ext;
+            ReadConfig();
             if (!Directory.Exists(s_OutPath)) {
                 Directory.CreateDirectory(s_OutPath);
             }
@@ -36,20 +38,40 @@ namespace Generator
             var files = Directory.GetFiles(s_SrcPath, "*.dsl", SearchOption.TopDirectoryOnly);
             foreach (string file in files) {
                 try {
-                    string fileName = Path.GetFileName(file);
+                    string fileName = Path.GetFileNameWithoutExtension(file);
 
                     Dsl.DslFile dslFile = new Dsl.DslFile();
                     dslFile.Load(file, s => Log(file, s));
-                    GenerateLua(dslFile, Path.Combine(s_OutPath, Path.ChangeExtension(fileName, s_Ext)));
+                    GenerateLua(dslFile, Path.Combine(s_OutPath, Path.ChangeExtension(fileName, s_Ext)), fileName);
                 } catch (Exception ex) {
                     Log(file, string.Format("exception:{0}\n{1}", ex.Message, ex.StackTrace));
                     System.Environment.Exit(-1);
                 }
             }
+            foreach (var pair in s_FileMergeInfos) {
+                var info = pair.Value;
+                StringBuilder sb = new StringBuilder();
+                foreach (string req in info.RequireList) {
+                    sb.AppendFormatLine("{0}require \"{1}\";", GetIndentString(0), req);
+                }
+                sb.AppendLine(info.CodeBuilder.ToString());
+                foreach (string className in info.DefinedClasses) {
+                    sb.AppendFormatLine("{0}{1}.__define_class();", GetIndentString(0), className);
+                }
+                File.WriteAllText(Path.Combine(s_OutPath, Path.ChangeExtension(info.MergedFileName, s_Ext)), sb.ToString());
+            }
             System.Environment.Exit(0);
         }
-        private static void GenerateLua(Dsl.DslFile dslFile, string outputFile)
+        private static void GenerateLua(Dsl.DslFile dslFile, string outputFile, string fileName)
         {
+            var myselfNewRequire = GetMergedFile(fileName);
+            FileMergeInfo mergedInfo = null;
+            if (!string.IsNullOrEmpty(myselfNewRequire)){
+                s_FileMergeInfos.TryGetValue(myselfNewRequire, out mergedInfo);
+            }
+
+            HashSet<string> requires = new HashSet<string>();
+            List<string> requireList = new List<string>();
             StringBuilder sb = new StringBuilder();
             Stack<string> classDefineStack = new Stack<string>();
             string prestr = string.Empty;
@@ -63,10 +85,27 @@ namespace Generator
                     string requireFileName = callData.GetParamId(0);
                     string srcPath = Path.Combine(s_ExePath, string.Format("lualib/{0}.lua", requireFileName));
                     string destPath = Path.Combine(s_OutPath, string.Format("{0}.{1}", requireFileName, s_Ext));
-                    if (!File.Exists(destPath) && File.Exists(srcPath)) {
+                    bool srcExist = File.Exists(srcPath);
+                    bool destExist = File.Exists(destPath);
+                    if (!destExist && srcExist) {
                         File.Copy(srcPath, destPath, true);
                     }
-                    sb.AppendFormatLine("{0}require \"{1}\";", GetIndentString(indent), requireFileName);
+                    if ((srcExist || requireFileName.StartsWith("cs2lua__")) && null != mergedInfo && mergedInfo.CodeBuilder.Length > 0) {
+                        //合并的文件，只有第一个文件require基础库
+                    } else {
+                        if (!DontRequire(fileName, requireFileName)) {
+                            var newRequire = GetMergedFile(requireFileName);
+                            if (null != newRequire) {
+                                if (newRequire != myselfNewRequire && !requires.Contains(newRequire)) {
+                                    requires.Add(newRequire);
+                                    requireList.Add(newRequire);
+                                }
+                            } else if(!requires.Contains(requireFileName)) {
+                                requires.Add(requireFileName);
+                                requireList.Add(requireFileName);
+                            }
+                        }
+                    }
                 } else if (id == "attributes") {
                     if (firstAttrs) {
                         sb.AppendLine("__cs2lua__AllAttrs = {};");
@@ -679,11 +718,30 @@ namespace Generator
                 }
             }
             sb.AppendLine();
-            while (classDefineStack.Count > 0) {
-                var className = classDefineStack.Pop();
-                sb.AppendFormatLine("{0}{1}.__define_class();", GetIndentString(indent), className);
+            if (null != mergedInfo) {
+                foreach (string req in requireList) {
+                    if (!mergedInfo.Requires.Contains(req)) {
+                        mergedInfo.Requires.Add(req);
+                        mergedInfo.RequireList.Add(req);
+                    }
+                }
+                mergedInfo.CodeBuilder.AppendLine(sb.ToString());
+                while (classDefineStack.Count > 0) {
+                    var className = classDefineStack.Pop();
+                    mergedInfo.DefinedClasses.Add(className);
+                }
+            } else {
+                StringBuilder newSb = new StringBuilder();
+                foreach (string req in requireList) {
+                    newSb.AppendFormatLine("{0}require \"{1}\";", GetIndentString(indent), req);
+                }
+                newSb.AppendLine(sb.ToString());
+                while (classDefineStack.Count > 0) {
+                    var className = classDefineStack.Pop();
+                    newSb.AppendFormatLine("{0}{1}.__define_class();", GetIndentString(indent), className);
+                }
+                File.WriteAllText(outputFile, newSb.ToString());
             }
-            File.WriteAllText(outputFile, sb.ToString());
         }
         private static void GenerateFieldValueComponent(Dsl.ISyntaxComponent comp, StringBuilder sb, int indent, bool firstLineUseIndent)
         {
@@ -1639,6 +1697,163 @@ namespace Generator
                 return true;
             return s_IntegerTypes.Contains(t);
         }
+        private static bool DontRequire(string file, string require)
+        {
+            foreach (var info in s_DontRequireInfos) {
+                if (!info.CachedNotExcepts.Contains(file)) {
+                    if (info.Excepts.Contains(file)) {
+                        continue;
+                    }
+                    foreach (var regex in info.ExceptMatches) {
+                        if (regex.IsMatch(file)) {
+                            info.Excepts.Add(file);
+                            continue;
+                        }
+                    }
+                    info.CachedNotExcepts.Add(file);
+                }
+                if (!info.CachedNotRequires.Contains(require)) {
+                    if (info.Requires.Contains(require)) {
+                        return true;
+                    }
+                    foreach (var regex in info.Matches) {
+                        if (regex.IsMatch(require)) {
+                            info.Requires.Add(require);
+                            return true;
+                        }
+                    }
+                    info.CachedNotRequires.Add(require);
+                }
+            }
+            return false;
+        }
+        private static string GetMergedFile(string file)
+        {
+            string res;
+            if (s_CachedFile2MergedFiles.TryGetValue(file, out res)) {
+                return res;
+            }
+            foreach (var pair in s_FileMergeInfos) {
+                var info = pair.Value;
+                if (info.Lists.Contains(file)) {
+                    s_CachedFile2MergedFiles.Add(file, info.MergedFileName);
+                    return info.MergedFileName;
+                }
+                foreach (var regex in info.Matches) {
+                    if (regex.IsMatch(file)) {
+                        s_CachedFile2MergedFiles.Add(file, info.MergedFileName);
+                        return info.MergedFileName;
+                    }
+                }
+            }
+            s_CachedFile2MergedFiles.Add(file, null);
+            return null;
+        }
+        private static void ReadConfig()
+        {
+            s_DontRequireInfos.Clear();
+            s_FileMergeInfos.Clear();
+            s_CachedFile2MergedFiles.Clear();
+
+            var file = Path.Combine(s_ExePath, "cs2dsl.dsl");
+            var dslFile = new Dsl.DslFile();
+            if (dslFile.Load(file, msg => { Console.WriteLine(msg); })) {
+                foreach (var info in dslFile.DslInfos) {
+                    ReadConfig(info);
+                }
+            }
+        }
+        private static void ReadConfig(Dsl.DslInfo info)
+        {
+            string id = info.GetId();
+            if (id == "dontrequire") {
+                var cfg = new DontRequireInfo();
+                var f = info.First;
+                if (null != f) {
+                    foreach (var p in f.Call.Params) {
+                        cfg.Requires.Add(p.GetId());
+                    }
+                    foreach (var s in f.Statements) {
+                        cfg.Requires.Add(s.GetId());
+                    }
+                }
+                for (int i = 1; i < info.GetFunctionNum(); ++i) {
+                    f = info.GetFunction(i);
+                    if (null != f) {
+                        string fid = f.GetId();
+                        if (fid == "match") {
+                            foreach (var p in f.Call.Params) {
+                                var str = p.GetId();
+                                var regex = new Regex(str, RegexOptions.Compiled);
+                                cfg.Matches.Add(regex);
+                            }
+                            foreach (var s in f.Statements) {
+                                var str = s.GetId();
+                                var regex = new Regex(str, RegexOptions.Compiled);
+                                cfg.Matches.Add(regex);
+                            }
+                        } else if (fid == "except") {
+                            foreach (var p in f.Call.Params) {
+                                cfg.Excepts.Add(p.GetId());
+                            }
+                            foreach (var s in f.Statements) {
+                                cfg.Excepts.Add(s.GetId());
+                            }
+                        } else if (fid == "exceptmatch") {
+                            foreach (var p in f.Call.Params) {
+                                var str = p.GetId();
+                                var regex = new Regex(str, RegexOptions.Compiled);
+                                cfg.ExceptMatches.Add(regex);
+                            }
+                            foreach (var s in f.Statements) {
+                                var str = s.GetId();
+                                var regex = new Regex(str, RegexOptions.Compiled);
+                                cfg.ExceptMatches.Add(regex);
+                            }
+                        }
+                    }
+                }
+                s_DontRequireInfos.Add(cfg);
+            } else if (id == "filemerge") {
+                var cfg = new FileMergeInfo();
+                var f = info.First;
+                if (null != f) {
+                    if (f.Call.GetParamNum() > 0) {
+                        var p = f.Call.GetParamId(0);
+                        cfg.MergedFileName = p;
+                    } else if (f.GetStatementNum() > 0) {
+                        var s = f.GetStatementId(0);
+                        cfg.MergedFileName = s;
+                    }
+                }
+                for (int i = 1; i < info.GetFunctionNum(); ++i) {
+                    f = info.GetFunction(i);
+                    if (null != f) {
+                        string fid = f.GetId();
+                        if (fid == "list") {
+                            foreach (var p in f.Call.Params) {
+                                cfg.Lists.Add(p.GetId());
+                            }
+                            foreach (var s in f.Statements) {
+                                cfg.Lists.Add(s.GetId());
+                            }
+                        } else if (fid == "match") {
+                            foreach (var p in f.Call.Params) {
+                                var str = p.GetId();
+                                var regex = new Regex(str, RegexOptions.Compiled);
+                                cfg.Matches.Add(regex);
+                            }
+                            foreach (var s in f.Statements) {
+                                var str = s.GetId();
+                                var regex = new Regex(str, RegexOptions.Compiled);
+                                cfg.Matches.Add(regex);
+                            }
+                        }
+                    }
+                }
+                s_FileMergeInfos.Add(cfg.MergedFileName, cfg);
+            }
+        }
 
         private static string s_ExePath = string.Empty;
         private static string s_SrcPath = string.Empty;
@@ -1663,5 +1878,32 @@ namespace Generator
         private static HashSet<string> s_IntegerTypes = new HashSet<string> {
             "System.Byte", "System.SByte", "System.Int16", "System.UInt16", "System.Int32", "System.UInt32", "System.Int64", "System.UInt64"
         };
+
+        private class DontRequireInfo
+        {
+            internal HashSet<string> Requires = new HashSet<string>();
+            internal List<Regex> Matches = new List<Regex>();
+            internal HashSet<string> Excepts = new HashSet<string>();
+            internal List<Regex> ExceptMatches = new List<Regex>();
+
+            internal HashSet<string> CachedNotRequires = new HashSet<string>();
+            internal HashSet<string> CachedNotExcepts = new HashSet<string>();
+        }
+
+        private class FileMergeInfo
+        {
+            internal string MergedFileName = string.Empty;
+            internal HashSet<string> Lists = new HashSet<string>();
+            internal List<Regex> Matches = new List<Regex>();
+            internal StringBuilder CodeBuilder = new StringBuilder();
+
+            internal HashSet<string> Requires = new HashSet<string>();
+            internal List<string> RequireList = new List<string>();
+            internal List<string> DefinedClasses = new List<string>();
+        }
+
+        private static List<DontRequireInfo> s_DontRequireInfos = new List<DontRequireInfo>();
+        private static Dictionary<string, FileMergeInfo> s_FileMergeInfos = new Dictionary<string, FileMergeInfo>();
+        private static Dictionary<string, string> s_CachedFile2MergedFiles = new Dictionary<string, string>();
     }
 }
