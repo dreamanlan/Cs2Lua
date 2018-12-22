@@ -38,11 +38,11 @@ CS.System.Double = CS.System.Double or __basic_type_func;
 CS.System.String = CS.System.String or __basic_type_func;
 CS.System.Collections = CS.System.Collections or {};
 CS.System.Collections.Generic = CS.System.Collections.Generic or {};
-CS.System.Collections.Generic.List_T = {__cs2lua_defined = true, __fullname = "CS.System.Collections.Generic.List_T", __typename = "List", __exist = function(k) return false; end};
-CS.System.Collections.Generic.Queue_T = {__cs2lua_defined = true, __fullname = "CS.System.Collections.Generic.Queue_T", __typename = "Queue", __exist = function(k) return false; end};
-CS.System.Collections.Generic.Stack_T = {__cs2lua_defined = true, __fullname = "CS.System.Collections.Generic.Stack_T", __typename = "Stack", __exist = function(k) return false; end};
-CS.System.Collections.Generic.Dictionary_TKey_TValue = {__cs2lua_defined = true, __fullname = "CS.System.Collections.Generic.Dictionary_TKey_TValue", __typename = "Dictionary", __exist = function(k) return false; end};
-CS.System.Collections.Generic.HashSet_T = {__cs2lua_defined = true, __fullname = "CS.System.Collections.Generic.HashSet_T", __typename = "HashSet", __exist = function(k) return false; end};
+CS.System.Collections.Generic.List_T = {__cs2lua_defined = true, __fullname = "CS.System.Collections.Generic.List_T", __name = "List", __exist = function(k) return false; end};
+CS.System.Collections.Generic.Queue_T = {__cs2lua_defined = true, __fullname = "CS.System.Collections.Generic.Queue_T", __name = "Queue", __exist = function(k) return false; end};
+CS.System.Collections.Generic.Stack_T = {__cs2lua_defined = true, __fullname = "CS.System.Collections.Generic.Stack_T", __name = "Stack", __exist = function(k) return false; end};
+CS.System.Collections.Generic.Dictionary_TKey_TValue = {__cs2lua_defined = true, __fullname = "CS.System.Collections.Generic.Dictionary_TKey_TValue", __name = "Dictionary", __exist = function(k) return false; end};
+CS.System.Collections.Generic.HashSet_T = {__cs2lua_defined = true, __fullname = "CS.System.Collections.Generic.HashSet_T", __name = "HashSet", __exist = function(k) return false; end};
 CS.System.Array = CS.System.Array or {};
 
 CS.System.Collections.Generic.MyDictionary_TKey_TValue = CS.System.Collections.Generic.Dictionary_TKey_TValue;
@@ -1046,7 +1046,7 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
     local class_events = static_events or {};
     class["__cs2lua_defined"] = true;
     class["__fullname"] = fullName;
-    class["__typename"] = typeName;
+    class["__name"] = typeName;
     class["__parent"] = base_class;
     class["__is_value_type"] = is_value_type;
     class["__interfaces"] = interfaces;
@@ -1213,7 +1213,7 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
             		__class = class,
             		__cs2lua_defined = true,
             		__fullname = fullName,
-            		__typename = typeName,
+            		__name = typeName,
 				    		__parent = base_class,
             		__is_value_type = is_value_type,
 				    		__interfaces = interfaces,
