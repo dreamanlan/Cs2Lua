@@ -708,7 +708,7 @@ namespace Generator
 
                     sb.AppendLine();
 
-                    sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, {3});", GetIndentString(indent), null == baseClass ? "nil" : baseClassName, className, isValueType ? "true" : "false");
+                    sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", \"{3}\", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, {4});", GetIndentString(indent), null == baseClass ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
 
                     --indent;
                     sb.AppendFormatLine("{0}end,", GetIndentString(indent));
@@ -1616,6 +1616,14 @@ namespace Generator
                 }
             }
             return null;
+        }
+        private static string GetLastName(string fullName)
+        {
+            int ix = fullName.LastIndexOf('.');
+            if (ix < 0)
+                return fullName;
+            else
+                return fullName.Substring(ix + 1);
         }
         private static string ConvertOperator(string id)
         {

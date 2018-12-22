@@ -716,7 +716,7 @@ __mt_index_of_array = function(t, k)
   elseif k=="Clear" then
     return function(obj)
     	local ct = __get_array_count(obj);
-    	for i = ct,1 do
+    	for i = ct,1,-1 do
     		table.remove(obj, i);
     	end;
     	__set_array_count(obj, 0);

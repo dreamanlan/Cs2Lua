@@ -57,12 +57,12 @@ System.Double = System.Double or __basic_type_func;
 System.String = System.String or __basic_type_func;
 System.Collections = System.Collections or {};
 System.Collections.Generic = System.Collections.Generic or {};
-System.Collections.Generic.List_T = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.List_T", __exist = function(k) return false; end};
-System.Collections.Generic.Queue_T = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.Queue_T", __exist = function(k) return false; end};
-System.Collections.Generic.Stack_T = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.Stack_T", __exist = function(k) return false; end};
-System.Collections.Generic.Dictionary_TKey_TValue = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.Dictionary_TKey_TValue", __exist = function(k) return false; end};
-System.Collections.Generic.HashSet_T = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.HashSet_T", __exist = function(k) return false; end};
-System.Collections.Generic.KeyValuePair_TKey_TValue = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.KeyValuePair_TKey_TValue", __exist = function(k) return false; end};
+System.Collections.Generic.List_T = {__cs2lua_defined = true, __fullname = "System.Collections.Generic.List_T", __typename = "List", __exist = function(k) return false; end};
+System.Collections.Generic.Queue_T = {__cs2lua_defined = true, __fullname = "System.Collections.Generic.Queue_T", __typename = "Queue", __exist = function(k) return false; end};
+System.Collections.Generic.Stack_T = {__cs2lua_defined = true, __fullname = "System.Collections.Generic.Stack_T", __typename = "Stack", __exist = function(k) return false; end};
+System.Collections.Generic.Dictionary_TKey_TValue = {__cs2lua_defined = true, __fullname = "System.Collections.Generic.Dictionary_TKey_TValue", __typename = "Dictionary", __exist = function(k) return false; end};
+System.Collections.Generic.HashSet_T = {__cs2lua_defined = true, __fullname = "System.Collections.Generic.HashSet_T", __typename = "HashSet", __exist = function(k) return false; end};
+System.Collections.Generic.KeyValuePair_TKey_TValue = {__cs2lua_defined = true, __fullname = "System.Collections.Generic.KeyValuePair_TKey_TValue", __typename = "KeyValuePair", __exist = function(k) return false; end};
 System.Array = System.Array or {};
 
 System.Collections.Generic.MyDictionary_TKey_TValue = System.Collections.Generic.Dictionary_TKey_TValue;
@@ -336,7 +336,7 @@ function typeis(obj, t, tk)
         end;
       end;
   	  --check cs2lua base class chain
-  	  local baseClass = rawget(meta, "__base_class");
+  	  local baseClass = rawget(meta, "__parent");
   	  local lastCheckedClass = meta;
   	  while baseClass ~= nil do  	  
     		if baseClass == t then
@@ -351,7 +351,7 @@ function typeis(obj, t, tk)
           end;
         end;
     		if rawget(baseClass, "__cs2lua_defined") then
-    			baseClass = rawget(baseClass, "__base_class");
+    			baseClass = rawget(baseClass, "__parent");
     		else
     			lastCheckedClass = baseClass;
     			break;
@@ -716,7 +716,7 @@ __mt_index_of_array = function(t, k)
   elseif k=="Clear" then
     return function(obj)
     	local ct = __get_array_count(obj);
-    	for i = ct,1 do
+    	for i = ct,1,-1 do
     		table.remove(obj, i);
     	end;
     	__set_array_count(obj, 0);
@@ -1073,7 +1073,7 @@ function wrapexternvaluetypearray(arr)
 	return setmetatable(arr, { __index = __mt_index_of_array, __Count = size, __cs2lua_defined = true, __class = System.Collections.Generic.List_T });
 end;
 
-function defineclass(base, className, static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, is_value_type)
+function defineclass(base, fullName, typeName, static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, is_value_type)
     local base_class = base;
     local mt = getmetatable(base_class);
 
@@ -1090,11 +1090,12 @@ function defineclass(base, className, static, static_methods, static_fields_buil
     local class_props = static_props or {};
     local class_events = static_events or {};
     class["__cs2lua_defined"] = true;
-    class["__type_name"] = className;
+    class["__fullname"] = fullName;
+    class["__typename"] = typeName;
+    class["__parent"] = base_class;
     class["__is_value_type"] = is_value_type;
     class["__interfaces"] = interfaces;
     class["__interface_map"] = interface_map;
-    class["__base_class"] = base_class;
         
     local function __find_base_class_key(k)
       if nil==k then
@@ -1240,11 +1241,12 @@ function defineclass(base, className, static, static_methods, static_fields_buil
             setmetatable(obj, {
             		__class = class,
             		__cs2lua_defined = true,
-            		__type_name = className,
+            		__fullname = fullName,
+            		__typename = typeName,
+				    		__parent = base_class,
             		__is_value_type = is_value_type,
 				    		__interfaces = interfaces,
 				    		__interface_map = interface_map,
-				    		__base_class = base_class,
                 __index = function(t, k)
                     if k=="__exist" then
                       return function(tb, fk) return __find_obj_key(fk); end;
@@ -1365,9 +1367,9 @@ function defineclass(base, className, static, static_methods, static_fields_buil
             end;
             --简单支持反射的属性:Type.Name与Type.FullName            
             if k=="Name" then
-              ret = __get_last_name(className);
+              ret = typeName;
             elseif k=="FullName" then
-              ret = className;
+              ret = fullName;
             end;
             return ret;
         end,
