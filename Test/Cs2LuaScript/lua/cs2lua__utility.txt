@@ -1,6 +1,26 @@
 --remove comments for debug with ZeroBrane
 --require "luadebug";
 
+function printJitStatus()
+  local infos = Slua.CreateClass("System.Text.StringBuilder");
+  local results = { jit.status() };  
+  Utility.AppendFormat(infos, "jit status count {0}", #results);
+  infos:AppendLine();
+  for i,v in ipairs(results) do
+    if i==1 then
+      Utility.AppendFormat(infos, "jit status {0}", v);
+    else
+      Utility.AppendFormat(infos, " {0}", v);
+    end;
+    infos:AppendLine();
+  end;
+  UnityEngine.Debug.Log(infos:ToString());
+end;
+
+jit.off();
+jit.flush();
+printJitStatus();
+
 if not package.loading then package.loading = {} end
 
 local rawrequire = require;
@@ -37,12 +57,12 @@ System.Double = System.Double or __basic_type_func;
 System.String = System.String or __basic_type_func;
 System.Collections = System.Collections or {};
 System.Collections.Generic = System.Collections.Generic or {};
-System.Collections.Generic.List_T = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.List_T", __exist = function(k) return false; end};
-System.Collections.Generic.Queue_T = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.Queue_T", __exist = function(k) return false; end};
-System.Collections.Generic.Stack_T = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.Stack_T", __exist = function(k) return false; end};
-System.Collections.Generic.Dictionary_TKey_TValue = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.Dictionary_TKey_TValue", __exist = function(k) return false; end};
-System.Collections.Generic.HashSet_T = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.HashSet_T", __exist = function(k) return false; end};
-System.Collections.Generic.KeyValuePair_TKey_TValue = {__cs2lua_defined = true, __type_name = "System.Collections.Generic.KeyValuePair_TKey_TValue", __exist = function(k) return false; end};
+System.Collections.Generic.List_T = {__cs2lua_defined = true, __fullname = "System.Collections.Generic.List_T", __name = "List", __exist = function(k) return false; end};
+System.Collections.Generic.Queue_T = {__cs2lua_defined = true, __fullname = "System.Collections.Generic.Queue_T", __name = "Queue", __exist = function(k) return false; end};
+System.Collections.Generic.Stack_T = {__cs2lua_defined = true, __fullname = "System.Collections.Generic.Stack_T", __name = "Stack", __exist = function(k) return false; end};
+System.Collections.Generic.Dictionary_TKey_TValue = {__cs2lua_defined = true, __fullname = "System.Collections.Generic.Dictionary_TKey_TValue", __name = "Dictionary", __exist = function(k) return false; end};
+System.Collections.Generic.HashSet_T = {__cs2lua_defined = true, __fullname = "System.Collections.Generic.HashSet_T", __name = "HashSet", __exist = function(k) return false; end};
+System.Collections.Generic.KeyValuePair_TKey_TValue = {__cs2lua_defined = true, __fullname = "System.Collections.Generic.KeyValuePair_TKey_TValue", __name = "KeyValuePair", __exist = function(k) return false; end};
 System.Array = System.Array or {};
 
 System.Collections.Generic.MyDictionary_TKey_TValue = System.Collections.Generic.Dictionary_TKey_TValue;
@@ -50,6 +70,52 @@ System.Collections.Generic.MyDictionary_TKey_TValue = System.Collections.Generic
 Slua = Slua or {out={}};
 __cs2lua_out = Slua.out;
 __cs2lua_nil_field_value = {};
+
+Cs2LuaLibrary = {
+	ToString = function(T, val)
+		return tostring(val);
+	end,
+};
+
+TypeKind = {
+	Unknown = 0,
+	Array = 1,
+	Class = 2,
+	Delegate = 3,
+	Dynamic = 4,
+	Enum = 5,
+	Error = 6,
+	Interface = 7,
+	Module = 8,
+	Pointer = 9,
+	Struct = 10,
+	Structure = 10,
+	TypeParameter = 11,
+	Submission = 12
+};
+
+MethodKind = {
+	AnonymousFunction = 0,
+	LambdaMethod = 0,
+	Constructor = 1,
+	Conversion = 2,
+	DelegateInvoke = 3,
+	Destructor = 4,
+	EventAdd = 5,
+	EventRaise = 6,
+	EventRemove = 7,
+	ExplicitInterfaceImplementation = 8,
+	UserDefinedOperator = 9,
+	Ordinary = 10,
+	PropertyGet = 11,
+	PropertySet = 12,
+	ReducedExtension = 13,
+	StaticConstructor = 14,
+	SharedConstructor = 14,
+	BuiltinOperator = 15,
+	DeclareMethod = 16,
+	LocalFunction = 17
+};
 
 __cs2lua_special_integer_operators = { "/", "%", "+", "-", "*", "<<", ">>", "&", "|", "^", "~" };
 __cs2lua_div = 0;
@@ -150,7 +216,7 @@ function bitxor(v1,v2)
 	end;
 end;
 
-function typecast(obj, t, isEnum)
+function typecast(obj, t, tk)
 	if t == System.String then
 		return tostring(obj);
 	elseif t == System.Single or t ==	System.Double then
@@ -197,16 +263,16 @@ function typecast(obj, t, isEnum)
 	  return v;
 	elseif t == System.Boolean then
 		return obj;
-	elseif isEnum then
+	elseif tk == TypeKind.Enum then
 	  return obj;
-	elseif typeis(obj, t, isEnum) then
+	elseif typeis(obj, t, tk) then
 		return obj;
 	else
   	return obj;
  	end;
 end;
 
-function typeas(obj, t, isEnum)
+function typeas(obj, t, tk)
 	if t == System.String then
 		return tostring(obj);
 	elseif t == System.Single or t ==	System.Double then
@@ -216,23 +282,23 @@ function typeas(obj, t, isEnum)
 	  v = math.floor(v);
 	  return v;
 	elseif t == System.Int32 or t == System.UInt32 then
-	  return typecast(obj, t, isEnum);
+	  return typecast(obj, t, tk);
 	elseif t == System.Int16 or t == System.UInt16 or t == System.Char then
-	  return typecast(obj, t, isEnum);
+	  return typecast(obj, t, tk);
 	elseif t == System.SByte or t == System.Byte then
-	  return typecast(obj, t, isEnum);
+	  return typecast(obj, t, tk);
 	elseif t == System.Boolean then
 		return obj;
-	elseif isEnum then
+	elseif tk==TypeKind.Enum then
 	  return obj;
-	elseif typeis(obj, t, isEnum) then
+	elseif typeis(obj, t, tk) then
 		return obj;
 	else
 		return nil;
  	end;
 end;
 
-function typeis(obj, t, isEnum)
+function typeis(obj, t, tk)
   local meta = getmetatable(obj);
   local meta2 = getmetatable(t);
   local tn1 = nil;
@@ -270,7 +336,7 @@ function typeis(obj, t, isEnum)
         end;
       end;
   	  --check cs2lua base class chain
-  	  local baseClass = rawget(meta, "__base_class");
+  	  local baseClass = rawget(meta, "__parent");
   	  local lastCheckedClass = meta;
   	  while baseClass ~= nil do  	  
     		if baseClass == t then
@@ -285,7 +351,7 @@ function typeis(obj, t, isEnum)
           end;
         end;
     		if rawget(baseClass, "__cs2lua_defined") then
-    			baseClass = rawget(baseClass, "__base_class");
+    			baseClass = rawget(baseClass, "__parent");
     		else
     			lastCheckedClass = baseClass;
     			break;
@@ -650,7 +716,7 @@ __mt_index_of_array = function(t, k)
   elseif k=="Clear" then
     return function(obj)
     	local ct = __get_array_count(obj);
-    	for i = ct,1 do
+    	for i = ct,1,-1 do
     		table.remove(obj, i);
     	end;
     	__set_array_count(obj, 0);
@@ -1007,7 +1073,7 @@ function wrapexternvaluetypearray(arr)
 	return setmetatable(arr, { __index = __mt_index_of_array, __Count = size, __cs2lua_defined = true, __class = System.Collections.Generic.List_T });
 end;
 
-function defineclass(base, className, static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, is_value_type)
+function defineclass(base, fullName, typeName, static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, is_value_type)
     local base_class = base;
     local mt = getmetatable(base_class);
 
@@ -1024,11 +1090,12 @@ function defineclass(base, className, static, static_methods, static_fields_buil
     local class_props = static_props or {};
     local class_events = static_events or {};
     class["__cs2lua_defined"] = true;
-    class["__type_name"] = className;
+    class["__fullname"] = fullName;
+    class["__name"] = typeName;
+    class["__parent"] = base_class;
     class["__is_value_type"] = is_value_type;
     class["__interfaces"] = interfaces;
     class["__interface_map"] = interface_map;
-    class["__base_class"] = base_class;
         
     local function __find_base_class_key(k)
       if nil==k then
@@ -1086,6 +1153,18 @@ function defineclass(base, className, static, static_methods, static_fields_buil
             local obj = {};
 						for k,v in pairs(instance_methods) do
 							obj[k] = v;
+						end;
+						for k,v in pairs(instance_methods) do
+							local minfo = method_info[k];
+							if not minfo then
+								if k~="__ctor" then
+									UnityEngine.Debug.LogError("can't found method "..tostring(k));
+								end;
+							else
+								if k=="ctor" or ((not method_info[k]["private"]) and (not method_info[k]["sealed"])) then
+									obj["__self__"..k] = v;
+								end;
+							end;
 						end;
             local obj_fields;
             if instance_fields_build then
@@ -1162,11 +1241,12 @@ function defineclass(base, className, static, static_methods, static_fields_buil
             setmetatable(obj, {
             		__class = class,
             		__cs2lua_defined = true,
-            		__type_name = className,
+            		__fullname = fullName,
+            		__name = typeName,
+				    		__parent = base_class,
             		__is_value_type = is_value_type,
 				    		__interfaces = interfaces,
 				    		__interface_map = interface_map,
-				    		__base_class = base_class,
                 __index = function(t, k)
                     if k=="__exist" then
                       return function(tb, fk) return __find_obj_key(fk); end;
@@ -1287,9 +1367,9 @@ function defineclass(base, className, static, static_methods, static_fields_buil
             end;
             --简单支持反射的属性:Type.Name与Type.FullName            
             if k=="Name" then
-              ret = __get_last_name(className);
+              ret = typeName;
             elseif k=="FullName" then
-              ret = className;
+              ret = fullName;
             end;
             return ret;
         end,
@@ -1325,7 +1405,7 @@ function defineclass(base, className, static, static_methods, static_fields_buil
     return class;
 end;
 
-function newobject(class, ctor, initializer, ...)
+function newobject(class, typeargs, typekinds, ctor, initializer, ...)
   local obj = class();
   if ctor then
     obj[ctor](obj, ...);
@@ -1336,17 +1416,13 @@ function newobject(class, ctor, initializer, ...)
   return obj;
 end;
 
-function newexternobject(class, className, ctor, initializer, ...)
+function newexternobject(class, typeargs, typekinds, initializer, ...)
   local obj = nil;
 	local args = {...};
   if class == System.Collections.Generic.KeyValuePair_TKey_TValue then
   	return { Key=args[1], Value=args[2] };
   end;
-  if class ~= nil then
-    obj = class(...);
-  else
-    obj = Slua.CreateClass(className, ...);
-  end;
+  obj = class(...);
   if obj and initializer then
   	initializer(obj);
   end;
@@ -1365,7 +1441,7 @@ function newtypeparamobject(t)
   end;
 end;
 
-function newdictionary(t, ctor, dict, ...)
+function newdictionary(t, typeargs, typekinds, ctor, dict, ...)
   if dict then
     local obj = {};
 	  setmetatable(obj, { __index = __mt_index_of_dictionary, __newindex = __mt_newindex_of_dictionary, __cs2lua_defined = true, __class = t });
@@ -1376,19 +1452,19 @@ function newdictionary(t, ctor, dict, ...)
 	end;
 end;
 
-function newlist(t, ctor, list, ...)
+function newlist(t, typeargs, typekinds, ctor, list, ...)
   if list then
     return setmetatable(list, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = t });
   end;
 end;
 
-function newcollection(t, ctor, coll, ...)
+function newcollection(t, typeargs, typekinds, ctor, coll, ...)
   if coll then
     return setmetatable(coll, { __index = __mt_index_of_hashset, __cs2lua_defined = true, __class = t });
   end;
 end;
 
-function newexterndictionary(t, className, ctor, dict, ...)
+function newexterndictionary(t, typeargs, typekinds, dict, ...)
   if dict and t==System.Collections.Generic.Dictionary_TKey_TValue then
     local obj = {};
 	  setmetatable(obj, { __index = __mt_index_of_dictionary, __newindex = __mt_newindex_of_dictionary, __cs2lua_defined = true, __class = t });
@@ -1397,12 +1473,7 @@ function newexterndictionary(t, className, ctor, dict, ...)
 		end;
     return obj;
 	else	  
-	  local obj = nil;
-	  if t ~= nil then
-	    obj = t(...);
-	  else
-	    obj = Slua.CreateClass(className, ...);
-	  end;
+	  local obj = t(...);
 	  if obj then
 			if dict ~= nil then
 				for k,v in pairs(dict) do
@@ -1416,16 +1487,11 @@ function newexterndictionary(t, className, ctor, dict, ...)
 	end;
 end;
 
-function newexternlist(t, className, ctor, list, ...)
+function newexternlist(t, typeargs, typekinds, list, ...)
   if list and t==System.Collections.Generic.List_T then    
 	  return setmetatable(list, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = t });
 	else 
-	  local obj = nil;
-	  if t ~= nil then
-	    obj = t(...);
-	  else
-	    obj = Slua.CreateClass(className, ...);
-	  end;
+	  local obj = t(...);
 	  if obj then
 			if list ~= nil then
 				for i,v in ipairs(list) do
@@ -1439,18 +1505,13 @@ function newexternlist(t, className, ctor, list, ...)
   end;
 end;
 
-function newexterncollection(t, className, ctor, coll, ...)
+function newexterncollection(t, typeargs, typekinds, coll, ...)
   if coll and (t==System.Collections.Generic.Queue_T or t==System.Collections.Generic.Stack_T) then
     return setmetatable(coll, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = t });
   elseif coll and t==System.Collections.Generic.HashSet_T then
     return setmetatable(coll, { __index = __mt_index_of_hashset, __cs2lua_defined = true, __class = t });
 	else
-	  local obj = nil;
-	  if t ~= nil then
-	    obj = t(...);
-	  else
-	    obj = Slua.CreateClass(className, ...);
-	  end;
+	  local obj = t(...);
 	  if obj then
 			if coll ~= nil then
 				for i,v in ipairs(coll) do
@@ -1533,6 +1594,13 @@ function delegationcomparewithnil(isevent, isStatic, key, t, inf, k, isequal)
   if k then
     v = t[k];  
   end;
+  if type(v)=="function" then
+  	if isequal then 
+      return false;
+    else
+      return true;
+    end;
+  end;
   local n = #v;
   if isequal and n==0 then
     return true;
@@ -1549,13 +1617,15 @@ function delegationset(isevent, isStatic, key, t, intf, k, handler)
   end;
   if not v or type(v)~="table" then
   	--取不到值或者值不是表，则有可能是普通的特性访问
-  	t[k] = handler;
+  	--t[k] = handler;
+  	return handler;
   else
 	  local n = #v;
 	  for i=1,n do
 	    table.remove(v);
 	  end;
 	  table.insert(v,handler);
+	  return v;
   end;
 end;
 function delegationadd(isevent, isStatic, key, t, intf, k, handler)
@@ -1563,7 +1633,12 @@ function delegationadd(isevent, isStatic, key, t, intf, k, handler)
   if k then
     v = t[k];  
   end;
-  table.insert(v, handler);
+  if v == nil then
+    v = delegationwrap(handler);
+  else
+    table.insert(v, handler);
+  end;
+  return v;
 end;
 function delegationremove(isevent, isStatic, key, t, intf, k, handler)
   local v = t;
@@ -1591,6 +1666,7 @@ function delegationremove(isevent, isStatic, key, t, intf, k, handler)
     table.remove(v, pos);
     removedelegationkey(handler);
   end;
+  return v;
 end;
 
 __extern_delegation_str_func = {}
@@ -1656,9 +1732,10 @@ function externdelegationcomparewithnil(isevent, isStatic, key, t, inf, k, isequ
 end;
 function externdelegationset(isevent, isStatic, key, t, intf, k, handler)
   if k then
-    t[k] = handler;
+    --t[k] = handler;
+    return handler;
   else
-    t = handler;
+    return handler;
   end;
 end;
 function externdelegationadd(isevent, isStatic, key, t, intf, k, handler)
@@ -1667,9 +1744,11 @@ function externdelegationadd(isevent, isStatic, key, t, intf, k, handler)
     setexterndelegationfunc(str .. key, handler);
   end;
   if k then
-    t[k] = {"+=", handler};
+    --t[k] = {"+=", handler};
+    return {"+=", handler};
   else
-    t = {"+=", handler};
+    --t = {"+=", handler};
+    return {"+=", handler};
   end;
 end;
 function externdelegationremove(isevent, isStatic, key, t, intf, k, handler)
@@ -1678,15 +1757,19 @@ function externdelegationremove(isevent, isStatic, key, t, intf, k, handler)
   if str then
     trueHandler = getexterndelegationfunc(str .. key);
   end;
+  local ret = nil;
   if k then
-    t[k] = {"-=", trueHandler};
+    --t[k] = {"-=", trueHandler};
+    ret = {"-=", trueHandler};
   else
-    t = {"-=", trueHandler};
+    --t = {"-=", trueHandler};
+    ret = {"-=", trueHandler};
   end;
   removedelegationkey(handler);
   if str then
     removeexterndelegationfunc(str .. key, trueHandler);
   end;
+  return ret;
 end;
 
 function getstaticindexer(class, name, ...)
@@ -1767,7 +1850,10 @@ function setexterninstanceindexer(obj, intf, name, ...)
     UnityEngine.Debug.LogError("[cs2lua] table index is nil");
     return;
   end;
-	local val = args[num];
+  local val = nil;
+  if num>1 then
+  	val = args[num];
+  end;
   local meta = getmetatable(obj);
   if meta then
 		local class = rawget(meta, "__class");
@@ -1798,7 +1884,15 @@ function invokeexternoperator(class, method, ...)
 	local argnum = #args;
 	if method=="op_Equality" then
 	  if args[1] and args[2] then
-	    return args[1]==args[2];
+	  	mt1 = getmetatable(args[1]);
+	  	mt2 = getmetatable(args[2]);
+	  	if mt1 and mt1.__eq then
+	  		return mt1.__eq(args[1], args[2]);
+	  	elseif mt2 and mt2.__eq then
+	  		return mt2.__eq(args[2], args[1]);
+	  	else
+	    	return args[1]==args[2];
+	    end;
 	  elseif not args[1] then
 	    return Slua.IsNull(args[2]);
 	  elseif not args[2] then
@@ -1808,7 +1902,15 @@ function invokeexternoperator(class, method, ...)
 	  end;
 	elseif method=="op_Inequality" then
 	  if args[1] and args[2] then
-	    return args[1]~=args[2];
+	  	mt1 = getmetatable(args[1]);
+	  	mt2 = getmetatable(args[2]);
+	  	if mt1 and mt1.__eq then
+	  		return not mt1.__eq(args[1], args[2]);
+	  	elseif mt2 and mt2.__eq then
+	  		return not mt2.__eq(args[2], args[1]);
+	  	else
+	    	return args[1]~=args[2];
+	    end;
 	  elseif not args[1] then
 	    return not Slua.IsNull(args[2]);
 	  elseif not args[2] then
@@ -2089,6 +2191,19 @@ function luathrow(obj)
   else
     error(obj.Message);
   end;
+end;
+
+function luaunpack(arr)
+	local mt = getmetatable(arr);
+	if mt and mt.__cs2lua_defined then
+		return unpack(arr);
+	else
+		return arr;
+	end;
+end;
+
+function chararraytostring(arr)
+	string.char(unpack(arr));
 end;
 
 LINQ={};

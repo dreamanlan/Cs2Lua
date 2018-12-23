@@ -1,0 +1,14 @@
+﻿<Properties StartupConfiguration="{A45F7BB4-96F8-4A99-B37F-4EF15B082E14}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="CsToDsl/CsToDslProcessor.cs">
+    <Files>
+      <File FileName="CsToDsl/CsToDslProcessor.cs" Line="126" Column="14" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.Cs2Lua PreferredExecutionTarget="MonoDevelop.Default" />
+</Properties>

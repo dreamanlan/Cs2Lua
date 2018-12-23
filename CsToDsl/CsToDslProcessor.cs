@@ -125,6 +125,18 @@ namespace RoslynTool.CsToDsl
                 preprocessors.Remove(m);
             }
 
+            var temp = refByPaths;
+            refByPaths = new Dictionary<string, string>();
+            foreach(var pair in temp){
+                var key = pair.Key.Replace('\\', '/');
+                var val = pair.Value;
+                refByPaths.Add(key, val);
+            }
+            for (int i = 0; i < files.Count; ++i) {
+                var file = files[i];
+                files[i] = file.Replace('\\', '/');
+            }
+
             bool haveError = false;
             List<SyntaxTree> trees = new List<SyntaxTree>();
             using (StreamWriter sw = new StreamWriter(Path.Combine(logDir, "SyntaxError.log"))) {

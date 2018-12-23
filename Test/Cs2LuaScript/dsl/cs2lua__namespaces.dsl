@@ -1,0 +1,1 @@
+namespace(Cs2LuaScript);

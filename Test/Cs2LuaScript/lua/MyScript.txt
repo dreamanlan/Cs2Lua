@@ -7,11 +7,10 @@ require "luastring";
 
 MyScript = {
 	__new_object = function(...)
-		return newobject(MyScript, nil, nil, ...);
+		return newobject(MyScript, {}, {}, nil, nil, ...);
 	end,
 	__define_class = function()
 		local static = MyScript;
-
 		local static_methods = {
 			cctor = function()
 			end,
@@ -28,82 +27,110 @@ MyScript = {
 
 		local instance_methods = {
 			Init = function(this, obj, mb)
-				local s; s = "test test test from cs2lua !";
+				local s;
+				s = "test test test from cs2lua !";
 				UnityEngine.Debug.Log(s);
 				mb:StartCoroutine(this:TestCoroutine());
-				this.root = newexternobject(UnityEngine.GameObject, "UnityEngine.GameObject", "ctor", nil, "root");
-				local slider; slider = typeas(UnityEngine.GameObject.Find("Canvas/Slider"):GetComponent(UnityEngine.UI.Slider), UnityEngine.UI.Slider, false);
-				local counttxt; counttxt = typeas(UnityEngine.GameObject.Find("Canvas/Count"):GetComponent(UnityEngine.UI.Text), UnityEngine.UI.Text, false);
+				this.root = newexternobject(UnityEngine.GameObject, {}, {}, nil, "root");
+				local slider;
+				slider = typeas(UnityEngine.GameObject.Find("Canvas/Slider"):GetComponent(UnityEngine.UI.Slider), UnityEngine.UI.Slider, TypeKind.Class);
+				local counttxt;
+				counttxt = typeas(UnityEngine.GameObject.Find("Canvas/Count"):GetComponent(UnityEngine.UI.Text), UnityEngine.UI.Text, TypeKind.Class);
 				slider.onValueChanged:AddListener((function(v)
 					this:Reset();
 					counttxt.text = LuaString.Format("cube:{0}", v);
-					this.max = typecast(v, System.Int32, false);
+					this.max = typecast(v, System.Int32, TypeKind.Struct);
 				end));
 				this:Reset();
 			end,
 			Update = function(this)
-				local i; i = 0;
+				local i;
+				i = 0;
 				while (i < this.cubes.Length) do
-					local offset; offset = condexp((invokeintegeroperator(1, "%", i, 2, System.Int32, System.Int32) == 1), true, 5, true, -5);
-					local nr; nr = (this.r + (UnityEngine.Mathf.Sin(UnityEngine.Time.time) * offset));
-					local angle; angle = condexp((invokeintegeroperator(1, "%", i, 2, System.Int32, System.Int32) == 1), false, (function() return UnityEngine.Time.time; end), true, -5);
-					local b; b = newexternobject(UnityEngine.Vector3, "UnityEngine.Vector3", "ctor", nil, typecast(( (UnityEngine.Mathf.Cos(((((i * 3.14) * 2) / this.max) + angle)) * nr) ), System.Single, false), typecast(( (UnityEngine.Mathf.Sin(((((i * 3.14) * 2) / this.max) + angle)) * nr) ), System.Single, false), 0);
-					this.cubes[i + 1].transform.position = b;
-				i = invokeintegeroperator(2, "+", i, 1, System.Int32, System.Int32);
+					local offset;
+					offset = condexp(((i % 2) == 1), true, 5, true, -5);
+					local nr;
+					nr = (this.r + (UnityEngine.Mathf.Sin(UnityEngine.Time.time) * offset));
+					local angle;
+					angle = condexp(((i % 2) == 1), false, (function()
+							return UnityEngine.Time.time;
+						end), true, -5);
+					local b;
+					b = newexternobject(UnityEngine.Vector3, {}, {}, nil, typecast(((UnityEngine.Mathf.Cos(((((i * 3.14) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Struct), typecast(((UnityEngine.Mathf.Sin(((((i * 3.14) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Struct), 0);
+					this.cubes[(i + 1)].transform.position = b;
+					i = (i + 1);
 				end;
-				if ((this.fogStart <= 0) or (this.t > 1)) then
+				if ((this.fogStart <= 0) or (this.t > 1)) then 
 					this.fogStart = UnityEngine.Time.time;
 					this.bgCurrent = UnityEngine.Camera.main.backgroundColor;
-					local ix; ix = UnityEngine.Random.Range(0, this.colors.Length);
-					this.bgColor = this.colors[ix + 1];
+					local ix;
+					ix = UnityEngine.Random.Range(0, this.colors.Length);
+					this.bgColor = this.colors[(ix + 1)];
 				end;
-				this.t = (( (UnityEngine.Time.time - this.fogStart) ) / 10);
+				this.t = (((UnityEngine.Time.time - this.fogStart)) / 10);
 				UnityEngine.Camera.main.backgroundColor = UnityEngine.Color.Lerp(this.bgCurrent, this.bgColor, this.t);
 			end,
 			Call = function(this, name, ...)
 				local args = wraparray{...};
 			end,
 			TestCoroutine = wrapenumerable(function(this)
-				wrapyield(newexternobject(UnityEngine.WaitForSeconds, "UnityEngine.WaitForSeconds", "ctor", nil, 10), false, true);
-				local i; i = 0;
+				wrapyield(newexternobject(UnityEngine.WaitForSeconds, {}, {}, nil, 10), false, true);
+				local i;
+				i = 0;
 				while (i < 60) do
-					wrapyield(newexternobject(UnityEngine.WaitForSeconds, "UnityEngine.WaitForSeconds", "ctor", nil, 1), false, true);
+					wrapyield(newexternobject(UnityEngine.WaitForSeconds, {}, {}, nil, 1), false, true);
 					UnityEngine.Debug.Log(System.String.Format("{0} seconds", i));
-				i = invokeintegeroperator(2, "+", i, 1, System.Int32, System.Int32);
+					i = (i + 1);
 				end;
 				return nil;
 			end),
 			Reset = function(this)
-				if (nil ~= this.cubes) then
-					local i; i = 0;
+				if (not isequal(nil, this.cubes)) then 
+					local i;
+					i = 0;
 					while (i < this.cubes.Length) do
-						UnityEngine.Object.Destroy(this.cubes[i + 1]);
-					i = invokeintegeroperator(2, "+", i, 1, System.Int32, System.Int32);
+						UnityEngine.Object.Destroy(this.cubes[(i + 1)]);
+						i = (i + 1);
 					end;
 				end;
-				this.cubes = (function() local d0 = this.max; local arr = wraparray({}, d0); for i0 = 1,d0 do arr[i0] = nil; end; return arr; end)();
-				local P; P = UnityEngine.Resources.Load("Particle System");
-				local i; i = 0;
+				this.cubes = (function()
+					local d0;
+					d0 = this.max;
+					local arr = wraparray({}, d0);
+					for i0 = 1, d0 do
+						arr[i0] = nil;
+					end;
+					return arr;
+				end)();
+				local P;
+				P = UnityEngine.Resources.Load("Particle System");
+				local i;
+				i = 0;
 				while (i < this.max) do
-					local cube; cube = UnityEngine.GameObject.CreatePrimitive(3);
-					cube.transform.position = newexternobject(UnityEngine.Vector3, "UnityEngine.Vector3", "ctor", nil, (typecast(UnityEngine.Mathf.Cos((((i * 3.14) * 2) / this.max)), System.Single, false) * this.r), (typecast(UnityEngine.Mathf.Sin((((i * 3.14) * 2) / this.max)), System.Single, false) * this.r), 0);
+					local cube;
+					cube = UnityEngine.GameObject.CreatePrimitive(3);
+					cube.transform.position = newexternobject(UnityEngine.Vector3, {}, {}, nil, (typecast(UnityEngine.Mathf.Cos((((i * 3.14) * 2) / this.max)), System.Single, TypeKind.Struct) * this.r), (typecast(UnityEngine.Mathf.Sin((((i * 3.14) * 2) / this.max)), System.Single, TypeKind.Struct) * this.r), 0);
 					cube.transform:SetParent(this.root.transform);
-					local mat; mat = cube:GetComponent(UnityEngine.Renderer).material;
-					local box; box = cube:GetComponent(UnityEngine.BoxCollider);
+					local mat;
+					mat = cube:GetComponent(UnityEngine.Renderer).material;
+					local box;
+					box = cube:GetComponent(UnityEngine.BoxCollider);
 					UnityEngine.Object.Destroy(box);
-					local p; p = typeas(UnityEngine.Object.Instantiate(P, UnityEngine.Vector3.zero, UnityEngine.Quaternion.identity), UnityEngine.GameObject, false);
+					local p;
+					p = typeas(UnityEngine.Object.Instantiate(P, UnityEngine.Vector3.zero, UnityEngine.Quaternion.identity), UnityEngine.GameObject, TypeKind.Class);
 					p.transform:SetParent(cube.transform);
-					local ix; ix = UnityEngine.Random.Range(0, this.colors.Length);
-					mat.color = this.colors[ix + 1];
-					this.cubes[i + 1] = cube;
-				i = invokeintegeroperator(2, "+", i, 1, System.Int32, System.Int32);
+					local ix;
+					ix = UnityEngine.Random.Range(0, this.colors.Length);
+					mat.color = this.colors[(ix + 1)];
+					this.cubes[(i + 1)] = cube;
+					i = (i + 1);
 				end;
 			end,
 			ctor = function(this)
 				this:__ctor();
 			end,
 			__ctor = function(this)
-				if this.__ctor_called then
+				if this.__ctor_called then 
 					return;
 				else
 					this.__ctor_called = true;
@@ -112,7 +139,6 @@ MyScript = {
 				this.bgColor = newexternobject(UnityEngine.Color, "UnityEngine.Color", nil, nil);
 			end,
 		};
-
 		local instance_fields_build = function()
 			local instance_fields = {
 				root = __cs2lua_nil_field_value,
@@ -123,7 +149,7 @@ MyScript = {
 				bgCurrent = defaultvalue(UnityEngine.Color, "UnityEngine.Color", true),
 				bgColor = defaultvalue(UnityEngine.Color, "UnityEngine.Color", true),
 				cubes = __cs2lua_nil_field_value,
-				colors = wraparray({UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black}, 9),
+				colors = wraparray({UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black}),
 				__attributes = MyScript__Attrs,
 				__ctor_called = false,
 			};
@@ -131,10 +157,10 @@ MyScript = {
 		end;
 		local instance_props = nil;
 		local instance_events = nil;
+
 		local interfaces = {
 			"ITickPlugin",
 		};
-
 		local interface_map = {
 			ITickPlugin_Init = "Init",
 			ITickPlugin_Update = "Update",
@@ -143,11 +169,63 @@ MyScript = {
 			ITickPlugin_Call = "Call",
 		};
 
+		local class_info = {
+			Kind = TypeKind.Class,
+		};
+		local method_info = {
+			Init = {
+				Kind = MethodKind.Ordinary,
+			},
+			Update = {
+				Kind = MethodKind.Ordinary,
+			},
+			FixedUpdate = {
+				Kind = MethodKind.Ordinary,
+			},
+			LateUpdate = {
+				Kind = MethodKind.Ordinary,
+			},
+			Call = {
+				Kind = MethodKind.Ordinary,
+			},
+			TestCoroutine = {
+				Kind = MethodKind.Ordinary,
+				private = true,
+			},
+			Reset = {
+				Kind = MethodKind.Ordinary,
+				private = true,
+			},
+			ctor = {
+				Kind = MethodKind.Constructor,
+			},
+		};
+		local property_info = nil;
+		local event_info = nil;
+		local field_info = {
+			root = {
+			},
+			r = {
+			},
+			max = {
+			},
+			t = {
+			},
+			fogStart = {
+			},
+			bgCurrent = {
+			},
+			bgColor = {
+			},
+			cubes = {
+			},
+			colors = {
+			},
+		};
 
-		return defineclass(nil, "MyScript", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
+		return defineclass(nil, "MyScript", "MyScript", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
 	end,
 };
-
 
 
 MyScript.__define_class();
