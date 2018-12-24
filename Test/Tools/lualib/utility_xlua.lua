@@ -38,11 +38,11 @@ CS.System.Double = CS.System.Double or __basic_type_func;
 CS.System.String = CS.System.String or __basic_type_func;
 CS.System.Collections = CS.System.Collections or {};
 CS.System.Collections.Generic = CS.System.Collections.Generic or {};
-CS.System.Collections.Generic.List_T = {__cs2lua_defined = true, __fullname = "CS.System.Collections.Generic.List_T", __name = "List", __exist = function(k) return false; end};
-CS.System.Collections.Generic.Queue_T = {__cs2lua_defined = true, __fullname = "CS.System.Collections.Generic.Queue_T", __name = "Queue", __exist = function(k) return false; end};
-CS.System.Collections.Generic.Stack_T = {__cs2lua_defined = true, __fullname = "CS.System.Collections.Generic.Stack_T", __name = "Stack", __exist = function(k) return false; end};
-CS.System.Collections.Generic.Dictionary_TKey_TValue = {__cs2lua_defined = true, __fullname = "CS.System.Collections.Generic.Dictionary_TKey_TValue", __name = "Dictionary", __exist = function(k) return false; end};
-CS.System.Collections.Generic.HashSet_T = {__cs2lua_defined = true, __fullname = "CS.System.Collections.Generic.HashSet_T", __name = "HashSet", __exist = function(k) return false; end};
+CS.System.Collections.Generic.List_T = {__cs2lua_defined = true, __cs2lua_fullname = "CS.System.Collections.Generic.List_T", __cs2lua_typename = "List", __exist = function(k) return false; end};
+CS.System.Collections.Generic.Queue_T = {__cs2lua_defined = true, __cs2lua_fullname = "CS.System.Collections.Generic.Queue_T", __cs2lua_typename = "Queue", __exist = function(k) return false; end};
+CS.System.Collections.Generic.Stack_T = {__cs2lua_defined = true, __cs2lua_fullname = "CS.System.Collections.Generic.Stack_T", __cs2lua_typename = "Stack", __exist = function(k) return false; end};
+CS.System.Collections.Generic.Dictionary_TKey_TValue = {__cs2lua_defined = true, __cs2lua_fullname = "CS.System.Collections.Generic.Dictionary_TKey_TValue", __cs2lua_typename = "Dictionary", __exist = function(k) return false; end};
+CS.System.Collections.Generic.HashSet_T = {__cs2lua_defined = true, __cs2lua_fullname = "CS.System.Collections.Generic.HashSet_T", __cs2lua_typename = "HashSet", __exist = function(k) return false; end};
 CS.System.Array = CS.System.Array or {};
 
 CS.System.Collections.Generic.MyDictionary_TKey_TValue = CS.System.Collections.Generic.Dictionary_TKey_TValue;
@@ -95,6 +95,81 @@ MethodKind = {
 	DeclareMethod = 16,
 	LocalFunction = 17
 };
+
+function getobjfullname(obj)
+	local meta = getmetatable(obj);
+	if meta then
+		if rawget(meta, "__cs2lua_defined") then
+			return rawget(meta, "__cs2lua_fullname");
+		else
+			return rawget(meta, "__fullname");
+		end;
+	else
+		return nil;
+	end;
+end;
+
+function getobjtypename(obj)
+	local meta = getmetatable(obj);
+	if meta then
+		if rawget(meta, "__cs2lua_defined") then
+			return rawget(meta, "__cs2lua_typename");
+		else
+			return rawget(meta, "__typename");
+		end;
+	else
+		return nil;
+	end;
+end;
+
+function getclassfullname(t)
+	if t then
+		if rawget(t, "__cs2lua_defined") then
+			return rawget(t, "__cs2lua_fullname");
+		else
+			return rawget(t, "__fullname");
+		end;
+	else
+		return nil;
+	end;
+end;
+
+function getclasstypename(t)
+	if t then
+		if rawget(t, "__cs2lua_defined") then
+			return rawget(t, "__cs2lua_typename");
+		else
+			return rawget(t, "__typename");
+		end;
+	else
+		return nil;
+	end;
+end;
+
+function getobjparentclass(obj)
+	local meta = getmetatable(obj);
+	if meta then
+		if rawget(meta, "__cs2lua_defined") then
+			return rawget(meta, "__cs2lua_parent");
+		else
+			return rawget(meta, "__parent");
+		end;
+	else
+		return nil;
+	end;
+end;
+
+function getclassparentclass(t)
+	if t then
+		if rawget(t, "__cs2lua_defined") then
+			return rawget(t, "__cs2lua_parent");
+		else
+			return rawget(t, "__parent");
+		end;
+	else
+		return nil;
+	end;
+end;
 
 __cs2lua_special_integer_operators = { "/", "%", "+", "-", "*", "<<", ">>", "&", "|", "^", "~" };
 __cs2lua_div = 0;
@@ -290,6 +365,8 @@ end
 
 function typeis(obj, t, tk)
 	local meta = getmetatable(obj);
+  local tn1 = getobjfullname(obj);
+  local tn2 = getclassfullname(t);
 	local intfsname = nil;
 	if meta then
 		if type(obj)=="userdata" then
@@ -300,7 +377,7 @@ function typeis(obj, t, tk)
 			end;
 			local intfs = rawget(meta, "__interfaces");
 			if intfs then
-				intfsname = rawget(t, "__fullname");
+				intfsname = tn2;
 				if intfsname ~= nil then
 					for i,v in ipairs(intfs) do
 						if v == intfsname then
@@ -310,9 +387,9 @@ function typeis(obj, t, tk)
 				end
 			end;
 			--check cs2lua base class chain
-			local baseClass = rawget(meta, "__parent");
+			local baseClass = rawget(meta, "__cs2lua_parent");
 			local lastCheckedClass = meta;
-			intfsname = rawget(t, "__fullname");			
+			intfsname = tn2;
 			while baseClass ~= nil do
 				if baseClass == t then
 					return true;
@@ -326,7 +403,7 @@ function typeis(obj, t, tk)
 					end;
 				end;
 				if rawget(baseClass, "__cs2lua_defined") then
-					baseClass = rawget(baseClass, "__parent");
+					baseClass = rawget(baseClass, "__cs2lua_parent");
 				else
 					lastCheckedClass = baseClass;
 					break;
@@ -1033,9 +1110,9 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
     local mt = getmetatable(base_class);
 
     local class = static or {};
-		for ck,cv in pairs(static_methods) do
-			class[ck] = cv;
-		end;
+    for ck,cv in pairs(static_methods) do
+      class[ck] = cv;
+    end;
     local class_fields;
     if static_fields_build then
       class_fields = static_fields_build();
@@ -1045,9 +1122,9 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
     local class_props = static_props or {};
     local class_events = static_events or {};
     class["__cs2lua_defined"] = true;
-    class["__fullname"] = fullName;
-    class["__name"] = typeName;
-    class["__parent"] = base_class;
+    class["__cs2lua_fullname"] = fullName;
+    class["__cs2lua_typename"] = typeName;
+    class["__cs2lua_parent"] = base_class;
     class["__is_value_type"] = is_value_type;
     class["__interfaces"] = interfaces;
     class["__interface_map"] = interface_map;
@@ -1058,17 +1135,17 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
         return false;
       end;
       if base_class then
-      	if rawget(base_class, "__cs2lua_defined") then
-      		local r,v = pcall(function() return base_class.__exist(k); end);
-      		if r then
-      		  return v;
-      		end;
-      	else
-        	local r,ret = pcall(function() return base_class[k]; end);
-        	if r then
-        		return true;
-        	end;
-      	end;
+        if rawget(base_class, "__cs2lua_defined") then
+          local r,v = pcall(function() return base_class.__exist(k); end);
+          if r then
+            return v;
+          end;
+        else
+          local r,ret = pcall(function() return base_class[k]; end);
+          if r then
+            return true;
+          end;
+        end;
       end;
       return false;
     end;        
@@ -1084,7 +1161,7 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
       end;
       ret = class_fields[k];
       if nil~=ret then
-      	return true;
+        return true;
       end;
       ret = class_props[k];
       if nil~=ret then
@@ -1095,6 +1172,19 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
         return true;
       end;
       return __find_base_class_key(k);
+    end;
+    local function __wrap_virtual_method(k, f)
+    	return function(this, ...)
+        local child = rawget(this, "__child__");
+        while child do
+          local nf = rawget(child, k);
+          if nf then
+            return nf(child, ...);
+          end
+          child = rawget(child, "__child__");
+        end
+        return f(this, ...);
+    	end;
     end;
     
     setmetatable(class, {
@@ -1107,30 +1197,37 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
       			end;
             local obj = {};
 						for k,v in pairs(instance_methods) do
-							obj[k] = v;
-						end;
-						for k,v in pairs(instance_methods) do
 							local minfo = method_info[k];
 							if not minfo then
+								obj[k] = v;
 								if k~="__ctor" then
 									UnityEngine.Debug.LogError("can't found method "..tostring(k));
 								end;
 							else
-								if k=="ctor" or ((not method_info[k]["private"]) and (not method_info[k]["sealed"])) then
+								if minfo["abstract"] or minfo["virtual"] or minfo["override"] then
+									obj[k] = __wrap_virtual_method(k, v);
+								else									
+									obj[k] = v;
+								end;
+								if k=="ctor" or ((not minfo["private"]) and (not minfo["sealed"])) then
 									obj["__self__"..k] = v;
 								end;
 							end;
 						end;
             local obj_fields;
             if instance_fields_build then
-            	obj_fields = instance_fields_build();
+              obj_fields = instance_fields_build();
             else
-            	obj_fields = {};
+              obj_fields = {};
             end;
             local obj_props = instance_props or {};
             local obj_events = instance_events or {};
             local obj_intf_map = interface_map or {};
+            
             obj["base"] = baseObj;
+            if baseObj then
+            	baseObj["__child__"] = obj;
+            end;
             
             local function __find_base_obj_key(k)
               if nil==k then
@@ -1138,18 +1235,18 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
                 return false;
               end;
               if baseObj then
-              	local meta = getmetatable(baseObj);
-              	if meta and rawget(meta, "__cs2lua_defined") then
-              		local r,v = pcall(function() return baseObj:__exist(k); end);
-              		if r then
-              		  return v;
-              		end;
-              	else
-                	local r, ret = pcall(function() return baseObj[k]; end);
-                	if r then
-                		return true;
-                	end;
-              	end;
+                local meta = getmetatable(baseObj);
+                if meta and rawget(meta, "__cs2lua_defined") then
+                  local r,v = pcall(function() return baseObj:__exist(k); end);
+                  if r then
+                    return v;
+                  end;
+                else
+                  local r, ret = pcall(function() return baseObj[k]; end);
+                  if r then
+                    return true;
+                  end;
+                end;
               end;
               return false;
             end;
@@ -1163,10 +1260,10 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
               if nil~=ret then
                 return true;
               end;
-	            ret = obj_fields[k];
-	            if nil~=ret then
-	            	return true;
-	            end;
+              ret = obj_fields[k];
+              if nil~=ret then
+                return true;
+              end;
               ret = obj_props[k];
               if nil~=ret then
                 return true;
@@ -1210,14 +1307,14 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
 			end
             
             setmetatable(obj, {
-            		__class = class,
-            		__cs2lua_defined = true,
-            		__fullname = fullName,
-            		__name = typeName,
-				    		__parent = base_class,
-            		__is_value_type = is_value_type,
-				    		__interfaces = interfaces,
-				    		__interface_map = interface_map,
+                __class = class,
+                __cs2lua_defined = true,
+                __cs2lua_fullname = fullName,
+                __cs2lua_typename = typeName,
+                __cs2lua_parent = base_class,
+                __is_value_type = is_value_type,
+                __interfaces = interfaces,
+                __interface_map = interface_map,
                 __index = function(t, k)
                     if k=="__exist" then
                       return function(tb, fk) return __find_obj_key(fk); end;
@@ -1227,10 +1324,10 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
                       return nil;
                     end;
                     local ret;
-				            ret = obj_fields[k];
-				            if nil~=ret then
-				            	return __unwrap_table_field(ret);
-				            end;
+                    ret = obj_fields[k];
+                    if nil~=ret then
+                      return __unwrap_table_field(ret);
+                    end;
                     ret = obj_props[k];
                     if nil~=ret then
                       if ret.get then
@@ -1271,10 +1368,10 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
 					
                       return ret;
                     end;
-				            --简单支持反射方法:GetType()
-				            if k=="GetType" then
-				             	return function(tb)	return class;	end;
-				            end;
+                    --简单支持反射方法:GetType()
+                    if k=="GetType" then
+                      return function(tb) return class; end;
+                    end;
                     return ret;
                 end,
 
@@ -1284,11 +1381,11 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
                       return;
                     end;
                     local ret;
-				            ret = obj_fields[k];
-				            if nil~=ret then
-				            	obj_fields[k] = __wrap_table_field(v);
-				            	return;
-				            end;
+                    ret = obj_fields[k];
+                    if nil~=ret then
+                      obj_fields[k] = __wrap_table_field(v);
+                      return;
+                    end;
                     ret = obj_props[k];
                     if nil~=ret then
                       if ret.set then
@@ -1306,16 +1403,16 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
                         return;
                       end;
                     end;
-          					if __find_base_obj_key(k) then
-          					  baseObj[k] = v;
-          					  return;
-          					end;
-          					rawset(t, k, v);
+                    if __find_base_obj_key(k) then
+                      baseObj[k] = v;
+                      return;
+                    end;
+                    rawset(t, k, v);
                 end,
-				
-        				__setbase = function(self, base)
-        					baseObj = base;
-        				end,              
+        
+                __setbase = function(self, base)
+                  baseObj = base;
+                end,              
             });
 
             return obj;
@@ -1332,7 +1429,7 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
             local ret;
             ret = class_fields[k];
             if nil~=ret then
-            	return __unwrap_table_field(ret);
+              return __unwrap_table_field(ret);
             end;
             ret = class_props[k];
             if nil~=ret then
@@ -1344,8 +1441,8 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
               return ret;
             end;
             if __find_base_class_key(k) then
-          		ret = base_class[k];
-          		return ret;
+              ret = base_class[k];
+              return ret;
             end;
             --简单支持反射的属性:Type.Name与Type.FullName            
             if k=="Name" then
@@ -1364,8 +1461,8 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
             local ret;
             ret = class_fields[k];
             if nil~=ret then
-            	class_fields[k] = __wrap_table_field(v);
-            	return;
+              class_fields[k] = __wrap_table_field(v);
+              return;
             end;
             ret = class_props[k];
             if nil~=ret then
@@ -1374,10 +1471,10 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
               end;
               return;
             end;
-  					if __find_base_class_key(k) then
-  					  base_class[k] = v;
-  					  return;
-  					end;
+            if __find_base_class_key(k) then
+              base_class[k] = v;
+              return;
+            end;
             rawset(t, k, v);
         end,
     });

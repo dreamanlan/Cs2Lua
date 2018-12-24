@@ -149,8 +149,8 @@ namespace Generator
                     sb.AppendFormatLine("{0}{1} = {{", GetIndentString(indent), intfName);
                     ++indent;
                     sb.AppendFormatLine("{0}__cs2lua_defined = true, ", GetIndentString(indent));
-                    sb.AppendFormatLine("{0}__fullname = \"{1}\", ", GetIndentString(indent), intfName);
-                    sb.AppendFormatLine("{0}__name = \"{1}\", ", GetIndentString(indent), GetLastName(intfName));
+                    sb.AppendFormatLine("{0}__cs2lua_fullname = \"{1}\", ", GetIndentString(indent), intfName);
+                    sb.AppendFormatLine("{0}__cs2lua_typename = \"{1}\", ", GetIndentString(indent), GetLastName(intfName));
                     sb.AppendFormatLine("{0}__interfaces = {{", GetIndentString(indent));
                     ++indent;
                     var intfs = FindStatement(funcData, "interfaces") as Dsl.FunctionData;
