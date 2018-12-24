@@ -102,7 +102,13 @@ function getobjfullname(obj)
 		if rawget(meta, "__cs2lua_defined") then
 			return rawget(meta, "__cs2lua_fullname");
 		else
-			return rawget(meta, "__fullname");
+			local name = rawget(meta, "__fullname");
+			local ix = string.find(name, ",");
+			if ix==nil then
+				return name;
+			else
+				return string.sub(name, 1, ix-1);
+			end;
 		end;
 	else
 		return nil;
@@ -127,7 +133,13 @@ function getclassfullname(t)
 		if rawget(t, "__cs2lua_defined") then
 			return rawget(t, "__cs2lua_fullname");
 		else
-			return rawget(t, "__fullname");
+			local name = rawget(t, "__fullname");
+			local ix = string.find(name, ",");
+			if ix==nil then
+				return name;
+			else
+				return string.sub(name, 1, ix-1);
+			end;
 		end;
 	else
 		return nil;
