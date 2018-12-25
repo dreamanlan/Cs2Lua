@@ -2000,15 +2000,32 @@ function invokeexternoperator(class, method, ...)
 	    return false;
 	  end;	  
 	elseif method=="op_Implicit" then
-	  if class==CS.UnityEngine.Vector3 then
-	    return CS.UnityEngine.Vector2(args[1].x, args[1].y);
-	  elseif class==CS.UnityEngine.Vector2 then
-	    return CS.UnityEngine.Vector3(args[1].x, args[1].y, 0);
-	  elseif class==CS.UnityEngine.Color32 then
-	    return CS.UnityEngine.Color(args[1].r/255.0, args[1].g/255.0, args[1].b/255.0, args[1].a/255.0);
-	  elseif class==CS.UnityEngine.Color then
-	    return CS.UnityEngine.Color32(math.floor(args[1].r*255), math.floor(args[1].g*255), math.floor(args[1].b*255), math.floor(args[1].a*255));
-	  else
+  	local t = nil;
+  	if args[1] then
+  		local meta = getmetatable(args[1]);
+  		if meta then
+	  		t = rawget(meta, "__typename");
+  		end;
+  	end;
+    if class==CS.UnityEngine.Vector4 then
+    	if t=="Vector3" then
+      	return CS.UnityEngine.Vector4(args[1].x, args[1].y, args[1].z, 0);
+      elseif t=="Vector4" then
+      	return CS.UnityEngine.Vector3(args[1].x, args[1].y, args[1].z);
+      end;
+    elseif class==CS.UnityEngine.Vector2 then
+    	if t=="Vector3" then
+    		return CS.UnityEngine.Vector2(args[1].x, args[1].y);
+    	else
+      	return CS.UnityEngine.Vector3(args[1].x, args[1].y, 0);
+      end;
+    elseif class==CS.UnityEngine.Color32 then
+    	if t=="Color32" then
+      	return CS.UnityEngine.Color(args[1].r/255.0, args[1].g/255.0, args[1].b/255.0, args[1].a/255.0);
+      else
+      	return CS.UnityEngine.Color32(math.floor(args[1].r*255), math.floor(args[1].g*255), math.floor(args[1].b*255), math.floor(args[1].a*255));
+      end;
+    else
 	    --这里就不仔细判断了，就假定是UnityEngine.Object子类了
 	    return not CS.XLuaExtensions.IsNull(args[1]);
 	  end;

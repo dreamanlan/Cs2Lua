@@ -2009,18 +2009,35 @@ function invokeexternoperator(class, method, ...)
 	    return false;
 	  end;	  
 	elseif method=="op_Implicit" then
-	  if class==UnityEngine.Vector3 then
-	    return Slua.CreateClass("UnityEngine.Vector2", args[1].x, args[1].y);
-	  elseif class==UnityEngine.Vector2 then
-	    return Slua.CreateClass("UnityEngine.Vector3", args[1].x, args[1].y, 0);
-	  elseif class==UnityEngine.Color32 then
-	    return Slua.CreateClass("UnityEngine.Color", args[1].r/255.0, args[1].g/255.0, args[1].b/255.0, args[1].a/255.0);
-	  elseif class==UnityEngine.Color then
-	    return Slua.CreateClass("UnityEngine.Color32", math.floor(args[1].r*255), math.floor(args[1].g*255), math.floor(args[1].b*255), math.floor(args[1].a*255));
-	  else
-	    --这里就不仔细判断了，就假定是UnityEngine.Object子类了
-	    return not Slua.IsNull(args[1]);
-	  end;
+  	local t = nil;
+  	if args[1] then
+  		local meta = getmetatable(args[1]);
+  		if meta then
+	  		t = rawget(meta, "__typename");
+  		end;
+  	end;
+    if class==UnityEngine.Vector4 then
+    	if t=="Vector3" then
+      	return Slua.CreateClass("UnityEngine.Vector4", args[1].x, args[1].y, args[1].z, 0);
+      elseif t=="Vector4" then
+      	return Slua.CreateClass("UnityEngine.Vector3", args[1].x, args[1].y, args[1].z);
+      end;
+    elseif class==UnityEngine.Vector2 then
+    	if t=="Vector3" then
+    		return Slua.CreateClass("UnityEngine.Vector2", args[1].x, args[1].y);
+    	else
+      	return Slua.CreateClass("UnityEngine.Vector3", args[1].x, args[1].y, 0);
+      end;
+    elseif class==UnityEngine.Color32 then
+    	if t=="Color32" then
+      	return Slua.CreateClass("UnityEngine.Color", args[1].r/255.0, args[1].g/255.0, args[1].b/255.0, args[1].a/255.0);
+      else
+      	return Slua.CreateClass("UnityEngine.Color32", math.floor(args[1].r*255), math.floor(args[1].g*255), math.floor(args[1].b*255), math.floor(args[1].a*255));
+      end;
+    else
+      --这里就不仔细判断了，就假定是UnityEngine.Object子类了
+      return not Slua.IsNull(args[1]);
+    end;
 	end;
 	if method then
   	if argnum == 1 and args[1] then
