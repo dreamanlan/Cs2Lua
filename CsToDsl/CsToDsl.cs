@@ -689,26 +689,26 @@ namespace RoslynTool.CsToDsl
             if (null != leftOper && null != rightOper && null != leftOper.Type && leftOper.Type.TypeKind == TypeKind.Delegate && (!leftOper.ConstantValue.HasValue || null != leftOper.ConstantValue.Value) && rightOper.ConstantValue.HasValue && rightOper.ConstantValue.Value == null) {
                 var sym = m_Model.GetSymbolInfo(left);
                 bool isEvent = (null != leftOper && leftOper is IEventReferenceExpression) || (null != rightOper && rightOper is IEventReferenceExpression);
-                OutputDelegationCompareWithNull(sym.Symbol, left, SymbolTable.Instance.IsCs2DslSymbol(leftOper.Type), isEvent, op == "==", lopd);
+                OutputDelegationCompareWithNull(sym.Symbol, leftOper, left, SymbolTable.Instance.IsCs2DslSymbol(leftOper.Type), isEvent, op == "==", lopd);
                 handled = true;
             } else if (null != leftOper && null != rightOper && null != rightOper.Type && rightOper.Type.TypeKind == TypeKind.Delegate && (!rightOper.ConstantValue.HasValue || null != rightOper.ConstantValue.Value) && leftOper.ConstantValue.HasValue && leftOper.ConstantValue.Value == null) {
                 var sym = m_Model.GetSymbolInfo(right);
                 bool isEvent = (null != leftOper && leftOper is IEventReferenceExpression) || (null != rightOper && rightOper is IEventReferenceExpression);
-                OutputDelegationCompareWithNull(sym.Symbol, right, SymbolTable.Instance.IsCs2DslSymbol(rightOper.Type), isEvent, op == "==", ropd);
+                OutputDelegationCompareWithNull(sym.Symbol, rightOper, right, SymbolTable.Instance.IsCs2DslSymbol(rightOper.Type), isEvent, op == "==", ropd);
                 handled = true;
             }
             return handled;
         }
-        private void OutputDelegationCompareWithNull(ISymbol leftSym, ExpressionSyntax left, bool isCs2LuaAssembly, bool isEvent, bool isEqual, IConversionExpression opd)
+        private void OutputDelegationCompareWithNull(ISymbol leftSym, IOperation leftOper, ExpressionSyntax left, bool isCs2LuaAssembly, bool isEvent, bool isEqual, IConversionExpression opd)
         {
-            if (null == leftSym) {
-                Log(left, "delegation compare with null, left symbol == null");
+            if (null == leftSym && null == leftOper) {
+                Log(left, "delegation compare with null, left symbol == null and left oper == null");
                 return;
             }
-            bool isStatic = leftSym.IsStatic;
+            bool isStatic = null != leftSym ? leftSym.IsStatic : false;
             var ci = m_ClassInfoStack.Peek();
             CodeBuilder.AppendFormat("{0}delegationcomparewithnil({1}, {2}, ", isCs2LuaAssembly ? string.Empty : "extern", isEvent ? "true" : "false", isStatic ? "true" : "false");
-            if (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event) {
+            if (null != leftSym && (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event)) {
                 string containingName = ClassInfo.GetFullName(leftSym.ContainingType);
                 var memberAccess = left as MemberAccessExpressionSyntax;
                 if (null != memberAccess) {
@@ -731,9 +731,14 @@ namespace RoslynTool.CsToDsl
                     OutputExpressionSyntax(left, opd);
                     CodeBuilder.Append(", nil, nil");
                 }
-            } else {
+            } else if (null != leftSym) {
                 string containingName = ClassInfo.GetFullName(leftSym.ContainingType);
                 CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
+                OutputExpressionSyntax(left, opd);
+                CodeBuilder.Append(", nil, nil");
+            } else {
+                string containingName = ClassInfo.GetFullName(leftOper.Type);
+                CodeBuilder.AppendFormat("\"{0}\", ", containingName);
                 OutputExpressionSyntax(left, opd);
                 CodeBuilder.Append(", nil, nil");
             }

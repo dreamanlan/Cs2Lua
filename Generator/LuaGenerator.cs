@@ -28,6 +28,7 @@ namespace Generator
 
             s_ExePath = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
             s_SrcPath = Path.Combine(csprojPath, "dsl");
+            s_LogPath = Path.Combine(csprojPath, "log");
             s_OutPath = outPath;
             s_Ext = ext;
             ReadConfig();
@@ -45,6 +46,7 @@ namespace Generator
                     GenerateLua(dslFile, Path.Combine(s_OutPath, Path.ChangeExtension(fileName, s_Ext)), fileName);
                 } catch (Exception ex) {
                     Log(file, string.Format("exception:{0}\n{1}", ex.Message, ex.StackTrace));
+                    File.WriteAllText(Path.Combine(s_LogPath, "Generator.log"), s_LogBuilder.ToString());
                     System.Environment.Exit(-1);
                 }
             }
@@ -60,6 +62,7 @@ namespace Generator
                 }
                 File.WriteAllText(Path.Combine(s_OutPath, Path.ChangeExtension(info.MergedFileName, s_Ext)), sb.ToString());
             }
+            File.WriteAllText(Path.Combine(s_LogPath, "Generator.log"), s_LogBuilder.ToString());
             System.Environment.Exit(0);
         }
         private static void GenerateLua(Dsl.DslFile dslFile, string outputFile, string fileName)
@@ -1641,7 +1644,7 @@ namespace Generator
         }
         private static void Log(string file, string msg)
         {
-            Console.WriteLine("[{0}]:{1}", file, msg);
+            s_LogBuilder.AppendFormatLine("[{0}]:{1}", file, msg);
         }
         private static string GetIndentString(int indent)
         {
@@ -1866,8 +1869,10 @@ namespace Generator
 
         private static string s_ExePath = string.Empty;
         private static string s_SrcPath = string.Empty;
+        private static string s_LogPath = string.Empty;
         private static string s_OutPath = string.Empty;
         private static string s_Ext = string.Empty;
+        private static StringBuilder s_LogBuilder = new StringBuilder();
         //下面这个list的顺序要与utility.lua里的整数操作表__cs2lua_special_integer_operators一致（索引用作操作符识别常量）
         private static List<string> s_SpecialIntegerOperators = new List<string> { "/", "%", "+", "-", "*", "<<", ">>", "&", "|", "^", "~" };
         
