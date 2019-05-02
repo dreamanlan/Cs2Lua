@@ -29,32 +29,53 @@ namespace RoslynTool.CsToDsl
                 MethodInfo mi = m_MethodInfoStack.Peek();
 
                 string retVar = string.Format("__try_ret_{0}", GetSourcePosForVar(node));
-                string errVar = string.Format("__try_err_{0}", GetSourcePosForVar(node));
+                string retValVar = string.Format("__try_retval_{0}", GetSourcePosForVar(node));
                 string handledVar = string.Format("__try_handled_{0}", GetSourcePosForVar(node));
+                string catchRetValVar = string.Format("__try_catch_ret_val_{0}", GetSourcePosForVar(node));
 
-                CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}) = dsltry(function(){{", GetIndentString(), retVar, errVar);
+                mi.TryCatchUsingOrLoopSwitchStack.Push(true);
+
+                CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}) = dsltry(function(){{", GetIndentString(), retVar, retValVar);
                 CodeBuilder.AppendLine();
                 ++m_Indent;
-                ++mi.TryCatchLayer;
+                ++mi.TryCatchUsingLayer;
                 VisitBlock(node.Block);
-                --mi.TryCatchLayer;
+                --mi.TryCatchUsingLayer;
                 --m_Indent;
                 CodeBuilder.AppendFormat("{0}}});", GetIndentString());
                 CodeBuilder.AppendLine();
-                
+
+                mi.TryCatchUsingOrLoopSwitchStack.Pop();
+
+                ReturnContinueBreakAnalysis returnAnalysis0 = new ReturnContinueBreakAnalysis();
+                returnAnalysis0.Visit(node.Block);
+                if (returnAnalysis0.Exist) {
+                    OutputTryCatchUsingReturn(returnAnalysis0, mi, retVar, retValVar);
+                }
+
                 if (node.Catches.Count > 0) {
-                    CodeBuilder.AppendFormat("{0}local({1}); {1} = false;", GetIndentString(), handledVar);
+                    CodeBuilder.AppendFormat("{0}local({1}, {2}); {1} = false;", GetIndentString(), handledVar, catchRetValVar);
                     CodeBuilder.AppendLine();
                     foreach (var clause in node.Catches) {
-                        CodeBuilder.AppendFormat("{0}{1} = dslcatch({1}, {2}, {3},", GetIndentString(), handledVar, retVar, errVar);
+                        ReturnContinueBreakAnalysis returnAnalysis1 = new ReturnContinueBreakAnalysis();
+                        returnAnalysis1.Visit(clause.Block);
+                        mi.TempReturnAnalysisStack.Push(returnAnalysis1);
+
+                        CodeBuilder.AppendFormat("{0}multiassign({1}, {4}) = dslcatch({1}, {2}, {3},", GetIndentString(), handledVar, retVar, retValVar, catchRetValVar);
                         CodeBuilder.AppendLine();
                         ++m_Indent;
-                        ++mi.TryCatchLayer;
+                        ++mi.TryCatchUsingLayer;
                         VisitCatchClause(clause);
-                        --mi.TryCatchLayer;
+                        --mi.TryCatchUsingLayer;
                         --m_Indent;
                         CodeBuilder.AppendFormat("{0});", GetIndentString());
                         CodeBuilder.AppendLine();
+
+                        mi.TempReturnAnalysisStack.Pop();
+
+                        if (returnAnalysis1.Exist) {
+                            OutputTryCatchUsingReturn(returnAnalysis1, mi, retVar, catchRetValVar);
+                        }
                     }
                     if (node.Catches.Count > 1) {
                         if (SymbolTable.EnableTranslationCheck) {
@@ -69,7 +90,12 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitCatchClause(CatchClauseSyntax node)
         {
+            MethodInfo mi = m_MethodInfoStack.Peek();
+            mi.TryCatchUsingOrLoopSwitchStack.Push(true);
+            ReturnContinueBreakAnalysis returnAnalysis = mi.TempReturnAnalysisStack.Peek();
+
             string handledVar = string.Format("__catch_handled_{0}", GetSourcePosForVar(node));
+            string bodyVar = string.Format("__catch_body_{0}", GetSourcePosForVar(node));
             CodeBuilder.AppendFormat("{0}(function({1}", GetIndentString(), handledVar);
             if (null != node.Declaration) {
                 CodeBuilder.Append(", ");
@@ -86,8 +112,6 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendLine();
                 ++m_Indent;
             }
-            //忽略
-            VisitBlock(node.Block);
             CodeBuilder.AppendFormat("{0}{1} = true;", GetIndentString(), handledVar);
             CodeBuilder.AppendLine();
             if (null != node.Filter) {
@@ -95,11 +119,26 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                 CodeBuilder.AppendLine();
             }
-            CodeBuilder.AppendFormat("{0}return {1};", GetIndentString(), handledVar);
-            CodeBuilder.AppendLine();
+            if (returnAnalysis.Exist) {
+                CodeBuilder.AppendFormat("{0}local({1}); {1} = function(){{", GetIndentString(), bodyVar);
+                CodeBuilder.AppendLine();
+                ++m_Indent;
+                VisitBlock(node.Block);
+                --m_Indent;
+                CodeBuilder.AppendFormat("{0}}};", GetIndentString());
+                CodeBuilder.AppendLine();
+                CodeBuilder.AppendFormat("{0}return({1}, {2}());", GetIndentString(), handledVar, bodyVar);
+                CodeBuilder.AppendLine();
+            } else {
+                VisitBlock(node.Block);
+                CodeBuilder.AppendFormat("{0}return({1}, null);", GetIndentString(), handledVar);
+                CodeBuilder.AppendLine();
+            }
             --m_Indent;
             CodeBuilder.AppendFormat("{0}}})", GetIndentString());
             CodeBuilder.AppendLine();
+
+            mi.TryCatchUsingOrLoopSwitchStack.Pop();
         }
         public override void VisitCatchDeclaration(CatchDeclarationSyntax node)
         {

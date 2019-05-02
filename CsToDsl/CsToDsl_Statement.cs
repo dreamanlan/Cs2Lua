@@ -17,6 +17,7 @@ namespace RoslynTool.CsToDsl
         { }
         public override void VisitBreakStatement(BreakStatementSyntax node)
         {
+            MethodInfo mi = m_MethodInfoStack.Peek();
             if (m_ContinueInfoStack.Count > 0) {
                 var ci = m_ContinueInfoStack.Peek();
                 if (ci.IsIgnoreBreak)
@@ -31,9 +32,14 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendFormat("{0}block{{", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
-                
-                CodeBuilder.AppendFormat("{0}break;", GetIndentString());
-                CodeBuilder.AppendLine();
+
+                if (mi.TryCatchUsingLayer > 0 && mi.TryCatchUsingOrLoopSwitchStack.Peek()) {
+                    CodeBuilder.AppendFormat("{0}return(3);", GetIndentString());
+                    CodeBuilder.AppendLine();
+                } else {
+                    CodeBuilder.AppendFormat("{0}break;", GetIndentString());
+                    CodeBuilder.AppendLine();
+                }
 
                 if (isLastNode) {
                     CodeBuilder.AppendFormat("{0}}};", GetIndentString());
@@ -43,6 +49,7 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitContinueStatement(ContinueStatementSyntax node)
         {
+            MethodInfo mi = m_MethodInfoStack.Peek();
             if (m_ContinueInfoStack.Count > 0) {
                 var ci = m_ContinueInfoStack.Peek();
                 if (ci.IsIgnoreBreak)
@@ -57,9 +64,14 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendFormat("{0}block{{", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
-                
-                CodeBuilder.AppendFormat("{0}break;", GetIndentString());
-                CodeBuilder.AppendLine();
+
+                if (mi.TryCatchUsingLayer > 0 && mi.TryCatchUsingOrLoopSwitchStack.Peek()) {
+                    CodeBuilder.AppendFormat("{0}return(2);", GetIndentString());
+                    CodeBuilder.AppendLine();
+                } else {
+                    CodeBuilder.AppendFormat("{0}break;", GetIndentString());
+                    CodeBuilder.AppendLine();
+                }
                 
                 if (isLastNode) {
                     CodeBuilder.AppendFormat("{0}}};", GetIndentString());
@@ -73,12 +85,12 @@ namespace RoslynTool.CsToDsl
             mi.ExistTopLevelReturn = IsLastNodeOfMethod(node);
             
             bool isLastNode = IsLastNodeOfParent(node);
-            if (!isLastNode || mi.TryCatchLayer > 0) {
+            if (!isLastNode || mi.TryCatchUsingLayer > 0) {
                 CodeBuilder.AppendFormat("{0}block{{", GetIndentString());
                 CodeBuilder.AppendLine();
             }
 
-            if (mi.TryCatchLayer > 0) {
+            if (mi.TryCatchUsingLayer > 0) {
                 if (null != node.Expression) {
                     IConversionExpression opd = null;
                     var iret = m_Model.GetOperation(node) as IReturnStatement;
@@ -89,7 +101,7 @@ namespace RoslynTool.CsToDsl
                     OutputExpressionSyntax(node.Expression, opd);
                     CodeBuilder.AppendLine(";");
                 }
-                CodeBuilder.AppendFormat("{0}return(true);", GetIndentString());
+                CodeBuilder.AppendFormat("{0}return(1);", GetIndentString());
                 CodeBuilder.AppendLine();
             } else {
                 string prestr;
@@ -121,13 +133,16 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendLine(");");
             }
 
-            if (!isLastNode || mi.TryCatchLayer > 0) {
+            if (!isLastNode || mi.TryCatchUsingLayer > 0) {
                 CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                 CodeBuilder.AppendLine();
             }
         }
         public override void VisitWhileStatement(WhileStatementSyntax node)
         {
+            MethodInfo mi = m_MethodInfoStack.Peek();
+            mi.TryCatchUsingOrLoopSwitchStack.Push(false);
+
             ContinueInfo ci = new ContinueInfo();
             ci.Init(node.Statement);
             m_ContinueInfoStack.Push(ci);
@@ -163,9 +178,13 @@ namespace RoslynTool.CsToDsl
             CodeBuilder.AppendLine();
 
             m_ContinueInfoStack.Pop();
+            mi.TryCatchUsingOrLoopSwitchStack.Pop();
         }
         public override void VisitDoStatement(DoStatementSyntax node)
         {
+            MethodInfo mi = m_MethodInfoStack.Peek();
+            mi.TryCatchUsingOrLoopSwitchStack.Push(false);
+
             ContinueInfo ci = new ContinueInfo();
             ci.Init(node.Statement);
             m_ContinueInfoStack.Push(ci);
@@ -201,9 +220,13 @@ namespace RoslynTool.CsToDsl
             CodeBuilder.AppendLine(");");
 
             m_ContinueInfoStack.Pop();
+            mi.TryCatchUsingOrLoopSwitchStack.Pop();
         }
         public override void VisitForStatement(ForStatementSyntax node)
         {
+            MethodInfo mi = m_MethodInfoStack.Peek();
+            mi.TryCatchUsingOrLoopSwitchStack.Push(false);
+
             ContinueInfo ci = new ContinueInfo();
             ci.Init(node.Statement);
             m_ContinueInfoStack.Push(ci);
@@ -255,9 +278,13 @@ namespace RoslynTool.CsToDsl
             CodeBuilder.AppendLine();
 
             m_ContinueInfoStack.Pop();
+            mi.TryCatchUsingOrLoopSwitchStack.Pop();
         }
         public override void VisitForEachStatement(ForEachStatementSyntax node)
         {
+            MethodInfo mi = m_MethodInfoStack.Peek();
+            mi.TryCatchUsingOrLoopSwitchStack.Push(false);
+
             ContinueInfo ci = new ContinueInfo();
             ci.Init(node.Statement);
             m_ContinueInfoStack.Push(ci);
@@ -292,6 +319,7 @@ namespace RoslynTool.CsToDsl
             CodeBuilder.AppendFormat("{0}}};", GetIndentString());
             CodeBuilder.AppendLine();
             m_ContinueInfoStack.Pop();
+            mi.TryCatchUsingOrLoopSwitchStack.Pop();
         }
         public override void VisitIfStatement(IfStatementSyntax node)
         {
@@ -346,6 +374,9 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitSwitchStatement(SwitchStatementSyntax node)
         {
+            MethodInfo mi = m_MethodInfoStack.Peek();
+            mi.TryCatchUsingOrLoopSwitchStack.Push(false);
+
             string varName = string.Format("__switch_{0}", GetSourcePosForVar(node));
             SwitchInfo si = new SwitchInfo();
             si.SwitchVarName = varName;
@@ -476,6 +507,7 @@ namespace RoslynTool.CsToDsl
             }
 
             m_SwitchInfoStack.Pop();
+            mi.TryCatchUsingOrLoopSwitchStack.Pop();
         }
         public override void VisitUnsafeStatement(UnsafeStatementSyntax node)
         {

@@ -5,15 +5,14 @@ require "cs2lua__interfaces";
 
 LuaString = {
 	__new_object = function(...)
-		return newobject(LuaString, nil, nil, ...);
+		return newobject(LuaString, {}, {}, nil, nil, ...);
 	end,
 	__define_class = function()
 		local static = LuaString;
-
 		local static_methods = {
 			Format = function(str, ...)
 				local args = wraparray{...};
-				return System.String.Format(str, unpack(args));
+				return System.String.Format(str, luaunpack(args));
 			end,
 			cctor = function()
 			end,
@@ -31,7 +30,6 @@ LuaString = {
 			ctor = function(this)
 			end,
 		};
-
 		local instance_fields_build = function()
 			local instance_fields = {
 			};
@@ -39,13 +37,29 @@ LuaString = {
 		end;
 		local instance_props = nil;
 		local instance_events = nil;
+
 		local interfaces = nil;
 		local interface_map = nil;
 
-		return defineclass(nil, "LuaString", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
+		local class_info = {
+			Kind = TypeKind.Class,
+		};
+		local method_info = {
+			Format = {
+				Kind = MethodKind.Ordinary,
+				static = true,
+			},
+			ctor = {
+				Kind = MethodKind.Constructor,
+			},
+		};
+		local property_info = nil;
+		local event_info = nil;
+		local field_info = nil;
+
+		return defineclass(nil, "LuaString", "LuaString", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
 	end,
 };
-
 
 
 LuaString.__define_class();

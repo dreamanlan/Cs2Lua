@@ -4,13 +4,13 @@
 function printJitStatus()
   local infos = Slua.CreateClass("System.Text.StringBuilder");
   local results = { jit.status() };  
-  Utility.AppendFormat(infos, "jit status count {0}", #results);
+  infos:AppendFormat("jit status count {0}", #results);
   infos:AppendLine();
   for i,v in ipairs(results) do
     if i==1 then
-      Utility.AppendFormat(infos, "jit status {0}", v);
+      infos:AppendFormat("jit status {0}", v);
     else
-      Utility.AppendFormat(infos, " {0}", v);
+      infos:AppendFormat(" {0}", v);
     end;
     infos:AppendLine();
   end;
@@ -2277,6 +2277,10 @@ function defaultvalue(t, typename, isExtern)
 	end;
 end;
 
+function luausing(func)
+  return pcall(func);
+end;
+
 function luatry(func)
   return xpcall(func, function(e)
     local err = tostring(e);
@@ -2286,10 +2290,11 @@ function luatry(func)
 end;
 
 function luacatch(handled, ret, err, func)
+	local retval = nil;
   if not handled and not ret then
-    handled = func(handled, {Message=err[1],StackTrace=err[2]});
+    handled, retval = func(handled, {Message=err[1],StackTrace=err[2]});
   end; 
-  return handled;
+  return handled, retval;
 end;
 
 function luathrow(obj)

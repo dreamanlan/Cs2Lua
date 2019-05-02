@@ -715,34 +715,111 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, memberAccess.Name.Identifier.Text);
                     OutputExpressionSyntax(memberAccess.Expression, opd);
                     CodeBuilder.Append(", ");
-                    string intf = "nil";
+                    string intf = "null";
                     string mname = string.Format("\"{0}\"", memberAccess.Name.Identifier.Text);
                     CheckExplicitInterfaceAccess(leftSym, ref intf, ref mname);
                     CodeBuilder.AppendFormat("{0}, {1}", intf, mname);
                 } else if (leftSym.ContainingType == ci.SemanticInfo || leftSym.ContainingType == ci.SemanticInfo.OriginalDefinition || ci.IsInherit(leftSym.ContainingType)) {
                     CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
                     if (isStatic)
-                        CodeBuilder.AppendFormat("{0}, nil, ", ClassInfo.GetFullName(leftSym.ContainingType));
+                        CodeBuilder.AppendFormat("{0}, null, ", ClassInfo.GetFullName(leftSym.ContainingType));
                     else
-                        CodeBuilder.Append("this, nil, ");
+                        CodeBuilder.Append("this, null, ");
                     CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
                 } else {
                     CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
                     OutputExpressionSyntax(left, opd);
-                    CodeBuilder.Append(", nil, nil");
+                    CodeBuilder.Append(", null, null");
                 }
             } else if (null != leftSym) {
                 string containingName = ClassInfo.GetFullName(leftSym.ContainingType);
                 CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
                 OutputExpressionSyntax(left, opd);
-                CodeBuilder.Append(", nil, nil");
+                CodeBuilder.Append(", null, null");
             } else {
                 string containingName = ClassInfo.GetFullName(leftOper.Type);
                 CodeBuilder.AppendFormat("\"{0}\", ", containingName);
                 OutputExpressionSyntax(left, opd);
-                CodeBuilder.Append(", nil, nil");
+                CodeBuilder.Append(", null, null");
             }
             CodeBuilder.AppendFormat(", {0})", isEqual ? "true" : "false");
+        }
+        private void OutputTryCatchUsingReturn(ReturnContinueBreakAnalysis returnAnalysis, MethodInfo mi, string retVar, string retValVar)
+        {
+            if (mi.TryCatchUsingLayer > 0) {
+                CodeBuilder.AppendFormat("{0}if({1} && {2} && {2}>=1 && {2}<=3){{", GetIndentString(), retVar, retValVar);
+                CodeBuilder.AppendLine();
+                ++m_Indent;
+                CodeBuilder.AppendFormat("{0}return({1});", GetIndentString(), retValVar);
+                CodeBuilder.AppendLine();
+                --m_Indent;
+                CodeBuilder.AppendFormat("{0}}};", GetIndentString());
+                CodeBuilder.AppendLine();
+            } else {
+                CodeBuilder.AppendFormat("{0}if({1} && {2}){{", GetIndentString(), retVar, retValVar);
+                CodeBuilder.AppendLine();
+                bool existIf = false;
+                if (returnAnalysis.ExistReturn) {
+                    CodeBuilder.AppendFormat("{0}if({1}==1){{", GetIndentString(), retValVar);
+                    CodeBuilder.AppendLine();
+                    ++m_Indent;
+
+                    string prestr;
+                    if (mi.SemanticInfo.MethodKind == MethodKind.Constructor) {
+                        CodeBuilder.AppendFormat("{0}return(this", GetIndentString());
+                        prestr = ", ";
+                    } else {
+                        CodeBuilder.AppendFormat("{0}return(", GetIndentString());
+                        prestr = string.Empty;
+                    }
+                    CodeBuilder.Append(prestr);
+                    CodeBuilder.Append(mi.ReturnVarName);
+                    prestr = ", ";
+                    var names = mi.ReturnParamNames;
+                    if (names.Count > 0) {
+                        for (int i = 0; i < names.Count; ++i) {
+                            CodeBuilder.Append(prestr);
+                            CodeBuilder.Append(names[i]);
+                            prestr = ", ";
+                        }
+                    }
+                    CodeBuilder.AppendLine(");");
+                    existIf = true;
+                }
+                if (returnAnalysis.ExistContinue) {
+                    if (existIf) {
+                        --m_Indent;
+                        CodeBuilder.AppendFormat("{0}}}elseif({1}==2){{", GetIndentString(), retValVar);
+                    } else {
+                        CodeBuilder.AppendFormat("{0}if({1}==2){{", GetIndentString(), retValVar);
+                    }
+                    CodeBuilder.AppendLine();
+                    ++m_Indent;
+                    CodeBuilder.AppendFormat("{0}break;", GetIndentString());
+                    CodeBuilder.AppendLine();
+                    existIf = true;
+                }
+                if (returnAnalysis.ExistBreak) {
+                    if (existIf) {
+                        --m_Indent;
+                        CodeBuilder.AppendFormat("{0}}}elseif({1}==3){{", GetIndentString(), retValVar);
+                    } else {
+                        CodeBuilder.AppendFormat("{0}if({1}==3){{", GetIndentString(), retValVar);
+                    }
+                    CodeBuilder.AppendLine();
+                    ++m_Indent;
+                    CodeBuilder.AppendFormat("{0}break;", GetIndentString());
+                    CodeBuilder.AppendLine();
+                    existIf = true;
+                }
+                if (existIf) {
+                    --m_Indent;
+                    CodeBuilder.AppendFormat("{0}}};", GetIndentString());
+                    CodeBuilder.AppendLine();
+                }
+                CodeBuilder.AppendFormat("{0}}};", GetIndentString());
+                CodeBuilder.AppendLine();
+            }
         }
         private void AddToplevelClass(string key, ClassInfo ci)
         {
@@ -1002,7 +1079,7 @@ namespace RoslynTool.CsToDsl
                 }
                 sb.Append("), ");
             } else {
-                sb.Append("typeargs(), typekinds()");
+                sb.Append("typeargs(), typekinds(), ");
             }
         }
         internal static void OutputDefaultValue(StringBuilder sb, ITypeSymbol type)

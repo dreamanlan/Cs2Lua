@@ -28,17 +28,24 @@ namespace RoslynTool.CsToDsl
         public override void VisitForEachStatement(ForEachStatementSyntax node)
         { }
         public override void VisitSwitchStatement(SwitchStatementSyntax node)
-        { }
+        {
+            ++m_InSwitch;
+            base.VisitSwitchStatement(node);
+            --m_InSwitch;
+        }
         public override void VisitContinueStatement(ContinueStatementSyntax node)
         {
             ++m_ContinueCount;
         }
         public override void VisitBreakStatement(BreakStatementSyntax node)
         {
-            ++m_BreakCount;
+            if (m_InSwitch <= 0) {
+                ++m_BreakCount;
+            }
         }
 
         private int m_ContinueCount = 0;
         private int m_BreakCount = 0;
+        private int m_InSwitch = 0;
     }
 }

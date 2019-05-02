@@ -64,7 +64,7 @@ class(MyScript) {
 				callstatic(UnityEngine.Debug, "Log", callstatic(System.String, "Format", "{0} seconds", i));
 			i = execbinary("+", i, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
 			};
-			return(nil);
+			return(null);
 		});
 		Reset = function(this){
 			if( execbinary("!=", null, getinstance(this, "cubes"), System.Object, System.Object, TypeKind.Class, TypeKind.Class) ){

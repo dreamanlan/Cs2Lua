@@ -26,14 +26,21 @@ namespace RoslynTool.CsToDsl
         internal bool ExistTopLevelReturn = false;
 
         internal bool ExistTryCatch = false;
-        internal int TryCatchLayer = 0;
+        internal bool ExistUsing = false;
+        internal int TryCatchUsingLayer = 0;
         internal string ReturnVarName = string.Empty;
+        internal Stack<bool> TryCatchUsingOrLoopSwitchStack = new Stack<bool>();
 
         internal IMethodSymbol SemanticInfo = null;
         internal SyntaxNode SyntaxNode = null;
 
+        internal Stack<ReturnContinueBreakAnalysis> TempReturnAnalysisStack = new Stack<ReturnContinueBreakAnalysis>();
+
         internal void Init(IMethodSymbol sym, SyntaxNode node)
         {
+            TryCatchUsingOrLoopSwitchStack.Clear();
+            TempReturnAnalysisStack.Clear();
+
             ParamNames.Clear();
             ReturnParamNames.Clear();
             OutParamNames.Clear();
@@ -42,7 +49,7 @@ namespace RoslynTool.CsToDsl
             ExistTopLevelReturn = false;
 
             ExistTryCatch = false;
-            TryCatchLayer = 0;
+            TryCatchUsingLayer = 0;
             ReturnVarName = string.Empty;
 
             SemanticInfo = sym;
