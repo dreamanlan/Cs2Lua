@@ -53,12 +53,15 @@ namespace Generator
             foreach (var pair in s_FileMergeInfos) {
                 var info = pair.Value;
                 StringBuilder sb = new StringBuilder();
+                sb.AppendLine(info.CodeBuilder.ToString());
                 foreach (string req in info.RequireList) {
                     sb.AppendFormatLine("{0}require \"{1}\";", GetIndentString(0), req);
                 }
-                sb.AppendLine(info.CodeBuilder.ToString());
                 foreach (string className in info.DefinedClasses) {
-                    sb.AppendFormatLine("{0}{1}.__define_class();", GetIndentString(0), className);
+                    sb.AppendFormatLine("{0}settempmetatable({1});", GetIndentString(0), className);
+                }
+                if (!string.IsNullOrEmpty(info.EntryClass)) {
+                    sb.AppendFormatLine("{0}defineentry({1});", GetIndentString(0), info.EntryClass);
                 }
                 File.WriteAllText(Path.Combine(s_OutPath, Path.ChangeExtension(info.MergedFileName, s_Ext)), sb.ToString());
             }
@@ -73,6 +76,7 @@ namespace Generator
                 s_FileMergeInfos.TryGetValue(myselfNewRequire, out mergedInfo);
             }
 
+            string entryClass = string.Empty;
             HashSet<string> requires = new HashSet<string>();
             List<string> requireList = new List<string>();
             StringBuilder sb = new StringBuilder();
@@ -103,12 +107,14 @@ namespace Generator
                                     requires.Add(newRequire);
                                     requireList.Add(newRequire);
                                 }
-                            } else if(!requires.Contains(requireFileName)) {
+                            } else if (!requires.Contains(requireFileName)) {
                                 requires.Add(requireFileName);
                                 requireList.Add(requireFileName);
                             }
                         }
                     }
+                } else if (id == "defineentry") {
+                    entryClass = CalcTypeString(callData.GetParam(0));
                 } else if (id == "attributes") {
                     if (firstAttrs) {
                         sb.AppendLine("__cs2lua__AllAttrs = {};");
@@ -734,15 +740,21 @@ namespace Generator
                     var className = classDefineStack.Pop();
                     mergedInfo.DefinedClasses.Add(className);
                 }
+                if (!string.IsNullOrEmpty(entryClass)) {
+                    mergedInfo.EntryClass = entryClass;
+                }
             } else {
                 StringBuilder newSb = new StringBuilder();
+                newSb.AppendLine(sb.ToString());
                 foreach (string req in requireList) {
                     newSb.AppendFormatLine("{0}require \"{1}\";", GetIndentString(indent), req);
                 }
-                newSb.AppendLine(sb.ToString());
                 while (classDefineStack.Count > 0) {
                     var className = classDefineStack.Pop();
-                    newSb.AppendFormatLine("{0}{1}.__define_class();", GetIndentString(indent), className);
+                    newSb.AppendFormatLine("{0}settempmetatable({1});", GetIndentString(indent), className);
+                }
+                if (!string.IsNullOrEmpty(entryClass)) {
+                    newSb.AppendFormatLine("{0}defineentry({1});", GetIndentString(indent), entryClass);
                 }
                 File.WriteAllText(outputFile, newSb.ToString());
             }
@@ -1909,6 +1921,7 @@ namespace Generator
         private class FileMergeInfo
         {
             internal string MergedFileName = string.Empty;
+            internal string EntryClass = string.Empty;
             internal HashSet<string> Lists = new HashSet<string>();
             internal List<Regex> Matches = new List<Regex>();
             internal StringBuilder CodeBuilder = new StringBuilder();

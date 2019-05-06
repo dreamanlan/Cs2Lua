@@ -101,7 +101,7 @@ namespace RoslynTool.CsToDsl
             if (!SymbolTable.Instance.IsCs2DslSymbol(refType)) {
                 AddExternReference(refType);
             }
-            if (!IsInnerClassOfGenericType(refType)) {
+            if (!refType.IsGenericType && !IsInnerClassOfGenericType(refType)) {
                 while (null != refType.ContainingType) {
                     refType = refType.ContainingType;
                 }

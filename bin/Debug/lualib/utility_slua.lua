@@ -204,6 +204,23 @@ function getclassparentclass(t)
 	end;
 end;
 
+function settempmetatable(class)
+	setmetatable(class, { 
+		__index = function(tb, key) 
+			class.__define_class();
+			return tb[key]; 
+		end, 
+		__newindex = function(tb,key,val)
+			class.__define_class();
+			tb[key]=val;
+		end,
+		__call = function(...)
+			class.__define_class();
+			return class(...);
+		end
+	});
+end;
+
 __cs2lua_special_integer_operators = { "/", "%", "+", "-", "*", "<<", ">>", "&", "|", "^", "~" };
 __cs2lua_div = 0;
 __cs2lua_mod = 1;
