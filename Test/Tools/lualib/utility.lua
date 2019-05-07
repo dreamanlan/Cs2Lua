@@ -207,14 +207,17 @@ end;
 function settempmetatable(class)
 	setmetatable(class, { 
 		__index = function(tb, key) 
+			setmetatable(class, nil);
 			class.__define_class();
 			return tb[key]; 
 		end, 
-		__newindex = function(tb,key,val)
+		__newindex = function(tb,key,val) 
+			setmetatable(class, nil);
 			class.__define_class();
 			tb[key]=val;
 		end,
-		__call = function(...)
+		__call = function(...) 
+			setmetatable(class, nil);
 			class.__define_class();
 			return class(...);
 		end
@@ -1166,7 +1169,7 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
 
     local class = static or {};
     for ck,cv in pairs(static_methods) do
-      class[ck] = cv;
+      rawset(class, ck, cv);
     end;
     local class_fields;
     if static_fields_build then
@@ -1176,13 +1179,13 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
     end;
     local class_props = static_props or {};
     local class_events = static_events or {};
-    class["__cs2lua_defined"] = true;
-    class["__cs2lua_fullname"] = fullName;
-    class["__cs2lua_typename"] = typeName;
-    class["__cs2lua_parent"] = base_class;
-    class["__is_value_type"] = is_value_type;
-    class["__interfaces"] = interfaces;
-    class["__interface_map"] = interface_map;
+    rawset(class, "__cs2lua_defined", true);
+    rawset(class, "__cs2lua_fullname", fullName);
+    rawset(class, "__cs2lua_typename", typeName);
+    rawset(class, "__cs2lua_parent", base_class);
+    rawset(class, "__is_value_type", is_value_type);
+    rawset(class, "__interfaces", interfaces);
+    rawset(class, "__interface_map", interface_map);
         
     local function __find_base_class_key(k)
       if nil==k then
