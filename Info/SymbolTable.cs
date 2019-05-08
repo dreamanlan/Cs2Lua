@@ -253,8 +253,10 @@ namespace RoslynTool.CsToDsl
                             string name = msym.Name;
                             if (name[0] == '.')
                                 name = name.Substring(1);
-                            if (memberCounts.ContainsKey(name) && !msym.IsOverride) {
-                                ++memberCounts[name];
+                            if (memberCounts.ContainsKey(name)) {
+                                if (!msym.IsOverride) {
+                                    ++memberCounts[name];
+                                }
                             } else {
                                 memberCounts.Add(name, 1);
                             }
@@ -274,8 +276,10 @@ namespace RoslynTool.CsToDsl
                     string name = msym.Name;
                     if (name[0] == '.')
                         name = name.Substring(1);
-                    if (memberCounts.ContainsKey(name) && !msym.IsOverride) {
-                        ++memberCounts[name];
+                    if (memberCounts.ContainsKey(name)) {
+                        if (!msym.IsOverride) {
+                            ++memberCounts[name];
+                        }
                     } else {
                         memberCounts.Add(name, 1);
                     }
