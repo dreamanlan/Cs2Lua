@@ -154,7 +154,7 @@ namespace RoslynTool.CsToDsl
             }
             return ret;
         }
-        internal void OutputArgumentList(IList<ExpressionSyntax> args, IList<ArgDefaultValueInfo> defValArgs, IList<ITypeSymbol> typeArgs, bool arrayToParams, bool useTypeNameString, SyntaxNode node, params IConversionExpression[] opds)
+        internal void OutputArgumentList(IList<ExpressionSyntax> args, IDictionary<int, string> argTypeNames, IList<ArgDefaultValueInfo> defValArgs, IList<ITypeSymbol> typeArgs, bool arrayToParams, bool useTypeNameString, SyntaxNode node, params IConversionExpression[] opds)
         {
             if (typeArgs.Count > 0) {
                 OutputTypeArgumentList(typeArgs, useTypeNameString, node);
@@ -162,7 +162,7 @@ namespace RoslynTool.CsToDsl
             if (args.Count + defValArgs.Count > 0) {
                 if (typeArgs.Count > 0)
                     CodeBuilder.Append(", ");
-                OutputExpressionList(args, defValArgs, arrayToParams, opds);
+                OutputExpressionList(args, argTypeNames, defValArgs, arrayToParams, opds);
             }
         }
         internal void OutputExpressionSyntax(ExpressionSyntax node)
@@ -314,12 +314,16 @@ namespace RoslynTool.CsToDsl
         }
         private void OutputExpressionList(IList<ExpressionSyntax> args)
         {
-            OutputExpressionList(args, null, false);
+            OutputExpressionList(args, null, null, false);
         }
-        private void OutputExpressionList(IList<ExpressionSyntax> args, IList<ArgDefaultValueInfo> defValArgs, bool arrayToParams, params IConversionExpression[] opds)
+        private void OutputExpressionList(IList<ExpressionSyntax> args, IDictionary<int, string> argTypeNames, IList<ArgDefaultValueInfo> defValArgs, bool arrayToParams, params IConversionExpression[] opds)
         {
             int ct = args.Count;
             for (int i = 0; i < ct; ++i) {
+                string typeName = string.Empty;
+                if (null != argTypeNames && argTypeNames.TryGetValue(i, out typeName)) {
+                    CodeBuilder.AppendFormat("\"{0}\", ", Escape(typeName));
+                }
                 var exp = args[i];
                 var opd = opds.Length > i ? opds[i] : null;
                 //表达式对象为空表明这个是一个out实参，替换为__cs2dsl_out
@@ -651,25 +655,25 @@ namespace RoslynTool.CsToDsl
         }
         private void OutputOperatorInvoke(InvocationInfo ii, SyntaxNode node)
         {
-            if (SymbolTable.Instance.IsCs2DslSymbol(ii.MethodSymbol)) {
+            if (!ii.IsExternMethod) {
                 CodeBuilder.AppendFormat("invokeoperator({0}, ", ii.ClassKey);
                 string manglingName = NameMangling(ii.MethodSymbol);
                 CodeBuilder.AppendFormat("\"{0}\"", manglingName);
                 CodeBuilder.Append(", ");
-                OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, node, ii.ArgConversions.ToArray());
+                OutputArgumentList(ii.Args, ii.ArgTypeNames, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, node, ii.ArgConversions.ToArray());
                 CodeBuilder.Append(")");
             } else {
                 string method = ii.MethodSymbol.Name;
                 CodeBuilder.AppendFormat("invokeexternoperator({0}, ", ii.GenericClassKey);
                 CodeBuilder.AppendFormat("\"{0}\"", method);
                 CodeBuilder.Append(", ");
-                OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, node, ii.ArgConversions.ToArray());
+                OutputArgumentList(ii.Args, ii.ArgTypeNames, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ArrayToParams, false, node, ii.ArgConversions.ToArray());
                 CodeBuilder.Append(")");
             }
         }
         private void OutputConversionInvokePrefix(InvocationInfo ii)
         {
-            if (SymbolTable.Instance.IsCs2DslSymbol(ii.MethodSymbol)) {
+            if (!ii.IsExternMethod) {
                 CodeBuilder.AppendFormat("invokeoperator({0}, ", ii.ClassKey);
                 string manglingName = NameMangling(ii.MethodSymbol);
                 CodeBuilder.AppendFormat("\"{0}\"", manglingName);

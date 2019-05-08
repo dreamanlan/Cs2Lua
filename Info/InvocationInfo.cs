@@ -20,6 +20,7 @@ namespace RoslynTool.CsToDsl
         internal string ClassKey = string.Empty;
         internal string GenericClassKey = string.Empty;
         internal List<ExpressionSyntax> Args = new List<ExpressionSyntax>();
+        internal Dictionary<int, string> ArgTypeNames = new Dictionary<int, string>();
         internal List<IConversionExpression> ArgConversions = new List<IConversionExpression>();
         internal List<ArgDefaultValueInfo> DefaultValueArgs = new List<ArgDefaultValueInfo>();
         internal List<ExpressionSyntax> ReturnArgs = new List<ExpressionSyntax>();
@@ -30,6 +31,8 @@ namespace RoslynTool.CsToDsl
         internal bool IsComponentGetOrAdd = false;
         internal bool IsBasicValueMethod = false;
         internal bool IsArrayStaticMethod = false;
+        internal bool IsExternMethod = false;
+        internal int ExternMethodOverloadedCount = 1;
         internal ExpressionSyntax FirstRefArray = null;
         internal ExpressionSyntax SecondRefArray = null;
 
@@ -64,6 +67,12 @@ namespace RoslynTool.CsToDsl
                             var iarg = moper.GetArgumentMatchingParameter(param);
                             if (null != iarg) {
                                 lastConv = iarg.Value as IConversionExpression;
+                            }
+                        }
+                        if (IsExternMethod && ExternMethodOverloadedCount > 1) {
+                            var pt = GetElementType(param.Type);
+                            if (pt.TypeKind == TypeKind.Delegate) {
+                                ArgTypeNames.Add(i, pt.Name);
                             }
                         }
                         if (!param.IsParams && param.Type.TypeKind == TypeKind.Array) {
@@ -138,6 +147,12 @@ namespace RoslynTool.CsToDsl
                                 lastConv = iarg.Value as IConversionExpression;
                             }
                         }
+                        if (IsExternMethod && ExternMethodOverloadedCount > 1) {
+                            var pt = GetElementType(param.Type);
+                            if (pt.TypeKind == TypeKind.Delegate) {
+                                ArgTypeNames.Add(i, pt.Name);
+                            }
+                        }
                         if (!param.IsParams && param.Type.TypeKind == TypeKind.Array) {
                             RecordRefArray(arg.Expression);
                         }
@@ -197,6 +212,14 @@ namespace RoslynTool.CsToDsl
                 for (int i = 0; i < argList.Count; ++i) {
                     var arg = argList[i];
                     var oper = model.GetOperation(arg);
+                    if (IsExternMethod && ExternMethodOverloadedCount > 1) {
+                        if (null != oper && null != oper.Type) {
+                            var pt = GetElementType(oper.Type);
+                            if (pt.TypeKind == TypeKind.Delegate) {
+                                ArgTypeNames.Add(i, pt.Name);
+                            }
+                        }
+                    }
                     if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Array) {
                         RecordRefArray(arg);
                     }
@@ -306,9 +329,9 @@ namespace RoslynTool.CsToDsl
                 var args = new List<ExpressionSyntax>();
                 args.Add(exp);
                 args.AddRange(Args);
-                cs2dsl.OutputArgumentList(args, DefaultValueArgs, GenericTypeArgs, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
+                cs2dsl.OutputArgumentList(args, ArgTypeNames, DefaultValueArgs, GenericTypeArgs, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
             } else {
-                cs2dsl.OutputArgumentList(Args, DefaultValueArgs, GenericTypeArgs, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
+                cs2dsl.OutputArgumentList(Args, ArgTypeNames, DefaultValueArgs, GenericTypeArgs, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
             }
             codeBuilder.Append(")");
         }
@@ -322,6 +345,7 @@ namespace RoslynTool.CsToDsl
             ArgConversions.Clear();
             ReturnArgs.Clear();
             GenericTypeArgs.Clear();
+			ArgTypeNames.Clear();
             
             ClassKey = ClassInfo.GetFullName(sym.ContainingType);
             GenericClassKey = ClassInfo.GetFullNameWithTypeParameters(sym.ContainingType);
@@ -329,6 +353,14 @@ namespace RoslynTool.CsToDsl
             IsExtensionMethod = sym.IsExtensionMethod && SymbolTable.Instance.IsCs2DslSymbol(sym);
             IsBasicValueMethod = SymbolTable.IsBasicValueMethod(sym);
             IsArrayStaticMethod = ClassKey == SymbolTable.PrefixExternClassName("System.Array") && sym.IsStatic;
+            IsExternMethod = !SymbolTable.Instance.IsCs2DslSymbol(sym);
+
+            var syms = sym.ContainingType.GetMembers(sym.Name);
+            if (null != syms) {
+                ExternMethodOverloadedCount = syms.Length;
+            } else {
+                ExternMethodOverloadedCount = 1;
+            }
 
             if ((ClassKey == SymbolTable.PrefixExternClassName("UnityEngine.GameObject") || ClassKey == SymbolTable.PrefixExternClassName("UnityEngine.Component")) && (sym.Name.StartsWith("GetComponent") || sym.Name.StartsWith("AddComponent"))) {
                 IsComponentGetOrAdd = true;
@@ -398,6 +430,19 @@ namespace RoslynTool.CsToDsl
                     SecondRefArray = exp;
                 }
             }
+        }
+
+        private ITypeSymbol GetElementType(ITypeSymbol typeSym)
+        {
+            while(typeSym.TypeKind == TypeKind.Array) {
+                var arrType = typeSym as IArrayTypeSymbol;
+                if (null != arrType) {
+                    typeSym = arrType.ElementType;
+                } else {
+                    break;
+                }
+            }
+            return typeSym;
         }
 
         internal static void TryAddExternEnum(bool isEnumClass, ExpressionSyntax exp, SemanticModel model)
