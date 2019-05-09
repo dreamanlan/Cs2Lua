@@ -1145,12 +1145,7 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
     for ck,cv in pairs(static_methods) do
       rawset(class, ck, cv);
     end;
-    local class_fields;
-    if static_fields_build then
-      class_fields = static_fields_build();
-    else
-      class_fields = {};
-    end;
+    local class_fields = {};
     local class_props = static_props or {};
     local class_events = static_events or {};
     rawset(class, "__cs2lua_defined", true);
@@ -1510,6 +1505,12 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
             rawset(t, k, v);
         end,
     });
+    if static_fields_build then
+      local sfb = static_fields_build();      
+	    for sfk,sfv in pairs(sfb) do
+	      rawset(class_fields, sfk, sfv);
+	    end;
+    end;
     if class.cctor then
       class.cctor();
     end;
