@@ -416,6 +416,8 @@ namespace RoslynTool.CsToDsl
                     var arrSym = oriparam.Type as IArrayTypeSymbol;
                     string fn = CalcMethodParameterTypeName(arrSym.ElementType);
                     sb.Append(fn.Replace('.', '_'));
+                } else if (oriparam.Type.TypeKind == TypeKind.TypeParameter) {
+                    sb.Append("Object");
                 } else {
                     string fn = CalcMethodParameterTypeName(oriparam.Type);
                     sb.Append(fn.Replace('.', '_'));
@@ -432,7 +434,7 @@ namespace RoslynTool.CsToDsl
             list.Add(type.Name);
             foreach (var arg in type.TypeArguments) {
                 if (arg.TypeKind == TypeKind.TypeParameter) {
-                    list.Add(arg.Name);
+                    list.Add("Object");
                 } else {
                     var fn = CalcMethodParameterTypeName(arg);
                     list.Add(fn.Replace(".", "_"));
