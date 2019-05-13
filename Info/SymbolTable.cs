@@ -403,6 +403,10 @@ namespace RoslynTool.CsToDsl
             if (!string.IsNullOrEmpty(name) && name[0] == '.')
                 name = name.Substring(1);
             sb.Append(name);
+            foreach(var tp in methodSym.TypeParameters) {
+                sb.Append("__");
+                sb.Append("Type");
+            }
             foreach (var param in methodSym.Parameters) {
                 sb.Append("__");
                 if (param.RefKind == RefKind.Ref) {
