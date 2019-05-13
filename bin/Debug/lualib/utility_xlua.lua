@@ -465,7 +465,7 @@ end;
 
 function __wrap_if_string(val)
   if type(val)=="string" then
-    return CS.System.String(val);
+    return CS.System.String("String_Arr_Char", val);
   else
     return val;
   end;
@@ -2138,7 +2138,7 @@ function invokeforstring(str, method, ...)
 			return string.sub(str, pos + 1, pos + length);
 		end
 	elseif method == "Split" then
-	  local csstr = CS.System.String(obj);
+	  local csstr = CS.System.String("String_Arr_Char", obj);
 	  return csstr:Split(string.char(...));
 	else
 		error("implement c# string method here" .. method)

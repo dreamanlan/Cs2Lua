@@ -393,7 +393,53 @@ namespace RoslynTool.CsToDsl
             }
         }
         private static SymbolTable s_Instance = new SymbolTable();
-        
+
+        internal static string CalcOverloadedMethodSignature(IMethodSymbol methodSym)
+        {
+            if (null == methodSym)
+                return string.Empty;
+            StringBuilder sb = new StringBuilder();
+            string name = methodSym.Name;
+            if (!string.IsNullOrEmpty(name) && name[0] == '.')
+                name = name.Substring(1);
+            sb.Append(name);
+            foreach (var param in methodSym.Parameters) {
+                sb.Append("__");
+                if (param.RefKind == RefKind.Ref) {
+                    sb.Append("Ref_");
+                } else if (param.RefKind == RefKind.Out) {
+                    sb.Append("Out_");
+                }
+                var oriparam = param.OriginalDefinition;
+                if (oriparam.Type.Kind == SymbolKind.ArrayType) {
+                    sb.Append("Arr_");
+                    var arrSym = oriparam.Type as IArrayTypeSymbol;
+                    string fn = CalcMethodParameterTypeName(arrSym.ElementType);
+                    sb.Append(fn.Replace('.', '_'));
+                } else {
+                    string fn = CalcMethodParameterTypeName(oriparam.Type);
+                    sb.Append(fn.Replace('.', '_'));
+                }
+            }
+            return sb.ToString();
+        }
+        internal static string CalcMethodParameterTypeName(ITypeSymbol sym)
+        {
+            INamedTypeSymbol type = sym as INamedTypeSymbol;
+            if (null == type)
+                return sym.Name;
+            List<string> list = new List<string>();
+            list.Add(type.Name);
+            foreach (var arg in type.TypeArguments) {
+                if (arg.TypeKind == TypeKind.TypeParameter) {
+                    list.Add(arg.Name);
+                } else {
+                    var fn = CalcMethodParameterTypeName(arg);
+                    list.Add(fn.Replace(".", "_"));
+                }
+            }
+            return string.Join("_", list.ToArray());
+        }
         internal static void MergeTypeParamsAndArgs(List<ITypeParameterSymbol> tParams, List<ITypeSymbol> tArgs, INamedTypeSymbol refType)
         {
             var typeParams = refType.TypeParameters;

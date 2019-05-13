@@ -1777,17 +1777,16 @@ namespace SLua
                             if (hasParams)
                                 continue;
                             else
-                                Write(file, "{0}(argc=={1}){{", first ? "if" : "else if", ci.GetParameters().Length + 1 + GetDelegateParameterCount(pars));
+                                Write(file, "{0}(argc=={1}){{", first ? "if" : "else if", ci.GetParameters().Length + 2);
                         } else {
-                            Write(file, "{0}(matchType(l,argc,2{1})){{", first ? "if" : "else if", TypeDecl(pars));
+                            Write(file, "{0}(matchType(l, \"{1}\", argc, 2{2})){{", first ? "if" : "else if", CalcOverloadedMethodSignature(ci), TypeDecl(pars));
                         }
                     }
 
-                    int argStart = 2;
                     for (int k = 0; k < pars.Length; k++) {
                         ParameterInfo p = pars[k];
                         bool hasParams = p.IsDefined(typeof(ParamArrayAttribute), false);
-                        CheckArgument(file, p.ParameterType, k, ref argStart, p.IsOut, hasParams, cons.Length);
+                        CheckArgument(file, p.ParameterType, k, cons.Length > 1 ? 3 : 2, p.IsOut, hasParams);
                     }
                     Write(file, "o=new {0}({1});", TypeDecl(t), FuncCall(ci));
                     WriteOk(file);
@@ -1814,18 +1813,17 @@ namespace SLua
                         }
                         if (isUniqueArgsCount(cons, ci)) {
                             if (hasParams)
-                                Write(file, "{0}(argc>={1}){{", first ? "if" : "else if", ci.GetParameters().Length + 1 + GetDelegateParameterCount(pars));
+                                Write(file, "{0}(argc>={1}){{", first ? "if" : "else if", ci.GetParameters().Length + 2);
                             else
                                 continue;
                         } else {
                             continue;
                         }
 
-                        int argStart = 2;
                         for (int k = 0; k < pars.Length; k++) {
                             ParameterInfo p = pars[k];
                             hasParams = p.IsDefined(typeof(ParamArrayAttribute), false);
-                            CheckArgument(file, p.ParameterType, k, ref argStart, p.IsOut, hasParams, cons.Length);
+                            CheckArgument(file, p.ParameterType, k, 3, p.IsOut, hasParams);
                         }
                         Write(file, "o=new {0}({1});", TypeDecl(t), FuncCall(ci));
                         WriteOk(file);
@@ -1865,26 +1863,6 @@ namespace SLua
                 WriteCatchExecption(file);
                 Write(file, "}");
             }
-        }
-
-        private int GetDelegateParameterCount(ParameterInfo[] pars)
-        {
-            int ct = 0;
-            foreach(var p in pars) {
-                var t = GetElementType(p.ParameterType);
-                if (t.BaseType == typeof(System.MulticastDelegate)) {
-                    ++ct;
-                }
-            }
-            return ct;
-        }
-
-        private Type GetElementType(Type t)
-        {
-            while(t.IsByRef || t.IsArray) {
-                t = t.GetElementType();
-            }
-            return t;
         }
 
         void WriteOk(StreamWriter file)
@@ -2046,7 +2024,7 @@ namespace SLua
                 !method.Name.StartsWith("set_", StringComparison.Ordinal) &&
                 !method.Name.StartsWith("add_", StringComparison.Ordinal) &&
                 !IsObsolete(method) && !method.ContainsGenericParameters &&
-                method.ToString() != "Int32 Clamp(Int32, Int32, Int32)" &&
+                //method.ToString() != "Int32 Clamp(Int32, Int32, Int32)" &&
                 !method.Name.StartsWith("remove_", StringComparison.Ordinal)) {
                 return true;
             }
@@ -2122,7 +2100,7 @@ namespace SLua
             } else // 2 or more override function
               {
                 Write(file, "int argc = LuaDLL.lua_gettop(l);");
-                
+
                 bool first = true;
                 //参数数量倒序排列
                 Array.Sort(cons, (a, b) => {
@@ -2156,9 +2134,9 @@ namespace SLua
                                 if (hasParams)
                                     continue;
                                 else
-                                    Write(file, "{0}(argc=={1}){{", first ? "if" : "else if", mi.IsStatic ? mi.GetParameters().Length + GetDelegateParameterCount(pars) : mi.GetParameters().Length + 1 + GetDelegateParameterCount(pars));
+                                    Write(file, "{0}(argc=={1}){{", first ? "if" : "else if", mi.IsStatic ? mi.GetParameters().Length + 1 : mi.GetParameters().Length + 2);
                             } else {
-                                Write(file, "{0}(matchType(l,argc,{1}{2})){{", first ? "if" : "else if", mi.IsStatic && !isExtension ? 1 : 2, TypeDecl(pars, isExtension ? 1 : 0));
+                                Write(file, "{0}(matchType(l, \"{1}\", argc, {2}{3})){{", first ? "if" : "else if", CalcOverloadedMethodSignature(mi), mi.IsStatic && !isExtension ? 1 : 2, TypeDecl(pars, isExtension ? 1 : 0));
                             }
                             WriteFunctionCall(mi, file, t, bf, cons.Length);
                             Write(file, "}");
@@ -2185,7 +2163,7 @@ namespace SLua
                             bool isExtension = IsExtensionMethod(mi) && (bf & BindingFlags.Instance) == BindingFlags.Instance;
                             if (isUniqueArgsCount(cons, mi)) {
                                 if (hasParams)
-                                    Write(file, "{0}(argc>={1}){{", first ? "if" : "else if", mi.IsStatic ? mi.GetParameters().Length + GetDelegateParameterCount(pars) : mi.GetParameters().Length + 1 + GetDelegateParameterCount(pars));
+                                    Write(file, "{0}(argc>={1}){{", first ? "if" : "else if", mi.IsStatic ? mi.GetParameters().Length + 1 : mi.GetParameters().Length + 2);
                                 else
                                     continue;
                             } else {
@@ -2201,6 +2179,48 @@ namespace SLua
             }
             WriteCatchExecption(file);
             Write(file, "}");
+        }
+        
+        static string CalcOverloadedMethodSignature(MethodBase mi)
+        {
+            if (null == mi)
+                return string.Empty;
+            StringBuilder sb = new StringBuilder();
+            string name = mi.Name;
+            if (!string.IsNullOrEmpty(name) && name[0] == '.')
+                name = name.Substring(1);
+            sb.Append(name);
+            foreach (var param in mi.GetParameters()) {
+                var paramType = param.ParameterType;
+                sb.Append("__");
+                if (param.ParameterType.IsByRef) {
+                    paramType = paramType.GetElementType();
+                    sb.Append("Ref_");
+                } else if (param.IsOut) {
+                    paramType = paramType.GetElementType();
+                    sb.Append("Out_");
+                }
+                if (paramType.IsArray) {
+                    paramType = paramType.GetElementType();
+                    sb.Append("Arr_");
+                    string fn = CalcMethodParameterTypeName(paramType);
+                    sb.Append(fn.Replace('.', '_'));
+                } else {
+                    string fn = CalcMethodParameterTypeName(paramType);
+                    sb.Append(fn.Replace('.', '_'));
+                }
+            }
+            return sb.ToString();
+        }
+        static string CalcMethodParameterTypeName(Type type)
+        {
+            List<string> list = new List<string>();
+            list.Add(type.Name);
+            foreach (var arg in type.GetGenericArguments()) {
+                var fn = CalcMethodParameterTypeName(arg);
+                list.Add(fn.Replace(".", "_"));
+            }
+            return string.Join("_", list.ToArray());
         }
 
         bool isUniqueArgsCount(MethodBase[] cons, MethodBase mi)
@@ -2227,9 +2247,8 @@ namespace SLua
         }
 
 
-        private void WriteFunctionCall(MethodInfo m, StreamWriter file, Type t, BindingFlags bf, int overloadCount)
+        private void WriteFunctionCall(MethodInfo m, StreamWriter file, Type t, BindingFlags bf, int overloadedCt)
         {
-
             bool isExtension = IsExtensionMethod(m) && (bf & BindingFlags.Instance) == BindingFlags.Instance;
             bool hasref = false;
             ParameterInfo[] pars = m.GetParameters();
@@ -2252,7 +2271,7 @@ namespace SLua
                 }
 
                 bool hasParams = p.IsDefined(typeof(ParamArrayAttribute), false);
-                CheckArgument(file, p.ParameterType, n, ref argIndex, !p.IsIn && p.IsOut, hasParams, overloadCount);
+                CheckArgument(file, p.ParameterType, n, overloadedCt > 1 ? argIndex + 1 : argIndex, !p.IsIn && p.IsOut, hasParams);
             }
 
             string ret = "";
@@ -2388,7 +2407,7 @@ namespace SLua
             if (fmt.EndsWith("{")) indent++;
         }
 
-        private void CheckArgument(StreamWriter file, Type t, int n, ref int argstart, bool isout, bool isparams, int overloadCount)
+        private void CheckArgument(StreamWriter file, Type t, int n, int argstart, bool isout, bool isparams)
         {
             Write(file, "{0} a{1};", TypeDecl(t), n + 1);
 
@@ -2400,9 +2419,6 @@ namespace SLua
                     Write(file, "checkEnum(l,{0},out a{1});", n + argstart, n + 1);
                 else if (t.BaseType == typeof(System.MulticastDelegate)) {
                     tryMake(t);
-                    if (overloadCount > 1) {
-                        ++argstart;
-                    }
                     Write(file, "LuaDelegation.checkDelegate(l,{0},out a{1});", n + argstart, n + 1);
                 } else if (isparams) {
                     if (t.GetElementType().IsValueType && !IsBaseType(t.GetElementType()))

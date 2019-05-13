@@ -491,7 +491,7 @@ end;
 
 function __wrap_if_string(val)
   if type(val)=="string" then
-    return System.String(val);
+    return System.String("String_Arr_Char", val);
   else
     return val;
   end;
@@ -2130,7 +2130,7 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
 	end;
 	if method then
   	if type(obj)=="string" then
-  	  local csstr = System.String(obj);
+  	  local csstr = System.String("String_Arr_Char", obj);
   	  if method=="Split" then
   	    return csstr:Split(string.char(...));
   	  else
@@ -2160,7 +2160,7 @@ function getforbasicvalue(obj, isEnum, class, property)
 	local meta = getmetatable(obj);
 	if property then
   	if type(obj)=="string" then
-  	  local csstr = System.String(obj);
+  	  local csstr = System.String("String_Arr_Char", obj);
   	  return csstr[property];
   	elseif meta then
   		return obj[property];
@@ -2176,7 +2176,7 @@ function setforbasicvalue(obj, isEnum, class, property, value)
 	local meta = getmetatable(obj);
 	if property then
   	if type(obj)=="string" then
-  	  local csstr = System.String(obj);
+  	  local csstr = System.String("String_Arr_Char", obj);
   	  csstr[property]=value;
   	elseif meta then
   		obj[property]=value;

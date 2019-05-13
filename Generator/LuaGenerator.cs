@@ -972,7 +972,7 @@ namespace Generator
                 } else if (op == "+" && (type1 == "System.String" || type2 == "System.String")) {
                     bool tostr1 = type1 != "System.String";
                     bool tostr2 = type2 != "System.String";
-                    sb.Append("System.String.Concat(");
+                    sb.Append("System.String.Concat(\"Concat__String__String\", ");
                     if (tostr1)
                         sb.Append("tostring(");
                     GenerateSyntaxComponent(p1, sb, indent, false);
@@ -1042,7 +1042,7 @@ namespace Generator
                 } else if (method == "op_GreaterThanOrEqual") {
                     luaOp = ">= ";
                 }
-                if (string.IsNullOrEmpty(luaOp)) {
+                if (string.IsNullOrEmpty(luaOp) || data.GetParamNum() > 4) {
                     sb.Append(id);
                     sb.Append("(");
                     string prestr = string.Empty;

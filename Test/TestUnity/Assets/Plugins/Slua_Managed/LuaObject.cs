@@ -913,137 +913,164 @@ return index
 			return LuaDLL.luaS_checkluatype(l, p, null) == 1;
 		}
 
-        public static bool matchType(IntPtr l, int p, Type t1)
+		public static bool matchType(IntPtr l, int p, Type t1)
 		{
 			LuaTypes t = LuaDLL.lua_type(l, p);
 			return matchType(l, p, t, t1);
-        }
-
-        public static bool matchType(IntPtr l, int total, ref int p, Type t)
-        {
-            if (total < p)
-                return false;
-            var bt = GetElementType(t);
-            if (bt.BaseType == typeof(System.MulticastDelegate)) {
-                string v;
-                if (!checkType(l, p, out v) || v != bt.Name)
-                    return false;
-                ++p;
-            }
-            if (total < p)
-                return false;
-            return matchType(l, p++, t);
-        }
-
-        public static bool matchTypeLast(IntPtr l, int total, ref int p, Type t)
-        {
-            bool ret = matchType(l, total, ref p, t);
-            if (total + 1 != p)
-                return false;
-            return ret;
-        }
-
-        public static bool matchType(IntPtr l, int total, int from, Type t1)
-		{
-			return matchTypeLast(l, total, ref from, t1);
 		}
 
-		public static bool matchType(IntPtr l, int total, int from, Type t1, Type t2)
+		public static bool matchType(IntPtr l, string signature, int total, int from, Type t1)
 		{
-            return matchType(l, total, ref from, t1) && matchTypeLast(l, total, ref from, t2);
+			if (total - from != 1)
+				return false;
+            string sig;
+            if (!checkType(l, from, out sig) || sig != signature)
+                return false;
+            ++from;
+            return matchType(l, from, t1);
 		}
 
-		public static bool matchType(IntPtr l, int total, int from, Type t1, Type t2, Type t3)
-        {
-            return matchType(l, total, ref from, t1) && matchType(l, total, ref from, t2) && matchTypeLast(l, total, ref from, t3);
-        }
-
-		public static bool matchType(IntPtr l, int total, int from, Type t1, Type t2, Type t3, Type t4)
-        {
-            return matchType(l, total, ref from, t1) && matchType(l, total, ref from, t2) && matchType(l, total, ref from, t3) && matchTypeLast(l, total, ref from, t4);
-        }
-
-		public static bool matchType(IntPtr l, int total, int from, Type t1, Type t2, Type t3, Type t4, Type t5)
-        {
-            return matchType(l, total, ref from, t1) && matchType(l, total, ref from, t2) && matchType(l, total, ref from, t3) && matchType(l, total, ref from, t4)
-                && matchTypeLast(l, total, ref from, t5);
-        }
-
-		public static bool matchType
-			(IntPtr l, int total, int from, Type t1, Type t2, Type t3, Type t4, Type t5,Type t6)
-        {
-            return matchType(l, total, ref from, t1) && matchType(l, total, ref from, t2) && matchType(l, total, ref from, t3) && matchType(l, total, ref from, t4)
-                && matchType(l, total, ref from, t5) && matchTypeLast(l, total, ref from, t6);
-        }
-
-		public static bool matchType
-			(IntPtr l, int total, int from, Type t1, Type t2, Type t3, Type t4, Type t5,Type t6,Type t7)
-        {
-            return matchType(l, total, ref from, t1) && matchType(l, total, ref from, t2) && matchType(l, total, ref from, t3) && matchType(l, total, ref from, t4)
-                && matchType(l, total, ref from, t5) && matchType(l, total, ref from, t6) && matchTypeLast(l, total, ref from, t7);
-        }
-
-		public static bool matchType
-			(IntPtr l, int total, int from, Type t1, Type t2, Type t3, Type t4, Type t5,Type t6,Type t7,Type t8)
-        {
-            return matchType(l, total, ref from, t1) && matchType(l, total, ref from, t2) && matchType(l, total, ref from, t3) && matchType(l, total, ref from, t4)
-                && matchType(l, total, ref from, t5) && matchType(l, total, ref from, t6) && matchType(l, total, ref from, t7) && matchTypeLast(l, total, ref from, t8);
-        }
-
-
-		public static bool matchType
-			(IntPtr l, int total, int from, Type t1, Type t2, Type t3, Type t4, Type t5,Type t6,Type t7,Type t8,Type t9)
-        {
-            return matchType(l, total, ref from, t1) && matchType(l, total, ref from, t2) && matchType(l, total, ref from, t3) && matchType(l, total, ref from, t4)
-                && matchType(l, total, ref from, t5) && matchType(l, total, ref from, t6) && matchType(l, total, ref from, t7) && matchType(l, total, ref from, t8)
-                && matchTypeLast(l, total, ref from, t9);
-        }
-
-		public static bool matchType
-			(IntPtr l, int total, int from, Type t1, Type t2, Type t3, Type t4, Type t5,Type t6,Type t7,Type t8,Type t9,Type t10)
-        {
-            return matchType(l, total, ref from, t1) && matchType(l, total, ref from, t2) && matchType(l, total, ref from, t3) && matchType(l, total, ref from, t4)
-                && matchType(l, total, ref from, t5) && matchType(l, total, ref from, t6) && matchType(l, total, ref from, t7) && matchType(l, total, ref from, t8)
-                && matchType(l, total, ref from, t9) && matchTypeLast(l, total, ref from, t10);
-        }
-
-        public static bool matchType(IntPtr l, int total, int from, params Type[] t)
-        {
-            int delegateCount = 0;
-            for (int i = 0; i < t.Length; ++i) {
-                var bt = GetElementType(t[i]);
-                if (bt.BaseType == typeof(System.MulticastDelegate)) {
-                    ++delegateCount;
-                }
-            }
-            if (total - from + 1 + delegateCount != t.Length)
+		public static bool matchType(IntPtr l, string signature, int total, int from, Type t1, Type t2)
+		{
+			if (total - from != 2)
+				return false;
+            string sig;
+            if (!checkType(l, from, out sig) || sig != signature)
                 return false;
+            ++from;
+            return matchType(l, from, t1) && matchType(l, from + 1, t2);
+		}
 
-            for (int i = 0; i < t.Length; ++i) {
-                bool isDelegate = false;
-                var bt = GetElementType(t[i]);
-                if (bt.BaseType == typeof(System.MulticastDelegate)) {
-                    isDelegate = true;
-                }
-                if (isDelegate) {
-                    string v;
-                    if (!checkType(l, from + i, out v) || v != bt.Name)
-                        return false;
-                    ++i;
-                }
+		public static bool matchType(IntPtr l, string signature, int total, int from, Type t1, Type t2, Type t3)
+		{
+			if (total - from != 3)
+				return false;
+            string sig;
+            if (!checkType(l, from, out sig) || sig != signature)
+                return false;
+            ++from;
+            return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3);
+		}
+
+		public static bool matchType(IntPtr l, string signature, int total, int from, Type t1, Type t2, Type t3, Type t4)
+		{
+			if (total - from != 4)
+				return false;
+            string sig;
+            if (!checkType(l, from, out sig) || sig != signature)
+                return false;
+            ++from;
+            return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3) && matchType(l, from + 3, t4);
+		}
+
+		public static bool matchType(IntPtr l, string signature, int total, int from, Type t1, Type t2, Type t3, Type t4, Type t5)
+		{
+			if (total - from != 5)
+				return false;
+            string sig;
+            if (!checkType(l, from, out sig) || sig != signature)
+                return false;
+            ++from;
+            return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3) && matchType(l, from + 3, t4)
+				&& matchType(l, from + 4, t5);
+		}
+
+		public static bool matchType
+			(IntPtr l, string signature, int total, int from, Type t1, Type t2, Type t3, Type t4, Type t5,Type t6)
+		{
+			if (total - from != 6)
+				return false;
+            string sig;
+            if (!checkType(l, from, out sig) || sig != signature)
+                return false;
+            ++from;
+            return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3) && matchType(l, from + 3, t4)
+				&& matchType(l, from + 4, t5)
+				&& matchType(l, from + 5, t6);
+		}
+
+		public static bool matchType
+			(IntPtr l, string signature, int total, int from, Type t1, Type t2, Type t3, Type t4, Type t5,Type t6,Type t7)
+		{
+			if (total - from != 7)
+				return false;
+            string sig;
+            if (!checkType(l, from, out sig) || sig != signature)
+                return false;
+            ++from;
+            return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3) && matchType(l, from + 3, t4)
+				&& matchType(l, from + 4, t5)
+				&& matchType(l, from + 5, t6)
+				&& matchType(l, from + 6, t7);
+		}
+
+		public static bool matchType
+			(IntPtr l, string signature, int total, int from, Type t1, Type t2, Type t3, Type t4, Type t5,Type t6,Type t7,Type t8)
+		{
+			if (total - from != 8)
+				return false;
+            string sig;
+            if (!checkType(l, from, out sig) || sig != signature)
+                return false;
+            ++from;
+            return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3) && matchType(l, from + 3, t4)
+				&& matchType(l, from + 4, t5)
+				&& matchType(l, from + 5, t6)
+				&& matchType(l, from + 6, t7)
+				&& matchType(l, from + 7, t8);
+		}
+
+
+		public static bool matchType
+			(IntPtr l, string signature, int total, int from, Type t1, Type t2, Type t3, Type t4, Type t5,Type t6,Type t7,Type t8,Type t9)
+		{
+			if (total - from != 9)
+				return false;
+            string sig;
+            if (!checkType(l, from, out sig) || sig != signature)
+                return false;
+            ++from;
+            return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3) && matchType(l, from + 3, t4)
+				&& matchType(l, from + 4, t5)
+				&& matchType(l, from + 5, t6)
+				&& matchType(l, from + 6, t7)
+				&& matchType(l, from + 7, t8)
+				&& matchType(l, from + 8, t9);
+		}
+
+		public static bool matchType
+			(IntPtr l, string signature, int total, int from, Type t1, Type t2, Type t3, Type t4, Type t5,Type t6,Type t7,Type t8,Type t9,Type t10)
+		{
+			if (total - from != 10)
+				return false;
+            string sig;
+            if (!checkType(l, from, out sig) || sig != signature)
+                return false;
+            ++from;
+            return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3) && matchType(l, from + 3, t4)
+				&& matchType(l, from + 4, t5)
+					&& matchType(l, from + 5, t6)
+					&& matchType(l, from + 6, t7)
+					&& matchType(l, from + 7, t8)
+					&& matchType(l, from + 8, t9)
+					&& matchType(l, from + 9, t10);
+		}
+
+        public static bool matchType(IntPtr l, string signature, int total, int from, params Type[] t)
+        {
+            if (total - from != t.Length)
+                return false;
+            string sig;
+            if (!checkType(l, from, out sig) || sig != signature)
+                return false;
+            ++from;
+            for (int i = 0; i < t.Length; ++i)
+            {
                 if (!matchType(l, from + i, t[i]))
                     return false;
             }
 
             return true;
-        }
-
-        private static Type GetElementType(Type t)
-        {
-            while (t.IsByRef || t.IsArray) {
-                t = t.GetElementType();
-            }
-            return t;
         }
 
         public static bool matchType(IntPtr l, int total, int from, ParameterInfo[] pars)
