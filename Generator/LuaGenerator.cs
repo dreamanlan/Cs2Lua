@@ -1101,11 +1101,19 @@ namespace Generator
             } else if (id == "callstatic") {
                 var obj = data.Params[0];
                 var member = data.Params[1];
+                var mid = member.GetId();
                 GenerateSyntaxComponent(obj, sb, indent, false);
-                sb.AppendFormat(".{0}", member.GetId());
+                sb.AppendFormat(".{0}", mid);
                 sb.Append("(");
+                int start = 2;
+                if (data.Params.Count > start) {
+                    var sig = data.GetParamId(start);
+                    if (sig.StartsWith(mid) && NoSignatureArg(sig)) {
+                        start = 3;
+                    }
+                }
                 string prestr = string.Empty;
-                for (int ix = 2; ix < data.Params.Count; ++ix) {
+                for (int ix = start; ix < data.Params.Count; ++ix) {
                     var param = data.Params[ix];
                     sb.Append(prestr);
                     string paramId = param.GetId();
@@ -1120,16 +1128,24 @@ namespace Generator
             } else if (id == "callinstance") {
                 var obj = data.Params[0];
                 var member = data.Params[1];
+                var mid = member.GetId();
                 var objCd = obj as Dsl.CallData;
                 GenerateSyntaxComponent(obj, sb, indent, false);
                 if (null != objCd && objCd.GetId() == "getinstance" && objCd.GetParamNum() == 2 && objCd.GetParamId(1) == "base") {
-                    sb.AppendFormat(":__self__{0}", member.GetId());
+                    sb.AppendFormat(":__self__{0}", mid);
                 } else {
-                    sb.AppendFormat(":{0}", member.GetId());
+                    sb.AppendFormat(":{0}", mid);
                 }
                 sb.Append("(");
+                int start = 2;
+                if (data.Params.Count > start) {
+                    var sig = data.GetParamId(start);
+                    if (sig.StartsWith(mid) && NoSignatureArg(sig)) {
+                        start = 3;
+                    }
+                }
                 string prestr = string.Empty;
-                for (int ix = 2; ix < data.Params.Count; ++ix) {
+                for (int ix = start; ix < data.Params.Count; ++ix) {
                     var param = data.Params[ix];
                     sb.Append(prestr);
                     string paramId = param.GetId();
@@ -1775,11 +1791,30 @@ namespace Generator
             s_CachedFile2MergedFiles.Add(file, null);
             return null;
         }
+        private static bool NoSignatureArg(string signature)
+        {
+            bool ret;
+            if(s_CachedNoSignatures.TryGetValue(signature, out ret)) {
+                return ret;
+            }
+            foreach (var info in s_NoSignatureArgInfos) {
+                foreach (var regex in info.SignatureMatches) {
+                    if (regex.IsMatch(signature)) {
+                        s_CachedNoSignatures.Add(signature, true);
+                        return true;
+                    }
+                }
+            }
+            s_CachedNoSignatures.Add(signature, false);
+            return false;
+        }
         private static void ReadConfig()
         {
             s_DontRequireInfos.Clear();
             s_FileMergeInfos.Clear();
+            s_NoSignatureArgInfos.Clear();
             s_CachedFile2MergedFiles.Clear();
+            s_CachedNoSignatures.Clear();
 
             var file = Path.Combine(s_ExePath, "cs2dsl.dsl");
             var dslFile = new Dsl.DslFile();
@@ -1878,6 +1913,22 @@ namespace Generator
                     }
                 }
                 s_FileMergeInfos.Add(cfg.MergedFileName, cfg);
+            } else if (id == "nosignaturearg") {
+                var cfg = new NoSignatureArgInfo();
+                var f = info.First;
+                if (null != f) {
+                    foreach (var p in f.Call.Params) {
+                        var str = p.GetId();
+                        var regex = new Regex(str, RegexOptions.Compiled);
+                        cfg.SignatureMatches.Add(regex);
+                    }
+                    foreach (var s in f.Statements) {
+                        var str = s.GetId();
+                        var regex = new Regex(str, RegexOptions.Compiled);
+                        cfg.SignatureMatches.Add(regex);
+                    }
+                }
+                s_NoSignatureArgInfos.Add(cfg);
             }
         }
 
@@ -1931,8 +1982,15 @@ namespace Generator
             internal List<string> DefinedClasses = new List<string>();
         }
 
+        private class NoSignatureArgInfo
+        {
+            internal List<Regex> SignatureMatches = new List<Regex>();
+        }
+
         private static List<DontRequireInfo> s_DontRequireInfos = new List<DontRequireInfo>();
         private static Dictionary<string, FileMergeInfo> s_FileMergeInfos = new Dictionary<string, FileMergeInfo>();
+        private static List<NoSignatureArgInfo> s_NoSignatureArgInfos = new List<NoSignatureArgInfo>();
         private static Dictionary<string, string> s_CachedFile2MergedFiles = new Dictionary<string, string>();
+        private static Dictionary<string, bool> s_CachedNoSignatures = new Dictionary<string, bool>();
     }
 }

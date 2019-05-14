@@ -1055,7 +1055,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
                 InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
                 ii.Init(leftPsym.SetMethod, leftElementAccess.ArgumentList, m_Model);
-                OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.ArrayToParams, false, leftElementAccess, ii.ArgConversions.ToArray());
+                OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, leftElementAccess, ii.ArgConversions.ToArray());
                 CodeBuilder.Append(", ");
                 OutputExpressionSyntax(assign.Right, opd);
                 CodeBuilder.Append(")");
@@ -1121,7 +1121,7 @@ namespace RoslynTool.CsToDsl
                     InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
                     List<ExpressionSyntax> args = new List<ExpressionSyntax> { leftCondAccess.WhenNotNull };
                     ii.Init(psym.SetMethod, args, m_Model);
-                    OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.ArrayToParams, false, leftCondAccess, ii.ArgConversions.ToArray());
+                    OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, leftCondAccess, ii.ArgConversions.ToArray());
                     CodeBuilder.Append(", ");
                     OutputExpressionSyntax(assign.Right, opd);
                     CodeBuilder.Append(")");

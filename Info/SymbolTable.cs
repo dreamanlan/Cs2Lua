@@ -394,7 +394,7 @@ namespace RoslynTool.CsToDsl
         }
         private static SymbolTable s_Instance = new SymbolTable();
 
-        internal static string CalcOverloadedMethodSignature(IMethodSymbol methodSym)
+        internal static string CalcOverloadedMethodSignature(IMethodSymbol methodSym, IMethodSymbol nonGenericMethodSym)
         {
             if (null == methodSym)
                 return string.Empty;
@@ -403,11 +403,13 @@ namespace RoslynTool.CsToDsl
             if (!string.IsNullOrEmpty(name) && name[0] == '.')
                 name = name.Substring(1);
             sb.Append(name);
-            foreach(var tp in methodSym.TypeParameters) {
-                sb.Append("__");
-                sb.Append("Type");
+            IMethodSymbol msym;
+            if (null != nonGenericMethodSym) {
+                msym = nonGenericMethodSym;
+            } else {
+                msym = methodSym;
             }
-            foreach (var param in methodSym.Parameters) {
+            foreach (var param in msym.Parameters) {
                 sb.Append("__");
                 if (param.RefKind == RefKind.Ref) {
                     sb.Append("Ref_");
@@ -440,7 +442,11 @@ namespace RoslynTool.CsToDsl
             if (null == type)
                 return sym.Name;
             List<string> list = new List<string>();
-            list.Add(type.Name);
+            if (type.TypeArguments.Length > 0) {
+                list.Add(string.Format("{0}`{1}", type.Name, type.TypeArguments.Length));
+            } else {
+                list.Add(type.Name);
+            }
             foreach (var arg in type.TypeArguments) {
                 if (arg.TypeKind == TypeKind.TypeParameter) {
                     var tp = arg as ITypeParameterSymbol;

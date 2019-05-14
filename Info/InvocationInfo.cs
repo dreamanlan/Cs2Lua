@@ -25,6 +25,7 @@ namespace RoslynTool.CsToDsl
         internal List<ExpressionSyntax> ReturnArgs = new List<ExpressionSyntax>();
         internal List<ITypeSymbol> GenericTypeArgs = new List<ITypeSymbol>();
         internal bool ArrayToParams = false;
+        internal bool PostPositionGenericTypeArgs = false;
         internal bool IsEnumClass = false;
         internal bool IsExtensionMethod = false;
         internal bool IsComponentGetOrAdd = false;
@@ -36,6 +37,7 @@ namespace RoslynTool.CsToDsl
         internal ExpressionSyntax SecondRefArray = null;
 
         internal IMethodSymbol MethodSymbol = null;
+        internal IMethodSymbol NonGenericMethodSymbol = null;
         internal IMethodSymbol CallerMethodSymbol = null;
         internal INamedTypeSymbol CallerTypeSymbol = null;
 
@@ -308,9 +310,9 @@ namespace RoslynTool.CsToDsl
                 var args = new List<ExpressionSyntax>();
                 args.Add(exp);
                 args.AddRange(Args);
-                cs2dsl.OutputArgumentList(args, DefaultValueArgs, GenericTypeArgs, ExternOverloadedMethodSignature, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
+                cs2dsl.OutputArgumentList(args, DefaultValueArgs, GenericTypeArgs, ExternOverloadedMethodSignature, PostPositionGenericTypeArgs, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
             } else {
-                cs2dsl.OutputArgumentList(Args, DefaultValueArgs, GenericTypeArgs, ExternOverloadedMethodSignature, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
+                cs2dsl.OutputArgumentList(Args, DefaultValueArgs, GenericTypeArgs, ExternOverloadedMethodSignature, PostPositionGenericTypeArgs, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
             }
             codeBuilder.Append(")");
         }
@@ -333,23 +335,87 @@ namespace RoslynTool.CsToDsl
             IsArrayStaticMethod = ClassKey == SymbolTable.PrefixExternClassName("System.Array") && sym.IsStatic;
             IsExternMethod = !SymbolTable.Instance.IsCs2DslSymbol(sym);
 
-            ExternOverloadedMethodSignature = string.Empty;
-            if (IsExternMethod) {
-                var syms = sym.ContainingType.GetMembers(sym.Name);
-                if (null != syms) {
-                    if (syms.Length > 1) {
-                        ExternOverloadedMethodSignature = SymbolTable.CalcOverloadedMethodSignature(sym);
-                    }
-                }
-            }
-
             if ((ClassKey == SymbolTable.PrefixExternClassName("UnityEngine.GameObject") || ClassKey == SymbolTable.PrefixExternClassName("UnityEngine.Component")) && (sym.Name.StartsWith("GetComponent") || sym.Name.StartsWith("AddComponent"))) {
                 IsComponentGetOrAdd = true;
             }
 
+            NonGenericMethodSymbol = null;
+            PostPositionGenericTypeArgs = false;
             if (sym.IsGenericMethod) {
-                foreach (var arg in sym.TypeArguments) {
-                    GenericTypeArgs.Add(arg);
+                bool existNonGenericVersion = true;
+                var ctype = sym.ContainingType;
+                var syms = ctype.GetMembers(sym.Name);
+                if (null != syms) {
+                    foreach(var isym in syms) {
+                        var msym = isym as IMethodSymbol;
+                        if (null != msym && !msym.IsGenericMethod && msym.Parameters.Length == sym.Parameters.Length + sym.TypeParameters.Length) {
+                            existNonGenericVersion = true;
+                            for (int i = 0; i < sym.TypeParameters.Length; ++i) {
+                                var psym = msym.Parameters[i];
+                                if (psym.Type.Name != "Type") {
+                                    existNonGenericVersion = false;
+                                    break;
+                                }
+                            }
+                            for(int i = 0; i < sym.Parameters.Length; ++i) {
+                                var psym1 = msym.Parameters[i + sym.TypeParameters.Length];
+                                var psym2 = sym.Parameters[i];
+                                if (psym1.Type.Name != psym2.Type.Name) {
+                                    existNonGenericVersion = false;
+                                    break;
+                                }
+                            }
+                            if (existNonGenericVersion) {
+                                NonGenericMethodSymbol = msym;
+                                PostPositionGenericTypeArgs = false;
+                            } else {
+                                existNonGenericVersion = true;
+                                for (int i = 0; i < sym.Parameters.Length; ++i) {
+                                    var psym1 = msym.Parameters[i];
+                                    var psym2 = sym.Parameters[i];
+                                    if (psym1.Type.Name != psym2.Type.Name) {
+                                        existNonGenericVersion = false;
+                                        break;
+                                    }
+                                }
+                                for (int i = 0; i < sym.TypeParameters.Length; ++i) {
+                                    var psym = msym.Parameters[i + sym.Parameters.Length];
+                                    if (psym.Type.Name != "Type") {
+                                        existNonGenericVersion = false;
+                                        break;
+                                    }
+                                }
+                                if (existNonGenericVersion) {
+                                    NonGenericMethodSymbol = msym;
+                                    PostPositionGenericTypeArgs = true;
+                                }
+                            }
+                            if (existNonGenericVersion)
+                                break;
+                        }
+                    }
+                }
+                if (existNonGenericVersion) {
+                    foreach (var arg in sym.TypeArguments) {
+                        GenericTypeArgs.Add(arg);
+                    }
+                }
+            }
+            
+            ExternOverloadedMethodSignature = string.Empty;
+            if (IsExternMethod) {
+                var syms = sym.ContainingType.GetMembers(sym.Name);
+                if (null != syms) {
+                    int mcount = 0;
+                    foreach (var isym in syms) {
+                        var msym = isym as IMethodSymbol;
+                        if (null != msym) {
+                            ++mcount;
+                        }
+                    }
+                    if (mcount > 1) {
+                        ExternOverloadedMethodSignature = SymbolTable.CalcOverloadedMethodSignature(sym, NonGenericMethodSymbol);
+                    }
                 }
             }
         }
@@ -380,10 +446,6 @@ namespace RoslynTool.CsToDsl
                     ClassSymbolInfo info;
                     if (SymbolTable.Instance.ClassSymbols.TryGetValue(ckey, out info)) {
                         info.SymbolOverloadFlags.TryGetValue(sym.Name, out isOverload);
-                    }
-
-                    if (sym.IsGenericMethod) {
-                        Logger.Instance.Log("Translation Warning", "extern method {0}.{1} is generic method, please insure a overloaded non generic method exist !", ckey, sym.Name);
                     }
 
                     foreach (var param in sym.Parameters) {
