@@ -1541,15 +1541,13 @@ function newexternobject(class, typeargs, typekinds, initializer, ...)
 end;
 
 function newtypeparamobject(t)
+	local obj = t();
   if rawget(t, "__cs2lua_defined") then
-    local obj = t();
     if obj.ctor then
       obj:ctor();
     end;
-    return obj;
-  else
-    return t();
   end;
+  return obj;
 end;
 
 function newdictionary(t, typeargs, typekinds, ctor, dict, ...)
@@ -1989,47 +1987,47 @@ function setexterninstanceindexer(obj, intf, name, ...)
 end;
 
 function invokeexternoperator(class, method, ...)
-	local args = {...};
-	--对slua，对应到lua元表操作符函数的操作符重载cs2lua转lua代码时已经换成对应操作符表达式。
-	--执行到这里的应该是无法对应到lua操作符的操作符重载
-	local argnum = #args;
-	if method=="op_Equality" then
-	  if args[1] and args[2] then
-	  	mt1 = getmetatable(args[1]);
-	  	mt2 = getmetatable(args[2]);
-	  	if mt1 and mt1.__eq then
-	  		return mt1.__eq(args[1], args[2]);
-	  	elseif mt2 and mt2.__eq then
-	  		return mt2.__eq(args[2], args[1]);
-	  	else
-	    	return args[1]==args[2];
-	    end;
-	  elseif not args[1] then
-	    return Slua.IsNull(args[2]);
-	  elseif not args[2] then
-	    return Slua.IsNull(args[1]);
-	  else
-	    return true;
-	  end;
-	elseif method=="op_Inequality" then
-	  if args[1] and args[2] then
-	  	mt1 = getmetatable(args[1]);
-	  	mt2 = getmetatable(args[2]);
-	  	if mt1 and mt1.__eq then
-	  		return not mt1.__eq(args[1], args[2]);
-	  	elseif mt2 and mt2.__eq then
-	  		return not mt2.__eq(args[2], args[1]);
-	  	else
-	    	return args[1]~=args[2];
-	    end;
-	  elseif not args[1] then
-	    return not Slua.IsNull(args[2]);
-	  elseif not args[2] then
-	    return not Slua.IsNull(args[1]);
-	  else
-	    return false;
-	  end;	  
-	elseif method=="op_Implicit" then
+  local args = {...};
+  --对slua，对应到lua元表操作符函数的操作符重载cs2lua转lua代码时已经换成对应操作符表达式。
+  --执行到这里的应该是无法对应到lua操作符的操作符重载
+  local argnum = #args;
+  if argnum==2 and method=="op_Equality" then
+    if args[1] and args[2] then
+      mt1 = getmetatable(args[1]);
+      mt2 = getmetatable(args[2]);
+      if mt1 and mt1.__eq then
+        return mt1.__eq(args[1], args[2]);
+      elseif mt2 and mt2.__eq then
+        return mt2.__eq(args[2], args[1]);
+      else
+        return args[1]==args[2];
+      end;
+    elseif not args[1] then
+      return Slua.IsNull(args[2]);
+    elseif not args[2] then
+      return Slua.IsNull(args[1]);
+    else
+      return true;
+    end;
+  elseif argnum==2 and method=="op_Inequality" then
+    if args[1] and args[2] then
+      mt1 = getmetatable(args[1]);
+      mt2 = getmetatable(args[2]);
+      if mt1 and mt1.__eq then
+        return not mt1.__eq(args[1], args[2]);
+      elseif mt2 and mt2.__eq then
+        return not mt2.__eq(args[2], args[1]);
+      else
+        return args[1]~=args[2];
+      end;
+    elseif not args[1] then
+      return not Slua.IsNull(args[2]);
+    elseif not args[2] then
+      return not Slua.IsNull(args[1]);
+    else
+      return false;
+    end;    
+  elseif method=="op_Implicit" then
   	local t = nil;
   	if args[1] then
   		local meta = getmetatable(args[1]);
@@ -2059,21 +2057,27 @@ function invokeexternoperator(class, method, ...)
       --这里就不仔细判断了，就假定是UnityEngine.Object子类了
       return not Slua.IsNull(args[1]);
     end;
-	end;
-	if method then
-  	if argnum == 1 and args[1] then
-  	  return args[1][method](...);
-  	elseif argnum == 2 then
-  	  if args[1] then
-  	    return args[1][method](...);
-  	  elseif args[2] then
-  	    return args[2][method](...);
-  	  end;
-  	end;  
-	else
-    UnityEngine.Debug.LogError("[cs2lua] table index is nil");
-	end;
-	return nil;
+  end;
+  if method then
+    if argnum == 1 and args[1] then
+      return args[1][method](...);
+    elseif argnum == 2 then
+      if args[1] then
+        return args[1][method](...);
+      elseif args[2] then
+        return args[2][method](...);
+      end;
+    elseif argnum == 3 then
+      if args[2] then
+        return args[2][method](...);
+      elseif args[3] then
+        return args[3][method](...);
+      end;
+    end;  
+  else
+    UnityEngine.Debug.LogError("LogError_String","[cs2lua] table index is nil");
+  end;
+  return nil;
 end;
 
 function defineentry(class)
@@ -2083,43 +2087,43 @@ function defineentry(class)
 end;
 
 function invokewithinterface(obj, intf, method, ...)
-	local meta = getmetatable(obj);
-	if method then
-  	if meta and rawget(meta, "__cs2lua_defined") then
-  		return obj[method](obj,...);
-  	else
-  		return obj[method](obj,...);
-  	end;
-	else
-    UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+  local meta = getmetatable(obj);
+  if method then
+    if meta and rawget(meta, "__cs2lua_defined") then
+      return obj[method](obj,...);
+    else
+      return obj[method](obj,...);
+    end;
+  else
+    UnityEngine.Debug.LogError("LogError_String","[cs2lua] table index is nil");
   end;
-	return nil;
+  return nil;
 end;
 function getwithinterface(obj, intf, property)
-	local meta = getmetatable(obj);
-	if property then
-  	if meta and rawget(meta, "__cs2lua_defined") then
-  		return obj[property];
-  	else
-  		return obj[property];
-  	end;
-	else
-    UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+  local meta = getmetatable(obj);
+  if property then
+    if meta and rawget(meta, "__cs2lua_defined") then
+      return obj[property];
+    else
+      return obj[property];
+    end;
+  else
+    UnityEngine.Debug.LogError("LogError_String","[cs2lua] table index is nil");
   end;
-	return nil;
+  return nil;
 end;
 function setwithinterface(obj, intf, property, value)
-	local meta = getmetatable(obj);
-	if property then
-  	if meta and rawget(meta, "__cs2lua_defined") then
-  		obj[property]=value;
-  	else
-  		obj[property]=value;
-  	end;
-	else
-    UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+  local meta = getmetatable(obj);
+  if property then
+    if meta and rawget(meta, "__cs2lua_defined") then
+      obj[property]=value;
+    else
+      obj[property]=value;
+    end;
+  else
+    UnityEngine.Debug.LogError("LogError_String","[cs2lua] table index is nil");
   end;
-	return nil;
+  return nil;
 end;
 
 function invokeforbasicvalue(obj, isEnum, class, method, ...)

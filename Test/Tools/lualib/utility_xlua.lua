@@ -1537,15 +1537,13 @@ function newexternobject(class, typeargs, typekinds, initializer, ...)
 end;
 
 function newtypeparamobject(t)
+	local obj = t();
   if rawget(t, "__cs2lua_defined") then
-    local obj = t();
     if obj.ctor then
       obj:ctor();
     end;
-    return obj;
-  else
-    return t();
   end;
+  return obj;
 end;
 
 function newdictionary(t, typeargs, typekinds, ctor, dict, ...)

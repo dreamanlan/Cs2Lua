@@ -429,6 +429,70 @@ namespace RoslynTool.CsToDsl
                 }
             }
         }
+        private void OutputNewValueType(INamedTypeSymbol namedTypeSym)
+        {
+            if (null == namedTypeSym) {
+                return;
+            }
+
+            bool isCollection = IsImplementationOfSys(namedTypeSym, "ICollection");
+            bool isExternal = !SymbolTable.Instance.IsCs2DslSymbol(namedTypeSym);
+            string fullTypeName = ClassInfo.GetFullName(namedTypeSym);
+
+            IMethodSymbol sym = null;
+            foreach (var c in namedTypeSym.InstanceConstructors) {
+                if (!c.IsGenericMethod && c.Parameters.Length == 0) {
+                    sym = c;
+                }
+            }
+
+            string ctor = null;
+            if (null != sym) {
+                ctor = NameMangling(sym);
+            }
+
+            if (isCollection) {
+                bool isDictionary = IsImplementationOfSys(namedTypeSym, "IDictionary");
+                bool isList = IsImplementationOfSys(namedTypeSym, "IList");
+                if (isDictionary) {
+                    //字典对象的处理
+                    CodeBuilder.AppendFormat("new{0}dictionary({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                } else if (isList) {
+                    //列表对象的处理
+                    CodeBuilder.AppendFormat("new{0}list({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                } else {
+                    //集合对象的处理
+                    CodeBuilder.AppendFormat("new{0}collection({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                }
+            } else {
+                CodeBuilder.AppendFormat("new{0}object({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+            }
+            if (!isExternal) {
+                //外部对象函数名不会换名，所以没必要提供名字，总是ctor
+                if (string.IsNullOrEmpty(ctor)) {
+                    CodeBuilder.Append(", null");
+                } else {
+                    CodeBuilder.AppendFormat(", \"{0}\"", ctor);
+                }
+            }
+            if (isCollection) {
+                bool isDictionary = IsImplementationOfSys(namedTypeSym, "IDictionary");
+                bool isList = IsImplementationOfSys(namedTypeSym, "IList");
+                if (isDictionary)
+                    CodeBuilder.Append(", literaldictionary()");
+                else if (isList)
+                    CodeBuilder.Append(", literallist()");
+                else
+                    CodeBuilder.Append(", literalcollection()");
+            } else {
+                CodeBuilder.Append(", null");
+            }
+            CodeBuilder.Append(");");
+        }
         private void OutputDefaultValue(ITypeSymbol type)
         {
             OutputDefaultValue(CodeBuilder, type);

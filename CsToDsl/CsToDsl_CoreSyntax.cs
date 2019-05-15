@@ -456,13 +456,8 @@ namespace RoslynTool.CsToDsl
                                     ci.ClassSemanticInfo.GenerateBasicCtor = true;
                                 }
                                 ++m_Indent;
-                                CodeBuilder.AppendFormat("{0}{1}.{2}", GetIndentString(), isStatic ? ci.Key : "this", name);
-                                string fullTypeName = ClassInfo.GetFullName(type);
-                                if (SymbolTable.Instance.IsCs2DslSymbol(type)) {
-                                    CodeBuilder.AppendFormat(" = new {0}();", fullTypeName);
-                                } else {
-                                    CodeBuilder.AppendFormat(" = newexternobject({0}, \"{0}\", null, null);", fullTypeName);
-                                }
+                                CodeBuilder.AppendFormat("{0}{1}.{2} = ", GetIndentString(), isStatic ? ci.Key : "this", name);
+                                OutputNewValueType(type as INamedTypeSymbol);
                                 CodeBuilder.AppendLine();
                                 --m_Indent;
                                 if (isStatic) {
@@ -489,13 +484,8 @@ namespace RoslynTool.CsToDsl
                                 ci.ClassSemanticInfo.GenerateBasicCtor = true;
                             }
                             ++m_Indent;
-                            CodeBuilder.AppendFormat("{0}{1}.{2}", GetIndentString(), isStatic ? ci.Key : "this", name);
-                            string fullTypeName = ClassInfo.GetFullName(type);
-                            if (SymbolTable.Instance.IsCs2DslSymbol(type)) {
-                                CodeBuilder.AppendFormat(" = new {0}();", fullTypeName);
-                            } else {
-                                CodeBuilder.AppendFormat(" = newexternobject({0}, \"{0}\", null, null);", fullTypeName);
-                            }
+                            CodeBuilder.AppendFormat("{0}{1}.{2} = ", GetIndentString(), isStatic ? ci.Key : "this", name);
+                            OutputNewValueType(type as INamedTypeSymbol);
                             CodeBuilder.AppendLine();
                             --m_Indent;
                             if (isStatic) {
@@ -805,65 +795,9 @@ namespace RoslynTool.CsToDsl
                 LocalVariableAccessAnalysis analysis = new LocalVariableAccessAnalysis(node.Identifier.Text);
                 analysis.Visit(block);
                 if (analysis.NeedInitOnDeclaration) {
-                    bool isCollection = IsImplementationOfSys(namedTypeSym, "ICollection");
-                    bool isExternal = !SymbolTable.Instance.IsCs2DslSymbol(namedTypeSym);
-                    string fullTypeName = ClassInfo.GetFullName(namedTypeSym);
-
-                    IMethodSymbol sym = null;
-                    foreach (var c in namedTypeSym.InstanceConstructors) {
-                        if (!c.IsGenericMethod && c.Parameters.Length == 0) {
-                            sym = c;
-                        }
-                    }
-
-                    string ctor = null;
-                    if (null != sym) {
-                        ctor = NameMangling(sym);
-                    }
-
                     CodeBuilder.AppendFormat("{0}local{{{1} = ", GetIndentString(), node.Identifier.Text);
-
-                    if (isCollection) {
-                        bool isDictionary = IsImplementationOfSys(namedTypeSym, "IDictionary");
-                        bool isList = IsImplementationOfSys(namedTypeSym, "IList");
-                        if (isDictionary) {
-                            //字典对象的处理
-                            CodeBuilder.AppendFormat("new{0}dictionary({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                            CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
-                        } else if (isList) {
-                            //列表对象的处理
-                            CodeBuilder.AppendFormat("new{0}list({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                            CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
-                        } else {
-                            //集合对象的处理
-                            CodeBuilder.AppendFormat("new{0}collection({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                            CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
-                        }
-                    } else {
-                        CodeBuilder.AppendFormat("new{0}object({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                        CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
-                    }
-                    if (!isExternal) {
-                        //外部对象函数名不会换名，所以没必要提供名字，总是ctor
-                        if (string.IsNullOrEmpty(ctor)) {
-                            CodeBuilder.Append(", null");
-                        } else {
-                            CodeBuilder.AppendFormat(", \"{0}\"", ctor);
-                        }
-                    }
-                    if (isCollection) {
-                        bool isDictionary = IsImplementationOfSys(namedTypeSym, "IDictionary");
-                        bool isList = IsImplementationOfSys(namedTypeSym, "IList");
-                        if (isDictionary)
-                            CodeBuilder.Append(", literaldictionary()");
-                        else if (isList)
-                            CodeBuilder.Append(", literallist()");
-                        else
-                            CodeBuilder.Append(", literalcollection()");
-                    } else {
-                        CodeBuilder.Append(", null");
-                    }
-                    CodeBuilder.Append(");}");
+                    OutputNewValueType(namedTypeSym);
+                    CodeBuilder.Append("}");
                 } else {
                     CodeBuilder.AppendFormat("{0}local({1})", GetIndentString(), node.Identifier.Text);
                 }
