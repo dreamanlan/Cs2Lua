@@ -1,7 +1,3 @@
-require "cs2lua__utility";
-require "cs2lua__namespaces";
-require "cs2lua__externenums";
-require "cs2lua__interfaces";
 
 Mandelbrot = {
 	__new_object = function(...)
@@ -24,7 +20,7 @@ Mandelbrot = {
 
 		local instance_methods = {
 			Start = function(this, obj, mb)
-				this.root = newexternobject(UnityEngine.GameObject, {}, {}, nil, "mandelbrot");
+				this.root = newexternobject(UnityEngine.GameObject, {}, {}, nil, "ctor__String", "mandelbrot");
 				this:Exec();
 			end,
 			Call = function(this, name, ...)
@@ -82,12 +78,12 @@ Mandelbrot = {
 			DrawCube = function(this, x, y, w, h)
 				local cube;
 				cube = UnityEngine.GameObject.CreatePrimitive(3);
-				cube.transform.position = newexternobject(UnityEngine.Vector3, {}, {}, nil, (((x * this.r) * this.scale) / w), ((((y * this.r) * this.scale) / h) - 12), 0);
-				cube.transform:SetParent(this.root.transform);
+				cube.transform.position = newexternobject(UnityEngine.Vector3, {}, {}, nil, "ctor__Single__Single__Single", (((x * this.r) * this.scale) / w), ((((y * this.r) * this.scale) / h) - 12), 0);
+				cube.transform:SetParent("SetParent__Transform", this.root.transform);
 				local mat;
-				mat = cube:GetComponent(UnityEngine.Renderer).material;
+				mat = cube:GetComponent("GetComponent__Type", UnityEngine.Renderer).material;
 				local ix;
-				ix = UnityEngine.Random.Range(0, this.colors.Length);
+				ix = UnityEngine.Random.Range("Range__Int32__Int32", 0, this.colors.Length);
 				mat.color = this.colors[(ix + 1)];
 			end,
 			ctor = function(this)
@@ -153,4 +149,8 @@ Mandelbrot = {
 };
 
 
-Mandelbrot.__define_class();
+require "cs2lua__utility";
+require "cs2lua__namespaces";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+settempmetatable(Mandelbrot);

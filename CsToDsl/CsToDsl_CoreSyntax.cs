@@ -86,13 +86,13 @@ namespace RoslynTool.CsToDsl
             SymbolTable.Instance.ClassSymbols.TryGetValue(ClassInfo.GetFullNameWithTypeParameters(declSym), out info);
             ci.Init(declSym, info);
             if (null != declSym) {
-                string[] requires = ClassInfo.GetAttributeArguments<string>(declSym, "Cs2Lua.RequireAttribute", 0);
+                string[] requires = ClassInfo.GetAttributeArguments<string>(declSym, "Cs2Dsl.RequireAttribute", 0);
                 if (null != requires) {
                     foreach (var req in requires) {
                         SymbolTable.Instance.AddRequire(ci.Key, req);
                     }
                 }
-                if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
+                if (ClassInfo.HasAttribute(declSym, "Cs2Dsl.IgnoreAttribute"))
                     return;
             }
 
@@ -103,7 +103,7 @@ namespace RoslynTool.CsToDsl
                 m_ToplevelCodeBuilder.Clear();
             }
 
-            if (!m_EnableInherit && !ClassInfo.HasAttribute(declSym, "Cs2Lua.EnableInheritAttribute") && !ClassInfo.HasAttribute(declSym.BaseType, "Cs2Lua.EnableInheritAttribute")) {
+            if (!m_EnableInherit && !ClassInfo.HasAttribute(declSym, "Cs2Dsl.EnableInheritAttribute") && !ClassInfo.HasAttribute(declSym.BaseType, "Cs2Dsl.EnableInheritAttribute")) {
                 string fullBaseClassName = null != declSym.BaseType ? ClassInfo.GetFullName(declSym.BaseType) : string.Empty;
                 if (!string.IsNullOrEmpty(fullBaseClassName) && fullBaseClassName != SymbolTable.PrefixExternClassName("System.Object") && fullBaseClassName != SymbolTable.PrefixExternClassName("System.ValueType")) {
                     Log(node, "Cs2Dsl class/struct can't inherit !");
@@ -212,13 +212,13 @@ namespace RoslynTool.CsToDsl
             var ci = m_ClassInfoStack.Peek();
 
             if (null != declSym) {
-                string[] requires = ClassInfo.GetAttributeArguments<string>(declSym, "Cs2Lua.RequireAttribute", 0);
+                string[] requires = ClassInfo.GetAttributeArguments<string>(declSym, "Cs2Dsl.RequireAttribute", 0);
                 if (null != requires) {
                     foreach (var req in requires) {
                         SymbolTable.Instance.AddRequire(ci.Key, req);
                     }
                 }
-                if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
+                if (ClassInfo.HasAttribute(declSym, "Cs2Dsl.IgnoreAttribute"))
                     return;
                 if (declSym.IsAbstract)
                     return;
@@ -253,8 +253,8 @@ namespace RoslynTool.CsToDsl
             CodeBuilder.AppendLine();
             ++m_Indent;
 
-            string dslModule = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.TranslateToAttribute", 0);
-            string dslFuncName = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Lua.TranslateToAttribute", 1);
+            string dslModule = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Dsl.TranslateToAttribute", 0);
+            string dslFuncName = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Dsl.TranslateToAttribute", 1);
             if (string.IsNullOrEmpty(dslModule) && string.IsNullOrEmpty(dslFuncName)) {
                 if (!declSym.ReturnsVoid && (mi.ExistTryCatch || mi.ExistUsing)) {
                     string retVar = string.Format("__method_ret_{0}", GetSourcePosForVar(node));
@@ -364,13 +364,13 @@ namespace RoslynTool.CsToDsl
             foreach (var v in fieldDecl.Declaration.Variables) {
                 var baseSym = m_Model.GetDeclaredSymbol(v);
                 if (null != baseSym) {
-                    string[] requires = ClassInfo.GetAttributeArguments<string>(baseSym, "Cs2Lua.RequireAttribute", 0);
+                    string[] requires = ClassInfo.GetAttributeArguments<string>(baseSym, "Cs2Dsl.RequireAttribute", 0);
                     if (null != requires) {
                         foreach (var req in requires) {
                             SymbolTable.Instance.AddRequire(ci.Key, req);
                         }
                     }
-                    if (ClassInfo.HasAttribute(baseSym, "Cs2Lua.IgnoreAttribute"))
+                    if (ClassInfo.HasAttribute(baseSym, "Cs2Dsl.IgnoreAttribute"))
                         continue;
                 } else {
                     Log(v, "Can't get field declared symbol !");
@@ -508,13 +508,13 @@ namespace RoslynTool.CsToDsl
             foreach (var v in eventFieldDecl.Declaration.Variables) {
                 var baseSym = m_Model.GetDeclaredSymbol(v);
                 if (null != baseSym) {
-                    string[] requires = ClassInfo.GetAttributeArguments<string>(baseSym, "Cs2Lua.RequireAttribute", 0);
+                    string[] requires = ClassInfo.GetAttributeArguments<string>(baseSym, "Cs2Dsl.RequireAttribute", 0);
                     if (null != requires) {
                         foreach (var req in requires) {
                             SymbolTable.Instance.AddRequire(ci.Key, req);
                         }
                     }
-                    if (ClassInfo.HasAttribute(baseSym, "Cs2Lua.IgnoreAttribute"))
+                    if (ClassInfo.HasAttribute(baseSym, "Cs2Dsl.IgnoreAttribute"))
                         continue;
                 } else {
                     Log(v, "Can't get event field declared symbol !");

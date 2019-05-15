@@ -27,7 +27,7 @@ namespace RoslynTool.CsToDsl
         {
             const string c_OutputExt = "dsl";
             List<string> preprocessors = new List<string>(macros);
-            preprocessors.Add("__LUA__");
+            preprocessors.Add("__DSL__");
 
             string exepath = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
             string path = Path.GetDirectoryName(srcFile);
@@ -127,7 +127,7 @@ namespace RoslynTool.CsToDsl
 
             var temp = refByPaths;
             refByPaths = new Dictionary<string, string>();
-            foreach(var pair in temp){
+            foreach (var pair in temp) {
                 var key = pair.Key.Replace('\\', '/');
                 var val = pair.Value;
                 refByPaths.Add(key, val);
@@ -216,7 +216,7 @@ namespace RoslynTool.CsToDsl
                     }
                 }
 
-                refs.Add(MetadataReference.CreateFromFile(typeof(Cs2Lua.IgnoreAttribute).Assembly.Location));
+                refs.Add(MetadataReference.CreateFromFile(typeof(Cs2Dsl.IgnoreAttribute).Assembly.Location));
             } else {
                 foreach (var pair in refByNames) {
                     string file = Path.Combine(SymbolTable.SystemDllPath, pair.Key) + ".dll";
@@ -224,7 +224,7 @@ namespace RoslynTool.CsToDsl
                     refs.Add(MetadataReference.CreateFromFile(file, new MetadataReferenceProperties(MetadataImageKind.Assembly, arr)));
                 }
 
-                refs.Add(MetadataReference.CreateFromFile(typeof(Cs2Lua.IgnoreAttribute).Assembly.Location));
+                refs.Add(MetadataReference.CreateFromFile(typeof(Cs2Dsl.IgnoreAttribute).Assembly.Location));
             }
 
             foreach (var pair in refByPaths) {
@@ -250,7 +250,7 @@ namespace RoslynTool.CsToDsl
             bool haveSemanticError = false;
             bool haveTranslationError = false;
             SymbolTable.Instance.Init(compilation);
-            SymbolTable.Instance.AddRequire("cs2lua__custom", "cs2lua__custom");
+            SymbolTable.Instance.AddRequire("cs2dsl__custom", "cs2dsl__custom");
             Dictionary<string, INamedTypeSymbol> ignoredClasses = new Dictionary<string, INamedTypeSymbol>();
             Dictionary<string, MergedClassInfo> toplevelClasses = new Dictionary<string, MergedClassInfo>();
             MergedNamespaceInfo toplevelMni = new MergedNamespaceInfo();
@@ -451,11 +451,11 @@ namespace RoslynTool.CsToDsl
             BuildInterfaces(intfBuilder);
             StringBuilder refExternBuilder = new StringBuilder();
             BuildReferencedExternTypes(refExternBuilder);
-            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__namespaces.{0}", c_OutputExt)), nsBuilder.ToString());
-            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__attributes.{0}", c_OutputExt)), attrBuilder.ToString());
-            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__externenums.{0}", c_OutputExt)), enumBuilder.ToString());
-            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2lua__interfaces.{0}", c_OutputExt)), intfBuilder.ToString());
-            File.WriteAllText(Path.Combine(outputDir, "cs2lua__references.txt"), refExternBuilder.ToString());
+            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2dsl__namespaces.{0}", c_OutputExt)), nsBuilder.ToString());
+            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2dsl__attributes.{0}", c_OutputExt)), attrBuilder.ToString());
+            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2dsl__externenums.{0}", c_OutputExt)), enumBuilder.ToString());
+            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2dsl__interfaces.{0}", c_OutputExt)), intfBuilder.ToString());
+            File.WriteAllText(Path.Combine(outputDir, "cs2dsl__references.txt"), refExternBuilder.ToString());
             foreach (var pair in toplevelClasses) {
                 StringBuilder classBuilder = new StringBuilder();
                 string fileName = BuildDslClass(classBuilder, pair.Key, pair.Value);
@@ -574,7 +574,7 @@ namespace RoslynTool.CsToDsl
             if (ignoredClasses.ContainsKey(key)) {
                 return;
             }
-            if (ClassInfo.HasAttribute(typesym, "Cs2Lua.IgnoreAttribute")) {
+            if (ClassInfo.HasAttribute(typesym, "Cs2Dsl.IgnoreAttribute")) {
                 return;
             }
             StringBuilder csb = new StringBuilder();
@@ -593,7 +593,7 @@ namespace RoslynTool.CsToDsl
             temp.Length = 0;
             foreach (var sym in typesym.GetMembers()) {
                 var msym = sym as IFieldSymbol;
-                if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Lua.IgnoreAttribute")) {
+                if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Dsl.IgnoreAttribute")) {
                     temp.AppendFormat("{0}field({1}){{", GetIndentString(indent), sym.Name);
                     temp.AppendLine();
                     ++indent;
@@ -609,7 +609,7 @@ namespace RoslynTool.CsToDsl
             temp.Length = 0;
             foreach (var sym in typesym.GetMembers()) {
                 var msym = sym as IMethodSymbol;
-                if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Lua.IgnoreAttribute")) {
+                if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Dsl.IgnoreAttribute")) {
                     string mname = SymbolTable.Instance.NameMangling(msym);
                     temp.AppendFormat("{0}method({1}){{", GetIndentString(indent), mname);
                     temp.AppendLine();
@@ -626,7 +626,7 @@ namespace RoslynTool.CsToDsl
             temp.Length = 0;
             foreach (var sym in typesym.GetMembers()) {
                 var msym = sym as IPropertySymbol;
-                if (null != msym && !msym.IsIndexer && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Lua.IgnoreAttribute")) {
+                if (null != msym && !msym.IsIndexer && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Dsl.IgnoreAttribute")) {
                     temp.AppendFormat("{0}property({1}){{", GetIndentString(indent), sym.Name);
                     temp.AppendLine();
                     ++indent;
@@ -642,7 +642,7 @@ namespace RoslynTool.CsToDsl
             temp.Length = 0;
             foreach (var sym in typesym.GetMembers()) {
                 var msym = sym as IEventSymbol;
-                if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Lua.IgnoreAttribute")) {
+                if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Dsl.IgnoreAttribute")) {
                     temp.AppendFormat("{0}event({1}){{", GetIndentString(indent), sym.Name);
                     temp.AppendLine();
                     ++indent;
@@ -836,10 +836,10 @@ namespace RoslynTool.CsToDsl
                 string fileName = BuildDslClass(classBuilder, pair.Key, pair.Value, false, dsllibRefs);
                 code.Append(classBuilder.ToString());
             }
-            sb.AppendLine("require(\"cs2lua__utility\");");
-            sb.AppendLine("require(\"cs2lua__attributes\");");
-            sb.AppendLine("require(\"cs2lua__externenums\");");
-            sb.AppendLine("require(\"cs2lua__interfaces\");");
+            sb.AppendLine("require(\"cs2dsl__utility\");");
+            sb.AppendLine("require(\"cs2dsl__attributes\");");
+            sb.AppendLine("require(\"cs2dsl__externenums\");");
+            sb.AppendLine("require(\"cs2dsl__interfaces\");");
             foreach (string lib in dsllibRefs) {
                 sb.AppendFormat("require(\"{0}\");", lib.ToLower());
                 sb.AppendLine();
@@ -929,12 +929,12 @@ namespace RoslynTool.CsToDsl
 
             HashSet<string> refs = new HashSet<string>();
             if (isAlone) {
-                sb.AppendLine("require(\"cs2lua__utility\");");
+                sb.AppendLine("require(\"cs2dsl__utility\");");
                 if (existAttributes)
-                    sb.AppendLine("require(\"cs2lua__attributes\");");
-                sb.AppendLine("require(\"cs2lua__namespaces\");");
-                sb.AppendLine("require(\"cs2lua__externenums\");");
-                sb.AppendLine("require(\"cs2lua__interfaces\");");
+                    sb.AppendLine("require(\"cs2dsl__attributes\");");
+                sb.AppendLine("require(\"cs2dsl__namespaces\");");
+                sb.AppendLine("require(\"cs2dsl__externenums\");");
+                sb.AppendLine("require(\"cs2dsl__interfaces\");");
                 foreach (string lib in requiredlibs) {
                     sb.AppendFormat("require(\"{0}\");", lib.ToLower());
                     sb.AppendLine();
@@ -943,7 +943,7 @@ namespace RoslynTool.CsToDsl
 
                 //references
                 if (SymbolTable.NoAutoRequire) {
-                    sb.AppendLine("require(\"cs2lua__custom\");");
+                    sb.AppendLine("require(\"cs2dsl__custom\");");
                 } else {
                     BuildReferences(sb, key, mci, refs);
                 }

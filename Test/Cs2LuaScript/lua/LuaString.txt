@@ -1,7 +1,3 @@
-require "cs2lua__utility";
-require "cs2lua__namespaces";
-require "cs2lua__externenums";
-require "cs2lua__interfaces";
 
 LuaString = {
 	__new_object = function(...)
@@ -12,7 +8,7 @@ LuaString = {
 		local static_methods = {
 			Format = function(str, ...)
 				local args = wraparray{...};
-				return System.String.Format(str, luaunpack(args));
+				return System.String.Format("Format__String__Arr_Object", str, luaunpack(args));
 			end,
 			cctor = function()
 			end,
@@ -62,4 +58,8 @@ LuaString = {
 };
 
 
-LuaString.__define_class();
+require "cs2lua__utility";
+require "cs2lua__namespaces";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+settempmetatable(LuaString);

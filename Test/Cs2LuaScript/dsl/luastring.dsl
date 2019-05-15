@@ -1,7 +1,7 @@
-require("cs2lua__utility");
-require("cs2lua__namespaces");
-require("cs2lua__externenums");
-require("cs2lua__interfaces");
+require("cs2dsl__utility");
+require("cs2dsl__namespaces");
+require("cs2dsl__externenums");
+require("cs2dsl__interfaces");
 
 class(LuaString) {
 	static_methods {
@@ -10,7 +10,7 @@ class(LuaString) {
 		};
 		Format = function(str, ...){
 			local{args = params(0);};
-			return(callstatic(System.String, "Format", str, dslunpack(args)));
+			return(callstatic(System.String, "Format", "Format__String__Arr_Object", str, dslunpack(args)));
 		};
 		cctor = function(){
 		};

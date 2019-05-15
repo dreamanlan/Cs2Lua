@@ -4,13 +4,13 @@
 function printJitStatus()
   local infos = Slua.CreateClass("System.Text.StringBuilder");
   local results = { jit.status() };  
-  Utility.AppendFormat(infos, "jit status count {0}", #results);
+  infos:AppendFormat("jit status count {0}", #results);
   infos:AppendLine();
   for i,v in ipairs(results) do
     if i==1 then
-      Utility.AppendFormat(infos, "jit status {0}", v);
+      infos:AppendFormat("jit status {0}", v);
     else
-      Utility.AppendFormat(infos, " {0}", v);
+      infos:AppendFormat(" {0}", v);
     end;
     infos:AppendLine();
   end;
@@ -202,6 +202,26 @@ function getclassparentclass(t)
 	else
 		return nil;
 	end;
+end;
+
+function settempmetatable(class)
+	setmetatable(class, { 
+		__index = function(tb, key) 
+			setmetatable(class, nil);
+			class.__define_class();
+			return tb[key]; 
+		end, 
+		__newindex = function(tb,key,val) 
+			setmetatable(class, nil);
+			class.__define_class();
+			tb[key]=val;
+		end,
+		__call = function(...) 
+			setmetatable(class, nil);
+			class.__define_class();
+			return class(...);
+		end
+	});
 end;
 
 __cs2lua_special_integer_operators = { "/", "%", "+", "-", "*", "<<", ">>", "&", "|", "^", "~" };
@@ -471,7 +491,7 @@ end;
 
 function __wrap_if_string(val)
   if type(val)=="string" then
-    return System.String(val);
+    return System.String("String_Arr_Char", val);
   else
     return val;
   end;
@@ -1149,23 +1169,18 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
 
     local class = static or {};
     for ck,cv in pairs(static_methods) do
-      class[ck] = cv;
+      rawset(class, ck, cv);
     end;
-    local class_fields;
-    if static_fields_build then
-      class_fields = static_fields_build();
-    else
-      class_fields = {};
-    end;
+    local class_fields = {};
     local class_props = static_props or {};
     local class_events = static_events or {};
-    class["__cs2lua_defined"] = true;
-    class["__cs2lua_fullname"] = fullName;
-    class["__cs2lua_typename"] = typeName;
-    class["__cs2lua_parent"] = base_class;
-    class["__is_value_type"] = is_value_type;
-    class["__interfaces"] = interfaces;
-    class["__interface_map"] = interface_map;
+    rawset(class, "__cs2lua_defined", true);
+    rawset(class, "__cs2lua_fullname", fullName);
+    rawset(class, "__cs2lua_typename", typeName);
+    rawset(class, "__cs2lua_parent", base_class);
+    rawset(class, "__is_value_type", is_value_type);
+    rawset(class, "__interfaces", interfaces);
+    rawset(class, "__interface_map", interface_map);
         
     local function __find_base_class_key(k)
       if nil==k then
@@ -1489,6 +1504,12 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
             rawset(t, k, v);
         end,
     });
+    if static_fields_build then
+      local sfb = static_fields_build();      
+	    for sfk,sfv in pairs(sfb) do
+	      rawset(class_fields, sfk, sfv);
+	    end;
+    end;
     if class.cctor then
       class.cctor();
     end;
@@ -1520,15 +1541,13 @@ function newexternobject(class, typeargs, typekinds, initializer, ...)
 end;
 
 function newtypeparamobject(t)
+	local obj = t();
   if rawget(t, "__cs2lua_defined") then
-    local obj = t();
     if obj.ctor then
       obj:ctor();
     end;
-    return obj;
-  else
-    return t();
   end;
+  return obj;
 end;
 
 function newdictionary(t, typeargs, typekinds, ctor, dict, ...)
@@ -1968,47 +1987,47 @@ function setexterninstanceindexer(obj, intf, name, ...)
 end;
 
 function invokeexternoperator(class, method, ...)
-	local args = {...};
-	--对slua，对应到lua元表操作符函数的操作符重载cs2lua转lua代码时已经换成对应操作符表达式。
-	--执行到这里的应该是无法对应到lua操作符的操作符重载
-	local argnum = #args;
-	if method=="op_Equality" then
-	  if args[1] and args[2] then
-	  	mt1 = getmetatable(args[1]);
-	  	mt2 = getmetatable(args[2]);
-	  	if mt1 and mt1.__eq then
-	  		return mt1.__eq(args[1], args[2]);
-	  	elseif mt2 and mt2.__eq then
-	  		return mt2.__eq(args[2], args[1]);
-	  	else
-	    	return args[1]==args[2];
-	    end;
-	  elseif not args[1] then
-	    return Slua.IsNull(args[2]);
-	  elseif not args[2] then
-	    return Slua.IsNull(args[1]);
-	  else
-	    return true;
-	  end;
-	elseif method=="op_Inequality" then
-	  if args[1] and args[2] then
-	  	mt1 = getmetatable(args[1]);
-	  	mt2 = getmetatable(args[2]);
-	  	if mt1 and mt1.__eq then
-	  		return not mt1.__eq(args[1], args[2]);
-	  	elseif mt2 and mt2.__eq then
-	  		return not mt2.__eq(args[2], args[1]);
-	  	else
-	    	return args[1]~=args[2];
-	    end;
-	  elseif not args[1] then
-	    return not Slua.IsNull(args[2]);
-	  elseif not args[2] then
-	    return not Slua.IsNull(args[1]);
-	  else
-	    return false;
-	  end;	  
-	elseif method=="op_Implicit" then
+  local args = {...};
+  --对slua，对应到lua元表操作符函数的操作符重载cs2lua转lua代码时已经换成对应操作符表达式。
+  --执行到这里的应该是无法对应到lua操作符的操作符重载
+  local argnum = #args;
+  if argnum==2 and method=="op_Equality" then
+    if args[1] and args[2] then
+      mt1 = getmetatable(args[1]);
+      mt2 = getmetatable(args[2]);
+      if mt1 and mt1.__eq then
+        return mt1.__eq(args[1], args[2]);
+      elseif mt2 and mt2.__eq then
+        return mt2.__eq(args[2], args[1]);
+      else
+        return args[1]==args[2];
+      end;
+    elseif not args[1] then
+      return Slua.IsNull(args[2]);
+    elseif not args[2] then
+      return Slua.IsNull(args[1]);
+    else
+      return true;
+    end;
+  elseif argnum==2 and method=="op_Inequality" then
+    if args[1] and args[2] then
+      mt1 = getmetatable(args[1]);
+      mt2 = getmetatable(args[2]);
+      if mt1 and mt1.__eq then
+        return not mt1.__eq(args[1], args[2]);
+      elseif mt2 and mt2.__eq then
+        return not mt2.__eq(args[2], args[1]);
+      else
+        return args[1]~=args[2];
+      end;
+    elseif not args[1] then
+      return not Slua.IsNull(args[2]);
+    elseif not args[2] then
+      return not Slua.IsNull(args[1]);
+    else
+      return false;
+    end;    
+  elseif method=="op_Implicit" then
   	local t = nil;
   	if args[1] then
   		local meta = getmetatable(args[1]);
@@ -2038,21 +2057,27 @@ function invokeexternoperator(class, method, ...)
       --这里就不仔细判断了，就假定是UnityEngine.Object子类了
       return not Slua.IsNull(args[1]);
     end;
-	end;
-	if method then
-  	if argnum == 1 and args[1] then
-  	  return args[1][method](...);
-  	elseif argnum == 2 then
-  	  if args[1] then
-  	    return args[1][method](...);
-  	  elseif args[2] then
-  	    return args[2][method](...);
-  	  end;
-  	end;  
-	else
-    UnityEngine.Debug.LogError("[cs2lua] table index is nil");
-	end;
-	return nil;
+  end;
+  if method then
+    if argnum == 1 and args[1] then
+      return args[1][method](...);
+    elseif argnum == 2 then
+      if args[1] then
+        return args[1][method](...);
+      elseif args[2] then
+        return args[2][method](...);
+      end;
+    elseif argnum == 3 then
+      if args[2] then
+        return args[2][method](...);
+      elseif args[3] then
+        return args[3][method](...);
+      end;
+    end;  
+  else
+    UnityEngine.Debug.LogError("LogError_String","[cs2lua] table index is nil");
+  end;
+  return nil;
 end;
 
 function defineentry(class)
@@ -2062,43 +2087,43 @@ function defineentry(class)
 end;
 
 function invokewithinterface(obj, intf, method, ...)
-	local meta = getmetatable(obj);
-	if method then
-  	if meta and rawget(meta, "__cs2lua_defined") then
-  		return obj[method](obj,...);
-  	else
-  		return obj[method](obj,...);
-  	end;
-	else
-    UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+  local meta = getmetatable(obj);
+  if method then
+    if meta and rawget(meta, "__cs2lua_defined") then
+      return obj[method](obj,...);
+    else
+      return obj[method](obj,...);
+    end;
+  else
+    UnityEngine.Debug.LogError("LogError_String","[cs2lua] table index is nil");
   end;
-	return nil;
+  return nil;
 end;
 function getwithinterface(obj, intf, property)
-	local meta = getmetatable(obj);
-	if property then
-  	if meta and rawget(meta, "__cs2lua_defined") then
-  		return obj[property];
-  	else
-  		return obj[property];
-  	end;
-	else
-    UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+  local meta = getmetatable(obj);
+  if property then
+    if meta and rawget(meta, "__cs2lua_defined") then
+      return obj[property];
+    else
+      return obj[property];
+    end;
+  else
+    UnityEngine.Debug.LogError("LogError_String","[cs2lua] table index is nil");
   end;
-	return nil;
+  return nil;
 end;
 function setwithinterface(obj, intf, property, value)
-	local meta = getmetatable(obj);
-	if property then
-  	if meta and rawget(meta, "__cs2lua_defined") then
-  		obj[property]=value;
-  	else
-  		obj[property]=value;
-  	end;
-	else
-    UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+  local meta = getmetatable(obj);
+  if property then
+    if meta and rawget(meta, "__cs2lua_defined") then
+      obj[property]=value;
+    else
+      obj[property]=value;
+    end;
+  else
+    UnityEngine.Debug.LogError("LogError_String","[cs2lua] table index is nil");
   end;
-	return nil;
+  return nil;
 end;
 
 function invokeforbasicvalue(obj, isEnum, class, method, ...)
@@ -2109,7 +2134,7 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
 	end;
 	if method then
   	if type(obj)=="string" then
-  	  local csstr = System.String(obj);
+  	  local csstr = System.String("String_Arr_Char", obj);
   	  if method=="Split" then
   	    return csstr:Split(string.char(...));
   	  else
@@ -2139,7 +2164,7 @@ function getforbasicvalue(obj, isEnum, class, property)
 	local meta = getmetatable(obj);
 	if property then
   	if type(obj)=="string" then
-  	  local csstr = System.String(obj);
+  	  local csstr = System.String("String_Arr_Char", obj);
   	  return csstr[property];
   	elseif meta then
   		return obj[property];
@@ -2155,7 +2180,7 @@ function setforbasicvalue(obj, isEnum, class, property, value)
 	local meta = getmetatable(obj);
 	if property then
   	if type(obj)=="string" then
-  	  local csstr = System.String(obj);
+  	  local csstr = System.String("String_Arr_Char", obj);
   	  csstr[property]=value;
   	elseif meta then
   		obj[property]=value;

@@ -34,9 +34,8 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cs2LuaUtility, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\dep\Cs2LuaUtility.dll</HintPath>
+    <Reference Include="Cs2DslUtility">
+      <HintPath>..\Tools\Cs2DslUtility.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

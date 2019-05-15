@@ -77,7 +77,7 @@ namespace RoslynTool.CsToDsl
                             Args.Add(arg.Expression);
                             ReturnArgs.Add(arg.Expression);
                         } else if (param.RefKind == RefKind.Out) {
-                            //方法的out参数，为与Slua的机制一致，在调用时传入__cs2lua_out，这里用null标记一下，在实际输出参数时再变为__cs2lua_out
+                            //方法的out参数，为与脚本引擎的机制一致，在调用时传入__cs2dsl_out，这里用null标记一下，在实际输出参数时再变为__cs2dsl_out
                             Args.Add(null);
                             ReturnArgs.Add(arg.Expression);
                         } else if (param.IsParams) {
@@ -149,7 +149,7 @@ namespace RoslynTool.CsToDsl
                             Args.Add(arg.Expression);
                             ReturnArgs.Add(arg.Expression);
                         } else if (param.RefKind == RefKind.Out) {
-                            //方法的out参数，为与Slua的机制一致，在调用时传入__cs2lua_out，这里用null标记一下，在实际输出参数时再变为__cs2lua_out
+                            //方法的out参数，为与脚本引擎的机制一致，在调用时传入__cs2dsl_out，这里用null标记一下，在实际输出参数时再变为__cs2dsl_out
                             Args.Add(null);
                             ReturnArgs.Add(arg.Expression);
                         } else if (param.IsParams) {
@@ -425,13 +425,13 @@ namespace RoslynTool.CsToDsl
             if (!SymbolTable.EnableTranslationCheck) {
                 return;
             }
-            if (ClassInfo.HasAttribute(sym, "Cs2Lua.DontCheckAttribute")) {
+            if (ClassInfo.HasAttribute(sym, "Cs2Dsl.DontCheckAttribute")) {
                 return;
             }
-            if (null != CallerMethodSymbol && ClassInfo.HasAttribute(CallerMethodSymbol, "Cs2Lua.DontCheckAttribute")) {
+            if (null != CallerMethodSymbol && ClassInfo.HasAttribute(CallerMethodSymbol, "Cs2Dsl.DontCheckAttribute")) {
                 return;
             }
-            if (null != CallerTypeSymbol && ClassInfo.HasAttribute(CallerTypeSymbol, "Cs2Lua.DontCheckAttribute")) {
+            if (null != CallerTypeSymbol && ClassInfo.HasAttribute(CallerTypeSymbol, "Cs2Dsl.DontCheckAttribute")) {
                 return;
             }
 

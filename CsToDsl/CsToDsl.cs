@@ -334,7 +334,7 @@ namespace RoslynTool.CsToDsl
                 var opd = opds.Length > i ? opds[i] : null;
                 //表达式对象为空表明这个是一个out实参，替换为__cs2dsl_out
                 if (null == exp) {
-                    CodeBuilder.Append("__cs2lua_out");
+                    CodeBuilder.Append("__cs2dsl_out");
                 } else if (i < ct - 1) {
                     OutputExpressionSyntax(exp, opd);
                 } else {
@@ -1179,17 +1179,6 @@ namespace RoslynTool.CsToDsl
         }
         internal static void OutputConstValue(StringBuilder sb, object val, object operOrSym)
         {
-            if (SymbolTable.ForXlua) { 
-                var ioper = operOrSym as IFieldReferenceExpression;
-                var fSym = operOrSym as IFieldSymbol;
-                if (null != ioper && ioper.Type.TypeKind == TypeKind.Enum) {
-                    fSym = ioper.Field;
-                }
-                if (null != fSym && fSym.Type.TypeKind == TypeKind.Enum && !SymbolTable.Instance.IsCs2DslSymbol(fSym)) {
-                    sb.AppendFormat("wrapconst({0}, \"{1}\")", ClassInfo.GetFullName(fSym.Type), fSym.Name);
-                    return;
-                }
-            }
             string v = val as string;
             if (null != v) {
                 sb.AppendFormat("\"{0}\"", Escape(v));

@@ -1,7 +1,7 @@
-require("cs2lua__utility");
-require("cs2lua__namespaces");
-require("cs2lua__externenums");
-require("cs2lua__interfaces");
+require("cs2dsl__utility");
+require("cs2dsl__namespaces");
+require("cs2dsl__externenums");
+require("cs2dsl__interfaces");
 
 class(Mandelbrot) {
 	static_methods {
@@ -18,7 +18,7 @@ class(Mandelbrot) {
 
 	instance_methods {
 		Start = function(this, obj, mb){
-			setinstance(this, "root", newexternobject(UnityEngine.GameObject, typeargs(), typekinds(), , null, "mandelbrot"));
+			setinstance(this, "root", newexternobject(UnityEngine.GameObject, typeargs(), typekinds(), , null, "ctor__String", "mandelbrot"));
 			callinstance(this, "Exec");
 		};
 		Call = function(this, name, ...){
@@ -58,10 +58,10 @@ class(Mandelbrot) {
 		};
 		DrawCube = function(this, x, y, w, h){
 			local(cube); cube = callstatic(UnityEngine.GameObject, "CreatePrimitive", 3);
-			setinstance(getinstance(cube, "transform"), "position", newexternobject(UnityEngine.Vector3, typeargs(), typekinds(), , null, execbinary("/", execbinary("*", execbinary("*", x, getinstance(this, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(this, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), w, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), execbinary("-", execbinary("/", execbinary("*", execbinary("*", y, getinstance(this, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(this, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), h, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 12, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 0));
-			callinstance(getinstance(cube, "transform"), "SetParent", getinstance(getinstance(this, "root"), "transform"));
-			local(mat); mat = getinstance(callinstance(cube, "GetComponent", UnityEngine.Renderer), "material");
-			local(ix); ix = callstatic(UnityEngine.Random, "Range", 0, getinstance(getinstance(this, "colors"), "Length"));
+			setinstance(getinstance(cube, "transform"), "position", newexternobject(UnityEngine.Vector3, typeargs(), typekinds(), , null, "ctor__Single__Single__Single", execbinary("/", execbinary("*", execbinary("*", x, getinstance(this, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(this, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), w, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), execbinary("-", execbinary("/", execbinary("*", execbinary("*", y, getinstance(this, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(this, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), h, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 12, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 0));
+			callinstance(getinstance(cube, "transform"), "SetParent", "SetParent__Transform", getinstance(getinstance(this, "root"), "transform"));
+			local(mat); mat = getinstance(callinstance(cube, "GetComponent", "GetComponent__Type", UnityEngine.Renderer), "material");
+			local(ix); ix = callstatic(UnityEngine.Random, "Range", "Range__Int32__Int32", 0, getinstance(getinstance(this, "colors"), "Length"));
 			setinstance(mat, "color", getinstance(this, "colors")[ix + 1]);
 		};
 		ctor = function(this){

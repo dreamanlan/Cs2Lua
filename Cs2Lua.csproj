@@ -94,9 +94,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Cs2LuaUtility\Cs2LuaUtility.csproj">
+    <ProjectReference Include="Cs2DslUtility\Cs2DslUtility.csproj">
       <Project>{8512d1c7-f979-4a86-853c-764a5568e16a}</Project>
-      <Name>Cs2LuaUtility</Name>
+      <Name>Cs2DslUtility</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

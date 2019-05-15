@@ -8,7 +8,7 @@ cd %workdir%
 xcopy %workdir%\Cs2LuaScript\lua\*.txt %workdir%\TestUnity\Assets\Slua\Resources /y /q
 
 xcopy %workdir%\Cs2LuaScript\bin\Debug\Cs2LuaScript.dll %workdir%\TestUnity\Assets\Plugins /y /q
-xcopy %workdir%\Cs2LuaScript\bin\Debug\Cs2LuaUtility.dll %workdir%\TestUnity\Assets\Plugins /y /q
+xcopy %workdir%\Cs2LuaScript\bin\Debug\Cs2DslUtility.dll %workdir%\TestUnity\Assets\Plugins /y /q
 
 del /a /f %workdir%\TestUnity\Assets\StreamingAssets\Cs2LuaScript.dll
-del /a /f %workdir%\TestUnity\Assets\StreamingAssets\Cs2LuaUtility.dll
+del /a /f %workdir%\TestUnity\Assets\StreamingAssets\Cs2DslUtility.dll

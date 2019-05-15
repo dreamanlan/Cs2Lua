@@ -132,17 +132,17 @@ namespace RoslynTool.CsToDsl
             var ci = m_ClassInfoStack.Peek();
             IMethodSymbol declSym = m_Model.GetDeclaredSymbol(node);
             if (null != declSym) {
-                string[] requires = ClassInfo.GetAttributeArguments<string>(declSym, "Cs2Lua.RequireAttribute", 0);
+                string[] requires = ClassInfo.GetAttributeArguments<string>(declSym, "Cs2Dsl.RequireAttribute", 0);
                 if (null != requires) {
                     foreach (var req in requires) {
                         SymbolTable.Instance.AddRequire(ci.Key, req);
                     }
                 }
-                if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
+                if (ClassInfo.HasAttribute(declSym, "Cs2Dsl.IgnoreAttribute"))
                     return;
                 if (declSym.IsAbstract)
                     return;
-                isExportConstructor = ClassInfo.HasAttribute(declSym, "Cs2Lua.ExportAttribute");
+                isExportConstructor = ClassInfo.HasAttribute(declSym, "Cs2Dsl.ExportAttribute");
             }
 
             bool generateBasicCtor = false;
@@ -283,13 +283,13 @@ namespace RoslynTool.CsToDsl
             var ci = m_ClassInfoStack.Peek();
             IPropertySymbol declSym = m_Model.GetDeclaredSymbol(node);
             if (null != declSym) {
-                string[] requires = ClassInfo.GetAttributeArguments<string>(declSym, "Cs2Lua.RequireAttribute", 0);
+                string[] requires = ClassInfo.GetAttributeArguments<string>(declSym, "Cs2Dsl.RequireAttribute", 0);
                 if (null != requires) {
                     foreach (var req in requires) {
                         SymbolTable.Instance.AddRequire(ci.Key, req);
                     }
                 }
-                if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
+                if (ClassInfo.HasAttribute(declSym, "Cs2Dsl.IgnoreAttribute"))
                     return;
                 if (declSym.IsAbstract)
                     return;
@@ -436,8 +436,8 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendLine();
                         ++m_Indent;
                         bool isStatic = declSym.IsStatic;
-                        string dslModule = ClassInfo.GetAttributeArgument<string>(sym, "Cs2Lua.TranslateToAttribute", 0);
-                        string dslFuncName = ClassInfo.GetAttributeArgument<string>(sym, "Cs2Lua.TranslateToAttribute", 1);
+                        string dslModule = ClassInfo.GetAttributeArgument<string>(sym, "Cs2Dsl.TranslateToAttribute", 0);
+                        string dslFuncName = ClassInfo.GetAttributeArgument<string>(sym, "Cs2Dsl.TranslateToAttribute", 1);
                         if (string.IsNullOrEmpty(dslModule) && string.IsNullOrEmpty(dslFuncName)) {
                             if (!sym.ReturnsVoid && (mi.ExistTryCatch || mi.ExistUsing)) {
                                 string retVar = string.Format("__method_ret_{0}", GetSourcePosForVar(node));
@@ -553,13 +553,13 @@ namespace RoslynTool.CsToDsl
             var ci = m_ClassInfoStack.Peek();
             IEventSymbol declSym = m_Model.GetDeclaredSymbol(node);
             if (null != declSym) {
-                string[] requires = ClassInfo.GetAttributeArguments<string>(declSym, "Cs2Lua.RequireAttribute", 0);
+                string[] requires = ClassInfo.GetAttributeArguments<string>(declSym, "Cs2Dsl.RequireAttribute", 0);
                 if (null != requires) {
                     foreach (var req in requires) {
                         SymbolTable.Instance.AddRequire(ci.Key, req);
                     }
                 }
-                if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
+                if (ClassInfo.HasAttribute(declSym, "Cs2Dsl.IgnoreAttribute"))
                     return;
                 if (declSym.IsAbstract)
                     return;
@@ -596,8 +596,8 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendLine();
                     ++m_Indent;
                     bool isStatic = declSym.IsStatic;
-                    string dslModule = ClassInfo.GetAttributeArgument<string>(sym, "Cs2Lua.TranslateToAttribute", 0);
-                    string dslFuncName = ClassInfo.GetAttributeArgument<string>(sym, "Cs2Lua.TranslateToAttribute", 1);
+                    string dslModule = ClassInfo.GetAttributeArgument<string>(sym, "Cs2Dsl.TranslateToAttribute", 0);
+                    string dslFuncName = ClassInfo.GetAttributeArgument<string>(sym, "Cs2Dsl.TranslateToAttribute", 1);
                     if (!string.IsNullOrEmpty(dslModule) || !string.IsNullOrEmpty(dslFuncName)) {
                         if (!string.IsNullOrEmpty(dslModule)) {
                             SymbolTable.Instance.AddRequire(ci.Key, dslModule);
@@ -658,13 +658,13 @@ namespace RoslynTool.CsToDsl
             var ci = m_ClassInfoStack.Peek();
             var declSym = m_Model.GetDeclaredSymbol(node);
             if (null != declSym) {
-                string[] requires = ClassInfo.GetAttributeArguments<string>(declSym, "Cs2Lua.RequireAttribute", 0);
+                string[] requires = ClassInfo.GetAttributeArguments<string>(declSym, "Cs2Dsl.RequireAttribute", 0);
                 if (null != requires) {
                     foreach (var req in requires) {
                         SymbolTable.Instance.AddRequire(ci.Key, req);
                     }
                 }
-                if (ClassInfo.HasAttribute(declSym, "Cs2Lua.IgnoreAttribute"))
+                if (ClassInfo.HasAttribute(declSym, "Cs2Dsl.IgnoreAttribute"))
                     return;
                 if (declSym.IsAbstract)
                     return;
@@ -763,8 +763,8 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendLine();
                     ++m_Indent;
                     bool isStatic = declSym.IsStatic;
-                    string dslModule = ClassInfo.GetAttributeArgument<string>(sym, "Cs2Lua.TranslateToAttribute", 0);
-                    string dslFuncName = ClassInfo.GetAttributeArgument<string>(sym, "Cs2Lua.TranslateToAttribute", 1);
+                    string dslModule = ClassInfo.GetAttributeArgument<string>(sym, "Cs2Dsl.TranslateToAttribute", 0);
+                    string dslFuncName = ClassInfo.GetAttributeArgument<string>(sym, "Cs2Dsl.TranslateToAttribute", 1);
                     if (string.IsNullOrEmpty(dslModule) && string.IsNullOrEmpty(dslFuncName)) {
                         if (!sym.ReturnsVoid && (mi.ExistTryCatch || mi.ExistUsing)) {
                             string retVar = string.Format("__method_ret_{0}", GetSourcePosForVar(node));

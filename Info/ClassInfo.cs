@@ -58,7 +58,7 @@ namespace RoslynTool.CsToDsl
         internal void Init(INamedTypeSymbol sym, ClassSymbolInfo info)
         {
             IsEnum = sym.TypeKind == TypeKind.Enum;
-            IsEntryClass = HasAttribute(sym, "Cs2Lua.EntryAttribute");
+            IsEntryClass = HasAttribute(sym, "Cs2Dsl.EntryAttribute");
             IsValueType = sym.IsValueType;
 
             IsInnerOfGenericType = IsInnerClassOfGenericType(sym);
@@ -111,9 +111,9 @@ namespace RoslynTool.CsToDsl
                 if (!refType.IsAnonymousType && !refType.IsImplicitClass && !refType.IsImplicitlyDeclared && refType.TypeKind != TypeKind.Delegate && refType.TypeKind != TypeKind.Dynamic && refType.TypeKind != TypeKind.Interface) {
                     if (!string.IsNullOrEmpty(key) && !References.Contains(key) && key != Key) {
                         bool isIgnoreFile = SymbolTable.Instance.IsIgnoredSymbol(refType);
-                        bool isIgnore = ClassInfo.HasAttribute(refType, "Cs2Lua.IgnoreAttribute");
+                        bool isIgnore = ClassInfo.HasAttribute(refType, "Cs2Dsl.IgnoreAttribute");
                         if (isIgnoreFile) {
-                            IgnoreReferences.Add("cs2lua__custom");
+                            IgnoreReferences.Add("cs2dsl__custom");
                         } else if (isIgnore) {
                             IgnoreReferences.Add(key);
                         } else {

@@ -50,10 +50,10 @@ class MyScript : ITickPlugin
         t = (Time.time - fogStart) / 10;
         Camera.main.backgroundColor = Color.Lerp(bgCurrent, bgColor, t);
     }
-    [Cs2Lua.Ignore]
+    [Cs2Dsl.Ignore]
     public void FixedUpdate()
     { }
-    [Cs2Lua.Ignore]
+    [Cs2Dsl.Ignore]
     public void LateUpdate()
     { }
     public void Call(string name, params object[] args)

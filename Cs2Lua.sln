@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cs2Lua", "Cs2Lua.csproj", "{A45F7BB4-96F8-4A99-B37F-4EF15B082E14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cs2LuaUtility", "Cs2LuaUtility\Cs2LuaUtility.csproj", "{8512D1C7-F979-4A86-853C-764A5568E16A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cs2DslUtility", "Cs2DslUtility\Cs2DslUtility.csproj", "{8512D1C7-F979-4A86-853C-764A5568E16A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +24,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {511A0D7C-3903-4291-996F-637B4DC26C3B}
 	EndGlobalSection
 EndGlobal

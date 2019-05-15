@@ -355,7 +355,6 @@ namespace RoslynTool.CsToDsl
                 InitRecursively(newSym);
             }
         }
-
         private SymbolTable() { }
 
         private CSharpCompilation m_Compilation = null;
@@ -678,16 +677,6 @@ namespace RoslynTool.CsToDsl
         {
             s_ExternClassNamePrefix = val;
         }
-        internal static bool ForSlua
-        {
-            get { return s_ForSlua; }
-            set { s_ForSlua = value; }
-        }
-        internal static bool ForXlua
-        {
-            get { return s_ForXlua; }
-            set { s_ForXlua = value; }
-        }
         internal static bool NoAutoRequire
         {
             get { return s_NoAutoRequire; }
@@ -720,8 +709,6 @@ namespace RoslynTool.CsToDsl
         }
 
         private static string s_ExternClassNamePrefix = string.Empty;
-        private static bool s_ForSlua = true;
-        private static bool s_ForXlua = false;
         private static bool s_NoAutoRequire = false;
         private static bool s_DslComponentByString = false;
         private static bool s_UseArrayGetSet = false;

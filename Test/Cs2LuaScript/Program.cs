@@ -5,10 +5,10 @@ using System.Text;
 
 namespace Cs2LuaScript
 {
-    [Cs2Lua.Entry]
+    [Cs2Dsl.Entry]
     public static class Program
     {
-        [Cs2Lua.Ignore]
+        [Cs2Dsl.Ignore]
         public static void InitDll()
         {
             PluginManager.Instance.RegisterTickFactory("MyScript", new TickPluginFactory<MyScript>());

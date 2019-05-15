@@ -111,22 +111,13 @@ namespace RoslynTool
                             enableInherit = true;
                         } else if (0 == string.Compare(args[i], "-enablelinq", true)) {
                             enableLinq = true;
-                        } else if (0 == string.Compare(args[i], "-normallua", true)) {
-                            SetNormalLua();
-                        } else if (0 == string.Compare(args[i], "-slua", true)) {
-                            SetNormalLua();
-                            SymbolTable.ForSlua = true;
-                        } else if (0 == string.Compare(args[i], "-xlua", true)) {
-                            SetNormalLua();
-                            SymbolTable.SetExternClassNamePrefix("CS.");
-                            SymbolTable.ForXlua = true;
                         } else if (0 == string.Compare(args[i], "-outputresult", true)) {
                             outputResult = true;
                         } else if (0 == string.Compare(args[i], "-parallel", true)) {
                             parallel = true;
                         } else if (0 == string.Compare(args[i], "-noautorequire", true)) {
                             SymbolTable.NoAutoRequire = true;
-                        } else if (0 == string.Compare(args[i], "-luacomponentbystring", true)) {
+                        } else if (0 == string.Compare(args[i], "-componentbystring", true)) {
                             SymbolTable.DslComponentByString = true;
                         } else if (0 == string.Compare(args[i], "-usearraygetset", true)) {
                             SymbolTable.UseArrayGetSet = true;
@@ -195,7 +186,7 @@ namespace RoslynTool
                         }
                     }
                 } else {
-                    Console.WriteLine("[Usage]:Cs2Lua [-out dir] [-ext fileext] [-enableinherit] [-enablelinq] [-normallua/-slua/-xlua] [-outputresult] [-noautorequire] [-luacomponentbystring] [-usearraygetset] [-enabletranslationcheck] [-d macro] [-u macro] [-externpath path] [-ignorepath path] [-refbyname dllname alias] [-refbypath dllpath alias] [-systemdllpath dllpath] [-src] csfile|csprojfile");
+                    Console.WriteLine("[Usage]:Cs2Lua [-out dir] [-ext fileext] [-enableinherit] [-enablelinq] [-outputresult] [-noautorequire] [-luacomponentbystring] [-usearraygetset] [-enabletranslationcheck] [-d macro] [-u macro] [-externpath path] [-ignorepath path] [-refbyname dllname alias] [-refbypath dllpath alias] [-systemdllpath dllpath] [-src] csfile|csprojfile");
                     Console.WriteLine("\twhere:");
                     Console.WriteLine("\t\tfileext = file externsion, default is txt for unity3d, maybe lua for other usage.");
                     Console.WriteLine("\t\tmacro = c# macro define, used in your csharp code #if/#elif/#else/#endif etc.");
@@ -232,12 +223,6 @@ namespace RoslynTool
                 }
                 Environment.Exit((int)ExitCode.Exception);
             }
-        }
-        private static void SetNormalLua()
-        {
-            SymbolTable.SetExternClassNamePrefix(string.Empty);
-            SymbolTable.ForSlua = false;
-            SymbolTable.ForXlua = false;
         }
     }
 }

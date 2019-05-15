@@ -1,8 +1,8 @@
-require("cs2lua__utility");
-require("cs2lua__attributes");
-require("cs2lua__namespaces");
-require("cs2lua__externenums");
-require("cs2lua__interfaces");
+require("cs2dsl__utility");
+require("cs2dsl__attributes");
+require("cs2dsl__namespaces");
+require("cs2dsl__externenums");
+require("cs2dsl__interfaces");
 require("luastring");
 
 class(MyScript) {
@@ -22,11 +22,11 @@ class(MyScript) {
 	instance_methods {
 		Init = function(this, obj, mb){
 			local(s); s = "test test test from cs2lua !";
-			callstatic(UnityEngine.Debug, "Log", s);
-			callinstance(mb, "StartCoroutine", callinstance(this, "TestCoroutine"));
-			setinstance(this, "root", newexternobject(UnityEngine.GameObject, typeargs(), typekinds(), , null, "root"));
-			local(slider); slider = typeas(callinstance(callstatic(UnityEngine.GameObject, "Find", "Canvas/Slider"), "GetComponent", typeof(UnityEngine.UI.Slider)), UnityEngine.UI.Slider, TypeKind.Class);
-			local(counttxt); counttxt = typeas(callinstance(callstatic(UnityEngine.GameObject, "Find", "Canvas/Count"), "GetComponent", typeof(UnityEngine.UI.Text)), UnityEngine.UI.Text, TypeKind.Class);
+			callstatic(UnityEngine.Debug, "Log", "Log__Object", s);
+			callinstance(mb, "StartCoroutine", "StartCoroutine__IEnumerator", callinstance(this, "TestCoroutine"));
+			setinstance(this, "root", newexternobject(UnityEngine.GameObject, typeargs(), typekinds(), , null, "ctor__String", "root"));
+			local(slider); slider = typeas(callinstance(callstatic(UnityEngine.GameObject, "Find", "Canvas/Slider"), "GetComponent", "GetComponent__Type", typeof(UnityEngine.UI.Slider)), UnityEngine.UI.Slider, TypeKind.Class);
+			local(counttxt); counttxt = typeas(callinstance(callstatic(UnityEngine.GameObject, "Find", "Canvas/Count"), "GetComponent", "GetComponent__Type", typeof(UnityEngine.UI.Text)), UnityEngine.UI.Text, TypeKind.Class);
 			callinstance(getinstance(slider, "onValueChanged"), "AddListener", (function(v){
 				callinstance(this, "Reset");
 				getinstance(counttxt, "text") = callstatic(LuaString, "Format", "cube:{0}", v);
@@ -40,14 +40,14 @@ class(MyScript) {
 				local(offset); offset = condexp(execbinary("==", execbinary("%", i, 2, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), true, 5, true, -5);
 				local(nr); nr = execbinary("+", getinstance(this, "r"), execbinary("*", callstatic(UnityEngine.Mathf, "Sin", getstatic(UnityEngine.Time, "time")), offset, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct);
 				local(angle); angle = condexp(execbinary("==", execbinary("%", i, 2, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), false, (function(){ return(getstatic(UnityEngine.Time, "time")); }), true, -5);
-				local(b); b = newexternobject(UnityEngine.Vector3, typeargs(), typekinds(), , null, typecast(( execbinary("*", callstatic(UnityEngine.Mathf, "Cos", execbinary("+", execbinary("/", execbinary("*", execbinary("*", i, 3.14, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 2, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(this, "max"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), angle, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct)), nr, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct) ), System.Single, TypeKind.Struct), typecast(( execbinary("*", callstatic(UnityEngine.Mathf, "Sin", execbinary("+", execbinary("/", execbinary("*", execbinary("*", i, 3.14, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 2, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(this, "max"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), angle, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct)), nr, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct) ), System.Single, TypeKind.Struct), 0);
+				local(b); b = newexternobject(UnityEngine.Vector3, typeargs(), typekinds(), , null, "ctor__Single__Single__Single", typecast(( execbinary("*", callstatic(UnityEngine.Mathf, "Cos", execbinary("+", execbinary("/", execbinary("*", execbinary("*", i, 3.14, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 2, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(this, "max"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), angle, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct)), nr, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct) ), System.Single, TypeKind.Struct), typecast(( execbinary("*", callstatic(UnityEngine.Mathf, "Sin", execbinary("+", execbinary("/", execbinary("*", execbinary("*", i, 3.14, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 2, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(this, "max"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), angle, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct)), nr, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct) ), System.Single, TypeKind.Struct), 0);
 				setinstance(getinstance(getinstance(this, "cubes")[i + 1], "transform"), "position", b);
 			i = execbinary("+", i, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
 			};
 			if( execbinary("||", execbinary("<=", getinstance(this, "fogStart"), 0, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), execbinary(">", getinstance(this, "t"), 1, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct) ){
 				setinstance(this, "fogStart", getstatic(UnityEngine.Time, "time"));
 				setinstance(this, "bgCurrent", getinstance(getstatic(UnityEngine.Camera, "main"), "backgroundColor"));
-				local(ix); ix = callstatic(UnityEngine.Random, "Range", 0, getinstance(getinstance(this, "colors"), "Length"));
+				local(ix); ix = callstatic(UnityEngine.Random, "Range", "Range__Int32__Int32", 0, getinstance(getinstance(this, "colors"), "Length"));
 				setinstance(this, "bgColor", getinstance(this, "colors")[ix + 1]);
 			};
 			setinstance(this, "t", execbinary("/", ( execbinary("-", getstatic(UnityEngine.Time, "time"), getinstance(this, "fogStart"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct) ), 10, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct));
@@ -61,7 +61,7 @@ class(MyScript) {
 			local(i); i = 0;
 			while( execbinary("<", i, 60, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
 				wrapyield(newexternobject(UnityEngine.WaitForSeconds, typeargs(), typekinds(), , null, 1), false, true);
-				callstatic(UnityEngine.Debug, "Log", callstatic(System.String, "Format", "{0} seconds", i));
+				callstatic(UnityEngine.Debug, "Log", "Log__Object", callstatic(System.String, "Format", "Format__String__Object", "{0} seconds", i));
 			i = execbinary("+", i, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
 			};
 			return(null);
@@ -70,23 +70,23 @@ class(MyScript) {
 			if( execbinary("!=", null, getinstance(this, "cubes"), System.Object, System.Object, TypeKind.Class, TypeKind.Class) ){
 				local(i); i = 0;
 				while( execbinary("<", i, getinstance(getinstance(this, "cubes"), "Length"), System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
-					callstatic(UnityEngine.Object, "Destroy", getinstance(this, "cubes")[i + 1]);
+					callstatic(UnityEngine.Object, "Destroy", "Destroy__Object", getinstance(this, "cubes")[i + 1]);
 				i = execbinary("+", i, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
 				};
 			};
 			setinstance(this, "cubes", (function(){ local(d0); d0 = getinstance(this, "max"); local{arr = newarray(UnityEngine.GameObject, d0);}; for(i0, 1, d0){ arr[i0] = null; }; return(arr); })());
-			local(P); P = callstatic(UnityEngine.Resources, "Load", "Particle System");
+			local(P); P = callstatic(UnityEngine.Resources, "Load", "Load__String", "Particle System");
 			local(i); i = 0;
 			while( execbinary("<", i, getinstance(this, "max"), System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
 				local(cube); cube = callstatic(UnityEngine.GameObject, "CreatePrimitive", 3);
-				setinstance(getinstance(cube, "transform"), "position", newexternobject(UnityEngine.Vector3, typeargs(), typekinds(), , null, execbinary("*", typecast(callstatic(UnityEngine.Mathf, "Cos", execbinary("/", execbinary("*", execbinary("*", i, 3.14, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 2, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(this, "max"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct)), System.Single, TypeKind.Struct), getinstance(this, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), execbinary("*", typecast(callstatic(UnityEngine.Mathf, "Sin", execbinary("/", execbinary("*", execbinary("*", i, 3.14, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 2, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(this, "max"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct)), System.Single, TypeKind.Struct), getinstance(this, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 0));
-				callinstance(getinstance(cube, "transform"), "SetParent", getinstance(getinstance(this, "root"), "transform"));
-				local(mat); mat = getinstance(callinstance(cube, "GetComponent", UnityEngine.Renderer), "material");
-				local(box); box = callinstance(cube, "GetComponent", typeof(UnityEngine.BoxCollider));
-				callstatic(UnityEngine.Object, "Destroy", box);
-				local(p); p = typeas(callstatic(UnityEngine.Object, "Instantiate", P, getstatic(UnityEngine.Vector3, "zero"), getstatic(UnityEngine.Quaternion, "identity")), UnityEngine.GameObject, TypeKind.Class);
-				callinstance(getinstance(p, "transform"), "SetParent", getinstance(cube, "transform"));
-				local(ix); ix = callstatic(UnityEngine.Random, "Range", 0, getinstance(getinstance(this, "colors"), "Length"));
+				setinstance(getinstance(cube, "transform"), "position", newexternobject(UnityEngine.Vector3, typeargs(), typekinds(), , null, "ctor__Single__Single__Single", execbinary("*", typecast(callstatic(UnityEngine.Mathf, "Cos", execbinary("/", execbinary("*", execbinary("*", i, 3.14, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 2, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(this, "max"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct)), System.Single, TypeKind.Struct), getinstance(this, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), execbinary("*", typecast(callstatic(UnityEngine.Mathf, "Sin", execbinary("/", execbinary("*", execbinary("*", i, 3.14, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 2, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(this, "max"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct)), System.Single, TypeKind.Struct), getinstance(this, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 0));
+				callinstance(getinstance(cube, "transform"), "SetParent", "SetParent__Transform", getinstance(getinstance(this, "root"), "transform"));
+				local(mat); mat = getinstance(callinstance(cube, "GetComponent", "GetComponent__Type", UnityEngine.Renderer), "material");
+				local(box); box = callinstance(cube, "GetComponent", "GetComponent__Type", typeof(UnityEngine.BoxCollider));
+				callstatic(UnityEngine.Object, "Destroy", "Destroy__Object", box);
+				local(p); p = typeas(callstatic(UnityEngine.Object, "Instantiate", "Instantiate__Object__Vector3__Quaternion", P, getstatic(UnityEngine.Vector3, "zero"), getstatic(UnityEngine.Quaternion, "identity")), UnityEngine.GameObject, TypeKind.Class);
+				callinstance(getinstance(p, "transform"), "SetParent", "SetParent__Transform", getinstance(cube, "transform"));
+				local(ix); ix = callstatic(UnityEngine.Random, "Range", "Range__Int32__Int32", 0, getinstance(getinstance(this, "colors"), "Length"));
 				setinstance(mat, "color", getinstance(this, "colors")[ix + 1]);
 				getinstance(this, "cubes")[i + 1] = cube;
 			i = execbinary("+", i, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
@@ -101,8 +101,8 @@ class(MyScript) {
 			}else{
 				setinstance(this, "__ctor_called", true);
 			};
-			this.bgCurrent = newexternobject(UnityEngine.Color, "UnityEngine.Color", null, null);
-			this.bgColor = newexternobject(UnityEngine.Color, "UnityEngine.Color", null, null);
+			this.bgCurrent = newexternobject(UnityEngine.Color, typeargs(), typekinds(), , null);
+			this.bgColor = newexternobject(UnityEngine.Color, typeargs(), typekinds(), , null);
 		};
 	};
 	instance_fields {

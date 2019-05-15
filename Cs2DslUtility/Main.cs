@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cs2Lua
+namespace Cs2Dsl
 {
     [System.AttributeUsage(System.AttributeTargets.All)]
     public sealed class DontCheckAttribute : System.Attribute

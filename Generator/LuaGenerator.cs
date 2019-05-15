@@ -43,7 +43,7 @@ namespace Generator
 
                     Dsl.DslFile dslFile = new Dsl.DslFile();
                     dslFile.Load(file, s => Log(file, s));
-                    GenerateLua(dslFile, Path.Combine(s_OutPath, Path.ChangeExtension(fileName, s_Ext)), fileName);
+                    GenerateLua(dslFile, Path.Combine(s_OutPath, Path.ChangeExtension(fileName.Replace("cs2dsl__", "cs2lua__"), s_Ext)), fileName);
                 } catch (Exception ex) {
                     Log(file, string.Format("exception:{0}\n{1}", ex.Message, ex.StackTrace));
                     File.WriteAllText(Path.Combine(s_LogPath, "Generator.log"), s_LogBuilder.ToString());
@@ -89,7 +89,7 @@ namespace Generator
                 var funcData = dslInfo.First;
                 var callData = funcData.Call;
                 if (id == "require") {
-                    string requireFileName = callData.GetParamId(0);
+                    string requireFileName = callData.GetParamId(0).Replace("cs2dsl__", "cs2lua__");
                     string srcPath = Path.Combine(s_ExePath, string.Format("lualib/{0}.lua", requireFileName));
                     string destPath = Path.Combine(s_OutPath, string.Format("{0}.{1}", requireFileName, s_Ext));
                     bool srcExist = File.Exists(srcPath);
@@ -818,6 +818,8 @@ namespace Generator
                             id = "__cs2lua_nil_field_value";
                         else
                             id = "nil";
+                    } else if (id == "__cs2dsl_out") {
+                        id = "__cs2lua_out";
                     }
                     sb.Append(id);
                     break;
