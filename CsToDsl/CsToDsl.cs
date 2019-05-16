@@ -602,7 +602,8 @@ namespace RoslynTool.CsToDsl
                         }
                         CodeBuilder.Append(" );}");
                     } else if (null != arrCreate) {
-                        string elementType = ClassInfo.GetFullName(arrCreate.ElementType);
+                        ITypeSymbol etype = SymbolTable.GetElementType(arrCreate.ElementType);
+                        string elementType = ClassInfo.GetFullName(etype);
                         if (arrCreate.DimensionSizes.Length == 1) {
                             if (null == arrCreate.Initializer || arrCreate.Initializer.ElementValues.Length == 0) {
                                 CodeBuilder.AppendFormat("newarray({0})", elementType);
@@ -1136,7 +1137,9 @@ namespace RoslynTool.CsToDsl
                 string prestr = string.Empty;
                 foreach (var ta in namedTypeSym.TypeArguments) {
                     sb.Append(prestr);
-                    if (ta.TypeKind == TypeKind.TypeParameter) {
+                    if (ta.TypeKind == TypeKind.Delegate) {
+                        sb.AppendFormat("\"{0}\"", ClassInfo.GetFullName(ta));
+                    } else if (ta.TypeKind == TypeKind.TypeParameter) {
                         sb.Append(ta.Name);
                     } else {
                         sb.Append(ClassInfo.GetFullName(ta));

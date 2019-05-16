@@ -1991,7 +1991,11 @@ function invokeexternoperator(class, method, ...)
   --对slua，对应到lua元表操作符函数的操作符重载cs2lua转lua代码时已经换成对应操作符表达式。
   --执行到这里的应该是无法对应到lua操作符的操作符重载
   local argnum = #args;
-  if argnum==2 and method=="op_Equality" then
+  if argnum==0 and method=="op_Equality" then
+  	return true;
+  elseif argnum==0 and method=="op_Inequality" then
+  	return false;
+  elseif argnum==2 and method=="op_Equality" then
     if args[1] and args[2] then
       mt1 = getmetatable(args[1]);
       mt2 = getmetatable(args[2]);

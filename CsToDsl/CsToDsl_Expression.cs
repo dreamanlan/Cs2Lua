@@ -726,9 +726,11 @@ namespace RoslynTool.CsToDsl
                     var arrCreateExp = node.Parent as ArrayCreationExpressionSyntax;
                     if (null != arrCreateExp) {
                         var arrCreate = m_Model.GetOperation(arrCreateExp) as IArrayCreationExpression;
-                        elementType = ClassInfo.GetFullName(arrCreate.ElementType);
+                        ITypeSymbol etype = SymbolTable.GetElementType(arrCreate.ElementType);
+                        elementType = ClassInfo.GetFullName(etype);
                     } else if (ct > 0) {
-                        elementType = ClassInfo.GetFullName(arrInitOper.ElementValues[0].Type);
+                        ITypeSymbol etype = SymbolTable.GetElementType(arrInitOper.ElementValues[0].Type);
+                        elementType = ClassInfo.GetFullName(etype);
                     }
                     if (ct > 0) {
                         CodeBuilder.AppendFormat("buildarray({0}, ", elementType);
@@ -946,7 +948,8 @@ namespace RoslynTool.CsToDsl
         {
             if (null == node.Initializer) {
                 var oper = m_Model.GetOperation(node) as IArrayCreationExpression;
-                string elementType = ClassInfo.GetFullName(oper.ElementType);
+                ITypeSymbol etype = SymbolTable.GetElementType(oper.ElementType);
+                string elementType = ClassInfo.GetFullName(etype);
                 var rankspecs = node.Type.RankSpecifiers;
                 var rankspec = rankspecs[0];
                 int rank = rankspec.Rank;
@@ -958,7 +961,7 @@ namespace RoslynTool.CsToDsl
                         var exp = rankspec.Sizes[i];
                         OutputExpressionSyntax(exp);
                         if (i == 0) {
-                            CodeBuilder.AppendFormat("; local{{arr = newarray({0}, d0);}}", elementType);
+                            CodeBuilder.AppendFormat("; local{{arr = newarray({0}, d0);}}", etype);
                         }
                         CodeBuilder.AppendFormat("; for(i{0}, 1, d{1}){{ arr{2} = ", i, i, GetArraySubscriptString(i));
                         if (i < ct - 1) {
@@ -967,18 +970,6 @@ namespace RoslynTool.CsToDsl
                             OutputExpressionSyntax(exp);
                             CodeBuilder.Append(");");
                         } else {
-                            ITypeSymbol etype = null;
-                            if (null != oper && null != oper.ElementType) {
-                                etype = oper.ElementType;
-                                for (; ; ) {
-                                    var t = etype as IArrayTypeSymbol;
-                                    if (null != t) {
-                                        etype = t.ElementType;
-                                    } else {
-                                        break;
-                                    }
-                                }
-                            }
                             OutputDefaultValue(etype);
                             CodeBuilder.Append(";");
                         }

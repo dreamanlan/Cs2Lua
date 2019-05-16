@@ -517,7 +517,11 @@ namespace SLua
 		#region struct
 		static public bool checkValueType<T>(IntPtr l, int p, out T v) where T:struct
 		{
-			v = (T) checkObj(l, p);
+            var ret = checkObj(l, p);
+            if (null == ret)
+                v = default(T);
+            else
+			    v = (T)ret;
 			return true;
 		}
 		#endregion

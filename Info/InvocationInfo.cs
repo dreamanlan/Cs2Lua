@@ -475,19 +475,6 @@ namespace RoslynTool.CsToDsl
             }
         }
 
-        private ITypeSymbol GetElementType(ITypeSymbol typeSym)
-        {
-            while(typeSym.TypeKind == TypeKind.Array) {
-                var arrType = typeSym as IArrayTypeSymbol;
-                if (null != arrType) {
-                    typeSym = arrType.ElementType;
-                } else {
-                    break;
-                }
-            }
-            return typeSym;
-        }
-
         internal static void TryAddExternEnum(bool isEnumClass, ExpressionSyntax exp, SemanticModel model)
         {
             if (isEnumClass) {

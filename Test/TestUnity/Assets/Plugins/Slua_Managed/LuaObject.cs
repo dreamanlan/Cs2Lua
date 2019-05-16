@@ -1127,7 +1127,16 @@ return index
 		{
 			if (LuaDLL.lua_type(l, p) == LuaTypes.LUA_TTABLE)
 			{
-				int n = LuaDLL.lua_rawlen(l, p);
+				int n;
+                int r = LuaDLL.lua_getmetatable(l, p);
+                if (r != 0) {
+                    LuaDLL.lua_pushstring(l, "__count");
+                    LuaDLL.lua_gettable(l, -2);
+                    n = LuaDLL.lua_tointeger(l, -1);
+                    LuaDLL.lua_pop(l, 2);
+                } else {
+                    n = LuaDLL.lua_rawlen(l, p);
+                }
 				ta = new T[n];
 				for (int k = 0; k < n; k++)
 				{
@@ -1151,7 +1160,16 @@ return index
         static public bool checkArray<T>(IntPtr l, int p, out T[][] ta)
         {
             if (LuaDLL.lua_type(l, p) == LuaTypes.LUA_TTABLE) {
-                int n = LuaDLL.lua_rawlen(l, p);
+                int n;
+                int r = LuaDLL.lua_getmetatable(l, p);
+                if (r != 0) {
+                    LuaDLL.lua_pushstring(l, "__count");
+                    LuaDLL.lua_gettable(l, -2);
+                    n = LuaDLL.lua_tointeger(l, -1);
+                    LuaDLL.lua_pop(l, 2);
+                } else {
+                    n = LuaDLL.lua_rawlen(l, p);
+                }
                 ta = new T[n][];
                 for (int k = 0; k < n; k++) {
                     LuaDLL.lua_rawgeti(l, p, k + 1);

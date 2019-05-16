@@ -677,6 +677,18 @@ namespace RoslynTool.CsToDsl
         {
             s_ExternClassNamePrefix = val;
         }
+        internal static ITypeSymbol GetElementType(ITypeSymbol typeSym)
+        {
+            while (typeSym.TypeKind == TypeKind.Array) {
+                var arrType = typeSym as IArrayTypeSymbol;
+                if (null != arrType) {
+                    typeSym = arrType.ElementType;
+                } else {
+                    break;
+                }
+            }
+            return typeSym;
+        }
         internal static bool NoAutoRequire
         {
             get { return s_NoAutoRequire; }
