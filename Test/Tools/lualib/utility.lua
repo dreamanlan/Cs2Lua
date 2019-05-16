@@ -1533,7 +1533,12 @@ function newexternobject(class, typeargs, typekinds, initializer, ...)
   if class == System.Collections.Generic.KeyValuePair_TKey_TValue then
   	return { Key=args[1], Value=args[2] };
   end;
-  obj = class(...);
+  if class==UnityEngine.Vector3 then
+  	table.remove(args,1);
+  	obj = class(unpack(args));
+  else
+  	obj = class(...);
+  end;
   if obj and initializer then
   	initializer(obj);
   end;
@@ -2030,7 +2035,13 @@ function invokeexternoperator(class, method, ...)
       return not Slua.IsNull(args[1]);
     else
       return false;
-    end;    
+    end; 
+  elseif method=="op_Multiply" then
+  	if argnum==2 then
+  		return args[1] * args[2];
+  	elseif argnum==3 then
+  		return args[2] * args[3];
+  	end;
   elseif method=="op_Implicit" then
   	local t = nil;
   	if args[1] then
