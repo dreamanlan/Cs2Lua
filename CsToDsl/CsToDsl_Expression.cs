@@ -108,7 +108,7 @@ namespace RoslynTool.CsToDsl
                         OutputExpressionSyntax(node.Left, lopd);
                         CodeBuilder.Append(", ");
                         OutputExpressionSyntax(node.Right, ropd);
-                        CodeBuilder.AppendFormat(", {0}, {1}, {2}, {3}", leftType, rightType, leftTypeKind, rightTypeKind);
+                        CodeBuilder.AppendFormat(", {0}, {1}, {2}, {3}", CsDslTranslater.EscapeType(leftType, leftTypeKind), CsDslTranslater.EscapeType(rightType, rightTypeKind), leftTypeKind, rightTypeKind);
                         CodeBuilder.Append(")");
                     }
                 }
@@ -217,7 +217,7 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.Append("execbinary(");
                     CodeBuilder.AppendFormat("\"{0}\", ", op);
                     OutputExpressionSyntax(node.Operand, opd);
-                    CodeBuilder.AppendFormat(", 1, {0}, {1}, {2}, {3}", type, type, typeKind, typeKind);
+                    CodeBuilder.AppendFormat(", 1, {0}, {1}, {2}, {3}", CsDslTranslater.EscapeType(type, typeKind), CsDslTranslater.EscapeType(type, typeKind), typeKind, typeKind);
                     CodeBuilder.Append(")");
                     CodeBuilder.Append("; return(");
                     OutputExpressionSyntax(node.Operand, opd);
@@ -233,7 +233,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append("execunary(");
                         CodeBuilder.AppendFormat("\"{0}\", ", op);
                         OutputExpressionSyntax(node.Operand, opd);
-                        CodeBuilder.AppendFormat(", {0}, {1}", type, typeKind);
+                        CodeBuilder.AppendFormat(", {0}, {1}", CsDslTranslater.EscapeType(type, typeKind), typeKind);
                         CodeBuilder.Append(")");
                     }
                 }

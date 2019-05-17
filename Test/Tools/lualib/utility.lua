@@ -400,6 +400,8 @@ function typeas(obj, t, tk)
     return obj;
   elseif typeis(obj, t, tk) then
     return obj;
+  elseif tk==TypeKind.Delegate then
+  	return obj;
   else
     return nil;
   end;
@@ -472,6 +474,9 @@ function typeis(obj, t, tk)
         end;
       end;
     end;
+  end;
+  if tk==TypeKind.Delegate and type(obj)=="function" then
+  	return true;
   end;
   return false;
 end;

@@ -2193,12 +2193,12 @@ namespace SLua
             foreach (var param in mi.GetParameters()) {
                 var paramType = param.ParameterType;
                 sb.Append("__");
-                if (param.ParameterType.IsByRef) {
-                    paramType = paramType.GetElementType();
-                    sb.Append("Ref_");
-                } else if (param.IsOut) {
+                if (param.IsOut) {
                     paramType = paramType.GetElementType();
                     sb.Append("Out_");
+                } else if (param.ParameterType.IsByRef) {
+                    paramType = paramType.GetElementType();
+                    sb.Append("Ref_");
                 }
                 if (paramType.IsArray) {
                     paramType = paramType.GetElementType();

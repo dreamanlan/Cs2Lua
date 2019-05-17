@@ -685,6 +685,9 @@ namespace RoslynTool.CsToDsl
                 } else if (type.TypeKind == TypeKind.Array) {
                     var arrType = type as IArrayTypeSymbol;
                     CodeBuilder.Append(SymbolTable.PrefixExternClassName("System.Array"));
+                } else if (type.TypeKind == TypeKind.Delegate) {
+                    var fullName = ClassInfo.GetFullName(type);
+                    CodeBuilder.AppendFormat("\"{0}\"", fullName);
                 } else {
                     var fullName = ClassInfo.GetFullName(type);
                     CodeBuilder.Append(fullName);
@@ -1253,6 +1256,13 @@ namespace RoslynTool.CsToDsl
                 }
             }
             return false;
+        }
+        internal static string EscapeType(string type, string typeKind)
+        {
+            if (typeKind == "TypeKind.Delegate")
+                return "\"" + type + "\"";
+            else
+                return type;
         }
 
         private static string GetArraySubscriptString(int index)
