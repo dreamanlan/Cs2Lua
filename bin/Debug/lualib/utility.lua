@@ -150,7 +150,7 @@ function getobjtypename(obj)
 end;
 
 function getclassfullname(t)
-	if t then
+	if t and type(t)~="string" then
 		if rawget(t, "__cs2lua_defined") then
 			return rawget(t, "__cs2lua_fullname");
 		else
@@ -163,19 +163,19 @@ function getclassfullname(t)
 			end;
 		end;
 	else
-		return nil;
+		return t;
 	end;
 end;
 
 function getclasstypename(t)
-	if t then
+	if t and type(t)~="string" then
 		if rawget(t, "__cs2lua_defined") then
 			return rawget(t, "__cs2lua_typename");
 		else
 			return rawget(t, "__typename");
 		end;
 	else
-		return nil;
+		return t;
 	end;
 end;
 
@@ -193,7 +193,7 @@ function getobjparentclass(obj)
 end;
 
 function getclassparentclass(t)
-	if t then
+	if t and type(t)~="string" then
 		if rawget(t, "__cs2lua_defined") then
 			return rawget(t, "__cs2lua_parent");
 		else
