@@ -409,7 +409,8 @@ namespace RoslynTool.CsToDsl
                     int mcount = 0;
                     foreach (var isym in syms) {
                         var msym = isym as IMethodSymbol;
-                        if (null != msym) {
+                        var fn = ClassInfo.GetFullName(msym.ContainingType);
+                        if (null != msym && msym.DeclaredAccessibility == Accessibility.Public && !msym.IsImplicitlyDeclared) {
                             ++mcount;
                         }
                     }
