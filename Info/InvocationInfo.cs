@@ -360,7 +360,7 @@ namespace RoslynTool.CsToDsl
                             for(int i = 0; i < sym.Parameters.Length; ++i) {
                                 var psym1 = msym.Parameters[i + sym.TypeParameters.Length];
                                 var psym2 = sym.Parameters[i];
-                                if (psym1.Type.Name != psym2.Type.Name) {
+                                if (psym1.Type.Name != psym2.Type.Name && psym2.OriginalDefinition.Type.TypeKind != TypeKind.TypeParameter) {
                                     existNonGenericVersion = false;
                                     break;
                                 }
@@ -373,7 +373,7 @@ namespace RoslynTool.CsToDsl
                                 for (int i = 0; i < sym.Parameters.Length; ++i) {
                                     var psym1 = msym.Parameters[i];
                                     var psym2 = sym.Parameters[i];
-                                    if (psym1.Type.Name != psym2.Type.Name) {
+                                    if (psym1.Type.Name != psym2.Type.Name && psym2.OriginalDefinition.Type.TypeKind != TypeKind.TypeParameter) {
                                         existNonGenericVersion = false;
                                         break;
                                     }
