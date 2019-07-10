@@ -9,23 +9,23 @@ public class Lua_UnityEngine_ComputeBuffer : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.ComputeBuffer o;
-			if(argc==4){
+			if(argc==5){
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				UnityEngine.ComputeBufferType a3;
-				checkEnum(l,4,out a3);
+				checkEnum(l,5,out a3);
 				o=new UnityEngine.ComputeBuffer(a1,a2,a3);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==3){
+			else if(argc==4){
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				o=new UnityEngine.ComputeBuffer(a1,a2);
 				pushValue(l,true);
 				pushValue(l,o);
@@ -65,27 +65,41 @@ public class Lua_UnityEngine_ComputeBuffer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int IsValid(IntPtr l) {
+		try {
+			UnityEngine.ComputeBuffer self=(UnityEngine.ComputeBuffer)checkSelf(l);
+			var ret=self.IsValid();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetData(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
+			if(argc==6){
 				UnityEngine.ComputeBuffer self=(UnityEngine.ComputeBuffer)checkSelf(l);
 				System.Array a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Int32 a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				System.Int32 a4;
-				checkType(l,5,out a4);
+				checkType(l,6,out a4);
 				self.SetData(a1,a2,a3,a4);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==2){
+			else if(argc==3){
 				UnityEngine.ComputeBuffer self=(UnityEngine.ComputeBuffer)checkSelf(l);
 				System.Array a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				self.SetData(a1);
 				pushValue(l,true);
 				return 1;
@@ -103,24 +117,24 @@ public class Lua_UnityEngine_ComputeBuffer : LuaObject {
 	static public int GetData(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
+			if(argc==6){
 				UnityEngine.ComputeBuffer self=(UnityEngine.ComputeBuffer)checkSelf(l);
 				System.Array a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Int32 a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				System.Int32 a4;
-				checkType(l,5,out a4);
+				checkType(l,6,out a4);
 				self.GetData(a1,a2,a3,a4);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==2){
+			else if(argc==3){
 				UnityEngine.ComputeBuffer self=(UnityEngine.ComputeBuffer)checkSelf(l);
 				System.Array a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				self.GetData(a1);
 				pushValue(l,true);
 				return 1;
@@ -224,6 +238,7 @@ public class Lua_UnityEngine_ComputeBuffer : LuaObject {
 		getTypeTable(l,"UnityEngine.ComputeBuffer");
 		addMember(l,Dispose);
 		addMember(l,Release);
+		addMember(l,IsValid);
 		addMember(l,SetData);
 		addMember(l,GetData);
 		addMember(l,SetCounterValue);

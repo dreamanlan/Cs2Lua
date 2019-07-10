@@ -22,15 +22,15 @@ public class Lua_UnityEngine_Caching : LuaObject {
 	static public int ClearCache_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==1){
+			if(argc==2){
 				System.Int32 a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				var ret=UnityEngine.Caching.ClearCache(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==0){
+			else if(argc==1){
 				var ret=UnityEngine.Caching.ClearCache();
 				pushValue(l,true);
 				pushValue(l,ret);
@@ -114,19 +114,19 @@ public class Lua_UnityEngine_Caching : LuaObject {
 	static public int IsVersionCached_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==3){
 				System.String a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Hash128 a2;
-				checkValueType(l,2,out a2);
+				checkValueType(l,3,out a2);
 				var ret=UnityEngine.Caching.IsVersionCached(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==1){
+			else if(argc==2){
 				UnityEngine.CachedAssetBundle a1;
-				checkValueType(l,1,out a1);
+				checkValueType(l,2,out a1);
 				var ret=UnityEngine.Caching.IsVersionCached(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
@@ -145,19 +145,19 @@ public class Lua_UnityEngine_Caching : LuaObject {
 	static public int MarkAsUsed_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==3){
 				System.String a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Hash128 a2;
-				checkValueType(l,2,out a2);
+				checkValueType(l,3,out a2);
 				var ret=UnityEngine.Caching.MarkAsUsed(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==1){
+			else if(argc==2){
 				UnityEngine.CachedAssetBundle a1;
-				checkValueType(l,1,out a1);
+				checkValueType(l,2,out a1);
 				var ret=UnityEngine.Caching.MarkAsUsed(a1);
 				pushValue(l,true);
 				pushValue(l,ret);

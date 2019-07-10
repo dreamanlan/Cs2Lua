@@ -83,6 +83,7 @@ namespace Generator
             Stack<string> classDefineStack = new Stack<string>();
             string prestr = string.Empty;
             int indent = 0;
+            bool firstRequire = true;
             bool firstAttrs = true;
             foreach (var dslInfo in dslFile.DslInfos) {
                 string id = dslInfo.GetId();
@@ -100,7 +101,11 @@ namespace Generator
                     if ((srcExist || requireFileName.StartsWith("cs2lua__")) && null != mergedInfo && mergedInfo.CodeBuilder.Length > 0) {
                         //合并的文件，只有第一个文件require基础库
                     } else {
-                        if (!DontRequire(fileName, requireFileName)) {
+                        if (firstRequire) {
+                            sb.AppendLine("require \"cs2lua__namespaces\"; ");
+                            firstRequire = false;
+                        }
+                        if (requireFileName != "cs2lua__namespaces" && !DontRequire(fileName, requireFileName)) {
                             var newRequire = GetMergedFile(requireFileName);
                             if (null != newRequire) {
                                 if (newRequire != myselfNewRequire && !requires.Contains(newRequire)) {
@@ -774,7 +779,12 @@ namespace Generator
                         GenerateConcreteSyntax(funcData, sb, indent, firstLineUseIndent);
                     } else {
                         var statementData = comp as Dsl.StatementData;
-                        GenerateConcreteSyntax(statementData, sb, indent, firstLineUseIndent);
+                        if (null != statementData) {
+                            GenerateConcreteSyntax(statementData, sb, indent, firstLineUseIndent);
+                        } else {
+                            System.Diagnostics.Debugger.Break();
+                            throw new Exception(string.Format("GenerateFieldValueComponent ISyntaxComponent exception:{0}", sb.ToString()));
+                        }
                     }
                 }
             }

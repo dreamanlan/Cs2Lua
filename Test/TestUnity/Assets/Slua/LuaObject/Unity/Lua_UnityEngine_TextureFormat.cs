@@ -35,8 +35,6 @@ public class Lua_UnityEngine_TextureFormat : LuaObject {
 		addMember(l,32,"PVRTC_RGB4");
 		addMember(l,33,"PVRTC_RGBA4");
 		addMember(l,34,"ETC_RGB4");
-		addMember(l,35,"ATC_RGB4");
-		addMember(l,36,"ATC_RGBA8");
 		addMember(l,41,"EAC_R");
 		addMember(l,42,"EAC_R_SIGNED");
 		addMember(l,43,"EAC_RG");
@@ -62,10 +60,12 @@ public class Lua_UnityEngine_TextureFormat : LuaObject {
 		addMember(l,63,"R8");
 		addMember(l,64,"ETC_RGB4Crunched");
 		addMember(l,65,"ETC2_RGBA8Crunched");
-		addMember(l,-127,"PVRTC_4BPP_RGB");
-		addMember(l,-127,"PVRTC_4BPP_RGBA");
-		addMember(l,-127,"PVRTC_2BPP_RGB");
 		addMember(l,-127,"PVRTC_2BPP_RGBA");
+		addMember(l,-127,"PVRTC_2BPP_RGB");
+		addMember(l,-127,"ATC_RGB4");
+		addMember(l,-127,"PVRTC_4BPP_RGB");
+		addMember(l,-127,"ATC_RGBA8");
+		addMember(l,-127,"PVRTC_4BPP_RGBA");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

@@ -4,15 +4,23 @@ using System.Collections.Generic;
 
 class LuaString
 {
-    public static string Format(string str, params object[] args)
+    public static string Format(string str, object arg)
     {
-        return string.Format(str, args);
+        return string.Format(str, arg);
+    }
+    public static string Format(string str, object arg1, object arg2)
+    {
+        return string.Format(str, arg1, arg2);
+    }
+    public static string Format(string str, object arg1, object arg2, object arg3)
+    {
+        return string.Format(str, arg1, arg2, arg3);
     }
 }
 
 class MyScript : ITickPlugin
 {   
-    public void Init(GameObject obj, MonoBehaviour mb)
+    public void Init(GameObject obj, MonoBehaviourProxy mb)
     {
         string s = "test test test from cs2lua !";
         Debug.Log(s);

@@ -18,6 +18,18 @@ public class Lua_UnityEngine_LightProbeProxyVolume : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_isFeatureSupported(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.LightProbeProxyVolume.isFeatureSupported);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_boundsGlobal(IntPtr l) {
 		try {
 			UnityEngine.LightProbeProxyVolume self=(UnityEngine.LightProbeProxyVolume)checkSelf(l);
@@ -78,118 +90,6 @@ public class Lua_UnityEngine_LightProbeProxyVolume : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.originCustom=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_boundingBoxMode(IntPtr l) {
-		try {
-			UnityEngine.LightProbeProxyVolume self=(UnityEngine.LightProbeProxyVolume)checkSelf(l);
-			pushValue(l,true);
-			pushEnum(l,(int)self.boundingBoxMode);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_boundingBoxMode(IntPtr l) {
-		try {
-			UnityEngine.LightProbeProxyVolume self=(UnityEngine.LightProbeProxyVolume)checkSelf(l);
-			UnityEngine.LightProbeProxyVolume.BoundingBoxMode v;
-			checkEnum(l,2,out v);
-			self.boundingBoxMode=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_resolutionMode(IntPtr l) {
-		try {
-			UnityEngine.LightProbeProxyVolume self=(UnityEngine.LightProbeProxyVolume)checkSelf(l);
-			pushValue(l,true);
-			pushEnum(l,(int)self.resolutionMode);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_resolutionMode(IntPtr l) {
-		try {
-			UnityEngine.LightProbeProxyVolume self=(UnityEngine.LightProbeProxyVolume)checkSelf(l);
-			UnityEngine.LightProbeProxyVolume.ResolutionMode v;
-			checkEnum(l,2,out v);
-			self.resolutionMode=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_probePositionMode(IntPtr l) {
-		try {
-			UnityEngine.LightProbeProxyVolume self=(UnityEngine.LightProbeProxyVolume)checkSelf(l);
-			pushValue(l,true);
-			pushEnum(l,(int)self.probePositionMode);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_probePositionMode(IntPtr l) {
-		try {
-			UnityEngine.LightProbeProxyVolume self=(UnityEngine.LightProbeProxyVolume)checkSelf(l);
-			UnityEngine.LightProbeProxyVolume.ProbePositionMode v;
-			checkEnum(l,2,out v);
-			self.probePositionMode=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_refreshMode(IntPtr l) {
-		try {
-			UnityEngine.LightProbeProxyVolume self=(UnityEngine.LightProbeProxyVolume)checkSelf(l);
-			pushValue(l,true);
-			pushEnum(l,(int)self.refreshMode);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_refreshMode(IntPtr l) {
-		try {
-			UnityEngine.LightProbeProxyVolume self=(UnityEngine.LightProbeProxyVolume)checkSelf(l);
-			UnityEngine.LightProbeProxyVolume.RefreshMode v;
-			checkEnum(l,2,out v);
-			self.refreshMode=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -311,11 +211,139 @@ public class Lua_UnityEngine_LightProbeProxyVolume : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_isFeatureSupported(IntPtr l) {
+	static public int get_boundingBoxMode(IntPtr l) {
 		try {
+			UnityEngine.LightProbeProxyVolume self=(UnityEngine.LightProbeProxyVolume)checkSelf(l);
 			pushValue(l,true);
-			pushValue(l,UnityEngine.LightProbeProxyVolume.isFeatureSupported);
+			pushEnum(l,(int)self.boundingBoxMode);
 			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_boundingBoxMode(IntPtr l) {
+		try {
+			UnityEngine.LightProbeProxyVolume self=(UnityEngine.LightProbeProxyVolume)checkSelf(l);
+			UnityEngine.LightProbeProxyVolume.BoundingBoxMode v;
+			checkEnum(l,2,out v);
+			self.boundingBoxMode=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_resolutionMode(IntPtr l) {
+		try {
+			UnityEngine.LightProbeProxyVolume self=(UnityEngine.LightProbeProxyVolume)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.resolutionMode);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_resolutionMode(IntPtr l) {
+		try {
+			UnityEngine.LightProbeProxyVolume self=(UnityEngine.LightProbeProxyVolume)checkSelf(l);
+			UnityEngine.LightProbeProxyVolume.ResolutionMode v;
+			checkEnum(l,2,out v);
+			self.resolutionMode=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_probePositionMode(IntPtr l) {
+		try {
+			UnityEngine.LightProbeProxyVolume self=(UnityEngine.LightProbeProxyVolume)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.probePositionMode);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_probePositionMode(IntPtr l) {
+		try {
+			UnityEngine.LightProbeProxyVolume self=(UnityEngine.LightProbeProxyVolume)checkSelf(l);
+			UnityEngine.LightProbeProxyVolume.ProbePositionMode v;
+			checkEnum(l,2,out v);
+			self.probePositionMode=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_refreshMode(IntPtr l) {
+		try {
+			UnityEngine.LightProbeProxyVolume self=(UnityEngine.LightProbeProxyVolume)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.refreshMode);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_refreshMode(IntPtr l) {
+		try {
+			UnityEngine.LightProbeProxyVolume self=(UnityEngine.LightProbeProxyVolume)checkSelf(l);
+			UnityEngine.LightProbeProxyVolume.RefreshMode v;
+			checkEnum(l,2,out v);
+			self.refreshMode=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_qualityMode(IntPtr l) {
+		try {
+			UnityEngine.LightProbeProxyVolume self=(UnityEngine.LightProbeProxyVolume)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.qualityMode);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_qualityMode(IntPtr l) {
+		try {
+			UnityEngine.LightProbeProxyVolume self=(UnityEngine.LightProbeProxyVolume)checkSelf(l);
+			UnityEngine.LightProbeProxyVolume.QualityMode v;
+			checkEnum(l,2,out v);
+			self.qualityMode=v;
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -325,18 +353,19 @@ public class Lua_UnityEngine_LightProbeProxyVolume : LuaObject {
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.LightProbeProxyVolume");
 		addMember(l,Update);
+		addMember(l,"isFeatureSupported",get_isFeatureSupported,null,false);
 		addMember(l,"boundsGlobal",get_boundsGlobal,null,true);
 		addMember(l,"sizeCustom",get_sizeCustom,set_sizeCustom,true);
 		addMember(l,"originCustom",get_originCustom,set_originCustom,true);
-		addMember(l,"boundingBoxMode",get_boundingBoxMode,set_boundingBoxMode,true);
-		addMember(l,"resolutionMode",get_resolutionMode,set_resolutionMode,true);
-		addMember(l,"probePositionMode",get_probePositionMode,set_probePositionMode,true);
-		addMember(l,"refreshMode",get_refreshMode,set_refreshMode,true);
 		addMember(l,"probeDensity",get_probeDensity,set_probeDensity,true);
 		addMember(l,"gridResolutionX",get_gridResolutionX,set_gridResolutionX,true);
 		addMember(l,"gridResolutionY",get_gridResolutionY,set_gridResolutionY,true);
 		addMember(l,"gridResolutionZ",get_gridResolutionZ,set_gridResolutionZ,true);
-		addMember(l,"isFeatureSupported",get_isFeatureSupported,null,false);
+		addMember(l,"boundingBoxMode",get_boundingBoxMode,set_boundingBoxMode,true);
+		addMember(l,"resolutionMode",get_resolutionMode,set_resolutionMode,true);
+		addMember(l,"probePositionMode",get_probePositionMode,set_probePositionMode,true);
+		addMember(l,"refreshMode",get_refreshMode,set_refreshMode,true);
+		addMember(l,"qualityMode",get_qualityMode,set_qualityMode,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.LightProbeProxyVolume),typeof(UnityEngine.Behaviour));
 	}
 }

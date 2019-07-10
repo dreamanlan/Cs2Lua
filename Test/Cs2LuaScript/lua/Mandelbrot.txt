@@ -1,3 +1,4 @@
+require "cs2lua__namespaces"; 
 
 Mandelbrot = {
 	__new_object = function(...)
@@ -150,7 +151,6 @@ Mandelbrot = {
 
 
 require "cs2lua__utility";
-require "cs2lua__namespaces";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
 settempmetatable(Mandelbrot);

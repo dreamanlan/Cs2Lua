@@ -535,6 +535,8 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(" = ");
                         if (!constVal.HasValue || constVal.Value != null) {
                             OutputExpressionSyntax(v.Initializer.Value, opd);
+                        } else {
+                            CodeBuilder.Append("null");
                         }
                     } else {
                         CodeBuilder.AppendFormat("{0}{1} = null", GetIndentString(), name);

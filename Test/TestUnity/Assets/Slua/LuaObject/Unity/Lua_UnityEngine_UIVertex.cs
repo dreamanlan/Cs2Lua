@@ -81,6 +81,37 @@ public class Lua_UnityEngine_UIVertex : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_tangent(IntPtr l) {
+		try {
+			UnityEngine.UIVertex self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.tangent);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_tangent(IntPtr l) {
+		try {
+			UnityEngine.UIVertex self;
+			checkValueType(l,1,out self);
+			UnityEngine.Vector4 v;
+			checkType(l,2,out v);
+			self.tangent=v;
+			setBack(l,self);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_color(IntPtr l) {
 		try {
 			UnityEngine.UIVertex self;
@@ -236,37 +267,6 @@ public class Lua_UnityEngine_UIVertex : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_tangent(IntPtr l) {
-		try {
-			UnityEngine.UIVertex self;
-			checkValueType(l,1,out self);
-			pushValue(l,true);
-			pushValue(l,self.tangent);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_tangent(IntPtr l) {
-		try {
-			UnityEngine.UIVertex self;
-			checkValueType(l,1,out self);
-			UnityEngine.Vector4 v;
-			checkType(l,2,out v);
-			self.tangent=v;
-			setBack(l,self);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_simpleVert(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -296,12 +296,12 @@ public class Lua_UnityEngine_UIVertex : LuaObject {
 		getTypeTable(l,"UnityEngine.UIVertex");
 		addMember(l,"position",get_position,set_position,true);
 		addMember(l,"normal",get_normal,set_normal,true);
+		addMember(l,"tangent",get_tangent,set_tangent,true);
 		addMember(l,"color",get_color,set_color,true);
 		addMember(l,"uv0",get_uv0,set_uv0,true);
 		addMember(l,"uv1",get_uv1,set_uv1,true);
 		addMember(l,"uv2",get_uv2,set_uv2,true);
 		addMember(l,"uv3",get_uv3,set_uv3,true);
-		addMember(l,"tangent",get_tangent,set_tangent,true);
 		addMember(l,"simpleVert",get_simpleVert,set_simpleVert,false);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.UIVertex),typeof(System.ValueType));
 	}

@@ -173,6 +173,34 @@ public class Lua_UnityEngine_SpriteRenderer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_maskInteraction(IntPtr l) {
+		try {
+			UnityEngine.SpriteRenderer self=(UnityEngine.SpriteRenderer)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.maskInteraction);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_maskInteraction(IntPtr l) {
+		try {
+			UnityEngine.SpriteRenderer self=(UnityEngine.SpriteRenderer)checkSelf(l);
+			UnityEngine.SpriteMaskInteraction v;
+			checkEnum(l,2,out v);
+			self.maskInteraction=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_flipX(IntPtr l) {
 		try {
 			UnityEngine.SpriteRenderer self=(UnityEngine.SpriteRenderer)checkSelf(l);
@@ -229,11 +257,11 @@ public class Lua_UnityEngine_SpriteRenderer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_maskInteraction(IntPtr l) {
+	static public int get_spriteSortPoint(IntPtr l) {
 		try {
 			UnityEngine.SpriteRenderer self=(UnityEngine.SpriteRenderer)checkSelf(l);
 			pushValue(l,true);
-			pushEnum(l,(int)self.maskInteraction);
+			pushEnum(l,(int)self.spriteSortPoint);
 			return 2;
 		}
 		catch(Exception e) {
@@ -242,12 +270,12 @@ public class Lua_UnityEngine_SpriteRenderer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int set_maskInteraction(IntPtr l) {
+	static public int set_spriteSortPoint(IntPtr l) {
 		try {
 			UnityEngine.SpriteRenderer self=(UnityEngine.SpriteRenderer)checkSelf(l);
-			UnityEngine.SpriteMaskInteraction v;
+			UnityEngine.SpriteSortPoint v;
 			checkEnum(l,2,out v);
-			self.maskInteraction=v;
+			self.spriteSortPoint=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -264,9 +292,10 @@ public class Lua_UnityEngine_SpriteRenderer : LuaObject {
 		addMember(l,"adaptiveModeThreshold",get_adaptiveModeThreshold,set_adaptiveModeThreshold,true);
 		addMember(l,"tileMode",get_tileMode,set_tileMode,true);
 		addMember(l,"color",get_color,set_color,true);
+		addMember(l,"maskInteraction",get_maskInteraction,set_maskInteraction,true);
 		addMember(l,"flipX",get_flipX,set_flipX,true);
 		addMember(l,"flipY",get_flipY,set_flipY,true);
-		addMember(l,"maskInteraction",get_maskInteraction,set_maskInteraction,true);
+		addMember(l,"spriteSortPoint",get_spriteSortPoint,set_spriteSortPoint,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.SpriteRenderer),typeof(UnityEngine.Renderer));
 	}
 }

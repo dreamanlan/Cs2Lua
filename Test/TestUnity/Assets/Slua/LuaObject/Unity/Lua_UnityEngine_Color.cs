@@ -9,27 +9,27 @@ public class Lua_UnityEngine_Color : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Color o;
-			if(argc==5){
+			if(argc==6){
 				System.Single a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Single a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Single a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				System.Single a4;
-				checkType(l,5,out a4);
+				checkType(l,6,out a4);
 				o=new UnityEngine.Color(a1,a2,a3,a4);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==4){
+			else if(argc==5){
 				System.Single a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Single a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Single a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				o=new UnityEngine.Color(a1,a2,a3);
 				pushValue(l,true);
 				pushValue(l,o);
@@ -86,31 +86,31 @@ public class Lua_UnityEngine_Color : LuaObject {
 	static public int op_Multiply(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,1,typeof(UnityEngine.Color),typeof(UnityEngine.Color))){
+			if(matchType(l, "op_Multiply__Color__Color", argc, 1,typeof(UnityEngine.Color),typeof(UnityEngine.Color))){
 				UnityEngine.Color a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Color a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				var ret=a1*a2;
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,1,typeof(UnityEngine.Color),typeof(float))){
+			else if(matchType(l, "op_Multiply__Color__Single", argc, 1,typeof(UnityEngine.Color),typeof(float))){
 				UnityEngine.Color a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Single a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				var ret=a1*a2;
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,1,typeof(float),typeof(UnityEngine.Color))){
+			else if(matchType(l, "op_Multiply__Single__Color", argc, 1,typeof(float),typeof(UnityEngine.Color))){
 				System.Single a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Color a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				var ret=a1*a2;
 				pushValue(l,true);
 				pushValue(l,ret);
@@ -238,27 +238,27 @@ public class Lua_UnityEngine_Color : LuaObject {
 	static public int HSVToRGB_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
+			if(argc==5){
 				System.Single a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Single a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.Single a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				System.Boolean a4;
-				checkType(l,4,out a4);
+				checkType(l,5,out a4);
 				var ret=UnityEngine.Color.HSVToRGB(a1,a2,a3,a4);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==3){
+			else if(argc==4){
 				System.Single a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Single a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.Single a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				var ret=UnityEngine.Color.HSVToRGB(a1,a2,a3);
 				pushValue(l,true);
 				pushValue(l,ret);

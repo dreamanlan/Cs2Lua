@@ -37,11 +37,11 @@ public class Lua_UnityEngine_CharacterController : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_isGrounded(IntPtr l) {
+	static public int get_velocity(IntPtr l) {
 		try {
 			UnityEngine.CharacterController self=(UnityEngine.CharacterController)checkSelf(l);
 			pushValue(l,true);
-			pushValue(l,self.isGrounded);
+			pushValue(l,self.velocity);
 			return 2;
 		}
 		catch(Exception e) {
@@ -50,11 +50,11 @@ public class Lua_UnityEngine_CharacterController : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_velocity(IntPtr l) {
+	static public int get_isGrounded(IntPtr l) {
 		try {
 			UnityEngine.CharacterController self=(UnityEngine.CharacterController)checkSelf(l);
 			pushValue(l,true);
-			pushValue(l,self.velocity);
+			pushValue(l,self.isGrounded);
 			return 2;
 		}
 		catch(Exception e) {
@@ -331,8 +331,8 @@ public class Lua_UnityEngine_CharacterController : LuaObject {
 		getTypeTable(l,"UnityEngine.CharacterController");
 		addMember(l,SimpleMove);
 		addMember(l,Move);
-		addMember(l,"isGrounded",get_isGrounded,null,true);
 		addMember(l,"velocity",get_velocity,null,true);
+		addMember(l,"isGrounded",get_isGrounded,null,true);
 		addMember(l,"collisionFlags",get_collisionFlags,null,true);
 		addMember(l,"radius",get_radius,set_radius,true);
 		addMember(l,"height",get_height,set_height,true);

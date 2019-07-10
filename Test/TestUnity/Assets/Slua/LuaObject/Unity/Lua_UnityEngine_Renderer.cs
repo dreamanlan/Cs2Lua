@@ -5,14 +5,44 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Renderer : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetPropertyBlock(IntPtr l) {
+	static public int HasPropertyBlock(IntPtr l) {
 		try {
 			UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
-			UnityEngine.MaterialPropertyBlock a1;
-			checkType(l,2,out a1);
-			self.SetPropertyBlock(a1);
+			var ret=self.HasPropertyBlock();
 			pushValue(l,true);
-			return 1;
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetPropertyBlock(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==4){
+				UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
+				UnityEngine.MaterialPropertyBlock a1;
+				checkType(l,3,out a1);
+				System.Int32 a2;
+				checkType(l,4,out a2);
+				self.SetPropertyBlock(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==3){
+				UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
+				UnityEngine.MaterialPropertyBlock a1;
+				checkType(l,3,out a1);
+				self.SetPropertyBlock(a1);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -22,10 +52,56 @@ public class Lua_UnityEngine_Renderer : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int GetPropertyBlock(IntPtr l) {
 		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==4){
+				UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
+				UnityEngine.MaterialPropertyBlock a1;
+				checkType(l,3,out a1);
+				System.Int32 a2;
+				checkType(l,4,out a2);
+				self.GetPropertyBlock(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==3){
+				UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
+				UnityEngine.MaterialPropertyBlock a1;
+				checkType(l,3,out a1);
+				self.GetPropertyBlock(a1);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetMaterials(IntPtr l) {
+		try {
 			UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
-			UnityEngine.MaterialPropertyBlock a1;
+			System.Collections.Generic.List<UnityEngine.Material> a1;
 			checkType(l,2,out a1);
-			self.GetPropertyBlock(a1);
+			self.GetMaterials(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetSharedMaterials(IntPtr l) {
+		try {
+			UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
+			System.Collections.Generic.List<UnityEngine.Material> a1;
+			checkType(l,2,out a1);
+			self.GetSharedMaterials(a1);
 			pushValue(l,true);
 			return 1;
 		}
@@ -235,6 +311,62 @@ public class Lua_UnityEngine_Renderer : LuaObject {
 			UnityEngine.Rendering.ReflectionProbeUsage v;
 			checkEnum(l,2,out v);
 			self.reflectionProbeUsage=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_renderingLayerMask(IntPtr l) {
+		try {
+			UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.renderingLayerMask);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_renderingLayerMask(IntPtr l) {
+		try {
+			UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
+			System.UInt32 v;
+			checkType(l,2,out v);
+			self.renderingLayerMask=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_rendererPriority(IntPtr l) {
+		try {
+			UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.rendererPriority);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_rendererPriority(IntPtr l) {
+		try {
+			UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
+			int v;
+			checkType(l,2,out v);
+			self.rendererPriority=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -563,6 +695,34 @@ public class Lua_UnityEngine_Renderer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_materials(IntPtr l) {
+		try {
+			UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.materials);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_materials(IntPtr l) {
+		try {
+			UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
+			UnityEngine.Material[] v;
+			checkArray(l,2,out v);
+			self.materials=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_material(IntPtr l) {
 		try {
 			UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
@@ -619,34 +779,6 @@ public class Lua_UnityEngine_Renderer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_materials(IntPtr l) {
-		try {
-			UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.materials);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_materials(IntPtr l) {
-		try {
-			UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
-			UnityEngine.Material[] v;
-			checkArray(l,2,out v);
-			self.materials=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_sharedMaterials(IntPtr l) {
 		try {
 			UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
@@ -676,8 +808,11 @@ public class Lua_UnityEngine_Renderer : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Renderer");
+		addMember(l,HasPropertyBlock);
 		addMember(l,SetPropertyBlock);
 		addMember(l,GetPropertyBlock);
+		addMember(l,GetMaterials);
+		addMember(l,GetSharedMaterials);
 		addMember(l,GetClosestReflectionProbes);
 		addMember(l,"bounds",get_bounds,null,true);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
@@ -687,6 +822,8 @@ public class Lua_UnityEngine_Renderer : LuaObject {
 		addMember(l,"motionVectorGenerationMode",get_motionVectorGenerationMode,set_motionVectorGenerationMode,true);
 		addMember(l,"lightProbeUsage",get_lightProbeUsage,set_lightProbeUsage,true);
 		addMember(l,"reflectionProbeUsage",get_reflectionProbeUsage,set_reflectionProbeUsage,true);
+		addMember(l,"renderingLayerMask",get_renderingLayerMask,set_renderingLayerMask,true);
+		addMember(l,"rendererPriority",get_rendererPriority,set_rendererPriority,true);
 		addMember(l,"sortingLayerName",get_sortingLayerName,set_sortingLayerName,true);
 		addMember(l,"sortingLayerID",get_sortingLayerID,set_sortingLayerID,true);
 		addMember(l,"sortingOrder",get_sortingOrder,set_sortingOrder,true);
@@ -700,9 +837,9 @@ public class Lua_UnityEngine_Renderer : LuaObject {
 		addMember(l,"realtimeLightmapIndex",get_realtimeLightmapIndex,set_realtimeLightmapIndex,true);
 		addMember(l,"lightmapScaleOffset",get_lightmapScaleOffset,set_lightmapScaleOffset,true);
 		addMember(l,"realtimeLightmapScaleOffset",get_realtimeLightmapScaleOffset,set_realtimeLightmapScaleOffset,true);
+		addMember(l,"materials",get_materials,set_materials,true);
 		addMember(l,"material",get_material,set_material,true);
 		addMember(l,"sharedMaterial",get_sharedMaterial,set_sharedMaterial,true);
-		addMember(l,"materials",get_materials,set_materials,true);
 		addMember(l,"sharedMaterials",get_sharedMaterials,set_sharedMaterials,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.Renderer),typeof(UnityEngine.Component));
 	}

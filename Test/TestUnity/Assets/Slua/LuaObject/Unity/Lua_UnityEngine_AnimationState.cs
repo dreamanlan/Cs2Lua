@@ -22,20 +22,20 @@ public class Lua_UnityEngine_AnimationState : LuaObject {
 	static public int AddMixingTransform(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
+			if(argc==4){
 				UnityEngine.AnimationState self=(UnityEngine.AnimationState)checkSelf(l);
 				UnityEngine.Transform a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Boolean a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				self.AddMixingTransform(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==2){
+			else if(argc==3){
 				UnityEngine.AnimationState self=(UnityEngine.AnimationState)checkSelf(l);
 				UnityEngine.Transform a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				self.AddMixingTransform(a1);
 				pushValue(l,true);
 				return 1;

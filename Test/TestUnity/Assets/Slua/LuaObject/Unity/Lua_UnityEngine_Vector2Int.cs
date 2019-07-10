@@ -228,21 +228,21 @@ public class Lua_UnityEngine_Vector2Int : LuaObject {
 	static public int op_Multiply(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,1,typeof(UnityEngine.Vector2Int),typeof(UnityEngine.Vector2Int))){
+			if(matchType(l, "op_Multiply__Vector2Int__Vector2Int", argc, 1,typeof(UnityEngine.Vector2Int),typeof(UnityEngine.Vector2Int))){
 				UnityEngine.Vector2Int a1;
-				checkValueType(l,1,out a1);
+				checkValueType(l,2,out a1);
 				UnityEngine.Vector2Int a2;
-				checkValueType(l,2,out a2);
+				checkValueType(l,3,out a2);
 				var ret=a1*a2;
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,1,typeof(UnityEngine.Vector2Int),typeof(int))){
+			else if(matchType(l, "op_Multiply__Vector2Int__Int32", argc, 1,typeof(UnityEngine.Vector2Int),typeof(int))){
 				UnityEngine.Vector2Int a1;
-				checkValueType(l,1,out a1);
+				checkValueType(l,2,out a1);
 				System.Int32 a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				var ret=a1*a2;
 				pushValue(l,true);
 				pushValue(l,ret);

@@ -5,12 +5,29 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Rendering_GraphicsSettings : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int HasShaderDefine_s(IntPtr l) {
 		try {
-			UnityEngine.Rendering.GraphicsSettings o;
-			o=new UnityEngine.Rendering.GraphicsSettings();
-			pushValue(l,true);
-			pushValue(l,o);
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==3){
+				UnityEngine.Rendering.GraphicsTier a1;
+				checkEnum(l,2,out a1);
+				UnityEngine.Rendering.BuiltinShaderDefine a2;
+				checkEnum(l,3,out a2);
+				var ret=UnityEngine.Rendering.GraphicsSettings.HasShaderDefine(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==2){
+				UnityEngine.Rendering.BuiltinShaderDefine a1;
+				checkEnum(l,2,out a1);
+				var ret=UnityEngine.Rendering.GraphicsSettings.HasShaderDefine(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
 			return 2;
 		}
 		catch(Exception e) {
@@ -74,63 +91,6 @@ public class Lua_UnityEngine_Rendering_GraphicsSettings : LuaObject {
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int HasShaderDefine_s(IntPtr l) {
-		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
-				UnityEngine.Rendering.GraphicsTier a1;
-				checkEnum(l,1,out a1);
-				UnityEngine.Rendering.BuiltinShaderDefine a2;
-				checkEnum(l,2,out a2);
-				var ret=UnityEngine.Rendering.GraphicsSettings.HasShaderDefine(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==1){
-				UnityEngine.Rendering.BuiltinShaderDefine a1;
-				checkEnum(l,1,out a1);
-				var ret=UnityEngine.Rendering.GraphicsSettings.HasShaderDefine(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_renderPipelineAsset(IntPtr l) {
-		try {
-			pushValue(l,true);
-			pushValue(l,UnityEngine.Rendering.GraphicsSettings.renderPipelineAsset);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_renderPipelineAsset(IntPtr l) {
-		try {
-			UnityEngine.Experimental.Rendering.RenderPipelineAsset v;
-			checkType(l,2,out v);
-			UnityEngine.Rendering.GraphicsSettings.renderPipelineAsset=v;
-			pushValue(l,true);
-			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -240,19 +200,72 @@ public class Lua_UnityEngine_Rendering_GraphicsSettings : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_useScriptableRenderPipelineBatching(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Rendering.GraphicsSettings.useScriptableRenderPipelineBatching);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_useScriptableRenderPipelineBatching(IntPtr l) {
+		try {
+			bool v;
+			checkType(l,2,out v);
+			UnityEngine.Rendering.GraphicsSettings.useScriptableRenderPipelineBatching=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_renderPipelineAsset(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Rendering.GraphicsSettings.renderPipelineAsset);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_renderPipelineAsset(IntPtr l) {
+		try {
+			UnityEngine.Experimental.Rendering.RenderPipelineAsset v;
+			checkType(l,2,out v);
+			UnityEngine.Rendering.GraphicsSettings.renderPipelineAsset=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Rendering.GraphicsSettings");
+		addMember(l,HasShaderDefine_s);
 		addMember(l,SetShaderMode_s);
 		addMember(l,GetShaderMode_s);
 		addMember(l,SetCustomShader_s);
 		addMember(l,GetCustomShader_s);
-		addMember(l,HasShaderDefine_s);
-		addMember(l,"renderPipelineAsset",get_renderPipelineAsset,set_renderPipelineAsset,false);
 		addMember(l,"transparencySortMode",get_transparencySortMode,set_transparencySortMode,false);
 		addMember(l,"transparencySortAxis",get_transparencySortAxis,set_transparencySortAxis,false);
 		addMember(l,"lightsUseLinearIntensity",get_lightsUseLinearIntensity,set_lightsUseLinearIntensity,false);
 		addMember(l,"lightsUseColorTemperature",get_lightsUseColorTemperature,set_lightsUseColorTemperature,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Rendering.GraphicsSettings),typeof(UnityEngine.Object));
+		addMember(l,"useScriptableRenderPipelineBatching",get_useScriptableRenderPipelineBatching,set_useScriptableRenderPipelineBatching,false);
+		addMember(l,"renderPipelineAsset",get_renderPipelineAsset,set_renderPipelineAsset,false);
+		createTypeMetatable(l,null, typeof(UnityEngine.Rendering.GraphicsSettings),typeof(UnityEngine.Object));
 	}
 }

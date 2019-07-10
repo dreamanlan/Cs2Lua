@@ -9,8 +9,8 @@ public class Lua_UnityEngine_ComputeBufferType : LuaObject {
 		addMember(l,1,"Raw");
 		addMember(l,2,"Append");
 		addMember(l,4,"Counter");
-		addMember(l,256,"IndirectArguments");
 		addMember(l,256,"DrawIndirect");
+		addMember(l,256,"IndirectArguments");
 		addMember(l,512,"GPUMemory");
 		LuaDLL.lua_pop(l, 1);
 	}

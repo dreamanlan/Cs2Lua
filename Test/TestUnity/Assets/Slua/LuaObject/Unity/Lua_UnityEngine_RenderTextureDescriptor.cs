@@ -9,37 +9,37 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.RenderTextureDescriptor o;
-			if(argc==5){
+			if(argc==6){
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				UnityEngine.RenderTextureFormat a3;
-				checkEnum(l,4,out a3);
+				checkEnum(l,5,out a3);
 				System.Int32 a4;
-				checkType(l,5,out a4);
+				checkType(l,6,out a4);
 				o=new UnityEngine.RenderTextureDescriptor(a1,a2,a3,a4);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(argc==5){
+				System.Int32 a1;
+				checkType(l,3,out a1);
+				System.Int32 a2;
+				checkType(l,4,out a2);
+				UnityEngine.RenderTextureFormat a3;
+				checkEnum(l,5,out a3);
+				o=new UnityEngine.RenderTextureDescriptor(a1,a2,a3);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
 			else if(argc==4){
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
-				UnityEngine.RenderTextureFormat a3;
-				checkEnum(l,4,out a3);
-				o=new UnityEngine.RenderTextureDescriptor(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==3){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				o=new UnityEngine.RenderTextureDescriptor(a1,a2);
 				pushValue(l,true);
 				pushValue(l,o);
@@ -173,37 +173,6 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.volumeDepth=v;
-			setBack(l,self);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_bindMS(IntPtr l) {
-		try {
-			UnityEngine.RenderTextureDescriptor self;
-			checkValueType(l,1,out self);
-			pushValue(l,true);
-			pushValue(l,self.bindMS);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_bindMS(IntPtr l) {
-		try {
-			UnityEngine.RenderTextureDescriptor self;
-			checkValueType(l,1,out self);
-			bool v;
-			checkType(l,2,out v);
-			self.bindMS=v;
 			setBack(l,self);
 			pushValue(l,true);
 			return 1;
@@ -536,6 +505,37 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_bindMS(IntPtr l) {
+		try {
+			UnityEngine.RenderTextureDescriptor self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.bindMS);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_bindMS(IntPtr l) {
+		try {
+			UnityEngine.RenderTextureDescriptor self;
+			checkValueType(l,1,out self);
+			bool v;
+			checkType(l,2,out v);
+			self.bindMS=v;
+			setBack(l,self);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.RenderTextureDescriptor");
@@ -543,7 +543,6 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 		addMember(l,"height",get_height,set_height,true);
 		addMember(l,"msaaSamples",get_msaaSamples,set_msaaSamples,true);
 		addMember(l,"volumeDepth",get_volumeDepth,set_volumeDepth,true);
-		addMember(l,"bindMS",get_bindMS,set_bindMS,true);
 		addMember(l,"colorFormat",get_colorFormat,set_colorFormat,true);
 		addMember(l,"depthBufferBits",get_depthBufferBits,set_depthBufferBits,true);
 		addMember(l,"dimension",get_dimension,set_dimension,true);
@@ -555,6 +554,7 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 		addMember(l,"useMipMap",get_useMipMap,set_useMipMap,true);
 		addMember(l,"autoGenerateMips",get_autoGenerateMips,set_autoGenerateMips,true);
 		addMember(l,"enableRandomWrite",get_enableRandomWrite,set_enableRandomWrite,true);
+		addMember(l,"bindMS",get_bindMS,set_bindMS,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.RenderTextureDescriptor),typeof(System.ValueType));
 	}
 }

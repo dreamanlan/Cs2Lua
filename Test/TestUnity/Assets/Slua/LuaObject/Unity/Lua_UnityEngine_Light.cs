@@ -5,28 +5,93 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Light : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int Reset(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			self.Reset();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetLightDirty(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			self.SetLightDirty();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int AddCommandBuffer(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
+			if(argc==5){
 				UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
 				UnityEngine.Rendering.LightEvent a1;
-				checkEnum(l,2,out a1);
+				checkEnum(l,3,out a1);
 				UnityEngine.Rendering.CommandBuffer a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				UnityEngine.Rendering.ShadowMapPass a3;
-				checkEnum(l,4,out a3);
+				checkEnum(l,5,out a3);
 				self.AddCommandBuffer(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==3){
+			else if(argc==4){
 				UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
 				UnityEngine.Rendering.LightEvent a1;
-				checkEnum(l,2,out a1);
+				checkEnum(l,3,out a1);
 				UnityEngine.Rendering.CommandBuffer a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				self.AddCommandBuffer(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AddCommandBufferAsync(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==6){
+				UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+				UnityEngine.Rendering.LightEvent a1;
+				checkEnum(l,3,out a1);
+				UnityEngine.Rendering.CommandBuffer a2;
+				checkType(l,4,out a2);
+				UnityEngine.Rendering.ShadowMapPass a3;
+				checkEnum(l,5,out a3);
+				UnityEngine.Rendering.ComputeQueueType a4;
+				checkEnum(l,6,out a4);
+				self.AddCommandBufferAsync(a1,a2,a3,a4);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==5){
+				UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+				UnityEngine.Rendering.LightEvent a1;
+				checkEnum(l,3,out a1);
+				UnityEngine.Rendering.CommandBuffer a2;
+				checkType(l,4,out a2);
+				UnityEngine.Rendering.ComputeQueueType a3;
+				checkEnum(l,5,out a3);
+				self.AddCommandBufferAsync(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
@@ -110,215 +175,6 @@ public class Lua_UnityEngine_Light : LuaObject {
 			var ret=UnityEngine.Light.GetLights(a1,a2);
 			pushValue(l,true);
 			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_shadows(IntPtr l) {
-		try {
-			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
-			pushValue(l,true);
-			pushEnum(l,(int)self.shadows);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_shadows(IntPtr l) {
-		try {
-			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
-			UnityEngine.LightShadows v;
-			checkEnum(l,2,out v);
-			self.shadows=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_shadowStrength(IntPtr l) {
-		try {
-			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.shadowStrength);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_shadowStrength(IntPtr l) {
-		try {
-			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
-			float v;
-			checkType(l,2,out v);
-			self.shadowStrength=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_shadowResolution(IntPtr l) {
-		try {
-			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
-			pushValue(l,true);
-			pushEnum(l,(int)self.shadowResolution);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_shadowResolution(IntPtr l) {
-		try {
-			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
-			UnityEngine.Rendering.LightShadowResolution v;
-			checkEnum(l,2,out v);
-			self.shadowResolution=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_cookieSize(IntPtr l) {
-		try {
-			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.cookieSize);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_cookieSize(IntPtr l) {
-		try {
-			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
-			float v;
-			checkType(l,2,out v);
-			self.cookieSize=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_cookie(IntPtr l) {
-		try {
-			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.cookie);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_cookie(IntPtr l) {
-		try {
-			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
-			UnityEngine.Texture v;
-			checkType(l,2,out v);
-			self.cookie=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_renderMode(IntPtr l) {
-		try {
-			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
-			pushValue(l,true);
-			pushEnum(l,(int)self.renderMode);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_renderMode(IntPtr l) {
-		try {
-			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
-			UnityEngine.LightRenderMode v;
-			checkEnum(l,2,out v);
-			self.renderMode=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_lightmapBakeType(IntPtr l) {
-		try {
-			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
-			pushValue(l,true);
-			pushEnum(l,(int)self.lightmapBakeType);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_lightmapBakeType(IntPtr l) {
-		try {
-			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
-			UnityEngine.LightmapBakeType v;
-			checkEnum(l,2,out v);
-			self.lightmapBakeType=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_commandBufferCount(IntPtr l) {
-		try {
-			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.commandBufferCount);
 			return 2;
 		}
 		catch(Exception e) {
@@ -717,23 +573,339 @@ public class Lua_UnityEngine_Light : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_lightShadowCasterMode(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.lightShadowCasterMode);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_lightShadowCasterMode(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			UnityEngine.LightShadowCasterMode v;
+			checkEnum(l,2,out v);
+			self.lightShadowCasterMode=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_shadowRadius(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.shadowRadius);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_shadowRadius(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			float v;
+			checkType(l,2,out v);
+			self.shadowRadius=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_shadowAngle(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.shadowAngle);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_shadowAngle(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			float v;
+			checkType(l,2,out v);
+			self.shadowAngle=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_shadows(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.shadows);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_shadows(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			UnityEngine.LightShadows v;
+			checkEnum(l,2,out v);
+			self.shadows=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_shadowStrength(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.shadowStrength);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_shadowStrength(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			float v;
+			checkType(l,2,out v);
+			self.shadowStrength=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_shadowResolution(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.shadowResolution);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_shadowResolution(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			UnityEngine.Rendering.LightShadowResolution v;
+			checkEnum(l,2,out v);
+			self.shadowResolution=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_layerShadowCullDistances(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.layerShadowCullDistances);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_layerShadowCullDistances(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			System.Single[] v;
+			checkArray(l,2,out v);
+			self.layerShadowCullDistances=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_cookieSize(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.cookieSize);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_cookieSize(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			float v;
+			checkType(l,2,out v);
+			self.cookieSize=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_cookie(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.cookie);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_cookie(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			UnityEngine.Texture v;
+			checkType(l,2,out v);
+			self.cookie=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_renderMode(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.renderMode);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_renderMode(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			UnityEngine.LightRenderMode v;
+			checkEnum(l,2,out v);
+			self.renderMode=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_lightmapBakeType(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.lightmapBakeType);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_lightmapBakeType(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			UnityEngine.LightmapBakeType v;
+			checkEnum(l,2,out v);
+			self.lightmapBakeType=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_commandBufferCount(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.commandBufferCount);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Light");
+		addMember(l,Reset);
+		addMember(l,SetLightDirty);
 		addMember(l,AddCommandBuffer);
+		addMember(l,AddCommandBufferAsync);
 		addMember(l,RemoveCommandBuffer);
 		addMember(l,RemoveCommandBuffers);
 		addMember(l,RemoveAllCommandBuffers);
 		addMember(l,GetCommandBuffers);
 		addMember(l,GetLights_s);
-		addMember(l,"shadows",get_shadows,set_shadows,true);
-		addMember(l,"shadowStrength",get_shadowStrength,set_shadowStrength,true);
-		addMember(l,"shadowResolution",get_shadowResolution,set_shadowResolution,true);
-		addMember(l,"cookieSize",get_cookieSize,set_cookieSize,true);
-		addMember(l,"cookie",get_cookie,set_cookie,true);
-		addMember(l,"renderMode",get_renderMode,set_renderMode,true);
-		addMember(l,"lightmapBakeType",get_lightmapBakeType,set_lightmapBakeType,true);
-		addMember(l,"commandBufferCount",get_commandBufferCount,null,true);
 		addMember(l,"type",get_type,set_type,true);
 		addMember(l,"spotAngle",get_spotAngle,set_spotAngle,true);
 		addMember(l,"color",get_color,set_color,true);
@@ -748,6 +920,18 @@ public class Lua_UnityEngine_Light : LuaObject {
 		addMember(l,"flare",get_flare,set_flare,true);
 		addMember(l,"bakingOutput",get_bakingOutput,set_bakingOutput,true);
 		addMember(l,"cullingMask",get_cullingMask,set_cullingMask,true);
+		addMember(l,"lightShadowCasterMode",get_lightShadowCasterMode,set_lightShadowCasterMode,true);
+		addMember(l,"shadowRadius",get_shadowRadius,set_shadowRadius,true);
+		addMember(l,"shadowAngle",get_shadowAngle,set_shadowAngle,true);
+		addMember(l,"shadows",get_shadows,set_shadows,true);
+		addMember(l,"shadowStrength",get_shadowStrength,set_shadowStrength,true);
+		addMember(l,"shadowResolution",get_shadowResolution,set_shadowResolution,true);
+		addMember(l,"layerShadowCullDistances",get_layerShadowCullDistances,set_layerShadowCullDistances,true);
+		addMember(l,"cookieSize",get_cookieSize,set_cookieSize,true);
+		addMember(l,"cookie",get_cookie,set_cookie,true);
+		addMember(l,"renderMode",get_renderMode,set_renderMode,true);
+		addMember(l,"lightmapBakeType",get_lightmapBakeType,set_lightmapBakeType,true);
+		addMember(l,"commandBufferCount",get_commandBufferCount,null,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.Light),typeof(UnityEngine.Behaviour));
 	}
 }

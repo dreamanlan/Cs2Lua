@@ -29,9 +29,10 @@ public class Lua_UnityEngine_Rendering_BuiltinShaderDefine : LuaObject {
 		addMember(l,21,"UNITY_HARDWARE_TIER3");
 		addMember(l,22,"UNITY_COLORSPACE_GAMMA");
 		addMember(l,23,"UNITY_LIGHT_PROBE_PROXY_VOLUME");
-		addMember(l,24,"UNITY_LIGHTMAP_DLDR_ENCODING");
-		addMember(l,25,"UNITY_LIGHTMAP_RGBM_ENCODING");
-		addMember(l,26,"UNITY_LIGHTMAP_FULL_HDR");
+		addMember(l,24,"UNITY_HALF_PRECISION_FRAGMENT_SHADER_REGISTERS");
+		addMember(l,25,"UNITY_LIGHTMAP_DLDR_ENCODING");
+		addMember(l,26,"UNITY_LIGHTMAP_RGBM_ENCODING");
+		addMember(l,27,"UNITY_LIGHTMAP_FULL_HDR");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

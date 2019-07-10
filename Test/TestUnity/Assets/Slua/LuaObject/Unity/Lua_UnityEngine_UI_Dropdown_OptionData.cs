@@ -9,33 +9,33 @@ public class Lua_UnityEngine_UI_Dropdown_OptionData : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.UI.Dropdown.OptionData o;
-			if(argc==3){
+			if(argc==4){
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				UnityEngine.Sprite a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				o=new UnityEngine.UI.Dropdown.OptionData(a1,a2);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.Sprite))){
-				UnityEngine.Sprite a1;
-				checkType(l,2,out a1);
-				o=new UnityEngine.UI.Dropdown.OptionData(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l,argc,2,typeof(string))){
+			else if(matchType(l, "ctor__String", argc, 2,typeof(string))){
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				o=new UnityEngine.UI.Dropdown.OptionData(a1);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==1){
+			else if(matchType(l, "ctor__Sprite", argc, 2,typeof(UnityEngine.Sprite))){
+				UnityEngine.Sprite a1;
+				checkType(l,3,out a1);
+				o=new UnityEngine.UI.Dropdown.OptionData(a1);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(argc==2){
 				o=new UnityEngine.UI.Dropdown.OptionData();
 				pushValue(l,true);
 				pushValue(l,o);

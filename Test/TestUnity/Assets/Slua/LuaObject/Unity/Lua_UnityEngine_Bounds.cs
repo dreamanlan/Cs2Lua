@@ -23,6 +23,143 @@ public class Lua_UnityEngine_Bounds : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int SetMinMax(IntPtr l) {
+		try {
+			UnityEngine.Bounds self;
+			checkValueType(l,1,out self);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Vector3 a2;
+			checkType(l,3,out a2);
+			self.SetMinMax(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Encapsulate(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(matchType(l, "Encapsulate__Vector3", argc, 2,typeof(UnityEngine.Vector3))){
+				UnityEngine.Bounds self;
+				checkValueType(l,1,out self);
+				UnityEngine.Vector3 a1;
+				checkType(l,3,out a1);
+				self.Encapsulate(a1);
+				pushValue(l,true);
+				setBack(l,self);
+				return 1;
+			}
+			else if(matchType(l, "Encapsulate__Bounds", argc, 2,typeof(UnityEngine.Bounds))){
+				UnityEngine.Bounds self;
+				checkValueType(l,1,out self);
+				UnityEngine.Bounds a1;
+				checkValueType(l,3,out a1);
+				self.Encapsulate(a1);
+				pushValue(l,true);
+				setBack(l,self);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Expand(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(matchType(l, "Expand__Vector3", argc, 2,typeof(UnityEngine.Vector3))){
+				UnityEngine.Bounds self;
+				checkValueType(l,1,out self);
+				UnityEngine.Vector3 a1;
+				checkType(l,3,out a1);
+				self.Expand(a1);
+				pushValue(l,true);
+				setBack(l,self);
+				return 1;
+			}
+			else if(matchType(l, "Expand__Single", argc, 2,typeof(float))){
+				UnityEngine.Bounds self;
+				checkValueType(l,1,out self);
+				System.Single a1;
+				checkType(l,3,out a1);
+				self.Expand(a1);
+				pushValue(l,true);
+				setBack(l,self);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Intersects(IntPtr l) {
+		try {
+			UnityEngine.Bounds self;
+			checkValueType(l,1,out self);
+			UnityEngine.Bounds a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Intersects(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int IntersectRay(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==4){
+				UnityEngine.Bounds self;
+				checkValueType(l,1,out self);
+				UnityEngine.Ray a1;
+				checkValueType(l,3,out a1);
+				System.Single a2;
+				var ret=self.IntersectRay(a1,out a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				pushValue(l,a2);
+				return 3;
+			}
+			else if(argc==3){
+				UnityEngine.Bounds self;
+				checkValueType(l,1,out self);
+				UnityEngine.Ray a1;
+				checkValueType(l,3,out a1);
+				var ret=self.IntersectRay(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Contains(IntPtr l) {
 		try {
 			UnityEngine.Bounds self;
@@ -57,41 +194,6 @@ public class Lua_UnityEngine_Bounds : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int IntersectRay(IntPtr l) {
-		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				UnityEngine.Bounds self;
-				checkValueType(l,1,out self);
-				UnityEngine.Ray a1;
-				checkValueType(l,2,out a1);
-				System.Single a2;
-				var ret=self.IntersectRay(a1,out a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				pushValue(l,a2);
-				return 3;
-			}
-			else if(argc==2){
-				UnityEngine.Bounds self;
-				checkValueType(l,1,out self);
-				UnityEngine.Ray a1;
-				checkValueType(l,2,out a1);
-				var ret=self.IntersectRay(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int ClosestPoint(IntPtr l) {
 		try {
 			UnityEngine.Bounds self;
@@ -99,108 +201,6 @@ public class Lua_UnityEngine_Bounds : LuaObject {
 			UnityEngine.Vector3 a1;
 			checkType(l,2,out a1);
 			var ret=self.ClosestPoint(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int SetMinMax(IntPtr l) {
-		try {
-			UnityEngine.Bounds self;
-			checkValueType(l,1,out self);
-			UnityEngine.Vector3 a1;
-			checkType(l,2,out a1);
-			UnityEngine.Vector3 a2;
-			checkType(l,3,out a2);
-			self.SetMinMax(a1,a2);
-			pushValue(l,true);
-			setBack(l,self);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Encapsulate(IntPtr l) {
-		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,2,typeof(UnityEngine.Vector3))){
-				UnityEngine.Bounds self;
-				checkValueType(l,1,out self);
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				self.Encapsulate(a1);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.Bounds))){
-				UnityEngine.Bounds self;
-				checkValueType(l,1,out self);
-				UnityEngine.Bounds a1;
-				checkValueType(l,2,out a1);
-				self.Encapsulate(a1);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Expand(IntPtr l) {
-		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,2,typeof(UnityEngine.Vector3))){
-				UnityEngine.Bounds self;
-				checkValueType(l,1,out self);
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				self.Expand(a1);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l,argc,2,typeof(float))){
-				UnityEngine.Bounds self;
-				checkValueType(l,1,out self);
-				System.Single a1;
-				checkType(l,2,out a1);
-				self.Expand(a1);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Intersects(IntPtr l) {
-		try {
-			UnityEngine.Bounds self;
-			checkValueType(l,1,out self);
-			UnityEngine.Bounds a1;
-			checkValueType(l,2,out a1);
-			var ret=self.Intersects(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -401,14 +401,14 @@ public class Lua_UnityEngine_Bounds : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Bounds");
-		addMember(l,Contains);
-		addMember(l,SqrDistance);
-		addMember(l,IntersectRay);
-		addMember(l,ClosestPoint);
 		addMember(l,SetMinMax);
 		addMember(l,Encapsulate);
 		addMember(l,Expand);
 		addMember(l,Intersects);
+		addMember(l,IntersectRay);
+		addMember(l,Contains);
+		addMember(l,SqrDistance);
+		addMember(l,ClosestPoint);
 		addMember(l,op_Equality);
 		addMember(l,op_Inequality);
 		addMember(l,"center",get_center,set_center,true);

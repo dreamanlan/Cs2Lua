@@ -40,80 +40,80 @@ public class Lua_UnityEngine_Logger : LuaObject {
 	static public int Log(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
+			if(argc==6){
 				UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
 				UnityEngine.LogType a1;
-				checkEnum(l,2,out a1);
+				checkEnum(l,3,out a1);
 				System.String a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Object a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				UnityEngine.Object a4;
-				checkType(l,5,out a4);
+				checkType(l,6,out a4);
 				self.Log(a1,a2,a3,a4);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.LogType),typeof(System.Object),typeof(UnityEngine.Object))){
+			else if(matchType(l, "Log__LogType__Object__Object", argc, 2,typeof(UnityEngine.LogType),typeof(System.Object),typeof(UnityEngine.Object))){
 				UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
 				UnityEngine.LogType a1;
-				checkEnum(l,2,out a1);
+				checkEnum(l,3,out a1);
 				System.Object a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				UnityEngine.Object a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				self.Log(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.LogType),typeof(string),typeof(System.Object))){
+			else if(matchType(l, "Log__LogType__String__Object", argc, 2,typeof(UnityEngine.LogType),typeof(string),typeof(System.Object))){
 				UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
 				UnityEngine.LogType a1;
-				checkEnum(l,2,out a1);
+				checkEnum(l,3,out a1);
 				System.String a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Object a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				self.Log(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l,argc,2,typeof(string),typeof(System.Object),typeof(UnityEngine.Object))){
+			else if(matchType(l, "Log__String__Object__Object", argc, 2,typeof(string),typeof(System.Object),typeof(UnityEngine.Object))){
 				UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Object a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				UnityEngine.Object a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				self.Log(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l,argc,2,typeof(string),typeof(System.Object))){
-				UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Object a2;
-				checkType(l,3,out a2);
-				self.Log(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.LogType),typeof(System.Object))){
+			else if(matchType(l, "Log__LogType__Object", argc, 2,typeof(UnityEngine.LogType),typeof(System.Object))){
 				UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
 				UnityEngine.LogType a1;
-				checkEnum(l,2,out a1);
+				checkEnum(l,3,out a1);
 				System.Object a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				self.Log(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==2){
+			else if(matchType(l, "Log__String__Object", argc, 2,typeof(string),typeof(System.Object))){
+				UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
+				System.String a1;
+				checkType(l,3,out a1);
+				System.Object a2;
+				checkType(l,4,out a2);
+				self.Log(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==3){
 				UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
 				System.Object a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				self.Log(a1);
 				pushValue(l,true);
 				return 1;
@@ -131,24 +131,24 @@ public class Lua_UnityEngine_Logger : LuaObject {
 	static public int LogWarning(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
+			if(argc==5){
 				UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Object a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				UnityEngine.Object a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				self.LogWarning(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==3){
+			else if(argc==4){
 				UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Object a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				self.LogWarning(a1,a2);
 				pushValue(l,true);
 				return 1;
@@ -166,24 +166,24 @@ public class Lua_UnityEngine_Logger : LuaObject {
 	static public int LogError(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
+			if(argc==5){
 				UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Object a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				UnityEngine.Object a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				self.LogError(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==3){
+			else if(argc==4){
 				UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Object a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				self.LogError(a1,a2);
 				pushValue(l,true);
 				return 1;
@@ -201,28 +201,28 @@ public class Lua_UnityEngine_Logger : LuaObject {
 	static public int LogFormat(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc>=5){
+			if(argc>=6){
 				UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
 				UnityEngine.LogType a1;
-				checkEnum(l,2,out a1);
+				checkEnum(l,3,out a1);
 				UnityEngine.Object a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.String a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				System.Object[] a4;
-				checkParams(l,5,out a4);
+				checkParams(l,6,out a4);
 				self.LogFormat(a1,a2,a3,a4);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc>=4){
+			else if(argc>=5){
 				UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
 				UnityEngine.LogType a1;
-				checkEnum(l,2,out a1);
+				checkEnum(l,3,out a1);
 				System.String a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Object[] a3;
-				checkParams(l,4,out a3);
+				checkParams(l,5,out a3);
 				self.LogFormat(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
@@ -240,20 +240,20 @@ public class Lua_UnityEngine_Logger : LuaObject {
 	static public int LogException(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
+			if(argc==4){
 				UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
 				System.Exception a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				UnityEngine.Object a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				self.LogException(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==2){
+			else if(argc==3){
 				UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
 				System.Exception a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				self.LogException(a1);
 				pushValue(l,true);
 				return 1;

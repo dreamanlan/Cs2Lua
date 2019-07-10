@@ -4,7 +4,7 @@ using System.Text;
 
 public interface ITickPlugin
 {
-    void Init(GameObject obj, MonoBehaviour mb);
+    void Init(GameObject obj, MonoBehaviourProxy mb);
     void Update();
     void FixedUpdate();
     void LateUpdate();

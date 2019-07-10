@@ -9,31 +9,45 @@ public class Lua_UnityEngine_SparseTexture : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.SparseTexture o;
-			if(argc==6){
+			if(argc==7){
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				UnityEngine.TextureFormat a3;
-				checkEnum(l,4,out a3);
+				checkEnum(l,5,out a3);
 				System.Int32 a4;
-				checkType(l,5,out a4);
+				checkType(l,6,out a4);
 				System.Boolean a5;
-				checkType(l,6,out a5);
+				checkType(l,7,out a5);
 				o=new UnityEngine.SparseTexture(a1,a2,a3,a4,a5);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==5){
+			else if(matchType(l, "ctor__Int32__Int32__TextureFormat__Int32", argc, 2,typeof(int),typeof(int),typeof(UnityEngine.TextureFormat),typeof(int))){
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				UnityEngine.TextureFormat a3;
-				checkEnum(l,4,out a3);
+				checkEnum(l,5,out a3);
 				System.Int32 a4;
-				checkType(l,5,out a4);
+				checkType(l,6,out a4);
+				o=new UnityEngine.SparseTexture(a1,a2,a3,a4);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(matchType(l, "ctor__Int32__Int32__GraphicsFormat__Int32", argc, 2,typeof(int),typeof(int),typeof(UnityEngine.Experimental.Rendering.GraphicsFormat),typeof(int))){
+				System.Int32 a1;
+				checkType(l,3,out a1);
+				System.Int32 a2;
+				checkType(l,4,out a2);
+				UnityEngine.Experimental.Rendering.GraphicsFormat a3;
+				checkEnum(l,5,out a3);
+				System.Int32 a4;
+				checkType(l,6,out a4);
 				o=new UnityEngine.SparseTexture(a1,a2,a3,a4);
 				pushValue(l,true);
 				pushValue(l,o);

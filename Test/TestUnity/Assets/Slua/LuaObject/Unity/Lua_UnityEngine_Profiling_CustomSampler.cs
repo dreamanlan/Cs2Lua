@@ -8,15 +8,15 @@ public class Lua_UnityEngine_Profiling_CustomSampler : LuaObject {
 	static public int Begin(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==3){
 				UnityEngine.Profiling.CustomSampler self=(UnityEngine.Profiling.CustomSampler)checkSelf(l);
 				UnityEngine.Object a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				self.Begin(a1);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==1){
+			else if(argc==2){
 				UnityEngine.Profiling.CustomSampler self=(UnityEngine.Profiling.CustomSampler)checkSelf(l);
 				self.Begin();
 				pushValue(l,true);

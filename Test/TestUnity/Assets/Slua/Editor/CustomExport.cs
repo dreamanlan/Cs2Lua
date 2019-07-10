@@ -85,8 +85,18 @@ namespace SLua
 
         public static List<string> FunctionFilterList = new List<string>()
         {
-            "UIWidget.showHandles",
-            "UIWidget.showHandlesWithMoveTool",
+            "System.Single.IsFinite",
+            "System.Double.IsFinite",
+            "System.Type.IsSZArray",
+            "System.IO.Stream.CopyToAsync",
+            "System.IO.Stream.FlushAsync",
+            "System.IO.Stream.ReadAsync",
+            "System.IO.Stream.BeginRead",
+            "System.IO.Stream.EndRead",
+            "System.IO.Stream.WriteAsync",
+            "System.IO.Stream.BeginWrite",
+            "System.IO.Stream.EndWrite",
+            "UnityEngine.WWW.GetMovieTexture",
         };
         // black list if white list not given
         public static void OnGetNoUseList(out List<string> list)
@@ -180,6 +190,7 @@ namespace SLua
                 "ShadowSplitData",
                 "DisposeSentinel",
                 "ReflectionMethodsCache",
+                "Unsafe",
             };
         }
     }

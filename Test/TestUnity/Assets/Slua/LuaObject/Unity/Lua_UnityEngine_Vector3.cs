@@ -9,23 +9,23 @@ public class Lua_UnityEngine_Vector3 : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Vector3 o;
-			if(argc==4){
+			if(argc==5){
 				System.Single a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Single a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Single a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				o=new UnityEngine.Vector3(a1,a2,a3);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==3){
+			else if(argc==4){
 				System.Single a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Single a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				o=new UnityEngine.Vector3(a1,a2);
 				pushValue(l,true);
 				pushValue(l,o);
@@ -139,13 +139,13 @@ public class Lua_UnityEngine_Vector3 : LuaObject {
 	static public int OrthoNormalize_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
+			if(argc==4){
 				UnityEngine.Vector3 a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				UnityEngine.Vector3 a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				UnityEngine.Vector3.OrthoNormalize(ref a1,ref a2,ref a3);
 				pushValue(l,true);
 				pushValue(l,a1);
@@ -153,11 +153,11 @@ public class Lua_UnityEngine_Vector3 : LuaObject {
 				pushValue(l,a3);
 				return 4;
 			}
-			else if(argc==2){
+			else if(argc==3){
 				UnityEngine.Vector3 a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				UnityEngine.Vector3.OrthoNormalize(ref a1,ref a2);
 				pushValue(l,true);
 				pushValue(l,a1);
@@ -255,20 +255,37 @@ public class Lua_UnityEngine_Vector3 : LuaObject {
 	static public int SmoothDamp_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==6){
+			if(argc==7){
 				UnityEngine.Vector3 a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				UnityEngine.Vector3 a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				System.Single a4;
-				checkType(l,4,out a4);
+				checkType(l,5,out a4);
 				System.Single a5;
-				checkType(l,5,out a5);
+				checkType(l,6,out a5);
 				System.Single a6;
-				checkType(l,6,out a6);
+				checkType(l,7,out a6);
 				var ret=UnityEngine.Vector3.SmoothDamp(a1,a2,ref a3,a4,a5,a6);
+				pushValue(l,true);
+				pushValue(l,ret);
+				pushValue(l,a3);
+				return 3;
+			}
+			else if(argc==6){
+				UnityEngine.Vector3 a1;
+				checkType(l,2,out a1);
+				UnityEngine.Vector3 a2;
+				checkType(l,3,out a2);
+				UnityEngine.Vector3 a3;
+				checkType(l,4,out a3);
+				System.Single a4;
+				checkType(l,5,out a4);
+				System.Single a5;
+				checkType(l,6,out a5);
+				var ret=UnityEngine.Vector3.SmoothDamp(a1,a2,ref a3,a4,a5);
 				pushValue(l,true);
 				pushValue(l,ret);
 				pushValue(l,a3);
@@ -276,30 +293,13 @@ public class Lua_UnityEngine_Vector3 : LuaObject {
 			}
 			else if(argc==5){
 				UnityEngine.Vector3 a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				UnityEngine.Vector3 a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				System.Single a4;
-				checkType(l,4,out a4);
-				System.Single a5;
-				checkType(l,5,out a5);
-				var ret=UnityEngine.Vector3.SmoothDamp(a1,a2,ref a3,a4,a5);
-				pushValue(l,true);
-				pushValue(l,ret);
-				pushValue(l,a3);
-				return 3;
-			}
-			else if(argc==4){
-				UnityEngine.Vector3 a1;
-				checkType(l,1,out a1);
-				UnityEngine.Vector3 a2;
-				checkType(l,2,out a2);
-				UnityEngine.Vector3 a3;
-				checkType(l,3,out a3);
-				System.Single a4;
-				checkType(l,4,out a4);
+				checkType(l,5,out a4);
 				var ret=UnityEngine.Vector3.SmoothDamp(a1,a2,ref a3,a4);
 				pushValue(l,true);
 				pushValue(l,ret);
@@ -619,21 +619,21 @@ public class Lua_UnityEngine_Vector3 : LuaObject {
 	static public int op_Multiply(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,1,typeof(UnityEngine.Vector3),typeof(float))){
+			if(matchType(l, "op_Multiply__Vector3__Single", argc, 1,typeof(UnityEngine.Vector3),typeof(float))){
 				UnityEngine.Vector3 a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Single a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				var ret=a1*a2;
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,1,typeof(float),typeof(UnityEngine.Vector3))){
+			else if(matchType(l, "op_Multiply__Single__Vector3", argc, 1,typeof(float),typeof(UnityEngine.Vector3))){
 				System.Single a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				var ret=a1*a2;
 				pushValue(l,true);
 				pushValue(l,ret);
@@ -704,6 +704,18 @@ public class Lua_UnityEngine_Vector3 : LuaObject {
 		try {
 			pushValue(l,true);
 			pushValue(l,UnityEngine.Vector3.kEpsilon);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_kEpsilonNormalSqrt(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Vector3.kEpsilonNormalSqrt);
 			return 2;
 		}
 		catch(Exception e) {
@@ -1039,6 +1051,7 @@ public class Lua_UnityEngine_Vector3 : LuaObject {
 		addMember(l,getItem);
 		addMember(l,setItem);
 		addMember(l,"kEpsilon",get_kEpsilon,null,false);
+		addMember(l,"kEpsilonNormalSqrt",get_kEpsilonNormalSqrt,null,false);
 		addMember(l,"x",get_x,set_x,true);
 		addMember(l,"y",get_y,set_y,true);
 		addMember(l,"z",get_z,set_z,true);

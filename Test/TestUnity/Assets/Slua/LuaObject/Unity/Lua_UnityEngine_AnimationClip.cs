@@ -19,6 +19,21 @@ public class Lua_UnityEngine_AnimationClip : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int AddEvent(IntPtr l) {
+		try {
+			UnityEngine.AnimationClip self=(UnityEngine.AnimationClip)checkSelf(l);
+			UnityEngine.AnimationEvent a1;
+			checkType(l,2,out a1);
+			self.AddEvent(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SampleAnimation(IntPtr l) {
 		try {
 			UnityEngine.AnimationClip self=(UnityEngine.AnimationClip)checkSelf(l);
@@ -83,12 +98,25 @@ public class Lua_UnityEngine_AnimationClip : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int AddEvent(IntPtr l) {
+	static public int get_events(IntPtr l) {
 		try {
 			UnityEngine.AnimationClip self=(UnityEngine.AnimationClip)checkSelf(l);
-			UnityEngine.AnimationEvent a1;
-			checkType(l,2,out a1);
-			self.AddEvent(a1);
+			pushValue(l,true);
+			pushValue(l,self.events);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_events(IntPtr l) {
+		try {
+			UnityEngine.AnimationClip self=(UnityEngine.AnimationClip)checkSelf(l);
+			UnityEngine.AnimationEvent[] v;
+			checkArray(l,2,out v);
+			self.events=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -249,11 +277,11 @@ public class Lua_UnityEngine_AnimationClip : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_events(IntPtr l) {
+	static public int get_hasGenericRootTransform(IntPtr l) {
 		try {
 			UnityEngine.AnimationClip self=(UnityEngine.AnimationClip)checkSelf(l);
 			pushValue(l,true);
-			pushValue(l,self.events);
+			pushValue(l,self.hasGenericRootTransform);
 			return 2;
 		}
 		catch(Exception e) {
@@ -262,14 +290,38 @@ public class Lua_UnityEngine_AnimationClip : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int set_events(IntPtr l) {
+	static public int get_hasMotionFloatCurves(IntPtr l) {
 		try {
 			UnityEngine.AnimationClip self=(UnityEngine.AnimationClip)checkSelf(l);
-			UnityEngine.AnimationEvent[] v;
-			checkArray(l,2,out v);
-			self.events=v;
 			pushValue(l,true);
-			return 1;
+			pushValue(l,self.hasMotionFloatCurves);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_hasMotionCurves(IntPtr l) {
+		try {
+			UnityEngine.AnimationClip self=(UnityEngine.AnimationClip)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.hasMotionCurves);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_hasRootCurves(IntPtr l) {
+		try {
+			UnityEngine.AnimationClip self=(UnityEngine.AnimationClip)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.hasRootCurves);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -278,11 +330,12 @@ public class Lua_UnityEngine_AnimationClip : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AnimationClip");
+		addMember(l,AddEvent);
 		addMember(l,SampleAnimation);
 		addMember(l,SetCurve);
 		addMember(l,EnsureQuaternionContinuity);
 		addMember(l,ClearCurves);
-		addMember(l,AddEvent);
+		addMember(l,"events",get_events,set_events,true);
 		addMember(l,"length",get_length,null,true);
 		addMember(l,"frameRate",get_frameRate,set_frameRate,true);
 		addMember(l,"wrapMode",get_wrapMode,set_wrapMode,true);
@@ -290,7 +343,10 @@ public class Lua_UnityEngine_AnimationClip : LuaObject {
 		addMember(l,"legacy",get_legacy,set_legacy,true);
 		addMember(l,"humanMotion",get_humanMotion,null,true);
 		addMember(l,"empty",get_empty,null,true);
-		addMember(l,"events",get_events,set_events,true);
+		addMember(l,"hasGenericRootTransform",get_hasGenericRootTransform,null,true);
+		addMember(l,"hasMotionFloatCurves",get_hasMotionFloatCurves,null,true);
+		addMember(l,"hasMotionCurves",get_hasMotionCurves,null,true);
+		addMember(l,"hasRootCurves",get_hasRootCurves,null,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.AnimationClip),typeof(UnityEngine.Motion));
 	}
 }

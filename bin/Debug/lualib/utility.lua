@@ -14,7 +14,7 @@ function printJitStatus()
     end;
     infos:AppendLine();
   end;
-  UnityEngine.Debug.Log(infos:ToString());
+  UnityEngine.Debug.Log("Log__String", infos:ToString());
 end;
 
 jit.off();
@@ -1078,7 +1078,7 @@ function wrapconst(t, name)
   if name then
     return t[name];
   else
-    UnityEngine.Debug.LogError("[cs2lua] table index is nil");
+    UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil");
   end;
   return nil;
 end;

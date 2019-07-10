@@ -7,6 +7,7 @@ public class Lua_UnityEngine_LineAlignment : LuaObject {
 		getEnumTable(l,"UnityEngine.LineAlignment");
 		addMember(l,0,"View");
 		addMember(l,1,"Local");
+		addMember(l,1,"TransformZ");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

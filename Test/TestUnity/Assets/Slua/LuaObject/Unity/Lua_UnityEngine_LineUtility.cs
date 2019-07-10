@@ -22,46 +22,46 @@ public class Lua_UnityEngine_LineUtility : LuaObject {
 	static public int Simplify_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,1,typeof(List<UnityEngine.Vector3>),typeof(float),typeof(List<System.Int32>))){
+			if(matchType(l, "Simplify__List`1_Vector3__Single__List`1_Int32", argc, 1,typeof(List<UnityEngine.Vector3>),typeof(float),typeof(List<System.Int32>))){
 				System.Collections.Generic.List<UnityEngine.Vector3> a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Single a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.Collections.Generic.List<System.Int32> a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				UnityEngine.LineUtility.Simplify(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l,argc,1,typeof(List<UnityEngine.Vector3>),typeof(float),typeof(List<UnityEngine.Vector3>))){
+			else if(matchType(l, "Simplify__List`1_Vector3__Single__List`1_Vector3", argc, 1,typeof(List<UnityEngine.Vector3>),typeof(float),typeof(List<UnityEngine.Vector3>))){
 				System.Collections.Generic.List<UnityEngine.Vector3> a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Single a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.Collections.Generic.List<UnityEngine.Vector3> a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				UnityEngine.LineUtility.Simplify(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l,argc,1,typeof(List<UnityEngine.Vector2>),typeof(float),typeof(List<System.Int32>))){
+			else if(matchType(l, "Simplify__List`1_Vector2__Single__List`1_Int32", argc, 1,typeof(List<UnityEngine.Vector2>),typeof(float),typeof(List<System.Int32>))){
 				System.Collections.Generic.List<UnityEngine.Vector2> a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Single a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.Collections.Generic.List<System.Int32> a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				UnityEngine.LineUtility.Simplify(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l,argc,1,typeof(List<UnityEngine.Vector2>),typeof(float),typeof(List<UnityEngine.Vector2>))){
+			else if(matchType(l, "Simplify__List`1_Vector2__Single__List`1_Vector2", argc, 1,typeof(List<UnityEngine.Vector2>),typeof(float),typeof(List<UnityEngine.Vector2>))){
 				System.Collections.Generic.List<UnityEngine.Vector2> a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Single a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.Collections.Generic.List<UnityEngine.Vector2> a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				UnityEngine.LineUtility.Simplify(a1,a2,a3);
 				pushValue(l,true);
 				return 1;

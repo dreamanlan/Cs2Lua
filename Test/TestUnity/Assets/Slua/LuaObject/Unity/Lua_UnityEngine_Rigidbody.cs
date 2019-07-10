@@ -20,372 +20,6 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int AddForce(IntPtr l) {
-		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				System.Single a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				System.Single a3;
-				checkType(l,4,out a3);
-				UnityEngine.ForceMode a4;
-				checkEnum(l,5,out a4);
-				self.AddForce(a1,a2,a3,a4);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==4){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				System.Single a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				System.Single a3;
-				checkType(l,4,out a3);
-				self.AddForce(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				UnityEngine.ForceMode a2;
-				checkEnum(l,3,out a2);
-				self.AddForce(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				self.AddForce(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int AddRelativeForce(IntPtr l) {
-		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				System.Single a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				System.Single a3;
-				checkType(l,4,out a3);
-				UnityEngine.ForceMode a4;
-				checkEnum(l,5,out a4);
-				self.AddRelativeForce(a1,a2,a3,a4);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==4){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				System.Single a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				System.Single a3;
-				checkType(l,4,out a3);
-				self.AddRelativeForce(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				UnityEngine.ForceMode a2;
-				checkEnum(l,3,out a2);
-				self.AddRelativeForce(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				self.AddRelativeForce(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int AddTorque(IntPtr l) {
-		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				System.Single a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				System.Single a3;
-				checkType(l,4,out a3);
-				UnityEngine.ForceMode a4;
-				checkEnum(l,5,out a4);
-				self.AddTorque(a1,a2,a3,a4);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==4){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				System.Single a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				System.Single a3;
-				checkType(l,4,out a3);
-				self.AddTorque(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				UnityEngine.ForceMode a2;
-				checkEnum(l,3,out a2);
-				self.AddTorque(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				self.AddTorque(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int AddRelativeTorque(IntPtr l) {
-		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				System.Single a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				System.Single a3;
-				checkType(l,4,out a3);
-				UnityEngine.ForceMode a4;
-				checkEnum(l,5,out a4);
-				self.AddRelativeTorque(a1,a2,a3,a4);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==4){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				System.Single a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				System.Single a3;
-				checkType(l,4,out a3);
-				self.AddRelativeTorque(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				UnityEngine.ForceMode a2;
-				checkEnum(l,3,out a2);
-				self.AddRelativeTorque(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				self.AddRelativeTorque(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int AddForceAtPosition(IntPtr l) {
-		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				UnityEngine.Vector3 a2;
-				checkType(l,3,out a2);
-				UnityEngine.ForceMode a3;
-				checkEnum(l,4,out a3);
-				self.AddForceAtPosition(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				UnityEngine.Vector3 a2;
-				checkType(l,3,out a2);
-				self.AddForceAtPosition(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int AddExplosionForce(IntPtr l) {
-		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==6){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				System.Single a1;
-				checkType(l,2,out a1);
-				UnityEngine.Vector3 a2;
-				checkType(l,3,out a2);
-				System.Single a3;
-				checkType(l,4,out a3);
-				System.Single a4;
-				checkType(l,5,out a4);
-				UnityEngine.ForceMode a5;
-				checkEnum(l,6,out a5);
-				self.AddExplosionForce(a1,a2,a3,a4,a5);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==5){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				System.Single a1;
-				checkType(l,2,out a1);
-				UnityEngine.Vector3 a2;
-				checkType(l,3,out a2);
-				System.Single a3;
-				checkType(l,4,out a3);
-				System.Single a4;
-				checkType(l,5,out a4);
-				self.AddExplosionForce(a1,a2,a3,a4);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==4){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				System.Single a1;
-				checkType(l,2,out a1);
-				UnityEngine.Vector3 a2;
-				checkType(l,3,out a2);
-				System.Single a3;
-				checkType(l,4,out a3);
-				self.AddExplosionForce(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int ClosestPointOnBounds(IntPtr l) {
-		try {
-			UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-			UnityEngine.Vector3 a1;
-			checkType(l,2,out a1);
-			var ret=self.ClosestPointOnBounds(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetRelativePointVelocity(IntPtr l) {
-		try {
-			UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-			UnityEngine.Vector3 a1;
-			checkType(l,2,out a1);
-			var ret=self.GetRelativePointVelocity(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetPointVelocity(IntPtr l) {
-		try {
-			UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-			UnityEngine.Vector3 a1;
-			checkType(l,2,out a1);
-			var ret=self.GetPointVelocity(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int MovePosition(IntPtr l) {
 		try {
 			UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
@@ -482,19 +116,398 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SweepTest(IntPtr l) {
+	static public int GetRelativePointVelocity(IntPtr l) {
+		try {
+			UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetRelativePointVelocity(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetPointVelocity(IntPtr l) {
+		try {
+			UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetPointVelocity(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AddForce(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==6){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				System.Single a1;
+				checkType(l,3,out a1);
+				System.Single a2;
+				checkType(l,4,out a2);
+				System.Single a3;
+				checkType(l,5,out a3);
+				UnityEngine.ForceMode a4;
+				checkEnum(l,6,out a4);
+				self.AddForce(a1,a2,a3,a4);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==5){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				System.Single a1;
+				checkType(l,3,out a1);
+				System.Single a2;
+				checkType(l,4,out a2);
+				System.Single a3;
+				checkType(l,5,out a3);
+				self.AddForce(a1,a2,a3);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==4){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				UnityEngine.Vector3 a1;
+				checkType(l,3,out a1);
+				UnityEngine.ForceMode a2;
+				checkEnum(l,4,out a2);
+				self.AddForce(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==3){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				UnityEngine.Vector3 a1;
+				checkType(l,3,out a1);
+				self.AddForce(a1);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AddRelativeForce(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==6){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				System.Single a1;
+				checkType(l,3,out a1);
+				System.Single a2;
+				checkType(l,4,out a2);
+				System.Single a3;
+				checkType(l,5,out a3);
+				UnityEngine.ForceMode a4;
+				checkEnum(l,6,out a4);
+				self.AddRelativeForce(a1,a2,a3,a4);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==5){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				System.Single a1;
+				checkType(l,3,out a1);
+				System.Single a2;
+				checkType(l,4,out a2);
+				System.Single a3;
+				checkType(l,5,out a3);
+				self.AddRelativeForce(a1,a2,a3);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==4){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				UnityEngine.Vector3 a1;
+				checkType(l,3,out a1);
+				UnityEngine.ForceMode a2;
+				checkEnum(l,4,out a2);
+				self.AddRelativeForce(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==3){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				UnityEngine.Vector3 a1;
+				checkType(l,3,out a1);
+				self.AddRelativeForce(a1);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AddTorque(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==6){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				System.Single a1;
+				checkType(l,3,out a1);
+				System.Single a2;
+				checkType(l,4,out a2);
+				System.Single a3;
+				checkType(l,5,out a3);
+				UnityEngine.ForceMode a4;
+				checkEnum(l,6,out a4);
+				self.AddTorque(a1,a2,a3,a4);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==5){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				System.Single a1;
+				checkType(l,3,out a1);
+				System.Single a2;
+				checkType(l,4,out a2);
+				System.Single a3;
+				checkType(l,5,out a3);
+				self.AddTorque(a1,a2,a3);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==4){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				UnityEngine.Vector3 a1;
+				checkType(l,3,out a1);
+				UnityEngine.ForceMode a2;
+				checkEnum(l,4,out a2);
+				self.AddTorque(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==3){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				UnityEngine.Vector3 a1;
+				checkType(l,3,out a1);
+				self.AddTorque(a1);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AddRelativeTorque(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==6){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				System.Single a1;
+				checkType(l,3,out a1);
+				System.Single a2;
+				checkType(l,4,out a2);
+				System.Single a3;
+				checkType(l,5,out a3);
+				UnityEngine.ForceMode a4;
+				checkEnum(l,6,out a4);
+				self.AddRelativeTorque(a1,a2,a3,a4);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==5){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				System.Single a1;
+				checkType(l,3,out a1);
+				System.Single a2;
+				checkType(l,4,out a2);
+				System.Single a3;
+				checkType(l,5,out a3);
+				self.AddRelativeTorque(a1,a2,a3);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==4){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				UnityEngine.Vector3 a1;
+				checkType(l,3,out a1);
+				UnityEngine.ForceMode a2;
+				checkEnum(l,4,out a2);
+				self.AddRelativeTorque(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==3){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				UnityEngine.Vector3 a1;
+				checkType(l,3,out a1);
+				self.AddRelativeTorque(a1);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AddForceAtPosition(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			if(argc==5){
 				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
 				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
+				UnityEngine.Vector3 a2;
+				checkType(l,4,out a2);
+				UnityEngine.ForceMode a3;
+				checkEnum(l,5,out a3);
+				self.AddForceAtPosition(a1,a2,a3);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==4){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				UnityEngine.Vector3 a1;
+				checkType(l,3,out a1);
+				UnityEngine.Vector3 a2;
+				checkType(l,4,out a2);
+				self.AddForceAtPosition(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AddExplosionForce(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==7){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				System.Single a1;
+				checkType(l,3,out a1);
+				UnityEngine.Vector3 a2;
+				checkType(l,4,out a2);
+				System.Single a3;
+				checkType(l,5,out a3);
+				System.Single a4;
+				checkType(l,6,out a4);
+				UnityEngine.ForceMode a5;
+				checkEnum(l,7,out a5);
+				self.AddExplosionForce(a1,a2,a3,a4,a5);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==6){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				System.Single a1;
+				checkType(l,3,out a1);
+				UnityEngine.Vector3 a2;
+				checkType(l,4,out a2);
+				System.Single a3;
+				checkType(l,5,out a3);
+				System.Single a4;
+				checkType(l,6,out a4);
+				self.AddExplosionForce(a1,a2,a3,a4);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==5){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				System.Single a1;
+				checkType(l,3,out a1);
+				UnityEngine.Vector3 a2;
+				checkType(l,4,out a2);
+				System.Single a3;
+				checkType(l,5,out a3);
+				self.AddExplosionForce(a1,a2,a3);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ClosestPointOnBounds(IntPtr l) {
+		try {
+			UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			var ret=self.ClosestPointOnBounds(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SweepTest(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==6){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				UnityEngine.Vector3 a1;
+				checkType(l,3,out a1);
 				UnityEngine.RaycastHit a2;
 				System.Single a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				UnityEngine.QueryTriggerInteraction a4;
-				checkEnum(l,5,out a4);
+				checkEnum(l,6,out a4);
 				var ret=self.SweepTest(a1,out a2,a3,a4);
+				pushValue(l,true);
+				pushValue(l,ret);
+				pushValue(l,a2);
+				return 3;
+			}
+			else if(argc==5){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				UnityEngine.Vector3 a1;
+				checkType(l,3,out a1);
+				UnityEngine.RaycastHit a2;
+				System.Single a3;
+				checkType(l,5,out a3);
+				var ret=self.SweepTest(a1,out a2,a3);
 				pushValue(l,true);
 				pushValue(l,ret);
 				pushValue(l,a2);
@@ -503,20 +516,7 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 			else if(argc==4){
 				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
 				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				UnityEngine.RaycastHit a2;
-				System.Single a3;
-				checkType(l,4,out a3);
-				var ret=self.SweepTest(a1,out a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				pushValue(l,a2);
-				return 3;
-			}
-			else if(argc==3){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				UnityEngine.RaycastHit a2;
 				var ret=self.SweepTest(a1,out a2);
 				pushValue(l,true);
@@ -537,15 +537,26 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 	static public int SweepTestAll(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
+			if(argc==5){
 				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
 				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Single a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				UnityEngine.QueryTriggerInteraction a3;
-				checkEnum(l,4,out a3);
+				checkEnum(l,5,out a3);
 				var ret=self.SweepTestAll(a1,a2,a3);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==4){
+				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+				UnityEngine.Vector3 a1;
+				checkType(l,3,out a1);
+				System.Single a2;
+				checkType(l,4,out a2);
+				var ret=self.SweepTestAll(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -553,18 +564,7 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 			else if(argc==3){
 				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
 				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				var ret=self.SweepTestAll(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				var ret=self.SweepTestAll(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
@@ -1125,34 +1125,6 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_solverVelocityIterations(IntPtr l) {
-		try {
-			UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.solverVelocityIterations);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_solverVelocityIterations(IntPtr l) {
-		try {
-			UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
-			int v;
-			checkType(l,2,out v);
-			self.solverVelocityIterations=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_sleepThreshold(IntPtr l) {
 		try {
 			UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
@@ -1207,19 +1179,38 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_solverVelocityIterations(IntPtr l) {
+		try {
+			UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.solverVelocityIterations);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_solverVelocityIterations(IntPtr l) {
+		try {
+			UnityEngine.Rigidbody self=(UnityEngine.Rigidbody)checkSelf(l);
+			int v;
+			checkType(l,2,out v);
+			self.solverVelocityIterations=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Rigidbody");
 		addMember(l,SetDensity);
-		addMember(l,AddForce);
-		addMember(l,AddRelativeForce);
-		addMember(l,AddTorque);
-		addMember(l,AddRelativeTorque);
-		addMember(l,AddForceAtPosition);
-		addMember(l,AddExplosionForce);
-		addMember(l,ClosestPointOnBounds);
-		addMember(l,GetRelativePointVelocity);
-		addMember(l,GetPointVelocity);
 		addMember(l,MovePosition);
 		addMember(l,MoveRotation);
 		addMember(l,Sleep);
@@ -1227,6 +1218,15 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 		addMember(l,WakeUp);
 		addMember(l,ResetCenterOfMass);
 		addMember(l,ResetInertiaTensor);
+		addMember(l,GetRelativePointVelocity);
+		addMember(l,GetPointVelocity);
+		addMember(l,AddForce);
+		addMember(l,AddRelativeForce);
+		addMember(l,AddTorque);
+		addMember(l,AddRelativeTorque);
+		addMember(l,AddForceAtPosition);
+		addMember(l,AddExplosionForce);
+		addMember(l,ClosestPointOnBounds);
 		addMember(l,SweepTest);
 		addMember(l,SweepTestAll);
 		addMember(l,"velocity",get_velocity,set_velocity,true);
@@ -1249,9 +1249,9 @@ public class Lua_UnityEngine_Rigidbody : LuaObject {
 		addMember(l,"rotation",get_rotation,set_rotation,true);
 		addMember(l,"interpolation",get_interpolation,set_interpolation,true);
 		addMember(l,"solverIterations",get_solverIterations,set_solverIterations,true);
-		addMember(l,"solverVelocityIterations",get_solverVelocityIterations,set_solverVelocityIterations,true);
 		addMember(l,"sleepThreshold",get_sleepThreshold,set_sleepThreshold,true);
 		addMember(l,"maxAngularVelocity",get_maxAngularVelocity,set_maxAngularVelocity,true);
+		addMember(l,"solverVelocityIterations",get_solverVelocityIterations,set_solverVelocityIterations,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.Rigidbody),typeof(UnityEngine.Component));
 	}
 }

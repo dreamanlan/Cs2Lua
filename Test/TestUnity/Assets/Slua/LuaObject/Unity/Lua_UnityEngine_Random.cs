@@ -36,21 +36,21 @@ public class Lua_UnityEngine_Random : LuaObject {
 	static public int Range_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,1,typeof(int),typeof(int))){
+			if(matchType(l, "Range__Int32__Int32", argc, 1,typeof(int),typeof(int))){
 				System.Int32 a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Int32 a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				var ret=UnityEngine.Random.Range(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,1,typeof(float),typeof(float))){
+			else if(matchType(l, "Range__Single__Single", argc, 1,typeof(float),typeof(float))){
 				System.Single a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Single a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				var ret=UnityEngine.Random.Range(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
@@ -69,71 +69,71 @@ public class Lua_UnityEngine_Random : LuaObject {
 	static public int ColorHSV_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==8){
+			if(argc==9){
 				System.Single a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Single a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.Single a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				System.Single a4;
-				checkType(l,4,out a4);
+				checkType(l,5,out a4);
 				System.Single a5;
-				checkType(l,5,out a5);
+				checkType(l,6,out a5);
 				System.Single a6;
-				checkType(l,6,out a6);
+				checkType(l,7,out a6);
 				System.Single a7;
-				checkType(l,7,out a7);
+				checkType(l,8,out a7);
 				System.Single a8;
-				checkType(l,8,out a8);
+				checkType(l,9,out a8);
 				var ret=UnityEngine.Random.ColorHSV(a1,a2,a3,a4,a5,a6,a7,a8);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==6){
+			else if(argc==7){
 				System.Single a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Single a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.Single a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				System.Single a4;
-				checkType(l,4,out a4);
+				checkType(l,5,out a4);
 				System.Single a5;
-				checkType(l,5,out a5);
+				checkType(l,6,out a5);
 				System.Single a6;
-				checkType(l,6,out a6);
+				checkType(l,7,out a6);
 				var ret=UnityEngine.Random.ColorHSV(a1,a2,a3,a4,a5,a6);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==4){
+			else if(argc==5){
 				System.Single a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Single a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.Single a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				System.Single a4;
-				checkType(l,4,out a4);
+				checkType(l,5,out a4);
 				var ret=UnityEngine.Random.ColorHSV(a1,a2,a3,a4);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==2){
+			else if(argc==3){
 				System.Single a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Single a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				var ret=UnityEngine.Random.ColorHSV(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==0){
+			else if(argc==1){
 				var ret=UnityEngine.Random.ColorHSV();
 				pushValue(l,true);
 				pushValue(l,ret);

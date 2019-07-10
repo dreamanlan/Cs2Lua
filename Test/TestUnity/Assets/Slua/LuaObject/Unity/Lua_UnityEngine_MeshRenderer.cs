@@ -31,10 +31,24 @@ public class Lua_UnityEngine_MeshRenderer : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_subMeshStartIndex(IntPtr l) {
+		try {
+			UnityEngine.MeshRenderer self=(UnityEngine.MeshRenderer)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.subMeshStartIndex);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.MeshRenderer");
 		addMember(l,"additionalVertexStreams",get_additionalVertexStreams,set_additionalVertexStreams,true);
+		addMember(l,"subMeshStartIndex",get_subMeshStartIndex,null,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.MeshRenderer),typeof(UnityEngine.Renderer));
 	}
 }

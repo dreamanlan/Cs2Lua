@@ -1127,8 +1127,28 @@ namespace SLua
 
             MethodInfo[] members = t.GetMethods(bf);
             List<MethodInfo> methods = new List<MethodInfo>();
-            foreach (MethodInfo mi in members)
+            foreach (MethodInfo mi in members) {
+                var assemblyFullName = mi.DeclaringType.Assembly.FullName;
+                if (assemblyFullName.StartsWith("mscorlib")) {
+                    if (mi.Name == "TryAdd" || 
+                        mi.Name == "TryDequeue" || 
+                        mi.Name == "TryPeek" || 
+                        mi.Name == "TryPop")
+                        continue;
+                }
+                if (assemblyFullName.StartsWith("System")) {
+                    if (mi.Name == "TryAdd" ||
+                        mi.Name == "TryDequeue" ||
+                        mi.Name == "TryPeek" ||
+                        mi.Name == "TryPop")
+                        continue;
+                }
+                if (assemblyFullName.StartsWith("System.Core")) {
+                    if (mi.Name == "TryGetValue")
+                        continue;
+                }
                 methods.Add(tryFixGenericMethod(mi));
+            }
 
             if (typeof(IDisposable).IsAssignableFrom(t) && null == methods.Find(m => m.Name == c_DisposeName)) {
                 var mis = t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly).Where(mi => mi.Name == c_DisposeName || mi.Name == c_DisposeIntfName).ToList();
@@ -1767,6 +1787,14 @@ namespace SLua
                     ConstructorInfo ci = cons[n];
                     ParameterInfo[] pars = ci.GetParameters();
 
+                    if (ci.DeclaringType.Assembly.FullName.StartsWith("mscorlib")) {
+                        if (typeof(IDictionary).IsAssignableFrom(ci.DeclaringType)) {
+                            if (pars.Length > 0 && typeof(IEnumerable).IsAssignableFrom(pars[0].ParameterType)) {
+                                continue;
+                            }
+                        }
+                    }
+
                     if (cons.Length > 1) {
                         bool hasParams = false;
                         if (pars.Length > 0) {
@@ -1805,6 +1833,14 @@ namespace SLua
                     for (int n = 0; n < cons.Length; n++) {
                         ConstructorInfo ci = cons[n];
                         ParameterInfo[] pars = ci.GetParameters();
+
+                        if (ci.DeclaringType.Assembly.FullName.StartsWith("mscorlib")) {
+                            if (typeof(IDictionary).IsAssignableFrom(ci.DeclaringType)) {
+                                if (pars.Length > 0 && typeof(IEnumerable).IsAssignableFrom(pars[0].ParameterType)) {
+                                    continue;
+                                }
+                            }
+                        }
 
                         bool hasParams = false;
                         if (pars.Length > 0) {
@@ -2010,7 +2046,19 @@ namespace SLua
 
         bool isUsefullMethod(MethodInfo method)
         {
+            var assemblyFullName = method.DeclaringType.Assembly.FullName;
             var pis = method.GetParameters();
+            if (assemblyFullName.StartsWith("mscorlib")) {
+                if(typeof(IDictionary).IsAssignableFrom(method.DeclaringType)){
+
+                    if (method.Name == "Remove" && pis.Length == 2) {
+                        return false;
+                    }
+                }
+                if (method.DeclaringType.FullName == "System.IO.Stream" && (method.Name == "Read" || method.Name == "Write") && pis.Length == 1) {
+                    return false;
+                }
+            }
             if ((method.Name.StartsWith("set_", StringComparison.Ordinal) ||
                 method.Name.StartsWith("add_", StringComparison.Ordinal)) &&
                 pis.Length == 1 && pis[0].ParameterType.Name.StartsWith("EventCallback")) {
@@ -2271,7 +2319,7 @@ namespace SLua
                 }
 
                 bool hasParams = p.IsDefined(typeof(ParamArrayAttribute), false);
-                CheckArgument(file, p.ParameterType, n, overloadedCt > 1 ? argIndex + 1 : argIndex, !p.IsIn && p.IsOut, hasParams);
+                CheckArgument(file, p.ParameterType, n, overloadedCt > 1 ? argIndex + 1 : argIndex, !p.ParameterType.IsArray && !p.IsIn && p.IsOut, hasParams);
             }
 
             string ret = "";

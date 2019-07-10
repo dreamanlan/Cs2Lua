@@ -34,35 +34,6 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetAlpha(IntPtr l) {
-		try {
-			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
-			var ret=self.GetAlpha();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int SetAlpha(IntPtr l) {
-		try {
-			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
-			System.Single a1;
-			checkType(l,2,out a1);
-			self.SetAlpha(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int EnableRectClipping(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -94,22 +65,22 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 	static public int SetMaterial(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,2,typeof(UnityEngine.Material),typeof(int))){
+			if(matchType(l, "SetMaterial__Material__Int32", argc, 2,typeof(UnityEngine.Material),typeof(int))){
 				UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
 				UnityEngine.Material a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				self.SetMaterial(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.Material),typeof(UnityEngine.Texture))){
+			else if(matchType(l, "SetMaterial__Material__Texture", argc, 2,typeof(UnityEngine.Material),typeof(UnityEngine.Texture))){
 				UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
 				UnityEngine.Material a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				UnityEngine.Texture a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				self.SetMaterial(a1,a2);
 				pushValue(l,true);
 				return 1;
@@ -127,16 +98,16 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 	static public int GetMaterial(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==3){
 				UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				var ret=self.GetMaterial(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==1){
+			else if(argc==2){
 				UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
 				var ret=self.GetMaterial();
 				pushValue(l,true);
@@ -244,51 +215,94 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int GetAlpha(IntPtr l) {
+		try {
+			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
+			var ret=self.GetAlpha();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetAlpha(IntPtr l) {
+		try {
+			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
+			System.Single a1;
+			checkType(l,2,out a1);
+			self.SetAlpha(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetInheritedAlpha(IntPtr l) {
+		try {
+			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
+			var ret=self.GetInheritedAlpha();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SplitUIVertexStreams_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==10){
+			if(argc==11){
 				System.Collections.Generic.List<UnityEngine.UIVertex> a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Collections.Generic.List<UnityEngine.Vector3> a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.Collections.Generic.List<UnityEngine.Color32> a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				System.Collections.Generic.List<UnityEngine.Vector2> a4;
-				checkType(l,4,out a4);
+				checkType(l,5,out a4);
 				System.Collections.Generic.List<UnityEngine.Vector2> a5;
-				checkType(l,5,out a5);
+				checkType(l,6,out a5);
 				System.Collections.Generic.List<UnityEngine.Vector2> a6;
-				checkType(l,6,out a6);
+				checkType(l,7,out a6);
 				System.Collections.Generic.List<UnityEngine.Vector2> a7;
-				checkType(l,7,out a7);
+				checkType(l,8,out a7);
 				System.Collections.Generic.List<UnityEngine.Vector3> a8;
-				checkType(l,8,out a8);
+				checkType(l,9,out a8);
 				System.Collections.Generic.List<UnityEngine.Vector4> a9;
-				checkType(l,9,out a9);
+				checkType(l,10,out a9);
 				System.Collections.Generic.List<System.Int32> a10;
-				checkType(l,10,out a10);
+				checkType(l,11,out a10);
 				UnityEngine.CanvasRenderer.SplitUIVertexStreams(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==8){
+			else if(argc==9){
 				System.Collections.Generic.List<UnityEngine.UIVertex> a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Collections.Generic.List<UnityEngine.Vector3> a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.Collections.Generic.List<UnityEngine.Color32> a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				System.Collections.Generic.List<UnityEngine.Vector2> a4;
-				checkType(l,4,out a4);
+				checkType(l,5,out a4);
 				System.Collections.Generic.List<UnityEngine.Vector2> a5;
-				checkType(l,5,out a5);
+				checkType(l,6,out a5);
 				System.Collections.Generic.List<UnityEngine.Vector3> a6;
-				checkType(l,6,out a6);
+				checkType(l,7,out a6);
 				System.Collections.Generic.List<UnityEngine.Vector4> a7;
-				checkType(l,7,out a7);
+				checkType(l,8,out a7);
 				System.Collections.Generic.List<System.Int32> a8;
-				checkType(l,8,out a8);
+				checkType(l,9,out a8);
 				UnityEngine.CanvasRenderer.SplitUIVertexStreams(a1,a2,a3,a4,a5,a6,a7,a8);
 				pushValue(l,true);
 				return 1;
@@ -306,48 +320,48 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 	static public int CreateUIVertexStream_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==10){
+			if(argc==11){
 				System.Collections.Generic.List<UnityEngine.UIVertex> a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Collections.Generic.List<UnityEngine.Vector3> a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.Collections.Generic.List<UnityEngine.Color32> a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				System.Collections.Generic.List<UnityEngine.Vector2> a4;
-				checkType(l,4,out a4);
+				checkType(l,5,out a4);
 				System.Collections.Generic.List<UnityEngine.Vector2> a5;
-				checkType(l,5,out a5);
+				checkType(l,6,out a5);
 				System.Collections.Generic.List<UnityEngine.Vector2> a6;
-				checkType(l,6,out a6);
+				checkType(l,7,out a6);
 				System.Collections.Generic.List<UnityEngine.Vector2> a7;
-				checkType(l,7,out a7);
+				checkType(l,8,out a7);
 				System.Collections.Generic.List<UnityEngine.Vector3> a8;
-				checkType(l,8,out a8);
+				checkType(l,9,out a8);
 				System.Collections.Generic.List<UnityEngine.Vector4> a9;
-				checkType(l,9,out a9);
+				checkType(l,10,out a9);
 				System.Collections.Generic.List<System.Int32> a10;
-				checkType(l,10,out a10);
+				checkType(l,11,out a10);
 				UnityEngine.CanvasRenderer.CreateUIVertexStream(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==8){
+			else if(argc==9){
 				System.Collections.Generic.List<UnityEngine.UIVertex> a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Collections.Generic.List<UnityEngine.Vector3> a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.Collections.Generic.List<UnityEngine.Color32> a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				System.Collections.Generic.List<UnityEngine.Vector2> a4;
-				checkType(l,4,out a4);
+				checkType(l,5,out a4);
 				System.Collections.Generic.List<UnityEngine.Vector2> a5;
-				checkType(l,5,out a5);
+				checkType(l,6,out a5);
 				System.Collections.Generic.List<UnityEngine.Vector3> a6;
-				checkType(l,6,out a6);
+				checkType(l,7,out a6);
 				System.Collections.Generic.List<UnityEngine.Vector4> a7;
-				checkType(l,7,out a7);
+				checkType(l,8,out a7);
 				System.Collections.Generic.List<System.Int32> a8;
-				checkType(l,8,out a8);
+				checkType(l,9,out a8);
 				UnityEngine.CanvasRenderer.CreateUIVertexStream(a1,a2,a3,a4,a5,a6,a7,a8);
 				pushValue(l,true);
 				return 1;
@@ -365,63 +379,50 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 	static public int AddUIVertexStream_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==9){
+			if(argc==10){
 				System.Collections.Generic.List<UnityEngine.UIVertex> a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Collections.Generic.List<UnityEngine.Vector3> a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.Collections.Generic.List<UnityEngine.Color32> a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				System.Collections.Generic.List<UnityEngine.Vector2> a4;
-				checkType(l,4,out a4);
+				checkType(l,5,out a4);
 				System.Collections.Generic.List<UnityEngine.Vector2> a5;
-				checkType(l,5,out a5);
+				checkType(l,6,out a5);
 				System.Collections.Generic.List<UnityEngine.Vector2> a6;
-				checkType(l,6,out a6);
+				checkType(l,7,out a6);
 				System.Collections.Generic.List<UnityEngine.Vector2> a7;
-				checkType(l,7,out a7);
+				checkType(l,8,out a7);
 				System.Collections.Generic.List<UnityEngine.Vector3> a8;
-				checkType(l,8,out a8);
+				checkType(l,9,out a8);
 				System.Collections.Generic.List<UnityEngine.Vector4> a9;
-				checkType(l,9,out a9);
+				checkType(l,10,out a9);
 				UnityEngine.CanvasRenderer.AddUIVertexStream(a1,a2,a3,a4,a5,a6,a7,a8,a9);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==7){
+			else if(argc==8){
 				System.Collections.Generic.List<UnityEngine.UIVertex> a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Collections.Generic.List<UnityEngine.Vector3> a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.Collections.Generic.List<UnityEngine.Color32> a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				System.Collections.Generic.List<UnityEngine.Vector2> a4;
-				checkType(l,4,out a4);
+				checkType(l,5,out a4);
 				System.Collections.Generic.List<UnityEngine.Vector2> a5;
-				checkType(l,5,out a5);
+				checkType(l,6,out a5);
 				System.Collections.Generic.List<UnityEngine.Vector3> a6;
-				checkType(l,6,out a6);
+				checkType(l,7,out a6);
 				System.Collections.Generic.List<UnityEngine.Vector4> a7;
-				checkType(l,7,out a7);
+				checkType(l,8,out a7);
 				UnityEngine.CanvasRenderer.AddUIVertexStream(a1,a2,a3,a4,a5,a6,a7);
 				pushValue(l,true);
 				return 1;
 			}
 			pushValue(l,false);
 			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_hasRectClipping(IntPtr l) {
-		try {
-			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.hasRectClipping);
 			return 2;
 		}
 		catch(Exception e) {
@@ -514,6 +515,73 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_absoluteDepth(IntPtr l) {
+		try {
+			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.absoluteDepth);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_hasMoved(IntPtr l) {
+		try {
+			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.hasMoved);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_cullTransparentMesh(IntPtr l) {
+		try {
+			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.cullTransparentMesh);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_cullTransparentMesh(IntPtr l) {
+		try {
+			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
+			bool v;
+			checkType(l,2,out v);
+			self.cullTransparentMesh=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_hasRectClipping(IntPtr l) {
+		try {
+			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.hasRectClipping);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_relativeDepth(IntPtr l) {
 		try {
 			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
@@ -553,39 +621,11 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 			return error(l,e);
 		}
 	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_absoluteDepth(IntPtr l) {
-		try {
-			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.absoluteDepth);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_hasMoved(IntPtr l) {
-		try {
-			UnityEngine.CanvasRenderer self=(UnityEngine.CanvasRenderer)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.hasMoved);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.CanvasRenderer");
 		addMember(l,SetColor);
 		addMember(l,GetColor);
-		addMember(l,GetAlpha);
-		addMember(l,SetAlpha);
 		addMember(l,EnableRectClipping);
 		addMember(l,DisableRectClipping);
 		addMember(l,SetMaterial);
@@ -596,17 +636,21 @@ public class Lua_UnityEngine_CanvasRenderer : LuaObject {
 		addMember(l,SetAlphaTexture);
 		addMember(l,SetMesh);
 		addMember(l,Clear);
+		addMember(l,GetAlpha);
+		addMember(l,SetAlpha);
+		addMember(l,GetInheritedAlpha);
 		addMember(l,SplitUIVertexStreams_s);
 		addMember(l,CreateUIVertexStream_s);
 		addMember(l,AddUIVertexStream_s);
-		addMember(l,"hasRectClipping",get_hasRectClipping,null,true);
 		addMember(l,"hasPopInstruction",get_hasPopInstruction,set_hasPopInstruction,true);
 		addMember(l,"materialCount",get_materialCount,set_materialCount,true);
 		addMember(l,"popMaterialCount",get_popMaterialCount,set_popMaterialCount,true);
-		addMember(l,"relativeDepth",get_relativeDepth,null,true);
-		addMember(l,"cull",get_cull,set_cull,true);
 		addMember(l,"absoluteDepth",get_absoluteDepth,null,true);
 		addMember(l,"hasMoved",get_hasMoved,null,true);
+		addMember(l,"cullTransparentMesh",get_cullTransparentMesh,set_cullTransparentMesh,true);
+		addMember(l,"hasRectClipping",get_hasRectClipping,null,true);
+		addMember(l,"relativeDepth",get_relativeDepth,null,true);
+		addMember(l,"cull",get_cull,set_cull,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.CanvasRenderer),typeof(UnityEngine.Component));
 	}
 }

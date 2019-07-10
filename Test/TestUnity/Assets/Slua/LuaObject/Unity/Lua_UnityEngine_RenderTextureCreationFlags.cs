@@ -14,6 +14,7 @@ public class Lua_UnityEngine_RenderTextureCreationFlags : LuaObject {
 		addMember(l,128,"AllowVerticalFlip");
 		addMember(l,256,"NoResolvedColorSurface");
 		addMember(l,1024,"DynamicallyScalable");
+		addMember(l,2048,"BindMS");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

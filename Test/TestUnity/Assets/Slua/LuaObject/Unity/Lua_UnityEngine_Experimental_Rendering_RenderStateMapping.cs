@@ -9,19 +9,19 @@ public class Lua_UnityEngine_Experimental_Rendering_RenderStateMapping : LuaObje
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Experimental.Rendering.RenderStateMapping o;
-			if(argc==3){
+			if(argc==4){
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				UnityEngine.Experimental.Rendering.RenderStateBlock a2;
-				checkValueType(l,3,out a2);
+				checkValueType(l,4,out a2);
 				o=new UnityEngine.Experimental.Rendering.RenderStateMapping(a1,a2);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==2){
+			else if(argc==3){
 				UnityEngine.Experimental.Rendering.RenderStateBlock a1;
-				checkValueType(l,2,out a1);
+				checkValueType(l,3,out a1);
 				o=new UnityEngine.Experimental.Rendering.RenderStateMapping(a1);
 				pushValue(l,true);
 				pushValue(l,o);

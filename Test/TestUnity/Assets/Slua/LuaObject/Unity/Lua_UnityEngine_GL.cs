@@ -256,20 +256,20 @@ public class Lua_UnityEngine_GL : LuaObject {
 	static public int LoadPixelMatrix_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
+			if(argc==5){
 				System.Single a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Single a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.Single a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				System.Single a4;
-				checkType(l,4,out a4);
+				checkType(l,5,out a4);
 				UnityEngine.GL.LoadPixelMatrix(a1,a2,a3,a4);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==0){
+			else if(argc==1){
 				UnityEngine.GL.LoadPixelMatrix();
 				pushValue(l,true);
 				return 1;
@@ -372,26 +372,26 @@ public class Lua_UnityEngine_GL : LuaObject {
 	static public int Clear_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
+			if(argc==5){
 				System.Boolean a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Boolean a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				UnityEngine.Color a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				System.Single a4;
-				checkType(l,4,out a4);
+				checkType(l,5,out a4);
 				UnityEngine.GL.Clear(a1,a2,a3,a4);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==3){
+			else if(argc==4){
 				System.Boolean a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Boolean a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				UnityEngine.Color a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				UnityEngine.GL.Clear(a1,a2,a3);
 				pushValue(l,true);
 				return 1;

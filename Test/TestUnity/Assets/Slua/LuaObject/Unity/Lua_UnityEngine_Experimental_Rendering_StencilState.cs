@@ -9,49 +9,49 @@ public class Lua_UnityEngine_Experimental_Rendering_StencilState : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Experimental.Rendering.StencilState o;
-			if(argc==12){
+			if(argc==13){
 				System.Boolean a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Byte a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Byte a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				UnityEngine.Rendering.CompareFunction a4;
-				checkEnum(l,5,out a4);
+				checkEnum(l,6,out a4);
 				UnityEngine.Rendering.StencilOp a5;
-				checkEnum(l,6,out a5);
+				checkEnum(l,7,out a5);
 				UnityEngine.Rendering.StencilOp a6;
-				checkEnum(l,7,out a6);
+				checkEnum(l,8,out a6);
 				UnityEngine.Rendering.StencilOp a7;
-				checkEnum(l,8,out a7);
+				checkEnum(l,9,out a7);
 				UnityEngine.Rendering.CompareFunction a8;
-				checkEnum(l,9,out a8);
+				checkEnum(l,10,out a8);
 				UnityEngine.Rendering.StencilOp a9;
-				checkEnum(l,10,out a9);
+				checkEnum(l,11,out a9);
 				UnityEngine.Rendering.StencilOp a10;
-				checkEnum(l,11,out a10);
+				checkEnum(l,12,out a10);
 				UnityEngine.Rendering.StencilOp a11;
-				checkEnum(l,12,out a11);
+				checkEnum(l,13,out a11);
 				o=new UnityEngine.Experimental.Rendering.StencilState(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==8){
+			else if(argc==9){
 				System.Boolean a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Byte a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Byte a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				UnityEngine.Rendering.CompareFunction a4;
-				checkEnum(l,5,out a4);
+				checkEnum(l,6,out a4);
 				UnityEngine.Rendering.StencilOp a5;
-				checkEnum(l,6,out a5);
+				checkEnum(l,7,out a5);
 				UnityEngine.Rendering.StencilOp a6;
-				checkEnum(l,7,out a6);
+				checkEnum(l,8,out a6);
 				UnityEngine.Rendering.StencilOp a7;
-				checkEnum(l,8,out a7);
+				checkEnum(l,9,out a7);
 				o=new UnityEngine.Experimental.Rendering.StencilState(a1,a2,a3,a4,a5,a6,a7);
 				pushValue(l,true);
 				pushValue(l,o);

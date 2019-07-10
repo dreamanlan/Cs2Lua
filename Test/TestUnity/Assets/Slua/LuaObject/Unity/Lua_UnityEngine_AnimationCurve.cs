@@ -9,15 +9,15 @@ public class Lua_UnityEngine_AnimationCurve : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.AnimationCurve o;
-			if(argc==1){
+			if(argc==2){
 				o=new UnityEngine.AnimationCurve();
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc>=2){
+			else if(argc>=3){
 				UnityEngine.Keyframe[] a1;
-				checkValueParams(l,2,out a1);
+				checkValueParams(l,3,out a1);
 				o=new UnityEngine.AnimationCurve(a1);
 				pushValue(l,true);
 				pushValue(l,o);
@@ -50,21 +50,21 @@ public class Lua_UnityEngine_AnimationCurve : LuaObject {
 	static public int AddKey(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
+			if(argc==4){
 				UnityEngine.AnimationCurve self=(UnityEngine.AnimationCurve)checkSelf(l);
 				System.Single a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Single a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				var ret=self.AddKey(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==2){
+			else if(argc==3){
 				UnityEngine.AnimationCurve self=(UnityEngine.AnimationCurve)checkSelf(l);
 				UnityEngine.Keyframe a1;
-				checkValueType(l,2,out a1);
+				checkValueType(l,3,out a1);
 				var ret=self.AddKey(a1);
 				pushValue(l,true);
 				pushValue(l,ret);

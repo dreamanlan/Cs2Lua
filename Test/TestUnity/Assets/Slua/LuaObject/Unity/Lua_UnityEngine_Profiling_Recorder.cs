@@ -5,6 +5,32 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Profiling_Recorder : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int FilterToCurrentThread(IntPtr l) {
+		try {
+			UnityEngine.Profiling.Recorder self=(UnityEngine.Profiling.Recorder)checkSelf(l);
+			self.FilterToCurrentThread();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CollectFromAllThreads(IntPtr l) {
+		try {
+			UnityEngine.Profiling.Recorder self=(UnityEngine.Profiling.Recorder)checkSelf(l);
+			self.CollectFromAllThreads();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Get_s(IntPtr l) {
 		try {
 			System.String a1;
@@ -88,6 +114,8 @@ public class Lua_UnityEngine_Profiling_Recorder : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Profiling.Recorder");
+		addMember(l,FilterToCurrentThread);
+		addMember(l,CollectFromAllThreads);
 		addMember(l,Get_s);
 		addMember(l,"isValid",get_isValid,null,true);
 		addMember(l,"enabled",get_enabled,set_enabled,true);

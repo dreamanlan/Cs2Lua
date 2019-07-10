@@ -22,21 +22,21 @@ public class Lua_System_Int16 : LuaObject {
 	static public int CompareTo(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,2,typeof(System.Object))){
+			if(matchType(l, "CompareTo__Object", argc, 2,typeof(System.Object))){
 				System.Int16 self;
 				checkType(l,1,out self);
 				System.Object a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				var ret=self.CompareTo(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(System.Int16))){
+			else if(matchType(l, "CompareTo__Int16", argc, 2,typeof(System.Int16))){
 				System.Int16 self;
 				checkType(l,1,out self);
 				System.Int16 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				var ret=self.CompareTo(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
@@ -70,41 +70,41 @@ public class Lua_System_Int16 : LuaObject {
 	static public int Parse_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
+			if(argc==4){
 				System.String a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Globalization.NumberStyles a2;
-				checkEnum(l,2,out a2);
+				checkEnum(l,3,out a2);
 				System.IFormatProvider a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				var ret=System.Int16.Parse(a1,a2,a3);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,1,typeof(string),typeof(System.IFormatProvider))){
+			else if(matchType(l, "Parse__String__NumberStyles", argc, 1,typeof(string),typeof(System.Globalization.NumberStyles))){
 				System.String a1;
-				checkType(l,1,out a1);
-				System.IFormatProvider a2;
-				checkType(l,2,out a2);
-				var ret=System.Int16.Parse(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l,argc,1,typeof(string),typeof(System.Globalization.NumberStyles))){
-				System.String a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Globalization.NumberStyles a2;
-				checkEnum(l,2,out a2);
+				checkEnum(l,3,out a2);
 				var ret=System.Int16.Parse(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==1){
+			else if(matchType(l, "Parse__String__IFormatProvider", argc, 1,typeof(string),typeof(System.IFormatProvider))){
 				System.String a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
+				System.IFormatProvider a2;
+				checkType(l,3,out a2);
+				var ret=System.Int16.Parse(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==2){
+				System.String a1;
+				checkType(l,2,out a1);
 				var ret=System.Int16.Parse(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
@@ -123,13 +123,13 @@ public class Lua_System_Int16 : LuaObject {
 	static public int TryParse_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
+			if(argc==5){
 				System.String a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Globalization.NumberStyles a2;
-				checkEnum(l,2,out a2);
+				checkEnum(l,3,out a2);
 				System.IFormatProvider a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				System.Int16 a4;
 				var ret=System.Int16.TryParse(a1,a2,a3,out a4);
 				pushValue(l,true);
@@ -137,9 +137,9 @@ public class Lua_System_Int16 : LuaObject {
 				pushValue(l,a4);
 				return 3;
 			}
-			else if(argc==2){
+			else if(argc==3){
 				System.String a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Int16 a2;
 				var ret=System.Int16.TryParse(a1,out a2);
 				pushValue(l,true);

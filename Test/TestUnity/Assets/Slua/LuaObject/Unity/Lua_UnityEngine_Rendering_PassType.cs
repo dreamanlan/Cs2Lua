@@ -17,6 +17,8 @@ public class Lua_UnityEngine_Rendering_PassType : LuaObject {
 		addMember(l,10,"Deferred");
 		addMember(l,11,"Meta");
 		addMember(l,12,"MotionVectors");
+		addMember(l,13,"ScriptableRenderPipeline");
+		addMember(l,14,"ScriptableRenderPipelineDefaultUnlit");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

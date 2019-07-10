@@ -9,33 +9,33 @@ public class Lua_UnityEngine_Plane : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Plane o;
-			if(argc==4){
+			if(argc==5){
 				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				UnityEngine.Vector3 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				UnityEngine.Vector3 a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				o=new UnityEngine.Plane(a1,a2,a3);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.Vector3),typeof(UnityEngine.Vector3))){
+			else if(matchType(l, "ctor__Vector3__Vector3", argc, 2,typeof(UnityEngine.Vector3),typeof(UnityEngine.Vector3))){
 				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				UnityEngine.Vector3 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				o=new UnityEngine.Plane(a1,a2);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.Vector3),typeof(float))){
+			else if(matchType(l, "ctor__Vector3__Single", argc, 2,typeof(UnityEngine.Vector3),typeof(float))){
 				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Single a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				o=new UnityEngine.Plane(a1,a2);
 				pushValue(l,true);
 				pushValue(l,o);

@@ -22,17 +22,17 @@ public class Lua_UnityEngine_Cache : LuaObject {
 	static public int ClearCache(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==3){
 				UnityEngine.Cache self;
 				checkValueType(l,1,out self);
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				var ret=self.ClearCache(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==1){
+			else if(argc==2){
 				UnityEngine.Cache self;
 				checkValueType(l,1,out self);
 				var ret=self.ClearCache();

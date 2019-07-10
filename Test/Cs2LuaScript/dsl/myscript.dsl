@@ -23,13 +23,13 @@ class(MyScript) {
 		Init = function(this, obj, mb){
 			local(s); s = "test test test from cs2lua !";
 			callstatic(UnityEngine.Debug, "Log", "Log__Object", s);
-			callinstance(mb, "StartCoroutine", "StartCoroutine__IEnumerator", callinstance(this, "TestCoroutine"));
+			callinstance(mb, "StartCoroutine", callinstance(this, "TestCoroutine"));
 			setinstance(this, "root", newexternobject(UnityEngine.GameObject, typeargs(), typekinds(), , null, "ctor__String", "root"));
 			local(slider); slider = typeas(callinstance(callstatic(UnityEngine.GameObject, "Find", "Canvas/Slider"), "GetComponent", "GetComponent__Type", typeof(UnityEngine.UI.Slider)), UnityEngine.UI.Slider, TypeKind.Class);
 			local(counttxt); counttxt = typeas(callinstance(callstatic(UnityEngine.GameObject, "Find", "Canvas/Count"), "GetComponent", "GetComponent__Type", typeof(UnityEngine.UI.Text)), UnityEngine.UI.Text, TypeKind.Class);
 			callinstance(getinstance(slider, "onValueChanged"), "AddListener", (function(v){
 				callinstance(this, "Reset");
-				getinstance(counttxt, "text") = callstatic(LuaString, "Format", "cube:{0}", v);
+				getinstance(counttxt, "text") = callstatic(LuaString, "Format__System_String__System_Object", "cube:{0}", v);
 				setinstance(this, "max", typecast(v, System.Int32, TypeKind.Struct));
 			}));
 			callinstance(this, "Reset");

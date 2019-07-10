@@ -8,9 +8,14 @@ class(LuaString) {
 		__new_object = function(...){
 			return(newobject(LuaString, typeargs(), typekinds(), null, null, ...));
 		};
-		Format = function(str, ...){
-			local{args = params(0);};
-			return(callstatic(System.String, "Format", "Format__String__Arr_Object", str, dslunpack(args)));
+		Format__System_String__System_Object = function(str, arg){
+			return(callstatic(System.String, "Format", "Format__String__Object", str, arg));
+		};
+		Format__System_String__System_Object__System_Object = function(str, arg1, arg2){
+			return(callstatic(System.String, "Format", "Format__String__Object__Object", str, arg1, arg2));
+		};
+		Format__System_String__System_Object__System_Object__System_Object = function(str, arg1, arg2, arg3){
+			return(callstatic(System.String, "Format", "Format__String__Object__Object__Object", str, arg1, arg2, arg3));
 		};
 		cctor = function(){
 		};
@@ -35,7 +40,13 @@ class(LuaString) {
 	class_info(TypeKind.Class, Accessibility.Internal) {
 	};
 	method_info {
-		Format(MethodKind.Ordinary, Accessibility.Public){
+		Format__System_String__System_Object(MethodKind.Ordinary, Accessibility.Public){
+			static(true);
+		};
+		Format__System_String__System_Object__System_Object(MethodKind.Ordinary, Accessibility.Public){
+			static(true);
+		};
+		Format__System_String__System_Object__System_Object__System_Object(MethodKind.Ordinary, Accessibility.Public){
 			static(true);
 		};
 		ctor(MethodKind.Constructor, Accessibility.Public){

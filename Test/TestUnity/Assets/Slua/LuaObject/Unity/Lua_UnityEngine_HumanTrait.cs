@@ -96,6 +96,21 @@ public class Lua_UnityEngine_HumanTrait : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int GetBoneDefaultHierarchyMass_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.HumanTrait.GetBoneDefaultHierarchyMass(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetParentBone_s(IntPtr l) {
 		try {
 			System.Int32 a1;
@@ -177,6 +192,7 @@ public class Lua_UnityEngine_HumanTrait : LuaObject {
 		addMember(l,RequiredBone_s);
 		addMember(l,GetMuscleDefaultMin_s);
 		addMember(l,GetMuscleDefaultMax_s);
+		addMember(l,GetBoneDefaultHierarchyMass_s);
 		addMember(l,GetParentBone_s);
 		addMember(l,"MuscleCount",get_MuscleCount,null,false);
 		addMember(l,"MuscleName",get_MuscleName,null,false);

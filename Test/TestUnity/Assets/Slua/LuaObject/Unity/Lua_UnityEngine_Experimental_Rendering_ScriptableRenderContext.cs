@@ -37,49 +37,49 @@ public class Lua_UnityEngine_Experimental_Rendering_ScriptableRenderContext : Lu
 	static public int DrawRenderers(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,2,typeof(UnityEngine.Experimental.Rendering.FilterResults),typeof(UnityEngine.Experimental.Rendering.DrawRendererSettings),typeof(UnityEngine.Experimental.Rendering.FilterRenderersSettings),typeof(UnityEngine.Experimental.Rendering.RenderStateBlock))){
+			if(matchType(l, "DrawRenderers__FilterResults__Ref_DrawRendererSettings__FilterRenderersSettings__RenderStateBlock", argc, 2,typeof(UnityEngine.Experimental.Rendering.FilterResults),typeof(UnityEngine.Experimental.Rendering.DrawRendererSettings),typeof(UnityEngine.Experimental.Rendering.FilterRenderersSettings),typeof(UnityEngine.Experimental.Rendering.RenderStateBlock))){
 				UnityEngine.Experimental.Rendering.ScriptableRenderContext self;
 				checkValueType(l,1,out self);
 				UnityEngine.Experimental.Rendering.FilterResults a1;
-				checkValueType(l,2,out a1);
+				checkValueType(l,3,out a1);
 				UnityEngine.Experimental.Rendering.DrawRendererSettings a2;
-				checkValueType(l,3,out a2);
+				checkValueType(l,4,out a2);
 				UnityEngine.Experimental.Rendering.FilterRenderersSettings a3;
-				checkValueType(l,4,out a3);
+				checkValueType(l,5,out a3);
 				UnityEngine.Experimental.Rendering.RenderStateBlock a4;
-				checkValueType(l,5,out a4);
+				checkValueType(l,6,out a4);
 				self.DrawRenderers(a1,ref a2,a3,a4);
 				pushValue(l,true);
 				pushValue(l,a2);
 				setBack(l,self);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.Experimental.Rendering.FilterResults),typeof(UnityEngine.Experimental.Rendering.DrawRendererSettings),typeof(UnityEngine.Experimental.Rendering.FilterRenderersSettings),typeof(List<UnityEngine.Experimental.Rendering.RenderStateMapping>))){
+			else if(matchType(l, "DrawRenderers__FilterResults__Ref_DrawRendererSettings__FilterRenderersSettings__List`1_RenderStateMapping", argc, 2,typeof(UnityEngine.Experimental.Rendering.FilterResults),typeof(UnityEngine.Experimental.Rendering.DrawRendererSettings),typeof(UnityEngine.Experimental.Rendering.FilterRenderersSettings),typeof(List<UnityEngine.Experimental.Rendering.RenderStateMapping>))){
 				UnityEngine.Experimental.Rendering.ScriptableRenderContext self;
 				checkValueType(l,1,out self);
 				UnityEngine.Experimental.Rendering.FilterResults a1;
-				checkValueType(l,2,out a1);
+				checkValueType(l,3,out a1);
 				UnityEngine.Experimental.Rendering.DrawRendererSettings a2;
-				checkValueType(l,3,out a2);
+				checkValueType(l,4,out a2);
 				UnityEngine.Experimental.Rendering.FilterRenderersSettings a3;
-				checkValueType(l,4,out a3);
+				checkValueType(l,5,out a3);
 				System.Collections.Generic.List<UnityEngine.Experimental.Rendering.RenderStateMapping> a4;
-				checkType(l,5,out a4);
+				checkType(l,6,out a4);
 				self.DrawRenderers(a1,ref a2,a3,a4);
 				pushValue(l,true);
 				pushValue(l,a2);
 				setBack(l,self);
 				return 2;
 			}
-			else if(argc==4){
+			else if(argc==5){
 				UnityEngine.Experimental.Rendering.ScriptableRenderContext self;
 				checkValueType(l,1,out self);
 				UnityEngine.Experimental.Rendering.FilterResults a1;
-				checkValueType(l,2,out a1);
+				checkValueType(l,3,out a1);
 				UnityEngine.Experimental.Rendering.DrawRendererSettings a2;
-				checkValueType(l,3,out a2);
+				checkValueType(l,4,out a2);
 				UnityEngine.Experimental.Rendering.FilterRenderersSettings a3;
-				checkValueType(l,4,out a3);
+				checkValueType(l,5,out a3);
 				self.DrawRenderers(a1,ref a2,a3);
 				pushValue(l,true);
 				pushValue(l,a2);
@@ -153,23 +153,23 @@ public class Lua_UnityEngine_Experimental_Rendering_ScriptableRenderContext : Lu
 	static public int SetupCameraProperties(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
+			if(argc==4){
 				UnityEngine.Experimental.Rendering.ScriptableRenderContext self;
 				checkValueType(l,1,out self);
 				UnityEngine.Camera a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Boolean a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				self.SetupCameraProperties(a1,a2);
 				pushValue(l,true);
 				setBack(l,self);
 				return 1;
 			}
-			else if(argc==2){
+			else if(argc==3){
 				UnityEngine.Experimental.Rendering.ScriptableRenderContext self;
 				checkValueType(l,1,out self);
 				UnityEngine.Camera a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				self.SetupCameraProperties(a1);
 				pushValue(l,true);
 				setBack(l,self);
@@ -253,20 +253,6 @@ public class Lua_UnityEngine_Experimental_Rendering_ScriptableRenderContext : Lu
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int EmitWorldGeometryForSceneView_s(IntPtr l) {
-		try {
-			UnityEngine.Camera a1;
-			checkType(l,1,out a1);
-			UnityEngine.Experimental.Rendering.ScriptableRenderContext.EmitWorldGeometryForSceneView(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int BeginRenderPassInternal_s(IntPtr l) {
 		try {
 			System.IntPtr a1;
@@ -323,6 +309,20 @@ public class Lua_UnityEngine_Experimental_Rendering_ScriptableRenderContext : Lu
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int EmitWorldGeometryForSceneView_s(IntPtr l) {
+		try {
+			UnityEngine.Camera a1;
+			checkType(l,1,out a1);
+			UnityEngine.Experimental.Rendering.ScriptableRenderContext.EmitWorldGeometryForSceneView(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Experimental.Rendering.ScriptableRenderContext");
@@ -336,10 +336,10 @@ public class Lua_UnityEngine_Experimental_Rendering_ScriptableRenderContext : Lu
 		addMember(l,StartMultiEye);
 		addMember(l,StopMultiEye);
 		addMember(l,DrawSkybox);
-		addMember(l,EmitWorldGeometryForSceneView_s);
 		addMember(l,BeginRenderPassInternal_s);
 		addMember(l,BeginSubPassInternal_s);
 		addMember(l,EndRenderPassInternal_s);
+		addMember(l,EmitWorldGeometryForSceneView_s);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.Experimental.Rendering.ScriptableRenderContext),typeof(System.ValueType));
 	}
 }

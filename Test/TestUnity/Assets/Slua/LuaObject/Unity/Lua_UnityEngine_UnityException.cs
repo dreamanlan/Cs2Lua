@@ -9,25 +9,25 @@ public class Lua_UnityEngine_UnityException : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.UnityException o;
-			if(argc==3){
+			if(argc==4){
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Exception a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				o=new UnityEngine.UnityException(a1,a2);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==2){
+			else if(argc==3){
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				o=new UnityEngine.UnityException(a1);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==1){
+			else if(argc==2){
 				o=new UnityEngine.UnityException();
 				pushValue(l,true);
 				pushValue(l,o);

@@ -1,3 +1,4 @@
+require "cs2lua__namespaces"; 
 
 MyScript = {
 	__new_object = function(...)
@@ -24,7 +25,7 @@ MyScript = {
 				local s;
 				s = "test test test from cs2lua !";
 				UnityEngine.Debug.Log("Log__Object", s);
-				mb:StartCoroutine("StartCoroutine__IEnumerator", this:TestCoroutine());
+				mb:StartCoroutine(this:TestCoroutine());
 				this.root = newexternobject(UnityEngine.GameObject, {}, {}, nil, "ctor__String", "root");
 				local slider;
 				slider = typeas(UnityEngine.GameObject.Find("Canvas/Slider"):GetComponent("GetComponent__Type", UnityEngine.UI.Slider), UnityEngine.UI.Slider, TypeKind.Class);
@@ -32,7 +33,7 @@ MyScript = {
 				counttxt = typeas(UnityEngine.GameObject.Find("Canvas/Count"):GetComponent("GetComponent__Type", UnityEngine.UI.Text), UnityEngine.UI.Text, TypeKind.Class);
 				slider.onValueChanged:AddListener((function(v)
 					this:Reset();
-					counttxt.text = LuaString.Format("cube:{0}", v);
+					counttxt.text = LuaString.Format__System_String__System_Object("cube:{0}", v);
 					this.max = typecast(v, System.Int32, TypeKind.Struct);
 				end));
 				this:Reset();
@@ -224,7 +225,6 @@ MyScript = {
 
 require "cs2lua__utility";
 require "cs2lua__attributes";
-require "cs2lua__namespaces";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
 require "luastring";

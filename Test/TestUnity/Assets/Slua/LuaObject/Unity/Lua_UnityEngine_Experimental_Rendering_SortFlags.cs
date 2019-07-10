@@ -14,6 +14,7 @@ public class Lua_UnityEngine_Experimental_Rendering_SortFlags : LuaObject {
 		addMember(l,23,"CommonTransparent");
 		addMember(l,32,"CanvasOrder");
 		addMember(l,59,"CommonOpaque");
+		addMember(l,64,"RendererPriority");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

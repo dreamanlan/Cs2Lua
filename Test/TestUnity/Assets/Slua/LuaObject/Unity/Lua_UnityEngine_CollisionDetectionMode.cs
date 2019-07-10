@@ -8,6 +8,7 @@ public class Lua_UnityEngine_CollisionDetectionMode : LuaObject {
 		addMember(l,0,"Discrete");
 		addMember(l,1,"Continuous");
 		addMember(l,2,"ContinuousDynamic");
+		addMember(l,3,"ContinuousSpeculative");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

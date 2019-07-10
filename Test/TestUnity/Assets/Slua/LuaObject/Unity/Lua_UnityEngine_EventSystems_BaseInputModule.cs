@@ -112,6 +112,34 @@ public class Lua_UnityEngine_EventSystems_BaseInputModule : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_inputOverride(IntPtr l) {
+		try {
+			UnityEngine.EventSystems.BaseInputModule self=(UnityEngine.EventSystems.BaseInputModule)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.inputOverride);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_inputOverride(IntPtr l) {
+		try {
+			UnityEngine.EventSystems.BaseInputModule self=(UnityEngine.EventSystems.BaseInputModule)checkSelf(l);
+			UnityEngine.EventSystems.BaseInput v;
+			checkType(l,2,out v);
+			self.inputOverride=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.EventSystems.BaseInputModule");
@@ -123,6 +151,7 @@ public class Lua_UnityEngine_EventSystems_BaseInputModule : LuaObject {
 		addMember(l,UpdateModule);
 		addMember(l,IsModuleSupported);
 		addMember(l,"input",get_input,null,true);
+		addMember(l,"inputOverride",get_inputOverride,set_inputOverride,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.EventSystems.BaseInputModule),typeof(UnityEngine.EventSystems.UIBehaviour));
 	}
 }

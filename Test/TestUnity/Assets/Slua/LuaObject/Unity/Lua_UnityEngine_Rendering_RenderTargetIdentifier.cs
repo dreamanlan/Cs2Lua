@@ -9,89 +9,103 @@ public class Lua_UnityEngine_Rendering_RenderTargetIdentifier : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Rendering.RenderTargetIdentifier o;
-			if(matchType(l,argc,2,typeof(string),typeof(int),typeof(UnityEngine.CubemapFace),typeof(int))){
+			if(matchType(l, "ctor__String__Int32__CubemapFace__Int32", argc, 2,typeof(string),typeof(int),typeof(UnityEngine.CubemapFace),typeof(int))){
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				UnityEngine.CubemapFace a3;
-				checkEnum(l,4,out a3);
+				checkEnum(l,5,out a3);
 				System.Int32 a4;
-				checkType(l,5,out a4);
+				checkType(l,6,out a4);
 				o=new UnityEngine.Rendering.RenderTargetIdentifier(a1,a2,a3,a4);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(int),typeof(int),typeof(UnityEngine.CubemapFace),typeof(int))){
+			else if(matchType(l, "ctor__Int32__Int32__CubemapFace__Int32", argc, 2,typeof(int),typeof(int),typeof(UnityEngine.CubemapFace),typeof(int))){
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				UnityEngine.CubemapFace a3;
-				checkEnum(l,4,out a3);
+				checkEnum(l,5,out a3);
 				System.Int32 a4;
-				checkType(l,5,out a4);
+				checkType(l,6,out a4);
 				o=new UnityEngine.Rendering.RenderTargetIdentifier(a1,a2,a3,a4);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.RenderBuffer),typeof(int),typeof(UnityEngine.CubemapFace),typeof(int))){
+			else if(matchType(l, "ctor__RenderTargetIdentifier__Int32__CubemapFace__Int32", argc, 2,typeof(UnityEngine.Rendering.RenderTargetIdentifier),typeof(int),typeof(UnityEngine.CubemapFace),typeof(int))){
+				UnityEngine.Rendering.RenderTargetIdentifier a1;
+				checkValueType(l,3,out a1);
+				System.Int32 a2;
+				checkType(l,4,out a2);
+				UnityEngine.CubemapFace a3;
+				checkEnum(l,5,out a3);
+				System.Int32 a4;
+				checkType(l,6,out a4);
+				o=new UnityEngine.Rendering.RenderTargetIdentifier(a1,a2,a3,a4);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(matchType(l, "ctor__Texture__Int32__CubemapFace__Int32", argc, 2,typeof(UnityEngine.Texture),typeof(int),typeof(UnityEngine.CubemapFace),typeof(int))){
+				UnityEngine.Texture a1;
+				checkType(l,3,out a1);
+				System.Int32 a2;
+				checkType(l,4,out a2);
+				UnityEngine.CubemapFace a3;
+				checkEnum(l,5,out a3);
+				System.Int32 a4;
+				checkType(l,6,out a4);
+				o=new UnityEngine.Rendering.RenderTargetIdentifier(a1,a2,a3,a4);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(matchType(l, "ctor__RenderBuffer__Int32__CubemapFace__Int32", argc, 2,typeof(UnityEngine.RenderBuffer),typeof(int),typeof(UnityEngine.CubemapFace),typeof(int))){
 				UnityEngine.RenderBuffer a1;
-				checkValueType(l,2,out a1);
+				checkValueType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				UnityEngine.CubemapFace a3;
-				checkEnum(l,4,out a3);
+				checkEnum(l,5,out a3);
 				System.Int32 a4;
-				checkType(l,5,out a4);
+				checkType(l,6,out a4);
 				o=new UnityEngine.Rendering.RenderTargetIdentifier(a1,a2,a3,a4);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.Texture),typeof(int),typeof(UnityEngine.CubemapFace),typeof(int))){
-				UnityEngine.Texture a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				UnityEngine.CubemapFace a3;
-				checkEnum(l,4,out a3);
-				System.Int32 a4;
-				checkType(l,5,out a4);
-				o=new UnityEngine.Rendering.RenderTargetIdentifier(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.Texture))){
-				UnityEngine.Texture a1;
-				checkType(l,2,out a1);
-				o=new UnityEngine.Rendering.RenderTargetIdentifier(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.Rendering.BuiltinRenderTextureType))){
+			else if(matchType(l, "ctor__BuiltinRenderTextureType", argc, 2,typeof(UnityEngine.Rendering.BuiltinRenderTextureType))){
 				UnityEngine.Rendering.BuiltinRenderTextureType a1;
-				checkEnum(l,2,out a1);
+				checkEnum(l,3,out a1);
 				o=new UnityEngine.Rendering.RenderTargetIdentifier(a1);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(string))){
+			else if(matchType(l, "ctor__String", argc, 2,typeof(string))){
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				o=new UnityEngine.Rendering.RenderTargetIdentifier(a1);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(int))){
+			else if(matchType(l, "ctor__Int32", argc, 2,typeof(int))){
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
+				o=new UnityEngine.Rendering.RenderTargetIdentifier(a1);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(matchType(l, "ctor__Texture", argc, 2,typeof(UnityEngine.Texture))){
+				UnityEngine.Texture a1;
+				checkType(l,3,out a1);
 				o=new UnityEngine.Rendering.RenderTargetIdentifier(a1);
 				pushValue(l,true);
 				pushValue(l,o);

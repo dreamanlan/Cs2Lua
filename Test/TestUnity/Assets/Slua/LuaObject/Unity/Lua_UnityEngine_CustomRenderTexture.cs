@@ -9,37 +9,49 @@ public class Lua_UnityEngine_CustomRenderTexture : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.CustomRenderTexture o;
-			if(argc==5){
+			if(argc==6){
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				UnityEngine.RenderTextureFormat a3;
-				checkEnum(l,4,out a3);
+				checkEnum(l,5,out a3);
 				UnityEngine.RenderTextureReadWrite a4;
-				checkEnum(l,5,out a4);
+				checkEnum(l,6,out a4);
 				o=new UnityEngine.CustomRenderTexture(a1,a2,a3,a4);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(matchType(l, "ctor__Int32__Int32__RenderTextureFormat", argc, 2,typeof(int),typeof(int),typeof(UnityEngine.RenderTextureFormat))){
+				System.Int32 a1;
+				checkType(l,3,out a1);
+				System.Int32 a2;
+				checkType(l,4,out a2);
+				UnityEngine.RenderTextureFormat a3;
+				checkEnum(l,5,out a3);
+				o=new UnityEngine.CustomRenderTexture(a1,a2,a3);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(matchType(l, "ctor__Int32__Int32__GraphicsFormat", argc, 2,typeof(int),typeof(int),typeof(UnityEngine.Experimental.Rendering.GraphicsFormat))){
+				System.Int32 a1;
+				checkType(l,3,out a1);
+				System.Int32 a2;
+				checkType(l,4,out a2);
+				UnityEngine.Experimental.Rendering.GraphicsFormat a3;
+				checkEnum(l,5,out a3);
+				o=new UnityEngine.CustomRenderTexture(a1,a2,a3);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
 			else if(argc==4){
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
-				UnityEngine.RenderTextureFormat a3;
-				checkEnum(l,4,out a3);
-				o=new UnityEngine.CustomRenderTexture(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==3){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				o=new UnityEngine.CustomRenderTexture(a1,a2);
 				pushValue(l,true);
 				pushValue(l,o);
@@ -56,15 +68,15 @@ public class Lua_UnityEngine_CustomRenderTexture : LuaObject {
 	static public int Update(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==3){
 				UnityEngine.CustomRenderTexture self=(UnityEngine.CustomRenderTexture)checkSelf(l);
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				self.Update(a1);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==1){
+			else if(argc==2){
 				UnityEngine.CustomRenderTexture self=(UnityEngine.CustomRenderTexture)checkSelf(l);
 				self.Update();
 				pushValue(l,true);

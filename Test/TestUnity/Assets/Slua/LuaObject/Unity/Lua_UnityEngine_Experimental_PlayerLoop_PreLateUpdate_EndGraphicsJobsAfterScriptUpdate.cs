@@ -1,0 +1,25 @@
+﻿using System;
+using SLua;
+using System.Collections.Generic;
+[UnityEngine.Scripting.Preserve]
+public class Lua_UnityEngine_Experimental_PlayerLoop_PreLateUpdate_EndGraphicsJobsAfterScriptUpdate : LuaObject {
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int constructor(IntPtr l) {
+		try {
+			UnityEngine.Experimental.PlayerLoop.PreLateUpdate.EndGraphicsJobsAfterScriptUpdate o;
+			o=new UnityEngine.Experimental.PlayerLoop.PreLateUpdate.EndGraphicsJobsAfterScriptUpdate();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[UnityEngine.Scripting.Preserve]
+	static public void reg(IntPtr l) {
+		getTypeTable(l,"UnityEngine.Experimental.PlayerLoop.PreLateUpdate.EndGraphicsJobsAfterScriptUpdate");
+		createTypeMetatable(l,constructor, typeof(UnityEngine.Experimental.PlayerLoop.PreLateUpdate.EndGraphicsJobsAfterScriptUpdate),typeof(System.ValueType));
+	}
+}

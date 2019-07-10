@@ -31,10 +31,39 @@ public class Lua_UnityEngine_LightProbeGroup : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_dering(IntPtr l) {
+		try {
+			UnityEngine.LightProbeGroup self=(UnityEngine.LightProbeGroup)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.dering);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_dering(IntPtr l) {
+		try {
+			UnityEngine.LightProbeGroup self=(UnityEngine.LightProbeGroup)checkSelf(l);
+			bool v;
+			checkType(l,2,out v);
+			self.dering=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.LightProbeGroup");
 		addMember(l,"probePositions",get_probePositions,set_probePositions,true);
+		addMember(l,"dering",get_dering,set_dering,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.LightProbeGroup),typeof(UnityEngine.Behaviour));
 	}
 }

@@ -46,6 +46,7 @@
     <Compile Include="IStartupPlugin.cs" />
     <Compile Include="ITickPlugin.cs" />
     <Compile Include="PluginManager.cs" />
+    <Compile Include="PluginUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

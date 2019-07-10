@@ -8,15 +8,15 @@ public class Lua_UnityEngine_Animation : LuaObject {
 	static public int Stop(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==3){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				self.Stop(a1);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==1){
+			else if(argc==2){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				self.Stop();
 				pushValue(l,true);
@@ -35,15 +35,15 @@ public class Lua_UnityEngine_Animation : LuaObject {
 	static public int Rewind(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==3){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				self.Rewind(a1);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==1){
+			else if(argc==2){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				self.Rewind();
 				pushValue(l,true);
@@ -91,36 +91,36 @@ public class Lua_UnityEngine_Animation : LuaObject {
 	static public int Play(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
+			if(argc==4){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				UnityEngine.PlayMode a2;
-				checkEnum(l,3,out a2);
+				checkEnum(l,4,out a2);
 				var ret=self.Play(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.PlayMode))){
+			else if(matchType(l, "Play__PlayMode", argc, 2,typeof(UnityEngine.PlayMode))){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				UnityEngine.PlayMode a1;
-				checkEnum(l,2,out a1);
+				checkEnum(l,3,out a1);
 				var ret=self.Play(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(string))){
+			else if(matchType(l, "Play__String", argc, 2,typeof(string))){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				var ret=self.Play(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(argc==1){
+			else if(argc==2){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				var ret=self.Play();
 				pushValue(l,true);
@@ -140,32 +140,32 @@ public class Lua_UnityEngine_Animation : LuaObject {
 	static public int CrossFade(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
+			if(argc==5){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Single a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				UnityEngine.PlayMode a3;
-				checkEnum(l,4,out a3);
+				checkEnum(l,5,out a3);
 				self.CrossFade(a1,a2,a3);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==4){
+				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
+				System.String a1;
+				checkType(l,3,out a1);
+				System.Single a2;
+				checkType(l,4,out a2);
+				self.CrossFade(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
 			else if(argc==3){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				System.String a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				self.CrossFade(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
-				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				self.CrossFade(a1);
 				pushValue(l,true);
 				return 1;
@@ -183,32 +183,32 @@ public class Lua_UnityEngine_Animation : LuaObject {
 	static public int Blend(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
+			if(argc==5){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Single a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Single a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				self.Blend(a1,a2,a3);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==4){
+				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
+				System.String a1;
+				checkType(l,3,out a1);
+				System.Single a2;
+				checkType(l,4,out a2);
+				self.Blend(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
 			else if(argc==3){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				System.String a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				self.Blend(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
-				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				self.Blend(a1);
 				pushValue(l,true);
 				return 1;
@@ -226,17 +226,30 @@ public class Lua_UnityEngine_Animation : LuaObject {
 	static public int CrossFadeQueued(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
+			if(argc==6){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Single a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				UnityEngine.QueueMode a3;
-				checkEnum(l,4,out a3);
+				checkEnum(l,5,out a3);
 				UnityEngine.PlayMode a4;
-				checkEnum(l,5,out a4);
+				checkEnum(l,6,out a4);
 				var ret=self.CrossFadeQueued(a1,a2,a3,a4);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==5){
+				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
+				System.String a1;
+				checkType(l,3,out a1);
+				System.Single a2;
+				checkType(l,4,out a2);
+				UnityEngine.QueueMode a3;
+				checkEnum(l,5,out a3);
+				var ret=self.CrossFadeQueued(a1,a2,a3);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -244,12 +257,10 @@ public class Lua_UnityEngine_Animation : LuaObject {
 			else if(argc==4){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Single a2;
-				checkType(l,3,out a2);
-				UnityEngine.QueueMode a3;
-				checkEnum(l,4,out a3);
-				var ret=self.CrossFadeQueued(a1,a2,a3);
+				checkType(l,4,out a2);
+				var ret=self.CrossFadeQueued(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -257,18 +268,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 			else if(argc==3){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				System.String a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				var ret=self.CrossFadeQueued(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
-				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				var ret=self.CrossFadeQueued(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
@@ -287,15 +287,26 @@ public class Lua_UnityEngine_Animation : LuaObject {
 	static public int PlayQueued(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
+			if(argc==5){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				UnityEngine.QueueMode a2;
-				checkEnum(l,3,out a2);
+				checkEnum(l,4,out a2);
 				UnityEngine.PlayMode a3;
-				checkEnum(l,4,out a3);
+				checkEnum(l,5,out a3);
 				var ret=self.PlayQueued(a1,a2,a3);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==4){
+				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
+				System.String a1;
+				checkType(l,3,out a1);
+				UnityEngine.QueueMode a2;
+				checkEnum(l,4,out a2);
+				var ret=self.PlayQueued(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -303,18 +314,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 			else if(argc==3){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				System.String a1;
-				checkType(l,2,out a1);
-				UnityEngine.QueueMode a2;
-				checkEnum(l,3,out a2);
-				var ret=self.PlayQueued(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
-				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				var ret=self.PlayQueued(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
@@ -333,42 +333,42 @@ public class Lua_UnityEngine_Animation : LuaObject {
 	static public int AddClip(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==6){
+			if(argc==7){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				UnityEngine.AnimationClip a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.String a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Int32 a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				System.Int32 a4;
-				checkType(l,5,out a4);
+				checkType(l,6,out a4);
 				System.Boolean a5;
-				checkType(l,6,out a5);
+				checkType(l,7,out a5);
 				self.AddClip(a1,a2,a3,a4,a5);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==5){
+			else if(argc==6){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				UnityEngine.AnimationClip a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.String a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Int32 a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				System.Int32 a4;
-				checkType(l,5,out a4);
+				checkType(l,6,out a4);
 				self.AddClip(a1,a2,a3,a4);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==3){
+			else if(argc==4){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				UnityEngine.AnimationClip a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.String a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				self.AddClip(a1,a2);
 				pushValue(l,true);
 				return 1;
@@ -386,18 +386,18 @@ public class Lua_UnityEngine_Animation : LuaObject {
 	static public int RemoveClip(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,2,typeof(UnityEngine.AnimationClip))){
+			if(matchType(l, "RemoveClip__AnimationClip", argc, 2,typeof(UnityEngine.AnimationClip))){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				UnityEngine.AnimationClip a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				self.RemoveClip(a1);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l,argc,2,typeof(string))){
+			else if(matchType(l, "RemoveClip__String", argc, 2,typeof(string))){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				self.RemoveClip(a1);
 				pushValue(l,true);
 				return 1;

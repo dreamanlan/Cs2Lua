@@ -8,19 +8,19 @@ public class Lua_UnityEngine_Display : LuaObject {
 	static public int Activate(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
+			if(argc==5){
 				UnityEngine.Display self=(UnityEngine.Display)checkSelf(l);
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Int32 a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				self.Activate(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==1){
+			else if(argc==2){
 				UnityEngine.Display self=(UnityEngine.Display)checkSelf(l);
 				self.Activate();
 				pushValue(l,true);

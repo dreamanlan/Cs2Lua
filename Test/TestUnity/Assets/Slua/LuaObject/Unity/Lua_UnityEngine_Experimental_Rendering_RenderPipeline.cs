@@ -35,6 +35,34 @@ public class Lua_UnityEngine_Experimental_Rendering_RenderPipeline : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int BeginFrameRendering_s(IntPtr l) {
+		try {
+			UnityEngine.Camera[] a1;
+			checkArray(l,1,out a1);
+			UnityEngine.Experimental.Rendering.RenderPipeline.BeginFrameRendering(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int BeginCameraRendering_s(IntPtr l) {
+		try {
+			UnityEngine.Camera a1;
+			checkType(l,1,out a1);
+			UnityEngine.Experimental.Rendering.RenderPipeline.BeginCameraRendering(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Dispose_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -64,6 +92,8 @@ public class Lua_UnityEngine_Experimental_Rendering_RenderPipeline : LuaObject {
 		getTypeTable(l,"UnityEngine.Experimental.Rendering.RenderPipeline");
 		addMember(l,Render);
 		addMember(l,Dispose);
+		addMember(l,BeginFrameRendering_s);
+		addMember(l,BeginCameraRendering_s);
 		addMember(l,Dispose_s);
 		addMember(l,"disposed",get_disposed,null,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.Experimental.Rendering.RenderPipeline));

@@ -37,17 +37,17 @@ public class Lua_UnityEngine_SceneManagement_Scene : LuaObject {
 	static public int GetRootGameObjects(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==3){
 				UnityEngine.SceneManagement.Scene self;
 				checkValueType(l,1,out self);
 				System.Collections.Generic.List<UnityEngine.GameObject> a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				self.GetRootGameObjects(a1);
 				pushValue(l,true);
 				setBack(l,self);
 				return 1;
 			}
-			else if(argc==1){
+			else if(argc==2){
 				UnityEngine.SceneManagement.Scene self;
 				checkValueType(l,1,out self);
 				var ret=self.GetRootGameObjects();
@@ -99,6 +99,20 @@ public class Lua_UnityEngine_SceneManagement_Scene : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_handle(IntPtr l) {
+		try {
+			UnityEngine.SceneManagement.Scene self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.handle);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_path(IntPtr l) {
 		try {
 			UnityEngine.SceneManagement.Scene self;
@@ -120,6 +134,23 @@ public class Lua_UnityEngine_SceneManagement_Scene : LuaObject {
 			pushValue(l,true);
 			pushValue(l,self.name);
 			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_name(IntPtr l) {
+		try {
+			UnityEngine.SceneManagement.Scene self;
+			checkValueType(l,1,out self);
+			string v;
+			checkType(l,2,out v);
+			self.name=v;
+			setBack(l,self);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -188,8 +219,9 @@ public class Lua_UnityEngine_SceneManagement_Scene : LuaObject {
 		addMember(l,GetRootGameObjects);
 		addMember(l,op_Equality);
 		addMember(l,op_Inequality);
+		addMember(l,"handle",get_handle,null,true);
 		addMember(l,"path",get_path,null,true);
-		addMember(l,"name",get_name,null,true);
+		addMember(l,"name",get_name,set_name,true);
 		addMember(l,"isLoaded",get_isLoaded,null,true);
 		addMember(l,"buildIndex",get_buildIndex,null,true);
 		addMember(l,"isDirty",get_isDirty,null,true);

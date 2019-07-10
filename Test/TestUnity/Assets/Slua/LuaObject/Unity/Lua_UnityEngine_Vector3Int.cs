@@ -232,21 +232,21 @@ public class Lua_UnityEngine_Vector3Int : LuaObject {
 	static public int op_Multiply(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,1,typeof(UnityEngine.Vector3Int),typeof(UnityEngine.Vector3Int))){
+			if(matchType(l, "op_Multiply__Vector3Int__Vector3Int", argc, 1,typeof(UnityEngine.Vector3Int),typeof(UnityEngine.Vector3Int))){
 				UnityEngine.Vector3Int a1;
-				checkValueType(l,1,out a1);
+				checkValueType(l,2,out a1);
 				UnityEngine.Vector3Int a2;
-				checkValueType(l,2,out a2);
+				checkValueType(l,3,out a2);
 				var ret=a1*a2;
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,1,typeof(UnityEngine.Vector3Int),typeof(int))){
+			else if(matchType(l, "op_Multiply__Vector3Int__Int32", argc, 1,typeof(UnityEngine.Vector3Int),typeof(int))){
 				UnityEngine.Vector3Int a1;
-				checkValueType(l,1,out a1);
+				checkValueType(l,2,out a1);
 				System.Int32 a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				var ret=a1*a2;
 				pushValue(l,true);
 				pushValue(l,ret);

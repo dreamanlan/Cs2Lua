@@ -84,34 +84,6 @@ public class Lua_UnityEngine_Canvas : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_worldCamera(IntPtr l) {
-		try {
-			UnityEngine.Canvas self=(UnityEngine.Canvas)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.worldCamera);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_worldCamera(IntPtr l) {
-		try {
-			UnityEngine.Canvas self=(UnityEngine.Canvas)checkSelf(l);
-			UnityEngine.Camera v;
-			checkType(l,2,out v);
-			self.worldCamera=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_pixelRect(IntPtr l) {
 		try {
 			UnityEngine.Canvas self=(UnityEngine.Canvas)checkSelf(l);
@@ -362,34 +334,6 @@ public class Lua_UnityEngine_Canvas : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_normalizedSortingGridSize(IntPtr l) {
-		try {
-			UnityEngine.Canvas self=(UnityEngine.Canvas)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.normalizedSortingGridSize);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_normalizedSortingGridSize(IntPtr l) {
-		try {
-			UnityEngine.Canvas self=(UnityEngine.Canvas)checkSelf(l);
-			float v;
-			checkType(l,2,out v);
-			self.normalizedSortingGridSize=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_sortingLayerID(IntPtr l) {
 		try {
 			UnityEngine.Canvas self=(UnityEngine.Canvas)checkSelf(l);
@@ -498,6 +442,62 @@ public class Lua_UnityEngine_Canvas : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_worldCamera(IntPtr l) {
+		try {
+			UnityEngine.Canvas self=(UnityEngine.Canvas)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.worldCamera);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_worldCamera(IntPtr l) {
+		try {
+			UnityEngine.Canvas self=(UnityEngine.Canvas)checkSelf(l);
+			UnityEngine.Camera v;
+			checkType(l,2,out v);
+			self.worldCamera=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_normalizedSortingGridSize(IntPtr l) {
+		try {
+			UnityEngine.Canvas self=(UnityEngine.Canvas)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.normalizedSortingGridSize);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_normalizedSortingGridSize(IntPtr l) {
+		try {
+			UnityEngine.Canvas self=(UnityEngine.Canvas)checkSelf(l);
+			float v;
+			checkType(l,2,out v);
+			self.normalizedSortingGridSize=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Canvas");
@@ -506,7 +506,6 @@ public class Lua_UnityEngine_Canvas : LuaObject {
 		addMember(l,ForceUpdateCanvases_s);
 		addMember(l,"renderMode",get_renderMode,set_renderMode,true);
 		addMember(l,"isRootCanvas",get_isRootCanvas,null,true);
-		addMember(l,"worldCamera",get_worldCamera,set_worldCamera,true);
 		addMember(l,"pixelRect",get_pixelRect,null,true);
 		addMember(l,"scaleFactor",get_scaleFactor,set_scaleFactor,true);
 		addMember(l,"referencePixelsPerUnit",get_referencePixelsPerUnit,set_referencePixelsPerUnit,true);
@@ -517,12 +516,13 @@ public class Lua_UnityEngine_Canvas : LuaObject {
 		addMember(l,"overrideSorting",get_overrideSorting,set_overrideSorting,true);
 		addMember(l,"sortingOrder",get_sortingOrder,set_sortingOrder,true);
 		addMember(l,"targetDisplay",get_targetDisplay,set_targetDisplay,true);
-		addMember(l,"normalizedSortingGridSize",get_normalizedSortingGridSize,set_normalizedSortingGridSize,true);
 		addMember(l,"sortingLayerID",get_sortingLayerID,set_sortingLayerID,true);
 		addMember(l,"cachedSortingLayerValue",get_cachedSortingLayerValue,null,true);
 		addMember(l,"additionalShaderChannels",get_additionalShaderChannels,set_additionalShaderChannels,true);
 		addMember(l,"sortingLayerName",get_sortingLayerName,set_sortingLayerName,true);
 		addMember(l,"rootCanvas",get_rootCanvas,null,true);
+		addMember(l,"worldCamera",get_worldCamera,set_worldCamera,true);
+		addMember(l,"normalizedSortingGridSize",get_normalizedSortingGridSize,set_normalizedSortingGridSize,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.Canvas),typeof(UnityEngine.Behaviour));
 	}
 }

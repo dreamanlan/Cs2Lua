@@ -94,21 +94,21 @@ public class Lua_UnityEngine_Rendering_SphericalHarmonicsL2 : LuaObject {
 	static public int op_Multiply(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,1,typeof(UnityEngine.Rendering.SphericalHarmonicsL2),typeof(float))){
+			if(matchType(l, "op_Multiply__SphericalHarmonicsL2__Single", argc, 1,typeof(UnityEngine.Rendering.SphericalHarmonicsL2),typeof(float))){
 				UnityEngine.Rendering.SphericalHarmonicsL2 a1;
-				checkValueType(l,1,out a1);
+				checkValueType(l,2,out a1);
 				System.Single a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				var ret=a1*a2;
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,1,typeof(float),typeof(UnityEngine.Rendering.SphericalHarmonicsL2))){
+			else if(matchType(l, "op_Multiply__Single__SphericalHarmonicsL2", argc, 1,typeof(float),typeof(UnityEngine.Rendering.SphericalHarmonicsL2))){
 				System.Single a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Rendering.SphericalHarmonicsL2 a2;
-				checkValueType(l,2,out a2);
+				checkValueType(l,3,out a2);
 				var ret=a1*a2;
 				pushValue(l,true);
 				pushValue(l,ret);

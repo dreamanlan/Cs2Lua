@@ -5,6 +5,19 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_RectTransform : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int ForceUpdateRectTransforms(IntPtr l) {
+		try {
+			UnityEngine.RectTransform self=(UnityEngine.RectTransform)checkSelf(l);
+			self.ForceUpdateRectTransforms();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetLocalCorners(IntPtr l) {
 		try {
 			UnityEngine.RectTransform self=(UnityEngine.RectTransform)checkSelf(l);
@@ -62,19 +75,6 @@ public class Lua_UnityEngine_RectTransform : LuaObject {
 			System.Single a2;
 			checkType(l,3,out a2);
 			self.SetSizeWithCurrentAnchors(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int ForceUpdateRectTransforms(IntPtr l) {
-		try {
-			UnityEngine.RectTransform self=(UnityEngine.RectTransform)checkSelf(l);
-			self.ForceUpdateRectTransforms();
 			pushValue(l,true);
 			return 1;
 		}
@@ -144,34 +144,6 @@ public class Lua_UnityEngine_RectTransform : LuaObject {
 			UnityEngine.Vector2 v;
 			checkType(l,2,out v);
 			self.anchorMax=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_anchoredPosition3D(IntPtr l) {
-		try {
-			UnityEngine.RectTransform self=(UnityEngine.RectTransform)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.anchoredPosition3D);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_anchoredPosition3D(IntPtr l) {
-		try {
-			UnityEngine.RectTransform self=(UnityEngine.RectTransform)checkSelf(l);
-			UnityEngine.Vector3 v;
-			checkType(l,2,out v);
-			self.anchoredPosition3D=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -265,6 +237,34 @@ public class Lua_UnityEngine_RectTransform : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_anchoredPosition3D(IntPtr l) {
+		try {
+			UnityEngine.RectTransform self=(UnityEngine.RectTransform)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.anchoredPosition3D);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_anchoredPosition3D(IntPtr l) {
+		try {
+			UnityEngine.RectTransform self=(UnityEngine.RectTransform)checkSelf(l);
+			UnityEngine.Vector3 v;
+			checkType(l,2,out v);
+			self.anchoredPosition3D=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_offsetMin(IntPtr l) {
 		try {
 			UnityEngine.RectTransform self=(UnityEngine.RectTransform)checkSelf(l);
@@ -322,18 +322,18 @@ public class Lua_UnityEngine_RectTransform : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.RectTransform");
+		addMember(l,ForceUpdateRectTransforms);
 		addMember(l,GetLocalCorners);
 		addMember(l,GetWorldCorners);
 		addMember(l,SetInsetAndSizeFromParentEdge);
 		addMember(l,SetSizeWithCurrentAnchors);
-		addMember(l,ForceUpdateRectTransforms);
 		addMember(l,"rect",get_rect,null,true);
 		addMember(l,"anchorMin",get_anchorMin,set_anchorMin,true);
 		addMember(l,"anchorMax",get_anchorMax,set_anchorMax,true);
-		addMember(l,"anchoredPosition3D",get_anchoredPosition3D,set_anchoredPosition3D,true);
 		addMember(l,"anchoredPosition",get_anchoredPosition,set_anchoredPosition,true);
 		addMember(l,"sizeDelta",get_sizeDelta,set_sizeDelta,true);
 		addMember(l,"pivot",get_pivot,set_pivot,true);
+		addMember(l,"anchoredPosition3D",get_anchoredPosition3D,set_anchoredPosition3D,true);
 		addMember(l,"offsetMin",get_offsetMin,set_offsetMin,true);
 		addMember(l,"offsetMax",get_offsetMax,set_offsetMax,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.RectTransform),typeof(UnityEngine.Transform));

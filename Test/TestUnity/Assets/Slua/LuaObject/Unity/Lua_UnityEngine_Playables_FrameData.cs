@@ -171,6 +171,34 @@ public class Lua_UnityEngine_Playables_FrameData : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_output(IntPtr l) {
+		try {
+			UnityEngine.Playables.FrameData self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.output);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_effectivePlayState(IntPtr l) {
+		try {
+			UnityEngine.Playables.FrameData self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushEnum(l,(int)self.effectivePlayState);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Playables.FrameData");
@@ -185,6 +213,8 @@ public class Lua_UnityEngine_Playables_FrameData : LuaObject {
 		addMember(l,"seekOccurred",get_seekOccurred,null,true);
 		addMember(l,"timeLooped",get_timeLooped,null,true);
 		addMember(l,"timeHeld",get_timeHeld,null,true);
+		addMember(l,"output",get_output,null,true);
+		addMember(l,"effectivePlayState",get_effectivePlayState,null,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.Playables.FrameData),typeof(System.ValueType));
 	}
 }

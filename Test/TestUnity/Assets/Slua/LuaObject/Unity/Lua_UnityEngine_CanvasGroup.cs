@@ -141,6 +141,6 @@ public class Lua_UnityEngine_CanvasGroup : LuaObject {
 		addMember(l,"interactable",get_interactable,set_interactable,true);
 		addMember(l,"blocksRaycasts",get_blocksRaycasts,set_blocksRaycasts,true);
 		addMember(l,"ignoreParentGroups",get_ignoreParentGroups,set_ignoreParentGroups,true);
-		createTypeMetatable(l,null, typeof(UnityEngine.CanvasGroup),typeof(UnityEngine.Component));
+		createTypeMetatable(l,null, typeof(UnityEngine.CanvasGroup),typeof(UnityEngine.Behaviour));
 	}
 }

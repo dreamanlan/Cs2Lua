@@ -22,35 +22,35 @@ public class Lua_UnityEngine_GeometryUtility : LuaObject {
 	static public int CalculateFrustumPlanes_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,1,typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Plane[]))){
-				UnityEngine.Matrix4x4 a1;
-				checkValueType(l,1,out a1);
-				UnityEngine.Plane[] a2;
-				checkArray(l,2,out a2);
-				UnityEngine.GeometryUtility.CalculateFrustumPlanes(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l,argc,1,typeof(UnityEngine.Camera),typeof(UnityEngine.Plane[]))){
+			if(matchType(l, "CalculateFrustumPlanes__Camera__Arr_Plane", argc, 1,typeof(UnityEngine.Camera),typeof(UnityEngine.Plane[]))){
 				UnityEngine.Camera a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Plane[] a2;
-				checkArray(l,2,out a2);
+				checkArray(l,3,out a2);
 				UnityEngine.GeometryUtility.CalculateFrustumPlanes(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l,argc,1,typeof(UnityEngine.Matrix4x4))){
+			else if(matchType(l, "CalculateFrustumPlanes__Matrix4x4__Arr_Plane", argc, 1,typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Plane[]))){
 				UnityEngine.Matrix4x4 a1;
-				checkValueType(l,1,out a1);
+				checkValueType(l,2,out a1);
+				UnityEngine.Plane[] a2;
+				checkArray(l,3,out a2);
+				UnityEngine.GeometryUtility.CalculateFrustumPlanes(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l, "CalculateFrustumPlanes__Camera", argc, 1,typeof(UnityEngine.Camera))){
+				UnityEngine.Camera a1;
+				checkType(l,2,out a1);
 				var ret=UnityEngine.GeometryUtility.CalculateFrustumPlanes(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l,argc,1,typeof(UnityEngine.Camera))){
-				UnityEngine.Camera a1;
-				checkType(l,1,out a1);
+			else if(matchType(l, "CalculateFrustumPlanes__Matrix4x4", argc, 1,typeof(UnityEngine.Matrix4x4))){
+				UnityEngine.Matrix4x4 a1;
+				checkValueType(l,2,out a1);
 				var ret=UnityEngine.GeometryUtility.CalculateFrustumPlanes(a1);
 				pushValue(l,true);
 				pushValue(l,ret);

@@ -9,23 +9,23 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			System.Collections.Generic.List<System.Int32> o;
-			if(matchType(l,argc,2,typeof(int))){
+			if(matchType(l, "ctor__Int32", argc, 2,typeof(int))){
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				o=new System.Collections.Generic.List<System.Int32>(a1);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(IEnumerable<System.Int32>))){
+			else if(matchType(l, "ctor__IEnumerable`1_Int32", argc, 2,typeof(IEnumerable<System.Int32>))){
 				System.Collections.Generic.IEnumerable<System.Int32> a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				o=new System.Collections.Generic.List<System.Int32>(a1);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==1){
+			else if(argc==2){
 				o=new System.Collections.Generic.List<System.Int32>();
 				pushValue(l,true);
 				pushValue(l,o);
@@ -86,17 +86,28 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 	static public int BinarySearch(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
+			if(argc==6){
 				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Int32 a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				System.Collections.Generic.IComparer<System.Int32> a4;
-				checkType(l,5,out a4);
+				checkType(l,6,out a4);
 				var ret=self.BinarySearch(a1,a2,a3,a4);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==4){
+				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
+				System.Int32 a1;
+				checkType(l,3,out a1);
+				System.Collections.Generic.IComparer<System.Int32> a2;
+				checkType(l,4,out a2);
+				var ret=self.BinarySearch(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -104,18 +115,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 			else if(argc==3){
 				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
 				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Collections.Generic.IComparer<System.Int32> a2;
-				checkType(l,3,out a2);
-				var ret=self.BinarySearch(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				var ret=self.BinarySearch(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
@@ -163,34 +163,34 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 	static public int CopyTo(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
+			if(argc==6){
 				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32[] a2;
-				checkArray(l,3,out a2);
+				checkArray(l,4,out a2);
 				System.Int32 a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				System.Int32 a4;
-				checkType(l,5,out a4);
+				checkType(l,6,out a4);
 				self.CopyTo(a1,a2,a3,a4);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==4){
+				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
+				System.Int32[] a1;
+				checkArray(l,3,out a1);
+				System.Int32 a2;
+				checkType(l,4,out a2);
+				self.CopyTo(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
 			else if(argc==3){
 				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
 				System.Int32[] a1;
-				checkArray(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				self.CopyTo(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
-				System.Int32[] a1;
-				checkArray(l,2,out a1);
+				checkArray(l,3,out a1);
 				self.CopyTo(a1);
 				pushValue(l,true);
 				return 1;
@@ -256,34 +256,34 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 	static public int FindIndex(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
+			if(argc==5){
 				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Predicate<System.Int32> a3;
-				LuaDelegation.checkDelegate(l,4,out a3);
+				LuaDelegation.checkDelegate(l,5,out a3);
 				var ret=self.FindIndex(a1,a2,a3);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==4){
+				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
+				System.Int32 a1;
+				checkType(l,3,out a1);
+				System.Predicate<System.Int32> a2;
+				LuaDelegation.checkDelegate(l,4,out a2);
+				var ret=self.FindIndex(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
 			else if(argc==3){
 				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Predicate<System.Int32> a2;
-				LuaDelegation.checkDelegate(l,3,out a2);
-				var ret=self.FindIndex(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
 				System.Predicate<System.Int32> a1;
-				LuaDelegation.checkDelegate(l,2,out a1);
+				LuaDelegation.checkDelegate(l,3,out a1);
 				var ret=self.FindIndex(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
@@ -318,34 +318,34 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 	static public int FindLastIndex(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
+			if(argc==5){
 				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Predicate<System.Int32> a3;
-				LuaDelegation.checkDelegate(l,4,out a3);
+				LuaDelegation.checkDelegate(l,5,out a3);
 				var ret=self.FindLastIndex(a1,a2,a3);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==4){
+				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
+				System.Int32 a1;
+				checkType(l,3,out a1);
+				System.Predicate<System.Int32> a2;
+				LuaDelegation.checkDelegate(l,4,out a2);
+				var ret=self.FindLastIndex(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
 			}
 			else if(argc==3){
 				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Predicate<System.Int32> a2;
-				LuaDelegation.checkDelegate(l,3,out a2);
-				var ret=self.FindLastIndex(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
 				System.Predicate<System.Int32> a1;
-				LuaDelegation.checkDelegate(l,2,out a1);
+				LuaDelegation.checkDelegate(l,3,out a1);
 				var ret=self.FindLastIndex(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
@@ -397,15 +397,26 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 	static public int IndexOf(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
+			if(argc==5){
 				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Int32 a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				var ret=self.IndexOf(a1,a2,a3);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==4){
+				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
+				System.Int32 a1;
+				checkType(l,3,out a1);
+				System.Int32 a2;
+				checkType(l,4,out a2);
+				var ret=self.IndexOf(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -413,18 +424,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 			else if(argc==3){
 				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
 				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				var ret=self.IndexOf(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				var ret=self.IndexOf(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
@@ -477,15 +477,26 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 	static public int LastIndexOf(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
+			if(argc==5){
 				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Int32 a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				var ret=self.LastIndexOf(a1,a2,a3);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==4){
+				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
+				System.Int32 a1;
+				checkType(l,3,out a1);
+				System.Int32 a2;
+				checkType(l,4,out a2);
+				var ret=self.LastIndexOf(a1,a2);
 				pushValue(l,true);
 				pushValue(l,ret);
 				return 2;
@@ -493,18 +504,7 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 			else if(argc==3){
 				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
 				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				var ret=self.LastIndexOf(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				var ret=self.LastIndexOf(a1);
 				pushValue(l,true);
 				pushValue(l,ret);
@@ -587,17 +587,17 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 	static public int Reverse(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
+			if(argc==4){
 				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				self.Reverse(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==1){
+			else if(argc==2){
 				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
 				self.Reverse();
 				pushValue(l,true);
@@ -616,35 +616,35 @@ public class Lua_System_Collections_Generic_List_1_int : LuaObject {
 	static public int Sort(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
+			if(argc==5){
 				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Collections.Generic.IComparer<System.Int32> a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				self.Sort(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l,argc,2,typeof(IComparer<System.Int32>))){
+			else if(matchType(l, "Sort__IComparer`1_Int32", argc, 2,typeof(IComparer<System.Int32>))){
 				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
 				System.Collections.Generic.IComparer<System.Int32> a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				self.Sort(a1);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l,argc,2,typeof(System.Comparison<System.Int32>))){
+			else if(matchType(l, "Sort__Comparison`1_Int32", argc, 2,typeof(System.Comparison<System.Int32>))){
 				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
 				System.Comparison<System.Int32> a1;
-				LuaDelegation.checkDelegate(l,2,out a1);
+				LuaDelegation.checkDelegate(l,3,out a1);
 				self.Sort(a1);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==1){
+			else if(argc==2){
 				System.Collections.Generic.List<System.Int32> self=(System.Collections.Generic.List<System.Int32>)checkSelf(l);
 				self.Sort();
 				pushValue(l,true);

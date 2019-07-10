@@ -111,6 +111,7 @@ namespace SLua {
 				Lua_UnityEngine_UI_LayoutUtility.reg,
 				Lua_UnityEngine_UI_VerticalLayoutGroup.reg,
 				Lua_UnityEngine_UI_VertexHelper.reg,
+				Lua_UnityEngine_Experimental_UI_VertexHelperExtension.reg,
 				Lua_UnityEngine_UI_BaseMeshEffect.reg,
 				Lua_UnityEngine_UI_Shadow.reg,
 				Lua_UnityEngine_UI_Outline.reg,

@@ -5,20 +5,6 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_UISystemProfilerApi : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
-		try {
-			UnityEngine.UISystemProfilerApi o;
-			o=new UnityEngine.UISystemProfilerApi();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int BeginSample_s(IntPtr l) {
 		try {
 			UnityEngine.UISystemProfilerApi.SampleType a1;
@@ -67,6 +53,6 @@ public class Lua_UnityEngine_UISystemProfilerApi : LuaObject {
 		addMember(l,BeginSample_s);
 		addMember(l,EndSample_s);
 		addMember(l,AddMarker_s);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.UISystemProfilerApi));
+		createTypeMetatable(l,null, typeof(UnityEngine.UISystemProfilerApi));
 	}
 }

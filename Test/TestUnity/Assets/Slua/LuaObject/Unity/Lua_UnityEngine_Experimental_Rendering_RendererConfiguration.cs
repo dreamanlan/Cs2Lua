@@ -13,6 +13,10 @@ public class Lua_UnityEngine_Experimental_Rendering_RendererConfiguration : LuaO
 		addMember(l,16,"ProvideLightIndices");
 		addMember(l,32,"PerObjectMotionVectors");
 		addMember(l,64,"PerObjectLightIndices8");
+		addMember(l,128,"ProvideReflectionProbeIndices");
+		addMember(l,256,"PerObjectOcclusionProbe");
+		addMember(l,512,"PerObjectOcclusionProbeProxyVolume");
+		addMember(l,1024,"PerObjectShadowMask");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

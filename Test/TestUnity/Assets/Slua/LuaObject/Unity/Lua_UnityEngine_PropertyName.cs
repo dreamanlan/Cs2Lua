@@ -9,25 +9,25 @@ public class Lua_UnityEngine_PropertyName : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.PropertyName o;
-			if(matchType(l,argc,2,typeof(int))){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				o=new UnityEngine.PropertyName(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l,argc,2,typeof(UnityEngine.PropertyName))){
-				UnityEngine.PropertyName a1;
-				checkValueType(l,2,out a1);
-				o=new UnityEngine.PropertyName(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l,argc,2,typeof(string))){
+			if(matchType(l, "ctor__String", argc, 2,typeof(string))){
 				System.String a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
+				o=new UnityEngine.PropertyName(a1);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(matchType(l, "ctor__PropertyName", argc, 2,typeof(UnityEngine.PropertyName))){
+				UnityEngine.PropertyName a1;
+				checkValueType(l,3,out a1);
+				o=new UnityEngine.PropertyName(a1);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(matchType(l, "ctor__Int32", argc, 2,typeof(int))){
+				System.Int32 a1;
+				checkType(l,3,out a1);
 				o=new UnityEngine.PropertyName(a1);
 				pushValue(l,true);
 				pushValue(l,o);

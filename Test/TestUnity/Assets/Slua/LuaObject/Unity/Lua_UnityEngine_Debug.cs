@@ -22,50 +22,50 @@ public class Lua_UnityEngine_Debug : LuaObject {
 	static public int DrawLine_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
+			if(argc==6){
 				UnityEngine.Vector3 a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				UnityEngine.Color a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				System.Single a4;
-				checkType(l,4,out a4);
+				checkType(l,5,out a4);
 				System.Boolean a5;
-				checkType(l,5,out a5);
+				checkType(l,6,out a5);
 				UnityEngine.Debug.DrawLine(a1,a2,a3,a4,a5);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==5){
+				UnityEngine.Vector3 a1;
+				checkType(l,2,out a1);
+				UnityEngine.Vector3 a2;
+				checkType(l,3,out a2);
+				UnityEngine.Color a3;
+				checkType(l,4,out a3);
+				System.Single a4;
+				checkType(l,5,out a4);
+				UnityEngine.Debug.DrawLine(a1,a2,a3,a4);
 				pushValue(l,true);
 				return 1;
 			}
 			else if(argc==4){
 				UnityEngine.Vector3 a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				UnityEngine.Color a3;
-				checkType(l,3,out a3);
-				System.Single a4;
-				checkType(l,4,out a4);
-				UnityEngine.Debug.DrawLine(a1,a2,a3,a4);
+				checkType(l,4,out a3);
+				UnityEngine.Debug.DrawLine(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
 			else if(argc==3){
 				UnityEngine.Vector3 a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
-				checkType(l,2,out a2);
-				UnityEngine.Color a3;
-				checkType(l,3,out a3);
-				UnityEngine.Debug.DrawLine(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.Vector3 a1;
-				checkType(l,1,out a1);
-				UnityEngine.Vector3 a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				UnityEngine.Debug.DrawLine(a1,a2);
 				pushValue(l,true);
 				return 1;
@@ -83,50 +83,50 @@ public class Lua_UnityEngine_Debug : LuaObject {
 	static public int DrawRay_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
+			if(argc==6){
 				UnityEngine.Vector3 a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				UnityEngine.Color a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				System.Single a4;
-				checkType(l,4,out a4);
+				checkType(l,5,out a4);
 				System.Boolean a5;
-				checkType(l,5,out a5);
+				checkType(l,6,out a5);
 				UnityEngine.Debug.DrawRay(a1,a2,a3,a4,a5);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==5){
+				UnityEngine.Vector3 a1;
+				checkType(l,2,out a1);
+				UnityEngine.Vector3 a2;
+				checkType(l,3,out a2);
+				UnityEngine.Color a3;
+				checkType(l,4,out a3);
+				System.Single a4;
+				checkType(l,5,out a4);
+				UnityEngine.Debug.DrawRay(a1,a2,a3,a4);
 				pushValue(l,true);
 				return 1;
 			}
 			else if(argc==4){
 				UnityEngine.Vector3 a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				UnityEngine.Color a3;
-				checkType(l,3,out a3);
-				System.Single a4;
-				checkType(l,4,out a4);
-				UnityEngine.Debug.DrawRay(a1,a2,a3,a4);
+				checkType(l,4,out a3);
+				UnityEngine.Debug.DrawRay(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
 			else if(argc==3){
 				UnityEngine.Vector3 a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
-				checkType(l,2,out a2);
-				UnityEngine.Color a3;
-				checkType(l,3,out a3);
-				UnityEngine.Debug.DrawRay(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.Vector3 a1;
-				checkType(l,1,out a1);
-				UnityEngine.Vector3 a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				UnityEngine.Debug.DrawRay(a1,a2);
 				pushValue(l,true);
 				return 1;
@@ -168,18 +168,18 @@ public class Lua_UnityEngine_Debug : LuaObject {
 	static public int Log_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==3){
 				System.Object a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Object a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				UnityEngine.Debug.Log(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==1){
+			else if(argc==2){
 				System.Object a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Debug.Log(a1);
 				pushValue(l,true);
 				return 1;
@@ -197,22 +197,22 @@ public class Lua_UnityEngine_Debug : LuaObject {
 	static public int LogFormat_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc>=3){
+			if(argc>=4){
 				UnityEngine.Object a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.String a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.Object[] a3;
-				checkParams(l,3,out a3);
+				checkParams(l,4,out a3);
 				UnityEngine.Debug.LogFormat(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc>=2){
+			else if(argc>=3){
 				System.String a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Object[] a2;
-				checkParams(l,2,out a2);
+				checkParams(l,3,out a2);
 				UnityEngine.Debug.LogFormat(a1,a2);
 				pushValue(l,true);
 				return 1;
@@ -230,18 +230,18 @@ public class Lua_UnityEngine_Debug : LuaObject {
 	static public int LogError_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==3){
 				System.Object a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Object a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				UnityEngine.Debug.LogError(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==1){
+			else if(argc==2){
 				System.Object a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Debug.LogError(a1);
 				pushValue(l,true);
 				return 1;
@@ -259,22 +259,22 @@ public class Lua_UnityEngine_Debug : LuaObject {
 	static public int LogErrorFormat_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc>=3){
+			if(argc>=4){
 				UnityEngine.Object a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.String a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.Object[] a3;
-				checkParams(l,3,out a3);
+				checkParams(l,4,out a3);
 				UnityEngine.Debug.LogErrorFormat(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc>=2){
+			else if(argc>=3){
 				System.String a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Object[] a2;
-				checkParams(l,2,out a2);
+				checkParams(l,3,out a2);
 				UnityEngine.Debug.LogErrorFormat(a1,a2);
 				pushValue(l,true);
 				return 1;
@@ -304,18 +304,18 @@ public class Lua_UnityEngine_Debug : LuaObject {
 	static public int LogException_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==3){
 				System.Exception a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Object a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				UnityEngine.Debug.LogException(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==1){
+			else if(argc==2){
 				System.Exception a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Debug.LogException(a1);
 				pushValue(l,true);
 				return 1;
@@ -333,18 +333,18 @@ public class Lua_UnityEngine_Debug : LuaObject {
 	static public int LogWarning_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==3){
 				System.Object a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Object a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				UnityEngine.Debug.LogWarning(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==1){
+			else if(argc==2){
 				System.Object a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Debug.LogWarning(a1);
 				pushValue(l,true);
 				return 1;
@@ -362,22 +362,22 @@ public class Lua_UnityEngine_Debug : LuaObject {
 	static public int LogWarningFormat_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc>=3){
+			if(argc>=4){
 				UnityEngine.Object a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.String a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.Object[] a3;
-				checkParams(l,3,out a3);
+				checkParams(l,4,out a3);
 				UnityEngine.Debug.LogWarningFormat(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc>=2){
+			else if(argc>=3){
 				System.String a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Object[] a2;
-				checkParams(l,2,out a2);
+				checkParams(l,3,out a2);
 				UnityEngine.Debug.LogWarningFormat(a1,a2);
 				pushValue(l,true);
 				return 1;
@@ -395,58 +395,58 @@ public class Lua_UnityEngine_Debug : LuaObject {
 	static public int Assert_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l,argc,1,typeof(bool),typeof(string),typeof(UnityEngine.Object))){
+			if(matchType(l, "Assert__Boolean__Object__Object", argc, 1,typeof(bool),typeof(System.Object),typeof(UnityEngine.Object))){
 				System.Boolean a1;
-				checkType(l,1,out a1);
-				System.String a2;
-				checkType(l,2,out a2);
-				UnityEngine.Object a3;
-				checkType(l,3,out a3);
-				UnityEngine.Debug.Assert(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l,argc,1,typeof(bool),typeof(System.Object),typeof(UnityEngine.Object))){
-				System.Boolean a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Object a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				UnityEngine.Object a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				UnityEngine.Debug.Assert(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l,argc,1,typeof(bool),typeof(UnityEngine.Object))){
+			else if(matchType(l, "Assert__Boolean__String__Object", argc, 1,typeof(bool),typeof(string),typeof(UnityEngine.Object))){
 				System.Boolean a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
+				System.String a2;
+				checkType(l,3,out a2);
+				UnityEngine.Object a3;
+				checkType(l,4,out a3);
+				UnityEngine.Debug.Assert(a1,a2,a3);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(matchType(l, "Assert__Boolean__Object", argc, 1,typeof(bool),typeof(UnityEngine.Object))){
+				System.Boolean a1;
+				checkType(l,2,out a1);
 				UnityEngine.Object a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				UnityEngine.Debug.Assert(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l,argc,1,typeof(bool),typeof(string))){
+			else if(matchType(l, "Assert__Boolean__Object", argc, 1,typeof(bool),typeof(System.Object))){
 				System.Boolean a1;
-				checkType(l,1,out a1);
-				System.String a2;
-				checkType(l,2,out a2);
-				UnityEngine.Debug.Assert(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l,argc,1,typeof(bool),typeof(System.Object))){
-				System.Boolean a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Object a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				UnityEngine.Debug.Assert(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==1){
+			else if(matchType(l, "Assert__Boolean__String", argc, 1,typeof(bool),typeof(string))){
 				System.Boolean a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
+				System.String a2;
+				checkType(l,3,out a2);
+				UnityEngine.Debug.Assert(a1,a2);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==2){
+				System.Boolean a1;
+				checkType(l,2,out a1);
 				UnityEngine.Debug.Assert(a1);
 				pushValue(l,true);
 				return 1;
@@ -464,26 +464,26 @@ public class Lua_UnityEngine_Debug : LuaObject {
 	static public int AssertFormat_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc>=4){
+			if(argc>=5){
 				System.Boolean a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Object a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.String a3;
-				checkType(l,3,out a3);
+				checkType(l,4,out a3);
 				System.Object[] a4;
-				checkParams(l,4,out a4);
+				checkParams(l,5,out a4);
 				UnityEngine.Debug.AssertFormat(a1,a2,a3,a4);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc>=3){
+			else if(argc>=4){
 				System.Boolean a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.String a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.Object[] a3;
-				checkParams(l,3,out a3);
+				checkParams(l,4,out a3);
 				UnityEngine.Debug.AssertFormat(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
@@ -501,18 +501,18 @@ public class Lua_UnityEngine_Debug : LuaObject {
 	static public int LogAssertion_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==3){
 				System.Object a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Object a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				UnityEngine.Debug.LogAssertion(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==1){
+			else if(argc==2){
 				System.Object a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.Debug.LogAssertion(a1);
 				pushValue(l,true);
 				return 1;
@@ -530,22 +530,22 @@ public class Lua_UnityEngine_Debug : LuaObject {
 	static public int LogAssertionFormat_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc>=3){
+			if(argc>=4){
 				UnityEngine.Object a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.String a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				System.Object[] a3;
-				checkParams(l,3,out a3);
+				checkParams(l,4,out a3);
 				UnityEngine.Debug.LogAssertionFormat(a1,a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc>=2){
+			else if(argc>=3){
 				System.String a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				System.Object[] a2;
-				checkParams(l,2,out a2);
+				checkParams(l,3,out a2);
 				UnityEngine.Debug.LogAssertionFormat(a1,a2);
 				pushValue(l,true);
 				return 1;

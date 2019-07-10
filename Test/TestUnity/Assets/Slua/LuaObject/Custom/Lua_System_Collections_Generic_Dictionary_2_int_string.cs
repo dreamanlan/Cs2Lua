@@ -9,51 +9,33 @@ public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject 
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			System.Collections.Generic.Dictionary<System.Int32,System.String> o;
-			if(matchType(l,argc,2,typeof(IDictionary<System.Int32,System.String>),typeof(IEqualityComparer<System.Int32>))){
-				System.Collections.Generic.IDictionary<System.Int32,System.String> a1;
-				checkType(l,2,out a1);
+			if(matchType(l, "ctor__Int32__IEqualityComparer`1_Int32", argc, 2,typeof(int),typeof(IEqualityComparer<System.Int32>))){
+				System.Int32 a1;
+				checkType(l,3,out a1);
 				System.Collections.Generic.IEqualityComparer<System.Int32> a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				o=new System.Collections.Generic.Dictionary<System.Int32,System.String>(a1,a2);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(int),typeof(IEqualityComparer<System.Int32>))){
+			else if(matchType(l, "ctor__Int32", argc, 2,typeof(int))){
 				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Collections.Generic.IEqualityComparer<System.Int32> a2;
-				checkType(l,3,out a2);
-				o=new System.Collections.Generic.Dictionary<System.Int32,System.String>(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l,argc,2,typeof(int))){
-				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				o=new System.Collections.Generic.Dictionary<System.Int32,System.String>(a1);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(IEqualityComparer<System.Int32>))){
+			else if(matchType(l, "ctor__IEqualityComparer`1_Int32", argc, 2,typeof(IEqualityComparer<System.Int32>))){
 				System.Collections.Generic.IEqualityComparer<System.Int32> a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				o=new System.Collections.Generic.Dictionary<System.Int32,System.String>(a1);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l,argc,2,typeof(IDictionary<System.Int32,System.String>))){
-				System.Collections.Generic.IDictionary<System.Int32,System.String> a1;
-				checkType(l,2,out a1);
-				o=new System.Collections.Generic.Dictionary<System.Int32,System.String>(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==1){
+			else if(argc==2){
 				o=new System.Collections.Generic.Dictionary<System.Int32,System.String>();
 				pushValue(l,true);
 				pushValue(l,o);
@@ -195,11 +177,11 @@ public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject 
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_Count(IntPtr l) {
+	static public int get_Comparer(IntPtr l) {
 		try {
 			System.Collections.Generic.Dictionary<System.Int32,System.String> self=(System.Collections.Generic.Dictionary<System.Int32,System.String>)checkSelf(l);
 			pushValue(l,true);
-			pushValue(l,self.Count);
+			pushValue(l,self.Comparer);
 			return 2;
 		}
 		catch(Exception e) {
@@ -208,11 +190,11 @@ public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject 
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_Comparer(IntPtr l) {
+	static public int get_Count(IntPtr l) {
 		try {
 			System.Collections.Generic.Dictionary<System.Int32,System.String> self=(System.Collections.Generic.Dictionary<System.Int32,System.String>)checkSelf(l);
 			pushValue(l,true);
-			pushValue(l,self.Comparer);
+			pushValue(l,self.Count);
 			return 2;
 		}
 		catch(Exception e) {
@@ -291,8 +273,8 @@ public class Lua_System_Collections_Generic_Dictionary_2_int_string : LuaObject 
 		addMember(l,TryGetValue);
 		addMember(l,getItem);
 		addMember(l,setItem);
-		addMember(l,"Count",get_Count,null,true);
 		addMember(l,"Comparer",get_Comparer,null,true);
+		addMember(l,"Count",get_Count,null,true);
 		addMember(l,"Keys",get_Keys,null,true);
 		addMember(l,"Values",get_Values,null,true);
 		createTypeMetatable(l,constructor, typeof(System.Collections.Generic.Dictionary<System.Int32,System.String>));

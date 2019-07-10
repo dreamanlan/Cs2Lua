@@ -9,25 +9,25 @@ public class Lua_UnityEngine_RectInt : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.RectInt o;
-			if(argc==5){
+			if(argc==6){
 				System.Int32 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Int32 a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Int32 a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				System.Int32 a4;
-				checkType(l,5,out a4);
+				checkType(l,6,out a4);
 				o=new UnityEngine.RectInt(a1,a2,a3,a4);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==3){
+			else if(argc==4){
 				UnityEngine.Vector2Int a1;
-				checkValueType(l,2,out a1);
+				checkValueType(l,3,out a1);
 				UnityEngine.Vector2Int a2;
-				checkValueType(l,3,out a2);
+				checkValueType(l,4,out a2);
 				o=new UnityEngine.RectInt(a1,a2);
 				pushValue(l,true);
 				pushValue(l,o);

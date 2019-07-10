@@ -175,32 +175,32 @@ public class Lua_UnityEngine_UI_Graphic : LuaObject {
 	static public int CrossFadeColor(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==6){
+			if(argc==7){
 				UnityEngine.UI.Graphic self=(UnityEngine.UI.Graphic)checkSelf(l);
 				UnityEngine.Color a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Single a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Boolean a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				System.Boolean a4;
-				checkType(l,5,out a4);
+				checkType(l,6,out a4);
 				System.Boolean a5;
-				checkType(l,6,out a5);
+				checkType(l,7,out a5);
 				self.CrossFadeColor(a1,a2,a3,a4,a5);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==5){
+			else if(argc==6){
 				UnityEngine.UI.Graphic self=(UnityEngine.UI.Graphic)checkSelf(l);
 				UnityEngine.Color a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Single a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				System.Boolean a3;
-				checkType(l,4,out a3);
+				checkType(l,5,out a3);
 				System.Boolean a4;
-				checkType(l,5,out a4);
+				checkType(l,6,out a4);
 				self.CrossFadeColor(a1,a2,a3,a4);
 				pushValue(l,true);
 				return 1;

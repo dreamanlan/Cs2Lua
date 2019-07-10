@@ -51,11 +51,24 @@ public class Lua_UnityEngine_Animations_AnimationMixerPlayable : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_Null(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Animations.AnimationMixerPlayable.Null);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Animations.AnimationMixerPlayable");
 		addMember(l,GetHandle);
 		addMember(l,Create_s);
+		addMember(l,"Null",get_Null,null,false);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.Animations.AnimationMixerPlayable),typeof(System.ValueType));
 	}
 }

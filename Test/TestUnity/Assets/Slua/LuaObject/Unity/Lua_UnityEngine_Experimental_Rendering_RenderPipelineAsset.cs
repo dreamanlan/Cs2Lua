@@ -46,10 +46,66 @@ public class Lua_UnityEngine_Experimental_Rendering_RenderPipelineAsset : LuaObj
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int GetRenderingLayerMaskNames(IntPtr l) {
+		try {
+			UnityEngine.Experimental.Rendering.RenderPipelineAsset self=(UnityEngine.Experimental.Rendering.RenderPipelineAsset)checkSelf(l);
+			var ret=self.GetRenderingLayerMaskNames();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetDefaultMaterial(IntPtr l) {
 		try {
 			UnityEngine.Experimental.Rendering.RenderPipelineAsset self=(UnityEngine.Experimental.Rendering.RenderPipelineAsset)checkSelf(l);
 			var ret=self.GetDefaultMaterial();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetAutodeskInteractiveShader(IntPtr l) {
+		try {
+			UnityEngine.Experimental.Rendering.RenderPipelineAsset self=(UnityEngine.Experimental.Rendering.RenderPipelineAsset)checkSelf(l);
+			var ret=self.GetAutodeskInteractiveShader();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetAutodeskInteractiveTransparentShader(IntPtr l) {
+		try {
+			UnityEngine.Experimental.Rendering.RenderPipelineAsset self=(UnityEngine.Experimental.Rendering.RenderPipelineAsset)checkSelf(l);
+			var ret=self.GetAutodeskInteractiveTransparentShader();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetAutodeskInteractiveMaskedShader(IntPtr l) {
+		try {
+			UnityEngine.Experimental.Rendering.RenderPipelineAsset self=(UnityEngine.Experimental.Rendering.RenderPipelineAsset)checkSelf(l);
+			var ret=self.GetAutodeskInteractiveMaskedShader();
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -176,7 +232,11 @@ public class Lua_UnityEngine_Experimental_Rendering_RenderPipelineAsset : LuaObj
 		addMember(l,DestroyCreatedInstances);
 		addMember(l,CreatePipeline);
 		addMember(l,GetTerrainBrushPassIndex);
+		addMember(l,GetRenderingLayerMaskNames);
 		addMember(l,GetDefaultMaterial);
+		addMember(l,GetAutodeskInteractiveShader);
+		addMember(l,GetAutodeskInteractiveTransparentShader);
+		addMember(l,GetAutodeskInteractiveMaskedShader);
 		addMember(l,GetDefaultParticleMaterial);
 		addMember(l,GetDefaultLineMaterial);
 		addMember(l,GetDefaultTerrainMaterial);

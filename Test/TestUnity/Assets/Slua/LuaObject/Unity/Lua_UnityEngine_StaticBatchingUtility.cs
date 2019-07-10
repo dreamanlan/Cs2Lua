@@ -22,18 +22,18 @@ public class Lua_UnityEngine_StaticBatchingUtility : LuaObject {
 	static public int Combine_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
+			if(argc==3){
 				UnityEngine.GameObject[] a1;
-				checkArray(l,1,out a1);
+				checkArray(l,2,out a1);
 				UnityEngine.GameObject a2;
-				checkType(l,2,out a2);
+				checkType(l,3,out a2);
 				UnityEngine.StaticBatchingUtility.Combine(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(argc==1){
+			else if(argc==2){
 				UnityEngine.GameObject a1;
-				checkType(l,1,out a1);
+				checkType(l,2,out a1);
 				UnityEngine.StaticBatchingUtility.Combine(a1);
 				pushValue(l,true);
 				return 1;

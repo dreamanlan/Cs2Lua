@@ -9,19 +9,19 @@ public class Lua_UnityEngine_BoundingSphere : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.BoundingSphere o;
-			if(argc==3){
+			if(argc==4){
 				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				System.Single a2;
-				checkType(l,3,out a2);
+				checkType(l,4,out a2);
 				o=new UnityEngine.BoundingSphere(a1,a2);
 				pushValue(l,true);
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc==2){
+			else if(argc==3){
 				UnityEngine.Vector4 a1;
-				checkType(l,2,out a1);
+				checkType(l,3,out a1);
 				o=new UnityEngine.BoundingSphere(a1);
 				pushValue(l,true);
 				pushValue(l,o);

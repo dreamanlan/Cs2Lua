@@ -53,34 +53,6 @@ public class Lua_UnityEngine_SkinnedMeshRenderer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_bones(IntPtr l) {
-		try {
-			UnityEngine.SkinnedMeshRenderer self=(UnityEngine.SkinnedMeshRenderer)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.bones);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_bones(IntPtr l) {
-		try {
-			UnityEngine.SkinnedMeshRenderer self=(UnityEngine.SkinnedMeshRenderer)checkSelf(l);
-			UnityEngine.Transform[] v;
-			checkArray(l,2,out v);
-			self.bones=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_quality(IntPtr l) {
 		try {
 			UnityEngine.SkinnedMeshRenderer self=(UnityEngine.SkinnedMeshRenderer)checkSelf(l);
@@ -137,6 +109,34 @@ public class Lua_UnityEngine_SkinnedMeshRenderer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_forceMatrixRecalculationPerRender(IntPtr l) {
+		try {
+			UnityEngine.SkinnedMeshRenderer self=(UnityEngine.SkinnedMeshRenderer)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.forceMatrixRecalculationPerRender);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_forceMatrixRecalculationPerRender(IntPtr l) {
+		try {
+			UnityEngine.SkinnedMeshRenderer self=(UnityEngine.SkinnedMeshRenderer)checkSelf(l);
+			bool v;
+			checkType(l,2,out v);
+			self.forceMatrixRecalculationPerRender=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_rootBone(IntPtr l) {
 		try {
 			UnityEngine.SkinnedMeshRenderer self=(UnityEngine.SkinnedMeshRenderer)checkSelf(l);
@@ -156,6 +156,34 @@ public class Lua_UnityEngine_SkinnedMeshRenderer : LuaObject {
 			UnityEngine.Transform v;
 			checkType(l,2,out v);
 			self.rootBone=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_bones(IntPtr l) {
+		try {
+			UnityEngine.SkinnedMeshRenderer self=(UnityEngine.SkinnedMeshRenderer)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.bones);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_bones(IntPtr l) {
+		try {
+			UnityEngine.SkinnedMeshRenderer self=(UnityEngine.SkinnedMeshRenderer)checkSelf(l);
+			UnityEngine.Transform[] v;
+			checkArray(l,2,out v);
+			self.bones=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -253,10 +281,11 @@ public class Lua_UnityEngine_SkinnedMeshRenderer : LuaObject {
 		addMember(l,GetBlendShapeWeight);
 		addMember(l,SetBlendShapeWeight);
 		addMember(l,BakeMesh);
-		addMember(l,"bones",get_bones,set_bones,true);
 		addMember(l,"quality",get_quality,set_quality,true);
 		addMember(l,"updateWhenOffscreen",get_updateWhenOffscreen,set_updateWhenOffscreen,true);
+		addMember(l,"forceMatrixRecalculationPerRender",get_forceMatrixRecalculationPerRender,set_forceMatrixRecalculationPerRender,true);
 		addMember(l,"rootBone",get_rootBone,set_rootBone,true);
+		addMember(l,"bones",get_bones,set_bones,true);
 		addMember(l,"sharedMesh",get_sharedMesh,set_sharedMesh,true);
 		addMember(l,"skinnedMotionVectors",get_skinnedMotionVectors,set_skinnedMotionVectors,true);
 		addMember(l,"localBounds",get_localBounds,set_localBounds,true);

@@ -741,6 +741,19 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_touchScreenKeyboard(IntPtr l) {
+		try {
+			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.touchScreenKeyboard);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_keyboardType(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -1092,6 +1105,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		addMember(l,"contentType",get_contentType,set_contentType,true);
 		addMember(l,"lineType",get_lineType,set_lineType,true);
 		addMember(l,"inputType",get_inputType,set_inputType,true);
+		addMember(l,"touchScreenKeyboard",get_touchScreenKeyboard,null,true);
 		addMember(l,"keyboardType",get_keyboardType,set_keyboardType,true);
 		addMember(l,"characterValidation",get_characterValidation,set_characterValidation,true);
 		addMember(l,"readOnly",get_readOnly,set_readOnly,true);
