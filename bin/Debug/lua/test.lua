@@ -170,3 +170,11 @@ for i=1,100000 do
 test(1,2,3);
 test(4,5,6);
 end;
+
+print();
+
+function forward(...)
+	return ...;
+end;
+
+print(forward(1,2,3));

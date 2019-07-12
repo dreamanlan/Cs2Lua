@@ -305,6 +305,13 @@ namespace Generator
                                     }
                                     sb.AppendLine(")");
                                     ++indent;
+                                    var logInfo = GetPrologueAndEpilogue(className, mname);
+                                    if (null != logInfo.PrologueInfo) {
+                                        sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.PrologueInfo, className, mname));
+                                    }
+                                    if (null != logInfo.EpilogueInfo) {
+                                        sb.AppendFormatLine("{0}return (function(...) local args={{...}}; {1}; return ...; end)((function() ", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
+                                    }
                                     foreach (var comp in fdef.Statements) {
                                         GenerateSyntaxComponent(comp, sb, indent, true);
                                         string subId = comp.GetId();
@@ -313,6 +320,9 @@ namespace Generator
                                         } else {
                                             sb.AppendLine();
                                         }
+                                    }
+                                    if (null != logInfo.EpilogueInfo) {
+                                        sb.AppendFormatLine("{0}end)());", GetIndentString(indent));
                                     }
                                     --indent;
                                     sb.AppendFormatLine("{0}end,", GetIndentString(indent));
@@ -445,6 +455,13 @@ namespace Generator
                                     }
                                     sb.AppendLine(")");
                                     ++indent;
+                                    var logInfo = GetPrologueAndEpilogue(className, mname);
+                                    if (null != logInfo.PrologueInfo) {
+                                        sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.PrologueInfo, className, mname));
+                                    }
+                                    if (null != logInfo.EpilogueInfo) {
+                                        sb.AppendFormatLine("{0}return (function(...) local args={{...}}; {1}; return ...; end)((function() ", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
+                                    }
                                     foreach (var comp in fdef.Statements) {
                                         GenerateSyntaxComponent(comp, sb, indent, true);
                                         string subId = comp.GetId();
@@ -453,6 +470,9 @@ namespace Generator
                                         } else {
                                             sb.AppendLine();
                                         }
+                                    }
+                                    if (null != logInfo.EpilogueInfo) {
+                                        sb.AppendFormatLine("{0}end)());", GetIndentString(indent));
                                     }
                                     --indent;
                                     sb.AppendFormatLine("{0}end,", GetIndentString(indent));
@@ -1630,6 +1650,21 @@ namespace Generator
                 sb.AppendLine("}};");
             }
         }
+        private static string CalcLogInfo(PrologueOrEpilogueInfo info, string className, string methodName)
+        {
+            string fmt = info.Format;
+            var args = new string[info.Args.Length];
+            for (int ix = 0; ix < args.Length; ++ix) {
+                var arg = info.Args[ix];
+                if (arg == "$class")
+                    args[ix] = className;
+                else if (arg == "$member")
+                    args[ix] = methodName;
+                else
+                    args[ix] = arg;
+            }
+            return string.Format(fmt, args);
+        }
         private static string CalcTypeString(Dsl.ISyntaxComponent comp)
         {
             string ret = comp.GetId();
@@ -1820,13 +1855,42 @@ namespace Generator
             s_CachedNoSignatures.Add(signature, false);
             return false;
         }
+        private static PrologueAndEpilogueInfo GetPrologueAndEpilogue(string _class, string _method)
+        {
+            string key = string.Format("{0}.{1}", _class, _method);
+            PrologueAndEpilogueInfo info;
+            if (s_CachedPrologueAndEpilogueInfos.TryGetValue(key, out info)) {
+                return info;
+            }
+            info = new PrologueAndEpilogueInfo();
+            foreach (var cfg in s_AddPrologueOrEpilogueInfos) {
+                if (cfg.Lists.Contains(key)) {
+                    if (cfg.IsPrologue)
+                        info.PrologueInfo = cfg.LogInfo;
+                    else
+                        info.EpilogueInfo = cfg.LogInfo;
+                }
+                foreach (var regex in cfg.Matches) {
+                    if (regex.IsMatch(key)) {
+                        if (cfg.IsPrologue)
+                            info.PrologueInfo = cfg.LogInfo;
+                        else
+                            info.EpilogueInfo = cfg.LogInfo;
+                    }
+                }
+            }
+            s_CachedPrologueAndEpilogueInfos.Add(key, info);
+            return info;
+        }
         private static void ReadConfig()
         {
             s_DontRequireInfos.Clear();
             s_FileMergeInfos.Clear();
             s_NoSignatureArgInfos.Clear();
+            s_AddPrologueOrEpilogueInfos.Clear();
             s_CachedFile2MergedFiles.Clear();
             s_CachedNoSignatures.Clear();
+            s_CachedPrologueAndEpilogueInfos.Clear();
 
             var file = Path.Combine(s_ExePath, "cs2dsl.dsl");
             var dslFile = new Dsl.DslFile();
@@ -1941,6 +2005,59 @@ namespace Generator
                     }
                 }
                 s_NoSignatureArgInfos.Add(cfg);
+            } else if (id == "addprologue" || id == "addepilogue") {
+                var cfg = new AddPrologueOrEpilogueInfo();
+                cfg.IsPrologue = id == "addprologue";
+                var f = info.First;
+                if (null != f) {
+                    int pnum = f.Call.GetParamNum();
+                    int snum = f.GetStatementNum();
+                    if (pnum > 0) {
+                        var fmt = f.Call.GetParamId(0);
+                        cfg.LogInfo.Format = fmt;
+                        var list = new List<string>();
+                        for (int ix = 1; ix < pnum; ++ix) {
+                            var arg = f.Call.GetParamId(ix);
+                            list.Add(arg);
+                        }
+                        cfg.LogInfo.Args = list.ToArray();
+                    } else if (snum > 0) {
+                        var fmt = f.GetStatementId(0);
+                        cfg.LogInfo.Format = fmt;
+                        var list = new List<string>();
+                        for (int ix = 1; ix < pnum; ++ix) {
+                            var arg = f.GetStatementId(ix);
+                            list.Add(arg);
+                        }
+                        cfg.LogInfo.Args = list.ToArray();
+                    }
+                }
+                for (int i = 1; i < info.GetFunctionNum(); ++i) {
+                    f = info.GetFunction(i);
+                    if (null != f) {
+                        string fid = f.GetId();
+                        if (fid == "list") {
+                            foreach (var p in f.Call.Params) {
+                                cfg.Lists.Add(p.GetId());
+                            }
+                            foreach (var s in f.Statements) {
+                                cfg.Lists.Add(s.GetId());
+                            }
+                        } else if (fid == "match") {
+                            foreach (var p in f.Call.Params) {
+                                var str = p.GetId();
+                                var regex = new Regex(str, RegexOptions.Compiled);
+                                cfg.Matches.Add(regex);
+                            }
+                            foreach (var s in f.Statements) {
+                                var str = s.GetId();
+                                var regex = new Regex(str, RegexOptions.Compiled);
+                                cfg.Matches.Add(regex);
+                            }
+                        }
+                    }
+                }
+                s_AddPrologueOrEpilogueInfos.Add(cfg);
             }
         }
 
@@ -1999,10 +2116,32 @@ namespace Generator
             internal List<Regex> SignatureMatches = new List<Regex>();
         }
 
+        private class PrologueOrEpilogueInfo
+        {
+            internal string Format = string.Empty;
+            internal string[] Args = null;
+        }
+
+        private class PrologueAndEpilogueInfo
+        {
+            internal PrologueOrEpilogueInfo PrologueInfo = null;
+            internal PrologueOrEpilogueInfo EpilogueInfo = null;
+        }
+
+        private class AddPrologueOrEpilogueInfo
+        {
+            internal bool IsPrologue = true;
+            internal PrologueOrEpilogueInfo LogInfo = new PrologueOrEpilogueInfo();
+            internal HashSet<string> Lists = new HashSet<string>();
+            internal List<Regex> Matches = new List<Regex>();
+        }
+
         private static List<DontRequireInfo> s_DontRequireInfos = new List<DontRequireInfo>();
         private static Dictionary<string, FileMergeInfo> s_FileMergeInfos = new Dictionary<string, FileMergeInfo>();
         private static List<NoSignatureArgInfo> s_NoSignatureArgInfos = new List<NoSignatureArgInfo>();
+        private static List<AddPrologueOrEpilogueInfo> s_AddPrologueOrEpilogueInfos = new List<AddPrologueOrEpilogueInfo>();
         private static Dictionary<string, string> s_CachedFile2MergedFiles = new Dictionary<string, string>();
         private static Dictionary<string, bool> s_CachedNoSignatures = new Dictionary<string, bool>();
+        private static Dictionary<string, PrologueAndEpilogueInfo> s_CachedPrologueAndEpilogueInfos = new Dictionary<string, PrologueAndEpilogueInfo>();
     }
 }
