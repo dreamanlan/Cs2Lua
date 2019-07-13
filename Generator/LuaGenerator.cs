@@ -238,6 +238,7 @@ namespace Generator
                                 var fdef = mdef.GetParam(1) as Dsl.FunctionData;
                                 if (mname == "__new_object" && null != fdef) {
                                     var fcall = fdef.Call;
+                                    bool haveParams = false;
                                     sb.AppendFormat("{0}{1} = {2}(", GetIndentString(indent), mname, fcall.GetId());
                                     prestr = string.Empty;
                                     for (int ix = 0; ix < fcall.Params.Count; ++ix) {
@@ -246,16 +247,29 @@ namespace Generator
                                         prestr = ", ";
                                         var pv = param as Dsl.ValueData;
                                         if (null != pv) {
-                                            sb.Append(pv.GetId());
+                                            var pname = pv.GetId();
+                                            if (ix == fcall.Params.Count - 1 && pname == "...")
+                                                haveParams = true;
+                                            sb.Append(pname);
                                         } else {
                                             var pc = param as Dsl.CallData;
                                             if (null != pc) {
-                                                sb.Append(pc.GetParamId(0));
+                                                var pname = pc.GetParamId(0);
+                                                if (ix == fcall.Params.Count - 1 && pname == "...")
+                                                    haveParams = true;
+                                                sb.Append(pname);
                                             }
                                         }
                                     }
                                     sb.AppendLine(")");
                                     ++indent;
+                                    var logInfo = GetPrologueAndEpilogue(className, mname);
+                                    if (null != logInfo.PrologueInfo) {
+                                        sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.PrologueInfo, className, mname));
+                                    }
+                                    if (null != logInfo.EpilogueInfo) {
+                                        sb.AppendFormatLine("{0}return (function(...) local args={{...}}; {1}; return ...; end)((function({2}) ", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname), haveParams ? "..." : string.Empty);
+                                    }
                                     foreach (var comp in fdef.Statements) {
                                         GenerateSyntaxComponent(comp, sb, indent, true);
                                         string subId = comp.GetId();
@@ -264,6 +278,9 @@ namespace Generator
                                         } else {
                                             sb.AppendLine();
                                         }
+                                    }
+                                    if (null != logInfo.EpilogueInfo) {
+                                        sb.AppendFormatLine("{0}end)({1}));", GetIndentString(indent), haveParams ? "..." : string.Empty);
                                     }
                                     --indent;
                                     sb.AppendFormatLine("{0}end,", GetIndentString(indent));
@@ -287,6 +304,7 @@ namespace Generator
                                 var fdef = param1 as Dsl.FunctionData;
                                 if (mname != "__new_object" && null != fdef) {
                                     var fcall = fdef.Call;
+                                    bool haveParams = false;
                                     sb.AppendFormat("{0}{1} = {2}(", GetIndentString(indent), mname, fcall.GetId());
                                     prestr = string.Empty;
                                     for (int ix = 0; ix < fcall.Params.Count; ++ix) {
@@ -295,11 +313,17 @@ namespace Generator
                                         prestr = ", ";
                                         var pv = param as Dsl.ValueData;
                                         if (null != pv) {
-                                            sb.Append(pv.GetId());
+                                            var pname = pv.GetId();
+                                            if (ix == fcall.Params.Count - 1 && pname == "...")
+                                                haveParams = true;
+                                            sb.Append(pname);
                                         } else {
                                             var pc = param as Dsl.CallData;
                                             if (null != pc) {
-                                                sb.Append(pc.GetParamId(0));
+                                                var pname = pc.GetParamId(0);
+                                                if (ix == fcall.Params.Count - 1 && pname == "...")
+                                                    haveParams = true;
+                                                sb.Append(pname);
                                             }
                                         }
                                     }
@@ -310,7 +334,7 @@ namespace Generator
                                         sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.PrologueInfo, className, mname));
                                     }
                                     if (null != logInfo.EpilogueInfo) {
-                                        sb.AppendFormatLine("{0}return (function(...) local args={{...}}; {1}; return ...; end)((function() ", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
+                                        sb.AppendFormatLine("{0}return (function(...) local args={{...}}; {1}; return ...; end)((function({2}) ", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname), haveParams ? "..." : string.Empty);
                                     }
                                     foreach (var comp in fdef.Statements) {
                                         GenerateSyntaxComponent(comp, sb, indent, true);
@@ -322,7 +346,7 @@ namespace Generator
                                         }
                                     }
                                     if (null != logInfo.EpilogueInfo) {
-                                        sb.AppendFormatLine("{0}end)());", GetIndentString(indent));
+                                        sb.AppendFormatLine("{0}end)({1}));", GetIndentString(indent), haveParams ? "..." : string.Empty);
                                     }
                                     --indent;
                                     sb.AppendFormatLine("{0}end,", GetIndentString(indent));
@@ -436,6 +460,7 @@ namespace Generator
                                 var fdef = param1 as Dsl.FunctionData;
                                 if (null != fdef) {
                                     var fcall = fdef.Call;
+                                    bool haveParams = false;
                                     sb.AppendFormat("{0}{1} = {2}(", GetIndentString(indent), mname, fcall.GetId());
                                     prestr = string.Empty;
                                     for (int ix = 0; ix < fcall.Params.Count;++ix ) {
@@ -445,11 +470,17 @@ namespace Generator
                                         prestr = ", ";
                                         var pv = param as Dsl.ValueData;
                                         if (null != pv) {
-                                            sb.Append(paramId);
+                                            var pname = pv.GetId();
+                                            if (ix == fcall.Params.Count - 1 && pname == "...")
+                                                haveParams = true;
+                                            sb.Append(pname);
                                         } else {
                                             var pc = param as Dsl.CallData;
                                             if (null != pc) {
-                                                sb.Append(pc.GetParamId(0));
+                                                var pname = pc.GetParamId(0);
+                                                if (ix == fcall.Params.Count - 1 && pname == "...")
+                                                    haveParams = true;
+                                                sb.Append(pname);
                                             }
                                         }
                                     }
@@ -460,7 +491,7 @@ namespace Generator
                                         sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.PrologueInfo, className, mname));
                                     }
                                     if (null != logInfo.EpilogueInfo) {
-                                        sb.AppendFormatLine("{0}return (function(...) local args={{...}}; {1}; return ...; end)((function() ", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
+                                        sb.AppendFormatLine("{0}return (function(...) local args={{...}}; {1}; return ...; end)((function({2}) ", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname), haveParams ? "..." : string.Empty);
                                     }
                                     foreach (var comp in fdef.Statements) {
                                         GenerateSyntaxComponent(comp, sb, indent, true);
@@ -472,7 +503,7 @@ namespace Generator
                                         }
                                     }
                                     if (null != logInfo.EpilogueInfo) {
-                                        sb.AppendFormatLine("{0}end)());", GetIndentString(indent));
+                                        sb.AppendFormatLine("{0}end)({1}));", GetIndentString(indent), haveParams ? "..." : string.Empty);
                                     }
                                     --indent;
                                     sb.AppendFormatLine("{0}end,", GetIndentString(indent));
@@ -743,7 +774,17 @@ namespace Generator
 
                     sb.AppendLine();
 
-                    sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", \"{3}\", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, {4});", GetIndentString(indent), null == baseClass ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
+                    var logInfoForDefineClass = GetPrologueAndEpilogue(className, "__define_class");
+                    if (null != logInfoForDefineClass.PrologueInfo) {
+                        sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfoForDefineClass.PrologueInfo, className, "__define_class"));
+                    }
+                    if (null != logInfoForDefineClass.EpilogueInfo) {
+                        sb.AppendFormatLine("{0}local __defineclass_return = defineclass({1}, \"{2}\", \"{3}\", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, {4});", GetIndentString(indent), null == baseClass ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
+                        sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfoForDefineClass.EpilogueInfo, className, "__define_class"));
+                        sb.AppendFormatLine("{0}return __defineclass_return;", GetIndentString(indent));
+                    } else {
+                        sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", \"{3}\", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, {4});", GetIndentString(indent), null == baseClass ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
+                    }
 
                     --indent;
                     sb.AppendFormatLine("{0}end,", GetIndentString(indent));
