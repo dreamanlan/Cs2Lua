@@ -117,6 +117,14 @@ MethodKind = {
 	LocalFunction = 17
 };
 
+function warmup(class)
+	local ret = true;
+	if rawget(class, "__cs2lua_predefined") and not rawget(class, "__cs2lua_defined") then
+		ret = class.__cs2lua_defined;
+	end;
+	return ret;
+end;
+
 function getobjfullname(obj)
 	local meta = getmetatable(obj);
 	if meta then
@@ -151,6 +159,7 @@ end;
 
 function getclassfullname(t)
 	if t and type(t)~="string" then
+		warmup(t);
 		if rawget(t, "__cs2lua_defined") then
 			return rawget(t, "__cs2lua_fullname");
 		else
@@ -169,6 +178,7 @@ end;
 
 function getclasstypename(t)
 	if t and type(t)~="string" then
+		warmup(t);
 		if rawget(t, "__cs2lua_defined") then
 			return rawget(t, "__cs2lua_typename");
 		else
@@ -194,6 +204,7 @@ end;
 
 function getclassparentclass(t)
 	if t and type(t)~="string" then
+		warmup(t);
 		if rawget(t, "__cs2lua_defined") then
 			return rawget(t, "__cs2lua_parent");
 		else
@@ -222,6 +233,7 @@ function settempmetatable(class)
 			return class(...);
 		end
 	});
+	rawset(class, "__cs2lua_predefined", true);
 end;
 
 __cs2lua_special_integer_operators = { "/", "%", "+", "-", "*", "<<", ">>", "&", "|", "^", "~" };
@@ -636,7 +648,7 @@ function __dec_array_count(tb)
 end;
 
 __mt_index_of_array = function(t, k)
-  if k=="__exist" then --½ûÓÃ¼Ì³Ð
+  if k=="__exist" then --Â½Ã»Ã“ÃƒÂ¼ÃŒÂ³Ã
     return function(tb,fk) return false; end;
 	elseif k=="Length" or k=="Count" then
 		return __get_array_count(t);
@@ -833,7 +845,7 @@ __mt_index_of_array = function(t, k)
 end;
 
 __mt_index_of_dictionary = function(t, k)
-	if k=="__exist" then --½ûÓÃ¼Ì³Ð
+	if k=="__exist" then --Â½Ã»Ã“ÃƒÂ¼ÃŒÂ³Ã
     return function(tb,fk) return false; end;
 	elseif k=="Count" then
 		return __get_table_count(t);
@@ -930,7 +942,7 @@ __mt_newindex_of_dictionary = function(t, k, val)
 end;
 
 __mt_index_of_hashset = function(t, k)
-	if k=="__exist" then --½ûÓÃ¼Ì³Ð
+	if k=="__exist" then --Â½Ã»Ã“ÃƒÂ¼ÃŒÂ³Ã
     return function(tb,fk) return false; end;
 	elseif k=="Count" then
 		return __get_table_count(t);
@@ -1403,7 +1415,7 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
                       ret = baseObj[k];
                       return ret;
                     end;
-                    --¼òµ¥Ö§³Ö·´Éä·½·¨:GetType()
+                    --ç®€å•æ”¯æŒåå°„æ–¹æ³•:GetType()
                     if k=="GetType" then
                       return function(tb) return class; end;
                     end;
@@ -1479,7 +1491,7 @@ function defineclass(base, fullName, typeName, static, static_methods, static_fi
               ret = base_class[k];
               return ret;
             end;
-            --¼òµ¥Ö§³Ö·´ÉäµÄÊôÐÔ:Type.NameÓëType.FullName            
+            --ç®€å•æ”¯æŒåå°„çš„å±žæ€§:Type.Nameä¸ŽType.FullName            
             if k=="Name" then
               ret = typeName;
             elseif k=="FullName" then
@@ -1745,7 +1757,7 @@ function delegationset(isevent, isStatic, key, t, intf, k, handler)
     v = t[k];
   end;
   if not v or type(v)~="table" then
-    --È¡²»µ½Öµ»òÕßÖµ²»ÊÇ±í£¬ÔòÓÐ¿ÉÄÜÊÇÆÕÍ¨µÄÌØÐÔ·ÃÎÊ
+    --å–ä¸åˆ°å€¼æˆ–è€…å€¼ä¸æ˜¯è¡¨ï¼Œåˆ™æœ‰å¯èƒ½æ˜¯æ™®é€šçš„ç‰¹æ€§è®¿é—®
     --t[k] = handler;
     return handler;
   else
@@ -2008,59 +2020,146 @@ end;
 
 function invokeexternoperator(class, method, ...)
   local args = {...};
-  --¶Ôslua£¬¶ÔÓ¦µ½luaÔª±í²Ù×÷·ûº¯ÊýµÄ²Ù×÷·ûÖØÔØcs2lua×ªlua´úÂëÊ±ÒÑ¾­»»³É¶ÔÓ¦²Ù×÷·û±í´ïÊ½¡£
-  --Ö´ÐÐµ½ÕâÀïµÄÓ¦¸ÃÊÇÎÞ·¨¶ÔÓ¦µ½lua²Ù×÷·ûµÄ²Ù×÷·ûÖØÔØ
+  --å¯¹sluaï¼Œå¯¹åº”åˆ°luaå…ƒè¡¨æ“ä½œç¬¦å‡½æ•°çš„æ“ä½œç¬¦é‡è½½cs2luaè½¬luaä»£ç æ—¶å·²ç»æ¢æˆå¯¹åº”æ“ä½œç¬¦è¡¨è¾¾å¼ã€‚
+  --æ‰§è¡Œåˆ°è¿™é‡Œçš„åº”è¯¥æ˜¯æ— æ³•å¯¹åº”åˆ°luaæ“ä½œç¬¦çš„æ“ä½œç¬¦é‡è½½
   local argnum = #args;
   if argnum==0 and method=="op_Equality" then
-  	return true;
+  	if args[1]==nil and args[2]==nil then
+  		return true;
+  	else
+  		return false;
+  	end;
   elseif argnum==0 and method=="op_Inequality" then
-  	return false;
+  	if args[1]==nil and args[2]==nil then
+  		return false;
+  	else
+  		return true;
+  	end;
+  elseif argnum==1 and method=="op_Equality" then
+	  if type(args[1])=="string" and string.sub(args[1],1,11)=="op_Equality" then
+	  	if args[2]==nil and args[3]==nil then
+	  		return true;
+	  	else
+	  		return false;
+	  	end;
+	  else
+	  	if args[1]==nil and args[2]==nil then
+	  		return true;
+	  	else
+	  		return false;
+	  	end;
+	  end;
+  elseif argnum==1 and method=="op_Inequality" then
+  	if type(args[1])=="string" and string.sub(args[1],1,13)=="op_Inequality" then
+	  	if args[2]==nil and args[3]==nil then
+	  		return false;
+	  	else
+	  		return true;
+	  	end;
+  	else
+	  	if args[1]==nil and args[2]==nil then
+	  		return false;
+	  	else
+	  		return true;
+	  	end;
+  	end;
   elseif argnum==2 and method=="op_Equality" then
-    if args[1] and args[2] then
-      mt1 = getmetatable(args[1]);
-      mt2 = getmetatable(args[2]);
-      if mt1 and mt1.__eq then
-        return mt1.__eq(args[1], args[2]);
-      elseif mt2 and mt2.__eq then
-        return mt2.__eq(args[2], args[1]);
-      else
-        return args[1]==args[2];
-      end;
-    elseif not args[1] then
-      return Slua.IsNull(args[2]);
-    elseif not args[2] then
-      return Slua.IsNull(args[1]);
-    else
-      return true;
-    end;
+	  if type(args[1])=="string" and string.sub(args[1],1,11)=="op_Equality" then
+	    if args[2] and args[3] then
+	      mt1 = getmetatable(args[2]);
+	      mt2 = getmetatable(args[3]);
+	      if mt1 and mt1.__eq then
+	        return mt1.__eq(args[2], args[3]);
+	      elseif mt2 and mt2.__eq then
+	        return mt2.__eq(args[3], args[2]);
+	      else
+	        return args[2]==args[3];
+	      end;
+	    elseif not args[2] then
+	      return Slua.IsNull(args[3]);
+	    elseif not args[3] then
+	      return Slua.IsNull(args[2]);
+	    else
+	      return true;
+	    end;	  
+	  else
+	    if args[1] and args[2] then
+	      mt1 = getmetatable(args[1]);
+	      mt2 = getmetatable(args[2]);
+	      if mt1 and mt1.__eq then
+	        return mt1.__eq(args[1], args[2]);
+	      elseif mt2 and mt2.__eq then
+	        return mt2.__eq(args[2], args[1]);
+	      else
+	        return args[1]==args[2];
+	      end;
+	    elseif not args[1] then
+	      return Slua.IsNull(args[2]);
+	    elseif not args[2] then
+	      return Slua.IsNull(args[1]);
+	    else
+	      return true;
+	    end;
+	  end;
   elseif argnum==2 and method=="op_Inequality" then
-    if args[1] and args[2] then
-      mt1 = getmetatable(args[1]);
-      mt2 = getmetatable(args[2]);
-      if mt1 and mt1.__eq then
-        return not mt1.__eq(args[1], args[2]);
-      elseif mt2 and mt2.__eq then
-        return not mt2.__eq(args[2], args[1]);
-      else
-        return args[1]~=args[2];
-      end;
-    elseif not args[1] then
-      return not Slua.IsNull(args[2]);
-    elseif not args[2] then
-      return not Slua.IsNull(args[1]);
-    else
-      return false;
-    end; 
+  	if type(args[1])=="string" and string.sub(args[1],1,13)=="op_Inequality" then
+	    if args[2] and args[3] then
+	      mt1 = getmetatable(args[2]);
+	      mt2 = getmetatable(args[3]);
+	      if mt1 and mt1.__eq then
+	        return not mt1.__eq(args[2], args[3]);
+	      elseif mt2 and mt2.__eq then
+	        return not mt2.__eq(args[3], args[2]);
+	      else
+	        return args[2]~=args[3];
+	      end;
+	    elseif not args[2] then
+	      return not Slua.IsNull(args[3]);
+	    elseif not args[3] then
+	      return not Slua.IsNull(args[2]);
+	    else
+	      return false;
+	    end; 
+  	else
+	    if args[1] and args[2] then
+	      mt1 = getmetatable(args[1]);
+	      mt2 = getmetatable(args[2]);
+	      if mt1 and mt1.__eq then
+	        return not mt1.__eq(args[1], args[2]);
+	      elseif mt2 and mt2.__eq then
+	        return not mt2.__eq(args[2], args[1]);
+	      else
+	        return args[1]~=args[2];
+	      end;
+	    elseif not args[1] then
+	      return not Slua.IsNull(args[2]);
+	    elseif not args[2] then
+	      return not Slua.IsNull(args[1]);
+	    else
+	      return false;
+	    end; 
+	  end;
   elseif method=="op_Multiply" then
   	if argnum==2 then
   		return args[1] * args[2];
   	elseif argnum==3 then
   		return args[2] * args[3];
   	end;
+  elseif method=="op_Division" then
+  	if argnum==2 then
+  		return args[1] / args[2];
+  	elseif argnum==3 then
+  		return args[2] / args[3];
+  	end;
   elseif method=="op_Implicit" then
   	local t = nil;
-  	if args[1] then
+  	if argnum==1 and args[1] then
   		local meta = getmetatable(args[1]);
+  		if meta then
+	  		t = rawget(meta, "__typename");
+  		end;
+  	elseif argnum==2 and args[2] then
+  		local meta = getmetatable(args[2]);
   		if meta then
 	  		t = rawget(meta, "__typename");
   		end;
@@ -2084,7 +2183,7 @@ function invokeexternoperator(class, method, ...)
       	return Slua.CreateClass("UnityEngine.Color32", math.floor(args[1].r*255), math.floor(args[1].g*255), math.floor(args[1].b*255), math.floor(args[1].a*255));
       end;
     else
-      --ÕâÀï¾Í²»×ÐÏ¸ÅÐ¶ÏÁË£¬¾Í¼Ù¶¨ÊÇUnityEngine.Object×ÓÀàÁË
+      --è¿™é‡Œå°±ä¸ä»”ç»†åˆ¤æ–­äº†ï¼Œå°±å‡å®šæ˜¯UnityEngine.Objectå­ç±»äº†
       return not Slua.IsNull(args[1]);
     end;
   end;
@@ -2092,10 +2191,10 @@ function invokeexternoperator(class, method, ...)
     if argnum == 1 and args[1] then
       return args[1][method](...);
     elseif argnum == 2 then
-      if args[1] then
-        return args[1][method](...);
-      elseif args[2] then
+      if args[2] then
         return args[2][method](...);
+      elseif args[1] then
+        return args[1][method](...);
       end;
     elseif argnum == 3 then
       if args[2] then
@@ -2156,39 +2255,70 @@ function setwithinterface(obj, intf, property, value)
   return nil;
 end;
 
+local function _get_first_untable_from_pack_args(...)
+  local args = {...}
+  if #args > 0 then
+    if type(args[1]) == "table" then
+      return args[1][1], args[1][2]
+    else
+      return args[1], args[2]
+    end
+  end
+end
+
 function invokeforbasicvalue(obj, isEnum, class, method, ...)
-	local args = {...};
-	local meta = getmetatable(obj);
-	if isEnum and obj and method=="ToString" then
-	  return class.Value2String[obj];
-	end;
-	if method then
-  	if type(obj)=="string" then
-  	  local csstr = System.String("String_Arr_Char", obj);
-  	  if method=="Split" then
-  	    return csstr:Split(string.char(...));
-  	  else
-  	    return csstr[method](csstr,...);
-  	  end;
-  	elseif meta then
-  		return obj[method](obj,...);
-  	elseif method=="CompareTo" then
-  	  if obj>args[1] then
-  	    return 1;
-  	  elseif obj<args[1] then
-  	    return -1;
-  	  else
-  	    return 0;
-  	  end;
-  	elseif method=="ToString" then
-  	  return tostring(obj);
-  	elseif method=="Split" then
-  	  return obj:Split(string.char(...));
-  	end;
-	else
+  local args = {...};
+  local meta = getmetatable(obj);
+  if isEnum and obj and method=="ToString" then
+    return class.Value2String[obj];
+  end;
+  if method then
+    if type(obj)=="string" then
+      local csstr = System.String("String_Arr_Char", obj);
+      if method=="Split" then
+        local result1, result2 = _get_first_untable_from_pack_args(...)
+        if type(result1) == "string" and type(result2) == "number" then
+          result2 = string.char(result2)
+        end
+        return csstr[method](csstr,result1,result2);
+      elseif method=="TrimStart" then
+        local result = _get_first_untable_from_pack_args(...)
+        if type(result) == "number" then
+          result = string.char(result)
+        end
+      	return csstr[method](csstr,result);
+      else
+        return csstr[method](csstr,...);
+      end;
+    elseif meta then
+      return obj[method](obj,...);
+    elseif method=="CompareTo" then
+      if obj>args[1] then
+        return 1;
+      elseif obj<args[1] then
+        return -1;
+      else
+        return 0;
+      end;
+    elseif method=="ToString" then
+      return tostring(obj);    
+    elseif method=="Split" then
+      local result1, result2 = _get_first_untable_from_pack_args(...)
+      if type(result1) == "string" and type(result2) == "number" then
+        result2 = string.char(result2)
+      end
+      return obj[method](obj,result1,result2);
+    elseif method=="TrimStart" then
+      local result = _get_first_untable_from_pack_args(...)
+      if type(result) == "number" then
+        result = string.char(result)
+      end
+    	return obj[method](obj,result);
+    end;
+  else
     UnityEngine.Debug.LogError("LogError_String","[cs2lua] table index is nil");
   end;
-	return nil;
+  return nil;
 end;
 function getforbasicvalue(obj, isEnum, class, property)
   local meta = getmetatable(obj);
@@ -2241,7 +2371,7 @@ function invokearraystaticmethod(firstArray, secondArray, method, ...)
         return nil;
       end;
     else
-      --ÕâÖÖÇéÐÎÈÏÎªÊÇÍâ²¿µ¼³öµÄÊý×éµ÷ÓÃ£¬Ö±½Óµ÷µ¼³ö½Ó¿ÚÁË£¨ÓÉÓÚSystem.ArrayÓÐgeneric³ÉÔ±£¬ÕâÐ©·½·¨µÄµ÷ÓÃ¹À¼Æ»á³ö´í£©
+      --è¿™ç§æƒ…å½¢è®¤ä¸ºæ˜¯å¤–éƒ¨å¯¼å‡ºçš„æ•°ç»„è°ƒç”¨ï¼Œç›´æŽ¥è°ƒå¯¼å‡ºæŽ¥å£äº†ï¼ˆç”±äºŽSystem.Arrayæœ‰genericæˆå‘˜ï¼Œè¿™äº›æ–¹æ³•çš„è°ƒç”¨ä¼°è®¡ä¼šå‡ºé”™ï¼‰
       System.Array[method](...);
     end;
   else
@@ -2249,7 +2379,7 @@ function invokearraystaticmethod(firstArray, secondArray, method, ...)
   end;
 end;
 
---ÔÝÊ±Ö»¶ÔÕûÊý³ý·¨½øÐÐÌØÊâ´¦Àí£¬ÔËËãÒç³öÔÝ²»´¦Àí
+--æš‚æ—¶åªå¯¹æ•´æ•°é™¤æ³•è¿›è¡Œç‰¹æ®Šå¤„ç†ï¼Œè¿ç®—æº¢å‡ºæš‚ä¸å¤„ç†
 --__cs2lua_div = 0;
 --__cs2lua_mod = 1;
 --__cs2lua_add = 2;
@@ -2302,19 +2432,19 @@ function invokeintegeroperator(op, luaop, opd1, opd2, type1, type2)
 end;
 
 function getiterator(exp)
-	local meta = getmetatable(exp);
-	if meta and rawget(meta, "__cs2lua_defined") then
-		local enumer = exp:GetEnumerator();
-		return function()
-			if enumer:MoveNext() then
-				return enumer.Current;
-			else
-				return nil;
-			end;
-		end;
-	else
-		return Slua.iter(exp);
-	end;
+  local meta = getmetatable(exp);
+  if meta and rawget(meta, "__cs2lua_defined") then
+    local enumer = exp:GetEnumerator();
+    return function()
+      if enumer:MoveNext() then
+        return enumer.Current;
+      else
+        return nil;
+      end;
+    end;
+  else
+    return Slua.iter(exp);
+  end;
 end;
 
 function defaultvalue(t, typename, isExtern)
@@ -2345,6 +2475,7 @@ function luatry(func)
   return xpcall(func, function(e)
     local err = tostring(e);
     local trace = debug.traceback(err); 
+    UnityEngine.Debug.LogError("LogError_Object", err .. ", " .. trace);
     return {err, trace};
   end);
 end;
@@ -2385,85 +2516,85 @@ LINQ.exec = function(linq)
   return LINQ.execRecursively(linq, ix, paramList);
 end;
 LINQ.execRecursively = function(linq, ix, paramList)
-	local finalRs = {};
-	local interRs = {};
-	local itemNum = #linq;
-	while ix <= itemNum do
-		local v = linq[ix];
-		local key = v[1];
-		ix = ix + 1;
-		
-		if key=="from" then
-		  local nextIx = LINQ.getNextIndex(linq, ix);
-		  
-		  --»ñÈ¡Ä¿±ê¼¯ºÏ
-			local coll = v[2](unpack(paramList));
-			LINQ.buildIntermediateResult(linq, ix, paramList, coll, interRs, finalRs);
-			
-			ix = nextIx;
-		elseif key=="where" then
-		  --ÔÚÖÐ¼ä½á¹û¼¯ÉÏ½øÐÐ¹ýÂË´¦Àí
-		  local temp = interRs;
-		  interRs = {};
-		  for i,val in ipairs(temp) do
-		    if v[2](unpack(val)) then
-		      table.insert(interRs, val);
-		    end;
-		  end;
-		elseif key=="orderby" then
-		  --ÅÅÐò£¨¶à¹Ø¼ü×Ö£©
-			table.sort(interRs, (function(l1, l2) return LINQ.compare(l1, l2, v[2]); end));
-		elseif key=="select" then
-		  --Éú³É×îÖÕ½á¹û¼¯
-		  for i,val in ipairs(interRs) do
-		    local r = v[2](unpack(val));
-		    table.insert(finalRs, r);
-		  end;
-		else
-			--ÆäËü×Ó¾äÔÝ²»Ö§³Ö¡£¡£
-		end;
-	end;
-	return finalRs;
+  local finalRs = {};
+  local interRs = {};
+  local itemNum = #linq;
+  while ix <= itemNum do
+    local v = linq[ix];
+    local key = v[1];
+    ix = ix + 1;
+    
+    if key=="from" then
+      local nextIx = LINQ.getNextIndex(linq, ix);
+      
+      --èŽ·å–ç›®æ ‡é›†åˆ
+      local coll = v[2](unpack(paramList));
+      LINQ.buildIntermediateResult(linq, ix, paramList, coll, interRs, finalRs);
+      
+      ix = nextIx;
+    elseif key=="where" then
+      --åœ¨ä¸­é—´ç»“æžœé›†ä¸Šè¿›è¡Œè¿‡æ»¤å¤„ç†
+      local temp = interRs;
+      interRs = {};
+      for i,val in ipairs(temp) do
+        if v[2](unpack(val)) then
+          table.insert(interRs, val);
+        end;
+      end;
+    elseif key=="orderby" then
+      --æŽ’åºï¼ˆå¤šå…³é”®å­—ï¼‰
+      table.sort(interRs, (function(l1, l2) return LINQ.compare(l1, l2, v[2]); end));
+    elseif key=="select" then
+      --ç”Ÿæˆæœ€ç»ˆç»“æžœé›†
+      for i,val in ipairs(interRs) do
+        local r = v[2](unpack(val));
+        table.insert(finalRs, r);
+      end;
+    else
+      --å…¶å®ƒå­å¥æš‚ä¸æ”¯æŒã€‚ã€‚
+    end;
+  end;
+  return finalRs;
 end;
 LINQ.buildIntermediateResult = function(linq, ix, paramList, coll, interRs, finalRs)
-  --±éÀúÄ¿±ê¼¯ºÏ£¬´¦ÀíÁ¬ÐøµÄletÓëwhere (ÕâÊ±whereÌõ¼þ¿ÉÒÔÔÚµ¥¸öÔªËØ±éÀúÊ±½øÐÐ£¬²»ÓÃµÈÖÐ¼ä½á¹û¼¯¹¹½¨ºóÔÙ¹ýÂË)
-	--Èç¹ûÓÖÓöµ½from£¬ÔòµÝ¹éµ÷ÓÃ×ÔÉíÀ´»ñÈ¡×Ó¼¯²¢ºÏ²¢µ½µ±Ç°½á¹û¼¯
-	for cv in getiterator(coll) do
-		local newParamList = {unpack(paramList)};
-		table.insert(newParamList, cv);
-		local isMatch = true;
-		local newIx = ix;
+  --éåŽ†ç›®æ ‡é›†åˆï¼Œå¤„ç†è¿žç»­çš„letä¸Žwhere (è¿™æ—¶whereæ¡ä»¶å¯ä»¥åœ¨å•ä¸ªå…ƒç´ éåŽ†æ—¶è¿›è¡Œï¼Œä¸ç”¨ç­‰ä¸­é—´ç»“æžœé›†æž„å»ºåŽå†è¿‡æ»¤)
+  --å¦‚æžœåˆé‡åˆ°fromï¼Œåˆ™é€’å½’è°ƒç”¨è‡ªèº«æ¥èŽ·å–å­é›†å¹¶åˆå¹¶åˆ°å½“å‰ç»“æžœé›†
+  for cv in getiterator(coll) do
+    local newParamList = {unpack(paramList)};
+    table.insert(newParamList, cv);
+    local isMatch = true;
+    local newIx = ix;
     local itemNum = #linq;
-		while newIx <= itemNum do
-			local v = linq[newIx];
-			local key = v[1];
-			
-			if key=="let" then
-				table.insert(newParamList, v[2](unpack(newParamList)));
-			elseif key=="where" then
-				if not v[2](unpack(newParamList)) then
-				  --²»·ûºÏÌõ¼þµÄ¼ÇÂ¼²»·Åµ½ÖÐ¼ä½á¹û¼¯
-					isMatch = false;
-					break;
-				end;
-			elseif key=="from" then
-			  --ÔÙ´ÎÓöµ½from£¬µÝ¹éµ÷ÓÃÔÙºÏ²¢½á¹û¼¯
-			  local ts = LINQ.execRecursively(linq, newIx, newParamList);
-			  for i,val in ipairs(ts) do
-			    table.insert(finalRs, val); 
-			  end;
-			  isMatch = false;
-			  break;
-			else
-			  --ÆäËü×Ó¾äÐèÒªÔÚÖÐ¼ä½á¹û¼¯Íê³ÉºóÔÙ´¦Àí£¬ÕâÀïÌø¹ý
-				break;
-			end;
-			newIx = newIx + 1;
-		end;
-		if isMatch then
-			table.insert(interRs, newParamList);
-		end;
-	end;
+    while newIx <= itemNum do
+      local v = linq[newIx];
+      local key = v[1];
+      
+      if key=="let" then
+        table.insert(newParamList, v[2](unpack(newParamList)));
+      elseif key=="where" then
+        if not v[2](unpack(newParamList)) then
+          --ä¸ç¬¦åˆæ¡ä»¶çš„è®°å½•ä¸æ”¾åˆ°ä¸­é—´ç»“æžœé›†
+          isMatch = false;
+          break;
+        end;
+      elseif key=="from" then
+        --å†æ¬¡é‡åˆ°fromï¼Œé€’å½’è°ƒç”¨å†åˆå¹¶ç»“æžœé›†
+        local ts = LINQ.execRecursively(linq, newIx, newParamList);
+        for i,val in ipairs(ts) do
+          table.insert(finalRs, val); 
+        end;
+        isMatch = false;
+        break;
+      else
+        --å…¶å®ƒå­å¥éœ€è¦åœ¨ä¸­é—´ç»“æžœé›†å®ŒæˆåŽå†å¤„ç†ï¼Œè¿™é‡Œè·³è¿‡
+        break;
+      end;
+      newIx = newIx + 1;
+    end;
+    if isMatch then
+      table.insert(interRs, newParamList);
+    end;
+  end;
 end;
 LINQ.compare = function(l1, l2, list)
   for i,v in ipairs(list) do
@@ -2482,17 +2613,17 @@ LINQ.compare = function(l1, l2, list)
 end;
 LINQ.getNextIndex = function(linq, ix)
   local itemNum = #linq;
-	while ix <= itemNum do
-		local v = linq[ix];
-		local key = v[1];
-		if key=="let" then
-		elseif key=="where" then
-		elseif key=="from" then
-		  return itemNum + 1;
-		else
-		  return ix;
-		end;
-		ix = ix + 1;
-	end;
-	return ix;
+  while ix <= itemNum do
+    local v = linq[ix];
+    local key = v[1];
+    if key=="let" then
+    elseif key=="where" then
+    elseif key=="from" then
+      return itemNum + 1;
+    else
+      return ix;
+    end;
+    ix = ix + 1;
+  end;
+  return ix;
 end;

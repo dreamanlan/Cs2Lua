@@ -117,6 +117,14 @@ MethodKind = {
 	LocalFunction = 17
 };
 
+function warmup(class)
+	local ret = true;
+	if rawget(class, "__cs2lua_predefined") and not rawget(class, "__cs2lua_defined") then
+		ret = class.__cs2lua_defined;
+	end;
+	return ret;
+end;
+
 function getobjfullname(obj)
 	local meta = getmetatable(obj);
 	if meta then
@@ -151,6 +159,7 @@ end;
 
 function getclassfullname(t)
 	if t and type(t)~="string" then
+		warmup(t);
 		if rawget(t, "__cs2lua_defined") then
 			return rawget(t, "__cs2lua_fullname");
 		else
@@ -169,6 +178,7 @@ end;
 
 function getclasstypename(t)
 	if t and type(t)~="string" then
+		warmup(t);
 		if rawget(t, "__cs2lua_defined") then
 			return rawget(t, "__cs2lua_typename");
 		else
@@ -194,6 +204,7 @@ end;
 
 function getclassparentclass(t)
 	if t and type(t)~="string" then
+		warmup(t);
 		if rawget(t, "__cs2lua_defined") then
 			return rawget(t, "__cs2lua_parent");
 		else
@@ -222,6 +233,7 @@ function settempmetatable(class)
 			return class(...);
 		end
 	});
+	rawset(class, "__cs2lua_predefined", true);
 end;
 
 __cs2lua_special_integer_operators = { "/", "%", "+", "-", "*", "<<", ">>", "&", "|", "^", "~" };
@@ -1745,7 +1757,7 @@ function delegationset(isevent, isStatic, key, t, intf, k, handler)
     v = t[k];
   end;
   if not v or type(v)~="table" then
-    --È¡²»µ½Öµ»òÕßÖµ²»ÊÇ±í£¬ÔòÓÐ¿ÉÄÜÊÇÆÕÍ¨µÄÌØÐÔ·ÃÎÊ
+    --取不到值或者值不是表，则有可能是普通的特性访问
     --t[k] = handler;
     return handler;
   else
@@ -2008,8 +2020,8 @@ end;
 
 function invokeexternoperator(class, method, ...)
   local args = {...};
-  --¶Ôslua£¬¶ÔÓ¦µ½luaÔª±í²Ù×÷·ûº¯ÊýµÄ²Ù×÷·ûÖØÔØcs2lua×ªlua´úÂëÊ±ÒÑ¾­»»³É¶ÔÓ¦²Ù×÷·û±í´ïÊ½¡£
-  --Ö´ÐÐµ½ÕâÀïµÄÓ¦¸ÃÊÇÎÞ·¨¶ÔÓ¦µ½lua²Ù×÷·ûµÄ²Ù×÷·ûÖØÔØ
+  --对slua，对应到lua元表操作符函数的操作符重载cs2lua转lua代码时已经换成对应操作符表达式。
+  --执行到这里的应该是无法对应到lua操作符的操作符重载
   local argnum = #args;
   if argnum==0 and method=="op_Equality" then
   	if args[1]==nil and args[2]==nil then
@@ -2141,8 +2153,13 @@ function invokeexternoperator(class, method, ...)
   	end;
   elseif method=="op_Implicit" then
   	local t = nil;
-  	if args[1] then
+  	if argnum==1 and args[1] then
   		local meta = getmetatable(args[1]);
+  		if meta then
+	  		t = rawget(meta, "__typename");
+  		end;
+  	elseif argnum==2 and args[2] then
+  		local meta = getmetatable(args[2]);
   		if meta then
 	  		t = rawget(meta, "__typename");
   		end;
@@ -2166,7 +2183,7 @@ function invokeexternoperator(class, method, ...)
       	return Slua.CreateClass("UnityEngine.Color32", math.floor(args[1].r*255), math.floor(args[1].g*255), math.floor(args[1].b*255), math.floor(args[1].a*255));
       end;
     else
-      --ÕâÀï¾Í²»×ÐÏ¸ÅÐ¶ÏÁË£¬¾Í¼Ù¶¨ÊÇUnityEngine.Object×ÓÀàÁË
+      --这里就不仔细判断了，就假定是UnityEngine.Object子类了
       return not Slua.IsNull(args[1]);
     end;
   end;
@@ -2174,10 +2191,10 @@ function invokeexternoperator(class, method, ...)
     if argnum == 1 and args[1] then
       return args[1][method](...);
     elseif argnum == 2 then
-      if args[1] then
-        return args[1][method](...);
-      elseif args[2] then
+      if args[2] then
         return args[2][method](...);
+      elseif args[1] then
+        return args[1][method](...);
       end;
     elseif argnum == 3 then
       if args[2] then
@@ -2354,7 +2371,7 @@ function invokearraystaticmethod(firstArray, secondArray, method, ...)
         return nil;
       end;
     else
-      --ÕâÖÖÇéÐÎÈÏÎªÊÇÍâ²¿µ¼³öµÄÊý×éµ÷ÓÃ£¬Ö±½Óµ÷µ¼³ö½Ó¿ÚÁË£¨ÓÉÓÚSystem.ArrayÓÐgeneric³ÉÔ±£¬ÕâÐ©·½·¨µÄµ÷ÓÃ¹À¼Æ»á³ö´í£©
+      --这种情形认为是外部导出的数组调用，直接调导出接口了（由于System.Array有generic成员，这些方法的调用估计会出错）
       System.Array[method](...);
     end;
   else
@@ -2362,7 +2379,7 @@ function invokearraystaticmethod(firstArray, secondArray, method, ...)
   end;
 end;
 
---ÔÝÊ±Ö»¶ÔÕûÊý³ý·¨½øÐÐÌØÊâ´¦Àí£¬ÔËËãÒç³öÔÝ²»´¦Àí
+--暂时只对整数除法进行特殊处理，运算溢出暂不处理
 --__cs2lua_div = 0;
 --__cs2lua_mod = 1;
 --__cs2lua_add = 2;
@@ -2458,7 +2475,7 @@ function luatry(func)
   return xpcall(func, function(e)
     local err = tostring(e);
     local trace = debug.traceback(err); 
-    UnityEngine.Debug.LogError("LogError_Object", err .. trace);
+    UnityEngine.Debug.LogError("LogError_Object", err .. ", " .. trace);
     return {err, trace};
   end);
 end;

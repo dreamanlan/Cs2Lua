@@ -1767,7 +1767,7 @@ namespace SLua
                 WriteFunctionAttr(file);
                 Write(file, "static public int constructor(IntPtr l) {");
                 WriteTry(file);
-                if (cons.Length > 1)
+                if (cons.Length > 1 || t.IsValueType)
                     Write(file, "int argc = LuaDLL.lua_gettop(l);");
                 Write(file, "{0} o;", TypeDecl(t));
                 bool first = true;
@@ -1795,7 +1795,7 @@ namespace SLua
                         }
                     }
 
-                    if (cons.Length > 1) {
+                    if (cons.Length > 1 || t.IsValueType) {
                         bool hasParams = false;
                         if (pars.Length > 0) {
                             ParameterInfo p = pars[pars.Length - 1];
@@ -1805,7 +1805,7 @@ namespace SLua
                             if (hasParams)
                                 continue;
                             else
-                                Write(file, "{0}(argc=={1}){{", first ? "if" : "else if", ci.GetParameters().Length + 2);
+                                Write(file, "{0}(argc=={1}){{", first ? "if" : "else if", ci.GetParameters().Length + (cons.Length > 1 ? 2 : 1));
                         } else {
                             Write(file, "{0}(matchType(l, \"{1}\", argc, 2{2})){{", first ? "if" : "else if", CalcOverloadedMethodSignature(ci), TypeDecl(pars));
                         }
@@ -1823,13 +1823,13 @@ namespace SLua
                     else
                         Write(file, "pushValue(l,o);");
                     Write(file, "return 2;");
-                    if (cons.Length == 1)
+                    if (cons.Length == 1 && !t.IsValueType)
                         WriteCatchExecption(file);
                     Write(file, "}");
                     first = false;
                 }
                 //第二遍处理params参数
-                if (cons.Length > 1) {
+                if (cons.Length > 1 || t.IsValueType) {
                     for (int n = 0; n < cons.Length; n++) {
                         ConstructorInfo ci = cons[n];
                         ParameterInfo[] pars = ci.GetParameters();
@@ -1849,7 +1849,7 @@ namespace SLua
                         }
                         if (isUniqueArgsCount(cons, ci)) {
                             if (hasParams)
-                                Write(file, "{0}(argc>={1}){{", first ? "if" : "else if", ci.GetParameters().Length + 2);
+                                Write(file, "{0}(argc>={1}){{", first ? "if" : "else if", ci.GetParameters().Length + (cons.Length > 1 ? 2 : 1));
                             else
                                 continue;
                         } else {
@@ -1868,8 +1868,6 @@ namespace SLua
                         else
                             Write(file, "pushValue(l,o);");
                         Write(file, "return 2;");
-                        if (cons.Length == 1)
-                            WriteCatchExecption(file);
                         Write(file, "}");
                         first = false;
                     }
@@ -1888,8 +1886,7 @@ namespace SLua
                     WriteCatchExecption(file);
                     Write(file, "}");
                 }
-            } else if (t.IsValueType) // default constructor
-              {
+            } else if (t.IsValueType) { // default constructor
                 WriteFunctionAttr(file);
                 Write(file, "static public int constructor(IntPtr l) {");
                 WriteTry(file);
