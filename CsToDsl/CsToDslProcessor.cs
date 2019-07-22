@@ -871,15 +871,11 @@ namespace RoslynTool.CsToDsl
             bool isEnumClass = false;
             bool haveCctor = false;
             bool haveCtor = false;
-            bool generateBasicCctor = false;
-            bool generateBasicCtor = false;
             bool existAttributes = false;
             ClassSymbolInfo csi;
             if (symTable.ClassSymbols.TryGetValue(genericTypeKey, out csi)) {
                 haveCctor = csi.ExistStaticConstructor;
                 haveCtor = csi.ExistConstructor;
-                generateBasicCctor = csi.GenerateBasicCctor;
-                generateBasicCtor = csi.GenerateBasicCtor;
                 existAttributes = csi.ExistAttributes;
                 isStaticClass = csi.TypeSymbol.IsStatic;
                 isValueType = csi.TypeSymbol.IsValueType;
@@ -979,7 +975,7 @@ namespace RoslynTool.CsToDsl
                         sb.AppendFormat("{0}return(newobject({1}, ", GetIndentString(indent), key);
                         var namedTypeSym = csi.TypeSymbol;
                         CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
-                        sb.Append("null, null, ...));");
+                        sb.Append(", null, null, ...));");
                         sb.AppendLine();
                     } else {
                         //处理ref/out参数
@@ -994,13 +990,13 @@ namespace RoslynTool.CsToDsl
                             sb.AppendFormat(") = newobject({0}, ", key);
                             var namedTypeSym = csi.TypeSymbol;
                             CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
-                            sb.AppendFormat("\"{0}\", null, ...); return(newobj); }})(...));", exportConstructor);
+                            sb.AppendFormat(", \"{0}\", null, ...); return(newobj); }})(...));", exportConstructor);
                             sb.AppendLine();
                         } else {
                             sb.AppendFormat("{0}return(newobject({1}, ", GetIndentString(indent), key);
                             var namedTypeSym = csi.TypeSymbol;
                             CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
-                            sb.AppendFormat("\"{0}\", null, ...));", exportConstructor);
+                            sb.AppendFormat(", \"{0}\", null, ...));", exportConstructor);
                             sb.AppendLine();
                         }
                     }
@@ -1023,40 +1019,36 @@ namespace RoslynTool.CsToDsl
                         sb.AppendFormat("{0}callstatic({1}, \"cctor\");", GetIndentString(indent), baseClass);
                         sb.AppendLine();
                     }
-                    if (generateBasicCctor) {
-                        sb.AppendFormat("{0}callstatic({1}, \"__cctor\");", GetIndentString(indent), key);
-                        sb.AppendLine();
-                    }
+                    sb.AppendFormat("{0}callstatic({1}, \"__cctor\");", GetIndentString(indent), key);
+                    sb.AppendLine();
                     --indent;
                     sb.AppendFormat("{0}}};", GetIndentString(indent));
                     sb.AppendLine();
                 }
-                if (generateBasicCctor) {
-                    sb.AppendFormat("{0}__cctor = function(){{", GetIndentString(indent));
-                    sb.AppendLine();
-                    ++indent;
-                    sb.AppendFormat("{0}if({1}.__cctor_called){{", GetIndentString(indent), key);
-                    sb.AppendLine();
-                    ++indent;
-                    sb.AppendFormat("{0}return;", GetIndentString(indent));
-                    sb.AppendLine();
-                    --indent;
-                    sb.AppendFormat("{0}}}else{{", GetIndentString(indent));
-                    sb.AppendLine();
-                    ++indent;
-                    sb.AppendFormat("{0}{1}.__cctor_called = true;", GetIndentString(indent), key);
-                    sb.AppendLine();
-                    --indent;
-                    sb.AppendFormat("{0}}};", GetIndentString(indent));
-                    sb.AppendLine();
-                    //static initializer
-                    foreach (var ci in classes) {
-                        sb.Append(ci.StaticInitializerCodeBuilder.ToString());
-                    }
-                    --indent;
-                    sb.AppendFormat("{0}}};", GetIndentString(indent));
-                    sb.AppendLine();
+                sb.AppendFormat("{0}__cctor = function(){{", GetIndentString(indent));
+                sb.AppendLine();
+                ++indent;
+                sb.AppendFormat("{0}if({1}.__cctor_called){{", GetIndentString(indent), key);
+                sb.AppendLine();
+                ++indent;
+                sb.AppendFormat("{0}return;", GetIndentString(indent));
+                sb.AppendLine();
+                --indent;
+                sb.AppendFormat("{0}}}else{{", GetIndentString(indent));
+                sb.AppendLine();
+                ++indent;
+                sb.AppendFormat("{0}{1}.__cctor_called = true;", GetIndentString(indent), key);
+                sb.AppendLine();
+                --indent;
+                sb.AppendFormat("{0}}};", GetIndentString(indent));
+                sb.AppendLine();
+                //static initializer
+                foreach (var ci in classes) {
+                    sb.Append(ci.StaticInitializerCodeBuilder.ToString());
                 }
+                --indent;
+                sb.AppendFormat("{0}}};", GetIndentString(indent));
+                sb.AppendLine();
 
                 --indent;
                 sb.AppendFormat("{0}}};", GetIndentString(indent));
@@ -1076,10 +1068,8 @@ namespace RoslynTool.CsToDsl
                     sb.AppendLine();
                 }
 
-                if (generateBasicCctor) {
-                    sb.AppendFormat("{0}__cctor_called = false;", GetIndentString(indent));
-                    sb.AppendLine();
-                }
+                sb.AppendFormat("{0}__cctor_called = false;", GetIndentString(indent));
+                sb.AppendLine();
                     
                 --indent;
                 sb.AppendFormat("{0}}};", GetIndentString(indent));
@@ -1153,40 +1143,37 @@ namespace RoslynTool.CsToDsl
                             sb.AppendFormat("{0}callinstance(getinstance(this, \"base\"), \"ctor\");", GetIndentString(indent));
                             sb.AppendLine();
                         }
-                        if (generateBasicCtor) {
-                            sb.AppendFormat("{0}callinstance(this, \"__ctor\");", GetIndentString(indent));
-                            sb.AppendLine();
-                        }
+                        sb.AppendFormat("{0}callinstance(this, \"__ctor\");", GetIndentString(indent));
+                        sb.AppendLine();
                         --indent;
                         sb.AppendFormat("{0}}};", GetIndentString(indent));
                         sb.AppendLine();
                     }
-                    if (generateBasicCtor) {
-                        sb.AppendFormat("{0}__ctor = function(this){{", GetIndentString(indent));
-                        sb.AppendLine();
-                        ++indent;
-                        sb.AppendFormat("{0}if(getinstance(this, \"__ctor_called\")){{", GetIndentString(indent));
-                        sb.AppendLine();
-                        ++indent;
-                        sb.AppendFormat("{0}return;", GetIndentString(indent));
-                        sb.AppendLine();
-                        --indent;
-                        sb.AppendFormat("{0}}}else{{", GetIndentString(indent));
-                        sb.AppendLine();
-                        ++indent;
-                        sb.AppendFormat("{0}setinstance(this, \"__ctor_called\", true);", GetIndentString(indent));
-                        sb.AppendLine();
-                        --indent;
-                        sb.AppendFormat("{0}}};", GetIndentString(indent));
-                        sb.AppendLine();
-                        //instance initializer
-                        foreach (var ci in classes) {
-                            sb.Append(ci.InstanceInitializerCodeBuilder.ToString());
-                        }
-                        --indent;
-                        sb.AppendFormat("{0}}};", GetIndentString(indent));
-                        sb.AppendLine();
+
+                    sb.AppendFormat("{0}__ctor = function(this){{", GetIndentString(indent));
+                    sb.AppendLine();
+                    ++indent;
+                    sb.AppendFormat("{0}if(getinstance(this, \"__ctor_called\")){{", GetIndentString(indent));
+                    sb.AppendLine();
+                    ++indent;
+                    sb.AppendFormat("{0}return;", GetIndentString(indent));
+                    sb.AppendLine();
+                    --indent;
+                    sb.AppendFormat("{0}}}else{{", GetIndentString(indent));
+                    sb.AppendLine();
+                    ++indent;
+                    sb.AppendFormat("{0}setinstance(this, \"__ctor_called\", true);", GetIndentString(indent));
+                    sb.AppendLine();
+                    --indent;
+                    sb.AppendFormat("{0}}};", GetIndentString(indent));
+                    sb.AppendLine();
+                    //instance initializer
+                    foreach (var ci in classes) {
+                        sb.Append(ci.InstanceInitializerCodeBuilder.ToString());
                     }
+                    --indent;
+                    sb.AppendFormat("{0}}};", GetIndentString(indent));
+                    sb.AppendLine();
 
                     --indent;
                     sb.AppendFormat("{0}}};", GetIndentString(indent));
@@ -1206,10 +1193,8 @@ namespace RoslynTool.CsToDsl
                         sb.AppendLine();
                     }
 
-                    if (generateBasicCtor) {
-                        sb.AppendFormat("{0}__ctor_called = false;", GetIndentString(indent));
-                        sb.AppendLine();
-                    }
+                    sb.AppendFormat("{0}__ctor_called = false;", GetIndentString(indent));
+                    sb.AppendLine();
 
                     --indent;
                     sb.AppendFormat("{0}}};", GetIndentString(indent));

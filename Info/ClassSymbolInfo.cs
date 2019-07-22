@@ -16,8 +16,6 @@ namespace RoslynTool.CsToDsl
         internal bool ExistAttributes = false;
         internal bool ExistConstructor = false;
         internal bool ExistStaticConstructor = false;
-        internal bool GenerateBasicCtor = false;
-        internal bool GenerateBasicCctor = false;
 
         internal INamedTypeSymbol TypeSymbol = null;
         internal List<IFieldSymbol> FieldSymbols = new List<IFieldSymbol>();
@@ -159,19 +157,12 @@ namespace RoslynTool.CsToDsl
             if (useExplicitTypeParam) {
                 if (fsym.IsStatic) {
                     staticFieldUseExplicitTypeParams = true;
-                    GenerateBasicCctor = true;
                 } else {
                     fieldUseExplicitTypeParams = true;
-                    GenerateBasicCtor = true;
                 }
                 FieldUseExplicitTypeParams.Add(fsym.Name, fsym);
             }
             if (createSelf) {
-                if (fsym.IsStatic) {
-                    GenerateBasicCctor = true;
-                } else {
-                    GenerateBasicCtor = true;
-                }
                 FieldCreateSelfs.Add(fsym.Name, fsym);
             }
         }

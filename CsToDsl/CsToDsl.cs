@@ -730,7 +730,7 @@ namespace RoslynTool.CsToDsl
         private void OutputOperatorInvoke(InvocationInfo ii, SyntaxNode node)
         {
             if (!ii.IsExternMethod) {
-                CodeBuilder.AppendFormat("invokeoperator({0}, ", ii.ClassKey);
+                CodeBuilder.AppendFormat("invokeoperator({0}, {1}, ", ClassInfo.GetFullName(ii.MethodSymbol.ReturnType), ii.ClassKey);
                 string manglingName = NameMangling(ii.MethodSymbol);
                 CodeBuilder.AppendFormat("\"{0}\"", manglingName);
                 CodeBuilder.Append(", ");
@@ -738,7 +738,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.Append(")");
             } else {
                 string method = ii.MethodSymbol.Name;
-                CodeBuilder.AppendFormat("invokeexternoperator({0}, ", ii.GenericClassKey);
+                CodeBuilder.AppendFormat("invokeexternoperator({0}, {1}, ", ClassInfo.GetFullName(ii.MethodSymbol.ReturnType), ii.GenericClassKey);
                 CodeBuilder.AppendFormat("\"{0}\"", method);
                 CodeBuilder.Append(", ");
                 OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, node, ii.ArgConversions.ToArray());
@@ -748,15 +748,19 @@ namespace RoslynTool.CsToDsl
         private void OutputConversionInvokePrefix(InvocationInfo ii)
         {
             if (!ii.IsExternMethod) {
-                CodeBuilder.AppendFormat("invokeoperator({0}, ", ii.ClassKey);
+                CodeBuilder.AppendFormat("invokeoperator({0}, {1}, ", ClassInfo.GetFullName(ii.MethodSymbol.ReturnType), ii.ClassKey);
                 string manglingName = NameMangling(ii.MethodSymbol);
                 CodeBuilder.AppendFormat("\"{0}\"", manglingName);
                 CodeBuilder.Append(", ");
             } else {
                 string method = ii.MethodSymbol.Name;
-                CodeBuilder.AppendFormat("invokeexternoperator({0}, ", ii.GenericClassKey);
+                CodeBuilder.AppendFormat("invokeexternoperator({0}, {1}, ", ClassInfo.GetFullName(ii.MethodSymbol.ReturnType), ii.GenericClassKey);
                 CodeBuilder.AppendFormat("\"{0}\"", method);
                 CodeBuilder.Append(", ");
+                if (!string.IsNullOrEmpty(ii.ExternOverloadedMethodSignature)) {
+                    CodeBuilder.AppendFormat("\"{0}\"", ii.ExternOverloadedMethodSignature);
+                    CodeBuilder.Append(", ");
+                }
             }
         }
         private bool ProcessEqualOrNotEqual(string op, ExpressionSyntax left, ExpressionSyntax right, IConversionExpression lopd, IConversionExpression ropd)
@@ -1157,9 +1161,9 @@ namespace RoslynTool.CsToDsl
                     sb.Append(ta.TypeKind);
                     prestr = ", ";
                 }
-                sb.Append("), ");
+                sb.Append(")");
             } else {
-                sb.Append("typeargs(), typekinds(), ");
+                sb.Append("typeargs(), typekinds()");
             }
         }
         internal static void OutputDefaultValue(StringBuilder sb, ITypeSymbol type)

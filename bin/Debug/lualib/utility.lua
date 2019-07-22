@@ -126,6 +126,12 @@ function warmup(class)
 end;
 
 function getobjfullname(obj)
+	local ty = type(obj);
+	if ty=="string" then
+		return "System.String";
+	elseif ty=="number" then
+		return "System.Double";
+	end;
 	local meta = getmetatable(obj);
 	if meta then
 		if rawget(meta, "__cs2lua_defined") then
@@ -141,10 +147,16 @@ function getobjfullname(obj)
 		end;
 	else
 		return nil;
-	end;
+	end;	
 end;
 
 function getobjtypename(obj)
+	local ty = type(obj);
+	if ty=="string" then
+		return "System.String";
+	elseif ty=="number" then
+		return "System.Double";
+	end;
 	local meta = getmetatable(obj);
 	if meta then
 		if rawget(meta, "__cs2lua_defined") then
@@ -190,6 +202,10 @@ function getclasstypename(t)
 end;
 
 function getobjparentclass(obj)
+	local ty = type(obj);
+	if ty=="string" or ty=="number" then
+		return nil;
+	end;
 	local meta = getmetatable(obj);
 	if meta then
 		if rawget(meta, "__cs2lua_defined") then
@@ -494,7 +510,7 @@ function typeis(obj, t, tk)
 end;
 
 function __do_eq(v1,v2)
-	return v1==v2;
+  return v1==v2;
 end;
 
 function isequal(v1,v2)
@@ -2018,7 +2034,11 @@ function setexterninstanceindexer(obj, intf, name, ...)
   return nil;
 end;
 
-function invokeexternoperator(class, method, ...)
+function invokeoperator(rettype, class, method, ...)
+	return nil;
+end;
+
+function invokeexternoperator(rettype, class, method, ...)
   local args = {...};
   --对slua，对应到lua元表操作符函数的操作符重载cs2lua转lua代码时已经换成对应操作符表达式。
   --执行到这里的应该是无法对应到lua操作符的操作符重载
@@ -2168,11 +2188,15 @@ function invokeexternoperator(class, method, ...)
     	if t=="Vector3" then
       	return Slua.CreateClass("UnityEngine.Vector4", args[2].x, args[2].y, args[2].z, 0);
       elseif t=="Vector4" then
-      	return Slua.CreateClass("UnityEngine.Vector3", args[2].x, args[2].y, args[2].z);
+      	if rettype==UnityEngine.Vector3 then
+      		return Slua.CreateClass("UnityEngine.Vector3", args[2].x, args[2].y, args[2].z);
+      	else
+      		return Slua.CreateClass("UnityEngine.Vector2", args[2].x, args[2].y);
+      	end;
       end;
     elseif class==UnityEngine.Vector2 then
     	if t=="Vector3" then
-    		return Slua.CreateClass("UnityEngine.Vector2", args[1].x, args[1].y);
+    		return Slua.CreateClass("UnityEngine.Vector2", args[2].x, args[2].y);
     	else
       	return Slua.CreateClass("UnityEngine.Vector3", args[2].x, args[2].y, 0);
       end;
@@ -2180,7 +2204,7 @@ function invokeexternoperator(class, method, ...)
     	if t=="Color32" then
       	return Slua.CreateClass("UnityEngine.Color", args[2].r/255.0, args[2].g/255.0, args[2].b/255.0, args[2].a/255.0);
       else
-      	return Slua.CreateClass("UnityEngine.Color32", math.floor(args[1].r*255), math.floor(args[1].g*255), math.floor(args[1].b*255), math.floor(args[1].a*255));
+      	return Slua.CreateClass("UnityEngine.Color32", math.floor(args[2].r*255), math.floor(args[2].g*255), math.floor(args[2].b*255), math.floor(args[2].a*255));
       end;
     else
       --这里就不仔细判断了，就假定是UnityEngine.Object子类了

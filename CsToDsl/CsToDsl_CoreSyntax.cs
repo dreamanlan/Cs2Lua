@@ -410,10 +410,8 @@ namespace RoslynTool.CsToDsl
                                 CodeBuilder.AppendLine(";");
                                 if (isStatic) {
                                     ci.CurrentCodeBuilder = ci.StaticInitializerCodeBuilder;
-                                    ci.ClassSemanticInfo.GenerateBasicCctor = true;
                                 } else {
                                     ci.CurrentCodeBuilder = ci.InstanceInitializerCodeBuilder;
-                                    ci.ClassSemanticInfo.GenerateBasicCtor = true;
                                 }
                                 ++m_Indent;
                                 CodeBuilder.AppendFormat("{0}{1}.{2}", GetIndentString(), isStatic ? ci.Key : "this", name);
@@ -450,10 +448,8 @@ namespace RoslynTool.CsToDsl
                                 OutputDefaultValue(type);
                                 if (isStatic) {
                                     ci.CurrentCodeBuilder = ci.StaticInitializerCodeBuilder;
-                                    ci.ClassSemanticInfo.GenerateBasicCctor = true;
                                 } else {
                                     ci.CurrentCodeBuilder = ci.InstanceInitializerCodeBuilder;
-                                    ci.ClassSemanticInfo.GenerateBasicCtor = true;
                                 }
                                 ++m_Indent;
                                 CodeBuilder.AppendFormat("{0}{1}.{2} = ", GetIndentString(), isStatic ? ci.Key : "this", name);
@@ -478,10 +474,8 @@ namespace RoslynTool.CsToDsl
                             OutputDefaultValue(type);
                             if (isStatic) {
                                 ci.CurrentCodeBuilder = ci.StaticInitializerCodeBuilder;
-                                ci.ClassSemanticInfo.GenerateBasicCctor = true;
                             } else {
                                 ci.CurrentCodeBuilder = ci.InstanceInitializerCodeBuilder;
-                                ci.ClassSemanticInfo.GenerateBasicCtor = true;
                             }
                             ++m_Indent;
                             CodeBuilder.AppendFormat("{0}{1}.{2} = ", GetIndentString(), isStatic ? ci.Key : "this", name);

@@ -1090,7 +1090,7 @@ namespace Generator
                     }
                 }
             } else if (id == "invokeexternoperator") {
-                string method = data.GetParamId(1);
+                string method = data.GetParamId(2);
                 string luaOp = string.Empty;
                 //slua导出时把重载操作符导出成lua实例方法了，然后利用lua实例上支持的操作符元方法在运行时绑定到重载实现
                 //这里把lua支持的操作符方法转成lua操作（可能比invokeexternoperator要快一些）
@@ -1115,7 +1115,7 @@ namespace Generator
                 } else if (method == "op_GreaterThanOrEqual") {
                     luaOp = ">= ";
                 }
-                if (string.IsNullOrEmpty(luaOp) || data.GetParamNum() > 4) {
+                if (string.IsNullOrEmpty(luaOp) || data.GetParamNum() > 5) {
                     sb.Append(id);
                     sb.Append("(");
                     string prestr = string.Empty;
@@ -1131,15 +1131,15 @@ namespace Generator
                         prestr = ", ";
                     }
                     sb.Append(")");
-                } else if (data.GetParamNum() == 3 && luaOp == "-") {
+                } else if (data.GetParamNum() == 4 && luaOp == "-") {
                     sb.Append("(- ");
-                    var param0 = data.GetParam(2);
+                    var param0 = data.GetParam(3);
                     GenerateSyntaxComponent(param0, sb, indent, false);
                     sb.Append(")");
-                } else if (data.GetParamNum() == 4) {
+                } else if (data.GetParamNum() == 5) {
                     sb.Append("(");
-                    var param0 = data.GetParam(2);
-                    var param1 = data.GetParam(3);
+                    var param0 = data.GetParam(3);
+                    var param1 = data.GetParam(4);
                     GenerateSyntaxComponent(param0, sb, indent, false);
                     sb.AppendFormat(" {0} ", luaOp);
                     GenerateSyntaxComponent(param1, sb, indent, false);

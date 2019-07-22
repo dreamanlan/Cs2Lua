@@ -145,14 +145,6 @@ namespace RoslynTool.CsToDsl
                 isExportConstructor = ClassInfo.HasAttribute(declSym, "Cs2Dsl.ExportAttribute");
             }
 
-            bool generateBasicCtor = false;
-            bool generateBasicCctor = false;
-            ClassSymbolInfo csi;
-            if (SymbolTable.Instance.ClassSymbols.TryGetValue(ci.Key, out csi)) {
-                generateBasicCtor = csi.GenerateBasicCtor;
-                generateBasicCctor = csi.GenerateBasicCctor;
-            }
-
             bool isStatic = declSym.IsStatic;
             var mi = new MethodInfo();
             mi.Init(declSym, node);
@@ -219,20 +211,16 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendFormat("{0}callstatic({1}, \"cctor\");", GetIndentString(), ci.BaseKey);
                     CodeBuilder.AppendLine();
                 }
-                if (generateBasicCctor) {
-                    CodeBuilder.AppendFormat("{0}callstatic({1}, \"__cctor\");", GetIndentString(), ci.Key);
-                    CodeBuilder.AppendLine();
-                }
+                CodeBuilder.AppendFormat("{0}callstatic({1}, \"__cctor\");", GetIndentString(), ci.Key);
+                CodeBuilder.AppendLine();
             } else {
                 if (!string.IsNullOrEmpty(ci.BaseKey) && !ClassInfo.IsBaseInitializerCalled(node, m_Model) && myselfDefinedBaseClass) {
                     //如果当前构造没有调父类构造并且委托的其它构造也没有调父类构造，则调用默认构造。
                     CodeBuilder.AppendFormat("{0}callinstance(getinstance(this, \"base\"), \"ctor\");", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
-                if (generateBasicCtor) {
-                    CodeBuilder.AppendFormat("{0}callinstance(this, \"__ctor\", {1});", GetIndentString(), string.Join(", ", mi.GenericTypeTypeParamNames.ToArray()));
-                    CodeBuilder.AppendLine();
-                }
+                CodeBuilder.AppendFormat("{0}callinstance(this, \"__ctor\");", GetIndentString());
+                CodeBuilder.AppendLine();
             }
             //再执行构造函数内容（构造函数部分）
             if (null != node.Body) {
