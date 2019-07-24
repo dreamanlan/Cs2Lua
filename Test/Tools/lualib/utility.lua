@@ -126,6 +126,12 @@ function warmup(class)
 end;
 
 function getobjfullname(obj)
+	local ty = type(obj);
+	if ty=="string" then
+		return "System.String";
+	elseif ty=="number" then
+		return "System.Double";
+	end;
 	local meta = getmetatable(obj);
 	if meta then
 		if rawget(meta, "__cs2lua_defined") then
@@ -141,10 +147,16 @@ function getobjfullname(obj)
 		end;
 	else
 		return nil;
-	end;
+	end;	
 end;
 
 function getobjtypename(obj)
+	local ty = type(obj);
+	if ty=="string" then
+		return "System.String";
+	elseif ty=="number" then
+		return "System.Double";
+	end;
 	local meta = getmetatable(obj);
 	if meta then
 		if rawget(meta, "__cs2lua_defined") then
@@ -190,6 +202,10 @@ function getclasstypename(t)
 end;
 
 function getobjparentclass(obj)
+	local ty = type(obj);
+	if ty=="string" or ty=="number" then
+		return nil;
+	end;
 	local meta = getmetatable(obj);
 	if meta then
 		if rawget(meta, "__cs2lua_defined") then
@@ -494,7 +510,7 @@ function typeis(obj, t, tk)
 end;
 
 function __do_eq(v1,v2)
-	return v1==v2;
+  return v1==v2;
 end;
 
 function isequal(v1,v2)
@@ -555,21 +571,21 @@ end;
 function __inc_table_count(tb)
   local meta = getmetatable(tb);
   if meta then
-  	if nil ~= meta.__count then
-	    meta.__count = meta.__count + 1;
-	  else
-	  	meta.__count = __calc_table_count(tb);
-	  end;
-	end;
+    if nil ~= meta.__count then
+        meta.__count = meta.__count + 1;
+      else
+        meta.__count = __calc_table_count(tb);
+      end;
+    end;
 end;
 
 function __dec_table_count(tb)
   local meta = getmetatable(tb);
   if meta then
-  	if meta.__count and meta.__count > 0 then
-    	meta.__count = meta.__count - 1;    
+    if meta.__count and meta.__count > 0 then
+        meta.__count = meta.__count - 1;    
     else
-    	meta.__count = __calc_table_count(tb);
+        meta.__count = __calc_table_count(tb);
     end;
   end;
 end;
@@ -589,19 +605,19 @@ function __clear_table(tb)
 end;
 
 function __wrap_table_field(v)
-	if nil==v then
-		return __cs2lua_nil_field_value;
-	else
-		return v;
-	end;
+    if nil==v then
+        return __cs2lua_nil_field_value;
+    else
+        return v;
+    end;
 end;
 
 function __unwrap_table_field(v)
-	if __cs2lua_nil_field_value==v then
-		return nil;
-	else
-		return v;
-	end;
+    if __cs2lua_nil_field_value==v then
+        return nil;
+    else
+        return v;
+    end;
 end;
 
 function __set_array_count(tb, count)
@@ -628,35 +644,35 @@ end;
 function __inc_array_count(tb)
   local meta = getmetatable(tb);
   if meta then
-  	if nil ~= meta.__count then
-	    meta.__count = meta.__count + 1;
-	  else
-	  	meta.__count = #tb;
-	  end;
-	end;
+    if nil ~= meta.__count then
+        meta.__count = meta.__count + 1;
+      else
+        meta.__count = #tb;
+      end;
+    end;
 end;
 
 function __dec_array_count(tb)
   local meta = getmetatable(tb);
   if meta then
-  	if meta.__count and meta.__count > 0 then
-    	meta.__count = meta.__count - 1;    
+    if meta.__count and meta.__count > 0 then
+        meta.__count = meta.__count - 1;    
     else
-    	meta.__count = #tb;
+        meta.__count = #tb;
     end;
   end;
 end;
 
 __mt_index_of_array = function(t, k)
-  if k=="__exist" then --½ûÓÃ¼Ì³Ð
+  if k=="__exist" then --禁用继承
     return function(tb,fk) return false; end;
-	elseif k=="Length" or k=="Count" then
-		return __get_array_count(t);
-	elseif k=="GetLength" then
-		return function(obj, ix)
+    elseif k=="Length" or k=="Count" then
+        return __get_array_count(t);
+    elseif k=="GetLength" then
+        return function(obj, ix)
       local ret = 0;
       local tb = obj;
-      for i=0,ix do			       
+      for i=0,ix do                
         ret = __get_array_count(tb);
         tb = rawget(tb,0);
       end;
@@ -666,13 +682,13 @@ __mt_index_of_array = function(t, k)
     return function(obj, v) table.insert(obj, v);__inc_array_count(obj); end;
   elseif k=="Remove" then
     return function(obj, p)
-    	local pos = 0;
+        local pos = 0;
       local ret = nil;
-    	local ct = __get_array_count(obj);
+        local ct = __get_array_count(obj);
       for i = 1,ct do
         local v = rawget(obj,i);
         if isequal(v,p) then
-        	pos = i;
+            pos = i;
           ret=v;
           break;
         end;
@@ -690,16 +706,16 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="RemoveAll" then
     return function(obj, pred)
-    	local deletes = {};
-    	local ct = __get_array_count(obj);
-      for i = 1,ct do		        
+        local deletes = {};
+        local ct = __get_array_count(obj);
+      for i = 1,ct do               
         if pred(rawget(obj,i)) then
-        	table.insert(deletes, i);
+            table.insert(deletes, i);
         end;
       end;
       for i,v in ipairs(deletes) do
-      	table.remove(obj, v);
-      	__dec_array_count(obj);
+        table.remove(obj, v);
+        __dec_array_count(obj);
       end;
     end;
   elseif k=="AddRange" then
@@ -716,53 +732,53 @@ __mt_index_of_array = function(t, k)
       __inc_array_count(obj);
     end;
   elseif k=="IndexOf" then
-	  return function(obj, p)
-    	local ct = __get_array_count(obj);
+      return function(obj, sig, p)
+        local ct = __get_array_count(obj);
       for i = 1,ct do
         local v = rawget(obj,i);
-        if v==p then	          
+        if v==p then              
           return i-1;
         end;
       end;
       return -1;
     end;
   elseif k=="LastIndexOf" then
-	  return function(obj, p)
-    	local ct = __get_array_count(obj);
+      return function(obj, sig, p)
+        local ct = __get_array_count(obj);
       for k=ct,1 do
         local v = rawget(obj,k);
-        if v==p then	          
+        if v==p then              
           return k-1;
         end;
       end;
       return -1;
     end;
   elseif k=="FindIndex" then
-  	return function(obj, predicate)
-    	local ct = __get_array_count(obj);
+    return function(obj, sig, predicate)
+        local ct = __get_array_count(obj);
       for i = 1,ct do
         local v = rawget(obj,i);
-  			if predicate(v) then
-  				return i-1;
-  			end
-  		end
-  		return -1;
-  	end;
+            if predicate(v) then
+                return i-1;
+            end
+        end
+        return -1;
+    end;
   elseif k=="Find" then
-  	return function(obj, predicate)
-    	local ct = __get_array_count(obj);
+    return function(obj, predicate)
+        local ct = __get_array_count(obj);
       for i = 1,ct do
         local v = rawget(obj,i);
-  			if predicate(v) then
-  				return v;
-  			end
-  		end
-  		return nil;
-  	end;
+            if predicate(v) then
+                return v;
+            end
+        end
+        return nil;
+    end;
   elseif k=="Contains" then
-	  return function(obj, p)
+      return function(obj, p)
       local ret = false;
-    	local ct = __get_array_count(obj);
+        local ct = __get_array_count(obj);
       for i = 1,ct do
         local v = rawget(obj,i);
         if v==p then
@@ -774,7 +790,7 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="Peek" then    
     return function(obj)
-    	local ct = __get_array_count(obj);
+        local ct = __get_array_count(obj);
       local v = rawget(obj,ct);
       return v;
     end;
@@ -785,7 +801,7 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="Dequeue" then
     return function(obj)
-    	local ct = __get_array_count(obj);
+        local ct = __get_array_count(obj);
       local v = rawget(obj,ct);
       table.remove(obj,ct);
       __dec_array_count(obj);
@@ -798,7 +814,7 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="Pop" then
     return function(obj)
-    	local ct = __get_array_count(obj);
+        local ct = __get_array_count(obj);
       local v = rawget(obj,ct);
       table.remove(obj,num);
       __dec_array_count(obj);
@@ -806,14 +822,14 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="CopyTo" then
     return function(obj, arr)
-    	local ct = __get_array_count(obj);
+        local ct = __get_array_count(obj);
       for k = 1,ct do
         arr[k] = rawget(obj,k);
       end;
     end;
   elseif k=="ToArray" then
     return function(obj)
-    	local ct = __get_array_count(obj);
+      local ct = __get_array_count(obj);
       local ret = wraparray({}, ct);
       for k = 1,ct do
         ret[k] = rawget(obj,k);
@@ -822,77 +838,88 @@ __mt_index_of_array = function(t, k)
     end;
   elseif k=="Clear" then
     return function(obj)
-    	local ct = __get_array_count(obj);
-    	for i = ct,1,-1 do
-    		table.remove(obj, i);
-    	end;
-    	__set_array_count(obj, 0);
+        local ct = __get_array_count(obj);
+        for i = ct,1,-1 do
+            table.remove(obj, i);
+        end;
+        __set_array_count(obj, 0);
     end;
   elseif k=="GetEnumerator" then
     return function(obj)
       return GetArrayEnumerator(obj);
     end
   elseif k=="Sort" then
-		return function(obj, predicate)
-		  table.sort(obj, function(a, b) return predicate(a, b) < 0 end);
-		end
+    return function(obj, predicate)
+      local function comp_all_kind(a,b,c)
+        if c == nil then
+          table.sort(obj, function(a, b) return predicate(a, b) < 0 end);
+        else
+          table.sort(obj, function(logic_class, a, b) return predicate(logic_class, a, b) < 0 end);
+        end
+      end
+    end
   elseif k=="GetType" then
-   	return function(obj)
-   		local meta = getmetatable(obj);   		
-   		return meta.__class;
-   	end;
+    return function(obj)
+        local meta = getmetatable(obj);         
+        return meta.__class;
+    end;
   end
 end;
 
 __mt_index_of_dictionary = function(t, k)
-	if k=="__exist" then --½ûÓÃ¼Ì³Ð
+    if k=="__exist" then --禁用继承
     return function(tb,fk) return false; end;
-	elseif k=="Count" then
-		return __get_table_count(t);
-	elseif k=="Add" then
-	  return function(obj, p1, p2)
-	    p1 = __unwrap_if_string(p1);		    
-	    rawset(obj, p1, { value=p2 });
-	    __inc_table_count(obj);
-	    return p2;
-	  end;
-	elseif k=="Remove" then
-	  return function(obj, p)
-	    p = __unwrap_if_string(p);
-	    local v = rawget(obj,p);
-	    local ret = nil;
-	    if v then
-	      ret = v.value;
+    elseif k=="Count" then
+        return __get_table_count(t);
+    elseif k=="Add" then
+      return function(obj, p1, p2)
+        p1 = __unwrap_if_string(p1);            
+        rawset(obj, p1, { value=p2 });
+        __inc_table_count(obj);
+        return p2;
+      end;
+    elseif k=="Remove" then
+      return function(obj, p)
+        p = __unwrap_if_string(p);
+        local v = rawget(obj,p);
+        local ret = nil;
+        if v then
+          ret = v.value;
         rawset(obj, p, nil);
       end;
       __dec_table_count(obj);
       return ret;
     end;
-	elseif k=="ContainsKey" then
-	  return function(obj, p)
-	    p = __unwrap_if_string(p);
+    elseif k=="ContainsKey" then
+      return function(obj, p)
+        p = __unwrap_if_string(p);
       if rawget(obj,p) then
         return true;
       end;
       return false;
     end;
-	elseif k=="ContainsValue" then
-	  return function(obj, p)
+    elseif k=="ContainsValue" then
+      return function(obj, p)
       local ret = false;
-      for k,v in pairs(obj) do		        
+      for k,v in pairs(obj) do              
         if v.value==p then
           ret=true;
           break;
         end;
       end;
       return ret;
-    end;		    
+    end;            
   elseif k=="TryGetValue" then
     return function(obj, p)
-	    p = __unwrap_if_string(p);
+        p = __unwrap_if_string(p);
       local v = rawget(obj,p);
       if v then
         return true, v.value;
+      else
+        v = rawget(obj,tostring(p));
+        if v then
+          return true, v.value;
+        end
       end;
       return false, nil;
     end;
@@ -912,60 +939,60 @@ __mt_index_of_dictionary = function(t, k)
     end;
     return ret;
   elseif k=="Clear" then
-  	return function(obj)
-  	  __clear_table(obj);
-  	end;
+    return function(obj)
+      __clear_table(obj);
+    end;
   elseif k=="GetEnumerator" then
     return function(obj)
       return GetDictEnumerator(obj);
     end;
   elseif k=="GetType" then
-   	return function(obj)
-   		local meta = getmetatable(obj);   		
-   		return meta.__class;
-   	end;
+    return function(obj)
+        local meta = getmetatable(obj);         
+        return meta.__class;
+    end;
   else
     local v = rawget(t,k);
     if v then
-  	  return v.value;
+      return v.value;
     end;
     return nil;    
-	end;
+    end;
 end;
 
 __mt_newindex_of_dictionary = function(t, k, val)  
   local v = rawget(t,k);
   if not v then
-	  __inc_table_count(t);
+      __inc_table_count(t);
   end;
   rawset(t, k, { value = val });
 end;
 
 __mt_index_of_hashset = function(t, k)
-	if k=="__exist" then --½ûÓÃ¼Ì³Ð
+    if k=="__exist" then --禁用继承
     return function(tb,fk) return false; end;
-	elseif k=="Count" then
-		return __get_table_count(t);
-	elseif k=="Add" then
-	  return function(obj, p)
-	    p = __unwrap_if_string(p);
-	    rawset(obj, p, true);
-	    __inc_table_count(obj);
-	    return true;
-	  end;
-	elseif k=="Remove" then
-	  return function(obj, p)
-	    p = __unwrap_if_string(p);
-	    local ret = rawget(obj,p);
-	    if ret then
+    elseif k=="Count" then
+        return __get_table_count(t);
+    elseif k=="Add" then
+      return function(obj, p)
+        p = __unwrap_if_string(p);
+        rawset(obj, p, true);
+        __inc_table_count(obj);
+        return true;
+      end;
+    elseif k=="Remove" then
+      return function(obj, p)
+        p = __unwrap_if_string(p);
+        local ret = rawget(obj,p);
+        if ret then
         rawset(obj, p, nil);
       end;
       __dec_table_count(obj);
       return ret;
     end;
-	elseif k=="Contains" then
-	  return function(obj, p)
-	    p = __unwrap_if_string(p);
+    elseif k=="Contains" then
+      return function(obj, p)
+        p = __unwrap_if_string(p);
       if rawget(obj,p) then
         return true;
       end;
@@ -974,24 +1001,24 @@ __mt_index_of_hashset = function(t, k)
   elseif k=="CopyTo" then
     return function(obj, arr)
       for k,v in pairs(obj) do
-	      k = __wrap_if_string(k);
+          k = __wrap_if_string(k);
         table.insert(arr,k);
       end;
     end;
   elseif k=="Clear" then
-  	return function(obj)
-  	  __clear_table(obj);
-  	end;
+    return function(obj)
+      __clear_table(obj);
+    end;
   elseif k=="GetEnumerator" then
     return function(obj)
       return GetHashsetEnumerator(obj);
     end;
   elseif k=="GetType" then
-   	return function(obj)
-   		local meta = getmetatable(obj);   		
-   		return meta.__class;
-   	end;
-	end;
+    return function(obj)
+        local meta = getmetatable(obj);         
+        return meta.__class;
+    end;
+    end;
 end;
 
 __mt_delegation = {
@@ -1090,7 +1117,7 @@ function wrapconst(t, name)
   if name then
     return t[name];
   else
-    UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil");
+    UnityEngine.Debug.LogError("LogError_String","[cs2lua] table index is nil");
   end;
   return nil;
 end;
@@ -1118,15 +1145,15 @@ function wraparray(arr, size)
   if not size then
     size = #arr;
   end;
-	return setmetatable(arr, { __index = __mt_index_of_array, __count = size, __cs2lua_defined = true, __class = System.Collections.Generic.List_T });
+    return setmetatable(arr, { __index = __mt_index_of_array, __count = size, __cs2lua_defined = true, __class = System.Collections.Generic.List_T });
 end;
 
 function wrapdictionary(dict)
   local obj = {};
   setmetatable(obj, { __index = __mt_index_of_dictionary, __newindex = __mt_newindex_of_dictionary, __cs2lua_defined = true, __class = System.Collections.Generic.Dictionary_TKey_TValue });
-	for k,v in pairs(dict) do
-	  obj:Add(k, v);
-	end;
+    for k,v in pairs(dict) do
+      obj:Add(k, v);
+    end;
   return obj;
 end;
 
@@ -1135,16 +1162,16 @@ function wrapdelegation(handlers)
 end;
 
 function wrapenumerable(func)
-	return function(...)
-		local args = {...};
-		return UnityEngine.WrapEnumerator(coroutine.create(function()
-			func(unpack(args));
-		end));
-	end;
+    return function(...)
+        local args = {...};
+        return UnityEngine.WrapEnumerator(coroutine.create(function()
+            func(unpack(args));
+        end));
+    end;
 end;
 
 function wrapyield(yieldVal, isEnumerableOrEnumerator, isUnityYield)
-	UnityEngine.Yield(yieldVal);
+    UnityEngine.Yield(yieldVal);
 end;
 
 LuaConsole = {
@@ -1152,32 +1179,32 @@ LuaConsole = {
     io.write(...);
   end,
   Print = function(...)
-  	print(...);
+    print(...);
   end,
 };
 
 function wrapvaluetype(v)
-	return v;
+    return v;
 end;
 
 function wrapvaluetypearray(arr)
-	for i,v in ipairs(arr) do
-		arr[i]=wrapvaluetype(v);
-	end;
-	local size = #arr;
-	return setmetatable(arr, { __index = __mt_index_of_array, __Count = size, __cs2lua_defined = true, __class = System.Collections.Generic.List_T });
+    for i,v in ipairs(arr) do
+        arr[i]=wrapvaluetype(v);
+    end;
+    local size = #arr;
+    return setmetatable(arr, { __index = __mt_index_of_array, __Count = size, __cs2lua_defined = true, __class = System.Collections.Generic.List_T });
 end;
 
 function wrapexternvaluetype(v)
-	return v;
+    return v;
 end;
 
 function wrapexternvaluetypearray(arr)
-	for i,v in ipairs(arr) do
-		arr[i]=wrapexternvaluetype(v);
-	end;
-	local size = #arr;
-	return setmetatable(arr, { __index = __mt_index_of_array, __Count = size, __cs2lua_defined = true, __class = System.Collections.Generic.List_T });
+    for i,v in ipairs(arr) do
+        arr[i]=wrapexternvaluetype(v);
+    end;
+    local size = #arr;
+    return setmetatable(arr, { __index = __mt_index_of_array, __Count = size, __cs2lua_defined = true, __class = System.Collections.Generic.List_T });
 end;
 
 function defineclass(base, fullName, typeName, static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, is_value_type)
@@ -1585,12 +1612,12 @@ end;
 function newdictionary(t, typeargs, typekinds, ctor, dict, ...)
   if dict then
     local obj = {};
-	  setmetatable(obj, { __index = __mt_index_of_dictionary, __newindex = __mt_newindex_of_dictionary, __cs2lua_defined = true, __class = t });
-		for k,v in pairs(dict) do
-		  obj:Add(k, v);
-		end;
+      setmetatable(obj, { __index = __mt_index_of_dictionary, __newindex = __mt_newindex_of_dictionary, __cs2lua_defined = true, __class = t });
+        for k,v in pairs(dict) do
+          obj:Add(k, v);
+        end;
     return obj;
-	end;
+    end;
 end;
 
 function newlist(t, typeargs, typekinds, ctor, list, ...)
@@ -1608,41 +1635,41 @@ end;
 function newexterndictionary(t, typeargs, typekinds, dict, ...)
   if dict and t==System.Collections.Generic.Dictionary_TKey_TValue then
     local obj = {};
-	  setmetatable(obj, { __index = __mt_index_of_dictionary, __newindex = __mt_newindex_of_dictionary, __cs2lua_defined = true, __class = t });
-		for k,v in pairs(dict) do
-		  obj:Add(k, v);
-		end;
+      setmetatable(obj, { __index = __mt_index_of_dictionary, __newindex = __mt_newindex_of_dictionary, __cs2lua_defined = true, __class = t });
+        for k,v in pairs(dict) do
+          obj:Add(k, v);
+        end;
     return obj;
-	else	  
-	  local obj = t(...);
-	  if obj then
-			if dict ~= nil then
-				for k,v in pairs(dict) do
-				  obj:Add(k, v);
-				end;
-			end
-	    return obj;
-	  else
-	    return nil;
-	  end;
-	end;
+    else      
+      local obj = t(...);
+      if obj then
+            if dict ~= nil then
+                for k,v in pairs(dict) do
+                  obj:Add(k, v);
+                end;
+            end
+        return obj;
+      else
+        return nil;
+      end;
+    end;
 end;
 
 function newexternlist(t, typeargs, typekinds, list, ...)
   if list and t==System.Collections.Generic.List_T then    
-	  return setmetatable(list, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = t });
-	else 
-	  local obj = t(...);
-	  if obj then
-			if list ~= nil then
-				for i,v in ipairs(list) do
-				  obj:Add(v);
-				end;
-			end
-	    return obj;
-	  else
-	    return nil;
-	  end;
+      return setmetatable(list, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = t });
+    else 
+      local obj = t(...);
+      if obj then
+            if list ~= nil then
+                for i,v in ipairs(list) do
+                  obj:Add(v);
+                end;
+            end
+        return obj;
+      else
+        return nil;
+      end;
   end;
 end;
 
@@ -1651,18 +1678,18 @@ function newexterncollection(t, typeargs, typekinds, coll, ...)
     return setmetatable(coll, { __index = __mt_index_of_array, __cs2lua_defined = true, __class = t });
   elseif coll and t==System.Collections.Generic.HashSet_T then
     return setmetatable(coll, { __index = __mt_index_of_hashset, __cs2lua_defined = true, __class = t });
-	else
-	  local obj = t(...);
-	  if obj then
-			if coll ~= nil then
-				for i,v in ipairs(coll) do
-				  obj:Add(v);
-				end;
-			end
-	    return obj;
-	  else
-	    return nil;
-	  end;
+    else
+      local obj = t(...);
+      if obj then
+            if coll ~= nil then
+                for i,v in ipairs(coll) do
+                  obj:Add(v);
+                end;
+            end
+        return obj;
+      else
+        return nil;
+      end;
   end;
 end;
 
@@ -2018,7 +2045,11 @@ function setexterninstanceindexer(obj, intf, name, ...)
   return nil;
 end;
 
-function invokeexternoperator(class, method, ...)
+function invokeoperator(rettype, class, method, ...)
+	return nil;
+end;
+
+function invokeexternoperator(rettype, class, method, ...)
   local args = {...};
   --对slua，对应到lua元表操作符函数的操作符重载cs2lua转lua代码时已经换成对应操作符表达式。
   --执行到这里的应该是无法对应到lua操作符的操作符重载
@@ -2168,11 +2199,15 @@ function invokeexternoperator(class, method, ...)
     	if t=="Vector3" then
       	return Slua.CreateClass("UnityEngine.Vector4", args[2].x, args[2].y, args[2].z, 0);
       elseif t=="Vector4" then
-      	return Slua.CreateClass("UnityEngine.Vector3", args[2].x, args[2].y, args[2].z);
+      	if rettype==UnityEngine.Vector3 then
+      		return Slua.CreateClass("UnityEngine.Vector3", args[2].x, args[2].y, args[2].z);
+      	else
+      		return Slua.CreateClass("UnityEngine.Vector2", args[2].x, args[2].y);
+      	end;
       end;
     elseif class==UnityEngine.Vector2 then
     	if t=="Vector3" then
-    		return Slua.CreateClass("UnityEngine.Vector2", args[1].x, args[1].y);
+    		return Slua.CreateClass("UnityEngine.Vector2", args[2].x, args[2].y);
     	else
       	return Slua.CreateClass("UnityEngine.Vector3", args[2].x, args[2].y, 0);
       end;
@@ -2180,7 +2215,7 @@ function invokeexternoperator(class, method, ...)
     	if t=="Color32" then
       	return Slua.CreateClass("UnityEngine.Color", args[2].r/255.0, args[2].g/255.0, args[2].b/255.0, args[2].a/255.0);
       else
-      	return Slua.CreateClass("UnityEngine.Color32", math.floor(args[1].r*255), math.floor(args[1].g*255), math.floor(args[1].b*255), math.floor(args[1].a*255));
+      	return Slua.CreateClass("UnityEngine.Color32", math.floor(args[2].r*255), math.floor(args[2].g*255), math.floor(args[2].b*255), math.floor(args[2].a*255));
       end;
     else
       --这里就不仔细判断了，就假定是UnityEngine.Object子类了
