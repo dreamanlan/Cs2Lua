@@ -2110,7 +2110,7 @@ namespace SLua
                 }
             }
 
-            MemberInfo[] cons = t.GetMember(name, bf);
+            MemberInfo[] cons = t.GetMember(name, bf & (~BindingFlags.DeclaredOnly));
             foreach (MemberInfo _m in cons) {
                 MemberInfo m = _m;
                 if (m.MemberType == MemberTypes.Method) m = tryFixGenericMethod((MethodInfo)m);

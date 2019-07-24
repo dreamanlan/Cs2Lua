@@ -732,7 +732,7 @@ namespace RoslynTool.CsToDsl
             "and", "elseif", "end", "function", "local", "nil", "not", "or", "repeat", "then", "until"
         };
         private static HashSet<string> s_BasicTypes = new HashSet<string> {
-            "System.Boolean", "System.Byte", "System.SByte", "System.Int16", "System.UInt16", "System.Int32", "System.UInt32", "System.Int64", "System.UInt64", "System.Single", "System.Double"
+            "System.Boolean", "System.Byte", "System.SByte", "System.Char", "System.Int16", "System.UInt16", "System.Int32", "System.UInt32", "System.Int64", "System.UInt64", "System.Single", "System.Decimal", "System.Double"
         };
         private static HashSet<string> s_IntegerTypes = new HashSet<string> {
             "System.Byte", "System.SByte", "System.Int16", "System.UInt16", "System.Int32", "System.UInt32", "System.Int64", "System.UInt64"
