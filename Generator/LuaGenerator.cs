@@ -1123,7 +1123,7 @@ namespace Generator
                         var param = data.Params[ix];
                         sb.Append(prestr);
                         string paramId = param.GetId();
-                        if (paramId == "...") {
+                        if (param.GetIdType() == (int)Dsl.ValueData.ID_TOKEN && paramId == "...") {
                             sb.Append("...");
                             continue;
                         }
@@ -1190,7 +1190,7 @@ namespace Generator
                     var param = data.Params[ix];
                     sb.Append(prestr);
                     string paramId = param.GetId();
-                    if (paramId == "...") {
+                    if (param.GetIdType() == (int)Dsl.ValueData.ID_TOKEN && paramId == "...") {
                         sb.Append("...");
                         continue;
                     }
@@ -1222,7 +1222,7 @@ namespace Generator
                     var param = data.Params[ix];
                     sb.Append(prestr);
                     string paramId = param.GetId();
-                    if (paramId == "...") {
+                    if (param.GetIdType() == (int)Dsl.ValueData.ID_TOKEN && paramId == "...") {
                         sb.Append("...");
                         continue;
                     }
@@ -1489,7 +1489,7 @@ namespace Generator
                             var param = data.Params[ix];
                             sb.Append(prestr);
                             string paramId = param.GetId();
-                            if (paramId == "...") {
+                            if (param.GetIdType() == (int)Dsl.ValueData.ID_TOKEN && paramId == "...") {
                                 sb.Append("...");
                                 continue;
                             }
