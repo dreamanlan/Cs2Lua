@@ -1873,7 +1873,7 @@ namespace SLua
                     }
 
                     if (t.IsValueType) {
-                        Write(file, "{0}(argc<=1){{", first ? "if" : "else if");
+                        Write(file, "{0}(argc<={1}){{", first ? "if" : "else if", cons.Length > 0 ? 2 : 1);
                         //Write(file, "{0}(argc=={1}){{", first ? "if" : "else if", 0);
                         Write(file, "o=new {0}();", FullName(t));
                         Write(file, "pushValue(l,true);");
