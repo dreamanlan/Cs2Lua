@@ -1,4 +1,4 @@
-require("cs2dsl__utility");
+require("cs2dsl__lualib");
 require("cs2dsl__attributes");
 require("cs2dsl__namespaces");
 require("cs2dsl__externenums");
@@ -14,10 +14,19 @@ class(Cs2LuaScript.Program) {
 			callstatic(Cs2LuaScript.Program, "Init");
 		};
 		cctor = function(){
+			callstatic(Cs2LuaScript.Program, "__cctor");
+		};
+		__cctor = function(){
+			if(Cs2LuaScript.Program.__cctor_called){
+				return;
+			}else{
+				Cs2LuaScript.Program.__cctor_called = true;
+			};
 		};
 	};
 	static_fields {
 		__attributes = Cs2LuaScript__Program__Attrs;
+		__cctor_called = false;
 	};
 	static_props {};
 	static_events {};

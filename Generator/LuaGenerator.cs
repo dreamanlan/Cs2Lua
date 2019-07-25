@@ -35,7 +35,7 @@ namespace Generator
             if (!Directory.Exists(s_OutPath)) {
                 Directory.CreateDirectory(s_OutPath);
             }
-            File.Copy(Path.Combine(s_ExePath, "lualib/utility.lua"), Path.Combine(s_OutPath, "cs2lua__utility." + s_Ext), true);
+            File.Copy(Path.Combine(s_ExePath, "lualib/lualib.lua"), Path.Combine(s_OutPath, "cs2lua__lualib." + s_Ext), true);
             var files = Directory.GetFiles(s_SrcPath, "*.dsl", SearchOption.TopDirectoryOnly);
             foreach (string file in files) {
                 try {
@@ -2108,7 +2108,7 @@ namespace Generator
         private static string s_OutPath = string.Empty;
         private static string s_Ext = string.Empty;
         private static StringBuilder s_LogBuilder = new StringBuilder();
-        //下面这个list的顺序要与utility.lua里的整数操作表__cs2lua_special_integer_operators一致（索引用作操作符识别常量）
+        //下面这个list的顺序要与lualib.lua里的整数操作表__cs2lua_special_integer_operators一致（索引用作操作符识别常量）
         private static List<string> s_SpecialIntegerOperators = new List<string> { "/", "%", "+", "-", "*", "<<", ">>", "&", "|", "^", "~" };
         
         private static Dictionary<string, string> s_UnaryFunctor = new Dictionary<string, string> {

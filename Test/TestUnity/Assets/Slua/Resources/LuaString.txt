@@ -17,11 +17,20 @@ LuaString = {
 				return System.String.Format("Format__String__Object__Object__Object", str, arg1, arg2, arg3);
 			end,
 			cctor = function()
+				LuaString.__cctor();
+			end,
+			__cctor = function()
+				if LuaString.__cctor_called then 
+					return;
+				else
+					LuaString.__cctor_called = true;
+				end;
 			end,
 		};
 
 		local static_fields_build = function()
 			local static_fields = {
+				__cctor_called = false,
 			};
 			return static_fields;
 		end;
@@ -30,10 +39,19 @@ LuaString = {
 
 		local instance_methods = {
 			ctor = function(this)
+				this:__ctor();
+			end,
+			__ctor = function(this)
+				if this.__ctor_called then 
+					return;
+				else
+					this.__ctor_called = true;
+				end;
 			end,
 		};
 		local instance_fields_build = function()
 			local instance_fields = {
+				__ctor_called = false,
 			};
 			return instance_fields;
 		end;
@@ -72,7 +90,7 @@ LuaString = {
 };
 
 
-require "cs2lua__utility";
+require "cs2lua__lualib";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
 settempmetatable(LuaString);

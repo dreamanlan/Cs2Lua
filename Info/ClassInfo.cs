@@ -285,7 +285,7 @@ namespace RoslynTool.CsToDsl
             if (SymbolTable.Instance.IsCs2DslSymbol(type)) {
                 return CalcFullName(type, true);
             } else {
-                //外部类型不会基于泛型样式导入，只有使用脚本语言实现的集合类会出现这种情况，这里需要用泛型类型名以与utility.dsl里的名称一致
+                //外部类型不会基于泛型样式导入，只有使用脚本语言实现的集合类会出现这种情况，这里需要用泛型类型名以与lualib.dsl里的名称一致
                 return SymbolTable.PrefixExternClassName(CalcFullNameWithTypeParameters(type, true));
             }
         }

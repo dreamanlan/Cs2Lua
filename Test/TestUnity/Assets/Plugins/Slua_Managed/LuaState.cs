@@ -192,7 +192,7 @@ namespace SLua
 
 			if (!state.isMainThread())
 			{
-				Logger.LogError("Can't call lua function in bg thread");
+                Logger.LogError(string.Format("Can't call lua function in bg thread\n{0}", Environment.StackTrace));
 				return false;
 			}
 

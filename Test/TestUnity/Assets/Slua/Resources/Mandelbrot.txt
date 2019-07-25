@@ -8,11 +8,20 @@ Mandelbrot = {
 		local static = Mandelbrot;
 		local static_methods = {
 			cctor = function()
+				Mandelbrot.__cctor();
+			end,
+			__cctor = function()
+				if Mandelbrot.__cctor_called then 
+					return;
+				else
+					Mandelbrot.__cctor_called = true;
+				end;
 			end,
 		};
 
 		local static_fields_build = function()
 			local static_fields = {
+				__cctor_called = false,
 			};
 			return static_fields;
 		end;
@@ -88,6 +97,14 @@ Mandelbrot = {
 				mat.color = this.colors[(ix + 1)];
 			end,
 			ctor = function(this)
+				this:__ctor();
+			end,
+			__ctor = function(this)
+				if this.__ctor_called then 
+					return;
+				else
+					this.__ctor_called = true;
+				end;
 			end,
 		};
 		local instance_fields_build = function()
@@ -96,6 +113,7 @@ Mandelbrot = {
 				colors = wraparray({UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black}),
 				r = 10,
 				scale = 3.00,
+				__ctor_called = false,
 			};
 			return instance_fields;
 		end;
@@ -150,7 +168,7 @@ Mandelbrot = {
 };
 
 
-require "cs2lua__utility";
+require "cs2lua__lualib";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
 settempmetatable(Mandelbrot);

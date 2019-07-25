@@ -818,8 +818,8 @@ return index
 		{
 			if (!LuaState.get(l).isMainThread())
 			{
-				Logger.LogError("Can't call lua function in bg thread");
-				return 0;
+                Logger.LogError(string.Format("Can't call lua function in bg thread\n{0}", Environment.StackTrace));
+                return 0;
 			}
 
 			if (errorRef == 0) {

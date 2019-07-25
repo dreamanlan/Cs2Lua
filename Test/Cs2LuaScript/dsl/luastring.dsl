@@ -1,4 +1,4 @@
-require("cs2dsl__utility");
+require("cs2dsl__lualib");
 require("cs2dsl__namespaces");
 require("cs2dsl__externenums");
 require("cs2dsl__interfaces");
@@ -18,18 +18,36 @@ class(LuaString) {
 			return(callstatic(System.String, "Format", "Format__String__Object__Object__Object", str, arg1, arg2, arg3));
 		};
 		cctor = function(){
+			callstatic(LuaString, "__cctor");
+		};
+		__cctor = function(){
+			if(LuaString.__cctor_called){
+				return;
+			}else{
+				LuaString.__cctor_called = true;
+			};
 		};
 	};
 	static_fields {
+		__cctor_called = false;
 	};
 	static_props {};
 	static_events {};
 
 	instance_methods {
 		ctor = function(this){
+			callinstance(this, "__ctor");
+		};
+		__ctor = function(this){
+			if(getinstance(this, "__ctor_called")){
+				return;
+			}else{
+				setinstance(this, "__ctor_called", true);
+			};
 		};
 	};
 	instance_fields {
+		__ctor_called = false;
 	};
 	instance_props {};
 	instance_events {};

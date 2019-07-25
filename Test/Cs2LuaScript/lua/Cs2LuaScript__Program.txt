@@ -12,12 +12,21 @@ Cs2LuaScript.Program = {
 				Cs2LuaScript.Program.Init();
 			end,
 			cctor = function()
+				Cs2LuaScript.Program.__cctor();
+			end,
+			__cctor = function()
+				if Cs2LuaScript.Program.__cctor_called then 
+					return;
+				else
+					Cs2LuaScript.Program.__cctor_called = true;
+				end;
 			end,
 		};
 
 		local static_fields_build = function()
 			local static_fields = {
 				__attributes = Cs2LuaScript__Program__Attrs,
+				__cctor_called = false,
 			};
 			return static_fields;
 		end;
@@ -45,7 +54,7 @@ Cs2LuaScript.Program = {
 };
 
 
-require "cs2lua__utility";
+require "cs2lua__lualib";
 require "cs2lua__attributes";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";

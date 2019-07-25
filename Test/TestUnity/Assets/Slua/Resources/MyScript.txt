@@ -8,12 +8,21 @@ MyScript = {
 		local static = MyScript;
 		local static_methods = {
 			cctor = function()
+				MyScript.__cctor();
+			end,
+			__cctor = function()
+				if MyScript.__cctor_called then 
+					return;
+				else
+					MyScript.__cctor_called = true;
+				end;
 			end,
 		};
 
 		local static_fields_build = function()
 			local static_fields = {
 				__attributes = MyScript__Attrs,
+				__cctor_called = false,
 			};
 			return static_fields;
 		end;
@@ -223,7 +232,7 @@ MyScript = {
 };
 
 
-require "cs2lua__utility";
+require "cs2lua__lualib";
 require "cs2lua__attributes";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";

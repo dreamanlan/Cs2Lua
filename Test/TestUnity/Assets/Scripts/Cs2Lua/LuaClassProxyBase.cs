@@ -1137,15 +1137,12 @@ public static class LuaFunctionHelper
 
 public class LuaClassProxyBase
 {
-    public string LuaClassFileName
-    {
+    public string ClassName {
         get { return m_LuaClassFileName; }
     }
-    public LuaTable Self
-    {
+    public LuaTable Self {
         get { return m_Self; }
-        set 
-        {
+        set {
             ResetLua(value);
         }
     }
@@ -1212,14 +1209,26 @@ public class LuaClassProxyBase
             return;
         if (!Cs2LuaAssembly.Instance.LuaInited)
             return;
+        string fileName = m_LuaClassFileName.ToLower();
         string className = m_LuaClassFileName.Replace("__", ".");
         var svr = Cs2LuaAssembly.Instance.LuaSvr;
-        svr.luaState.doFile(m_LuaClassFileName);
+        var sb = new System.Text.StringBuilder();
+        sb.Append("require ");
+        sb.Append('"');
+        sb.Append(fileName);
+        sb.Append('"');
+        svr.luaState.doString(sb.ToString());
         var classObj = (LuaTable)svr.luaState[className];
-        m_Self = (LuaTable)((LuaFunction)classObj["__new_object"]).call();
-        if (null != m_Self) {
-            PrepareMembers();
-            m_LuaInited = true;
+        if (null != classObj) {
+            m_Self = (LuaTable)((LuaFunction)classObj["__new_object"]).call();
+            if (null != m_Self) {
+                PrepareMembers();
+                m_LuaInited = true;
+            } else {
+                Debug.LogErrorFormat("__new_object failed, class {0} from {1}", className, fileName);
+            }
+        } else {
+            Debug.LogErrorFormat("Can't find {0} from {1}", className, fileName);
         }
 #endif
     }

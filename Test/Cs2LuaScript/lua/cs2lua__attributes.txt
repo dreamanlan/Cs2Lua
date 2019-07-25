@@ -1,7 +1,7 @@
 __cs2lua__AllAttrs = {};
 __cs2lua__AllAttrs["Cs2LuaScript.Program"] = {
 	Class = {
-		{"Cs2Lua.EntryAttribute", {}, {}};
+		{"Cs2Dsl.EntryAttribute", {}, {}};
 	};
 };
 

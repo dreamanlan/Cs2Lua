@@ -26,15 +26,15 @@
 
 namespace SLua
 {
-	using System;
-	using System.Threading;
-	using System.Collections;
-	using System.Collections.Generic;
-	using System.Reflection;
-	#if !SLUA_STANDALONE
-	using UnityEngine;
-	using Debug = UnityEngine.Debug;
-	#endif
+    using System;
+    using System.Threading;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Reflection;
+#if !SLUA_STANDALONE
+    using UnityEngine;
+    using Debug = UnityEngine.Debug;
+#endif
 
 	public enum LuaSvrFlag {
 		LSF_BASIC = 0,
@@ -45,7 +45,7 @@ namespace SLua
 	public class LuaSvr 
 	{
 		public LuaState luaState;
-		#if !SLUA_STANDALONE
+#if !SLUA_STANDALONE
 		protected static LuaSvrGameObject lgo;
 		#endif
 		int errorReported = 0;
@@ -175,7 +175,6 @@ namespace SLua
             }
 #endif
             Helper.reg(L);
-            LuaValueType.reg(L);
 
             if ((flag & LuaSvrFlag.LSF_EXTLIB) != 0)
                 LuaDLL.luaS_openextlibs(L);

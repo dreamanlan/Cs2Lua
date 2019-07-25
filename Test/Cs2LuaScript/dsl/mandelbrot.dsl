@@ -1,4 +1,4 @@
-require("cs2dsl__utility");
+require("cs2dsl__lualib");
 require("cs2dsl__namespaces");
 require("cs2dsl__externenums");
 require("cs2dsl__interfaces");
@@ -9,16 +9,25 @@ class(Mandelbrot) {
 			return(newobject(Mandelbrot, typeargs(), typekinds(), null, null, ...));
 		};
 		cctor = function(){
+			callstatic(Mandelbrot, "__cctor");
+		};
+		__cctor = function(){
+			if(Mandelbrot.__cctor_called){
+				return;
+			}else{
+				Mandelbrot.__cctor_called = true;
+			};
 		};
 	};
 	static_fields {
+		__cctor_called = false;
 	};
 	static_props {};
 	static_events {};
 
 	instance_methods {
 		Start = function(this, obj, mb){
-			setinstance(this, "root", newexternobject(UnityEngine.GameObject, typeargs(), typekinds(), , null, "ctor__String", "mandelbrot"));
+			setinstance(this, "root", newexternobject(UnityEngine.GameObject, typeargs(), typekinds(), null, "ctor__String", "mandelbrot"));
 			callinstance(this, "Exec");
 		};
 		Call = function(this, name, ...){
@@ -58,13 +67,21 @@ class(Mandelbrot) {
 		};
 		DrawCube = function(this, x, y, w, h){
 			local(cube); cube = callstatic(UnityEngine.GameObject, "CreatePrimitive", 3);
-			setinstance(getinstance(cube, "transform"), "position", newexternobject(UnityEngine.Vector3, typeargs(), typekinds(), , null, "ctor__Single__Single__Single", execbinary("/", execbinary("*", execbinary("*", x, getinstance(this, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(this, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), w, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), execbinary("-", execbinary("/", execbinary("*", execbinary("*", y, getinstance(this, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(this, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), h, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 12, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 0));
+			setinstance(getinstance(cube, "transform"), "position", newexternobject(UnityEngine.Vector3, typeargs(), typekinds(), null, "ctor__Single__Single__Single", execbinary("/", execbinary("*", execbinary("*", x, getinstance(this, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(this, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), w, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), execbinary("-", execbinary("/", execbinary("*", execbinary("*", y, getinstance(this, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(this, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), h, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 12, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 0));
 			callinstance(getinstance(cube, "transform"), "SetParent", "SetParent__Transform", getinstance(getinstance(this, "root"), "transform"));
 			local(mat); mat = getinstance(callinstance(cube, "GetComponent", "GetComponent__Type", UnityEngine.Renderer), "material");
 			local(ix); ix = callstatic(UnityEngine.Random, "Range", "Range__Int32__Int32", 0, getinstance(getinstance(this, "colors"), "Length"));
 			setinstance(mat, "color", getinstance(this, "colors")[ix + 1]);
 		};
 		ctor = function(this){
+			callinstance(this, "__ctor");
+		};
+		__ctor = function(this){
+			if(getinstance(this, "__ctor_called")){
+				return;
+			}else{
+				setinstance(this, "__ctor_called", true);
+			};
 		};
 	};
 	instance_fields {
@@ -72,6 +89,7 @@ class(Mandelbrot) {
 		colors = buildarray(UnityEngine.Color, getstatic(UnityEngine.Color, "red"), getstatic(UnityEngine.Color, "blue"), getstatic(UnityEngine.Color, "green"), getstatic(UnityEngine.Color, "cyan"), getstatic(UnityEngine.Color, "grey"), getstatic(UnityEngine.Color, "white"), getstatic(UnityEngine.Color, "yellow"), getstatic(UnityEngine.Color, "magenta"), getstatic(UnityEngine.Color, "black"));
 		r = 10;
 		scale = 3.00;
+		__ctor_called = false;
 	};
 	instance_props {};
 	instance_events {};

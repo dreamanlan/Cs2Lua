@@ -836,7 +836,7 @@ namespace RoslynTool.CsToDsl
                 string fileName = BuildDslClass(classBuilder, pair.Key, pair.Value, false, dsllibRefs);
                 code.Append(classBuilder.ToString());
             }
-            sb.AppendLine("require(\"cs2dsl__utility\");");
+            sb.AppendLine("require(\"cs2dsl__lualib\");");
             sb.AppendLine("require(\"cs2dsl__attributes\");");
             sb.AppendLine("require(\"cs2dsl__externenums\");");
             sb.AppendLine("require(\"cs2dsl__interfaces\");");
@@ -925,7 +925,7 @@ namespace RoslynTool.CsToDsl
 
             HashSet<string> refs = new HashSet<string>();
             if (isAlone) {
-                sb.AppendLine("require(\"cs2dsl__utility\");");
+                sb.AppendLine("require(\"cs2dsl__lualib\");");
                 if (existAttributes)
                     sb.AppendLine("require(\"cs2dsl__attributes\");");
                 sb.AppendLine("require(\"cs2dsl__namespaces\");");

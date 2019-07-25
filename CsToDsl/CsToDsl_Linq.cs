@@ -22,7 +22,7 @@ namespace RoslynTool.CsToDsl
         public override void VisitQueryExpression(QueryExpressionSyntax node)
         {
             if (!m_EnableLinq) {
-                Log(node, "Cs2Dsl can't support LINQ, use -enablelinq remove this error! (c# LINQ syntax will translate to use script LINQ class in utility.dsl)");
+                Log(node, "Cs2Dsl can't support LINQ, use -enablelinq remove this error! (c# LINQ syntax will translate to use script LINQ class in lualib.dsl)");
             }
 
             m_LinqParamInfoStack.Push(new LinqParamInfo());
