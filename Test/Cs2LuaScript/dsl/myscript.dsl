@@ -8,7 +8,7 @@ require("luastring");
 class(MyScript) {
 	static_methods {
 		__new_object = function(...){
-			return(newobject(MyScript, typeargs(), typekinds(), null, null, ...));
+			return(newobject(MyScript, typeargs(), typekinds(), "ctor", null, ...));
 		};
 		cctor = function(){
 			callstatic(MyScript, "__cctor");
@@ -112,6 +112,7 @@ class(MyScript) {
 			};
 			this.bgCurrent = newexternobject(UnityEngine.Color, typeargs(), typekinds(), null);
 			this.bgColor = newexternobject(UnityEngine.Color, typeargs(), typekinds(), null);
+			this.colors = buildarray(UnityEngine.Color, getstatic(UnityEngine.Color, "red"), getstatic(UnityEngine.Color, "blue"), getstatic(UnityEngine.Color, "green"), getstatic(UnityEngine.Color, "cyan"), getstatic(UnityEngine.Color, "grey"), getstatic(UnityEngine.Color, "white"), getstatic(UnityEngine.Color, "yellow"), getstatic(UnityEngine.Color, "magenta"), getstatic(UnityEngine.Color, "black"));
 		};
 	};
 	instance_fields {
@@ -120,10 +121,10 @@ class(MyScript) {
 		max = 400;
 		t = 0;
 		fogStart = 0;
-		bgCurrent = defaultvalue(UnityEngine.Color, "UnityEngine.Color", true);
-		bgColor = defaultvalue(UnityEngine.Color, "UnityEngine.Color", true);
+		bgCurrent = null;
+		bgColor = null;
 		cubes = null;
-		colors = buildarray(UnityEngine.Color, getstatic(UnityEngine.Color, "red"), getstatic(UnityEngine.Color, "blue"), getstatic(UnityEngine.Color, "green"), getstatic(UnityEngine.Color, "cyan"), getstatic(UnityEngine.Color, "grey"), getstatic(UnityEngine.Color, "white"), getstatic(UnityEngine.Color, "yellow"), getstatic(UnityEngine.Color, "magenta"), getstatic(UnityEngine.Color, "black"));
+		colors = null;
 		__attributes = MyScript__Attrs;
 		__ctor_called = false;
 	};

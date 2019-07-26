@@ -7,15 +7,25 @@ public class Lua_UnityEngine_CachedAssetBundle : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
+			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.CachedAssetBundle o;
-			System.String a1;
-			checkType(l,2,out a1);
-			UnityEngine.Hash128 a2;
-			checkValueType(l,3,out a2);
-			o=new UnityEngine.CachedAssetBundle(a1,a2);
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
+			if(argc==3){
+				System.String a1;
+				checkType(l,2,out a1);
+				UnityEngine.Hash128 a2;
+				checkValueType(l,3,out a2);
+				o=new UnityEngine.CachedAssetBundle(a1,a2);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(argc<=2){
+				o=new UnityEngine.CachedAssetBundle();
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			return error(l,"New object failed.");
 		}
 		catch(Exception e) {
 			return error(l,e);

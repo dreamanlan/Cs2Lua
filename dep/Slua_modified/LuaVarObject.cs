@@ -177,7 +177,7 @@ namespace SLua
                     sb.Append(">");
                     typeParams = sb.ToString();
                 }
-                Logger.LogWarning(string.Format("forceInvoke {0}{1}.{2}", m.DeclaringType.Name, typeParams, m.Name));
+                Logger.LogLuaStack(l, string.Format("forceInvoke {0}{1}.{2}", m.DeclaringType.Name, typeParams, m.Name));
 				var pis = m.GetParameters();
 				pushValue(l, true);
 				if (ret != null)
@@ -265,7 +265,7 @@ namespace SLua
                 sb.Append(">");
                 typeParams = sb.ToString();
             }
-            Logger.LogWarning(string.Format("luaIndex {0}{1}.{2}", objType.Name, typeParams, key));
+            Logger.LogLuaStack(l, string.Format("luaIndex {0}{1}.{2}", objType.Name, typeParams, key));
 
             if (self is IDictionary)
             {
@@ -306,7 +306,7 @@ namespace SLua
                 sb.Append(">");
                 typeParams = sb.ToString();
             }
-            Logger.LogWarning(string.Format("luaIndex {0}{1}.{2}", objType.Name, typeParams, key));
+            Logger.LogLuaStack(l, string.Format("luaIndex {0}{1}.{2}", objType.Name, typeParams, key));
             
             if (self is IDictionary)
             {
@@ -420,7 +420,7 @@ namespace SLua
                 sb.Append(">");
                 typeParams = sb.ToString();
             }
-            Logger.LogWarning(string.Format("luaNewIndex {0}{1}.{2}", objType.Name, typeParams, key));
+            Logger.LogLuaStack(l, string.Format("luaNewIndex {0}{1}.{2}", objType.Name, typeParams, key));
 
             if (self is IDictionary)
             {
@@ -488,7 +488,7 @@ namespace SLua
                 sb.Append(">");
                 typeParams = sb.ToString();
             }
-            Logger.LogWarning(string.Format("luaIndex {0}{1}.{2}", objType.Name, typeParams, index));
+            Logger.LogLuaStack(l, string.Format("luaIndex {0}{1}.{2}", objType.Name, typeParams, index));
 
             if (self is IList)
             {
@@ -541,7 +541,7 @@ namespace SLua
                 sb.Append(">");
                 typeParams = sb.ToString();
             }
-            Logger.LogWarning(string.Format("luaNewIndex {0}{1}.{2}", objType.Name, typeParams, index));
+            Logger.LogLuaStack(l, string.Format("luaNewIndex {0}{1}.{2}", objType.Name, typeParams, index));
 
             if (self is IList)
             {
@@ -589,7 +589,7 @@ namespace SLua
                 sb.Append(">");
                 typeParams = sb.ToString();
             }
-            Logger.LogWarning(string.Format("luaNewIndex {0}{1}.{2}", objType.Name, typeParams, k));
+            Logger.LogLuaStack(l, string.Format("luaNewIndex {0}{1}.{2}", objType.Name, typeParams, k));
 
             if (self is IDictionary)
             {

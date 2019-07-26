@@ -2,7 +2,7 @@ require "cs2lua__namespaces";
 
 LuaString = {
 	__new_object = function(...)
-		return newobject(LuaString, {}, {}, nil, nil, ...);
+		return newobject(LuaString, {}, {}, "ctor", nil, ...);
 	end,
 	__define_class = function()
 		local static = LuaString;
@@ -85,7 +85,10 @@ LuaString = {
 		local event_info = nil;
 		local field_info = nil;
 
-		return defineclass(nil, "LuaString", "LuaString", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		CsLibrary.LogSystem.Warn("LuaString::__define_class begin");
+		local __defineclass_return = defineclass(nil, "LuaString", "LuaString", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		CsLibrary.LogSystem.Warn("LuaString::__define_class end");
+		return __defineclass_return;
 	end,
 };
 

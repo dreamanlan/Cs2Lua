@@ -6,7 +6,7 @@ require("cs2dsl__interfaces");
 class(Mandelbrot) {
 	static_methods {
 		__new_object = function(...){
-			return(newobject(Mandelbrot, typeargs(), typekinds(), null, null, ...));
+			return(newobject(Mandelbrot, typeargs(), typekinds(), "ctor", null, ...));
 		};
 		cctor = function(){
 			callstatic(Mandelbrot, "__cctor");
@@ -82,11 +82,12 @@ class(Mandelbrot) {
 			}else{
 				setinstance(this, "__ctor_called", true);
 			};
+			this.colors = buildarray(UnityEngine.Color, getstatic(UnityEngine.Color, "red"), getstatic(UnityEngine.Color, "blue"), getstatic(UnityEngine.Color, "green"), getstatic(UnityEngine.Color, "cyan"), getstatic(UnityEngine.Color, "grey"), getstatic(UnityEngine.Color, "white"), getstatic(UnityEngine.Color, "yellow"), getstatic(UnityEngine.Color, "magenta"), getstatic(UnityEngine.Color, "black"));
 		};
 	};
 	instance_fields {
 		root = null;
-		colors = buildarray(UnityEngine.Color, getstatic(UnityEngine.Color, "red"), getstatic(UnityEngine.Color, "blue"), getstatic(UnityEngine.Color, "green"), getstatic(UnityEngine.Color, "cyan"), getstatic(UnityEngine.Color, "grey"), getstatic(UnityEngine.Color, "white"), getstatic(UnityEngine.Color, "yellow"), getstatic(UnityEngine.Color, "magenta"), getstatic(UnityEngine.Color, "black"));
+		colors = null;
 		r = 10;
 		scale = 3.00;
 		__ctor_called = false;

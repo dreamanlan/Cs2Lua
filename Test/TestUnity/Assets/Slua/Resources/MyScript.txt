@@ -2,7 +2,7 @@ require "cs2lua__namespaces";
 
 MyScript = {
 	__new_object = function(...)
-		return newobject(MyScript, {}, {}, nil, nil, ...);
+		return newobject(MyScript, {}, {}, "ctor", nil, ...);
 	end,
 	__define_class = function()
 		local static = MyScript;
@@ -141,6 +141,7 @@ MyScript = {
 				end;
 				this.bgCurrent = newexternobject(UnityEngine.Color, {}, {}, nil);
 				this.bgColor = newexternobject(UnityEngine.Color, {}, {}, nil);
+				this.colors = wraparray({UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black});
 			end,
 		};
 		local instance_fields_build = function()
@@ -150,10 +151,10 @@ MyScript = {
 				max = 400,
 				t = 0,
 				fogStart = 0,
-				bgCurrent = defaultvalue(UnityEngine.Color, "UnityEngine.Color", true),
-				bgColor = defaultvalue(UnityEngine.Color, "UnityEngine.Color", true),
+				bgCurrent = __cs2lua_nil_field_value,
+				bgColor = __cs2lua_nil_field_value,
 				cubes = __cs2lua_nil_field_value,
-				colors = wraparray({UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black}),
+				colors = __cs2lua_nil_field_value,
 				__attributes = MyScript__Attrs,
 				__ctor_called = false,
 			};
@@ -227,7 +228,10 @@ MyScript = {
 			},
 		};
 
-		return defineclass(nil, "MyScript", "MyScript", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		CsLibrary.LogSystem.Warn("MyScript::__define_class begin");
+		local __defineclass_return = defineclass(nil, "MyScript", "MyScript", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		CsLibrary.LogSystem.Warn("MyScript::__define_class end");
+		return __defineclass_return;
 	end,
 };
 

@@ -7,17 +7,27 @@ public class Lua_UnityEngine_Vector3Int : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
+			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Vector3Int o;
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			System.Int32 a2;
-			checkType(l,3,out a2);
-			System.Int32 a3;
-			checkType(l,4,out a3);
-			o=new UnityEngine.Vector3Int(a1,a2,a3);
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
+			if(argc==4){
+				System.Int32 a1;
+				checkType(l,2,out a1);
+				System.Int32 a2;
+				checkType(l,3,out a2);
+				System.Int32 a3;
+				checkType(l,4,out a3);
+				o=new UnityEngine.Vector3Int(a1,a2,a3);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(argc<=2){
+				o=new UnityEngine.Vector3Int();
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			return error(l,"New object failed.");
 		}
 		catch(Exception e) {
 			return error(l,e);

@@ -7,15 +7,25 @@ public class Lua_UnityEngine_Ray2D : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
+			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Ray2D o;
-			UnityEngine.Vector2 a1;
-			checkType(l,2,out a1);
-			UnityEngine.Vector2 a2;
-			checkType(l,3,out a2);
-			o=new UnityEngine.Ray2D(a1,a2);
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
+			if(argc==3){
+				UnityEngine.Vector2 a1;
+				checkType(l,2,out a1);
+				UnityEngine.Vector2 a2;
+				checkType(l,3,out a2);
+				o=new UnityEngine.Ray2D(a1,a2);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(argc<=2){
+				o=new UnityEngine.Ray2D();
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			return error(l,"New object failed.");
 		}
 		catch(Exception e) {
 			return error(l,e);

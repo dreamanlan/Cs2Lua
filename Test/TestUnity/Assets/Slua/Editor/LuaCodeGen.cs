@@ -1877,7 +1877,7 @@ namespace SLua
                         //Write(file, "{0}(argc=={1}){{", first ? "if" : "else if", 0);
                         Write(file, "o=new {0}();", FullName(t));
                         Write(file, "pushValue(l,true);");
-                        Write(file, "pushObject(l,o);");
+                        Write(file, "pushValue(l,o);");
                         Write(file, "return 2;");
                         Write(file, "}");
                     }

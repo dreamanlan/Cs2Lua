@@ -7,19 +7,29 @@ public class Lua_UnityEngine_Quaternion : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
+			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Quaternion o;
-			System.Single a1;
-			checkType(l,2,out a1);
-			System.Single a2;
-			checkType(l,3,out a2);
-			System.Single a3;
-			checkType(l,4,out a3);
-			System.Single a4;
-			checkType(l,5,out a4);
-			o=new UnityEngine.Quaternion(a1,a2,a3,a4);
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
+			if(argc==5){
+				System.Single a1;
+				checkType(l,2,out a1);
+				System.Single a2;
+				checkType(l,3,out a2);
+				System.Single a3;
+				checkType(l,4,out a3);
+				System.Single a4;
+				checkType(l,5,out a4);
+				o=new UnityEngine.Quaternion(a1,a2,a3,a4);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(argc<=2){
+				o=new UnityEngine.Quaternion();
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			return error(l,"New object failed.");
 		}
 		catch(Exception e) {
 			return error(l,e);

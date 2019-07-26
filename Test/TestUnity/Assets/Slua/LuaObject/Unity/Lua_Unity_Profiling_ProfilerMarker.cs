@@ -7,13 +7,23 @@ public class Lua_Unity_Profiling_ProfilerMarker : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
+			int argc = LuaDLL.lua_gettop(l);
 			Unity.Profiling.ProfilerMarker o;
-			System.String a1;
-			checkType(l,2,out a1);
-			o=new Unity.Profiling.ProfilerMarker(a1);
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
+			if(argc==2){
+				System.String a1;
+				checkType(l,2,out a1);
+				o=new Unity.Profiling.ProfilerMarker(a1);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(argc<=2){
+				o=new Unity.Profiling.ProfilerMarker();
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			return error(l,"New object failed.");
 		}
 		catch(Exception e) {
 			return error(l,e);

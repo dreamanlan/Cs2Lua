@@ -7,19 +7,29 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
+			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Color32 o;
-			System.Byte a1;
-			checkType(l,2,out a1);
-			System.Byte a2;
-			checkType(l,3,out a2);
-			System.Byte a3;
-			checkType(l,4,out a3);
-			System.Byte a4;
-			checkType(l,5,out a4);
-			o=new UnityEngine.Color32(a1,a2,a3,a4);
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
+			if(argc==5){
+				System.Byte a1;
+				checkType(l,2,out a1);
+				System.Byte a2;
+				checkType(l,3,out a2);
+				System.Byte a3;
+				checkType(l,4,out a3);
+				System.Byte a4;
+				checkType(l,5,out a4);
+				o=new UnityEngine.Color32(a1,a2,a3,a4);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(argc<=2){
+				o=new UnityEngine.Color32();
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			return error(l,"New object failed.");
 		}
 		catch(Exception e) {
 			return error(l,e);

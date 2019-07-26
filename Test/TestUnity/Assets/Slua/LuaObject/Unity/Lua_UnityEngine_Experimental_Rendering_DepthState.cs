@@ -7,15 +7,25 @@ public class Lua_UnityEngine_Experimental_Rendering_DepthState : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
+			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Experimental.Rendering.DepthState o;
-			System.Boolean a1;
-			checkType(l,2,out a1);
-			UnityEngine.Rendering.CompareFunction a2;
-			checkEnum(l,3,out a2);
-			o=new UnityEngine.Experimental.Rendering.DepthState(a1,a2);
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
+			if(argc==3){
+				System.Boolean a1;
+				checkType(l,2,out a1);
+				UnityEngine.Rendering.CompareFunction a2;
+				checkEnum(l,3,out a2);
+				o=new UnityEngine.Experimental.Rendering.DepthState(a1,a2);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(argc<=2){
+				o=new UnityEngine.Experimental.Rendering.DepthState();
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			return error(l,"New object failed.");
 		}
 		catch(Exception e) {
 			return error(l,e);

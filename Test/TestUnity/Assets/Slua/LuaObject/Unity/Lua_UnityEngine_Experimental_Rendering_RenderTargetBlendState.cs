@@ -7,25 +7,35 @@ public class Lua_UnityEngine_Experimental_Rendering_RenderTargetBlendState : Lua
 	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
+			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Experimental.Rendering.RenderTargetBlendState o;
-			UnityEngine.Rendering.ColorWriteMask a1;
-			checkEnum(l,2,out a1);
-			UnityEngine.Rendering.BlendMode a2;
-			checkEnum(l,3,out a2);
-			UnityEngine.Rendering.BlendMode a3;
-			checkEnum(l,4,out a3);
-			UnityEngine.Rendering.BlendMode a4;
-			checkEnum(l,5,out a4);
-			UnityEngine.Rendering.BlendMode a5;
-			checkEnum(l,6,out a5);
-			UnityEngine.Rendering.BlendOp a6;
-			checkEnum(l,7,out a6);
-			UnityEngine.Rendering.BlendOp a7;
-			checkEnum(l,8,out a7);
-			o=new UnityEngine.Experimental.Rendering.RenderTargetBlendState(a1,a2,a3,a4,a5,a6,a7);
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
+			if(argc==8){
+				UnityEngine.Rendering.ColorWriteMask a1;
+				checkEnum(l,2,out a1);
+				UnityEngine.Rendering.BlendMode a2;
+				checkEnum(l,3,out a2);
+				UnityEngine.Rendering.BlendMode a3;
+				checkEnum(l,4,out a3);
+				UnityEngine.Rendering.BlendMode a4;
+				checkEnum(l,5,out a4);
+				UnityEngine.Rendering.BlendMode a5;
+				checkEnum(l,6,out a5);
+				UnityEngine.Rendering.BlendOp a6;
+				checkEnum(l,7,out a6);
+				UnityEngine.Rendering.BlendOp a7;
+				checkEnum(l,8,out a7);
+				o=new UnityEngine.Experimental.Rendering.RenderTargetBlendState(a1,a2,a3,a4,a5,a6,a7);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(argc<=2){
+				o=new UnityEngine.Experimental.Rendering.RenderTargetBlendState();
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			return error(l,"New object failed.");
 		}
 		catch(Exception e) {
 			return error(l,e);

@@ -7,15 +7,25 @@ public class Lua_UnityEngine_Experimental_Rendering_DrawRendererSettings : LuaOb
 	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
+			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Experimental.Rendering.DrawRendererSettings o;
-			UnityEngine.Camera a1;
-			checkType(l,2,out a1);
-			UnityEngine.Experimental.Rendering.ShaderPassName a2;
-			checkValueType(l,3,out a2);
-			o=new UnityEngine.Experimental.Rendering.DrawRendererSettings(a1,a2);
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
+			if(argc==3){
+				UnityEngine.Camera a1;
+				checkType(l,2,out a1);
+				UnityEngine.Experimental.Rendering.ShaderPassName a2;
+				checkValueType(l,3,out a2);
+				o=new UnityEngine.Experimental.Rendering.DrawRendererSettings(a1,a2);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(argc<=2){
+				o=new UnityEngine.Experimental.Rendering.DrawRendererSettings();
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			return error(l,"New object failed.");
 		}
 		catch(Exception e) {
 			return error(l,e);

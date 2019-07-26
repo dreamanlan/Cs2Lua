@@ -7,23 +7,33 @@ public class Lua_UnityEngine_CapsulecastCommand : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
+			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.CapsulecastCommand o;
-			UnityEngine.Vector3 a1;
-			checkType(l,2,out a1);
-			UnityEngine.Vector3 a2;
-			checkType(l,3,out a2);
-			System.Single a3;
-			checkType(l,4,out a3);
-			UnityEngine.Vector3 a4;
-			checkType(l,5,out a4);
-			System.Single a5;
-			checkType(l,6,out a5);
-			System.Int32 a6;
-			checkType(l,7,out a6);
-			o=new UnityEngine.CapsulecastCommand(a1,a2,a3,a4,a5,a6);
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
+			if(argc==7){
+				UnityEngine.Vector3 a1;
+				checkType(l,2,out a1);
+				UnityEngine.Vector3 a2;
+				checkType(l,3,out a2);
+				System.Single a3;
+				checkType(l,4,out a3);
+				UnityEngine.Vector3 a4;
+				checkType(l,5,out a4);
+				System.Single a5;
+				checkType(l,6,out a5);
+				System.Int32 a6;
+				checkType(l,7,out a6);
+				o=new UnityEngine.CapsulecastCommand(a1,a2,a3,a4,a5,a6);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(argc<=2){
+				o=new UnityEngine.CapsulecastCommand();
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			return error(l,"New object failed.");
 		}
 		catch(Exception e) {
 			return error(l,e);

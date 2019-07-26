@@ -476,18 +476,6 @@ function invokeexternoperator(rettype, class, method, ...)
           return false;
         end; 
       end;
-  elseif method=="op_Multiply" then
-      if argnum==2 then
-          return args[1] * args[2];
-      elseif argnum==3 then
-          return args[2] * args[3];
-      end;
-  elseif method=="op_Division" then
-      if argnum==2 then
-          return args[1] / args[2];
-      elseif argnum==3 then
-          return args[2] / args[3];
-      end;
   elseif method=="op_Implicit" then
       local t = nil;
       if argnum==1 and args[1] then

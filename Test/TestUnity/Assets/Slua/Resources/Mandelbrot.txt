@@ -2,7 +2,7 @@ require "cs2lua__namespaces";
 
 Mandelbrot = {
 	__new_object = function(...)
-		return newobject(Mandelbrot, {}, {}, nil, nil, ...);
+		return newobject(Mandelbrot, {}, {}, "ctor", nil, ...);
 	end,
 	__define_class = function()
 		local static = Mandelbrot;
@@ -105,12 +105,13 @@ Mandelbrot = {
 				else
 					this.__ctor_called = true;
 				end;
+				this.colors = wraparray({UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black});
 			end,
 		};
 		local instance_fields_build = function()
 			local instance_fields = {
 				root = __cs2lua_nil_field_value,
-				colors = wraparray({UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black}),
+				colors = __cs2lua_nil_field_value,
 				r = 10,
 				scale = 3.00,
 				__ctor_called = false,
@@ -163,7 +164,10 @@ Mandelbrot = {
 			},
 		};
 
-		return defineclass(nil, "Mandelbrot", "Mandelbrot", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		CsLibrary.LogSystem.Warn("Mandelbrot::__define_class begin");
+		local __defineclass_return = defineclass(nil, "Mandelbrot", "Mandelbrot", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		CsLibrary.LogSystem.Warn("Mandelbrot::__define_class end");
+		return __defineclass_return;
 	end,
 };
 

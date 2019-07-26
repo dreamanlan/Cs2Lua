@@ -975,7 +975,7 @@ namespace RoslynTool.CsToDsl
                         sb.AppendFormat("{0}return(newobject({1}, ", GetIndentString(indent), key);
                         var namedTypeSym = csi.TypeSymbol;
                         CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
-                        sb.Append(", null, null, ...));");
+                        sb.Append(", \"ctor\", null, ...));");
                         sb.AppendLine();
                     } else {
                         //处理ref/out参数

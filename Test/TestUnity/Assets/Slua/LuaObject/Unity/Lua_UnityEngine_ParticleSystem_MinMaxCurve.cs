@@ -49,10 +49,10 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxCurve : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc<=1){
+			else if(argc<=2){
 				o=new UnityEngine.ParticleSystem.MinMaxCurve();
 				pushValue(l,true);
-				pushObject(l,o);
+				pushValue(l,o);
 				return 2;
 			}
 			return error(l,"New object failed.");

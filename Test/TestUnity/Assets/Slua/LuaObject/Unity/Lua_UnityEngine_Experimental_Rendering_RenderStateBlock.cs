@@ -7,13 +7,23 @@ public class Lua_UnityEngine_Experimental_Rendering_RenderStateBlock : LuaObject
 	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
+			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Experimental.Rendering.RenderStateBlock o;
-			UnityEngine.Experimental.Rendering.RenderStateMask a1;
-			checkEnum(l,2,out a1);
-			o=new UnityEngine.Experimental.Rendering.RenderStateBlock(a1);
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
+			if(argc==2){
+				UnityEngine.Experimental.Rendering.RenderStateMask a1;
+				checkEnum(l,2,out a1);
+				o=new UnityEngine.Experimental.Rendering.RenderStateBlock(a1);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(argc<=2){
+				o=new UnityEngine.Experimental.Rendering.RenderStateBlock();
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			return error(l,"New object failed.");
 		}
 		catch(Exception e) {
 			return error(l,e);

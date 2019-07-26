@@ -7,21 +7,31 @@ public class Lua_UnityEngine_RaycastCommand : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
+			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.RaycastCommand o;
-			UnityEngine.Vector3 a1;
-			checkType(l,2,out a1);
-			UnityEngine.Vector3 a2;
-			checkType(l,3,out a2);
-			System.Single a3;
-			checkType(l,4,out a3);
-			System.Int32 a4;
-			checkType(l,5,out a4);
-			System.Int32 a5;
-			checkType(l,6,out a5);
-			o=new UnityEngine.RaycastCommand(a1,a2,a3,a4,a5);
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
+			if(argc==6){
+				UnityEngine.Vector3 a1;
+				checkType(l,2,out a1);
+				UnityEngine.Vector3 a2;
+				checkType(l,3,out a2);
+				System.Single a3;
+				checkType(l,4,out a3);
+				System.Int32 a4;
+				checkType(l,5,out a4);
+				System.Int32 a5;
+				checkType(l,6,out a5);
+				o=new UnityEngine.RaycastCommand(a1,a2,a3,a4,a5);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(argc<=2){
+				o=new UnityEngine.RaycastCommand();
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			return error(l,"New object failed.");
 		}
 		catch(Exception e) {
 			return error(l,e);

@@ -41,10 +41,10 @@ public class Lua_UnityEngine_Plane : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(argc<=1){
+			else if(argc<=2){
 				o=new UnityEngine.Plane();
 				pushValue(l,true);
-				pushObject(l,o);
+				pushValue(l,o);
 				return 2;
 			}
 			return error(l,"New object failed.");

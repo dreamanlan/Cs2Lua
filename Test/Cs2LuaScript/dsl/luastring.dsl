@@ -6,7 +6,7 @@ require("cs2dsl__interfaces");
 class(LuaString) {
 	static_methods {
 		__new_object = function(...){
-			return(newobject(LuaString, typeargs(), typekinds(), null, null, ...));
+			return(newobject(LuaString, typeargs(), typekinds(), "ctor", null, ...));
 		};
 		Format__System_String__System_Object = function(str, arg){
 			return(callstatic(System.String, "Format", "Format__String__Object", str, arg));

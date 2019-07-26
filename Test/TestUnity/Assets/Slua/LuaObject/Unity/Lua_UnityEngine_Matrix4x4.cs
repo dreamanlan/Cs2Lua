@@ -7,19 +7,29 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int constructor(IntPtr l) {
 		try {
+			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Matrix4x4 o;
-			UnityEngine.Vector4 a1;
-			checkType(l,2,out a1);
-			UnityEngine.Vector4 a2;
-			checkType(l,3,out a2);
-			UnityEngine.Vector4 a3;
-			checkType(l,4,out a3);
-			UnityEngine.Vector4 a4;
-			checkType(l,5,out a4);
-			o=new UnityEngine.Matrix4x4(a1,a2,a3,a4);
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
+			if(argc==5){
+				UnityEngine.Vector4 a1;
+				checkType(l,2,out a1);
+				UnityEngine.Vector4 a2;
+				checkType(l,3,out a2);
+				UnityEngine.Vector4 a3;
+				checkType(l,4,out a3);
+				UnityEngine.Vector4 a4;
+				checkType(l,5,out a4);
+				o=new UnityEngine.Matrix4x4(a1,a2,a3,a4);
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			else if(argc<=2){
+				o=new UnityEngine.Matrix4x4();
+				pushValue(l,true);
+				pushValue(l,o);
+				return 2;
+			}
+			return error(l,"New object failed.");
 		}
 		catch(Exception e) {
 			return error(l,e);

@@ -472,9 +472,9 @@ namespace RoslynTool.CsToDsl
                 CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
             }
             if (!isExternal) {
-                //外部对象函数名不会换名，所以没必要提供名字，总是ctor
+                //外部对象函数名不会换名，所以没必要提供名字，总是ctor。翻译的类在没有明确构造时，会生成
                 if (string.IsNullOrEmpty(ctor)) {
-                    CodeBuilder.Append(", null");
+                    CodeBuilder.Append(", \"ctor\"");
                 } else {
                     CodeBuilder.AppendFormat(", \"{0}\"", ctor);
                 }
@@ -495,7 +495,11 @@ namespace RoslynTool.CsToDsl
         }
         private void OutputDefaultValue(ITypeSymbol type)
         {
-            OutputDefaultValue(CodeBuilder, type);
+            OutputDefaultValue(type, false);
+        }
+        private void OutputDefaultValue(ITypeSymbol type, bool setValueTypeToNull)
+        {
+            OutputDefaultValue(CodeBuilder, type, setValueTypeToNull);
         }
         private void OutputArgumentDefaultValue(object val, object operOrSym)
         {
@@ -1166,7 +1170,7 @@ namespace RoslynTool.CsToDsl
                 sb.Append("typeargs(), typekinds()");
             }
         }
-        internal static void OutputDefaultValue(StringBuilder sb, ITypeSymbol type)
+        internal static void OutputDefaultValue(StringBuilder sb, ITypeSymbol type, bool setValueTypeToNull)
         {
             if (null != type) {
                 if (type.IsValueType) {
@@ -1175,6 +1179,8 @@ namespace RoslynTool.CsToDsl
                             sb.Append("false");
                         else
                             sb.Append("0");
+                    } else if (setValueTypeToNull) {
+                        sb.Append("null");
                     } else {
                         bool isExternal = !SymbolTable.Instance.IsCs2DslSymbol(type);
                         string fn = ClassInfo.GetFullName(type);
