@@ -228,9 +228,9 @@ MyScript = {
 			},
 		};
 
-		CsLibrary.LogSystem.Warn("MyScript::__define_class begin");
+		UnityEngine.Debug.LogWarning("LogWarning_Object", "MyScript::__define_class begin");
 		local __defineclass_return = defineclass(nil, "MyScript", "MyScript", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
-		CsLibrary.LogSystem.Warn("MyScript::__define_class end");
+		UnityEngine.Debug.LogWarning("LogWarning_Object", "MyScript::__define_class end");
 		return __defineclass_return;
 	end,
 };
