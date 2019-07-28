@@ -691,7 +691,7 @@ function invokearraystaticmethod(firstArray, secondArray, method, ...)
     local meta = getmetatable(firstArray);    
     if meta and rawget(meta, "__cs2lua_defined") then
       if method=="IndexOf" then
-        return firstArray:IndexOf(args[3]);
+        return firstArray:IndexOf(args[1], args[3]);
       elseif method=="Sort" then
         return table.sort(firstArray, function(a, b) return args[3](a, b) < 0 end);
       else
@@ -2036,18 +2036,22 @@ end;
 
 function getclassfullname(t)
 	if t and type(t)~="string" then
-		warmup(t);
-		if rawget(t, "__cs2lua_defined") then
-			return rawget(t, "__cs2lua_fullname");
-		else
-			local name = rawget(t, "__fullname");
-			local ix = string.find(name, ",");
-			if ix==nil then
-				return name;
-			else
-				return string.sub(name, 1, ix-1);
-			end;
-		end;
+	    if type(t)~="table" then
+	        return tostring(t);
+	    else
+    		warmup(t);
+    		if rawget(t, "__cs2lua_defined") then
+    			return rawget(t, "__cs2lua_fullname");
+    		else
+    			local name = rawget(t, "__fullname");
+    			local ix = string.find(name, ",");
+    			if ix==nil then
+    				return name;
+    			else
+    				return string.sub(name, 1, ix-1);
+    			end;
+    		end;
+    	end;
 	else
 		return t;
 	end;
@@ -2055,12 +2059,16 @@ end;
 
 function getclasstypename(t)
 	if t and type(t)~="string" then
-		warmup(t);
-		if rawget(t, "__cs2lua_defined") then
-			return rawget(t, "__cs2lua_typename");
-		else
-			return rawget(t, "__typename");
-		end;
+	    if type(t)~="table" then
+	        return tostring(t);
+	    else
+    		warmup(t);
+    		if rawget(t, "__cs2lua_defined") then
+    			return rawget(t, "__cs2lua_typename");
+    		else
+    			return rawget(t, "__typename");
+    		end;
+    	end;
 	else
 		return t;
 	end;
@@ -2085,12 +2093,16 @@ end;
 
 function getclassparentclass(t)
 	if t and type(t)~="string" then
-		warmup(t);
-		if rawget(t, "__cs2lua_defined") then
-			return rawget(t, "__cs2lua_parent");
-		else
-			return rawget(t, "__parent");
-		end;
+	    if type(t)~="table" then
+	        return tostring(t);
+	    else
+    		warmup(t);
+    		if rawget(t, "__cs2lua_defined") then
+    			return rawget(t, "__cs2lua_parent");
+    		else
+    			return rawget(t, "__parent");
+    		end;
+    	end;
 	else
 		return nil;
 	end;
