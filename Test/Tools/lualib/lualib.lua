@@ -1,6 +1,3 @@
---remove comments for debug with ZeroBrane
---require "luadebug";
-
 local function get_basic_type_func()
   return function(v)
     return v;
