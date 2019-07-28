@@ -299,6 +299,8 @@ function getexterninstanceindexer(obj, intf, name, ...)
       return obj[index+1];
     elseif typename == "LuaVarObject" then
       return obj[index];
+    elseif name=="get_Chars" then
+      return string.char(string.byte(index+1));
     else
       return obj:getItem(index);
     end;
