@@ -241,7 +241,7 @@ function getstaticindexer(class, name, ...)
     return nil;
   end;
 end;
-function getinstanceindexer(obj, intf, name, ...)
+function getinstanceindexer(obj, class, intf, name, ...)
   if name then
     return obj[name](obj, ...);
   else
@@ -258,7 +258,7 @@ function setstaticindexer(class, name, ...)
   end;
   return nil;
 end;
-function setinstanceindexer(obj, intf, name, ...)
+function setinstanceindexer(obj, class, intf, name, ...)
   if name then
     obj[name](obj, ...);
   else
@@ -270,39 +270,43 @@ end;
 function getexternstaticindexer(class, name, ...)
   return class[...];
 end;
-function getexterninstanceindexer(obj, intf, name, ...)  
+function getexterninstanceindexer(obj, class, intf, name, ...)  
   local args = {...};  
   local index;
-  if type(args[1])=="string" and string.find(args[1],name)==1 then
-    index = __unwrap_if_string(args[2]);
-  else
-    index = __unwrap_if_string(args[1]);
-  end;
-  if nil==index then
-    UnityEngine.Debug.LogError("LogError_String","[cs2lua] table index is nil");
-    return nil;
-  end;
   local meta = getmetatable(obj);
   if meta then
     local class = rawget(meta, "__class");
-    local typename = rawget(meta, "__typename");
     if class == System.Collections.Generic.List_T then
-      return obj[index+1];
+        index = __unwrap_if_string(args[1]);
+        return obj[index+1];
     elseif class == System.Collections.Generic.Dictionary_TKey_TValue then
-      local v = obj[index];
-      if v then
-        return v.value;
-      else
-        return nil;
-      end;
-    elseif typename == "LuaArray" then
-      return obj[index+1];
-    elseif typename == "LuaVarObject" then
-      return obj[index];
-    elseif name=="get_Chars" then
-      return string.char(string.byte(index+1));
+        index = __unwrap_if_string(args[1]);
+        local v = obj[index];
+        if v then
+            return v.value;
+        else
+            return nil;
+        end;
     else
-      return obj:getItem(index);
+        if type(args[1])=="string" and string.find(args[1],name)==1 then
+            index = __unwrap_if_string(args[2]);
+        else
+            index = __unwrap_if_string(args[1]);
+        end;
+        if nil==index then
+            UnityEngine.Debug.LogError("LogError_String","[cs2lua] table index is nil");
+            return nil;
+        end;
+        local typename = rawget(meta, "__typename");
+        if typename == "LuaArray" then
+          return obj[index+1];
+        elseif typename == "LuaVarObject" then
+          return obj[index];
+        elseif name=="get_Chars" then
+          return string.char(string.byte(index+1));
+        else
+          return obj:getItem(index);
+        end;
     end;
   end;
 end;
@@ -310,7 +314,7 @@ end;
 function setexternstaticindexer(class, name, ...) 
   return nil;
 end;
-function setexterninstanceindexer(obj, intf, name, ...)
+function setexterninstanceindexer(obj, class, intf, name, ...)
   local args = {...};
   local num = #args; 
   local index;
