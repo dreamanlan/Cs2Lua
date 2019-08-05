@@ -241,7 +241,7 @@ function getstaticindexer(class, name, ...)
     return nil;
   end;
 end;
-function getinstanceindexer(obj, class, intf, name, ...)
+function getinstanceindexer(obj, intf, class, name, ...)
   if name then
     return obj[name](obj, ...);
   else
@@ -258,7 +258,7 @@ function setstaticindexer(class, name, ...)
   end;
   return nil;
 end;
-function setinstanceindexer(obj, class, intf, name, ...)
+function setinstanceindexer(obj, intf, class, name, ...)
   if name then
     obj[name](obj, ...);
   else
@@ -270,7 +270,7 @@ end;
 function getexternstaticindexer(class, name, ...)
   return class[...];
 end;
-function getexterninstanceindexer(obj, class, intf, name, ...)  
+function getexterninstanceindexer(obj, intf, class, name, ...)  
   local args = {...};  
   local index;
   local meta = getmetatable(obj);
@@ -314,7 +314,7 @@ end;
 function setexternstaticindexer(class, name, ...) 
   return nil;
 end;
-function setexterninstanceindexer(obj, class, intf, name, ...)
+function setexterninstanceindexer(obj, intf, class, name, ...)
   local args = {...};
   local num = #args; 
   local index;

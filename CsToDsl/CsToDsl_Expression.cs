@@ -499,12 +499,12 @@ namespace RoslynTool.CsToDsl
                 }
                 CodeBuilder.Append(", ");
                 if (!psym.IsStatic) {
-                    string fullName = ClassInfo.GetFullName(psym.ContainingType);
-                    CodeBuilder.Append(fullName);
-                    CodeBuilder.Append(", ");
                     string fnOfIntf = "null";
                     CheckExplicitInterfaceAccess(psym.GetMethod, ref fnOfIntf);
                     CodeBuilder.AppendFormat("{0}, ", fnOfIntf);
+                    string fullName = ClassInfo.GetFullName(psym.ContainingType);
+                    CodeBuilder.Append(fullName);
+                    CodeBuilder.Append(", ");
                 }
                 string manglingName = NameMangling(psym.GetMethod);
                 CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
@@ -555,12 +555,12 @@ namespace RoslynTool.CsToDsl
                     }
                     CodeBuilder.Append(", ");
                     if (!psym.IsStatic) {
-                        string fullName = ClassInfo.GetFullName(psym.ContainingType);
-                        CodeBuilder.Append(fullName);
-                        CodeBuilder.Append(", ");
                         string fnOfIntf = "null";
                         CheckExplicitInterfaceAccess(psym.GetMethod, ref fnOfIntf);
                         CodeBuilder.AppendFormat("{0}, ", fnOfIntf);
+                        string fullName = ClassInfo.GetFullName(psym.ContainingType);
+                        CodeBuilder.Append(fullName);
+                        CodeBuilder.Append(", ");
                     }
                     string manglingName = NameMangling(psym.GetMethod);
                     CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
