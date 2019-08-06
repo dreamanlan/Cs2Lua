@@ -233,44 +233,10 @@ function chararraytostring(arr)
   return string.char(unpack(arr));
 end;
 
-function getstaticindexer(class, name, ...)
-  if name then
-    return class[name](...);
-  else
-    UnityEngine.Debug.LogError("LogError_String","[cs2lua] table index is nil");
-    return nil;
-  end;
+function getexternstaticindexer(callerClass, class, name, argCount, ...)
+  return class[name](...);
 end;
-function getinstanceindexer(obj, intf, class, name, ...)
-  if name then
-    return obj[name](obj, ...);
-  else
-    UnityEngine.Debug.LogError("LogError_String","[cs2lua] table index is nil");
-    return nil;
-  end;
-end;
-
-function setstaticindexer(class, name, ...)
-  if name then
-    class[name](...);
-  else
-    UnityEngine.Debug.LogError("LogError_String","[cs2lua] table index is nil");
-  end;
-  return nil;
-end;
-function setinstanceindexer(obj, intf, class, name, ...)
-  if name then
-    obj[name](obj, ...);
-  else
-    UnityEngine.Debug.LogError("LogError_String","[cs2lua] table index is nil");
-  end;
-  return nil;
-end;
-
-function getexternstaticindexer(class, name, ...)
-  return class[...];
-end;
-function getexterninstanceindexer(obj, intf, class, name, ...)  
+function getexterninstanceindexer(callerClass, obj, intf, class, name, argCount, ...)  
   local args = {...};  
   local index;
   local meta = getmetatable(obj);
@@ -311,10 +277,10 @@ function getexterninstanceindexer(obj, intf, class, name, ...)
   end;
 end;
 
-function setexternstaticindexer(class, name, ...) 
-  return nil;
+function setexternstaticindexer(callerClass, class, name, argCount, toplevel, ...) 
+  return class[name](...);
 end;
-function setexterninstanceindexer(obj, intf, class, name, ...)
+function setexterninstanceindexer(callerClass, obj, intf, class, name, argCount, toplevel, ...)
   local args = {...};
   local num = #args; 
   local index;

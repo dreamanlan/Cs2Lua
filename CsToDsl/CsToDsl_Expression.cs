@@ -491,6 +491,15 @@ namespace RoslynTool.CsToDsl
             }
             if (null != psym && psym.IsIndexer) {
                 CodeBuilder.AppendFormat("get{0}{1}indexer(", SymbolTable.Instance.IsCs2DslSymbol(psym) ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
+                var expOper = m_Model.GetOperation(node.Expression);
+                if (null != expOper) {
+                    string fullName = ClassInfo.GetFullName(expOper.Type);
+                    CodeBuilder.Append(fullName);
+                }
+                else {
+                    CodeBuilder.Append("null");
+                }
+                CodeBuilder.Append(", ");
                 if (psym.IsStatic) {
                     string fullName = ClassInfo.GetFullName(psym.ContainingType);
                     CodeBuilder.Append(fullName);
@@ -507,7 +516,7 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.Append(", ");
                 }
                 string manglingName = NameMangling(psym.GetMethod);
-                CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
+                CodeBuilder.AppendFormat("\"{0}\", {1}, ", manglingName, psym.GetMethod.Parameters.Length);
                 InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
                 ii.Init(psym.GetMethod, node.ArgumentList, m_Model);
                 OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, node, ii.ArgConversions.ToArray());
@@ -547,6 +556,15 @@ namespace RoslynTool.CsToDsl
                 if (null != psym && psym.IsIndexer) {
                     CodeBuilder.Append("(function(){ return(");
                     CodeBuilder.AppendFormat("get{0}{1}indexer(", SymbolTable.Instance.IsCs2DslSymbol(psym) ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
+                    var expOper = m_Model.GetOperation(node.Expression);
+                    if (null != expOper) {
+                        string fullName = ClassInfo.GetFullName(expOper.Type);
+                        CodeBuilder.Append(fullName);
+                    }
+                    else {
+                        CodeBuilder.Append("null");
+                    }
+                    CodeBuilder.Append(", ");
                     if (psym.IsStatic) {
                         string fullName = ClassInfo.GetFullName(psym.ContainingType);
                         CodeBuilder.Append(fullName);
@@ -563,7 +581,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(", ");
                     }
                     string manglingName = NameMangling(psym.GetMethod);
-                    CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
+                    CodeBuilder.AppendFormat("\"{0}\", {1}, ", manglingName, psym.GetMethod.Parameters.Length);
                     InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
                     List<ExpressionSyntax> args = new List<ExpressionSyntax> { node.WhenNotNull };
                     ii.Init(psym.GetMethod, args, m_Model);

@@ -961,6 +961,14 @@ namespace RoslynTool.CsToDsl
             }
             if (null != leftPsym && leftPsym.IsIndexer) {
                 CodeBuilder.AppendFormat("set{0}{1}indexer(", SymbolTable.Instance.IsCs2DslSymbol(leftPsym) ? string.Empty : "extern", leftPsym.IsStatic ? "static" : "instance");
+                var expOper = m_Model.GetOperation(leftElementAccess.Expression);
+                if (null != expOper) {
+                    string fullName = ClassInfo.GetFullName(expOper.Type);
+                    CodeBuilder.Append(fullName);
+                } else {
+                    CodeBuilder.Append("null");
+                }
+                CodeBuilder.Append(", ");
                 if (leftPsym.IsStatic) {
                     string fullName = ClassInfo.GetFullName(leftPsym.ContainingType);
                     CodeBuilder.Append(fullName);
@@ -977,7 +985,7 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.Append(", ");
                 }
                 string manglingName = NameMangling(leftPsym.SetMethod);
-                CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
+                CodeBuilder.AppendFormat("\"{0}\", {1}, {2}, ", manglingName, leftPsym.SetMethod.Parameters.Length, toplevel ? "true" : "false");
                 InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
                 ii.Init(leftPsym.SetMethod, leftElementAccess.ArgumentList, m_Model);
                 OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, leftElementAccess, ii.ArgConversions.ToArray());
@@ -986,7 +994,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.Append(")");
             } else if (leftOper.Kind == OperationKind.ArrayElementReferenceExpression) {
                 if (SymbolTable.UseArrayGetSet) {
-                    CodeBuilder.Append("arrayset(");
+                    CodeBuilder.AppendFormat("arrayset({0}, ", toplevel ? "true" : "false");
                     OutputExpressionSyntax(leftElementAccess.Expression);
                     CodeBuilder.Append(", ");
                     VisitBracketedArgumentList(leftElementAccess.ArgumentList);
@@ -1029,6 +1037,15 @@ namespace RoslynTool.CsToDsl
                 if (null != psym && psym.IsIndexer) {
                     CodeBuilder.Append("(function(){ return(");
                     CodeBuilder.AppendFormat("set{0}{1}indexer(", SymbolTable.Instance.IsCs2DslSymbol(psym) ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
+                    var expOper = m_Model.GetOperation(leftCondAccess.Expression);
+                    if (null != expOper) {
+                        string fullName = ClassInfo.GetFullName(expOper.Type);
+                        CodeBuilder.Append(fullName);
+                    }
+                    else {
+                        CodeBuilder.Append("null");
+                    }
+                    CodeBuilder.Append(", ");
                     if (psym.IsStatic) {
                         string fullName = ClassInfo.GetFullName(psym.ContainingType);
                         CodeBuilder.Append(fullName);
@@ -1045,7 +1062,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(", ");
                     }
                     string manglingName = NameMangling(psym.SetMethod);
-                    CodeBuilder.AppendFormat("\"{0}\", ", manglingName);
+                    CodeBuilder.AppendFormat("\"{0}\", {1}, false, ", manglingName, psym.SetMethod.Parameters.Length);
                     InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
                     List<ExpressionSyntax> args = new List<ExpressionSyntax> { leftCondAccess.WhenNotNull };
                     ii.Init(psym.SetMethod, args, m_Model);
@@ -1056,7 +1073,7 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.Append("); })");
                 } else if (bindingOper.Kind == OperationKind.ArrayElementReferenceExpression) {
                     if (SymbolTable.UseArrayGetSet) {
-                        CodeBuilder.Append("arrayset(");
+                        CodeBuilder.Append("arrayset(false, ");
                         OutputExpressionSyntax(leftCondAccess.Expression);
                         CodeBuilder.Append(", ");
                         OutputExpressionSyntax(leftCondAccess.WhenNotNull);

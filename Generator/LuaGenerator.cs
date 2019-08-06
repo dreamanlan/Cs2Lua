@@ -22,7 +22,8 @@ namespace Generator
         {
             if (string.IsNullOrEmpty(outPath)) {
                 outPath = Path.Combine(csprojPath, "lua");
-            } else if (!Path.IsPathRooted(outPath)) {
+            }
+            else if (!Path.IsPathRooted(outPath)) {
                 outPath = Path.Combine(csprojPath, outPath);
             }
 
@@ -44,7 +45,8 @@ namespace Generator
                     Dsl.DslFile dslFile = new Dsl.DslFile();
                     dslFile.Load(file, s => Log(file, s));
                     GenerateLua(dslFile, Path.Combine(s_OutPath, Path.ChangeExtension(fileName.Replace("cs2dsl__", "cs2lua__"), s_Ext)), fileName);
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     Log(file, string.Format("exception:{0}\n{1}", ex.Message, ex.StackTrace));
                     File.WriteAllText(Path.Combine(s_LogPath, "Generator.log"), s_LogBuilder.ToString());
                     System.Environment.Exit(-1);
@@ -72,7 +74,7 @@ namespace Generator
         {
             var myselfNewRequire = GetMergedFile(fileName);
             FileMergeInfo mergedInfo = null;
-            if (!string.IsNullOrEmpty(myselfNewRequire)){
+            if (!string.IsNullOrEmpty(myselfNewRequire)) {
                 s_FileMergeInfos.TryGetValue(myselfNewRequire, out mergedInfo);
             }
 
@@ -100,7 +102,8 @@ namespace Generator
                     }
                     if ((srcExist || requireFileName.StartsWith("cs2lua__")) && null != mergedInfo && mergedInfo.CodeBuilder.Length > 0) {
                         //合并的文件，只有第一个文件require基础库
-                    } else {
+                    }
+                    else {
                         if (firstRequire) {
                             sb.AppendLine("require \"cs2lua__namespaces\"; ");
                             firstRequire = false;
@@ -112,15 +115,18 @@ namespace Generator
                                     requires.Add(newRequire);
                                     requireList.Add(newRequire);
                                 }
-                            } else if (!requires.Contains(requireFileName)) {
+                            }
+                            else if (!requires.Contains(requireFileName)) {
                                 requires.Add(requireFileName);
                                 requireList.Add(requireFileName);
                             }
                         }
                     }
-                } else if (id == "defineentry") {
+                }
+                else if (id == "defineentry") {
                     entryClass = CalcTypeString(callData.GetParam(0));
-                } else if (id == "attributes") {
+                }
+                else if (id == "attributes") {
                     if (firstAttrs) {
                         sb.AppendLine("__cs2lua__AllAttrs = {};");
                         firstAttrs = false;
@@ -155,10 +161,12 @@ namespace Generator
                     }
                     --indent;
                     sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                } else if (id == "namespace") {
+                }
+                else if (id == "namespace") {
                     string ns = CalcTypeString(callData.GetParam(0));
                     sb.AppendFormatLine("{0}{1} = {1} or {{}};", GetIndentString(indent), ns, ns);
-                } else if (id == "interface") {
+                }
+                else if (id == "interface") {
                     string intfName = CalcTypeString(callData.GetParam(0));
                     sb.AppendFormatLine("{0}{1} = {{", GetIndentString(indent), intfName);
                     ++indent;
@@ -179,10 +187,12 @@ namespace Generator
                     sb.AppendFormatLine("{0}__exist = function(k) return false; end", GetIndentString(indent));
                     --indent;
                     sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                } else if (id == "defineentry") {
+                }
+                else if (id == "defineentry") {
                     string className = CalcTypeString(callData.GetParam(0));
                     sb.AppendFormatLine("{0}defineentry({1});", GetIndentString(indent), className);
-                } else if (id == "enum") {
+                }
+                else if (id == "enum") {
                     string className = CalcTypeString(callData.GetParam(0));
                     var baseClass = callData.GetParam(1);
                     string baseClassName = string.Empty;
@@ -215,7 +225,8 @@ namespace Generator
                     }
                     --indent;
                     sb.AppendFormatLine("{0}}});", GetIndentString(indent));
-                } else if (id == "class" || id == "struct") {
+                }
+                else if (id == "class" || id == "struct") {
                     string className = CalcTypeString(callData.GetParam(0));
                     var baseClass = callData.GetParam(1);
                     string baseClassName = string.Empty;
@@ -225,10 +236,10 @@ namespace Generator
                     bool isValueType = id == "struct";
 
                     sb.AppendLine();
-                    
+
                     sb.AppendFormatLine("{0}{1} = {{", GetIndentString(indent), className);
                     ++indent;
-                    
+
                     var staticMethods = FindStatement(funcData, "static_methods") as Dsl.FunctionData;
                     if (null != staticMethods) {
                         foreach (var def in staticMethods.Statements) {
@@ -251,7 +262,8 @@ namespace Generator
                                             if (ix == fcall.Params.Count - 1 && pname == "...")
                                                 haveParams = true;
                                             sb.Append(pname);
-                                        } else {
+                                        }
+                                        else {
                                             var pc = param as Dsl.CallData;
                                             if (null != pc) {
                                                 var pname = pc.GetParamId(0);
@@ -275,7 +287,8 @@ namespace Generator
                                         string subId = comp.GetId();
                                         if (subId != "comments" && subId != "comment") {
                                             sb.AppendLine(";");
-                                        } else {
+                                        }
+                                        else {
                                             sb.AppendLine();
                                         }
                                     }
@@ -288,11 +301,11 @@ namespace Generator
                             }
                         }
                     }
-	                
+
                     sb.AppendFormatLine("{0}__define_class = function()", GetIndentString(indent));
                     ++indent;
                     sb.AppendFormatLine("{0}local static = {1};", GetIndentString(indent), className);
-                                        
+
                     if (null != staticMethods) {
                         sb.AppendFormatLine("{0}local static_methods = {{", GetIndentString(indent));
                         ++indent;
@@ -317,7 +330,8 @@ namespace Generator
                                             if (ix == fcall.Params.Count - 1 && pname == "...")
                                                 haveParams = true;
                                             sb.Append(pname);
-                                        } else {
+                                        }
+                                        else {
                                             var pc = param as Dsl.CallData;
                                             if (null != pc) {
                                                 var pname = pc.GetParamId(0);
@@ -341,7 +355,8 @@ namespace Generator
                                         string subId = comp.GetId();
                                         if (subId != "comments" && subId != "comment") {
                                             sb.AppendLine(";");
-                                        } else {
+                                        }
+                                        else {
                                             sb.AppendLine();
                                         }
                                     }
@@ -350,7 +365,8 @@ namespace Generator
                                     }
                                     --indent;
                                     sb.AppendFormatLine("{0}end,", GetIndentString(indent));
-                                } else {
+                                }
+                                else {
                                     var cdef = param1 as Dsl.CallData;
                                     if (null != cdef) {
                                         sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
@@ -368,7 +384,7 @@ namespace Generator
 
                     sb.AppendFormatLine("{0}local static_fields_build = function()", GetIndentString(indent));
                     ++indent;
-			        sb.AppendFormatLine("{0}local static_fields = {{", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}local static_fields = {{", GetIndentString(indent));
                     ++indent;
 
                     var staticFields = FindStatement(funcData, "static_fields") as Dsl.FunctionData;
@@ -386,11 +402,11 @@ namespace Generator
                     }
 
                     --indent;
-			        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-			        sb.AppendFormatLine("{0}return static_fields;", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}}};", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}return static_fields;", GetIndentString(indent));
                     --indent;
                     sb.AppendFormatLine("{0}end;", GetIndentString(indent));
-                    
+
                     var staticProps = FindStatement(funcData, "static_props") as Dsl.FunctionData;
                     if (null != staticProps && staticProps.GetStatementNum() > 0) {
                         sb.AppendFormatLine("{0}local static_props = {{", GetIndentString(indent));
@@ -415,7 +431,8 @@ namespace Generator
                         }
                         --indent;
                         sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    } else {
+                    }
+                    else {
                         sb.AppendFormatLine("{0}local static_props = nil;", GetIndentString(indent));
                     }
                     var staticEvents = FindStatement(funcData, "static_events") as Dsl.FunctionData;
@@ -442,12 +459,13 @@ namespace Generator
                         }
                         --indent;
                         sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    } else {
+                    }
+                    else {
                         sb.AppendFormatLine("{0}local static_events = nil;", GetIndentString(indent));
                     }
 
                     sb.AppendLine();
-                    
+
                     var instMethods = FindStatement(funcData, "instance_methods") as Dsl.FunctionData;
                     if (null != instMethods) {
                         sb.AppendFormatLine("{0}local instance_methods = {{", GetIndentString(indent));
@@ -463,7 +481,7 @@ namespace Generator
                                     bool haveParams = false;
                                     sb.AppendFormat("{0}{1} = {2}(", GetIndentString(indent), mname, fcall.GetId());
                                     prestr = string.Empty;
-                                    for (int ix = 0; ix < fcall.Params.Count;++ix ) {
+                                    for (int ix = 0; ix < fcall.Params.Count; ++ix) {
                                         var param = fcall.Params[ix];
                                         string paramId = param.GetId();
                                         sb.Append(prestr);
@@ -474,7 +492,8 @@ namespace Generator
                                             if (ix == fcall.Params.Count - 1 && pname == "...")
                                                 haveParams = true;
                                             sb.Append(pname);
-                                        } else {
+                                        }
+                                        else {
                                             var pc = param as Dsl.CallData;
                                             if (null != pc) {
                                                 var pname = pc.GetParamId(0);
@@ -498,7 +517,8 @@ namespace Generator
                                         string subId = comp.GetId();
                                         if (subId != "comments" && subId != "comment") {
                                             sb.AppendLine(";");
-                                        } else {
+                                        }
+                                        else {
                                             sb.AppendLine();
                                         }
                                     }
@@ -507,7 +527,8 @@ namespace Generator
                                     }
                                     --indent;
                                     sb.AppendFormatLine("{0}end,", GetIndentString(indent));
-                                } else {
+                                }
+                                else {
                                     var cdef = param1 as Dsl.CallData;
                                     if (null != cdef) {
                                         sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
@@ -521,10 +542,10 @@ namespace Generator
                         sb.AppendFormatLine("{0}}};", GetIndentString(indent));
                     }
 
-                    
-		            sb.AppendFormatLine("{0}local instance_fields_build = function()", GetIndentString(indent));
+
+                    sb.AppendFormatLine("{0}local instance_fields_build = function()", GetIndentString(indent));
                     ++indent;
-			        sb.AppendFormatLine("{0}local instance_fields = {{", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}local instance_fields = {{", GetIndentString(indent));
                     ++indent;
 
                     var instFields = FindStatement(funcData, "instance_fields") as Dsl.FunctionData;
@@ -540,10 +561,10 @@ namespace Generator
                             }
                         }
                     }
-                    
+
                     --indent;
-			        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-			        sb.AppendFormatLine("{0}return instance_fields;", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}}};", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}return instance_fields;", GetIndentString(indent));
                     --indent;
                     sb.AppendFormatLine("{0}end;", GetIndentString(indent));
 
@@ -571,7 +592,8 @@ namespace Generator
                         }
                         --indent;
                         sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    } else {
+                    }
+                    else {
                         sb.AppendFormatLine("{0}local instance_props = nil;", GetIndentString(indent));
                     }
                     var instanceEvents = FindStatement(funcData, "instance_events") as Dsl.FunctionData;
@@ -598,7 +620,8 @@ namespace Generator
                         }
                         --indent;
                         sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    } else {
+                    }
+                    else {
                         sb.AppendFormatLine("{0}local instance_events = nil;", GetIndentString(indent));
                     }
 
@@ -614,7 +637,8 @@ namespace Generator
                         }
                         --indent;
                         sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    } else {
+                    }
+                    else {
                         sb.AppendFormatLine("{0}local interfaces = nil;", GetIndentString(indent));
                     }
                     var interfaceMap = FindStatement(funcData, "interface_map") as Dsl.FunctionData;
@@ -631,7 +655,8 @@ namespace Generator
                         }
                         --indent;
                         sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    } else {
+                    }
+                    else {
                         sb.AppendFormatLine("{0}local interface_map = nil;", GetIndentString(indent));
                     }
 
@@ -684,7 +709,8 @@ namespace Generator
                         }
                         --indent;
                         sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    } else {
+                    }
+                    else {
                         sb.AppendFormatLine("{0}local method_info = nil;", GetIndentString(indent));
                     }
 
@@ -713,7 +739,8 @@ namespace Generator
                         }
                         --indent;
                         sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    } else {
+                    }
+                    else {
                         sb.AppendFormatLine("{0}local property_info = nil;", GetIndentString(indent));
                     }
 
@@ -742,7 +769,8 @@ namespace Generator
                         }
                         --indent;
                         sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    } else {
+                    }
+                    else {
                         sb.AppendFormatLine("{0}local event_info = nil;", GetIndentString(indent));
                     }
 
@@ -768,7 +796,8 @@ namespace Generator
                         }
                         --indent;
                         sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    } else {
+                    }
+                    else {
                         sb.AppendFormatLine("{0}local field_info = nil;", GetIndentString(indent));
                     }
 
@@ -782,7 +811,8 @@ namespace Generator
                         sb.AppendFormatLine("{0}local __defineclass_return = defineclass({1}, \"{2}\", \"{3}\", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, {4});", GetIndentString(indent), null == baseClass ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
                         sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfoForDefineClass.EpilogueInfo, className, "__define_class"));
                         sb.AppendFormatLine("{0}return __defineclass_return;", GetIndentString(indent));
-                    } else {
+                    }
+                    else {
                         sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", \"{3}\", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, {4});", GetIndentString(indent), null == baseClass ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
                     }
 
@@ -809,7 +839,8 @@ namespace Generator
                 if (!string.IsNullOrEmpty(entryClass)) {
                     mergedInfo.EntryClass = entryClass;
                 }
-            } else {
+            }
+            else {
                 StringBuilder newSb = new StringBuilder();
                 newSb.AppendLine(sb.ToString());
                 foreach (string req in requireList) {
@@ -830,19 +861,23 @@ namespace Generator
             var valData = comp as Dsl.ValueData;
             if (null != valData) {
                 GenerateConcreteSyntax(valData, sb, indent, firstLineUseIndent, true);
-            } else {
+            }
+            else {
                 var callData = comp as Dsl.CallData;
                 if (null != callData) {
                     GenerateConcreteSyntax(callData, sb, indent, firstLineUseIndent);
-                } else {
+                }
+                else {
                     var funcData = comp as Dsl.FunctionData;
                     if (null != funcData) {
                         GenerateConcreteSyntax(funcData, sb, indent, firstLineUseIndent);
-                    } else {
+                    }
+                    else {
                         var statementData = comp as Dsl.StatementData;
                         if (null != statementData) {
                             GenerateConcreteSyntax(statementData, sb, indent, firstLineUseIndent);
-                        } else {
+                        }
+                        else {
                             System.Diagnostics.Debugger.Break();
                             throw new Exception(string.Format("GenerateFieldValueComponent ISyntaxComponent exception:{0}", sb.ToString()));
                         }
@@ -855,15 +890,18 @@ namespace Generator
             var valData = comp as Dsl.ValueData;
             if (null != valData) {
                 GenerateConcreteSyntax(valData, sb, indent, firstLineUseIndent);
-            } else {
+            }
+            else {
                 var callData = comp as Dsl.CallData;
                 if (null != callData) {
                     GenerateConcreteSyntax(callData, sb, indent, firstLineUseIndent);
-                } else {
+                }
+                else {
                     var funcData = comp as Dsl.FunctionData;
                     if (null != funcData) {
                         GenerateConcreteSyntax(funcData, sb, indent, firstLineUseIndent);
-                    } else {
+                    }
+                    else {
                         var statementData = comp as Dsl.StatementData;
                         GenerateConcreteSyntax(statementData, sb, indent, firstLineUseIndent);
                     }
@@ -889,7 +927,8 @@ namespace Generator
                             id = "__cs2lua_nil_field_value";
                         else
                             id = "nil";
-                    } else if (id == "__cs2dsl_out") {
+                    }
+                    else if (id == "__cs2dsl_out") {
                         id = "__cs2lua_out";
                     }
                     sb.Append(id);
@@ -904,7 +943,7 @@ namespace Generator
             string id = string.Empty;
             var callData = data.Call;
             if (null == callData) {
-                id = data.GetId();                
+                id = data.GetId();
             }
             if (firstLineUseIndent) {
                 sb.AppendFormat("{0}", GetIndentString(indent));
@@ -917,7 +956,8 @@ namespace Generator
                     sb.AppendFormat("({0} ", id);
                     GenerateSyntaxComponent(param1, sb, indent, false);
                     sb.Append(")");
-                } else if (paramNum == 2) {
+                }
+                else if (paramNum == 2) {
                     ++indent;
                     var param1 = data.GetParam(0);
                     var param2 = data.GetParam(1);
@@ -936,7 +976,8 @@ namespace Generator
                                 }
                                 sb.AppendFormat(" {0} ", id);
                                 GenerateSyntaxComponent(param2, sb, indent, false);
-                            } else {
+                            }
+                            else {
                                 GenerateSyntaxComponent(cd.GetParam(0), sb, indent, false);
                                 sb.AppendFormat(" {0} ", id);
                                 GenerateSyntaxComponent(param2, sb, indent, false);
@@ -954,28 +995,23 @@ namespace Generator
                             sb.Append(")");
                     }
                 }
-            } else if (id == "comment") {
+            }
+            else if (id == "comment") {
                 sb.AppendFormat("--{0}", data.GetParamId(0));
-            } else if (id == "local") {
+            }
+            else if (id == "local") {
                 sb.Append("local ");
-                string prestr = string.Empty;
-                foreach (var param in data.Params) {
-                    sb.Append(prestr);
-                    GenerateSyntaxComponent(param, sb, indent, false);
-                    prestr = ", ";
-                }
-            } else if (id == "ref" || id == "out") {
+                GenerateArguments(data, sb, indent, 0);
+            }
+            else if (id == "ref" || id == "out") {
                 var param = data.GetParam(0);
                 GenerateSyntaxComponent(param, sb, indent, false);
-            } else if (id == "return") {
+            }
+            else if (id == "return") {
                 sb.Append("return ");
-                string prestr = string.Empty;
-                foreach (var param in data.Params) {
-                    sb.Append(prestr);
-                    GenerateSyntaxComponent(param, sb, indent, false);
-                    prestr = ", ";
-                }
-            } else if (id == "execunary") {
+                GenerateArguments(data, sb, indent, 0);
+            }
+            else if (id == "execunary") {
                 string op = data.GetParamId(0);
                 var p1 = data.GetParam(1);
                 string type1 = CalcTypeString(data.GetParam(2));
@@ -992,34 +1028,40 @@ namespace Generator
                             sb.Append("(");
                             GenerateSyntaxComponent(p1, sb, indent, false);
                             sb.AppendFormat(" {0} 1)", intOp);
-                        } else {
+                        }
+                        else {
                             sb.AppendFormat("invokeintegeroperator({0}, \"{1}\", ", intOpIndex, intOp);
                             GenerateSyntaxComponent(p1, sb, indent, false);
                             sb.AppendFormat(", 1, {0}, {1})", type1, type1);
                         }
-                    } if (s_IntegerTypes.Contains(type1) && (op == "+" || op == "-")) {
+                    }
+                    if (s_IntegerTypes.Contains(type1) && (op == "+" || op == "-")) {
                         sb.AppendFormat("( {0} ", intOp);
                         GenerateSyntaxComponent(p1, sb, indent, false);
                         sb.Append(")");
-                    } else {
+                    }
+                    else {
                         sb.AppendFormat("invokeintegeroperator({0}, \"{1}\", nil, ", intOpIndex, intOp);
                         GenerateSyntaxComponent(p1, sb, indent, false);
                         sb.AppendFormat(", nil, {0})", type1, type1);
                     }
-                } else {
+                }
+                else {
                     string functor;
                     if (s_UnaryFunctor.TryGetValue(op, out functor)) {
                         sb.AppendFormat("{0}(", functor);
                         GenerateSyntaxComponent(data.GetParam(1), sb, indent, false);
                         sb.Append(")");
-                    } else {
+                    }
+                    else {
                         op = ConvertOperator(op);
                         sb.AppendFormat("({0} ", op);
                         GenerateSyntaxComponent(data.GetParam(1), sb, indent, false);
                         sb.Append(")");
                     }
                 }
-            } else if (id == "execbinary") {
+            }
+            else if (id == "execbinary") {
                 string op = data.GetParamId(0);
                 var p1 = data.GetParam(1);
                 var p2 = data.GetParam(2);
@@ -1035,14 +1077,16 @@ namespace Generator
                         sb.AppendFormat(" {0} ", op);
                         GenerateSyntaxComponent(p2, sb, indent, false);
                         sb.Append(")");
-                    } else {
+                    }
+                    else {
                         sb.AppendFormat("invokeintegeroperator({0}, \"{1}\", ", intOpIndex, op);
                         GenerateSyntaxComponent(p1, sb, indent, false);
                         sb.Append(", ");
                         GenerateSyntaxComponent(p2, sb, indent, false);
                         sb.AppendFormat(", {0}, {1})", type1, type2);
                     }
-                } else if (op == "+" && (type1 == "System.String" || type2 == "System.String")) {
+                }
+                else if (op == "+" && (type1 == "System.String" || type2 == "System.String")) {
                     bool tostr1 = type1 != "System.String";
                     bool tostr2 = type2 != "System.String";
                     sb.Append("System.String.Concat(\"Concat__String__String\", ");
@@ -1058,21 +1102,24 @@ namespace Generator
                     if (tostr2)
                         sb.Append(")");
                     sb.Append(")");
-                } else if ((op == "==" || op == "!=") && !IsBasicType(type1, typeKind1, true) && !IsBasicType(type2, typeKind2, true)) {
+                }
+                else if ((op == "==" || op == "!=") && !IsBasicType(type1, typeKind1, true) && !IsBasicType(type2, typeKind2, true)) {
                     if (op == "==") {
                         sb.Append("isequal(");
                         GenerateSyntaxComponent(p1, sb, indent, false);
                         sb.Append(", ");
                         GenerateSyntaxComponent(p2, sb, indent, false);
                         sb.Append(")");
-                    } else {
+                    }
+                    else {
                         sb.Append("(not isequal(");
                         GenerateSyntaxComponent(p1, sb, indent, false);
                         sb.Append(", ");
                         GenerateSyntaxComponent(p2, sb, indent, false);
                         sb.Append("))");
                     }
-                } else {
+                }
+                else {
                     string functor;
                     if (s_BinaryFunctor.TryGetValue(op, out functor)) {
                         sb.AppendFormat("{0}(", functor);
@@ -1080,7 +1127,8 @@ namespace Generator
                         sb.Append(", ");
                         GenerateSyntaxComponent(p2, sb, indent, false);
                         sb.Append(")");
-                    } else {
+                    }
+                    else {
                         op = ConvertOperator(op);
                         sb.Append("(");
                         GenerateSyntaxComponent(p1, sb, indent, false);
@@ -1089,54 +1137,55 @@ namespace Generator
                         sb.Append(")");
                     }
                 }
-            } else if (id == "invokeexternoperator") {
+            }
+            else if (id == "invokeexternoperator") {
                 string method = data.GetParamId(2);
                 string luaOp = string.Empty;
                 //slua导出时把重载操作符导出成lua实例方法了，然后利用lua实例上支持的操作符元方法在运行时绑定到重载实现
                 //这里把lua支持的操作符方法转成lua操作（可能比invokeexternoperator要快一些）
                 if (method == "op_Addition") {
                     luaOp = "+";
-                } else if (method == "op_Subtraction") {
+                }
+                else if (method == "op_Subtraction") {
                     luaOp = "-";
-                } else if (method == "op_Multiply") {
+                }
+                else if (method == "op_Multiply") {
                     luaOp = "*";
-                } else if (method == "op_Division") {
+                }
+                else if (method == "op_Division") {
                     luaOp = "/";
-                } else if (method == "op_UnaryNegation") {
+                }
+                else if (method == "op_UnaryNegation") {
                     luaOp = "-";
-                } else if (method == "op_UnaryPlus") {
+                }
+                else if (method == "op_UnaryPlus") {
                     luaOp = "+";
-                } else if (method == "op_LessThan") {
+                }
+                else if (method == "op_LessThan") {
                     luaOp = "<";
-                } else if (method == "op_GreaterThan") {
+                }
+                else if (method == "op_GreaterThan") {
                     luaOp = ">";
-                } else if (method == "op_LessThanOrEqual") {
+                }
+                else if (method == "op_LessThanOrEqual") {
                     luaOp = "<=";
-                } else if (method == "op_GreaterThanOrEqual") {
+                }
+                else if (method == "op_GreaterThanOrEqual") {
                     luaOp = ">= ";
                 }
                 if (string.IsNullOrEmpty(luaOp) || data.GetParamNum() > 5) {
                     sb.Append(id);
                     sb.Append("(");
-                    string prestr = string.Empty;
-                    for (int ix = 0; ix < data.Params.Count; ++ix) {
-                        var param = data.Params[ix];
-                        sb.Append(prestr);
-                        string paramId = param.GetId();
-                        if (param.GetIdType() == (int)Dsl.ValueData.ID_TOKEN && paramId == "...") {
-                            sb.Append("...");
-                            continue;
-                        }
-                        GenerateSyntaxComponent(param, sb, indent, false);
-                        prestr = ", ";
-                    }
+                    GenerateArguments(data, sb, indent, 0);
                     sb.Append(")");
-                } else if (data.GetParamNum() == 4 && luaOp == "-") {
+                }
+                else if (data.GetParamNum() == 4 && luaOp == "-") {
                     sb.Append("(- ");
                     var param0 = data.GetParam(3);
                     GenerateSyntaxComponent(param0, sb, indent, false);
                     sb.Append(")");
-                } else if (data.GetParamNum() == 5) {
+                }
+                else if (data.GetParamNum() == 5) {
                     sb.Append("(");
                     var param0 = data.GetParam(3);
                     var param1 = data.GetParam(4);
@@ -1145,25 +1194,20 @@ namespace Generator
                     GenerateSyntaxComponent(param1, sb, indent, false);
                     sb.Append(")");
                 }
-            } else if (id == "getstatic") {
+            }
+            else if (id == "getstatic") {
                 var obj = data.Params[0];
                 var member = data.Params[1];
                 GenerateSyntaxComponent(obj, sb, indent, false);
                 sb.AppendFormat(".{0}", member.GetId());
-            } else if (id == "getinstance") {
+            }
+            else if (id == "getinstance") {
                 var obj = data.Params[0];
                 var member = data.Params[1];
                 GenerateSyntaxComponent(obj, sb, indent, false);
                 sb.AppendFormat(".{0}", member.GetId());
-            } else if (id == "setstatic") {
-                var obj = data.Params[0];
-                var member = data.Params[1];
-                var val = data.Params[2];
-                GenerateSyntaxComponent(obj, sb, indent, false);
-                sb.AppendFormat(".{0}", member.GetId());
-                sb.Append(" = ");
-                GenerateSyntaxComponent(val, sb, indent, false);
-            } else if (id == "setinstance") {
+            }
+            else if (id == "setstatic") {
                 var obj = data.Params[0];
                 var member = data.Params[1];
                 var val = data.Params[2];
@@ -1171,7 +1215,17 @@ namespace Generator
                 sb.AppendFormat(".{0}", member.GetId());
                 sb.Append(" = ");
                 GenerateSyntaxComponent(val, sb, indent, false);
-            } else if (id == "callstatic") {
+            }
+            else if (id == "setinstance") {
+                var obj = data.Params[0];
+                var member = data.Params[1];
+                var val = data.Params[2];
+                GenerateSyntaxComponent(obj, sb, indent, false);
+                sb.AppendFormat(".{0}", member.GetId());
+                sb.Append(" = ");
+                GenerateSyntaxComponent(val, sb, indent, false);
+            }
+            else if (id == "callstatic") {
                 var obj = data.Params[0];
                 var member = data.Params[1];
                 var mid = member.GetId();
@@ -1185,20 +1239,10 @@ namespace Generator
                         start = 3;
                     }
                 }
-                string prestr = string.Empty;
-                for (int ix = start; ix < data.Params.Count; ++ix) {
-                    var param = data.Params[ix];
-                    sb.Append(prestr);
-                    string paramId = param.GetId();
-                    if (param.GetIdType() == (int)Dsl.ValueData.ID_TOKEN && paramId == "...") {
-                        sb.Append("...");
-                        continue;
-                    }
-                    GenerateSyntaxComponent(param, sb, indent, false);
-                    prestr = ", ";
-                }
+                GenerateArguments(data, sb, indent, start);
                 sb.Append(")");
-            } else if (id == "callinstance") {
+            }
+            else if (id == "callinstance") {
                 var obj = data.Params[0];
                 var member = data.Params[1];
                 var mid = member.GetId();
@@ -1206,7 +1250,8 @@ namespace Generator
                 GenerateSyntaxComponent(obj, sb, indent, false);
                 if (null != objCd && objCd.GetId() == "getinstance" && objCd.GetParamNum() == 2 && objCd.GetParamId(1) == "base") {
                     sb.AppendFormat(":__self__{0}", mid);
-                } else {
+                }
+                else {
                     sb.AppendFormat(":{0}", mid);
                 }
                 sb.Append("(");
@@ -1217,27 +1262,330 @@ namespace Generator
                         start = 3;
                     }
                 }
-                string prestr = string.Empty;
-                for (int ix = start; ix < data.Params.Count; ++ix) {
-                    var param = data.Params[ix];
-                    sb.Append(prestr);
-                    string paramId = param.GetId();
-                    if (param.GetIdType() == (int)Dsl.ValueData.ID_TOKEN && paramId == "...") {
-                        sb.Append("...");
-                        continue;
-                    }
-                    GenerateSyntaxComponent(param, sb, indent, false);
-                    prestr = ", ";
-                }
+                GenerateArguments(data, sb, indent, start);
                 sb.Append(")");
-            } else if (id == "typeof") {
+            }
+            else if (id == "getstaticindexer") {
+                var _callerClass = data.Params[0];
+                var _class = data.Params[1];
+                var _member = data.Params[2].GetId();
+                var _pct = data.Params[3].GetId();
+                int ct;
+                int.TryParse(_pct, out ct);
+                if (ct == 1) {
+                    var _index = data.Params[4];
+                    GenerateSyntaxComponent(_class, sb, 0, false);
+                    sb.Append('[');
+                    GenerateSyntaxComponent(_index, sb, 0, false);
+                    sb.Append(']');
+                }
+                else {
+                    int start = 4;
+                    GenerateSyntaxComponent(_class, sb, 0, false);
+                    sb.Append('[');
+                    sb.Append('"');
+                    sb.Append(_member);
+                    sb.Append('"');
+                    sb.Append(']');
+                    sb.Append('(');
+                    GenerateArguments(data, sb, indent, start);
+                    sb.Append(')');
+                }
+            }
+            else if (id == "getinstanceindexer") {
+                var _callerClass = data.Params[0];
+                var _obj = data.Params[1];
+                var _intf = data.Params[2];
+                var _class = data.Params[3];
+                var _member = data.Params[4].GetId();
+                var _pct = data.Params[5].GetId();
+                int ct;
+                int.TryParse(_pct, out ct);
+                if (ct == 1) {
+                    var _index = data.Params[6];
+                    GenerateSyntaxComponent(_obj, sb, indent, false);
+                    sb.Append('[');
+                    GenerateSyntaxComponent(_index, sb, 0, false);
+                    sb.Append(']');
+                }
+                else {
+                    int start = 6;
+                    GenerateSyntaxComponent(_obj, sb, indent, false);
+                    sb.Append('[');
+                    sb.Append('"');
+                    sb.Append(_member);
+                    sb.Append('"');
+                    sb.Append(']');
+                    sb.Append('(');
+                    GenerateSyntaxComponent(_obj, sb, indent, false);
+                    sb.Append(", ");
+                    GenerateArguments(data, sb, indent, start);
+                    sb.Append(')');
+                }
+            }
+            else if (id == "setstaticindexer") {
+                var _callerClass = data.Params[0];
+                var _class = data.Params[1];
+                var _member = data.Params[2].GetId();
+                var _pct = data.Params[3].GetId();
+                var _toplevel = data.Params[4].GetId();
+                int ct;
+                int.TryParse(_pct, out ct);
+                if (ct == 2 && _toplevel == "true") {
+                    var _index = data.Params[5];
+                    var _val = data.Params[6];
+                    GenerateSyntaxComponent(_class, sb, 0, false);
+                    sb.Append('[');
+                    GenerateSyntaxComponent(_index, sb, 0, false);
+                    sb.Append(']');
+                    sb.Append(" = ");
+                    GenerateSyntaxComponent(_val, sb, 0, false);
+                }
+                else {
+                    int start = 5;
+                    GenerateSyntaxComponent(_class, sb, 0, false);
+                    sb.Append('[');
+                    sb.Append('"');
+                    sb.Append(_member);
+                    sb.Append('"');
+                    sb.Append(']');
+                    sb.Append('(');
+                    GenerateArguments(data, sb, indent, start);
+                    sb.Append(')');
+                }
+            }
+            else if (id == "setinstanceindexer") {
+                var _callerClass = data.Params[0];
+                var _obj = data.Params[1];
+                var _intf = data.Params[2];
+                var _class = data.Params[3];
+                var _member = data.Params[4].GetId();
+                var _pct = data.Params[5].GetId();
+                var _toplevel = data.Params[6].GetId();
+                int ct;
+                int.TryParse(_pct, out ct);
+                if (ct == 2 && _toplevel=="true") {
+                    var _index = data.Params[7];
+                    var _val = data.Params[8];
+                    GenerateSyntaxComponent(_obj, sb, indent, false);
+                    sb.Append('[');
+                    GenerateSyntaxComponent(_index, sb, 0, false);
+                    sb.Append(']');
+                    sb.Append(" = ");
+                    GenerateSyntaxComponent(_val, sb, 0, false);
+                }
+                else {
+                    int start = 7;
+                    GenerateSyntaxComponent(_obj, sb, indent, false);
+                    sb.Append('[');
+                    sb.Append('"');
+                    sb.Append(_member);
+                    sb.Append('"');
+                    sb.Append(']');
+                    sb.Append('(');
+                    GenerateSyntaxComponent(_obj, sb, indent, false);
+                    sb.Append(", ");
+                    GenerateArguments(data, sb, indent, start);
+                    sb.Append(')');
+                }
+            }
+            else if (id == "getexternstaticindexer") {
+                var _callerClass = data.Params[0];
+                var _class = data.Params[1];
+                var _member = data.Params[2];
+                var strCallerClass = CalcTypeString(_callerClass);
+                var strClass = CalcTypeString(_class);
+                var strMember = CalcTypeString(_member);
+                int indexerType;
+                if (IndexerByLualib(strCallerClass, string.Empty, string.Empty, strClass, strMember, out indexerType)) {
+                    var _pct = data.Params[3].GetId();
+                    int ct;
+                    int.TryParse(_pct, out ct);
+                    if (ct == 1) {
+                        var _index = data.Params[4];
+                        sb.Append(strClass);
+                        sb.Append('[');
+                        GenerateSyntaxComponent(_index, sb, 0, false);
+                        if (indexerType == (int)IndexerTypeEnum.LikeArray) {
+                            sb.Append(" + 1");
+                        }
+                        sb.Append(']');
+                    }
+                    else {
+                        int start = 4;
+                        sb.Append(strClass);
+                        sb.Append('[');
+                        sb.Append('"');
+                        sb.Append(strMember);
+                        sb.Append('"');
+                        sb.Append(']');
+                        sb.Append('(');
+                        GenerateArguments(data, sb, indent, start);
+                        sb.Append(')');
+                    }
+                }
+                else {
+                    sb.Append(id);
+                    sb.Append('(');
+                    GenerateArguments(data, sb, indent, 0);
+                    sb.Append(')');
+                }
+            }
+            else if (id == "getexterninstanceindexer") {
+                var _callerClass = data.Params[0];
+                var _obj = data.Params[1];
+                var _intf = data.Params[2];
+                var _class = data.Params[3];
+                var _member = data.Params[4];
+                var strCallerClass = CalcTypeString(_callerClass);
+                var strObj = CalcExpressionString(_obj);
+                var strIntf = CalcTypeString(_intf);
+                var strClass = CalcTypeString(_class);
+                var strMember = CalcTypeString(_member);
+                int indexerType;
+                if(IndexerByLualib(strCallerClass, strObj, strIntf, strClass, strMember, out indexerType)) {
+                    var _pct = data.Params[5].GetId();
+                    int ct;
+                    int.TryParse(_pct, out ct);
+                    if (ct == 1) {
+                        var _index = data.Params[6];
+                        sb.Append(strObj);
+                        sb.Append('[');
+                        GenerateSyntaxComponent(_index, sb, 0, false);
+                        if (indexerType == (int)IndexerTypeEnum.LikeArray) {
+                            sb.Append(" + 1");
+                        }
+                        sb.Append(']');
+                    }
+                    else {
+                        int start = 6;
+                        GenerateSyntaxComponent(_obj, sb, indent, false);
+                        sb.Append('[');
+                        sb.Append('"');
+                        sb.Append(strMember);
+                        sb.Append('"');
+                        sb.Append(']');
+                        sb.Append('(');
+                        GenerateSyntaxComponent(_obj, sb, indent, false);
+                        sb.Append(", ");
+                        GenerateArguments(data, sb, indent, start);
+                        sb.Append(')');
+                    }
+                } else {
+                    sb.Append(id);
+                    sb.Append('(');
+                    GenerateArguments(data, sb, indent, 0);
+                    sb.Append(')');
+                }
+            }
+            else if (id == "setexternstaticindexer") {
+                var _callerClass = data.Params[0];
+                var _class = data.Params[1];
+                var _member = data.Params[2];
+                var strCallerClass = CalcTypeString(_callerClass);
+                var strClass = CalcTypeString(_class);
+                var strMember = CalcTypeString(_member);
+                int indexerType;
+                if (IndexerByLualib(strCallerClass, string.Empty, string.Empty, strClass, strMember, out indexerType)) {
+                    var _pct = data.Params[3].GetId();
+                    var _toplevel = data.Params[4].GetId();
+                    int ct;
+                    int.TryParse(_pct, out ct);
+                    if (ct == 2 && _toplevel == "true") {
+                        var _index = data.Params[5];
+                        var _val = data.Params[6];
+                        sb.Append(strClass);
+                        sb.Append('[');
+                        GenerateSyntaxComponent(_index, sb, 0, false);
+                        if (indexerType == (int)IndexerTypeEnum.LikeArray) {
+                            sb.Append(" + 1");
+                        }
+                        sb.Append(']');
+                        sb.Append(" = ");
+                        GenerateSyntaxComponent(_val, sb, 0, false);
+                    }
+                    else {
+                        int start = 5;
+                        sb.Append(strClass);
+                        sb.Append('[');
+                        sb.Append('"');
+                        sb.Append(strMember);
+                        sb.Append('"');
+                        sb.Append(']');
+                        sb.Append('(');
+                        GenerateArguments(data, sb, indent, start);
+                        sb.Append(')');
+                    }
+                }
+                else {
+                    sb.Append(id);
+                    sb.Append('(');
+                    GenerateArguments(data, sb, indent, 0);
+                    sb.Append(')');
+                }
+            }
+            else if (id == "setexterninstanceindexer") {
+                var _callerClass = data.Params[0];
+                var _obj = data.Params[1];
+                var _intf = data.Params[2];
+                var _class = data.Params[3];
+                var _member = data.Params[4];
+                var strCallerClass = CalcTypeString(_callerClass);
+                var strObj = CalcExpressionString(_obj);
+                var strIntf = CalcTypeString(_intf);
+                var strClass = CalcTypeString(_class);
+                var strMember = CalcTypeString(_member);
+                int indexerType;
+                if (IndexerByLualib(strCallerClass, strObj, strIntf, strClass, strMember, out indexerType)) {
+                    var _pct = data.Params[5].GetId();
+                    var _toplevel = data.Params[6].GetId();
+                    int ct;
+                    int.TryParse(_pct, out ct);
+                    if (ct == 2 && _toplevel == "true") {
+                        var _index = data.Params[7];
+                        var _val = data.Params[8];
+                        sb.Append(strObj);
+                        sb.Append('[');
+                        GenerateSyntaxComponent(_index, sb, 0, false);
+                        if (indexerType == (int)IndexerTypeEnum.LikeArray) {
+                            sb.Append(" + 1");
+                        }
+                        sb.Append(']');
+                        sb.Append(" = ");
+                        GenerateSyntaxComponent(_val, sb, 0, false);
+                    }
+                    else {
+                        int start = 7;
+                        GenerateSyntaxComponent(_obj, sb, indent, false);
+                        sb.Append('[');
+                        sb.Append('"');
+                        sb.Append(strMember);
+                        sb.Append('"');
+                        sb.Append(']');
+                        sb.Append('(');
+                        GenerateSyntaxComponent(_obj, sb, indent, false);
+                        sb.Append(", ");
+                        GenerateArguments(data, sb, indent, start);
+                        sb.Append(')');
+                    }
+                }
+                else {
+                    sb.Append(id);
+                    sb.Append('(');
+                    GenerateArguments(data, sb, indent, 0);
+                    sb.Append(')');
+                }
+            }
+            else if (id == "typeof") {
                 var typeStr = CalcTypeString(data.GetParam(0));
                 sb.AppendFormat("{0}", typeStr);
-            } else if (id == "params") {
+            }
+            else if (id == "params") {
                 int num = data.GetParamNum();
                 if (num == 0) {
                     sb.Append("{...}");
-                } else if (num == 1) {
+                }
+                else if (num == 1) {
                     int type;
                     if (int.TryParse(data.GetParamId(0), out type)) {
                         switch (type) {
@@ -1252,7 +1600,8 @@ namespace Generator
                                 break;
                         }
                     }
-                } else {
+                }
+                else {
                     int type;
                     if (int.TryParse(data.GetParamId(0), out type)) {
                         string name = data.GetParamId(1);
@@ -1269,29 +1618,21 @@ namespace Generator
                         }
                     }
                 }
-            } else if (id == "paramsremove") {
+            }
+            else if (id == "paramsremove") {
                 sb.AppendFormat("table.remove({0})", data.GetParamId(0));
-            } else if (id == "typeargs") {
+            }
+            else if (id == "typeargs") {
                 sb.Append("{");
-                string prestr = string.Empty;
-                for (int ix = 0; ix < data.Params.Count; ++ix) {
-                    var param = data.Params[ix];
-                    sb.Append(prestr);
-                    GenerateSyntaxComponent(param, sb, indent, false);
-                    prestr = ", ";
-                }
+                GenerateArguments(data, sb, indent, 0);
                 sb.Append("}");
-            } else if (id == "typekinds") {
+            }
+            else if (id == "typekinds") {
                 sb.Append("{");
-                string prestr = string.Empty;
-                for (int ix = 0; ix < data.Params.Count; ++ix) {
-                    var param = data.Params[ix];
-                    sb.Append(prestr);
-                    GenerateSyntaxComponent(param, sb, indent, false);
-                    prestr = ", ";
-                }
+                GenerateArguments(data, sb, indent, 0);
                 sb.Append("}");
-            } else if (id == "builddelegation") {
+            }
+            else if (id == "builddelegation") {
                 var paramsString = data.GetParamId(0);
                 var varName = data.GetParamId(1);
                 var delegationKey = data.GetParamId(2);
@@ -1312,7 +1653,8 @@ namespace Generator
                 sb.Append(objOrClassName);
                 if (isStatic) {
                     sb.Append(".");
-                } else {
+                }
+                else {
                     sb.Append(":");
                 }
                 sb.Append(methodName);
@@ -1322,14 +1664,16 @@ namespace Generator
                 sb.AppendFormat("{0}", GetIndentString(indent));
                 sb.AppendFormatLine("setdelegationkey({0}, \"{1}\", {2}, {3}.{4});", varName, delegationKey, objOrClassName, objOrClassName, methodName);
                 sb.AppendFormat("{0}return {1}", GetIndentString(indent), varName);
-            } else if (id == "setdelegation") {
+            }
+            else if (id == "setdelegation") {
                 //这里可以对xlua的delegation用法进行特殊转换
                 var obj = data.Params[0];
                 var val = data.Params[1];
                 GenerateSyntaxComponent(obj, sb, indent, false);
                 sb.Append(" = ");
                 GenerateSyntaxComponent(val, sb, indent, false);
-            } else if (id == "setstaticdelegation") {
+            }
+            else if (id == "setstaticdelegation") {
                 //这里可以对xlua的delegation用法进行特殊转换
                 var obj = data.Params[0];
                 var member = data.Params[1];
@@ -1338,7 +1682,8 @@ namespace Generator
                 sb.AppendFormat(".{0}", member.GetId());
                 sb.Append(" = ");
                 GenerateSyntaxComponent(val, sb, indent, false);
-            } else if (id == "setinstancedelegation") {
+            }
+            else if (id == "setinstancedelegation") {
                 //这里可以对xlua的delegation用法进行特殊转换
                 var obj = data.Params[0];
                 var member = data.Params[1];
@@ -1347,17 +1692,13 @@ namespace Generator
                 sb.AppendFormat(".{0}", member.GetId());
                 sb.Append(" = ");
                 GenerateSyntaxComponent(val, sb, indent, false);
-            } else if (id == "anonymousobject") {
+            }
+            else if (id == "anonymousobject") {
                 sb.Append("wrapdictionary{");
-                string prestr = string.Empty;
-                for (int ix = 0; ix < data.Params.Count; ++ix) {
-                    var param = data.Params[ix];
-                    sb.Append(prestr);
-                    GenerateSyntaxComponent(param, sb, indent, false);
-                    prestr = ", ";
-                }
+                GenerateArguments(data, sb, indent, 0);
                 sb.Append("}");
-            } else if (id == "literaldictionary") {
+            }
+            else if (id == "literaldictionary") {
                 sb.Append("{");
                 string prestr = string.Empty;
                 for (int ix = 0; ix < data.Params.Count; ++ix) {
@@ -1368,57 +1709,47 @@ namespace Generator
                     var v = param.GetParam(1);
                     if (null != kcd) {
                         sb.AppendFormat("[{0}] = ", CalcTypeString(k));
-                    } else if (k.GetIdType() == Dsl.ValueData.STRING_TOKEN) {
+                    }
+                    else if (k.GetIdType() == Dsl.ValueData.STRING_TOKEN) {
                         sb.AppendFormat("[\"{0}\"] = ", Escape(k.GetId()));
-                    } else {
+                    }
+                    else {
                         sb.AppendFormat("[{0}] = ", k.GetId());
                     }
                     GenerateSyntaxComponent(v, sb, indent, false);
                     prestr = ", ";
                 }
                 sb.Append("}");
-            } else if (id == "literallist" || id == "literalcollection" || id == "literalcomplex" || id == "literalobject") {
+            }
+            else if (id == "literallist" || id == "literalcollection" || id == "literalcomplex" || id == "literalobject") {
                 sb.Append("{");
-                string prestr = string.Empty;
-                for (int ix = 0; ix < data.Params.Count; ++ix) {
-                    var param = data.Params[ix];
-                    sb.Append(prestr);
-                    GenerateSyntaxComponent(param, sb, indent, false);
-                    prestr = ", ";
-                }
+                GenerateArguments(data, sb, indent, 0);
                 sb.Append("}");
-            } else if (id == "buildarray") {
+            }
+            else if (id == "buildarray") {
                 var typeStr = CalcTypeString(data.GetParam(0));
                 if (typeStr == "System.Char") {
                     sb.Append("chararraytostring({");
-                    string prestr = string.Empty;
-                    for (int ix = 1; ix < data.Params.Count; ++ix) {
-                        var param = data.Params[ix];
-                        sb.Append(prestr);
-                        GenerateSyntaxComponent(param, sb, indent, false);
-                        prestr = ", ";
-                    }
-                    sb.Append("})");
-                } else {
-                    sb.Append("wraparray({");
-                    string prestr = string.Empty;
-                    for (int ix = 1; ix < data.Params.Count; ++ix) {
-                        var param = data.Params[ix];
-                        sb.Append(prestr);
-                        GenerateSyntaxComponent(param, sb, indent, false);
-                        prestr = ", ";
-                    }
+                    GenerateArguments(data, sb, indent, 1);
                     sb.Append("})");
                 }
-            } else if (id == "newarray") {
+                else {
+                    sb.Append("wraparray({");
+                    GenerateArguments(data, sb, indent, 1);
+                    sb.Append("})");
+                }
+            }
+            else if (id == "newarray") {
                 var typeStr = CalcTypeString(data.GetParam(0));
                 if (data.GetParamNum() > 1) {
                     var vname = data.GetParamId(1);
                     sb.AppendFormat("wraparray({{}}, {0})", vname);
-                } else {
+                }
+                else {
                     sb.Append("wraparray{}");
                 }
-            } else if (id == "foreach") {
+            }
+            else if (id == "foreach") {
                 sb.Append("for ");
                 var param1 = data.GetParamId(0);
                 sb.Append(param1);
@@ -1426,7 +1757,8 @@ namespace Generator
                 var param2 = data.GetParam(1);
                 GenerateSyntaxComponent(param2, sb, indent, false);
                 sb.Append(" do");
-            } else if (id == "for") {
+            }
+            else if (id == "for") {
                 sb.Append("for ");
                 var param0 = data.GetParamId(0);
                 sb.Append(param0);
@@ -1442,35 +1774,48 @@ namespace Generator
                     GenerateSyntaxComponent(param3, sb, indent, false);
                 }
                 sb.Append(" do");
-            } else {
+            }
+            else {
                 if (null != callData) {
                     GenerateSyntaxComponent(callData, sb, indent, false);
-                } else if (id == "if") {
+                }
+                else if (id == "if") {
                     sb.Append("if ");
-                } else if (id == "elseif") {
+                }
+                else if (id == "elseif") {
                     sb.Append("elseif ");
-                } else if (id == "while") {
+                }
+                else if (id == "while") {
                     sb.Append("while ");
-                } else if (id == "until") {
+                }
+                else if (id == "until") {
                     sb.Append("until ");
-                } else if (id == "block") {
+                }
+                else if (id == "block") {
                     sb.Append("do");
-                } else if (id == "dslunpack") {
+                }
+                else if (id == "dslunpack") {
                     sb.Append("luaunpack");
-                } else if (id == "dslusing") {
+                }
+                else if (id == "dslusing") {
                     sb.Append("luausing");
-                } else if (id == "dsltry") {
+                }
+                else if (id == "dsltry") {
                     sb.Append("luatry");
-                } else if (id == "dslcatch") {
+                }
+                else if (id == "dslcatch") {
                     sb.Append("luacatch");
-                } else if (id == "dslthrow") {
+                }
+                else if (id == "dslthrow") {
                     sb.Append("luathrow");
-                } else {
+                }
+                else {
                     sb.Append(id);
                 }
                 if (data.HaveParam()) {
                     if (id == "if" || id == "elseif" || id == "while" || id == "until") {
-                    } else {
+                    }
+                    else {
                         switch (data.GetParamClass()) {
                             case (int)Dsl.CallData.ParamClassEnum.PARAM_CLASS_PARENTHESIS:
                                 sb.Append("(");
@@ -1484,21 +1829,11 @@ namespace Generator
                         }
                     }
                     if (data.GetParamClass() != (int)Dsl.CallData.ParamClassEnum.PARAM_CLASS_PERIOD) {
-                        string prestr = string.Empty;
-                        for (int ix = 0; ix < data.Params.Count; ++ix) {
-                            var param = data.Params[ix];
-                            sb.Append(prestr);
-                            string paramId = param.GetId();
-                            if (param.GetIdType() == (int)Dsl.ValueData.ID_TOKEN && paramId == "...") {
-                                sb.Append("...");
-                                continue;
-                            }
-                            GenerateSyntaxComponent(param, sb, indent, false);
-                            prestr = ", ";
-                        }
+                        GenerateArguments(data, sb, indent, 0);
                     }
                     if (id == "if" || id == "elseif" || id == "while" || id == "until") {
-                    } else {
+                    }
+                    else {
                         switch (data.GetParamClass()) {
                             case (int)Dsl.CallData.ParamClassEnum.PARAM_CLASS_PARENTHESIS:
                                 sb.Append(")");
@@ -1512,7 +1847,8 @@ namespace Generator
                     }
                     if (id == "if" || id == "elseif") {
                         sb.Append(" then ");
-                    } else if (id == "while") {
+                    }
+                    else if (id == "while") {
                         sb.Append(" do");
                     }
                 }
@@ -1534,31 +1870,26 @@ namespace Generator
                     GenerateSyntaxComponent(comp, sb, indent, true);
                     sb.AppendLine();
                 }
-            } else if (id == "local") {
+            }
+            else if (id == "local") {
                 bool first = true;
                 foreach (var comp in data.Statements) {
                     if (!first) {
                         sb.AppendLine(";");
-                    } else {
+                    }
+                    else {
                         first = false;
                     }
                     sb.Append("local ");
                     GenerateSyntaxComponent(comp, sb, indent, false);
                 }
-            } else {
+            }
+            else {
                 GenerateConcreteSyntax(fcall, sb, indent, false);
                 if (data.HaveStatement()) {
                     sb.AppendLine();
                     ++indent;
-                    foreach (var comp in data.Statements) {
-                        GenerateSyntaxComponent(comp, sb, indent, true);
-                        string subId = comp.GetId();
-                        if (subId != "comments" && subId != "comment") {
-                            sb.AppendLine(";");
-                        } else {
-                            sb.AppendLine();
-                        }
-                    }
+                    GenerateStatements(data, sb, indent);
                     --indent;
                     sb.AppendFormat("{0}end", GetIndentString(indent));
                 }
@@ -1575,11 +1906,13 @@ namespace Generator
                 foreach (var funcData in data.Functions) {
                     var fcall = funcData.Call;
                     var linqId = fcall.GetId();
-                    if (linqId=="linq") {
+                    if (linqId == "linq") {
                         sb.Append("LINQ.exec({");
-                    } else if (linqId == "end") {
+                    }
+                    else if (linqId == "end") {
                         sb.Append("})");
-                    } else {
+                    }
+                    else {
                         sb.AppendFormat("{0}{{\"{1}\"", prestr, linqId);
                         prestr = ", ";
                         ++indent;
@@ -1591,20 +1924,24 @@ namespace Generator
                         sb.Append("}");
                     }
                 }
-            } else if (id == "do") {
+            }
+            else if (id == "do") {
                 foreach (var funcData in data.Functions) {
                     var fcall = funcData.Call;
                     if (funcData == data.First) {
                         if (firstLineUseIndent) {
                             sb.AppendLine("repeat");
-                        } else {
+                        }
+                        else {
                             sb.AppendFormatLine("{0}repeat", GetIndentString(indent));
                         }
-                    } else if (funcData == data.Second) {
+                    }
+                    else if (funcData == data.Second) {
                         var param0 = fcall.GetParam(0);
                         if (param0.GetId() == "false") {
                             sb.AppendFormat("{0}until true", GetIndentString(indent));
-                        } else {
+                        }
+                        else {
                             sb.AppendFormat("{0}until not (", GetIndentString(indent));
                             GenerateSyntaxComponent(param0, sb, indent, false);
                             sb.Append(")");
@@ -1613,44 +1950,31 @@ namespace Generator
                     if (funcData.HaveStatement()) {
                         sb.AppendLine();
                         ++indent;
-                        foreach (var comp in funcData.Statements) {
-                            GenerateSyntaxComponent(comp, sb, indent, true);
-                            string subId = comp.GetId();
-                            if (subId != "comments" && subId != "comment") {
-                                sb.AppendLine(";");
-                            } else {
-                                sb.AppendLine();
-                            }
-                        }
+                        GenerateStatements(funcData, sb, indent);
                         --indent;
                         if (funcData == data.Last) {
                             sb.AppendFormat("{0}end", GetIndentString(indent));
                         }
-                    } else {
+                    }
+                    else {
                         sb.Append(" ");
                     }
                 }
-            } else {
+            }
+            else {
                 foreach (var funcData in data.Functions) {
                     var fcall = funcData.Call;
                     GenerateConcreteSyntax(fcall, sb, indent, funcData == data.First ? false : true);
                     if (funcData.HaveStatement()) {
                         sb.AppendLine();
                         ++indent;
-                        foreach (var comp in funcData.Statements) {
-                            GenerateSyntaxComponent(comp, sb, indent, true);
-                            string subId = comp.GetId();
-                            if (subId != "comments" && subId != "comment") {
-                                sb.AppendLine(";");
-                            } else {
-                                sb.AppendLine();
-                            }
-                        }
+                        GenerateStatements(funcData, sb, indent);
                         --indent;
                         if (funcData == data.Last) {
                             sb.AppendFormat("{0}end", GetIndentString(indent));
                         }
-                    } else {
+                    }
+                    else {
                         sb.Append(" ");
                     }
                 }
@@ -1665,7 +1989,8 @@ namespace Generator
                 string attr;
                 if (attrCd.IsHighOrder) {
                     attr = CalcTypeString(attrCd.Call);
-                } else {
+                }
+                else {
                     attr = attrCd.GetId();
                 }
                 sb.AppendFormat("{0}{{\"{1}\", {{", GetIndentString(indent), attr);
@@ -1691,6 +2016,34 @@ namespace Generator
                 sb.AppendLine("}};");
             }
         }
+        private static void GenerateArguments(Dsl.CallData data, StringBuilder sb, int indent, int start)
+        {
+            string prestr = string.Empty;
+            for (int ix = start; ix < data.Params.Count; ++ix) {
+                var param = data.Params[ix];
+                sb.Append(prestr);
+                string paramId = param.GetId();
+                if (param.GetIdType() == (int)Dsl.ValueData.ID_TOKEN && paramId == "...") {
+                    sb.Append("...");
+                    continue;
+                }
+                GenerateSyntaxComponent(param, sb, indent, false);
+                prestr = ", ";
+            }
+        }
+        private static void GenerateStatements(Dsl.FunctionData data, StringBuilder sb, int indent)
+        {
+            foreach (var comp in data.Statements) {
+                GenerateSyntaxComponent(comp, sb, indent, true);
+                string subId = comp.GetId();
+                if (subId != "comments" && subId != "comment") {
+                    sb.AppendLine(";");
+                }
+                else {
+                    sb.AppendLine();
+                }
+            }
+        }
         private static string CalcLogInfo(PrologueOrEpilogueInfo info, string className, string methodName)
         {
             string fmt = info.Format;
@@ -1714,12 +2067,19 @@ namespace Generator
                 string prefix;
                 if (cd.IsHighOrder) {
                     prefix = CalcTypeString(cd.Call);
-                } else {
+                }
+                else {
                     prefix = cd.GetId();
                 }
                 ret = prefix + "." + cd.GetParamId(0);
             }
             return ret;
+        }
+        private static string CalcExpressionString(Dsl.ISyntaxComponent comp)
+        {
+            StringBuilder sb = new StringBuilder();
+            GenerateSyntaxComponent(comp, sb, 0, false);
+            return sb.ToString();
         }
         private static Dsl.ISyntaxComponent FindParam(Dsl.FunctionData funcData, string key)
         {
@@ -1751,11 +2111,14 @@ namespace Generator
         {
             if (id == "!=") {
                 id = "~=";
-            } else if (id == "&&") {
+            }
+            else if (id == "&&") {
                 id = "and";
-            } else if (id == "||") {
+            }
+            else if (id == "||") {
                 id = "or";
-            } else if (id == "!") {
+            }
+            else if (id == "!") {
                 id = "not";
             }
             return id;
@@ -1882,11 +2245,11 @@ namespace Generator
         private static bool NoSignatureArg(string signature)
         {
             bool ret;
-            if(s_CachedNoSignatures.TryGetValue(signature, out ret)) {
+            if (s_CachedNoSignatures.TryGetValue(signature, out ret)) {
                 return ret;
             }
             foreach (var info in s_NoSignatureArgInfos) {
-                foreach (var regex in info.SignatureMatches) {
+                foreach (var regex in info.Matches) {
                     if (regex.IsMatch(signature)) {
                         s_CachedNoSignatures.Add(signature, true);
                         return true;
@@ -1894,6 +2257,26 @@ namespace Generator
                 }
             }
             s_CachedNoSignatures.Add(signature, false);
+            return false;
+        }
+        private static bool IndexerByLualib(string objClassName, string obj, string intf, string className, string member, out int val)
+        {
+            string key = string.Format("{0}|{1}|{2}|{3}|{4}", objClassName, obj, intf, className, member);
+            if (s_CachedIndexerByLualibInfos.TryGetValue(key, out val)) {
+                return val != 0;
+            }
+            foreach (var info in s_IndexerByLualibInfos) {
+                if ((null == info.ObjectClassMatch || info.ObjectClassMatch.IsMatch(objClassName)) && 
+                    (null == info.ObjectMatch || info.ObjectMatch.IsMatch(obj)) &&
+                    (null == info.InterfaceMatch || info.InterfaceMatch.IsMatch(intf)) &&
+                    (null == info.ClassMatch || info.ClassMatch.IsMatch(className)) &&
+                    (null == info.MemberMatch || info.MemberMatch.IsMatch(member))) {
+                    s_CachedIndexerByLualibInfos.Add(key, info.IndexerType);
+                    val = info.IndexerType;
+                    return true;
+                }
+            }
+            s_CachedIndexerByLualibInfos.Add(key, 0);
             return false;
         }
         private static PrologueAndEpilogueInfo GetPrologueAndEpilogue(string _class, string _method)
@@ -1970,14 +2353,16 @@ namespace Generator
                                 var regex = new Regex(str, RegexOptions.Compiled);
                                 cfg.Matches.Add(regex);
                             }
-                        } else if (fid == "except") {
+                        }
+                        else if (fid == "except") {
                             foreach (var p in f.Call.Params) {
                                 cfg.Excepts.Add(p.GetId());
                             }
                             foreach (var s in f.Statements) {
                                 cfg.Excepts.Add(s.GetId());
                             }
-                        } else if (fid == "exceptmatch") {
+                        }
+                        else if (fid == "exceptmatch") {
                             foreach (var p in f.Call.Params) {
                                 var str = p.GetId();
                                 var regex = new Regex(str, RegexOptions.Compiled);
@@ -1992,14 +2377,16 @@ namespace Generator
                     }
                 }
                 s_DontRequireInfos.Add(cfg);
-            } else if (id == "filemerge") {
+            }
+            else if (id == "filemerge") {
                 var cfg = new FileMergeInfo();
                 var f = info.First;
                 if (null != f) {
                     if (f.Call.GetParamNum() > 0) {
                         var p = f.Call.GetParamId(0);
                         cfg.MergedFileName = p;
-                    } else if (f.GetStatementNum() > 0) {
+                    }
+                    else if (f.GetStatementNum() > 0) {
                         var s = f.GetStatementId(0);
                         cfg.MergedFileName = s;
                     }
@@ -2015,7 +2402,8 @@ namespace Generator
                             foreach (var s in f.Statements) {
                                 cfg.Lists.Add(s.GetId());
                             }
-                        } else if (fid == "match") {
+                        }
+                        else if (fid == "match") {
                             foreach (var p in f.Call.Params) {
                                 var str = p.GetId();
                                 var regex = new Regex(str, RegexOptions.Compiled);
@@ -2030,23 +2418,60 @@ namespace Generator
                     }
                 }
                 s_FileMergeInfos.Add(cfg.MergedFileName, cfg);
-            } else if (id == "nosignaturearg") {
+            }
+            else if (id == "nosignaturearg") {
                 var cfg = new NoSignatureArgInfo();
                 var f = info.First;
                 if (null != f) {
                     foreach (var p in f.Call.Params) {
                         var str = p.GetId();
                         var regex = new Regex(str, RegexOptions.Compiled);
-                        cfg.SignatureMatches.Add(regex);
+                        cfg.Matches.Add(regex);
                     }
                     foreach (var s in f.Statements) {
                         var str = s.GetId();
                         var regex = new Regex(str, RegexOptions.Compiled);
-                        cfg.SignatureMatches.Add(regex);
+                        cfg.Matches.Add(regex);
                     }
                 }
                 s_NoSignatureArgInfos.Add(cfg);
-            } else if (id == "addprologue" || id == "addepilogue") {
+            }
+            else if (id == "indexerbylualib") {
+                var cfg = new IndexerByLualibInfo();
+                var f = info.First;
+                if (null != f) {
+                    if (f.Call.GetParamNum() >= 5) {
+                        var str = f.Call.GetParamId(0);
+                        var regex = new Regex(str, RegexOptions.Compiled);
+                        cfg.ObjectClassMatch = regex;
+                        str = f.Call.GetParamId(1);
+                        regex = new Regex(str, RegexOptions.Compiled);
+                        cfg.ObjectMatch = regex;
+                        str = f.Call.GetParamId(2);
+                        regex = new Regex(str, RegexOptions.Compiled);
+                        cfg.InterfaceMatch = regex;
+                        str = f.Call.GetParamId(3);
+                        regex = new Regex(str, RegexOptions.Compiled);
+                        cfg.ClassMatch = regex;
+                        str = f.Call.GetParamId(4);
+                        regex = new Regex(str, RegexOptions.Compiled);
+                        cfg.MemberMatch = regex;
+
+                        foreach (var s in f.Statements) {
+                            var cd = s as Dsl.CallData;
+                            if (null != cd) {
+                                var attrId = cd.GetId();
+                                if (attrId == "indexertype") {
+                                    var attrVal = cd.GetParamId(0);
+                                    int.TryParse(attrVal, out cfg.IndexerType);
+                                }
+                            }
+                        }
+                    }
+                }
+                s_IndexerByLualibInfos.Add(cfg);
+            }
+            else if (id == "addprologue" || id == "addepilogue") {
                 var cfg = new AddPrologueOrEpilogueInfo();
                 cfg.IsPrologue = id == "addprologue";
                 var f = info.First;
@@ -2062,7 +2487,8 @@ namespace Generator
                             list.Add(arg);
                         }
                         cfg.LogInfo.Args = list.ToArray();
-                    } else if (snum > 0) {
+                    }
+                    else if (snum > 0) {
                         var fmt = f.GetStatementId(0);
                         cfg.LogInfo.Format = fmt;
                         var list = new List<string>();
@@ -2084,7 +2510,8 @@ namespace Generator
                             foreach (var s in f.Statements) {
                                 cfg.Lists.Add(s.GetId());
                             }
-                        } else if (fid == "match") {
+                        }
+                        else if (fid == "match") {
                             foreach (var p in f.Call.Params) {
                                 var str = p.GetId();
                                 var regex = new Regex(str, RegexOptions.Compiled);
@@ -2110,7 +2537,7 @@ namespace Generator
         private static StringBuilder s_LogBuilder = new StringBuilder();
         //下面这个list的顺序要与lualib.lua里的整数操作表__cs2lua_special_integer_operators一致（索引用作操作符识别常量）
         private static List<string> s_SpecialIntegerOperators = new List<string> { "/", "%", "+", "-", "*", "<<", ">>", "&", "|", "^", "~" };
-        
+
         private static Dictionary<string, string> s_UnaryFunctor = new Dictionary<string, string> {
             {"~", "bitnot"},
         };
@@ -2154,7 +2581,24 @@ namespace Generator
 
         private class NoSignatureArgInfo
         {
-            internal List<Regex> SignatureMatches = new List<Regex>();
+            internal List<Regex> Matches = new List<Regex>();
+        }
+
+        private enum IndexerTypeEnum : int
+        {
+            NotByLualib = 0,
+            LikeArray,
+            Other
+        }
+
+        private class IndexerByLualibInfo
+        {
+            internal Regex ObjectClassMatch = null;
+            internal Regex ObjectMatch = null;
+            internal Regex InterfaceMatch = null;
+            internal Regex ClassMatch = null;
+            internal Regex MemberMatch = null;
+            internal int IndexerType = (int)IndexerTypeEnum.Other;
         }
 
         private class PrologueOrEpilogueInfo
@@ -2180,9 +2624,11 @@ namespace Generator
         private static List<DontRequireInfo> s_DontRequireInfos = new List<DontRequireInfo>();
         private static Dictionary<string, FileMergeInfo> s_FileMergeInfos = new Dictionary<string, FileMergeInfo>();
         private static List<NoSignatureArgInfo> s_NoSignatureArgInfos = new List<NoSignatureArgInfo>();
+        private static List<IndexerByLualibInfo> s_IndexerByLualibInfos = new List<IndexerByLualibInfo>();
         private static List<AddPrologueOrEpilogueInfo> s_AddPrologueOrEpilogueInfos = new List<AddPrologueOrEpilogueInfo>();
         private static Dictionary<string, string> s_CachedFile2MergedFiles = new Dictionary<string, string>();
         private static Dictionary<string, bool> s_CachedNoSignatures = new Dictionary<string, bool>();
+        private static Dictionary<string, int> s_CachedIndexerByLualibInfos = new Dictionary<string, int>();
         private static Dictionary<string, PrologueAndEpilogueInfo> s_CachedPrologueAndEpilogueInfos = new Dictionary<string, PrologueAndEpilogueInfo>();
     }
 }
