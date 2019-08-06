@@ -1266,18 +1266,77 @@ namespace Generator
                 sb.Append(")");
             }
             else if (id == "getstaticindexer") {
-                var _callerClass = data.Params[0];
-                var _class = data.Params[1];
-                var _member = data.Params[2].GetId();
-                var _pct = data.Params[3].GetId();
+                var _class = data.Params[0];
+                var _member = data.Params[1].GetId();
+                var _pct = data.Params[2].GetId();
                 int ct;
                 int.TryParse(_pct, out ct);
                 if (ct == 1) {
-                    var _index = data.Params[4];
+                    var _index = data.Params[3];
                     GenerateSyntaxComponent(_class, sb, 0, false);
                     sb.Append('[');
                     GenerateSyntaxComponent(_index, sb, 0, false);
                     sb.Append(']');
+                }
+                else {
+                    int start = 3;
+                    GenerateSyntaxComponent(_class, sb, 0, false);
+                    sb.Append('[');
+                    sb.Append('"');
+                    sb.Append(_member);
+                    sb.Append('"');
+                    sb.Append(']');
+                    sb.Append('(');
+                    GenerateArguments(data, sb, indent, start);
+                    sb.Append(')');
+                }
+            }
+            else if (id == "getinstanceindexer") {
+                var _obj = data.Params[0];
+                var _intf = data.Params[1];
+                var _class = data.Params[2];
+                var _member = data.Params[3].GetId();
+                var _pct = data.Params[4].GetId();
+                int ct;
+                int.TryParse(_pct, out ct);
+                if (ct == 1) {
+                    var _index = data.Params[5];
+                    GenerateSyntaxComponent(_obj, sb, indent, false);
+                    sb.Append('[');
+                    GenerateSyntaxComponent(_index, sb, 0, false);
+                    sb.Append(']');
+                }
+                else {
+                    int start = 5;
+                    GenerateSyntaxComponent(_obj, sb, indent, false);
+                    sb.Append('[');
+                    sb.Append('"');
+                    sb.Append(_member);
+                    sb.Append('"');
+                    sb.Append(']');
+                    sb.Append('(');
+                    GenerateSyntaxComponent(_obj, sb, indent, false);
+                    sb.Append(", ");
+                    GenerateArguments(data, sb, indent, start);
+                    sb.Append(')');
+                }
+            }
+            else if (id == "setstaticindexer") {
+                var _class = data.Params[0];
+                var _member = data.Params[1].GetId();
+                var _pct = data.Params[2].GetId();
+                var _toplevel = data.Params[3].GetId();
+                int ct;
+                int.TryParse(_pct, out ct);
+                if (ct == 2 && _toplevel == "true") {
+                    var _index = data.Params[4];
+                    var _val = data.Params[5];
+                    GenerateSyntaxComponent(_class, sb, 0, false);
+                    sb.Append('[');
+                    GenerateSyntaxComponent(_index, sb, 0, false);
+                    sb.Append(']');
+                    sb.Append(" = ");
+                    GenerateSyntaxComponent(_val, sb, 0, false);
                 }
                 else {
                     int start = 4;
@@ -1292,21 +1351,24 @@ namespace Generator
                     sb.Append(')');
                 }
             }
-            else if (id == "getinstanceindexer") {
-                var _callerClass = data.Params[0];
-                var _obj = data.Params[1];
-                var _intf = data.Params[2];
-                var _class = data.Params[3];
-                var _member = data.Params[4].GetId();
-                var _pct = data.Params[5].GetId();
+            else if (id == "setinstanceindexer") {
+                var _obj = data.Params[0];
+                var _intf = data.Params[1];
+                var _class = data.Params[2];
+                var _member = data.Params[3].GetId();
+                var _pct = data.Params[4].GetId();
+                var _toplevel = data.Params[5].GetId();
                 int ct;
                 int.TryParse(_pct, out ct);
-                if (ct == 1) {
+                if (ct == 2 && _toplevel=="true") {
                     var _index = data.Params[6];
+                    var _val = data.Params[7];
                     GenerateSyntaxComponent(_obj, sb, indent, false);
                     sb.Append('[');
                     GenerateSyntaxComponent(_index, sb, 0, false);
                     sb.Append(']');
+                    sb.Append(" = ");
+                    GenerateSyntaxComponent(_val, sb, 0, false);
                 }
                 else {
                     int start = 6;
@@ -1323,86 +1385,28 @@ namespace Generator
                     sb.Append(')');
                 }
             }
-            else if (id == "setstaticindexer") {
-                var _callerClass = data.Params[0];
-                var _class = data.Params[1];
-                var _member = data.Params[2].GetId();
-                var _pct = data.Params[3].GetId();
-                var _toplevel = data.Params[4].GetId();
-                int ct;
-                int.TryParse(_pct, out ct);
-                if (ct == 2 && _toplevel == "true") {
-                    var _index = data.Params[5];
-                    var _val = data.Params[6];
-                    GenerateSyntaxComponent(_class, sb, 0, false);
-                    sb.Append('[');
-                    GenerateSyntaxComponent(_index, sb, 0, false);
-                    sb.Append(']');
-                    sb.Append(" = ");
-                    GenerateSyntaxComponent(_val, sb, 0, false);
-                }
-                else {
-                    int start = 5;
-                    GenerateSyntaxComponent(_class, sb, 0, false);
-                    sb.Append('[');
-                    sb.Append('"');
-                    sb.Append(_member);
-                    sb.Append('"');
-                    sb.Append(']');
-                    sb.Append('(');
-                    GenerateArguments(data, sb, indent, start);
-                    sb.Append(')');
-                }
-            }
-            else if (id == "setinstanceindexer") {
-                var _callerClass = data.Params[0];
-                var _obj = data.Params[1];
-                var _intf = data.Params[2];
-                var _class = data.Params[3];
-                var _member = data.Params[4].GetId();
-                var _pct = data.Params[5].GetId();
-                var _toplevel = data.Params[6].GetId();
-                int ct;
-                int.TryParse(_pct, out ct);
-                if (ct == 2 && _toplevel=="true") {
-                    var _index = data.Params[7];
-                    var _val = data.Params[8];
-                    GenerateSyntaxComponent(_obj, sb, indent, false);
-                    sb.Append('[');
-                    GenerateSyntaxComponent(_index, sb, 0, false);
-                    sb.Append(']');
-                    sb.Append(" = ");
-                    GenerateSyntaxComponent(_val, sb, 0, false);
-                }
-                else {
-                    int start = 7;
-                    GenerateSyntaxComponent(_obj, sb, indent, false);
-                    sb.Append('[');
-                    sb.Append('"');
-                    sb.Append(_member);
-                    sb.Append('"');
-                    sb.Append(']');
-                    sb.Append('(');
-                    GenerateSyntaxComponent(_obj, sb, indent, false);
-                    sb.Append(", ");
-                    GenerateArguments(data, sb, indent, start);
-                    sb.Append(')');
-                }
-            }
             else if (id == "getexternstaticindexer") {
                 var _callerClass = data.Params[0];
-                var _class = data.Params[1];
-                var _member = data.Params[2];
+                var _typeargs = data.Params[1] as Dsl.CallData;
+                var _typekinds = data.Params[2] as Dsl.CallData;
+                var _class = data.Params[3];
+                var _member = data.Params[4];
                 var strCallerClass = CalcTypeString(_callerClass);
                 var strClass = CalcTypeString(_class);
                 var strMember = CalcTypeString(_member);
+                var keyIsInteger = true;
+                if (_typeargs.GetParamNum() > 0 && _typekinds.GetParamNum() > 0) {
+                    var firstTypeArg = CalcTypeString(_typeargs.GetParam(0));
+                    var firstTypeKind = CalcTypeString(_typekinds.GetParam(0));
+                    keyIsInteger = IsIntegerType(firstTypeArg, firstTypeKind);
+                }
                 int indexerType;
-                if (IndexerByLualib(strCallerClass, string.Empty, string.Empty, strClass, strMember, out indexerType)) {
-                    var _pct = data.Params[3].GetId();
+                if (IndexerByLualib(strCallerClass, string.Empty, string.Empty, strClass, strMember, out indexerType) && (indexerType == (int)IndexerTypeEnum.LikeArray || !keyIsInteger)) {
+                    var _pct = data.Params[5].GetId();
                     int ct;
                     int.TryParse(_pct, out ct);
                     if (ct == 1) {
-                        var _index = data.Params[4];
+                        var _index = data.Params[6];
                         sb.Append(strClass);
                         sb.Append('[');
                         GenerateSyntaxComponent(_index, sb, 0, false);
@@ -1412,7 +1416,7 @@ namespace Generator
                         sb.Append(']');
                     }
                     else {
-                        int start = 4;
+                        int start = 6;
                         sb.Append(strClass);
                         sb.Append('[');
                         sb.Append('"');
@@ -1433,22 +1437,30 @@ namespace Generator
             }
             else if (id == "getexterninstanceindexer") {
                 var _callerClass = data.Params[0];
-                var _obj = data.Params[1];
-                var _intf = data.Params[2];
-                var _class = data.Params[3];
-                var _member = data.Params[4];
+                var _typeargs = data.Params[1] as Dsl.CallData;
+                var _typekinds = data.Params[2] as Dsl.CallData;
+                var _obj = data.Params[3];
+                var _intf = data.Params[4];
+                var _class = data.Params[5];
+                var _member = data.Params[6];
                 var strCallerClass = CalcTypeString(_callerClass);
                 var strObj = CalcExpressionString(_obj);
                 var strIntf = CalcTypeString(_intf);
                 var strClass = CalcTypeString(_class);
                 var strMember = CalcTypeString(_member);
+                var keyIsInteger = true;
+                if (_typeargs.GetParamNum() > 0 && _typekinds.GetParamNum() > 0) {
+                    var firstTypeArg = CalcTypeString(_typeargs.GetParam(0));
+                    var firstTypeKind = CalcTypeString(_typekinds.GetParam(0));
+                    keyIsInteger = IsIntegerType(firstTypeArg, firstTypeKind);
+                }
                 int indexerType;
-                if(IndexerByLualib(strCallerClass, strObj, strIntf, strClass, strMember, out indexerType)) {
-                    var _pct = data.Params[5].GetId();
+                if(IndexerByLualib(strCallerClass, strObj, strIntf, strClass, strMember, out indexerType) && (indexerType == (int)IndexerTypeEnum.LikeArray || !keyIsInteger)) {
+                    var _pct = data.Params[7].GetId();
                     int ct;
                     int.TryParse(_pct, out ct);
                     if (ct == 1) {
-                        var _index = data.Params[6];
+                        var _index = data.Params[8];
                         sb.Append(strObj);
                         sb.Append('[');
                         GenerateSyntaxComponent(_index, sb, 0, false);
@@ -1458,7 +1470,7 @@ namespace Generator
                         sb.Append(']');
                     }
                     else {
-                        int start = 6;
+                        int start = 8;
                         GenerateSyntaxComponent(_obj, sb, indent, false);
                         sb.Append('[');
                         sb.Append('"');
@@ -1480,20 +1492,28 @@ namespace Generator
             }
             else if (id == "setexternstaticindexer") {
                 var _callerClass = data.Params[0];
-                var _class = data.Params[1];
-                var _member = data.Params[2];
+                var _typeargs = data.Params[1] as Dsl.CallData;
+                var _typekinds = data.Params[2] as Dsl.CallData;
+                var _class = data.Params[3];
+                var _member = data.Params[4];
                 var strCallerClass = CalcTypeString(_callerClass);
                 var strClass = CalcTypeString(_class);
                 var strMember = CalcTypeString(_member);
+                var keyIsInteger = true;
+                if (_typeargs.GetParamNum() > 0 && _typekinds.GetParamNum() > 0) {
+                    var firstTypeArg = CalcTypeString(_typeargs.GetParam(0));
+                    var firstTypeKind = CalcTypeString(_typekinds.GetParam(0));
+                    keyIsInteger = IsIntegerType(firstTypeArg, firstTypeKind);
+                }
                 int indexerType;
-                if (IndexerByLualib(strCallerClass, string.Empty, string.Empty, strClass, strMember, out indexerType)) {
-                    var _pct = data.Params[3].GetId();
-                    var _toplevel = data.Params[4].GetId();
+                if (IndexerByLualib(strCallerClass, string.Empty, string.Empty, strClass, strMember, out indexerType) && (indexerType == (int)IndexerTypeEnum.LikeArray || !keyIsInteger)) {
+                    var _pct = data.Params[5].GetId();
+                    var _toplevel = data.Params[6].GetId();
                     int ct;
                     int.TryParse(_pct, out ct);
                     if (ct == 2 && _toplevel == "true") {
-                        var _index = data.Params[5];
-                        var _val = data.Params[6];
+                        var _index = data.Params[7];
+                        var _val = data.Params[8];
                         sb.Append(strClass);
                         sb.Append('[');
                         GenerateSyntaxComponent(_index, sb, 0, false);
@@ -1505,7 +1525,7 @@ namespace Generator
                         GenerateSyntaxComponent(_val, sb, 0, false);
                     }
                     else {
-                        int start = 5;
+                        int start = 7;
                         sb.Append(strClass);
                         sb.Append('[');
                         sb.Append('"');
@@ -1526,24 +1546,32 @@ namespace Generator
             }
             else if (id == "setexterninstanceindexer") {
                 var _callerClass = data.Params[0];
-                var _obj = data.Params[1];
-                var _intf = data.Params[2];
-                var _class = data.Params[3];
-                var _member = data.Params[4];
+                var _typeargs = data.Params[1] as Dsl.CallData;
+                var _typekinds = data.Params[2] as Dsl.CallData;
+                var _obj = data.Params[3];
+                var _intf = data.Params[4];
+                var _class = data.Params[5];
+                var _member = data.Params[6];
                 var strCallerClass = CalcTypeString(_callerClass);
                 var strObj = CalcExpressionString(_obj);
                 var strIntf = CalcTypeString(_intf);
                 var strClass = CalcTypeString(_class);
                 var strMember = CalcTypeString(_member);
+                var keyIsInteger = true;
+                if (_typeargs.GetParamNum() > 0 && _typekinds.GetParamNum() > 0) {
+                    var firstTypeArg = CalcTypeString(_typeargs.GetParam(0));
+                    var firstTypeKind = CalcTypeString(_typekinds.GetParam(0));
+                    keyIsInteger = IsIntegerType(firstTypeArg, firstTypeKind);
+                }
                 int indexerType;
-                if (IndexerByLualib(strCallerClass, strObj, strIntf, strClass, strMember, out indexerType)) {
-                    var _pct = data.Params[5].GetId();
-                    var _toplevel = data.Params[6].GetId();
+                if (IndexerByLualib(strCallerClass, strObj, strIntf, strClass, strMember, out indexerType) && (indexerType == (int)IndexerTypeEnum.LikeArray || !keyIsInteger)) {
+                    var _pct = data.Params[7].GetId();
+                    var _toplevel = data.Params[8].GetId();
                     int ct;
                     int.TryParse(_pct, out ct);
                     if (ct == 2 && _toplevel == "true") {
-                        var _index = data.Params[7];
-                        var _val = data.Params[8];
+                        var _index = data.Params[9];
+                        var _val = data.Params[10];
                         sb.Append(strObj);
                         sb.Append('[');
                         GenerateSyntaxComponent(_index, sb, 0, false);
@@ -1555,7 +1583,7 @@ namespace Generator
                         GenerateSyntaxComponent(_val, sb, 0, false);
                     }
                     else {
-                        int start = 7;
+                        int start = 9;
                         GenerateSyntaxComponent(_obj, sb, indent, false);
                         sb.Append('[');
                         sb.Append('"');
@@ -1623,14 +1651,24 @@ namespace Generator
                 sb.AppendFormat("table.remove({0})", data.GetParamId(0));
             }
             else if (id == "typeargs") {
-                sb.Append("{");
-                GenerateArguments(data, sb, indent, 0);
-                sb.Append("}");
+                if (data.GetParamNum() > 0) {
+                    sb.Append("{");
+                    GenerateArguments(data, sb, indent, 0);
+                    sb.Append("}");
+                }
+                else {
+                    sb.Append("nil");
+                }
             }
             else if (id == "typekinds") {
-                sb.Append("{");
-                GenerateArguments(data, sb, indent, 0);
-                sb.Append("}");
+                if (data.GetParamNum() > 0) {
+                    sb.Append("{");
+                    GenerateArguments(data, sb, indent, 0);
+                    sb.Append("}");
+                }
+                else {
+                    sb.Append("nil");
+                }
             }
             else if (id == "builddelegation") {
                 var paramsString = data.GetParamId(0);

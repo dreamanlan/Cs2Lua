@@ -960,15 +960,23 @@ namespace RoslynTool.CsToDsl
                 AddReferenceAndTryDeriveGenericTypeInstance(ci, leftSym);
             }
             if (null != leftPsym && leftPsym.IsIndexer) {
-                CodeBuilder.AppendFormat("set{0}{1}indexer(", SymbolTable.Instance.IsCs2DslSymbol(leftPsym) ? string.Empty : "extern", leftPsym.IsStatic ? "static" : "instance");
-                var expOper = m_Model.GetOperation(leftElementAccess.Expression);
-                if (null != expOper) {
-                    string fullName = ClassInfo.GetFullName(expOper.Type);
-                    CodeBuilder.Append(fullName);
-                } else {
-                    CodeBuilder.Append("null");
+                bool isCs2Lua = SymbolTable.Instance.IsCs2DslSymbol(leftPsym);
+                CodeBuilder.AppendFormat("set{0}{1}indexer(", isCs2Lua ? string.Empty : "extern", leftPsym.IsStatic ? "static" : "instance");
+                if (!isCs2Lua) {
+                    INamedTypeSymbol namedTypeSym = null;
+                    var expOper = m_Model.GetOperation(leftElementAccess.Expression);
+                    if (null != expOper) {
+                        string fullName = ClassInfo.GetFullName(expOper.Type);
+                        CodeBuilder.Append(fullName);
+                        namedTypeSym = expOper.Type as INamedTypeSymbol;
+                    }
+                    else {
+                        CodeBuilder.Append("null");
+                    }
+                    CodeBuilder.Append(", ");
+                    OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                    CodeBuilder.Append(", ");
                 }
-                CodeBuilder.Append(", ");
                 if (leftPsym.IsStatic) {
                     string fullName = ClassInfo.GetFullName(leftPsym.ContainingType);
                     CodeBuilder.Append(fullName);
@@ -1036,16 +1044,23 @@ namespace RoslynTool.CsToDsl
                 }
                 if (null != psym && psym.IsIndexer) {
                     CodeBuilder.Append("(function(){ return(");
-                    CodeBuilder.AppendFormat("set{0}{1}indexer(", SymbolTable.Instance.IsCs2DslSymbol(psym) ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
-                    var expOper = m_Model.GetOperation(leftCondAccess.Expression);
-                    if (null != expOper) {
-                        string fullName = ClassInfo.GetFullName(expOper.Type);
-                        CodeBuilder.Append(fullName);
+                    bool isCs2Lua = SymbolTable.Instance.IsCs2DslSymbol(psym);
+                    CodeBuilder.AppendFormat("set{0}{1}indexer(", isCs2Lua ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
+                    if (!isCs2Lua) {
+                        INamedTypeSymbol namedTypeSym = null;
+                        var expOper = m_Model.GetOperation(leftCondAccess.Expression);
+                        if (null != expOper) {
+                            string fullName = ClassInfo.GetFullName(expOper.Type);
+                            CodeBuilder.Append(fullName);
+                            namedTypeSym = expOper.Type as INamedTypeSymbol;
+                        }
+                        else {
+                            CodeBuilder.Append("null");
+                        }
+                        CodeBuilder.Append(", ");
+                        OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                        CodeBuilder.Append(", ");
                     }
-                    else {
-                        CodeBuilder.Append("null");
-                    }
-                    CodeBuilder.Append(", ");
                     if (psym.IsStatic) {
                         string fullName = ClassInfo.GetFullName(psym.ContainingType);
                         CodeBuilder.Append(fullName);

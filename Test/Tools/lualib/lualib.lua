@@ -233,10 +233,10 @@ function chararraytostring(arr)
   return string.char(unpack(arr));
 end;
 
-function getexternstaticindexer(callerClass, class, name, argCount, ...)
+function getexternstaticindexer(callerClass, typeargs, typekinds, class, name, argCount, ...)
   return class[name](...);
 end;
-function getexterninstanceindexer(callerClass, obj, intf, class, name, argCount, ...)  
+function getexterninstanceindexer(callerClass, typeargs, typekinds, obj, intf, class, name, argCount, ...)  
   local args = {...};  
   local index;
   local meta = getmetatable(obj);
@@ -277,10 +277,10 @@ function getexterninstanceindexer(callerClass, obj, intf, class, name, argCount,
   end;
 end;
 
-function setexternstaticindexer(callerClass, class, name, argCount, toplevel, ...) 
+function setexternstaticindexer(callerClass, typeargs, typekinds, class, name, argCount, toplevel, ...) 
   return class[name](...);
 end;
-function setexterninstanceindexer(callerClass, obj, intf, class, name, argCount, toplevel, ...)
+function setexterninstanceindexer(callerClass, typeargs, typekinds, obj, intf, class, name, argCount, toplevel, ...)
   local args = {...};
   local num = #args; 
   local index;
