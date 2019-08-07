@@ -1535,6 +1535,7 @@ __mt_index_of_dictionary = function(t, k)
             return meta.__class
         end
     else 
+        k = __unwrap_if_string(k) 
         local data = __get_table_data(t)     
         local v = rawget(data, k)
         if v then
@@ -1545,6 +1546,7 @@ __mt_index_of_dictionary = function(t, k)
 end
 
 __mt_newindex_of_dictionary = function(t, k, val) 
+    k = __unwrap_if_string(k) 
     local data = __get_table_data(t)     
     local v = rawget(data, k)
     if not v then
