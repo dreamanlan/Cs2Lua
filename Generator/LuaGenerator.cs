@@ -1392,16 +1392,12 @@ namespace Generator
                 var _class = data.Params[3];
                 var _member = data.Params[4];
                 var strCallerClass = CalcTypeString(_callerClass);
+                var strTypeArgs = CalcTypesString(_typeargs);
+                var strTypeKinds = CalcTypesString(_typekinds);
                 var strClass = CalcTypeString(_class);
                 var strMember = CalcTypeString(_member);
-                var keyIsInteger = true;
-                if (_typeargs.GetParamNum() > 0 && _typekinds.GetParamNum() > 0) {
-                    var firstTypeArg = CalcTypeString(_typeargs.GetParam(0));
-                    var firstTypeKind = CalcTypeString(_typekinds.GetParam(0));
-                    keyIsInteger = IsIntegerType(firstTypeArg, firstTypeKind);
-                }
                 int indexerType;
-                if (IndexerByLualib(strCallerClass, string.Empty, string.Empty, strClass, strMember, out indexerType) && (indexerType == (int)IndexerTypeEnum.LikeArray || !keyIsInteger)) {
+                if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, string.Empty, string.Empty, strClass, strMember, out indexerType)) {
                     var _pct = data.Params[5].GetId();
                     int ct;
                     int.TryParse(_pct, out ct);
@@ -1444,18 +1440,14 @@ namespace Generator
                 var _class = data.Params[5];
                 var _member = data.Params[6];
                 var strCallerClass = CalcTypeString(_callerClass);
+                var strTypeArgs = CalcTypesString(_typeargs);
+                var strTypeKinds = CalcTypesString(_typekinds);
                 var strObj = CalcExpressionString(_obj);
                 var strIntf = CalcTypeString(_intf);
                 var strClass = CalcTypeString(_class);
                 var strMember = CalcTypeString(_member);
-                var keyIsInteger = true;
-                if (_typeargs.GetParamNum() > 0 && _typekinds.GetParamNum() > 0) {
-                    var firstTypeArg = CalcTypeString(_typeargs.GetParam(0));
-                    var firstTypeKind = CalcTypeString(_typekinds.GetParam(0));
-                    keyIsInteger = IsIntegerType(firstTypeArg, firstTypeKind);
-                }
                 int indexerType;
-                if(IndexerByLualib(strCallerClass, strObj, strIntf, strClass, strMember, out indexerType) && (indexerType == (int)IndexerTypeEnum.LikeArray || !keyIsInteger)) {
+                if(IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, strObj, strIntf, strClass, strMember, out indexerType)) {
                     var _pct = data.Params[7].GetId();
                     int ct;
                     int.TryParse(_pct, out ct);
@@ -1497,16 +1489,12 @@ namespace Generator
                 var _class = data.Params[3];
                 var _member = data.Params[4];
                 var strCallerClass = CalcTypeString(_callerClass);
+                var strTypeArgs = CalcTypesString(_typeargs);
+                var strTypeKinds = CalcTypesString(_typekinds);
                 var strClass = CalcTypeString(_class);
                 var strMember = CalcTypeString(_member);
-                var keyIsInteger = true;
-                if (_typeargs.GetParamNum() > 0 && _typekinds.GetParamNum() > 0) {
-                    var firstTypeArg = CalcTypeString(_typeargs.GetParam(0));
-                    var firstTypeKind = CalcTypeString(_typekinds.GetParam(0));
-                    keyIsInteger = IsIntegerType(firstTypeArg, firstTypeKind);
-                }
                 int indexerType;
-                if (IndexerByLualib(strCallerClass, string.Empty, string.Empty, strClass, strMember, out indexerType) && (indexerType == (int)IndexerTypeEnum.LikeArray || !keyIsInteger)) {
+                if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, string.Empty, string.Empty, strClass, strMember, out indexerType)) {
                     var _pct = data.Params[5].GetId();
                     var _toplevel = data.Params[6].GetId();
                     int ct;
@@ -1553,18 +1541,14 @@ namespace Generator
                 var _class = data.Params[5];
                 var _member = data.Params[6];
                 var strCallerClass = CalcTypeString(_callerClass);
+                var strTypeArgs = CalcTypesString(_typeargs);
+                var strTypeKinds = CalcTypesString(_typekinds);
                 var strObj = CalcExpressionString(_obj);
                 var strIntf = CalcTypeString(_intf);
                 var strClass = CalcTypeString(_class);
                 var strMember = CalcTypeString(_member);
-                var keyIsInteger = true;
-                if (_typeargs.GetParamNum() > 0 && _typekinds.GetParamNum() > 0) {
-                    var firstTypeArg = CalcTypeString(_typeargs.GetParam(0));
-                    var firstTypeKind = CalcTypeString(_typekinds.GetParam(0));
-                    keyIsInteger = IsIntegerType(firstTypeArg, firstTypeKind);
-                }
                 int indexerType;
-                if (IndexerByLualib(strCallerClass, strObj, strIntf, strClass, strMember, out indexerType) && (indexerType == (int)IndexerTypeEnum.LikeArray || !keyIsInteger)) {
+                if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, strObj, strIntf, strClass, strMember, out indexerType)) {
                     var _pct = data.Params[7].GetId();
                     var _toplevel = data.Params[8].GetId();
                     int ct;
@@ -2097,6 +2081,18 @@ namespace Generator
             }
             return string.Format(fmt, args);
         }
+        private static string CalcTypesString(Dsl.CallData cd)
+        {
+            StringBuilder sb = new StringBuilder();
+            string prestr = string.Empty;
+            foreach(var p in cd.Params) {
+                var str = CalcTypeString(p);
+                sb.Append(prestr);
+                sb.Append(str);
+                prestr = ":";
+            }
+            return sb.ToString();
+        }
         private static string CalcTypeString(Dsl.ISyntaxComponent comp)
         {
             string ret = comp.GetId();
@@ -2297,14 +2293,16 @@ namespace Generator
             s_CachedNoSignatures.Add(signature, false);
             return false;
         }
-        private static bool IndexerByLualib(string objClassName, string obj, string intf, string className, string member, out int val)
+        private static bool IndexerByLualib(string objClassName, string typeArgs, string typeKinds, string obj, string intf, string className, string member, out int val)
         {
-            string key = string.Format("{0}|{1}|{2}|{3}|{4}", objClassName, obj, intf, className, member);
+            string key = string.Format("{0}|{1}|{2}|{3}|{4}|{5}|{6}", objClassName, typeArgs, typeKinds, obj, intf, className, member);
             if (s_CachedIndexerByLualibInfos.TryGetValue(key, out val)) {
                 return val != 0;
             }
             foreach (var info in s_IndexerByLualibInfos) {
-                if ((null == info.ObjectClassMatch || info.ObjectClassMatch.IsMatch(objClassName)) && 
+                if ((null == info.ObjectClassMatch || info.ObjectClassMatch.IsMatch(objClassName)) &&
+                    (null == info.TypeArgsMatch || info.ObjectMatch.IsMatch(typeArgs)) &&
+                    (null == info.TypeKindsMatch || info.ObjectMatch.IsMatch(typeKinds)) &&
                     (null == info.ObjectMatch || info.ObjectMatch.IsMatch(obj)) &&
                     (null == info.InterfaceMatch || info.InterfaceMatch.IsMatch(intf)) &&
                     (null == info.ClassMatch || info.ClassMatch.IsMatch(className)) &&
@@ -2349,9 +2347,11 @@ namespace Generator
             s_DontRequireInfos.Clear();
             s_FileMergeInfos.Clear();
             s_NoSignatureArgInfos.Clear();
+            s_IndexerByLualibInfos.Clear();
             s_AddPrologueOrEpilogueInfos.Clear();
             s_CachedFile2MergedFiles.Clear();
             s_CachedNoSignatures.Clear();
+            s_CachedIndexerByLualibInfos.Clear();
             s_CachedPrologueAndEpilogueInfos.Clear();
 
             var file = Path.Combine(s_ExePath, "cs2dsl.dsl");
@@ -2478,20 +2478,26 @@ namespace Generator
                 var cfg = new IndexerByLualibInfo();
                 var f = info.First;
                 if (null != f) {
-                    if (f.Call.GetParamNum() >= 5) {
+                    if (f.Call.GetParamNum() >= 7) {
                         var str = f.Call.GetParamId(0);
                         var regex = new Regex(str, RegexOptions.Compiled);
                         cfg.ObjectClassMatch = regex;
                         str = f.Call.GetParamId(1);
                         regex = new Regex(str, RegexOptions.Compiled);
-                        cfg.ObjectMatch = regex;
+                        cfg.TypeArgsMatch = regex;
                         str = f.Call.GetParamId(2);
                         regex = new Regex(str, RegexOptions.Compiled);
-                        cfg.InterfaceMatch = regex;
+                        cfg.TypeKindsMatch = regex;
                         str = f.Call.GetParamId(3);
                         regex = new Regex(str, RegexOptions.Compiled);
-                        cfg.ClassMatch = regex;
+                        cfg.ObjectMatch = regex;
                         str = f.Call.GetParamId(4);
+                        regex = new Regex(str, RegexOptions.Compiled);
+                        cfg.InterfaceMatch = regex;
+                        str = f.Call.GetParamId(5);
+                        regex = new Regex(str, RegexOptions.Compiled);
+                        cfg.ClassMatch = regex;
+                        str = f.Call.GetParamId(6);
                         regex = new Regex(str, RegexOptions.Compiled);
                         cfg.MemberMatch = regex;
 
@@ -2632,6 +2638,8 @@ namespace Generator
         private class IndexerByLualibInfo
         {
             internal Regex ObjectClassMatch = null;
+            internal Regex TypeArgsMatch = null;
+            internal Regex TypeKindsMatch = null;
             internal Regex ObjectMatch = null;
             internal Regex InterfaceMatch = null;
             internal Regex ClassMatch = null;

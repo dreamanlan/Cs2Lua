@@ -178,3 +178,11 @@ function forward(...)
 end;
 
 print(forward(1,2,3));
+
+local t = {};
+local __mt_index = function(t,k)
+    print("get "..tostring(t).." "..tostring(k));
+end;
+setmetatable(t, {__index = __mt_index});
+
+local v = t[1]
