@@ -771,7 +771,7 @@ namespace RoslynTool.CsToDsl
                         elementType = ClassInfo.GetFullName(etype);
                     }
                     if (ct > 0) {
-                        CodeBuilder.AppendFormat("buildarray({0}, ", elementType);
+                        CodeBuilder.AppendFormat("literalarray({0}, ", elementType);
                         for (int i = 0; i < ct; ++i) {
                             var exp = args[i];
                             IConversionExpression opd = arrInitOper.ElementValues[i] as IConversionExpression;

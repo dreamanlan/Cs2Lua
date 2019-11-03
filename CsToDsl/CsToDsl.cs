@@ -612,7 +612,7 @@ namespace RoslynTool.CsToDsl
                             if (null == arrCreate.Initializer || arrCreate.Initializer.ElementValues.Length == 0) {
                                 CodeBuilder.AppendFormat("newarray({0})", elementType);
                             } else {
-                                CodeBuilder.AppendFormat("buildarray({0}, ", elementType);
+                                CodeBuilder.AppendFormat("literalarray({0}, ", elementType);
                                 string prestr = string.Empty;
                                 foreach (var arg in arrCreate.Initializer.ElementValues) {
                                     CodeBuilder.Append(prestr);

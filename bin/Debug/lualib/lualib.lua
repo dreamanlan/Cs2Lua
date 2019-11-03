@@ -205,8 +205,10 @@ Cs2LuaLibrary = {
     Min = wrap_min,
     Max__System_Single__System_Single = wrap_max,
     Max__System_Int32__System_Int32 = wrap_max,
+    Max__System_UInt32__System_UInt32 = wrap_max,
     Min__System_Single__System_Single = wrap_min,
-    Min__System_Int32__System_Int32 = wrap_min
+    Min__System_Int32__System_Int32 = wrap_min,
+    Min__System_UInt32__System_UInt32 = wrap_min,
 }
 
 function settempmetatable(class)
@@ -1502,6 +1504,18 @@ __mt_index_of_dictionary = function(t, k)
                     return true, v.value
                 end
             end
+            local meta = getmetatable(obj)
+            if meta.__cs2lua_typeargs and meta.__cs2lua_typekinds then
+                if meta.__cs2lua_typekinds[2] == TypeKind.Struct then
+                    local vt = meta.__cs2lua_typeargs[2]
+                    if vt==System.Int32 or vt==System.UInt32 
+                        or vt==System.Int64 or vt==System.UInt64 
+                        or vt==System.Char or vt==System.Byte 
+                        or vt==System.Int16 or vt==System.UInt16 then
+                        return false, 0
+                    end
+                end
+            end
             return false, nil
         end
     elseif k == "Keys" then
@@ -1797,6 +1811,8 @@ function newdictionary(t, typeargs, typekinds, ctor, dict, ...)
                 __newindex = __mt_newindex_of_dictionary,
                 __cs2lua_defined = true,
                 __class = t,
+                __cs2lua_typeargs = typeargs,
+                __cs2lua_typekinds = typekinds,
                 __cs2lua_data = {}
             }
         )
@@ -1829,6 +1845,8 @@ function newexterndictionary(t, typeargs, typekinds, dict, ...)
                 __newindex = __mt_newindex_of_dictionary,
                 __cs2lua_defined = true,
                 __class = t,
+                __cs2lua_typeargs = typeargs,
+                __cs2lua_typekinds = typekinds,
                 __cs2lua_data = {}
             }
         )

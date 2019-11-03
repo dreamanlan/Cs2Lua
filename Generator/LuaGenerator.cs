@@ -1748,7 +1748,7 @@ namespace Generator
                 GenerateArguments(data, sb, indent, 0);
                 sb.Append("}");
             }
-            else if (id == "buildarray") {
+            else if (id == "literalarray") {
                 var typeStr = CalcTypeString(data.GetParam(0));
                 if (typeStr == "System.Char") {
                     sb.Append("chararraytostring({");
