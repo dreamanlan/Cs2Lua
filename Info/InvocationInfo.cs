@@ -76,20 +76,24 @@ namespace RoslynTool.CsToDsl
                         if (param.RefKind == RefKind.Ref) {
                             Args.Add(arg.Expression);
                             ReturnArgs.Add(arg.Expression);
-                        } else if (param.RefKind == RefKind.Out) {
+                        }
+                        else if (param.RefKind == RefKind.Out) {
                             //方法的out参数，为与脚本引擎的机制一致，在调用时传入__cs2dsl_out，这里用null标记一下，在实际输出参数时再变为__cs2dsl_out
                             Args.Add(null);
                             ReturnArgs.Add(arg.Expression);
-                        } else if (param.IsParams) {
+                        }
+                        else if (param.IsParams) {
                             var argOper = model.GetOperation(arg.Expression);
                             if (null != argOper && null != argOper.Type && argOper.Type.TypeKind == TypeKind.Array && i == ct - 1) {
                                 ArrayToParams = true;
                             }
                             Args.Add(arg.Expression);
-                        } else {
+                        }
+                        else {
                             Args.Add(arg.Expression);
                         }
-                    } else {
+                    }
+                    else {
                         Args.Add(arg.Expression);
                     }
                     ArgConversions.Add(lastConv);
@@ -148,20 +152,24 @@ namespace RoslynTool.CsToDsl
                         if (param.RefKind == RefKind.Ref) {
                             Args.Add(arg.Expression);
                             ReturnArgs.Add(arg.Expression);
-                        } else if (param.RefKind == RefKind.Out) {
+                        }
+                        else if (param.RefKind == RefKind.Out) {
                             //方法的out参数，为与脚本引擎的机制一致，在调用时传入__cs2dsl_out，这里用null标记一下，在实际输出参数时再变为__cs2dsl_out
                             Args.Add(null);
                             ReturnArgs.Add(arg.Expression);
-                        } else if (param.IsParams) {
+                        }
+                        else if (param.IsParams) {
                             var argOper = model.GetOperation(arg.Expression);
                             if (null != argOper && null != argOper.Type && argOper.Type.TypeKind == TypeKind.Array && i == ct - 1) {
                                 ArrayToParams = true;
                             }
                             Args.Add(arg.Expression);
-                        } else {
+                        }
+                        else {
                             Args.Add(arg.Expression);
                         }
-                    } else {
+                    }
+                    else {
                         Args.Add(arg.Expression);
                     }
                     ArgConversions.Add(lastConv);
@@ -213,7 +221,7 @@ namespace RoslynTool.CsToDsl
                 }
             }
         }
-        
+
         internal void OutputInvocation(StringBuilder codeBuilder, CsDslTranslater cs2dsl, ExpressionSyntax exp, bool isMemberAccess, SemanticModel model, SyntaxNode node)
         {
             IMethodSymbol sym = MethodSymbol;
@@ -228,68 +236,80 @@ namespace RoslynTool.CsToDsl
                     expIsBasicType = true;
                 }
                 if (sym.MethodKind == MethodKind.DelegateInvoke) {
-                    var memberAccess  = node as MemberAccessExpressionSyntax;
+                    var memberAccess = node as MemberAccessExpressionSyntax;
                     if (null != memberAccess) {
                         codeBuilder.Append("callinstance(");
                         cs2dsl.OutputExpressionSyntax(exp);
                         codeBuilder.AppendFormat(", \"{0}\"", memberAccess.Name);
                         prestr = ", ";
-                    } else {
+                    }
+                    else {
                         //error;
                     }
-                } else if (isExplicitInterfaceInvoke) {
+                }
+                else if (isExplicitInterfaceInvoke) {
                     codeBuilder.Append("invokewithinterface(");
                     cs2dsl.OutputExpressionSyntax(exp);
                     codeBuilder.Append(", ");
                     codeBuilder.AppendFormat("{0}, \"{1}\"", fnOfIntf, mname);
                     prestr = ", ";
-                } else if (IsExtensionMethod) {
+                }
+                else if (IsExtensionMethod) {
                     codeBuilder.Append("callstatic(");
                     codeBuilder.AppendFormat("{0}, \"{1}\", ", ClassKey, mname);
-                } else if (IsBasicValueMethod || expIsBasicType) {
+                }
+                else if (IsBasicValueMethod || expIsBasicType) {
                     string ckey = CalcInvokeTarget(IsEnumClass, ClassKey, cs2dsl, exp, model);
                     codeBuilder.Append("invokeforbasicvalue(");
                     cs2dsl.OutputExpressionSyntax(exp);
                     codeBuilder.Append(", ");
                     codeBuilder.AppendFormat("{0}, {1}, \"{2}\"", IsEnumClass ? "true" : "false", ckey, mname);
                     prestr = ", ";
-                } else if (IsArrayStaticMethod) {
+                }
+                else if (IsArrayStaticMethod) {
                     codeBuilder.Append("invokearraystaticmethod(");
                     if (null == FirstRefArray) {
                         codeBuilder.Append("null, ");
-                    } else {
+                    }
+                    else {
                         cs2dsl.OutputExpressionSyntax(FirstRefArray);
                         codeBuilder.Append(", ");
                     }
                     if (null == SecondRefArray) {
                         codeBuilder.Append("null, ");
-                    } else {
+                    }
+                    else {
                         cs2dsl.OutputExpressionSyntax(SecondRefArray);
                         codeBuilder.Append(", ");
                     }
                     codeBuilder.AppendFormat("\"{0}\"", mname);
                     prestr = ", ";
-                } else {
+                }
+                else {
                     if (sym.IsStatic) {
                         codeBuilder.Append("callstatic(");
                         codeBuilder.Append(ClassKey);
-                    } else {
+                    }
+                    else {
                         codeBuilder.Append("callinstance(");
                         cs2dsl.OutputExpressionSyntax(exp);
                     }
                     codeBuilder.AppendFormat(", \"{0}\"", mname);
                     prestr = ", ";
                 }
-            } else {
+            }
+            else {
                 if (sym.MethodKind == MethodKind.DelegateInvoke) {
                     cs2dsl.OutputExpressionSyntax(exp);
                     codeBuilder.Append("(");
-                } else if (sym.IsStatic) {
+                }
+                else if (sym.IsStatic) {
                     codeBuilder.Append("callstatic(");
                     codeBuilder.Append(ClassKey);
                     codeBuilder.AppendFormat(", \"{0}\"", mname);
                     prestr = ", ";
-                } else {
+                }
+                else {
                     codeBuilder.Append("callinstance(");
                     codeBuilder.Append("this");
                     codeBuilder.AppendFormat(", \"{0}\"", mname);
@@ -300,7 +320,7 @@ namespace RoslynTool.CsToDsl
                 codeBuilder.Append(prestr);
             }
             bool useTypeNameString = false;
-            if(IsComponentGetOrAdd && SymbolTable.DslComponentByString){
+            if (IsComponentGetOrAdd && SymbolTable.DslComponentByString) {
                 var tArgs = sym.TypeArguments;
                 if (tArgs.Length > 0 && SymbolTable.Instance.IsCs2DslSymbol(tArgs[0])) {
                     useTypeNameString = true;
@@ -311,7 +331,8 @@ namespace RoslynTool.CsToDsl
                 args.Add(exp);
                 args.AddRange(Args);
                 cs2dsl.OutputArgumentList(args, DefaultValueArgs, GenericTypeArgs, ExternOverloadedMethodSignature, PostPositionGenericTypeArgs, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
-            } else {
+            }
+            else {
                 cs2dsl.OutputArgumentList(Args, DefaultValueArgs, GenericTypeArgs, ExternOverloadedMethodSignature, PostPositionGenericTypeArgs, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
             }
             codeBuilder.Append(")");
@@ -326,7 +347,7 @@ namespace RoslynTool.CsToDsl
             ArgConversions.Clear();
             ReturnArgs.Clear();
             GenericTypeArgs.Clear();
-            
+
             ClassKey = ClassInfo.GetFullName(sym.ContainingType);
             GenericClassKey = ClassInfo.GetFullNameWithTypeParameters(sym.ContainingType);
             IsEnumClass = sym.ContainingType.TypeKind == TypeKind.Enum || ClassKey == SymbolTable.PrefixExternClassName("System.Enum");
@@ -346,7 +367,7 @@ namespace RoslynTool.CsToDsl
                 var ctype = sym.ContainingType;
                 var syms = ctype.GetMembers(sym.Name);
                 if (null != syms) {
-                    foreach(var isym in syms) {
+                    foreach (var isym in syms) {
                         var msym = isym as IMethodSymbol;
                         if (null != msym && !msym.IsGenericMethod && msym.Parameters.Length == sym.Parameters.Length + sym.TypeParameters.Length) {
                             existNonGenericVersion = true;
@@ -357,7 +378,7 @@ namespace RoslynTool.CsToDsl
                                     break;
                                 }
                             }
-                            for(int i = 0; i < sym.Parameters.Length; ++i) {
+                            for (int i = 0; i < sym.Parameters.Length; ++i) {
                                 var psym1 = msym.Parameters[i + sym.TypeParameters.Length];
                                 var psym2 = sym.Parameters[i];
                                 if (psym1.Type.Name != psym2.Type.Name && psym2.OriginalDefinition.Type.TypeKind != TypeKind.TypeParameter) {
@@ -368,7 +389,8 @@ namespace RoslynTool.CsToDsl
                             if (existNonGenericVersion) {
                                 NonGenericMethodSymbol = msym;
                                 PostPositionGenericTypeArgs = false;
-                            } else {
+                            }
+                            else {
                                 existNonGenericVersion = true;
                                 for (int i = 0; i < sym.Parameters.Length; ++i) {
                                     var psym1 = msym.Parameters[i];
@@ -401,7 +423,7 @@ namespace RoslynTool.CsToDsl
                     }
                 }
             }
-            
+
             ExternOverloadedMethodSignature = string.Empty;
             if (IsExternMethod) {
                 var syms = sym.ContainingType.GetMembers(sym.Name);
@@ -420,7 +442,7 @@ namespace RoslynTool.CsToDsl
                 }
             }
         }
-        
+
         private void CheckInvocation(IMethodSymbol sym)
         {
             if (!SymbolTable.EnableTranslationCheck) {
@@ -470,7 +492,8 @@ namespace RoslynTool.CsToDsl
             if (IsArrayStaticMethod) {
                 if (null == FirstRefArray) {
                     FirstRefArray = exp;
-                } else if (null == SecondRefArray) {
+                }
+                else if (null == SecondRefArray) {
                     SecondRefArray = exp;
                 }
             }
@@ -483,7 +506,8 @@ namespace RoslynTool.CsToDsl
                 if (!SymbolTable.Instance.IsCs2DslSymbol(oper.Type) && oper.Type.TypeKind == TypeKind.Enum) {
                     string ckey = ClassInfo.GetFullName(oper.Type);
                     SymbolTable.Instance.AddExternEnum(ckey, oper.Type);
-                } else {
+                }
+                else {
                     var typeOf = oper as ITypeOfExpression;
                     if (null != typeOf && !SymbolTable.Instance.IsCs2DslSymbol(typeOf.TypeOperand) && typeOf.TypeOperand.TypeKind == TypeKind.Enum) {
                         string ckey = ClassInfo.GetFullName(typeOf.TypeOperand);
