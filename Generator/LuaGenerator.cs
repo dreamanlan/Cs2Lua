@@ -2391,6 +2391,7 @@ namespace Generator
             s_DontRequireInfos.Clear();
             s_FileMergeInfos.Clear();
             s_NoSignatureArgInfos.Clear();
+            s_ReplaceSignatureArgInfos.Clear();
             s_IndexerByLualibInfos.Clear();
             s_AddPrologueOrEpilogueInfos.Clear();
             s_CachedFile2MergedFiles.Clear();
