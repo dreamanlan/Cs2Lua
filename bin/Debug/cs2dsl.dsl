@@ -3,7 +3,7 @@ dontrequire("cs2luanetworkmessagepools")except("program","messagedefine__cs2luam
 filemerge("messagedefine")match("messagedefine__.*");
 
 //nosignaturearg("Euler__.*");
-replacesignaturearg("Instantiate__GameObject","Instantiate__Object");
+//replacesignaturearg("Instantiate__GameObject","Instantiate__Object");
 indexerbylualib("System.Collections.Generic.List_T", ".*", ".*", ".*", "null", "System.Collections.Generic.List_T", "get_Item"){indexertype(1);};
 indexerbylualib("System.Collections.Generic.List_T", ".*", ".*", ".*", "null", "System.Collections.Generic.List_T", "set_Item"){indexertype(1);};
 indexerbylualib("System.Collections.Generic.Dictionary_TKey_TValue", ".*", ".*", ".*", "null", "System.Collections.Generic.Dictionary_TKey_TValue", "get_Item");

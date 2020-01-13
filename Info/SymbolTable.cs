@@ -438,8 +438,13 @@ namespace RoslynTool.CsToDsl
                     sb.Append(fn.Replace('.', '_'));
                 }
                 else if (oriparam.Type.Kind == SymbolKind.TypeParameter) {
-                    string fn = CalcMethodParameterTypeName(param.Type);
-                    sb.Append(fn.Replace('.', '_'));
+                    var tp = oriparam.Type as ITypeParameterSymbol;
+                    if (tp.ConstraintTypes.Length > 0) {
+                        sb.Append(tp.ConstraintTypes[0].Name);
+                    }
+                    else {
+                        sb.Append("Object");
+                    }
                 }
                 else {
                     var namedType = oriparam.Type as INamedTypeSymbol;
