@@ -327,7 +327,7 @@ namespace RoslynTool.CsToDsl
         public override void VisitEndRegionDirectiveTrivia(EndRegionDirectiveTriviaSyntax node)
         { }
         #endregion
-        
+
         #region 预处理的功能Roslyn库已经实现，这些接口是提供预处理相关信息，我们不需要处理
         public override void VisitIfDirectiveTrivia(IfDirectiveTriviaSyntax node)
         {

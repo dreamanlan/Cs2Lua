@@ -47,7 +47,8 @@ namespace RoslynTool.CsToDsl
                 if (!onlyComment) {
                     this.Visit((CSharpSyntaxNode)trivia.GetStructure());
                 }
-            } else {
+            }
+            else {
                 if (trivia.IsKind(SyntaxKind.SingleLineCommentTrivia)) {
                     string content = trivia.ToString();
                     content = content.Substring(2);
@@ -56,7 +57,8 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendFormat("{0}comment(\"{1}\");", GetIndentString(), Escape(content));
                         CodeBuilder.AppendLine();
                     }
-                } else if (trivia.IsKind(SyntaxKind.MultiLineCommentTrivia)) {
+                }
+                else if (trivia.IsKind(SyntaxKind.MultiLineCommentTrivia)) {
                     string content = trivia.ToString();
                     content = content.Substring(2, content.Length - 4);
                     if (content != m_LastComment) {
@@ -88,7 +90,8 @@ namespace RoslynTool.CsToDsl
                 while (enumer2.MoveNext()) {
                     this.VisitToken(enumer2.Current);
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 Log(node, "DefaultVisit throw exception:{0}\n{1}", ex.Message, ex.StackTrace);
             }
         }
@@ -106,7 +109,8 @@ namespace RoslynTool.CsToDsl
                     }
                     try {
                         ((CSharpSyntaxNode)node).Accept(this);
-                    } catch (Exception ex) {
+                    }
+                    catch (Exception ex) {
                         Log(node, "CSharpSyntaxNode.Accept throw exception:{0}\n{1}", ex.Message, ex.StackTrace);
                     }
                     m_LastComment = string.Empty;
@@ -118,7 +122,8 @@ namespace RoslynTool.CsToDsl
                         }
                     }
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 Log(node, "Visit throw exception:{0}\n{1}", ex.Message, ex.StackTrace);
             }
         }
@@ -143,7 +148,8 @@ namespace RoslynTool.CsToDsl
             if (null != localSym && localSym.HasConstantValue) {
                 if (null != node.Initializer) {
                     CodeBuilder.AppendFormat("{0}local({1}); {2}", GetIndentString(), node.Identifier.Text, node.Identifier.Text);
-                } else {
+                }
+                else {
                     CodeBuilder.AppendFormat("{0}local({1})", GetIndentString(), node.Identifier.Text);
                 }
                 CodeBuilder.Append(" = ");
@@ -170,7 +176,8 @@ namespace RoslynTool.CsToDsl
             var oper = m_Model.GetOperation(node);
             if (oper.Kind == OperationKind.IndexedPropertyReferenceExpression) {
                 OutputArgumentList(node.Arguments, ", ", oper);
-            } else {
+            }
+            else {
                 OutputArgumentList(node.Arguments, "][", oper);
             }
         }
@@ -191,7 +198,8 @@ namespace RoslynTool.CsToDsl
             if (null != type) {
                 string fullName = ClassInfo.GetFullName(type);
                 CodeBuilder.Append(fullName);
-            } else {
+            }
+            else {
                 CodeBuilder.Append(node.Keyword.Text);
             }
         }
@@ -212,7 +220,8 @@ namespace RoslynTool.CsToDsl
                             AddReferenceAndTryDeriveGenericTypeInstance(classInfo, namedType);
                         }
                         return;
-                    } else if (sym.Kind == SymbolKind.Field || sym.Kind == SymbolKind.Property || sym.Kind == SymbolKind.Event) {
+                    }
+                    else if (sym.Kind == SymbolKind.Field || sym.Kind == SymbolKind.Property || sym.Kind == SymbolKind.Event) {
                         if (IsNewObjMember(name)) {
                             CodeBuilder.AppendFormat("getinstance(newobj, \"{0}\")", name);
                             return;
@@ -220,12 +229,14 @@ namespace RoslynTool.CsToDsl
                         if (sym.ContainingType == classInfo.SemanticInfo || sym.ContainingType == classInfo.SemanticInfo.OriginalDefinition || classInfo.IsInherit(sym.ContainingType)) {
                             if (sym.IsStatic) {
                                 CodeBuilder.AppendFormat("getstatic({0}, \"{1}\")", classInfo.Key, sym.Name);
-                            } else {
+                            }
+                            else {
                                 CodeBuilder.AppendFormat("getinstance(this, \"{0}\")", sym.Name);
                             }
                             return;
                         }
-                    } else if (sym.Kind == SymbolKind.Method && (sym.ContainingType == classInfo.SemanticInfo || sym.ContainingType == classInfo.SemanticInfo.OriginalDefinition || classInfo.IsInherit(sym.ContainingType))) {
+                    }
+                    else if (sym.Kind == SymbolKind.Method && (sym.ContainingType == classInfo.SemanticInfo || sym.ContainingType == classInfo.SemanticInfo.OriginalDefinition || classInfo.IsInherit(sym.ContainingType))) {
                         var msym = sym as IMethodSymbol;
                         string manglingName = NameMangling(msym);
                         var mi = new MethodInfo();
@@ -233,20 +244,23 @@ namespace RoslynTool.CsToDsl
                         if (node.Parent is InvocationExpressionSyntax) {
                             if (sym.IsStatic) {
                                 CodeBuilder.AppendFormat("getstatic({0}, \"{1}\")", classInfo.Key, manglingName);
-                            } else {
+                            }
+                            else {
                                 CodeBuilder.AppendFormat("getinstance(this, \"{0}\")", manglingName);
                             }
-                        } else {
+                        }
+                        else {
                             string className = ClassInfo.GetFullName(msym.ContainingType);
                             string delegationKey = string.Format("{0}:{1}", className, manglingName);
                             string varName = string.Format("__delegation_{0}", GetSourcePosForVar(node));
-                            
+
                             CodeBuilder.Append("(function(){ ");
 
                             string paramsString = string.Join(", ", mi.ParamNames.ToArray());
                             if (msym.IsStatic) {
                                 CodeBuilder.AppendFormat("builddelegation(\"{0}\", {1}, \"{2}\", {3}, {4}, {5}, {6});", paramsString, varName, delegationKey, className, manglingName, msym.ReturnsVoid ? "false" : "true", msym.IsStatic ? "true" : "false");
-                            } else {
+                            }
+                            else {
                                 CodeBuilder.AppendFormat("builddelegation(\"{0}\", {1}, \"{2}\", {3}, {4}, {5}, {6});", paramsString, varName, delegationKey, "this", manglingName, msym.ReturnsVoid ? "false" : "true", msym.IsStatic ? "true" : "false");
                             }
 
@@ -254,7 +268,8 @@ namespace RoslynTool.CsToDsl
                         }
                         return;
                     }
-                } else {
+                }
+                else {
                     if (IsNewObjMember(name)) {
                         CodeBuilder.AppendFormat("getinstance(newobj, \"{0}\")", name);
                         return;
@@ -271,7 +286,8 @@ namespace RoslynTool.CsToDsl
             if (null != sym) {
                 string fullName = ClassInfo.GetFullName(sym);
                 CodeBuilder.Append(fullName);
-            } else {
+            }
+            else {
                 ReportIllegalSymbol(node, symInfo);
                 CodeBuilder.Append(node.GetText());
             }

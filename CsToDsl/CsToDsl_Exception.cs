@@ -129,7 +129,8 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendLine();
                 CodeBuilder.AppendFormat("{0}return({1}, {2}());", GetIndentString(), handledVar, bodyVar);
                 CodeBuilder.AppendLine();
-            } else {
+            }
+            else {
                 VisitBlock(node.Block);
                 CodeBuilder.AppendFormat("{0}return({1}, null);", GetIndentString(), handledVar);
                 CodeBuilder.AppendLine();

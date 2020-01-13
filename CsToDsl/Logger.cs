@@ -14,15 +14,13 @@ namespace RoslynTool.CsToDsl
     {
         public bool HaveError
         {
-            get
-            {
+            get {
                 return m_LogBuilder.Length > 0;
             }
         }
         public string ErrorLog
         {
-            get
-            {
+            get {
                 return m_LogBuilder.ToString();
             }
         }
@@ -48,7 +46,8 @@ namespace RoslynTool.CsToDsl
         {
             if (null != location) {
                 m_LogBuilder.AppendFormat("<<<[Log]>>> [location: {0}] ", location.GetLineSpan());
-            } else {
+            }
+            else {
                 LogCallStack("Log: location == null !");
             }
             m_LogBuilder.AppendFormat(format, args);
@@ -60,7 +59,8 @@ namespace RoslynTool.CsToDsl
                 string[] lines = node.ToString().Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
                 string line = lines.Length > 0 ? lines[0] : string.Empty;
                 m_LogBuilder.AppendFormat("<<<[Log for {0}]>>> [code:[ {1} ] location: {2}] ", node.GetType().Name, line, node.GetLocation().GetLineSpan());
-            } else {
+            }
+            else {
                 LogCallStack("Log: node == null !");
             }
             m_LogBuilder.AppendFormat(format, args);
@@ -78,7 +78,8 @@ namespace RoslynTool.CsToDsl
                     m_LogBuilder.AppendFormat("\tCandidateSymbol: {0}", candidateSymbol.ToString());
                     m_LogBuilder.AppendLine();
                 }
-            } else {
+            }
+            else {
                 LogCallStack("ReportIllegalSymbol: node == null !");
             }
         }
@@ -97,18 +98,19 @@ namespace RoslynTool.CsToDsl
                         m_LogBuilder.AppendLine();
                     }
                 }
-            } else {
+            }
+            else {
                 LogCallStack("ReportIllegalType: node == null || typeSym == null || typeSym.TypeKind != TypeKind.Error !");
             }
         }
         public void ReportIllegalType(ISymbol sym)
         {
             var typeSym = sym as ITypeSymbol;
-            if (null!=typeSym && typeSym.TypeKind == TypeKind.Error) {
+            if (null != typeSym && typeSym.TypeKind == TypeKind.Error) {
                 var errType = typeSym as IErrorTypeSymbol;
                 if (null != errType) {
                     m_LogBuilder.AppendFormat("<<<[Log]>>> Error type: {0}", errType.ToString());
-                    foreach(var location in errType.Locations){
+                    foreach (var location in errType.Locations) {
                         m_LogBuilder.AppendFormat("\tlocation: {0}", location.GetLineSpan());
                     }
                     m_LogBuilder.AppendLine();
@@ -122,7 +124,8 @@ namespace RoslynTool.CsToDsl
             if (null != sym) {
                 m_LogBuilder.AppendFormat("ErrorSymbol: {0} type:{1}", sym.ToString(), sym.Kind);
                 m_LogBuilder.AppendLine();
-            } else {
+            }
+            else {
                 LogCallStack("ReportIllegalType: sym == null !");
             }
         }
@@ -136,9 +139,8 @@ namespace RoslynTool.CsToDsl
         private StringBuilder m_LogBuilder = new StringBuilder();
 
         internal static Logger Instance
-        { 
-            get
-            {
+        {
+            get {
                 return s_Instance;
             }
         }

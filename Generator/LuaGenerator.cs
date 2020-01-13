@@ -1360,7 +1360,7 @@ namespace Generator
                 var _toplevel = data.Params[5].GetId();
                 int ct;
                 int.TryParse(_pct, out ct);
-                if (ct == 2 && _toplevel=="true") {
+                if (ct == 2 && _toplevel == "true") {
                     var _index = data.Params[6];
                     var _val = data.Params[7];
                     GenerateSyntaxComponent(_obj, sb, indent, false);
@@ -1447,7 +1447,7 @@ namespace Generator
                 var strClass = CalcTypeString(_class);
                 var strMember = CalcTypeString(_member);
                 int indexerType;
-                if(IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, strObj, strIntf, strClass, strMember, out indexerType)) {
+                if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, strObj, strIntf, strClass, strMember, out indexerType)) {
                     var _pct = data.Params[7].GetId();
                     int ct;
                     int.TryParse(_pct, out ct);
@@ -1475,7 +1475,8 @@ namespace Generator
                         GenerateArguments(data, sb, indent, start);
                         sb.Append(')');
                     }
-                } else {
+                }
+                else {
                     sb.Append(id);
                     sb.Append('(');
                     GenerateArguments(data, sb, indent, 0);
@@ -1831,6 +1832,12 @@ namespace Generator
                 else if (id == "dslthrow") {
                     sb.Append("luathrow");
                 }
+                else if (id == "lock") {
+                    sb.Append("do");
+                }
+                else if (id == "unsafe") {
+                    sb.Append("do");
+                }
                 else {
                     sb.Append(id);
                 }
@@ -2085,7 +2092,7 @@ namespace Generator
         {
             StringBuilder sb = new StringBuilder();
             string prestr = string.Empty;
-            foreach(var p in cd.Params) {
+            foreach (var p in cd.Params) {
                 var str = CalcTypeString(p);
                 sb.Append(prestr);
                 sb.Append(str);

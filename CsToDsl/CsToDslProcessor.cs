@@ -71,7 +71,8 @@ namespace RoslynTool.CsToDsl
                             refByPaths.Add(pathNode.InnerText, aliasesNode.InnerText);
                         else
                             refByPaths.Add(pathNode.InnerText, "global");
-                    } else {
+                    }
+                    else {
                         string val = node.GetAttribute("Include");
                         if (!string.IsNullOrEmpty(val) && !refByNames.ContainsKey(val)) {
                             if (null != aliasesNode)
@@ -117,11 +118,12 @@ namespace RoslynTool.CsToDsl
                         files.Add(val);
                     }
                 }
-            } else {
+            }
+            else {
                 files.Add(srcFile);
             }
 
-            foreach(string m in undefMacros){
+            foreach (string m in undefMacros) {
                 preprocessors.Remove(m);
             }
 
@@ -164,7 +166,8 @@ namespace RoslynTool.CsToDsl
                                 string msg = diag.ToString();
                                 LockWriteLine(sw, "{0}", msg);
                                 haveError = true;
-                            } else {
+                            }
+                            else {
                                 if (firstWarning) {
                                     LockWriteLine(sw2, "============<<<Syntax Warning:{0}>>>============", fileName);
                                     firstWarning = false;
@@ -176,7 +179,8 @@ namespace RoslynTool.CsToDsl
                     };
                     if (parallel) {
                         Parallel.ForEach(files, handler);
-                    } else {
+                    }
+                    else {
                         foreach (var file in files) {
                             handler(file);
                         }
@@ -217,7 +221,8 @@ namespace RoslynTool.CsToDsl
                 }
 
                 refs.Add(MetadataReference.CreateFromFile(typeof(Cs2Dsl.IgnoreAttribute).Assembly.Location));
-            } else {
+            }
+            else {
                 foreach (var pair in refByNames) {
                     string file = Path.Combine(SymbolTable.SystemDllPath, pair.Key) + ".dll";
                     var arr = System.Collections.Immutable.ImmutableArray.Create(pair.Value);
@@ -290,7 +295,8 @@ namespace RoslynTool.CsToDsl
                                         }
                                     }
                                 }
-                            } else {
+                            }
+                            else {
                                 TypeAnalysis ta = new TypeAnalysis(model);
                                 ta.Visit(root);
                                 var symbols = ta.Symbols;
@@ -307,7 +313,8 @@ namespace RoslynTool.CsToDsl
                         };
                         if (parallel) {
                             Parallel.ForEach(newTrees, handler1);
-                        } else {
+                        }
+                        else {
                             foreach (var tree in newTrees) {
                                 handler1(tree);
                             }
@@ -338,7 +345,8 @@ namespace RoslynTool.CsToDsl
                                     string msg = diag.ToString();
                                     LockWriteLine(sw, "{0}", msg);
                                     haveSemanticError = true;
-                                } else {
+                                }
+                                else {
                                     if (firstWarning) {
                                         LockWriteLine(sw2, "============<<<Semantic Warning:{0}>>>============", fileName);
                                         firstWarning = false;
@@ -379,7 +387,8 @@ namespace RoslynTool.CsToDsl
                         };
                         if (parallel) {
                             Parallel.ForEach(newTrees, handler2);
-                        } else {
+                        }
+                        else {
                             foreach (var tree in newTrees) {
                                 handler2(tree);
                             }
@@ -396,7 +405,8 @@ namespace RoslynTool.CsToDsl
                                 csToDsl.SaveLog(sw3);
                                 csToDsl.ClearLog();
                                 haveTranslationError = true;
-                            } else {
+                            }
+                            else {
                                 while (csToDsl.DerivedGenericTypeInstances.Count > 0) {
                                     var t = csToDsl.DerivedGenericTypeInstances.Dequeue();
                                     typeSyms.Enqueue(t);
@@ -471,7 +481,8 @@ namespace RoslynTool.CsToDsl
                     Console.WriteLine("{0}", File.ReadAllText(Path.Combine(logDir, "Translation.log")));
                 }
                 return ExitCode.SemanticError;
-            } else {
+            }
+            else {
                 if (outputResult) {
                     Console.Write(allClassBuilder.ToString());
                 }
@@ -532,7 +543,8 @@ namespace RoslynTool.CsToDsl
                 string nsname;
                 if (string.IsNullOrEmpty(upperns)) {
                     nsname = mni.Name;
-                } else {
+                }
+                else {
                     nsname = upperns + "." + mni.Name;
                 }
                 if (!string.IsNullOrEmpty(nsname)) {
@@ -714,13 +726,16 @@ namespace RoslynTool.CsToDsl
                     }
                 }
                 sb.Append("]");
-            } else {
+            }
+            else {
                 object v = tc.Value;
                 if (null == v) {
                     sb.Append("null");
-                } else if (v is string) {
+                }
+                else if (v is string) {
                     sb.AppendFormat("\"{0}\"", v.ToString());
-                } else {
+                }
+                else {
                     sb.Append(v);
                 }
             }
@@ -742,9 +757,11 @@ namespace RoslynTool.CsToDsl
             string ns;
             if (null != enumSym.ContainingType) {
                 ns = BuildExternEnumNamespace(sb, indent, enumSym.ContainingType);
-            } else if (null != enumSym.ContainingNamespace) {
+            }
+            else if (null != enumSym.ContainingNamespace) {
                 ns = BuildExternEnumNamespace(sb, indent, enumSym.ContainingNamespace);
-            } else {
+            }
+            else {
                 ns = string.Empty;
             }
             if (!string.IsNullOrEmpty(ns)) {
@@ -771,14 +788,17 @@ namespace RoslynTool.CsToDsl
             string ns;
             if (null != typeSym.ContainingType) {
                 ns = BuildExternEnumNamespace(sb, indent, typeSym.ContainingType);
-            } else if (null != typeSym.ContainingNamespace) {
+            }
+            else if (null != typeSym.ContainingNamespace) {
                 ns = BuildExternEnumNamespace(sb, indent, typeSym.ContainingNamespace);
-            } else {
+            }
+            else {
                 ns = string.Empty;
             }
             if (string.IsNullOrEmpty(ns)) {
                 return typeSym.Name;
-            } else {
+            }
+            else {
                 return ns + "." + typeSym.Name;
             }
         }
@@ -786,16 +806,19 @@ namespace RoslynTool.CsToDsl
         {
             if (string.IsNullOrEmpty(nsSym.Name)) {
                 return string.Empty;
-            } else {
+            }
+            else {
                 string ns;
                 if (null != nsSym.ContainingNamespace) {
                     ns = BuildExternEnumNamespace(sb, indent, nsSym.ContainingNamespace);
-                } else {
+                }
+                else {
                     ns = string.Empty;
                 }
                 if (string.IsNullOrEmpty(ns)) {
                     return nsSym.Name;
-                } else {
+                }
+                else {
                     return ns + "." + nsSym.Name;
                 }
             }
@@ -882,7 +905,7 @@ namespace RoslynTool.CsToDsl
                 isEnumClass = csi.TypeSymbol.TypeKind == TypeKind.Enum;
             }
             bool myselfDefinedBaseClass = SymbolTable.Instance.IsCs2DslSymbol(csi.TypeSymbol.BaseType);
-            
+
             HashSet<string> requiredlibs = new HashSet<string>();
             HashSet<string> dsllibs;
             if (symTable.Requires.TryGetValue(key, out dsllibs)) {
@@ -909,7 +932,7 @@ namespace RoslynTool.CsToDsl
                     }
                 }
             }
-            
+
             bool isEntryClass = false;
             string exportConstructor = string.Empty;
             MethodInfo exportConstructorInfo = null;
@@ -920,7 +943,7 @@ namespace RoslynTool.CsToDsl
                 if (!string.IsNullOrEmpty(ci.ExportConstructor)) {
                     exportConstructor = ci.ExportConstructor;
                     exportConstructorInfo = ci.ExportConstructorInfo;
-                }                
+                }
             }
 
             HashSet<string> refs = new HashSet<string>();
@@ -940,17 +963,19 @@ namespace RoslynTool.CsToDsl
                 //references
                 if (SymbolTable.NoAutoRequire) {
                     sb.AppendLine("require(\"cs2dsl__custom\");");
-                } else {
+                }
+                else {
                     BuildReferences(sb, key, mci, refs);
                 }
             }
-            
+
             sb.AppendLine();
 
             int indent = 0;
             if (string.IsNullOrEmpty(baseClass)) {
                 sb.AppendFormat("{0}{1}({2}) {{", GetIndentString(indent), isEnumClass ? "enum" : (isValueType ? "struct" : "class"), key);
-            } else {
+            }
+            else {
                 sb.AppendFormat("{0}{1}({2}, {3}) {{", GetIndentString(indent), isEnumClass ? "enum" : (isValueType ? "struct" : "class"), key, baseClass);
             }
             sb.AppendLine();
@@ -961,7 +986,8 @@ namespace RoslynTool.CsToDsl
                 foreach (var ci in classes) {
                     sb.Append(ci.StaticFieldCodeBuilder.ToString());
                 }
-            } else {
+            }
+            else {
                 sb.AppendFormat("{0}static_methods {{", GetIndentString(indent));
                 sb.AppendLine();
                 ++indent;
@@ -977,7 +1003,8 @@ namespace RoslynTool.CsToDsl
                         CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
                         sb.Append(", \"ctor\", null, ...));");
                         sb.AppendLine();
-                    } else {
+                    }
+                    else {
                         //处理ref/out参数
                         if (exportConstructorInfo.ReturnParamNames.Count > 0) {
                             sb.AppendFormat("{0}return((function(...){{ ", GetIndentString(indent));
@@ -992,7 +1019,8 @@ namespace RoslynTool.CsToDsl
                             CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
                             sb.AppendFormat(", \"{0}\", null, ...); return(newobj); }})(...));", exportConstructor);
                             sb.AppendLine();
-                        } else {
+                        }
+                        else {
                             sb.AppendFormat("{0}return(newobject({1}, ", GetIndentString(indent), key);
                             var namedTypeSym = csi.TypeSymbol;
                             CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
@@ -1053,7 +1081,7 @@ namespace RoslynTool.CsToDsl
                 --indent;
                 sb.AppendFormat("{0}}};", GetIndentString(indent));
                 sb.AppendLine();
-                
+
                 sb.AppendFormat("{0}static_fields {{", GetIndentString(indent));
                 sb.AppendLine();
                 ++indent;
@@ -1070,7 +1098,7 @@ namespace RoslynTool.CsToDsl
 
                 sb.AppendFormat("{0}__cctor_called = false;", GetIndentString(indent));
                 sb.AppendLine();
-                    
+
                 --indent;
                 sb.AppendFormat("{0}}};", GetIndentString(indent));
                 sb.AppendLine();
@@ -1094,7 +1122,8 @@ namespace RoslynTool.CsToDsl
                     --indent;
                     sb.AppendFormat("{0}}};", GetIndentString(indent));
                     sb.AppendLine();
-                } else {
+                }
+                else {
                     sb.AppendFormat("{0}static_props {{}};", GetIndentString(indent));
                     sb.AppendLine();
                 }
@@ -1118,7 +1147,8 @@ namespace RoslynTool.CsToDsl
                     --indent;
                     sb.AppendFormat("{0}}};", GetIndentString(indent));
                     sb.AppendLine();
-                } else {
+                }
+                else {
                     sb.AppendFormat("{0}static_events {{}};", GetIndentString(indent));
                     sb.AppendLine();
                 }
@@ -1187,7 +1217,7 @@ namespace RoslynTool.CsToDsl
                     foreach (var ci in classes) {
                         sb.Append(ci.InstanceFieldCodeBuilder.ToString());
                     }
-                    
+
                     if (existAttributes) {
                         sb.AppendFormat("{0}__attributes = {1};", GetIndentString(indent), attributesName);
                         sb.AppendLine();
@@ -1219,7 +1249,8 @@ namespace RoslynTool.CsToDsl
                         --indent;
                         sb.AppendFormat("{0}}};", GetIndentString(indent));
                         sb.AppendLine();
-                    } else {
+                    }
+                    else {
                         sb.AppendFormat("{0}instance_props {{}};", GetIndentString(indent));
                         sb.AppendLine();
                     }
@@ -1243,7 +1274,8 @@ namespace RoslynTool.CsToDsl
                         --indent;
                         sb.AppendFormat("{0}}};", GetIndentString(indent));
                         sb.AppendLine();
-                    } else {
+                    }
+                    else {
                         sb.AppendFormat("{0}instance_events {{}};", GetIndentString(indent));
                         sb.AppendLine();
                     }
@@ -1263,7 +1295,8 @@ namespace RoslynTool.CsToDsl
                         --indent;
                         sb.AppendFormat("{0}}};", GetIndentString(indent));
                         sb.AppendLine();
-                    } else {
+                    }
+                    else {
                         sb.AppendFormat("{0}interfaces {{}};", GetIndentString(indent));
                         sb.AppendLine();
                     }
@@ -1277,11 +1310,12 @@ namespace RoslynTool.CsToDsl
                             sb.AppendFormat("{0}{1} = \"{2}\";", GetIndentString(indent), pair.Key, pair.Value);
                             sb.AppendLine();
                         }
-                        
+
                         --indent;
                         sb.AppendFormat("{0}}};", GetIndentString(indent));
                         sb.AppendLine();
-                    } else {
+                    }
+                    else {
                         sb.AppendFormat("{0}interface_map {{}};", GetIndentString(indent));
                         sb.AppendLine();
                     }
@@ -1362,7 +1396,8 @@ namespace RoslynTool.CsToDsl
                         --indent;
                         sb.AppendFormat("{0}}};", GetIndentString(indent));
                         sb.AppendLine();
-                    } else {
+                    }
+                    else {
                         sb.AppendFormat("{0}method_info {{}};", GetIndentString(indent));
                         sb.AppendLine();
                     }
@@ -1418,7 +1453,8 @@ namespace RoslynTool.CsToDsl
                         --indent;
                         sb.AppendFormat("{0}}};", GetIndentString(indent));
                         sb.AppendLine();
-                    } else {
+                    }
+                    else {
                         sb.AppendFormat("{0}property_info {{}};", GetIndentString(indent));
                         sb.AppendLine();
                     }
@@ -1462,7 +1498,8 @@ namespace RoslynTool.CsToDsl
                         --indent;
                         sb.AppendFormat("{0}}};", GetIndentString(indent));
                         sb.AppendLine();
-                    } else {
+                    }
+                    else {
                         sb.AppendFormat("{0}event_info {{}};", GetIndentString(indent));
                         sb.AppendLine();
                     }
@@ -1502,7 +1539,8 @@ namespace RoslynTool.CsToDsl
                         --indent;
                         sb.AppendFormat("{0}}};", GetIndentString(indent));
                         sb.AppendLine();
-                    } else {
+                    }
+                    else {
                         sb.AppendFormat("{0}field_info {{}};", GetIndentString(indent));
                         sb.AppendLine();
                     }
@@ -1632,10 +1670,12 @@ namespace RoslynTool.CsToDsl
                     if (element.Name == name) {
                         if (index < names.Length - 1) {
                             list.AddRange(SelectNodesRecursively(element, index + 1, names));
-                        } else {
+                        }
+                        else {
                             list.Add(element);
                         }
-                    } else if (index == 0) {
+                    }
+                    else if (index == 0) {
                         list.AddRange(SelectNodesRecursively(element, index, names));
                     }
                 }
@@ -1656,10 +1696,12 @@ namespace RoslynTool.CsToDsl
                     if (element.Name == name) {
                         if (index < names.Length - 1) {
                             ret = SelectSingleNodeRecursively(element, index + 1, names);
-                        } else {
+                        }
+                        else {
                             ret = element;
                         }
-                    } else if (index == 0) {
+                    }
+                    else if (index == 0) {
                         ret = SelectSingleNodeRecursively(element, index, names);
                     }
                     if (null != ret) {

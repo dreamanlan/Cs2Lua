@@ -44,7 +44,8 @@ namespace RoslynTool.CsToDsl
                 var typeSymInfo = objectCreate.Type;
                 var sym = objectCreate.Constructor;
                 m_ObjectCreateType = typeSymInfo;
-            } else {
+            }
+            else {
                 var typeParamObjCreate = oper as ITypeParameterObjectCreationExpression;
                 if (null != typeParamObjCreate) {
                     var typeParam = typeParamObjCreate.Type as ITypeParameterSymbol;

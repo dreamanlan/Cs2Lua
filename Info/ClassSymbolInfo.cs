@@ -39,7 +39,7 @@ namespace RoslynTool.CsToDsl
                 Logger.Instance.ReportIllegalType(typeSym);
                 return;
             }
-            
+
             IsInterface = typeSym.TypeKind == TypeKind.Interface;
 
             foreach (var intf in typeSym.AllInterfaces) {
@@ -68,7 +68,7 @@ namespace RoslynTool.CsToDsl
 
             bool fieldUseExplicitTypeParams = false;
             bool staticUseExplicitTypeParams = false;
-            TypeSymbol = typeSym;            
+            TypeSymbol = typeSym;
             var members = typeSym.GetMembers();
             foreach (var sym in members) {
                 var fsym = sym as IFieldSymbol;
@@ -86,7 +86,8 @@ namespace RoslynTool.CsToDsl
                 if (null != msym) {
                     if (msym.MethodKind == MethodKind.Constructor && !msym.IsImplicitlyDeclared) {
                         ExistConstructor = true;
-                    } else if (msym.MethodKind == MethodKind.StaticConstructor && !msym.IsImplicitlyDeclared) {
+                    }
+                    else if (msym.MethodKind == MethodKind.StaticConstructor && !msym.IsImplicitlyDeclared) {
                         ExistStaticConstructor = true;
                     }
                     MethodSymbols.Add(msym);
@@ -102,12 +103,14 @@ namespace RoslynTool.CsToDsl
                     int count;
                     if (memberCounts.TryGetValue(name, out count)) {
                         isOverloaded = count > 1;
-                    } else {
+                    }
+                    else {
                         isOverloaded = false;
                     }
                     if (!SymbolOverloadFlags.ContainsKey(name)) {
                         SymbolOverloadFlags.Add(name, isOverloaded);
-                    } else {
+                    }
+                    else {
                         SymbolOverloadFlags[name] = isOverloaded;
                     }
                     continue;
@@ -157,7 +160,8 @@ namespace RoslynTool.CsToDsl
             if (useExplicitTypeParam) {
                 if (fsym.IsStatic) {
                     staticFieldUseExplicitTypeParams = true;
-                } else {
+                }
+                else {
                     fieldUseExplicitTypeParams = true;
                 }
                 FieldUseExplicitTypeParams.Add(fsym.Name, fsym);

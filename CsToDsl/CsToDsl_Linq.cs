@@ -67,7 +67,7 @@ namespace RoslynTool.CsToDsl
             var paramInfo = m_LinqParamInfoStack.Peek();
             var paramNames = paramInfo.ParamNames;
 
-            CodeBuilder.AppendFormat("join((function({0}){{ return(", string.Join(", ", paramNames.ToArray()));            
+            CodeBuilder.AppendFormat("join((function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
             var opd = m_Model.GetOperation(node.InExpression) as IConversionExpression;
             OutputExpressionSyntax(node.InExpression, opd);
             CodeBuilder.Append("); }), ");

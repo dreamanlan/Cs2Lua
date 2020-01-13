@@ -40,7 +40,8 @@ namespace RoslynTool
                                     ++i;
                                 }
                             }
-                        } else if (0 == string.Compare(args[i], "-out", true)) {
+                        }
+                        else if (0 == string.Compare(args[i], "-out", true)) {
                             if (i < args.Length - 1) {
                                 string arg = args[i + 1];
                                 if (!arg.StartsWith("-")) {
@@ -48,7 +49,8 @@ namespace RoslynTool
                                     ++i;
                                 }
                             }
-                        } else if (0 == string.Compare(args[i], "-d", true)) {
+                        }
+                        else if (0 == string.Compare(args[i], "-d", true)) {
                             if (i < args.Length - 1) {
                                 string arg = args[i + 1];
                                 if (!arg.StartsWith("-")) {
@@ -56,7 +58,8 @@ namespace RoslynTool
                                     ++i;
                                 }
                             }
-                        } else if (0 == string.Compare(args[i], "-u", true)) {
+                        }
+                        else if (0 == string.Compare(args[i], "-u", true)) {
                             if (i < args.Length - 1) {
                                 string arg = args[i + 1];
                                 if (!arg.StartsWith("-")) {
@@ -64,7 +67,8 @@ namespace RoslynTool
                                     ++i;
                                 }
                             }
-                        } else if (0 == string.Compare(args[i], "-ignorepath", true)) {
+                        }
+                        else if (0 == string.Compare(args[i], "-ignorepath", true)) {
                             if (i < args.Length - 1) {
                                 string arg = args[i + 1];
                                 if (!arg.StartsWith("-")) {
@@ -72,7 +76,8 @@ namespace RoslynTool
                                     ++i;
                                 }
                             }
-                        } else if (0 == string.Compare(args[i], "-externpath", true)) {
+                        }
+                        else if (0 == string.Compare(args[i], "-externpath", true)) {
                             if (i < args.Length - 1) {
                                 string arg = args[i + 1];
                                 if (!arg.StartsWith("-")) {
@@ -80,7 +85,8 @@ namespace RoslynTool
                                     ++i;
                                 }
                             }
-                        } else if (0 == string.Compare(args[i], "-internpath", true)) {
+                        }
+                        else if (0 == string.Compare(args[i], "-internpath", true)) {
                             if (i < args.Length - 1) {
                                 string arg = args[i + 1];
                                 if (!arg.StartsWith("-")) {
@@ -88,7 +94,8 @@ namespace RoslynTool
                                     ++i;
                                 }
                             }
-                        } else if (0 == string.Compare(args[i], "-systemdllpath", true)) {
+                        }
+                        else if (0 == string.Compare(args[i], "-systemdllpath", true)) {
                             if (i < args.Length - 1) {
                                 string arg = args[i + 1];
                                 if (!arg.StartsWith("-")) {
@@ -96,7 +103,8 @@ namespace RoslynTool
                                     ++i;
                                 }
                             }
-                        } else if (0 == string.Compare(args[i], "-src", true)) {
+                        }
+                        else if (0 == string.Compare(args[i], "-src", true)) {
                             if (i < args.Length - 1) {
                                 string arg = args[i + 1];
                                 if (!arg.StartsWith("-")) {
@@ -107,33 +115,44 @@ namespace RoslynTool
                                     ++i;
                                 }
                             }
-                        } else if (0 == string.Compare(args[i], "-enableinherit", true)) {
+                        }
+                        else if (0 == string.Compare(args[i], "-enableinherit", true)) {
                             enableInherit = true;
-                        } else if (0 == string.Compare(args[i], "-enablelinq", true)) {
+                        }
+                        else if (0 == string.Compare(args[i], "-enablelinq", true)) {
                             enableLinq = true;
-                        } else if (0 == string.Compare(args[i], "-outputresult", true)) {
+                        }
+                        else if (0 == string.Compare(args[i], "-outputresult", true)) {
                             outputResult = true;
-                        } else if (0 == string.Compare(args[i], "-parallel", true)) {
+                        }
+                        else if (0 == string.Compare(args[i], "-parallel", true)) {
                             parallel = true;
-                        } else if (0 == string.Compare(args[i], "-noautorequire", true)) {
+                        }
+                        else if (0 == string.Compare(args[i], "-noautorequire", true)) {
                             SymbolTable.NoAutoRequire = true;
-                        } else if (0 == string.Compare(args[i], "-componentbystring", true)) {
+                        }
+                        else if (0 == string.Compare(args[i], "-componentbystring", true)) {
                             SymbolTable.DslComponentByString = true;
-                        } else if (0 == string.Compare(args[i], "-usearraygetset", true)) {
+                        }
+                        else if (0 == string.Compare(args[i], "-usearraygetset", true)) {
                             SymbolTable.UseArrayGetSet = true;
-                        } else if (0 == string.Compare(args[i], "-enabletranslationcheck", true)) {
+                        }
+                        else if (0 == string.Compare(args[i], "-enabletranslationcheck", true)) {
                             SymbolTable.EnableTranslationCheck = true;
-                        } else if (0 == string.Compare(args[i], "-refbyname", true)) {
+                        }
+                        else if (0 == string.Compare(args[i], "-refbyname", true)) {
                             string name = string.Empty, alias = "global";
                             if (i < args.Length - 1) {
                                 string arg = args[i + 1];
                                 if (!arg.StartsWith("-")) {
                                     name = arg;
                                     ++i;
-                                } else {
+                                }
+                                else {
                                     continue;
                                 }
-                            } else {
+                            }
+                            else {
                                 continue;
                             }
                             if (i < args.Length - 1) {
@@ -145,20 +164,24 @@ namespace RoslynTool
                             }
                             if (!refByNames.ContainsKey(name)) {
                                 refByNames.Add(name, alias);
-                            } else {
+                            }
+                            else {
                                 Console.WriteLine("refbyname duplicate, ignored ! {0}={1}", name, alias);
                             }
-                        } else if (0 == string.Compare(args[i], "-refbypath", true)) {
+                        }
+                        else if (0 == string.Compare(args[i], "-refbypath", true)) {
                             string path = string.Empty, alias = "global";
                             if (i < args.Length - 1) {
                                 string arg = args[i + 1];
                                 if (!arg.StartsWith("-")) {
                                     path = arg;
                                     ++i;
-                                } else {
+                                }
+                                else {
                                     continue;
                                 }
-                            } else {
+                            }
+                            else {
                                 continue;
                             }
                             if (i < args.Length - 1) {
@@ -170,14 +193,17 @@ namespace RoslynTool
                             }
                             if (!File.Exists(path)) {
                                 Console.WriteLine("refbypath path not found ! {0}={1}", path, alias);
-                            } else {
+                            }
+                            else {
                                 if (!refByPaths.ContainsKey(path)) {
                                     refByPaths.Add(path, alias);
-                                } else {
+                                }
+                                else {
                                     Console.WriteLine("refbypath duplicate, ignored ! {0}={1}", path, alias);
                                 }
                             }
-                        } else {
+                        }
+                        else {
                             file = args[i];
                             if (!File.Exists(file)) {
                                 Console.WriteLine("file path not found ! {0}", file);
@@ -185,7 +211,8 @@ namespace RoslynTool
                             break;
                         }
                     }
-                } else {
+                }
+                else {
                     Console.WriteLine("[Usage]:Cs2Lua [-out dir] [-ext fileext] [-enableinherit] [-enablelinq] [-outputresult] [-noautorequire] [-luacomponentbystring] [-usearraygetset] [-enabletranslationcheck] [-d macro] [-u macro] [-externpath path] [-ignorepath path] [-refbyname dllname alias] [-refbypath dllpath alias] [-systemdllpath dllpath] [-src] csfile|csprojfile");
                     Console.WriteLine("\twhere:");
                     Console.WriteLine("\t\tfileext = file externsion, default is txt for unity3d, maybe lua for other usage.");
@@ -209,10 +236,12 @@ namespace RoslynTool
                     Console.WriteLine("RunningTime: {0}s", stopwatch.Elapsed.TotalSeconds);
                     Generator.LuaGenerator.Generate(Path.GetDirectoryName(file), outputDir, outputExt);
                     Environment.Exit(result);
-                } else {
+                }
+                else {
                     Environment.Exit((int)ExitCode.FileNotFound);
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 Console.WriteLine("exception:{0}", ex.Message);
                 Console.WriteLine("{0}", ex.StackTrace);
                 while (null != ex.InnerException) {

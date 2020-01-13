@@ -36,7 +36,8 @@ namespace RoslynTool.CsToDsl
                 if (mi.TryCatchUsingLayer > 0 && mi.TryCatchUsingOrLoopSwitchStack.Peek()) {
                     CodeBuilder.AppendFormat("{0}return(3);", GetIndentString());
                     CodeBuilder.AppendLine();
-                } else {
+                }
+                else {
                     CodeBuilder.AppendFormat("{0}break;", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
@@ -58,7 +59,7 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendFormat("{0}{1} = false;", GetIndentString(), ci.BreakFlagVarName);
                     CodeBuilder.AppendLine();
                 }
-                
+
                 bool isLastNode = IsLastNodeOfFor(node);
                 if (isLastNode) {
                     CodeBuilder.AppendFormat("{0}block{{", GetIndentString());
@@ -68,11 +69,12 @@ namespace RoslynTool.CsToDsl
                 if (mi.TryCatchUsingLayer > 0 && mi.TryCatchUsingOrLoopSwitchStack.Peek()) {
                     CodeBuilder.AppendFormat("{0}return(2);", GetIndentString());
                     CodeBuilder.AppendLine();
-                } else {
+                }
+                else {
                     CodeBuilder.AppendFormat("{0}break;", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
-                
+
                 if (isLastNode) {
                     CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                     CodeBuilder.AppendLine();
@@ -83,7 +85,7 @@ namespace RoslynTool.CsToDsl
         {
             MethodInfo mi = m_MethodInfoStack.Peek();
             mi.ExistTopLevelReturn = IsLastNodeOfMethod(node);
-            
+
             bool isLastNode = IsLastNodeOfParent(node);
             if (!isLastNode || mi.TryCatchUsingLayer > 0) {
                 CodeBuilder.AppendFormat("{0}block{{", GetIndentString());
@@ -103,12 +105,14 @@ namespace RoslynTool.CsToDsl
                 }
                 CodeBuilder.AppendFormat("{0}return(1);", GetIndentString());
                 CodeBuilder.AppendLine();
-            } else {
+            }
+            else {
                 string prestr;
                 if (mi.SemanticInfo.MethodKind == MethodKind.Constructor) {
                     CodeBuilder.AppendFormat("{0}return(this", GetIndentString());
                     prestr = ", ";
-                } else {
+                }
+                else {
                     CodeBuilder.AppendFormat("{0}return(", GetIndentString());
                     prestr = string.Empty;
                 }
@@ -247,7 +251,8 @@ namespace RoslynTool.CsToDsl
                     opd = oper.Condition as IConversionExpression;
                 }
                 OutputExpressionSyntax(node.Condition, opd);
-            } else {
+            }
+            else {
                 CodeBuilder.Append("true");
             }
             CodeBuilder.AppendLine(" ){");
@@ -336,7 +341,8 @@ namespace RoslynTool.CsToDsl
             --m_Indent;
             if (null != node.Else) {
                 VisitElseClause(node.Else);
-            } else {
+            }
+            else {
                 CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                 CodeBuilder.AppendLine();
             }
@@ -358,11 +364,13 @@ namespace RoslynTool.CsToDsl
                 --m_Indent;
                 if (null != ifNode.Else) {
                     VisitElseClause(ifNode.Else);
-                } else {
+                }
+                else {
                     CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
-            } else {
+            }
+            else {
                 CodeBuilder.AppendFormat("{0}}}else{{", GetIndentString());
                 CodeBuilder.AppendLine();
                 ++m_Indent;
@@ -418,7 +426,8 @@ namespace RoslynTool.CsToDsl
                 ba.Visit(section);
                 if (ba.BreakCount > 1) {
                     ci.IsIgnoreBreak = false;
-                } else {
+                }
+                else {
                     ci.IsIgnoreBreak = true;
                 }
 
@@ -471,12 +480,14 @@ namespace RoslynTool.CsToDsl
                 ba.Visit(defaultSection);
                 if (ba.BreakCount > 1) {
                     ci.IsIgnoreBreak = false;
-                } else {
+                }
+                else {
                     ci.IsIgnoreBreak = true;
                 }
                 if (ct > 1) {
                     CodeBuilder.AppendFormat("{0}}}else{{", GetIndentString());
-                } else {
+                }
+                else {
                     CodeBuilder.AppendFormat("{0}block{{", GetIndentString());
                 }
                 CodeBuilder.AppendLine();
@@ -501,7 +512,8 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendLine();
 
                 m_ContinueInfoStack.Pop();
-            } else if (ct > 0) {
+            }
+            else if (ct > 0) {
                 CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                 CodeBuilder.AppendLine();
             }
@@ -550,20 +562,24 @@ namespace RoslynTool.CsToDsl
                     OutputExpressionSyntax(node.Expression);
                     if (null != type && (IsImplementationOfSys(type, "IEnumerable") || IsImplementationOfSys(type, "IEnumerator"))) {
                         CodeBuilder.Append(", true");
-                    } else {
+                    }
+                    else {
                         CodeBuilder.Append(", false");
                     }
                     if (null != type && IsSubclassOf(type, "UnityEngine.YieldInstruction")) {
                         CodeBuilder.Append(", true");
-                    } else {
+                    }
+                    else {
                         CodeBuilder.Append(", false");
                     }
-                } else {
+                }
+                else {
                     CodeBuilder.Append("null, false, false");
                 }
                 CodeBuilder.Append(");");
                 CodeBuilder.AppendLine();
-            } else {
+            }
+            else {
                 bool isLastNode = IsLastNodeOfParent(node);
                 if (!isLastNode) {
                     CodeBuilder.AppendFormat("{0}block{{", GetIndentString());

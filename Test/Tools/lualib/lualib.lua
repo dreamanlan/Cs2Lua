@@ -645,12 +645,22 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
         elseif meta then
             return obj[method](obj, ...)
         elseif method == "CompareTo" then
-            if obj > args[1] then
-                return 1
-            elseif obj < args[1] then
-                return -1
+            if type(args[1]) == "string" and string.find(args[1], method) == 1 then
+                if obj > args[2] then
+                    return 1
+                elseif obj < args[2] then
+                    return -1
+                else
+                    return 0
+                end
             else
-                return 0
+                if obj > args[1] then
+                    return 1
+                elseif obj < args[1] then
+                    return -1
+                else
+                    return 0
+                end
             end
         elseif method == "ToString" then
             return tostring(obj)
@@ -1413,24 +1423,13 @@ __mt_index_of_array = function(t, k)
             return GetArrayEnumerator(obj)
         end
     elseif k == "Sort" then
-        return function(obj, predicate)
-            local function comp_all_kind(a, b, c)
-                if c == nil then
-                    table.sort(
-                        obj,
-                        function(a, b)
-                            return predicate(a, b) < 0
-                        end
-                    )
-                else
-                    table.sort(
-                        obj,
-                        function(logic_class, a, b)
-                            return predicate(logic_class, a, b) < 0
-                        end
-                    )
+        return function(obj, sig, predicate)
+            table.sort(
+                obj,
+                function(a, b)
+                    return predicate(a, b) < 0
                 end
-            end
+            )
         end
     elseif k == "GetType" then
         return function(obj)
@@ -2328,6 +2327,9 @@ function typeas(obj, t, tk)
 end
 
 function typeis(obj, t, tk)
+    if obj == nil then
+        return false
+    end
     local meta = getmetatable(obj)
     local tn1 = getobjfullname(obj)
     local tn2 = getclassfullname(t)

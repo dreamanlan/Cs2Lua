@@ -19,10 +19,12 @@ namespace RoslynTool.CsToDsl
                 string name = SymbolTable.CheckDslKeyword(id, out change);
                 if (change && !token.IsKeyword()) {
                     return SyntaxFactory.Identifier(token.LeadingTrivia, name, token.TrailingTrivia);
-                } else {
+                }
+                else {
                     return base.VisitToken(token);
                 }
-            } else {
+            }
+            else {
                 return base.VisitToken(token);
             }
         }

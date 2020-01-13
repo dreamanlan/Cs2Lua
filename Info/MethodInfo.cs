@@ -78,16 +78,19 @@ namespace RoslynTool.CsToDsl
                     OriginalParamsName = param.Name;
                     //遇到变参直接结束（变参set_Item会出现后面带一个value参数的情形，在函数实现里处理）
                     break;
-                } else if (param.RefKind == RefKind.Ref) {
+                }
+                else if (param.RefKind == RefKind.Ref) {
                     //ref参数与out参数在形参处理时机制相同，实参时out参数传入__cs2dsl_out（适应脚本引擎与dotnet反射的调用规则）
                     ParamNames.Add(string.Format("ref({0})", param.Name));
                     ReturnParamNames.Add(param.Name);
-                } else if (param.RefKind == RefKind.Out) {
+                }
+                else if (param.RefKind == RefKind.Out) {
                     //ref参数与out参数在形参处理时机制相同，实参时out参数传入__cs2dsl_out（适应脚本引擎与dotnet反射的调用规则）
                     ParamNames.Add(string.Format("out({0})", param.Name));
                     ReturnParamNames.Add(param.Name);
                     OutParamNames.Add(param.Name);
-                } else {
+                }
+                else {
                     if (param.Type.TypeKind == TypeKind.Struct) {
                         string ns = ClassInfo.GetNamespaces(param.Type);
                         if (SymbolTable.Instance.IsCs2DslSymbol(param.Type))
@@ -98,7 +101,7 @@ namespace RoslynTool.CsToDsl
                     ParamNames.Add(param.Name);
                 }
             }
-            
+
             if (!sym.ReturnsVoid) {
                 var returnType = ClassInfo.GetFullName(sym.ReturnType);
                 if (returnType.StartsWith(SymbolTable.PrefixExternClassName("System.Collections")) && (sym.ReturnType.Name == "IEnumerable" || sym.ReturnType.Name == "IEnumerator")) {

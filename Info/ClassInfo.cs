@@ -26,7 +26,7 @@ namespace RoslynTool.CsToDsl
         internal MethodInfo ExportConstructorInfo = null;
         internal HashSet<string> References = new HashSet<string>();
         internal HashSet<string> IgnoreReferences = new HashSet<string>();
-                
+
         internal bool ExistConstructor = false;
         internal bool ExistStaticConstructor = false;
 
@@ -67,7 +67,7 @@ namespace RoslynTool.CsToDsl
             ExistStaticConstructor = false;
             SemanticInfo = sym;
             ClassSemanticInfo = info;
-                        
+
             Key = GetFullName(sym);
             BaseKey = GetFullName(sym.BaseType);
             if (BaseKey == SymbolTable.PrefixExternClassName("System.Object") || BaseKey == SymbolTable.PrefixExternClassName("System.ValueType")) {
@@ -84,14 +84,16 @@ namespace RoslynTool.CsToDsl
             var arrType = sym as IArrayTypeSymbol;
             if (null != arrType) {
                 AddReference(arrType.ElementType);
-            } else {
+            }
+            else {
                 var refType = sym as INamedTypeSymbol;
                 if (null == refType) {
                     refType = sym.ContainingType;
                 }
                 if (null != refType) {
                     AddReference(refType);
-                } else {
+                }
+                else {
                     Logger.Instance.ReportIllegalType(sym);
                 }
             }
@@ -114,9 +116,11 @@ namespace RoslynTool.CsToDsl
                         bool isIgnore = ClassInfo.HasAttribute(refType, "Cs2Dsl.IgnoreAttribute");
                         if (isIgnoreFile) {
                             IgnoreReferences.Add("cs2dsl__custom");
-                        } else if (isIgnore) {
+                        }
+                        else if (isIgnore) {
                             IgnoreReferences.Add(key);
-                        } else {
+                        }
+                        else {
                             if (!SemanticInfo.IsGenericType || SemanticInfo.TypeArguments.IndexOf(refType) < 0) {
                                 References.Add(key);
                                 if (refType.IsGenericType) {
@@ -173,11 +177,12 @@ namespace RoslynTool.CsToDsl
             bool ret = false;
             if (type.OriginalDefinition == genericType) {
                 ret = true;
-            } else {
+            }
+            else {
                 var refType = type.OriginalDefinition;
                 while (null != refType.ContainingType) {
                     refType = refType.ContainingType;
-                    if (refType==genericType) {
+                    if (refType == genericType) {
                         ret = true;
                         break;
                     }
@@ -202,13 +207,14 @@ namespace RoslynTool.CsToDsl
                             }
                         }
                     }
-                } else if (init.ThisOrBaseKeyword.Text == "base") {
+                }
+                else if (init.ThisOrBaseKeyword.Text == "base") {
                     baseInitializerCalled = true;
                 }
             }
             return baseInitializerCalled;
         }
-        
+
         internal static bool HasAttribute(ISymbol sym, string fullName)
         {
             if (null == sym)
@@ -284,7 +290,8 @@ namespace RoslynTool.CsToDsl
                 return string.Empty;
             if (SymbolTable.Instance.IsCs2DslSymbol(type)) {
                 return CalcFullName(type, true);
-            } else {
+            }
+            else {
                 //外部类型不会基于泛型样式导入，只有使用脚本语言实现的集合类会出现这种情况，这里需要用泛型类型名以与lualib.dsl里的名称一致
                 return SymbolTable.PrefixExternClassName(CalcFullNameWithTypeParameters(type, true));
             }
@@ -297,10 +304,12 @@ namespace RoslynTool.CsToDsl
             if (type.ContainingAssembly == SymbolTable.Instance.AssemblySymbol) {
                 if (isExtern) {
                     return SymbolTable.PrefixExternClassName(CalcFullName(type, true));
-                } else {
+                }
+                else {
                     return CalcFullName(type, true);
                 }
-            } else {
+            }
+            else {
                 return SymbolTable.PrefixExternClassName(CalcFullNameWithTypeParameters(type, true));
             }
         }
@@ -310,7 +319,8 @@ namespace RoslynTool.CsToDsl
                 return string.Empty;
             if (type.ContainingAssembly == SymbolTable.Instance.AssemblySymbol) {
                 return CalcFullNameWithTypeParameters(type, true);
-            } else {
+            }
+            else {
                 return SymbolTable.PrefixExternClassName(CalcFullNameWithTypeParameters(type, true));
             }
         }
@@ -320,17 +330,19 @@ namespace RoslynTool.CsToDsl
                 return string.Empty;
             if (type.Kind == SymbolKind.Namespace) {
                 return CalcFullName(type, true);
-            } else {
+            }
+            else {
                 return CalcFullName(type, false);
             }
-        }        
+        }
         internal static string GetFullNameWithTypeParameters(ISymbol type)
         {
             if (null == type)
                 return string.Empty;
             if (SymbolTable.Instance.IsCs2DslSymbol(type)) {
                 return CalcFullNameWithTypeParameters(type, true);
-            } else {
+            }
+            else {
                 return SymbolTable.PrefixExternClassName(CalcFullNameWithTypeParameters(type, true));
             }
         }
@@ -340,7 +352,8 @@ namespace RoslynTool.CsToDsl
                 return string.Empty;
             if (type.Kind == SymbolKind.Namespace) {
                 return CalcFullNameWithTypeParameters(type, true);
-            } else {
+            }
+            else {
                 return CalcFullNameWithTypeParameters(type, false);
             }
         }
@@ -349,11 +362,13 @@ namespace RoslynTool.CsToDsl
         {
             if (null == typeSym) {
                 return name;
-            } else {
+            }
+            else {
                 string ns = CalcNameWithTypeParameters(typeSym);
                 if (string.IsNullOrEmpty(ns)) {
                     return name;
-                } else {
+                }
+                else {
                     return ns.Replace(".", "_") + "_" + name;
                 }
             }
@@ -379,7 +394,8 @@ namespace RoslynTool.CsToDsl
                 ct = ct.ContainingType;
                 if (null != ct) {
                     name = CalcNameWithTypeArguments(ct);
-                } else {
+                }
+                else {
                     name = string.Empty;
                 }
             }
@@ -409,7 +425,8 @@ namespace RoslynTool.CsToDsl
                 ct = ct.ContainingType;
                 if (null != ct) {
                     name = CalcNameWithTypeParameters(ct);
-                } else {
+                }
+                else {
                     name = string.Empty;
                 }
             }
@@ -427,7 +444,8 @@ namespace RoslynTool.CsToDsl
             var typeSym = sym as INamedTypeSymbol;
             if (null != typeSym) {
                 return CalcNameWithTypeParameters(typeSym);
-            } else {
+            }
+            else {
                 return sym.Name;
             }
         }
@@ -438,7 +456,8 @@ namespace RoslynTool.CsToDsl
             var typeSym = sym as INamedTypeSymbol;
             if (null != typeSym) {
                 return CalcNameWithTypeArguments(typeSym);
-            } else {
+            }
+            else {
                 return sym.Name;
             }
         }
@@ -464,16 +483,18 @@ namespace RoslynTool.CsToDsl
                     var t = SymbolTable.Instance.FindTypeArgument(arg);
                     if (t.TypeKind == TypeKind.TypeParameter) {
                         list.Add(t.Name);
-                    } else {
+                    }
+                    else {
                         var fn = GetFullName(t);
                         list.Add(fn.Replace(".", "_"));
                     }
-                } else {
+                }
+                else {
                     var fn = GetFullName(arg);
                     list.Add(fn.Replace(".", "_"));
                 }
             }
             return string.Join("_", list.ToArray());
-        }        
+        }
     }
 }

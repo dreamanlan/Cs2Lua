@@ -31,7 +31,8 @@ namespace RoslynTool.CsToDsl
                                 var leftNode = assignNode.Left;
                                 if (leftNode == node) {
                                     m_NeedInitOnDeclaration = false;
-                                } else {
+                                }
+                                else {
                                     m_NeedInitOnDeclaration = true;
                                 }
                             }
@@ -42,7 +43,8 @@ namespace RoslynTool.CsToDsl
                                 if (null != argNode) {
                                     if (null != argNode.RefOrOutKeyword && argNode.RefOrOutKeyword.Text == "out") {
                                         m_NeedInitOnDeclaration = false;
-                                    } else {
+                                    }
+                                    else {
                                         m_NeedInitOnDeclaration = true;
                                     }
                                 }
@@ -67,10 +69,12 @@ namespace RoslynTool.CsToDsl
                 if (parent.IsKind(SyntaxKind.LocalDeclarationStatement)) {
                     kind = SyntaxKind.LocalDeclarationStatement;
                     return parent;
-                } else if (parent.IsKind(SyntaxKind.SimpleAssignmentExpression)) {
+                }
+                else if (parent.IsKind(SyntaxKind.SimpleAssignmentExpression)) {
                     kind = SyntaxKind.SimpleAssignmentExpression;
                     return parent;
-                } else if (parent.IsKind(SyntaxKind.Argument)) {
+                }
+                else if (parent.IsKind(SyntaxKind.Argument)) {
                     kind = SyntaxKind.Argument;
                     return parent;
                 }
