@@ -1233,13 +1233,25 @@ namespace Generator
                 sb.AppendFormat(".{0}", mid);
                 sb.Append("(");
                 int start = 2;
+                string sig = string.Empty;
                 if (data.Params.Count > start) {
-                    var sig = data.GetParamId(start);
-                    if (sig.StartsWith(mid) && NoSignatureArg(sig)) {
+                    var sigParam = data.GetParam(start) as Dsl.ValueData;
+                    if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && sigParam.GetId().StartsWith(mid)) {
                         start = 3;
+                        sig = sigParam.GetId();
+                        string target;
+                        if (NoSignatureArg(sig)) {
+                            sig = string.Empty;
+                        }
+                        else if (TryReplaceSignatureArg(sig, out target)) {
+                            sig = target;
+                        }
+                    }
+                    else {
+                        sig = string.Empty;
                     }
                 }
-                GenerateArguments(data, sb, indent, start);
+                GenerateArguments(data, sb, indent, start, sig);
                 sb.Append(")");
             }
             else if (id == "callinstance") {
@@ -1256,13 +1268,25 @@ namespace Generator
                 }
                 sb.Append("(");
                 int start = 2;
+                string sig = string.Empty;
                 if (data.Params.Count > start) {
-                    var sig = data.GetParamId(start);
-                    if (sig.StartsWith(mid) && NoSignatureArg(sig)) {
+                    var sigParam = data.GetParam(start) as Dsl.ValueData;
+                    if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && sigParam.GetId().StartsWith(mid)) {
                         start = 3;
+                        sig = sigParam.GetId();
+                        string target;
+                        if (NoSignatureArg(sig)) {
+                            sig = string.Empty;
+                        }
+                        else if (TryReplaceSignatureArg(sig, out target)) {
+                            sig = target;
+                        }
+                    }
+                    else {
+                        sig = string.Empty;
                     }
                 }
-                GenerateArguments(data, sb, indent, start);
+                GenerateArguments(data, sb, indent, start, sig);
                 sb.Append(")");
             }
             else if (id == "getstaticindexer") {
@@ -2047,7 +2071,16 @@ namespace Generator
         }
         private static void GenerateArguments(Dsl.CallData data, StringBuilder sb, int indent, int start)
         {
+            GenerateArguments(data, sb, indent, start, string.Empty);
+        }
+        private static void GenerateArguments(Dsl.CallData data, StringBuilder sb, int indent, int start, string sig)
+        {
             string prestr = string.Empty;
+            if (!string.IsNullOrEmpty(sig)) {
+                sb.Append(prestr);
+                sb.AppendFormat("\"{0}\"", Escape(sig));
+                prestr = ", ";
+            }
             for (int ix = start; ix < data.Params.Count; ++ix) {
                 var param = data.Params[ix];
                 sb.Append(prestr);
@@ -2300,6 +2333,10 @@ namespace Generator
             s_CachedNoSignatures.Add(signature, false);
             return false;
         }
+        private static bool TryReplaceSignatureArg(string signature, out string target)
+        {
+            return s_ReplaceSignatureArgInfos.TryGetValue(signature, out target);
+        }
         private static bool IndexerByLualib(string objClassName, string typeArgs, string typeKinds, string obj, string intf, string className, string member, out int val)
         {
             string key = string.Format("{0}|{1}|{2}|{3}|{4}|{5}|{6}", objClassName, typeArgs, typeKinds, obj, intf, className, member);
@@ -2480,6 +2517,21 @@ namespace Generator
                     }
                 }
                 s_NoSignatureArgInfos.Add(cfg);
+            }
+            else if (id == "replacesignaturearg") {
+                var f = info.First;
+                if (null != f) {
+                    for(int i = 0; i < f.Call.GetParamNum(); i += 2) {
+                        var src = f.Call.GetParamId(i);
+                        var target = f.Call.GetParamId(i + 1);
+                        s_ReplaceSignatureArgInfos[src] = target;
+                    }
+                    for(int i = 0; i < f.GetStatementNum(); i += 2) {
+                        var src = f.GetStatementId(i);
+                        var target = f.GetStatementId(i + 1);
+                        s_ReplaceSignatureArgInfos[src] = target;
+                    }
+                }
             }
             else if (id == "indexerbylualib") {
                 var cfg = new IndexerByLualibInfo();
@@ -2677,6 +2729,7 @@ namespace Generator
         private static List<DontRequireInfo> s_DontRequireInfos = new List<DontRequireInfo>();
         private static Dictionary<string, FileMergeInfo> s_FileMergeInfos = new Dictionary<string, FileMergeInfo>();
         private static List<NoSignatureArgInfo> s_NoSignatureArgInfos = new List<NoSignatureArgInfo>();
+        private static Dictionary<string, string> s_ReplaceSignatureArgInfos = new Dictionary<string, string>();
         private static List<IndexerByLualibInfo> s_IndexerByLualibInfos = new List<IndexerByLualibInfo>();
         private static List<AddPrologueOrEpilogueInfo> s_AddPrologueOrEpilogueInfos = new List<AddPrologueOrEpilogueInfo>();
         private static Dictionary<string, string> s_CachedFile2MergedFiles = new Dictionary<string, string>();

@@ -433,7 +433,7 @@ namespace RoslynTool.CsToDsl
                     string fn = CalcMethodParameterTypeName(arrSym.ElementType);
                     sb.Append(fn.Replace('.', '_'));
                 }
-                else if(oriparam.Type.Kind == SymbolKind.TypeParameter) {
+                else if (oriparam.Type.Kind == SymbolKind.TypeParameter) {
                     string fn = CalcMethodParameterTypeName(param.Type);
                     sb.Append(fn.Replace('.', '_'));
                 }
