@@ -430,6 +430,10 @@ namespace RoslynTool.CsToDsl
                 if (oriparam.Type.Kind == SymbolKind.ArrayType) {
                     sb.Append("Arr_");
                     var arrSym = oriparam.Type as IArrayTypeSymbol;
+                    var namedType = arrSym.ElementType as INamedTypeSymbol;
+                    if (null != namedType && namedType.IsGenericType) {
+                        arrSym = param.Type as IArrayTypeSymbol;
+                    }
                     string fn = CalcMethodParameterTypeName(arrSym.ElementType);
                     sb.Append(fn.Replace('.', '_'));
                 }
@@ -438,8 +442,15 @@ namespace RoslynTool.CsToDsl
                     sb.Append(fn.Replace('.', '_'));
                 }
                 else {
-                    string fn = CalcMethodParameterTypeName(oriparam.Type);
-                    sb.Append(fn.Replace('.', '_'));
+                    var namedType = oriparam.Type as INamedTypeSymbol;
+                    if (null != namedType && namedType.IsGenericType) {
+                        string fn = CalcMethodParameterTypeName(param.Type);
+                        sb.Append(fn.Replace('.', '_'));
+                    }
+                    else {
+                        string fn = CalcMethodParameterTypeName(oriparam.Type);
+                        sb.Append(fn.Replace('.', '_'));
+                    }
                 }
             }
             return sb.ToString();
