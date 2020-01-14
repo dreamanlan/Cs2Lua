@@ -1089,7 +1089,7 @@ namespace Generator
                 else if (op == "+" && (type1 == "System.String" || type2 == "System.String")) {
                     bool tostr1 = type1 != "System.String";
                     bool tostr2 = type2 != "System.String";
-                    sb.Append("System.String.Concat(\"Concat__String__String\", ");
+                    sb.Append("System.String.Concat(\"System.String:Concat__String__String\", ");
                     if (tostr1)
                         sb.Append("tostring(");
                     GenerateSyntaxComponent(p1, sb, indent, false);
@@ -1236,7 +1236,7 @@ namespace Generator
                 string sig = string.Empty;
                 if (data.Params.Count > start) {
                     var sigParam = data.GetParam(start) as Dsl.ValueData;
-                    if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && sigParam.GetId().StartsWith(mid)) {
+                    if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
                         start = 3;
                         sig = sigParam.GetId();
                         string target;
@@ -1271,7 +1271,7 @@ namespace Generator
                 string sig = string.Empty;
                 if (data.Params.Count > start) {
                     var sigParam = data.GetParam(start) as Dsl.ValueData;
-                    if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && sigParam.GetId().StartsWith(mid)) {
+                    if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
                         start = 3;
                         sig = sigParam.GetId();
                         string target;
@@ -2105,6 +2105,12 @@ namespace Generator
                     sb.AppendLine();
                 }
             }
+        }
+        private static bool IsSignature(string sig, string method)
+        {
+            int ix = sig.IndexOf(':');
+            int startIndex = ix + 1;
+            return startIndex == sig.IndexOf(method, startIndex);
         }
         private static string CalcLogInfo(PrologueOrEpilogueInfo info, string className, string methodName)
         {

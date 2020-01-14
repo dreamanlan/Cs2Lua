@@ -281,6 +281,17 @@ function luaunpack(arr)
     end
 end
 
+function issignature(sig, method)
+    if type(sig) == "string" then
+        local l = string.find(sig, ":", 1, true)        
+        local s,e = string.find(sig, method, 1 + 1, true)
+        if s ~= nil and s == l + 1 then
+            return true
+        end
+    end
+    return false
+end
+
 function chararraytostring(arr)
     return string.char(unpack(arr))
 end
@@ -301,7 +312,7 @@ function getexterninstanceindexer(callerClass, typeargs, typekinds, obj, intf, c
             index = __unwrap_if_string(args[1])
             return obj[index]
         else
-            if type(args[1]) == "string" and string.find(args[1], name) == 1 then
+            if issignature(args[1], name) then
                 index = __unwrap_if_string(args[2])
             else
                 index = __unwrap_if_string(args[1])
@@ -331,7 +342,7 @@ function setexterninstanceindexer(callerClass, typeargs, typekinds, obj, intf, c
     local args = {...}
     local num = #args
     local index
-    if type(args[1]) == "string" and string.find(args[1], name) == 1 then
+    if issignature(args[1], name) then
         index = __unwrap_if_string(args[2])
     else
         index = __unwrap_if_string(args[1])
@@ -645,7 +656,7 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
         elseif meta then
             return obj[method](obj, ...)
         elseif method == "CompareTo" then
-            if type(args[1]) == "string" and string.find(args[1], method) == 1 then
+            if issignature(args[1], method) then
                 if obj > args[2] then
                     return 1
                 elseif obj < args[2] then

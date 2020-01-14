@@ -407,6 +407,10 @@ namespace RoslynTool.CsToDsl
             if (null == methodSym)
                 return string.Empty;
             StringBuilder sb = new StringBuilder();
+            var typeSym = methodSym.ContainingType;
+            var typeName = ClassInfo.GetFullName(typeSym);
+            sb.Append(typeName);
+            sb.Append(":");
             string name = methodSym.Name;
             if (!string.IsNullOrEmpty(name) && name[0] == '.')
                 name = name.Substring(1);
@@ -420,63 +424,9 @@ namespace RoslynTool.CsToDsl
             }
             foreach (var param in msym.Parameters) {
                 sb.Append("__");
-                if (param.RefKind == RefKind.Ref) {
-                    sb.Append("Ref_");
-                }
-                else if (param.RefKind == RefKind.Out) {
-                    sb.Append("Out_");
-                }
-                var oriparam = param.OriginalDefinition;
-                if (oriparam.Type.Kind == SymbolKind.ArrayType) {
-                    sb.Append("Arr_");
-                    var arrSym = oriparam.Type as IArrayTypeSymbol;
-                    var namedType = arrSym.ElementType as INamedTypeSymbol;
-                    if (null != namedType && namedType.IsGenericType) {
-                        arrSym = param.Type as IArrayTypeSymbol;
-                    }
-                    string fn = CalcMethodParameterTypeName(arrSym.ElementType);
-                    sb.Append(fn.Replace('.', '_'));
-                }
-                else if (oriparam.Type.Kind == SymbolKind.TypeParameter) {
-                    var tp = oriparam.Type as ITypeParameterSymbol;
-                    if (tp.ConstraintTypes.Length > 0) {
-                        sb.Append(tp.ConstraintTypes[0].Name);
-                    }
-                    else {
-                        sb.Append("Object");
-                    }
-                }
-                else {
-                    var namedType = oriparam.Type as INamedTypeSymbol;
-                    if (null != namedType && namedType.IsGenericType) {
-                        string fn = CalcMethodParameterTypeName(param.Type);
-                        sb.Append(fn.Replace('.', '_'));
-                    }
-                    else {
-                        string fn = CalcMethodParameterTypeName(oriparam.Type);
-                        sb.Append(fn.Replace('.', '_'));
-                    }
-                }
+                CalcMethodParameter(sb, param);
             }
             return sb.ToString();
-        }
-        internal static string CalcMethodParameterTypeName(ITypeSymbol sym)
-        {
-            INamedTypeSymbol type = sym as INamedTypeSymbol;
-            if (null == type)
-                return sym.Name;
-            List<string> list = new List<string>();
-            if (type.TypeArguments.Length > 0) {
-                list.Add(string.Format("{0}`{1}", type.Name, type.TypeArguments.Length));
-            }
-            else {
-                list.Add(type.Name);
-            }
-            foreach (var arg in type.TypeArguments) {
-                var fn = CalcMethodParameterTypeName(arg);
-                list.Add(fn.Replace(".", "_"));
-            }
-            return string.Join("_", list.ToArray());
         }
         internal static void MergeTypeParamsAndArgs(List<ITypeParameterSymbol> tParams, List<ITypeSymbol> tArgs, INamedTypeSymbol refType)
         {
@@ -752,6 +702,66 @@ namespace RoslynTool.CsToDsl
         {
             get { return s_SystemDllPath; }
             set { s_SystemDllPath = value; }
+        }
+
+        private static void CalcMethodParameter(StringBuilder sb, IParameterSymbol param)
+        {
+            if (param.RefKind == RefKind.Ref) {
+                sb.Append("Ref_");
+            }
+            else if (param.RefKind == RefKind.Out) {
+                sb.Append("Out_");
+            }
+            var oriparam = param.OriginalDefinition;
+            if (oriparam.Type.Kind == SymbolKind.ArrayType) {
+                sb.Append("Arr_");
+                var oriArrSym = oriparam.Type as IArrayTypeSymbol;
+                var arrSym = param.Type as IArrayTypeSymbol;
+                CalcMethodParameterType(sb, oriArrSym.ElementType, arrSym.ElementType);
+            }
+            else {
+                CalcMethodParameterType(sb, oriparam.Type, param.Type);
+            }
+        }
+        private static void CalcMethodParameterType(StringBuilder sb, ITypeSymbol orisym, ITypeSymbol sym)
+        {
+            if (orisym.Kind == SymbolKind.TypeParameter) {
+                var tp = orisym as ITypeParameterSymbol;
+                if (tp.ConstraintTypes.Length > 0) {
+                    sb.Append(tp.ConstraintTypes[0].Name);
+                }
+                else {
+                    sb.Append("Object");
+                }
+            }
+            else {
+                var namedType = orisym as INamedTypeSymbol;
+                if (null != namedType && namedType.IsGenericType) {
+                    CalcMethodParameterTypeName(sb, sym);
+                }
+                else {
+                    CalcMethodParameterTypeName(sb, orisym);
+                }
+            }
+        }
+        private static void CalcMethodParameterTypeName(StringBuilder sb, ITypeSymbol sym)
+        {
+            INamedTypeSymbol type = sym as INamedTypeSymbol;
+            if (null == type) {
+                sb.Append(sym.Name);
+                return;
+            }
+            List<string> list = new List<string>();
+            if (type.TypeArguments.Length > 0) {
+                sb.AppendFormat("{0}`{1}", type.Name, type.TypeArguments.Length);
+            }
+            else {
+                sb.Append(type.Name);
+            }
+            foreach (var arg in type.TypeArguments) {
+                sb.Append('_');
+                CalcMethodParameterTypeName(sb, arg);
+            }
         }
 
         private static string s_ExternClassNamePrefix = string.Empty;

@@ -924,7 +924,7 @@ return index
 			if (total - from != 1)
 				return false;
             string sig;
-            if (!checkType(l, from, out sig) || sig != signature)
+            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
                 return false;
             ++from;
             return matchType(l, from, t1);
@@ -935,7 +935,7 @@ return index
 			if (total - from != 2)
 				return false;
             string sig;
-            if (!checkType(l, from, out sig) || sig != signature)
+            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
                 return false;
             ++from;
             return matchType(l, from, t1) && matchType(l, from + 1, t2);
@@ -946,7 +946,7 @@ return index
 			if (total - from != 3)
 				return false;
             string sig;
-            if (!checkType(l, from, out sig) || sig != signature)
+            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
                 return false;
             ++from;
             return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3);
@@ -957,7 +957,7 @@ return index
 			if (total - from != 4)
 				return false;
             string sig;
-            if (!checkType(l, from, out sig) || sig != signature)
+            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
                 return false;
             ++from;
             return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3) && matchType(l, from + 3, t4);
@@ -968,7 +968,7 @@ return index
 			if (total - from != 5)
 				return false;
             string sig;
-            if (!checkType(l, from, out sig) || sig != signature)
+            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
                 return false;
             ++from;
             return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3) && matchType(l, from + 3, t4)
@@ -981,7 +981,7 @@ return index
 			if (total - from != 6)
 				return false;
             string sig;
-            if (!checkType(l, from, out sig) || sig != signature)
+            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
                 return false;
             ++from;
             return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3) && matchType(l, from + 3, t4)
@@ -995,7 +995,7 @@ return index
 			if (total - from != 7)
 				return false;
             string sig;
-            if (!checkType(l, from, out sig) || sig != signature)
+            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
                 return false;
             ++from;
             return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3) && matchType(l, from + 3, t4)
@@ -1010,7 +1010,7 @@ return index
 			if (total - from != 8)
 				return false;
             string sig;
-            if (!checkType(l, from, out sig) || sig != signature)
+            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
                 return false;
             ++from;
             return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3) && matchType(l, from + 3, t4)
@@ -1027,7 +1027,7 @@ return index
 			if (total - from != 9)
 				return false;
             string sig;
-            if (!checkType(l, from, out sig) || sig != signature)
+            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
                 return false;
             ++from;
             return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3) && matchType(l, from + 3, t4)
@@ -1044,7 +1044,7 @@ return index
 			if (total - from != 10)
 				return false;
             string sig;
-            if (!checkType(l, from, out sig) || sig != signature)
+            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
                 return false;
             ++from;
             return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3) && matchType(l, from + 3, t4)
@@ -1061,7 +1061,7 @@ return index
             if (total - from != t.Length)
                 return false;
             string sig;
-            if (!checkType(l, from, out sig) || sig != signature)
+            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
                 return false;
             ++from;
             for (int i = 0; i < t.Length; ++i)
