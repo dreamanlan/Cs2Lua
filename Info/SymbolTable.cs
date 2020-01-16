@@ -485,6 +485,10 @@ namespace RoslynTool.CsToDsl
                 name = name.Substring(1);
             sb.Append(name);
             if (SymbolTable.Instance.IsCs2DslSymbol(methodSym)) {
+                foreach(var tparam in methodSym.TypeParameters) {
+                    sb.Append("_");
+                    sb.Append(tparam.Name);
+                }
                 foreach (var param in methodSym.Parameters) {
                     sb.Append("__");
                     if (param.RefKind == RefKind.Ref) {
