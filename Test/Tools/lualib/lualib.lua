@@ -74,7 +74,10 @@ System.Collections.Generic.KeyValuePair_TKey_TValue = {
 }
 System.Array = System.Array or {}
 
-System.Collections.Generic.MyDictionary_TKey_TValue = System.Collections.Generic.Dictionary_TKey_TValue
+System.Collections.Generic.MyDictionary_TKey_TValue = System.Collections.Generic.Dictionary_TKey_TValue or {}
+
+System.Linq = System.Linq or {}
+System.Linq.Enumerable = System.Linq.Enumerable or {}
 
 __cs2lua_special_integer_operators = {"/", "%", "+", "-", "*", "<<", ">>", "&", "|", "^", "~"}
 __cs2lua_div = 0
@@ -294,6 +297,16 @@ end
 
 function chararraytostring(arr)
     return string.char(unpack(arr))
+end
+
+function callexternextension(callerClass, method, ...)
+    local args = {...}
+    local obj = args[1]
+    if calllerClass == System.Linq.Enumerable then
+        
+    else
+        obj[method](args);
+    end
 end
 
 function getexternstaticindexer(callerClass, typeargs, typekinds, class, name, argCount, ...)
@@ -750,7 +763,7 @@ function invokearraystaticmethod(firstArray, secondArray, method, ...)
             end
         else
             --这种情形认为是外部导出的数组调用，直接调导出接口了（由于System.Array有generic成员，这些方法的调用估计会出错）
-            System.Array[method](...)
+            return System.Array[method](...)
         end
     else
         return nil

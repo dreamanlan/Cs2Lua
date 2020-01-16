@@ -225,7 +225,7 @@ namespace RoslynTool.CsToDsl
         internal void OutputInvocation(StringBuilder codeBuilder, CsDslTranslater cs2dsl, ExpressionSyntax exp, bool isMemberAccess, SemanticModel model, SyntaxNode node)
         {
             IMethodSymbol sym = MethodSymbol;
-            string mname = cs2dsl.NameMangling(IsExtensionMethod && null != sym.ReducedFrom ? sym.ReducedFrom : sym);
+            string mname = cs2dsl.NameMangling(IsExtensionMethod && !IsExternMethod && null != sym.ReducedFrom ? sym.ReducedFrom : sym);
             string prestr = string.Empty;
             if (isMemberAccess) {
                 string fnOfIntf = "null";
@@ -255,8 +255,13 @@ namespace RoslynTool.CsToDsl
                     prestr = ", ";
                 }
                 else if (IsExtensionMethod) {
-                    codeBuilder.Append("callstatic(");
+                    if(IsExternMethod)
+                        codeBuilder.Append("callexternextension(");
+                    else
+                        codeBuilder.Append("callextension(");
                     codeBuilder.AppendFormat("{0}, \"{1}\", ", ClassKey, mname);
+                    cs2dsl.OutputExpressionSyntax(exp);
+                    prestr = ", ";
                 }
                 else if (IsBasicValueMethod || expIsBasicType) {
                     string ckey = CalcInvokeTarget(IsEnumClass, ClassKey, cs2dsl, exp, model);
@@ -326,15 +331,7 @@ namespace RoslynTool.CsToDsl
                     useTypeNameString = true;
                 }
             }
-            if (IsExtensionMethod) {
-                var args = new List<ExpressionSyntax>();
-                args.Add(exp);
-                args.AddRange(Args);
-                cs2dsl.OutputArgumentList(args, DefaultValueArgs, GenericTypeArgs, ExternOverloadedMethodSignature, PostPositionGenericTypeArgs, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
-            }
-            else {
-                cs2dsl.OutputArgumentList(Args, DefaultValueArgs, GenericTypeArgs, ExternOverloadedMethodSignature, PostPositionGenericTypeArgs, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
-            }
+            cs2dsl.OutputArgumentList(Args, DefaultValueArgs, GenericTypeArgs, ExternOverloadedMethodSignature, PostPositionGenericTypeArgs, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
             codeBuilder.Append(")");
         }
 
@@ -351,7 +348,7 @@ namespace RoslynTool.CsToDsl
             ClassKey = ClassInfo.GetFullName(sym.ContainingType);
             GenericClassKey = ClassInfo.GetFullNameWithTypeParameters(sym.ContainingType);
             IsEnumClass = sym.ContainingType.TypeKind == TypeKind.Enum || ClassKey == SymbolTable.PrefixExternClassName("System.Enum");
-            IsExtensionMethod = sym.IsExtensionMethod && SymbolTable.Instance.IsCs2DslSymbol(sym);
+            IsExtensionMethod = sym.IsExtensionMethod;
             IsBasicValueMethod = SymbolTable.IsBasicValueMethod(sym);
             IsArrayStaticMethod = ClassKey == SymbolTable.PrefixExternClassName("System.Array") && sym.IsStatic;
             IsExternMethod = !SymbolTable.Instance.IsCs2DslSymbol(sym);

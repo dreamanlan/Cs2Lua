@@ -1289,6 +1289,41 @@ namespace Generator
                 GenerateArguments(data, sb, indent, start, sig);
                 sb.Append(")");
             }
+            else if (id == "callextension") {
+                var obj = data.Params[0];
+                var member = data.Params[1];
+                var mid = member.GetId();
+                GenerateSyntaxComponent(obj, sb, indent, false);
+                sb.AppendFormat(".{0}", mid);
+                sb.Append("(");
+                int start = 2;
+                string sig = string.Empty;
+                if (data.Params.Count > start) {
+                    var sigParam = data.GetParam(start) as Dsl.ValueData;
+                    if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
+                        start = 3;
+                        sig = sigParam.GetId();
+                        string target;
+                        if (NoSignatureArg(sig)) {
+                            sig = string.Empty;
+                        }
+                        else if (TryReplaceSignatureArg(sig, out target)) {
+                            sig = target;
+                        }
+                    }
+                    else {
+                        sig = string.Empty;
+                    }
+                }
+                GenerateArguments(data, sb, indent, start, sig);
+                sb.Append(")");
+            }
+            else if (id == "callexternextension") {
+                sb.Append(id);
+                sb.Append('(');
+                GenerateArguments(data, sb, indent, 0);
+                sb.Append(')');
+            }
             else if (id == "getstaticindexer") {
                 var _class = data.Params[0];
                 var _member = data.Params[1].GetId();
@@ -2351,8 +2386,8 @@ namespace Generator
             }
             foreach (var info in s_IndexerByLualibInfos) {
                 if ((null == info.ObjectClassMatch || info.ObjectClassMatch.IsMatch(objClassName)) &&
-                    (null == info.TypeArgsMatch || info.ObjectMatch.IsMatch(typeArgs)) &&
-                    (null == info.TypeKindsMatch || info.ObjectMatch.IsMatch(typeKinds)) &&
+                    (null == info.TypeArgsMatch || info.TypeArgsMatch.IsMatch(typeArgs)) &&
+                    (null == info.TypeKindsMatch || info.TypeKindsMatch.IsMatch(typeKinds)) &&
                     (null == info.ObjectMatch || info.ObjectMatch.IsMatch(obj)) &&
                     (null == info.InterfaceMatch || info.InterfaceMatch.IsMatch(intf)) &&
                     (null == info.ClassMatch || info.ClassMatch.IsMatch(className)) &&
