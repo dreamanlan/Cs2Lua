@@ -2570,15 +2570,17 @@ function defineclass(
         return function(this, ...)
             local child = rawget(this, "__child__")
             local final_nf = nil
+            local final_child = nil
             while child do
                 local nf = rawget(child, k)
                 if nf then
                     final_nf = nf
+                    final_child = child
                 end
                 child = rawget(child, "__child__")
             end
             if final_nf then
-                return final_nf(child, ...)
+                return final_nf(final_child, ...)
             end
             return f(this, ...)
         end
