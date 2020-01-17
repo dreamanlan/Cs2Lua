@@ -325,7 +325,8 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitDefaultExpression(DefaultExpressionSyntax node)
         {
-            CodeBuilder.Append("null");
+            var typeInfo = m_Model.GetTypeInfo(node.Type);
+            OutputDefaultValue(typeInfo.Type);
         }
         #endregion
 

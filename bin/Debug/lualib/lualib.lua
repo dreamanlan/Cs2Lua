@@ -296,7 +296,7 @@ function issignature(sig, method)
 end
 
 function chararraytostring(arr)
-    return string.char(unpack(arr))
+    return System.String("String__Arr_Char", arr)
 end
 
 function callexternextension(callerClass, method, ...)
@@ -340,7 +340,7 @@ function getexterninstanceindexer(callerClass, typeargs, typekinds, obj, intf, c
             elseif typename == "LuaVarObject" then
                 return obj[index]
             elseif name == "get_Chars" then
-                return string.char(string.byte(index + 1))
+                return Utility.StringGetChar(obj, index)
             else
                 return obj:getItem(index)
             end
@@ -645,22 +645,22 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
     end
     if method then
         if class == System.Char and method == "ToString" then
-            return string.char(obj)
+            return Utility.CharToString(obj)
         elseif class == System.String then
             local csstr = obj
             if type(obj) == "string" then
-                csstr = System.String("String_Arr_Char", obj)
+                csstr = System.String("String__Arr_Char", obj)
             end
             if method == "Split" then
                 local result1, result2 = _get_first_untable_from_pack_args(...)
                 if type(result1) == "string" and type(result2) == "number" then
-                    result2 = string.char(result2)
+                    result2 = Utility.CharToString(result2)
                 end
                 return csstr[method](csstr, result1, result2)
             elseif method == "TrimStart" then
                 local result = _get_first_untable_from_pack_args(...)
                 if type(result) == "number" then
-                    result = string.char(result)
+                    result = Utility.CharToString(result)
                 end
                 return csstr[method](csstr, result)
             else
@@ -691,13 +691,13 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
         elseif method == "Split" then
             local result1, result2 = _get_first_untable_from_pack_args(...)
             if type(result1) == "string" and type(result2) == "number" then
-                result2 = string.char(result2)
+                result2 = Utility.CharToString(result2)
             end
             return obj[method](obj, result1, result2)
         elseif method == "TrimStart" then
             local result = _get_first_untable_from_pack_args(...)
             if type(result) == "number" then
-                result = string.char(result)
+                result = Utility.CharToString(result)
             end
             return obj[method](obj, result)
         end
