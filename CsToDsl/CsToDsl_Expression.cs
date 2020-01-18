@@ -293,6 +293,9 @@ namespace RoslynTool.CsToDsl
 
             var oper = m_Model.GetOperation(node) as ITypeOfExpression;
             var type = oper.TypeOperand;
+
+            TypeChecker.CheckType(type, node, GetCurMethodSemanticInfo());
+
             CodeBuilder.Append("typeof(");
             OutputType(type, node, ci, "typeof");
             CodeBuilder.Append(")");
@@ -317,6 +320,12 @@ namespace RoslynTool.CsToDsl
 
                 var typeInfo = m_Model.GetTypeInfo(node.Type);
                 var type = typeInfo.Type;
+
+                var srcOper = m_Model.GetOperation(node.Expression);
+                if (null != srcOper) {
+                    TypeChecker.CheckConvert(srcOper.Type, type, node, GetCurMethodSemanticInfo());
+                }
+
                 CodeBuilder.Append(", ");
                 OutputType(type, node, ci, "cast");
                 CodeBuilder.AppendFormat(", TypeKind.{0}", type.TypeKind);
@@ -348,6 +357,11 @@ namespace RoslynTool.CsToDsl
             var leftMemberAccess = node.Left as MemberAccessExpressionSyntax;
             var leftElementAccess = node.Left as ElementAccessExpressionSyntax;
             var leftCondAccess = node.Left as ConditionalAccessExpressionSyntax;
+
+            var rightOper = m_Model.GetOperation(node.Right);
+            if (null != leftOper && null != rightOper) {
+                TypeChecker.CheckConvert(rightOper.Type, leftOper.Type, node, GetCurMethodSemanticInfo());
+            }
 
             SpecialAssignmentType specialType = SpecialAssignmentType.None;
             if (null != leftMemberAccess && null != leftPsym) {
@@ -392,6 +406,8 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitMemberAccessExpression(MemberAccessExpressionSyntax node)
         {
+            TypeChecker.CheckMemberAccess(m_Model, node, GetCurMethodSemanticInfo());
+
             SymbolInfo symInfo = m_Model.GetSymbolInfo(node);
             var sym = symInfo.Symbol;
 
@@ -477,7 +493,7 @@ namespace RoslynTool.CsToDsl
                     else if (propForBasicValueType) {
                         string pname = psym.Name;
                         string cname = ClassInfo.GetFullName(psym.ContainingType);
-                        bool isEnumClass = psym.ContainingType.TypeKind == TypeKind.Enum || cname == SymbolTable.PrefixExternClassName("System.Enum");
+                        bool isEnumClass = psym.ContainingType.TypeKind == TypeKind.Enum || cname == "System.Enum";
                         string ckey = InvocationInfo.CalcInvokeTarget(isEnumClass, cname, this, node.Expression, m_Model);
                         CodeBuilder.AppendFormat("getforbasicvalue(");
                         OutputExpressionSyntax(node.Expression);
@@ -901,6 +917,8 @@ namespace RoslynTool.CsToDsl
             if (null != objectCreate) {
                 var typeSymInfo = objectCreate.Type;
                 var sym = objectCreate.Constructor;
+
+                TypeChecker.CheckType(typeSymInfo, node, GetCurMethodSemanticInfo());
 
                 string fullTypeName = ClassInfo.GetFullName(typeSymInfo);
                 var namedTypeSym = typeSymInfo as INamedTypeSymbol;

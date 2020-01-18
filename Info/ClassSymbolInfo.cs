@@ -54,7 +54,7 @@ namespace RoslynTool.CsToDsl
 
             ClassKey = ClassInfo.GetFullName(typeSym);
             BaseClassKey = ClassInfo.GetFullName(typeSym.BaseType);
-            if (BaseClassKey == SymbolTable.PrefixExternClassName("System.Object") || BaseClassKey == SymbolTable.PrefixExternClassName("System.ValueType"))
+            if (BaseClassKey == "System.Object" || BaseClassKey == "System.ValueType")
                 BaseClassKey = string.Empty;
             ExistConstructor = false;
             ExistStaticConstructor = false;

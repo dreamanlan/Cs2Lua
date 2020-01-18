@@ -254,7 +254,7 @@ namespace RoslynTool.CsToDsl
 
             bool haveSemanticError = false;
             bool haveTranslationError = false;
-            SymbolTable.Instance.Init(compilation);
+            SymbolTable.Instance.Init(compilation, exepath);
             SymbolTable.Instance.AddRequire("cs2dsl__custom", "cs2dsl__custom");
             Dictionary<string, INamedTypeSymbol> ignoredClasses = new Dictionary<string, INamedTypeSymbol>();
             Dictionary<string, MergedClassInfo> toplevelClasses = new Dictionary<string, MergedClassInfo>();
@@ -1575,7 +1575,7 @@ namespace RoslynTool.CsToDsl
             var classes = mci.Classes;
             foreach (var ci in classes) {
                 foreach (string r in ci.References) {
-                    if (!r.StartsWith(SymbolTable.PrefixExternClassName("System.")) && !r.StartsWith(SymbolTable.PrefixExternClassName("UnityEngine."))) {
+                    if (!r.StartsWith("System.") && !r.StartsWith("UnityEngine.")) {
                         string refname = r.Replace(".", "__");
                         if (!refs.Contains(refname)) {
                             sb.AppendFormat("require(\"{0}\");", refname.ToLower());

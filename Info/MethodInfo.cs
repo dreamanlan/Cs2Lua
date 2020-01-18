@@ -104,7 +104,7 @@ namespace RoslynTool.CsToDsl
 
             if (!sym.ReturnsVoid) {
                 var returnType = ClassInfo.GetFullName(sym.ReturnType);
-                if (returnType.StartsWith(SymbolTable.PrefixExternClassName("System.Collections")) && (sym.ReturnType.Name == "IEnumerable" || sym.ReturnType.Name == "IEnumerator")) {
+                if (returnType.StartsWith("System.Collections") && (sym.ReturnType.Name == "IEnumerable" || sym.ReturnType.Name == "IEnumerator")) {
                     var analysis = new YieldAnalysis();
                     analysis.Visit(node);
                     ExistYield = analysis.YieldCount > 0;

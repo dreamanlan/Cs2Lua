@@ -77,6 +77,30 @@ namespace RoslynTool.CsToDsl
         {
             get { return m_CheckedInvocations; }
         }
+        internal HashSet<string> IllegalGenericTypes
+        {
+            get { return m_IllegalGenericTypes; }
+        }
+        internal HashSet<string> IllegalGenericMethods
+        {
+            get { return m_IllegalGenericMethods; }
+        }
+        internal HashSet<string> IllegalParameterGenericTypes
+        {
+            get { return m_IllegalParameterGenericTypes; }
+        }
+        internal HashSet<string> IllegalExtensions
+        {
+            get { return m_IllegalExtensions; }
+        }
+        internal Dictionary<string, HashSet<string>> IllegalConvertions
+        {
+            get { return m_IllegalConvertions; }
+        }
+        internal HashSet<string> AccessMemberOfIllegalGenericTypes
+        {
+            get { return m_AccessMemberOfIllegalGenericTypes; }
+        }
         internal void SetTypeParamsAndArgs(List<ITypeParameterSymbol> typeParams, List<ITypeSymbol> typeArgs, INamedTypeSymbol refType)
         {
             m_TypeParameters.Clear();
@@ -155,14 +179,257 @@ namespace RoslynTool.CsToDsl
         {
             return sym.ContainingAssembly == m_AssemblySymbol && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym, true));
         }
-        internal void Init(CSharpCompilation compilation)
+        internal void Init(CSharpCompilation compilation, string cfgPath)
         {
             m_Compilation = compilation;
             m_AssemblySymbol = compilation.Assembly;
             INamespaceSymbol nssym = m_AssemblySymbol.GlobalNamespace;
             BuildInheritTypeTreeRecursively(nssym);
             InitRecursively(nssym);
+
+            Dsl.DslFile dslFile = new Dsl.DslFile();
+            if (dslFile.Load(Path.Combine(cfgPath, "rewriter.dsl"), (msg) => { Console.WriteLine(msg); })) {
+                foreach (var info in dslFile.DslInfos) {
+                    var call = info.First.Call;
+                    var fid = info.GetId();
+                    if (fid != "config")
+                        continue;
+                    var cid = call.GetParamId(0);
+                    if (cid == "LegalGenericTypeList") {
+                        foreach (var comp in info.First.Statements) {
+                            var cd = comp as Dsl.CallData;
+                            if (null != cd) {
+                                var mid = cd.GetId();
+                                if (mid == "type") {
+                                    var v1 = cd.GetParamId(0);
+                                    if (!m_LegalGenericTypes.Contains(v1)) {
+                                        m_LegalGenericTypes.Add(v1);
+                                    }
+                                }
+                            }
+                        }
+                    } else if (cid == "LegalGenericMethodList") {
+                        foreach (var comp in info.First.Statements) {
+                            var cd = comp as Dsl.CallData;
+                            if (null != cd) {
+                                var mid = cd.GetId();
+                                if (mid == "method") {
+                                    var v1 = cd.GetParamId(0);
+                                    var v2 = cd.GetParamId(0);
+                                    var v = string.Format("{0}.{1}", v1, v2);
+                                    if (!m_LegalGenericMethods.Contains(v)) {
+                                        m_LegalGenericMethods.Add(v);
+                                    }
+                                }
+                            }
+                        }
+                    } else if (cid == "LegalParameterGenericTypeList") {
+                        foreach (var comp in info.First.Statements) {
+                            var cd = comp as Dsl.CallData;
+                            if (null != cd) {
+                                var mid = cd.GetId();
+                                if (mid == "type") {
+                                    var v1 = cd.GetParamId(0);
+                                    if (!m_LegalParameterGenericTypes.Contains(v1)) {
+                                        m_LegalParameterGenericTypes.Add(v1);
+                                    }
+                                }
+                            }
+                        }
+                    } else if (cid == "LegalExtensionList") {
+                        foreach (var comp in info.First.Statements) {
+                            var cd = comp as Dsl.CallData;
+                            if (null != cd) {
+                                var mid = cd.GetId();
+                                if (mid == "type") {
+                                    var v1 = cd.GetParamId(0);
+                                    if (!m_LegalExtensions.Contains(v1)) {
+                                        m_LegalExtensions.Add(v1);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (cid == "LegalConvertionList") {
+                        foreach (var comp in info.First.Statements) {
+                            var cd = comp as Dsl.CallData;
+                            if (null != cd) {
+                                var mid = cd.GetId();
+                                if (mid == "convertion") {
+                                    var v1 = cd.GetParamId(0);
+                                    var v2 = cd.GetParamId(1);
+                                    HashSet<string> targets;
+                                    if(!m_LegalConvertions.TryGetValue(v1, out targets)) {
+                                        targets = new HashSet<string>();
+                                        m_LegalConvertions.Add(v1, targets);
+                                    }
+                                    if (!targets.Contains(v2)) {
+                                        targets.Add(v2);
+                                    }
+                                }
+                            }
+                        }
+                    } else if (cid == "IllegalTypeList") {
+                        foreach (var comp in info.First.Statements) {
+                            var cd = comp as Dsl.CallData;
+                            if (null != cd) {
+                                var mid = cd.GetId();
+                                if (mid == "type") {
+                                    var v1 = cd.GetParamId(0);
+                                    if (!m_IllegalTypes.Contains(v1)) {
+                                        m_IllegalTypes.Add(v1);
+                                    }
+                                }
+                            }
+                        }
+                    } else if (cid == "IllegalMethodList") {
+                        foreach (var comp in info.First.Statements) {
+                            var cd = comp as Dsl.CallData;
+                            if (null != cd) {
+                                var mid = cd.GetId();
+                                if (mid == "method") {
+                                    var v1 = cd.GetParamId(0);
+                                    var v2 = cd.GetParamId(0);
+                                    var v = string.Format("{0}.{1}", v1, v2);
+                                    if (!m_IllegalMethods.Contains(v)) {
+                                        m_IllegalMethods.Add(v);
+                                    }
+                                }
+                            }
+                        }
+                    } else if (cid == "IllegalPropertyList") {
+                        foreach (var comp in info.First.Statements) {
+                            var cd = comp as Dsl.CallData;
+                            if (null != cd) {
+                                var mid = cd.GetId();
+                                if (mid == "property") {
+                                    var v1 = cd.GetParamId(0);
+                                    var v2 = cd.GetParamId(0);
+                                    var v = string.Format("{0}.{1}", v1, v2);
+                                    if (!m_IllegalProperties.Contains(v)) {
+                                        m_IllegalProperties.Add(v);
+                                    }
+                                }
+                            }
+                        }
+                    } else if (cid == "IllegalFieldList") {
+                        foreach (var comp in info.First.Statements) {
+                            var cd = comp as Dsl.CallData;
+                            if (null != cd) {
+                                var mid = cd.GetId();
+                                if (mid == "field") {
+                                    var v1 = cd.GetParamId(0);
+                                    var v2 = cd.GetParamId(0);
+                                    var v = string.Format("{0}.{1}", v1, v2);
+                                    if (!m_IllegalFields.Contains(v)) {
+                                        m_IllegalFields.Add(v);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }            
+
         }
+		
+        internal bool IsLegalGenericType(INamedTypeSymbol sym)
+        {
+            return IsLegalGenericType(sym, false);
+        }
+        internal bool IsLegalGenericType(INamedTypeSymbol sym, bool isAccessMember)
+        {
+            var name = ClassInfo.GetFullName(sym);
+            bool ret = m_LegalGenericTypes.Contains(name);
+            if (!ret) {
+                if (isAccessMember) {
+                    if (!m_AccessMemberOfIllegalGenericTypes.Contains(name)) {
+                        m_AccessMemberOfIllegalGenericTypes.Add(name);
+                    }
+                } else {
+                    if (!m_IllegalGenericTypes.Contains(name)) {
+                        m_IllegalGenericTypes.Add(name);
+                    }
+                }
+            }
+            return ret;
+        }
+        internal bool IsLegalGenericMethod(IMethodSymbol sym)
+        {
+            var type = ClassInfo.GetFullName(sym.ContainingType);
+            var name = sym.Name;
+            var fullName = string.Format("{0}.{1}", type, name);
+            bool ret = m_LegalGenericMethods.Contains(fullName);
+            if (!ret) {
+                if (!m_IllegalGenericMethods.Contains(fullName)) {
+                    m_IllegalGenericMethods.Add(fullName);
+                }
+            }
+            return ret;
+        }
+        internal bool IsLegalParameterGenericType(INamedTypeSymbol sym)
+        {
+            var name = ClassInfo.GetFullName(sym);
+            bool ret = m_LegalParameterGenericTypes.Contains(name);
+            if (!ret) {
+                if (!m_IllegalParameterGenericTypes.Contains(name)) {
+                    m_IllegalParameterGenericTypes.Add(name);
+                }
+            }
+            return ret;
+        }
+        internal bool IsLegalExtension(INamedTypeSymbol sym)
+        {
+            var name = ClassInfo.GetFullName(sym);
+            bool ret = m_LegalExtensions.Contains(name);
+            if (!ret) {
+                if (!m_IllegalExtensions.Contains(name)) {
+                    m_IllegalExtensions.Add(name);
+                }
+            }
+            return ret;
+        }
+        internal bool IsLegalConvertion(INamedTypeSymbol srcSym, INamedTypeSymbol targetSym)
+        {
+            var srcName = ClassInfo.GetFullName(srcSym);
+            var targetName = ClassInfo.GetFullName(targetSym);
+            bool ret = false;
+            HashSet<string> targets;
+            if(m_LegalConvertions.TryGetValue(srcName, out targets)) {
+                ret = targets.Contains(targetName);
+            }
+            return ret;
+        }
+        internal bool IsIllegalType(INamedTypeSymbol sym)
+        {
+            var name = ClassInfo.GetFullName(sym);
+            return m_IllegalTypes.Contains(name);
+        }
+        internal bool IsIllegalMethod(IMethodSymbol sym)
+        {
+            var type = ClassInfo.GetFullName(sym.ContainingType);
+            var name = sym.Name;
+            var fullName = string.Format("{0}.{1}", type, name);
+            bool ret = m_IllegalMethods.Contains(fullName);
+            return ret;
+        }
+        internal bool IsIllegalProperty(IPropertySymbol sym)
+        {
+            var type = ClassInfo.GetFullName(sym.ContainingType);
+            var name = sym.Name;
+            var fullName = string.Format("{0}.{1}", type, name);
+            bool ret = m_IllegalProperties.Contains(fullName);
+            return ret;
+        }
+        internal bool IsIllegalField(IFieldSymbol sym)
+        {
+            var type = ClassInfo.GetFullName(sym.ContainingType);
+            var name = sym.Name;
+            var fullName = string.Format("{0}.{1}", type, name);
+            bool ret = m_IllegalFields.Contains(fullName);
+            return ret;
+        }
+        
         internal void AddRequire(string refClass, string moduleName)
         {
             lock (m_Requires) {
@@ -321,7 +588,7 @@ namespace RoslynTool.CsToDsl
             var baseType = typeSym.BaseType;
             if (null != baseType) {
                 string baseClassKey = ClassInfo.GetFullName(baseType);
-                if (baseClassKey == SymbolTable.PrefixExternClassName("System.Object") || baseClassKey == SymbolTable.PrefixExternClassName("System.ValueType")) {
+                if (baseClassKey == "System.Object" || baseClassKey == "System.ValueType") {
                 }
                 else {
                     TypeTreeNode baseTypeTreeNode;
@@ -392,6 +659,26 @@ namespace RoslynTool.CsToDsl
         }
         private Dictionary<string, TypeTreeNode> m_TypeTreeNodes = new Dictionary<string, TypeTreeNode>();
         private HashSet<string> m_CheckedInvocations = new HashSet<string>();
+		
+		private HashSet<string> m_LegalGenericTypes = new HashSet<string>();
+        private HashSet<string> m_LegalGenericMethods = new HashSet<string>();
+        private HashSet<string> m_LegalParameterGenericTypes = new HashSet<string>();
+        private HashSet<string> m_LegalExtensions = new HashSet<string>();
+        private Dictionary<string, HashSet<string>> m_LegalConvertions = new Dictionary<string, HashSet<string>>();
+
+        private HashSet<string> m_IllegalTypes = new HashSet<string>();
+        private HashSet<string> m_IllegalMethods = new HashSet<string>();
+        private HashSet<string> m_IllegalProperties = new HashSet<string>();
+        private HashSet<string> m_IllegalFields = new HashSet<string>();
+
+        private HashSet<string> m_IllegalGenericTypes = new HashSet<string>();
+        private HashSet<string> m_IllegalGenericMethods = new HashSet<string>();
+        private HashSet<string> m_IllegalParameterGenericTypes = new HashSet<string>();
+        private HashSet<string> m_IllegalExtensions = new HashSet<string>();
+        private Dictionary<string, HashSet<string>> m_IllegalConvertions = new Dictionary<string, HashSet<string>>();
+
+        private HashSet<string> m_AccessMemberOfIllegalGenericTypes = new HashSet<string>();
+
 
         internal static SymbolTable Instance
         {
@@ -580,7 +867,7 @@ namespace RoslynTool.CsToDsl
         {
             bool ret = false;
             if (null != sym && !sym.IsStatic && null != sym.ContainingType) {
-                if (sym.ContainingType.TypeKind == TypeKind.Enum || ClassInfo.GetFullName(sym.ContainingType) == SymbolTable.PrefixExternClassName("System.Enum")) {
+                if (sym.ContainingType.TypeKind == TypeKind.Enum || ClassInfo.GetFullName(sym.ContainingType) == "System.Enum") {
                     ret = true;
                 }
                 else {
@@ -594,7 +881,7 @@ namespace RoslynTool.CsToDsl
         {
             bool ret = false;
             if (null != sym && !sym.IsStatic && null != sym.ContainingType) {
-                if (sym.ContainingType.TypeKind == TypeKind.Enum || ClassInfo.GetFullName(sym.ContainingType) == SymbolTable.PrefixExternClassName("System.Enum")) {
+                if (sym.ContainingType.TypeKind == TypeKind.Enum || ClassInfo.GetFullName(sym.ContainingType) == "System.Enum") {
                     ret = true;
                 }
                 else {
@@ -611,7 +898,7 @@ namespace RoslynTool.CsToDsl
         internal static bool IsBasicType(ITypeSymbol type, bool includeString)
         {
             bool ret = false;
-            if (type.TypeKind == TypeKind.Enum || ClassInfo.GetFullName(type) == SymbolTable.PrefixExternClassName("System.Enum")) {
+            if (type.TypeKind == TypeKind.Enum || ClassInfo.GetFullName(type) == "System.Enum") {
                 ret = true;
             }
             else {
@@ -622,15 +909,14 @@ namespace RoslynTool.CsToDsl
         }
         internal static bool IsBasicType(string type, bool includeString)
         {
-            string t = UnPrefixExternClassName(type);
-            if (includeString && t == "System.String")
+            if (includeString && type == "System.String")
                 return true;
-            return s_BasicTypes.Contains(t);
+            return s_BasicTypes.Contains(type);
         }
         internal static bool IsIntegerType(ITypeSymbol type)
         {
             bool ret = false;
-            if (type.TypeKind == TypeKind.Enum || ClassInfo.GetFullName(type) == SymbolTable.PrefixExternClassName("System.Enum")) {
+            if (type.TypeKind == TypeKind.Enum || ClassInfo.GetFullName(type) == "System.Enum") {
                 ret = true;
             }
             else {
@@ -641,28 +927,7 @@ namespace RoslynTool.CsToDsl
         }
         internal static bool IsIntegerType(string type)
         {
-            string t = UnPrefixExternClassName(type);
-            return s_IntegerTypes.Contains(t);
-        }
-        internal static string PrefixExternClassName(string cn)
-        {
-            string prefix = s_ExternClassNamePrefix;
-            if (string.IsNullOrEmpty(prefix))
-                return cn;
-            else
-                return prefix + cn;
-        }
-        internal static string UnPrefixExternClassName(string cn)
-        {
-            string prefix = s_ExternClassNamePrefix;
-            if (cn.StartsWith(prefix))
-                return cn.Substring(prefix.Length);
-            else
-                return cn;
-        }
-        internal static void SetExternClassNamePrefix(string val)
-        {
-            s_ExternClassNamePrefix = val;
+            return s_IntegerTypes.Contains(type);
         }
         internal static ITypeSymbol GetElementType(ITypeSymbol typeSym)
         {
@@ -768,7 +1033,6 @@ namespace RoslynTool.CsToDsl
             }
         }
 
-        private static string s_ExternClassNamePrefix = string.Empty;
         private static bool s_NoAutoRequire = false;
         private static bool s_DslComponentByString = false;
         private static bool s_UseArrayGetSet = false;

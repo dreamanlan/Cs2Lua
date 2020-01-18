@@ -70,7 +70,7 @@ namespace RoslynTool.CsToDsl
 
             Key = GetFullName(sym);
             BaseKey = GetFullName(sym.BaseType);
-            if (BaseKey == SymbolTable.PrefixExternClassName("System.Object") || BaseKey == SymbolTable.PrefixExternClassName("System.ValueType")) {
+            if (BaseKey == "System.Object" || BaseKey == "System.ValueType") {
                 BaseKey = string.Empty;
             }
 
@@ -221,7 +221,7 @@ namespace RoslynTool.CsToDsl
                 return false;
             foreach (var attr in sym.GetAttributes()) {
                 string fn = GetFullName(attr.AttributeClass);
-                if (fn == fullName || fn == SymbolTable.PrefixExternClassName(fullName))
+                if (fn == fullName)
                     return true;
             }
             return false;
@@ -232,7 +232,7 @@ namespace RoslynTool.CsToDsl
                 return default(T);
             foreach (var attr in sym.GetAttributes()) {
                 string fn = GetFullName(attr.AttributeClass);
-                if (fn == fullName || fn == SymbolTable.PrefixExternClassName(fullName)) {
+                if (fn == fullName) {
                     var args = attr.NamedArguments;
                     foreach (var pair in args) {
                         if (pair.Key == argName) {
@@ -250,7 +250,7 @@ namespace RoslynTool.CsToDsl
                 return default(T);
             foreach (var attr in sym.GetAttributes()) {
                 string fn = GetFullName(attr.AttributeClass);
-                if (fn == fullName || fn == SymbolTable.PrefixExternClassName(fullName)) {
+                if (fn == fullName) {
                     var args = attr.ConstructorArguments;
                     int ct = args.Length;
                     if (index >= 0 && index < ct) {
@@ -267,7 +267,7 @@ namespace RoslynTool.CsToDsl
                 return null;
             foreach (var attr in sym.GetAttributes()) {
                 string fn = GetFullName(attr.AttributeClass);
-                if (fn == fullName || fn == SymbolTable.PrefixExternClassName(fullName)) {
+                if (fn == fullName) {
                     var args = attr.ConstructorArguments;
                     int ct = args.Length;
                     if (index >= 0 && index < ct) {
@@ -293,7 +293,7 @@ namespace RoslynTool.CsToDsl
             }
             else {
                 //外部类型不会基于泛型样式导入，只有使用脚本语言实现的集合类会出现这种情况，这里需要用泛型类型名以与lualib.dsl里的名称一致
-                return SymbolTable.PrefixExternClassName(CalcFullNameWithTypeParameters(type, true));
+                return CalcFullNameWithTypeParameters(type, true);
             }
         }
         //专门用于SymbolTable::IsCs2DslSymbol与分析外部文件的类定义时使用的函数(防止递归调用与数据构建过程中查询数据)
@@ -302,27 +302,17 @@ namespace RoslynTool.CsToDsl
             if (null == type)
                 return string.Empty;
             if (type.ContainingAssembly == SymbolTable.Instance.AssemblySymbol) {
-                if (isExtern) {
-                    return SymbolTable.PrefixExternClassName(CalcFullName(type, true));
-                }
-                else {
-                    return CalcFullName(type, true);
-                }
+                return CalcFullName(type, true);
             }
             else {
-                return SymbolTable.PrefixExternClassName(CalcFullNameWithTypeParameters(type, true));
+                return CalcFullNameWithTypeParameters(type, true);
             }
         }
         internal static string SpecialGetFullTypeNameWithTypeParameters(ISymbol type)
         {
             if (null == type)
                 return string.Empty;
-            if (type.ContainingAssembly == SymbolTable.Instance.AssemblySymbol) {
-                return CalcFullNameWithTypeParameters(type, true);
-            }
-            else {
-                return SymbolTable.PrefixExternClassName(CalcFullNameWithTypeParameters(type, true));
-            }
+            return CalcFullNameWithTypeParameters(type, true);
         }
         internal static string GetNamespaces(ISymbol type)
         {
@@ -339,12 +329,7 @@ namespace RoslynTool.CsToDsl
         {
             if (null == type)
                 return string.Empty;
-            if (SymbolTable.Instance.IsCs2DslSymbol(type)) {
-                return CalcFullNameWithTypeParameters(type, true);
-            }
-            else {
-                return SymbolTable.PrefixExternClassName(CalcFullNameWithTypeParameters(type, true));
-            }
+            return CalcFullNameWithTypeParameters(type, true);
         }
         internal static string GetNamespacesWithTypeParameters(ISymbol type)
         {

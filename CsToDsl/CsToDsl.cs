@@ -724,7 +724,7 @@ namespace RoslynTool.CsToDsl
                 }
                 else if (type.TypeKind == TypeKind.Array) {
                     var arrType = type as IArrayTypeSymbol;
-                    CodeBuilder.Append(SymbolTable.PrefixExternClassName("System.Array"));
+                    CodeBuilder.Append("System.Array");
                 }
                 else if (type.TypeKind == TypeKind.Delegate) {
                     var fullName = ClassInfo.GetFullName(type);

@@ -106,7 +106,7 @@ namespace RoslynTool.CsToDsl
 
             if (!m_EnableInherit && !ClassInfo.HasAttribute(declSym, "Cs2Dsl.EnableInheritAttribute") && !ClassInfo.HasAttribute(declSym.BaseType, "Cs2Dsl.EnableInheritAttribute")) {
                 string fullBaseClassName = null != declSym.BaseType ? ClassInfo.GetFullName(declSym.BaseType) : string.Empty;
-                if (!string.IsNullOrEmpty(fullBaseClassName) && fullBaseClassName != SymbolTable.PrefixExternClassName("System.Object") && fullBaseClassName != SymbolTable.PrefixExternClassName("System.ValueType")) {
+                if (!string.IsNullOrEmpty(fullBaseClassName) && fullBaseClassName != "System.Object" && fullBaseClassName != "System.ValueType") {
                     Log(node, "Cs2Dsl class/struct can't inherit !");
                 }
             }
@@ -741,13 +741,18 @@ namespace RoslynTool.CsToDsl
             var declSym = m_Model.GetDeclaredSymbol(node) as ILocalSymbol;
             var namedTypeSym = null != declSym ? declSym.Type as INamedTypeSymbol : null;
             if (null != node.Initializer) {
-                var oper = m_Model.GetOperation(node.Initializer) as IVariableDeclarationStatement;
+                var init = node.Initializer;
+                var srcOper = m_Model.GetOperation(init.Value);
+                if (null != srcOper) {
+                    TypeChecker.CheckConvert(srcOper.Type, namedTypeSym, node, GetCurMethodSemanticInfo());
+                }
+                var oper = m_Model.GetOperation(init) as IVariableDeclarationStatement;
                 IConversionExpression opd = null;
                 if (null != oper && oper.Variables.Length == 1) {
                     opd = oper.Variables[0].InitialValue as IConversionExpression;
                 }
-                var token = node.Initializer.EqualsToken;
-                var invocation = node.Initializer.Value as InvocationExpressionSyntax;
+                var token = init.EqualsToken;
+                var invocation = init.Value as InvocationExpressionSyntax;
                 if (null != invocation) {
                     string localName = string.Format("__localdecl_{0}", GetSourcePosForVar(invocation));
                     SymbolInfo symInfo = m_Model.GetSymbolInfo(invocation);
@@ -820,7 +825,6 @@ namespace RoslynTool.CsToDsl
                 else {
                     CodeBuilder.AppendFormat("{0}local({1}); {2}", GetIndentString(), node.Identifier.Text, node.Identifier.Text);
                     CodeBuilder.AppendFormat(" {0} ", token.Text);
-                    var init = node.Initializer;
                     OutputExpressionSyntax(init.Value, opd);
                 }
             }
@@ -868,7 +872,7 @@ namespace RoslynTool.CsToDsl
             }
             else if (specialType == SpecialAssignmentType.PropForBasicValueType) {
                 string className = ClassInfo.GetFullName(leftPsym.ContainingType);
-                bool isEnumClass = leftPsym.ContainingType.TypeKind == TypeKind.Enum || className == SymbolTable.PrefixExternClassName("System.Enum");
+                bool isEnumClass = leftPsym.ContainingType.TypeKind == TypeKind.Enum || className == "System.Enum";
                 string pname = leftPsym.Name;
                 string ckey = InvocationInfo.CalcInvokeTarget(isEnumClass, className, this, leftMemberAccess.Expression, m_Model);
                 CodeBuilder.AppendFormat("setforbasicvalue(");
