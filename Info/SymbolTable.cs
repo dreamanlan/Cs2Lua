@@ -191,7 +191,7 @@ namespace RoslynTool.CsToDsl
                                 var mid = cd.GetId();
                                 if (mid == "method") {
                                     var v1 = cd.GetParamId(0);
-                                    var v2 = cd.GetParamId(0);
+                                    var v2 = cd.GetParamId(1);
                                     var v = string.Format("{0}.{1}", v1, v2);
                                     if (!m_LegalGenericMethods.Contains(v)) {
                                         m_LegalGenericMethods.Add(v);
@@ -265,7 +265,7 @@ namespace RoslynTool.CsToDsl
                                 var mid = cd.GetId();
                                 if (mid == "method") {
                                     var v1 = cd.GetParamId(0);
-                                    var v2 = cd.GetParamId(0);
+                                    var v2 = cd.GetParamId(1);
                                     var v = string.Format("{0}.{1}", v1, v2);
                                     if (!m_IllegalMethods.Contains(v)) {
                                         m_IllegalMethods.Add(v);
@@ -280,7 +280,7 @@ namespace RoslynTool.CsToDsl
                                 var mid = cd.GetId();
                                 if (mid == "property") {
                                     var v1 = cd.GetParamId(0);
-                                    var v2 = cd.GetParamId(0);
+                                    var v2 = cd.GetParamId(1);
                                     var v = string.Format("{0}.{1}", v1, v2);
                                     if (!m_IllegalProperties.Contains(v)) {
                                         m_IllegalProperties.Add(v);
@@ -295,7 +295,7 @@ namespace RoslynTool.CsToDsl
                                 var mid = cd.GetId();
                                 if (mid == "field") {
                                     var v1 = cd.GetParamId(0);
-                                    var v2 = cd.GetParamId(0);
+                                    var v2 = cd.GetParamId(1);
                                     var v = string.Format("{0}.{1}", v1, v2);
                                     if (!m_IllegalFields.Contains(v)) {
                                         m_IllegalFields.Add(v);

@@ -12,7 +12,7 @@ config(LegalGenericTypeList)
 };
 config(LegalGenericMethodList)
 {
-    method("UnityEngine.GameObject.GetComponentsInChildren");
+    method("UnityEngine.GameObject","GetComponentsInChildren");
 };
 config(LegalParameterGenericTypeList)
 {
