@@ -45,7 +45,7 @@ namespace RoslynTool.CsToDsl
         {
             get { return m_Requires; }
         }
-        public SortedSet<string> ReferencedExternTypes
+        internal SortedSet<string> ReferencedExternTypes
         {
             get { return m_ReferencedExternTypes; }
         }
@@ -76,30 +76,6 @@ namespace RoslynTool.CsToDsl
         internal HashSet<string> CheckedInvocations
         {
             get { return m_CheckedInvocations; }
-        }
-        internal HashSet<string> IllegalGenericTypes
-        {
-            get { return m_IllegalGenericTypes; }
-        }
-        internal HashSet<string> IllegalGenericMethods
-        {
-            get { return m_IllegalGenericMethods; }
-        }
-        internal HashSet<string> IllegalParameterGenericTypes
-        {
-            get { return m_IllegalParameterGenericTypes; }
-        }
-        internal HashSet<string> IllegalExtensions
-        {
-            get { return m_IllegalExtensions; }
-        }
-        internal Dictionary<string, HashSet<string>> IllegalConvertions
-        {
-            get { return m_IllegalConvertions; }
-        }
-        internal HashSet<string> AccessMemberOfIllegalGenericTypes
-        {
-            get { return m_AccessMemberOfIllegalGenericTypes; }
         }
         internal void SetTypeParamsAndArgs(List<ITypeParameterSymbol> typeParams, List<ITypeSymbol> typeArgs, INamedTypeSymbol refType)
         {
@@ -341,16 +317,9 @@ namespace RoslynTool.CsToDsl
         {
             var name = ClassInfo.GetFullName(sym);
             bool ret = m_LegalGenericTypes.Contains(name);
-            if (!ret) {
-                if (isAccessMember) {
-                    if (!m_AccessMemberOfIllegalGenericTypes.Contains(name)) {
-                        m_AccessMemberOfIllegalGenericTypes.Add(name);
-                    }
-                } else {
-                    if (!m_IllegalGenericTypes.Contains(name)) {
-                        m_IllegalGenericTypes.Add(name);
-                    }
-                }
+            if (!ret && sym.IsGenericType) {                
+                name = CalcFullNameAndTypeArguments(name, sym);
+                ret = m_LegalGenericTypes.Contains(name);
             }
             return ret;
         }
@@ -360,21 +329,15 @@ namespace RoslynTool.CsToDsl
             var name = sym.Name;
             var fullName = string.Format("{0}.{1}", type, name);
             bool ret = m_LegalGenericMethods.Contains(fullName);
-            if (!ret) {
-                if (!m_IllegalGenericMethods.Contains(fullName)) {
-                    m_IllegalGenericMethods.Add(fullName);
-                }
-            }
             return ret;
         }
         internal bool IsLegalParameterGenericType(INamedTypeSymbol sym)
         {
             var name = ClassInfo.GetFullName(sym);
             bool ret = m_LegalParameterGenericTypes.Contains(name);
-            if (!ret) {
-                if (!m_IllegalParameterGenericTypes.Contains(name)) {
-                    m_IllegalParameterGenericTypes.Add(name);
-                }
+            if (!ret && sym.IsGenericType) {
+                name = CalcFullNameAndTypeArguments(name, sym);
+                ret = m_LegalParameterGenericTypes.Contains(name);
             }
             return ret;
         }
@@ -382,11 +345,6 @@ namespace RoslynTool.CsToDsl
         {
             var name = ClassInfo.GetFullName(sym);
             bool ret = m_LegalExtensions.Contains(name);
-            if (!ret) {
-                if (!m_IllegalExtensions.Contains(name)) {
-                    m_IllegalExtensions.Add(name);
-                }
-            }
             return ret;
         }
         internal bool IsLegalConvertion(INamedTypeSymbol srcSym, INamedTypeSymbol targetSym)
@@ -398,12 +356,34 @@ namespace RoslynTool.CsToDsl
             if(m_LegalConvertions.TryGetValue(srcName, out targets)) {
                 ret = targets.Contains(targetName);
             }
+            string newTargetName = null;
+            if (!ret && null != targets && targetSym.IsGenericType) {
+                newTargetName = CalcFullNameAndTypeArguments(targetName, targetSym);
+                ret = targets.Contains(newTargetName);
+            }
+            string newSrcName = null;
+            if (!ret && srcSym.IsGenericType) {
+                newSrcName = CalcFullNameAndTypeArguments(srcName, srcSym);
+                if (m_LegalConvertions.TryGetValue(newSrcName, out targets)) {
+                    ret = targets.Contains(targetName);
+                    if(!ret && targetSym.IsGenericType) {
+                        if (null == newTargetName)
+                            newTargetName = CalcFullNameAndTypeArguments(targetName, targetSym);
+                        ret = targets.Contains(newTargetName);
+                    }
+                }
+            }
             return ret;
         }
         internal bool IsIllegalType(INamedTypeSymbol sym)
         {
             var name = ClassInfo.GetFullName(sym);
-            return m_IllegalTypes.Contains(name);
+            var ret = m_IllegalTypes.Contains(name);
+            if (!ret && sym.IsGenericType) {
+                var str = CalcFullNameAndTypeArguments(name, sym);
+                ret = m_IllegalTypes.Contains(str);
+            }
+            return ret;
         }
         internal bool IsIllegalMethod(IMethodSymbol sym)
         {
@@ -428,6 +408,11 @@ namespace RoslynTool.CsToDsl
             var fullName = string.Format("{0}.{1}", type, name);
             bool ret = m_IllegalFields.Contains(fullName);
             return ret;
+        }
+        internal string CalcFullNameAndTypeArguments(INamedTypeSymbol sym)
+        {
+            var name = ClassInfo.GetFullName(sym);
+            return CalcFullNameAndTypeArguments(name, sym);
         }
         
         internal void AddRequire(string refClass, string moduleName)
@@ -564,7 +549,32 @@ namespace RoslynTool.CsToDsl
                 CalcMemberCountRecursively(cnode, memberCounts);
             }
         }
-
+        private string CalcFullNameAndTypeArguments(string name, INamedTypeSymbol sym)
+        {
+            if (sym.IsGenericType) {
+                StringBuilder sb = new StringBuilder();
+                sb.Append(name);
+                sb.Append('|');
+                string prestr = string.Empty;
+                foreach (var ta in sym.TypeArguments) {
+                    sb.Append(prestr);
+                    if (ta.TypeKind == TypeKind.Delegate) {
+                        sb.AppendFormat("\"{0}\"", ClassInfo.GetFullName(ta));
+                    }
+                    else if (ta.TypeKind == TypeKind.TypeParameter) {
+                        sb.Append(ta.Name);
+                    }
+                    else {
+                        sb.Append(ClassInfo.GetFullName(ta));
+                    }
+                    prestr = ", ";
+                }
+                return sb.ToString();
+            }
+            else {
+                return name;
+            }
+        }
         private void BuildInheritTypeTreeRecursively(INamespaceSymbol nssym)
         {
             if (null != nssym) {
@@ -670,15 +680,6 @@ namespace RoslynTool.CsToDsl
         private HashSet<string> m_IllegalMethods = new HashSet<string>();
         private HashSet<string> m_IllegalProperties = new HashSet<string>();
         private HashSet<string> m_IllegalFields = new HashSet<string>();
-
-        private HashSet<string> m_IllegalGenericTypes = new HashSet<string>();
-        private HashSet<string> m_IllegalGenericMethods = new HashSet<string>();
-        private HashSet<string> m_IllegalParameterGenericTypes = new HashSet<string>();
-        private HashSet<string> m_IllegalExtensions = new HashSet<string>();
-        private Dictionary<string, HashSet<string>> m_IllegalConvertions = new Dictionary<string, HashSet<string>>();
-
-        private HashSet<string> m_AccessMemberOfIllegalGenericTypes = new HashSet<string>();
-
 
         internal static SymbolTable Instance
         {

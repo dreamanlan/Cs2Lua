@@ -55,12 +55,12 @@ namespace RoslynTool.CsToDsl
                     if (null != type && !SymbolTable.Instance.IsCs2DslSymbol(type) && type.TypeKind != TypeKind.Delegate) {
                         if (type.IsGenericType) {
                             if (!SymbolTable.Instance.IsLegalParameterGenericType(type)) {
-                                Logger.Instance.Log(node, "unsupported extern type '{0}' from member access !", ClassInfo.GetFullName(type));
+                                Logger.Instance.Log(node, "unsupported extern type '{0}' from member access !", SymbolTable.Instance.CalcFullNameAndTypeArguments(type));
                             }
                         }
                         else {
                             if (SymbolTable.Instance.IsIllegalType(type)) {
-                                Logger.Instance.Log(node, "unsupported extern type '{0}' from member access !", ClassInfo.GetFullName(type));
+                                Logger.Instance.Log(node, "unsupported extern type '{0}' from member access !", SymbolTable.Instance.CalcFullNameAndTypeArguments(type));
                             }
                         }
                     }
@@ -82,12 +82,12 @@ namespace RoslynTool.CsToDsl
             if (null != type && !SymbolTable.Instance.IsCs2DslSymbol(type)) {
                 if (type.IsGenericType) {
                     if (!SymbolTable.Instance.IsLegalGenericType(type)) {
-                        Logger.Instance.Log(node, "unsupported extern generic type '{0}' !", ClassInfo.GetFullName(type));
+                        Logger.Instance.Log(node, "unsupported extern generic type '{0}' !", SymbolTable.Instance.CalcFullNameAndTypeArguments(type));
                     }
                 }
                 else {
                     if (SymbolTable.Instance.IsIllegalType(type)) {
-                        Logger.Instance.Log(node, "unsupported extern type '{0}' !", ClassInfo.GetFullName(type));
+                        Logger.Instance.Log(node, "unsupported extern type '{0}' !", SymbolTable.Instance.CalcFullNameAndTypeArguments(type));
                     }
                 }
             }
@@ -108,12 +108,12 @@ namespace RoslynTool.CsToDsl
             if (null != srcNamedTypeSym && null != targetNamedTypeSym){
                 if (null != srcNamedTypeSym.ContainingType && ClassInfo.GetFullName(srcNamedTypeSym) == "System.Object" && !SymbolTable.Instance.IsCs2DslSymbol(srcNamedTypeSym.ContainingType) && targetNamedTypeSym.TypeKind != TypeKind.Delegate && (targetNamedTypeSym.IsGenericType || SymbolTable.Instance.IsCs2DslSymbol(targetNamedTypeSym))) {
                     if (!SymbolTable.Instance.IsLegalConvertion(srcNamedTypeSym, targetNamedTypeSym)) {
-                        Logger.Instance.Log(node, "can't convert extern type '{0}' to generic type '{1}' !", ClassInfo.GetFullName(srcNamedTypeSym), ClassInfo.GetFullName(targetNamedTypeSym));
+                        Logger.Instance.Log(node, "can't convert extern type '{0}' to generic type '{1}' !", SymbolTable.Instance.CalcFullNameAndTypeArguments(srcNamedTypeSym), SymbolTable.Instance.CalcFullNameAndTypeArguments(targetNamedTypeSym));
                     }
                 }
                 else if (null != targetNamedTypeSym.ContainingType && ClassInfo.GetFullName(targetNamedTypeSym) == "System.Object" && !SymbolTable.Instance.IsCs2DslSymbol(targetNamedTypeSym.ContainingType) && srcNamedTypeSym.TypeKind != TypeKind.Delegate && (srcNamedTypeSym.IsGenericType || SymbolTable.Instance.IsCs2DslSymbol(srcNamedTypeSym))) {
                     if (!SymbolTable.Instance.IsLegalConvertion(srcNamedTypeSym, targetNamedTypeSym)) {
-                        Logger.Instance.Log(node, "can't convert extern type '{0}' to generic type '{1}' !", ClassInfo.GetFullName(srcNamedTypeSym), ClassInfo.GetFullName(targetNamedTypeSym));
+                        Logger.Instance.Log(node, "can't convert extern type '{0}' to generic type '{1}' !", SymbolTable.Instance.CalcFullNameAndTypeArguments(srcNamedTypeSym), SymbolTable.Instance.CalcFullNameAndTypeArguments(targetNamedTypeSym));
                     }
                 }
                 else if (srcNamedTypeSym.TypeKind == TypeKind.Delegate || targetNamedTypeSym.TypeKind == TypeKind.Delegate) {
@@ -121,12 +121,12 @@ namespace RoslynTool.CsToDsl
                 }
                 else if (!srcNamedTypeSym.IsGenericType && !SymbolTable.Instance.IsCs2DslSymbol(srcNamedTypeSym) && targetNamedTypeSym.IsGenericType) {
                     if (!SymbolTable.Instance.IsLegalConvertion(srcNamedTypeSym, targetNamedTypeSym)) {
-                        Logger.Instance.Log(node, "can't convert extern type '{0}' to generic type '{1}' !", ClassInfo.GetFullName(srcNamedTypeSym), ClassInfo.GetFullName(targetNamedTypeSym));
+                        Logger.Instance.Log(node, "can't convert extern type '{0}' to generic type '{1}' !", SymbolTable.Instance.CalcFullNameAndTypeArguments(srcNamedTypeSym), SymbolTable.Instance.CalcFullNameAndTypeArguments(targetNamedTypeSym));
                     }
                 }
             }
             if (null != targetNamedTypeSym && !SymbolTable.Instance.IsCs2DslSymbol(targetNamedTypeSym) && SymbolTable.Instance.IsIllegalType(targetNamedTypeSym)) {
-                Logger.Instance.Log(node, "unsupported extern type '{0}' !", ClassInfo.GetFullName(targetNamedTypeSym));
+                Logger.Instance.Log(node, "unsupported extern type '{0}' !", SymbolTable.Instance.CalcFullNameAndTypeArguments(targetNamedTypeSym));
             }
         }
         internal static void CheckInvocation(IMethodSymbol sym, IMethodSymbol callerSym)
@@ -173,7 +173,7 @@ namespace RoslynTool.CsToDsl
                         }
                     }
 
-                    if (sym.ContainingType.TypeKind == TypeKind.Delegate || sym.ContainingType.IsGenericType && SymbolTable.Instance.IsLegalGenericType(sym.ContainingType, true)) {
+                    if (sym.ContainingType.TypeKind == TypeKind.Delegate || sym.ContainingType.IsGenericType && SymbolTable.Instance.IsLegalGenericType(sym.ContainingType, true) || sym.IsGenericMethod && SymbolTable.Instance.IsLegalGenericMethod(sym)) {
                         //如果是标记为合法的泛型类或委托类型的成员，则不用再进行类型检查
                     }
                     else {

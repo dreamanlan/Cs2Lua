@@ -12,7 +12,7 @@ config(LegalGenericTypeList)
 };
 config(LegalGenericMethodList)
 {
-    method("");
+    method("UnityEngine.GameObject.GetComponentsInChildren");
 };
 config(LegalParameterGenericTypeList)
 {
@@ -25,6 +25,10 @@ config(LegalExtensionList)
 {
     type("Vector3Extension");
     type("DG.Tweening.TweenExtensions");
+    type("DG.Tweening.TweenSettingsExtensions");
+    type("DG.Tweening.ShortcutExtensions");
+    type("UnityEngine.Playables.PlayableExtensions");
+    type("UniGifExtension");
 };
 config(LegalConvertionList)
 {
