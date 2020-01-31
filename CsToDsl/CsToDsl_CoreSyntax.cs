@@ -1398,12 +1398,13 @@ namespace RoslynTool.CsToDsl
                 return;
             }
             bool isEvent = leftOper is IEventReferenceExpression;
+            //外部的delegation只能是成员，因为delegation类型就是普通的function，这里不能以delegation的类型来判断是否外部类型
             string prefix;
-            if (SymbolTable.Instance.IsCs2DslSymbol(leftSym)) {
-                prefix = string.Empty;
+            if ((leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event) && !SymbolTable.Instance.IsCs2DslSymbol(leftSym.ContainingType)) {
+                prefix = "extern";
             }
             else {
-                prefix = "extern";
+                prefix = string.Empty;                
             }
             string postfix;
             if (op == "=") {

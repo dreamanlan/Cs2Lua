@@ -816,16 +816,27 @@ namespace RoslynTool.CsToDsl
             bool handled = false;
             var leftOper = m_Model.GetOperation(left);
             var rightOper = m_Model.GetOperation(right);
+            //外部的delegation只能是成员，因为delegation类型就是普通的function，这里不能以delegation的类型来判断是否外部类型
             if (null != leftOper && null != rightOper && null != leftOper.Type && leftOper.Type.TypeKind == TypeKind.Delegate && (!leftOper.ConstantValue.HasValue || null != leftOper.ConstantValue.Value) && rightOper.ConstantValue.HasValue && rightOper.ConstantValue.Value == null) {
                 var sym = m_Model.GetSymbolInfo(left);
-                bool isEvent = (null != leftOper && leftOper is IEventReferenceExpression) || (null != rightOper && rightOper is IEventReferenceExpression);
-                OutputDelegationCompareWithNull(sym.Symbol, leftOper, left, SymbolTable.Instance.IsCs2DslSymbol(leftOper.Type), isEvent, op == "==", lopd);
+                var leftSym = sym.Symbol;
+                bool isCs2Lua = true;
+                if (null != leftSym && (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event) && !SymbolTable.Instance.IsCs2DslSymbol(leftSym.ContainingType)) {
+                    isCs2Lua = false;
+                }
+                bool isEvent = (null != leftOper && leftOper is IEventReferenceExpression) || (null != rightOper && rightOper is IEventReferenceExpression);                
+                OutputDelegationCompareWithNull(leftSym, leftOper, left, isCs2Lua, isEvent, op == "==", lopd);
                 handled = true;
             }
             else if (null != leftOper && null != rightOper && null != rightOper.Type && rightOper.Type.TypeKind == TypeKind.Delegate && (!rightOper.ConstantValue.HasValue || null != rightOper.ConstantValue.Value) && leftOper.ConstantValue.HasValue && leftOper.ConstantValue.Value == null) {
                 var sym = m_Model.GetSymbolInfo(right);
+                var rightSym = sym.Symbol;
+                bool isCs2Lua = true;
+                if (null != rightSym && (rightSym.Kind == SymbolKind.Field || rightSym.Kind == SymbolKind.Property || rightSym.Kind == SymbolKind.Event) && !SymbolTable.Instance.IsCs2DslSymbol(rightSym.ContainingType)) {
+                    isCs2Lua = false;
+                }
                 bool isEvent = (null != leftOper && leftOper is IEventReferenceExpression) || (null != rightOper && rightOper is IEventReferenceExpression);
-                OutputDelegationCompareWithNull(sym.Symbol, rightOper, right, SymbolTable.Instance.IsCs2DslSymbol(rightOper.Type), isEvent, op == "==", ropd);
+                OutputDelegationCompareWithNull(rightSym, rightOper, right, isCs2Lua, isEvent, op == "==", ropd);
                 handled = true;
             }
             return handled;

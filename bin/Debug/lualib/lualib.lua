@@ -1087,7 +1087,7 @@ end
 function externdelegationcomparewithnil(isevent, isStatic, key, t, inf, k, isequal)
     local v = t
     if k then
-        v = t[k]
+        return true
     end
     if isequal and not v then
         return true
@@ -1099,7 +1099,6 @@ function externdelegationcomparewithnil(isevent, isStatic, key, t, inf, k, isequ
 end
 function externdelegationset(isevent, isStatic, key, t, intf, k, handler)
     if k then
-        --t[k] = handler;
         return handler
     else
         return handler
@@ -1111,10 +1110,8 @@ function externdelegationadd(isevent, isStatic, key, t, intf, k, handler)
         setexterndelegationfunc(str .. key, handler)
     end
     if k then
-        --t[k] = {"+=", handler};
         return {"+=", handler}
     else
-        --t = {"+=", handler};
         return {"+=", handler}
     end
 end
@@ -1126,10 +1123,8 @@ function externdelegationremove(isevent, isStatic, key, t, intf, k, handler)
     end
     local ret = nil
     if k then
-        --t[k] = {"-=", trueHandler};
         ret = {"-=", trueHandler}
     else
-        --t = {"-=", trueHandler};
         ret = {"-=", trueHandler}
     end
     removedelegationkey(handler)
