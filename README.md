@@ -7,7 +7,7 @@ https://github.com/dreamanlan/Cs2Lua/tree/master/Test
 
 【命令行】
 
-    Cs2Lua [-out dir] [-ext fileext] [-enableinherit] [-enablelinq] [-normallua/-slua/-xlua] [-outputresult] [-noautorequire] [-luacomponentbystring] [-usearraygetset] [-enabletranslationcheck] [-d macro] [-u macro] [-externpath path] [-ignorepath path] [-refbyname dllname alias] [-refbypath dllpath alias] [-systemdllpath dllpath] [-src] csfile|csprojfile
+    Cs2Lua [-out dir] [-ext fileext] [-enableinherit] [-enablelinq] [-outputresult] [-noautorequire] [-luacomponentbystring] [-usearraygetset] [-enabletranslationcheck] [-d macro] [-u macro] [-externpath path] [-ignorepath path] [-refbyname dllname alias] [-refbypath dllpath alias] [-systemdllpath dllpath] [-src] csfile|csprojfile
 
 其中:
 
@@ -22,10 +22,6 @@ https://github.com/dreamanlan/Cs2Lua/tree/master/Test
     alias = 外部dll顶层名空间别名，默认为global, 别名在c#代码里由'extern alias 名字;'语句使用。
     
     enableinherit = 此选项指明是否允许继承。
-
-    normallua = 此选项指明输出为普通lua，此时与slua特定实现相关的语法会关闭（如输出参数调用时传入Slua.out）。
-
-    slua = 此选项默认打开，指明输出lua用于unity3d+slua。
 
     outputresult = 此选项指明是否在控制台输出最终转化的结果（合并为单一文件样式）。
 
@@ -148,7 +144,7 @@ Cs2Lua的输出主要包括：
 
 1、目标是可以不依赖特定的交互机制（相关依赖都在lualib.lua或明确引用的外部lua里，转换工具只处理语法直接支持的语义转换）。
 
-2、目前生成的lua代码能使用的c# API假定由slua导出（可以用命令行开关切换为纯lua, 这时可能需要手写lua代码提供API）。
+2、cs2lua需要对lua的c#封装进行较大修改，目前是基于slua的源码修改的，不能单独使用各类lua的c#运行时实现（现在看来，cs2lua与lua的c#运行时在目标上有很大差异，手写lua更多是支持lua语言的特性，然后只需要允许c#提供lua api即可。自动翻译的lua实际上是使用lua来模拟c#语言的特性，此时需要更多向c#特性靠拢，因此需要对lua的c#运行时进行很多修改以支持c#语言的语言习惯【尽管cs2lua已经限制了c#的很多语法】）。
 
 【基本思路】
 
