@@ -76,6 +76,11 @@ namespace SLua
             list.Add("CustomApi");
         }
         
+        public static void OnGetCustomAssemblyUseList(out HashSet<string> list)
+        {
+            list = new HashSet<string> {
+            };
+        }
         public static void OnGetCustomAssemblyNoUseList(out List<string> list)
         {
             list = new List<string>
@@ -98,7 +103,15 @@ namespace SLua
             "System.IO.Stream.EndWrite",
             "UnityEngine.WWW.GetMovieTexture",
         };
-        // black list if white list not given
+        // white list
+        public static void OnGetUseList(out HashSet<string> list)
+        {
+            list = new HashSet<string>
+            {
+                "UnityEngine.Texture2D"
+            };
+        }
+        // black list
         public static void OnGetNoUseList(out List<string> list)
         {
             list = new List<string>
@@ -156,7 +169,6 @@ namespace SLua
                 "TextureCompressionQuality",
                 "TouchScreenKeyboardType",
                 "TouchScreenKeyboard",
-                "MovieTexture",
                 "UnityEngineInternal",
                 "Terrain",                            
                 "Tree",
