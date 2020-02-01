@@ -387,6 +387,10 @@ namespace RoslynTool.CsToDsl
         }
         internal bool IsIllegalMethod(IMethodSymbol sym)
         {
+            if (sym.MethodKind == MethodKind.DelegateInvoke)
+                return false;
+            if (sym.ContainingType.TypeKind == TypeKind.Delegate && sym.Name != "ToString")
+                return true;
             var type = ClassInfo.GetFullName(sym.ContainingType);
             var name = sym.Name;
             var fullName = string.Format("{0}.{1}", type, name);
@@ -395,6 +399,8 @@ namespace RoslynTool.CsToDsl
         }
         internal bool IsIllegalProperty(IPropertySymbol sym)
         {
+            if (sym.ContainingType.TypeKind == TypeKind.Delegate)
+                return true;
             var type = ClassInfo.GetFullName(sym.ContainingType);
             var name = sym.Name;
             var fullName = string.Format("{0}.{1}", type, name);
@@ -403,6 +409,8 @@ namespace RoslynTool.CsToDsl
         }
         internal bool IsIllegalField(IFieldSymbol sym)
         {
+            if (sym.ContainingType.TypeKind == TypeKind.Delegate)
+                return true;
             var type = ClassInfo.GetFullName(sym.ContainingType);
             var name = sym.Name;
             var fullName = string.Format("{0}.{1}", type, name);

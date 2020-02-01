@@ -14,6 +14,7 @@ namespace RoslynTool.CsToDsl
     {
         internal object Value;
         internal object OperOrSym;
+        internal ExpressionSyntax Expression;
     }
     internal class InvocationInfo
     {
@@ -55,13 +56,18 @@ namespace RoslynTool.CsToDsl
                 var moper = model.GetOperation(argList) as IInvocationExpression;
                 var args = argList.Arguments;
 
-                IConversionExpression lastConv = null;
-                int ct = args.Count;
-                for (int i = 0; i < ct; ++i) {
+                Dictionary<string, ExpressionSyntax> namedArgs = new Dictionary<string, ExpressionSyntax>();
+                int ct = 0;
+                for (int i = 0; i < args.Count; ++i) {
                     var arg = args[i];
                     TryAddExternEnum(IsEnumClass, arg.Expression, model);
-                    if (i < sym.Parameters.Length) {
-                        var param = sym.Parameters[i];
+                    if (null != arg.NameColon) {
+                        namedArgs.Add(arg.NameColon.Name.Identifier.Text, arg.Expression);
+                        continue;
+                    }
+                    IConversionExpression lastConv = null;
+                    if (ct < sym.Parameters.Length) {
+                        var param = sym.Parameters[ct];
                         if (null != moper) {
                             var iarg = moper.GetArgumentMatchingParameter(param);
                             if (null != iarg) {
@@ -82,7 +88,7 @@ namespace RoslynTool.CsToDsl
                         }
                         else if (param.IsParams) {
                             var argOper = model.GetOperation(arg.Expression);
-                            if (null != argOper && null != argOper.Type && argOper.Type.TypeKind == TypeKind.Array && i == ct - 1) {
+                            if (null != argOper && null != argOper.Type && argOper.Type.TypeKind == TypeKind.Array) {
                                 ArrayToParams = true;
                             }
                             Args.Add(arg.Expression);
@@ -90,6 +96,7 @@ namespace RoslynTool.CsToDsl
                         else {
                             Args.Add(arg.Expression);
                         }
+                        ++ct;
                     }
                     else {
                         Args.Add(arg.Expression);
@@ -99,24 +106,38 @@ namespace RoslynTool.CsToDsl
                 for (int i = ct; i < sym.Parameters.Length; ++i) {
                     var param = sym.Parameters[i];
                     if (param.HasExplicitDefaultValue) {
-                        var decl = param.DeclaringSyntaxReferences;
-                        bool handled = false;
-                        if (decl.Length >= 1) {
-                            var node = param.DeclaringSyntaxReferences[0].GetSyntax() as ParameterSyntax;
-                            if (null != node) {
-                                var exp = node.Default.Value;
-                                var tree = node.SyntaxTree;
-                                var newModel = SymbolTable.Instance.Compilation.GetSemanticModel(tree, true);
-                                if (null != newModel) {
-                                    var oper = newModel.GetOperation(exp);
-                                    //var dsym = newModel.GetSymbolInfo(exp).Symbol;
-                                    DefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, OperOrSym = oper });
-                                    handled = true;
-                                }
+                        IConversionExpression lastConv = null;
+                        if (null != moper) {
+                            var iarg = moper.GetArgumentMatchingParameter(param);
+                            if (null != iarg) {
+                                lastConv = iarg.Value as IConversionExpression;
                             }
                         }
-                        if (!handled) {
-                            DefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, OperOrSym = null });
+                        ArgConversions.Add(lastConv);
+                        ExpressionSyntax expval;
+                        if (namedArgs.TryGetValue(param.Name, out expval)) {
+                            DefaultValueArgs.Add(new ArgDefaultValueInfo { Expression = expval });
+                        }
+                        else {
+                            var decl = param.DeclaringSyntaxReferences;
+                            bool handled = false;
+                            if (decl.Length >= 1) {
+                                var node = param.DeclaringSyntaxReferences[0].GetSyntax() as ParameterSyntax;
+                                if (null != node) {
+                                    var exp = node.Default.Value;
+                                    var tree = node.SyntaxTree;
+                                    var newModel = SymbolTable.Instance.Compilation.GetSemanticModel(tree, true);
+                                    if (null != newModel) {
+                                        var oper = newModel.GetOperation(exp);
+                                        //var dsym = newModel.GetSymbolInfo(exp).Symbol;
+                                        DefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, OperOrSym = oper });
+                                        handled = true;
+                                    }
+                                }
+                            }
+                            if (!handled) {
+                                DefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, OperOrSym = null });
+                            }
                         }
                     }
                 }
@@ -131,13 +152,18 @@ namespace RoslynTool.CsToDsl
                 var moper = model.GetOperation(argList) as IInvocationExpression;
                 var args = argList.Arguments;
 
-                IConversionExpression lastConv = null;
-                int ct = args.Count;
-                for (int i = 0; i < ct; ++i) {
+                Dictionary<string, ExpressionSyntax> namedArgs = new Dictionary<string, ExpressionSyntax>();
+                int ct = 0;
+                for (int i = 0; i < args.Count; ++i) {
                     var arg = args[i];
                     TryAddExternEnum(IsEnumClass, arg.Expression, model);
-                    if (i < sym.Parameters.Length) {
-                        var param = sym.Parameters[i];
+                    if (null != arg.NameColon) {
+                        namedArgs.Add(arg.NameColon.Name.Identifier.Text, arg.Expression);
+                        continue;
+                    }
+                    IConversionExpression lastConv = null;
+                    if (ct < sym.Parameters.Length) {
+                        var param = sym.Parameters[ct];
                         if (null != moper) {
                             var iarg = moper.GetArgumentMatchingParameter(param);
                             if (null != iarg) {
@@ -158,7 +184,7 @@ namespace RoslynTool.CsToDsl
                         }
                         else if (param.IsParams) {
                             var argOper = model.GetOperation(arg.Expression);
-                            if (null != argOper && null != argOper.Type && argOper.Type.TypeKind == TypeKind.Array && i == ct - 1) {
+                            if (null != argOper && null != argOper.Type && argOper.Type.TypeKind == TypeKind.Array) {
                                 ArrayToParams = true;
                             }
                             Args.Add(arg.Expression);
@@ -166,6 +192,7 @@ namespace RoslynTool.CsToDsl
                         else {
                             Args.Add(arg.Expression);
                         }
+                        ++ct;
                     }
                     else {
                         Args.Add(arg.Expression);
@@ -175,24 +202,38 @@ namespace RoslynTool.CsToDsl
                 for (int i = ct; i < sym.Parameters.Length; ++i) {
                     var param = sym.Parameters[i];
                     if (param.HasExplicitDefaultValue) {
-                        var decl = param.DeclaringSyntaxReferences;
-                        bool handled = false;
-                        if (decl.Length >= 1) {
-                            var node = param.DeclaringSyntaxReferences[0].GetSyntax() as ParameterSyntax;
-                            if (null != node) {
-                                var exp = node.Default.Value;
-                                var tree = node.SyntaxTree;
-                                var newModel = SymbolTable.Instance.Compilation.GetSemanticModel(tree, true);
-                                if (null != newModel) {
-                                    var oper = newModel.GetOperation(exp);
-                                    //var dsym = newModel.GetSymbolInfo(exp).Symbol;
-                                    DefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, OperOrSym = oper });
-                                    handled = true;
-                                }
+                        IConversionExpression lastConv = null;
+                        if (null != moper) {
+                            var iarg = moper.GetArgumentMatchingParameter(param);
+                            if (null != iarg) {
+                                lastConv = iarg.Value as IConversionExpression;
                             }
                         }
-                        if (!handled) {
-                            DefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, OperOrSym = null });
+                        ArgConversions.Add(lastConv);
+                        ExpressionSyntax expval;
+                        if (namedArgs.TryGetValue(param.Name, out expval)) {
+                            DefaultValueArgs.Add(new ArgDefaultValueInfo { Expression = expval });
+                        }
+                        else {
+                            var decl = param.DeclaringSyntaxReferences;
+                            bool handled = false;
+                            if (decl.Length >= 1) {
+                                var node = param.DeclaringSyntaxReferences[0].GetSyntax() as ParameterSyntax;
+                                if (null != node) {
+                                    var exp = node.Default.Value;
+                                    var tree = node.SyntaxTree;
+                                    var newModel = SymbolTable.Instance.Compilation.GetSemanticModel(tree, true);
+                                    if (null != newModel) {
+                                        var oper = newModel.GetOperation(exp);
+                                        //var dsym = newModel.GetSymbolInfo(exp).Symbol;
+                                        DefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, OperOrSym = oper });
+                                        handled = true;
+                                    }
+                                }
+                            }
+                            if (!handled) {
+                                DefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, OperOrSym = null });
+                            }
                         }
                     }
                 }

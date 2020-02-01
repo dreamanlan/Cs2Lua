@@ -2016,9 +2016,13 @@ namespace SLua
                 pis.Length == 1 && pis[0].ParameterType.Name.StartsWith("EventCallback")) {
                 return true;
             }
-            if (method.Name != "GetType" && method.Name != "GetHashCode" && method.Name != "Equals" &&
-                method.Name != "ToString" && /*method.Name != "Clone" &&*/
-                method.Name != "GetEnumerator" && /*method.Name != "CopyTo" &&*/
+            if (method.Name != "GetType" && 
+                method.Name != "GetHashCode" && 
+                method.Name != "Equals" &&
+                (method.Name != "ToString" || method.DeclaringType.Name == "Convert") && 
+                /*method.Name != "Clone" &&*/
+                method.Name != "GetEnumerator" && 
+                /*method.Name != "CopyTo" &&*/
                 method.Name != "op_Implicit" && method.Name != "op_Explicit" &&
                 !method.Name.StartsWith("get_", StringComparison.Ordinal) &&
                 !method.Name.StartsWith("set_", StringComparison.Ordinal) &&

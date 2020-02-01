@@ -362,7 +362,13 @@ namespace RoslynTool.CsToDsl
                 }
                 for (int i = 0; i < dvCt; ++i) {
                     var info = defValArgs[i];
-                    OutputArgumentDefaultValue(info.Value, info.OperOrSym);
+                    var opd = opds.Length > ct + i ? opds[ct + i] : null;
+                    if (null != info.Expression) {
+                        OutputExpressionSyntax(info.Expression, opd);
+                    }
+                    else {
+                        OutputArgumentDefaultValue(info.Value, info.OperOrSym, opd);
+                    }
                     if (i < dvCt - 1) {
                         CodeBuilder.Append(", ");
                     }
@@ -514,8 +520,14 @@ namespace RoslynTool.CsToDsl
         {
             OutputDefaultValue(CodeBuilder, type, setValueTypeToNull);
         }
-        private void OutputArgumentDefaultValue(object val, object operOrSym)
+        private void OutputArgumentDefaultValue(object val, object operOrSym, IConversionExpression opd)
         {
+            if (null != opd && opd.UsesOperatorMethod) {
+                IMethodSymbol msym = opd.OperatorMethod;
+                InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
+                ii.Init(msym, (List<ExpressionSyntax>)null, m_Model);
+                OutputConversionInvokePrefix(ii);
+            }
             if (null == val) {
                 bool handled = false;
                 var oper = operOrSym as IOperation;
@@ -678,6 +690,9 @@ namespace RoslynTool.CsToDsl
             }
             else {
                 OutputConstValue(val, operOrSym);
+            }
+            if (null != opd && opd.UsesOperatorMethod) {
+                CodeBuilder.Append(")");
             }
         }
         private void OutputConstValue(object val, object operOrSym)
