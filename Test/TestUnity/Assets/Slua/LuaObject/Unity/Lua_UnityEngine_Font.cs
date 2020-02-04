@@ -203,6 +203,19 @@ public class Lua_UnityEngine_Font : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int GetPathsToOSFonts_s(IntPtr l) {
+		try {
+			var ret=UnityEngine.Font.GetPathsToOSFonts();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_material(IntPtr l) {
 		try {
 			UnityEngine.Font self=(UnityEngine.Font)checkSelf(l);
@@ -346,6 +359,7 @@ public class Lua_UnityEngine_Font : LuaObject {
 		addMember(l,CreateDynamicFontFromOSFont_s);
 		addMember(l,GetMaxVertsForString_s);
 		addMember(l,GetOSInstalledFontNames_s);
+		addMember(l,GetPathsToOSFonts_s);
 		addMember(l,"material",get_material,set_material,true);
 		addMember(l,"fontNames",get_fontNames,set_fontNames,true);
 		addMember(l,"dynamic",get_dynamic,null,true);

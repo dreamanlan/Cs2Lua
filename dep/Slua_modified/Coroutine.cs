@@ -26,7 +26,6 @@ namespace SLua
 	using UnityEngine;
 	using System.Collections;
 	using SLua;
-	using SLua;
 	using System;
 
 	public class LuaCoroutine : LuaObject
@@ -43,36 +42,22 @@ namespace SLua
 			string yield =
 @"
 local Yield = UnityEngine.Yieldk
-
-uCoroutine = uCoroutine or {}
-
-uCoroutine.create = function(x)
-
-	local co = coroutine.create(x)
-	coroutine.resume(co)
-	return co
-
-end
-
-uCoroutine.yield = function(x)
-
+UnityEngine.Yield = function(x)
 	local co, ismain = coroutine.running()
 	if ismain then error('Can not yield in main thread') end
 
 	if type(x) == 'thread' and coroutine.status(x) ~= 'dead' then
 		repeat
-			Yield(nil, function() coroutine.resume(co) end)
+			Yield(nil, function() lualog('coroutine.resume status:{0} after thread {1}', coroutine.status(co), x);coroutine.resume(co) end)
 			coroutine.yield()
+            lualog('coroutine.yield status:{0} for thread {1}', coroutine.status(co), x)
 		until coroutine.status(x) == 'dead'
 	else
-		Yield(x, function() if coroutine.status(co) ~= 'dead' then coroutine.resume(co); end; end)
+		Yield(x, function() if coroutine.status(co) ~= 'dead' then lualog('coroutine.resume status:{0} after {1}', coroutine.status(co), x);coroutine.resume(co) end; end)
 		coroutine.yield()
+        lualog('coroutine.yield status:{0} for {1}', coroutine.status(co), x)
 	end
-
 end
-
--- backward compatibility of older versions
-UnityEngine.Yield = uCoroutine.yield
 ";
 			LuaState.get(l).doString(yield);
 		}

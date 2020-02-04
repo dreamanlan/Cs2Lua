@@ -26,8 +26,8 @@ class(Mandelbrot) {
 	static_events {};
 
 	instance_methods {
-		Start = function(this, obj, mb){
-			setinstance(this, "root", newexternobject(UnityEngine.GameObject, typeargs(), typekinds(), null, "ctor__String", "mandelbrot"));
+		Init = function(this, obj, mb){
+			setinstance(this, "root", newexternobject(UnityEngine.GameObject, typeargs(), typekinds(), null, "UnityEngine.GameObject:ctor__String", "mandelbrot"));
 			callinstance(this, "Exec");
 		};
 		Call = function(this, name, ...){
@@ -67,10 +67,10 @@ class(Mandelbrot) {
 		};
 		DrawCube = function(this, x, y, w, h){
 			local(cube); cube = callstatic(UnityEngine.GameObject, "CreatePrimitive", 3);
-			setinstance(getinstance(cube, "transform"), "position", newexternobject(UnityEngine.Vector3, typeargs(), typekinds(), null, "ctor__Single__Single__Single", execbinary("/", execbinary("*", execbinary("*", x, getinstance(this, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(this, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), w, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), execbinary("-", execbinary("/", execbinary("*", execbinary("*", y, getinstance(this, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(this, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), h, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 12, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 0));
-			callinstance(getinstance(cube, "transform"), "SetParent", "SetParent__Transform", getinstance(getinstance(this, "root"), "transform"));
-			local(mat); mat = getinstance(callinstance(cube, "GetComponent", "GetComponent__Type", UnityEngine.Renderer), "material");
-			local(ix); ix = callstatic(UnityEngine.Random, "Range", "Range__Int32__Int32", 0, getinstance(getinstance(this, "colors"), "Length"));
+			setinstance(getinstance(cube, "transform"), "position", newexternobject(UnityEngine.Vector3, typeargs(), typekinds(), null, "UnityEngine.Vector3:ctor__Single__Single__Single", execbinary("/", execbinary("*", execbinary("*", x, getinstance(this, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(this, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), w, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), execbinary("-", execbinary("/", execbinary("*", execbinary("*", y, getinstance(this, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(this, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), h, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 12, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 0));
+			callinstance(getinstance(cube, "transform"), "SetParent", "UnityEngine.Transform:SetParent__Transform", getinstance(getinstance(this, "root"), "transform"));
+			local(mat); mat = getinstance(callinstance(cube, "GetComponent", "UnityEngine.GameObject:GetComponent__Type", UnityEngine.Renderer), "material");
+			local(ix); ix = callstatic(UnityEngine.Random, "Range", "UnityEngine.Random:Range__Int32__Int32", 0, getinstance(getinstance(this, "colors"), "Length"));
 			setinstance(mat, "color", getinstance(this, "colors")[ix + 1]);
 		};
 		ctor = function(this){
@@ -82,7 +82,7 @@ class(Mandelbrot) {
 			}else{
 				setinstance(this, "__ctor_called", true);
 			};
-			this.colors = buildarray(UnityEngine.Color, getstatic(UnityEngine.Color, "red"), getstatic(UnityEngine.Color, "blue"), getstatic(UnityEngine.Color, "green"), getstatic(UnityEngine.Color, "cyan"), getstatic(UnityEngine.Color, "grey"), getstatic(UnityEngine.Color, "white"), getstatic(UnityEngine.Color, "yellow"), getstatic(UnityEngine.Color, "magenta"), getstatic(UnityEngine.Color, "black"));
+			this.colors = literalarray(UnityEngine.Color, getstatic(UnityEngine.Color, "red"), getstatic(UnityEngine.Color, "blue"), getstatic(UnityEngine.Color, "green"), getstatic(UnityEngine.Color, "cyan"), getstatic(UnityEngine.Color, "grey"), getstatic(UnityEngine.Color, "white"), getstatic(UnityEngine.Color, "yellow"), getstatic(UnityEngine.Color, "magenta"), getstatic(UnityEngine.Color, "black"));
 		};
 	};
 	instance_fields {
@@ -99,14 +99,14 @@ class(Mandelbrot) {
 		"IStartupPlugin";
 	};
 	interface_map {
-		IStartupPlugin_Start = "Start";
+		IStartupPlugin_Init = "Init";
 		IStartupPlugin_Call = "Call";
 	};
 
 	class_info(TypeKind.Class, Accessibility.Internal) {
 	};
 	method_info {
-		Start(MethodKind.Ordinary, Accessibility.Public){
+		Init(MethodKind.Ordinary, Accessibility.Public){
 		};
 		Call(MethodKind.Ordinary, Accessibility.Public){
 		};

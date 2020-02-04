@@ -16,10 +16,9 @@ public class Cs2LuaTickWithAllUpdate : MonoBehaviour
             luaInited = false;
             StartCoroutine(StartupLua(className));
         } else {
+            monoBehaviourProxy = new MonoBehaviourProxy(this);
             csObject = PluginManager.Instance.CreateTick(className);
-            if (null != csObject) {
-                csObject.Init(gameObject, this);
-            }
+            csObject.Init(gameObject, monoBehaviourProxy);
         }
     }
 
@@ -125,4 +124,5 @@ public class Cs2LuaTickWithAllUpdate : MonoBehaviour
     private LuaFunction lateUpdate;
     private LuaFunction call;
     private bool luaInited;
+    private MonoBehaviourProxy monoBehaviourProxy;
 }

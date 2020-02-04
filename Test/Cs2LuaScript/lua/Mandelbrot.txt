@@ -2,7 +2,7 @@ require "cs2lua__namespaces";
 
 Mandelbrot = {
 	__new_object = function(...)
-		return newobject(Mandelbrot, {}, {}, "ctor", nil, ...);
+		return newobject(Mandelbrot, nil, nil, "ctor", nil, ...);
 	end,
 	__define_class = function()
 		local static = Mandelbrot;
@@ -29,8 +29,8 @@ Mandelbrot = {
 		local static_events = nil;
 
 		local instance_methods = {
-			Start = function(this, obj, mb)
-				this.root = newexternobject(UnityEngine.GameObject, {}, {}, nil, "ctor__String", "mandelbrot");
+			Init = function(this, obj, mb)
+				this.root = newexternobject(UnityEngine.GameObject, nil, nil, nil, "UnityEngine.GameObject:ctor__String", "mandelbrot");
 				this:Exec();
 			end,
 			Call = function(this, name, ...)
@@ -88,12 +88,12 @@ Mandelbrot = {
 			DrawCube = function(this, x, y, w, h)
 				local cube;
 				cube = UnityEngine.GameObject.CreatePrimitive(3);
-				cube.transform.position = newexternobject(UnityEngine.Vector3, {}, {}, nil, "ctor__Single__Single__Single", (((x * this.r) * this.scale) / w), ((((y * this.r) * this.scale) / h) - 12), 0);
-				cube.transform:SetParent("SetParent__Transform", this.root.transform);
+				cube.transform.position = newexternobject(UnityEngine.Vector3, nil, nil, nil, "UnityEngine.Vector3:ctor__Single__Single__Single", (((x * this.r) * this.scale) / w), ((((y * this.r) * this.scale) / h) - 12), 0);
+				cube.transform:SetParent("UnityEngine.Transform:SetParent__Transform", this.root.transform);
 				local mat;
-				mat = cube:GetComponent("GetComponent__Type", UnityEngine.Renderer).material;
+				mat = cube:GetComponent("UnityEngine.GameObject:GetComponent__Type", UnityEngine.Renderer).material;
 				local ix;
-				ix = UnityEngine.Random.Range("Range__Int32__Int32", 0, this.colors.Length);
+				ix = UnityEngine.Random.Range("UnityEngine.Random:Range__Int32__Int32", 0, this.colors.Length);
 				mat.color = this.colors[(ix + 1)];
 			end,
 			ctor = function(this)
@@ -125,7 +125,7 @@ Mandelbrot = {
 			"IStartupPlugin",
 		};
 		local interface_map = {
-			IStartupPlugin_Start = "Start",
+			IStartupPlugin_Init = "Init",
 			IStartupPlugin_Call = "Call",
 		};
 
@@ -133,7 +133,7 @@ Mandelbrot = {
 			Kind = TypeKind.Class,
 		};
 		local method_info = {
-			Start = {
+			Init = {
 				Kind = MethodKind.Ordinary,
 			},
 			Call = {
@@ -164,9 +164,9 @@ Mandelbrot = {
 			},
 		};
 
-		UnityEngine.Debug.LogWarning("LogWarning_Object", "Mandelbrot::__define_class begin");
+		Utility.Warn("Mandelbrot::__define_class begin");
 		local __defineclass_return = defineclass(nil, "Mandelbrot", "Mandelbrot", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
-		UnityEngine.Debug.LogWarning("LogWarning_Object", "Mandelbrot::__define_class end");
+		Utility.Warn("Mandelbrot::__define_class end");
 		return __defineclass_return;
 	end,
 };

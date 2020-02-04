@@ -1,4 +1,4 @@
-attributes(Cs2LuaScript.Program){
+attributes(Program){
 	class{
 		attribute(Cs2Dsl.EntryAttribute([], []));
 	};

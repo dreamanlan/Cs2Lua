@@ -17,8 +17,9 @@ public class Cs2LuaStartup : MonoBehaviour
             luaInited = false;
             StartCoroutine(StartupLua(className));
         } else {
+            monoBehaviourProxy = new MonoBehaviourProxy(this);
             csObject = PluginManager.Instance.CreateStartup(className);
-            csObject.Start(gameObject, this);
+            csObject.Init(gameObject, monoBehaviourProxy);
         }
     }
 
@@ -36,10 +37,10 @@ public class Cs2LuaStartup : MonoBehaviour
         svr.luaState.doString(sb.ToString());
         classObj = (LuaTable)svr.luaState[className];
         self = (LuaTable)((LuaFunction)classObj["__new_object"]).call();
-        start = (LuaFunction)self["Start"];
+        init = (LuaFunction)self["Init"];
         call = (LuaFunction)self["Call"];
-        if (null != start) {
-            start.call(self, gameObject, this);
+        if (null != init) {
+            init.call(self, gameObject, this);
         }
         luaInited = true;
         yield return null;
@@ -76,7 +77,8 @@ public class Cs2LuaStartup : MonoBehaviour
     private LuaSvr svr;
     private LuaTable classObj;
     private LuaTable self;
-    private LuaFunction start;
+    private LuaFunction init;
     private LuaFunction call;
     private bool luaInited;
+    private MonoBehaviourProxy monoBehaviourProxy;
 }

@@ -4,7 +4,7 @@ using System.Text;
 
 public interface IStartupPlugin
 {
-    void Start(GameObject obj, MonoBehaviourProxy mb);
+    void Init(GameObject obj, MonoBehaviourProxy mb);
     void Call(string name, params object[] args);
 }
 public interface IStartupPluginFactory

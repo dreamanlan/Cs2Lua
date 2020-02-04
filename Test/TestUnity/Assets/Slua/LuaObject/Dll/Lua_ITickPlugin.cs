@@ -10,7 +10,7 @@ public class Lua_ITickPlugin : LuaObject {
 			ITickPlugin self=(ITickPlugin)checkSelf(l);
 			UnityEngine.GameObject a1;
 			checkType(l,2,out a1);
-			UnityEngine.MonoBehaviour a2;
+			MonoBehaviourProxy a2;
 			checkType(l,3,out a2);
 			self.Init(a1,a2);
 			pushValue(l,true);

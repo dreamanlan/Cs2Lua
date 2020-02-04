@@ -12,8 +12,8 @@ indexerbylualib("System.Collections.Generic.Dictionary_TKey_TValue", ".*", ".*",
 indexerbylualib("System.Collections.Generic.Dictionary_TKey_TValue", ".*", ".*", ".*", "null", "System.Collections.Generic.Dictionary_TKey_TValue", "set_Item");
 //indexerbylualib(".*", ".*", ".*", "Cs2LuaUiControllerManager\\\.allControllers", "null", ".*", ".*");
 
-addprologue("{0}{1}::{2}{3}", "CsLibrary.LogSystem.Warn(\"", $class, $member, " begin\")")match("StartupFGUI");
-addepilogue("{0}{1}::{2}{3}", "CsLibrary.LogSystem.Warn(\"", $class, $member, " end\")")match("StartupFGUI");
+addprologue("{0}{1}::{2}{3}", "Utility.Warn(\"", $class, $member, " begin\")")match("StartupFGUI");
+addepilogue("{0}{1}::{2}{3}", "Utility.Warn(\"", $class, $member, " end\")")match("StartupFGUI");
 
-addprologue("{0}{1}::{2}{3}", "CsLibrary.LogSystem.Warn(\"", $class, $member, " begin\")")match("__define_class");
-addepilogue("{0}{1}::{2}{3}", "CsLibrary.LogSystem.Warn(\"", $class, $member, " end\")")match("__define_class");
+addprologue("{0}{1}::{2}{3}", "Utility.Warn(\"", $class, $member, " begin\")")match("__define_class");
+addepilogue("{0}{1}::{2}{3}", "Utility.Warn(\"", $class, $member, " end\")")match("__define_class");

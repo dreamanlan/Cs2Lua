@@ -9,13 +9,13 @@ class(LuaString) {
 			return(newobject(LuaString, typeargs(), typekinds(), "ctor", null, ...));
 		};
 		Format__System_String__System_Object = function(str, arg){
-			return(callstatic(System.String, "Format", "Format__String__Object", str, arg));
+			return(callstatic(System.String, "Format", "System.String:Format__String__Object", str, arg));
 		};
 		Format__System_String__System_Object__System_Object = function(str, arg1, arg2){
-			return(callstatic(System.String, "Format", "Format__String__Object__Object", str, arg1, arg2));
+			return(callstatic(System.String, "Format", "System.String:Format__String__Object__Object", str, arg1, arg2));
 		};
 		Format__System_String__System_Object__System_Object__System_Object = function(str, arg1, arg2, arg3){
-			return(callstatic(System.String, "Format", "Format__String__Object__Object__Object", str, arg1, arg2, arg3));
+			return(callstatic(System.String, "Format", "System.String:Format__String__Object__Object__Object", str, arg1, arg2, arg3));
 		};
 		cctor = function(){
 			callstatic(LuaString, "__cctor");

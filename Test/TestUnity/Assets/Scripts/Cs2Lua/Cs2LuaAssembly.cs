@@ -22,7 +22,7 @@ internal class Cs2LuaAssembly
     internal void Init()
     {
         m_LuaSvr.init(null, () => {
-            var entry = (LuaTable)m_LuaSvr.start("Cs2LuaScript__Program");
+            var entry = (LuaTable)m_LuaSvr.start("Program");
             entry.invoke("Init");
             m_LuaInited = true;
         });
@@ -31,7 +31,7 @@ internal class Cs2LuaAssembly
 #else
         Load(Path.Combine(Application.streamingAssetsPath, "Cs2LuaScript.dll"));
         if (null != m_Assembly) {
-            var type = m_Assembly.GetType("Cs2LuaScript.Program");
+            var type = m_Assembly.GetType("Program");
             type.InvokeMember("Init", BindingFlags.Public | BindingFlags.Static | BindingFlags.InvokeMethod, null, null, null);
         }
 #endif

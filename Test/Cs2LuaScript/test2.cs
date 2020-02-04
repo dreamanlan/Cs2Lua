@@ -3,7 +3,7 @@ using System.IO;
 
 class Mandelbrot : IStartupPlugin
 {
-    public void Start(GameObject obj, MonoBehaviourProxy mb)
+    public void Init(GameObject obj, MonoBehaviourProxy mb)
     {
         root = new GameObject("mandelbrot");
         Exec();

@@ -25,4 +25,28 @@ public partial class Utility
     {
         return new String(c);
     }
+
+    public static void Debug(string fmt, params object[] args)
+    {
+        if (args.Length == 0)
+            UnityEngine.Debug.Log(fmt);
+        else
+            UnityEngine.Debug.LogFormat(fmt, args);
+    }
+
+    public static void Warn(string fmt, params object[] args)
+    {
+        if (args.Length == 0)
+            UnityEngine.Debug.LogWarning(fmt);
+        else
+            UnityEngine.Debug.LogWarningFormat(fmt, args);
+    }
+
+    public static void Error(string fmt, params object[] args)
+    {
+        if (args.Length == 0)
+            UnityEngine.Debug.LogError(fmt);
+        else
+            UnityEngine.Debug.LogErrorFormat(fmt, args);
+    }
 }

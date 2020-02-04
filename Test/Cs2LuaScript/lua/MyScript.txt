@@ -2,7 +2,7 @@ require "cs2lua__namespaces";
 
 MyScript = {
 	__new_object = function(...)
-		return newobject(MyScript, {}, {}, "ctor", nil, ...);
+		return newobject(MyScript, nil, nil, "ctor", nil, ...);
 	end,
 	__define_class = function()
 		local static = MyScript;
@@ -33,13 +33,13 @@ MyScript = {
 			Init = function(this, obj, mb)
 				local s;
 				s = "test test test from cs2lua !";
-				UnityEngine.Debug.Log("Log__Object", s);
+				UnityEngine.Debug.Log("UnityEngine.Debug:Log__Object", s);
 				mb:StartCoroutine(this:TestCoroutine());
-				this.root = newexternobject(UnityEngine.GameObject, {}, {}, nil, "ctor__String", "root");
+				this.root = newexternobject(UnityEngine.GameObject, nil, nil, nil, "UnityEngine.GameObject:ctor__String", "root");
 				local slider;
-				slider = typeas(UnityEngine.GameObject.Find("Canvas/Slider"):GetComponent("GetComponent__Type", UnityEngine.UI.Slider), UnityEngine.UI.Slider, TypeKind.Class);
+				slider = typeas(UnityEngine.GameObject.Find("Canvas/Slider"):GetComponent("UnityEngine.GameObject:GetComponent__Type", UnityEngine.UI.Slider), UnityEngine.UI.Slider, TypeKind.Class);
 				local counttxt;
-				counttxt = typeas(UnityEngine.GameObject.Find("Canvas/Count"):GetComponent("GetComponent__Type", UnityEngine.UI.Text), UnityEngine.UI.Text, TypeKind.Class);
+				counttxt = typeas(UnityEngine.GameObject.Find("Canvas/Count"):GetComponent("UnityEngine.GameObject:GetComponent__Type", UnityEngine.UI.Text), UnityEngine.UI.Text, TypeKind.Class);
 				slider.onValueChanged:AddListener((function(v)
 					this:Reset();
 					counttxt.text = LuaString.Format__System_String__System_Object("cube:{0}", v);
@@ -60,7 +60,7 @@ MyScript = {
 							return UnityEngine.Time.time;
 						end), true, -5);
 					local b;
-					b = newexternobject(UnityEngine.Vector3, {}, {}, nil, "ctor__Single__Single__Single", typecast(((UnityEngine.Mathf.Cos(((((i * 3.14) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Struct), typecast(((UnityEngine.Mathf.Sin(((((i * 3.14) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Struct), 0);
+					b = newexternobject(UnityEngine.Vector3, nil, nil, nil, "UnityEngine.Vector3:ctor__Single__Single__Single", typecast(((UnityEngine.Mathf.Cos(((((i * 3.14) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Struct), typecast(((UnityEngine.Mathf.Sin(((((i * 3.14) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Struct), 0);
 					this.cubes[(i + 1)].transform.position = b;
 					i = (i + 1);
 				end;
@@ -68,7 +68,7 @@ MyScript = {
 					this.fogStart = UnityEngine.Time.time;
 					this.bgCurrent = UnityEngine.Camera.main.backgroundColor;
 					local ix;
-					ix = UnityEngine.Random.Range("Range__Int32__Int32", 0, this.colors.Length);
+					ix = UnityEngine.Random.Range("UnityEngine.Random:Range__Int32__Int32", 0, this.colors.Length);
 					this.bgColor = this.colors[(ix + 1)];
 				end;
 				this.t = (((UnityEngine.Time.time - this.fogStart)) / 10);
@@ -78,12 +78,12 @@ MyScript = {
 				local args = wraparray{...};
 			end,
 			TestCoroutine = wrapenumerable(function(this)
-				wrapyield(newexternobject(UnityEngine.WaitForSeconds, {}, {}, nil, 10), false, true);
+				wrapyield(newexternobject(UnityEngine.WaitForSeconds, nil, nil, nil, 10), false, true);
 				local i;
 				i = 0;
 				while (i < 60) do
-					wrapyield(newexternobject(UnityEngine.WaitForSeconds, {}, {}, nil, 1), false, true);
-					UnityEngine.Debug.Log("Log__Object", System.String.Format("Format__String__Object", "{0} seconds", i));
+					wrapyield(newexternobject(UnityEngine.WaitForSeconds, nil, nil, nil, 1), false, true);
+					UnityEngine.Debug.Log("UnityEngine.Debug:Log__Object", System.String.Format("System.String:Format__String__Object", "{0} seconds", i));
 					i = (i + 1);
 				end;
 				return nil;
@@ -93,7 +93,7 @@ MyScript = {
 					local i;
 					i = 0;
 					while (i < this.cubes.Length) do
-						UnityEngine.Object.Destroy("Destroy__Object", this.cubes[(i + 1)]);
+						UnityEngine.Object.Destroy("UnityEngine.Object:Destroy__Object", this.cubes[(i + 1)]);
 						i = (i + 1);
 					end;
 				end;
@@ -107,24 +107,24 @@ MyScript = {
 					return arr;
 				end)();
 				local P;
-				P = UnityEngine.Resources.Load("Load__String", "Particle System");
+				P = UnityEngine.Resources.Load("UnityEngine.Resources:Load__String", "Particle System");
 				local i;
 				i = 0;
 				while (i < this.max) do
 					local cube;
 					cube = UnityEngine.GameObject.CreatePrimitive(3);
-					cube.transform.position = newexternobject(UnityEngine.Vector3, {}, {}, nil, "ctor__Single__Single__Single", (typecast(UnityEngine.Mathf.Cos((((i * 3.14) * 2) / this.max)), System.Single, TypeKind.Struct) * this.r), (typecast(UnityEngine.Mathf.Sin((((i * 3.14) * 2) / this.max)), System.Single, TypeKind.Struct) * this.r), 0);
-					cube.transform:SetParent("SetParent__Transform", this.root.transform);
+					cube.transform.position = newexternobject(UnityEngine.Vector3, nil, nil, nil, "UnityEngine.Vector3:ctor__Single__Single__Single", (typecast(UnityEngine.Mathf.Cos((((i * 3.14) * 2) / this.max)), System.Single, TypeKind.Struct) * this.r), (typecast(UnityEngine.Mathf.Sin((((i * 3.14) * 2) / this.max)), System.Single, TypeKind.Struct) * this.r), 0);
+					cube.transform:SetParent("UnityEngine.Transform:SetParent__Transform", this.root.transform);
 					local mat;
-					mat = cube:GetComponent("GetComponent__Type", UnityEngine.Renderer).material;
+					mat = cube:GetComponent("UnityEngine.GameObject:GetComponent__Type", UnityEngine.Renderer).material;
 					local box;
-					box = cube:GetComponent("GetComponent__Type", UnityEngine.BoxCollider);
-					UnityEngine.Object.Destroy("Destroy__Object", box);
+					box = cube:GetComponent("UnityEngine.GameObject:GetComponent__Type", UnityEngine.BoxCollider);
+					UnityEngine.Object.Destroy("UnityEngine.Object:Destroy__Object", box);
 					local p;
-					p = typeas(UnityEngine.Object.Instantiate("Instantiate__Object__Vector3__Quaternion", P, UnityEngine.Vector3.zero, UnityEngine.Quaternion.identity), UnityEngine.GameObject, TypeKind.Class);
-					p.transform:SetParent("SetParent__Transform", cube.transform);
+					p = typeas(UnityEngine.Object.Instantiate("UnityEngine.Object:Instantiate__Object__Vector3__Quaternion", P, UnityEngine.Vector3.zero, UnityEngine.Quaternion.identity), UnityEngine.GameObject, TypeKind.Class);
+					p.transform:SetParent("UnityEngine.Transform:SetParent__Transform", cube.transform);
 					local ix;
-					ix = UnityEngine.Random.Range("Range__Int32__Int32", 0, this.colors.Length);
+					ix = UnityEngine.Random.Range("UnityEngine.Random:Range__Int32__Int32", 0, this.colors.Length);
 					mat.color = this.colors[(ix + 1)];
 					this.cubes[(i + 1)] = cube;
 					i = (i + 1);
@@ -139,8 +139,8 @@ MyScript = {
 				else
 					this.__ctor_called = true;
 				end;
-				this.bgCurrent = newexternobject(UnityEngine.Color, {}, {}, nil);
-				this.bgColor = newexternobject(UnityEngine.Color, {}, {}, nil);
+				this.bgCurrent = newexternobject(UnityEngine.Color, nil, nil, nil);
+				this.bgColor = newexternobject(UnityEngine.Color, nil, nil, nil);
 				this.colors = wraparray({UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black});
 			end,
 		};
@@ -228,9 +228,9 @@ MyScript = {
 			},
 		};
 
-		UnityEngine.Debug.LogWarning("LogWarning_Object", "MyScript::__define_class begin");
+		Utility.Warn("MyScript::__define_class begin");
 		local __defineclass_return = defineclass(nil, "MyScript", "MyScript", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
-		UnityEngine.Debug.LogWarning("LogWarning_Object", "MyScript::__define_class end");
+		Utility.Warn("MyScript::__define_class end");
 		return __defineclass_return;
 	end,
 };

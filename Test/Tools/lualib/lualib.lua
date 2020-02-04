@@ -238,6 +238,10 @@ function settempmetatable(class)
     rawset(class, "__cs2lua_predefined", true)
 end
 
+function lualog(fmt, ...)
+    Utility.Warn(fmt, ...);
+end
+
 function luausing(func)
     return pcall(func)
 end

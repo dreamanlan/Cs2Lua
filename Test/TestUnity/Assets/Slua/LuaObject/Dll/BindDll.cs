@@ -11,6 +11,8 @@ namespace SLua {
 				Lua_ITickPluginFactory.reg,
 				Lua_IObjectPluginFactory.reg,
 				Lua_PluginManager.reg,
+				Lua_MonoBehaviourProxy.reg,
+				Lua_Utility.reg,
 			};
 			return list;
 		}
