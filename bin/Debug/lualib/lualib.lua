@@ -307,9 +307,9 @@ function callexternextension(callerClass, method, ...)
     local args = {...}
     local obj = args[1]
     if calllerClass == System.Linq.Enumerable then
-        
+        error("can't call linq extension method !")
     else
-        obj[method](args);
+        return obj[method](...);
     end
 end
 
@@ -401,48 +401,24 @@ function invokeexternoperator(rettype, class, method, ...)
     --执行到这里的应该是无法对应到lua操作符的操作符重载
     local argnum = #args
     if argnum == 0 and method == "op_Equality" then
-        if args[1] == nil and args[2] == nil then
-            return true
-        else
-            return false
-        end
+        return Slua.IsNull(args[2])
     elseif argnum == 0 and method == "op_Inequality" then
-        if args[1] == nil and args[2] == nil then
-            return false
-        else
-            return true
-        end
+        return not Slua.IsNull(args[2])
     elseif argnum == 1 and method == "op_Equality" then
-        if type(args[1]) == "string" and string.sub(args[1], 1, 11) == "op_Equality" then
-            if args[2] == nil and args[3] == nil then
-                return true
-            else
-                return false
-            end
+        if issignature(args[1], method) then
+            return Slua.IsNull(args[3])
         else
-            if args[1] == nil and args[2] == nil then
-                return true
-            else
-                return false
-            end
+            return Slua.IsNull(args[1])
         end
     elseif argnum == 1 and method == "op_Inequality" then
-        if type(args[1]) == "string" and string.sub(args[1], 1, 13) == "op_Inequality" then
-            if args[2] == nil and args[3] == nil then
-                return false
-            else
-                return true
-            end
+        if issignature(args[1], method) then
+            return not Slua.IsNull(args[3])
         else
-            if args[1] == nil and args[2] == nil then
-                return false
-            else
-                return true
-            end
+            return not Slua.IsNull(args[1])
         end
     elseif argnum == 2 and method == "op_Equality" then
-        if type(args[1]) == "string" and string.sub(args[1], 1, 11) == "op_Equality" then
-            if args[2] and args[3] then
+        if issignature(args[1], method) then
+            if args[3] then
                 mt1 = getmetatable(args[2])
                 mt2 = getmetatable(args[3])
                 if mt1 and mt1.__eq then
@@ -452,35 +428,23 @@ function invokeexternoperator(rettype, class, method, ...)
                 else
                     return args[2] == args[3]
                 end
-            elseif not args[2] then
-                return Slua.IsNull(args[3])
-            elseif not args[3] then
-                return Slua.IsNull(args[2])
             else
-                return true
+                return Slua.IsNull(args[2])
             end
         else
-            if args[1] and args[2] then
-                mt1 = getmetatable(args[1])
-                mt2 = getmetatable(args[2])
-                if mt1 and mt1.__eq then
-                    return mt1.__eq(args[1], args[2])
-                elseif mt2 and mt2.__eq then
-                    return mt2.__eq(args[2], args[1])
-                else
-                    return args[1] == args[2]
-                end
-            elseif not args[1] then
-                return Slua.IsNull(args[2])
-            elseif not args[2] then
-                return Slua.IsNull(args[1])
+            mt1 = getmetatable(args[1])
+            mt2 = getmetatable(args[2])
+            if mt1 and mt1.__eq then
+                return mt1.__eq(args[1], args[2])
+            elseif mt2 and mt2.__eq then
+                return mt2.__eq(args[2], args[1])
             else
-                return true
+                return args[1] == args[2]
             end
         end
     elseif argnum == 2 and method == "op_Inequality" then
-        if type(args[1]) == "string" and string.sub(args[1], 1, 13) == "op_Inequality" then
-            if args[2] and args[3] then
+        if issignature(args[1], method) then
+            if args[3] then
                 mt1 = getmetatable(args[2])
                 mt2 = getmetatable(args[3])
                 if mt1 and mt1.__eq then
@@ -490,30 +454,18 @@ function invokeexternoperator(rettype, class, method, ...)
                 else
                     return args[2] ~= args[3]
                 end
-            elseif not args[2] then
-                return not Slua.IsNull(args[3])
-            elseif not args[3] then
-                return not Slua.IsNull(args[2])
             else
-                return false
+                return not Slua.IsNull(args[2])
             end
         else
-            if args[1] and args[2] then
-                mt1 = getmetatable(args[1])
-                mt2 = getmetatable(args[2])
-                if mt1 and mt1.__eq then
-                    return not mt1.__eq(args[1], args[2])
-                elseif mt2 and mt2.__eq then
-                    return not mt2.__eq(args[2], args[1])
-                else
-                    return args[1] ~= args[2]
-                end
-            elseif not args[1] then
-                return not Slua.IsNull(args[2])
-            elseif not args[2] then
-                return not Slua.IsNull(args[1])
+            mt1 = getmetatable(args[1])
+            mt2 = getmetatable(args[2])
+            if mt1 and mt1.__eq then
+                return not mt1.__eq(args[1], args[2])
+            elseif mt2 and mt2.__eq then
+                return not mt2.__eq(args[2], args[1])
             else
-                return false
+                return args[1] ~= args[2]
             end
         end
     elseif method == "op_Implicit" then
@@ -566,6 +518,44 @@ function invokeexternoperator(rettype, class, method, ...)
         else
             --这里就不仔细判断了，就假定是UnityEngine.Object子类了
             return not Slua.IsNull(args[1])
+        end
+    elseif method == "op_Multiply" then
+        if argnum==3 then
+            local t1 = nil
+            local t2 = nil
+            local meta1 = getmetatable(args[2])
+            if meta1 then
+                t1 = rawget(meta1, "__typename")
+            end
+            local meta2 = getmetatable(args[3])
+            if meta2 then
+                t2 = rawget(meta2, "__typename")
+            end
+            if t1=="Vector2" and type(args[3])=="number" then
+                return Slua.CreateClass("UnityEngine.Vector2", args[2].x*args[3], args[2].y*args[3])
+            elseif type(args[2])=="number" and t2=="Vector2" then
+                return Slua.CreateClass("UnityEngine.Vector2", args[3].x*args[2], args[3].y*args[2])
+            elseif t1=="Vector3" and type(args[3])=="number" then
+                return Slua.CreateClass("UnityEngine.Vector3", args[2].x*args[3], args[2].y*args[3], args[2].z*args[3])
+            elseif type(args[2])=="number" and t2=="Vector3" then
+                return Slua.CreateClass("UnityEngine.Vector3", args[3].x*args[2], args[3].y*args[2], args[3].z*args[2])
+            elseif t1=="Vector4" and type(args[3])=="number" then
+                return Slua.CreateClass("UnityEngine.Vector4", args[2].x*args[3], args[2].y*args[3], args[2].z*args[3], args[2].w*args[3])
+            elseif type(args[2])=="number" and t2=="Vector4" then
+                return Slua.CreateClass("UnityEngine.Vector4", args[3].x*args[2], args[3].y*args[2], args[3].z*args[2], args[3].w*args[2])
+            elseif t1=="Color" and type(args[3])=="number" then
+                return Slua.CreateClass("UnityEngine.Color", args[2].r*args[3], args[2].g*args[3], args[2].b*args[3], args[2].a*args[3])
+            elseif type(args[2])=="number" and t2=="Color" then
+                return Slua.CreateClass("UnityEngine.Color", args[3].r*args[2], args[3].g*args[2], args[3].b*args[2], args[3].a*args[2])
+            else
+                args[2][method](...)
+            end
+        elseif argnum==2 then
+            if type(args[1])=="number" and type(args[2])=="number" then
+                return args[1] * args[2]
+            else
+                return args[1][method](...)
+            end
         end
     end
     if method then

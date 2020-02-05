@@ -399,7 +399,7 @@ namespace RoslynTool.CsToDsl
             NonGenericMethodSymbol = null;
             PostPositionGenericTypeArgs = false;
             if (sym.IsGenericMethod) {
-                bool existNonGenericVersion = true;
+                bool existNonGenericVersion = !IsExternMethod;
                 var ctype = sym.ContainingType;
                 var syms = ctype.GetMembers(sym.Name);
                 if (null != syms) {
