@@ -1322,7 +1322,7 @@ __mt_index_of_array = function(t, k)
             local ct = __get_array_count(obj)
             for i = 1, ct do
                 local v = rawget(obj, i)
-                if v == p then
+                if rawequal(v,p) then
                     return i - 1
                 end
             end
@@ -1333,7 +1333,7 @@ __mt_index_of_array = function(t, k)
             local ct = __get_array_count(obj)
             for k = ct, 1 do
                 local v = rawget(obj, k)
-                if v == p then
+                if rawequal(v,p) then
                     return k - 1
                 end
             end
@@ -1367,7 +1367,7 @@ __mt_index_of_array = function(t, k)
             local ct = __get_array_count(obj)
             for i = 1, ct do
                 local v = rawget(obj, i)
-                if v == p then
+                if rawequal(v,p) then
                     ret = true
                     break
                 end
@@ -1496,7 +1496,7 @@ __mt_index_of_dictionary = function(t, k)
             local ret = false 
             local data = __get_table_data(obj)     
             for k, v in pairs(data) do
-                if v.value == p then
+                if rawequal(v.value,p) then
                     ret = true
                     break
                 end
