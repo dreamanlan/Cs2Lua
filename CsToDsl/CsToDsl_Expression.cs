@@ -325,6 +325,9 @@ namespace RoslynTool.CsToDsl
                 if (null != srcOper) {
                     TypeChecker.CheckConvert(srcOper.Type, type, node, GetCurMethodSemanticInfo());
                 }
+                else {
+                    Log(node, "cast type checker failed !");
+                }
 
                 CodeBuilder.Append(", ");
                 OutputType(type, node, ci, "cast");
@@ -348,19 +351,25 @@ namespace RoslynTool.CsToDsl
             string baseOp = op.Substring(0, op.Length - 1);
 
             bool needWrapFunction = true;
+            var leftMemberAccess = node.Left as MemberAccessExpressionSyntax;
+            var leftElementAccess = node.Left as ElementAccessExpressionSyntax;
+            var leftCondAccess = node.Left as ConditionalAccessExpressionSyntax;
+
             var leftOper = m_Model.GetOperation(node.Left);
             var leftSymbolInfo = m_Model.GetSymbolInfo(node.Left);
             var leftSym = leftSymbolInfo.Symbol;
             var leftPsym = leftSym as IPropertySymbol;
             var leftEsym = leftSym as IEventSymbol;
             var leftFsym = leftSym as IFieldSymbol;
-            var leftMemberAccess = node.Left as MemberAccessExpressionSyntax;
-            var leftElementAccess = node.Left as ElementAccessExpressionSyntax;
-            var leftCondAccess = node.Left as ConditionalAccessExpressionSyntax;
-
+            
             var rightOper = m_Model.GetOperation(node.Right);
+
+            var curMethod = GetCurMethodSemanticInfo();
             if (null != leftOper && null != rightOper) {
-                TypeChecker.CheckConvert(rightOper.Type, leftOper.Type, node, GetCurMethodSemanticInfo());
+                TypeChecker.CheckConvert(rightOper.Type, leftOper.Type, node, curMethod);
+            }
+            else {
+                Log(node, "assignment type checker failed ! left oper:{0} right oper:{1}", leftOper, rightOper);
             }
 
             SpecialAssignmentType specialType = SpecialAssignmentType.None;

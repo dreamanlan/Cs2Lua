@@ -571,15 +571,26 @@ namespace RoslynTool.CsToDsl
             if (null != assign) {
                 string op = assign.OperatorToken.Text;
                 string baseOp = op.Substring(0, op.Length - 1);
+                var leftMemberAccess = assign.Left as MemberAccessExpressionSyntax;
+                var leftElementAccess = assign.Left as ElementAccessExpressionSyntax;
+                var leftCondAccess = assign.Left as ConditionalAccessExpressionSyntax;
+
                 var leftOper = m_Model.GetOperation(assign.Left);
                 var leftSymbolInfo = m_Model.GetSymbolInfo(assign.Left);
                 var leftSym = leftSymbolInfo.Symbol;
                 var leftPsym = leftSym as IPropertySymbol;
                 var leftEsym = leftSym as IEventSymbol;
                 var leftFsym = leftSym as IFieldSymbol;
-                var leftMemberAccess = assign.Left as MemberAccessExpressionSyntax;
-                var leftElementAccess = assign.Left as ElementAccessExpressionSyntax;
-                var leftCondAccess = assign.Left as ConditionalAccessExpressionSyntax;
+
+                var rightOper = m_Model.GetOperation(assign.Right);
+
+                var curMethod = GetCurMethodSemanticInfo();
+                if (null != leftOper && null != rightOper) {
+                    TypeChecker.CheckConvert(rightOper.Type, leftOper.Type, assign, curMethod);
+                }
+                else {
+                    Log(assign, "assignment type checker failed ! left oper:{0} right oper:{1}", leftOper, rightOper);
+                }
 
                 SpecialAssignmentType specialType = SpecialAssignmentType.None;
                 if (null != leftMemberAccess && null != leftPsym) {
@@ -745,6 +756,9 @@ namespace RoslynTool.CsToDsl
                 var srcOper = m_Model.GetOperation(init.Value);
                 if (null != srcOper) {
                     TypeChecker.CheckConvert(srcOper.Type, namedTypeSym, node, GetCurMethodSemanticInfo());
+                }
+                else {
+                    Log(node, "local variable type checker failed !");
                 }
                 var oper = m_Model.GetOperation(init) as IVariableDeclarationStatement;
                 IConversionExpression opd = null;
