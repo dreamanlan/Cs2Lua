@@ -48,13 +48,13 @@ UnityEngine.Yield = function(x)
 
 	if type(x) == 'thread' and coroutine.status(x) ~= 'dead' then
 		repeat
-			Yield(nil, function() lualog('coroutine.resume status:{0} after thread {1}', coroutine.status(co), x);coroutine.resume(co) end)
-            lualog('coroutine.yield for thread {1}', x)
+			Yield(nil, function() lualog('coroutine status:{0} after thread {1}', coroutine.status(co), x);coroutine.resume(co) end)
+            lualog('coroutine yield for thread {0}', x)
 			coroutine.yield()
 		until coroutine.status(x) == 'dead'
 	else
 		Yield(x, function() lualog('coroutine status:{0} after {1}', coroutine.status(co), x);if coroutine.status(co) == 'suspended' then coroutine.resume(co) end; end)
-		lualog('coroutine.yield for {1}', x)
+		lualog('coroutine yield for {0}', x)
         coroutine.yield()
 	end
 end
