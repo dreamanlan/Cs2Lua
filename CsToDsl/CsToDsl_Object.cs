@@ -276,9 +276,6 @@ namespace RoslynTool.CsToDsl
         public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
             IMethodSymbol declSym = m_Model.GetDeclaredSymbol(node);
-            if(declSym.Name== "Handle_QSCMD_LILIAN_XIAKE_LISTSC") {
-
-            }
             VisitCommonMethodDeclaration(declSym, node, node.Body, node.ExpressionBody);
         }
         public override void VisitPropertyDeclaration(PropertyDeclarationSyntax node)
