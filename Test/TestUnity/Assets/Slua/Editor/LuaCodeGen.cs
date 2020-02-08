@@ -1096,7 +1096,8 @@ namespace SLua
                     if (mi.Name == "TryAdd" || 
                         mi.Name == "TryDequeue" || 
                         mi.Name == "TryPeek" || 
-                        mi.Name == "TryPop")
+                        mi.Name == "TryPop" ||
+                        mi.Name == "Deconstruct")
                         continue;
                 }
                 if (assemblyFullName.StartsWith("System")) {
@@ -1830,7 +1831,7 @@ namespace SLua
                     if (t.IsValueType) {
                         Write(file, "{0}(argc<={1}){{", first ? "if" : "else if", cons.Length > 0 ? 2 : 1);
                         //Write(file, "{0}(argc=={1}){{", first ? "if" : "else if", 0);
-                        Write(file, "o=new {0}();", FullName(t));
+                        Write(file, "o=new {0}();", TypeDecl(t));
                         Write(file, "pushValue(l,true);");
                         Write(file, "pushValue(l,o);");
                         Write(file, "return 2;");
@@ -1845,8 +1846,8 @@ namespace SLua
                 WriteFunctionAttr(file);
                 Write(file, "static public int constructor(IntPtr l) {");
                 WriteTry(file);
-                Write(file, "{0} o;", FullName(t));
-                Write(file, "o=new {0}();", FullName(t));
+                Write(file, "{0} o;", TypeDecl(t));
+                Write(file, "o=new {0}();", TypeDecl(t));
                 WriteReturn(file, "o");
                 WriteCatchExecption(file);
                 Write(file, "}");

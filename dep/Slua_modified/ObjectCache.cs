@@ -60,6 +60,10 @@ namespace SLua
                 return get(nl);
             return null;
         }
+        public static void AddAQName(Type t, string aqname)
+        {
+            aqnameMap[t] = aqname;
+        }
 
         class ObjSlot
         {
