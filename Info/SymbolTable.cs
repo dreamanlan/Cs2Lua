@@ -153,7 +153,16 @@ namespace RoslynTool.CsToDsl
         }
         internal bool IsCs2DslSymbol(ITypeSymbol sym)
         {
-            return sym.ContainingAssembly == m_AssemblySymbol && !m_ExternTypes.ContainsKey(ClassInfo.SpecialGetFullTypeName(sym, true));
+            var name = ClassInfo.SpecialGetFullTypeName(sym, true);
+            if (name == "System.Nullable_T") {
+                var nsym = sym as INamedTypeSymbol;
+                if (null != nsym) {
+                    nsym = nsym.TypeArguments[0] as INamedTypeSymbol;
+                    name = ClassInfo.SpecialGetFullTypeName(sym, true);
+                    return nsym.ContainingAssembly == m_AssemblySymbol && !m_ExternTypes.ContainsKey(name);
+                }
+            }
+            return sym.ContainingAssembly == m_AssemblySymbol && !m_ExternTypes.ContainsKey(name);
         }
         internal void Init(CSharpCompilation compilation, string cfgPath)
         {
@@ -697,6 +706,21 @@ namespace RoslynTool.CsToDsl
         }
         private static SymbolTable s_Instance = new SymbolTable();
 
+        internal static bool TryRemoveNullable(ref INamedTypeSymbol sym)
+        {
+            bool ret = false;
+            if (null != sym) {
+                var name = ClassInfo.GetFullName(sym);
+                if (name == "System.Nullable_T") {
+                    var nsym = sym.TypeArguments[0] as INamedTypeSymbol;
+                    if (null != nsym) {
+                        sym = nsym;
+                        ret = true;
+                    }
+                }
+            }
+            return ret;
+        }
         //外部导出的api只能使用具体类型，所以调用时泛型参数按提供的参数的类型来生成用于确定调哪个重载版本的签名
         internal static string CalcOverloadedMethodSignature(IMethodSymbol methodSym, IMethodSymbol nonGenericMethodSym)
         {
