@@ -21,6 +21,17 @@ internal class Cs2LuaAssembly
     }
     internal void Init()
     {
+        ObjectCache.AddAQName(typeof(LinkedListNode<CsLibrary.EntityInfo>), "LinkedListNodeEntityInfo");
+        ObjectCache.AddAQName(typeof(KeyValuePair<int, int>), "IntIntPair");
+        ObjectCache.AddAQName(typeof(KeyValuePair<int, float>), "IntFloatPair");
+        ObjectCache.AddAQName(typeof(KeyValuePair<int, string>), "IntStrPair");
+        ObjectCache.AddAQName(typeof(KeyValuePair<int, object>), "IntObjPair");
+        ObjectCache.AddAQName(typeof(KeyValuePair<int, UnityEngine.Object>), "IntUobjPair");
+        ObjectCache.AddAQName(typeof(KeyValuePair<string, int>), "StrIntPair");
+        ObjectCache.AddAQName(typeof(KeyValuePair<string, float>), "StrFloatPair");
+        ObjectCache.AddAQName(typeof(KeyValuePair<string, string>), "StrStrPair");
+        ObjectCache.AddAQName(typeof(KeyValuePair<string, object>), "StrObjPair");
+        ObjectCache.AddAQName(typeof(KeyValuePair<string, UnityEngine.Object>), "StrUobjPair");
         m_LuaSvr.init(null, () => {
             var entry = (LuaTable)m_LuaSvr.start("Program");
             entry.invoke("Init");
