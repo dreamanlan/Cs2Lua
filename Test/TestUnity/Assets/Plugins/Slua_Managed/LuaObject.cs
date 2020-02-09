@@ -1187,7 +1187,16 @@ return index
 		static public bool checkParams<T>(IntPtr l, int p, out T[] pars) where T:class
 		{
 			int top = LuaDLL.lua_gettop(l);
-			if (top - p >= 0)
+            if (top == p && LuaDLL.lua_type(l, p) == LuaTypes.LUA_TTABLE) {
+                int n = LuaDLL.lua_rawlen(l, p);
+                pars = new T[n];
+                for (int k = 0; k < n; k++) {
+                    LuaDLL.lua_rawgeti(l, p, k + 1);
+                    checkType(l, -1, out pars[k]);
+                    LuaDLL.lua_pop(l, 1);
+                }
+            }
+            else if (top - p >= 0)
 			{
 				pars = new T[top - p + 1];
 				for (int n = p, k = 0; n <= top; n++, k++)
@@ -1203,7 +1212,16 @@ return index
 		static public bool checkValueParams<T>(IntPtr l, int p, out T[] pars) where T : struct
 		{
 			int top = LuaDLL.lua_gettop(l);
-			if (top - p >= 0)
+            if (top == p && LuaDLL.lua_type(l, p) == LuaTypes.LUA_TTABLE) {
+                int n = LuaDLL.lua_rawlen(l, p);
+                pars = new T[n];
+                for (int k = 0; k < n; k++) {
+                    LuaDLL.lua_rawgeti(l, p, k + 1);
+                    checkValueType(l, -1, out pars[k]);
+                    LuaDLL.lua_pop(l, 1);
+                }
+            }
+            else if (top - p >= 0)
 			{
 				pars = new T[top - p + 1];
 				for (int n = p, k = 0; n <= top; n++, k++)
@@ -1219,7 +1237,16 @@ return index
         static public bool checkParams(IntPtr l, int p, out bool[] pars)
         {
             int top = LuaDLL.lua_gettop(l);
-            if (top - p >= 0) {
+            if (top == p && LuaDLL.lua_type(l, p) == LuaTypes.LUA_TTABLE) {
+                int n = LuaDLL.lua_rawlen(l, p);
+                pars = new bool[n];
+                for (int k = 0; k < n; k++) {
+                    LuaDLL.lua_rawgeti(l, p, k + 1);
+                    checkType(l, -1, out pars[k]);
+                    LuaDLL.lua_pop(l, 1);
+                }
+            }
+            else if (top - p >= 0) {
                 pars = new bool[top - p + 1];
                 for (int n = p, k = 0; n <= top; n++, k++) {
                     checkType(l, n, out pars[k]);
@@ -1233,7 +1260,16 @@ return index
 		static public bool checkParams(IntPtr l, int p, out float[] pars)
 		{
 			int top = LuaDLL.lua_gettop(l);
-			if (top - p >= 0)
+            if (top == p && LuaDLL.lua_type(l, p) == LuaTypes.LUA_TTABLE) {
+                int n = LuaDLL.lua_rawlen(l, p);
+                pars = new float[n];
+                for (int k = 0; k < n; k++) {
+                    LuaDLL.lua_rawgeti(l, p, k + 1);
+                    checkType(l, -1, out pars[k]);
+                    LuaDLL.lua_pop(l, 1);
+                }
+            }
+            else if (top - p >= 0)
 			{
 				pars = new float[top - p + 1];
 				for (int n = p, k = 0; n <= top; n++, k++)
@@ -1249,7 +1285,16 @@ return index
 		static public bool checkParams(IntPtr l, int p, out int[] pars)
 		{
 			int top = LuaDLL.lua_gettop(l);
-			if (top - p >= 0)
+            if (top == p && LuaDLL.lua_type(l, p) == LuaTypes.LUA_TTABLE) {
+                int n = LuaDLL.lua_rawlen(l, p);
+                pars = new int[n];
+                for (int k = 0; k < n; k++) {
+                    LuaDLL.lua_rawgeti(l, p, k + 1);
+                    checkType(l, -1, out pars[k]);
+                    LuaDLL.lua_pop(l, 1);
+                }
+            }
+            else if (top - p >= 0)
 			{
 				pars = new int[top - p + 1];
 				for (int n = p, k = 0; n <= top; n++, k++)
@@ -1265,7 +1310,16 @@ return index
         static public bool checkParams(IntPtr l, int p, out long[] pars)
         {
             int top = LuaDLL.lua_gettop(l);
-            if (top - p >= 0) {
+            if (top == p && LuaDLL.lua_type(l, p) == LuaTypes.LUA_TTABLE) {
+                int n = LuaDLL.lua_rawlen(l, p);
+                pars = new long[n];
+                for (int k = 0; k < n; k++) {
+                    LuaDLL.lua_rawgeti(l, p, k + 1);
+                    checkType(l, -1, out pars[k]);
+                    LuaDLL.lua_pop(l, 1);
+                }
+            }
+            else if (top - p >= 0) {
                 pars = new long[top - p + 1];
                 for (int n = p, k = 0; n <= top; n++, k++) {
                     checkType(l, n, out pars[k]);
@@ -1278,9 +1332,17 @@ return index
 
 		static public bool checkParams(IntPtr l, int p, out string[] pars)
 		{
-			int top = LuaDLL.lua_gettop(l);
-			if (top - p >= 0)
-			{
+            int top = LuaDLL.lua_gettop(l);
+            if (top == p && LuaDLL.lua_type(l, p) == LuaTypes.LUA_TTABLE) {
+                int n = LuaDLL.lua_rawlen(l, p);
+                pars = new string[n];
+                for (int k = 0; k < n; k++) {
+                    LuaDLL.lua_rawgeti(l, p, k + 1);
+                    checkType(l, -1, out pars[k]);
+                    LuaDLL.lua_pop(l, 1);
+                }
+            }
+            else if (top - p >= 0) {
 				pars = new string[top - p + 1];
 				for (int n = p, k = 0; n <= top; n++, k++)
 				{
@@ -1293,12 +1355,40 @@ return index
 		}
 
 		static public bool checkParams(IntPtr l, int p, out char[] pars)
-		{
-			LuaDLL.luaL_checktype(l, p, LuaTypes.LUA_TSTRING);
-			string s;
-			checkType(l, p, out s);
-			pars = s.ToCharArray();
-			return true;
+        {
+            int top = LuaDLL.lua_gettop(l);
+            if (top == p) {
+                if (LuaDLL.lua_type(l, p) == LuaTypes.LUA_TTABLE) {
+                    int n = LuaDLL.lua_rawlen(l, p);
+                    pars = new char[n];
+                    for (int k = 0; k < n; k++) {
+                        LuaDLL.lua_rawgeti(l, p, k + 1);
+                        checkType(l, -1, out pars[k]);
+                        LuaDLL.lua_pop(l, 1);
+                    }
+                }
+                else if(LuaDLL.lua_isnumber(l, p)) {
+                    char c;
+                    checkType(l, p, out c);
+                    pars = new char[] { c };
+                }
+                else {
+                    LuaDLL.luaL_checktype(l, p, LuaTypes.LUA_TSTRING);
+                    string s;
+                    checkType(l, p, out s);
+                    pars = s.ToCharArray();
+                }
+                return true;
+            }
+            else if (top - p > 0) {
+                pars = new char[top - p + 1];
+                for (int n = p, k = 0; n <= top; n++, k++) {
+                    checkType(l, n, out pars[k]);
+                }
+                return true;
+            }
+            pars = new char[0];
+            return true;
 		}
 
         static public object checkVar(IntPtr l, int p, Type t)
