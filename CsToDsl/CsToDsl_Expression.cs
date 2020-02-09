@@ -1091,7 +1091,7 @@ namespace RoslynTool.CsToDsl
                         var exp = rankspec.Sizes[i];
                         OutputExpressionSyntax(exp);
                         if (i == 0) {
-                            CodeBuilder.AppendFormat("; local{{arr = newarray({0}, d0);}}", etype);
+                            CodeBuilder.AppendFormat("; local{{arr = newarray({0}, d0);}}", elementType);
                         }
                         CodeBuilder.AppendFormat("; for(i{0}, 1, d{1}){{ arr{2} = ", i, i, GetArraySubscriptString(i));
                         if (i < ct - 1) {
