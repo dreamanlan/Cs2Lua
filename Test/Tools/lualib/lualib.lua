@@ -299,10 +299,6 @@ function issignature(sig, method)
     return false
 end
 
-function chararraytostring(arr)
-    return System.String("String__Arr_Char", arr)
-end
-
 function callexternextension(callerClass, method, ...)
     local args = {...}
     local obj = args[1]
@@ -861,11 +857,11 @@ function wrapchar(char, intVal)
     end
 end
 
-function wrapvaluetype(v)
+function wrapstruct(v)
     return v
 end
 
-function wrapexternvaluetype(v)
+function wrapexternstruct(v)
     return v
 end
 
@@ -1748,7 +1744,7 @@ function getiterator(exp)
     end
 end
 
-function wraparray(arr, size)
+function wraparray(arr, size, type)
     if not size then
         size = #arr
     end
@@ -1763,7 +1759,7 @@ function wraparray(arr, size)
     )
 end
 
-function wrapdictionary(dict)
+function wrapanonymousobject(dict)
     local obj = {}
     setmetatable(
         obj,
@@ -1781,9 +1777,13 @@ function wrapdictionary(dict)
     return obj
 end
 
-function wrapvaluetypearray(arr)
+function wrapclassparams(arr)
+    return wraparray(arr)
+end
+
+function wrapstructparams(arr)
     for i, v in ipairs(arr) do
-        arr[i] = wrapvaluetype(v)
+        arr[i] = wrapstruct(v)
     end
     local size = #arr
     return setmetatable(
@@ -1797,9 +1797,9 @@ function wrapvaluetypearray(arr)
     )
 end
 
-function wrapexternvaluetypearray(arr)
+function wrapexternstructparams(arr)
     for i, v in ipairs(arr) do
-        arr[i] = wrapexternvaluetype(v)
+        arr[i] = wrapexternstruct(v)
     end
     local size = #arr
     return setmetatable(

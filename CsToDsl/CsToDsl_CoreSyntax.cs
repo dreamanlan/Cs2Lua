@@ -611,7 +611,7 @@ namespace RoslynTool.CsToDsl
                 VisitAssignment(ci, op, baseOp, assign, expTerminater, true, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType);
                 var oper = m_Model.GetOperation(assign.Right);
                 if (null != leftSym && leftSym.Kind == SymbolKind.Local && null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
-                    CodeBuilder.AppendFormat("{0}{1} = wrapvaluetype({2});", GetIndentString(), leftSym.Name, leftSym.Name);
+                    CodeBuilder.AppendFormat("{0}{1} = wrapstruct({2});", GetIndentString(), leftSym.Name, leftSym.Name);
                     CodeBuilder.AppendLine();
                 }
                 return;

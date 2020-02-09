@@ -1662,13 +1662,13 @@ namespace Generator
                     if (int.TryParse(data.GetParamId(0), out type)) {
                         switch (type) {
                             case 0:
-                                sb.Append("wraparray{...}");
+                                sb.Append("wrapclassparams{...}");
                                 break;
                             case 1:
-                                sb.Append("wrapvaluetypearray{...}");
+                                sb.Append("wrapstructparams{...}");
                                 break;
                             case 2:
-                                sb.Append("wrapexternvaluetypearray{...}");
+                                sb.Append("wrapexternalstructparams{...}");
                                 break;
                         }
                     }
@@ -1679,13 +1679,13 @@ namespace Generator
                         string name = data.GetParamId(1);
                         switch (type) {
                             case 0:
-                                sb.AppendFormat("wraparray({0})", name);
+                                sb.AppendFormat("wrapclassparams({0})", name);
                                 break;
                             case 1:
-                                sb.AppendFormat("wrapvaluetypearray({0})", name);
+                                sb.AppendFormat("wrapstructparams({0})", name);
                                 break;
                             case 2:
-                                sb.AppendFormat("wrapexternvaluetypearray({0})", name);
+                                sb.AppendFormat("wrapexternstructparams({0})", name);
                                 break;
                         }
                     }
@@ -1776,7 +1776,7 @@ namespace Generator
                 GenerateSyntaxComponent(val, sb, indent, false);
             }
             else if (id == "anonymousobject") {
-                sb.Append("wrapdictionary{");
+                sb.Append("wrapanonymousobject{");
                 GenerateArguments(data, sb, indent, 0);
                 sb.Append("}");
             }
@@ -1810,25 +1810,18 @@ namespace Generator
             }
             else if (id == "literalarray") {
                 var typeStr = CalcTypeString(data.GetParam(0));
-                if (typeStr == "System.Char") {
-                    sb.Append("chararraytostring({");
-                    GenerateArguments(data, sb, indent, 1);
-                    sb.Append("})");
-                }
-                else {
-                    sb.Append("wraparray({");
-                    GenerateArguments(data, sb, indent, 1);
-                    sb.Append("})");
-                }
+                sb.Append("wraparray({");
+                GenerateArguments(data, sb, indent, 1);
+                sb.AppendFormat("}}, nil, {0})", typeStr);
             }
             else if (id == "newarray") {
                 var typeStr = CalcTypeString(data.GetParam(0));
                 if (data.GetParamNum() > 1) {
                     var vname = data.GetParamId(1);
-                    sb.AppendFormat("wraparray({{}}, {0})", vname);
+                    sb.AppendFormat("wraparray({{}}, {0}, {1})", vname, typeStr);
                 }
                 else {
-                    sb.Append("wraparray{}");
+                    sb.AppendFormat("wraparray({{}}, nil, {0})", typeStr);
                 }
             }
             else if (id == "foreach") {

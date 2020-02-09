@@ -315,11 +315,11 @@ namespace RoslynTool.CsToDsl
             for (int i = 0; i < mi.ParamNames.Count; ++i) {
                 var name = mi.ParamNames[i];
                 if (mi.ValueParams.Contains(i)) {
-                    codeBuilder.AppendFormat("{0}{1} = wrapvaluetype({2});", GetIndentString(), name, name);
+                    codeBuilder.AppendFormat("{0}{1} = wrapstruct({2});", GetIndentString(), name, name);
                     codeBuilder.AppendLine();
                 }
                 else if (mi.ExternValueParams.Contains(i)) {
-                    codeBuilder.AppendFormat("{0}{1} = wrapexternvaluetype({2});", GetIndentString(), name, name);
+                    codeBuilder.AppendFormat("{0}{1} = wrapexternstruct({2});", GetIndentString(), name, name);
                     codeBuilder.AppendLine();
                 }
             }

@@ -128,10 +128,21 @@ namespace SLua
 
 		static public bool checkArray(IntPtr l, int p, out char[] pars)
 		{
-			LuaDLL.luaL_checktype(l, p, LuaTypes.LUA_TSTRING);
-			string s;
-			checkType(l, p, out s);
-			pars = s.ToCharArray();
+            if (LuaDLL.lua_type(l, p) == LuaTypes.LUA_TTABLE) {
+                int n = LuaDLL.lua_rawlen(l, p);
+                pars = new char[n];
+                for (int k = 0; k < n; k++) {
+                    LuaDLL.lua_rawgeti(l, p, k + 1);
+                    checkType(l, -1, out pars[k]);
+                    LuaDLL.lua_pop(l, 1);
+                }
+            }
+            else {
+                LuaDLL.luaL_checktype(l, p, LuaTypes.LUA_TSTRING);
+                string s;
+                checkType(l, p, out s);
+                pars = s.ToCharArray();
+            }
 			return true;
 		}
 		#endregion

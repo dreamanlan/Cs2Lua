@@ -400,7 +400,7 @@ namespace RoslynTool.CsToDsl
             VisitAssignment(ci, op, baseOp, node, string.Empty, false, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType);
             var oper = m_Model.GetOperation(node.Right);
             if (null != leftSym && leftSym.Kind == SymbolKind.Local && null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
-                CodeBuilder.AppendFormat("; {0} = wrapvaluetype({1})", leftSym.Name, leftSym.Name);
+                CodeBuilder.AppendFormat("; {0} = wrapstruct({1})", leftSym.Name, leftSym.Name);
             }
             if (needWrapFunction) {
                 CodeBuilder.Append("; return(");
