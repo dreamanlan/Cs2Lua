@@ -33,7 +33,6 @@ namespace SLua
 
 	public partial class LuaObject
 	{
-
 		static public bool checkType(IntPtr l, int p, out Vector4 v)
 		{
 			float x, y, z, w;
@@ -94,7 +93,35 @@ namespace SLua
 			checkType(l, p, out v);
 			lm = v;
 			return true;
-		}
+        }
+
+        static public bool checkParams(IntPtr l, int p, out Vector3[] pars)
+        {
+            int top = LuaDLL.lua_gettop(l);
+            if (top - p >= 0) {
+                pars = new Vector3[top - p + 1];
+                for (int n = p, k = 0; n <= top; n++, k++) {
+                    checkType(l, n, out pars[k]);
+                }
+                return true;
+            }
+            pars = new Vector3[0];
+            return true;
+        }
+
+        static public bool checkParams(IntPtr l, int p, out Vector2[] pars)
+        {
+            int top = LuaDLL.lua_gettop(l);
+            if (top - p >= 0) {
+                pars = new Vector2[top - p + 1];
+                for (int n = p, k = 0; n <= top; n++, k++) {
+                    checkType(l, n, out pars[k]);
+                }
+                return true;
+            }
+            pars = new Vector2[0];
+            return true;
+        }
 
         public static void pushValue(IntPtr l, RaycastHit2D r)
 		{
@@ -132,14 +159,10 @@ namespace SLua
 			LuaDLL.luaS_pushVector2(l, o.x, o.y);
 		}
 
-
-
 		public static void pushValue(IntPtr l, Vector3 o)
 		{
 			LuaDLL.luaS_pushVector3(l, o.x, o.y, o.z);
 		}
-
-
 
 		public static void pushValue(IntPtr l, Vector4 o)
 		{
