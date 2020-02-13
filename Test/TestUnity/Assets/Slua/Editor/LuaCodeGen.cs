@@ -2019,7 +2019,7 @@ namespace SLua
             }
             if (method.Name != "GetType" && 
                 method.Name != "GetHashCode" && 
-                method.Name != "Equals" &&
+                (method.Name != "Equals" || method.DeclaringType.Name == "String") &&
                 (method.Name != "ToString" || method.DeclaringType.Name == "Convert") && 
                 /*method.Name != "Clone" &&*/
                 method.Name != "GetEnumerator" && 
