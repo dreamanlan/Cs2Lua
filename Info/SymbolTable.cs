@@ -175,13 +175,16 @@ namespace RoslynTool.CsToDsl
             Dsl.DslFile dslFile = new Dsl.DslFile();
             if (dslFile.Load(Path.Combine(cfgPath, "rewriter.dsl"), (msg) => { Console.WriteLine(msg); })) {
                 foreach (var info in dslFile.DslInfos) {
-                    var call = info.First.Call;
                     var fid = info.GetId();
                     if (fid != "config")
                         continue;
+                    var func = info as Dsl.FunctionData;
+                    if (null == func)
+                        continue;
+                    var call = func.Call;
                     var cid = call.GetParamId(0);
                     if (cid == "LegalGenericTypeList") {
-                        foreach (var comp in info.First.Statements) {
+                        foreach (var comp in func.Statements) {
                             var cd = comp as Dsl.CallData;
                             if (null != cd) {
                                 var mid = cd.GetId();
@@ -194,7 +197,7 @@ namespace RoslynTool.CsToDsl
                             }
                         }
                     } else if (cid == "LegalGenericMethodList") {
-                        foreach (var comp in info.First.Statements) {
+                        foreach (var comp in func.Statements) {
                             var cd = comp as Dsl.CallData;
                             if (null != cd) {
                                 var mid = cd.GetId();
@@ -209,7 +212,7 @@ namespace RoslynTool.CsToDsl
                             }
                         }
                     } else if (cid == "LegalParameterGenericTypeList") {
-                        foreach (var comp in info.First.Statements) {
+                        foreach (var comp in func.Statements) {
                             var cd = comp as Dsl.CallData;
                             if (null != cd) {
                                 var mid = cd.GetId();
@@ -222,7 +225,7 @@ namespace RoslynTool.CsToDsl
                             }
                         }
                     } else if (cid == "LegalExtensionList") {
-                        foreach (var comp in info.First.Statements) {
+                        foreach (var comp in func.Statements) {
                             var cd = comp as Dsl.CallData;
                             if (null != cd) {
                                 var mid = cd.GetId();
@@ -236,7 +239,7 @@ namespace RoslynTool.CsToDsl
                         }
                     }
                     else if (cid == "LegalConvertionList") {
-                        foreach (var comp in info.First.Statements) {
+                        foreach (var comp in func.Statements) {
                             var cd = comp as Dsl.CallData;
                             if (null != cd) {
                                 var mid = cd.GetId();
@@ -255,7 +258,7 @@ namespace RoslynTool.CsToDsl
                             }
                         }
                     } else if (cid == "IllegalTypeList") {
-                        foreach (var comp in info.First.Statements) {
+                        foreach (var comp in func.Statements) {
                             var cd = comp as Dsl.CallData;
                             if (null != cd) {
                                 var mid = cd.GetId();
@@ -268,7 +271,7 @@ namespace RoslynTool.CsToDsl
                             }
                         }
                     } else if (cid == "IllegalMethodList") {
-                        foreach (var comp in info.First.Statements) {
+                        foreach (var comp in func.Statements) {
                             var cd = comp as Dsl.CallData;
                             if (null != cd) {
                                 var mid = cd.GetId();
@@ -283,7 +286,7 @@ namespace RoslynTool.CsToDsl
                             }
                         }
                     } else if (cid == "IllegalPropertyList") {
-                        foreach (var comp in info.First.Statements) {
+                        foreach (var comp in func.Statements) {
                             var cd = comp as Dsl.CallData;
                             if (null != cd) {
                                 var mid = cd.GetId();
@@ -298,7 +301,7 @@ namespace RoslynTool.CsToDsl
                             }
                         }
                     } else if (cid == "IllegalFieldList") {
-                        foreach (var comp in info.First.Statements) {
+                        foreach (var comp in func.Statements) {
                             var cd = comp as Dsl.CallData;
                             if (null != cd) {
                                 var mid = cd.GetId();

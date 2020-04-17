@@ -89,8 +89,11 @@ namespace Generator
             bool firstAttrs = true;
             foreach (var dslInfo in dslFile.DslInfos) {
                 string id = dslInfo.GetId();
-                var funcData = dslInfo.First;
-                var callData = funcData.Call;
+                Dsl.CallData callData = dslInfo as Dsl.CallData;
+                Dsl.FunctionData funcData = dslInfo as Dsl.FunctionData;
+                if (null != funcData) {
+                    callData = funcData.Call;
+                }
                 if (id == "require") {
                     string requireFileName = callData.GetParamId(0).Replace("cs2dsl__", "cs2lua__");
                     string srcPath = Path.Combine(s_ExePath, string.Format("lualib/{0}.lua", requireFileName));
@@ -2441,12 +2444,19 @@ namespace Generator
                 }
             }
         }
-        private static void ReadConfig(Dsl.DslInfo info)
+        private static void ReadConfig(Dsl.ISyntaxComponent cfgInfo)
         {
-            string id = info.GetId();
+            Dsl.FunctionData first = cfgInfo as Dsl.FunctionData;
+            Dsl.StatementData info = cfgInfo as Dsl.StatementData;
+            if (null == first && null != info) {
+                first = info.First;
+            }
+            if (null == first)
+                return;
+            string id = cfgInfo.GetId();
             if (id == "dontrequire") {
                 var cfg = new DontRequireInfo();
-                var f = info.First;
+                var f = first;
                 if (null != f) {
                     foreach (var p in f.Call.Params) {
                         cfg.Requires.Add(p.GetId());
@@ -2455,40 +2465,42 @@ namespace Generator
                         cfg.Requires.Add(s.GetId());
                     }
                 }
-                for (int i = 1; i < info.GetFunctionNum(); ++i) {
-                    f = info.GetFunction(i);
-                    if (null != f) {
-                        string fid = f.GetId();
-                        if (fid == "match") {
-                            foreach (var p in f.Call.Params) {
-                                var str = p.GetId();
-                                var regex = new Regex(str, RegexOptions.Compiled);
-                                cfg.Matches.Add(regex);
+                if (null != info) {
+                    for (int i = 1; i < info.GetFunctionNum(); ++i) {
+                        f = info.GetFunction(i);
+                        if (null != f) {
+                            string fid = f.GetId();
+                            if (fid == "match") {
+                                foreach (var p in f.Call.Params) {
+                                    var str = p.GetId();
+                                    var regex = new Regex(str, RegexOptions.Compiled);
+                                    cfg.Matches.Add(regex);
+                                }
+                                foreach (var s in f.Statements) {
+                                    var str = s.GetId();
+                                    var regex = new Regex(str, RegexOptions.Compiled);
+                                    cfg.Matches.Add(regex);
+                                }
                             }
-                            foreach (var s in f.Statements) {
-                                var str = s.GetId();
-                                var regex = new Regex(str, RegexOptions.Compiled);
-                                cfg.Matches.Add(regex);
+                            else if (fid == "except") {
+                                foreach (var p in f.Call.Params) {
+                                    cfg.Excepts.Add(p.GetId());
+                                }
+                                foreach (var s in f.Statements) {
+                                    cfg.Excepts.Add(s.GetId());
+                                }
                             }
-                        }
-                        else if (fid == "except") {
-                            foreach (var p in f.Call.Params) {
-                                cfg.Excepts.Add(p.GetId());
-                            }
-                            foreach (var s in f.Statements) {
-                                cfg.Excepts.Add(s.GetId());
-                            }
-                        }
-                        else if (fid == "exceptmatch") {
-                            foreach (var p in f.Call.Params) {
-                                var str = p.GetId();
-                                var regex = new Regex(str, RegexOptions.Compiled);
-                                cfg.ExceptMatches.Add(regex);
-                            }
-                            foreach (var s in f.Statements) {
-                                var str = s.GetId();
-                                var regex = new Regex(str, RegexOptions.Compiled);
-                                cfg.ExceptMatches.Add(regex);
+                            else if (fid == "exceptmatch") {
+                                foreach (var p in f.Call.Params) {
+                                    var str = p.GetId();
+                                    var regex = new Regex(str, RegexOptions.Compiled);
+                                    cfg.ExceptMatches.Add(regex);
+                                }
+                                foreach (var s in f.Statements) {
+                                    var str = s.GetId();
+                                    var regex = new Regex(str, RegexOptions.Compiled);
+                                    cfg.ExceptMatches.Add(regex);
+                                }
                             }
                         }
                     }
@@ -2497,7 +2509,7 @@ namespace Generator
             }
             else if (id == "filemerge") {
                 var cfg = new FileMergeInfo();
-                var f = info.First;
+                var f = first;
                 if (null != f) {
                     if (f.Call.GetParamNum() > 0) {
                         var p = f.Call.GetParamId(0);
@@ -2508,28 +2520,30 @@ namespace Generator
                         cfg.MergedFileName = s;
                     }
                 }
-                for (int i = 1; i < info.GetFunctionNum(); ++i) {
-                    f = info.GetFunction(i);
-                    if (null != f) {
-                        string fid = f.GetId();
-                        if (fid == "list") {
-                            foreach (var p in f.Call.Params) {
-                                cfg.Lists.Add(p.GetId());
+                if (null != info) {
+                    for (int i = 1; i < info.GetFunctionNum(); ++i) {
+                        f = info.GetFunction(i);
+                        if (null != f) {
+                            string fid = f.GetId();
+                            if (fid == "list") {
+                                foreach (var p in f.Call.Params) {
+                                    cfg.Lists.Add(p.GetId());
+                                }
+                                foreach (var s in f.Statements) {
+                                    cfg.Lists.Add(s.GetId());
+                                }
                             }
-                            foreach (var s in f.Statements) {
-                                cfg.Lists.Add(s.GetId());
-                            }
-                        }
-                        else if (fid == "match") {
-                            foreach (var p in f.Call.Params) {
-                                var str = p.GetId();
-                                var regex = new Regex(str, RegexOptions.Compiled);
-                                cfg.Matches.Add(regex);
-                            }
-                            foreach (var s in f.Statements) {
-                                var str = s.GetId();
-                                var regex = new Regex(str, RegexOptions.Compiled);
-                                cfg.Matches.Add(regex);
+                            else if (fid == "match") {
+                                foreach (var p in f.Call.Params) {
+                                    var str = p.GetId();
+                                    var regex = new Regex(str, RegexOptions.Compiled);
+                                    cfg.Matches.Add(regex);
+                                }
+                                foreach (var s in f.Statements) {
+                                    var str = s.GetId();
+                                    var regex = new Regex(str, RegexOptions.Compiled);
+                                    cfg.Matches.Add(regex);
+                                }
                             }
                         }
                     }
@@ -2538,7 +2552,7 @@ namespace Generator
             }
             else if (id == "nosignaturearg") {
                 var cfg = new NoSignatureArgInfo();
-                var f = info.First;
+                var f = first;
                 if (null != f) {
                     foreach (var p in f.Call.Params) {
                         var str = p.GetId();
@@ -2554,7 +2568,7 @@ namespace Generator
                 s_NoSignatureArgInfos.Add(cfg);
             }
             else if (id == "replacesignaturearg") {
-                var f = info.First;
+                var f = first;
                 if (null != f) {
                     for(int i = 0; i < f.Call.GetParamNum(); i += 2) {
                         var src = f.Call.GetParamId(i);
@@ -2570,7 +2584,7 @@ namespace Generator
             }
             else if (id == "indexerbylualib") {
                 var cfg = new IndexerByLualibInfo();
-                var f = info.First;
+                var f = first;
                 if (null != f) {
                     if (f.Call.GetParamNum() >= 7) {
                         var str = f.Call.GetParamId(0);
@@ -2612,7 +2626,7 @@ namespace Generator
             else if (id == "addprologue" || id == "addepilogue") {
                 var cfg = new AddPrologueOrEpilogueInfo();
                 cfg.IsPrologue = id == "addprologue";
-                var f = info.First;
+                var f = first;
                 if (null != f) {
                     int pnum = f.Call.GetParamNum();
                     int snum = f.GetStatementNum();
@@ -2637,28 +2651,30 @@ namespace Generator
                         cfg.LogInfo.Args = list.ToArray();
                     }
                 }
-                for (int i = 1; i < info.GetFunctionNum(); ++i) {
-                    f = info.GetFunction(i);
-                    if (null != f) {
-                        string fid = f.GetId();
-                        if (fid == "list") {
-                            foreach (var p in f.Call.Params) {
-                                cfg.Lists.Add(p.GetId());
+                if (null != info) {
+                    for (int i = 1; i < info.GetFunctionNum(); ++i) {
+                        f = info.GetFunction(i);
+                        if (null != f) {
+                            string fid = f.GetId();
+                            if (fid == "list") {
+                                foreach (var p in f.Call.Params) {
+                                    cfg.Lists.Add(p.GetId());
+                                }
+                                foreach (var s in f.Statements) {
+                                    cfg.Lists.Add(s.GetId());
+                                }
                             }
-                            foreach (var s in f.Statements) {
-                                cfg.Lists.Add(s.GetId());
-                            }
-                        }
-                        else if (fid == "match") {
-                            foreach (var p in f.Call.Params) {
-                                var str = p.GetId();
-                                var regex = new Regex(str, RegexOptions.Compiled);
-                                cfg.Matches.Add(regex);
-                            }
-                            foreach (var s in f.Statements) {
-                                var str = s.GetId();
-                                var regex = new Regex(str, RegexOptions.Compiled);
-                                cfg.Matches.Add(regex);
+                            else if (fid == "match") {
+                                foreach (var p in f.Call.Params) {
+                                    var str = p.GetId();
+                                    var regex = new Regex(str, RegexOptions.Compiled);
+                                    cfg.Matches.Add(regex);
+                                }
+                                foreach (var s in f.Statements) {
+                                    var str = s.GetId();
+                                    var regex = new Regex(str, RegexOptions.Compiled);
+                                    cfg.Matches.Add(regex);
+                                }
                             }
                         }
                     }
