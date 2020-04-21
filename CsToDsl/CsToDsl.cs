@@ -284,7 +284,7 @@ namespace RoslynTool.CsToDsl
                     if (m_SkipGenericTypeDefine) {
                         SymbolTable.Instance.AddGenericTypeInstance(ClassInfo.GetFullName(refType), refType);
                     }
-                    else {
+                    else if (!ClassInfo.HasAttribute(refType, "Cs2Dsl.IgnoreAttribute")) {
                         var instInfo = new DerivedGenericTypeInstanceInfo();
                         instInfo.Symbol = refType;
                         instInfo.Node = null;

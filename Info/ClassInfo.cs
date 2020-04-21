@@ -288,8 +288,16 @@ namespace RoslynTool.CsToDsl
         {
             if (null == type)
                 return string.Empty;
-            if (SymbolTable.Instance.IsCs2DslSymbol(type)) {
-                return CalcFullName(type, true);
+            else if (SymbolTable.Instance.IsCs2DslSymbol(type)) {
+                //如果一个类标记为忽略，如果它是泛型类，则创建对象的名字使用泛型参数构建而不是实际类型参数构建
+                //这种类因为需要在脚本里手动实现，假定都是可以一个类实现泛型类的功能的。
+                bool ignore = ClassInfo.HasAttribute(type, "Cs2Dsl.IgnoreAttribute");
+                if (ignore) {
+                    return CalcFullNameWithTypeParameters(type, true);
+                }
+                else {
+                    return CalcFullName(type, true);
+                }
             }
             else {
                 //外部类型不会基于泛型样式导入，只有使用脚本语言实现的集合类会出现这种情况，这里需要用泛型类型名以与lualib.dsl里的名称一致

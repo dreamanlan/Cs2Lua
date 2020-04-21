@@ -476,7 +476,8 @@ namespace RoslynTool.CsToDsl
         internal void AddGenericTypeInstance(string key, INamedTypeSymbol sym)
         {
             lock (m_GenericTypeInstances) {
-                if (!m_GenericTypeInstances.ContainsKey(key)) {
+                bool ignore = ClassInfo.HasAttribute(sym, "Cs2Dsl.IgnoreAttribute");
+                if (!ignore && !m_GenericTypeInstances.ContainsKey(key)) {
                     m_GenericTypeInstances.Add(key, sym);
                 }
             }

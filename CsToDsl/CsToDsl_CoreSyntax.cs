@@ -68,16 +68,21 @@ namespace RoslynTool.CsToDsl
         private void VisitTypeDeclarationSyntax(TypeDeclarationSyntax node)
         {
             INamedTypeSymbol declSym = m_Model.GetDeclaredSymbol(node);
-            if (m_SkipGenericTypeDefine && declSym.IsGenericType) {
-                node.Accept(new InnerClassAnalysis(m_Model));
-                return;
+            bool ignore = ClassInfo.HasAttribute(declSym, "Cs2Dsl.IgnoreAttribute");
+            if (!ignore) {
+                if (m_SkipGenericTypeDefine && declSym.IsGenericType) {
+                    node.Accept(new InnerClassAnalysis(m_Model));
+                    return;
+                }
             }
             if (!m_SkipGenericTypeDefine && !ClassInfo.IsOriginalOrContainingGenericType(m_GenericTypeInstance, declSym)) {
-                DerivedGenericTypeInstanceInfo instInfo = new DerivedGenericTypeInstanceInfo();
-                instInfo.Symbol = declSym;
-                instInfo.Node = node;
-                instInfo.FillTypeParamsAndArgs(declSym);
-                m_DerivedGenericTypeInstances.Enqueue(instInfo);
+                if (!ignore) {
+                    DerivedGenericTypeInstanceInfo instInfo = new DerivedGenericTypeInstanceInfo();
+                    instInfo.Symbol = declSym;
+                    instInfo.Node = node;
+                    instInfo.FillTypeParamsAndArgs(declSym);
+                    m_DerivedGenericTypeInstances.Enqueue(instInfo);
+                }
                 return;
             }
             declSym = GetTypeDefineSymbol(declSym);
