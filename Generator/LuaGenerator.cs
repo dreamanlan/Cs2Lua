@@ -47,7 +47,15 @@ namespace Generator
                     GenerateLua(dslFile, Path.Combine(s_OutPath, Path.ChangeExtension(fileName.Replace("cs2dsl__", "cs2lua__"), s_Ext)), fileName);
                 }
                 catch (Exception ex) {
-                    Log(file, string.Format("exception:{0}\n{1}", ex.Message, ex.StackTrace));
+                    string id = string.Empty;
+                    int line = 0;
+                    if (null != s_CurSyntax) {
+                        id = s_CurSyntax.GetId();
+                        if (null == id)
+                            id = string.Empty;
+                        line = s_CurSyntax.GetLine();
+                    }
+                    Log(file, string.Format("[{0}:{1}]:exception:{2}\n{3}", id, line, ex.Message, ex.StackTrace));
                     File.WriteAllText(Path.Combine(s_LogPath, "Generator.log"), s_LogBuilder.ToString());
                     System.Environment.Exit(-1);
                 }
@@ -88,6 +96,7 @@ namespace Generator
             bool firstRequire = true;
             bool firstAttrs = true;
             foreach (var dslInfo in dslFile.DslInfos) {
+                s_CurSyntax = dslInfo;
                 string id = dslInfo.GetId();
                 Dsl.CallData callData = dslInfo as Dsl.CallData;
                 Dsl.FunctionData funcData = dslInfo as Dsl.FunctionData;
@@ -861,6 +870,7 @@ namespace Generator
         }
         private static void GenerateFieldValueComponent(Dsl.ISyntaxComponent comp, StringBuilder sb, int indent, bool firstLineUseIndent)
         {
+            s_CurSyntax = comp;
             var valData = comp as Dsl.ValueData;
             if (null != valData) {
                 GenerateConcreteSyntax(valData, sb, indent, firstLineUseIndent, true);
@@ -890,6 +900,7 @@ namespace Generator
         }
         private static void GenerateSyntaxComponent(Dsl.ISyntaxComponent comp, StringBuilder sb, int indent, bool firstLineUseIndent)
         {
+            s_CurSyntax = comp;
             var valData = comp as Dsl.ValueData;
             if (null != valData) {
                 GenerateConcreteSyntax(valData, sb, indent, firstLineUseIndent);
@@ -917,6 +928,7 @@ namespace Generator
         }
         private static void GenerateConcreteSyntax(Dsl.ValueData data, StringBuilder sb, int indent, bool firstLineUseIndent, bool useSpecNil)
         {
+            s_CurSyntax = data;
             if (firstLineUseIndent) {
                 sb.AppendFormat("{0}", GetIndentString(indent));
             }
@@ -943,6 +955,7 @@ namespace Generator
         }
         private static void GenerateConcreteSyntax(Dsl.CallData data, StringBuilder sb, int indent, bool firstLineUseIndent)
         {
+            s_CurSyntax = data;
             string id = string.Empty;
             var callData = data.Call;
             if (null == callData) {
@@ -965,7 +978,8 @@ namespace Generator
                     var param1 = data.GetParam(0);
                     var param2 = data.GetParam(1);
                     bool handled = false;
-                    if (id == "=" && param1.GetId() == "multiassign") {
+                    string leftParamId = param1.GetId();
+                    if (id == "=" && leftParamId == "multiassign") {
                         var cd = param1 as Dsl.CallData;
                         if (null != cd) {
                             if (cd.GetParamNum() > 1) {
@@ -985,6 +999,20 @@ namespace Generator
                                 sb.AppendFormat(" {0} ", id);
                                 GenerateSyntaxComponent(param2, sb, indent, false);
                             }
+                            handled = true;
+                        }
+                    }
+                    else if(id == "=" && (leftParamId=="getstatic"
+                         || leftParamId == "getinstance"
+                         || leftParamId == "getstaticindexer"
+                         || leftParamId == "getinstanceindexer"
+                         || leftParamId == "getexternstaticindexer"
+                         || leftParamId == "getexterninstanceindexer")) {
+                        var cd = param1 as Dsl.CallData;
+                        if (null != cd.Name) {
+                            cd.Name.SetId("s" + leftParamId.Substring(1));
+                            cd.AddParams(param2);
+                            GenerateConcreteSyntax(cd, sb, indent, false);
                             handled = true;
                         }
                     }
@@ -1806,7 +1834,7 @@ namespace Generator
                 }
                 sb.Append("}");
             }
-            else if (id == "literallist" || id == "literalcollection" || id == "literalcomplex" || id == "literalobject") {
+            else if (id == "literallist" || id == "literalcollection" || id == "literalcomplex") {
                 sb.Append("{");
                 GenerateArguments(data, sb, indent, 0);
                 sb.Append("}");
@@ -1940,6 +1968,7 @@ namespace Generator
         }
         private static void GenerateConcreteSyntax(Dsl.FunctionData data, StringBuilder sb, int indent, bool firstLineUseIndent)
         {
+            s_CurSyntax = data;
             if (firstLineUseIndent) {
                 sb.AppendFormat("{0}", GetIndentString(indent));
             }
@@ -1981,6 +2010,7 @@ namespace Generator
         }
         private static void GenerateConcreteSyntax(Dsl.StatementData data, StringBuilder sb, int indent, bool firstLineUseIndent)
         {
+            s_CurSyntax = data;
             if (firstLineUseIndent) {
                 sb.AppendFormat("{0}", GetIndentString(indent));
             }
@@ -2066,6 +2096,7 @@ namespace Generator
         }
         private static void GenerateAttribute(Dsl.ISyntaxComponent comp, StringBuilder sb, int indent)
         {
+            s_CurSyntax = comp;
             string prestr = string.Empty;
             var cd = comp as Dsl.CallData;
             if (null != cd) {
@@ -2102,10 +2133,12 @@ namespace Generator
         }
         private static void GenerateArguments(Dsl.CallData data, StringBuilder sb, int indent, int start)
         {
+            s_CurSyntax = data;
             GenerateArguments(data, sb, indent, start, string.Empty);
         }
         private static void GenerateArguments(Dsl.CallData data, StringBuilder sb, int indent, int start, string sig)
         {
+            s_CurSyntax = data;
             string prestr = string.Empty;
             if (!string.IsNullOrEmpty(sig)) {
                 sb.Append(prestr);
@@ -2126,6 +2159,7 @@ namespace Generator
         }
         private static void GenerateStatements(Dsl.FunctionData data, StringBuilder sb, int indent)
         {
+            s_CurSyntax = data;
             foreach (var comp in data.Statements) {
                 GenerateSyntaxComponent(comp, sb, indent, true);
                 string subId = comp.GetId();
@@ -2683,6 +2717,7 @@ namespace Generator
             }
         }
 
+        private static Dsl.ISyntaxComponent s_CurSyntax = null;
         private static string s_ExePath = string.Empty;
         private static string s_SrcPath = string.Empty;
         private static string s_LogPath = string.Empty;

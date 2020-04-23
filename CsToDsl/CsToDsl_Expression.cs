@@ -866,7 +866,7 @@ namespace RoslynTool.CsToDsl
                         isCollectionObj = IsImplementationOfSys(typeSymInfo, "ICollection");
                     }
                     if (isCollectionObj) {
-                        CodeBuilder.Append("literalobject(");
+                        CodeBuilder.Append("literalcollection(");
                         var args = node.Expressions;
                         int ct = args.Count;
                         for (int i = 0; i < ct; ++i) {

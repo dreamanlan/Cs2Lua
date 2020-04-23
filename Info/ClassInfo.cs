@@ -288,7 +288,7 @@ namespace RoslynTool.CsToDsl
         {
             if (null == type)
                 return string.Empty;
-            else if (SymbolTable.Instance.IsCs2DslSymbol(type)) {
+            if (SymbolTable.Instance.IsCs2DslSymbol(type)) {
                 //如果一个类标记为忽略，如果它是泛型类，则创建对象的名字使用泛型参数构建而不是实际类型参数构建
                 //这种类因为需要在脚本里手动实现，假定都是可以一个类实现泛型类的功能的。
                 bool ignore = ClassInfo.HasAttribute(type, "Cs2Dsl.IgnoreAttribute");

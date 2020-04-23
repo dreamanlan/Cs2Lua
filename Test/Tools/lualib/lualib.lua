@@ -79,6 +79,10 @@ System.Collections.Generic.MyDictionary_TKey_TValue = System.Collections.Generic
 System.Linq = System.Linq or {}
 System.Linq.Enumerable = System.Linq.Enumerable or {}
 
+Cs2LuaList_T = Cs2LuaList_T or {}
+Cs2LuaIntDictionary_TValue = Cs2LuaIntDictionary_TValue or {}
+Cs2LuaStringDictionary_TValue = Cs2LuaStringDictionary_TValue or {}
+
 __cs2lua_special_integer_operators = {"/", "%", "+", "-", "*", "<<", ">>", "&", "|", "^", "~"}
 __cs2lua_div = 0
 __cs2lua_mod = 1
@@ -1842,7 +1846,11 @@ function newlist(t, typeargs, typekinds, ctor, list, ...)
 end
 
 function newcollection(t, typeargs, typekinds, ctor, coll, ...)
-    if coll then
+    if t == Cs2LuaList_T then
+        return newlist(t, typeargs, typekinds, ctor, coll, ...)
+    elseif t == Cs2LuaIntDictionary_TValue or t == Cs2LuaStringDictionary_TValue then
+        return newdictionary(t, typeargs, typekinds, ctor, coll, ...)
+    elseif coll then
         return setmetatable(coll, {__index = __mt_index_of_hashset, __cs2lua_defined = true, __class = t, __cs2lua_data = {}})
     end
 end

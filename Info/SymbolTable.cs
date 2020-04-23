@@ -839,6 +839,8 @@ namespace RoslynTool.CsToDsl
                         sb.Append(fn.Replace('.', '_'));
                     }
                     else {
+                        //这里使用泛型形参名作为函数签名的一部分，主要是为适应泛型类实例化后仍能保持函数签名一致
+                        //因此导致的缺陷是不能支持依靠泛型类型的实参类型来区分的重载函数（这时候就在c#里给函数换个名字吧）
                         string fn = ClassInfo.GetFullName(oriparam.Type);
                         sb.Append(fn.Replace('.', '_'));
                     }
