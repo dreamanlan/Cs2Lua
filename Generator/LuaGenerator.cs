@@ -1362,10 +1362,18 @@ namespace Generator
                 int ct;
                 int.TryParse(_pct, out ct);
                 if (ct == 1) {
+                    var strClass = CalcTypeString(_class);
+                    var strMember = _member;
+                    int indexerType;
+                    bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, string.Empty, string.Empty, strClass, strMember, out indexerType);
+
                     var _index = data.Params[3];
                     GenerateSyntaxComponent(_class, sb, 0, false);
                     sb.Append('[');
                     GenerateSyntaxComponent(_index, sb, 0, false);
+                    if (isIndexerByLua && indexerType == (int)IndexerTypeEnum.LikeArray) {
+                        sb.Append(" + 1");
+                    }
                     sb.Append(']');
                 }
                 else {
@@ -1390,10 +1398,20 @@ namespace Generator
                 int ct;
                 int.TryParse(_pct, out ct);
                 if (ct == 1) {
+                    var strObj = CalcExpressionString(_obj);
+                    var strIntf = CalcTypeString(_intf);
+                    var strClass = CalcTypeString(_class);
+                    var strMember = _member;
+                    int indexerType;
+                    bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, strObj, strIntf, strClass, strMember, out indexerType);
+
                     var _index = data.Params[5];
                     GenerateSyntaxComponent(_obj, sb, indent, false);
                     sb.Append('[');
                     GenerateSyntaxComponent(_index, sb, 0, false);
+                    if (isIndexerByLua && indexerType == (int)IndexerTypeEnum.LikeArray) {
+                        sb.Append(" + 1");
+                    }
                     sb.Append(']');
                 }
                 else {
@@ -1419,11 +1437,19 @@ namespace Generator
                 int ct;
                 int.TryParse(_pct, out ct);
                 if (ct == 2 && _toplevel == "true") {
+                    var strClass = CalcTypeString(_class);
+                    var strMember = _member;
+                    int indexerType;
+                    bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, string.Empty, string.Empty, strClass, strMember, out indexerType);
+
                     var _index = data.Params[4];
                     var _val = data.Params[5];
                     GenerateSyntaxComponent(_class, sb, 0, false);
                     sb.Append('[');
                     GenerateSyntaxComponent(_index, sb, 0, false);
+                    if (isIndexerByLua && indexerType == (int)IndexerTypeEnum.LikeArray) {
+                        sb.Append(" + 1");
+                    }
                     sb.Append(']');
                     sb.Append(" = ");
                     GenerateSyntaxComponent(_val, sb, 0, false);
@@ -1451,11 +1477,21 @@ namespace Generator
                 int ct;
                 int.TryParse(_pct, out ct);
                 if (ct == 2 && _toplevel == "true") {
+                    var strObj = CalcExpressionString(_obj);
+                    var strIntf = CalcTypeString(_intf);
+                    var strClass = CalcTypeString(_class);
+                    var strMember = _member;
+                    int indexerType;
+                    bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, strObj, strIntf, strClass, strMember, out indexerType);
+
                     var _index = data.Params[6];
                     var _val = data.Params[7];
                     GenerateSyntaxComponent(_obj, sb, indent, false);
                     sb.Append('[');
                     GenerateSyntaxComponent(_index, sb, 0, false);
+                    if (isIndexerByLua && indexerType == (int)IndexerTypeEnum.LikeArray) {
+                        sb.Append(" + 1");
+                    }
                     sb.Append(']');
                     sb.Append(" = ");
                     GenerateSyntaxComponent(_val, sb, 0, false);
