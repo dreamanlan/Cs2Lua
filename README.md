@@ -1,13 +1,13 @@
 # Cs2Lua
 CSharp代码转lua，适用于使用lua实现热更新而又想有一个强类型检查的语言的场合
 
-##【示例链接】
+## 【示例链接】
 
 https://github.com/dreamanlan/Cs2Lua/tree/master/Test
 
 
 
-##【命令行】
+## 【命令行】
 
     Cs2Lua [-out dir] [-ext fileext] [-enableinherit] [-enablelinq] [-outputresult] [-noautorequire] [-luacomponentbystring] [-usearraygetset] [-enabletranslationcheck] [-d macro] [-u macro] [-externpath path] [-ignorepath path] [-refbyname dllname alias] [-refbypath dllpath alias] [-systemdllpath dllpath] [-src] csfile|csprojfile
 
@@ -41,7 +41,7 @@ Cs2Lua的输出主要包括：
 
 
 
-##【源由】
+## 【源由】
 
 1、基于unity3d的移动游戏开发，在android与ios平台上的限制不同。在android上，我们可以拆分可执行文件为多个dll，然后运行时动态加载除主程序外的其它dll，这样也就允许了对dll的单独更新，然而ios上此路不通，ios禁止使用jit与动态加载dll。为了实现热更新，游戏行业一般采用lua。
 
@@ -59,7 +59,7 @@ Cs2Lua的输出主要包括：
   
   
 
-##【C#->lua对c#的限制】
+## 【C#->lua对c#的限制】
 
 1、不完全支持类的继承与泛型（可以实现接口），主要原因是lua的元表机制很难完美实现c#对象继承的详细语义同时还保持良好的效率与可理解性。并且支持接口与partial类后，继承的很多特性可以很优雅的实现。
 
@@ -83,7 +83,7 @@ Cs2Lua的输出主要包括：
 
 
 
-##【主要支持的c#特性】
+## 【主要支持的c#特性】
 
 1、类、方法、indexer、特性、事件、委托、字段等类定义相关的机制，静态与实例2类。
 
@@ -123,7 +123,7 @@ Cs2Lua的输出主要包括：
 
 
 
-##【支持在C#里用属性标记的额外特性】
+## 【支持在C#里用属性标记的额外特性】
 
 1、Cs2Lua.Ignore属性
 
@@ -151,7 +151,7 @@ Cs2Lua的输出主要包括：
  
  
 
-##【基本思路】
+## 【基本思路】
 
 1、语法制导方式翻译到DSL（可以理解为简化了语法特性的中间语言），再由DSL经由生成器转换为lua。（c#语法、语义直接使用Rosyln工程）
 
@@ -173,7 +173,7 @@ Cs2Lua的输出主要包括：
 
 
 
-##【比较复杂的转换】
+## 【比较复杂的转换】
 
 1、ref/out参数【假设C#函数定义int f(int a, int b, ref int c, out int d)】 
 
@@ -345,7 +345,7 @@ Cs2Lua的输出主要包括：
   
   
   
-##【特殊处理】
+## 【特殊处理】
 
 1、转换出的lua代码不使用self表示对象自己，而是使用this表示对象自己，这样无需处理c#代码里用self作变量名的情形。类似的，转换出的lua使用base来表示父类子对象。类似的，property的get/set方法名也仍然是get/set，event接口实现的add/remove方法名也仍然使用add/remove。
 
@@ -374,7 +374,7 @@ GetComponent<T>() => GetCompoent(Type)
 
 
   
-##【用法】
+## 【用法】
 
 1、建立一个C#工程，引用Cs2Lualualib.dll。
 
@@ -392,7 +392,7 @@ GetComponent<T>() => GetCompoent(Type)
 
 
 
-##【lualib.lua】
+## 【lualib.lua】
 
 *** cs2lua的实现假设C#导出给lua的API都采用slua。
 
@@ -442,7 +442,7 @@ public class IntList : List<int>
     
     
 
-##【如何增加可以在c#里使用的API】
+## 【如何增加可以在c#里使用的API】
 
 1、第一种方式就是在独立的C# dll里实现，然后用slua导出。
 
@@ -454,19 +454,19 @@ b、所用的api没有在c# dll里定义，所以也不会在slua里导出。这
 
 
 
-##【调试lua】
+## 【调试lua】
 
 可以使用LuaStudio进行lua调试，但对于比较复杂的工程，调试实在是非常慢。
 
 
 
-##【示例链接】
+## 【示例链接】
 
 https://github.com/dreamanlan/Cs2Lua/tree/master/Test
 
 
 
-##【为什么不再支持各种lua的c#运行时？】
+## 【为什么不再支持各种lua的c#运行时？】
 
 1、cs2lua需要对lua的c#封装进行较大修改，目前是基于slua的源码修改的，不能单独使用各类lua的c#运行时实现（比较大的修改是继承与重载方法的匹配机制）。
 
