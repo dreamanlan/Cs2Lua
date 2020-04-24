@@ -196,6 +196,15 @@ LuaConsole = {
 }
 
 Cs2LuaLibrary = {
+    IsCs2Lua = function(obj)
+        if obj then
+            local meta = getmetatable(obj)
+            if meta and rawget(meta, "__cs2lua_defined") then
+                return true;
+            end
+        end
+        return false
+    end,
     ToString = function(T, val)
         return tostring(val)
     end,
