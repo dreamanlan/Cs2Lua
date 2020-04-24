@@ -1326,7 +1326,7 @@ __mt_index_of_array = function(t, k)
             __inc_array_count(obj)
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
         end
-    elseif k == "IndexOf" then
+    elseif k == "IndexOf" then                      --System.Collections.Generic.List<T>::IndexOf
         return function(obj, sig, p)
             local ct = __get_array_count(obj)
             for i = 1, ct do
@@ -1337,8 +1337,30 @@ __mt_index_of_array = function(t, k)
             end
             return -1
         end
-    elseif k == "LastIndexOf" then
+    elseif k == "IndexOf__Cs2LuaList_T_T" then      --Cs2Lua<T>::IndexOf
+        return function(obj, p)
+            local ct = __get_array_count(obj)
+            for i = 1, ct do
+                local v = rawget(obj, i)
+                if rawequal(v,p) then
+                    return i - 1
+                end
+            end
+            return -1
+        end
+    elseif k == "LastIndexOf" then                  --System.Collections.Generic.List<T>::LastIndexOf
         return function(obj, sig, p)
+            local ct = __get_array_count(obj)
+            for k = ct, 1 do
+                local v = rawget(obj, k)
+                if rawequal(v,p) then
+                    return k - 1
+                end
+            end
+            return -1
+        end
+    elseif k == "LastIndexOf__Cs2LuaList_T_T" then  --Cs2LuaList<T>::LastIndexOf
+        return function(obj, p)
             local ct = __get_array_count(obj)
             for k = ct, 1 do
                 local v = rawget(obj, k)
@@ -1444,8 +1466,17 @@ __mt_index_of_array = function(t, k)
         return function(obj)
             return GetArrayEnumerator(obj)
         end
-    elseif k == "Sort" then
+    elseif k == "Sort" then                         --System.Collections.Generic.List<T>::Sort
         return function(obj, sig, predicate)
+            table.sort(
+                obj,
+                function(a, b)
+                    return predicate(a, b) < 0
+                end
+            )
+        end
+    elseif k == "Sort__System_Comparison_T" then    --Cs2LuaList<T>::Sort
+        return function(obj, predicate)
             table.sort(
                 obj,
                 function(a, b)
