@@ -11,6 +11,9 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace RoslynTool.CsToDsl
 {
+    /// <summary>
+    /// 翻译过程中用到的符号信息，也包括翻译所用的dsl配置信息。
+    /// </summary>
     internal class SymbolTable
     {
         internal CSharpCompilation Compilation

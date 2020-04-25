@@ -9,6 +9,9 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace RoslynTool.CsToDsl
 {
+    /// <summary>
+    /// 分析指定代码块内yield语句的使用情况
+    /// </summary>
     internal class YieldAnalysis : CSharpSyntaxWalker
     {
         public int YieldCount

@@ -9,6 +9,9 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace RoslynTool.CsToDsl
 {
+    /// <summary>
+    /// 确定一个局部变量是否可在声明时初始化
+    /// </summary>
     internal class LocalVariableAccessAnalysis : CSharpSyntaxWalker
     {
         public bool NeedInitOnDeclaration

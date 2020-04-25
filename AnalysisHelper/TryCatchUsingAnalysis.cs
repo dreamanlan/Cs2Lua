@@ -10,6 +10,9 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace RoslynTool.CsToDsl
 {
+    /// <summary>
+    /// 检查指定代码块内try-catch与using语句的使用情况
+    /// </summary>
     internal class TryCatchUsingAnalysis : CSharpSyntaxWalker
     {
         public bool ExistTryCatch

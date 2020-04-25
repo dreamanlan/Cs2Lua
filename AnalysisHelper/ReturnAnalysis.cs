@@ -10,6 +10,9 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace RoslynTool.CsToDsl
 {
+    /// <summary>
+    /// 检查在指定代码块内return、continue、break语句的情况
+    /// </summary>
     internal class ReturnContinueBreakAnalysis : CSharpSyntaxWalker
     {
         public bool Exist

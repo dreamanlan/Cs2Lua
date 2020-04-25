@@ -9,6 +9,9 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace RoslynTool.CsToDsl
 {
+    /// <summary>
+    /// 搜索指定代码块内是否存在break语句（排除内嵌的语句块）
+    /// </summary>
     internal class BreakAnalysis : CSharpSyntaxWalker
     {
         public int BreakCount

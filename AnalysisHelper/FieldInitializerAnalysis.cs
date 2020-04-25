@@ -10,6 +10,9 @@ using Microsoft.CodeAnalysis.Semantics;
 
 namespace RoslynTool.CsToDsl
 {
+    /// <summary>
+    /// 检查字段初始化表达式里是否引用了类型参数
+    /// </summary>
     internal class FieldInitializerAnalysis : CSharpSyntaxWalker
     {
         public bool UseExplicitTypeParam

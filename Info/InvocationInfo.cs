@@ -10,6 +10,9 @@ using Microsoft.CodeAnalysis.Semantics;
 
 namespace RoslynTool.CsToDsl
 {
+    /// <summary>
+    /// 用于翻译方法调用的信息。
+    /// </summary>
     internal class ArgDefaultValueInfo
     {
         internal object Value;

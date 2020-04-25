@@ -10,6 +10,9 @@ using Microsoft.CodeAnalysis.Semantics;
 
 namespace RoslynTool.CsToDsl
 {
+    /// <summary>
+    /// 用于翻译方法定义的信息。
+    /// </summary>
     internal class MethodInfo
     {
         internal List<string> ParamNames = new List<string>();

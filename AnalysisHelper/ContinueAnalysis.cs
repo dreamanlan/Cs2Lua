@@ -9,6 +9,9 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace RoslynTool.CsToDsl
 {
+    /// <summary>
+    /// 分析当前块内的continue语句
+    /// </summary>
     internal class ContinueAnalysis : CSharpSyntaxWalker
     {
         public int ContinueCount

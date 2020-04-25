@@ -9,6 +9,9 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace RoslynTool.CsToDsl
 {
+    /// <summary>
+    /// 类的C#语义信息
+    /// </summary>
     internal class ClassSymbolInfo
     {
         internal string ClassKey = string.Empty;

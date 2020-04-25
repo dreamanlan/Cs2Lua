@@ -9,6 +9,9 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace RoslynTool.CsToDsl
 {
+    /// <summary>
+    /// lua关键字作c#变量名的，需要进行名称替换
+    /// </summary>
     internal class DslKeywordsReplacer : CSharpSyntaxRewriter
     {
         public override SyntaxToken VisitToken(SyntaxToken token)

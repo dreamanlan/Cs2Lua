@@ -10,6 +10,9 @@ using Microsoft.CodeAnalysis.Semantics;
 
 namespace RoslynTool.CsToDsl
 {
+    /// <summary>
+    /// 寻找嵌入的泛型类
+    /// </summary>
     internal class InnerClassAnalysis : CSharpSyntaxWalker
     {
         public override void VisitStructDeclaration(StructDeclarationSyntax node)

@@ -715,6 +715,10 @@ namespace RoslynTool.CsToDsl
             VisitBracketedArgumentList(node.ArgumentList);
             CodeBuilder.Append("]");
         }
+        /// <summary>
+        /// 对象创建与初始化是除赋值与函数调外另一个比较复杂的地方，这个函数和后面几个函数完成相关工作。
+        /// </summary>
+        /// <param name="node"></param>
         public override void VisitInitializerExpression(InitializerExpressionSyntax node)
         {
             var oper = m_Model.GetOperation(node);

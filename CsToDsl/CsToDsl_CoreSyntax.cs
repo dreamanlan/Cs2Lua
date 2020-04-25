@@ -22,6 +22,12 @@ namespace RoslynTool.CsToDsl
             }
             node.Accept(this);
         }
+        /// <summary>
+        /// C#的ref/out参数需要翻译到lua的多返回语句，由于函数调用可能是表达式的一部分，这导致作为顶层表达式与嵌入在表达式中的一部分
+        /// 的翻译方式不一样，嵌入的部分需要使用匿名函数封装。这里是作为顶层表达式的入口。
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="expTerminater"></param>
         private void VisitToplevelExpression(ExpressionSyntax expression, string expTerminater)
         {
             VisitToplevelExpressionFirstPass(expression, expTerminater);
@@ -568,6 +574,11 @@ namespace RoslynTool.CsToDsl
                 }
             }
         }
+        /// <summary>
+        /// 顶层表达式的处理分为表达式本身与++/--的后续处理。这是表达式本身的部分。
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="expTerminater"></param>
         private void VisitToplevelExpressionFirstPass(ExpressionSyntax expression, string expTerminater)
         {
             var ci = m_ClassInfoStack.Peek();
@@ -865,6 +876,24 @@ namespace RoslynTool.CsToDsl
             }
             CodeBuilder.AppendLine(";");
         }
+        /// <summary>
+        /// 赋值语句的翻译可能是翻译里最复杂的一部分，这个函数与后面几个分别对赋值的不同情形进行处理。
+        /// </summary>
+        /// <param name="ci"></param>
+        /// <param name="op"></param>
+        /// <param name="baseOp"></param>
+        /// <param name="assign"></param>
+        /// <param name="expTerminater"></param>
+        /// <param name="toplevel"></param>
+        /// <param name="leftOper"></param>
+        /// <param name="leftSym"></param>
+        /// <param name="leftPsym"></param>
+        /// <param name="leftEsym"></param>
+        /// <param name="leftFsym"></param>
+        /// <param name="leftMemberAccess"></param>
+        /// <param name="leftElementAccess"></param>
+        /// <param name="leftCondAccess"></param>
+        /// <param name="specialType"></param>
         private void VisitAssignment(ClassInfo ci, string op, string baseOp, AssignmentExpressionSyntax assign, string expTerminater, bool toplevel, IOperation leftOper, ISymbol leftSym, IPropertySymbol leftPsym, IEventSymbol leftEsym, IFieldSymbol leftFsym, MemberAccessExpressionSyntax leftMemberAccess, ElementAccessExpressionSyntax leftElementAccess, ConditionalAccessExpressionSyntax leftCondAccess, SpecialAssignmentType specialType)
         {
             var assignOper = m_Model.GetOperation(assign);

@@ -57,6 +57,12 @@ namespace RoslynTool.CsToDsl
                 return Logger.Instance.ErrorLog;
             }
         }
+        /// <summary>
+        /// 单文件翻译分为两遍，一遍是非泛型的翻译，此时跳过泛型类型。
+        /// 另一遍是泛型的翻译，采用C++模板实例化的方式翻译。
+        /// 这里是非泛型的翻译入口。
+        /// </summary>
+        /// <param name="node"></param>
         internal void Translate(SyntaxNode node)
         {
             m_SkipGenericTypeDefine = true;
@@ -66,6 +72,13 @@ namespace RoslynTool.CsToDsl
                 m_ToplevelCodeBuilder.Clear();
             }
         }
+        /// <summary>
+        /// 这是泛型类实例翻译的入口点，处理之前翻译时添加到队列里的泛型类实例。
+        /// 翻译的方式和c++的模板实例化类似。
+        /// 在翻译的过程发现新的泛型实例也会添加到翻译队列里处理。
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="sym"></param>
         internal void Translate(SyntaxNode node, INamedTypeSymbol sym)
         {
             m_SkipGenericTypeDefine = false;

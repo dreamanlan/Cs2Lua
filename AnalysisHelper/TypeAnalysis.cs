@@ -9,6 +9,9 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace RoslynTool.CsToDsl
 {
+    /// <summary>
+    /// 提取当前代码文件内的声明的类型
+    /// </summary>
     internal class TypeAnalysis : CSharpSyntaxWalker
     {
         public List<ITypeSymbol> Symbols

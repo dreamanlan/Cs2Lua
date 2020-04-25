@@ -10,6 +10,9 @@ using Microsoft.CodeAnalysis.Semantics;
 
 namespace RoslynTool.CsToDsl
 {
+    /// <summary>
+    /// 一些C#层面合法但cs2lua需要限制的相关用法的类型检查。
+    /// </summary>
     internal static class TypeChecker
     {
         internal static void CheckMemberAccess(SemanticModel model, MemberAccessExpressionSyntax node, IMethodSymbol callerSym)

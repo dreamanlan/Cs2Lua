@@ -11,6 +11,11 @@ using Microsoft.CodeAnalysis.Semantics;
 
 namespace RoslynTool.CsToDsl
 {
+    /// <summary>
+    /// 描述翻译结果的类信息。
+    /// 翻译过程中采用语法制导的方式直接翻译到中间DSL代码，每个类被翻译到多个代码片断，
+    /// 最后再组装输出到一个代码文件里。
+    /// </summary>
     internal class ClassInfo
     {
         internal bool IsEnum = false;
