@@ -1,23 +1,27 @@
-require "cs2lua__utility";
-require "cs2lua__namespaces";
-require "cs2lua__externenums";
-require "cs2lua__interfaces";
-require "luaconsole";
-require "toplevel__testenum";
+require "cs2lua__namespaces"; 
 
 TopLevel.Runnable = {
 	__new_object = function(...)
-		return newobject(TopLevel.Runnable, {}, {}, nil, nil, ...);
+		return newobject(TopLevel.Runnable, nil, nil, "ctor", nil, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.Runnable;
 		local static_methods = {
 			cctor = function()
+				TopLevel.Runnable.__cctor();
+			end,
+			__cctor = function()
+				if TopLevel.Runnable.__cctor_called then 
+					return;
+				else
+					TopLevel.Runnable.__cctor_called = true;
+				end;
 			end,
 		};
 
 		local static_fields_build = function()
 			local static_fields = {
+				__cctor_called = false,
 			};
 			return static_fields;
 		end;
@@ -40,22 +44,31 @@ TopLevel.Runnable = {
 			end,
 			Test2 = function(this)
 				local s;
-				s = invokeforbasicvalue(4, true, TopLevel.TestEnum, "ToString");
+				s = invokeforbasicvalue(4, true, TopLevel.TestEnum, "ToString", "System.Enum:ToString");
 				local e;
 				e = 1;
-				System.Enum.Parse(TopLevel.TestEnum, "Two");
+				System.Enum.Parse("System.Enum:Parse__Type__String", TopLevel.TestEnum, "Two");
 				local ss;
-				ss = invokeforbasicvalue(1, true, System.PlatformID, "ToString");
+				ss = invokeforbasicvalue(1, true, System.PlatformID, "ToString", "System.Enum:ToString");
 			end,
 			Runnable_add_OnAction = function(this, value)
 			end,
 			Runnable_remove_OnAction = function(this, value)
 			end,
 			ctor = function(this)
+				this:__ctor();
+			end,
+			__ctor = function(this)
+				if this.__ctor_called then 
+					return;
+				else
+					this.__ctor_called = true;
+				end;
 			end,
 		};
 		local instance_fields_build = function()
 			local instance_fields = {
+				__ctor_called = false,
 			};
 			return instance_fields;
 		end;
@@ -89,8 +102,59 @@ TopLevel.Runnable = {
 			IRunnable0_Test = "Runnable_Test",
 		};
 
-		return defineclass(nil, "TopLevel.Runnable", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
+		local class_info = {
+			Kind = TypeKind.Class,
+		};
+		local method_info = {
+			Runnable_Test = {
+				Kind = MethodKind.ExplicitInterfaceImplementation,
+				private = true,
+			},
+			Runnable_get_TestProp = {
+				Kind = MethodKind.PropertyGet,
+				private = true,
+			},
+			Runnable_set_TestProp = {
+				Kind = MethodKind.PropertySet,
+				private = true,
+			},
+			get_Item = {
+				Kind = MethodKind.PropertyGet,
+			},
+			set_Item = {
+				Kind = MethodKind.PropertySet,
+			},
+			Test2 = {
+				Kind = MethodKind.Ordinary,
+			},
+			Runnable_add_OnAction = {
+				Kind = MethodKind.EventAdd,
+				private = true,
+			},
+			Runnable_remove_OnAction = {
+				Kind = MethodKind.EventRemove,
+				private = true,
+			},
+			ctor = {
+				Kind = MethodKind.Constructor,
+			},
+		};
+		local property_info = {
+		};
+		local field_info = {
+		};
+		local field_info = nil;
+
+		Utility.Warn("TopLevel.Runnable::__define_class begin");
+		local __defineclass_return = defineclass(nil, "TopLevel.Runnable", "Runnable", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		Utility.Warn("TopLevel.Runnable::__define_class end");
+		return __defineclass_return;
 	end,
 };
 
-TopLevel.Runnable.__define_class();
+
+require "cs2lua__lualib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+require "toplevel__testenum";
+settempmetatable(TopLevel.Runnable);

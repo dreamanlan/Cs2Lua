@@ -1,7 +1,7 @@
-require("cs2lua__utility");
-require("cs2lua__namespaces");
-require("cs2lua__externenums");
-require("cs2lua__interfaces");
+require("cs2dsl__lualib");
+require("cs2dsl__namespaces");
+require("cs2dsl__externenums");
+require("cs2dsl__interfaces");
 
 enum(TopLevel.TestEnum, System.Enum) {
 	member("Invalid", -2147483648);

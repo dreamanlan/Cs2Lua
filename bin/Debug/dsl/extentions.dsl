@@ -1,7 +1,8 @@
-require("cs2lua__utility");
-require("cs2lua__namespaces");
-require("cs2lua__externenums");
-require("cs2lua__interfaces");
+require("cs2dsl__lualib");
+require("cs2dsl__namespaces");
+require("cs2dsl__externenums");
+require("cs2dsl__interfaces");
+require("transform");
 
 class(Extentions) {
 	static_methods {
@@ -9,56 +10,39 @@ class(Extentions) {
 			return(execbinary("/", getinstance(dateTime, "Ticks"), 10000, System.Int64, System.Int64, TypeKind.Struct, TypeKind.Struct));
 		};
 		timeSince1970 = function(dateTime){
-			return(typecast(( execbinary("/", callstatic(Extentions, "timeSince1970InMillisecond", dateTime), 1000, System.Int64, System.Int64, TypeKind.Struct, TypeKind.Struct) ), System.Int64, TypeKind.Struct));
+			return(typecast(( execbinary("/", callextension(Extentions, "timeSince1970InMillisecond", dateTime), 1000, System.Int64, System.Int64, TypeKind.Struct, TypeKind.Struct) ), System.Int64, TypeKind.Struct));
 		};
 		timeSince1970InMillisecond = function(dateTime){
 			comment("return (long)(Time.realtimeSinceStartup * 1000);");
 			if( execbinary("==", getinstance(getstatic(Extentions, "dateTime1970"), "Ticks"), 0, System.Int64, System.Int64, TypeKind.Struct, TypeKind.Struct) ){
 				comment("Debug.LogError(\"Ticks = 0\");");
-				getstatic(Extentions, "dateTime1970") = callstatic(System.DateTime, "Parse", "1970-1-1");
+				getstatic(Extentions, "dateTime1970") = callstatic(System.DateTime, "Parse", "System.DateTime:Parse__String", "1970-1-1");
 			};
 			local(v); v = 4;
-			local(ts); ts = invokeexternoperator(System.DateTime, "op_Subtraction", dateTime, getstatic(Extentions, "dateTime1970"));
+			local(ts); ts = invokeexternoperator(System.TimeSpan, System.DateTime, "op_Subtraction", "System.DateTime:op_Subtraction__DateTime__DateTime", dateTime, getstatic(Extentions, "dateTime1970"));
 			return(typecast(getinstance(ts, "TotalMilliseconds"), System.Int64, TypeKind.Struct));
 		};
 		findChildRecursively = function(transform, childName, maxDepth){
-			local(child); child = callinstance(transform, "FindChild", childName);
-			if( execbinary("&&", invokeexternoperator(UnityEngine.Object, "op_Equality", child, null), execbinary(">", maxDepth, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct) ){
-				local(childCount); childCount = getinstance(transform, "childCount");
-				local(i); i = 0;
-				while( execbinary("<", i, childCount, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
-					child = callstatic(Extentions, "findChildRecursively", callinstance(transform, "GetChild", i), childName, execbinary("-", maxDepth, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
-					if( invokeexternoperator(UnityEngine.Object, "op_Inequality", child, null) ){
-						break;
-					};
-					block{
-					break;
-					};
-				i = execbinary("+", i, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
-				};
-			};
-			return(child);
+;
+			if( execbinary("&&", 			return(child);
 		};
 		searchChildRecursively = function(transform, childName, maxDepth){
-			if( execbinary("!=", invokeforbasicvalue(getinstance(transform, "name"), false, System.String, "IndexOf", childName), -1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
+			if( execbinary("!=", , -1, , System.Int32, TypeKind.Error, TypeKind.Struct) ){
 				return(transform);
 			};
-			local(count); count = getinstance(transform, "childCount");
+			local(count); count = transform.childCount;
 			if( execbinary(">", maxDepth, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
 				local(i); i = 0;
 				while( execbinary("<", i, count, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
-					local(nowNode); nowNode = callinstance(transform, "GetChild", i);
-					local(searchRes); searchRes = callstatic(Extentions, "searchChildRecursively", getstatic(Extentions, "searchChildRecursively"), nowNode, childName, execbinary("-", maxDepth, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
-					if( invokeexternoperator(UnityEngine.Object, "op_Inequality", searchRes, null) ){
-						return(searchRes);
-					};
-				i = execbinary("+", i, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
+;
+					local(searchRes); searchRes = callstatic(Extentions, "searchChildRecursively", nowNode, childName, execbinary("-", maxDepth, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
+					if( 				i = execbinary("+", i, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
 				};
 			};
 			return(null);
 		};
 		isFirstTimeToStart = function(){
-			local(isFirstTimeStart); isFirstTimeStart = callstatic(UnityEngine.PlayerPrefs, "GetInt", "isFirstTimeToStart", 1);
+;
 			return(execbinary("==", isFirstTimeStart, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
 		};
 		AddSorted = function(T, list, item){
@@ -66,15 +50,15 @@ class(Extentions) {
 				callinstance(list, "Add", item);
 				return();
 			};
-			if( execbinary("<=", callinstance(getexterninstanceindexer(list, null, "get_Item", execbinary("-", getinstance(list, "Count"), 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct)), "CompareTo", item), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
+			if( execbinary("<=", callinstance(getexterninstanceindexer(System.Collections.Generic.List_T, typeargs(T), typekinds(TypeKind.TypeParameter), list, null, System.Collections.Generic.List_T, "get_Item", 1, execbinary("-", getinstance(list, "Count"), 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct)), "CompareTo", item), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
 				callinstance(list, "Add", item);
 				return();
 			};
-			if( execbinary(">=", callinstance(getexterninstanceindexer(list, null, "get_Item", 0), "CompareTo", item), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
+			if( execbinary(">=", callinstance(getexterninstanceindexer(System.Collections.Generic.List_T, typeargs(T), typekinds(TypeKind.TypeParameter), list, null, System.Collections.Generic.List_T, "get_Item", 1, 0), "CompareTo", item), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
 				callinstance(list, "Insert", 0, item);
 				return();
 			};
-			local(index); index = callinstance(list, "BinarySearch", item);
+			local(index); index = callinstance(list, "BinarySearch", "System.Collections.Generic.List_T:BinarySearch__Object", item);
 			if( execbinary("<", index, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
 				index = execunary("~", index, System.Int32, TypeKind.Struct);
 			};
@@ -89,11 +73,11 @@ class(Extentions) {
 			}else{
 				Extentions.__cctor_called = true;
 			};
-			Extentions.dateTime1970 = newexternobject(System.DateTime, "System.DateTime", null, null);
+			Extentions.dateTime1970 = newexternobject(System.DateTime, typeargs(), typekinds(), null);
 		};
 	};
 	static_fields {
-		dateTime1970 = defaultvalue(System.DateTime, "System.DateTime", true);
+		dateTime1970 = null;
 		__cctor_called = false;
 	};
 	static_props {};

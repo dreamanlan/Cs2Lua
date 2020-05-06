@@ -1,9 +1,4 @@
-require "cs2lua__utility";
-require "cs2lua__namespaces";
-require "cs2lua__externenums";
-require "cs2lua__interfaces";
-require "toplevel__secondlevel__foo";
-require "luaconsole";
+require "cs2lua__namespaces"; 
 
 TopLevel.SecondLevel.FooExtension = {
 	__define_class = function()
@@ -14,7 +9,7 @@ TopLevel.SecondLevel.FooExtension = {
 					obj.m_Test2 = 678;
 				end;
 				local f;
-				f = newexternlist(System.Collections.Generic.List_T, {System.Collections.Generic.List_T}, {TypeKind.Class}, "System.Collections.Generic.List_T", "ctor", {newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, "System.Collections.Generic.List_T", "ctor", {1, 2}), newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, "System.Collections.Generic.List_T", "ctor", {2, 3})});
+				f = newexternlist(System.Collections.Generic.List_T, {System.Collections.Generic.List_T}, {TypeKind.Class}, {newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, {1, 2}, "System.Collections.Generic.List_T:ctor"), newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, {2, 3}, "System.Collections.Generic.List_T:ctor")}, "System.Collections.Generic.List_T:ctor");
 			end,
 			Test3__TopLevel_SecondLevel_Foo__System_Int32 = function(__cs_this, ix)
 				__cs_this:Test123(123, 456);
@@ -24,51 +19,51 @@ TopLevel.SecondLevel.FooExtension = {
 			NormalMethod = function()
 				LuaConsole.Print(1, 2, 3, 4, 5);
 				local f;
-				f = newobject(TopLevel.SecondLevel.Foo, {}, {}, "ctor", nil);
+				f = newobject(TopLevel.SecondLevel.Foo, nil, nil, "ctor", nil);
 				local ff;
-				ff = newobject(TopLevel.SecondLevel.Foo, {}, {}, "ctor", nil);
+				ff = newobject(TopLevel.SecondLevel.Foo, nil, nil, "ctor", nil);
 				local f1;
 				f1 = (function()
-						local __delegation_obj_567_28_567_34;
-						__delegation_obj_567_28_567_34 = f;
-						local __delegation_567_28_567_34; __delegation_567_28_567_34 = (function()
-							__delegation_obj_567_28_567_34:Test();
+						local __delegation_obj_577_28_577_34;
+						__delegation_obj_577_28_577_34 = f;
+						local __delegation_577_28_577_34; __delegation_577_28_577_34 = (function()
+							__delegation_obj_577_28_577_34:Test();
 						end);
-						setdelegationkey(__delegation_567_28_567_34, "TopLevel.SecondLevel.Foo:Test", __delegation_obj_567_28_567_34, __delegation_obj_567_28_567_34.Test);
-						return __delegation_567_28_567_34;
+						setdelegationkey(__delegation_577_28_577_34, "TopLevel.SecondLevel.Foo:Test", __delegation_obj_577_28_577_34, __delegation_obj_577_28_577_34.Test);
+						return __delegation_577_28_577_34;
 					end)();
 				f1();
 				local f2;
 				f2 = (function()
-						local __delegation_obj_570_28_570_35;
-						__delegation_obj_570_28_570_35 = f;
-						local __delegation_570_28_570_35; __delegation_570_28_570_35 = (function()
-							__delegation_obj_570_28_570_35:Test3();
+						local __delegation_obj_580_28_580_35;
+						__delegation_obj_580_28_580_35 = f;
+						local __delegation_580_28_580_35; __delegation_580_28_580_35 = (function()
+							__delegation_obj_580_28_580_35:Test3();
 						end);
-						setdelegationkey(__delegation_570_28_570_35, "TopLevel.SecondLevel.FooExtension:Test3", __delegation_obj_570_28_570_35, __delegation_obj_570_28_570_35.Test3);
-						return __delegation_570_28_570_35;
+						setdelegationkey(__delegation_580_28_580_35, "TopLevel.SecondLevel.FooExtension:Test3", __delegation_obj_580_28_580_35, __delegation_obj_580_28_580_35.Test3);
+						return __delegation_580_28_580_35;
 					end)();
 				f2();
-				TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo(TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo, f);
+				TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo(f);
 				local r;
-				r = invokeoperator(TopLevel.SecondLevel.Foo, "op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo", f, ff);
-				f = invokeoperator(TopLevel.SecondLevel.Foo, "op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo", f, ff);
+				r = invokeoperator(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.Foo, "op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo", f, ff);
+				f = invokeoperator(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.Foo, "op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo", f, ff);
 				local rr;
-				rr = invokeoperator(TopLevel.SecondLevel.Foo, "op_Explicit", 123);
+				rr = invokeoperator(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.Foo, "op_Explicit", 123);
 				local rrr;
 				rrr = typeas(f, TopLevel.SecondLevel.Foo, TypeKind.Class);
 				local obj;
-				obj = newexternobject(UnityEngine.GameObject, {}, {}, "UnityEngine.GameObject", "ctor", nil, "test test test");
+				(= obj);
 				TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo__System_Int32(f, 8);
 				local arr;
-				arr = wraparray({1, 2, 3, 4, 4});
+				arr = wraparray({1, 2, 3, 4, 4}, nil, System.Int32);
 				local v;
 				v = arr[3];
 				local dict;
-				dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {["1"] = 2, ["3"] = 4});
+				dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, {[1] = 2, [3] = 4}, "System.Collections.Generic.Dictionary_TKey_TValue:ctor");
 				local v1;
 				v1 = condaccess(dict, (function()
-						return getexterninstanceindexer(dict, nil, "get_Item", 1);
+						return getexterninstanceindexer(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, dict, nil, System.Collections.Generic.Dictionary_TKey_TValue, "get_Item", 1, 1);
 					end));
 				local list;
 				list = nil;
@@ -77,7 +72,7 @@ TopLevel.SecondLevel.FooExtension = {
 						return list.Count;
 					end));
 				local arr2;
-				arr2 = wraparray({1, 2, 3, 4});
+				arr2 = wraparray({1, 2, 3, 4}, nil, System.Int32);
 				local v3;
 				v3 = condaccess(arr2, (function()
 						return arr2[3];
@@ -89,17 +84,30 @@ TopLevel.SecondLevel.FooExtension = {
 				local c;
 				c = 3;
 				a = (function()
-						b = c;
+						b = (function()
+								local __unary_606_20_606_23;
+								__unary_606_20_606_23 = c;
+								c = (c + 1);
+								return __unary_606_20_606_23;
+							end)();
 						return b;
 					end)();
-				c = invokeintegeroperator(2, "+", c, 1, System.Int32, System.Int32);
 			end,
 			cctor = function()
+				TopLevel.SecondLevel.FooExtension.__cctor();
+			end,
+			__cctor = function()
+				if TopLevel.SecondLevel.FooExtension.__cctor_called then 
+					return;
+				else
+					TopLevel.SecondLevel.FooExtension.__cctor_called = true;
+				end;
 			end,
 		};
 
 		local static_fields_build = function()
 			local static_fields = {
+				__cctor_called = false,
 			};
 			return static_fields;
 		end;
@@ -117,8 +125,22 @@ TopLevel.SecondLevel.FooExtension = {
 		local interfaces = nil;
 		local interface_map = nil;
 
-		return defineclass(nil, "TopLevel.SecondLevel.FooExtension", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
+		local method_info = nil;
+		local property_info = nil;
+		local event_info = nil;
+		local field_info = nil;
+
+		Utility.Warn("TopLevel.SecondLevel.FooExtension::__define_class begin");
+		local __defineclass_return = defineclass(nil, "TopLevel.SecondLevel.FooExtension", "FooExtension", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		Utility.Warn("TopLevel.SecondLevel.FooExtension::__define_class end");
+		return __defineclass_return;
 	end,
 };
 
-TopLevel.SecondLevel.FooExtension.__define_class();
+
+require "cs2lua__lualib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+require "toplevel__secondlevel__foo";
+require "gameobject";
+settempmetatable(TopLevel.SecondLevel.FooExtension);

@@ -1,23 +1,28 @@
-require "cs2lua__utility";
-require "cs2lua__namespaces";
-require "cs2lua__externenums";
-require "cs2lua__interfaces";
-require "luaconsole";
-require "cusinghelper";
+require "cs2lua__namespaces"; 
 
 TestUnity = {
 	__new_object = function(...)
-		return newobject(TestUnity, {}, {}, nil, nil, ...);
+		return newobject(TestUnity, nil, nil, "ctor", nil, ...);
 	end,
 	__define_class = function()
 		local static = TestUnity;
 		local static_methods = {
 			cctor = function()
+				MonoBehaviour.cctor();
+				TestUnity.__cctor();
+			end,
+			__cctor = function()
+				if TestUnity.__cctor_called then 
+					return;
+				else
+					TestUnity.__cctor_called = true;
+				end;
 			end,
 		};
 
 		local static_fields_build = function()
 			local static_fields = {
+				__cctor_called = false,
 			};
 			return static_fields;
 		end;
@@ -26,7 +31,7 @@ TestUnity = {
 
 		local instance_methods = {
 			Test = function(this, ...)
-				local args = wraparray{...};
+				local args = wrapclassparams{...};
 				if (args.Length >= 3) then 
 					local sagatObjId;
 					sagatObjId = typecast(args[1], System.Int32, TypeKind.Struct);
@@ -35,41 +40,36 @@ TestUnity = {
 					local attackObjId;
 					attackObjId = typecast(args[3], System.Int32, TypeKind.Struct);
 				end;
-				local t;
-				t = this.gameObject:GetComponent(UnityEngine.Transform);
-				this.gameObject:SetActive(true);
-				local r;
-				r = this.gameObject:GetComponent(UnityEngine.Renderer);
-				this.gameObject.active = true;
+				gameObject.active = true;
 				local v;
 				v = true;
 				local s;
-				s = invokeforbasicvalue(v, false, System.Boolean, "ToString");
+				s = invokeforbasicvalue(v, false, System.Boolean, "ToString", "System.Boolean:ToString");
 				local i;
 				i = 123;
 				local s2;
-				s2 = invokeforbasicvalue(i, false, System.Int32, "ToString");
+				s2 = invokeforbasicvalue(i, false, System.Int32, "ToString", "System.Int32:ToString");
 				local i2;
-				i2 = invokeforbasicvalue(s2, false, System.String, "IndexOf", wrapchar("2", 0x032));
+				i2 = invokeforbasicvalue(s2, false, System.String, "IndexOf", "System.String:IndexOf__Char", wrapchar("2", 0x032));
 				LuaConsole.Print(i2);
 				local i3;
 				i3 = getforbasicvalue(this.m_TestString, false, System.String, "Length");
 				local c;
-				c = getexterninstanceindexer(this.m_TestString, nil, "get_Chars", 2);
+				c = getexterninstanceindexer(System.String, nil, nil, this.m_TestString, nil, System.String, "get_Chars", 1, 2);
 				local equal;
 				equal = (this.m_TestString == s);
 				local a;
-				a = wraparray({5, 4, 3, 2, 1});
+				a = wraparray({5, 4, 3, 2, 1}, nil, System.Int32);
 				local ix;
-				ix = invokearraystaticmethod(a, nil, "IndexOf", System.Int32, a, 3);
+				ix = invokearraystaticmethod(a, nil, "IndexOf", "System.Array:IndexOf__Arr_Object__Object", a, 3);
 				local f;
 				f = typecast(((function(vv)
 						LuaConsole.Print("test");
-					end)), System.Action_T, TypeKind.Delegate);
+					end)), "System.Action_T", TypeKind.Delegate);
 				f(123);
 				local isLoadingHeadIcon;
 				isLoadingHeadIcon = false;
-				local __using_83_8_86_9 = newobject(CUsingHelper, {}, {}, "ctor", nil, (function()
+				local __using_83_8_86_9 = newobject(CUsingHelper, nil, nil, "ctor", nil, (function()
 						isLoadingHeadIcon = true;
 					end), (function()
 						isLoadingHeadIcon = false;
@@ -77,16 +77,16 @@ TestUnity = {
 				LuaConsole.Print("test");
 				__using_83_8_86_9:Dispose();
 				local v1s;
-				v1s = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {["1"] = 2, ["3"] = 4, ["5"] = 6});
+				v1s = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, {[1] = 2, [3] = 4, [5] = 6}, "System.Collections.Generic.Dictionary_TKey_TValue:ctor");
 				local v2s;
-				v2s = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, "System.Collections.Generic.Dictionary_TKey_TValue", "ctor", {["1"] = 3, ["5"] = 4});
+				v2s = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, {[1] = 3, [5] = 4}, "System.Collections.Generic.Dictionary_TKey_TValue:ctor");
 				local v0;
 				v0 = LINQ.exec({{"from", function()
 							return v1s;
 						end}, {"let", function(v1)
 							return v1.Value;
 						end}, {"let", function(v1, v3)
-							return invokeforbasicvalue(invokeforbasicvalue(v3, false, System.Int32, "ToString"), false, System.String, "Split", wrapchar(" ", 0x020));
+							return invokeforbasicvalue(invokeforbasicvalue(v3, false, System.Int32, "ToString", "System.Int32:ToString"), false, System.String, "Split", "System.String:Split__Arr_Char", wrapchar(" ", 0x020));
 						end}, {"from", function(v1, v3, v4)
 							return (LINQ.exec({{"from", function()
 									return v2s;
@@ -108,9 +108,9 @@ TestUnity = {
 						end), (function(v1, v2)
 							return v2.Key;
 						end)}, {"into"}, {"select", function(v1, ttt0)
-							return wrapdictionary{}
+							return wrapanonymousobject{}
 								v1 = v1;
-								v2 = ttt0:Count(System.Collections.Generic.KeyValuePair_TKey_TValue);
+								v2 = callexternextension(System.Linq.Enumerable, "Count", ttt0);
 							end;
 						end}, {"continuation"}, {"groupby", (function(ttt)
 							return ttt;
@@ -121,11 +121,21 @@ TestUnity = {
 				end;
 			end,
 			ctor = function(this)
+				this.base:__self__ctor();
+				this:__ctor();
+			end,
+			__ctor = function(this)
+				if this.__ctor_called then 
+					return;
+				else
+					this.__ctor_called = true;
+				end;
 			end,
 		};
 		local instance_fields_build = function()
 			local instance_fields = {
 				m_TestString = "13579",
+				__ctor_called = false,
 			};
 			return instance_fields;
 		end;
@@ -135,8 +145,36 @@ TestUnity = {
 		local interfaces = nil;
 		local interface_map = nil;
 
-		return defineclass(UnityEngine.MonoBehaviour, "TestUnity", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
+		local class_info = {
+			Kind = TypeKind.Class,
+		};
+		local method_info = {
+			Test = {
+				Kind = MethodKind.Ordinary,
+				private = true,
+			},
+			ctor = {
+				Kind = MethodKind.Constructor,
+			},
+		};
+		local property_info = nil;
+		local event_info = nil;
+		local field_info = {
+			m_TestString = {
+			},
+		};
+
+		Utility.Warn("TestUnity::__define_class begin");
+		local __defineclass_return = defineclass(MonoBehaviour, "TestUnity", "TestUnity", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		Utility.Warn("TestUnity::__define_class end");
+		return __defineclass_return;
 	end,
 };
 
-TestUnity.__define_class();
+
+require "cs2lua__lualib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+require "monobehaviour";
+require "cusinghelper";
+settempmetatable(TestUnity);

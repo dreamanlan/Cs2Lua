@@ -1,21 +1,27 @@
-require "cs2lua__utility";
-require "cs2lua__namespaces";
-require "cs2lua__externenums";
-require "cs2lua__interfaces";
+require "cs2lua__namespaces"; 
 
 ZipOutputStream = {
 	__new_object = function(...)
-		return newobject(ZipOutputStream, {}, {}, "ctor", nil, ...);
+		return newobject(ZipOutputStream, nil, nil, "ctor", nil, ...);
 	end,
 	__define_class = function()
 		local static = ZipOutputStream;
 		local static_methods = {
 			cctor = function()
+				ZipOutputStream.__cctor();
+			end,
+			__cctor = function()
+				if ZipOutputStream.__cctor_called then 
+					return;
+				else
+					ZipOutputStream.__cctor_called = true;
+				end;
 			end,
 		};
 
 		local static_fields_build = function()
 			local static_fields = {
+				__cctor_called = false,
 			};
 			return static_fields;
 		end;
@@ -24,11 +30,20 @@ ZipOutputStream = {
 
 		local instance_methods = {
 			ctor = function(this, ms)
+				this:__ctor();
 				return this;
+			end,
+			__ctor = function(this)
+				if this.__ctor_called then 
+					return;
+				else
+					this.__ctor_called = true;
+				end;
 			end,
 		};
 		local instance_fields_build = function()
 			local instance_fields = {
+				__ctor_called = false,
 			};
 			return instance_fields;
 		end;
@@ -38,8 +53,27 @@ ZipOutputStream = {
 		local interfaces = nil;
 		local interface_map = nil;
 
-		return defineclass(nil, "ZipOutputStream", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
+		local class_info = {
+			Kind = TypeKind.Class,
+		};
+		local method_info = {
+			ctor = {
+				Kind = MethodKind.Constructor,
+			},
+		};
+		local property_info = nil;
+		local event_info = nil;
+		local field_info = nil;
+
+		Utility.Warn("ZipOutputStream::__define_class begin");
+		local __defineclass_return = defineclass(nil, "ZipOutputStream", "ZipOutputStream", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		Utility.Warn("ZipOutputStream::__define_class end");
+		return __defineclass_return;
 	end,
 };
 
-ZipOutputStream.__define_class();
+
+require "cs2lua__lualib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+settempmetatable(ZipOutputStream);

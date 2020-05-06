@@ -307,6 +307,11 @@ namespace TopLevel
                     T v2 = (T)(object)g;
                     Foo f = new Foo();
                     f.Test3();
+                    ++f;
+                    f++;
+                    --f;
+                    f--;
+                    int i = (++f).m_Test + (f++).m_Test + (--f).m_Test + (f--).m_Test;
                 }
                 public void Test2<GG>(T t, TT tt)
                 {
@@ -422,6 +427,11 @@ namespace TopLevel
             public Foo(int a, int b)
             {}
 
+            public static Foo operator ++(Foo self)
+            {
+                self.m_Test += 1;
+                return self;
+            }
             public static Foo operator + (Foo self, Foo other)
             {
                 self.m_Test += other.m_Test;

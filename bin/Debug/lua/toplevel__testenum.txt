@@ -1,7 +1,4 @@
-require "cs2lua__utility";
-require "cs2lua__namespaces";
-require "cs2lua__externenums";
-require "cs2lua__interfaces";
+require "cs2lua__namespaces"; 
 
 TopLevel.TestEnum = {
 	["Invalid"] = -2147483648,
@@ -19,3 +16,7 @@ rawset(TopLevel.TestEnum, "Value2String", {
 	[38] = "Four",
 });
 
+
+require "cs2lua__lualib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";

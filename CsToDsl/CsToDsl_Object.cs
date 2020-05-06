@@ -255,7 +255,7 @@ namespace RoslynTool.CsToDsl
                 }
                 CodeBuilder.AppendFormat("{0}", GetIndentString());
                 if (node.ExpressionBody.Expression is AssignmentExpressionSyntax) {
-                    VisitToplevelExpressionFirstPass(node.ExpressionBody.Expression, string.Empty);
+                    VisitToplevelExpression(node.ExpressionBody.Expression, string.Empty);
                 }
                 else {
                     OutputExpressionSyntax(node.ExpressionBody.Expression, opd);
@@ -517,7 +517,7 @@ namespace RoslynTool.CsToDsl
                             if (sym.ReturnsVoid) {
                                 CodeBuilder.AppendFormat("{0}", GetIndentString());
                                 if (accessor.ExpressionBody.Expression is AssignmentExpressionSyntax) {
-                                    VisitToplevelExpressionFirstPass(accessor.ExpressionBody.Expression, string.Empty);
+                                    VisitToplevelExpression(accessor.ExpressionBody.Expression, string.Empty);
                                 }
                                 else {
                                     OutputExpressionSyntax(accessor.ExpressionBody.Expression, opd);
@@ -887,7 +887,7 @@ namespace RoslynTool.CsToDsl
                             if (sym.ReturnsVoid) {
                                 CodeBuilder.AppendFormat("{0}", GetIndentString());
                                 if (accessor.ExpressionBody.Expression is AssignmentExpressionSyntax) {
-                                    VisitToplevelExpressionFirstPass(accessor.ExpressionBody.Expression, string.Empty);
+                                    VisitToplevelExpression(accessor.ExpressionBody.Expression, string.Empty);
                                 }
                                 else {
                                     OutputExpressionSyntax(accessor.ExpressionBody.Expression, opd);

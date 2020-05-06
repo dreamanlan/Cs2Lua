@@ -21,56 +21,7 @@ namespace RoslynTool.CsToDsl
                 return;
             }
             node.Accept(this);
-        }
-        /// <summary>
-        /// C#的ref/out参数需要翻译到lua的多返回语句，由于函数调用可能是表达式的一部分，这导致作为顶层表达式与嵌入在表达式中的一部分
-        /// 的翻译方式不一样，嵌入的部分需要使用匿名函数封装。这里是作为顶层表达式的入口。
-        /// </summary>
-        /// <param name="expression"></param>
-        /// <param name="expTerminater"></param>
-        private void VisitToplevelExpression(ExpressionSyntax expression, string expTerminater)
-        {
-            VisitToplevelExpressionFirstPass(expression, expTerminater);
-            while (m_PostfixUnaryExpressions.Count > 0) {
-                PostfixUnaryExpressionSyntax postfixUnary = m_PostfixUnaryExpressions.Dequeue();
-                if (null != postfixUnary) {
-                    string op = postfixUnary.OperatorToken.Text;
-                    if (op == "++" || op == "--") {
-                        op = op == "++" ? "+" : "-";
-                        string type = "null";
-                        string typeKind = "null";
-                        IConversionExpression opd = null;
-                        var assignOper = m_Model.GetOperation(postfixUnary) as ICompoundAssignmentExpression;
-                        if (null != assignOper && null != assignOper.Target) {
-                            var typeSym = assignOper.Target.Type;
-                            type = ClassInfo.GetFullName(typeSym);
-                            typeKind = "TypeKind." + typeSym.TypeKind.ToString();
-                            opd = assignOper.Value as IConversionExpression;
-                        }
-                        CodeBuilder.AppendFormat("{0}", GetIndentString());
-                        OutputExpressionSyntax(postfixUnary.Operand, opd);
-                        CodeBuilder.Append(" = ");
-                        if (null != assignOper && assignOper.UsesOperatorMethod) {
-                            IMethodSymbol msym = assignOper.OperatorMethod;
-                            InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
-                            var arglist = new List<ExpressionSyntax>() { postfixUnary.Operand };
-                            ii.Init(msym, arglist, m_Model, opd);
-                            OutputOperatorInvoke(ii, postfixUnary);
-                            CodeBuilder.AppendFormat("{0}", expTerminater);
-                        }
-                        else {
-                            CodeBuilder.Append("execbinary(");
-                            CodeBuilder.AppendFormat("\"{0}\", ", op);
-                            OutputExpressionSyntax(postfixUnary.Operand);
-                            CodeBuilder.AppendFormat(", 1, {0}, {1}, {2}, {3}", CsDslTranslater.EscapeType(type, typeKind), CsDslTranslater.EscapeType(type, typeKind), typeKind, typeKind);
-                            CodeBuilder.AppendFormat("){0}", expTerminater);
-                        }
-                        if (expTerminater.Length > 0)
-                            CodeBuilder.AppendLine();
-                    }
-                }
-            }
-        }
+        }        
         private void VisitTypeDeclarationSyntax(TypeDeclarationSyntax node)
         {
             INamedTypeSymbol declSym = m_Model.GetDeclaredSymbol(node);
@@ -357,7 +308,7 @@ namespace RoslynTool.CsToDsl
                 if (declSym.ReturnsVoid) {
                     CodeBuilder.AppendFormat("{0}", GetIndentString());
                     if (expressionBody.Expression is AssignmentExpressionSyntax) {
-                        VisitToplevelExpressionFirstPass(expressionBody.Expression, string.Empty);
+                        VisitToplevelExpression(expressionBody.Expression, string.Empty);
                     }
                     else {
                         OutputExpressionSyntax(expressionBody.Expression, opd);
@@ -575,11 +526,12 @@ namespace RoslynTool.CsToDsl
             }
         }
         /// <summary>
-        /// 顶层表达式的处理分为表达式本身与++/--的后续处理。这是表达式本身的部分。
+        /// C#的ref/out参数需要翻译到lua的多返回语句，由于函数调用可能是表达式的一部分，这导致作为顶层表达式与嵌入在表达式中的一部分
+        /// 的翻译方式不一样，嵌入的部分需要使用匿名函数封装。这里是作为顶层表达式的入口。
         /// </summary>
         /// <param name="expression"></param>
         /// <param name="expTerminater"></param>
-        private void VisitToplevelExpressionFirstPass(ExpressionSyntax expression, string expTerminater)
+        private void VisitToplevelExpression(ExpressionSyntax expression, string expTerminater)
         {
             var ci = m_ClassInfoStack.Peek();
 
@@ -670,8 +622,12 @@ namespace RoslynTool.CsToDsl
                     var arglist = new List<ExpressionSyntax>() { prefixUnary.Operand };
                     ii.Init(msym, arglist, m_Model, opd);
                     OutputOperatorInvoke(ii, prefixUnary);
+                    CodeBuilder.AppendFormat("{0}", expTerminater);
+                    if (expTerminater.Length > 0)
+                        CodeBuilder.AppendLine();
                 }
                 else if (null != assignOper && assignOper.UsesOperatorMethod) {
+                    //++/--的重载调这里
                     OutputExpressionSyntax(prefixUnary.Operand, opd);
                     CodeBuilder.Append(" = ");
                     IMethodSymbol msym = assignOper.OperatorMethod;
@@ -679,6 +635,9 @@ namespace RoslynTool.CsToDsl
                     var arglist = new List<ExpressionSyntax>() { prefixUnary.Operand };
                     ii.Init(msym, arglist, m_Model, opd);
                     OutputOperatorInvoke(ii, prefixUnary);
+                    CodeBuilder.AppendFormat("{0}", expTerminater);
+                    if (expTerminater.Length > 0)
+                        CodeBuilder.AppendLine();
                 }
                 else {
                     string op = prefixUnary.OperatorToken.Text;
@@ -718,6 +677,10 @@ namespace RoslynTool.CsToDsl
             if (null != postfixUnary) {
                 var oper = m_Model.GetOperation(postfixUnary);
                 IConversionExpression opd = null;
+                var unaryOper = oper as IUnaryOperatorExpression;
+                if (null != unaryOper) {
+                    opd = unaryOper.Operand as IConversionExpression;
+                }
                 var assignOper = oper as ICompoundAssignmentExpression;
                 if (null != assignOper) {
                     opd = assignOper.Value as IConversionExpression;
@@ -732,7 +695,18 @@ namespace RoslynTool.CsToDsl
                     type = ClassInfo.GetFullName(typeSym);
                     typeKind = "TypeKind." + typeSym.TypeKind.ToString();
                 }
-                if (null != assignOper && assignOper.UsesOperatorMethod) {
+                if (null != unaryOper && unaryOper.UsesOperatorMethod) {
+                    IMethodSymbol msym = unaryOper.OperatorMethod;
+                    InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
+                    var arglist = new List<ExpressionSyntax>() { prefixUnary.Operand };
+                    ii.Init(msym, arglist, m_Model, opd);
+                    OutputOperatorInvoke(ii, prefixUnary);
+                    CodeBuilder.AppendFormat("{0}", expTerminater);
+                    if (expTerminater.Length > 0)
+                        CodeBuilder.AppendLine();
+                }
+                else if (null != assignOper && assignOper.UsesOperatorMethod) {
+                    //++/--的重载调这里
                     OutputExpressionSyntax(postfixUnary.Operand, opd);
                     CodeBuilder.Append(" = ");
                     IMethodSymbol msym = assignOper.OperatorMethod;
@@ -740,6 +714,9 @@ namespace RoslynTool.CsToDsl
                     var arglist = new List<ExpressionSyntax>() { postfixUnary.Operand };
                     ii.Init(msym, arglist, m_Model, opd);
                     OutputOperatorInvoke(ii, postfixUnary);
+                    CodeBuilder.AppendFormat("{0}", expTerminater);
+                    if (expTerminater.Length > 0)
+                        CodeBuilder.AppendLine();
                 }
                 else {
                     string op = postfixUnary.OperatorToken.Text;

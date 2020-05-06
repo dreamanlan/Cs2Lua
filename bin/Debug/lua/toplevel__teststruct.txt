@@ -1,21 +1,27 @@
-require "cs2lua__utility";
-require "cs2lua__namespaces";
-require "cs2lua__externenums";
-require "cs2lua__interfaces";
+require "cs2lua__namespaces"; 
 
 TopLevel.TestStruct = {
 	__new_object = function(...)
-		return newobject(TopLevel.TestStruct, {}, {}, nil, nil, ...);
+		return newobject(TopLevel.TestStruct, nil, nil, "ctor", nil, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.TestStruct;
 		local static_methods = {
 			cctor = function()
+				TopLevel.TestStruct.__cctor();
+			end,
+			__cctor = function()
+				if TopLevel.TestStruct.__cctor_called then 
+					return;
+				else
+					TopLevel.TestStruct.__cctor_called = true;
+				end;
 			end,
 		};
 
 		local static_fields_build = function()
 			local static_fields = {
+				__cctor_called = false,
 			};
 			return static_fields;
 		end;
@@ -24,6 +30,14 @@ TopLevel.TestStruct = {
 
 		local instance_methods = {
 			ctor = function(this)
+				this:__ctor();
+			end,
+			__ctor = function(this)
+				if this.__ctor_called then 
+					return;
+				else
+					this.__ctor_called = true;
+				end;
 			end,
 		};
 		local instance_fields_build = function()
@@ -31,6 +45,7 @@ TopLevel.TestStruct = {
 				A = 0,
 				B = 0,
 				C = 0,
+				__ctor_called = false,
 			};
 			return instance_fields;
 		end;
@@ -40,8 +55,35 @@ TopLevel.TestStruct = {
 		local interfaces = nil;
 		local interface_map = nil;
 
-		return defineclass(nil, "TopLevel.TestStruct", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, true);
+		local class_info = {
+			Kind = TypeKind.Struct,
+			sealed = true,
+		};
+		local method_info = {
+			ctor = {
+				Kind = MethodKind.Constructor,
+			},
+		};
+		local property_info = nil;
+		local event_info = nil;
+		local field_info = {
+			A = {
+			},
+			B = {
+			},
+			C = {
+			},
+		};
+
+		Utility.Warn("TopLevel.TestStruct::__define_class begin");
+		local __defineclass_return = defineclass(nil, "TopLevel.TestStruct", "TestStruct", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, true);
+		Utility.Warn("TopLevel.TestStruct::__define_class end");
+		return __defineclass_return;
 	end,
 };
 
-TopLevel.TestStruct.__define_class();
+
+require "cs2lua__lualib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+settempmetatable(TopLevel.TestStruct);

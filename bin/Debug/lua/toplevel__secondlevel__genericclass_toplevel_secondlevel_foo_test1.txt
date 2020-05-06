@@ -1,14 +1,10 @@
-require "cs2lua__utility";
-require "cs2lua__namespaces";
-require "cs2lua__externenums";
-require "cs2lua__interfaces";
-require "toplevel__secondlevel__foo";
+require "cs2lua__namespaces"; 
 
 TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1 = {
 	__new_object = function(...)
 		return (function(...)
 			local newobj, v, v2;
-			newobj,v,v2 = newobject(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1, {TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.T}, {TypeKind.TypeParameter}, "ctor", nil, ...);
+			newobj,v,v2 = newobject(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1, {T}, {TypeKind.TypeParameter}, "ctor", nil, ...);
 			return newobj;
 		end)(...);
 	end,
@@ -16,6 +12,7 @@ TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1 = {
 		local static = TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1;
 		local static_methods = {
 			cctor = function()
+				TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.__cctor();
 				TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.s_Test = 9876;
 			end,
 			__cctor = function()
@@ -24,6 +21,7 @@ TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1 = {
 				else
 					TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.__cctor_called = true;
 				end;
+				TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.s_Inst = newtypeparamobject(TopLevel.SecondLevel.Foo.Test1);
 			end,
 		};
 
@@ -32,7 +30,7 @@ TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1 = {
 				TTT = 789,
 				s_Test = 2147483647,
 				s_Float = wrapconst(System.Single, "PositiveInfinity"),
-				s_Inst = newtypeparamobject(TopLevel.SecondLevel.Foo.Test1),
+				s_Inst = __cs2lua_nil_field_value,
 				__cctor_called = false,
 			};
 			return static_fields;
@@ -42,9 +40,10 @@ TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1 = {
 
 		local instance_methods = {
 			ctor = function(this, v, v2)
+				this:__ctor();
 				local obj;
 				obj = newtypeparamobject(TopLevel.SecondLevel.Foo.Test1);
-				this.m_Test = invokeintegeroperator(2, "+", v, 4, System.Int32, System.Int32);
+				this.m_Test = (v + 4);
 				v2 = 123;
 				return this, v, v2;
 			end,
@@ -58,13 +57,15 @@ TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1 = {
 				else
 					this.__ctor_called = true;
 				end;
+				this.m_Test2 = (TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.TTT + 1);
+				this.m_Inst = newtypeparamobject(TopLevel.SecondLevel.Foo.Test1);
 			end,
 		};
 		local instance_fields_build = function()
 			local instance_fields = {
 				m_Test = 123,
-				m_Test2 = invokeintegeroperator(2, "+", TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.TTT, 1, System.Int32, System.Int32),
-				m_Inst = newtypeparamobject(TopLevel.SecondLevel.Foo.Test1),
+				m_Test2 = 0,
+				m_Inst = __cs2lua_nil_field_value,
 				__ctor_called = false,
 			};
 			return instance_fields;
@@ -75,8 +76,56 @@ TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1 = {
 		local interfaces = nil;
 		local interface_map = nil;
 
-		return defineclass(nil, "TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
+		local class_info = {
+			Kind = TypeKind.Class,
+		};
+		local method_info = {
+			ctor = {
+				Kind = MethodKind.Constructor,
+			},
+			Test = {
+				Kind = MethodKind.Ordinary,
+				generic = true,
+			},
+			cctor = {
+				Kind = MethodKind.StaticConstructor,
+				private = true,
+				static = true,
+			},
+		};
+		local property_info = nil;
+		local event_info = nil;
+		local field_info = {
+			TTT = {
+				static = true,
+			},
+			m_Test = {
+			},
+			m_Test2 = {
+			},
+			m_Inst = {
+			},
+			s_Test = {
+				static = true,
+			},
+			s_Float = {
+				static = true,
+			},
+			s_Inst = {
+				static = true,
+			},
+		};
+
+		Utility.Warn("TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1::__define_class begin");
+		local __defineclass_return = defineclass(nil, "TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1", "GenericClass_TopLevel_SecondLevel_Foo_Test1", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		Utility.Warn("TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1::__define_class end");
+		return __defineclass_return;
 	end,
 };
 
-TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.__define_class();
+
+require "cs2lua__lualib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+require "toplevel__secondlevel__foo";
+settempmetatable(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1);

@@ -1,11 +1,8 @@
-require "cs2lua__utility";
-require "cs2lua__namespaces";
-require "cs2lua__externenums";
-require "cs2lua__interfaces";
+require "cs2lua__namespaces"; 
 
 TopLevel.Singleton_TopLevel_SecondLevel_Foo = {
 	__new_object = function(...)
-		return newobject(TopLevel.Singleton_TopLevel_SecondLevel_Foo, {TopLevel.Singleton_T.T}, {TypeKind.TypeParameter}, "ctor", nil, ...);
+		return newobject(TopLevel.Singleton_TopLevel_SecondLevel_Foo, {T}, {TypeKind.TypeParameter}, "ctor", nil, ...);
 	end,
 	__define_class = function()
 		local static = TopLevel.Singleton_TopLevel_SecondLevel_Foo;
@@ -22,12 +19,21 @@ TopLevel.Singleton_TopLevel_SecondLevel_Foo = {
 				TopLevel.Singleton_TopLevel_SecondLevel_Foo.ms_instance = nil;
 			end,
 			cctor = function()
+				TopLevel.Singleton_TopLevel_SecondLevel_Foo.__cctor();
+			end,
+			__cctor = function()
+				if TopLevel.Singleton_TopLevel_SecondLevel_Foo.__cctor_called then 
+					return;
+				else
+					TopLevel.Singleton_TopLevel_SecondLevel_Foo.__cctor_called = true;
+				end;
 			end,
 		};
 
 		local static_fields_build = function()
 			local static_fields = {
 				ms_instance = __cs2lua_nil_field_value,
+				__cctor_called = false,
 			};
 			return static_fields;
 		end;
@@ -41,16 +47,24 @@ TopLevel.Singleton_TopLevel_SecondLevel_Foo = {
 
 		local instance_methods = {
 			ctor = function(this)
+				this:__ctor();
 				if (not isequal(TopLevel.Singleton_TopLevel_SecondLevel_Foo.ms_instance, nil)) then 
-					UnityEngine.Debug.LogError("Cannot have two instances in singleton");
 					return this;
 				end;
 				TopLevel.Singleton_TopLevel_SecondLevel_Foo.ms_instance = typecast(typecast(this, System.Object, TypeKind.Class), TopLevel.SecondLevel.Foo, TypeKind.TypeParameter);
 				return this;
 			end,
+			__ctor = function(this)
+				if this.__ctor_called then 
+					return;
+				else
+					this.__ctor_called = true;
+				end;
+			end,
 		};
 		local instance_fields_build = function()
 			local instance_fields = {
+				__ctor_called = false,
 			};
 			return instance_fields;
 		end;
@@ -60,8 +74,47 @@ TopLevel.Singleton_TopLevel_SecondLevel_Foo = {
 		local interfaces = nil;
 		local interface_map = nil;
 
-		return defineclass(nil, "TopLevel.Singleton_TopLevel_SecondLevel_Foo", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, false);
+		local class_info = {
+			Kind = TypeKind.Class,
+		};
+		local method_info = {
+			get_instance = {
+				Kind = MethodKind.PropertyGet,
+				static = true,
+			},
+			set_instance = {
+				Kind = MethodKind.PropertySet,
+				static = true,
+			},
+			ctor = {
+				Kind = MethodKind.Constructor,
+			},
+			Delete = {
+				Kind = MethodKind.Ordinary,
+				static = true,
+			},
+		};
+		local property_info = {
+			instance = {
+				static = true,
+			},
+		};
+		local event_info = nil;
+		local field_info = {
+			ms_instance = {
+				static = true,
+			},
+		};
+
+		Utility.Warn("TopLevel.Singleton_TopLevel_SecondLevel_Foo::__define_class begin");
+		local __defineclass_return = defineclass(nil, "TopLevel.Singleton_TopLevel_SecondLevel_Foo", "Singleton_TopLevel_SecondLevel_Foo", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		Utility.Warn("TopLevel.Singleton_TopLevel_SecondLevel_Foo::__define_class end");
+		return __defineclass_return;
 	end,
 };
 
-TopLevel.Singleton_TopLevel_SecondLevel_Foo.__define_class();
+
+require "cs2lua__lualib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+settempmetatable(TopLevel.Singleton_TopLevel_SecondLevel_Foo);
