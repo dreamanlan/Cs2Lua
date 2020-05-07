@@ -48,3 +48,29 @@ https://github.com/dreamanlan/Cs2Lua/blob/master/DESIGN.md
 6、定义一个通用的中间语言层的好处是，我们通过写不同的转换器，可以翻译到不同的目标语言。我在另一个工程里实验了翻译到lua与javascript，确实可以共用第一阶段的工作。（https://github.com/dreamanlan/Cs2Dsl ）
 
 7、我觉得翻译最核心的地方还是在于正确性而不是使用了多少层间接层次。所以我的策略是在语法单位层面上寻找一个等价变换，保证翻译后的语法在语义上与翻译前是等价的，事实证明，这些等价变换是翻译的有效保证，即便这样可能会有一定的性能与可读性的损失（理论上是可以在翻译后进一步解决的，但不宜作为翻译时的目标）。
+
+##【一个容易翻错的例子（防止误调整计算顺序的备忘）】
+C#表达式内嵌的++/--运算、带out/ref参数的函数，在翻译时要特别注意求值顺序，比如下例中的fv的计算，表达式的各项都是使用kk或者修改kk的，这让表达式各项之
+间形成依赖，如果不严格按照这个顺序计算，结果就会错误，cs2lua采取匿名函数来处理++/--运算与out/ref参数，就是为了保证在语义上与c#原表达式等价。
+
+using System;
+using System.Collections.Generic;
+
+public static class Program
+{
+    public static void Main()
+    {
+        int kk = 0;
+        int fv = kk + kk++ + ++kk + Transform(out kk) + After(ref kk);
+    }
+    public static int Transform(out int v)
+    {
+        v = 123;
+        return v;
+    }
+    public static int After(ref int v)
+    {
+        ++v;
+        return v;
+    }    
+}
