@@ -108,7 +108,7 @@ class(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.FooBase) {
 			return(this);
 		},
 		Test123 = function(this, a, b){
-			return(typecast(( execbinary("+", a, b, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct) ), System.Int32, TypeKind.Struct); return(__expbody_458_12_458_90);
+			return(typecast(( execbinary("+", a, b, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct) ), System.Int32, TypeKind.Struct));
 		};
 		GTest__TopLevel_SecondLevel_GenericClass_bar = function(this, arg){
 		};
@@ -131,6 +131,12 @@ class(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.FooBase) {
 			callinstance(t, "Test2", System.Int32, newobject(TopLevel.SecondLevel.Foo.Test1, typeargs(), typekinds(), "ctor", null), newobject(TopLevel.SecondLevel.Foo.Test2, typeargs(), typekinds(), "ctor", null));
 			local(v);
 			local(vv); multiassign(vv, v) = callinstance(this, "TestLocal", __cs2dsl_out);
+			if( execbinary("<", execclosure(__invoke_486_19_486_35, true){ multiassign(__invoke_486_19_486_35, v) = callinstance(this, "TestLocal", __cs2dsl_out); }, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
+			};
+			if( execclosure(__invoke_489_19_489_36, true){ multiassign(__invoke_489_19_489_36, v) = callinstance(this, "TestLocal2", __cs2dsl_out); } ){
+			};
+			if( execunary("!", execclosure(__invoke_492_21_492_38, true){ multiassign(__invoke_492_21_492_38, v) = callinstance(this, "TestLocal2", __cs2dsl_out); }, System.Boolean, TypeKind.Struct) ){
+			};
 			local(ts); ts = newobject(TopLevel.TestStruct, typeargs(), typekinds(), "ctor", null);
 			ts = wrapstruct(ts);
 			setinstance(ts, "A", 1);
@@ -156,6 +162,9 @@ class(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.FooBase) {
 			v = 1;
 			return(2, v);
 		};
+		TestLocal2 = function(this, out(v)){
+			return(false, v);
+		};
 		TestValueArg = function(this, ts){
 			ts = wrapstruct(ts);
 			setinstance(ts, "A", 4);
@@ -180,10 +189,10 @@ class(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.FooBase) {
 		};
 		TestSwitch = function(this){
 			local(i); i = 10;
-			local{__switch_533_16_541_17 = i;};
-			if( (__switch_533_16_541_17 == 1) || (__switch_533_16_541_17 == 3) ){
+			local{__switch_546_16_554_17 = i;};
+			if( (__switch_546_16_554_17 == 1) || (__switch_546_16_554_17 == 3) ){
 				return();
-			}elseif( __switch_533_16_541_17 == 2 ){
+			}elseif( __switch_546_16_554_17 == 2 ){
 				return();
 			}else{
 				return();
@@ -287,6 +296,8 @@ class(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.FooBase) {
 		Test(MethodKind.Ordinary, Accessibility.Public){
 		};
 		TestLocal(MethodKind.Ordinary, Accessibility.Private){
+		};
+		TestLocal2(MethodKind.Ordinary, Accessibility.Private){
 		};
 		TestValueArg(MethodKind.Ordinary, Accessibility.Private){
 		};

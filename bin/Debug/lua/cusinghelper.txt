@@ -55,7 +55,7 @@ CUsingHelper = {
 			__cctor = function()
 				if CUsingHelper.__cctor_called then 
 					return;
-				else
+ 				else
 					CUsingHelper.__cctor_called = true;
 				end;
 			end,
@@ -81,7 +81,7 @@ CUsingHelper = {
 			__ctor = function(this)
 				if this.__ctor_called then 
 					return;
-				else
+ 				else
 					this.__ctor_called = true;
 				end;
 			end,

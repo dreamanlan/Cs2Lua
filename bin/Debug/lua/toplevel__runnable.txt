@@ -13,7 +13,7 @@ TopLevel.Runnable = {
 			__cctor = function()
 				if TopLevel.Runnable.__cctor_called then 
 					return;
-				else
+ 				else
 					TopLevel.Runnable.__cctor_called = true;
 				end;
 			end,
@@ -61,7 +61,7 @@ TopLevel.Runnable = {
 			__ctor = function(this)
 				if this.__ctor_called then 
 					return;
-				else
+ 				else
 					this.__ctor_called = true;
 				end;
 			end,

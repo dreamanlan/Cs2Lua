@@ -13,7 +13,7 @@ foo_System_Int32_System_Int32 = {
 			__cctor = function()
 				if foo_System_Int32_System_Int32.__cctor_called then 
 					return;
-				else
+ 				else
 					foo_System_Int32_System_Int32.__cctor_called = true;
 				end;
 			end,
@@ -41,7 +41,7 @@ foo_System_Int32_System_Int32 = {
 			__ctor = function(this)
 				if this.__ctor_called then 
 					return;
-				else
+ 				else
 					this.__ctor_called = true;
 				end;
 			end,

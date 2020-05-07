@@ -3,11 +3,11 @@ test.cs(38,23): warning CS3014: 'CUsingHelper.ReadZip(byte[])' cannot be marked 
 test.cs(118,18): warning CS0168: The variable 'dt' is declared but never used
 test.cs(118,21): warning CS0168: The variable 'dt2' is declared but never used
 test.cs(223,22): warning CS0219: The variable 'e' is assigned but its value is never used
-test.cs(637,13): warning CS0219: The variable 'v' is assigned but its value is never used
-test.cs(480,23): warning CS0219: The variable 'abc' is assigned but its value is never used
+test.cs(650,13): warning CS0219: The variable 'v' is assigned but its value is never used
 test.cs(251,19): warning CS0219: The variable 't' is assigned but its value is never used
-test.cs(658,32): warning CS0162: Unreachable code detected
-test.cs(543,17): warning CS0162: Unreachable code detected
+test.cs(671,32): warning CS0162: Unreachable code detected
+test.cs(480,23): warning CS0219: The variable 'abc' is assigned but its value is never used
+test.cs(556,17): warning CS0162: Unreachable code detected
 test.cs(83,14): warning CS0219: The variable 'isLoadingHeadIcon' is assigned but its value is never used
 test.cs(170,5): hidden CS8019: Unnecessary using directive.
 test.cs(6,1): hidden CS8019: Unnecessary using directive.

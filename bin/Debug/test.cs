@@ -484,6 +484,15 @@ namespace TopLevel
 
                 int v;
                 int vv=TestLocal(out v);
+                if(TestLocal(out v) < 1) {
+
+                }
+                if(TestLocal2(out v)) {
+
+                }
+                if (!TestLocal2(out v)) {
+
+                }
 
                 TestStruct ts = new TestStruct();
                 ts.A=1;
@@ -510,6 +519,10 @@ namespace TopLevel
                 ir.Test();
                 v = 1;
                 return 2;
+            }
+            private bool TestLocal2(out int v)
+            {
+                return false;
             }
             private int TestValueArg(TestStruct ts)
             {

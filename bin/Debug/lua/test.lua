@@ -186,3 +186,20 @@ end;
 setmetatable(t, {__index = __mt_index});
 
 local v = t[1]
+
+local t1 = os.time()
+local d = 0
+for i=1,100000000 do
+d = d + 1
+local k = d
+end
+local t2 = os.time()
+print("normal:",os.difftime(t2,t1))
+
+local t3 = os.time()
+local d2 = 0
+for i=1,100000000 do
+local k = (function() d2=d2+1;return(d2); end)()
+end
+local t4 = os.time()
+print("functional:",os.difftime(t4,t3))

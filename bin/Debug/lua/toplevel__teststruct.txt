@@ -13,7 +13,7 @@ TopLevel.TestStruct = {
 			__cctor = function()
 				if TopLevel.TestStruct.__cctor_called then 
 					return;
-				else
+ 				else
 					TopLevel.TestStruct.__cctor_called = true;
 				end;
 			end,
@@ -35,7 +35,7 @@ TopLevel.TestStruct = {
 			__ctor = function(this)
 				if this.__ctor_called then 
 					return;
-				else
+ 				else
 					this.__ctor_called = true;
 				end;
 			end,

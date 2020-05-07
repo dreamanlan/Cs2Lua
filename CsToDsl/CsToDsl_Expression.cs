@@ -64,13 +64,17 @@ namespace RoslynTool.CsToDsl
                 if (null != boper) {
                     if (null != boper.LeftOperand) {
                         var ltype = boper.LeftOperand.Type;
-                        leftType = ClassInfo.GetFullName(ltype);
-                        leftTypeKind = "TypeKind." + ltype.TypeKind.ToString();
+                        if (null != ltype) {
+                            leftType = ClassInfo.GetFullName(ltype);
+                            leftTypeKind = "TypeKind." + ltype.TypeKind.ToString();
+                        }
                     }
                     if (null != boper.RightOperand) {
                         var rtype = boper.RightOperand.Type;
-                        rightType = ClassInfo.GetFullName(rtype);
-                        rightTypeKind = "TypeKind." + rtype.TypeKind.ToString();
+                        if (null != rtype) {
+                            rightType = ClassInfo.GetFullName(rtype);
+                            rightTypeKind = "TypeKind." + rtype.TypeKind.ToString();
+                        }
                     }
                 }
                 ProcessBinaryOperator(node, ref op);
@@ -316,7 +320,7 @@ namespace RoslynTool.CsToDsl
                     ii.Init(msym, arglist, m_Model, opd);
                     OutputOperatorInvoke(ii, node);
                     CodeBuilder.Append("; return(");
-                    OutputOperatorInvoke(ii, node);
+                    OutputExpressionSyntax(node.Operand, opd);
                     CodeBuilder.Append("); })()");
                 }
             }

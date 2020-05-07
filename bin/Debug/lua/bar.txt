@@ -13,7 +13,7 @@ bar = {
 			__cctor = function()
 				if bar.__cctor_called then 
 					return;
-				else
+ 				else
 					bar.__cctor_called = true;
 				end;
 				bar.s_DateTime = newexternobject(System.DateTime, nil, nil, nil);
@@ -48,7 +48,7 @@ bar = {
 			__ctor = function(this)
 				if this.__ctor_called then 
 					return;
-				else
+ 				else
 					this.__ctor_called = true;
 				end;
 				this.m_DateTime = newexternobject(System.DateTime, nil, nil, nil);

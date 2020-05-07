@@ -324,7 +324,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendFormat("; return({0}, {1})", varName, string.Join(", ", mi.ReturnParamNames));
                     }
                     else {
-                        CodeBuilder.AppendFormat("; return({0})", varName);
+                        CodeBuilder.Append(")");
                     }
                     CodeBuilder.AppendLine(";");
                 }
@@ -786,7 +786,7 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.AppendFormat(" {0} ", token.Text);
                             OutputConversionInvokePrefix(iop);
                             if (ct > 0) {
-                                CodeBuilder.AppendFormat("(function(){{ local({0}); multiassign({1}", localName, localName);
+                                CodeBuilder.AppendFormat("execclosure({0}, true){{ multiassign({1}", localName, localName);
                             }
                         }
                         else {
@@ -823,9 +823,8 @@ namespace RoslynTool.CsToDsl
                         }
                         if (useOperator) {
                             if (ct > 0) {
-                                CodeBuilder.AppendFormat("; return({0}); }})()", localName);
+                                CodeBuilder.Append("; }");
                             }
-                            CodeBuilder.Append(")");
                         }
                     }
                 }
@@ -1012,11 +1011,15 @@ namespace RoslynTool.CsToDsl
                         string rtypeKind = "null";
                         if (null != compAssignInfo && null != compAssignInfo.Target && null != compAssignInfo.Value) {
                             ltypeSym = compAssignInfo.Target.Type;
+                            if (null != ltypeSym) {
+                                ltype = ClassInfo.GetFullName(ltypeSym);
+                                ltypeKind = "TypeKind." + ltypeSym.TypeKind.ToString();
+                            }
                             rtypeSym = compAssignInfo.Value.Type;
-                            ltype = ClassInfo.GetFullName(ltypeSym);
-                            rtype = ClassInfo.GetFullName(rtypeSym);
-                            ltypeKind = "TypeKind." + ltypeSym.TypeKind.ToString();
-                            rtypeKind = "TypeKind." + rtypeSym.TypeKind.ToString();
+                            if (null != rtypeSym) {
+                                rtype = ClassInfo.GetFullName(rtypeSym);
+                                rtypeKind = "TypeKind." + rtypeSym.TypeKind.ToString();
+                            }
                         }
                         ProcessBinaryOperator(assign, ref baseOp);
                         string functor;
@@ -1106,17 +1109,23 @@ namespace RoslynTool.CsToDsl
                 }
                 else {
                     if (!toplevel) {
-                        CodeBuilder.Append("(function(){ ");
-                    }
-                    OutputExpressionSyntax(leftElementAccess.Expression);
-                    CodeBuilder.Append("[");
-                    VisitBracketedArgumentList(leftElementAccess.ArgumentList);
-                    CodeBuilder.Append("] = ");
-                    OutputExpressionSyntax(assign.Right, opd);
-                    if (!toplevel) {
-                        CodeBuilder.Append("; return(");
+                        string localName = string.Format("__ret_{0}", GetSourcePosForVar(assign));
+                        CodeBuilder.AppendFormat("execclosure({0}, true){{ ", localName);
+                        OutputExpressionSyntax(leftElementAccess.Expression);
+                        CodeBuilder.Append("[");
+                        VisitBracketedArgumentList(leftElementAccess.ArgumentList);
+                        CodeBuilder.Append("] = ");
+                        CodeBuilder.AppendFormat("execclosure({0}, false){{ {1} = ", localName, localName);
                         OutputExpressionSyntax(assign.Right, opd);
-                        CodeBuilder.Append("); })()");
+                        CodeBuilder.Append("; };");
+                        CodeBuilder.Append("; }");
+                    }
+                    else {
+                        OutputExpressionSyntax(leftElementAccess.Expression);
+                        CodeBuilder.Append("[");
+                        VisitBracketedArgumentList(leftElementAccess.ArgumentList);
+                        CodeBuilder.Append("] = ");
+                        OutputExpressionSyntax(assign.Right, opd);
                     }
                 }
             }
@@ -1195,14 +1204,17 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(")");
                     }
                     else {
-                        CodeBuilder.Append("(function(){ ");
+                        string localName = string.Format("__ret_{0}", GetSourcePosForVar(assign));
+                        CodeBuilder.AppendFormat("(function(){{ local({0}); ", localName);
                         OutputExpressionSyntax(leftCondAccess.Expression);
                         CodeBuilder.Append("[");
                         OutputExpressionSyntax(leftCondAccess.WhenNotNull);
                         CodeBuilder.Append("] = ");
+                        CodeBuilder.AppendFormat("execclosure({0}, false){{ {1} = ", localName, localName);
                         OutputExpressionSyntax(assign.Right, opd);
-                        CodeBuilder.Append("; return(");
-                        OutputExpressionSyntax(assign.Right, opd);
+                        CodeBuilder.Append("; };");
+                        CodeBuilder.Append(" return(");
+                        CodeBuilder.Append(localName);
                         CodeBuilder.Append("); })");
                     }
                 }
@@ -1211,13 +1223,16 @@ namespace RoslynTool.CsToDsl
                 }
             }
             else {
-                CodeBuilder.Append("(function(){ ");
+                string localName = string.Format("__ret_{0}", GetSourcePosForVar(assign));
+                CodeBuilder.AppendFormat("(function(){{ local({0}); ", localName);
                 OutputExpressionSyntax(leftCondAccess.Expression);
                 OutputExpressionSyntax(leftCondAccess.WhenNotNull);
                 CodeBuilder.Append(" = ");
+                CodeBuilder.AppendFormat("execclosure({0}, false){{ {1} = ", localName, localName);
                 OutputExpressionSyntax(assign.Right, opd);
-                CodeBuilder.Append("; return(");
-                OutputExpressionSyntax(assign.Right, opd);
+                CodeBuilder.Append("; };");
+                CodeBuilder.Append(" return(");
+                CodeBuilder.Append(localName);
                 CodeBuilder.Append("); })");
             }
             CodeBuilder.Append(")");
@@ -1288,7 +1303,7 @@ namespace RoslynTool.CsToDsl
                             OutputConversionInvokePrefix(iop);
                         }
                         if (ct > 0) {
-                            CodeBuilder.AppendFormat("(function(){{ local({0}); multiassign({1}", localName, localName);
+                            CodeBuilder.AppendFormat("execclosure({0}, true){{ multiassign({1}", localName, localName);
                             outputEqualOp = true;
                         }
                     }
@@ -1300,7 +1315,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(" = ");
                         OutputConversionInvokePrefix(iop);
                         if (ct > 0) {
-                            CodeBuilder.AppendFormat("(function(){{ local({0}); multiassign({1}", localName, localName);
+                            CodeBuilder.AppendFormat("execclosure({0}, true){{ multiassign({1}", localName, localName);
                             outputEqualOp = true;
                         }
                     }
@@ -1323,7 +1338,7 @@ namespace RoslynTool.CsToDsl
                     ii.OutputInvocation(CodeBuilder, this, memberAccess.Expression, true, m_Model, memberAccess);
                     if (op != "=") {
                         if (ct > 0) {
-                            CodeBuilder.AppendFormat("; return({0}); }})()", localName);
+                            CodeBuilder.Append("; }");
                         }
                         if (null != ropd && ropd.UsesOperatorMethod) {
                             CodeBuilder.Append(")");
@@ -1333,7 +1348,7 @@ namespace RoslynTool.CsToDsl
                     }
                     else if (null != opd && opd.UsesOperatorMethod) {
                         if (ct > 0) {
-                            CodeBuilder.AppendFormat("; return({0}); }})()", localName);
+                            CodeBuilder.Append("; }");
                         }
                         CodeBuilder.Append(")");
                     }
@@ -1364,7 +1379,7 @@ namespace RoslynTool.CsToDsl
                             OutputConversionInvokePrefix(iop);
                         }
                         if (ct > 0) {
-                            CodeBuilder.AppendFormat("(function(){{ local({0}); multiassign({1}", localName, localName);
+                            CodeBuilder.AppendFormat("execclosure({0}, true){{ multiassign({1}", localName, localName);
                             outputEqualOp = true;
                         }
                     }
@@ -1376,7 +1391,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(" = ");
                         OutputConversionInvokePrefix(iop);
                         if (ct > 0) {
-                            CodeBuilder.AppendFormat("(function(){{ local({0}); multiassign({1}", localName, localName);
+                            CodeBuilder.AppendFormat("execclosure({0}, true){{ multiassign({1}", localName, localName);
                             outputEqualOp = true;
                         }
                     }
@@ -1399,7 +1414,7 @@ namespace RoslynTool.CsToDsl
                     ii.OutputInvocation(CodeBuilder, this, invocation.Expression, false, m_Model, invocation);
                     if (op != "=") {
                         if (ct > 0) {
-                            CodeBuilder.AppendFormat("; return({0}); }})()", localName);
+                            CodeBuilder.Append("; }");
                         }
                         if (null != ropd && ropd.UsesOperatorMethod) {
                             CodeBuilder.Append(")");
@@ -1409,7 +1424,7 @@ namespace RoslynTool.CsToDsl
                     }
                     else if (null != opd && opd.UsesOperatorMethod) {
                         if (ct > 0) {
-                            CodeBuilder.AppendFormat("; return({0}); }})()", localName);
+                            CodeBuilder.Append("; }");
                         }
                         CodeBuilder.Append(")");
                     }
@@ -1521,7 +1536,7 @@ namespace RoslynTool.CsToDsl
 
                     if (ii.ReturnArgs.Count > 0) {
                         if (!toplevel) {
-                            CodeBuilder.AppendFormat("(function(){{ local({0}); multiassign({1}, ", localName, localName);
+                            CodeBuilder.AppendFormat("execclosure({0}, true){{ multiassign({1}, ", localName, localName);
                         }
                         else if (!sym.ReturnsVoid) {
                             CodeBuilder.AppendFormat("local({0}); multiassign({1}, ", localName, localName);
@@ -1535,7 +1550,7 @@ namespace RoslynTool.CsToDsl
                     ii.OutputInvocation(CodeBuilder, this, memberAccess.Expression, true, m_Model, memberAccess);
                     if (ii.ReturnArgs.Count > 0) {
                         if (!toplevel) {
-                            CodeBuilder.AppendFormat("; return({0}); }})()", localName);
+                            CodeBuilder.Append("; }");
                         }
                     }
                     CodeBuilder.AppendFormat("{0}", expTerminater);
@@ -1545,7 +1560,7 @@ namespace RoslynTool.CsToDsl
                 else {
                     if (ii.ReturnArgs.Count > 0) {
                         if (!toplevel) {
-                            CodeBuilder.AppendFormat("(function(){{ local({0}); multiassign({1}, ", localName, localName);
+                            CodeBuilder.AppendFormat("execclosure({0}, true){{ multiassign({1}, ", localName, localName);
                         }
                         else if (!sym.ReturnsVoid) {
                             CodeBuilder.AppendFormat("local({0}); multiassign({1}, ", localName, localName);
@@ -1559,7 +1574,7 @@ namespace RoslynTool.CsToDsl
                     ii.OutputInvocation(CodeBuilder, this, invocation.Expression, false, m_Model, invocation);
                     if (ii.ReturnArgs.Count > 0) {
                         if (!toplevel) {
-                            CodeBuilder.AppendFormat("; return({0}); }})()", localName);
+                            CodeBuilder.Append("; }");
                         }
                     }
                     CodeBuilder.AppendFormat("{0}", expTerminater);

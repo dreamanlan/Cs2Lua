@@ -24,7 +24,21 @@ class(Extentions) {
 		};
 		findChildRecursively = function(transform, childName, maxDepth){
 ;
-			if( execbinary("&&", 			return(child);
+			if( execbinary("&&", execbinary("==", child, null, Transform, null, TypeKind.Error, null), execbinary(">", maxDepth, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct) ){
+				local(childCount); childCount = transform.childCount;
+				local(i); i = 0;
+				while( execbinary("<", i, childCount, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
+					;
+					if( execbinary("!=", child, null, Transform, null, TypeKind.Error, null) ){
+						break;
+					};
+					block{
+					break;
+					};
+				i = execbinary("+", i, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
+				};
+			};
+			return(child);
 		};
 		searchChildRecursively = function(transform, childName, maxDepth){
 			if( execbinary("!=", , -1, , System.Int32, TypeKind.Error, TypeKind.Struct) ){
@@ -36,7 +50,10 @@ class(Extentions) {
 				while( execbinary("<", i, count, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
 ;
 					local(searchRes); searchRes = callstatic(Extentions, "searchChildRecursively", nowNode, childName, execbinary("-", maxDepth, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
-					if( 				i = execbinary("+", i, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
+					if( execbinary("!=", searchRes, null, Transform, null, TypeKind.Error, null) ){
+						return(searchRes);
+					};
+				i = execbinary("+", i, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
 				};
 			};
 			return(null);

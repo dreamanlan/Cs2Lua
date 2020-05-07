@@ -1,2 +1,636 @@
+require "cs2lua__namespaces"; 
+
+TopLevel.SecondLevel.Foo = {
+	__new_object = function(...)
+		return newobject(TopLevel.SecondLevel.Foo, nil, nil, "ctor", nil, ...);
+	end,
+	__define_class = function()
+		local static = TopLevel.SecondLevel.Foo;
+		local static_methods = {
+			add_StaticEventBridge = function(value)
+			end,
+			remove_StaticEventBridge = function(value)
+			end,
+			op_Increment = function(self)
+				self.m_Test = (self.m_Test + 1);
+				return self;
+				return nil;
+			end,
+			op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo = function(self, other)
+				self.m_Test = (self.m_Test + other.m_Test);
+				return self;
+				return nil;
+			end,
+			op_Addition__TopLevel_SecondLevel_Foo__System_Int32 = function(self, val)
+				self.m_Test = (self.m_Test + val);
+				return self;
+				return nil;
+			end,
+			op_Explicit = function(a)
+				local f;
+				f = newobject(TopLevel.SecondLevel.Foo, nil, nil, "ctor", nil);
+				f.m_Test = a;
+				f.Val = newobject(TopLevel.TestStruct, nil, nil, "ctor", nil);
+				local ts;
+				ts = f.Val;
+				ts = wrapstruct(ts);
+				f[ts] = ts;
+				local r;
+				r = f[ts];
+				local result;
+				result = TopLevel.Singleton_TopLevel_SecondLevel_Foo.instance:Test123(1, 2);
+				TopLevel.Singleton_TopLevel_SecondLevel_Foo.instance = nil;
+				return f;
+				return nil;
+			end,
+			cctor = function()
+				TopLevel.SecondLevel.FooBase.cctor();
+				TopLevel.SecondLevel.Foo.__cctor();
+			end,
+			__cctor = function()
+				if TopLevel.SecondLevel.Foo.__cctor_called then 
+					return;
+ 				else
+					TopLevel.SecondLevel.Foo.__cctor_called = true;
+				end;
+			end,
+		};
+
+		local static_fields_build = function()
+			local static_fields = {
+				__attributes = TopLevel__SecondLevel__Foo__Attrs,
+				__cctor_called = false,
+			};
+			return static_fields;
+		end;
+		local static_props = nil;
+		local static_events = {
+			StaticEventBridge = {
+				add = static_methods.add_StaticEventBridge,
+				remove = static_methods.remove_StaticEventBridge,
+			},
+		};
+
+		local instance_methods = {
+			add_EventBridge = function(this, value)
+			end,
+			remove_EventBridge = function(this, value)
+			end,
+			get_Val = function(this)
+				return this.m_TS;
+			end,
+			set_Val = function(this, value)
+				value = wrapstruct(value);
+				this.m_TS = value;
+			end,
+			get_Item = function(this, ...)
+				local args = wrapstructparams{...};
+				return 1;
+			end,
+			set_Item = function(this, ...)
+				local args = {...};
+				local value = table.remove(args);
+				local args = wrapstructparams(args);
+			end,
+			ctor = function(this)
+				this:ctor__System_Int32(0);
+				this:__ctor();
+				return this;
+			end,
+			ctor__System_Int32 = function(this, v)
+				this.base:__self__ctor();
+				this:__ctor();
+				this.m_Test = v;
+				return this;
+			end,
+			ctor__System_Int32__System_Int32 = function(this, a, b)
+				this.base:__self__ctor();
+				this:__ctor();
+				return this;
+			end,
+			Test123 = function(this, a, b)
+				return typecast(((a + b)), System.Int32, TypeKind.Struct);
+			end,
+			GTest__TopLevel_SecondLevel_GenericClass_bar = function(this, arg)
+			end,
+			GTest__TopLevel_SecondLevel_GenericClass_TopLevel_Runnable = function(this, arg)
+			end,
+			Iterator = wrapenumerable(function(this)
+				wrapyield(nil, false, false);
+				wrapyield(false, false);
+				return nil;
+			end),
+			Iterator2 = wrapenumerable(function(this)
+				wrapyield(nil, false, false);
+				return nil;
+			end),
+			Test = function(this)
+				this:Test123(1, wrapconst(System.Single, "NegativeInfinity"));
+				local abc;
+				abc = wrapconst(System.Single, "NegativeInfinity");
+				local t;
+				t = newobject(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2, {TopLevel.SecondLevel.Foo.Test2}, {TypeKind.Class}, "ctor", nil, newobject(TopLevel.SecondLevel.Foo.Test1, nil, nil, "ctor", nil), newobject(TopLevel.SecondLevel.Foo.Test2, nil, nil, "ctor", nil));
+				t:Test(System.Int32, 123);
+				t:Test2(System.Int32, newobject(TopLevel.SecondLevel.Foo.Test1, nil, nil, "ctor", nil), newobject(TopLevel.SecondLevel.Foo.Test2, nil, nil, "ctor", nil));
+				local v;
+				local vv;
+				vv,v = this:TestLocal(__cs2lua_out);
+				if ((function() 
+					local __invoke_486_19_486_35;
+					__invoke_486_19_486_35,v = this:TestLocal(__cs2lua_out);
+					return __invoke_486_19_486_35;
+				end)() < 1) then 
+				end;
+				local __invoke_489_19_489_36;
+				__invoke_489_19_489_36,v = this:TestLocal2(__cs2lua_out);
+				if __invoke_489_19_489_36 then
+
+				end;
+				local __invoke_492_21_492_38;
+				__invoke_492_21_492_38,v = this:TestLocal2(__cs2lua_out);
+				if not __invoke_492_21_492_38 then
+
+				end;
+				local ts;
+				ts = newobject(TopLevel.TestStruct, nil, nil, "ctor", nil);
+				ts = wrapstruct(ts);
+				ts.A = 1;
+				ts.B = 2;
+				ts.C = 3;
+				local ts2;
+				ts2 = ts;
+				ts2 = wrapstruct(ts2);
+				local ts3;
+				ts3 = ts;
+				ts3 = wrapstruct(ts3);
+				this:TestValueArg(ts);
+				if delegationcomparewithnil(true, false, "TopLevel.SecondLevel.Foo:OnSimple", this, nil, "OnSimple", false) then 
+					this.OnSimple();
+				end;
+				local f;
+				f = this.OnSimple;
+				if delegationcomparewithnil(false, false, "TopLevel.SecondLevel.Foo:f", f, nil, nil, false) then 
+					f();
+				end;
+			end,
+			TestLocal = function(this, v)
+				local ir;
+				ir = newobject(TopLevel.Runnable, nil, nil, "ctor", nil);
+				invokewithinterface(ir, "TopLevel_IRunnable0", "Test");
+				v = 1;
+				return 2, v;
+			end,
+			TestLocal2 = function(this, v)
+				return false, v;
+			end,
+			TestValueArg = function(this, ts)
+				ts = wrapstruct(ts);
+				ts.A = 4;
+				ts.B = 5;
+				ts.C = 6;
+				return 0;
+			end,
+			TestContinueAndReturn = function(this)
+				local i;
+				i = 0;
+				while (i < 100) do
+					repeat
+
+						if (i < 10) then 
+							break;
+						end;
+						do
+							return i;
+						end;
+					until true ;
+					i = (i + 1);
+				end;
+				return -1;
+			end,
+			TestSwitch = function(this)
+				local i;
+				i = 10;
+				local __switch_546_16_554_17 = i;
+				if (((__switch_546_16_554_17 == 1)) or ((__switch_546_16_554_17 == 3))) then 
+					return ;
+ 				elseif (__switch_546_16_554_17 == 2) then 
+					return ;
+				else
+					return ;
+				end;
+				if (i > 3) then 
+					return ;
+				end;
+				if typeis(this, TopLevel.SecondLevel.FooBase, TypeKind.Class) then 
+					return ;
+				end;
+			end,
+			__ctor = function(this)
+				if this.__ctor_called then 
+					return;
+ 				else
+					this.__ctor_called = true;
+				end;
+				this.m_TS = newobject(TopLevel.TestStruct, nil, nil, "ctor", nil);
+				this.m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, {System.String}, {TypeKind.Class}, {"one", "two", "three"}, "System.Collections.Generic.HashSet_T:ctor");
+			end,
+		};
+		local instance_fields_build = function()
+			local instance_fields = {
+				OnSimple = __cs2lua_nil_field_value,
+				OnSimple2 = __cs2lua_nil_field_value,
+				m_Test = 0,
+				m_Test2 = 0,
+				m_TS = __cs2lua_nil_field_value,
+				m_HashSet = __cs2lua_nil_field_value,
+				__attributes = TopLevel__SecondLevel__Foo__Attrs,
+				__ctor_called = false,
+			};
+			return instance_fields;
+		end;
+		local instance_props = {
+			Val = {
+				get = instance_methods.get_Val,
+				set = instance_methods.set_Val,
+			},
+		};
+		local instance_events = {
+			Val = {
+				get = instance_methods.get_Val,
+				set = instance_methods.set_Val,
+			},
+		};
+
+		local interfaces = nil;
+		local interface_map = nil;
+
+		local class_info = {
+			Kind = TypeKind.Class,
+		};
+		local method_info = {
+			add_OnSimple = {
+				Kind = MethodKind.EventAdd,
+			},
+			remove_OnSimple = {
+				Kind = MethodKind.EventRemove,
+			},
+			add_EventBridge = {
+				Kind = MethodKind.EventAdd,
+			},
+			remove_EventBridge = {
+				Kind = MethodKind.EventRemove,
+			},
+			add_StaticEventBridge = {
+				Kind = MethodKind.EventAdd,
+				static = true,
+			},
+			remove_StaticEventBridge = {
+				Kind = MethodKind.EventRemove,
+				static = true,
+			},
+			get_Val = {
+				Kind = MethodKind.PropertyGet,
+			},
+			set_Val = {
+				Kind = MethodKind.PropertySet,
+			},
+			get_Item = {
+				Kind = MethodKind.PropertyGet,
+			},
+			set_Item = {
+				Kind = MethodKind.PropertySet,
+			},
+			ctor = {
+				Kind = MethodKind.Constructor,
+			},
+			ctor__System_Int32 = {
+				Kind = MethodKind.Constructor,
+			},
+			ctor__System_Int32__System_Int32 = {
+				Kind = MethodKind.Constructor,
+			},
+			op_Increment = {
+				Kind = MethodKind.UserDefinedOperator,
+				static = true,
+			},
+			op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo = {
+				Kind = MethodKind.UserDefinedOperator,
+				static = true,
+			},
+			op_Addition__TopLevel_SecondLevel_Foo__System_Int32 = {
+				Kind = MethodKind.UserDefinedOperator,
+				static = true,
+			},
+			op_Explicit = {
+				Kind = MethodKind.Conversion,
+				static = true,
+			},
+			Test123 = {
+				Kind = MethodKind.Ordinary,
+			},
+			GTest__TopLevel_SecondLevel_GenericClass_bar = {
+				Kind = MethodKind.Ordinary,
+			},
+			GTest__TopLevel_SecondLevel_GenericClass_TopLevel_Runnable = {
+				Kind = MethodKind.Ordinary,
+			},
+			Iterator = {
+				Kind = MethodKind.Ordinary,
+			},
+			Iterator2 = {
+				Kind = MethodKind.Ordinary,
+			},
+			Test = {
+				Kind = MethodKind.Ordinary,
+			},
+			TestLocal = {
+				Kind = MethodKind.Ordinary,
+				private = true,
+			},
+			TestLocal2 = {
+				Kind = MethodKind.Ordinary,
+				private = true,
+			},
+			TestValueArg = {
+				Kind = MethodKind.Ordinary,
+				private = true,
+			},
+			TestContinueAndReturn = {
+				Kind = MethodKind.Ordinary,
+				private = true,
+			},
+			TestSwitch = {
+				Kind = MethodKind.Ordinary,
+				private = true,
+			},
+		};
+		local property_info = {
+			Val = {
+			},
+		};
+		local field_info = {
+			OnSimple = {
+			},
+			EventBridge = {
+			},
+			StaticEventBridge = {
+				static = true,
+			},
+		};
+		local field_info = {
+			OnSimple2 = {
+			},
+			m_Test = {
+			},
+			m_Test2 = {
+			},
+			m_TS = {
+			},
+			m_HashSet = {
+			},
+		};
+
+		Utility.Warn("TopLevel.SecondLevel.Foo::__define_class begin");
+		local __defineclass_return = defineclass(TopLevel.SecondLevel.FooBase, "TopLevel.SecondLevel.Foo", "Foo", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		Utility.Warn("TopLevel.SecondLevel.Foo::__define_class end");
+		return __defineclass_return;
+	end,
+};
+
+TopLevel.SecondLevel.Foo.Test1 = {
+	__new_object = function(...)
+		return newobject(TopLevel.SecondLevel.Foo.Test1, nil, nil, "ctor", nil, ...);
+	end,
+	__define_class = function()
+		local static = TopLevel.SecondLevel.Foo.Test1;
+		local static_methods = {
+			cctor = function()
+				TopLevel.SecondLevel.Foo.Test1.__cctor();
+			end,
+			__cctor = function()
+				if TopLevel.SecondLevel.Foo.Test1.__cctor_called then 
+					return;
+ 				else
+					TopLevel.SecondLevel.Foo.Test1.__cctor_called = true;
+				end;
+			end,
+		};
+
+		local static_fields_build = function()
+			local static_fields = {
+				__cctor_called = false,
+			};
+			return static_fields;
+		end;
+		local static_props = nil;
+		local static_events = nil;
+
+		local instance_methods = {
+			ctor = function(this)
+				this:__ctor();
+			end,
+			__ctor = function(this)
+				if this.__ctor_called then 
+					return;
+ 				else
+					this.__ctor_called = true;
+				end;
+			end,
+		};
+		local instance_fields_build = function()
+			local instance_fields = {
+				__ctor_called = false,
+			};
+			return instance_fields;
+		end;
+		local instance_props = nil;
+		local instance_events = nil;
+
+		local interfaces = nil;
+		local interface_map = nil;
+
+		local class_info = {
+			Kind = TypeKind.Class,
+			private = true,
+		};
+		local method_info = {
+			ctor = {
+				Kind = MethodKind.Constructor,
+			},
+		};
+		local property_info = nil;
+		local event_info = nil;
+		local field_info = nil;
+
+		Utility.Warn("TopLevel.SecondLevel.Foo.Test1::__define_class begin");
+		local __defineclass_return = defineclass(nil, "TopLevel.SecondLevel.Foo.Test1", "Test1", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		Utility.Warn("TopLevel.SecondLevel.Foo.Test1::__define_class end");
+		return __defineclass_return;
+	end,
+};
+
+TopLevel.SecondLevel.Foo.Test2 = {
+	__new_object = function(...)
+		return newobject(TopLevel.SecondLevel.Foo.Test2, nil, nil, "ctor", nil, ...);
+	end,
+	__define_class = function()
+		local static = TopLevel.SecondLevel.Foo.Test2;
+		local static_methods = {
+			cctor = function()
+				TopLevel.SecondLevel.Foo.Test2.__cctor();
+			end,
+			__cctor = function()
+				if TopLevel.SecondLevel.Foo.Test2.__cctor_called then 
+					return;
+ 				else
+					TopLevel.SecondLevel.Foo.Test2.__cctor_called = true;
+				end;
+			end,
+		};
+
+		local static_fields_build = function()
+			local static_fields = {
+				__cctor_called = false,
+			};
+			return static_fields;
+		end;
+		local static_props = nil;
+		local static_events = nil;
+
+		local instance_methods = {
+			ctor = function(this)
+				this:__ctor();
+			end,
+			__ctor = function(this)
+				if this.__ctor_called then 
+					return;
+ 				else
+					this.__ctor_called = true;
+				end;
+			end,
+		};
+		local instance_fields_build = function()
+			local instance_fields = {
+				__ctor_called = false,
+			};
+			return instance_fields;
+		end;
+		local instance_props = nil;
+		local instance_events = nil;
+
+		local interfaces = nil;
+		local interface_map = nil;
+
+		local class_info = {
+			Kind = TypeKind.Class,
+			private = true,
+		};
+		local method_info = {
+			ctor = {
+				Kind = MethodKind.Constructor,
+			},
+		};
+		local property_info = nil;
+		local event_info = nil;
+		local field_info = nil;
+
+		Utility.Warn("TopLevel.SecondLevel.Foo.Test2::__define_class begin");
+		local __defineclass_return = defineclass(nil, "TopLevel.SecondLevel.Foo.Test2", "Test2", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		Utility.Warn("TopLevel.SecondLevel.Foo.Test2::__define_class end");
+		return __defineclass_return;
+	end,
+};
+
+TopLevel.SecondLevel.Foo.FooChild = {
+	__new_object = function(...)
+		return newobject(TopLevel.SecondLevel.Foo.FooChild, nil, nil, "ctor", nil, ...);
+	end,
+	__define_class = function()
+		local static = TopLevel.SecondLevel.Foo.FooChild;
+		local static_methods = {
+			cctor = function()
+				TopLevel.SecondLevel.Foo.FooChild.__cctor();
+			end,
+			__cctor = function()
+				if TopLevel.SecondLevel.Foo.FooChild.__cctor_called then 
+					return;
+ 				else
+					TopLevel.SecondLevel.Foo.FooChild.__cctor_called = true;
+				end;
+			end,
+		};
+
+		local static_fields_build = function()
+			local static_fields = {
+				__cctor_called = false,
+			};
+			return static_fields;
+		end;
+		local static_props = nil;
+		local static_events = nil;
+
+		local instance_methods = {
+			ctor = function(this)
+				this:__ctor();
+			end,
+			__ctor = function(this)
+				if this.__ctor_called then 
+					return;
+ 				else
+					this.__ctor_called = true;
+				end;
+			end,
+		};
+		local instance_fields_build = function()
+			local instance_fields = {
+				m_Test1 = 123,
+				m_Test2 = 456,
+				__ctor_called = false,
+			};
+			return instance_fields;
+		end;
+		local instance_props = nil;
+		local instance_events = nil;
+
+		local interfaces = nil;
+		local interface_map = nil;
+
+		local class_info = {
+			Kind = TypeKind.Class,
+			private = true,
+		};
+		local method_info = {
+			ctor = {
+				Kind = MethodKind.Constructor,
+			},
+		};
+		local property_info = nil;
+		local event_info = nil;
+		local field_info = {
+			m_Test1 = {
+			},
+			m_Test2 = {
+			},
+		};
+
+		Utility.Warn("TopLevel.SecondLevel.Foo.FooChild::__define_class begin");
+		local __defineclass_return = defineclass(nil, "TopLevel.SecondLevel.Foo.FooChild", "FooChild", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		Utility.Warn("TopLevel.SecondLevel.Foo.FooChild::__define_class end");
+		return __defineclass_return;
+	end,
+};
 
 
+require "cs2lua__lualib";
+require "cs2lua__attributes";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+require "toplevel__secondlevel__foobase";
+require "toplevel__teststruct";
+require "toplevel__singleton_toplevel_secondlevel_foo";
+require "toplevel__secondlevel__genericclass_toplevel_secondlevel_foo_test1__innergenericclass_toplevel_secondlevel_foo_test2";
+require "toplevel__runnable";
+settempmetatable(TopLevel.SecondLevel.Foo.FooChild);
+settempmetatable(TopLevel.SecondLevel.Foo.Test2);
+settempmetatable(TopLevel.SecondLevel.Foo.Test1);
+settempmetatable(TopLevel.SecondLevel.Foo);
