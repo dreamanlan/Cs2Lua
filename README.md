@@ -55,24 +55,24 @@ C#表达式内嵌的++/--运算、带out/ref参数的函数，在翻译时要特
 间形成依赖，如果不严格按照这个顺序计算，结果就会错误，cs2lua采取匿名函数来处理++/--运算与out/ref参数，就是为了保证在语义上与c#原表达式等价。
 
 
-using System;
-using System.Collections.Generic;
+    using System;
+    using System.Collections.Generic;
 
-public static class Program
-{
-    public static void Main()
+    public static class Program
     {
-        int kk = 0;
-        int fv = kk + kk++ + ++kk + Transform(out kk) + After(ref kk);
+        public static void Main()
+        {
+            int kk = 0;
+            int fv = kk + kk++ + ++kk + Transform(out kk) + After(ref kk);
+        }
+        public static int Transform(out int v)
+        {
+            v = 123;
+            return v;
+        }
+        public static int After(ref int v)
+        {
+            ++v;
+            return v;
+        }    
     }
-    public static int Transform(out int v)
-    {
-        v = 123;
-        return v;
-    }
-    public static int After(ref int v)
-    {
-        ++v;
-        return v;
-    }    
-}
