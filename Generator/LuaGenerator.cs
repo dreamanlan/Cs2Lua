@@ -2048,16 +2048,43 @@ namespace Generator
                 }
                 sb.AppendFormat("{0}end)()", GetIndentString(indent));
             }
+            else if (id == "while") {
+                int num = data.Call.GetParamNum();
+                Dsl.FunctionData closure = null;
+                string exp = null;
+                if (num == 1 && CanRemoveClosure(data.Call.GetParam(0), out closure, out exp)) {
+                    //TryGetValue这样的单一条件表达式可以转换为非匿名函数包装样式
+                    sb.AppendLine("while true do");
+                    ++indent;
+                    string localName = closure.Call.GetParamId(0);
+                    bool needDecl = (bool)Convert.ChangeType(closure.Call.GetParamId(1), typeof(bool));
+                    if (needDecl) {
+                        sb.AppendFormatLine("{0}local {1};", GetIndentString(indent), localName);
+                    }
+                    GenerateStatements(closure, sb, indent);
+                    sb.AppendFormatLine("{0}if not {1} then", GetIndentString(indent), exp);
+                    ++indent;
+                    sb.AppendFormatLine("{0}break;", GetIndentString(indent));
+                    --indent;
+                    sb.AppendFormatLine("{0}end;", GetIndentString(indent));
+                    --indent;
+                }
+                else {
+                    GenerateConcreteSyntax(fcall, sb, indent, false);
+                }
+                if (data.HaveStatement()) {
+                    sb.AppendLine();
+                    ++indent;
+                    GenerateStatements(data, sb, indent);
+                    --indent;
+                    sb.AppendFormat("{0}end", GetIndentString(indent));
+                }
+            }
             else if (id == "if") {
                 int num = data.Call.GetParamNum();
-                bool isNot = false;
-                var unaryop = data.Call.GetParam(0) as Dsl.CallData;
-                var closure = data.Call.GetParam(0) as Dsl.FunctionData;
-                if (null != unaryop && unaryop.GetId() == "execunary" && unaryop.GetParamId(0) == "!") {
-                    isNot = true;
-                    closure = unaryop.GetParam(1) as Dsl.FunctionData;
-                }
-                if (num == 1 && null != closure && closure.GetId() == "execclosure") {
+                Dsl.FunctionData closure = null;
+                string exp = null;
+                if (num == 1 && CanRemoveClosure(data.Call.GetParam(0), out closure, out exp)) {
                     //TryGetValue这样的单一条件表达式可以提到if语句外面
                     string localName = closure.Call.GetParamId(0);
                     bool needDecl = (bool)Convert.ChangeType(closure.Call.GetParamId(1), typeof(bool));
@@ -2068,10 +2095,7 @@ namespace Generator
                         sb.AppendLine("--");
                     }
                     GenerateStatements(closure, sb, indent);
-                    if(isNot)
-                        sb.AppendFormatLine("{0}if not {1} then", GetIndentString(indent), localName);
-                    else
-                        sb.AppendFormatLine("{0}if {1} then", GetIndentString(indent), localName);
+                    sb.AppendFormatLine("{0}if {1} then", GetIndentString(indent), exp);
                 }
                 else {
                     GenerateConcreteSyntax(fcall, sb, indent, false);
@@ -2139,13 +2163,25 @@ namespace Generator
                     }
                     else if (funcData == data.Second) {
                         var param0 = fcall.GetParam(0);
-                        if (param0.GetId() == "false") {
+                        Dsl.FunctionData closure;
+                        string exp;
+                        if (CanRemoveClosure(param0, out closure, out exp)) {
+                            ++indent;
+                            string localName = closure.Call.GetParamId(0);
+                            bool needDecl = (bool)Convert.ChangeType(closure.Call.GetParamId(1), typeof(bool));
+                            if (needDecl) {
+                                sb.AppendFormatLine("{0}local {1};", GetIndentString(indent), localName);
+                            }
+                            GenerateStatements(closure, sb, indent);
+                            --indent;
+                            sb.AppendFormat("{0}until not {1}", GetIndentString(indent), exp);
+                        }
+                        else if (param0.GetId() == "false") {
                             sb.AppendFormat("{0}until true", GetIndentString(indent));
                         }
                         else {
-                            sb.AppendFormat("{0}until not (", GetIndentString(indent));
+                            sb.AppendFormat("{0}until not ", GetIndentString(indent));
                             GenerateSyntaxComponent(param0, sb, indent, false);
-                            sb.Append(")");
                         }
                     }
                     if (funcData.HaveStatement()) {
@@ -2165,14 +2201,9 @@ namespace Generator
             else if (id == "if") {
                 var fdata = data.First;
                 int num = fdata.Call.GetParamNum();
-                bool isNot = false;
-                var unaryop = fdata.Call.GetParam(0) as Dsl.CallData;
-                var closure = fdata.Call.GetParam(0) as Dsl.FunctionData;
-                if (null != unaryop && unaryop.GetId() == "execunary" && unaryop.GetParamId(0) == "!") {
-                    isNot = true;
-                    closure = unaryop.GetParam(1) as Dsl.FunctionData;
-                }
-                if (num == 1 && null != closure && closure.GetId() == "execclosure") {
+                Dsl.FunctionData closure = null;
+                string exp = null;
+                if (num == 1 && CanRemoveClosure(fdata.Call.GetParam(0), out closure, out exp)) {
                     //TryGetValue这样的单一条件表达式可以提到if语句外面
                     string localName = closure.Call.GetParamId(0);
                     bool needDecl = (bool)Convert.ChangeType(closure.Call.GetParamId(1), typeof(bool));
@@ -2183,10 +2214,7 @@ namespace Generator
                         sb.AppendLine("--");
                     }
                     GenerateStatements(closure, sb, indent);
-                    if (isNot)
-                        sb.AppendFormatLine("{0}if not {1} then", GetIndentString(indent), localName);
-                    else
-                        sb.AppendFormatLine("{0}if {1} then", GetIndentString(indent), localName);
+                    sb.AppendFormatLine("{0}if {1} then", GetIndentString(indent), exp);
                 }
                 else {
                     var fcall = fdata.Call;
@@ -2202,10 +2230,22 @@ namespace Generator
                     sb.AppendFormat("{0}end", GetIndentString(indent));
                 }
                 else {
-                    sb.Append(" ");
                     for (int ix = 1; ix < data.GetFunctionNum(); ++ix) {
                         var funcData = data.GetFunction(ix);
                         var fcall = funcData.Call;
+                        if (CanRemoveClosure(fcall.GetParam(0))) {
+                            for(int i = 0; i < ix; ++i) {
+                                data.Functions.RemoveAt(0);
+                            }
+                            data.First.Call.Name.SetId("if");
+                            sb.AppendFormatLine("{0}else", GetIndentString(indent));
+                            ++indent;
+                            GenerateConcreteSyntax(data, sb, indent, true);
+                            --indent;
+                            sb.AppendLine(";");
+                            sb.AppendFormat("{0}end", GetIndentString(indent));
+                            break;
+                        }
                         GenerateConcreteSyntax(fcall, sb, indent, funcData == data.First ? false : true);
                         if (funcData.HaveStatement()) {
                             sb.AppendLine();
@@ -2317,6 +2357,44 @@ namespace Generator
                     sb.AppendLine();
                 }
             }
+        }
+        private static bool CanRemoveClosure(Dsl.ISyntaxComponent param)
+        {
+            Dsl.FunctionData closure;
+            Dsl.CallData exp;
+            return CanRemoveClosure(param, out closure, out exp);
+        }
+        private static bool CanRemoveClosure(Dsl.ISyntaxComponent param, out Dsl.FunctionData closure, out string exp)
+        {
+            Dsl.CallData unaryop;
+            if(CanRemoveClosure(param, out closure, out unaryop)) {
+                if (null != unaryop) {
+                    Dsl.ValueData vd = new Dsl.ValueData(closure.Call.GetParamId(0));
+                    unaryop.SetParam(1, vd);
+                    StringBuilder sb = new StringBuilder();
+                    GenerateConcreteSyntax(unaryop, sb, 0, false);
+                    exp = sb.ToString();
+                }
+                else {
+                    exp = closure.Call.GetParamId(0);
+                }
+                return true;
+            }
+            closure = null;
+            exp = null;
+            return false;
+        }
+        private static bool CanRemoveClosure(Dsl.ISyntaxComponent param, out Dsl.FunctionData closure, out Dsl.CallData exp)
+        {
+            exp = param as Dsl.CallData;
+            closure = param as Dsl.FunctionData;
+            if (null != exp && exp.GetId() == "execunary" && exp.GetParamId(0) == "!") {
+                closure = exp.GetParam(1) as Dsl.FunctionData;
+            }
+            if (null != closure && closure.GetId() == "execclosure") {
+                return true;
+            }
+            return false;
         }
         private static bool IsSignature(string sig, string method)
         {

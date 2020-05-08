@@ -477,9 +477,11 @@ namespace RoslynTool.CsToDsl
                 || leftOper.Type.TypeKind == TypeKind.Delegate && (leftSym.Kind != SymbolKind.Local || op != "=")) {
                 needWrapFunction = false;
             }
+            string assignVar = null;
             if (needWrapFunction) {
+                assignVar = string.Format("__assign_{0}", GetSourcePosForVar(node));
                 //顶层的赋值语句已经处理，这里的赋值都需要包装成lambda函数的样式
-                CodeBuilder.Append("(function(){ ");
+                CodeBuilder.AppendFormat("execclosure({0}, true){{ ", assignVar);
             }
             VisitAssignment(ci, op, baseOp, node, string.Empty, false, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType);
             var oper = m_Model.GetOperation(node.Right);
@@ -487,9 +489,9 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("; {0} = wrapstruct({1})", leftSym.Name, leftSym.Name);
             }
             if (needWrapFunction) {
-                CodeBuilder.Append("; return(");
+                CodeBuilder.AppendFormat("{0} = ", assignVar);
                 OutputExpressionSyntax(node.Left);
-                CodeBuilder.Append("); })()");
+                CodeBuilder.Append("; }");
             }
         }
         public override void VisitInvocationExpression(InvocationExpressionSyntax node)

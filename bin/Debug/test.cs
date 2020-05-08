@@ -493,6 +493,18 @@ namespace TopLevel
                 if (!TestLocal2(out v)) {
 
                 }
+                else if(TestLocal2(out v)) {
+
+                }
+                else {
+
+                }
+                while(TestLocal2(out v)) {
+
+                }
+                do {
+
+                } while (!TestLocal2(out v));
 
                 TestStruct ts = new TestStruct();
                 ts.A=1;

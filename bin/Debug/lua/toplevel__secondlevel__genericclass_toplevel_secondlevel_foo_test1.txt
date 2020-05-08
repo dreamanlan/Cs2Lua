@@ -18,7 +18,7 @@ TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1 = {
 			__cctor = function()
 				if TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.__cctor_called then 
 					return;
- 				else
+				else
 					TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.__cctor_called = true;
 				end;
 				TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.s_Inst = newtypeparamobject(TopLevel.SecondLevel.Foo.Test1);
@@ -54,7 +54,7 @@ TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1 = {
 			__ctor = function(this)
 				if this.__ctor_called then 
 					return;
- 				else
+				else
 					this.__ctor_called = true;
 				end;
 				this.m_Test2 = (TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.TTT + 1);

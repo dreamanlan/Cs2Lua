@@ -14,7 +14,7 @@ TestUnity = {
 			__cctor = function()
 				if TestUnity.__cctor_called then 
 					return;
- 				else
+				else
 					TestUnity.__cctor_called = true;
 				end;
 			end,
@@ -127,7 +127,7 @@ TestUnity = {
 			__ctor = function(this)
 				if this.__ctor_called then 
 					return;
- 				else
+				else
 					this.__ctor_called = true;
 				end;
 			end,

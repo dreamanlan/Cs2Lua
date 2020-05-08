@@ -24,24 +24,24 @@ TopLevel.SecondLevel.FooExtension = {
 				ff = newobject(TopLevel.SecondLevel.Foo, nil, nil, "ctor", nil);
 				local f1;
 				f1 = (function()
-						local __delegation_obj_590_28_590_34;
-						__delegation_obj_590_28_590_34 = f;
-						local __delegation_590_28_590_34; __delegation_590_28_590_34 = (function()
-							__delegation_obj_590_28_590_34:Test();
+						local __delegation_obj_602_28_602_34;
+						__delegation_obj_602_28_602_34 = f;
+						local __delegation_602_28_602_34; __delegation_602_28_602_34 = (function()
+							__delegation_obj_602_28_602_34:Test();
 						end);
-						setdelegationkey(__delegation_590_28_590_34, "TopLevel.SecondLevel.Foo:Test", __delegation_obj_590_28_590_34, __delegation_obj_590_28_590_34.Test);
-						return __delegation_590_28_590_34;
+						setdelegationkey(__delegation_602_28_602_34, "TopLevel.SecondLevel.Foo:Test", __delegation_obj_602_28_602_34, __delegation_obj_602_28_602_34.Test);
+						return __delegation_602_28_602_34;
 					end)();
 				f1();
 				local f2;
 				f2 = (function()
-						local __delegation_obj_593_28_593_35;
-						__delegation_obj_593_28_593_35 = f;
-						local __delegation_593_28_593_35; __delegation_593_28_593_35 = (function()
-							__delegation_obj_593_28_593_35:Test3();
+						local __delegation_obj_605_28_605_35;
+						__delegation_obj_605_28_605_35 = f;
+						local __delegation_605_28_605_35; __delegation_605_28_605_35 = (function()
+							__delegation_obj_605_28_605_35:Test3();
 						end);
-						setdelegationkey(__delegation_593_28_593_35, "TopLevel.SecondLevel.FooExtension:Test3", __delegation_obj_593_28_593_35, __delegation_obj_593_28_593_35.Test3);
-						return __delegation_593_28_593_35;
+						setdelegationkey(__delegation_605_28_605_35, "TopLevel.SecondLevel.FooExtension:Test3", __delegation_obj_605_28_605_35, __delegation_obj_605_28_605_35.Test3);
+						return __delegation_605_28_605_35;
 					end)();
 				f2();
 				TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo(f);
@@ -83,14 +83,15 @@ TopLevel.SecondLevel.FooExtension = {
 				b = 2;
 				local c;
 				c = 3;
-				a = (function()
+				a = (function() 
+						local __assign_631_18_631_23;
 						b = (function()
-								local __unary_619_20_619_23;
-								__unary_619_20_619_23 = c;
-								c = (c + 1);
-								return __unary_619_20_619_23;
-							end)();
-						return b;
+									local __unary_631_20_631_23;
+									__unary_631_20_631_23 = c;
+									c = (c + 1);
+									return __unary_631_20_631_23;
+								end)() 								__assign_631_18_631_23  = b;
+						return __assign_631_18_631_23;
 					end)();
 			end,
 			cctor = function()
@@ -99,7 +100,7 @@ TopLevel.SecondLevel.FooExtension = {
 			__cctor = function()
 				if TopLevel.SecondLevel.FooExtension.__cctor_called then 
 					return;
- 				else
+				else
 					TopLevel.SecondLevel.FooExtension.__cctor_called = true;
 				end;
 			end,

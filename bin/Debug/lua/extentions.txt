@@ -89,7 +89,7 @@ Extentions = {
 			__cctor = function()
 				if Extentions.__cctor_called then 
 					return;
- 				else
+				else
 					Extentions.__cctor_called = true;
 				end;
 				Extentions.dateTime1970 = newexternobject(System.DateTime, nil, nil, nil);

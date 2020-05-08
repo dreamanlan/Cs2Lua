@@ -13,7 +13,7 @@ ZipInputStream = {
 			__cctor = function()
 				if ZipInputStream.__cctor_called then 
 					return;
- 				else
+				else
 					ZipInputStream.__cctor_called = true;
 				end;
 			end,
@@ -36,7 +36,7 @@ ZipInputStream = {
 			__ctor = function(this)
 				if this.__ctor_called then 
 					return;
- 				else
+				else
 					this.__ctor_called = true;
 				end;
 			end,

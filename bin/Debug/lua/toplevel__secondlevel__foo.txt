@@ -50,7 +50,7 @@ TopLevel.SecondLevel.Foo = {
 			__cctor = function()
 				if TopLevel.SecondLevel.Foo.__cctor_called then 
 					return;
- 				else
+				else
 					TopLevel.SecondLevel.Foo.__cctor_called = true;
 				end;
 			end,
@@ -148,9 +148,29 @@ TopLevel.SecondLevel.Foo = {
 				end;
 				local __invoke_492_21_492_38;
 				__invoke_492_21_492_38,v = this:TestLocal2(__cs2lua_out);
-				if not __invoke_492_21_492_38 then
+				if (not __invoke_492_21_492_38) then
+
+				else
+					local __invoke_495_24_495_41;
+					__invoke_495_24_495_41,v = this:TestLocal2(__cs2lua_out);
+					if __invoke_495_24_495_41 then
+
+					else
+					end;
+				end;
+				while true do
+					local __invoke_501_22_501_39;
+					__invoke_501_22_501_39,v = this:TestLocal2(__cs2lua_out);
+					if not __invoke_501_22_501_39 then
+						break;
+					end;
 
 				end;
+				repeat
+
+					local __invoke_506_26_506_43;
+					__invoke_506_26_506_43,v = this:TestLocal2(__cs2lua_out);
+				until not (not __invoke_506_26_506_43) ;
 				local ts;
 				ts = newobject(TopLevel.TestStruct, nil, nil, "ctor", nil);
 				ts = wrapstruct(ts);
@@ -210,10 +230,10 @@ TopLevel.SecondLevel.Foo = {
 			TestSwitch = function(this)
 				local i;
 				i = 10;
-				local __switch_546_16_554_17 = i;
-				if (((__switch_546_16_554_17 == 1)) or ((__switch_546_16_554_17 == 3))) then 
+				local __switch_558_16_566_17 = i;
+				if (((__switch_558_16_566_17 == 1)) or ((__switch_558_16_566_17 == 3))) then 
 					return ;
- 				elseif (__switch_546_16_554_17 == 2) then 
+				elseif (__switch_558_16_566_17 == 2) then 
 					return ;
 				else
 					return ;
@@ -228,7 +248,7 @@ TopLevel.SecondLevel.Foo = {
 			__ctor = function(this)
 				if this.__ctor_called then 
 					return;
- 				else
+				else
 					this.__ctor_called = true;
 				end;
 				this.m_TS = newobject(TopLevel.TestStruct, nil, nil, "ctor", nil);
@@ -410,7 +430,7 @@ TopLevel.SecondLevel.Foo.Test1 = {
 			__cctor = function()
 				if TopLevel.SecondLevel.Foo.Test1.__cctor_called then 
 					return;
- 				else
+				else
 					TopLevel.SecondLevel.Foo.Test1.__cctor_called = true;
 				end;
 			end,
@@ -432,7 +452,7 @@ TopLevel.SecondLevel.Foo.Test1 = {
 			__ctor = function(this)
 				if this.__ctor_called then 
 					return;
- 				else
+				else
 					this.__ctor_called = true;
 				end;
 			end,
@@ -482,7 +502,7 @@ TopLevel.SecondLevel.Foo.Test2 = {
 			__cctor = function()
 				if TopLevel.SecondLevel.Foo.Test2.__cctor_called then 
 					return;
- 				else
+				else
 					TopLevel.SecondLevel.Foo.Test2.__cctor_called = true;
 				end;
 			end,
@@ -504,7 +524,7 @@ TopLevel.SecondLevel.Foo.Test2 = {
 			__ctor = function(this)
 				if this.__ctor_called then 
 					return;
- 				else
+				else
 					this.__ctor_called = true;
 				end;
 			end,
@@ -554,7 +574,7 @@ TopLevel.SecondLevel.Foo.FooChild = {
 			__cctor = function()
 				if TopLevel.SecondLevel.Foo.FooChild.__cctor_called then 
 					return;
- 				else
+				else
 					TopLevel.SecondLevel.Foo.FooChild.__cctor_called = true;
 				end;
 			end,
@@ -576,7 +596,7 @@ TopLevel.SecondLevel.Foo.FooChild = {
 			__ctor = function(this)
 				if this.__ctor_called then 
 					return;
- 				else
+				else
 					this.__ctor_called = true;
 				end;
 			end,

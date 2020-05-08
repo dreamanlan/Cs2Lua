@@ -136,7 +136,13 @@ class(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.FooBase) {
 			if( execclosure(__invoke_489_19_489_36, true){ multiassign(__invoke_489_19_489_36, v) = callinstance(this, "TestLocal2", __cs2dsl_out); } ){
 			};
 			if( execunary("!", execclosure(__invoke_492_21_492_38, true){ multiassign(__invoke_492_21_492_38, v) = callinstance(this, "TestLocal2", __cs2dsl_out); }, System.Boolean, TypeKind.Struct) ){
+			}elseif( execclosure(__invoke_495_24_495_41, true){ multiassign(__invoke_495_24_495_41, v) = callinstance(this, "TestLocal2", __cs2dsl_out); } ){
+			}else{
 			};
+			while( execclosure(__invoke_501_22_501_39, true){ multiassign(__invoke_501_22_501_39, v) = callinstance(this, "TestLocal2", __cs2dsl_out); } ){
+			};
+			do{
+			}while(execunary("!", execclosure(__invoke_506_26_506_43, true){ multiassign(__invoke_506_26_506_43, v) = callinstance(this, "TestLocal2", __cs2dsl_out); }, System.Boolean, TypeKind.Struct));
 			local(ts); ts = newobject(TopLevel.TestStruct, typeargs(), typekinds(), "ctor", null);
 			ts = wrapstruct(ts);
 			setinstance(ts, "A", 1);
@@ -189,10 +195,10 @@ class(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.FooBase) {
 		};
 		TestSwitch = function(this){
 			local(i); i = 10;
-			local{__switch_546_16_554_17 = i;};
-			if( (__switch_546_16_554_17 == 1) || (__switch_546_16_554_17 == 3) ){
+			local{__switch_558_16_566_17 = i;};
+			if( (__switch_558_16_566_17 == 1) || (__switch_558_16_566_17 == 3) ){
 				return();
-			}elseif( __switch_546_16_554_17 == 2 ){
+			}elseif( __switch_558_16_566_17 == 2 ){
 				return();
 			}else{
 				return();

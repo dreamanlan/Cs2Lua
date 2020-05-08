@@ -9,14 +9,14 @@
 <<<[Log for QueryExpressionSyntax]>>> [code:[ from v2 in v2s select v2 ] location: test.cs: (90,98)-(90,122)] Cs2Dsl can't support LINQ, use -enablelinq remove this error! (c# LINQ syntax will translate to use script LINQ class in lualib.dsl)
 <<<[Log for QueryExpressionSyntax]>>> [code:[ from v1 in v1s join v2 in v2s on v1.Key equals v2.Key into ttt0 select new { v1 = v1, v2 = ttt0.Count() } into ttt group ttt by ttt.v2 ] location: test.cs: (91,17)-(91,151)] Cs2Dsl can't support LINQ, use -enablelinq remove this error! (c# LINQ syntax will translate to use script LINQ class in lualib.dsl)
 <<<[Log for ObjectCreationExpressionSyntax]>>> [code:[ new UnityEngine.WaitForSeconds(3) ] location: test.cs: (466,29)-(466,62)] Unknown ObjectCreationExpressionSyntax !
-<<<[Log for ObjectCreationExpressionSyntax]>>> [code:[ new GameObject("test test test") ] location: test.cs: (606,26)-(606,58)] Unknown ObjectCreationExpressionSyntax !
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ transform.FindChild(childName) ] location: test.cs: (666,20)-(666,50)
-<<<[Log for MemberAccessExpressionSyntax]>>> Can't determine symbol: None, code:[ transform.childCount ] location: test.cs: (669,20)-(669,40)
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ transform.GetChild(i).findChildRecursively(childName,maxDepth - 1) ] location: test.cs: (671,12)-(671,78)
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ transform.name.IndexOf(childName) ] location: test.cs: (693,12)-(693,45)
-<<<[Log for MemberAccessExpressionSyntax]>>> Can't determine symbol: None, code:[ transform.childCount ] location: test.cs: (698,20)-(698,40)
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ transform.GetChild(i) ] location: test.cs: (703,36)-(703,57)
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ PlayerPrefs.GetInt("isFirstTimeToStart", 1) ] location: test.cs: (715,25)-(715,68)
+<<<[Log for ObjectCreationExpressionSyntax]>>> [code:[ new GameObject("test test test") ] location: test.cs: (618,26)-(618,58)] Unknown ObjectCreationExpressionSyntax !
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ transform.FindChild(childName) ] location: test.cs: (678,20)-(678,50)
+<<<[Log for MemberAccessExpressionSyntax]>>> Can't determine symbol: None, code:[ transform.childCount ] location: test.cs: (681,20)-(681,40)
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ transform.GetChild(i).findChildRecursively(childName,maxDepth - 1) ] location: test.cs: (683,12)-(683,78)
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ transform.name.IndexOf(childName) ] location: test.cs: (705,12)-(705,45)
+<<<[Log for MemberAccessExpressionSyntax]>>> Can't determine symbol: None, code:[ transform.childCount ] location: test.cs: (710,20)-(710,40)
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ transform.GetChild(i) ] location: test.cs: (715,36)-(715,57)
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ PlayerPrefs.GetInt("isFirstTimeToStart", 1) ] location: test.cs: (727,25)-(727,68)
 ============<<<Translation Error:test>>>============
 <<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ Debug.LogError("Cannot have two instances in singleton") ] location: test.cs: (278,16)-(278,72)
 ============<<<Translation Error:test>>>============

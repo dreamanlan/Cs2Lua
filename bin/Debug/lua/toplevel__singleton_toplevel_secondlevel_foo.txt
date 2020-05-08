@@ -24,7 +24,7 @@ TopLevel.Singleton_TopLevel_SecondLevel_Foo = {
 			__cctor = function()
 				if TopLevel.Singleton_TopLevel_SecondLevel_Foo.__cctor_called then 
 					return;
- 				else
+				else
 					TopLevel.Singleton_TopLevel_SecondLevel_Foo.__cctor_called = true;
 				end;
 			end,
@@ -57,7 +57,7 @@ TopLevel.Singleton_TopLevel_SecondLevel_Foo = {
 			__ctor = function(this)
 				if this.__ctor_called then 
 					return;
- 				else
+				else
 					this.__ctor_called = true;
 				end;
 			end,
