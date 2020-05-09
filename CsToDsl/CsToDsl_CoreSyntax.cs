@@ -886,6 +886,7 @@ namespace RoslynTool.CsToDsl
             }
             InvocationExpressionSyntax invocation = assign.Right as InvocationExpressionSyntax;
             if (specialType == SpecialAssignmentType.PropExplicitImplementInterface) {
+                //这里不区分是否外部符号了，委托到动态语言的脚本库实现，可根据对象运行时信息判断
                 string fnOfIntf = "null";
                 string mname = "null";
                 CheckExplicitInterfaceAccess(leftPsym, ref fnOfIntf, ref mname);
@@ -896,6 +897,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.Append(")");
             }
             else if (specialType == SpecialAssignmentType.PropForBasicValueType) {
+                //这里不区分是否外部符号了，委托到动态语言的脚本库实现，可根据对象运行时信息判断
                 string className = ClassInfo.GetFullName(leftPsym.ContainingType);
                 bool isEnumClass = leftPsym.ContainingType.TypeKind == TypeKind.Enum || className == "System.Enum";
                 string pname = leftPsym.Name;
@@ -917,6 +919,7 @@ namespace RoslynTool.CsToDsl
                 if (isMemberAccess) {
                     string className = ClassInfo.GetFullName(leftSym.ContainingType);
                     string memberName = leftSym.Name;
+                    //delegation就不用区分是否外部符号了，基本上在动态语言里都是函数对象，作为普通数据成员
                     if (leftSym.IsStatic) {
                         CodeBuilder.Append("setstaticdelegation(");
                         CodeBuilder.Append(className);
@@ -945,18 +948,29 @@ namespace RoslynTool.CsToDsl
                 VisitAssignmentInvocation(ci, op, baseOp, assign, invocation, opd, lopd, ropd, compAssignInfo);
             }
             else {
+                bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(leftSym);
                 bool isMemberAccess = null != leftPsym || null != leftEsym || null != leftFsym;
                 if (op == "=") {
                     if (isMemberAccess) {
                         string className = ClassInfo.GetFullName(leftSym.ContainingType);
                         string memberName = leftSym.Name;
                         if (leftSym.IsStatic) {
-                            CodeBuilder.Append("setstatic(");
+                            if(isExtern)
+                                CodeBuilder.Append("setexternstatic(SymbolKind.");
+                            else
+                                CodeBuilder.Append("setstatic(SymbolKind.");
+                            CodeBuilder.Append(leftSym.Kind.ToString());
+                            CodeBuilder.Append(", ");
                             CodeBuilder.Append(className);
                             CodeBuilder.AppendFormat(", \"{0}\", ", memberName);
                         }
                         else {
-                            CodeBuilder.Append("setinstance(");
+                            if (isExtern)
+                                CodeBuilder.Append("setexterninstance(SymbolKind.");
+                            else
+                                CodeBuilder.Append("setinstance(SymbolKind.");
+                            CodeBuilder.Append(leftSym.Kind.ToString());
+                            CodeBuilder.Append(", ");
                             if (null != leftMemberAccess)
                                 OutputExpressionSyntax(leftMemberAccess.Expression);
                             else if (IsNewObjMember(memberName))
@@ -977,12 +991,22 @@ namespace RoslynTool.CsToDsl
                         string className = ClassInfo.GetFullName(leftSym.ContainingType);
                         string memberName = leftSym.Name;
                         if (leftSym.IsStatic) {
-                            CodeBuilder.Append("setstatic(");
+                            if (isExtern)
+                                CodeBuilder.Append("setexternstatic(SymbolKind.");
+                            else
+                                CodeBuilder.Append("setstatic(SymbolKind.");
+                            CodeBuilder.Append(leftSym.Kind.ToString());
+                            CodeBuilder.Append(", ");
                             CodeBuilder.Append(className);
                             CodeBuilder.AppendFormat(", \"{0}\", ", memberName);
                         }
                         else {
-                            CodeBuilder.Append("setinstance(");
+                            if (isExtern)
+                                CodeBuilder.Append("setexterninstance(SymbolKind.");
+                            else
+                                CodeBuilder.Append("setinstance(SymbolKind.");
+                            CodeBuilder.Append(leftSym.Kind.ToString());
+                            CodeBuilder.Append(", ");
                             if (null != leftMemberAccess)
                                 OutputExpressionSyntax(leftMemberAccess.Expression);
                             else if (IsNewObjMember(memberName))

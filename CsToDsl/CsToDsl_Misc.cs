@@ -211,6 +211,7 @@ namespace RoslynTool.CsToDsl
                 SymbolInfo symbolInfo = m_Model.GetSymbolInfo(node);
                 var sym = symbolInfo.Symbol;
                 if (null != sym) {
+                    bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(sym);
                     if (sym.Kind == SymbolKind.NamedType || sym.Kind == SymbolKind.Namespace) {
                         string fullName = ClassInfo.GetFullName(sym);
                         CodeBuilder.Append(fullName);
@@ -223,15 +224,15 @@ namespace RoslynTool.CsToDsl
                     }
                     else if (sym.Kind == SymbolKind.Field || sym.Kind == SymbolKind.Property || sym.Kind == SymbolKind.Event) {
                         if (IsNewObjMember(name)) {
-                            CodeBuilder.AppendFormat("getinstance(newobj, \"{0}\")", name);
+                            CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, newobj, \"{2}\")", isExtern ? "getexterninstance" : "getinstance", sym.Kind.ToString(), name);
                             return;
                         }
                         if (sym.ContainingType == classInfo.SemanticInfo || sym.ContainingType == classInfo.SemanticInfo.OriginalDefinition || classInfo.IsInherit(sym.ContainingType)) {
                             if (sym.IsStatic) {
-                                CodeBuilder.AppendFormat("getstatic({0}, \"{1}\")", classInfo.Key, sym.Name);
+                                CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, {2}, \"{3}\")", isExtern ? "getexternstatic" : "getstatic", sym.Kind.ToString(), classInfo.Key, sym.Name);
                             }
                             else {
-                                CodeBuilder.AppendFormat("getinstance(this, \"{0}\")", sym.Name);
+                                CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, this, \"{2}\")", isExtern ? "getexterninstance" : "getinstance", sym.Kind.ToString(), sym.Name);
                             }
                             return;
                         }
@@ -243,10 +244,10 @@ namespace RoslynTool.CsToDsl
                         mi.Init(msym, node);
                         if (node.Parent is InvocationExpressionSyntax) {
                             if (sym.IsStatic) {
-                                CodeBuilder.AppendFormat("getstatic({0}, \"{1}\")", classInfo.Key, manglingName);
+                                CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, {2}, \"{3}\")", isExtern ? "getexternstatic" : "getstatic", sym.Kind.ToString(), classInfo.Key, manglingName);
                             }
                             else {
-                                CodeBuilder.AppendFormat("getinstance(this, \"{0}\")", manglingName);
+                                CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, this, \"{2}\")", isExtern ? "getexterninstance" : "getinstance", sym.Kind.ToString(), manglingName);
                             }
                         }
                         else {
@@ -270,8 +271,9 @@ namespace RoslynTool.CsToDsl
                     }
                 }
                 else {
-                    if (IsNewObjMember(name)) {
-                        CodeBuilder.AppendFormat("getinstance(newobj, \"{0}\")", name);
+                    SymbolKind kind;
+                    if (IsNewObjMember(name, out kind)) {
+                        CodeBuilder.AppendFormat("getinstance(SymbolKind.{0}, newobj, \"{1}\")", kind.ToString(), name);
                         return;
                     }
                     ReportIllegalSymbol(node, symbolInfo);

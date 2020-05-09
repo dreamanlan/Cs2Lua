@@ -1170,7 +1170,7 @@ namespace RoslynTool.CsToDsl
                         sb.AppendLine();
                         ++indent;
                         if (!string.IsNullOrEmpty(baseClass) && myselfDefinedBaseClass) {
-                            sb.AppendFormat("{0}callinstance(getinstance(this, \"base\"), \"ctor\");", GetIndentString(indent));
+                            sb.AppendFormat("{0}callinstance(getinstance(SymbolKind.Field, this, \"base\"), \"ctor\");", GetIndentString(indent));
                             sb.AppendLine();
                         }
                         sb.AppendFormat("{0}callinstance(this, \"__ctor\");", GetIndentString(indent));
@@ -1183,7 +1183,7 @@ namespace RoslynTool.CsToDsl
                     sb.AppendFormat("{0}__ctor = function(this){{", GetIndentString(indent));
                     sb.AppendLine();
                     ++indent;
-                    sb.AppendFormat("{0}if(getinstance(this, \"__ctor_called\")){{", GetIndentString(indent));
+                    sb.AppendFormat("{0}if(getinstance(SymbolKind.Field, this, \"__ctor_called\")){{", GetIndentString(indent));
                     sb.AppendLine();
                     ++indent;
                     sb.AppendFormat("{0}return;", GetIndentString(indent));
@@ -1192,7 +1192,7 @@ namespace RoslynTool.CsToDsl
                     sb.AppendFormat("{0}}}else{{", GetIndentString(indent));
                     sb.AppendLine();
                     ++indent;
-                    sb.AppendFormat("{0}setinstance(this, \"__ctor_called\", true);", GetIndentString(indent));
+                    sb.AppendFormat("{0}setinstance(SymbolKind.Field, this, \"__ctor_called\", true);", GetIndentString(indent));
                     sb.AppendLine();
                     --indent;
                     sb.AppendFormat("{0}}};", GetIndentString(indent));

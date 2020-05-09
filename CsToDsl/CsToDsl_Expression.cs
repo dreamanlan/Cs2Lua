@@ -171,7 +171,7 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitBaseExpression(BaseExpressionSyntax node)
         {
-            CodeBuilder.Append("getinstance(this, \"base\")");
+            CodeBuilder.Append("getinstance(SymbolKind.Field, this, \"base\")");
         }
         public override void VisitParenthesizedExpression(ParenthesizedExpressionSyntax node)
         {
@@ -511,7 +511,9 @@ namespace RoslynTool.CsToDsl
                 className = ClassInfo.GetFullName(sym.ContainingType);
             }
 
+            bool isExtern = false;
             if (null != sym) {
+                isExtern = !SymbolTable.Instance.IsCs2DslSymbol(sym);
                 if (sym.IsStatic) {
                     var ci = m_ClassInfoStack.Peek();
                     AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
@@ -524,12 +526,22 @@ namespace RoslynTool.CsToDsl
                 var msym = sym as IMethodSymbol;
                 string manglingName = NameMangling(msym);
                 if (string.IsNullOrEmpty(className)) {
-                    CodeBuilder.Append("getinstance(");
+                    if(isExtern)
+                        CodeBuilder.Append("getexterninstance(SymbolKind.");
+                    else
+                        CodeBuilder.Append("getinstance(SymbolKind.");
+                    CodeBuilder.Append(sym.Kind.ToString());
+                    CodeBuilder.Append(", ");
                     OutputExpressionSyntax(node.Expression);
                     CodeBuilder.Append(", \"");
                 }
                 else {
-                    CodeBuilder.Append("getstatic(");
+                    if (isExtern)
+                        CodeBuilder.Append("getexternstatic(SymbolKind.");
+                    else
+                        CodeBuilder.Append("getstatic(SymbolKind.");
+                    CodeBuilder.Append(sym.Kind.ToString());
+                    CodeBuilder.Append(", ");
                     CodeBuilder.Append(className);
                     CodeBuilder.Append(", \"");
                 }
@@ -581,11 +593,13 @@ namespace RoslynTool.CsToDsl
                         }
                     }
                     if (propExplicitImplementInterface) {
+                        //这里不区分是否外部符号了，委托到动态语言的脚本库实现，可根据对象运行时信息判断
                         CodeBuilder.AppendFormat("getwithinterface(");
                         OutputExpressionSyntax(node.Expression);
                         CodeBuilder.AppendFormat(", \"{0}\", \"{1}\")", fnOfIntf, mname);
                     }
                     else if (propForBasicValueType) {
+                        //这里不区分是否外部符号了，委托到动态语言的脚本库实现，可根据对象运行时信息判断
                         string pname = psym.Name;
                         string cname = ClassInfo.GetFullName(psym.ContainingType);
                         bool isEnumClass = psym.ContainingType.TypeKind == TypeKind.Enum || cname == "System.Enum";
@@ -594,13 +608,23 @@ namespace RoslynTool.CsToDsl
                         OutputExpressionSyntax(node.Expression);
                         CodeBuilder.AppendFormat(", {0}, {1}, \"{2}\")", isEnumClass ? "true" : "false", ckey, pname);
                     }
-                    else if (null != psym) {
+                    else if (null != sym) {                        
                         if (string.IsNullOrEmpty(className)) {
-                            CodeBuilder.Append("getinstance(");
+                            if (isExtern)
+                                CodeBuilder.Append("getexterninstance(SymbolKind.");
+                            else
+                                CodeBuilder.Append("getinstance(SymbolKind.");
+                            CodeBuilder.Append(sym.Kind.ToString());
+                            CodeBuilder.Append(", ");
                             OutputExpressionSyntax(node.Expression);
                         }
                         else {
-                            CodeBuilder.Append("getstatic(");
+                            if (isExtern)
+                                CodeBuilder.Append("getexternstatic(SymbolKind.");
+                            else
+                                CodeBuilder.Append("getstatic(SymbolKind.");
+                            CodeBuilder.Append(sym.Kind.ToString());
+                            CodeBuilder.Append(", ");
                             CodeBuilder.Append(className);
                         }
                         CodeBuilder.Append(", ");

@@ -280,7 +280,10 @@ namespace RoslynTool.CsToDsl
                 if (sym.MethodKind == MethodKind.DelegateInvoke) {
                     var memberAccess = node as MemberAccessExpressionSyntax;
                     if (null != memberAccess) {
-                        codeBuilder.Append("callinstance(");
+                        if (IsExternMethod)
+                            codeBuilder.Append("callexterninstance(");
+                        else
+                            codeBuilder.Append("callinstance(");
                         cs2dsl.OutputExpressionSyntax(exp);
                         codeBuilder.AppendFormat(", \"{0}\"", memberAccess.Name);
                         prestr = ", ";
@@ -290,6 +293,7 @@ namespace RoslynTool.CsToDsl
                     }
                 }
                 else if (isExplicitInterfaceInvoke) {
+                    //这里不区分是否外部符号了，委托到动态语言的脚本库实现，可根据对象运行时信息判断
                     codeBuilder.Append("invokewithinterface(");
                     cs2dsl.OutputExpressionSyntax(exp);
                     codeBuilder.Append(", ");
@@ -306,6 +310,7 @@ namespace RoslynTool.CsToDsl
                     prestr = ", ";
                 }
                 else if (IsBasicValueMethod || expIsBasicType) {
+                    //这里不区分是否外部符号了，委托到动态语言的脚本库实现，可根据对象运行时信息判断
                     string ckey = CalcInvokeTarget(IsEnumClass, ClassKey, cs2dsl, exp, model);
                     codeBuilder.Append("invokeforbasicvalue(");
                     cs2dsl.OutputExpressionSyntax(exp);
@@ -314,6 +319,7 @@ namespace RoslynTool.CsToDsl
                     prestr = ", ";
                 }
                 else if (IsArrayStaticMethod) {
+                    //这里不区分是否外部符号了，委托到动态语言的脚本库实现，可根据对象运行时信息判断
                     codeBuilder.Append("invokearraystaticmethod(");
                     if (null == FirstRefArray) {
                         codeBuilder.Append("null, ");
@@ -334,11 +340,17 @@ namespace RoslynTool.CsToDsl
                 }
                 else {
                     if (sym.IsStatic) {
-                        codeBuilder.Append("callstatic(");
+                        if(IsExternMethod)
+                            codeBuilder.Append("callexternstatic(");
+                        else
+                            codeBuilder.Append("callstatic(");
                         codeBuilder.Append(ClassKey);
                     }
                     else {
-                        codeBuilder.Append("callinstance(");
+                        if (IsExternMethod)
+                            codeBuilder.Append("callexterninstance(");
+                        else
+                            codeBuilder.Append("callinstance(");
                         cs2dsl.OutputExpressionSyntax(exp);
                     }
                     codeBuilder.AppendFormat(", \"{0}\"", mname);
@@ -351,13 +363,19 @@ namespace RoslynTool.CsToDsl
                     codeBuilder.Append("(");
                 }
                 else if (sym.IsStatic) {
-                    codeBuilder.Append("callstatic(");
+                    if (IsExternMethod)
+                        codeBuilder.Append("callexternstatic(");
+                    else
+                        codeBuilder.Append("callstatic(");
                     codeBuilder.Append(ClassKey);
                     codeBuilder.AppendFormat(", \"{0}\"", mname);
                     prestr = ", ";
                 }
                 else {
-                    codeBuilder.Append("callinstance(");
+                    if (IsExternMethod)
+                        codeBuilder.Append("callexterninstance(");
+                    else
+                        codeBuilder.Append("callinstance(");
                     codeBuilder.Append("this");
                     codeBuilder.AppendFormat(", \"{0}\"", mname);
                     prestr = ", ";

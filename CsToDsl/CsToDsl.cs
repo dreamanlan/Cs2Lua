@@ -682,7 +682,13 @@ namespace RoslynTool.CsToDsl
                     }
                     else if (null != fieldRef) {
                         var field = fieldRef.Field;
-                        CodeBuilder.Append("getstatic(");
+                        bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(field);
+                        if(isExtern)
+                            CodeBuilder.Append("getexternstatic(SymbolKind.");
+                        else
+                            CodeBuilder.Append("getstatic(SymbolKind.");
+                        CodeBuilder.Append(field.Kind.ToString());
+                        CodeBuilder.Append(", ");
                         CodeBuilder.Append(ClassInfo.GetFullName(field.Type));
                         CodeBuilder.Append(", \"");
                         CodeBuilder.Append(field.Name);
@@ -690,7 +696,13 @@ namespace RoslynTool.CsToDsl
                     }
                     else if (null != propRef) {
                         var property = propRef.Property;
-                        CodeBuilder.Append("getstatic(");
+                        bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(property);
+                        if (isExtern)
+                            CodeBuilder.Append("getexternstatic(SymbolKind.");
+                        else
+                            CodeBuilder.Append("getstatic(SymbolKind.");
+                        CodeBuilder.Append(property.Kind.ToString());
+                        CodeBuilder.Append(", ");
                         CodeBuilder.Append(ClassInfo.GetFullName(property.Type));
                         CodeBuilder.Append(", \"");
                         CodeBuilder.Append(property.Name);
@@ -1011,15 +1023,22 @@ namespace RoslynTool.CsToDsl
         }
         private bool IsNewObjMember(string name)
         {
+            SymbolKind kind;
+            return IsNewObjMember(name, out kind);
+        }
+        private bool IsNewObjMember(string name, out SymbolKind kind)
+        {
             if (m_ObjectInitializerStack.Count > 0) {
                 ITypeSymbol symInfo = m_ObjectInitializerStack.Peek();
                 if (null != symInfo) {
                     var names = symInfo.GetMembers(name);
                     if (names.Length > 0) {
+                        kind = names[0].Kind;
                         return true;
                     }
                 }
             }
+            kind = SymbolKind.ErrorType;
             return false;
         }
         private IMethodSymbol FindClassMethodDeclaredSymbol(SyntaxNode node)

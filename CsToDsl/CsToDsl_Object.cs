@@ -204,7 +204,7 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendFormat("{0}callinstance(this, \"{1}\"", GetIndentString(), manglingName2);
                 }
                 else if (init.ThisOrBaseKeyword.Text == "base") {
-                    CodeBuilder.AppendFormat("{0}callinstance(getinstance(this, \"base\"), \"{1}\"", GetIndentString(), manglingName2);
+                    CodeBuilder.AppendFormat("{0}callinstance(getinstance(SymbolKind.Field, this, \"base\"), \"{1}\"", GetIndentString(), manglingName2);
                 }
                 if (init.ArgumentList.Arguments.Count > 0) {
                     CodeBuilder.Append(", ");
@@ -224,7 +224,7 @@ namespace RoslynTool.CsToDsl
             else {
                 if (!string.IsNullOrEmpty(ci.BaseKey) && !ClassInfo.IsBaseInitializerCalled(node, m_Model) && myselfDefinedBaseClass) {
                     //如果当前构造没有调父类构造并且委托的其它构造也没有调父类构造，则调用默认构造。
-                    CodeBuilder.AppendFormat("{0}callinstance(getinstance(this, \"base\"), \"ctor\");", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}callinstance(getinstance(SymbolKind.Field, this, \"base\"), \"ctor\");", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
                 CodeBuilder.AppendFormat("{0}callinstance(this, \"__ctor\");", GetIndentString());
@@ -1197,12 +1197,12 @@ namespace RoslynTool.CsToDsl
             }
             if (null != node.Declaration && null != node.Declaration.Variables) {
                 foreach (var decl in node.Declaration.Variables) {
-                    CodeBuilder.AppendFormat("{0}callinstance({1}, \"Dispose\");", GetIndentString(), decl.Identifier.Text);
+                    CodeBuilder.AppendFormat("{0}callexterninstance({1}, \"Dispose\");", GetIndentString(), decl.Identifier.Text);
                     CodeBuilder.AppendLine();
                 }
             }
             else if (null != node.Expression) {
-                CodeBuilder.AppendFormat("{0}callinstance({1}, \"Dispose\");", GetIndentString(), varName);
+                CodeBuilder.AppendFormat("{0}callexterninstance({1}, \"Dispose\");", GetIndentString(), varName);
                 CodeBuilder.AppendLine();
             }
             else {
