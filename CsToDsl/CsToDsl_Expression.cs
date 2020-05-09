@@ -489,7 +489,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("; {0} = wrapstruct({1})", leftSym.Name, leftSym.Name);
             }
             if (needWrapFunction) {
-                CodeBuilder.AppendFormat("{0} = ", assignVar);
+                CodeBuilder.AppendFormat("; {0} = ", assignVar);
                 OutputExpressionSyntax(node.Left);
                 CodeBuilder.Append("; }");
             }
@@ -1034,10 +1034,10 @@ namespace RoslynTool.CsToDsl
                 string localName = string.Format("__newobject_{0}", GetSourcePosForVar(node));
                 if (ii.ReturnArgs.Count > 0) {
                     CodeBuilder.Append("(function(){ ");
-                    CodeBuilder.AppendFormat("local({0}); {1}", localName, localName);
+                    CodeBuilder.AppendFormat("local({0}); multiassign({1}", localName, localName);
                     CodeBuilder.Append(", ");
                     OutputExpressionList(ii.ReturnArgs);
-                    CodeBuilder.Append(" = ");
+                    CodeBuilder.Append(") = ");
                 }
                 if (isCollection) {
                     bool isDictionary = IsImplementationOfSys(typeSymInfo, "IDictionary");

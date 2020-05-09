@@ -825,6 +825,7 @@ namespace RoslynTool.CsToDsl
                             if (ct > 0) {
                                 CodeBuilder.Append("; }");
                             }
+                            CodeBuilder.Append(")");
                         }
                     }
                 }
