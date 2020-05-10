@@ -99,7 +99,7 @@ namespace RoslynTool.CsToDsl
                     OutParamNames.Add(param.Name);
                 }
                 else {
-                    if (param.Type.TypeKind == TypeKind.Struct) {
+                    if (param.Type.TypeKind == TypeKind.Struct && !CsDslTranslater.IsImplementationOfSys(param.Type, "IEnumerator")) {
                         string ns = ClassInfo.GetNamespaces(param.Type);
                         if (SymbolTable.Instance.IsCs2DslSymbol(param.Type))
                             ValueParams.Add(ParamNames.Count);

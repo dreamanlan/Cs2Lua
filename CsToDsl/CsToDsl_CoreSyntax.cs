@@ -578,7 +578,7 @@ namespace RoslynTool.CsToDsl
                 }
                 VisitAssignment(ci, op, baseOp, assign, expTerminater, true, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType);
                 var oper = m_Model.GetOperation(assign.Right);
-                if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct) {
+                if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && !CsDslTranslater.IsImplementationOfSys(oper.Type, "IEnumerator")) {
                     //这里假定赋值语句左边是多次访问不变的左值（暂未想到满足所有情形的解决方案）
                     if (SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
                         CodeBuilder.Append(GetIndentString());

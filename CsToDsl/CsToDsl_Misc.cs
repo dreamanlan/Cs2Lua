@@ -160,7 +160,7 @@ namespace RoslynTool.CsToDsl
             VisitLocalVariableDeclarator(ci, node);
             if (null != node.Initializer) {
                 var oper = m_Model.GetOperation(node.Initializer.Value);
-                if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct) {
+                if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && !CsDslTranslater.IsImplementationOfSys(oper.Type, "IEnumerator")) {
                     if (SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
                         CodeBuilder.AppendFormat("{0}{1} = wrapstruct({2}, {3});", GetIndentString(), node.Identifier.Text, node.Identifier.Text, ClassInfo.GetFullName(oper.Type));
                         CodeBuilder.AppendLine();
