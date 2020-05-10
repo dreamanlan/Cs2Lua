@@ -228,6 +228,9 @@ Cs2LuaLibrary = {
         end
         return false
     end,
+    FormatString = function(fmt, ...)
+        return Utility.LuaFormat(fmt, ...);
+    end,
     ToString = function(T, val)
         return tostring(val)
     end,

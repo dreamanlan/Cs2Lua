@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 internal static class Cs2LuaType
 {
@@ -19,11 +19,15 @@ internal static class Cs2LuaLibrary
     {
         return false;
     }
+    internal static string FormatString(string fmt, params object[] args)
+    {
+        return string.Format(fmt, args);
+    }
     internal static string ToString<T>(T val)
     {
         return val.ToString();
     }
-    internal static Type GetType<T>(T val)
+    internal static System.Type GetType<T>(T val)
     {
         return val.GetType();
     }
