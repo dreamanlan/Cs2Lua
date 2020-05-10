@@ -96,6 +96,29 @@ __cs2lua_bitor = 8
 __cs2lua_bitxor = 9
 __cs2lua_bitnot = 10
 
+SymbolKind = {
+    Alias = 0,
+    ArrayType = 1,
+    Assembly = 2,
+    DynamicType = 3,
+    ErrorType = 4,
+    Event = 5,
+    Field = 6,
+    Label = 7,
+    Local = 8,
+    Method = 9,
+    NetModule = 10,
+    NamedType = 11,
+    Namespace = 12,
+    Parameter = 13,
+    PointerType = 14,
+    Property = 15,
+    RangeVariable = 16,
+    TypeParameter = 17,
+    Preprocessing = 18,
+    Discard = 19
+}
+
 TypeKind = {
     Unknown = 0,
     Array = 1,
@@ -870,11 +893,11 @@ function wrapchar(char, intVal)
     end
 end
 
-function wrapstruct(v)
+function wrapstruct(v, classObj, typeKind)
     return v
 end
 
-function wrapexternstruct(v)
+function wrapexternstruct(v, classObj, typeKind)
     return v
 end
 
@@ -1788,7 +1811,7 @@ function getiterator(exp)
     end
 end
 
-function wraparray(arr, size, type)
+function wraparray(arr, size, classObj, typeKind)
     if not size then
         size = #arr
     end
@@ -1821,40 +1844,8 @@ function wrapanonymousobject(dict)
     return obj
 end
 
-function wrapclassparams(arr)
-    return wraparray(arr)
-end
-
-function wrapstructparams(arr)
-    for i, v in ipairs(arr) do
-        arr[i] = wrapstruct(v)
-    end
-    local size = #arr
-    return setmetatable(
-        arr,
-        {
-            __index = __mt_index_of_array,
-            __Count = size,
-            __cs2lua_defined = true,
-            __class = System.Collections.Generic.List_T
-        }
-    )
-end
-
-function wrapexternstructparams(arr)
-    for i, v in ipairs(arr) do
-        arr[i] = wrapexternstruct(v)
-    end
-    local size = #arr
-    return setmetatable(
-        arr,
-        {
-            __index = __mt_index_of_array,
-            __Count = size,
-            __cs2lua_defined = true,
-            __class = System.Collections.Generic.List_T
-        }
-    )
+function wrapparams(arr, elementType, elementTypeKind)
+    return wraparray(arr, nil, elementType, elementTypeKind)
 end
 
 function newdictionary(t, typeargs, typekinds, ctor, dict, ...)

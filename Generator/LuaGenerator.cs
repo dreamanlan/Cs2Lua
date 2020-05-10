@@ -1726,43 +1726,9 @@ namespace Generator
                 sb.AppendFormat("{0}", typeStr);
             }
             else if (id == "params") {
-                int num = data.GetParamNum();
-                if (num == 0) {
-                    sb.Append("{...}");
-                }
-                else if (num == 1) {
-                    int type;
-                    if (int.TryParse(data.GetParamId(0), out type)) {
-                        switch (type) {
-                            case 0:
-                                sb.Append("wrapclassparams{...}");
-                                break;
-                            case 1:
-                                sb.Append("wrapstructparams{...}");
-                                break;
-                            case 2:
-                                sb.Append("wrapexternalstructparams{...}");
-                                break;
-                        }
-                    }
-                }
-                else {
-                    int type;
-                    if (int.TryParse(data.GetParamId(0), out type)) {
-                        string name = data.GetParamId(1);
-                        switch (type) {
-                            case 0:
-                                sb.AppendFormat("wrapclassparams({0})", name);
-                                break;
-                            case 1:
-                                sb.AppendFormat("wrapstructparams({0})", name);
-                                break;
-                            case 2:
-                                sb.AppendFormat("wrapexternstructparams({0})", name);
-                                break;
-                        }
-                    }
-                }
+                var typeStr = CalcTypeString(data.GetParam(0));
+                var typeKind = CalcTypeString(data.GetParam(1));
+                sb.AppendFormat("wrapparams({{...}}, {0}, {1})", typeStr, typeKind);
             }
             else if (id == "paramsremove") {
                 sb.AppendFormat("table.remove({0})", data.GetParamId(0));
@@ -1856,7 +1822,7 @@ namespace Generator
             else if (id == "literaldictionary") {
                 sb.Append("{");
                 string prestr = string.Empty;
-                for (int ix = 0; ix < data.Params.Count; ++ix) {
+                for (int ix = 2; ix < data.Params.Count; ++ix) {
                     var param = data.Params[ix] as Dsl.CallData;
                     sb.Append(prestr);
                     var k = param.GetParam(0);
@@ -1878,23 +1844,25 @@ namespace Generator
             }
             else if (id == "literallist" || id == "literalcollection" || id == "literalcomplex") {
                 sb.Append("{");
-                GenerateArguments(data, sb, indent, 0);
+                GenerateArguments(data, sb, indent, 2);
                 sb.Append("}");
             }
             else if (id == "literalarray") {
                 var typeStr = CalcTypeString(data.GetParam(0));
+                var typeKind = CalcTypeString(data.GetParam(1));
                 sb.Append("wraparray({");
-                GenerateArguments(data, sb, indent, 1);
-                sb.AppendFormat("}}, nil, {0})", typeStr);
+                GenerateArguments(data, sb, indent, 2);
+                sb.AppendFormat("}}, nil, {0}, {1})", typeStr, typeKind);
             }
             else if (id == "newarray") {
                 var typeStr = CalcTypeString(data.GetParam(0));
-                if (data.GetParamNum() > 1) {
-                    var vname = data.GetParamId(1);
-                    sb.AppendFormat("wraparray({{}}, {0}, {1})", vname, typeStr);
+                var typeKind = CalcTypeString(data.GetParam(1));
+                if (data.GetParamNum() > 2) {
+                    var vname = data.GetParamId(2);
+                    sb.AppendFormat("wraparray({{}}, {0}, {1}, {2})", vname, typeStr, typeKind);
                 }
                 else {
-                    sb.AppendFormat("wraparray({{}}, nil, {0})", typeStr);
+                    sb.AppendFormat("wraparray({{}}, nil, {0}, {1})", typeStr, typeKind);
                 }
             }
             else if (id == "foreach") {

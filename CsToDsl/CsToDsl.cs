@@ -327,12 +327,13 @@ namespace RoslynTool.CsToDsl
         {
             for (int i = 0; i < mi.ParamNames.Count; ++i) {
                 var name = mi.ParamNames[i];
+                var type = mi.ParamTypes[i];
                 if (mi.ValueParams.Contains(i)) {
-                    codeBuilder.AppendFormat("{0}{1} = wrapstruct({2});", GetIndentString(), name, name);
+                    codeBuilder.AppendFormat("{0}{1} = wrapstruct({2}, {3});", GetIndentString(), name, name, type);
                     codeBuilder.AppendLine();
                 }
                 else if (mi.ExternValueParams.Contains(i)) {
-                    codeBuilder.AppendFormat("{0}{1} = wrapexternstruct({2});", GetIndentString(), name, name);
+                    codeBuilder.AppendFormat("{0}{1} = wrapexternstruct({2}, {3});", GetIndentString(), name, name, type);
                     codeBuilder.AppendLine();
                 }
             }
@@ -513,12 +514,21 @@ namespace RoslynTool.CsToDsl
             if (isCollection) {
                 bool isDictionary = IsImplementationOfSys(namedTypeSym, "IDictionary");
                 bool isList = IsImplementationOfSys(namedTypeSym, "IList");
-                if (isDictionary)
-                    CodeBuilder.Append(", literaldictionary()");
-                else if (isList)
-                    CodeBuilder.Append(", literallist()");
-                else
-                    CodeBuilder.Append(", literalcollection()");
+                if (isDictionary) {
+                    CodeBuilder.Append(", literaldictionary(");
+                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                    CodeBuilder.Append(")");
+                }
+                else if (isList) {
+                    CodeBuilder.Append(", literallist(");
+                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                    CodeBuilder.Append(")");
+                }
+                else {
+                    CodeBuilder.Append(", literalcollection(");
+                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                    CodeBuilder.Append(")");
+                }
             }
             else {
                 CodeBuilder.Append(", null");
@@ -626,12 +636,21 @@ namespace RoslynTool.CsToDsl
                             if (isCollection) {
                                 bool isDictionary = IsImplementationOfSys(namedTypeSym, "IDictionary");
                                 bool isList = IsImplementationOfSys(namedTypeSym, "IList");
-                                if (isDictionary)
-                                    CodeBuilder.Append(", literaldictionary()");
-                                else if (isList)
-                                    CodeBuilder.Append(", literallist()");
-                                else
-                                    CodeBuilder.Append(", literalcollection()");
+                                if (isDictionary) {
+                                    CodeBuilder.Append(", literaldictionary(");
+                                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                                    CodeBuilder.Append(")");
+                                }
+                                else if (isList) {
+                                    CodeBuilder.Append(", literallist(");
+                                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                                    CodeBuilder.Append(")");
+                                }
+                                else {
+                                    CodeBuilder.Append(", literalcollection(");
+                                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                                    CodeBuilder.Append(")");
+                                }
                             }
                             else {
                                 CodeBuilder.Append(", null");
@@ -658,10 +677,10 @@ namespace RoslynTool.CsToDsl
                         string elementType = ClassInfo.GetFullName(etype);
                         if (arrCreate.DimensionSizes.Length == 1) {
                             if (null == arrCreate.Initializer || arrCreate.Initializer.ElementValues.Length == 0) {
-                                CodeBuilder.AppendFormat("newarray({0})", elementType);
+                                CodeBuilder.AppendFormat("newarray({0}, TypeKind.{1})", elementType, etype.TypeKind.ToString());
                             }
                             else {
-                                CodeBuilder.AppendFormat("literalarray({0}, ", elementType);
+                                CodeBuilder.AppendFormat("literalarray({0}, TypeKind.{1}, ", elementType, etype.TypeKind.ToString());
                                 string prestr = string.Empty;
                                 foreach (var arg in arrCreate.Initializer.ElementValues) {
                                     CodeBuilder.Append(prestr);

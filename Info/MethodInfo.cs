@@ -16,6 +16,8 @@ namespace RoslynTool.CsToDsl
     internal class MethodInfo
     {
         internal List<string> ParamNames = new List<string>();
+        internal List<string> ParamTypes = new List<string>();
+        internal List<string> ParamTypeKinds = new List<string>();
         internal List<string> ReturnParamNames = new List<string>();
         internal List<string> OutParamNames = new List<string>();
         internal HashSet<int> ValueParams = new HashSet<int>();
@@ -23,8 +25,7 @@ namespace RoslynTool.CsToDsl
         internal List<string> GenericTypeTypeParamNames = new List<string>();
         internal List<string> GenericMethodTypeParamNames = new List<string>();
         internal string OriginalParamsName = string.Empty;
-        internal bool ParamsIsValueType = false;
-        internal bool ParamsIsExternValueType = false;
+        internal string ParamsElementInfo = string.Empty;
         internal bool ExistYield = false;
         internal bool ExistTopLevelReturn = false;
 
@@ -61,6 +62,8 @@ namespace RoslynTool.CsToDsl
             if (sym.IsGenericMethod) {
                 foreach (var param in sym.TypeParameters) {
                     ParamNames.Add(param.Name);
+                    ParamTypes.Add("null");
+                    ParamTypeKinds.Add("TypeKind." + param.TypeKind.ToString());
                     GenericMethodTypeParamNames.Add(param.Name);
                 }
             }
@@ -68,16 +71,14 @@ namespace RoslynTool.CsToDsl
             foreach (var param in sym.Parameters) {
                 if (param.IsParams) {
                     var arrTypeSym = param.Type as IArrayTypeSymbol;
-                    if (null != arrTypeSym && arrTypeSym.ElementType.TypeKind == TypeKind.Struct) {
-                        string ns = ClassInfo.GetNamespaces(arrTypeSym.ElementType);
-                        if (SymbolTable.Instance.IsCs2DslSymbol(arrTypeSym.ElementType))
-                            ParamsIsValueType = true;
-                        else if (ns != "System") {
-                            ParamsIsExternValueType = true;
-                        }
-
+                    if (null != arrTypeSym) {
+                        string elementType = ClassInfo.GetFullName(arrTypeSym.ElementType);
+                        string elementTypeKind = "TypeKind." + arrTypeSym.ElementType.TypeKind.ToString();
+                        ParamsElementInfo = string.Format("{0}, {1}", elementType, elementTypeKind);
                     }
                     ParamNames.Add("...");
+                    ParamTypes.Add(ClassInfo.GetFullName(param.Type));
+                    ParamTypeKinds.Add("TypeKind." + param.Type.TypeKind.ToString());
                     OriginalParamsName = param.Name;
                     //遇到变参直接结束（变参set_Item会出现后面带一个value参数的情形，在函数实现里处理）
                     break;
@@ -85,11 +86,15 @@ namespace RoslynTool.CsToDsl
                 else if (param.RefKind == RefKind.Ref) {
                     //ref参数与out参数在形参处理时机制相同，实参时out参数传入__cs2dsl_out（适应脚本引擎与dotnet反射的调用规则）
                     ParamNames.Add(string.Format("ref({0})", param.Name));
+                    ParamTypes.Add(ClassInfo.GetFullName(param.Type));
+                    ParamTypeKinds.Add("TypeKind." + param.Type.TypeKind.ToString());
                     ReturnParamNames.Add(param.Name);
                 }
                 else if (param.RefKind == RefKind.Out) {
                     //ref参数与out参数在形参处理时机制相同，实参时out参数传入__cs2dsl_out（适应脚本引擎与dotnet反射的调用规则）
                     ParamNames.Add(string.Format("out({0})", param.Name));
+                    ParamTypes.Add(ClassInfo.GetFullName(param.Type));
+                    ParamTypeKinds.Add("TypeKind." + param.Type.TypeKind.ToString());
                     ReturnParamNames.Add(param.Name);
                     OutParamNames.Add(param.Name);
                 }
@@ -102,6 +107,8 @@ namespace RoslynTool.CsToDsl
                             ExternValueParams.Add(ParamNames.Count);
                     }
                     ParamNames.Add(param.Name);
+                    ParamTypes.Add(ClassInfo.GetFullName(param.Type));
+                    ParamTypeKinds.Add("TypeKind." + param.Type.TypeKind.ToString());
                 }
             }
 

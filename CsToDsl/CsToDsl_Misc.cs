@@ -160,9 +160,18 @@ namespace RoslynTool.CsToDsl
             VisitLocalVariableDeclarator(ci, node);
             if (null != node.Initializer) {
                 var oper = m_Model.GetOperation(node.Initializer.Value);
-                if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
-                    CodeBuilder.AppendFormat("{0}{1} = wrapstruct({2});", GetIndentString(), node.Identifier.Text, node.Identifier.Text);
-                    CodeBuilder.AppendLine();
+                if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct) {
+                    if (SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
+                        CodeBuilder.AppendFormat("{0}{1} = wrapstruct({2}, {3});", GetIndentString(), node.Identifier.Text, node.Identifier.Text, ClassInfo.GetFullName(oper.Type));
+                        CodeBuilder.AppendLine();
+                    }
+                    else {
+                        string ns = ClassInfo.GetNamespaces(oper.Type);
+                        if (ns != "System") {
+                            CodeBuilder.AppendFormat("{0}{1} = wrapexternstruct({2}, {3});", GetIndentString(), node.Identifier.Text, node.Identifier.Text, ClassInfo.GetFullName(oper.Type));
+                            CodeBuilder.AppendLine();
+                        }
+                    }
                 }
             }
         }

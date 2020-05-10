@@ -192,7 +192,7 @@ namespace RoslynTool.CsToDsl
                 OutputWrapValueParams(CodeBuilder, mi);
             }
             if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
-                CodeBuilder.AppendFormat("{0}local{{{1} = params({2});}};", GetIndentString(), mi.OriginalParamsName, mi.ParamsIsExternValueType ? 2 : (mi.ParamsIsValueType ? 1 : 0));
+                CodeBuilder.AppendFormat("{0}local{{{1} = params({2});}};", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
                 CodeBuilder.AppendLine();
             }
             //首先执行初始化列表
@@ -725,7 +725,7 @@ namespace RoslynTool.CsToDsl
                         OutputWrapValueParams(CodeBuilder, mi);
                     }
                     if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
-                        CodeBuilder.AppendFormat("{0}local{{{1} = params({2});}};", GetIndentString(), mi.OriginalParamsName, mi.ParamsIsExternValueType ? 2 : (mi.ParamsIsValueType ? 1 : 0));
+                        CodeBuilder.AppendFormat("{0}local{{{1} = params({2});}};", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
                         CodeBuilder.AppendLine();
                     }
                     string varName = string.Format("__expbody_{0}", GetSourcePosForVar(node));
@@ -823,15 +823,13 @@ namespace RoslynTool.CsToDsl
                         }
                         if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
                             if (keyword == "get") {
-                                CodeBuilder.AppendFormat("{0}local{{{1} = params({2});}};", GetIndentString(), mi.OriginalParamsName, mi.ParamsIsExternValueType ? 2 : (mi.ParamsIsValueType ? 1 : 0));
+                                CodeBuilder.AppendFormat("{0}local{{{1} = params({2});}};", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
                                 CodeBuilder.AppendLine();
                             }
                             else {
-                                CodeBuilder.AppendFormat("{0}local{{{1} = params();}};", GetIndentString(), mi.OriginalParamsName);
+                                CodeBuilder.AppendFormat("{0}local{{{1} = params({2});}};", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
                                 CodeBuilder.AppendLine();
                                 CodeBuilder.AppendFormat("{0}local{{value = paramsremove({1});}};", GetIndentString(), mi.OriginalParamsName);
-                                CodeBuilder.AppendLine();
-                                CodeBuilder.AppendFormat("{0}local{{{1} = params({2}, {3});}};", GetIndentString(), mi.OriginalParamsName, mi.ParamsIsExternValueType ? 2 : (mi.ParamsIsValueType ? 1 : 0), mi.OriginalParamsName);
                                 CodeBuilder.AppendLine();
                             }
                         }
@@ -993,7 +991,7 @@ namespace RoslynTool.CsToDsl
                         OutputWrapValueParams(CodeBuilder, mi);
                     }
                     if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
-                        CodeBuilder.AppendFormat("{0}local{{{1} = params({2});}};", GetIndentString(), mi.OriginalParamsName, mi.ParamsIsExternValueType ? 2 : (mi.ParamsIsValueType ? 1 : 0));
+                        CodeBuilder.AppendFormat("{0}local{{{1} = params({2});}};", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
                         CodeBuilder.AppendLine();
                     }
                     node.Body.Accept(this);

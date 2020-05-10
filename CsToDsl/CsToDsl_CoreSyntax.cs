@@ -231,7 +231,7 @@ namespace RoslynTool.CsToDsl
                     OutputWrapValueParams(CodeBuilder, mi);
                 }
                 if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
-                    CodeBuilder.AppendFormat("{0}local{{{1} = params({2});}};", GetIndentString(), mi.OriginalParamsName, mi.ParamsIsExternValueType ? 2 : (mi.ParamsIsValueType ? 1 : 0));
+                    CodeBuilder.AppendFormat("{0}local{{{1} = params({2});}};", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
                     CodeBuilder.AppendLine();
                 }
             }
@@ -578,9 +578,27 @@ namespace RoslynTool.CsToDsl
                 }
                 VisitAssignment(ci, op, baseOp, assign, expTerminater, true, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType);
                 var oper = m_Model.GetOperation(assign.Right);
-                if (null != leftSym && leftSym.Kind == SymbolKind.Local && null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
-                    CodeBuilder.AppendFormat("{0}{1} = wrapstruct({2});", GetIndentString(), leftSym.Name, leftSym.Name);
-                    CodeBuilder.AppendLine();
+                if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct) {
+                    //这里假定赋值语句左边是多次访问不变的左值（暂未想到满足所有情形的解决方案）
+                    if (SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
+                        CodeBuilder.Append(GetIndentString());
+                        OutputExpressionSyntax(assign.Left);
+                        CodeBuilder.Append(" = wrapstruct(");
+                        OutputExpressionSyntax(assign.Left);
+                        CodeBuilder.AppendFormat(", {0});", ClassInfo.GetFullName(oper.Type));
+                        CodeBuilder.AppendLine();
+                    }
+                    else {
+                        string ns = ClassInfo.GetNamespaces(oper.Type);
+                        if (ns != "System") {
+                            CodeBuilder.Append(GetIndentString());
+                            OutputExpressionSyntax(assign.Left);
+                            CodeBuilder.Append(" = wrapexternstruct(");
+                            OutputExpressionSyntax(assign.Left);
+                            CodeBuilder.AppendFormat(", {0});", ClassInfo.GetFullName(oper.Type));
+                            CodeBuilder.AppendLine();
+                        }
+                    }
                 }
                 return;
             }
