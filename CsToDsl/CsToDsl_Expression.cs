@@ -486,24 +486,26 @@ namespace RoslynTool.CsToDsl
             VisitAssignment(ci, op, baseOp, node, string.Empty, false, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType);
             var oper = m_Model.GetOperation(node.Right);
             if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && !CsDslTranslater.IsImplementationOfSys(oper.Type, "IEnumerator")) {
-                //这里假定赋值语句左边是多次访问不变的左值（暂未想到满足所有情形的解决方案）
-                if (SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
-                    CodeBuilder.Append(GetIndentString());
-                    OutputExpressionSyntax(node.Left);
-                    CodeBuilder.Append(" = wrapstruct(");
-                    OutputExpressionSyntax(node.Left);
-                    CodeBuilder.AppendFormat(", {0});", ClassInfo.GetFullName(oper.Type));
-                    CodeBuilder.AppendLine();
-                }
-                else {
-                    string ns = ClassInfo.GetNamespaces(oper.Type);
-                    if (ns != "System") {
+                //只有变量赋值与字段赋值需要处理，其它的都在相应的函数调用里处理了
+                if (null != leftSym && leftSym.Kind == SymbolKind.Local || null != leftFsym) {
+                    if (SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
                         CodeBuilder.Append(GetIndentString());
                         OutputExpressionSyntax(node.Left);
-                        CodeBuilder.Append(" = wrapexternstruct(");
+                        CodeBuilder.Append(" = wrapstruct(");
                         OutputExpressionSyntax(node.Left);
                         CodeBuilder.AppendFormat(", {0});", ClassInfo.GetFullName(oper.Type));
                         CodeBuilder.AppendLine();
+                    }
+                    else {
+                        string ns = ClassInfo.GetNamespaces(oper.Type);
+                        if (ns != "System") {
+                            CodeBuilder.Append(GetIndentString());
+                            OutputExpressionSyntax(node.Left);
+                            CodeBuilder.Append(" = wrapexternstruct(");
+                            OutputExpressionSyntax(node.Left);
+                            CodeBuilder.AppendFormat(", {0});", ClassInfo.GetFullName(oper.Type));
+                            CodeBuilder.AppendLine();
+                        }
                     }
                 }
             }

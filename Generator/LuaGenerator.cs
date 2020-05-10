@@ -1005,17 +1005,85 @@ namespace Generator
                     else if(id == "=" && (leftParamId== "getstatic"
                          || leftParamId == "getexternstatic"
                          || leftParamId == "getinstance"
-                         || leftParamId == "getexterninstance"
-                         || leftParamId == "getstaticindexer"
-                         || leftParamId == "getinstanceindexer"
-                         || leftParamId == "getexternstaticindexer"
-                         || leftParamId == "getexterninstanceindexer")) {                        
+                         || leftParamId == "getexterninstance")) {                        
                         var cd = param1 as Dsl.CallData;
                         if (null != cd.Name) {
                             cd.Name.SetId("s" + leftParamId.Substring(1));
                             cd.AddParams(param2);
                             GenerateConcreteSyntax(cd, sb, indent, false);
                             handled = true;
+                        }
+                    }
+                    else if (id == "=" && leftParamId == "getstaticindexer") {
+                        var cd = param1 as Dsl.CallData;
+                        if (null != cd.Name) {
+                            var member = cd.GetParam(1) as Dsl.ValueData;
+                            var pct = cd.GetParam(2) as Dsl.ValueData;
+                            if (null != member && null != pct) {
+                                member.SetId("s" + member.GetId().Substring(1));
+                                int ct;
+                                int.TryParse(pct.GetId(), out ct);
+                                pct.SetId((ct + 1).ToString());
+
+                                cd.Name.SetId("s" + leftParamId.Substring(1));
+                                cd.AddParams(param2);
+                                GenerateConcreteSyntax(cd, sb, indent, false);
+                                handled = true;
+                            }
+                        }
+                    }
+                    else if (id == "=" && leftParamId == "getinstanceindexer") {
+                        var cd = param1 as Dsl.CallData;
+                        if (null != cd.Name) {
+                            var member = cd.GetParam(3) as Dsl.ValueData;
+                            var pct = cd.GetParam(4) as Dsl.ValueData;
+                            if (null != member && null != pct) {
+                                member.SetId("s" + member.GetId().Substring(1));
+                                int ct;
+                                int.TryParse(pct.GetId(), out ct);
+                                pct.SetId((ct + 1).ToString());
+
+                                cd.Name.SetId("s" + leftParamId.Substring(1));
+                                cd.AddParams(param2);
+                                GenerateConcreteSyntax(cd, sb, indent, false);
+                                handled = true;
+                            }
+                        }
+                    }
+                    else if (id == "=" && leftParamId == "getexternstaticindexer") {
+                        var cd = param1 as Dsl.CallData;
+                        if (null != cd.Name) {
+                            var member = cd.GetParam(4) as Dsl.ValueData;
+                            var pct = cd.GetParam(5) as Dsl.ValueData;
+                            if (null != member && null != pct) {
+                                member.SetId("s" + member.GetId().Substring(1));
+                                int ct;
+                                int.TryParse(pct.GetId(), out ct);
+                                pct.SetId((ct + 1).ToString());
+
+                                cd.Name.SetId("s" + leftParamId.Substring(1));
+                                cd.AddParams(param2);
+                                GenerateConcreteSyntax(cd, sb, indent, false);
+                                handled = true;
+                            }
+                        }
+                    }
+                    else if (id == "=" && leftParamId == "getexterninstanceindexer") {
+                        var cd = param1 as Dsl.CallData;
+                        if (null != cd.Name) {
+                            var member = cd.GetParam(6) as Dsl.ValueData;
+                            var pct = cd.GetParam(7) as Dsl.ValueData;
+                            if (null != member && null != pct) {
+                                member.SetId("s" + member.GetId().Substring(1));
+                                int ct;
+                                int.TryParse(pct.GetId(), out ct);
+                                pct.SetId((ct + 1).ToString());
+
+                                cd.Name.SetId("s" + leftParamId.Substring(1));
+                                cd.AddParams(param2);
+                                GenerateConcreteSyntax(cd, sb, indent, false);
+                                handled = true;
+                            }
                         }
                     }
                     if (!handled) {
