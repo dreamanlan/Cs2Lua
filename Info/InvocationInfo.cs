@@ -43,12 +43,12 @@ namespace RoslynTool.CsToDsl
         internal IMethodSymbol MethodSymbol = null;
         internal IMethodSymbol NonGenericMethodSymbol = null;
         internal IMethodSymbol CallerMethodSymbol = null;
+        internal SyntaxNode CallerSyntaxNode = null;
 
-        internal InvocationInfo(IMethodSymbol caller)
+        internal InvocationInfo(IMethodSymbol caller, SyntaxNode node)
         {
-            if (null != caller) {
-                CallerMethodSymbol = caller;
-            }
+            CallerMethodSymbol = caller;
+            CallerSyntaxNode = node;
         }
 
         internal void Init(IMethodSymbol sym, ArgumentListSyntax argList, SemanticModel model)
@@ -398,7 +398,7 @@ namespace RoslynTool.CsToDsl
         private void Init(IMethodSymbol sym)
         {
             MethodSymbol = sym;
-            TypeChecker.CheckInvocation(sym, CallerMethodSymbol);
+            TypeChecker.CheckInvocation(sym, CallerMethodSymbol, CallerSyntaxNode);
 
             Args.Clear();
             ArgConversions.Clear();

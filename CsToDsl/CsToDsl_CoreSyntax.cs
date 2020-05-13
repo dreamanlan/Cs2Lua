@@ -638,7 +638,7 @@ namespace RoslynTool.CsToDsl
                 }
                 if (null != unaryOper && unaryOper.UsesOperatorMethod) {
                     IMethodSymbol msym = unaryOper.OperatorMethod;
-                    InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
+                    InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), expression);
                     var arglist = new List<ExpressionSyntax>() { prefixUnary.Operand };
                     ii.Init(msym, arglist, m_Model, opd);
                     OutputOperatorInvoke(ii, prefixUnary);
@@ -651,7 +651,7 @@ namespace RoslynTool.CsToDsl
                     OutputExpressionSyntax(prefixUnary.Operand, opd);
                     CodeBuilder.Append(" = ");
                     IMethodSymbol msym = assignOper.OperatorMethod;
-                    InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
+                    InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), expression);
                     var arglist = new List<ExpressionSyntax>() { prefixUnary.Operand };
                     ii.Init(msym, arglist, m_Model, opd);
                     OutputOperatorInvoke(ii, prefixUnary);
@@ -717,7 +717,7 @@ namespace RoslynTool.CsToDsl
                 }
                 if (null != unaryOper && unaryOper.UsesOperatorMethod) {
                     IMethodSymbol msym = unaryOper.OperatorMethod;
-                    InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
+                    InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), expression);
                     var arglist = new List<ExpressionSyntax>() { prefixUnary.Operand };
                     ii.Init(msym, arglist, m_Model, opd);
                     OutputOperatorInvoke(ii, prefixUnary);
@@ -730,7 +730,7 @@ namespace RoslynTool.CsToDsl
                     OutputExpressionSyntax(postfixUnary.Operand, opd);
                     CodeBuilder.Append(" = ");
                     IMethodSymbol msym = assignOper.OperatorMethod;
-                    InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
+                    InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), expression);
                     var arglist = new List<ExpressionSyntax>() { postfixUnary.Operand };
                     ii.Init(msym, arglist, m_Model, opd);
                     OutputOperatorInvoke(ii, postfixUnary);
@@ -790,7 +790,7 @@ namespace RoslynTool.CsToDsl
                     }
                     else {
                         //处理ref/out参数
-                        InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
+                        InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), invocation);
                         ii.Init(sym, invocation.ArgumentList, m_Model);
                         if (sym.IsStatic || sym.IsExtensionMethod) {
                             AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
@@ -800,7 +800,7 @@ namespace RoslynTool.CsToDsl
                         if (null != opd && opd.UsesOperatorMethod) {
                             useOperator = true;
                             IMethodSymbol msym = opd.OperatorMethod;
-                            InvocationInfo iop = new InvocationInfo(GetCurMethodSemanticInfo());
+                            InvocationInfo iop = new InvocationInfo(GetCurMethodSemanticInfo(), invocation);
                             iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
                             CodeBuilder.AppendFormat("{0}local({1}); {2}", GetIndentString(), node.Identifier.Text, node.Identifier.Text);
                             CodeBuilder.AppendFormat(" {0} ", token.Text);
@@ -822,7 +822,7 @@ namespace RoslynTool.CsToDsl
                             }
                             if (ct > 0) {
                                 CodeBuilder.Append(", ");
-                                OutputExpressionList(ii.ReturnArgs);
+                                OutputExpressionList(ii.ReturnArgs, memberAccess);
                                 CodeBuilder.AppendFormat(") {0} ", token.Text);
                             }
                             else if (!useOperator) {
@@ -833,7 +833,7 @@ namespace RoslynTool.CsToDsl
                         else {
                             if (ct > 0) {
                                 CodeBuilder.Append(", ");
-                                OutputExpressionList(ii.ReturnArgs);
+                                OutputExpressionList(ii.ReturnArgs, invocation);
                                 CodeBuilder.AppendFormat(") {0} ", token.Text);
                             }
                             else if (!useOperator) {
@@ -1042,7 +1042,7 @@ namespace RoslynTool.CsToDsl
                     }
                     if (null != compAssignInfo && compAssignInfo.UsesOperatorMethod) {
                         IMethodSymbol msym = compAssignInfo.OperatorMethod;
-                        InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
+                        InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), assign);
                         var arglist = new List<ExpressionSyntax>() { assign.Left, assign.Right };
                         ii.Init(msym, arglist, m_Model, lopd, ropd);
                         OutputOperatorInvoke(ii, assign);
@@ -1135,7 +1135,7 @@ namespace RoslynTool.CsToDsl
                 }
                 string manglingName = NameMangling(leftPsym.SetMethod);
                 CodeBuilder.AppendFormat("\"{0}\", {1}, {2}, ", manglingName, leftPsym.SetMethod.Parameters.Length, toplevel ? "true" : "false");
-                InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
+                InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), leftElementAccess);
                 ii.Init(leftPsym.SetMethod, leftElementAccess.ArgumentList, m_Model);
                 OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, leftElementAccess, ii.ArgConversions.ToArray());
                 CodeBuilder.Append(", ");
@@ -1229,7 +1229,7 @@ namespace RoslynTool.CsToDsl
                     }
                     string manglingName = NameMangling(psym.SetMethod);
                     CodeBuilder.AppendFormat("\"{0}\", {1}, false, ", manglingName, psym.SetMethod.Parameters.Length);
-                    InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
+                    InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), leftCondAccess);
                     List<ExpressionSyntax> args = new List<ExpressionSyntax> { leftCondAccess.WhenNotNull };
                     ii.Init(psym.SetMethod, args, m_Model);
                     OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, leftCondAccess, ii.ArgConversions.ToArray());
@@ -1292,7 +1292,7 @@ namespace RoslynTool.CsToDsl
             }
             else {
                 //处理ref/out参数
-                InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
+                InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), invocation);
                 ii.Init(sym, invocation.ArgumentList, m_Model);
                 if (sym.IsStatic || sym.IsExtensionMethod) {
                     AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
@@ -1343,7 +1343,7 @@ namespace RoslynTool.CsToDsl
                         }
                         if (null != ropd && ropd.UsesOperatorMethod) {
                             IMethodSymbol msym = ropd.OperatorMethod;
-                            InvocationInfo iop = new InvocationInfo(GetCurMethodSemanticInfo());
+                            InvocationInfo iop = new InvocationInfo(GetCurMethodSemanticInfo(), assign);
                             iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
                             OutputConversionInvokePrefix(iop);
                         }
@@ -1354,7 +1354,7 @@ namespace RoslynTool.CsToDsl
                     }
                     else if (null != opd && opd.UsesOperatorMethod) {
                         IMethodSymbol msym = opd.OperatorMethod;
-                        InvocationInfo iop = new InvocationInfo(GetCurMethodSemanticInfo());
+                        InvocationInfo iop = new InvocationInfo(GetCurMethodSemanticInfo(), assign);
                         iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
                         OutputExpressionSyntax(assign.Left);
                         CodeBuilder.Append(" = ");
@@ -1374,7 +1374,7 @@ namespace RoslynTool.CsToDsl
 
                     if (ct > 0) {
                         CodeBuilder.Append(", ");
-                        OutputExpressionList(ii.ReturnArgs);
+                        OutputExpressionList(ii.ReturnArgs, memberAccess);
                         CodeBuilder.Append(")");
                     }
                     if (outputEqualOp) {
@@ -1419,7 +1419,7 @@ namespace RoslynTool.CsToDsl
                         }
                         if (null != ropd && ropd.UsesOperatorMethod) {
                             IMethodSymbol msym = ropd.OperatorMethod;
-                            InvocationInfo iop = new InvocationInfo(GetCurMethodSemanticInfo());
+                            InvocationInfo iop = new InvocationInfo(GetCurMethodSemanticInfo(), assign);
                             iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
                             OutputConversionInvokePrefix(iop);
                         }
@@ -1430,7 +1430,7 @@ namespace RoslynTool.CsToDsl
                     }
                     else if (null != opd && opd.UsesOperatorMethod) {
                         IMethodSymbol msym = opd.OperatorMethod;
-                        InvocationInfo iop = new InvocationInfo(GetCurMethodSemanticInfo());
+                        InvocationInfo iop = new InvocationInfo(GetCurMethodSemanticInfo(), assign);
                         iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
                         OutputExpressionSyntax(assign.Left);
                         CodeBuilder.Append(" = ");
@@ -1450,7 +1450,7 @@ namespace RoslynTool.CsToDsl
 
                     if (ct > 0) {
                         CodeBuilder.Append(", ");
-                        OutputExpressionList(ii.ReturnArgs);
+                        OutputExpressionList(ii.ReturnArgs, invocation);
                         CodeBuilder.Append(")");
                     }
                     if (outputEqualOp) {
@@ -1567,7 +1567,7 @@ namespace RoslynTool.CsToDsl
             }
             else {
                 //处理ref/out参数
-                InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
+                InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), invocation);
                 ii.Init(sym, invocation.ArgumentList, m_Model);
                 if (sym.IsStatic || sym.IsExtensionMethod) {
                     AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
@@ -1589,7 +1589,7 @@ namespace RoslynTool.CsToDsl
                         else {
                             CodeBuilder.Append("multiassign(");
                         }
-                        OutputExpressionList(ii.ReturnArgs);
+                        OutputExpressionList(ii.ReturnArgs, memberAccess);
                         CodeBuilder.Append(") = ");
                     }
                     ii.OutputInvocation(CodeBuilder, this, memberAccess.Expression, true, m_Model, memberAccess);
@@ -1613,7 +1613,7 @@ namespace RoslynTool.CsToDsl
                         else {
                             CodeBuilder.Append("multiassign(");
                         }
-                        OutputExpressionList(ii.ReturnArgs);
+                        OutputExpressionList(ii.ReturnArgs, memberAccess);
                         CodeBuilder.Append(") = ");
                     }
                     ii.OutputInvocation(CodeBuilder, this, invocation.Expression, false, m_Model, invocation);

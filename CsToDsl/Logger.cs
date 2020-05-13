@@ -61,7 +61,7 @@ namespace RoslynTool.CsToDsl
                 m_LogBuilder.AppendFormat("<<<[Log for {0}]>>> [code:[ {1} ] location: {2}] ", node.GetType().Name, line, node.GetLocation().GetLineSpan());
             }
             else {
-                LogCallStack("Log: node == null !");
+                LogCallStack("[no source info]");
             }
             m_LogBuilder.AppendFormat(format, args);
             m_LogBuilder.AppendLine();

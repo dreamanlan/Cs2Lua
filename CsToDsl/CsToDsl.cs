@@ -178,7 +178,7 @@ namespace RoslynTool.CsToDsl
             if (args.Count + defValArgs.Count > 0) {
                 if (!string.IsNullOrEmpty(externOverloadedMethodSignature) || !postpositionGenericTypeArgs && typeArgs.Count > 0)
                     CodeBuilder.Append(", ");
-                OutputExpressionList(args, defValArgs, arrayToParams, opds);
+                OutputExpressionList(args, defValArgs, arrayToParams, node, opds);
             }
             if (postpositionGenericTypeArgs && typeArgs.Count > 0) {
                 if (!string.IsNullOrEmpty(externOverloadedMethodSignature) || args.Count + defValArgs.Count > 0)
@@ -194,7 +194,7 @@ namespace RoslynTool.CsToDsl
         {
             if (null != opd && opd.UsesOperatorMethod && !(node is CastExpressionSyntax)) {
                 IMethodSymbol msym = opd.OperatorMethod;
-                InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
+                InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), node);
                 var arglist = new List<ExpressionSyntax>() { node };
                 ii.Init(msym, arglist, m_Model);
                 OutputOperatorInvoke(ii, node);
@@ -338,11 +338,11 @@ namespace RoslynTool.CsToDsl
                 }
             }
         }
-        private void OutputExpressionList(IList<ExpressionSyntax> args)
+        private void OutputExpressionList(IList<ExpressionSyntax> args, SyntaxNode node)
         {
-            OutputExpressionList(args, null, false);
+            OutputExpressionList(args, null, false, node);
         }
-        private void OutputExpressionList(IList<ExpressionSyntax> args, IList<ArgDefaultValueInfo> defValArgs, bool arrayToParams, params IConversionExpression[] opds)
+        private void OutputExpressionList(IList<ExpressionSyntax> args, IList<ArgDefaultValueInfo> defValArgs, bool arrayToParams, SyntaxNode node, params IConversionExpression[] opds)
         {
             int ct = args.Count;
             for (int i = 0; i < ct; ++i) {
@@ -381,7 +381,7 @@ namespace RoslynTool.CsToDsl
                         OutputExpressionSyntax(info.Expression, opd);
                     }
                     else {
-                        OutputArgumentDefaultValue(info.Value, info.OperOrSym, opd);
+                        OutputArgumentDefaultValue(info.Value, info.OperOrSym, opd, node);
                     }
                     if (i < dvCt - 1) {
                         CodeBuilder.Append(", ");
@@ -543,11 +543,11 @@ namespace RoslynTool.CsToDsl
         {
             OutputDefaultValue(CodeBuilder, type, setValueTypeToNull);
         }
-        private void OutputArgumentDefaultValue(object val, object operOrSym, IConversionExpression opd)
+        private void OutputArgumentDefaultValue(object val, object operOrSym, IConversionExpression opd, SyntaxNode node)
         {
             if (null != opd && opd.UsesOperatorMethod) {
                 IMethodSymbol msym = opd.OperatorMethod;
-                InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo());
+                InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), node);
                 ii.Init(msym, (List<ExpressionSyntax>)null, m_Model);
                 OutputConversionInvokePrefix(ii);
             }

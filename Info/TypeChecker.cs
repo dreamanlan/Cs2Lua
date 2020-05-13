@@ -137,7 +137,7 @@ namespace RoslynTool.CsToDsl
                 Logger.Instance.Log(node, "unsupported extern type '{0}' !", SymbolTable.Instance.CalcFullNameAndTypeArguments(targetNamedTypeSym));
             }
         }
-        internal static void CheckInvocation(IMethodSymbol sym, IMethodSymbol callerSym)
+        internal static void CheckInvocation(IMethodSymbol sym, IMethodSymbol callerSym, SyntaxNode callerSyntaxNode)
         {
             if (!SymbolTable.EnableTranslationCheck) {
                 return;
@@ -154,68 +154,64 @@ namespace RoslynTool.CsToDsl
 
             if (!SymbolTable.Instance.IsCs2DslSymbol(sym)) {
                 var ckey = ClassInfo.GetFullName(sym.ContainingType);
-                var id = string.Format("{0}.{1}", ckey, sym.Name);
-                if (!SymbolTable.Instance.CheckedInvocations.Contains(id)) {
-                    SymbolTable.Instance.CheckedInvocations.Add(id);
 
-                    bool isOverload = false;
-                    ClassSymbolInfo info;
-                    if (SymbolTable.Instance.ClassSymbols.TryGetValue(ckey, out info)) {
-                        info.SymbolOverloadFlags.TryGetValue(sym.Name, out isOverload);
-                    }
+                bool isOverload = false;
+                ClassSymbolInfo info;
+                if (SymbolTable.Instance.ClassSymbols.TryGetValue(ckey, out info)) {
+                    info.SymbolOverloadFlags.TryGetValue(sym.Name, out isOverload);
+                }
 
-                    string callerInfo = string.Empty;
-                    if (null != callerSym) {
-                        var callerClass = ClassInfo.GetFullName(callerSym.ContainingType);
-                        var callerMethod = SymbolTable.Instance.NameMangling(callerSym);
-                        callerInfo = string.Format(" caller:{0}.{1}", callerClass, callerMethod);
-                    }
+                string callerInfo = string.Empty;
+                if (null != callerSym) {
+                    var callerClass = ClassInfo.GetFullName(callerSym.ContainingType);
+                    var callerMethod = SymbolTable.Instance.NameMangling(callerSym);
+                    callerInfo = string.Format(" caller:{0}.{1}", callerClass, callerMethod);
+                }
 
-                    if (sym.IsExtensionMethod && !SymbolTable.Instance.IsLegalExtension(sym.ContainingType)) {
-                        //不支持的语法
-                        Logger.Instance.Log("Translation Error", "unsupported extern extension method {0}.{1} !{2}", ckey, sym.Name, string.IsNullOrEmpty(callerInfo) ? string.Empty : callerInfo);
+                if (sym.IsExtensionMethod && !SymbolTable.Instance.IsLegalExtension(sym.ContainingType)) {
+                    //不支持的语法
+                    Logger.Instance.Log(callerSyntaxNode, "unsupported extern extension method {0}.{1} !{2}", ckey, sym.Name, string.IsNullOrEmpty(callerInfo) ? string.Empty : callerInfo);
+                }
+                else {
+                    if (SymbolTable.Instance.IsIllegalMethod(sym)) {
+                        Logger.Instance.Log(callerSyntaxNode, "unsupported extern method {0}.{1} !{2}", ckey, sym.Name, string.IsNullOrEmpty(callerInfo) ? string.Empty : callerInfo);
                     }
-                    else {
-                        if (SymbolTable.Instance.IsIllegalMethod(sym)) {
-                            Logger.Instance.Log("Translation Error", "unsupported extern method {0}.{1} !{2}", ckey, sym.Name, string.IsNullOrEmpty(callerInfo) ? string.Empty : callerInfo);
+                }
+
+                if (sym.ContainingType.TypeKind == TypeKind.Delegate || sym.ContainingType.IsGenericType && SymbolTable.Instance.IsLegalGenericType(sym.ContainingType, true) || sym.IsGenericMethod && SymbolTable.Instance.IsLegalGenericMethod(sym)) {
+                    //如果是标记为合法的泛型类或委托类型的成员，则不用再进行类型检查
+                }
+                else {
+                    foreach (var param in sym.Parameters) {
+                        var type = param.Type as INamedTypeSymbol;
+                        if (param.IsParams && isOverload) {
+                            Logger.Instance.Log(callerSyntaxNode, "extern overloaded method {0}.{1} parameter {2} is params, please check export api code !{3}", ckey, sym.Name, param.Name, string.IsNullOrEmpty(callerInfo) ? string.Empty : callerInfo);
+                            continue;
                         }
-                    }
-
-                    if (sym.ContainingType.TypeKind == TypeKind.Delegate || sym.ContainingType.IsGenericType && SymbolTable.Instance.IsLegalGenericType(sym.ContainingType, true) || sym.IsGenericMethod && SymbolTable.Instance.IsLegalGenericMethod(sym)) {
-                        //如果是标记为合法的泛型类或委托类型的成员，则不用再进行类型检查
-                    }
-                    else {
-                        foreach (var param in sym.Parameters) {
-                            var type = param.Type as INamedTypeSymbol;
-                            if (param.IsParams && isOverload) {
-                                Logger.Instance.Log("Translation Warning", "extern overloaded method {0}.{1} parameter {2} is params, please check export api code !{3}", ckey, sym.Name, param.Name, string.IsNullOrEmpty(callerInfo) ? string.Empty : callerInfo);
-                                continue;
-                            }
-                            if (null != type && type.TypeKind != TypeKind.Delegate) {
-                                if (type.IsGenericType) {
-                                    if (!SymbolTable.Instance.IsLegalParameterGenericType(type)) {
-                                        Logger.Instance.Log("Translation Error", "extern method {0}.{1} parameter {2} is generic type, please replace with non generic type !{3}", ckey, sym.Name, param.Name, string.IsNullOrEmpty(callerInfo) ? string.Empty : callerInfo);
-                                    }
+                        if (null != type && type.TypeKind != TypeKind.Delegate) {
+                            if (type.IsGenericType) {
+                                if (!SymbolTable.Instance.IsLegalParameterGenericType(type)) {
+                                    Logger.Instance.Log(callerSyntaxNode, "extern method {0}.{1} parameter {2} is generic type, please replace with non generic type !{3}", ckey, sym.Name, param.Name, string.IsNullOrEmpty(callerInfo) ? string.Empty : callerInfo);
                                 }
-                                else {
-                                    if (SymbolTable.Instance.IsIllegalType(type)) {
-                                        Logger.Instance.Log("Translation Error", "extern method {0}.{1} parameter {2} is unsupported type, please replace with non generic type !{3}", ckey, sym.Name, param.Name, string.IsNullOrEmpty(callerInfo) ? string.Empty : callerInfo);
-                                    }
+                            }
+                            else {
+                                if (SymbolTable.Instance.IsIllegalType(type)) {
+                                    Logger.Instance.Log(callerSyntaxNode, "extern method {0}.{1} parameter {2} is unsupported type, please replace with non generic type !{3}", ckey, sym.Name, param.Name, string.IsNullOrEmpty(callerInfo) ? string.Empty : callerInfo);
                                 }
                             }
                         }
-                        if (!sym.ReturnsVoid) {
-                            var type = sym.ReturnType as INamedTypeSymbol;
-                            if (null != type && type.TypeKind != TypeKind.Delegate) {
-                                if (type.IsGenericType) {
-                                    if (!SymbolTable.Instance.IsLegalParameterGenericType(type)) {
-                                        Logger.Instance.Log("Translation Error", "extern method {0}.{1} return {2} is generic type, please replace with non generic type !{3}", ckey, sym.Name, type.Name, string.IsNullOrEmpty(callerInfo) ? string.Empty : callerInfo);
-                                    }
+                    }
+                    if (!sym.ReturnsVoid) {
+                        var type = sym.ReturnType as INamedTypeSymbol;
+                        if (null != type && type.TypeKind != TypeKind.Delegate) {
+                            if (type.IsGenericType) {
+                                if (!SymbolTable.Instance.IsLegalParameterGenericType(type)) {
+                                    Logger.Instance.Log(callerSyntaxNode, "extern method {0}.{1} return {2} is generic type, please replace with non generic type !{3}", ckey, sym.Name, type.Name, string.IsNullOrEmpty(callerInfo) ? string.Empty : callerInfo);
                                 }
-                                else {
-                                    if (SymbolTable.Instance.IsIllegalType(type)) {
-                                        Logger.Instance.Log("Translation Error", "extern method {0}.{1} return {2} is unsupported type, please replace with non generic type !{3}", ckey, sym.Name, type.Name, string.IsNullOrEmpty(callerInfo) ? string.Empty : callerInfo);
-                                    }
+                            }
+                            else {
+                                if (SymbolTable.Instance.IsIllegalType(type)) {
+                                    Logger.Instance.Log(callerSyntaxNode, "extern method {0}.{1} return {2} is unsupported type, please replace with non generic type !{3}", ckey, sym.Name, type.Name, string.IsNullOrEmpty(callerInfo) ? string.Empty : callerInfo);
                                 }
                             }
                         }

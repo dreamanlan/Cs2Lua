@@ -76,10 +76,6 @@ namespace RoslynTool.CsToDsl
         {
             get { return m_Cs2DslInterfaces; }
         }
-        internal HashSet<string> CheckedInvocations
-        {
-            get { return m_CheckedInvocations; }
-        }
         internal void SetTypeParamsAndArgs(List<ITypeParameterSymbol> typeParams, List<ITypeSymbol> typeArgs, INamedTypeSymbol refType)
         {
             m_TypeParameters.Clear();
@@ -692,7 +688,6 @@ namespace RoslynTool.CsToDsl
             internal List<TypeTreeNode> ChildTypeNodes = new List<TypeTreeNode>();
         }
         private Dictionary<string, TypeTreeNode> m_TypeTreeNodes = new Dictionary<string, TypeTreeNode>();
-        private HashSet<string> m_CheckedInvocations = new HashSet<string>();
 		
 		private HashSet<string> m_LegalGenericTypes = new HashSet<string>();
         private HashSet<string> m_LegalGenericMethods = new HashSet<string>();
