@@ -180,7 +180,7 @@ namespace RoslynTool.CsToDsl
                     var func = info as Dsl.FunctionData;
                     if (null == func)
                         continue;
-                    var call = func.LowerOrderOrThisCall;
+                    var call = func.ThisOrLowerOrderCall;
                     var cid = call.GetParamId(0);
                     if (cid == "LegalGenericTypeList") {
                         foreach (var comp in func.Params) {

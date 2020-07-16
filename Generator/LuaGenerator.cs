@@ -2119,8 +2119,8 @@ namespace Generator
                     //TryGetValue这样的单一条件表达式可以转换为非匿名函数包装样式
                     sb.AppendLine("while true do");
                     ++indent;
-                    string localName = closure.LowerOrderOrThisCall.GetParamId(0);
-                    bool needDecl = (bool)Convert.ChangeType(closure.LowerOrderOrThisCall.GetParamId(1), typeof(bool));
+                    string localName = closure.ThisOrLowerOrderCall.GetParamId(0);
+                    bool needDecl = (bool)Convert.ChangeType(closure.ThisOrLowerOrderCall.GetParamId(1), typeof(bool));
                     if (needDecl) {
                         sb.AppendFormatLine("{0}local {1};", GetIndentString(indent), localName);
                     }
@@ -2149,8 +2149,8 @@ namespace Generator
                 string exp = null;
                 if (num == 1 && CanRemoveClosure(fcall.GetParam(0), out closure, out exp)) {
                     //TryGetValue这样的单一条件表达式可以提到if语句外面
-                    string localName = closure.LowerOrderOrThisCall.GetParamId(0);
-                    bool needDecl = (bool)Convert.ChangeType(closure.LowerOrderOrThisCall.GetParamId(1), typeof(bool));
+                    string localName = closure.ThisOrLowerOrderCall.GetParamId(0);
+                    bool needDecl = (bool)Convert.ChangeType(closure.ThisOrLowerOrderCall.GetParamId(1), typeof(bool));
                     if (needDecl) {
                         sb.AppendFormatLine("local {0};", localName);
                     }
@@ -2234,8 +2234,8 @@ namespace Generator
                         string exp;
                         if (CanRemoveClosure(param0, out closure, out exp)) {
                             ++indent;
-                            string localName = closure.LowerOrderOrThisCall.GetParamId(0);
-                            bool needDecl = (bool)Convert.ChangeType(closure.LowerOrderOrThisCall.GetParamId(1), typeof(bool));
+                            string localName = closure.ThisOrLowerOrderCall.GetParamId(0);
+                            bool needDecl = (bool)Convert.ChangeType(closure.ThisOrLowerOrderCall.GetParamId(1), typeof(bool));
                             if (needDecl) {
                                 sb.AppendFormatLine("{0}local {1};", GetIndentString(indent), localName);
                             }
@@ -2275,8 +2275,8 @@ namespace Generator
                 string exp = null;
                 if (num == 1 && CanRemoveClosure(fcall.GetParam(0), out closure, out exp)) {
                     //TryGetValue这样的单一条件表达式可以提到if语句外面
-                    string localName = closure.LowerOrderOrThisCall.GetParamId(0);
-                    bool needDecl = (bool)Convert.ChangeType(closure.LowerOrderOrThisCall.GetParamId(1), typeof(bool));
+                    string localName = closure.ThisOrLowerOrderCall.GetParamId(0);
+                    bool needDecl = (bool)Convert.ChangeType(closure.ThisOrLowerOrderCall.GetParamId(1), typeof(bool));
                     if (needDecl) {
                         sb.AppendFormatLine("local {0};", localName);
                     }
@@ -2442,14 +2442,14 @@ namespace Generator
             Dsl.FunctionData unaryop;
             if(CanRemoveClosure(param, out closure, out unaryop)) {
                 if (null != unaryop) {
-                    Dsl.ValueData vd = new Dsl.ValueData(closure.LowerOrderOrThisCall.GetParamId(0));
+                    Dsl.ValueData vd = new Dsl.ValueData(closure.ThisOrLowerOrderCall.GetParamId(0));
                     unaryop.SetParam(1, vd);
                     StringBuilder sb = new StringBuilder();
                     GenerateConcreteSyntax(unaryop, sb, 0, false);
                     exp = sb.ToString();
                 }
                 else {
-                    exp = closure.LowerOrderOrThisCall.GetParamId(0);
+                    exp = closure.ThisOrLowerOrderCall.GetParamId(0);
                 }
                 return true;
             }
@@ -2883,7 +2883,7 @@ namespace Generator
                 var cfg = new IndexerByLualibInfo();
                 var f = first;
                 if (null != f) {
-                    Dsl.FunctionData fcd = f.LowerOrderOrThisCall;
+                    Dsl.FunctionData fcd = f.ThisOrLowerOrderCall;
                     if (fcd.IsValid() && fcd.GetParamNum() >= 7) {
                         var str = fcd.GetParamId(0);
                         var regex = new Regex(str, RegexOptions.Compiled);
