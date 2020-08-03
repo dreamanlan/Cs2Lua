@@ -1510,6 +1510,8 @@ namespace RoslynTool.CsToDsl
                         ++indent;
 
                         foreach (var fsym in csi.FieldSymbols) {
+                            if (fsym.IsImplicitlyDeclared)
+                                continue;
                             var name = fsym.Name;
                             sb.AppendFormat("{0}{1}(Accessibility.{2}){{", GetIndentString(indent), name, fsym.DeclaredAccessibility);
                             sb.AppendLine();

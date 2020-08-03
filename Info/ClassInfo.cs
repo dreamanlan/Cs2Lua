@@ -107,6 +107,12 @@ namespace RoslynTool.CsToDsl
         {
             if (!SymbolTable.Instance.IsCs2DslSymbol(refType)) {
                 AddExternReference(refType);
+                //外部泛型类的类型参数也需要引用
+                if (refType.IsGenericType) {
+                    foreach (var sym in refType.TypeArguments) {
+                        AddReference(sym);
+                    }
+                }
             }
             if (!refType.IsGenericType && !IsInnerClassOfGenericType(refType)) {
                 while (null != refType.ContainingType) {
