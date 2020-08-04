@@ -401,9 +401,11 @@ namespace RoslynTool.CsToDsl
                             CsDslTranslater csToDsl = new CsDslTranslater(model, enableInherit, enableLinq);
                             csToDsl.Translate(node, typeSym);
                             if (csToDsl.HaveError) {
-                                sw3.WriteLine("============<<<Translation Error:{0}>>>============", fileName);
-                                csToDsl.SaveLog(sw3);
-                                csToDsl.ClearLog();
+                                LockWriteLine(sw3, "============<<<Translation Error:{0}>>>============", fileName);
+                                lock (sw3) {
+                                    csToDsl.SaveLog(sw3);
+                                    csToDsl.ClearLog();
+                                }
                                 haveTranslationError = true;
                             }
                             else {
@@ -418,10 +420,13 @@ namespace RoslynTool.CsToDsl
                                 var cis = cpair.Value;
 
                                 foreach (var ci in cis) {
-                                    AddMergedClasses(toplevelClasses, ckey, ci);
+                                    lock (toplevelClasses) {
+                                        AddMergedClasses(toplevelClasses, ckey, ci);
+                                    }
                                 }
                             }
                         };
+                        var tasks = new List<Task>();
                         foreach (var pair in SymbolTable.Instance.GenericTypeInstances) {
                             var typeSym = pair.Value;
                             typeSyms.Enqueue(new DerivedGenericTypeInstanceInfo { Symbol = typeSym, Node = null });
@@ -435,12 +440,18 @@ namespace RoslynTool.CsToDsl
                                     var refKey = ClassInfo.GetFullNameWithTypeParameters(ts.Symbol);
                                     List<SyntaxNode> nodes;
                                     if (SymbolTable.Instance.GenericTypeDefines.TryGetValue(refKey, out nodes)) {
+                                        tasks.Clear();
                                         if (null != ts.Node) {
-                                            action(ts.Node, ts.Symbol);
+                                            var t = Task.Run(() => {
+                                                action(ts.Node, ts.Symbol);
+                                            });
+                                            tasks.Add(t);
                                         }
                                         foreach (var node in nodes) {
-                                            action(node, ts.Symbol);
+                                            var t = Task.Run(() => action(node, ts.Symbol));
+                                            tasks.Add(t);
                                         }
+                                        Task.WaitAll(tasks.ToArray());
                                     }
                                 }
                             }
@@ -451,28 +462,61 @@ namespace RoslynTool.CsToDsl
                 }
                 sw.Close();
             }
-            StringBuilder nsBuilder = new StringBuilder();
-            BuildNamespaces(nsBuilder, toplevelMni);
-            StringBuilder attrBuilder = new StringBuilder();
-            BuildAttributes(attrBuilder, compilation.Assembly, ignoredClasses);
-            StringBuilder enumBuilder = new StringBuilder();
-            BuildExternEnums(enumBuilder);
-            StringBuilder intfBuilder = new StringBuilder();
-            BuildInterfaces(intfBuilder);
-            StringBuilder refExternBuilder = new StringBuilder();
-            BuildReferencedExternTypes(refExternBuilder);
-            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2dsl__namespaces.{0}", c_OutputExt)), nsBuilder.ToString());
-            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2dsl__attributes.{0}", c_OutputExt)), attrBuilder.ToString());
-            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2dsl__externenums.{0}", c_OutputExt)), enumBuilder.ToString());
-            File.WriteAllText(Path.Combine(outputDir, string.Format("cs2dsl__interfaces.{0}", c_OutputExt)), intfBuilder.ToString());
-            File.WriteAllText(Path.Combine(outputDir, "cs2dsl__references.txt"), refExternBuilder.ToString());
-            foreach (var pair in toplevelClasses) {
-                StringBuilder classBuilder = new StringBuilder();
-                string fileName = BuildDslClass(classBuilder, pair.Key, pair.Value);
-                File.WriteAllText(Path.Combine(outputDir, Path.ChangeExtension(fileName.ToLower(), c_OutputExt)), classBuilder.ToString());
+            if (parallel) {
+                Parallel.Invoke(() => {
+                    StringBuilder nsBuilder = new StringBuilder();
+                    BuildNamespaces(nsBuilder, toplevelMni);
+                    File.WriteAllText(Path.Combine(outputDir, string.Format("cs2dsl__namespaces.{0}", c_OutputExt)), nsBuilder.ToString());
+                }, () => {
+                    StringBuilder attrBuilder = new StringBuilder();
+                    BuildAttributes(attrBuilder, compilation.Assembly, ignoredClasses);
+                    File.WriteAllText(Path.Combine(outputDir, string.Format("cs2dsl__attributes.{0}", c_OutputExt)), attrBuilder.ToString());
+                }, () => {
+                    StringBuilder enumBuilder = new StringBuilder();
+                    BuildExternEnums(enumBuilder);
+                    File.WriteAllText(Path.Combine(outputDir, string.Format("cs2dsl__externenums.{0}", c_OutputExt)), enumBuilder.ToString());
+                }, () => {
+                    StringBuilder intfBuilder = new StringBuilder();
+                    BuildInterfaces(intfBuilder);
+                    File.WriteAllText(Path.Combine(outputDir, string.Format("cs2dsl__interfaces.{0}", c_OutputExt)), intfBuilder.ToString());
+                }, () => {
+                    StringBuilder refExternBuilder = new StringBuilder();
+                    BuildReferencedExternTypes(refExternBuilder);
+                    File.WriteAllText(Path.Combine(outputDir, "cs2dsl__references.txt"), refExternBuilder.ToString());
+                });
+                Parallel.ForEach(toplevelClasses, (pair) => {
+                    StringBuilder classBuilder = new StringBuilder();
+                    string fileName = BuildDslClass(classBuilder, pair.Key, pair.Value);
+                    File.WriteAllText(Path.Combine(outputDir, Path.ChangeExtension(fileName.ToLower(), c_OutputExt)), classBuilder.ToString());
+                });
             }
-            StringBuilder allClassBuilder = new StringBuilder();
-            BuildDslClass(allClassBuilder, toplevelMni, toplevelClasses);
+            else {
+                StringBuilder nsBuilder = new StringBuilder();
+                BuildNamespaces(nsBuilder, toplevelMni);
+                File.WriteAllText(Path.Combine(outputDir, string.Format("cs2dsl__namespaces.{0}", c_OutputExt)), nsBuilder.ToString());
+
+                StringBuilder attrBuilder = new StringBuilder();
+                BuildAttributes(attrBuilder, compilation.Assembly, ignoredClasses);
+                File.WriteAllText(Path.Combine(outputDir, string.Format("cs2dsl__attributes.{0}", c_OutputExt)), attrBuilder.ToString());
+
+                StringBuilder enumBuilder = new StringBuilder();
+                BuildExternEnums(enumBuilder);
+                File.WriteAllText(Path.Combine(outputDir, string.Format("cs2dsl__externenums.{0}", c_OutputExt)), enumBuilder.ToString());
+
+                StringBuilder intfBuilder = new StringBuilder();
+                BuildInterfaces(intfBuilder);
+                File.WriteAllText(Path.Combine(outputDir, string.Format("cs2dsl__interfaces.{0}", c_OutputExt)), intfBuilder.ToString());
+
+                StringBuilder refExternBuilder = new StringBuilder();
+                BuildReferencedExternTypes(refExternBuilder);
+                File.WriteAllText(Path.Combine(outputDir, "cs2dsl__references.txt"), refExternBuilder.ToString());
+
+                foreach (var pair in toplevelClasses) {
+                    StringBuilder classBuilder = new StringBuilder();
+                    string fileName = BuildDslClass(classBuilder, pair.Key, pair.Value);
+                    File.WriteAllText(Path.Combine(outputDir, Path.ChangeExtension(fileName.ToLower(), c_OutputExt)), classBuilder.ToString());
+                }
+            }
             if (haveSemanticError || haveTranslationError) {
                 if (haveSemanticError) {
                     Console.WriteLine("{0}", File.ReadAllText(Path.Combine(logDir, "SemanticError.log")));
@@ -484,6 +528,8 @@ namespace RoslynTool.CsToDsl
             }
             else {
                 if (outputResult) {
+                    StringBuilder allClassBuilder = new StringBuilder();
+                    BuildDslClass(allClassBuilder, toplevelMni, toplevelClasses);
                     Console.Write(allClassBuilder.ToString());
                 }
                 return ExitCode.Success;
@@ -1599,7 +1645,7 @@ namespace RoslynTool.CsToDsl
 
         private static void LockWriteLine(StreamWriter sw, string fmt, params object[] args)
         {
-            lock (sw) {
+            lock (s_Lock) {
                 sw.WriteLine(fmt, args);
             }
         }
@@ -1713,5 +1759,7 @@ namespace RoslynTool.CsToDsl
             }
             return ret;
         }
+
+        private static object s_Lock = new object();
     }
 }

@@ -235,9 +235,10 @@ namespace RoslynTool
                     stopwatch1.Stop();
                     Console.WriteLine("CsToDsl consume time: {0}s", stopwatch1.Elapsed.TotalSeconds);
                     var stopwatch2 = Stopwatch.StartNew();
-                    Generator.LuaGenerator.Generate(Path.GetDirectoryName(file), outputDir, outputExt);
+                    Generator.LuaGenerator.Generate(Path.GetDirectoryName(file), outputDir, outputExt, parallel);
                     stopwatch2.Stop();
                     Console.WriteLine("LuaGenerator consume time: {0}s", stopwatch2.Elapsed.TotalSeconds);
+                    System.Threading.Thread.Sleep(1000);
                     Environment.Exit(result);
                 }
                 else {

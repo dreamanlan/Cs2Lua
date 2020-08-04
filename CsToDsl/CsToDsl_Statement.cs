@@ -95,7 +95,7 @@ namespace RoslynTool.CsToDsl
             if (mi.TryCatchUsingLayer > 0) {
                 if (null != node.Expression) {
                     IConversionExpression opd = null;
-                    var iret = m_Model.GetOperation(node) as IReturnStatement;
+                    var iret = m_Model.GetOperationEx(node) as IReturnStatement;
                     if (null != iret) {
                         opd = iret.ReturnedValue as IConversionExpression;
                     }
@@ -119,7 +119,7 @@ namespace RoslynTool.CsToDsl
                 if (null != node.Expression) {
                     CodeBuilder.Append(prestr);
                     IConversionExpression opd = null;
-                    var iret = m_Model.GetOperation(node) as IReturnStatement;
+                    var iret = m_Model.GetOperationEx(node) as IReturnStatement;
                     if (null != iret) {
                         opd = iret.ReturnedValue as IConversionExpression;
                     }
@@ -152,7 +152,7 @@ namespace RoslynTool.CsToDsl
             m_ContinueInfoStack.Push(ci);
 
             CodeBuilder.AppendFormat("{0}while( ", GetIndentString());
-            var oper = m_Model.GetOperation(node) as IWhileUntilLoopStatement;
+            var oper = m_Model.GetOperationEx(node) as IWhileUntilLoopStatement;
             IConversionExpression opd = null;
             if (null != oper) {
                 opd = oper.Condition as IConversionExpression;
@@ -215,7 +215,7 @@ namespace RoslynTool.CsToDsl
                 }
             }
             CodeBuilder.AppendFormat("{0}}}while(", GetIndentString());
-            var oper = m_Model.GetOperation(node) as IWhileUntilLoopStatement;
+            var oper = m_Model.GetOperationEx(node) as IWhileUntilLoopStatement;
             IConversionExpression opd = null;
             if (null != oper) {
                 opd = oper.Condition as IConversionExpression;
@@ -245,7 +245,7 @@ namespace RoslynTool.CsToDsl
             }
             CodeBuilder.AppendFormat("{0}while( ", GetIndentString());
             if (null != node.Condition) {
-                var oper = m_Model.GetOperation(node) as IForLoopStatement;
+                var oper = m_Model.GetOperationEx(node) as IForLoopStatement;
                 IConversionExpression opd = null;
                 if (null != oper) {
                     opd = oper.Condition as IConversionExpression;
@@ -296,7 +296,7 @@ namespace RoslynTool.CsToDsl
 
             CodeBuilder.AppendFormat("{0}foreach({1}, getiterator(", GetIndentString(), node.Identifier.Text);
             IConversionExpression opd = null;
-            var oper = m_Model.GetOperation(node) as IForEachLoopStatement;
+            var oper = m_Model.GetOperationEx(node) as IForEachLoopStatement;
             if (null != oper) {
                 opd = oper.Collection as IConversionExpression;
             }
@@ -329,7 +329,7 @@ namespace RoslynTool.CsToDsl
         public override void VisitIfStatement(IfStatementSyntax node)
         {
             CodeBuilder.AppendFormat("{0}if( ", GetIndentString());
-            var oper = m_Model.GetOperation(node) as IIfStatement;
+            var oper = m_Model.GetOperationEx(node) as IIfStatement;
             IConversionExpression opd = null;
             if (null != oper) {
                 opd = oper.Condition as IConversionExpression;
@@ -352,7 +352,7 @@ namespace RoslynTool.CsToDsl
             IfStatementSyntax ifNode = node.Statement as IfStatementSyntax;
             if (null != ifNode) {
                 CodeBuilder.AppendFormat("{0}}}elseif( ", GetIndentString());
-                var oper = m_Model.GetOperation(node) as IIfStatement;
+                var oper = m_Model.GetOperationEx(node) as IIfStatement;
                 IConversionExpression opd = null;
                 if (null != oper) {
                     opd = oper.Condition as IConversionExpression;
@@ -392,7 +392,7 @@ namespace RoslynTool.CsToDsl
 
             CodeBuilder.AppendFormat("{0}local{{{1} = ", GetIndentString(), varName);
             IConversionExpression opd = null;
-            var oper = m_Model.GetOperation(node) as ISwitchStatement;
+            var oper = m_Model.GetOperationEx(node) as ISwitchStatement;
             if (null != oper) {
                 opd = oper.Value as IConversionExpression;
             }
@@ -557,7 +557,7 @@ namespace RoslynTool.CsToDsl
             if (node.ReturnOrBreakKeyword.Text == "return") {
                 CodeBuilder.AppendFormat("{0}wrapyield(", GetIndentString());
                 if (null != node.Expression) {
-                    var oper = m_Model.GetOperation(node.Expression);
+                    var oper = m_Model.GetOperationEx(node.Expression);
                     var type = oper.Type;
                     OutputExpressionSyntax(node.Expression);
                     if (null != type && (IsImplementationOfSys(type, "IEnumerable") || IsImplementationOfSys(type, "IEnumerator"))) {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -18,7 +19,7 @@ namespace Generator
     }
     internal static class LuaGenerator
     {
-        internal static void Generate(string csprojPath, string outPath, string ext)
+        internal static void Generate(string csprojPath, string outPath, string ext, bool parallel)
         {
             if (string.IsNullOrEmpty(outPath)) {
                 outPath = Path.Combine(csprojPath, "lua");
@@ -38,7 +39,7 @@ namespace Generator
             }
             File.Copy(Path.Combine(s_ExePath, "lualib/lualib.lua"), Path.Combine(s_OutPath, "cs2lua__lualib." + s_Ext), true);
             var files = Directory.GetFiles(s_SrcPath, "*.dsl", SearchOption.TopDirectoryOnly);
-            foreach (string file in files) {
+            Action<string> handler = (file) => {
                 try {
                     string fileName = Path.GetFileNameWithoutExtension(file);
 
@@ -58,6 +59,14 @@ namespace Generator
                     Log(file, string.Format("[{0}:{1}]:exception:{2}\n{3}", id, line, ex.Message, ex.StackTrace));
                     File.WriteAllText(Path.Combine(s_LogPath, "Generator.log"), s_LogBuilder.ToString());
                     System.Environment.Exit(-1);
+                }
+            };
+            if (parallel) {
+                Parallel.ForEach(files, handler);
+            }
+            else {
+                foreach (var file in files) {
+                    handler(file);
                 }
             }
             foreach (var pair in s_FileMergeInfos) {
@@ -2672,17 +2681,17 @@ namespace Generator
             foreach (var pair in s_FileMergeInfos) {
                 var info = pair.Value;
                 if (info.Lists.Contains(file)) {
-                    s_CachedFile2MergedFiles.Add(file, info.MergedFileName);
+                    s_CachedFile2MergedFiles.TryAdd(file, info.MergedFileName);
                     return info.MergedFileName;
                 }
                 foreach (var regex in info.Matches) {
                     if (regex.IsMatch(file)) {
-                        s_CachedFile2MergedFiles.Add(file, info.MergedFileName);
+                        s_CachedFile2MergedFiles.TryAdd(file, info.MergedFileName);
                         return info.MergedFileName;
                     }
                 }
             }
-            s_CachedFile2MergedFiles.Add(file, null);
+            s_CachedFile2MergedFiles.TryAdd(file, null);
             return null;
         }
         private static bool NoSignatureArg(string signature)
@@ -2694,12 +2703,12 @@ namespace Generator
             foreach (var info in s_NoSignatureArgInfos) {
                 foreach (var regex in info.Matches) {
                     if (regex.IsMatch(signature)) {
-                        s_CachedNoSignatures.Add(signature, true);
+                        s_CachedNoSignatures.TryAdd(signature, true);
                         return true;
                     }
                 }
             }
-            s_CachedNoSignatures.Add(signature, false);
+            s_CachedNoSignatures.TryAdd(signature, false);
             return false;
         }
         private static bool TryReplaceSignatureArg(string signature, out string target)
@@ -2720,12 +2729,12 @@ namespace Generator
                     (null == info.InterfaceMatch || info.InterfaceMatch.IsMatch(intf)) &&
                     (null == info.ClassMatch || info.ClassMatch.IsMatch(className)) &&
                     (null == info.MemberMatch || info.MemberMatch.IsMatch(member))) {
-                    s_CachedIndexerByLualibInfos.Add(key, info.IndexerType);
+                    s_CachedIndexerByLualibInfos.TryAdd(key, info.IndexerType);
                     val = info.IndexerType;
                     return true;
                 }
             }
-            s_CachedIndexerByLualibInfos.Add(key, 0);
+            s_CachedIndexerByLualibInfos.TryAdd(key, 0);
             return false;
         }
         private static PrologueAndEpilogueInfo GetPrologueAndEpilogue(string _class, string _method)
@@ -2752,7 +2761,7 @@ namespace Generator
                     }
                 }
             }
-            s_CachedPrologueAndEpilogueInfos.Add(key, info);
+            s_CachedPrologueAndEpilogueInfos.TryAdd(key, info);
             return info;
         }
         private static void ReadConfig()
@@ -2961,6 +2970,7 @@ namespace Generator
             }
         }
 
+        [ThreadStatic]
         private static Dsl.ISyntaxComponent s_CurSyntax = null;
         private static string s_ExePath = string.Empty;
         private static string s_SrcPath = string.Empty;
@@ -3062,9 +3072,9 @@ namespace Generator
         private static Dictionary<string, string> s_ReplaceSignatureArgInfos = new Dictionary<string, string>();
         private static List<IndexerByLualibInfo> s_IndexerByLualibInfos = new List<IndexerByLualibInfo>();
         private static List<AddPrologueOrEpilogueInfo> s_AddPrologueOrEpilogueInfos = new List<AddPrologueOrEpilogueInfo>();
-        private static Dictionary<string, string> s_CachedFile2MergedFiles = new Dictionary<string, string>();
-        private static Dictionary<string, bool> s_CachedNoSignatures = new Dictionary<string, bool>();
-        private static Dictionary<string, int> s_CachedIndexerByLualibInfos = new Dictionary<string, int>();
-        private static Dictionary<string, PrologueAndEpilogueInfo> s_CachedPrologueAndEpilogueInfos = new Dictionary<string, PrologueAndEpilogueInfo>();
+        private static ConcurrentDictionary<string, string> s_CachedFile2MergedFiles = new ConcurrentDictionary<string, string>();
+        private static ConcurrentDictionary<string, bool> s_CachedNoSignatures = new ConcurrentDictionary<string, bool>();
+        private static ConcurrentDictionary<string, int> s_CachedIndexerByLualibInfos = new ConcurrentDictionary<string, int>();
+        private static ConcurrentDictionary<string, PrologueAndEpilogueInfo> s_CachedPrologueAndEpilogueInfos = new ConcurrentDictionary<string, PrologueAndEpilogueInfo>();
     }
 }

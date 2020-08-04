@@ -198,7 +198,7 @@ namespace RoslynTool.CsToDsl
             //首先执行初始化列表
             var init = node.Initializer;
             if (null != init) {
-                var oper = m_Model.GetOperation(init) as IInvocationExpression;
+                var oper = m_Model.GetOperationEx(init) as IInvocationExpression;
                 string manglingName2 = NameMangling(oper.TargetMethod);
                 if (init.ThisOrBaseKeyword.Text == "this") {
                     CodeBuilder.AppendFormat("{0}callinstance(this, \"{1}\"", GetIndentString(), manglingName2);
@@ -246,7 +246,7 @@ namespace RoslynTool.CsToDsl
             }
             else if (null != node.ExpressionBody) {
                 IConversionExpression opd = null;
-                var oper = m_Model.GetOperation(node.ExpressionBody) as IBlockStatement;
+                var oper = m_Model.GetOperationEx(node.ExpressionBody) as IBlockStatement;
                 if (null != oper && oper.Statements.Length == 1) {
                     var iret = oper.Statements[0] as IReturnStatement;
                     if (null != iret) {
@@ -338,7 +338,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendFormat("{0}return(", GetIndentString());
                     }
                     IConversionExpression opd = null;
-                    var oper = m_Model.GetOperation(node.ExpressionBody) as IBlockStatement;
+                    var oper = m_Model.GetOperationEx(node.ExpressionBody) as IBlockStatement;
                     if (null != oper && oper.Statements.Length == 1) {
                         var iret = oper.Statements[0] as IReturnStatement;
                         if (null != iret) {
@@ -396,7 +396,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("{0}{1} = ", GetIndentString(), SymbolTable.GetPropertyName(declSym));
                 if (null != node.Initializer) {
                     IConversionExpression opd = null;
-                    var oper = m_Model.GetOperation(node.Initializer) as ISymbolInitializer;
+                    var oper = m_Model.GetOperationEx(node.Initializer) as ISymbolInitializer;
                     if (null != oper) {
                         opd = oper.Value as IConversionExpression;
                     }
@@ -507,7 +507,7 @@ namespace RoslynTool.CsToDsl
                                 }
                             }
                             IConversionExpression opd = null;
-                            var oper = m_Model.GetOperation(accessor.ExpressionBody) as IBlockStatement;
+                            var oper = m_Model.GetOperationEx(accessor.ExpressionBody) as IBlockStatement;
                             if (null != oper && oper.Statements.Length == 1) {
                                 var iret = oper.Statements[0] as IReturnStatement;
                                 if (null != iret) {
@@ -736,7 +736,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendFormat("{0}return(", GetIndentString());
                     }
                     IConversionExpression opd = null;
-                    var oper = m_Model.GetOperation(node.ExpressionBody) as IBlockStatement;
+                    var oper = m_Model.GetOperationEx(node.ExpressionBody) as IBlockStatement;
                     if (null != oper && oper.Statements.Length == 1) {
                         var iret = oper.Statements[0] as IReturnStatement;
                         if (null != iret) {
@@ -875,7 +875,7 @@ namespace RoslynTool.CsToDsl
                                 }
                             }
                             IConversionExpression opd = null;
-                            var oper = m_Model.GetOperation(accessor.ExpressionBody) as IBlockStatement;
+                            var oper = m_Model.GetOperationEx(accessor.ExpressionBody) as IBlockStatement;
                             if (null != oper && oper.Statements.Length == 1) {
                                 var iret = oper.Statements[0] as IReturnStatement;
                                 if (null != iret) {
@@ -919,7 +919,7 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitSimpleLambdaExpression(SimpleLambdaExpressionSyntax node)
         {
-            SymbolInfo symInfo = m_Model.GetSymbolInfo(node);
+            SymbolInfo symInfo = m_Model.GetSymbolInfoEx(node);
             var sym = symInfo.Symbol as IMethodSymbol;
 
             if (null != sym && sym.Parameters.Length == 1) {
@@ -940,7 +940,7 @@ namespace RoslynTool.CsToDsl
                     var param = sym.Parameters[0];
                     CodeBuilder.AppendFormat("(function({0}) {{ return(", param.Name);
                     IConversionExpression opd = null;
-                    var oper = m_Model.GetOperation(node) as ILambdaExpression;
+                    var oper = m_Model.GetOperationEx(node) as ILambdaExpression;
                     if (null != oper && oper.Body.Statements.Length == 1) {
                         var iret = oper.Body.Statements[0] as IReturnStatement;
                         if (null != iret) {
@@ -963,7 +963,7 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitParenthesizedLambdaExpression(ParenthesizedLambdaExpressionSyntax node)
         {
-            SymbolInfo symInfo = m_Model.GetSymbolInfo(node);
+            SymbolInfo symInfo = m_Model.GetSymbolInfoEx(node);
             var sym = symInfo.Symbol as IMethodSymbol;
             if (null != sym) {
                 var mi = new MethodInfo();
@@ -1036,7 +1036,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append("return(");
                     }
                     IConversionExpression opd = null;
-                    var oper = m_Model.GetOperation(node) as ILambdaExpression;
+                    var oper = m_Model.GetOperationEx(node) as ILambdaExpression;
                     if (null != oper && oper.Body.Statements.Length == 1) {
                         var iret = oper.Body.Statements[0] as IReturnStatement;
                         if (null != iret) {
@@ -1066,7 +1066,7 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitAnonymousMethodExpression(AnonymousMethodExpressionSyntax node)
         {
-            SymbolInfo symInfo = m_Model.GetSymbolInfo(node);
+            SymbolInfo symInfo = m_Model.GetSymbolInfoEx(node);
             var sym = symInfo.Symbol as IMethodSymbol;
             if (null != sym) {
                 var mi = new MethodInfo();
@@ -1163,7 +1163,7 @@ namespace RoslynTool.CsToDsl
             }
             else if (null != node.Expression) {
                 CodeBuilder.AppendFormat("{0}local{{{1} = ", GetIndentString(), varName);
-                IConversionExpression opd = m_Model.GetOperation(node.Expression) as IConversionExpression;
+                IConversionExpression opd = m_Model.GetOperationEx(node.Expression) as IConversionExpression;
                 OutputExpressionSyntax(node.Expression, opd);
                 CodeBuilder.AppendLine(";};");
             }

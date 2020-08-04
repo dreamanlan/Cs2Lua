@@ -56,7 +56,7 @@ namespace RoslynTool.CsToDsl
             Init(sym);
 
             if (null != argList) {
-                var moper = model.GetOperation(argList) as IInvocationExpression;
+                var moper = model.GetOperationEx(argList) as IInvocationExpression;
                 var args = argList.Arguments;
 
                 Dictionary<string, ExpressionSyntax> namedArgs = new Dictionary<string, ExpressionSyntax>();
@@ -90,7 +90,7 @@ namespace RoslynTool.CsToDsl
                             ReturnArgs.Add(arg.Expression);
                         }
                         else if (param.IsParams) {
-                            var argOper = model.GetOperation(arg.Expression);
+                            var argOper = model.GetOperationEx(arg.Expression);
                             if (null != argOper && null != argOper.Type && argOper.Type.TypeKind == TypeKind.Array) {
                                 ArrayToParams = true;
                             }
@@ -132,7 +132,7 @@ namespace RoslynTool.CsToDsl
                                     var newModel = SymbolTable.Instance.Compilation.GetSemanticModel(tree, true);
                                     if (null != newModel) {
                                         var oper = newModel.GetOperation(exp);
-                                        //var dsym = newModel.GetSymbolInfo(exp).Symbol;
+                                        //var dsym = newModel.GetSymbolInfoEx(exp).Symbol;
                                         DefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, OperOrSym = oper });
                                         handled = true;
                                     }
@@ -152,7 +152,7 @@ namespace RoslynTool.CsToDsl
             Init(sym);
 
             if (null != argList) {
-                var moper = model.GetOperation(argList) as IInvocationExpression;
+                var moper = model.GetOperationEx(argList) as IInvocationExpression;
                 var args = argList.Arguments;
 
                 Dictionary<string, ExpressionSyntax> namedArgs = new Dictionary<string, ExpressionSyntax>();
@@ -186,7 +186,7 @@ namespace RoslynTool.CsToDsl
                             ReturnArgs.Add(arg.Expression);
                         }
                         else if (param.IsParams) {
-                            var argOper = model.GetOperation(arg.Expression);
+                            var argOper = model.GetOperationEx(arg.Expression);
                             if (null != argOper && null != argOper.Type && argOper.Type.TypeKind == TypeKind.Array) {
                                 ArrayToParams = true;
                             }
@@ -228,7 +228,7 @@ namespace RoslynTool.CsToDsl
                                     var newModel = SymbolTable.Instance.Compilation.GetSemanticModel(tree, true);
                                     if (null != newModel) {
                                         var oper = newModel.GetOperation(exp);
-                                        //var dsym = newModel.GetSymbolInfo(exp).Symbol;
+                                        //var dsym = newModel.GetSymbolInfoEx(exp).Symbol;
                                         DefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, OperOrSym = oper });
                                         handled = true;
                                     }
@@ -250,7 +250,7 @@ namespace RoslynTool.CsToDsl
             if (null != argList) {
                 for (int i = 0; i < argList.Count; ++i) {
                     var arg = argList[i];
-                    var oper = model.GetOperation(arg);
+                    var oper = model.GetOperationEx(arg);
                     if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Array) {
                         RecordRefArray(arg);
                     }
@@ -271,7 +271,7 @@ namespace RoslynTool.CsToDsl
             string prestr = string.Empty;
             if (isMemberAccess) {
                 string fnOfIntf = "null";
-                var expOper = model.GetOperation(exp);
+                var expOper = model.GetOperationEx(exp);
                 bool isExplicitInterfaceInvoke = cs2dsl.CheckExplicitInterfaceAccess(sym, ref fnOfIntf);
                 bool expIsBasicType = false;
                 if (!sym.IsStatic && null != expOper && SymbolTable.IsBasicType(expOper.Type)) {
@@ -515,7 +515,7 @@ namespace RoslynTool.CsToDsl
         internal static void TryAddExternEnum(bool isEnumClass, ExpressionSyntax exp, SemanticModel model)
         {
             if (isEnumClass) {
-                var oper = model.GetOperation(exp);
+                var oper = model.GetOperationEx(exp);
                 if (!SymbolTable.Instance.IsCs2DslSymbol(oper.Type) && oper.Type.TypeKind == TypeKind.Enum) {
                     string ckey = ClassInfo.GetFullName(oper.Type);
                     SymbolTable.Instance.AddExternEnum(ckey, oper.Type);
@@ -535,7 +535,7 @@ namespace RoslynTool.CsToDsl
             TryAddExternEnum(isEnumClass, exp, model);
             string ckey = classKey;
             if (isEnumClass) {
-                var oper = model.GetOperation(exp);
+                var oper = model.GetOperationEx(exp);
                 if (oper.Type.TypeKind == TypeKind.Enum) {
                     var ci = cs2dsl.GetCurClassInfo();
                     ci.AddReference(oper.Type);

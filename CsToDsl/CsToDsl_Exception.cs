@@ -18,7 +18,7 @@ namespace RoslynTool.CsToDsl
         {
             CodeBuilder.AppendFormat("{0}dslthrow(", GetIndentString());
             if (null != node.Expression) {
-                IConversionExpression opd = m_Model.GetOperation(node.Expression) as IConversionExpression;
+                IConversionExpression opd = m_Model.GetOperationEx(node.Expression) as IConversionExpression;
                 OutputExpressionSyntax(node.Expression, opd);
             }
             CodeBuilder.AppendLine(");");
@@ -106,7 +106,7 @@ namespace RoslynTool.CsToDsl
             ++m_Indent;
             if (null != node.Filter) {
                 CodeBuilder.Append("if(");
-                IConversionExpression opd = m_Model.GetOperation(node.Filter.FilterExpression) as IConversionExpression;
+                IConversionExpression opd = m_Model.GetOperationEx(node.Filter.FilterExpression) as IConversionExpression;
                 OutputExpressionSyntax(node.Filter.FilterExpression, opd);
                 CodeBuilder.Append("){");
                 CodeBuilder.AppendLine();

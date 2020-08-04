@@ -663,11 +663,13 @@ namespace RoslynTool.CsToDsl
         }
         private SymbolTable() { }
 
+        //这部分在初始构建，不会多线程修改
         private CSharpCompilation m_Compilation = null;
         private IAssemblySymbol m_AssemblySymbol = null;
         private Dictionary<string, INamespaceSymbol> m_NamespaceSymbols = new Dictionary<string, INamespaceSymbol>();
         private Dictionary<string, ClassSymbolInfo> m_ClassSymbols = new Dictionary<string, ClassSymbolInfo>();
-
+        
+        //多线程访问部分，注意加锁
         private ConcurrentDictionary<string, INamedTypeSymbol> m_ExternTypes = new ConcurrentDictionary<string, INamedTypeSymbol>();
         private ConcurrentDictionary<string, INamedTypeSymbol> m_InternTypes = new ConcurrentDictionary<string, INamedTypeSymbol>();
         private ConcurrentDictionary<string, INamedTypeSymbol> m_IgnoredTypes = new ConcurrentDictionary<string, INamedTypeSymbol>();
@@ -681,6 +683,7 @@ namespace RoslynTool.CsToDsl
         private List<ITypeParameterSymbol> m_TypeParameters = new List<ITypeParameterSymbol>();
         private List<ITypeSymbol> m_TypeArguments = new List<ITypeSymbol>();
 
+        //初始化时构建，不会多线程修改
         private class TypeTreeNode
         {
             internal INamedTypeSymbol Type;
@@ -689,6 +692,7 @@ namespace RoslynTool.CsToDsl
         }
         private Dictionary<string, TypeTreeNode> m_TypeTreeNodes = new Dictionary<string, TypeTreeNode>();
 		
+        //配置文件数据，初始化后不会再修改
 		private HashSet<string> m_LegalGenericTypes = new HashSet<string>();
         private HashSet<string> m_LegalGenericMethods = new HashSet<string>();
         private HashSet<string> m_LegalParameterGenericTypes = new HashSet<string>();
@@ -1086,5 +1090,29 @@ namespace RoslynTool.CsToDsl
         private static HashSet<string> s_IntegerTypes = new HashSet<string> {
             "System.Byte", "System.SByte", "System.Int16", "System.UInt16", "System.Int32", "System.UInt32", "System.Int64", "System.UInt64"
         };
+    }
+    internal static class SemanticExtension
+    {
+        internal static SymbolInfo GetSymbolInfoEx(this SemanticModel model, SyntaxNode node)
+        {
+            SymbolInfo info;
+            if(!s_SymbolInfoCache.TryGetValue(node, out info)) {
+                info = model.GetSymbolInfo(node);
+                s_SymbolInfoCache.TryAdd(node, info);
+            }
+            return info;
+        }
+        internal static IOperation GetOperationEx(this SemanticModel model, SyntaxNode node)
+        {
+            IOperation info = null;
+            if (!s_OperationCache.TryGetValue(node, out info)) {
+                info = model.GetOperation(node);
+                s_OperationCache.TryAdd(node, info);
+            }
+            return info;
+        }
+
+        private static ConcurrentDictionary<SyntaxNode, SymbolInfo> s_SymbolInfoCache = new ConcurrentDictionary<SyntaxNode, SymbolInfo>();
+        private static ConcurrentDictionary<SyntaxNode, IOperation> s_OperationCache = new ConcurrentDictionary<SyntaxNode, IOperation>();
     }
 }

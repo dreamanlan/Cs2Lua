@@ -206,7 +206,7 @@ namespace RoslynTool.CsToDsl
             bool baseInitializerCalled = false;
             var init = node.Initializer;
             if (null != init) {
-                var oper = model.GetOperation(init) as IInvocationExpression;
+                var oper = model.GetOperationEx(init) as IInvocationExpression;
                 if (init.ThisOrBaseKeyword.Text == "this") {
                     var constructor = oper.TargetMethod;
                     if (null != constructor) {

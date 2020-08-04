@@ -29,7 +29,7 @@ namespace RoslynTool.CsToDsl
         public override void VisitBinaryExpression(BinaryExpressionSyntax node)
         {
             var ci = m_ClassInfoStack.Peek();
-            var oper = m_Model.GetOperation(node) as IHasOperatorMethodExpression;
+            var oper = m_Model.GetOperationEx(node) as IHasOperatorMethodExpression;
             if (null != oper && oper.UsesOperatorMethod) {
                 IMethodSymbol msym = oper.OperatorMethod;
                 var castOper = oper as IConversionExpression;
@@ -90,7 +90,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendFormat(", TypeKind.{0}", type.TypeKind);
                     }
                     else if (op == "??") {
-                        var rightOper = m_Model.GetOperation(node.Right);
+                        var rightOper = m_Model.GetOperationEx(node.Right);
                         bool rightIsConst = null != rightOper && rightOper.ConstantValue.HasValue;
                         if (rightIsConst) {
                             CodeBuilder.Append("true, ");
@@ -127,12 +127,12 @@ namespace RoslynTool.CsToDsl
         public override void VisitConditionalExpression(ConditionalExpressionSyntax node)
         {
             IConversionExpression opd = null;
-            var oper = m_Model.GetOperation(node) as IConditionalChoiceExpression;
+            var oper = m_Model.GetOperationEx(node) as IConditionalChoiceExpression;
             if (null != oper) {
                 opd = oper.Condition as IConversionExpression;
             }
-            var tOper = m_Model.GetOperation(node.WhenTrue);
-            var fOper = m_Model.GetOperation(node.WhenFalse);
+            var tOper = m_Model.GetOperationEx(node.WhenTrue);
+            var fOper = m_Model.GetOperationEx(node.WhenFalse);
             bool trueIsConst = null != tOper && tOper.ConstantValue.HasValue;
             bool falseIsConst = null != fOper && fOper.ConstantValue.HasValue;
 
@@ -181,7 +181,7 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitPrefixUnaryExpression(PrefixUnaryExpressionSyntax node)
         {
-            var oper = m_Model.GetOperation(node);
+            var oper = m_Model.GetOperationEx(node);
             IConversionExpression opd = null;
             var unaryOper = oper as IUnaryOperatorExpression;
             if (null != unaryOper) {
@@ -261,7 +261,7 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitPostfixUnaryExpression(PostfixUnaryExpressionSyntax node)
         {
-            var oper = m_Model.GetOperation(node);
+            var oper = m_Model.GetOperationEx(node);
             IConversionExpression opd = null;
             var unaryOper = oper as IUnaryOperatorExpression;
             if (null != unaryOper) {
@@ -363,7 +363,7 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitSizeOfExpression(SizeOfExpressionSyntax node)
         {
-            var oper = m_Model.GetOperation(node) as ISizeOfExpression;
+            var oper = m_Model.GetOperationEx(node) as ISizeOfExpression;
             if (oper.ConstantValue.HasValue) {
                 OutputConstValue(oper.ConstantValue.Value, oper);
             }
@@ -375,7 +375,7 @@ namespace RoslynTool.CsToDsl
         {
             var ci = m_ClassInfoStack.Peek();
 
-            var oper = m_Model.GetOperation(node) as ITypeOfExpression;
+            var oper = m_Model.GetOperationEx(node) as ITypeOfExpression;
             var type = oper.TypeOperand;
 
             TypeChecker.CheckType(type, node, GetCurMethodSemanticInfo());
@@ -387,7 +387,7 @@ namespace RoslynTool.CsToDsl
         public override void VisitCastExpression(CastExpressionSyntax node)
         {
             var ci = m_ClassInfoStack.Peek();
-            var oper = m_Model.GetOperation(node) as IConversionExpression;
+            var oper = m_Model.GetOperationEx(node) as IConversionExpression;
             var opd = oper.Operand as IConversionExpression;
             if (null != oper && oper.UsesOperatorMethod) {
                 IMethodSymbol msym = oper.OperatorMethod;
@@ -405,7 +405,7 @@ namespace RoslynTool.CsToDsl
                 var typeInfo = m_Model.GetTypeInfo(node.Type);
                 var type = typeInfo.Type;
 
-                var srcOper = m_Model.GetOperation(node.Expression);
+                var srcOper = m_Model.GetOperationEx(node.Expression);
                 if (null != srcOper) {
                     TypeChecker.CheckConvert(srcOper.Type, type, node, GetCurMethodSemanticInfo());
                 }
@@ -439,14 +439,14 @@ namespace RoslynTool.CsToDsl
             var leftElementAccess = node.Left as ElementAccessExpressionSyntax;
             var leftCondAccess = node.Left as ConditionalAccessExpressionSyntax;
 
-            var leftOper = m_Model.GetOperation(node.Left);
-            var leftSymbolInfo = m_Model.GetSymbolInfo(node.Left);
+            var leftOper = m_Model.GetOperationEx(node.Left);
+            var leftSymbolInfo = m_Model.GetSymbolInfoEx(node.Left);
             var leftSym = leftSymbolInfo.Symbol;
             var leftPsym = leftSym as IPropertySymbol;
             var leftEsym = leftSym as IEventSymbol;
             var leftFsym = leftSym as IFieldSymbol;
             
-            var rightOper = m_Model.GetOperation(node.Right);
+            var rightOper = m_Model.GetOperationEx(node.Right);
 
             var curMethod = GetCurMethodSemanticInfo();
             if (null != leftOper && null != rightOper) {
@@ -460,7 +460,7 @@ namespace RoslynTool.CsToDsl
             if (null != leftMemberAccess && null != leftPsym) {
                 if (!leftPsym.IsStatic) {
                     bool expIsBasicType = false;
-                    var expOper = m_Model.GetOperation(leftMemberAccess.Expression);
+                    var expOper = m_Model.GetOperationEx(leftMemberAccess.Expression);
                     if (null != expOper && SymbolTable.IsBasicType(expOper.Type)) {
                         expIsBasicType = true;
                     }
@@ -484,7 +484,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("execclosure({0}, true){{ ", assignVar);
             }
             VisitAssignment(ci, op, baseOp, node, string.Empty, false, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType);
-            var oper = m_Model.GetOperation(node.Right);
+            var oper = m_Model.GetOperationEx(node.Right);
             if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && !CsDslTranslater.IsImplementationOfSys(oper.Type, "IEnumerator")) {
                 //只有变量赋值与字段赋值需要处理，其它的都在相应的函数调用里处理了
                 if (null != leftSym && leftSym.Kind == SymbolKind.Local || null != leftFsym) {
@@ -525,7 +525,7 @@ namespace RoslynTool.CsToDsl
         {
             TypeChecker.CheckMemberAccess(m_Model, node, GetCurMethodSemanticInfo());
 
-            SymbolInfo symInfo = m_Model.GetSymbolInfo(node);
+            SymbolInfo symInfo = m_Model.GetSymbolInfoEx(node);
             var sym = symInfo.Symbol;
 
             string className = string.Empty;
@@ -606,7 +606,7 @@ namespace RoslynTool.CsToDsl
                     if (null != psym) {
                         if (!psym.IsStatic) {
                             propExplicitImplementInterface = CheckExplicitInterfaceAccess(psym, ref fnOfIntf, ref mname);
-                            var expOper = m_Model.GetOperation(node.Expression);
+                            var expOper = m_Model.GetOperationEx(node.Expression);
                             bool expIsBasicType = false;
                             if (null != expOper && SymbolTable.IsBasicType(expOper.Type)) {
                                 expIsBasicType = true;
@@ -668,8 +668,8 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitElementAccessExpression(ElementAccessExpressionSyntax node)
         {
-            var oper = m_Model.GetOperation(node);
-            var symInfo = m_Model.GetSymbolInfo(node);
+            var oper = m_Model.GetOperationEx(node);
+            var symInfo = m_Model.GetSymbolInfoEx(node);
             var sym = symInfo.Symbol;
             var psym = sym as IPropertySymbol;
             if (null != sym && sym.IsStatic) {
@@ -681,7 +681,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("get{0}{1}indexer(", isCs2Lua ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
                 if (!isCs2Lua) {
                     INamedTypeSymbol namedTypeSym = null;
-                    var expOper = m_Model.GetOperation(node.Expression);
+                    var expOper = m_Model.GetOperationEx(node.Expression);
                     if (null != expOper) {
                         string fullName = ClassInfo.GetFullName(expOper.Type);
                         CodeBuilder.Append(fullName);
@@ -743,8 +743,8 @@ namespace RoslynTool.CsToDsl
             CodeBuilder.Append(", ");
             var elementBinding = node.WhenNotNull as ElementBindingExpressionSyntax;
             if (null != elementBinding) {
-                var oper = m_Model.GetOperation(node.WhenNotNull);
-                var symInfo = m_Model.GetSymbolInfo(node.WhenNotNull);
+                var oper = m_Model.GetOperationEx(node.WhenNotNull);
+                var symInfo = m_Model.GetSymbolInfoEx(node.WhenNotNull);
                 var sym = symInfo.Symbol;
                 var psym = sym as IPropertySymbol;
                 if (null != sym && sym.IsStatic) {
@@ -757,7 +757,7 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendFormat("get{0}{1}indexer(", isCs2Lua ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
                     if (!isCs2Lua) {
                         INamedTypeSymbol namedTypeSym = null;
-                        var expOper = m_Model.GetOperation(node.Expression);
+                        var expOper = m_Model.GetOperationEx(node.Expression);
                         if (null != expOper) {
                             string fullName = ClassInfo.GetFullName(expOper.Type);
                             CodeBuilder.Append(fullName);
@@ -826,7 +826,7 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitMemberBindingExpression(MemberBindingExpressionSyntax node)
         {
-            var symInfo = m_Model.GetSymbolInfo(node.Name);
+            var symInfo = m_Model.GetSymbolInfoEx(node.Name);
             var sym = symInfo.Symbol;
             var msym = sym as IMethodSymbol;
             if (null != msym) {
@@ -853,7 +853,7 @@ namespace RoslynTool.CsToDsl
         /// <param name="node"></param>
         public override void VisitInitializerExpression(InitializerExpressionSyntax node)
         {
-            var oper = m_Model.GetOperation(node);
+            var oper = m_Model.GetOperationEx(node);
             if (null != oper) {
                 var namedTypeSym = oper.Type as INamedTypeSymbol;
                 bool isCollection = node.IsKind(SyntaxKind.CollectionInitializerExpression);
@@ -984,7 +984,7 @@ namespace RoslynTool.CsToDsl
                     string typeKind = "ErrorType";
                     var arrCreateExp = node.Parent as ArrayCreationExpressionSyntax;
                     if (null != arrCreateExp) {
-                        var arrCreate = m_Model.GetOperation(arrCreateExp) as IArrayCreationExpression;
+                        var arrCreate = m_Model.GetOperationEx(arrCreateExp) as IArrayCreationExpression;
                         ITypeSymbol etype = SymbolTable.GetElementType(arrCreate.ElementType);
                         elementType = ClassInfo.GetFullName(etype);
                         typeKind = etype.TypeKind.ToString();
@@ -1076,7 +1076,7 @@ namespace RoslynTool.CsToDsl
         public override void VisitObjectCreationExpression(ObjectCreationExpressionSyntax node)
         {
             var ci = m_ClassInfoStack.Peek();
-            var oper = m_Model.GetOperation(node);
+            var oper = m_Model.GetOperationEx(node);
             var objectCreate = oper as IObjectCreationExpression;
             if (null != objectCreate) {
                 var typeSymInfo = objectCreate.Type;
@@ -1241,7 +1241,7 @@ namespace RoslynTool.CsToDsl
         public override void VisitArrayCreationExpression(ArrayCreationExpressionSyntax node)
         {
             if (null == node.Initializer) {
-                var oper = m_Model.GetOperation(node) as IArrayCreationExpression;
+                var oper = m_Model.GetOperationEx(node) as IArrayCreationExpression;
                 ITypeSymbol etype = SymbolTable.GetElementType(oper.ElementType);
                 string elementType = ClassInfo.GetFullName(etype);
                 string typeKind = etype.TypeKind.ToString();

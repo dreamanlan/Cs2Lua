@@ -159,7 +159,7 @@ namespace RoslynTool.CsToDsl
             }
             VisitLocalVariableDeclarator(ci, node);
             if (null != node.Initializer) {
-                var oper = m_Model.GetOperation(node.Initializer.Value);
+                var oper = m_Model.GetOperationEx(node.Initializer.Value);
                 if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && !CsDslTranslater.IsImplementationOfSys(oper.Type, "IEnumerator")) {
                     if (SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
                         CodeBuilder.AppendFormat("{0}{1} = wrapstruct({2}, {3});", GetIndentString(), node.Identifier.Text, node.Identifier.Text, ClassInfo.GetFullName(oper.Type));
@@ -177,12 +177,12 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitArgumentList(ArgumentListSyntax node)
         {
-            var oper = m_Model.GetOperation(node);
+            var oper = m_Model.GetOperationEx(node);
             OutputArgumentList(node.Arguments, ", ", oper);
         }
         public override void VisitBracketedArgumentList(BracketedArgumentListSyntax node)
         {
-            var oper = m_Model.GetOperation(node);
+            var oper = m_Model.GetOperationEx(node);
             if (oper.Kind == OperationKind.IndexedPropertyReferenceExpression) {
                 OutputArgumentList(node.Arguments, ", ", oper);
             }
@@ -192,7 +192,7 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitArgument(ArgumentSyntax node)
         {
-            var oper = m_Model.GetOperation(node) as IArgument;
+            var oper = m_Model.GetOperationEx(node) as IArgument;
             IConversionExpression opd = null;
             if (null != oper) {
                 opd = oper.Value as IConversionExpression;
@@ -217,7 +217,7 @@ namespace RoslynTool.CsToDsl
             string name = node.Identifier.Text;
             if (m_ClassInfoStack.Count > 0) {
                 ClassInfo classInfo = m_ClassInfoStack.Peek();
-                SymbolInfo symbolInfo = m_Model.GetSymbolInfo(node);
+                SymbolInfo symbolInfo = m_Model.GetSymbolInfoEx(node);
                 var sym = symbolInfo.Symbol;
                 if (null != sym) {
                     bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(sym);
@@ -292,7 +292,7 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitQualifiedName(QualifiedNameSyntax node)
         {
-            SymbolInfo symInfo = m_Model.GetSymbolInfo(node);
+            SymbolInfo symInfo = m_Model.GetSymbolInfoEx(node);
             var sym = symInfo.Symbol;
             if (null != sym) {
                 string fullName = ClassInfo.GetFullName(sym);

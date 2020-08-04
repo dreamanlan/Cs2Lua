@@ -26,7 +26,7 @@ namespace RoslynTool.CsToDsl
 
         public override void VisitTypeOfExpression(TypeOfExpressionSyntax node)
         {
-            var oper = m_Model.GetOperation(node) as ITypeOfExpression;
+            var oper = m_Model.GetOperationEx(node) as ITypeOfExpression;
             var type = oper.TypeOperand;
             if (null != type) {
                 if (type.TypeKind == TypeKind.TypeParameter) {
@@ -41,7 +41,7 @@ namespace RoslynTool.CsToDsl
 
         public override void VisitObjectCreationExpression(ObjectCreationExpressionSyntax node)
         {
-            var oper = m_Model.GetOperation(node);
+            var oper = m_Model.GetOperationEx(node);
             var objectCreate = oper as IObjectCreationExpression;
             if (null != objectCreate) {
                 var typeSymInfo = objectCreate.Type;
@@ -74,7 +74,7 @@ namespace RoslynTool.CsToDsl
         {
             string op = node.OperatorToken.Text;
             if (op == "is" || op == "as") {
-                var oper = m_Model.GetOperation(node.Right);
+                var oper = m_Model.GetOperationEx(node.Right);
                 if (null != oper) {
                     var type = oper.Type as ITypeParameterSymbol;
                     if (null != type && type.TypeParameterKind == TypeParameterKind.Type) {

@@ -44,7 +44,7 @@ namespace RoslynTool.CsToDsl
             var paramNames = paramInfo.ParamNames;
 
             CodeBuilder.AppendFormat("from(function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
-            var opd = m_Model.GetOperation(node.Expression) as IConversionExpression;
+            var opd = m_Model.GetOperationEx(node.Expression) as IConversionExpression;
             OutputExpressionSyntax(node.Expression, opd);
             CodeBuilder.Append("); })");
 
@@ -56,7 +56,7 @@ namespace RoslynTool.CsToDsl
             var paramNames = paramInfo.ParamNames;
 
             CodeBuilder.AppendFormat("let(function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
-            var opd = m_Model.GetOperation(node.Expression) as IConversionExpression;
+            var opd = m_Model.GetOperationEx(node.Expression) as IConversionExpression;
             OutputExpressionSyntax(node.Expression, opd);
             CodeBuilder.Append("); })");
 
@@ -68,7 +68,7 @@ namespace RoslynTool.CsToDsl
             var paramNames = paramInfo.ParamNames;
 
             CodeBuilder.AppendFormat("join((function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
-            var opd = m_Model.GetOperation(node.InExpression) as IConversionExpression;
+            var opd = m_Model.GetOperationEx(node.InExpression) as IConversionExpression;
             OutputExpressionSyntax(node.InExpression, opd);
             CodeBuilder.Append("); }), ");
 
@@ -76,12 +76,12 @@ namespace RoslynTool.CsToDsl
             paramNames.Add(paramInfo.JoinParamName);
 
             CodeBuilder.AppendFormat("(function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
-            var opdl = m_Model.GetOperation(node.LeftExpression) as IConversionExpression;
+            var opdl = m_Model.GetOperationEx(node.LeftExpression) as IConversionExpression;
             OutputExpressionSyntax(node.LeftExpression, opdl);
             CodeBuilder.Append("); }), ");
 
             CodeBuilder.AppendFormat("(function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
-            var opdr = m_Model.GetOperation(node.RightExpression) as IConversionExpression;
+            var opdr = m_Model.GetOperationEx(node.RightExpression) as IConversionExpression;
             OutputExpressionSyntax(node.RightExpression, opdr);
             CodeBuilder.Append("); }))");
 
@@ -105,7 +105,7 @@ namespace RoslynTool.CsToDsl
             var paramNames = paramInfo.ParamNames;
 
             CodeBuilder.AppendFormat("where(function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
-            var opd = m_Model.GetOperation(node.Condition) as IConversionExpression;
+            var opd = m_Model.GetOperationEx(node.Condition) as IConversionExpression;
             OutputExpressionSyntax(node.Condition, opd);
             CodeBuilder.Append("); })");
         }
@@ -119,7 +119,7 @@ namespace RoslynTool.CsToDsl
             var paramNames = paramInfo.ParamNames;
 
             CodeBuilder.AppendFormat("orderby((function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
-            var opd = m_Model.GetOperation(node.Expression) as IConversionExpression;
+            var opd = m_Model.GetOperationEx(node.Expression) as IConversionExpression;
             OutputExpressionSyntax(node.Expression, opd);
             CodeBuilder.AppendFormat("); }}), {0})", node.AscendingOrDescendingKeyword.Text != "descending" ? "true" : "false");
         }
@@ -129,7 +129,7 @@ namespace RoslynTool.CsToDsl
             var paramNames = paramInfo.ParamNames;
 
             CodeBuilder.AppendFormat("select(function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
-            var opd = m_Model.GetOperation(node.Expression) as IConversionExpression;
+            var opd = m_Model.GetOperationEx(node.Expression) as IConversionExpression;
             OutputExpressionSyntax(node.Expression, opd);
             CodeBuilder.Append("); })");
         }
@@ -139,12 +139,12 @@ namespace RoslynTool.CsToDsl
             var paramNames = paramInfo.ParamNames;
 
             CodeBuilder.AppendFormat("groupby((function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
-            var opdGroup = m_Model.GetOperation(node.GroupExpression) as IConversionExpression;
+            var opdGroup = m_Model.GetOperationEx(node.GroupExpression) as IConversionExpression;
             OutputExpressionSyntax(node.GroupExpression, opdGroup);
             CodeBuilder.Append("); }), ");
 
             CodeBuilder.AppendFormat("(function({0}){{ return(", string.Join(", ", paramNames.ToArray()));
-            var opdBy = m_Model.GetOperation(node.ByExpression) as IConversionExpression;
+            var opdBy = m_Model.GetOperationEx(node.ByExpression) as IConversionExpression;
             OutputExpressionSyntax(node.ByExpression, opdBy);
             CodeBuilder.Append("); }))");
         }

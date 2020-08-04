@@ -17,11 +17,11 @@ namespace RoslynTool.CsToDsl
     {
         internal static void CheckMemberAccess(SemanticModel model, MemberAccessExpressionSyntax node, IMethodSymbol callerSym)
         {
-            var esym = model.GetSymbolInfo(node).Symbol as IEventSymbol;
-            var psym = model.GetSymbolInfo(node).Symbol as IPropertySymbol;
-            var fsym = model.GetSymbolInfo(node).Symbol as IFieldSymbol;
-            var msym = model.GetSymbolInfo(node).Symbol as IMethodSymbol;
-            var oper = model.GetOperation(node);
+            var esym = model.GetSymbolInfoEx(node).Symbol as IEventSymbol;
+            var psym = model.GetSymbolInfoEx(node).Symbol as IPropertySymbol;
+            var fsym = model.GetSymbolInfoEx(node).Symbol as IFieldSymbol;
+            var msym = model.GetSymbolInfoEx(node).Symbol as IMethodSymbol;
+            var oper = model.GetOperationEx(node);
 
             bool isExtern = false;
             INamedTypeSymbol classType = null;
