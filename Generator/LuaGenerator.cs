@@ -868,19 +868,21 @@ namespace Generator
             }
             sb.AppendLine();
             if (null != mergedInfo) {
-                foreach (string req in requireList) {
-                    if (!mergedInfo.Requires.Contains(req)) {
-                        mergedInfo.Requires.Add(req);
-                        mergedInfo.RequireList.Add(req);
+                lock (mergedInfo) {
+                    foreach (string req in requireList) {
+                        if (!mergedInfo.Requires.Contains(req)) {
+                            mergedInfo.Requires.Add(req);
+                            mergedInfo.RequireList.Add(req);
+                        }
                     }
-                }
-                mergedInfo.CodeBuilder.AppendLine(sb.ToString());
-                while (classDefineStack.Count > 0) {
-                    var className = classDefineStack.Pop();
-                    mergedInfo.DefinedClasses.Add(className);
-                }
-                if (!string.IsNullOrEmpty(entryClass)) {
-                    mergedInfo.EntryClass = entryClass;
+                    mergedInfo.CodeBuilder.AppendLine(sb.ToString());
+                    while (classDefineStack.Count > 0) {
+                        var className = classDefineStack.Pop();
+                        mergedInfo.DefinedClasses.Add(className);
+                    }
+                    if (!string.IsNullOrEmpty(entryClass)) {
+                        mergedInfo.EntryClass = entryClass;
+                    }
                 }
             }
             else {
