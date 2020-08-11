@@ -1389,10 +1389,10 @@ __mt_index_of_array = function(t, k)
     elseif k == "IndexOf" then                      --System.Collections.Generic.List<T>::IndexOf
         return function(obj, sig, p, start, count)
             local ct = __get_array_count(obj)
-            if not isnumber(count) then
+            if count==nil then
                 count = ct
             end
-            if not isnumber(start) then
+            if start==nil then
                 start = 0
             end
             for i = start+1, ct do
@@ -1406,10 +1406,10 @@ __mt_index_of_array = function(t, k)
     elseif k == "LastIndexOf" then                  --System.Collections.Generic.List<T>::LastIndexOf
         return function(obj, sig, p, start, count)
             local ct = __get_array_count(obj)
-            if not isnumber(count) then
+            if count==nil then
                 count = ct
             end
-            if not isnumber(start) then
+            if start==nil then
                 start = 0
             end
             for k = ct, start+1 do
@@ -1426,11 +1426,11 @@ __mt_index_of_array = function(t, k)
             local start = 0
             local count = ct
             local pred = p1
-            if isnumber(p1) and isnumber(p2) and p3 then
+            if p1~=nil and p2~=nil and p3~=nil then
                 start = p1
                 count = p2
                 pred = p3
-            elseif isnumber(p1) and p2 then
+            elseif p1~=nil and p2~=nil then
                 start = p1
                 pred = p2
             end
