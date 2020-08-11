@@ -1130,10 +1130,6 @@ namespace Generator
                 sb.Append("local ");
                 GenerateArguments(data, sb, indent, 0);
             }
-            else if (id == "ref" || id == "out") {
-                var param = data.GetParam(0);
-                GenerateSyntaxComponent(param, sb, indent, false);
-            }
             else if (id == "return") {
                 sb.Append("return ");
                 GenerateArguments(data, sb, indent, 0);

@@ -19,11 +19,10 @@ namespace RoslynTool.CsToDsl
         internal List<string> ParamTypes = new List<string>();
         internal List<string> ParamTypeKinds = new List<string>();
         internal List<string> ReturnParamNames = new List<string>();
-        internal List<string> OutParamNames = new List<string>();
         internal HashSet<int> ValueParams = new HashSet<int>();
         internal HashSet<int> ExternValueParams = new HashSet<int>();
-        internal List<string> GenericTypeTypeParamNames = new List<string>();
-        internal List<string> GenericMethodTypeParamNames = new List<string>();
+        internal HashSet<int> OutValueParams = new HashSet<int>();
+        internal HashSet<int> OutExternValueParams = new HashSet<int>();
         internal string OriginalParamsName = string.Empty;
         internal string ParamsElementInfo = string.Empty;
         internal bool ExistYield = false;
@@ -47,7 +46,6 @@ namespace RoslynTool.CsToDsl
 
             ParamNames.Clear();
             ReturnParamNames.Clear();
-            OutParamNames.Clear();
             OriginalParamsName = string.Empty;
             ExistYield = false;
             ExistTopLevelReturn = false;
@@ -59,15 +57,16 @@ namespace RoslynTool.CsToDsl
             SemanticInfo = sym;
             SyntaxNode = node;
 
-            if (sym.IsGenericMethod) {
+            if (!sym.IsExtensionMethod && sym.IsGenericMethod) {
+                //不是扩展方法，泛型参数放在参数表最前面
                 foreach (var param in sym.TypeParameters) {
                     ParamNames.Add(param.Name);
                     ParamTypes.Add("null");
                     ParamTypeKinds.Add("TypeKind." + param.TypeKind.ToString());
-                    GenericMethodTypeParamNames.Add(param.Name);
                 }
             }
 
+            bool first = true;
             foreach (var param in sym.Parameters) {
                 if (param.IsParams) {
                     var arrTypeSym = param.Type as IArrayTypeSymbol;
@@ -85,18 +84,24 @@ namespace RoslynTool.CsToDsl
                 }
                 else if (param.RefKind == RefKind.Ref) {
                     //ref参数与out参数在形参处理时机制相同，实参时out参数传入__cs2dsl_out（适应脚本引擎与dotnet反射的调用规则）
-                    ParamNames.Add(string.Format("ref({0})", param.Name));
+                    ParamNames.Add(param.Name);
                     ParamTypes.Add(ClassInfo.GetFullName(param.Type));
                     ParamTypeKinds.Add("TypeKind." + param.Type.TypeKind.ToString());
                     ReturnParamNames.Add(param.Name);
                 }
                 else if (param.RefKind == RefKind.Out) {
+                    if (param.Type.TypeKind == TypeKind.Struct && !CsDslTranslater.IsImplementationOfSys(param.Type, "IEnumerator")) {
+                        string ns = ClassInfo.GetNamespaces(param.Type);
+                        if (SymbolTable.Instance.IsCs2DslSymbol(param.Type))
+                            OutValueParams.Add(ParamNames.Count);
+                        else if (ns != "System")
+                            OutExternValueParams.Add(ParamNames.Count);
+                    }
                     //ref参数与out参数在形参处理时机制相同，实参时out参数传入__cs2dsl_out（适应脚本引擎与dotnet反射的调用规则）
-                    ParamNames.Add(string.Format("out({0})", param.Name));
+                    ParamNames.Add(param.Name);
                     ParamTypes.Add(ClassInfo.GetFullName(param.Type));
                     ParamTypeKinds.Add("TypeKind." + param.Type.TypeKind.ToString());
                     ReturnParamNames.Add(param.Name);
-                    OutParamNames.Add(param.Name);
                 }
                 else {
                     if (param.Type.TypeKind == TypeKind.Struct && !CsDslTranslater.IsImplementationOfSys(param.Type, "IEnumerator")) {
@@ -110,6 +115,15 @@ namespace RoslynTool.CsToDsl
                     ParamTypes.Add(ClassInfo.GetFullName(param.Type));
                     ParamTypeKinds.Add("TypeKind." + param.Type.TypeKind.ToString());
                 }
+                if (first && sym.IsExtensionMethod && sym.IsGenericMethod) {
+                    //扩展方法的泛型参数放在第一个参数后
+                    foreach (var tp in sym.TypeParameters) {
+                        ParamNames.Add(tp.Name);
+                        ParamTypes.Add("null");
+                        ParamTypeKinds.Add("TypeKind." + tp.TypeKind.ToString());
+                    }
+                }
+                first = false;
             }
 
             if (!sym.ReturnsVoid) {

@@ -300,7 +300,7 @@ end
 function luacatch(handled, ret, err, func)
     local retval = nil
     if not handled and not ret then
-        handled, retval = func(handled, {Message = err[1], StackTrace = err[2]})
+        handled, retval = func(handled, {Message = err[1], StackTrace = err[2], ToString = function() return Message end})
     end
     return handled, retval
 end
@@ -896,6 +896,21 @@ function wrapchar(char, intVal)
     end
 end
 
+function wrapoutstruct(v, classObj, typeKind)
+    return classObj()
+end
+
+function wrapoutexternstruct(v, classObj, typeKind)
+    if classObj == System.Collections.Generic.KeyValuePair_TKey_TValue then
+        return nil
+    elseif classObj == UnityEngine.Vector2 then
+        return UnityEngine.Vector2.zero
+    elseif classObj == UnityEngine.Vector3 then
+        return UnityEngine.Vector3.zero
+    end
+    return classObj()
+end
+
 function wrapstruct(v, classObj, typeKind)
     return v
 end
@@ -1352,21 +1367,35 @@ __mt_index_of_array = function(t, k)
             __inc_array_count(obj)
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
         end
-    elseif k == "IndexOf" then                      --System.Collections.Generic.List<T>::IndexOf
-        return function(obj, sig, p)
-            local ct = __get_array_count(obj)
-            for i = 1, ct do
-                local v = rawget(obj, i)
-                if rawequal(v,p) then
-                    return i - 1
-                end
+    elseif k == "InsertRange" then
+        return function(obj, ix, coll)
+            local ct = 0
+            local enumer = coll:GetEnumerator()
+            while enumer:MoveNext() do
+                table.insert(obj, ix + 1 + ct, enumer.Current)
+                __inc_array_count(obj)
+                ct = ct + 1
             end
-            return -1
+            -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
         end
-    elseif k == "IndexOf__Cs2LuaList_T_T" then      --Cs2Lua<T>::IndexOf
-        return function(obj, p)
+    elseif k == "RemoveRange" then
+        return function(obj, ix, ct)
+            for i=1,ct do                
+                table.remove(obj, ix + 1)
+                __dec_array_count(obj)
+            end
+            -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
+        end
+    elseif k == "IndexOf" then                      --System.Collections.Generic.List<T>::IndexOf
+        return function(obj, sig, p, start, count)
             local ct = __get_array_count(obj)
-            for i = 1, ct do
+            if not isnumber(count) then
+                count = ct
+            end
+            if not isnumber(start) then
+                start = 0
+            end
+            for i = start+1, ct do
                 local v = rawget(obj, i)
                 if rawequal(v,p) then
                     return i - 1
@@ -1375,20 +1404,15 @@ __mt_index_of_array = function(t, k)
             return -1
         end
     elseif k == "LastIndexOf" then                  --System.Collections.Generic.List<T>::LastIndexOf
-        return function(obj, sig, p)
+        return function(obj, sig, p, start, count)
             local ct = __get_array_count(obj)
-            for k = ct, 1 do
-                local v = rawget(obj, k)
-                if rawequal(v,p) then
-                    return k - 1
-                end
+            if not isnumber(count) then
+                count = ct
             end
-            return -1
-        end
-    elseif k == "LastIndexOf__Cs2LuaList_T_T" then  --Cs2LuaList<T>::LastIndexOf
-        return function(obj, p)
-            local ct = __get_array_count(obj)
-            for k = ct, 1 do
+            if not isnumber(start) then
+                start = 0
+            end
+            for k = ct, start+1 do
                 local v = rawget(obj, k)
                 if rawequal(v,p) then
                     return k - 1
@@ -1397,11 +1421,22 @@ __mt_index_of_array = function(t, k)
             return -1
         end
     elseif k == "FindIndex" then
-        return function(obj, sig, predicate)
+        return function(obj, sig, p1, p2, p3)
             local ct = __get_array_count(obj)
-            for i = 1, ct do
+            local start = 0
+            local count = ct
+            local pred = p1
+            if isnumber(p1) and isnumber(p2) and p3 then
+                start = p1
+                count = p2
+                pred = p3
+            elseif isnumber(p1) and p2 then
+                start = p1
+                pred = p2
+            end
+            for i = start+1, ct do
                 local v = rawget(obj, i)
-                if predicate(v) then
+                if pred(v) then
                     return i - 1
                 end
             end

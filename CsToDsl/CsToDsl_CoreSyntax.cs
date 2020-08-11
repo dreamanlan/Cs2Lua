@@ -227,9 +227,7 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendFormat("{0}local({1}); {1} = null;", GetIndentString(), retVar);
                     CodeBuilder.AppendLine();
                 }
-                if (mi.ValueParams.Count > 0) {
-                    OutputWrapValueParams(CodeBuilder, mi);
-                }
+                TryWrapValueParams(CodeBuilder, mi);
                 if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
                     CodeBuilder.AppendFormat("{0}local{{{1} = params({2});}};", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
                     CodeBuilder.AppendLine();

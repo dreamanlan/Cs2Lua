@@ -829,7 +829,8 @@ namespace RoslynTool.CsToDsl
                         var arrSym = oriparam.Type as IArrayTypeSymbol;
                         string fn;
                         if (arrSym.ElementType.TypeKind == TypeKind.TypeParameter) {
-                            fn = ClassInfo.GetFullNameWithTypeParameters(arrSym.ElementType);
+                            //fn = ClassInfo.GetFullNameWithTypeParameters(arrSym.ElementType);
+                            fn = arrSym.ElementType.Name;
                         }
                         else {
                             fn = ClassInfo.GetFullName(arrSym.ElementType);
@@ -837,7 +838,8 @@ namespace RoslynTool.CsToDsl
                         sb.Append(fn.Replace('.', '_'));
                     }
                     else if (oriparam.Type.TypeKind == TypeKind.TypeParameter) {
-                        string fn = ClassInfo.GetFullNameWithTypeParameters(oriparam.Type);
+                        //string fn = ClassInfo.GetFullNameWithTypeParameters(oriparam.Type);
+                        string fn = oriparam.Type.Name;
                         sb.Append(fn.Replace('.', '_'));
                     }
                     else {

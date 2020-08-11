@@ -323,6 +323,30 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.Append(", ");
             }
         }
+        private void TryWrapValueParams(StringBuilder codeBuilder, MethodInfo mi)
+        {
+            if (mi.OutValueParams.Count > 0 || mi.OutExternValueParams.Count > 0) {
+                OutputWrapOutValueParams(CodeBuilder, mi);
+            }
+            if (mi.ValueParams.Count > 0 || mi.ExternValueParams.Count > 0) {
+                OutputWrapValueParams(CodeBuilder, mi);
+            }
+        }
+        private void OutputWrapOutValueParams(StringBuilder codeBuilder, MethodInfo mi)
+        {
+            for (int i = 0; i < mi.ParamNames.Count; ++i) {
+                var name = mi.ParamNames[i];
+                var type = mi.ParamTypes[i];
+                if (mi.OutValueParams.Contains(i)) {
+                    codeBuilder.AppendFormat("{0}{1} = wrapoutstruct({2}, {3});", GetIndentString(), name, name, type);
+                    codeBuilder.AppendLine();
+                }
+                else if (mi.OutExternValueParams.Contains(i)) {
+                    codeBuilder.AppendFormat("{0}{1} = wrapoutexternstruct({2}, {3});", GetIndentString(), name, name, type);
+                    codeBuilder.AppendLine();
+                }
+            }
+        }
         private void OutputWrapValueParams(StringBuilder codeBuilder, MethodInfo mi)
         {
             for (int i = 0; i < mi.ParamNames.Count; ++i) {
