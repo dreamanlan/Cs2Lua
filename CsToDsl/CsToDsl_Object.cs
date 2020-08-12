@@ -294,6 +294,7 @@ namespace RoslynTool.CsToDsl
             }
 
             if (null != node.ExpressionBody) {
+                SymbolTable.Instance.NoImplProperties.TryAdd(declSym, false);
                 //只读特性表达式体初始化写法
                 StringBuilder curBuilder = ci.CurrentCodeBuilder;
                 if (declSym.IsStatic) {
@@ -376,6 +377,7 @@ namespace RoslynTool.CsToDsl
                     break;
                 }
             }
+            SymbolTable.Instance.NoImplProperties.TryAdd(declSym, noimpl);
 
             if (noimpl) {
                 //退化为field

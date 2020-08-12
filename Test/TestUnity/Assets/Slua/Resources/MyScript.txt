@@ -5,6 +5,7 @@ MyScript = {
 		return newobject(MyScript, nil, nil, "ctor", nil, ...);
 	end,
 	__define_class = function()
+		Utility.Warn("MyScript::__define_class begin");
 		local static = MyScript;
 		local static_methods = {
 			cctor = function()
@@ -26,8 +27,6 @@ MyScript = {
 			};
 			return static_fields;
 		end;
-		local static_props = nil;
-		local static_events = nil;
 
 		local instance_methods = {
 			Init = function(this, obj, mb)
@@ -61,21 +60,24 @@ MyScript = {
 						end), true, -5);
 					local b;
 					b = newexternobject(UnityEngine.Vector3, nil, nil, nil, "UnityEngine.Vector3:ctor__Single__Single__Single", typecast(((UnityEngine.Mathf.Cos(((((i * 3.14) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Struct), typecast(((UnityEngine.Mathf.Sin(((((i * 3.14) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Struct), 0);
+					b = wrapexternstruct(b, UnityEngine.Vector3);
 					this.cubes[(i + 1)].transform.position = b;
 					i = (i + 1);
 				end;
 				if ((this.fogStart <= 0) or (this.t > 1)) then 
 					this.fogStart = UnityEngine.Time.time;
 					this.bgCurrent = UnityEngine.Camera.main.backgroundColor;
+					this.bgCurrent = wrapexternstruct(this.bgCurrent, UnityEngine.Color);
 					local ix;
 					ix = UnityEngine.Random.Range("UnityEngine.Random:Range__Int32__Int32", 0, this.colors.Length);
 					this.bgColor = this.colors[(ix + 1)];
+					this.bgColor = wrapexternstruct(this.bgColor, UnityEngine.Color);
 				end;
 				this.t = (((UnityEngine.Time.time - this.fogStart)) / 10);
 				UnityEngine.Camera.main.backgroundColor = UnityEngine.Color.Lerp(this.bgCurrent, this.bgColor, this.t);
 			end,
 			Call = function(this, name, ...)
-				local args = wraparray{...};
+				local args = wrapparams({...}, System.Object, TypeKind.Class);
 			end,
 			TestCoroutine = wrapenumerable(function(this)
 				wrapyield(newexternobject(UnityEngine.WaitForSeconds, nil, nil, nil, 10), false, true);
@@ -100,7 +102,7 @@ MyScript = {
 				this.cubes = (function()
 					local d0;
 					d0 = this.max;
-					local arr = wraparray({}, d0);
+					local arr = wraparray({}, d0, UnityEngine.GameObject, TypeKind.Class);
 					for i0 = 1, d0 do
 						arr[i0] = nil;
 					end;
@@ -141,7 +143,7 @@ MyScript = {
 				end;
 				this.bgCurrent = newexternobject(UnityEngine.Color, nil, nil, nil);
 				this.bgColor = newexternobject(UnityEngine.Color, nil, nil, nil);
-				this.colors = wraparray({UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black});
+				this.colors = wraparray({UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black}, nil, UnityEngine.Color, TypeKind.Struct);
 			end,
 		};
 		local instance_fields_build = function()
@@ -160,76 +162,22 @@ MyScript = {
 			};
 			return instance_fields;
 		end;
-		local instance_props = nil;
-		local instance_events = nil;
 
 		local interfaces = {
 			"ITickPlugin",
 		};
-		local interface_map = {
-			ITickPlugin_Init = "Init",
-			ITickPlugin_Update = "Update",
-			ITickPlugin_FixedUpdate = "FixedUpdate",
-			ITickPlugin_LateUpdate = "LateUpdate",
-			ITickPlugin_Call = "Call",
-		};
 
-		local class_info = {
-			Kind = TypeKind.Class,
-		};
+		local class_info = nil;
 		local method_info = {
-			Init = {
-				Kind = MethodKind.Ordinary,
-			},
-			Update = {
-				Kind = MethodKind.Ordinary,
-			},
-			FixedUpdate = {
-				Kind = MethodKind.Ordinary,
-			},
-			LateUpdate = {
-				Kind = MethodKind.Ordinary,
-			},
-			Call = {
-				Kind = MethodKind.Ordinary,
-			},
-			TestCoroutine = {
-				Kind = MethodKind.Ordinary,
-				private = true,
-			},
-			Reset = {
-				Kind = MethodKind.Ordinary,
-				private = true,
-			},
 			ctor = {
 				Kind = MethodKind.Constructor,
 			},
 		};
 		local property_info = nil;
 		local event_info = nil;
-		local field_info = {
-			root = {
-			},
-			r = {
-			},
-			max = {
-			},
-			t = {
-			},
-			fogStart = {
-			},
-			bgCurrent = {
-			},
-			bgColor = {
-			},
-			cubes = {
-			},
-			colors = {
-			},
-		};
+		local field_info = nil;
 
-		Utility.Warn("MyScript::__define_class begin");
-		local __defineclass_return = defineclass(nil, "MyScript", "MyScript", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		local __defineclass_return = defineclass(nil, "MyScript", "MyScript", static, static_methods, static_fields_build, instance_methods, instance_fields_build, interfaces, class_info, method_info, property_info, event_info, field_info, false);
 		Utility.Warn("MyScript::__define_class end");
 		return __defineclass_return;
 	end,

@@ -552,7 +552,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append("getexterninstance(SymbolKind.");
                     else
                         CodeBuilder.Append("getinstance(SymbolKind.");
-                    CodeBuilder.Append(sym.Kind.ToString());
+                    CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(sym));
                     CodeBuilder.Append(", ");
                     OutputExpressionSyntax(node.Expression);
                     CodeBuilder.Append(", \"");
@@ -562,7 +562,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append("getexternstatic(SymbolKind.");
                     else
                         CodeBuilder.Append("getstatic(SymbolKind.");
-                    CodeBuilder.Append(sym.Kind.ToString());
+                    CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(sym));
                     CodeBuilder.Append(", ");
                     CodeBuilder.Append(className);
                     CodeBuilder.Append(", \"");
@@ -599,13 +599,12 @@ namespace RoslynTool.CsToDsl
                 }
                 else {
                     var psym = sym as IPropertySymbol;
-                    string fnOfIntf = string.Empty;
                     string mname = string.Empty;
                     bool propExplicitImplementInterface = false;
                     bool propForBasicValueType = false;
                     if (null != psym) {
                         if (!psym.IsStatic) {
-                            propExplicitImplementInterface = CheckExplicitInterfaceAccess(psym, ref fnOfIntf, ref mname);
+                            propExplicitImplementInterface = CheckExplicitInterfaceAccess(psym, ref mname);
                             var expOper = m_Model.GetOperationEx(node.Expression);
                             bool expIsBasicType = false;
                             if (null != expOper && SymbolTable.IsBasicType(expOper.Type)) {
@@ -616,9 +615,9 @@ namespace RoslynTool.CsToDsl
                     }
                     if (propExplicitImplementInterface) {
                         //这里不区分是否外部符号了，委托到动态语言的脚本库实现，可根据对象运行时信息判断
-                        CodeBuilder.AppendFormat("getwithinterface(");
+                        CodeBuilder.AppendFormat("getinstance(SymbolKind.Property, ");
                         OutputExpressionSyntax(node.Expression);
-                        CodeBuilder.AppendFormat(", \"{0}\", \"{1}\")", fnOfIntf, mname);
+                        CodeBuilder.AppendFormat(", \"{0}\")", mname);
                     }
                     else if (propForBasicValueType) {
                         //这里不区分是否外部符号了，委托到动态语言的脚本库实现，可根据对象运行时信息判断
@@ -636,7 +635,7 @@ namespace RoslynTool.CsToDsl
                                 CodeBuilder.Append("getexterninstance(SymbolKind.");
                             else
                                 CodeBuilder.Append("getinstance(SymbolKind.");
-                            CodeBuilder.Append(sym.Kind.ToString());
+                            CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(sym));
                             CodeBuilder.Append(", ");
                             OutputExpressionSyntax(node.Expression);
                         }
@@ -645,7 +644,7 @@ namespace RoslynTool.CsToDsl
                                 CodeBuilder.Append("getexternstatic(SymbolKind.");
                             else
                                 CodeBuilder.Append("getstatic(SymbolKind.");
-                            CodeBuilder.Append(sym.Kind.ToString());
+                            CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(sym));
                             CodeBuilder.Append(", ");
                             CodeBuilder.Append(className);
                         }
@@ -702,15 +701,13 @@ namespace RoslynTool.CsToDsl
                     OutputExpressionSyntax(node.Expression);
                 }
                 CodeBuilder.Append(", ");
+                string manglingName = NameMangling(psym.GetMethod);
                 if (!psym.IsStatic) {
-                    string fnOfIntf = "null";
-                    CheckExplicitInterfaceAccess(psym.GetMethod, ref fnOfIntf);
-                    CodeBuilder.AppendFormat("{0}, ", fnOfIntf);
+                    CheckExplicitInterfaceAccess(psym.GetMethod, ref manglingName);
                     string fullName = ClassInfo.GetFullName(psym.ContainingType);
                     CodeBuilder.Append(fullName);
                     CodeBuilder.Append(", ");
                 }
-                string manglingName = NameMangling(psym.GetMethod);
                 CodeBuilder.AppendFormat("\"{0}\", {1}, ", manglingName, psym.GetMethod.Parameters.Length);
                 InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), node);
                 ii.Init(psym.GetMethod, node.ArgumentList, m_Model);
@@ -778,15 +775,13 @@ namespace RoslynTool.CsToDsl
                         OutputExpressionSyntax(node.Expression);
                     }
                     CodeBuilder.Append(", ");
+                    string manglingName = NameMangling(psym.GetMethod);
                     if (!psym.IsStatic) {
-                        string fnOfIntf = "null";
-                        CheckExplicitInterfaceAccess(psym.GetMethod, ref fnOfIntf);
-                        CodeBuilder.AppendFormat("{0}, ", fnOfIntf);
+                        CheckExplicitInterfaceAccess(psym.GetMethod, ref manglingName);
                         string fullName = ClassInfo.GetFullName(psym.ContainingType);
                         CodeBuilder.Append(fullName);
                         CodeBuilder.Append(", ");
                     }
-                    string manglingName = NameMangling(psym.GetMethod);
                     CodeBuilder.AppendFormat("\"{0}\", {1}, ", manglingName, psym.GetMethod.Parameters.Length);
                     InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), node);
                     List<ExpressionSyntax> args = new List<ExpressionSyntax> { node.WhenNotNull };

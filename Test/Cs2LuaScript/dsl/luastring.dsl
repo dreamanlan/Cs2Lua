@@ -9,13 +9,13 @@ class(LuaString) {
 			return(newobject(LuaString, typeargs(), typekinds(), "ctor", null, ...));
 		};
 		Format__System_String__System_Object = function(str, arg){
-			return(callstatic(System.String, "Format", "System.String:Format__String__Object", str, arg));
+			return(callexternstatic(System.String, "Format", "System.String:Format__String__Object", str, arg));
 		};
 		Format__System_String__System_Object__System_Object = function(str, arg1, arg2){
-			return(callstatic(System.String, "Format", "System.String:Format__String__Object__Object", str, arg1, arg2));
+			return(callexternstatic(System.String, "Format", "System.String:Format__String__Object__Object", str, arg1, arg2));
 		};
 		Format__System_String__System_Object__System_Object__System_Object = function(str, arg1, arg2, arg3){
-			return(callstatic(System.String, "Format", "System.String:Format__String__Object__Object__Object", str, arg1, arg2, arg3));
+			return(callexternstatic(System.String, "Format", "System.String:Format__String__Object__Object__Object", str, arg1, arg2, arg3));
 		};
 		cctor = function(){
 			callstatic(LuaString, "__cctor");
@@ -39,10 +39,10 @@ class(LuaString) {
 			callinstance(this, "__ctor");
 		};
 		__ctor = function(this){
-			if(getinstance(this, "__ctor_called")){
+			if(getinstance(SymbolKind.Field, this, "__ctor_called")){
 				return;
 			}else{
-				setinstance(this, "__ctor_called", true);
+				setinstance(SymbolKind.Field, this, "__ctor_called", true);
 			};
 		};
 	};
@@ -53,7 +53,6 @@ class(LuaString) {
 	instance_events {};
 
 	interfaces {};
-	interface_map {};
 
 	class_info(TypeKind.Class, Accessibility.Internal) {
 	};

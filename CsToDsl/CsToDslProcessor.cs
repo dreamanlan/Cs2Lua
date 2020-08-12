@@ -1347,25 +1347,6 @@ namespace RoslynTool.CsToDsl
                         sb.AppendLine();
                     }
 
-                    if (csi.InterfaceMethodMap.Count > 0) {
-                        sb.AppendFormat("{0}interface_map {{", GetIndentString(indent));
-                        sb.AppendLine();
-                        ++indent;
-
-                        foreach (var pair in csi.InterfaceMethodMap) {
-                            sb.AppendFormat("{0}{1} = \"{2}\";", GetIndentString(indent), pair.Key, pair.Value);
-                            sb.AppendLine();
-                        }
-
-                        --indent;
-                        sb.AppendFormat("{0}}};", GetIndentString(indent));
-                        sb.AppendLine();
-                    }
-                    else {
-                        sb.AppendFormat("{0}interface_map {{}};", GetIndentString(indent));
-                        sb.AppendLine();
-                    }
-
                     sb.AppendLine();
 
                     //修饰信息

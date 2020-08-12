@@ -223,7 +223,7 @@ Cs2LuaLibrary = {
         if obj then
             local meta = getmetatable(obj)
             if meta and rawget(meta, "__cs2lua_defined") then
-                return true;
+                return true
             end
         end
         return false
@@ -351,7 +351,7 @@ end
 function getexternstaticindexer(callerClass, typeargs, typekinds, class, name, argCount, ...)
     return class[name](...)
 end
-function getexterninstanceindexer(callerClass, typeargs, typekinds, obj, intf, class, name, argCount, ...)
+function getexterninstanceindexer(callerClass, typeargs, typekinds, obj, class, name, argCount, ...)
     local args = {...}
     local index
     local meta = getmetatable(obj)
@@ -390,7 +390,7 @@ end
 function setexternstaticindexer(callerClass, typeargs, typekinds, class, name, argCount, toplevel, ...)
     return class[name](...)
 end
-function setexterninstanceindexer(callerClass, typeargs, typekinds, obj, intf, class, name, argCount, toplevel, ...)
+function setexterninstanceindexer(callerClass, typeargs, typekinds, obj, class, name, argCount, toplevel, ...)
     local args = {...}
     local num = #args
     local index
@@ -608,46 +608,6 @@ function invokeexternoperator(rettype, class, method, ...)
             elseif args[3] then
                 return args[3][method](...)
             end
-        end
-    else
-        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-    end
-    return nil
-end
-
-function invokewithinterface(obj, intf, method, ...)
-    local meta = getmetatable(obj)
-    if method then
-        if meta and rawget(meta, "__cs2lua_defined") then
-            return obj[method](obj, ...)
-        else
-            return obj[method](obj, ...)
-        end
-    else
-        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-    end
-    return nil
-end
-function getwithinterface(obj, intf, property)
-    local meta = getmetatable(obj)
-    if property then
-        if meta and rawget(meta, "__cs2lua_defined") then
-            return obj[property]
-        else
-            return obj[property]
-        end
-    else
-        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-    end
-    return nil
-end
-function setwithinterface(obj, intf, property, value)
-    local meta = getmetatable(obj)
-    if property then
-        if meta and rawget(meta, "__cs2lua_defined") then
-            obj[property] = value
-        else
-            obj[property] = value
         end
     else
         UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
@@ -986,7 +946,7 @@ function delegationwrap(handler)
     end
 end
 
-function delegationcomparewithnil(isevent, isStatic, key, t, inf, k, isequal)
+function delegationcomparewithnil(isevent, isStatic, key, t, k, isequal)
     if not t then
         if isequal then
             return true
@@ -1021,7 +981,7 @@ function delegationcomparewithnil(isevent, isStatic, key, t, inf, k, isequal)
         return false
     end
 end
-function delegationset(isevent, isStatic, key, t, intf, k, handler)
+function delegationset(isevent, isStatic, key, t, k, handler)
     local v = t
     if k then
         v = t[k]
@@ -1039,7 +999,7 @@ function delegationset(isevent, isStatic, key, t, intf, k, handler)
         return v
     end
 end
-function delegationadd(isevent, isStatic, key, t, intf, k, handler)
+function delegationadd(isevent, isStatic, key, t, k, handler)
     local v = t
     if k then
         v = t[k]
@@ -1051,7 +1011,7 @@ function delegationadd(isevent, isStatic, key, t, intf, k, handler)
     end
     return v
 end
-function delegationremove(isevent, isStatic, key, t, intf, k, handler)
+function delegationremove(isevent, isStatic, key, t, k, handler)
     local v = t
     if k then
         v = t[k]
@@ -1128,7 +1088,7 @@ function dumpexterndelegationtable()
     end
 end
 
-function externdelegationcomparewithnil(isevent, isStatic, key, t, inf, k, isequal)
+function externdelegationcomparewithnil(isevent, isStatic, key, t, k, isequal)
     local v = t
     if k then
         return true
@@ -1141,14 +1101,14 @@ function externdelegationcomparewithnil(isevent, isStatic, key, t, inf, k, isequ
         return false
     end
 end
-function externdelegationset(isevent, isStatic, key, t, intf, k, handler)
+function externdelegationset(isevent, isStatic, key, t, k, handler)
     if k then
         return handler
     else
         return handler
     end
 end
-function externdelegationadd(isevent, isStatic, key, t, intf, k, handler)
+function externdelegationadd(isevent, isStatic, key, t, k, handler)
     local str = getdelegationkey(handler)
     if str then
         setexterndelegationfunc(str .. key, handler)
@@ -1159,7 +1119,7 @@ function externdelegationadd(isevent, isStatic, key, t, intf, k, handler)
         return {"+=", handler}
     end
 end
-function externdelegationremove(isevent, isStatic, key, t, intf, k, handler)
+function externdelegationremove(isevent, isStatic, key, t, k, handler)
     local str = getdelegationkey(handler)
     local trueHandler = handler
     if str then
@@ -1295,6 +1255,8 @@ __mt_index_of_array = function(t, k)
         end
     elseif k == "Length" or k == "Count" then
         return __get_array_count(t)
+    elseif k == "get_Length" or k == "get_Count" then    
+        return function(obj) return __get_table_count(t) end
     elseif k == "GetLength" then
         return function(obj, ix)
             local ret = 0
@@ -1562,6 +1524,8 @@ __mt_index_of_dictionary = function(t, k)
         end
     elseif k == "Count" then
         return __get_table_count(t)
+    elseif k == "get_Count" then    
+        return function(obj) return __get_table_count(t) end
     elseif k == "Add" then
         return function(obj, p1, p2)
             p1 = __unwrap_if_string(p1)     
@@ -1691,6 +1655,8 @@ __mt_index_of_hashset = function(t, k)
         end
     elseif k == "Count" then
         return __get_table_count(t)
+    elseif k == "get_Count" then    
+        return function(obj) return __get_table_count(t) end
     elseif k == "Add" then
         return function(obj, p)
             p = __unwrap_if_string(p) 
@@ -2546,14 +2512,9 @@ function defineclass(
     static,
     static_methods,
     static_fields_build,
-    static_props,
-    static_events,
     instance_methods,
     instance_fields_build,
-    instance_props,
-    instance_events,
     interfaces,
-    interface_map,
     class_info,
     method_info,
     property_info,
@@ -2576,7 +2537,6 @@ function defineclass(
     rawset(class, "__cs2lua_parent", base_class)
     rawset(class, "__is_value_type", is_value_type)
     rawset(class, "__interfaces", interfaces)
-    rawset(class, "__interface_map", interface_map)
 
     local function __find_base_class_key(k)
         if nil == k then
@@ -2622,14 +2582,6 @@ function defineclass(
         if nil ~= ret then
             return true
         end
-        ret = class_props[k]
-        if nil ~= ret then
-            return true
-        end
-        ret = class_events[k]
-        if nil ~= ret then
-            return true
-        end
         return __find_base_class_key(k)
     end
     local function __wrap_virtual_method(k, f)
@@ -2667,9 +2619,6 @@ function defineclass(
                     local minfo = method_info[k]
                     if not minfo then
                         obj[k] = v
-                        if k ~= "__ctor" then
-                            UnityEngine.Debug.LogError("LogError_String", "can't found method " .. tostring(k))
-                        end
                     else
                         if minfo["abstract"] or minfo["virtual"] or minfo["override"] then
                             obj[k] = __wrap_virtual_method(k, v)
@@ -2687,9 +2636,6 @@ function defineclass(
                 else
                     obj_fields = {}
                 end
-                local obj_props = instance_props or {}
-                local obj_events = instance_events or {}
-                local obj_intf_map = interface_map or {}
 
                 obj["base"] = baseObj
                 if baseObj then
@@ -2741,29 +2687,6 @@ function defineclass(
                     if nil ~= ret then
                         return true
                     end
-                    ret = obj_props[k]
-                    if nil ~= ret then
-                        return true
-                    end
-                    ret = obj_events[k]
-                    if nil ~= ret then
-                        return true
-                    end
-                    local nk = obj_intf_map[k]
-                    if nil ~= nk then
-                        ret = obj_fields[nk]
-                        if nil ~= ret then
-                            return true
-                        end
-                        ret = obj_props[nk]
-                        if nil ~= ret then
-                            return true
-                        end
-                        ret = obj_events[nk]
-                        if nil ~= ret then
-                            return true
-                        end
-                    end
                     return __find_base_obj_key(k)
                 end
 
@@ -2777,7 +2700,6 @@ function defineclass(
                         __cs2lua_parent = base_class,
                         __is_value_type = is_value_type,
                         __interfaces = interfaces,
-                        __interface_map = interface_map,
                         __index = function(t, k)
                             if k == "__exist" then
                                 return function(tb, fk)
@@ -2792,31 +2714,6 @@ function defineclass(
                             ret = obj_fields[k]
                             if nil ~= ret then
                                 return __unwrap_table_field(ret)
-                            end
-                            ret = obj_props[k]
-                            if nil ~= ret then
-                                if ret.get then
-                                    ret = ret.get(t)
-                                else
-                                    ret = nil
-                                end
-                                return ret
-                            end
-                            ret = obj_intf_map[k]
-                            if nil ~= ret then
-                                ret = obj_fields[ret]
-                                if nil ~= ret then
-                                    return ret
-                                end
-                                ret = obj_props[ret]
-                                if nil ~= ret then
-                                    if ret.get then
-                                        ret = ret.get(t)
-                                    else
-                                        ret = nil
-                                    end
-                                    return ret
-                                end
                             end
                             if __find_base_obj_key(k) then
                                 ret = baseObj[k]
@@ -2840,23 +2737,6 @@ function defineclass(
                             if nil ~= ret then
                                 obj_fields[k] = __wrap_table_field(v)
                                 return
-                            end
-                            ret = obj_props[k]
-                            if nil ~= ret then
-                                if ret.set then
-                                    ret.set(t, v)
-                                end
-                                return
-                            end
-                            ret = obj_intf_map[k]
-                            if nil ~= ret then
-                                ret = obj_props[ret]
-                                if nil ~= ret then
-                                    if ret.set then
-                                        ret.set(t, v)
-                                    end
-                                    return
-                                end
                             end
                             if __find_base_obj_key(k) then
                                 baseObj[k] = v
@@ -2887,15 +2767,6 @@ function defineclass(
                 if nil ~= ret then
                     return __unwrap_table_field(ret)
                 end
-                ret = class_props[k]
-                if nil ~= ret then
-                    if ret.get then
-                        ret = ret.get(t)
-                    else
-                        ret = nil
-                    end
-                    return ret
-                end
                 if __find_base_class_key(k) then
                     ret = base_class[k]
                     return ret
@@ -2917,13 +2788,6 @@ function defineclass(
                 ret = class_fields[k]
                 if nil ~= ret then
                     class_fields[k] = __wrap_table_field(v)
-                    return
-                end
-                ret = class_props[k]
-                if nil ~= ret then
-                    if ret.set then
-                        ret.set(t, v)
-                    end
                     return
                 end
                 if __find_base_class_key(k) then

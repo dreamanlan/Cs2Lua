@@ -107,16 +107,10 @@ namespace RoslynTool.CsToDsl
         }
         internal bool CheckExplicitInterfaceAccess(ISymbol sym)
         {
-            string nameOfIntf = null;
             string mname = null;
-            return CheckExplicitInterfaceAccess(sym, ref nameOfIntf, ref mname);
+            return CheckExplicitInterfaceAccess(sym, ref mname);
         }
-        internal bool CheckExplicitInterfaceAccess(ISymbol sym, ref string nameOfIntf)
-        {
-            string mname = null;
-            return CheckExplicitInterfaceAccess(sym, ref nameOfIntf, ref mname);
-        }
-        internal bool CheckExplicitInterfaceAccess(ISymbol sym, ref string nameOfIntf, ref string mname)
+        internal bool CheckExplicitInterfaceAccess(ISymbol sym, ref string mname)
         {
             bool ret = false;
             if (sym.ContainingType.TypeKind == TypeKind.Interface) {
@@ -126,38 +120,26 @@ namespace RoslynTool.CsToDsl
                     switch (sym.Kind) {
                         case SymbolKind.Method:
                             IMethodSymbol msym = sym as IMethodSymbol;
-                            if (csi.ExplicitInterfaceImplementationMethods.Contains(msym)) {
+                            IMethodSymbol rmsym;
+                            if (csi.ExplicitInterfaceImplementationMethods.TryGetValue(msym, out rmsym)) {
                                 ret = true;
-                                if (null != nameOfIntf) {
-                                    nameOfIntf = string.Format("\"{0}\"", fn.Replace(".", "_"));
-                                }
-                                if (null != mname) {
-                                    mname = string.Format("\"{0}\"", NameMangling(msym));
-                                }
+                                mname = SymbolTable.GetMethodName(rmsym);
                             }
                             break;
                         case SymbolKind.Property:
                             IPropertySymbol psym = sym as IPropertySymbol;
-                            if (csi.ExplicitInterfaceImplementationProperties.Contains(psym)) {
+                            IPropertySymbol rpsym;
+                            if (csi.ExplicitInterfaceImplementationProperties.TryGetValue(psym, out rpsym)) {
                                 ret = true;
-                                if (null != nameOfIntf) {
-                                    nameOfIntf = string.Format("\"{0}\"", fn.Replace(".", "_"));
-                                }
-                                if (null != mname) {
-                                    mname = string.Format("\"{0}\"", SymbolTable.GetPropertyName(psym));
-                                }
+                                mname = SymbolTable.GetPropertyName(rpsym);
                             }
                             break;
                         case SymbolKind.Event:
                             IEventSymbol esym = sym as IEventSymbol;
-                            if (csi.ExplicitInterfaceImplementationEvents.Contains(esym)) {
+                            IEventSymbol resym;
+                            if (csi.ExplicitInterfaceImplementationEvents.TryGetValue(esym, out resym)) {
                                 ret = true;
-                                if (null != nameOfIntf) {
-                                    nameOfIntf = string.Format("\"{0}\"", fn.Replace(".", "_"));
-                                }
-                                if (null != mname) {
-                                    mname = string.Format("\"{0}\"", SymbolTable.GetEventName(esym));
-                                }
+                                mname = SymbolTable.GetEventName(esym);
                             }
                             break;
                     }
@@ -730,7 +712,7 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.Append("getexternstatic(SymbolKind.");
                         else
                             CodeBuilder.Append("getstatic(SymbolKind.");
-                        CodeBuilder.Append(field.Kind.ToString());
+                        CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(field));
                         CodeBuilder.Append(", ");
                         CodeBuilder.Append(ClassInfo.GetFullName(field.Type));
                         CodeBuilder.Append(", \"");
@@ -744,7 +726,7 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.Append("getexternstatic(SymbolKind.");
                         else
                             CodeBuilder.Append("getstatic(SymbolKind.");
-                        CodeBuilder.Append(property.Kind.ToString());
+                        CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(property));
                         CodeBuilder.Append(", ");
                         CodeBuilder.Append(ClassInfo.GetFullName(property.Type));
                         CodeBuilder.Append(", \"");
@@ -940,36 +922,35 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, memberAccess.Name.Identifier.Text);
                     OutputExpressionSyntax(memberAccess.Expression, opd);
                     CodeBuilder.Append(", ");
-                    string intf = "null";
-                    string mname = string.Format("\"{0}\"", memberAccess.Name.Identifier.Text);
-                    CheckExplicitInterfaceAccess(leftSym, ref intf, ref mname);
-                    CodeBuilder.AppendFormat("{0}, {1}", intf, mname);
+                    string mname = memberAccess.Name.Identifier.Text;
+                    CheckExplicitInterfaceAccess(leftSym, ref mname);
+                    CodeBuilder.AppendFormat("\"{0}\"", mname);
                 }
                 else if (leftSym.ContainingType == ci.SemanticInfo || leftSym.ContainingType == ci.SemanticInfo.OriginalDefinition || ci.IsInherit(leftSym.ContainingType)) {
                     CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
                     if (isStatic)
-                        CodeBuilder.AppendFormat("{0}, null, ", ClassInfo.GetFullName(leftSym.ContainingType));
+                        CodeBuilder.AppendFormat("{0}, ", ClassInfo.GetFullName(leftSym.ContainingType));
                     else
-                        CodeBuilder.Append("this, null, ");
+                        CodeBuilder.Append("this, ");
                     CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
                 }
                 else {
                     CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
                     OutputExpressionSyntax(left, opd);
-                    CodeBuilder.Append(", null, null");
+                    CodeBuilder.Append(", null");
                 }
             }
             else if (null != leftSym) {
                 string containingName = ClassInfo.GetFullName(leftSym.ContainingType);
                 CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
                 OutputExpressionSyntax(left, opd);
-                CodeBuilder.Append(", null, null");
+                CodeBuilder.Append(", null");
             }
             else {
                 string containingName = ClassInfo.GetFullName(leftOper.Type);
                 CodeBuilder.AppendFormat("\"{0}\", ", containingName);
                 OutputExpressionSyntax(left, opd);
-                CodeBuilder.Append(", null, null");
+                CodeBuilder.Append(", null");
             }
             CodeBuilder.AppendFormat(", {0})", isEqual ? "true" : "false");
         }

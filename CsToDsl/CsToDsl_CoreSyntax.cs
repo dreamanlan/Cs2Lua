@@ -905,12 +905,11 @@ namespace RoslynTool.CsToDsl
             InvocationExpressionSyntax invocation = assign.Right as InvocationExpressionSyntax;
             if (specialType == SpecialAssignmentType.PropExplicitImplementInterface) {
                 //这里不区分是否外部符号了，委托到动态语言的脚本库实现，可根据对象运行时信息判断
-                string fnOfIntf = "null";
-                string mname = "null";
-                CheckExplicitInterfaceAccess(leftPsym, ref fnOfIntf, ref mname);
-                CodeBuilder.AppendFormat("setwithinterface(");
+                string mname = string.Empty;
+                CheckExplicitInterfaceAccess(leftPsym, ref mname);
+                CodeBuilder.AppendFormat("setinstance(SymbolKind.Property, ");
                 OutputExpressionSyntax(leftMemberAccess.Expression);
-                CodeBuilder.AppendFormat(", {0}, {1}, ", fnOfIntf, mname);
+                CodeBuilder.AppendFormat(", \"{0}\", ", mname);
                 OutputExpressionSyntax(assign.Right, opd);
                 CodeBuilder.Append(")");
             }
@@ -977,7 +976,7 @@ namespace RoslynTool.CsToDsl
                                 CodeBuilder.Append("setexternstatic(SymbolKind.");
                             else
                                 CodeBuilder.Append("setstatic(SymbolKind.");
-                            CodeBuilder.Append(leftSym.Kind.ToString());
+                            CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(leftSym));
                             CodeBuilder.Append(", ");
                             CodeBuilder.Append(className);
                             CodeBuilder.AppendFormat(", \"{0}\", ", memberName);
@@ -987,7 +986,7 @@ namespace RoslynTool.CsToDsl
                                 CodeBuilder.Append("setexterninstance(SymbolKind.");
                             else
                                 CodeBuilder.Append("setinstance(SymbolKind.");
-                            CodeBuilder.Append(leftSym.Kind.ToString());
+                            CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(leftSym));
                             CodeBuilder.Append(", ");
                             if (null != leftMemberAccess)
                                 OutputExpressionSyntax(leftMemberAccess.Expression);
@@ -1013,7 +1012,7 @@ namespace RoslynTool.CsToDsl
                                 CodeBuilder.Append("setexternstatic(SymbolKind.");
                             else
                                 CodeBuilder.Append("setstatic(SymbolKind.");
-                            CodeBuilder.Append(leftSym.Kind.ToString());
+                            CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(leftSym));
                             CodeBuilder.Append(", ");
                             CodeBuilder.Append(className);
                             CodeBuilder.AppendFormat(", \"{0}\", ", memberName);
@@ -1023,7 +1022,7 @@ namespace RoslynTool.CsToDsl
                                 CodeBuilder.Append("setexterninstance(SymbolKind.");
                             else
                                 CodeBuilder.Append("setinstance(SymbolKind.");
-                            CodeBuilder.Append(leftSym.Kind.ToString());
+                            CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(leftSym));
                             CodeBuilder.Append(", ");
                             if (null != leftMemberAccess)
                                 OutputExpressionSyntax(leftMemberAccess.Expression);
@@ -1123,15 +1122,13 @@ namespace RoslynTool.CsToDsl
                     OutputExpressionSyntax(leftElementAccess.Expression);
                 }
                 CodeBuilder.Append(", ");
+                string manglingName = NameMangling(leftPsym.SetMethod);
                 if (!leftPsym.IsStatic) {
-                    string fnOfIntf = "null";
-                    CheckExplicitInterfaceAccess(leftPsym.SetMethod, ref fnOfIntf);
-                    CodeBuilder.AppendFormat("{0}, ", fnOfIntf);
+                    CheckExplicitInterfaceAccess(leftPsym.SetMethod, ref manglingName);
                     string fullName = ClassInfo.GetFullName(leftPsym.ContainingType);
                     CodeBuilder.Append(fullName);
                     CodeBuilder.Append(", ");
                 }
-                string manglingName = NameMangling(leftPsym.SetMethod);
                 CodeBuilder.AppendFormat("\"{0}\", {1}, {2}, ", manglingName, leftPsym.SetMethod.Parameters.Length, toplevel ? "true" : "false");
                 InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), leftElementAccess);
                 ii.Init(leftPsym.SetMethod, leftElementAccess.ArgumentList, m_Model);
@@ -1217,15 +1214,13 @@ namespace RoslynTool.CsToDsl
                         OutputExpressionSyntax(leftCondAccess.Expression);
                     }
                     CodeBuilder.Append(", ");
+                    string manglingName = NameMangling(psym.SetMethod);
                     if (!psym.IsStatic) {
-                        string fnOfIntf = "null";
-                        CheckExplicitInterfaceAccess(psym.SetMethod, ref fnOfIntf);
-                        CodeBuilder.AppendFormat("{0}, ", fnOfIntf);
+                        CheckExplicitInterfaceAccess(psym.SetMethod, ref manglingName);
                         string fullName = ClassInfo.GetFullName(psym.ContainingType);
                         CodeBuilder.Append(fullName);
                         CodeBuilder.Append(", ");
                     }
-                    string manglingName = NameMangling(psym.SetMethod);
                     CodeBuilder.AppendFormat("\"{0}\", {1}, false, ", manglingName, psym.SetMethod.Parameters.Length);
                     InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), leftCondAccess);
                     List<ExpressionSyntax> args = new List<ExpressionSyntax> { leftCondAccess.WhenNotNull };
@@ -1514,29 +1509,28 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, memberAccess.Name.Identifier.Text);
                     OutputExpressionSyntax(memberAccess.Expression);
                     CodeBuilder.Append(", ");
-                    string intf = "null";
-                    string mname = string.Format("\"{0}\"", memberAccess.Name.Identifier.Text);
-                    CheckExplicitInterfaceAccess(leftSym, ref intf, ref mname);
-                    CodeBuilder.AppendFormat("{0}, {1}", intf, mname);
+                    string mname = memberAccess.Name.Identifier.Text;
+                    CheckExplicitInterfaceAccess(leftSym, ref mname);
+                    CodeBuilder.AppendFormat("\"{0}\"", mname);
                 }
                 else if (leftSym.ContainingType == ci.SemanticInfo || leftSym.ContainingType == ci.SemanticInfo.OriginalDefinition || ci.IsInherit(leftSym.ContainingType)) {
                     CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
                     if (leftSym.IsStatic)
-                        CodeBuilder.AppendFormat("{0}, null, ", ClassInfo.GetFullName(leftSym.ContainingType));
+                        CodeBuilder.AppendFormat("{0}, ", ClassInfo.GetFullName(leftSym.ContainingType));
                     else
-                        CodeBuilder.Append("this, null, ");
+                        CodeBuilder.Append("this, ");
                     CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
                 }
                 else {
                     CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
-                    CodeBuilder.Append("newobj, null, ");
+                    CodeBuilder.Append("newobj, ");
                     CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
                 }
             }
             else {
                 CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
                 OutputExpressionSyntax(assign.Left);
-                CodeBuilder.Append(", null, null");
+                CodeBuilder.Append(", null");
             }
             CodeBuilder.Append(", ");
             OutputExpressionSyntax(assign.Right, opd);

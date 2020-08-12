@@ -233,15 +233,15 @@ namespace RoslynTool.CsToDsl
                     }
                     else if (sym.Kind == SymbolKind.Field || sym.Kind == SymbolKind.Property || sym.Kind == SymbolKind.Event) {
                         if (IsNewObjMember(name)) {
-                            CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, newobj, \"{2}\")", isExtern ? "getexterninstance" : "getinstance", sym.Kind.ToString(), name);
+                            CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, newobj, \"{2}\")", isExtern ? "getexterninstance" : "getinstance", SymbolTable.Instance.GetSymbolKind(sym), name);
                             return;
                         }
                         if (sym.ContainingType == classInfo.SemanticInfo || sym.ContainingType == classInfo.SemanticInfo.OriginalDefinition || classInfo.IsInherit(sym.ContainingType)) {
                             if (sym.IsStatic) {
-                                CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, {2}, \"{3}\")", isExtern ? "getexternstatic" : "getstatic", sym.Kind.ToString(), classInfo.Key, sym.Name);
+                                CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, {2}, \"{3}\")", isExtern ? "getexternstatic" : "getstatic", SymbolTable.Instance.GetSymbolKind(sym), classInfo.Key, sym.Name);
                             }
                             else {
-                                CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, this, \"{2}\")", isExtern ? "getexterninstance" : "getinstance", sym.Kind.ToString(), sym.Name);
+                                CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, this, \"{2}\")", isExtern ? "getexterninstance" : "getinstance", SymbolTable.Instance.GetSymbolKind(sym), sym.Name);
                             }
                             return;
                         }
@@ -253,10 +253,10 @@ namespace RoslynTool.CsToDsl
                         mi.Init(msym, node);
                         if (node.Parent is InvocationExpressionSyntax) {
                             if (sym.IsStatic) {
-                                CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, {2}, \"{3}\")", isExtern ? "getexternstatic" : "getstatic", sym.Kind.ToString(), classInfo.Key, manglingName);
+                                CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, {2}, \"{3}\")", isExtern ? "getexternstatic" : "getstatic", SymbolTable.Instance.GetSymbolKind(sym), classInfo.Key, manglingName);
                             }
                             else {
-                                CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, this, \"{2}\")", isExtern ? "getexterninstance" : "getinstance", sym.Kind.ToString(), manglingName);
+                                CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, this, \"{2}\")", isExtern ? "getexterninstance" : "getinstance", SymbolTable.Instance.GetSymbolKind(sym), manglingName);
                             }
                         }
                         else {

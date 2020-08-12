@@ -270,7 +270,7 @@ namespace RoslynTool.CsToDsl
             string mname = cs2dsl.NameMangling(IsExtensionMethod && !IsExternMethod && null != sym.ReducedFrom ? sym.ReducedFrom : sym);
             string prestr = string.Empty;
             if (isMemberAccess) {
-                string fnOfIntf = "null";
+                string fnOfIntf = string.Empty;
                 var expOper = model.GetOperationEx(exp);
                 bool isExplicitInterfaceInvoke = cs2dsl.CheckExplicitInterfaceAccess(sym, ref fnOfIntf);
                 bool expIsBasicType = false;
@@ -294,10 +294,10 @@ namespace RoslynTool.CsToDsl
                 }
                 else if (isExplicitInterfaceInvoke) {
                     //这里不区分是否外部符号了，委托到动态语言的脚本库实现，可根据对象运行时信息判断
-                    codeBuilder.Append("invokewithinterface(");
+                    codeBuilder.Append("callinstance(");
                     cs2dsl.OutputExpressionSyntax(exp);
                     codeBuilder.Append(", ");
-                    codeBuilder.AppendFormat("{0}, \"{1}\"", fnOfIntf, mname);
+                    codeBuilder.AppendFormat("\"{0}\"", fnOfIntf);
                     prestr = ", ";
                 }
                 else if (IsExtensionMethod) {

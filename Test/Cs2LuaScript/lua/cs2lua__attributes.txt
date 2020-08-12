@@ -1,4 +1,9 @@
 __cs2lua__AllAttrs = {};
+__cs2lua__AllAttrs["Cs2LuaType"] = {
+	GetFullName = {
+		{"Cs2Dsl.TranslateToAttribute", {luaModuleName = "Cs2LuaTypeImpl", targetMethodName = "Cs2LuaTypeImpl.GetFullName"}, {}};
+	};
+};
 __cs2lua__AllAttrs["Program"] = {
 	Class = {
 		{"Cs2Dsl.EntryAttribute", {}, {}};

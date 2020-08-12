@@ -437,64 +437,7 @@ namespace Generator
                     sb.AppendFormatLine("{0}return static_fields;", GetIndentString(indent));
                     --indent;
                     sb.AppendFormatLine("{0}end;", GetIndentString(indent));
-
-                    var staticProps = FindStatement(funcData, "static_props") as Dsl.FunctionData;
-                    if (null != staticProps && staticProps.GetParamNum() > 0) {
-                        sb.AppendFormatLine("{0}local static_props = {{", GetIndentString(indent));
-                        ++indent;
-                        foreach (var def in staticProps.Params) {
-                            var mdef = def as Dsl.FunctionData;
-                            if (mdef.GetId() == "=") {
-                                string mname = mdef.GetParamId(0);
-                                var prop = mdef.GetParam(1);
-                                sb.AppendFormatLine("{0}{1} = {{", GetIndentString(indent), mname);
-                                ++indent;
-                                var body = prop as Dsl.FunctionData;
-                                if (null != body) {
-                                    foreach (var comp in body.Params) {
-                                        GenerateSyntaxComponent(comp, sb, indent, true);
-                                        sb.AppendLine(",");
-                                    }
-                                }
-                                --indent;
-                                sb.AppendFormatLine("{0}}},", GetIndentString(indent));
-                            }
-                        }
-                        --indent;
-                        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    }
-                    else {
-                        sb.AppendFormatLine("{0}local static_props = nil;", GetIndentString(indent));
-                    }
-                    var staticEvents = FindStatement(funcData, "static_events") as Dsl.FunctionData;
-                    if (null != staticEvents && staticEvents.GetParamNum() > 0) {
-                        sb.AppendFormatLine("{0}local static_events = {{", GetIndentString(indent));
-                        ++indent;
-                        foreach (var def in staticEvents.Params) {
-                            var mdef = def as Dsl.FunctionData;
-                            if (mdef.GetId() == "=") {
-                                string mname = mdef.GetParamId(0);
-                                var evt = mdef.GetParam(1);
-                                sb.AppendFormatLine("{0}{1} = {{", GetIndentString(indent), mname);
-                                ++indent;
-                                var body = evt as Dsl.FunctionData;
-                                if (null != body) {
-                                    foreach (var comp in body.Params) {
-                                        GenerateSyntaxComponent(comp, sb, indent, true);
-                                        sb.AppendLine(",");
-                                    }
-                                }
-                                --indent;
-                                sb.AppendFormatLine("{0}}},", GetIndentString(indent));
-                            }
-                        }
-                        --indent;
-                        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    }
-                    else {
-                        sb.AppendFormatLine("{0}local static_events = nil;", GetIndentString(indent));
-                    }
-
+                    
                     sb.AppendLine();
 
                     var instMethods = FindStatement(funcData, "instance_methods") as Dsl.FunctionData;
@@ -599,64 +542,7 @@ namespace Generator
                     sb.AppendFormatLine("{0}return instance_fields;", GetIndentString(indent));
                     --indent;
                     sb.AppendFormatLine("{0}end;", GetIndentString(indent));
-
-                    var instanceProps = FindStatement(funcData, "instance_props") as Dsl.FunctionData;
-                    if (null != instanceProps && instanceProps.GetParamNum() > 0) {
-                        sb.AppendFormatLine("{0}local instance_props = {{", GetIndentString(indent));
-                        ++indent;
-                        foreach (var def in instanceProps.Params) {
-                            var mdef = def as Dsl.FunctionData;
-                            if (mdef.GetId() == "=") {
-                                string mname = mdef.GetParamId(0);
-                                var prop = mdef.GetParam(1);
-                                sb.AppendFormatLine("{0}{1} = {{", GetIndentString(indent), mname);
-                                ++indent;
-                                var body = prop as Dsl.FunctionData;
-                                if (null != body) {
-                                    foreach (var comp in body.Params) {
-                                        GenerateSyntaxComponent(comp, sb, indent, true);
-                                        sb.AppendLine(",");
-                                    }
-                                }
-                                --indent;
-                                sb.AppendFormatLine("{0}}},", GetIndentString(indent));
-                            }
-                        }
-                        --indent;
-                        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    }
-                    else {
-                        sb.AppendFormatLine("{0}local instance_props = nil;", GetIndentString(indent));
-                    }
-                    var instanceEvents = FindStatement(funcData, "instance_events") as Dsl.FunctionData;
-                    if (null != instanceEvents && instanceEvents.GetParamNum() > 0) {
-                        sb.AppendFormatLine("{0}local instance_events = {{", GetIndentString(indent));
-                        ++indent;
-                        foreach (var def in instanceProps.Params) {
-                            var mdef = def as Dsl.FunctionData;
-                            if (mdef.GetId() == "=") {
-                                string mname = mdef.GetParamId(0);
-                                var evt = mdef.GetParam(1);
-                                sb.AppendFormatLine("{0}{1} = {{", GetIndentString(indent), mname);
-                                ++indent;
-                                var body = evt as Dsl.FunctionData;
-                                if (null != body) {
-                                    foreach (var comp in body.Params) {
-                                        GenerateSyntaxComponent(comp, sb, indent, true);
-                                        sb.AppendLine(",");
-                                    }
-                                }
-                                --indent;
-                                sb.AppendFormatLine("{0}}},", GetIndentString(indent));
-                            }
-                        }
-                        --indent;
-                        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    }
-                    else {
-                        sb.AppendFormatLine("{0}local instance_events = nil;", GetIndentString(indent));
-                    }
-
+                    
                     sb.AppendLine();
 
                     var interfaces = FindStatement(funcData, "interfaces") as Dsl.FunctionData;
@@ -673,29 +559,11 @@ namespace Generator
                     else {
                         sb.AppendFormatLine("{0}local interfaces = nil;", GetIndentString(indent));
                     }
-                    var interfaceMap = FindStatement(funcData, "interface_map") as Dsl.FunctionData;
-                    if (null != interfaceMap && interfaceMap.GetParamNum() > 0) {
-                        sb.AppendFormatLine("{0}local interface_map = {{", GetIndentString(indent));
-                        ++indent;
-                        foreach (var def in interfaceMap.Params) {
-                            var mdef = def as Dsl.FunctionData;
-                            if (mdef.GetId() == "=") {
-                                string mname = mdef.GetParamId(0);
-                                string mvalue = mdef.GetParamId(1);
-                                sb.AppendFormatLine("{0}{1} = \"{2}\",", GetIndentString(indent), mname, mvalue);
-                            }
-                        }
-                        --indent;
-                        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    }
-                    else {
-                        sb.AppendFormatLine("{0}local interface_map = nil;", GetIndentString(indent));
-                    }
 
                     sb.AppendLine();
 
                     var classInfo = FindStatement(funcData, "class_info") as Dsl.FunctionData;
-                    if (null != classInfo) {
+                    if (s_GenClassInfo && null != classInfo) {
                         var fcall = classInfo;
                         if (classInfo.IsHighOrder)
                             fcall = classInfo.LowerOrderFunction;
@@ -716,6 +584,9 @@ namespace Generator
                         --indent;
                         sb.AppendFormatLine("{0}}};", GetIndentString(indent));
                     }
+                    else {
+                        sb.AppendFormatLine("{0}local class_info = nil;", GetIndentString(indent));
+                    }
 
                     var methodInfo = FindStatement(funcData, "method_info") as Dsl.FunctionData;
                     if (null != methodInfo && methodInfo.GetParamNum() > 0) {
@@ -727,22 +598,43 @@ namespace Generator
                                 var fcall = mfunc;
                                 if (mfunc.IsHighOrder)
                                     fcall = mfunc.LowerOrderFunction;
-                                sb.AppendFormatLine("{0}{1} = {{", GetIndentString(indent), mfunc.GetId());
-                                ++indent;
-                                var kind = CalcTypeString(fcall.GetParam(0));
-                                var accessibility = CalcTypeString(fcall.GetParam(1));
-                                sb.AppendFormatLine("{0}Kind = {1},", GetIndentString(indent), kind);
-                                if (accessibility == "Accessibility.Private") {
-                                    sb.AppendFormatLine("{0}private = true,", GetIndentString(indent));
+                                bool gen = s_GenMethodInfo;
+                                if (!gen) {
+                                    if (mfunc.GetId() == "ctor") {
+                                        gen = true;
+                                    }
+                                    else {
+                                        foreach (var minfo in mfunc.Params) {
+                                            var mdef = minfo as Dsl.FunctionData;
+                                            string key = mdef.GetId();
+                                            string val = mdef.GetParamId(0);
+                                            bool bv;
+                                            bool.TryParse(val, out bv);
+                                            if (key == "abstract" || key == "virtual" || key == "override") {
+                                                gen = true;
+                                                break;
+                                            }
+                                        }
+                                    }
                                 }
-                                foreach (var minfo in mfunc.Params) {
-                                    var mdef = minfo as Dsl.FunctionData;
-                                    string key = mdef.GetId();
-                                    string val = mdef.GetParamId(0);
-                                    sb.AppendFormatLine("{0}{1} = {2},", GetIndentString(indent), key, val);
+                                if (gen) {
+                                    sb.AppendFormatLine("{0}{1} = {{", GetIndentString(indent), mfunc.GetId());
+                                    ++indent;
+                                    var kind = CalcTypeString(fcall.GetParam(0));
+                                    var accessibility = CalcTypeString(fcall.GetParam(1));
+                                    sb.AppendFormatLine("{0}Kind = {1},", GetIndentString(indent), kind);
+                                    if (accessibility == "Accessibility.Private") {
+                                        sb.AppendFormatLine("{0}private = true,", GetIndentString(indent));
+                                    }
+                                    foreach (var minfo in mfunc.Params) {
+                                        var mdef = minfo as Dsl.FunctionData;
+                                        string key = mdef.GetId();
+                                        string val = mdef.GetParamId(0);
+                                        sb.AppendFormatLine("{0}{1} = {2},", GetIndentString(indent), key, val);
+                                    }
+                                    --indent;
+                                    sb.AppendFormatLine("{0}}},", GetIndentString(indent));
                                 }
-                                --indent;
-                                sb.AppendFormatLine("{0}}},", GetIndentString(indent));
                             }
                         }
                         --indent;
@@ -753,7 +645,7 @@ namespace Generator
                     }
 
                     var propertyInfo = FindStatement(funcData, "property_info") as Dsl.FunctionData;
-                    if (null != propertyInfo && propertyInfo.GetParamNum() > 0) {
+                    if (s_GenPropertyInfo && null != propertyInfo && propertyInfo.GetParamNum() > 0) {
                         sb.AppendFormatLine("{0}local property_info = {{", GetIndentString(indent));
                         ++indent;
                         foreach (var def in propertyInfo.Params) {
@@ -786,7 +678,7 @@ namespace Generator
                     }
 
                     var eventInfo = FindStatement(funcData, "event_info") as Dsl.FunctionData;
-                    if (null != eventInfo && eventInfo.GetParamNum() > 0) {
+                    if (s_GenEventInfo && null != eventInfo && eventInfo.GetParamNum() > 0) {
                         sb.AppendFormatLine("{0}local field_info = {{", GetIndentString(indent));
                         ++indent;
                         foreach (var def in eventInfo.Params) {
@@ -819,7 +711,7 @@ namespace Generator
                     }
 
                     var fieldInfo = FindStatement(funcData, "field_info") as Dsl.FunctionData;
-                    if (null != fieldInfo && fieldInfo.GetParamNum() > 0) {
+                    if (s_GenFieldInfo && null != fieldInfo && fieldInfo.GetParamNum() > 0) {
                         sb.AppendFormatLine("{0}local field_info = {{", GetIndentString(indent));
                         ++indent;
                         foreach (var def in fieldInfo.Params) {
@@ -850,12 +742,12 @@ namespace Generator
 
                     sb.AppendLine();
                     if (null != logInfoForDefineClass.EpilogueInfo) {
-                        sb.AppendFormatLine("{0}local __defineclass_return = defineclass({1}, \"{2}\", \"{3}\", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
+                        sb.AppendFormatLine("{0}local __defineclass_return = defineclass({1}, \"{2}\", \"{3}\", static, static_methods, static_fields_build, instance_methods, instance_fields_build, interfaces, class_info, method_info, property_info, event_info, field_info, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
                         sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfoForDefineClass.EpilogueInfo, className, "__define_class"));
                         sb.AppendFormatLine("{0}return __defineclass_return;", GetIndentString(indent));
                     }
                     else {
-                        sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", \"{3}\", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
+                        sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", \"{3}\", static, static_methods, static_fields_build, instance_methods, instance_fields_build, interfaces, class_info, method_info, property_info, event_info, field_info, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
                     }
                     --indent;
                     sb.AppendFormatLine("{0}end,", GetIndentString(indent));
@@ -1317,21 +1209,79 @@ namespace Generator
                     sb.Append(")");
                 }
             }
-            else if (id == "getstatic" || id == "getexternstatic") {
+            else if (id == "getstatic") {
+                var kind = CalcTypeString(data.GetParam(0));
+                var obj = data.Params[1];
+                var member = data.Params[2];
+                GenerateSyntaxComponent(obj, sb, indent, false);
+                if (kind == "SymbolKind.Property") {
+                    sb.AppendFormat(".get_{0}()", member.GetId());
+                }
+                else {
+                    sb.AppendFormat(".{0}", member.GetId());
+                }
+            }
+            else if (id == "getinstance") {
+                var kind = CalcTypeString(data.GetParam(0));
+                var obj = data.Params[1];
+                var member = data.Params[2];
+                GenerateSyntaxComponent(obj, sb, indent, false);
+                if (kind == "SymbolKind.Property") {
+                    sb.AppendFormat(":get_{0}()", member.GetId());
+                }
+                else {
+                    sb.AppendFormat(".{0}", member.GetId());
+                }
+            }
+            else if (id == "setstatic") {
+                var kind = CalcTypeString(data.GetParam(0));
+                var obj = data.Params[1];
+                var member = data.Params[2];
+                var val = data.Params[3];
+                GenerateSyntaxComponent(obj, sb, indent, false);
+                if (kind == "SymbolKind.Property") {
+                    sb.AppendFormat(".set_{0}(", member.GetId());
+                    GenerateSyntaxComponent(val, sb, indent, false);
+                    sb.Append(")");
+                }
+                else {
+                    sb.AppendFormat(".{0}", member.GetId());
+                    sb.Append(" = ");
+                    GenerateSyntaxComponent(val, sb, indent, false);
+                }
+            }
+            else if (id == "setinstance") {
+                var kind = CalcTypeString(data.GetParam(0));
+                var obj = data.Params[1];
+                var member = data.Params[2];
+                var val = data.Params[3];
+                GenerateSyntaxComponent(obj, sb, indent, false);
+                if (kind == "SymbolKind.Property") {
+                    sb.AppendFormat(":set_{0}(", member.GetId());
+                    GenerateSyntaxComponent(val, sb, indent, false);
+                    sb.Append(")");
+                }
+                else {
+                    sb.AppendFormat(".{0}", member.GetId());
+                    sb.Append(" = ");
+                    GenerateSyntaxComponent(val, sb, indent, false);
+                }
+            }
+            else if (id == "getexternstatic") {
                 var kind = CalcTypeString(data.GetParam(0));
                 var obj = data.Params[1];
                 var member = data.Params[2];
                 GenerateSyntaxComponent(obj, sb, indent, false);
                 sb.AppendFormat(".{0}", member.GetId());
             }
-            else if (id == "getinstance" || id == "getexterninstance") {
+            else if (id == "getexterninstance") {
                 var kind = CalcTypeString(data.GetParam(0));
                 var obj = data.Params[1];
                 var member = data.Params[2];
                 GenerateSyntaxComponent(obj, sb, indent, false);
                 sb.AppendFormat(".{0}", member.GetId());
             }
-            else if (id == "setstatic" || id == "setexternstatic") {
+            else if (id == "setexternstatic") {
                 var kind = CalcTypeString(data.GetParam(0));
                 var obj = data.Params[1];
                 var member = data.Params[2];
@@ -1341,7 +1291,7 @@ namespace Generator
                 sb.Append(" = ");
                 GenerateSyntaxComponent(val, sb, indent, false);
             }
-            else if (id == "setinstance" || id == "setexterninstance") {
+            else if (id == "setexterninstance") {
                 var kind = CalcTypeString(data.GetParam(0));
                 var obj = data.Params[1];
                 var member = data.Params[2];
@@ -1460,7 +1410,7 @@ namespace Generator
                     var strClass = CalcTypeString(_class);
                     var strMember = _member;
                     int indexerType;
-                    bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, string.Empty, string.Empty, strClass, strMember, out indexerType);
+                    bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, string.Empty, strClass, strMember, out indexerType);
 
                     var _index = data.Params[3];
                     GenerateSyntaxComponent(_class, sb, 0, false);
@@ -1474,11 +1424,8 @@ namespace Generator
                 else {
                     int start = 3;
                     GenerateSyntaxComponent(_class, sb, 0, false);
-                    sb.Append('[');
-                    sb.Append('"');
+                    sb.Append('.');
                     sb.Append(_member);
-                    sb.Append('"');
-                    sb.Append(']');
                     sb.Append('(');
                     GenerateArguments(data, sb, indent, start);
                     sb.Append(')');
@@ -1486,21 +1433,19 @@ namespace Generator
             }
             else if (id == "getinstanceindexer") {
                 var _obj = data.Params[0];
-                var _intf = data.Params[1];
-                var _class = data.Params[2];
-                var _member = data.Params[3].GetId();
-                var _pct = data.Params[4].GetId();
+                var _class = data.Params[1];
+                var _member = data.Params[2].GetId();
+                var _pct = data.Params[3].GetId();
                 int ct;
                 int.TryParse(_pct, out ct);
                 if (ct == 1) {
                     var strObj = CalcExpressionString(_obj);
-                    var strIntf = CalcTypeString(_intf);
                     var strClass = CalcTypeString(_class);
                     var strMember = _member;
                     int indexerType;
-                    bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, strObj, strIntf, strClass, strMember, out indexerType);
+                    bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, strObj, strClass, strMember, out indexerType);
 
-                    var _index = data.Params[5];
+                    var _index = data.Params[4];
                     GenerateSyntaxComponent(_obj, sb, indent, false);
                     sb.Append('[');
                     GenerateSyntaxComponent(_index, sb, 0, false);
@@ -1510,13 +1455,10 @@ namespace Generator
                     sb.Append(']');
                 }
                 else {
-                    int start = 5;
+                    int start = 4;
                     GenerateSyntaxComponent(_obj, sb, indent, false);
-                    sb.Append('[');
-                    sb.Append('"');
+                    sb.Append(':');
                     sb.Append(_member);
-                    sb.Append('"');
-                    sb.Append(']');
                     sb.Append('(');
                     GenerateSyntaxComponent(_obj, sb, indent, false);
                     sb.Append(", ");
@@ -1535,7 +1477,7 @@ namespace Generator
                     var strClass = CalcTypeString(_class);
                     var strMember = _member;
                     int indexerType;
-                    bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, string.Empty, string.Empty, strClass, strMember, out indexerType);
+                    bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, string.Empty, strClass, strMember, out indexerType);
 
                     var _index = data.Params[4];
                     var _val = data.Params[5];
@@ -1552,11 +1494,8 @@ namespace Generator
                 else {
                     int start = 4;
                     GenerateSyntaxComponent(_class, sb, 0, false);
-                    sb.Append('[');
-                    sb.Append('"');
+                    sb.Append('.');
                     sb.Append(_member);
-                    sb.Append('"');
-                    sb.Append(']');
                     sb.Append('(');
                     GenerateArguments(data, sb, indent, start);
                     sb.Append(')');
@@ -1564,23 +1503,21 @@ namespace Generator
             }
             else if (id == "setinstanceindexer") {
                 var _obj = data.Params[0];
-                var _intf = data.Params[1];
-                var _class = data.Params[2];
-                var _member = data.Params[3].GetId();
-                var _pct = data.Params[4].GetId();
-                var _toplevel = data.Params[5].GetId();
+                var _class = data.Params[1];
+                var _member = data.Params[2].GetId();
+                var _pct = data.Params[3].GetId();
+                var _toplevel = data.Params[4].GetId();
                 int ct;
                 int.TryParse(_pct, out ct);
                 if (ct == 2 && _toplevel == "true") {
                     var strObj = CalcExpressionString(_obj);
-                    var strIntf = CalcTypeString(_intf);
                     var strClass = CalcTypeString(_class);
                     var strMember = _member;
                     int indexerType;
-                    bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, strObj, strIntf, strClass, strMember, out indexerType);
+                    bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, strObj, strClass, strMember, out indexerType);
 
-                    var _index = data.Params[6];
-                    var _val = data.Params[7];
+                    var _index = data.Params[5];
+                    var _val = data.Params[6];
                     GenerateSyntaxComponent(_obj, sb, indent, false);
                     sb.Append('[');
                     GenerateSyntaxComponent(_index, sb, 0, false);
@@ -1592,13 +1529,10 @@ namespace Generator
                     GenerateSyntaxComponent(_val, sb, 0, false);
                 }
                 else {
-                    int start = 6;
+                    int start = 5;
                     GenerateSyntaxComponent(_obj, sb, indent, false);
-                    sb.Append('[');
-                    sb.Append('"');
+                    sb.Append(':');
                     sb.Append(_member);
-                    sb.Append('"');
-                    sb.Append(']');
                     sb.Append('(');
                     GenerateSyntaxComponent(_obj, sb, indent, false);
                     sb.Append(", ");
@@ -1618,7 +1552,7 @@ namespace Generator
                 var strClass = CalcTypeString(_class);
                 var strMember = CalcTypeString(_member);
                 int indexerType;
-                if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, string.Empty, string.Empty, strClass, strMember, out indexerType)) {
+                if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, string.Empty, strClass, strMember, out indexerType)) {
                     var _pct = data.Params[5].GetId();
                     int ct;
                     int.TryParse(_pct, out ct);
@@ -1657,23 +1591,21 @@ namespace Generator
                 var _typeargs = data.Params[1] as Dsl.FunctionData;
                 var _typekinds = data.Params[2] as Dsl.FunctionData;
                 var _obj = data.Params[3];
-                var _intf = data.Params[4];
-                var _class = data.Params[5];
-                var _member = data.Params[6];
+                var _class = data.Params[4];
+                var _member = data.Params[5];
                 var strCallerClass = CalcTypeString(_callerClass);
                 var strTypeArgs = CalcTypesString(_typeargs);
                 var strTypeKinds = CalcTypesString(_typekinds);
                 var strObj = CalcExpressionString(_obj);
-                var strIntf = CalcTypeString(_intf);
                 var strClass = CalcTypeString(_class);
                 var strMember = CalcTypeString(_member);
                 int indexerType;
-                if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, strObj, strIntf, strClass, strMember, out indexerType)) {
-                    var _pct = data.Params[7].GetId();
+                if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, strObj, strClass, strMember, out indexerType)) {
+                    var _pct = data.Params[6].GetId();
                     int ct;
                     int.TryParse(_pct, out ct);
                     if (ct == 1) {
-                        var _index = data.Params[8];
+                        var _index = data.Params[7];
                         sb.Append(strObj);
                         sb.Append('[');
                         GenerateSyntaxComponent(_index, sb, 0, false);
@@ -1683,7 +1615,7 @@ namespace Generator
                         sb.Append(']');
                     }
                     else {
-                        int start = 8;
+                        int start = 7;
                         GenerateSyntaxComponent(_obj, sb, indent, false);
                         sb.Append('[');
                         sb.Append('"');
@@ -1716,7 +1648,7 @@ namespace Generator
                 var strClass = CalcTypeString(_class);
                 var strMember = CalcTypeString(_member);
                 int indexerType;
-                if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, string.Empty, string.Empty, strClass, strMember, out indexerType)) {
+                if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, string.Empty, strClass, strMember, out indexerType)) {
                     var _pct = data.Params[5].GetId();
                     var _toplevel = data.Params[6].GetId();
                     int ct;
@@ -1759,25 +1691,23 @@ namespace Generator
                 var _typeargs = data.Params[1] as Dsl.FunctionData;
                 var _typekinds = data.Params[2] as Dsl.FunctionData;
                 var _obj = data.Params[3];
-                var _intf = data.Params[4];
-                var _class = data.Params[5];
-                var _member = data.Params[6];
+                var _class = data.Params[4];
+                var _member = data.Params[5];
                 var strCallerClass = CalcTypeString(_callerClass);
                 var strTypeArgs = CalcTypesString(_typeargs);
                 var strTypeKinds = CalcTypesString(_typekinds);
                 var strObj = CalcExpressionString(_obj);
-                var strIntf = CalcTypeString(_intf);
                 var strClass = CalcTypeString(_class);
                 var strMember = CalcTypeString(_member);
                 int indexerType;
-                if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, strObj, strIntf, strClass, strMember, out indexerType)) {
-                    var _pct = data.Params[7].GetId();
-                    var _toplevel = data.Params[8].GetId();
+                if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, strObj, strClass, strMember, out indexerType)) {
+                    var _pct = data.Params[6].GetId();
+                    var _toplevel = data.Params[7].GetId();
                     int ct;
                     int.TryParse(_pct, out ct);
                     if (ct == 2 && _toplevel == "true") {
-                        var _index = data.Params[9];
-                        var _val = data.Params[10];
+                        var _index = data.Params[8];
+                        var _val = data.Params[9];
                         sb.Append(strObj);
                         sb.Append('[');
                         GenerateSyntaxComponent(_index, sb, 0, false);
@@ -1789,7 +1719,7 @@ namespace Generator
                         GenerateSyntaxComponent(_val, sb, 0, false);
                     }
                     else {
-                        int start = 9;
+                        int start = 8;
                         GenerateSyntaxComponent(_obj, sb, indent, false);
                         sb.Append('[');
                         sb.Append('"');
@@ -2712,9 +2642,9 @@ namespace Generator
         {
             return s_ReplaceSignatureArgInfos.TryGetValue(signature, out target);
         }
-        private static bool IndexerByLualib(string objClassName, string typeArgs, string typeKinds, string obj, string intf, string className, string member, out int val)
+        private static bool IndexerByLualib(string objClassName, string typeArgs, string typeKinds, string obj, string className, string member, out int val)
         {
-            string key = string.Format("{0}|{1}|{2}|{3}|{4}|{5}|{6}", objClassName, typeArgs, typeKinds, obj, intf, className, member);
+            string key = string.Format("{0}|{1}|{2}|{3}|{4}|{5}", objClassName, typeArgs, typeKinds, obj, className, member);
             if (s_CachedIndexerByLualibInfos.TryGetValue(key, out val)) {
                 return val != 0;
             }
@@ -2723,7 +2653,6 @@ namespace Generator
                     (null == info.TypeArgsMatch || info.TypeArgsMatch.IsMatch(typeArgs)) &&
                     (null == info.TypeKindsMatch || info.TypeKindsMatch.IsMatch(typeKinds)) &&
                     (null == info.ObjectMatch || info.ObjectMatch.IsMatch(obj)) &&
-                    (null == info.InterfaceMatch || info.InterfaceMatch.IsMatch(intf)) &&
                     (null == info.ClassMatch || info.ClassMatch.IsMatch(className)) &&
                     (null == info.MemberMatch || info.MemberMatch.IsMatch(member))) {
                     s_CachedIndexerByLualibInfos.TryAdd(key, info.IndexerType);
@@ -2763,6 +2692,12 @@ namespace Generator
         }
         private static void ReadConfig()
         {
+            s_GenClassInfo = false;
+            s_GenMethodInfo = false;
+            s_GenPropertyInfo = false;
+            s_GenEventInfo = false;
+            s_GenFieldInfo = false;
+
             s_DontRequireInfos.Clear();
             s_FileMergeInfos.Clear();
             s_NoSignatureArgInfos.Clear();
@@ -2784,21 +2719,18 @@ namespace Generator
         }
         private static void ReadConfig(Dsl.ISyntaxComponent cfgInfo)
         {
-            Dsl.FunctionData first = cfgInfo as Dsl.FunctionData;
+            Dsl.FunctionData f = cfgInfo as Dsl.FunctionData;
             Dsl.StatementData info = cfgInfo as Dsl.StatementData;
-            if (null == first && null != info) {
-                first = info.First;
+            if (null == f && null != info) {
+                f = info.First;
             }
-            if (null == first)
+            if (null == f)
                 return;
             string id = cfgInfo.GetId();
             if (id == "dontrequire") {
                 var cfg = new DontRequireInfo();
-                var f = first;
-                if (null != f) {
-                    foreach (var s in f.Params) {
-                        cfg.Requires.Add(s.GetId());
-                    }
+                foreach (var s in f.Params) {
+                    cfg.Requires.Add(s.GetId());
                 }
                 if (null != info) {
                     for (int i = 1; i < info.GetFunctionNum(); ++i) {
@@ -2831,12 +2763,9 @@ namespace Generator
             }
             else if (id == "filemerge") {
                 var cfg = new FileMergeInfo();
-                var f = first;
-                if (null != f) {
-                    if (f.GetParamNum() > 0) {
-                        var s = f.GetParamId(0);
-                        cfg.MergedFileName = s;
-                    }
+                if (f.GetParamNum() > 0) {
+                    var s = f.GetParamId(0);
+                    cfg.MergedFileName = s;
                 }
                 if (null != info) {
                     for (int i = 1; i < info.GetFunctionNum(); ++i) {
@@ -2862,63 +2791,51 @@ namespace Generator
             }
             else if (id == "nosignaturearg") {
                 var cfg = new NoSignatureArgInfo();
-                var f = first;
-                if (null != f) {
-                    foreach (var s in f.Params) {
-                        var str = s.GetId();
-                        var regex = new Regex(str, RegexOptions.Compiled);
-                        cfg.Matches.Add(regex);
-                    }
+                foreach (var s in f.Params) {
+                    var str = s.GetId();
+                    var regex = new Regex(str, RegexOptions.Compiled);
+                    cfg.Matches.Add(regex);
                 }
                 s_NoSignatureArgInfos.Add(cfg);
             }
             else if (id == "replacesignaturearg") {
-                var f = first;
-                if (null != f) {
-                    for (int i = 0; i < f.GetParamNum(); i += 2) {
-                        var src = f.GetParamId(i);
-                        var target = f.GetParamId(i + 1);
-                        s_ReplaceSignatureArgInfos[src] = target;
-                    }
+                for (int i = 0; i < f.GetParamNum(); i += 2) {
+                    var src = f.GetParamId(i);
+                    var target = f.GetParamId(i + 1);
+                    s_ReplaceSignatureArgInfos[src] = target;
                 }
             }
             else if (id == "indexerbylualib") {
                 var cfg = new IndexerByLualibInfo();
-                var f = first;
-                if (null != f) {
-                    Dsl.FunctionData fcd = f.ThisOrLowerOrderCall;
-                    if (fcd.IsValid() && fcd.GetParamNum() >= 7) {
-                        var str = fcd.GetParamId(0);
-                        var regex = new Regex(str, RegexOptions.Compiled);
-                        cfg.ObjectClassMatch = regex;
-                        str = fcd.GetParamId(1);
-                        regex = new Regex(str, RegexOptions.Compiled);
-                        cfg.TypeArgsMatch = regex;
-                        str = fcd.GetParamId(2);
-                        regex = new Regex(str, RegexOptions.Compiled);
-                        cfg.TypeKindsMatch = regex;
-                        str = fcd.GetParamId(3);
-                        regex = new Regex(str, RegexOptions.Compiled);
-                        cfg.ObjectMatch = regex;
-                        str = fcd.GetParamId(4);
-                        regex = new Regex(str, RegexOptions.Compiled);
-                        cfg.InterfaceMatch = regex;
-                        str = fcd.GetParamId(5);
-                        regex = new Regex(str, RegexOptions.Compiled);
-                        cfg.ClassMatch = regex;
-                        str = fcd.GetParamId(6);
-                        regex = new Regex(str, RegexOptions.Compiled);
-                        cfg.MemberMatch = regex;
+                Dsl.FunctionData fcd = f.ThisOrLowerOrderCall;
+                if (fcd.IsValid() && fcd.GetParamNum() >= 6) {
+                    var str = fcd.GetParamId(0);
+                    var regex = new Regex(str, RegexOptions.Compiled);
+                    cfg.ObjectClassMatch = regex;
+                    str = fcd.GetParamId(1);
+                    regex = new Regex(str, RegexOptions.Compiled);
+                    cfg.TypeArgsMatch = regex;
+                    str = fcd.GetParamId(2);
+                    regex = new Regex(str, RegexOptions.Compiled);
+                    cfg.TypeKindsMatch = regex;
+                    str = fcd.GetParamId(3);
+                    regex = new Regex(str, RegexOptions.Compiled);
+                    cfg.ObjectMatch = regex;
+                    str = fcd.GetParamId(4);
+                    regex = new Regex(str, RegexOptions.Compiled);
+                    cfg.ClassMatch = regex;
+                    str = fcd.GetParamId(5);
+                    regex = new Regex(str, RegexOptions.Compiled);
+                    cfg.MemberMatch = regex;
 
-                        if (f.HaveStatement()) {
-                            foreach (var s in f.Params) {
-                                var cd = s as Dsl.FunctionData;
-                                if (null != cd) {
-                                    var attrId = cd.GetId();
-                                    if (attrId == "indexertype") {
-                                        var attrVal = cd.GetParamId(0);
-                                        int.TryParse(attrVal, out cfg.IndexerType);
-                                    }
+                    if (f.HaveStatement()) {
+                        foreach (var s in f.Params) {
+                            var cd = s as Dsl.FunctionData;
+                            if (null != cd) {
+                                var attrId = cd.GetId();
+                                if (attrId == "indexertype") {
+                                    var attrVal = cd.GetParamId(0);
+                                    int.TryParse(attrVal, out cfg.IndexerType);
                                 }
                             }
                         }
@@ -2929,19 +2846,16 @@ namespace Generator
             else if (id == "addprologue" || id == "addepilogue") {
                 var cfg = new AddPrologueOrEpilogueInfo();
                 cfg.IsPrologue = id == "addprologue";
-                var f = first;
-                if (null != f) {
-                    int pnum = f.GetParamNum();
-                    if (pnum > 0) {
-                        var fmt = f.GetParamId(0);
-                        cfg.LogInfo.Format = fmt;
-                        var list = new List<string>();
-                        for (int ix = 1; ix < pnum; ++ix) {
-                            var arg = f.GetParamId(ix);
-                            list.Add(arg);
-                        }
-                        cfg.LogInfo.Args = list.ToArray();
+                int pnum = f.GetParamNum();
+                if (pnum > 0) {
+                    var fmt = f.GetParamId(0);
+                    cfg.LogInfo.Format = fmt;
+                    var list = new List<string>();
+                    for (int ix = 1; ix < pnum; ++ix) {
+                        var arg = f.GetParamId(ix);
+                        list.Add(arg);
                     }
+                    cfg.LogInfo.Args = list.ToArray();
                 }
                 if (null != info) {
                     for (int i = 1; i < info.GetFunctionNum(); ++i) {
@@ -2964,6 +2878,41 @@ namespace Generator
                     }
                 }
                 s_AddPrologueOrEpilogueInfos.Add(cfg);
+            }
+            else if (id == "genclassinfo") {
+                int pnum = f.GetParamNum();
+                if (pnum > 0) {
+                    var val = f.GetParamId(0);
+                    bool.TryParse(val, out s_GenClassInfo);
+                }
+            }
+            else if (id == "genmethodinfo") {
+                int pnum = f.GetParamNum();
+                if (pnum > 0) {
+                    var val = f.GetParamId(0);
+                    bool.TryParse(val, out s_GenMethodInfo);
+                }
+            }
+            else if (id == "genpropertyinfo") {
+                int pnum = f.GetParamNum();
+                if (pnum > 0) {
+                    var val = f.GetParamId(0);
+                    bool.TryParse(val, out s_GenPropertyInfo);
+                }
+            }
+            else if (id == "geneventinfo") {
+                int pnum = f.GetParamNum();
+                if (pnum > 0) {
+                    var val = f.GetParamId(0);
+                    bool.TryParse(val, out s_GenEventInfo);
+                }
+            }
+            else if (id == "genfieldinfo") {
+                int pnum = f.GetParamNum();
+                if (pnum > 0) {
+                    var val = f.GetParamId(0);
+                    bool.TryParse(val, out s_GenFieldInfo);
+                }
             }
         }
 
@@ -3037,7 +2986,6 @@ namespace Generator
             internal Regex TypeArgsMatch = null;
             internal Regex TypeKindsMatch = null;
             internal Regex ObjectMatch = null;
-            internal Regex InterfaceMatch = null;
             internal Regex ClassMatch = null;
             internal Regex MemberMatch = null;
             internal int IndexerType = (int)IndexerTypeEnum.Other;
@@ -3062,6 +3010,12 @@ namespace Generator
             internal HashSet<string> Lists = new HashSet<string>();
             internal List<Regex> Matches = new List<Regex>();
         }
+
+        private static bool s_GenClassInfo = false;
+        private static bool s_GenMethodInfo = false;
+        private static bool s_GenPropertyInfo = false;
+        private static bool s_GenEventInfo = false;
+        private static bool s_GenFieldInfo = false;
 
         private static List<DontRequireInfo> s_DontRequireInfos = new List<DontRequireInfo>();
         private static Dictionary<string, FileMergeInfo> s_FileMergeInfos = new Dictionary<string, FileMergeInfo>();

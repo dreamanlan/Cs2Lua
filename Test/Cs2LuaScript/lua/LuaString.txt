@@ -5,6 +5,7 @@ LuaString = {
 		return newobject(LuaString, nil, nil, "ctor", nil, ...);
 	end,
 	__define_class = function()
+		Utility.Warn("LuaString::__define_class begin");
 		local static = LuaString;
 		local static_methods = {
 			Format__System_String__System_Object = function(str, arg)
@@ -34,8 +35,6 @@ LuaString = {
 			};
 			return static_fields;
 		end;
-		local static_props = nil;
-		local static_events = nil;
 
 		local instance_methods = {
 			ctor = function(this)
@@ -55,28 +54,11 @@ LuaString = {
 			};
 			return instance_fields;
 		end;
-		local instance_props = nil;
-		local instance_events = nil;
 
 		local interfaces = nil;
-		local interface_map = nil;
 
-		local class_info = {
-			Kind = TypeKind.Class,
-		};
+		local class_info = nil;
 		local method_info = {
-			Format__System_String__System_Object = {
-				Kind = MethodKind.Ordinary,
-				static = true,
-			},
-			Format__System_String__System_Object__System_Object = {
-				Kind = MethodKind.Ordinary,
-				static = true,
-			},
-			Format__System_String__System_Object__System_Object__System_Object = {
-				Kind = MethodKind.Ordinary,
-				static = true,
-			},
 			ctor = {
 				Kind = MethodKind.Constructor,
 			},
@@ -85,8 +67,7 @@ LuaString = {
 		local event_info = nil;
 		local field_info = nil;
 
-		Utility.Warn("LuaString::__define_class begin");
-		local __defineclass_return = defineclass(nil, "LuaString", "LuaString", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		local __defineclass_return = defineclass(nil, "LuaString", "LuaString", static, static_methods, static_fields_build, instance_methods, instance_fields_build, interfaces, class_info, method_info, property_info, event_info, field_info, false);
 		Utility.Warn("LuaString::__define_class end");
 		return __defineclass_return;
 	end,

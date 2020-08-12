@@ -2,6 +2,7 @@ require "cs2lua__namespaces";
 
 Program = {
 	__define_class = function()
+		Utility.Warn("Program::__define_class begin");
 		local static = Program;
 		local static_methods = {
 			Init = function()
@@ -30,27 +31,22 @@ Program = {
 			};
 			return static_fields;
 		end;
-		local static_props = nil;
-		local static_events = nil;
 
 		local instance_fields_build = function()
 			local instance_fields = {
 			};
 			return instance_fields;
 		end;
-		local instance_props = nil;
-		local instance_events = nil;
 
 		local interfaces = nil;
-		local interface_map = nil;
 
+		local class_info = nil;
 		local method_info = nil;
 		local property_info = nil;
 		local event_info = nil;
 		local field_info = nil;
 
-		Utility.Warn("Program::__define_class begin");
-		local __defineclass_return = defineclass(nil, "Program", "Program", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		local __defineclass_return = defineclass(nil, "Program", "Program", static, static_methods, static_fields_build, instance_methods, instance_fields_build, interfaces, class_info, method_info, property_info, event_info, field_info, false);
 		Utility.Warn("Program::__define_class end");
 		return __defineclass_return;
 	end,

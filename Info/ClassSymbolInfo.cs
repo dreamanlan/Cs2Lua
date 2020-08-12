@@ -31,10 +31,9 @@ namespace RoslynTool.CsToDsl
         internal Dictionary<string, IFieldSymbol> FieldCreateSelfs = new Dictionary<string, IFieldSymbol>();
 
         internal bool IsInterface = false;
-        internal Dictionary<string, string> InterfaceMethodMap = new Dictionary<string, string>();
-        internal List<IMethodSymbol> ExplicitInterfaceImplementationMethods = new List<IMethodSymbol>();
-        internal List<IPropertySymbol> ExplicitInterfaceImplementationProperties = new List<IPropertySymbol>();
-        internal List<IEventSymbol> ExplicitInterfaceImplementationEvents = new List<IEventSymbol>();
+        internal Dictionary<IMethodSymbol, IMethodSymbol> ExplicitInterfaceImplementationMethods = new Dictionary<IMethodSymbol, IMethodSymbol>();
+        internal Dictionary<IPropertySymbol, IPropertySymbol> ExplicitInterfaceImplementationProperties = new Dictionary<IPropertySymbol, IPropertySymbol>();
+        internal Dictionary<IEventSymbol, IEventSymbol> ExplicitInterfaceImplementationEvents = new Dictionary<IEventSymbol, IEventSymbol>();
 
         internal void Init(INamedTypeSymbol typeSym, CSharpCompilation compilation, SymbolTable symTable)
         {
@@ -179,44 +178,6 @@ namespace RoslynTool.CsToDsl
                 if (!InterfaceSymbols.Contains(intf)) {
                     InterfaceSymbols.Add(intf);
                 }
-                foreach (var sym in intf.GetMembers()) {
-                    var msym = sym as IMethodSymbol;
-                    if (null != msym) {
-                        var implSym = typeSym.FindImplementationForInterfaceMember(sym) as IMethodSymbol;
-                        if (null != implSym) {
-                            string name = symTable.NameMangling(msym);
-                            name = ClassInfo.CalcNameWithFullTypeName(name, sym.ContainingType);
-                            string implName = symTable.NameMangling(implSym);
-                            if (!InterfaceMethodMap.ContainsKey(name)) {
-                                InterfaceMethodMap.Add(name, implName);
-                            }
-                        }
-                    }
-                    var psym = sym as IPropertySymbol;
-                    if (null != psym && !psym.IsIndexer) {
-                        var implSym = typeSym.FindImplementationForInterfaceMember(sym) as IPropertySymbol;
-                        if (null != implSym && !psym.IsIndexer) {
-                            string name = SymbolTable.GetPropertyName(psym);
-                            name = ClassInfo.CalcNameWithFullTypeName(name, sym.ContainingType);
-                            string implName = SymbolTable.GetPropertyName(implSym);
-                            if (!InterfaceMethodMap.ContainsKey(name)) {
-                                InterfaceMethodMap.Add(name, implName);
-                            }
-                        }
-                    }
-                    var esym = sym as IEventSymbol;
-                    if (null != esym) {
-                        var implSym = typeSym.FindImplementationForInterfaceMember(sym) as IEventSymbol;
-                        if (null != implSym) {
-                            string name = SymbolTable.GetEventName(esym);
-                            name = ClassInfo.CalcNameWithFullTypeName(name, sym.ContainingType);
-                            string implName = SymbolTable.GetEventName(implSym);
-                            if (!InterfaceMethodMap.ContainsKey(name)) {
-                                InterfaceMethodMap.Add(name, implName);
-                            }
-                        }
-                    }
-                }
             }
             if (typeSym.TypeKind != TypeKind.Interface) {
                 foreach (var sym in typeSym.GetMembers()) {
@@ -226,8 +187,8 @@ namespace RoslynTool.CsToDsl
                             string fn = ClassInfo.GetFullName(implSym.ContainingType);
                             ClassSymbolInfo csi;
                             if (symTable.ClassSymbols.TryGetValue(fn, out csi)) {
-                                if (!csi.ExplicitInterfaceImplementationMethods.Contains(implSym))
-                                    csi.ExplicitInterfaceImplementationMethods.Add(implSym);
+                                if (!csi.ExplicitInterfaceImplementationMethods.ContainsKey(implSym))
+                                    csi.ExplicitInterfaceImplementationMethods.Add(implSym, msym);
                             }
                         }
                     }
@@ -237,8 +198,8 @@ namespace RoslynTool.CsToDsl
                             string fn = ClassInfo.GetFullName(implSym.ContainingType);
                             ClassSymbolInfo csi;
                             if (symTable.ClassSymbols.TryGetValue(fn, out csi)) {
-                                if (!csi.ExplicitInterfaceImplementationProperties.Contains(implSym))
-                                    csi.ExplicitInterfaceImplementationProperties.Add(implSym);
+                                if (!csi.ExplicitInterfaceImplementationProperties.ContainsKey(implSym))
+                                    csi.ExplicitInterfaceImplementationProperties.Add(implSym, psym);
                             }
                         }
                     }
@@ -248,8 +209,8 @@ namespace RoslynTool.CsToDsl
                             string fn = ClassInfo.GetFullName(implSym.ContainingType);
                             ClassSymbolInfo csi;
                             if (symTable.ClassSymbols.TryGetValue(fn, out csi)) {
-                                if (!csi.ExplicitInterfaceImplementationEvents.Contains(implSym))
-                                    csi.ExplicitInterfaceImplementationEvents.Add(implSym);
+                                if (!csi.ExplicitInterfaceImplementationEvents.ContainsKey(implSym))
+                                    csi.ExplicitInterfaceImplementationEvents.Add(implSym, esym);
                             }
                         }
                     }

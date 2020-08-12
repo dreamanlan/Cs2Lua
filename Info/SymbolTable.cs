@@ -44,6 +44,10 @@ namespace RoslynTool.CsToDsl
         {
             get { return m_IgnoredTypes; }
         }
+        internal ConcurrentDictionary<IPropertySymbol, bool> NoImplProperties
+        {
+            get { return m_NoImplProperties; }
+        }
         internal Dictionary<string, HashSet<string>> Requires
         {
             get { return m_Requires; }
@@ -99,6 +103,30 @@ namespace RoslynTool.CsToDsl
         internal void SymbolClassified()
         {
             Console.WriteLine("Symbol size, Extern:{0} Intern:{1} Ignore:{2}", m_ExternTypes.Count, m_InternTypes.Count, m_IgnoredTypes.Count);
+        }
+        internal string GetSymbolKind(ISymbol sym)
+        {
+            IPropertySymbol psym = sym as IPropertySymbol;
+            if (null != psym) {
+                bool val;
+                if (m_NoImplProperties.TryGetValue(psym, out val)) {
+                    return val ? "Field" : sym.Kind.ToString();
+                }
+                else if (IsCs2DslSymbol(psym) && psym.DeclaringSyntaxReferences.Length > 0) {
+                    var node = psym.DeclaringSyntaxReferences[0].GetSyntax() as PropertyDeclarationSyntax;
+                    bool noimpl = true;
+                    foreach (var accessor in node.AccessorList.Accessors) {
+                        if (null != accessor.Body || null != accessor.ExpressionBody) {
+                            noimpl = false;
+                            break;
+                        }
+                    }
+                    m_NoImplProperties.TryAdd(psym, noimpl);
+                    if (noimpl)
+                        return "Field";
+                }
+            }
+            return sym.Kind.ToString();
         }
         internal bool IsIgnoredSymbol(ITypeSymbol sym)
         {
@@ -673,6 +701,7 @@ namespace RoslynTool.CsToDsl
         private ConcurrentDictionary<string, INamedTypeSymbol> m_ExternTypes = new ConcurrentDictionary<string, INamedTypeSymbol>();
         private ConcurrentDictionary<string, INamedTypeSymbol> m_InternTypes = new ConcurrentDictionary<string, INamedTypeSymbol>();
         private ConcurrentDictionary<string, INamedTypeSymbol> m_IgnoredTypes = new ConcurrentDictionary<string, INamedTypeSymbol>();
+        private ConcurrentDictionary<IPropertySymbol, bool> m_NoImplProperties = new ConcurrentDictionary<IPropertySymbol, bool>();
         private Dictionary<string, HashSet<string>> m_Requires = new Dictionary<string, HashSet<string>>();
         private SortedSet<string> m_ReferencedExternTypes = new SortedSet<string>();
         private ConcurrentDictionary<string, ITypeSymbol> m_ExternEnums = new ConcurrentDictionary<string, ITypeSymbol>();
@@ -858,8 +887,7 @@ namespace RoslynTool.CsToDsl
                 return string.Empty;
             }
             if (sym.ExplicitInterfaceImplementations.Length > 0) {
-                int ix = sym.Name.LastIndexOf('.');
-                return ClassInfo.CalcNameWithFullTypeName(sym.Name.Substring(ix + 1), sym.ContainingType);
+                return sym.Name.Replace('.', '_');
             }
             else {
                 return sym.Name;
@@ -871,8 +899,7 @@ namespace RoslynTool.CsToDsl
                 return string.Empty;
             }
             if (sym.ExplicitInterfaceImplementations.Length > 0) {
-                int ix = sym.Name.LastIndexOf('.');
-                return ClassInfo.CalcNameWithFullTypeName(sym.Name.Substring(ix + 1), sym.ContainingType);
+                return sym.Name.Replace('.', '_');
             }
             else {
                 return sym.Name;
@@ -884,8 +911,7 @@ namespace RoslynTool.CsToDsl
                 return string.Empty;
             }
             if (sym.ExplicitInterfaceImplementations.Length > 0) {
-                int ix = sym.Name.LastIndexOf('.');
-                return ClassInfo.CalcNameWithFullTypeName(sym.Name.Substring(ix + 1), sym.ContainingType);
+                return sym.Name.Replace('.', '_');
             }
             else {
                 return sym.Name;
