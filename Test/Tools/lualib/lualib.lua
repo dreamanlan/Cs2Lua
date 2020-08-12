@@ -1256,7 +1256,7 @@ __mt_index_of_array = function(t, k)
     elseif k == "Length" or k == "Count" then
         return __get_array_count(t)
     elseif k == "get_Length" or k == "get_Count" then    
-        return function(obj) return __get_table_count(t) end
+        return function(t) return __get_table_count(t) end
     elseif k == "GetLength" then
         return function(obj, ix)
             local ret = 0
@@ -1525,7 +1525,7 @@ __mt_index_of_dictionary = function(t, k)
     elseif k == "Count" then
         return __get_table_count(t)
     elseif k == "get_Count" then    
-        return function(obj) return __get_table_count(t) end
+        return function(t) return __get_table_count(t) end
     elseif k == "Add" then
         return function(obj, p1, p2)
             p1 = __unwrap_if_string(p1)     
@@ -1656,7 +1656,7 @@ __mt_index_of_hashset = function(t, k)
     elseif k == "Count" then
         return __get_table_count(t)
     elseif k == "get_Count" then    
-        return function(obj) return __get_table_count(t) end
+        return function(t) return __get_table_count(t) end
     elseif k == "Add" then
         return function(obj, p)
             p = __unwrap_if_string(p) 
