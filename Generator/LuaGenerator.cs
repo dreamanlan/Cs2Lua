@@ -328,8 +328,12 @@ namespace Generator
                         }
                     }
 
+                    var logInfoForDefineClass = GetPrologueAndEpilogue(className, "__define_class");
                     sb.AppendFormatLine("{0}__define_class = function()", GetIndentString(indent));
                     ++indent;
+                    if (null != logInfoForDefineClass.PrologueInfo) {
+                        sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfoForDefineClass.PrologueInfo, className, "__define_class"));
+                    }
                     sb.AppendFormatLine("{0}local static = {1};", GetIndentString(indent), className);
 
                     if (null != staticMethods) {
@@ -341,8 +345,8 @@ namespace Generator
                                 string mname = mdef.GetParamId(0);
                                 var param1 = mdef.GetParam(1);
                                 var fdef = param1 as Dsl.FunctionData;
-                                if (null != fdef) {
-                                    if (mname != "__new_object" && fdef.HaveStatement()) {
+                                if (null != fdef && mname != "__new_object") {
+                                    if (fdef.HaveStatement()) {
                                         var fcall = fdef;
                                         if (fdef.IsHighOrder)
                                             fcall = fdef.LowerOrderFunction;
@@ -845,11 +849,6 @@ namespace Generator
                     }
 
                     sb.AppendLine();
-
-                    var logInfoForDefineClass = GetPrologueAndEpilogue(className, "__define_class");
-                    if (null != logInfoForDefineClass.PrologueInfo) {
-                        sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfoForDefineClass.PrologueInfo, className, "__define_class"));
-                    }
                     if (null != logInfoForDefineClass.EpilogueInfo) {
                         sb.AppendFormatLine("{0}local __defineclass_return = defineclass({1}, \"{2}\", \"{3}\", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
                         sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfoForDefineClass.EpilogueInfo, className, "__define_class"));
@@ -858,11 +857,11 @@ namespace Generator
                     else {
                         sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", \"{3}\", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
                     }
-
                     --indent;
                     sb.AppendFormatLine("{0}end,", GetIndentString(indent));
                     --indent;
                     sb.AppendFormatLine("{0}}};", GetIndentString(indent));
+
                     classDefineStack.Push(className);
                 }
             }
