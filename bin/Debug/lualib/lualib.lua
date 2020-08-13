@@ -73,6 +73,7 @@ System.Collections.Generic.KeyValuePair_TKey_TValue = {
     end
 }
 System.Array = System.Array or {}
+System.Nullable_T = System.Nullable_T or {}
 
 System.Collections.Generic.MyDictionary_TKey_TValue = System.Collections.Generic.Dictionary_TKey_TValue or {}
 
@@ -2841,7 +2842,9 @@ end
 function newexternobject(class, typeargs, typekinds, initializer, ...)
     local obj = nil
     local args = {...}
-    if class == System.Collections.Generic.KeyValuePair_TKey_TValue then
+    if class == System.Nullable_T then
+        return nil
+    elseif class == System.Collections.Generic.KeyValuePair_TKey_TValue then
         return {Key = args[1], Value = args[2]}
     end
     if class == UnityEngine.Vector3 then
