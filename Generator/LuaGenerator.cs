@@ -1828,32 +1828,48 @@ namespace Generator
                 sb.AppendFormat("{0}return {1}", GetIndentString(indent), varName);
             }
             else if (id == "setdelegation") {
-                //这里可以对xlua的delegation用法进行特殊转换
-                var obj = data.Params[0];
-                var val = data.Params[1];
+                var kind = CalcTypeString(data.GetParam(0));
+                var obj = data.Params[1];
+                var val = data.Params[2];
                 GenerateSyntaxComponent(obj, sb, indent, false);
                 sb.Append(" = ");
                 GenerateSyntaxComponent(val, sb, indent, false);
             }
             else if (id == "setstaticdelegation") {
-                //这里可以对xlua的delegation用法进行特殊转换
-                var obj = data.Params[0];
-                var member = data.Params[1];
-                var val = data.Params[2];
-                GenerateSyntaxComponent(obj, sb, indent, false);
-                sb.AppendFormat(".{0}", member.GetId());
-                sb.Append(" = ");
-                GenerateSyntaxComponent(val, sb, indent, false);
+                var kind = CalcTypeString(data.GetParam(0));
+                var obj = data.Params[1];
+                var member = data.Params[2];
+                var val = data.Params[3];
+                if (kind == "SymbolKind.Property") {
+                    GenerateSyntaxComponent(obj, sb, indent, false);
+                    sb.AppendFormat(".set_{0}(", member.GetId());
+                    GenerateSyntaxComponent(val, sb, indent, false);
+                    sb.Append(")");
+                }
+                else {
+                    GenerateSyntaxComponent(obj, sb, indent, false);
+                    sb.AppendFormat(".{0}", member.GetId());
+                    sb.Append(" = ");
+                    GenerateSyntaxComponent(val, sb, indent, false);
+                }
             }
             else if (id == "setinstancedelegation") {
-                //这里可以对xlua的delegation用法进行特殊转换
-                var obj = data.Params[0];
-                var member = data.Params[1];
-                var val = data.Params[2];
-                GenerateSyntaxComponent(obj, sb, indent, false);
-                sb.AppendFormat(".{0}", member.GetId());
-                sb.Append(" = ");
-                GenerateSyntaxComponent(val, sb, indent, false);
+                var kind = CalcTypeString(data.GetParam(0));
+                var obj = data.Params[1];
+                var member = data.Params[2];
+                var val = data.Params[3];
+                if (kind == "SymbolKind.Property") {
+                    GenerateSyntaxComponent(obj, sb, indent, false);
+                    sb.AppendFormat(":set_{0}(", member.GetId());
+                    GenerateSyntaxComponent(val, sb, indent, false);
+                    sb.Append(")");
+                }
+                else {
+                    GenerateSyntaxComponent(obj, sb, indent, false);
+                    sb.AppendFormat(".{0}", member.GetId());
+                    sb.Append(" = ");
+                    GenerateSyntaxComponent(val, sb, indent, false);
+                }
             }
             else if (id == "anonymousobject") {
                 sb.Append("wrapanonymousobject{");

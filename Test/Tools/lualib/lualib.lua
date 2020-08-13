@@ -947,7 +947,7 @@ function delegationwrap(handler)
     end
 end
 
-function delegationcomparewithnil(isevent, isStatic, key, t, k, isequal)
+function delegationcomparewithnil(isstatic, key, t, k, symKind, isequal)
     if not t then
         if isequal then
             return true
@@ -964,7 +964,11 @@ function delegationcomparewithnil(isevent, isStatic, key, t, k, isequal)
     end
     local v = t
     if k then
-        v = t[k]
+        if symKind == SymbolKind.Property then
+            v = t[k](t)
+        else
+            v = t[k]
+        end
     end
     if type(v) == "function" then
         if isequal then
@@ -982,10 +986,14 @@ function delegationcomparewithnil(isevent, isStatic, key, t, k, isequal)
         return false
     end
 end
-function delegationset(isevent, isStatic, key, t, k, handler)
+function delegationset(isstatic, key, t, k, symKind, handler)
     local v = t
     if k then
-        v = t[k]
+        if symKind == SymbolKind.Property then
+            v = t[k](t)
+        else
+            v = t[k]
+        end
     end
     if not v or type(v) ~= "table" then
         --取不到值或者值不是表，则有可能是普通的特性访问
@@ -1000,10 +1008,14 @@ function delegationset(isevent, isStatic, key, t, k, handler)
         return v
     end
 end
-function delegationadd(isevent, isStatic, key, t, k, handler)
+function delegationadd(isstatic, key, t, k, symKind, handler)
     local v = t
     if k then
-        v = t[k]
+        if symKind == SymbolKind.Property then
+            v = t[k](t)
+        else
+            v = t[k]
+        end
     end
     if v == nil then
         v = delegationwrap(handler)
@@ -1012,10 +1024,14 @@ function delegationadd(isevent, isStatic, key, t, k, handler)
     end
     return v
 end
-function delegationremove(isevent, isStatic, key, t, k, handler)
+function delegationremove(isstatic, key, t, k, symKind, handler)
     local v = t
     if k then
-        v = t[k]
+        if symKind == SymbolKind.Property then
+            v = t[k](t)
+        else
+            v = t[k]
+        end
     end
     local find = false
     local pos = 1
@@ -1089,7 +1105,7 @@ function dumpexterndelegationtable()
     end
 end
 
-function externdelegationcomparewithnil(isevent, isStatic, key, t, k, isequal)
+function externdelegationcomparewithnil(isstatic, key, t, k, symKind, isequal)
     local v = t
     if k then
         return true
@@ -1102,14 +1118,14 @@ function externdelegationcomparewithnil(isevent, isStatic, key, t, k, isequal)
         return false
     end
 end
-function externdelegationset(isevent, isStatic, key, t, k, handler)
+function externdelegationset(isstatic, key, t, k, symKind, handler)
     if k then
         return handler
     else
         return handler
     end
 end
-function externdelegationadd(isevent, isStatic, key, t, k, handler)
+function externdelegationadd(isstatic, key, t, k, symKind, handler)
     local str = getdelegationkey(handler)
     if str then
         setexterndelegationfunc(str .. key, handler)
@@ -1120,7 +1136,7 @@ function externdelegationadd(isevent, isStatic, key, t, k, handler)
         return {"+=", handler}
     end
 end
-function externdelegationremove(isevent, isStatic, key, t, k, handler)
+function externdelegationremove(isstatic, key, t, k, symKind, handler)
     local str = getdelegationkey(handler)
     local trueHandler = handler
     if str then

@@ -938,12 +938,16 @@ namespace RoslynTool.CsToDsl
                     string memberName = leftSym.Name;
                     //delegation就不用区分是否外部符号了，基本上在动态语言里都是函数对象，作为普通数据成员
                     if (leftSym.IsStatic) {
-                        CodeBuilder.Append("setstaticdelegation(");
+                        CodeBuilder.Append("setstaticdelegation(SymbolKind.");
+                        CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(leftSym));
+                        CodeBuilder.Append(", ");
                         CodeBuilder.Append(className);
                         CodeBuilder.AppendFormat(", \"{0}\", ", memberName);
                     }
                     else {
-                        CodeBuilder.Append("setinstancedelegation(");
+                        CodeBuilder.Append("setinstancedelegation(SymbolKind.");
+                        CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(leftSym));
+                        CodeBuilder.Append(", ");
                         if (null != leftMemberAccess)
                             OutputExpressionSyntax(leftMemberAccess.Expression);
                         else if (IsNewObjMember(memberName))
@@ -954,7 +958,9 @@ namespace RoslynTool.CsToDsl
                     }
                 }
                 else {
-                    CodeBuilder.Append("setdelegation(");
+                    CodeBuilder.Append("setdelegation(SymbolKind.");
+                    CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(leftSym));
+                    CodeBuilder.Append(", ");
                     OutputExpressionSyntax(assign.Left);
                     CodeBuilder.Append(", ");
                 }
@@ -1475,10 +1481,13 @@ namespace RoslynTool.CsToDsl
                 Log(assign, "assignment delegation, left symbol == null");
                 return;
             }
-            bool isEvent = leftOper is IEventReferenceExpression;
+            var leftPsym = leftSym as IPropertySymbol;
+            bool isIndexer = null != leftPsym && leftPsym.IsIndexer;
+            bool isWriteOnly = null != leftPsym && leftPsym.IsWriteOnly;
             //外部的delegation只能是成员，因为delegation类型就是普通的function，这里不能以delegation的类型来判断是否外部类型
+            bool isCs2LuaAssembly = SymbolTable.Instance.IsCs2DslSymbol(leftSym.ContainingType);
             string prefix;
-            if ((leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event) && !SymbolTable.Instance.IsCs2DslSymbol(leftSym.ContainingType)) {
+            if ((leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event) && !isCs2LuaAssembly) {
                 prefix = "extern";
             }
             else {
@@ -1500,10 +1509,15 @@ namespace RoslynTool.CsToDsl
             }
             bool isStatic = leftSym.IsStatic;
             string containingName = ClassInfo.GetFullName(leftSym.ContainingType);
+            string kind = null != leftSym ? SymbolTable.Instance.GetSymbolKind(leftSym) : null;
+            string namePrefix = isCs2LuaAssembly && !isWriteOnly && kind == "Property" ? "get_" : string.Empty;
             CodeBuilder.AppendFormat("{0}delegation{1}", prefix, postfix);
             CodeBuilder.Append("(");
-            CodeBuilder.AppendFormat("{0}, {1}, ", isEvent ? "true" : "false", isStatic ? "true" : "false");
-            if (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event) {
+            CodeBuilder.AppendFormat("{0}, ", isStatic ? "true" : "false");
+            if (isWriteOnly) {
+                CodeBuilder.AppendFormat("\"{0}:{1}\", null, null, SymbolKind.{2}", containingName, leftSym.Name, kind);
+            }
+            else if (!isIndexer && (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event)) {
                 var memberAccess = assign.Left as MemberAccessExpressionSyntax;
                 if (null != memberAccess) {
                     CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, memberAccess.Name.Identifier.Text);
@@ -1511,7 +1525,7 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.Append(", ");
                     string mname = memberAccess.Name.Identifier.Text;
                     CheckExplicitInterfaceAccess(leftSym, ref mname);
-                    CodeBuilder.AppendFormat("\"{0}\"", mname);
+                    CodeBuilder.AppendFormat("\"{0}{1}\", SymbolKind.{2}", namePrefix, mname, kind);
                 }
                 else if (leftSym.ContainingType == ci.SemanticInfo || leftSym.ContainingType == ci.SemanticInfo.OriginalDefinition || ci.IsInherit(leftSym.ContainingType)) {
                     CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
@@ -1519,18 +1533,18 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendFormat("{0}, ", ClassInfo.GetFullName(leftSym.ContainingType));
                     else
                         CodeBuilder.Append("this, ");
-                    CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
+                    CodeBuilder.AppendFormat("\"{0}{1}\", SymbolKind.{2}", namePrefix, leftSym.Name, kind);
                 }
                 else {
                     CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
                     CodeBuilder.Append("newobj, ");
-                    CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
+                    CodeBuilder.AppendFormat("\"{0}{1}\", SymbolKind.{2}", namePrefix, leftSym.Name, kind);
                 }
             }
             else {
                 CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
                 OutputExpressionSyntax(assign.Left);
-                CodeBuilder.Append(", null");
+                CodeBuilder.AppendFormat(", null, SymbolKind.{0}", kind);
             }
             CodeBuilder.Append(", ");
             OutputExpressionSyntax(assign.Right, opd);

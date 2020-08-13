@@ -889,8 +889,7 @@ namespace RoslynTool.CsToDsl
                 if (null != leftSym && (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event) && !SymbolTable.Instance.IsCs2DslSymbol(leftSym.ContainingType)) {
                     isCs2Lua = false;
                 }
-                bool isEvent = (null != leftOper && leftOper is IEventReferenceExpression) || (null != rightOper && rightOper is IEventReferenceExpression);                
-                OutputDelegationCompareWithNull(leftSym, leftOper, left, isCs2Lua, isEvent, op == "==", lopd);
+                OutputDelegationCompareWithNull(leftSym, leftOper, left, isCs2Lua, op == "==", lopd);
                 handled = true;
             }
             else if (null != leftOper && null != rightOper && null != rightOper.Type && rightOper.Type.TypeKind == TypeKind.Delegate && (!rightOper.ConstantValue.HasValue || null != rightOper.ConstantValue.Value) && leftOper.ConstantValue.HasValue && leftOper.ConstantValue.Value == null) {
@@ -900,57 +899,65 @@ namespace RoslynTool.CsToDsl
                 if (null != rightSym && (rightSym.Kind == SymbolKind.Field || rightSym.Kind == SymbolKind.Property || rightSym.Kind == SymbolKind.Event) && !SymbolTable.Instance.IsCs2DslSymbol(rightSym.ContainingType)) {
                     isCs2Lua = false;
                 }
-                bool isEvent = (null != leftOper && leftOper is IEventReferenceExpression) || (null != rightOper && rightOper is IEventReferenceExpression);
-                OutputDelegationCompareWithNull(rightSym, rightOper, right, isCs2Lua, isEvent, op == "==", ropd);
+                OutputDelegationCompareWithNull(rightSym, rightOper, right, isCs2Lua, op == "==", ropd);
                 handled = true;
             }
             return handled;
         }
-        private void OutputDelegationCompareWithNull(ISymbol leftSym, IOperation leftOper, ExpressionSyntax left, bool isCs2LuaAssembly, bool isEvent, bool isEqual, IConversionExpression opd)
+        private void OutputDelegationCompareWithNull(ISymbol leftSym, IOperation leftOper, ExpressionSyntax left, bool isCs2LuaAssembly, bool isEqual, IConversionExpression opd)
         {
             if (null == leftSym && null == leftOper) {
                 Log(left, "delegation compare with null, left symbol == null and left oper == null");
                 return;
             }
+            var leftPsym = leftSym as IPropertySymbol;
+            bool isIndexer = null != leftPsym && leftPsym.IsIndexer;
+            bool isWriteOnly = null != leftPsym && leftPsym.IsWriteOnly;
             bool isStatic = null != leftSym ? leftSym.IsStatic : false;
+            string kind = null != leftSym ? SymbolTable.Instance.GetSymbolKind(leftSym) : null;
+            string namePrefix = isCs2LuaAssembly && !isWriteOnly && kind == "Property" ? "get_" : string.Empty;
             var ci = m_ClassInfoStack.Peek();
-            CodeBuilder.AppendFormat("{0}delegationcomparewithnil({1}, {2}, ", isCs2LuaAssembly ? string.Empty : "extern", isEvent ? "true" : "false", isStatic ? "true" : "false");
-            if (null != leftSym && (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event)) {
+            CodeBuilder.AppendFormat("{0}delegationcomparewithnil({1}, ", isCs2LuaAssembly ? string.Empty : "extern", isStatic ? "true" : "false");
+            if (null != leftSym){
                 string containingName = ClassInfo.GetFullName(leftSym.ContainingType);
-                var memberAccess = left as MemberAccessExpressionSyntax;
-                if (null != memberAccess) {
-                    CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, memberAccess.Name.Identifier.Text);
-                    OutputExpressionSyntax(memberAccess.Expression, opd);
-                    CodeBuilder.Append(", ");
-                    string mname = memberAccess.Name.Identifier.Text;
-                    CheckExplicitInterfaceAccess(leftSym, ref mname);
-                    CodeBuilder.AppendFormat("\"{0}\"", mname);
+                if (isWriteOnly) {
+                    CodeBuilder.AppendFormat("\"{0}:{1}\", null, null, SymbolKind.{2}", containingName, leftSym.Name, kind);
                 }
-                else if (leftSym.ContainingType == ci.SemanticInfo || leftSym.ContainingType == ci.SemanticInfo.OriginalDefinition || ci.IsInherit(leftSym.ContainingType)) {
-                    CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
-                    if (isStatic)
-                        CodeBuilder.AppendFormat("{0}, ", ClassInfo.GetFullName(leftSym.ContainingType));
-                    else
-                        CodeBuilder.Append("this, ");
-                    CodeBuilder.AppendFormat("\"{0}\"", leftSym.Name);
+                else if (!isIndexer && (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event)) {
+                    var memberAccess = left as MemberAccessExpressionSyntax;
+                    if (null != memberAccess) {
+                        CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, memberAccess.Name.Identifier.Text);
+                        OutputExpressionSyntax(memberAccess.Expression, opd);
+                        CodeBuilder.Append(", ");
+                        string mname = memberAccess.Name.Identifier.Text;
+                        CheckExplicitInterfaceAccess(leftSym, ref mname);
+                        CodeBuilder.AppendFormat("\"{0}{1}\", SymbolKind.{2}", namePrefix, mname, kind);
+                    }
+                    else if (leftSym.ContainingType == ci.SemanticInfo || leftSym.ContainingType == ci.SemanticInfo.OriginalDefinition || ci.IsInherit(leftSym.ContainingType)) {
+                        CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
+                        if (isStatic)
+                            CodeBuilder.AppendFormat("{0}, ", ClassInfo.GetFullName(leftSym.ContainingType));
+                        else
+                            CodeBuilder.Append("this, ");
+                        CodeBuilder.AppendFormat("\"{0}{1}\", SymbolKind.{2}", namePrefix, leftSym.Name, kind);
+                    }
+                    else {
+                        CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
+                        CodeBuilder.Append("newobj, ");
+                        CodeBuilder.AppendFormat("\"{0}{1}\", SymbolKind.{2}", namePrefix, leftSym.Name, kind);
+                    }
                 }
                 else {
                     CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
                     OutputExpressionSyntax(left, opd);
-                    CodeBuilder.Append(", null");
+                    CodeBuilder.AppendFormat(", null, SymbolKind.{0}", kind);
                 }
-            }
-            else if (null != leftSym) {
-                string containingName = ClassInfo.GetFullName(leftSym.ContainingType);
-                CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
-                OutputExpressionSyntax(left, opd);
-                CodeBuilder.Append(", null");
             }
             else {
                 string containingName = ClassInfo.GetFullName(leftOper.Type);
                 CodeBuilder.AppendFormat("\"{0}\", ", containingName);
                 OutputExpressionSyntax(left, opd);
-                CodeBuilder.Append(", null");
+                CodeBuilder.Append(", null, null");
             }
             CodeBuilder.AppendFormat(", {0})", isEqual ? "true" : "false");
         }
