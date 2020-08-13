@@ -562,7 +562,21 @@ namespace Generator
 
                     sb.AppendLine();
 
+                    bool sealedClass = false;
                     var classInfo = FindStatement(funcData, "class_info") as Dsl.FunctionData;
+                    if (null != classInfo) {
+                        foreach (var def in classInfo.Params) {
+                            var mdef = def as Dsl.FunctionData;
+                            string key = mdef.GetId();
+                            string val = mdef.GetParamId(0);
+                            bool bv;
+                            bool.TryParse(val, out bv);
+                            if (key == "sealed") {
+                                sealedClass = true;
+                                break;
+                            }
+                        }
+                    }
                     if (s_GenClassInfo && null != classInfo) {
                         var fcall = classInfo;
                         if (classInfo.IsHighOrder)
@@ -589,7 +603,7 @@ namespace Generator
                     }
 
                     var methodInfo = FindStatement(funcData, "method_info") as Dsl.FunctionData;
-                    if (null != methodInfo && methodInfo.GetParamNum() > 0) {
+                    if ((!sealedClass || s_GenMethodInfo) && null != methodInfo && methodInfo.GetParamNum() > 0) {
                         sb.AppendFormatLine("{0}local method_info = {{", GetIndentString(indent));
                         ++indent;
                         foreach (var def in methodInfo.Params) {
@@ -600,17 +614,25 @@ namespace Generator
                                     fcall = mfunc.LowerOrderFunction;
                                 bool gen = s_GenMethodInfo;
                                 if (!gen) {
-                                    if (mfunc.GetId() == "ctor") {
+                                    if (mfunc.GetId().StartsWith("ctor")) {
                                         gen = true;
                                     }
                                     else {
+                                        var accessibility = CalcTypeString(fcall.GetParam(1));
+                                        if (accessibility != "Accessibility.Private") {
+                                            gen = true;
+                                        }
                                         foreach (var minfo in mfunc.Params) {
                                             var mdef = minfo as Dsl.FunctionData;
                                             string key = mdef.GetId();
                                             string val = mdef.GetParamId(0);
                                             bool bv;
                                             bool.TryParse(val, out bv);
-                                            if (key == "abstract" || key == "virtual" || key == "override") {
+                                            if (key == "sealed") {
+                                                gen = false;
+                                                break;
+                                            }
+                                            else if (key == "abstract" || key == "virtual" || key == "override") {
                                                 gen = true;
                                                 break;
                                             }

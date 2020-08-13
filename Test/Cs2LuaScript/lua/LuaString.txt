@@ -59,6 +59,18 @@ LuaString = {
 
 		local class_info = nil;
 		local method_info = {
+			Format__System_String__System_Object = {
+				Kind = MethodKind.Ordinary,
+				static = true,
+			},
+			Format__System_String__System_Object__System_Object = {
+				Kind = MethodKind.Ordinary,
+				static = true,
+			},
+			Format__System_String__System_Object__System_Object__System_Object = {
+				Kind = MethodKind.Ordinary,
+				static = true,
+			},
 			ctor = {
 				Kind = MethodKind.Constructor,
 			},

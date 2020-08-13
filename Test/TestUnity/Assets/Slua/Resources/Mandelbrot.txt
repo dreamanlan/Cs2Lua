@@ -124,6 +124,12 @@ Mandelbrot = {
 
 		local class_info = nil;
 		local method_info = {
+			Init = {
+				Kind = MethodKind.Ordinary,
+			},
+			Call = {
+				Kind = MethodKind.Ordinary,
+			},
 			ctor = {
 				Kind = MethodKind.Constructor,
 			},

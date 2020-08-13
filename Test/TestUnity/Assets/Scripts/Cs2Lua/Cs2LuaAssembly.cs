@@ -21,7 +21,6 @@ internal class Cs2LuaAssembly
     }
     internal void Init()
     {
-        ObjectCache.AddAQName(typeof(LinkedListNode<CsLibrary.EntityInfo>), "LinkedListNodeEntityInfo");
         ObjectCache.AddAQName(typeof(KeyValuePair<int, int>), "IntIntPair");
         ObjectCache.AddAQName(typeof(KeyValuePair<int, float>), "IntFloatPair");
         ObjectCache.AddAQName(typeof(KeyValuePair<int, string>), "IntStrPair");

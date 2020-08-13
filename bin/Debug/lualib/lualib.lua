@@ -1256,7 +1256,7 @@ __mt_index_of_array = function(t, k)
     elseif k == "Length" or k == "Count" then
         return __get_array_count(t)
     elseif k == "get_Length" or k == "get_Count" then    
-        return function(t) return __get_table_count(t) end
+        return function(obj) return __get_table_count(obj) end
     elseif k == "GetLength" then
         return function(obj, ix)
             local ret = 0
@@ -1525,7 +1525,7 @@ __mt_index_of_dictionary = function(t, k)
     elseif k == "Count" then
         return __get_table_count(t)
     elseif k == "get_Count" then    
-        return function(t) return __get_table_count(t) end
+        return function(obj) return __get_table_count(obj) end
     elseif k == "Add" then
         return function(obj, p1, p2)
             p1 = __unwrap_if_string(p1)     
@@ -1656,7 +1656,7 @@ __mt_index_of_hashset = function(t, k)
     elseif k == "Count" then
         return __get_table_count(t)
     elseif k == "get_Count" then    
-        return function(t) return __get_table_count(t) end
+        return function(obj) return __get_table_count(obj) end
     elseif k == "Add" then
         return function(obj, p)
             p = __unwrap_if_string(p) 
@@ -1731,6 +1731,8 @@ function GetArrayEnumerator(tb)
             __index = function(t, k)
                 if k == "Current" then
                     return t.current
+                elseif k == "get_Current" then
+                    return function(obj) return obj.current end
                 end
                 return nil
             end
@@ -1764,6 +1766,8 @@ function GetDictEnumerator(tb)
             __index = function(t, k)
                 if k == "Current" then
                     return t.current
+                elseif k == "get_Current" then
+                    return function(obj) return obj.current end
                 end
                 return nil
             end
@@ -1792,6 +1796,8 @@ function GetHashsetEnumerator(tb)
             __index = function(t, k)
                 if k == "Current" then
                     return __wrap_if_string(t.key)
+                elseif k == "get_Current" then
+                    return function(obj) return __wrap_if_string(obj.Key) end
                 end
                 return nil
             end
@@ -1876,7 +1882,7 @@ end
 
 function newlist(t, typeargs, typekinds, ctor, list, ...)
     if list then
-        return setmetatable(list, {__index = __mt_index_of_array, __cs2lua_defined = true, __class = t})
+        return setmetatable(list, {__index = __mt_index_of_array, __count = #list, __cs2lua_defined = true, __class = t})
     end
 end
 
@@ -1926,7 +1932,7 @@ end
 
 function newexternlist(t, typeargs, typekinds, list, ...)
     if list and t == System.Collections.Generic.List_T then
-        return setmetatable(list, {__index = __mt_index_of_array, __cs2lua_defined = true, __class = t})
+        return setmetatable(list, {__index = __mt_index_of_array, __count = #list, __cs2lua_defined = true, __class = t})
     else
         local obj = t(...)
         if obj then
@@ -1944,7 +1950,7 @@ end
 
 function newexterncollection(t, typeargs, typekinds, coll, ...)
     if coll and (t == System.Collections.Generic.Queue_T or t == System.Collections.Generic.Stack_T) then
-        return setmetatable(coll, {__index = __mt_index_of_array, __cs2lua_defined = true, __class = t})
+        return setmetatable(coll, {__index = __mt_index_of_array, __count = #coll, __cs2lua_defined = true, __class = t})
     elseif coll and t == System.Collections.Generic.HashSet_T then
         return setmetatable(coll, {__index = __mt_index_of_hashset, __cs2lua_defined = true, __class = t, __cs2lua_data = {}})
     else
@@ -2616,17 +2622,22 @@ function defineclass(
                 end
                 local obj = {}
                 for k, v in pairs(instance_methods) do
-                    local minfo = method_info[k]
-                    if not minfo then
+                    if not method_info then
                         obj[k] = v
                     else
-                        if minfo["abstract"] or minfo["virtual"] or minfo["override"] then
-                            obj[k] = __wrap_virtual_method(k, v)
-                        else
+                        local minfo = method_info[k]
+                        if not minfo then
                             obj[k] = v
-                        end
-                        if k == "ctor" or ((not minfo["private"]) and (not minfo["sealed"])) then
-                            obj["__self__" .. k] = v
+                        else
+                            if minfo["abstract"] or minfo["virtual"] or minfo["override"] then
+                                obj[k] = __wrap_virtual_method(k, v)
+                            else
+                                obj[k] = v
+                            end
+                            local result = string.find(k,"ctor",1,true)
+                            if (result==1) or ((not minfo["private"]) and (not minfo["sealed"])) then
+                                obj["__self__" .. k] = v
+                            end
                         end
                     end
                 end
