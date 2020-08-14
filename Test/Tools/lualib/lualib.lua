@@ -2528,32 +2528,136 @@ function __unwrap_if_string(val)
     end
 end
 
+function __find_base_class_key(k, base_class)
+    if nil == k then
+        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
+        return false
+    end
+    if base_class then
+        if rawget(base_class, "__cs2lua_defined") then
+            local r, v =
+                pcall(
+                function()
+                    return base_class.__exist(k)
+                end
+            )
+            if r then
+                return v
+            end
+        else
+            local r, ret =
+                pcall(
+                function()
+                    return base_class[k]
+                end
+            )
+            if r then
+                return true
+            end
+        end
+    end
+    return false
+end
+function __find_class_key(k, class, class_fields, base_class)
+    if nil == k then
+        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
+        return false
+    end
+    local ret
+    ret = rawget(class, k)
+    if nil ~= ret then
+        return true
+    end
+    ret = class_fields[k]
+    if nil ~= ret then
+        return true
+    end
+    return __find_base_class_key(k, base_class)
+end
+function __wrap_virtual_method(k, f)
+    return function(this, ...)
+        local child = rawget(this, "__child__")
+        local final_nf = nil
+        local final_child = nil
+        while child do
+            local nf = rawget(child, k)
+            if nf then
+                final_nf = nf
+                final_child = child
+            end
+            child = rawget(child, "__child__")
+        end
+        if final_nf then
+            return final_nf(final_child, ...)
+        end
+        return f(this, ...)
+    end
+end
+
+function __find_base_obj_key(k, baseObj)
+    if nil == k then
+        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
+        return false
+    end
+    if baseObj then
+        local meta = getmetatable(baseObj)
+        if meta and rawget(meta, "__cs2lua_defined") then
+            local r, v =
+                pcall(
+                function()
+                    return baseObj:__exist(k)
+                end
+            )
+            if r then
+                return v
+            end
+        else
+            local r, ret =
+                pcall(
+                function()
+                    return baseObj[k]
+                end
+            )
+            if r then
+                return true
+            end
+        end
+    end
+    return false
+end
+function __find_obj_key(k, obj, obj_fields, baseObj)
+    if nil == k then
+        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
+        return false
+    end
+    local ret
+    ret = rawget(obj, k)
+    if nil ~= ret then
+        return true
+    end
+    ret = obj_fields[k]
+    if nil ~= ret then
+        return true
+    end
+    return __find_base_obj_key(k, baseObj)
+end
+
 function defineclass(
     base,
     fullName,
     typeName,
-    static,
-    static_methods,
-    static_fields_build,
+    class_build,
     instance_methods,
     instance_fields_build,
-    interfaces,
-    class_info,
-    method_info,
-    property_info,
-    event_info,
-    field_info,
     is_value_type)
+    
     local base_class = base
     local mt = getmetatable(base_class)
 
-    local class = static or {}
-    for ck, cv in pairs(static_methods) do
-        rawset(class, ck, cv)
-    end
-    local class_fields = {}
-    local class_props = static_props or {}
-    local class_events = static_events or {}
+    local class, class_fields = class_build()
+    local interfaces = class.__interfaces
+    local method_info = class.__method_info
+    
     rawset(class, "__cs2lua_defined", true)
     rawset(class, "__cs2lua_fullname", fullName)
     rawset(class, "__cs2lua_typename", typeName)
@@ -2561,229 +2665,13 @@ function defineclass(
     rawset(class, "__is_value_type", is_value_type)
     rawset(class, "__interfaces", interfaces)
 
-    local function __find_base_class_key(k)
-        if nil == k then
-            UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-            return false
-        end
-        if base_class then
-            if rawget(base_class, "__cs2lua_defined") then
-                local r, v =
-                    pcall(
-                    function()
-                        return base_class.__exist(k)
-                    end
-                )
-                if r then
-                    return v
-                end
-            else
-                local r, ret =
-                    pcall(
-                    function()
-                        return base_class[k]
-                    end
-                )
-                if r then
-                    return true
-                end
-            end
-        end
-        return false
-    end
-    local function __find_class_key(k)
-        if nil == k then
-            UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-            return false
-        end
-        local ret
-        ret = rawget(class, k)
-        if nil ~= ret then
-            return true
-        end
-        ret = class_fields[k]
-        if nil ~= ret then
-            return true
-        end
-        return __find_base_class_key(k)
-    end
-    local function __wrap_virtual_method(k, f)
-        return function(this, ...)
-            local child = rawget(this, "__child__")
-            local final_nf = nil
-            local final_child = nil
-            while child do
-                local nf = rawget(child, k)
-                if nf then
-                    final_nf = nf
-                    final_child = child
-                end
-                child = rawget(child, "__child__")
-            end
-            if final_nf then
-                return final_nf(final_child, ...)
-            end
-            return f(this, ...)
-        end
-    end
-
     setmetatable(
         class,
         {
-            __call = function()
-                local baseObj = nil
-                if base_class == UnityEngine.MonoBehaviour then
-                    baseObj = nil
-                elseif mt then
-                    baseObj = mt.__call()
-                end
-                local obj = {}
-                for k, v in pairs(instance_methods) do
-                    if not method_info then
-                        obj[k] = v
-                    else
-                        local minfo = method_info[k]
-                        if not minfo then
-                            obj[k] = v
-                        else
-                            if minfo["abstract"] or minfo["virtual"] or minfo["override"] then
-                                obj[k] = __wrap_virtual_method(k, v)
-                            else
-                                obj[k] = v
-                            end
-                            local result = string.find(k,"ctor",1,true)
-                            if (result==1) or ((not minfo["private"]) and (not minfo["sealed"])) then
-                                obj["__self__" .. k] = v
-                            end
-                        end
-                    end
-                end
-                local obj_fields
-                if instance_fields_build then
-                    obj_fields = instance_fields_build()
-                else
-                    obj_fields = {}
-                end
-
-                obj["base"] = baseObj
-                if baseObj then
-                    baseObj["__child__"] = obj
-                end
-
-                local function __find_base_obj_key(k)
-                    if nil == k then
-                        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-                        return false
-                    end
-                    if baseObj then
-                        local meta = getmetatable(baseObj)
-                        if meta and rawget(meta, "__cs2lua_defined") then
-                            local r, v =
-                                pcall(
-                                function()
-                                    return baseObj:__exist(k)
-                                end
-                            )
-                            if r then
-                                return v
-                            end
-                        else
-                            local r, ret =
-                                pcall(
-                                function()
-                                    return baseObj[k]
-                                end
-                            )
-                            if r then
-                                return true
-                            end
-                        end
-                    end
-                    return false
-                end
-                local function __find_obj_key(k)
-                    if nil == k then
-                        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-                        return false
-                    end
-                    local ret
-                    ret = rawget(obj, k)
-                    if nil ~= ret then
-                        return true
-                    end
-                    ret = obj_fields[k]
-                    if nil ~= ret then
-                        return true
-                    end
-                    return __find_base_obj_key(k)
-                end
-
-                setmetatable(
-                    obj,
-                    {
-                        __class = class,
-                        __cs2lua_defined = true,
-                        __cs2lua_fullname = fullName,
-                        __cs2lua_typename = typeName,
-                        __cs2lua_parent = base_class,
-                        __is_value_type = is_value_type,
-                        __interfaces = interfaces,
-                        __index = function(t, k)
-                            if k == "__exist" then
-                                return function(tb, fk)
-                                    return __find_obj_key(fk)
-                                end
-                            end
-                            if nil == k then
-                                UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-                                return nil
-                            end
-                            local ret
-                            ret = obj_fields[k]
-                            if nil ~= ret then
-                                return __unwrap_table_field(ret)
-                            end
-                            if __find_base_obj_key(k) then
-                                ret = baseObj[k]
-                                return ret
-                            end
-                            --简单支持反射方法:GetType()
-                            if k == "GetType" then
-                                return function(tb)
-                                    return class
-                                end
-                            end
-                            return ret
-                        end,
-                        __newindex = function(t, k, v)
-                            if nil == k then
-                                UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-                                return
-                            end
-                            local ret
-                            ret = obj_fields[k]
-                            if nil ~= ret then
-                                obj_fields[k] = __wrap_table_field(v)
-                                return
-                            end
-                            if __find_base_obj_key(k) then
-                                baseObj[k] = v
-                                return
-                            end
-                            rawset(t, k, v)
-                        end,
-                        __setbase = function(self, base)
-                            baseObj = base
-                        end
-                    }
-                )
-
-                return obj
-            end,
             __index = function(t, k)
                 if k == "__exist" then
                     return function(fk)
-                        return __find_class_key(fk)
+                        return __find_class_key(fk, class, class_fields, base_class)
                     end
                 end
                 if nil == k then
@@ -2795,7 +2683,7 @@ function defineclass(
                 if nil ~= ret then
                     return __unwrap_table_field(ret)
                 end
-                if __find_base_class_key(k) then
+                if __find_base_class_key(k, base_class) then
                     ret = base_class[k]
                     return ret
                 end
@@ -2818,23 +2706,115 @@ function defineclass(
                     class_fields[k] = __wrap_table_field(v)
                     return
                 end
-                if __find_base_class_key(k) then
+                if __find_base_class_key(k, base_class) then
                     base_class[k] = v
                     return
                 end
                 rawset(t, k, v)
+            end,
+            __call = function()
+                local baseObj = nil
+                if base_class == UnityEngine.MonoBehaviour then
+                    baseObj = nil
+                elseif mt then
+                    baseObj = mt.__call()
+                end
+                local obj = {}
+                local obj_fields = instance_fields_build()
+                for k, v in pairs(instance_methods) do
+                    if not method_info then
+                        obj[k] = v
+                    else
+                        local minfo = method_info[k]
+                        if not minfo then
+                            obj[k] = v
+                        else
+                            if minfo["abstract"] or minfo["virtual"] or minfo["override"] then
+                                obj[k] = __wrap_virtual_method(k, v)
+                            else
+                                obj[k] = v
+                            end
+                            local result = string.find(k,"ctor",1,true)
+                            if (result==1) or ((not minfo["private"]) and (not minfo["sealed"])) then
+                                obj["__self__" .. k] = v
+                            end
+                        end
+                    end
+                end
+                
+                obj["base"] = baseObj
+                if baseObj then
+                    baseObj["__child__"] = obj
+                end
+
+                setmetatable(
+                    obj,
+                    {
+                        __class = class,
+                        __cs2lua_defined = true,
+                        __cs2lua_fullname = fullName,
+                        __cs2lua_typename = typeName,
+                        __cs2lua_parent = base_class,
+                        __is_value_type = is_value_type,
+                        __interfaces = interfaces,
+                        __index = function(t, k)
+                            if k == "__exist" then
+                                return function(tb, fk)
+                                    return __find_obj_key(fk, obj, obj_fields, baseObj)
+                                end
+                            end
+                            if nil == k then
+                                UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
+                                return nil
+                            end
+                            local ret
+                            ret = obj_fields[k]
+                            if nil ~= ret then
+                                return __unwrap_table_field(ret)
+                            end
+                            if __find_base_obj_key(k, baseObj) then
+                                ret = baseObj[k]
+                                return ret
+                            end
+                            --简单支持反射方法:GetType()
+                            if k == "GetType" then
+                                return function(tb)
+                                    return class
+                                end
+                            end
+                            return ret
+                        end,
+                        __newindex = function(t, k, v)
+                            if nil == k then
+                                UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
+                                return
+                            end
+                            local ret
+                            ret = obj_fields[k]
+                            if nil ~= ret then
+                                obj_fields[k] = __wrap_table_field(v)
+                                return
+                            end
+                            if __find_base_obj_key(k, baseObj) then
+                                baseObj[k] = v
+                                return
+                            end
+                            rawset(t, k, v)
+                        end,
+                        __setbase = function(self, base)
+                            baseObj = base
+                        end
+                    }
+                )
+
+                return obj
             end
         }
     )
-    if static_fields_build then
-        local sfb = static_fields_build()
-        for sfk, sfv in pairs(sfb) do
-            rawset(class_fields, sfk, sfv)
-        end
-    end
     if class.cctor then
         class.cctor()
     end
+    
     return class
 end
 

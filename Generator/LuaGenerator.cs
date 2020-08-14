@@ -271,81 +271,7 @@ namespace Generator
                             if (mdef.GetId() == "=") {
                                 string mname = mdef.GetParamId(0);
                                 var fdef = mdef.GetParam(1) as Dsl.FunctionData;
-                                if (mname == "__new_object" && null != fdef) {
-                                    var fcall = fdef;
-                                    if (fdef.IsHighOrder)
-                                        fcall = fdef.LowerOrderFunction;
-                                    bool haveParams = false;
-                                    sb.AppendFormat("{0}{1} = {2}(", GetIndentString(indent), mname, fcall.GetId());
-                                    prestr = string.Empty;
-                                    for (int ix = 0; ix < fcall.Params.Count; ++ix) {
-                                        var param = fcall.Params[ix];
-                                        sb.Append(prestr);
-                                        prestr = ", ";
-                                        var pv = param as Dsl.ValueData;
-                                        if (null != pv) {
-                                            var pname = pv.GetId();
-                                            if (ix == fcall.Params.Count - 1 && pname == "...")
-                                                haveParams = true;
-                                            sb.Append(pname);
-                                        }
-                                        else {
-                                            var pc = param as Dsl.FunctionData;
-                                            if (null != pc) {
-                                                var pname = pc.GetParamId(0);
-                                                if (ix == fcall.Params.Count - 1 && pname == "...")
-                                                    haveParams = true;
-                                                sb.Append(pname);
-                                            }
-                                        }
-                                    }
-                                    sb.AppendLine(")");
-                                    ++indent;
-                                    var logInfo = GetPrologueAndEpilogue(className, mname);
-                                    if (null != logInfo.PrologueInfo) {
-                                        sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.PrologueInfo, className, mname));
-                                    }
-                                    if (null != logInfo.EpilogueInfo) {
-                                        sb.AppendFormatLine("{0}return (function(...) local args={{...}}; {1}; return ...; end)((function({2}) ", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname), haveParams ? "..." : string.Empty);
-                                    }
-                                    foreach (var comp in fdef.Params) {
-                                        GenerateSyntaxComponent(comp, sb, indent, true);
-                                        string subId = comp.GetId();
-                                        if (subId != "comments" && subId != "comment") {
-                                            sb.AppendLine(";");
-                                        }
-                                        else {
-                                            sb.AppendLine();
-                                        }
-                                    }
-                                    if (null != logInfo.EpilogueInfo) {
-                                        sb.AppendFormatLine("{0}end)({1}));", GetIndentString(indent), haveParams ? "..." : string.Empty);
-                                    }
-                                    --indent;
-                                    sb.AppendFormatLine("{0}end,", GetIndentString(indent));
-                                }
-                            }
-                        }
-                    }
-
-                    var logInfoForDefineClass = GetPrologueAndEpilogue(className, "__define_class");
-                    sb.AppendFormatLine("{0}__define_class = function()", GetIndentString(indent));
-                    ++indent;
-                    if (null != logInfoForDefineClass.PrologueInfo) {
-                        sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfoForDefineClass.PrologueInfo, className, "__define_class"));
-                    }
-                    sb.AppendFormatLine("{0}local static = {1};", GetIndentString(indent), className);
-
-                    if (null != staticMethods) {
-                        sb.AppendFormatLine("{0}local static_methods = {{", GetIndentString(indent));
-                        ++indent;
-                        foreach (var def in staticMethods.Params) {
-                            var mdef = def as Dsl.FunctionData;
-                            if (mdef.GetId() == "=") {
-                                string mname = mdef.GetParamId(0);
-                                var param1 = mdef.GetParam(1);
-                                var fdef = param1 as Dsl.FunctionData;
-                                if (null != fdef && mname != "__new_object") {
+                                if (null != fdef) {
                                     if (fdef.HaveStatement()) {
                                         var fcall = fdef;
                                         if (fdef.IsHighOrder)
@@ -407,15 +333,20 @@ namespace Generator
                                 }
                             }
                         }
-                        --indent;
-                        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
                     }
 
+                    var logInfoForDefineClass = GetPrologueAndEpilogue(className, "__define_class");
+                    sb.AppendFormatLine("{0}__define_class = function()", GetIndentString(indent));
+                    ++indent;
+                    if (null != logInfoForDefineClass.PrologueInfo) {
+                        sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfoForDefineClass.PrologueInfo, className, "__define_class"));
+                    }
                     sb.AppendLine();
 
-                    sb.AppendFormatLine("{0}local static_fields_build = function()", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}local class_build = function()", GetIndentString(indent));
                     ++indent;
-                    sb.AppendFormatLine("{0}local static_fields = {{", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}local class = {1};", GetIndentString(indent), className);
+                    sb.AppendFormatLine("{0}local class_fields = {{", GetIndentString(indent));
                     ++indent;
 
                     var staticFields = FindStatement(funcData, "static_fields") as Dsl.FunctionData;
@@ -434,7 +365,7 @@ namespace Generator
 
                     --indent;
                     sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    sb.AppendFormatLine("{0}return static_fields;", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}return class, class_fields;", GetIndentString(indent));
                     --indent;
                     sb.AppendFormatLine("{0}end;", GetIndentString(indent));
                     
@@ -517,9 +448,9 @@ namespace Generator
                         sb.AppendFormatLine("{0}}};", GetIndentString(indent));
                     }
 
-
                     sb.AppendFormatLine("{0}local instance_fields_build = function()", GetIndentString(indent));
                     ++indent;
+					
                     sb.AppendFormatLine("{0}local instance_fields = {{", GetIndentString(indent));
                     ++indent;
 
@@ -542,27 +473,38 @@ namespace Generator
                     sb.AppendFormatLine("{0}return instance_fields;", GetIndentString(indent));
                     --indent;
                     sb.AppendFormatLine("{0}end;", GetIndentString(indent));
-                    
+
+                    sb.AppendLine();
+                    if (null != logInfoForDefineClass.EpilogueInfo) {
+                        sb.AppendFormatLine("{0}local __defineclass_return = defineclass({1}, \"{2}\", \"{3}\", class_build, instance_methods, instance_fields_build, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
+                        sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfoForDefineClass.EpilogueInfo, className, "__define_class"));
+                        sb.AppendFormatLine("{0}return __defineclass_return;", GetIndentString(indent));
+                    }
+                    else {
+                        sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", \"{3}\", class_build, instance_build, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
+                    }
+                    --indent;
+                    sb.AppendFormatLine("{0}end,", GetIndentString(indent));
+
                     sb.AppendLine();
 
                     var interfaces = FindStatement(funcData, "interfaces") as Dsl.FunctionData;
                     if (null != interfaces && interfaces.GetParamNum() > 0) {
-                        sb.AppendFormatLine("{0}local interfaces = {{", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}__interfaces = {{", GetIndentString(indent));
                         ++indent;
                         foreach (var def in interfaces.Params) {
                             var mdef = def as Dsl.ValueData;
                             sb.AppendFormatLine("{0}\"{1}\",", GetIndentString(indent), mdef.GetId());
                         }
                         --indent;
-                        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}}},", GetIndentString(indent));
                     }
                     else {
-                        sb.AppendFormatLine("{0}local interfaces = nil;", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}__interfaces = nil,", GetIndentString(indent));
                     }
 
-                    sb.AppendLine();
-
                     bool sealedClass = false;
+                    bool staticClass = false;
                     var classInfo = FindStatement(funcData, "class_info") as Dsl.FunctionData;
                     if (null != classInfo) {
                         foreach (var def in classInfo.Params) {
@@ -575,13 +517,17 @@ namespace Generator
                                 sealedClass = true;
                                 break;
                             }
+                            else if (key == "static") {
+                                staticClass = true;
+                                break;
+                            }
                         }
                     }
                     if (s_GenClassInfo && null != classInfo) {
                         var fcall = classInfo;
                         if (classInfo.IsHighOrder)
                             fcall = classInfo.LowerOrderFunction;
-                        sb.AppendFormatLine("{0}local class_info = {{", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}__class_info = {{", GetIndentString(indent));
                         ++indent;
                         var kind = CalcTypeString(fcall.GetParam(0));
                         var accessibility = CalcTypeString(fcall.GetParam(1));
@@ -596,15 +542,15 @@ namespace Generator
                             sb.AppendFormatLine("{0}{1} = {2},", GetIndentString(indent), key, val);
                         }
                         --indent;
-                        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}}},", GetIndentString(indent));
                     }
                     else {
-                        sb.AppendFormatLine("{0}local class_info = nil;", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}__class_info = nil,", GetIndentString(indent));
                     }
 
                     var methodInfo = FindStatement(funcData, "method_info") as Dsl.FunctionData;
-                    if ((!sealedClass || s_GenMethodInfo) && null != methodInfo && methodInfo.GetParamNum() > 0) {
-                        sb.AppendFormatLine("{0}local method_info = {{", GetIndentString(indent));
+                    if ((!sealedClass && !staticClass || s_GenMethodInfo) && null != methodInfo && methodInfo.GetParamNum() > 0) {
+                        sb.AppendFormatLine("{0}__method_info = {{", GetIndentString(indent));
                         ++indent;
                         foreach (var def in methodInfo.Params) {
                             var mfunc = def as Dsl.FunctionData;
@@ -660,15 +606,15 @@ namespace Generator
                             }
                         }
                         --indent;
-                        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}}},", GetIndentString(indent));
                     }
                     else {
-                        sb.AppendFormatLine("{0}local method_info = nil;", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}__method_info = nil,", GetIndentString(indent));
                     }
 
                     var propertyInfo = FindStatement(funcData, "property_info") as Dsl.FunctionData;
                     if (s_GenPropertyInfo && null != propertyInfo && propertyInfo.GetParamNum() > 0) {
-                        sb.AppendFormatLine("{0}local property_info = {{", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}__property_info = {{", GetIndentString(indent));
                         ++indent;
                         foreach (var def in propertyInfo.Params) {
                             var mfunc = def as Dsl.FunctionData;
@@ -693,15 +639,15 @@ namespace Generator
                             }
                         }
                         --indent;
-                        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}}},", GetIndentString(indent));
                     }
                     else {
-                        sb.AppendFormatLine("{0}local property_info = nil;", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}__property_info = nil,", GetIndentString(indent));
                     }
 
                     var eventInfo = FindStatement(funcData, "event_info") as Dsl.FunctionData;
                     if (s_GenEventInfo && null != eventInfo && eventInfo.GetParamNum() > 0) {
-                        sb.AppendFormatLine("{0}local field_info = {{", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}__event_info = {{", GetIndentString(indent));
                         ++indent;
                         foreach (var def in eventInfo.Params) {
                             var mfunc = def as Dsl.FunctionData;
@@ -726,15 +672,15 @@ namespace Generator
                             }
                         }
                         --indent;
-                        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}}},", GetIndentString(indent));
                     }
                     else {
-                        sb.AppendFormatLine("{0}local event_info = nil;", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}__event_info = nil,", GetIndentString(indent));
                     }
 
                     var fieldInfo = FindStatement(funcData, "field_info") as Dsl.FunctionData;
                     if (s_GenFieldInfo && null != fieldInfo && fieldInfo.GetParamNum() > 0) {
-                        sb.AppendFormatLine("{0}local field_info = {{", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}__field_info = {{", GetIndentString(indent));
                         ++indent;
                         foreach (var def in fieldInfo.Params) {
                             var mfunc = def as Dsl.FunctionData;
@@ -756,23 +702,11 @@ namespace Generator
                             }
                         }
                         --indent;
-                        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}}},", GetIndentString(indent));
                     }
                     else {
-                        sb.AppendFormatLine("{0}local field_info = nil;", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}__field_info = nil,", GetIndentString(indent));
                     }
-
-                    sb.AppendLine();
-                    if (null != logInfoForDefineClass.EpilogueInfo) {
-                        sb.AppendFormatLine("{0}local __defineclass_return = defineclass({1}, \"{2}\", \"{3}\", static, static_methods, static_fields_build, instance_methods, instance_fields_build, interfaces, class_info, method_info, property_info, event_info, field_info, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
-                        sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfoForDefineClass.EpilogueInfo, className, "__define_class"));
-                        sb.AppendFormatLine("{0}return __defineclass_return;", GetIndentString(indent));
-                    }
-                    else {
-                        sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", \"{3}\", static, static_methods, static_fields_build, instance_methods, instance_fields_build, interfaces, class_info, method_info, property_info, event_info, field_info, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
-                    }
-                    --indent;
-                    sb.AppendFormatLine("{0}end,", GetIndentString(indent));
                     --indent;
                     sb.AppendFormatLine("{0}}};", GetIndentString(indent));
 
