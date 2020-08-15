@@ -189,7 +189,7 @@ local v = t[1]
 
 local t1 = os.time()
 local d = 0
-for i=1,100000000 do
+for i=1,1000 do
 d = d + 1
 local k = d
 end
@@ -198,8 +198,24 @@ print("normal:",os.difftime(t2,t1))
 
 local t3 = os.time()
 local d2 = 0
-for i=1,100000000 do
+for i=1,1000 do
 local k = (function() d2=d2+1;return(d2); end)()
 end
 local t4 = os.time()
 print("functional:",os.difftime(t4,t3))
+
+local a=0
+local b=123
+local g_TaggedFuncs = {}
+function __setfunc(key, func)    
+    if not g_TaggedFuncs[key] then
+        g_TaggedFuncs[key] = func
+    end
+    return func
+end
+function __getfunc(key)
+    return g_TaggedFuncs[key]
+end
+for i=1,3 do
+    __setfunc("id", __getfunc("id") or (function() print(b);a=b;return a; end))()
+end

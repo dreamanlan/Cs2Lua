@@ -279,23 +279,32 @@ function settempmetatable(class)
 end
 
 function lualog(fmt, ...)
-    Utility.Warn(fmt, ...);
+    CsLibrary.LogSystem.Warn(fmt, ...);
 end
 
-function luausing(func)
-    return pcall(func)
+function luausing(func, ...)
+    if nil==func then
+        return true
+    else
+        return pcall(func, ...)
+    end
 end
 
-function luatry(func)
-    return xpcall(
-        func,
-        function(e)
-            local err = tostring(e)
-            local trace = debug.traceback(err)
-            UnityEngine.Debug.LogError("LogError_Object", err .. ", " .. trace)
-            return {err, trace}
-        end
-    )
+function luatry(func, ...)
+    if nil==func then
+        return true
+    else
+        return xpcall(
+            func,
+            ...,
+            function(e)
+                local err = tostring(e)
+                local trace = debug.traceback(err)
+                UnityEngine.Debug.LogError("LogError_Object", err .. ", " .. trace)
+                return {err, trace}
+            end
+        )
+    end
 end
 
 function luacatch(handled, ret, err, func)
@@ -1265,17 +1274,17 @@ function __dec_array_count(tb)
     end
 end
 
-__mt_index_of_array = function(t, k)
-    if k == "__exist" then --禁用继承
-        return function(tb, fk)
+__mt_index_of_array_table = {
+    __exist = function(tb, fk) --禁用继承
             return false
-        end
-    elseif k == "Length" or k == "Count" then
-        return __get_array_count(t)
-    elseif k == "get_Length" or k == "get_Count" then    
-        return function(obj) return __get_table_count(obj) end
-    elseif k == "GetLength" then
-        return function(obj, ix)
+        end,
+    get_Length = function(obj) 
+    		    return __get_table_count(obj) 
+    		end,
+    get_Count = function(obj) 
+    		    return __get_table_count(obj) 
+    		end,
+    GetLength = function(obj, ix)
             local ret = 0
             local tb = obj
             for i = 0, ix do
@@ -1283,15 +1292,13 @@ __mt_index_of_array = function(t, k)
                 tb = rawget(tb, 0)
             end
             return ret
-        end
-    elseif k == "Add" then
-        return function(obj, v)
+        end,
+    Add = function(obj, v)
             table.insert(obj, v)
             __inc_array_count(obj)
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj);
-        end
-    elseif k == "Remove" then
-        return function(obj, p)
+        end,
+    Remove = function(obj, p)
             local pos = 0
             local ret = nil
             local ct = __get_array_count(obj)
@@ -1309,15 +1316,13 @@ __mt_index_of_array = function(t, k)
             end
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
             return ret
-        end
-    elseif k == "RemoveAt" then
-        return function(obj, ix)
+        end,
+    RemoveAt = function(obj, ix)
             table.remove(obj, ix + 1)
             __dec_array_count(obj)
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
-        end
-    elseif k == "RemoveAll" then
-        return function(obj, pred)
+        end,
+    RemoveAll = function(obj, pred)
             local deletes = {}
             local ct = __get_array_count(obj)
             for i = 1, ct do
@@ -1330,24 +1335,21 @@ __mt_index_of_array = function(t, k)
                 __dec_array_count(obj)
             end
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
-        end
-    elseif k == "AddRange" then
-        return function(obj, coll)
+        end,
+    AddRange = function(obj, coll)
             local enumer = coll:GetEnumerator()
             while enumer:MoveNext() do
                 table.insert(obj, enumer.Current)
                 __inc_array_count(obj)
             end
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
-        end
-    elseif k == "Insert" then
-        return function(obj, ix, p)
+        end,
+    Insert = function(obj, ix, p)
             table.insert(obj, ix + 1, p)
             __inc_array_count(obj)
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
-        end
-    elseif k == "InsertRange" then
-        return function(obj, ix, coll)
+        end,
+    InsertRange = function(obj, ix, coll)
             local ct = 0
             local enumer = coll:GetEnumerator()
             while enumer:MoveNext() do
@@ -1356,17 +1358,15 @@ __mt_index_of_array = function(t, k)
                 ct = ct + 1
             end
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
-        end
-    elseif k == "RemoveRange" then
-        return function(obj, ix, ct)
+        end,
+    RemoveRange = function(obj, ix, ct)
             for i=1,ct do                
                 table.remove(obj, ix + 1)
                 __dec_array_count(obj)
             end
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
-        end
-    elseif k == "IndexOf" then                      --System.Collections.Generic.List<T>::IndexOf
-        return function(obj, sig, p, start, count)
+        end,
+    IndexOf = function(obj, sig, p, start, count)
             local ct = __get_array_count(obj)
             if count==nil then
                 count = ct
@@ -1381,9 +1381,8 @@ __mt_index_of_array = function(t, k)
                 end
             end
             return -1
-        end
-    elseif k == "LastIndexOf" then                  --System.Collections.Generic.List<T>::LastIndexOf
-        return function(obj, sig, p, start, count)
+        end,
+    LastIndexOf = function(obj, sig, p, start, count)
             local ct = __get_array_count(obj)
             if count==nil then
                 count = ct
@@ -1398,9 +1397,8 @@ __mt_index_of_array = function(t, k)
                 end
             end
             return -1
-        end
-    elseif k == "FindIndex" then
-        return function(obj, sig, p1, p2, p3)
+        end,
+    FindIndex = function(obj, sig, p1, p2, p3)
             local ct = __get_array_count(obj)
             local start = 0
             local count = ct
@@ -1420,9 +1418,8 @@ __mt_index_of_array = function(t, k)
                 end
             end
             return -1
-        end
-    elseif k == "Find" then
-        return function(obj, predicate)
+        end,
+    Find = function(obj, predicate)
             local ct = __get_array_count(obj)
             for i = 1, ct do
                 local v = rawget(obj, i)
@@ -1431,9 +1428,8 @@ __mt_index_of_array = function(t, k)
                 end
             end
             return nil
-        end
-    elseif k == "Contains" then
-        return function(obj, p)
+        end,
+    Contains = function(obj, p)
             local ret = false
             local ct = __get_array_count(obj)
             for i = 1, ct do
@@ -1444,115 +1440,104 @@ __mt_index_of_array = function(t, k)
                 end
             end
             return ret
-        end
-    elseif k == "Peek" then
-        return function(obj)
+        end,
+    Peek = function(obj)
             local ct = __get_array_count(obj)
             local v = rawget(obj, ct)
             return v
-        end
-    elseif k == "Enqueue" then
-        return function(obj, v)
+        end,
+    Enqueue = function(obj, v)
             table.insert(obj, 1, v)
             __inc_array_count(obj)
-        end
-    elseif k == "Dequeue" then
-        return function(obj)
+        end,
+    Dequeue = function(obj)
             local ct = __get_array_count(obj)
             local v = rawget(obj, ct)
             table.remove(obj, ct)
             __dec_array_count(obj)
             return v
-        end
-    elseif k == "Push" then
-        return function(obj, v)
+        end,
+    Push = function(obj, v)
             table.insert(obj, v)
             __inc_array_count(obj)
-        end
-    elseif k == "Pop" then
-        return function(obj)
+        end,
+    Pop = function(obj)
             local ct = __get_array_count(obj)
             local v = rawget(obj, ct)
             table.remove(obj, num)
             __dec_array_count(obj)
             return v
-        end
-    elseif k == "CopyTo" then
-        return function(obj, arr)
+        end,
+    CopyTo = function(obj, arr)
             local ct = __get_array_count(obj)
             for k = 1, ct do
                 arr[k] = rawget(obj, k)
             end
-        end
-    elseif k == "ToArray" then
-        return function(obj)
+        end,
+    ToArray = function(obj)
             local ct = __get_array_count(obj)
             local ret = wraparray({}, ct)
             for k = 1, ct do
                 ret[k] = rawget(obj, k)
             end
             return ret
-        end
-    elseif k == "Clear" then
-        return function(obj)
+        end,
+    Clear = function(obj)
             local ct = __get_array_count(obj)
             for i = ct, 1, -1 do
                 table.remove(obj, i)
             end
             __set_array_count(obj, 0)
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
-        end
-    elseif k == "GetEnumerator" then
-        return function(obj)
+        end,
+    GetEnumerator = function(obj)
             return GetArrayEnumerator(obj)
-        end
-    elseif k == "Sort" then                         --System.Collections.Generic.List<T>::Sort
-        return function(obj, sig, predicate)
+        end,
+    Sort = function(obj, sig, predicate)
             table.sort(
                 obj,
                 function(a, b)
                     return predicate(a, b) < 0
                 end
             )
-        end
-    elseif k == "Sort__System_Comparison_T" then    --Cs2LuaList<T>::Sort
-        return function(obj, predicate)
+        end,
+    Sort__System_Comparison_T = function(obj, predicate)
             table.sort(
                 obj,
                 function(a, b)
                     return predicate(a, b) < 0
                 end
             )
-        end
-    elseif k == "GetType" then
-        return function(obj)
+        end,
+    GetType = function(obj)
             local meta = getmetatable(obj)
             return meta.__class
-        end
-    -- else
-    --   return rawget(t,k);
+        end,
+}
+
+__mt_index_of_array = function(t, k)
+    if k == "Length" or k == "Count" then
+        return __get_array_count(t)
+    else
+		return __mt_index_of_array_table[k]
     end
 end
 
-__mt_index_of_dictionary = function(t, k)
-    if k == "__exist" then --禁用继承
-        return function(tb, fk)
+__mt_index_of_dictionary_table = {
+    __exist = function(tb, fk)    --禁用继承
             return false
-        end
-    elseif k == "Count" then
-        return __get_table_count(t)
-    elseif k == "get_Count" then    
-        return function(obj) return __get_table_count(obj) end
-    elseif k == "Add" then
-        return function(obj, p1, p2)
+        end,
+    get_Count = function(obj)
+             return __get_table_count(obj)
+         end,
+    Add = function(obj, p1, p2)
             p1 = __unwrap_if_string(p1)     
             local data = __get_table_data(obj)       
             rawset(data, p1, {value = p2})
             __inc_table_count(obj)
             return p2
-        end
-    elseif k == "Remove" then
-        return function(obj, p)
+        end,
+    Remove = function(obj, p)
             p = __unwrap_if_string(p) 
             local data = __get_table_data(obj)     
             local v = rawget(data, p)
@@ -1563,18 +1548,16 @@ __mt_index_of_dictionary = function(t, k)
             end
             __dec_table_count(obj)
             return ret
-        end
-    elseif k == "ContainsKey" then
-        return function(obj, p)
+        end,
+    ContainsKey = function(obj, p)
             p = __unwrap_if_string(p) 
             local data = __get_table_data(obj)     
             if rawget(data, p) then
                 return true
             end
             return false
-        end
-    elseif k == "ContainsValue" then
-        return function(obj, p)
+        end,
+    ContainsValue = function(obj, p)
             local ret = false 
             local data = __get_table_data(obj)     
             for k, v in pairs(data) do
@@ -1584,9 +1567,8 @@ __mt_index_of_dictionary = function(t, k)
                 end
             end
             return ret
-        end
-    elseif k == "TryGetValue" then
-        return function(obj, p)
+        end,
+    TryGetValue = function(obj, p)
             p = __unwrap_if_string(p) 
             local data = __get_table_data(obj)     
             local v = rawget(data, p)
@@ -1611,7 +1593,22 @@ __mt_index_of_dictionary = function(t, k)
                 end
             end
             return false, nil
-        end
+        end,
+    Clear = function(obj)
+            __clear_table(obj)
+        end,
+    GetEnumerator = function(obj)
+            return GetDictEnumerator(obj)
+        end,
+    GetType = function(obj)
+            local meta = getmetatable(obj)
+            return meta.__class
+        end,
+}
+
+__mt_index_of_dictionary = function(t, k)
+     if k == "Count" then
+        return __get_table_count(t)
     elseif k == "Keys" then
         local ret = wraparray {} 
         local data = __get_table_data(t)     
@@ -1629,27 +1626,19 @@ __mt_index_of_dictionary = function(t, k)
             __inc_array_count(ret)
         end
         return ret
-    elseif k == "Clear" then
-        return function(obj)
-            __clear_table(obj)
-        end
-    elseif k == "GetEnumerator" then
-        return function(obj)
-            return GetDictEnumerator(obj)
-        end
-    elseif k == "GetType" then
-        return function(obj)
-            local meta = getmetatable(obj)
-            return meta.__class
-        end
     else 
-        k = __unwrap_if_string(k) 
-        local data = __get_table_data(t)     
-        local v = rawget(data, k)
-        if v then
-            return v.value
+        local f = __mt_index_of_dictionary_table[k]
+        if f then
+            return f
+        else
+            k = __unwrap_if_string(k) 
+            local data = __get_table_data(t)     
+            local v = rawget(data, k)
+            if v then
+                return v.value
+            end
+            return nil
         end
-        return nil
     end
 end
 
@@ -1665,25 +1654,21 @@ __mt_newindex_of_dictionary = function(t, k, val)
     end
 end
 
-__mt_index_of_hashset = function(t, k)
-    if k == "__exist" then --禁用继承
-        return function(tb, fk)
+__mt_index_of_hashset_table={
+    __exist = function(tb, fk)  --禁用继承
             return false
-        end
-    elseif k == "Count" then
-        return __get_table_count(t)
-    elseif k == "get_Count" then    
-        return function(obj) return __get_table_count(obj) end
-    elseif k == "Add" then
-        return function(obj, p)
+        end,
+    get_Count = function(obj)
+             return __get_table_count(obj) 
+        end,
+    Add = function(obj, p)
             p = __unwrap_if_string(p) 
             local data = __get_table_data(obj)     
             rawset(data, p, true)
             __inc_table_count(obj)
             return true
-        end
-    elseif k == "Remove" then
-        return function(obj, p)
+        end,
+    Remove = function(obj, p)
             p = __unwrap_if_string(p) 
             local data = __get_table_data(obj)     
             local ret = rawget(data, p)
@@ -1692,41 +1677,44 @@ __mt_index_of_hashset = function(t, k)
             end
             __dec_table_count(obj)
             return ret
-        end
-    elseif k == "Contains" then
-        return function(obj, p)
+        end,
+    Contains = function(obj, p)
             p = __unwrap_if_string(p) 
             local data = __get_table_data(obj)     
             if rawget(data, p) then
                 return true
             end
             return false
-        end
-    elseif k == "CopyTo" then
-        return function(obj, arr) 
+        end,
+    CopyTo = function(obj, arr) 
             local data = __get_table_data(obj)     
             for k, v in pairs(data) do
                 k = __wrap_if_string(k)
                 table.insert(arr, k)
             end
-        end
-    elseif k == "Clear" then
-        return function(obj)
+        end,
+    Clear = function(obj)
             __clear_table(obj)
-        end
-    elseif k == "GetEnumerator" then
-        return function(obj)
+        end,
+    GetEnumerator = function(obj)
             return GetHashsetEnumerator(obj)
-        end
-    elseif k == "GetType" then
-        return function(obj)
+        end,
+    GetType = function(obj)
             local meta = getmetatable(obj)
             return meta.__class
-        end
+        end,
+}
+
+__mt_index_of_hashset = function(t, k)
+    if k == "Count" then
+        return __get_table_count(t)
+    else
+        return __mt_index_of_hashset_table[k]
     end
 end
 
 function GetArrayEnumerator(tb)
+    local function __get_Current(obj) return obj.current end
     return setmetatable(
         {
             MoveNext = function(this)
@@ -1749,7 +1737,7 @@ function GetArrayEnumerator(tb)
                 if k == "Current" then
                     return t.current
                 elseif k == "get_Current" then
-                    return function(obj) return obj.current end
+                    return __get_Current
                 end
                 return nil
             end
@@ -1758,6 +1746,7 @@ function GetArrayEnumerator(tb)
 end
 
 function GetDictEnumerator(tb)
+    local function __get_Current(obj) return obj.current end
     return setmetatable(
         {
             MoveNext = function(this)
@@ -1784,7 +1773,7 @@ function GetDictEnumerator(tb)
                 if k == "Current" then
                     return t.current
                 elseif k == "get_Current" then
-                    return function(obj) return obj.current end
+                    return __get_Current
                 end
                 return nil
             end
@@ -1793,6 +1782,7 @@ function GetDictEnumerator(tb)
 end
 
 function GetHashsetEnumerator(tb)
+    local function __get_Current(obj) return __wrap_if_string(obj.Key) end
     return setmetatable(
         {
             MoveNext = function(this)
@@ -1814,7 +1804,7 @@ function GetHashsetEnumerator(tb)
                 if k == "Current" then
                     return __wrap_if_string(t.key)
                 elseif k == "get_Current" then
-                    return function(obj) return __wrap_if_string(obj.Key) end
+                    return __get_Current
                 end
                 return nil
             end
@@ -2535,25 +2525,9 @@ function __find_base_class_key(k, base_class)
     end
     if base_class then
         if rawget(base_class, "__cs2lua_defined") then
-            local r, v =
-                pcall(
-                function()
-                    return base_class.__exist(k)
-                end
-            )
-            if r then
-                return v
-            end
+            return base_class.__exist(k)
         else
-            local r, ret =
-                pcall(
-                function()
-                    return base_class[k]
-                end
-            )
-            if r then
-                return true
-            end
+            return find_extern_class_or_obj_key(k,base_class)
         end
     end
     return false
@@ -2594,6 +2568,24 @@ function __wrap_virtual_method(k, f)
     end
 end
 
+function find_extern_class_or_obj_key(k, obj)
+    local t=getmetatable(obj)
+    repeat
+        local fun=rawget(t,k)
+        local tp=type(fun)        
+        if tp=='function' then 
+            return true 
+        elseif tp=='table' then
+            local f=fun[1]
+            if f then
+                return true
+            end
+        end
+        t = rawget(t,'__parent')
+    until t==nil
+    return false
+end
+
 function __find_base_obj_key(k, baseObj)
     if nil == k then
         UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
@@ -2602,25 +2594,9 @@ function __find_base_obj_key(k, baseObj)
     if baseObj then
         local meta = getmetatable(baseObj)
         if meta and rawget(meta, "__cs2lua_defined") then
-            local r, v =
-                pcall(
-                function()
-                    return baseObj:__exist(k)
-                end
-            )
-            if r then
-                return v
-            end
+            return baseObj:__exist(k)
         else
-            local r, ret =
-                pcall(
-                function()
-                    return baseObj[k]
-                end
-            )
-            if r then
-                return true
-            end
+            return find_extern_class_or_obj_key(k,baseObj)
         end
     end
     return false
@@ -2646,7 +2622,8 @@ function defineclass(
     base,
     fullName,
     typeName,
-    class_build,
+    class,
+    static_fields_build,
     instance_methods,
     instance_fields_build,
     is_value_type)
@@ -2654,7 +2631,7 @@ function defineclass(
     local base_class = base
     local mt = getmetatable(base_class)
 
-    local class, class_fields = class_build()
+    local class_fields = static_fields_build()
     local interfaces = class.__interfaces
     local method_info = class.__method_info
     
@@ -2665,14 +2642,20 @@ function defineclass(
     rawset(class, "__is_value_type", is_value_type)
     rawset(class, "__interfaces", interfaces)
 
+    local function __exist(fk)
+        return __find_class_key(fk, class, class_fields, base_class)
+    end
+
+    local function obj_GetType(tb)
+        return class
+    end
+
     setmetatable(
         class,
         {
             __index = function(t, k)
                 if k == "__exist" then
-                    return function(fk)
-                        return __find_class_key(fk, class, class_fields, base_class)
-                    end
+                    return __exist
                 end
                 if nil == k then
                     UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
@@ -2747,6 +2730,10 @@ function defineclass(
                     baseObj["__child__"] = obj
                 end
 
+                local function obj__exist(tb, fk)
+                    return __find_obj_key(fk, obj, obj_fields, baseObj)
+                end
+
                 setmetatable(
                     obj,
                     {
@@ -2759,9 +2746,7 @@ function defineclass(
                         __interfaces = interfaces,
                         __index = function(t, k)
                             if k == "__exist" then
-                                return function(tb, fk)
-                                    return __find_obj_key(fk, obj, obj_fields, baseObj)
-                                end
+                                return obj__exist
                             end
                             if nil == k then
                                 UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
@@ -2778,9 +2763,7 @@ function defineclass(
                             end
                             --简单支持反射方法:GetType()
                             if k == "GetType" then
-                                return function(tb)
-                                    return class
-                                end
+                                return obj_GetType
                             end
                             return ret
                         end,

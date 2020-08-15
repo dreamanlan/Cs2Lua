@@ -1160,14 +1160,14 @@ namespace RoslynTool.CsToDsl
                 ReturnContinueBreakAnalysis returnAnalysis = new ReturnContinueBreakAnalysis();
                 returnAnalysis.Visit(node.Statement);
                 if (returnAnalysis.Exist) {
-                    CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}) = dslusing(function(){{", GetIndentString(), retVar, retValVar);
+                    CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}) = dslusing{{", GetIndentString(), retVar, retValVar);
                     CodeBuilder.AppendLine();
                     ++m_Indent;
                     ++mi.TryCatchUsingLayer;
                     node.Statement.Accept(this);
                     --mi.TryCatchUsingLayer;
                     --m_Indent;
-                    CodeBuilder.AppendFormat("{0}}});", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                     CodeBuilder.AppendLine();
 
                     OutputTryCatchUsingReturn(returnAnalysis, mi, retVar, retValVar);

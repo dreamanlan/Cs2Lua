@@ -343,10 +343,10 @@ namespace Generator
                     }
                     sb.AppendLine();
 
-                    sb.AppendFormatLine("{0}local class_build = function()", GetIndentString(indent));
-                    ++indent;
                     sb.AppendFormatLine("{0}local class = {1};", GetIndentString(indent), className);
-                    sb.AppendFormatLine("{0}local class_fields = {{", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}local static_fields_build = function()", GetIndentString(indent));
+                    ++indent;
+                    sb.AppendFormatLine("{0}local static_fields = {{", GetIndentString(indent));
                     ++indent;
 
                     var staticFields = FindStatement(funcData, "static_fields") as Dsl.FunctionData;
@@ -365,7 +365,7 @@ namespace Generator
 
                     --indent;
                     sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    sb.AppendFormatLine("{0}return class, class_fields;", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}return static_fields;", GetIndentString(indent));
                     --indent;
                     sb.AppendFormatLine("{0}end;", GetIndentString(indent));
                     
@@ -476,12 +476,12 @@ namespace Generator
 
                     sb.AppendLine();
                     if (null != logInfoForDefineClass.EpilogueInfo) {
-                        sb.AppendFormatLine("{0}local __defineclass_return = defineclass({1}, \"{2}\", \"{3}\", class_build, instance_methods, instance_fields_build, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
+                        sb.AppendFormatLine("{0}local __defineclass_return = defineclass({1}, \"{2}\", \"{3}\", class, static_fields_build, instance_methods, instance_fields_build, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
                         sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfoForDefineClass.EpilogueInfo, className, "__define_class"));
                         sb.AppendFormatLine("{0}return __defineclass_return;", GetIndentString(indent));
                     }
                     else {
-                        sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", \"{3}\", class_build, instance_build, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
+                        sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", \"{3}\", class, static_fields_build, instance_methods, instance_fields_build, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
                     }
                     --indent;
                     sb.AppendFormatLine("{0}end,", GetIndentString(indent));
@@ -823,6 +823,7 @@ namespace Generator
         }
         private static void GenerateConcreteSyntaxForCall(Dsl.FunctionData data, StringBuilder sb, int indent, bool firstLineUseIndent)
         {
+            //这个方法生成函数名与参数表部分，需要注意的是data可能是函数名+函数体，在这个方法里不应生成函数体部分
             s_CurSyntax = data;
             if (firstLineUseIndent) {
                 sb.AppendFormat("{0}", GetIndentString(indent));
@@ -1901,23 +1902,17 @@ namespace Generator
                 else if (id == "dslunpack") {
                     sb.Append("luaunpack");
                 }
-                else if (id == "dslusing") {
-                    sb.Append("luausing");
+                else if (id == "lock") {
+                    sb.Append("do");
                 }
-                else if (id == "dsltry") {
-                    sb.Append("luatry");
+                else if (id == "unsafe") {
+                    sb.Append("do");
                 }
                 else if (id == "dslcatch") {
                     sb.Append("luacatch");
                 }
                 else if (id == "dslthrow") {
                     sb.Append("luathrow");
-                }
-                else if (id == "lock") {
-                    sb.Append("do");
-                }
-                else if (id == "unsafe") {
-                    sb.Append("do");
                 }
                 else if(!string.IsNullOrEmpty(id)) {
                     sb.Append(id);
@@ -2076,8 +2071,126 @@ namespace Generator
                     sb.AppendFormat("{0}end", GetIndentString(indent));
                 }
             }
+            else if (id == "dslusing" || id == "dsltry") {
+                if (id == "dslusing")
+                    sb.Append("luausing");
+                else
+                    sb.Append("luatry");
+                //赋值操作会++indent，所以这里输出语句时会缩进一次，这样恰好能看出原来的try块的范围，先保持此格式
+                bool canSimplify = false;
+                if (data.GetParamNum() == 1) {
+                    var bodyStatement = data.GetParam(0) as Dsl.FunctionData;
+                    if (null != bodyStatement && !bodyStatement.IsHighOrder) {
+                        var name = bodyStatement.GetId();
+                        if (name == "return") {
+                            bodyStatement = bodyStatement.GetParam(0) as Dsl.FunctionData;
+                            if (null != bodyStatement && !bodyStatement.IsHighOrder) {
+                                name = bodyStatement.GetId();
+                                if (name == "callstatic" || name == "callexternstatic" || name == "callinstance" || name == "callexterninstance") {
+                                    canSimplify = true;
+                                }
+                            }
+                        }
+                        else if(name == "callstatic" || name == "callexternstatic" || name== "callinstance" || name == "callexterninstance") {
+                            canSimplify = true;
+                        }
+                        if (canSimplify) {
+                            sb.Append("(");
+                            //只有一个函数调用的，正常模拟
+                            if (name == "callstatic" || name == "callexternstatic") {
+                                var obj = bodyStatement.Params[0];
+                                var member = bodyStatement.Params[1];
+                                var mid = member.GetId();
+                                GenerateSyntaxComponent(obj, sb, indent, false);
+                                sb.AppendFormat(".{0}", mid);
+                                int start = 2;
+                                string sig = string.Empty;
+                                if (bodyStatement.GetParamNum() > start) {
+                                    var sigParam = bodyStatement.GetParam(start) as Dsl.ValueData;
+                                    if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
+                                        start = 3;
+                                        sig = sigParam.GetId();
+                                        string target;
+                                        if (NoSignatureArg(sig)) {
+                                            sig = string.Empty;
+                                        }
+                                        else if (TryReplaceSignatureArg(sig, out target)) {
+                                            sig = target;
+                                        }
+                                    }
+                                    else {
+                                        sig = string.Empty;
+                                    }
+                                }
+                                if (bodyStatement.GetParamNum() > start) {
+                                    sb.Append(", ");
+                                }
+                                GenerateArguments(bodyStatement, sb, indent, start, sig);
+                            }
+                            else if (name == "callinstance" || name == "callexterninstance") {
+                                var obj = bodyStatement.Params[0];
+                                var member = bodyStatement.Params[1];
+                                var mid = member.GetId();
+                                var objCd = obj as Dsl.FunctionData;
+                                GenerateSyntaxComponent(obj, sb, indent, false);
+                                if (null != objCd && objCd.GetId() == "getinstance" && objCd.GetParamNum() == 3 && objCd.GetParamId(2) == "base") {
+                                    sb.AppendFormat(".__self__{0}", mid);
+                                }
+                                else {
+                                    sb.AppendFormat(".{0}", mid);
+                                }
+                                sb.Append(", ");
+                                GenerateSyntaxComponent(obj, sb, indent, false);
+                                int start = 2;
+                                string sig = string.Empty;
+                                if (bodyStatement.GetParamNum() > start) {
+                                    var sigParam = bodyStatement.GetParam(start) as Dsl.ValueData;
+                                    if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
+                                        start = 3;
+                                        sig = sigParam.GetId();
+                                        string target;
+                                        if (NoSignatureArg(sig)) {
+                                            sig = string.Empty;
+                                        }
+                                        else if (TryReplaceSignatureArg(sig, out target)) {
+                                            sig = target;
+                                        }
+                                    }
+                                    else {
+                                        sig = string.Empty;
+                                    }
+                                }
+                                if (bodyStatement.GetParamNum() > start) {
+                                    sb.Append(", ");
+                                }
+                                GenerateArguments(bodyStatement, sb, indent, start, sig);
+                            }
+                            sb.Append(")");
+                        }
+                    }
+                }
+                if(!canSimplify) {
+                    //出于性能考虑（function对象有较大开销），忽略using与try-catch机制
+                    sb.AppendLine("(nil);");
+                    string lastSubId = null;
+                    foreach (var comp in data.Params) {
+                        if (null != lastSubId) {
+                            if (lastSubId != "comments" && lastSubId != "comment") {
+                                sb.AppendLine(";");
+                            }
+                            else {
+                                sb.AppendLine();
+                            }
+                        }
+                        GenerateSyntaxComponent(comp, sb, indent, true);
+                        lastSubId = comp.GetId();
+                    }
+                }
+            }
             else {
+                //函数名与参数部分由另一方法生成（有可能没有参数）
                 GenerateConcreteSyntaxForCall(fcall, sb, indent, false);
+                //函数体部分
                 if (data.HaveStatement()) {
                     sb.AppendLine();
                     ++indent;

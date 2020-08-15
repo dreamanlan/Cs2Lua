@@ -35,14 +35,14 @@ namespace RoslynTool.CsToDsl
 
                 mi.TryCatchUsingOrLoopSwitchStack.Push(true);
 
-                CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}) = dsltry(function(){{", GetIndentString(), retVar, retValVar);
+                CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}) = dsltry{{", GetIndentString(), retVar, retValVar);
                 CodeBuilder.AppendLine();
                 ++m_Indent;
                 ++mi.TryCatchUsingLayer;
                 VisitBlock(node.Block);
                 --mi.TryCatchUsingLayer;
                 --m_Indent;
-                CodeBuilder.AppendFormat("{0}}});", GetIndentString());
+                CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                 CodeBuilder.AppendLine();
 
                 mi.TryCatchUsingOrLoopSwitchStack.Pop();

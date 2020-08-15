@@ -474,10 +474,16 @@ namespace RoslynTool.CsToDsl
                         }
                     }
                 }
-                if (existNonGenericVersion) {
+                if (existNonGenericVersion) {                    
                     foreach (var arg in sym.TypeArguments) {
                         GenericTypeArgs.Add(arg);
                     }
+                }
+                else {
+                    //没有找到参数匹配的非泛型版本，则不传递泛型参数类型
+                    //这样处理可以适应2类可能有效的情形：
+                    //1、如果有多个重载函数，其中有一个object类型变参，则其他泛型参数版本会适配到这个非泛型变参版本
+                    //2、有一些方法不需要明确传递泛型参数类型（比如普通实参可推导出泛型参数类型并且泛型参数类型在函数中不明确使用）
                 }
             }
 
