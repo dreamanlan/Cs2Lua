@@ -296,13 +296,13 @@ function luatry(func, ...)
     else
         return xpcall(
             func,
-            ...,
             function(e)
                 local err = tostring(e)
                 local trace = debug.traceback(err)
                 UnityEngine.Debug.LogError("LogError_Object", err .. ", " .. trace)
                 return {err, trace}
-            end
+            end,
+            ...
         )
     end
 end
