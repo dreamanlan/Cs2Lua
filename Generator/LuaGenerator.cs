@@ -2076,114 +2076,129 @@ namespace Generator
                     sb.Append("luausing");
                 else
                     sb.Append("luatry");
-                //赋值操作会++indent，所以这里输出语句时会缩进一次，这样恰好能看出原来的try块的范围，先保持此格式
-                bool canSimplify = false;
-                if (data.GetParamNum() == 1) {
-                    var bodyStatement = data.GetParam(0) as Dsl.FunctionData;
-                    if (null != bodyStatement && !bodyStatement.IsHighOrder) {
-                        var name = bodyStatement.GetId();
-                        if (name == "return") {
-                            bodyStatement = bodyStatement.GetParam(0) as Dsl.FunctionData;
-                            if (null != bodyStatement && !bodyStatement.IsHighOrder) {
-                                name = bodyStatement.GetId();
-                                if (name == "callstatic" || name == "callexternstatic" || name == "callinstance" || name == "callexterninstance") {
-                                    canSimplify = true;
-                                }
-                            }
-                        }
-                        else if(name == "callstatic" || name == "callexternstatic" || name== "callinstance" || name == "callexterninstance") {
-                            canSimplify = true;
-                        }
-                        if (canSimplify) {
-                            sb.Append("(");
-                            //只有一个函数调用的，正常模拟
-                            if (name == "callstatic" || name == "callexternstatic") {
-                                var obj = bodyStatement.Params[0];
-                                var member = bodyStatement.Params[1];
-                                var mid = member.GetId();
-                                GenerateSyntaxComponent(obj, sb, indent, false);
-                                sb.AppendFormat(".{0}", mid);
-                                int start = 2;
-                                string sig = string.Empty;
-                                if (bodyStatement.GetParamNum() > start) {
-                                    var sigParam = bodyStatement.GetParam(start) as Dsl.ValueData;
-                                    if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
-                                        start = 3;
-                                        sig = sigParam.GetId();
-                                        string target;
-                                        if (NoSignatureArg(sig)) {
-                                            sig = string.Empty;
-                                        }
-                                        else if (TryReplaceSignatureArg(sig, out target)) {
-                                            sig = target;
-                                        }
-                                    }
-                                    else {
-                                        sig = string.Empty;
+                if (s_EnableComplexTryUsing) {
+                    sb.Append("(function()");
+                    sb.AppendLine();
+                    //函数体部分
+                    if (data.HaveStatement()) {
+                        sb.AppendLine();
+                        //赋值操作会++indent
+                        //++indent;
+                        GenerateStatements(data, sb, indent);
+                        --indent;
+                    }
+                    sb.AppendFormat("{0}end)", GetIndentString(indent));
+                }
+                else {
+                    //赋值操作会++indent，所以这里输出语句时会缩进一次，这样恰好能看出原来的try块的范围，先保持此格式
+                    bool canSimplify = false;
+                    if (data.GetParamNum() == 1) {
+                        var bodyStatement = data.GetParam(0) as Dsl.FunctionData;
+                        if (null != bodyStatement && !bodyStatement.IsHighOrder) {
+                            var name = bodyStatement.GetId();
+                            if (name == "return") {
+                                bodyStatement = bodyStatement.GetParam(0) as Dsl.FunctionData;
+                                if (null != bodyStatement && !bodyStatement.IsHighOrder) {
+                                    name = bodyStatement.GetId();
+                                    if (name == "callstatic" || name == "callexternstatic" || name == "callinstance" || name == "callexterninstance") {
+                                        canSimplify = true;
                                     }
                                 }
-                                if (bodyStatement.GetParamNum() > start) {
-                                    sb.Append(", ");
-                                }
-                                GenerateArguments(bodyStatement, sb, indent, start, sig);
                             }
-                            else if (name == "callinstance" || name == "callexterninstance") {
-                                var obj = bodyStatement.Params[0];
-                                var member = bodyStatement.Params[1];
-                                var mid = member.GetId();
-                                var objCd = obj as Dsl.FunctionData;
-                                GenerateSyntaxComponent(obj, sb, indent, false);
-                                if (null != objCd && objCd.GetId() == "getinstance" && objCd.GetParamNum() == 3 && objCd.GetParamId(2) == "base") {
-                                    sb.AppendFormat(".__self__{0}", mid);
-                                }
-                                else {
+                            else if (name == "callstatic" || name == "callexternstatic" || name == "callinstance" || name == "callexterninstance") {
+                                canSimplify = true;
+                            }
+                            if (canSimplify) {
+                                sb.Append("(");
+                                //只有一个函数调用的，正常模拟
+                                if (name == "callstatic" || name == "callexternstatic") {
+                                    var obj = bodyStatement.Params[0];
+                                    var member = bodyStatement.Params[1];
+                                    var mid = member.GetId();
+                                    GenerateSyntaxComponent(obj, sb, indent, false);
                                     sb.AppendFormat(".{0}", mid);
-                                }
-                                sb.Append(", ");
-                                GenerateSyntaxComponent(obj, sb, indent, false);
-                                int start = 2;
-                                string sig = string.Empty;
-                                if (bodyStatement.GetParamNum() > start) {
-                                    var sigParam = bodyStatement.GetParam(start) as Dsl.ValueData;
-                                    if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
-                                        start = 3;
-                                        sig = sigParam.GetId();
-                                        string target;
-                                        if (NoSignatureArg(sig)) {
+                                    int start = 2;
+                                    string sig = string.Empty;
+                                    if (bodyStatement.GetParamNum() > start) {
+                                        var sigParam = bodyStatement.GetParam(start) as Dsl.ValueData;
+                                        if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
+                                            start = 3;
+                                            sig = sigParam.GetId();
+                                            string target;
+                                            if (NoSignatureArg(sig)) {
+                                                sig = string.Empty;
+                                            }
+                                            else if (TryReplaceSignatureArg(sig, out target)) {
+                                                sig = target;
+                                            }
+                                        }
+                                        else {
                                             sig = string.Empty;
                                         }
-                                        else if (TryReplaceSignatureArg(sig, out target)) {
-                                            sig = target;
-                                        }
+                                    }
+                                    if (bodyStatement.GetParamNum() > start) {
+                                        sb.Append(", ");
+                                    }
+                                    GenerateArguments(bodyStatement, sb, indent, start, sig);
+                                }
+                                else if (name == "callinstance" || name == "callexterninstance") {
+                                    var obj = bodyStatement.Params[0];
+                                    var member = bodyStatement.Params[1];
+                                    var mid = member.GetId();
+                                    var objCd = obj as Dsl.FunctionData;
+                                    GenerateSyntaxComponent(obj, sb, indent, false);
+                                    if (null != objCd && objCd.GetId() == "getinstance" && objCd.GetParamNum() == 3 && objCd.GetParamId(2) == "base") {
+                                        sb.AppendFormat(".__self__{0}", mid);
                                     }
                                     else {
-                                        sig = string.Empty;
+                                        sb.AppendFormat(".{0}", mid);
                                     }
-                                }
-                                if (bodyStatement.GetParamNum() > start) {
                                     sb.Append(", ");
+                                    GenerateSyntaxComponent(obj, sb, indent, false);
+                                    int start = 2;
+                                    string sig = string.Empty;
+                                    if (bodyStatement.GetParamNum() > start) {
+                                        var sigParam = bodyStatement.GetParam(start) as Dsl.ValueData;
+                                        if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
+                                            start = 3;
+                                            sig = sigParam.GetId();
+                                            string target;
+                                            if (NoSignatureArg(sig)) {
+                                                sig = string.Empty;
+                                            }
+                                            else if (TryReplaceSignatureArg(sig, out target)) {
+                                                sig = target;
+                                            }
+                                        }
+                                        else {
+                                            sig = string.Empty;
+                                        }
+                                    }
+                                    if (bodyStatement.GetParamNum() > start) {
+                                        sb.Append(", ");
+                                    }
+                                    GenerateArguments(bodyStatement, sb, indent, start, sig);
                                 }
-                                GenerateArguments(bodyStatement, sb, indent, start, sig);
+                                sb.Append(")");
                             }
-                            sb.Append(")");
                         }
                     }
-                }
-                if(!canSimplify) {
-                    //出于性能考虑（function对象有较大开销），忽略using与try-catch机制
-                    sb.AppendLine("(nil);");
-                    string lastSubId = null;
-                    foreach (var comp in data.Params) {
-                        if (null != lastSubId) {
-                            if (lastSubId != "comments" && lastSubId != "comment") {
-                                sb.AppendLine(";");
+                    if (!canSimplify) {
+                        //出于性能考虑（function对象有较大开销），忽略using与try-catch机制
+                        sb.AppendLine("(nil);");
+                        string lastSubId = null;
+                        foreach (var comp in data.Params) {
+                            if (null != lastSubId) {
+                                if (lastSubId != "comments" && lastSubId != "comment") {
+                                    sb.AppendLine(";");
+                                }
+                                else {
+                                    sb.AppendLine();
+                                }
                             }
-                            else {
-                                sb.AppendLine();
-                            }
+                            GenerateSyntaxComponent(comp, sb, indent, true);
+                            lastSubId = comp.GetId();
                         }
-                        GenerateSyntaxComponent(comp, sb, indent, true);
-                        lastSubId = comp.GetId();
                     }
                 }
             }
@@ -2481,6 +2496,9 @@ namespace Generator
             closure = param as Dsl.FunctionData;
             if (null != exp && exp.GetId() == "execunary" && exp.GetParamId(0) == "!") {
                 closure = exp.GetParam(1) as Dsl.FunctionData;
+            }
+            else {
+                exp = null;
             }
             if (null != closure && closure.GetId() == "execclosure") {
                 return true;
@@ -3112,5 +3130,7 @@ namespace Generator
         private static ConcurrentDictionary<string, bool> s_CachedNoSignatures = new ConcurrentDictionary<string, bool>();
         private static ConcurrentDictionary<string, int> s_CachedIndexerByLualibInfos = new ConcurrentDictionary<string, int>();
         private static ConcurrentDictionary<string, PrologueAndEpilogueInfo> s_CachedPrologueAndEpilogueInfos = new ConcurrentDictionary<string, PrologueAndEpilogueInfo>();
+
+        private static bool s_EnableComplexTryUsing = false;
     }
 }

@@ -963,7 +963,7 @@ namespace RoslynTool.CsToDsl
         }
         private void OutputTryCatchUsingReturn(ReturnContinueBreakAnalysis returnAnalysis, MethodInfo mi, string retVar, string retValVar)
         {
-            if (mi.TryCatchUsingLayer > 0) {
+            if (mi.TryUsingLayer > 0) {
                 CodeBuilder.AppendFormat("{0}if({1} && {2} && {2}>=1 && {2}<=3){{", GetIndentString(), retVar, retValVar);
                 CodeBuilder.AppendLine();
                 ++m_Indent;

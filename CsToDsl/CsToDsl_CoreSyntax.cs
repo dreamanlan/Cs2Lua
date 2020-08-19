@@ -194,10 +194,10 @@ namespace RoslynTool.CsToDsl
             mi.Init(declSym, node);
             m_MethodInfoStack.Push(mi);
 
-            TryCatchUsingAnalysis tryCatch = new TryCatchUsingAnalysis();
-            tryCatch.Visit(node);
-            mi.ExistTryCatch = tryCatch.ExistTryCatch;
-            mi.ExistUsing = tryCatch.ExistUsing;
+            TryUsingAnalysis tryUsing = new TryUsingAnalysis();
+            tryUsing.Visit(node);
+            mi.ExistTry = tryUsing.ExistTry;
+            mi.ExistUsing = tryUsing.ExistUsing;
 
             string manglingName = NameMangling(declSym);
             bool isExtension = declSym.IsExtensionMethod;
@@ -220,7 +220,7 @@ namespace RoslynTool.CsToDsl
             string dslModule = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Dsl.TranslateToAttribute", 0);
             string dslFuncName = ClassInfo.GetAttributeArgument<string>(declSym, "Cs2Dsl.TranslateToAttribute", 1);
             if (string.IsNullOrEmpty(dslModule) && string.IsNullOrEmpty(dslFuncName)) {
-                if (!declSym.ReturnsVoid && (mi.ExistTryCatch || mi.ExistUsing)) {
+                if (!declSym.ReturnsVoid && (mi.ExistTry || mi.ExistUsing)) {
                     string retVar = string.Format("__method_ret_{0}", GetSourcePosForVar(node));
                     mi.ReturnVarName = retVar;
 
@@ -264,7 +264,7 @@ namespace RoslynTool.CsToDsl
                         }
                     }
                     else {
-                        if (mi.ExistTryCatch) {
+                        if (mi.ExistTry) {
                             if (mi.ReturnParamNames.Count > 0) {
                                 CodeBuilder.AppendFormat("{0}return({1}, {2});", GetIndentString(), mi.ReturnVarName, string.Join(", ", mi.ReturnParamNames));
                                 CodeBuilder.AppendLine();

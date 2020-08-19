@@ -28,9 +28,9 @@ namespace RoslynTool.CsToDsl
         internal bool ExistYield = false;
         internal bool ExistTopLevelReturn = false;
 
-        internal bool ExistTryCatch = false;
+        internal bool ExistTry = false;
         internal bool ExistUsing = false;
-        internal int TryCatchUsingLayer = 0;
+        internal int TryUsingLayer = 0;
         internal string ReturnVarName = string.Empty;
         internal Stack<bool> TryCatchUsingOrLoopSwitchStack = new Stack<bool>();
 
@@ -50,8 +50,8 @@ namespace RoslynTool.CsToDsl
             ExistYield = false;
             ExistTopLevelReturn = false;
 
-            ExistTryCatch = false;
-            TryCatchUsingLayer = 0;
+            ExistTry = false;
+            TryUsingLayer = 0;
             ReturnVarName = string.Empty;
 
             SemanticInfo = sym;

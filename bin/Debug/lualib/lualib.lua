@@ -2038,6 +2038,15 @@ function bitnot(v)
 end
 
 function bitand(v1, v2)
+    if v1==true and v2==true then
+        return true
+    elseif v1==false and v2==false then
+        return false
+    elseif v1==true and v2==false then
+        return false
+    elseif v1==false and v2==true then
+        return false
+    end
     if bit then
         return bit.band(v1, v2)
     else
@@ -2046,6 +2055,15 @@ function bitand(v1, v2)
 end
 
 function bitor(v1, v2)
+    if v1==true and v2==true then
+        return true
+    elseif v1==false and v2==false then
+        return false
+    elseif v1==true and v2==false then
+        return true
+    elseif v1==false and v2==true then
+        return true
+    end
     if bit then
         return bit.bor(v1, v2)
     else

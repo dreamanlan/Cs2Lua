@@ -1041,6 +1041,10 @@ namespace RoslynTool.CsToDsl
             get { return s_SystemDllPath; }
             set { s_SystemDllPath = value; }
         }
+        internal static bool EnableComplexTryUsing
+        {
+            get { return s_EnableComplexTryUsing; }
+        }
 
         private static void CalcMethodParameter(StringBuilder sb, IParameterSymbol param)
         {
@@ -1108,6 +1112,7 @@ namespace RoslynTool.CsToDsl
         private static bool s_ArrayLowerBoundIsOne = true;
         private static bool s_EnableTranslationCheck = false;
         private static string s_SystemDllPath = string.Empty;
+        private static bool s_EnableComplexTryUsing = false;
 
         private static HashSet<string> s_ExtraDslKeywords = new HashSet<string> {
             "and", "elseif", "end", "function", "local", "nil", "not", "or", "repeat", "then", "until"

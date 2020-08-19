@@ -38,9 +38,9 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}) = dsltry{{", GetIndentString(), retVar, retValVar);
                 CodeBuilder.AppendLine();
                 ++m_Indent;
-                ++mi.TryCatchUsingLayer;
+                ++mi.TryUsingLayer;
                 VisitBlock(node.Block);
-                --mi.TryCatchUsingLayer;
+                --mi.TryUsingLayer;
                 --m_Indent;
                 CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                 CodeBuilder.AppendLine();
@@ -64,9 +64,9 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendFormat("{0}multiassign({1}, {4}) = dslcatch({1}, {2}, {3},", GetIndentString(), handledVar, retVar, retValVar, catchRetValVar);
                         CodeBuilder.AppendLine();
                         ++m_Indent;
-                        ++mi.TryCatchUsingLayer;
+                        ++mi.TryUsingLayer;
                         VisitCatchClause(clause);
-                        --mi.TryCatchUsingLayer;
+                        --mi.TryUsingLayer;
                         --m_Indent;
                         CodeBuilder.AppendFormat("{0});", GetIndentString());
                         CodeBuilder.AppendLine();

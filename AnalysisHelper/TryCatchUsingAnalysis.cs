@@ -11,13 +11,13 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 namespace RoslynTool.CsToDsl
 {
     /// <summary>
-    /// 检查指定代码块内try-catch与using语句的使用情况
+    /// 检查指定代码块内try与using语句的使用情况
     /// </summary>
-    internal class TryCatchUsingAnalysis : CSharpSyntaxWalker
+    internal class TryUsingAnalysis : CSharpSyntaxWalker
     {
-        public bool ExistTryCatch
+        public bool ExistTry
         {
-            get { return m_ExistTryCatch; }
+            get { return m_ExistTry; }
         }
         public bool ExistUsing
         {
@@ -25,14 +25,14 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitTryStatement(TryStatementSyntax node)
         {
-            m_ExistTryCatch = true;
+            m_ExistTry = true;
         }
         public override void VisitUsingStatement(UsingStatementSyntax node)
         {
             m_ExistUsing = true;
         }
 
-        private bool m_ExistTryCatch = false;
+        private bool m_ExistTry = false;
         private bool m_ExistUsing = false;
     }
 }
