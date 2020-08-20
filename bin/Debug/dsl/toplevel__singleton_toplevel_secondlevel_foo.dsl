@@ -9,15 +9,15 @@ class(TopLevel.Singleton_TopLevel_SecondLevel_Foo) {
 			return(newobject(TopLevel.Singleton_TopLevel_SecondLevel_Foo, typeargs(T), typekinds(TypeKind.TypeParameter), "ctor", null, ...));
 		};
 		get_instance = function(){
-			if( execbinary("==", getstatic(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance"), null, System.Object, System.Object, TypeKind.Class, TypeKind.Class) ){
-				setstatic(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance", newtypeparamobject(TopLevel.SecondLevel.Foo));
+			if( execbinary("==", getstatic(SymbolKind.Field, TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance"), null, System.Object, System.Object, TypeKind.Class, TypeKind.Class) ){
+				setstatic(SymbolKind.Field, TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance", newtypeparamobject(TopLevel.SecondLevel.Foo));
 			};
-			return(getstatic(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance"));
+			return(getstatic(SymbolKind.Field, TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance"));
 		};
 		set_instance = function(value){
 		};
 		Delete = function(){
-			setstatic(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance", null);
+			setstatic(SymbolKind.Field, TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance", null);
 		};
 		cctor = function(){
 			callstatic(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "__cctor");
@@ -45,17 +45,18 @@ class(TopLevel.Singleton_TopLevel_SecondLevel_Foo) {
 	instance_methods {
 		ctor = function(this){
 			callinstance(this, "__ctor");
-			if( execbinary("!=", getstatic(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance"), null, System.Object, System.Object, TypeKind.Class, TypeKind.Class) ){
-								return(this);
+			if( execbinary("!=", getstatic(SymbolKind.Field, TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance"), null, System.Object, System.Object, TypeKind.Class, TypeKind.Class) ){
+				callexternstatic(UnityEngine.Debug, "LogError", "UnityEngine.Debug:LogError__Object", "Cannot have two instances in singleton");
+				return(this);
 			};
-			setstatic(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance", typecast(typecast(this, System.Object, TypeKind.Class), TopLevel.SecondLevel.Foo, TypeKind.TypeParameter));
+			setstatic(SymbolKind.Field, TopLevel.Singleton_TopLevel_SecondLevel_Foo, "ms_instance", typecast(typecast(this, System.Object, TypeKind.Class), TopLevel.SecondLevel.Foo, TypeKind.TypeParameter));
 			return(this);
 		},
 		__ctor = function(this){
-			if(getinstance(this, "__ctor_called")){
+			if(getinstance(SymbolKind.Field, this, "__ctor_called")){
 				return;
 			}else{
-				setinstance(this, "__ctor_called", true);
+				setinstance(SymbolKind.Field, this, "__ctor_called", true);
 			};
 		};
 	};
@@ -66,7 +67,6 @@ class(TopLevel.Singleton_TopLevel_SecondLevel_Foo) {
 	instance_events {};
 
 	interfaces {};
-	interface_map {};
 
 	class_info(TypeKind.Class, Accessibility.Public) {
 	};

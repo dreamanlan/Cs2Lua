@@ -19,30 +19,30 @@ class(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.FooBase) {
 		remove_StaticEventBridge = function(value){
 		};
 		op_Increment = function(self){
-			setinstance(self, "m_Test", execbinary("+", self.m_Test, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
+			setinstance(SymbolKind.Field, self, "m_Test", execbinary("+", getinstance(SymbolKind.Field, self, "m_Test"), 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
 			return(self);
 			return(null);
 		};
 		op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo = function(self, other){
-			setinstance(self, "m_Test", execbinary("+", self.m_Test, other.m_Test, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
+			setinstance(SymbolKind.Field, self, "m_Test", execbinary("+", getinstance(SymbolKind.Field, self, "m_Test"), getinstance(SymbolKind.Field, other, "m_Test"), System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
 			return(self);
 			return(null);
 		};
 		op_Addition__TopLevel_SecondLevel_Foo__System_Int32 = function(self, val){
-			setinstance(self, "m_Test", execbinary("+", self.m_Test, val, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
+			setinstance(SymbolKind.Field, self, "m_Test", execbinary("+", getinstance(SymbolKind.Field, self, "m_Test"), val, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
 			return(self);
 			return(null);
 		};
 		op_Explicit = function(a){
 			local(f); f = newobject(TopLevel.SecondLevel.Foo, typeargs(), typekinds(), "ctor", null);
-			setinstance(f, "m_Test", a);
-			setinstance(f, "Val", newobject(TopLevel.TestStruct, typeargs(), typekinds(), "ctor", null));
-			local(ts); ts = getinstance(f, "Val");
-			ts = wrapstruct(ts);
-			setinstanceindexer(f, null, TopLevel.SecondLevel.Foo, "set_Item", 2, true, ts, ts, 123);
-			local(r); r = getinstanceindexer(f, null, TopLevel.SecondLevel.Foo, "get_Item", 1, ts, ts);
-			local(result); result = callinstance(getstatic(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "instance"), "Test123", 1, 2);
-			setstatic(TopLevel.Singleton_TopLevel_SecondLevel_Foo, "instance", null);
+			setinstance(SymbolKind.Field, f, "m_Test", a);
+			setinstance(SymbolKind.Property, f, "Val", newobject(TopLevel.TestStruct, typeargs(), typekinds(), "ctor", null));
+			local(ts); ts = getinstance(SymbolKind.Property, f, "Val");
+			ts = wrapstruct(ts, TopLevel.TestStruct);
+			setinstanceindexer(f, TopLevel.SecondLevel.Foo, "set_Item", 2, true, ts, ts, 123);
+			local(r); r = getinstanceindexer(f, TopLevel.SecondLevel.Foo, "get_Item", 1, ts, ts);
+			local(result); result = callinstance(getstatic(SymbolKind.Property, TopLevel.Singleton_TopLevel_SecondLevel_Foo, "instance"), "Test123", 1, 2);
+			setstatic(SymbolKind.Property, TopLevel.Singleton_TopLevel_SecondLevel_Foo, "instance", null);
 			return(f);
 			return(null);
 		};
@@ -76,20 +76,20 @@ class(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.FooBase) {
 		remove_EventBridge = function(this, value){
 		};
 		get_Val = function(this){
-			return(this.m_TS);
+			return(getinstance(SymbolKind.Field, this, "m_TS"));
 		};
 		set_Val = function(this, value){
-			value = wrapstruct(value);
-			setinstance(this, "m_TS", value);
+			value = wrapstruct(value, TopLevel.TestStruct);
+			setinstance(SymbolKind.Field, this, "m_TS", value);
+			getinstance(SymbolKind.Field, this, "m_TS") = wrapstruct(getinstance(SymbolKind.Field, this, "m_TS"), TopLevel.TestStruct);
 		};
 		get_Item = function(this, ...){
-			local{args = params(1);};
+			local{args = params(TopLevel.TestStruct, TypeKind.Struct);};
 			return(1);
 		};
 		set_Item = function(this, ...){
-			local{args = params();};
+			local{args = params(TopLevel.TestStruct, TypeKind.Struct);};
 			local{value = paramsremove(args);};
-			local{args = params(1, args);};
 		};
 		ctor = function(this){
 			callinstance(this, "ctor__System_Int32", 0);
@@ -97,13 +97,13 @@ class(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.FooBase) {
 			return(this);
 		},
 		ctor__System_Int32 = function(this, v){
-			callinstance(getinstance(this, "base"), "ctor");
+			callinstance(getinstance(SymbolKind.Field, this, "base"), "ctor");
 			callinstance(this, "__ctor");
-			setinstance(this, "m_Test", v);
+			setinstance(SymbolKind.Field, this, "m_Test", v);
 			return(this);
 		},
 		ctor__System_Int32__System_Int32 = function(this, a, b){
-			callinstance(getinstance(this, "base"), "ctor");
+			callinstance(getinstance(SymbolKind.Field, this, "base"), "ctor");
 			callinstance(this, "__ctor");
 			return(this);
 		},
@@ -116,7 +116,7 @@ class(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.FooBase) {
 		};
 		Iterator = wrapenumerable(function(this){
 			wrapyield(null, false, false);
-			wrapyield(, false, false);
+			wrapyield(newexternobject(UnityEngine.WaitForSeconds, typeargs(), typekinds(), null, 3), false, true);
 			return(null);
 		});
 		Iterator2 = wrapenumerable(function(this){
@@ -131,51 +131,52 @@ class(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.FooBase) {
 			callinstance(t, "Test2", System.Int32, newobject(TopLevel.SecondLevel.Foo.Test1, typeargs(), typekinds(), "ctor", null), newobject(TopLevel.SecondLevel.Foo.Test2, typeargs(), typekinds(), "ctor", null));
 			local(v);
 			local(vv); multiassign(vv, v) = callinstance(this, "TestLocal", __cs2dsl_out);
-			if( execbinary("<", execclosure(__invoke_486_19_486_35, true){ multiassign(__invoke_486_19_486_35, v) = callinstance(this, "TestLocal", __cs2dsl_out); }, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
+			if( execbinary("<", execclosure(__invoke_490_19_490_35, true){ multiassign(__invoke_490_19_490_35, v) = callinstance(this, "TestLocal", __cs2dsl_out); }, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
 			};
-			if( execclosure(__invoke_489_19_489_36, true){ multiassign(__invoke_489_19_489_36, v) = callinstance(this, "TestLocal2", __cs2dsl_out); } ){
+			if( execclosure(__invoke_493_19_493_36, true){ multiassign(__invoke_493_19_493_36, v) = callinstance(this, "TestLocal2", __cs2dsl_out); } ){
 			};
-			if( execunary("!", execclosure(__invoke_492_21_492_38, true){ multiassign(__invoke_492_21_492_38, v) = callinstance(this, "TestLocal2", __cs2dsl_out); }, System.Boolean, TypeKind.Struct) ){
-			}elseif( execclosure(__invoke_495_24_495_41, true){ multiassign(__invoke_495_24_495_41, v) = callinstance(this, "TestLocal2", __cs2dsl_out); } ){
+			if( execunary("!", execclosure(__invoke_496_21_496_38, true){ multiassign(__invoke_496_21_496_38, v) = callinstance(this, "TestLocal2", __cs2dsl_out); }, System.Boolean, TypeKind.Struct) ){
+			}elseif( execclosure(__invoke_499_24_499_41, true){ multiassign(__invoke_499_24_499_41, v) = callinstance(this, "TestLocal2", __cs2dsl_out); } ){
 			}else{
 			};
-			while( execclosure(__invoke_501_22_501_39, true){ multiassign(__invoke_501_22_501_39, v) = callinstance(this, "TestLocal2", __cs2dsl_out); } ){
+			while( execclosure(__invoke_505_22_505_39, true){ multiassign(__invoke_505_22_505_39, v) = callinstance(this, "TestLocal2", __cs2dsl_out); } ){
 			};
 			do{
-			}while(execunary("!", execclosure(__invoke_506_26_506_43, true){ multiassign(__invoke_506_26_506_43, v) = callinstance(this, "TestLocal2", __cs2dsl_out); }, System.Boolean, TypeKind.Struct));
+			}while(execunary("!", execclosure(__invoke_510_26_510_43, true){ multiassign(__invoke_510_26_510_43, v) = callinstance(this, "TestLocal2", __cs2dsl_out); }, System.Boolean, TypeKind.Struct));
 			local(ts); ts = newobject(TopLevel.TestStruct, typeargs(), typekinds(), "ctor", null);
-			ts = wrapstruct(ts);
-			setinstance(ts, "A", 1);
-			setinstance(ts, "B", 2);
-			setinstance(ts, "C", 3);
+			ts = wrapstruct(ts, TopLevel.TestStruct);
+			setinstance(SymbolKind.Field, ts, "A", 1);
+			setinstance(SymbolKind.Field, ts, "B", 2);
+			setinstance(SymbolKind.Field, ts, "C", 3);
 			local(ts2); ts2 = ts;
-			ts2 = wrapstruct(ts2);
+			ts2 = wrapstruct(ts2, TopLevel.TestStruct);
 			local(ts3);
 			ts3 = ts;
-			ts3 = wrapstruct(ts3);
+			ts3 = wrapstruct(ts3, TopLevel.TestStruct);
 			callinstance(this, "TestValueArg", ts);
-			if( delegationcomparewithnil(true, false, "TopLevel.SecondLevel.Foo:OnSimple", this, null, "OnSimple", false) ){
-				getinstance(this, "OnSimple")();
+			if( delegationcomparewithnil(false, "TopLevel.SecondLevel.Foo:OnSimple", this, "OnSimple", SymbolKind.Event, false) ){
+				getinstance(SymbolKind.Event, this, "OnSimple")();
 			};
-			local(f); f = getinstance(this, "OnSimple");
-			if( delegationcomparewithnil(false, false, "TopLevel.SecondLevel.Foo:f", f, null, null, false) ){
+			local(f); f = getinstance(SymbolKind.Event, this, "OnSimple");
+			if( delegationcomparewithnil(false, "TopLevel.SecondLevel.Foo:f", f, null, SymbolKind.Local, false) ){
 				f();
 			};
 		};
-		TestLocal = function(this, out(v)){
+		TestLocal = function(this, v){
 			local(ir); ir = newobject(TopLevel.Runnable, typeargs(), typekinds(), "ctor", null);
-			invokewithinterface(ir, "TopLevel_IRunnable0", "Test");
+			callinstance(ir, "TopLevel_IRunnable0_Test");
 			v = 1;
 			return(2, v);
 		};
-		TestLocal2 = function(this, out(v)){
+		TestLocal2 = function(this, v){
+			v = 0;
 			return(false, v);
 		};
 		TestValueArg = function(this, ts){
-			ts = wrapstruct(ts);
-			setinstance(ts, "A", 4);
-			setinstance(ts, "B", 5);
-			setinstance(ts, "C", 6);
+			ts = wrapstruct(ts, TopLevel.TestStruct);
+			setinstance(SymbolKind.Field, ts, "A", 4);
+			setinstance(SymbolKind.Field, ts, "B", 5);
+			setinstance(SymbolKind.Field, ts, "C", 6);
 			return(0);
 		};
 		TestContinueAndReturn = function(this){
@@ -183,7 +184,9 @@ class(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.FooBase) {
 			while( execbinary("<", i, 100, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
 			do{
 				if( execbinary("<", i, 10, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
+					block{
 					break;
+					};
 				};
 				block{
 				return(i);
@@ -195,10 +198,10 @@ class(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.FooBase) {
 		};
 		TestSwitch = function(this){
 			local(i); i = 10;
-			local{__switch_558_16_566_17 = i;};
-			if( (__switch_558_16_566_17 == 1) || (__switch_558_16_566_17 == 3) ){
+			local{__switch_563_16_571_17 = i;};
+			if( (__switch_563_16_571_17 == 1) || (__switch_563_16_571_17 == 3) ){
 				return();
-			}elseif( __switch_558_16_566_17 == 2 ){
+			}elseif( __switch_563_16_571_17 == 2 ){
 				return();
 			}else{
 				return();
@@ -211,13 +214,13 @@ class(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.FooBase) {
 			};
 		};
 		__ctor = function(this){
-			if(getinstance(this, "__ctor_called")){
+			if(getinstance(SymbolKind.Field, this, "__ctor_called")){
 				return;
 			}else{
-				setinstance(this, "__ctor_called", true);
+				setinstance(SymbolKind.Field, this, "__ctor_called", true);
 			};
 			this.m_TS = newobject(TopLevel.TestStruct, typeargs(), typekinds(), "ctor", null);
-			this.m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, typeargs(System.String), typekinds(TypeKind.Class), literalcollection("one", "two", "three"), "System.Collections.Generic.HashSet_T:ctor");
+			this.m_HashSet = newexterncollection(System.Collections.Generic.HashSet_T, typeargs(System.String), typekinds(TypeKind.Class), literalcollection(typeargs(System.String), typekinds(TypeKind.Class), "one", "two", "three"), "System.Collections.Generic.HashSet_T:ctor");
 		};
 	};
 	instance_fields {
@@ -244,7 +247,6 @@ class(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.FooBase) {
 	};
 
 	interfaces {};
-	interface_map {};
 
 	class_info(TypeKind.Class, Accessibility.Internal) {
 	};
@@ -369,10 +371,10 @@ class(TopLevel.SecondLevel.Foo.Test1) {
 			callinstance(this, "__ctor");
 		};
 		__ctor = function(this){
-			if(getinstance(this, "__ctor_called")){
+			if(getinstance(SymbolKind.Field, this, "__ctor_called")){
 				return;
 			}else{
-				setinstance(this, "__ctor_called", true);
+				setinstance(SymbolKind.Field, this, "__ctor_called", true);
 			};
 		};
 	};
@@ -383,7 +385,6 @@ class(TopLevel.SecondLevel.Foo.Test1) {
 	instance_events {};
 
 	interfaces {};
-	interface_map {};
 
 	class_info(TypeKind.Class, Accessibility.Private) {
 	};
@@ -426,10 +427,10 @@ class(TopLevel.SecondLevel.Foo.Test2) {
 			callinstance(this, "__ctor");
 		};
 		__ctor = function(this){
-			if(getinstance(this, "__ctor_called")){
+			if(getinstance(SymbolKind.Field, this, "__ctor_called")){
 				return;
 			}else{
-				setinstance(this, "__ctor_called", true);
+				setinstance(SymbolKind.Field, this, "__ctor_called", true);
 			};
 		};
 	};
@@ -440,7 +441,6 @@ class(TopLevel.SecondLevel.Foo.Test2) {
 	instance_events {};
 
 	interfaces {};
-	interface_map {};
 
 	class_info(TypeKind.Class, Accessibility.Private) {
 	};
@@ -483,10 +483,10 @@ class(TopLevel.SecondLevel.Foo.FooChild) {
 			callinstance(this, "__ctor");
 		};
 		__ctor = function(this){
-			if(getinstance(this, "__ctor_called")){
+			if(getinstance(SymbolKind.Field, this, "__ctor_called")){
 				return;
 			}else{
-				setinstance(this, "__ctor_called", true);
+				setinstance(SymbolKind.Field, this, "__ctor_called", true);
 			};
 		};
 	};
@@ -499,7 +499,6 @@ class(TopLevel.SecondLevel.Foo.FooChild) {
 	instance_events {};
 
 	interfaces {};
-	interface_map {};
 
 	class_info(TypeKind.Class, Accessibility.Private) {
 	};

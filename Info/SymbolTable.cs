@@ -113,12 +113,15 @@ namespace RoslynTool.CsToDsl
                     return val ? "Field" : sym.Kind.ToString();
                 }
                 else if (IsCs2DslSymbol(psym) && psym.DeclaringSyntaxReferences.Length > 0) {
-                    var node = psym.DeclaringSyntaxReferences[0].GetSyntax() as PropertyDeclarationSyntax;
                     bool noimpl = true;
-                    foreach (var accessor in node.AccessorList.Accessors) {
-                        if (null != accessor.Body || null != accessor.ExpressionBody) {
-                            noimpl = false;
-                            break;
+                    var syntax = psym.DeclaringSyntaxReferences[0].GetSyntax();
+                    var node = syntax as PropertyDeclarationSyntax;
+                    if (null != node) {
+                        foreach (var accessor in node.AccessorList.Accessors) {
+                            if (null != accessor.Body || null != accessor.ExpressionBody) {
+                                noimpl = false;
+                                break;
+                            }
                         }
                     }
                     m_NoImplProperties.TryAdd(psym, noimpl);

@@ -198,6 +198,7 @@ namespace RoslynTool.CsToDsl
             tryUsing.Visit(node);
             mi.ExistTry = tryUsing.ExistTry;
             mi.ExistUsing = tryUsing.ExistUsing;
+            mi.ExistEmbedTryOrUsing = tryUsing.ExistEmbedTryOrUsing;
 
             string manglingName = NameMangling(declSym);
             bool isExtension = declSym.IsExtensionMethod;

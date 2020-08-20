@@ -1,101 +1,107 @@
 require "cs2lua__namespaces"; 
 
 Extentions = {
+	timeInMillisecond = function(dateTime)
+		return invokeintegeroperator(0, "/", dateTime.Ticks, 10000, System.Int64, System.Int64);
+	end,
+	timeSince1970 = function(dateTime)
+		return typecast((invokeintegeroperator(0, "/", Extentions.timeSince1970InMillisecond(dateTime), 1000, System.Int64, System.Int64)), System.Int64, TypeKind.Struct);
+	end,
+	timeSince1970InMillisecond = function(dateTime)
+		--return (long)(Time.realtimeSinceStartup * 1000);
+		if (Extentions.dateTime1970.Ticks == 0) then 
+			--Debug.LogError("Ticks = 0");
+			Extentions.dateTime1970 = System.DateTime.Parse("System.DateTime:Parse__String", "1970-1-1");
+		end;
+		local v;
+		v = 4;
+		local ts;
+		ts = invokeexternoperator(System.TimeSpan, System.DateTime, "op_Subtraction", "System.DateTime:op_Subtraction__DateTime__DateTime", dateTime, Extentions.dateTime1970);
+		return typecast(ts.TotalMilliseconds, System.Int64, TypeKind.Struct);
+	end,
+	findChildRecursively = function(transform, childName, maxDepth)
+		local child;
+		child = transform:FindChild(childName);
+		if (invokeexternoperator(System.Boolean, UnityEngine.Object, "op_Equality", child, nil) and (maxDepth > 0)) then 
+			local childCount;
+			childCount = transform.childCount;
+			local i;
+			i = 0;
+			while (i < childCount) do
+				child = Extentions.findChildRecursively(transform:GetChild(i), childName, (maxDepth - 1));
+				if invokeexternoperator(System.Boolean, UnityEngine.Object, "op_Inequality", child, nil) then 
+					do
+						break;
+					end;
+				end;
+				break;
+				i = (i + 1);
+			end;
+		end;
+		return child;
+	end,
+	searchChildRecursively = function(transform, childName, maxDepth)
+		if (invokeforbasicvalue(transform.name, false, System.String, "IndexOf", "System.String:IndexOf__String", childName) ~= -1) then 
+			return transform;
+		end;
+		local count;
+		count = transform.childCount;
+		if (maxDepth > 0) then 
+			local i;
+			i = 0;
+			while (i < count) do
+				local nowNode;
+				nowNode = transform:GetChild(i);
+				local searchRes;
+				searchRes = Extentions.searchChildRecursively(nowNode, childName, (maxDepth - 1));
+				if invokeexternoperator(System.Boolean, UnityEngine.Object, "op_Inequality", searchRes, nil) then 
+					return searchRes;
+				end;
+				i = (i + 1);
+			end;
+		end;
+		return nil;
+	end,
+	isFirstTimeToStart = function()
+		local isFirstTimeStart;
+		isFirstTimeStart = UnityEngine.PlayerPrefs.GetInt("UnityEngine.PlayerPrefs:GetInt__String__Int32", "isFirstTimeToStart", 1);
+		return (isFirstTimeStart == 1);
+	end,
+	AddSorted = function(list, T, item)
+		if (list.Count == 0) then 
+			list:Add(item);
+			return ;
+		end;
+		if (list[(list.Count - 1) + 1]:CompareTo(item) <= 0) then 
+			list:Add(item);
+			return ;
+		end;
+		if (list[0 + 1]:CompareTo(item) >= 0) then 
+			list:Insert(0, item);
+			return ;
+		end;
+		local index;
+		index = list:BinarySearch("System.Collections.Generic.List_T:BinarySearch__Object", item);
+		if (index < 0) then 
+			index = invokeintegeroperator(10, "~", nil, index, nil, System.Int32);
+		end;
+		list:Insert(index, item);
+	end,
+	cctor = function()
+		Extentions.__cctor();
+	end,
+	__cctor = function()
+		if Extentions.__cctor_called then 
+			return;
+		else
+			Extentions.__cctor_called = true;
+		end;
+		Extentions.dateTime1970 = newexternobject(System.DateTime, nil, nil, nil);
+	end,
 	__define_class = function()
-		local static = Extentions;
-		local static_methods = {
-			timeInMillisecond = function(dateTime)
-				return invokeintegeroperator(0, "/", dateTime.Ticks, 10000, System.Int64, System.Int64);
-			end,
-			timeSince1970 = function(dateTime)
-				return typecast((invokeintegeroperator(0, "/", Extentions.timeSince1970InMillisecond(dateTime), 1000, System.Int64, System.Int64)), System.Int64, TypeKind.Struct);
-			end,
-			timeSince1970InMillisecond = function(dateTime)
-				--return (long)(Time.realtimeSinceStartup * 1000);
-				if (Extentions.dateTime1970.Ticks == 0) then 
-					--Debug.LogError("Ticks = 0");
-					Extentions.dateTime1970 = System.DateTime.Parse("System.DateTime:Parse__String", "1970-1-1");
-				end;
-				local v;
-				v = 4;
-				local ts;
-				ts = invokeexternoperator(System.TimeSpan, System.DateTime, "op_Subtraction", "System.DateTime:op_Subtraction__DateTime__DateTime", dateTime, Extentions.dateTime1970);
-				return typecast(ts.TotalMilliseconds, System.Int64, TypeKind.Struct);
-			end,
-			findChildRecursively = function(transform, childName, maxDepth)
-				if (isequal(child, nil) and (maxDepth > 0)) then 
-					local childCount;
-					childCount = transform.childCount;
-					local i;
-					i = 0;
-					while (i < childCount) do
-						if (not isequal(child, nil)) then 
-							break;
-						end;
-						do
-							break;
-						end;
-						i = (i + 1);
-					end;
-				end;
-				return child;
-			end,
-			searchChildRecursively = function(transform, childName, maxDepth)
-				if (not isequal(-1, System.Int32)) then 
-					return transform;
-				end;
-				local count;
-				count = transform.childCount;
-				if (maxDepth > 0) then 
-					local i;
-					i = 0;
-					while (i < count) do
-						local searchRes;
-						searchRes = Extentions.searchChildRecursively(nowNode, childName, (maxDepth - 1));
-						if (not isequal(searchRes, nil)) then 
-							return searchRes;
-						end;
-						i = (i + 1);
-					end;
-				end;
-				return nil;
-			end,
-			isFirstTimeToStart = function()
-				return (isFirstTimeStart == 1);
-			end,
-			AddSorted = function(T, list, item)
-				if (list.Count == 0) then 
-					list:Add(item);
-					return ;
-				end;
-				if (list[(list.Count - 1) + 1]:CompareTo(item) <= 0) then 
-					list:Add(item);
-					return ;
-				end;
-				if (list[0 + 1]:CompareTo(item) >= 0) then 
-					list:Insert(0, item);
-					return ;
-				end;
-				local index;
-				index = list:BinarySearch("System.Collections.Generic.List_T:BinarySearch__Object", item);
-				if (index < 0) then 
-					index = invokeintegeroperator(10, "~", nil, index, nil, System.Int32);
-				end;
-				list:Insert(index, item);
-			end,
-			cctor = function()
-				Extentions.__cctor();
-			end,
-			__cctor = function()
-				if Extentions.__cctor_called then 
-					return;
-				else
-					Extentions.__cctor_called = true;
-				end;
-				Extentions.dateTime1970 = newexternobject(System.DateTime, nil, nil, nil);
-			end,
-		};
+		Utility.Warn("Extentions::__define_class begin");
 
+		local class = Extentions;
 		local static_fields_build = function()
 			local static_fields = {
 				dateTime1970 = __cs2lua_nil_field_value,
@@ -103,35 +109,28 @@ Extentions = {
 			};
 			return static_fields;
 		end;
-		local static_props = nil;
-		local static_events = nil;
 
 		local instance_fields_build = function()
 			local instance_fields = {
 			};
 			return instance_fields;
 		end;
-		local instance_props = nil;
-		local instance_events = nil;
 
-		local interfaces = nil;
-		local interface_map = nil;
-
-		local method_info = nil;
-		local property_info = nil;
-		local event_info = nil;
-		local field_info = nil;
-
-		Utility.Warn("Extentions::__define_class begin");
-		local __defineclass_return = defineclass(nil, "Extentions", "Extentions", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		local __defineclass_return = defineclass(nil, "Extentions", "Extentions", class, static_fields_build, instance_methods, instance_fields_build, false);
 		Utility.Warn("Extentions::__define_class end");
 		return __defineclass_return;
 	end,
+
+	__interfaces = nil,
+	__class_info = nil,
+	__method_info = nil,
+	__property_info = nil,
+	__event_info = nil,
+	__field_info = nil,
 };
 
 
 require "cs2lua__lualib";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
-require "transform";
 settempmetatable(Extentions);

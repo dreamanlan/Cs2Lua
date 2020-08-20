@@ -34,10 +34,10 @@ class(foo_System_Int32_System_Int32) {
 			callinstance(this, "__ctor");
 		};
 		__ctor = function(this){
-			if(getinstance(this, "__ctor_called")){
+			if(getinstance(SymbolKind.Field, this, "__ctor_called")){
 				return;
 			}else{
-				setinstance(this, "__ctor_called", true);
+				setinstance(SymbolKind.Field, this, "__ctor_called", true);
 			};
 		};
 	};
@@ -48,7 +48,6 @@ class(foo_System_Int32_System_Int32) {
 	instance_events {};
 
 	interfaces {};
-	interface_map {};
 
 	class_info(TypeKind.Class, Accessibility.Public) {
 	};

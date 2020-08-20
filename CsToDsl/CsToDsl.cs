@@ -961,12 +961,13 @@ namespace RoslynTool.CsToDsl
             }
             CodeBuilder.AppendFormat(", {0})", isEqual ? "true" : "false");
         }
-        private void OutputTryCatchUsingReturn(ReturnContinueBreakAnalysis returnAnalysis, MethodInfo mi, string retVar, string retValVar)
+        private void OutputTryCatchUsingReturn(ReturnContinueBreakAnalysis returnAnalysis, MethodInfo mi, string retValVar)
         {
             if (mi.TryUsingLayer > 0) {
-                CodeBuilder.AppendFormat("{0}if({1} && {2} && {2}>=1 && {2}<=3){{", GetIndentString(), retVar, retValVar);
+                CodeBuilder.AppendFormat("{0}if({1} && {1}>=1 && {1}<=3){{", GetIndentString(), retValVar);
                 CodeBuilder.AppendLine();
                 ++m_Indent;
+                //嵌入的try/using，返回给外层try/using。此情形只能使用函数对象，所以是return(1/2/3)
                 CodeBuilder.AppendFormat("{0}return({1});", GetIndentString(), retValVar);
                 CodeBuilder.AppendLine();
                 --m_Indent;
@@ -974,7 +975,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendLine();
             }
             else {
-                CodeBuilder.AppendFormat("{0}if({1} && {2}){{", GetIndentString(), retVar, retValVar);
+                CodeBuilder.AppendFormat("{0}if({1}){{", GetIndentString(), retValVar);
                 CodeBuilder.AppendLine();
                 bool existIf = false;
                 if (returnAnalysis.ExistReturn) {

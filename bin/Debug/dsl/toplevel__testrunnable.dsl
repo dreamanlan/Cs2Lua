@@ -29,20 +29,20 @@ class(TopLevel.TestRunnable) {
 	instance_methods {
 		Test = function(this){
 			local(f); f = newobject(TopLevel.Runnable, typeargs(), typekinds(), "ctor", null);
-			invokewithinterface(f, "TopLevel_IRunnable0", "Test");
-			local(i); i = getinstanceindexer(f, null, TopLevel.IRunnable_System_Int32, "get_Item", 1, 4);
-			setinstanceindexer(f, null, TopLevel.IRunnable_System_Int32, "set_Item", 2, true, 0, i);
-			setwithinterface(f, "TopLevel_IRunnable_System_Int32", "TestProp", i);
-			i = getwithinterface(f, ""TopLevel_IRunnable_System_Int32"", ""TestProp"");
+			callinstance(f, "TopLevel_IRunnable0_Test");
+			local(i); i = getinstanceindexer(f, TopLevel.IRunnable_System_Int32, "get_Item", 1, 4);
+			setinstanceindexer(f, TopLevel.IRunnable_System_Int32, "set_Item", 2, true, 0, i);
+			setinstance(SymbolKind.Property, f, "TopLevel_IRunnable<System_Int32>_TestProp", i);
+			i = getinstance(SymbolKind.Property, f, "TopLevel_IRunnable<System_Int32>_TestProp");
 			local(pow); pow = (function(v) { return(execbinary("*", v, v, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct)); };);
 			local(pow2); pow2 = (function(v1, v2){ return(execbinary("*", v1, v2, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct)); });
 			local(a); a = (function(){
 				i = execbinary("*", i, i, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
 				callstatic(LuaConsole, "Print", execbinary("*", i, 4, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
 			});
-			setinstancedelegation(f, "OnAction", delegationadd(true, false, "TopLevel.IRunnable_System_Int32:OnAction", f, "TopLevel_IRunnable_System_Int32", "OnAction", a));
-			setinstancedelegation(f, "OnAction", delegationremove(true, false, "TopLevel.IRunnable_System_Int32:OnAction", f, "TopLevel_IRunnable_System_Int32", "OnAction", a));
-			setinstancedelegation(this, "OnDelegation", delegationadd(false, false, "TopLevel.TestRunnable:OnDelegation", this, null, "OnDelegation", a));
+			setinstancedelegation(SymbolKind.Event, f, "OnAction", delegationadd(false, "TopLevel.IRunnable_System_Int32:OnAction", f, "OnAction", SymbolKind.Event, a));
+			setinstancedelegation(SymbolKind.Event, f, "OnAction", delegationremove(false, "TopLevel.IRunnable_System_Int32:OnAction", f, "OnAction", SymbolKind.Event, a));
+			setinstancedelegation(SymbolKind.Field, this, "OnDelegation", delegationadd(false, "TopLevel.TestRunnable:OnDelegation", this, "OnDelegation", SymbolKind.Field, a));
 			local(t); t = wrapconst(System.Single, "NegativeInfinity");
 			t = wrapconst(System.Single, "NaN");
 		};
@@ -50,10 +50,10 @@ class(TopLevel.TestRunnable) {
 			callinstance(this, "__ctor");
 		};
 		__ctor = function(this){
-			if(getinstance(this, "__ctor_called")){
+			if(getinstance(SymbolKind.Field, this, "__ctor_called")){
 				return;
 			}else{
-				setinstance(this, "__ctor_called", true);
+				setinstance(SymbolKind.Field, this, "__ctor_called", true);
 			};
 		};
 	};
@@ -65,7 +65,6 @@ class(TopLevel.TestRunnable) {
 	instance_events {};
 
 	interfaces {};
-	interface_map {};
 
 	class_info(TypeKind.Class, Accessibility.Public) {
 	};

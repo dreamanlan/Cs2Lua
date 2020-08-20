@@ -154,10 +154,11 @@ namespace RoslynTool.CsToDsl
             mi.Init(declSym, node);
             m_MethodInfoStack.Push(mi);
 
-            TryUsingAnalysis tryCatch = new TryUsingAnalysis();
-            tryCatch.Visit(node);
-            mi.ExistTry = tryCatch.ExistTry;
-            mi.ExistUsing = tryCatch.ExistUsing;
+            TryUsingAnalysis tryUsing = new TryUsingAnalysis();
+            tryUsing.Visit(node);
+            mi.ExistTry = tryUsing.ExistTry;
+            mi.ExistUsing = tryUsing.ExistUsing;
+            mi.ExistEmbedTryOrUsing = tryUsing.ExistEmbedTryOrUsing;
 
             string manglingName = NameMangling(declSym);
             if (isStatic) {
@@ -310,10 +311,11 @@ namespace RoslynTool.CsToDsl
                     mi.Init(sym, node);
                     m_MethodInfoStack.Push(mi);
 
-                    TryUsingAnalysis tryCatch = new TryUsingAnalysis();
-                    tryCatch.Visit(node);
-                    mi.ExistTry = tryCatch.ExistTry;
-                    mi.ExistUsing = tryCatch.ExistUsing;
+                    TryUsingAnalysis tryUsing = new TryUsingAnalysis();
+                    tryUsing.Visit(node);
+                    mi.ExistTry = tryUsing.ExistTry;
+                    mi.ExistUsing = tryUsing.ExistUsing;
+                    mi.ExistEmbedTryOrUsing = tryUsing.ExistEmbedTryOrUsing;
 
                     string manglingName = NameMangling(sym);
                     string paramStr = string.Join(", ", mi.ParamNames.ToArray());
@@ -424,10 +426,11 @@ namespace RoslynTool.CsToDsl
                         mi.Init(sym, accessor);
                         m_MethodInfoStack.Push(mi);
 
-                        TryUsingAnalysis tryCatch = new TryUsingAnalysis();
-                        tryCatch.Visit(node);
-                        mi.ExistTry = tryCatch.ExistTry;
-                        mi.ExistUsing = tryCatch.ExistUsing;
+                        TryUsingAnalysis tryUsing = new TryUsingAnalysis();
+                        tryUsing.Visit(node);
+                        mi.ExistTry = tryUsing.ExistTry;
+                        mi.ExistUsing = tryUsing.ExistUsing;
+                        mi.ExistEmbedTryOrUsing = tryUsing.ExistEmbedTryOrUsing;
 
                         string manglingName = NameMangling(sym);
                         string paramStr = string.Join(", ", mi.ParamNames.ToArray());
@@ -589,10 +592,11 @@ namespace RoslynTool.CsToDsl
                     mi.Init(sym, accessor);
                     m_MethodInfoStack.Push(mi);
 
-                    TryUsingAnalysis tryCatch = new TryUsingAnalysis();
-                    tryCatch.Visit(node);
-                    mi.ExistTry = tryCatch.ExistTry;
-                    mi.ExistUsing = tryCatch.ExistUsing;
+                    TryUsingAnalysis tryUsing = new TryUsingAnalysis();
+                    tryUsing.Visit(node);
+                    mi.ExistTry = tryUsing.ExistTry;
+                    mi.ExistUsing = tryUsing.ExistUsing;
+                    mi.ExistEmbedTryOrUsing = tryUsing.ExistEmbedTryOrUsing;
 
                     string manglingName = NameMangling(sym);
                     string keyword = accessor.Keyword.Text;
@@ -697,10 +701,11 @@ namespace RoslynTool.CsToDsl
                     mi.Init(sym, node);
                     m_MethodInfoStack.Push(mi);
 
-                    TryUsingAnalysis tryCatch = new TryUsingAnalysis();
-                    tryCatch.Visit(node);
-                    mi.ExistTry = tryCatch.ExistTry;
-                    mi.ExistUsing = tryCatch.ExistUsing;
+                    TryUsingAnalysis tryUsing = new TryUsingAnalysis();
+                    tryUsing.Visit(node);
+                    mi.ExistTry = tryUsing.ExistTry;
+                    mi.ExistUsing = tryUsing.ExistUsing;
+                    mi.ExistEmbedTryOrUsing = tryUsing.ExistEmbedTryOrUsing;
 
                     string manglingName = NameMangling(sym);
                     string paramStr = string.Join(", ", mi.ParamNames.ToArray());
@@ -764,10 +769,11 @@ namespace RoslynTool.CsToDsl
                     mi.Init(sym, accessor);
                     m_MethodInfoStack.Push(mi);
 
-                    TryUsingAnalysis tryCatch = new TryUsingAnalysis();
-                    tryCatch.Visit(node);
-                    mi.ExistTry = tryCatch.ExistTry;
-                    mi.ExistUsing = tryCatch.ExistUsing;
+                    TryUsingAnalysis tryUsing = new TryUsingAnalysis();
+                    tryUsing.Visit(node);
+                    mi.ExistTry = tryUsing.ExistTry;
+                    mi.ExistUsing = tryUsing.ExistUsing;
+                    mi.ExistEmbedTryOrUsing = tryUsing.ExistEmbedTryOrUsing;
 
                     string manglingName = NameMangling(sym);
                     string keyword = accessor.Keyword.Text;
@@ -958,10 +964,11 @@ namespace RoslynTool.CsToDsl
                 mi.Init(sym, node);
                 m_MethodInfoStack.Push(mi);
 
-                TryUsingAnalysis tryCatch = new TryUsingAnalysis();
-                tryCatch.Visit(node);
-                mi.ExistTry = tryCatch.ExistTry;
-                mi.ExistUsing = tryCatch.ExistUsing;
+                TryUsingAnalysis tryUsing = new TryUsingAnalysis();
+                tryUsing.Visit(node);
+                mi.ExistTry = tryUsing.ExistTry;
+                mi.ExistUsing = tryUsing.ExistUsing;
+                mi.ExistEmbedTryOrUsing = tryUsing.ExistEmbedTryOrUsing;
 
                 CodeBuilder.Append("(function(");
                 CodeBuilder.Append(string.Join(", ", mi.ParamNames.ToArray()));
@@ -1059,10 +1066,11 @@ namespace RoslynTool.CsToDsl
                 mi.Init(sym, node);
                 m_MethodInfoStack.Push(mi);
 
-                TryUsingAnalysis tryCatch = new TryUsingAnalysis();
-                tryCatch.Visit(node);
-                mi.ExistTry = tryCatch.ExistTry;
-                mi.ExistUsing = tryCatch.ExistUsing;
+                TryUsingAnalysis tryUsing = new TryUsingAnalysis();
+                tryUsing.Visit(node);
+                mi.ExistTry = tryUsing.ExistTry;
+                mi.ExistUsing = tryUsing.ExistUsing;
+                mi.ExistEmbedTryOrUsing = tryUsing.ExistEmbedTryOrUsing;
 
                 CodeBuilder.Append("(function(");
                 int ct = sym.Parameters.Length;
@@ -1141,9 +1149,10 @@ namespace RoslynTool.CsToDsl
         {
             MethodInfo mi = m_MethodInfoStack.Peek();
 
-            string varName = string.Format("__using_{0}", GetSourcePosForVar(node));
-            string retVar = string.Format("__using_ret_{0}", GetSourcePosForVar(node));
-            string retValVar = string.Format("__using_ret_val_{0}", GetSourcePosForVar(node));
+            string srcPos = GetSourcePosForVar(node);
+            string varName = string.Format("__using_{0}", srcPos);
+            string retVar = string.Format("__using_ret_{0}", srcPos);
+            string retValVar = string.Format("__using_ret_val_{0}", srcPos);
             if (null != node.Declaration) {
                 VisitVariableDeclaration(node.Declaration);
             }
@@ -1158,9 +1167,12 @@ namespace RoslynTool.CsToDsl
             }
             if (null != node.Statement) {
                 ReturnContinueBreakAnalysis returnAnalysis = new ReturnContinueBreakAnalysis();
+                returnAnalysis.RetValVar = retValVar;
                 returnAnalysis.Visit(node.Statement);
                 if (returnAnalysis.Exist) {
-                    CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}) = dslusing{{", GetIndentString(), retVar, retValVar);
+                    mi.TempReturnAnalysisStack.Push(returnAnalysis);
+
+                    CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}) = dslusing({3}, {1}){{", GetIndentString(), retVar, retValVar, mi.ExistEmbedTryOrUsing || returnAnalysis.ExistReturnInLoopOrSwitch ? "true" : "false");
                     CodeBuilder.AppendLine();
                     ++m_Indent;
                     ++mi.TryUsingLayer;
@@ -1170,7 +1182,24 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                     CodeBuilder.AppendLine();
 
-                    OutputTryCatchUsingReturn(returnAnalysis, mi, retVar, retValVar);
+                    mi.TempReturnAnalysisStack.Pop();
+
+                    if (null != node.Declaration && null != node.Declaration.Variables) {
+                        foreach (var decl in node.Declaration.Variables) {
+                            CodeBuilder.AppendFormat("{0}callexterninstance({1}, \"Dispose\");", GetIndentString(), decl.Identifier.Text);
+                            CodeBuilder.AppendLine();
+                        }
+                    }
+                    else if (null != node.Expression) {
+                        CodeBuilder.AppendFormat("{0}callexterninstance({1}, \"Dispose\");", GetIndentString(), varName);
+                        CodeBuilder.AppendLine();
+                    }
+                    else {
+                        Log(node, "node.Declaration is null or node.Declaration.Variables is null, and node.Expression is null.");
+                    }
+
+                    OutputTryCatchUsingReturn(returnAnalysis, mi, retValVar);
+                    return;
                 }
                 else {
                     node.Statement.Accept(this);

@@ -1883,6 +1883,20 @@ namespace Generator
                 }
                 sb.Append(" do");
             }
+            else if (id == "dslcatch") {
+                sb.Append("luacatch(");
+                var param0 = data.GetParam(0);
+                GenerateSyntaxComponent(param0, sb, indent, false);
+                sb.Append(", ");
+                var param1 = data.GetParam(1);
+                GenerateSyntaxComponent(param1, sb, indent, false);
+                sb.Append(", (not ");
+                var param2 = data.GetParam(2);
+                GenerateSyntaxComponent(param2, sb, indent, false);
+                sb.Append(") and ");
+                GenerateArguments(data, sb, indent, 3);
+                sb.Append(")");
+            }
             else {
                 if (id == "if") {
                     sb.Append("if ");
@@ -1907,9 +1921,6 @@ namespace Generator
                 }
                 else if (id == "unsafe") {
                     sb.Append("do");
-                }
-                else if (id == "dslcatch") {
-                    sb.Append("luacatch");
                 }
                 else if (id == "dslthrow") {
                     sb.Append("luathrow");
@@ -2076,7 +2087,9 @@ namespace Generator
                     sb.Append("luausing");
                 else
                     sb.Append("luatry");
-                if (s_EnableComplexTryUsing) {
+                var complex = data.LowerOrderFunction.GetParamId(0) == "true";
+                var retVar = data.LowerOrderFunction.GetParamId(1);
+                if (complex) {
                     sb.Append("(function()");
                     sb.AppendLine();
                     //函数体部分
@@ -2094,19 +2107,30 @@ namespace Generator
                     bool canSimplify = false;
                     if (data.GetParamNum() == 1) {
                         var bodyStatement = data.GetParam(0) as Dsl.FunctionData;
-                        if (null != bodyStatement && !bodyStatement.IsHighOrder) {
+                        if (null != bodyStatement) {
                             var name = bodyStatement.GetId();
-                            if (name == "return") {
-                                bodyStatement = bodyStatement.GetParam(0) as Dsl.FunctionData;
-                                if (null != bodyStatement && !bodyStatement.IsHighOrder) {
-                                    name = bodyStatement.GetId();
-                                    if (name == "callstatic" || name == "callexternstatic" || name == "callinstance" || name == "callexterninstance") {
-                                        canSimplify = true;
+                            string funcRetVar = null;
+                            string tryRetVar = null;
+                            string tryRetVal = null;
+                            if (!bodyStatement.IsHighOrder && (name == "callstatic" || name == "callexternstatic" || name == "callinstance" || name == "callexterninstance")) {
+                                canSimplify = true;
+                            }
+                            else if (name == "block" && bodyStatement.GetParamNum() == 3) {
+                                var funcCall = bodyStatement.GetParam(0) as Dsl.FunctionData;
+                                var retValVar = bodyStatement.GetParam(1) as Dsl.FunctionData;
+                                var breakStatement = bodyStatement.GetParam(2) as Dsl.ValueData;
+                                if (null != funcCall && null != retValVar && null != breakStatement && funcCall.GetId() == "=" && retValVar.GetId() == "=" && breakStatement.GetId() == "break") {
+                                    bodyStatement = funcCall.GetParam(1) as Dsl.FunctionData;
+                                    if (null != bodyStatement && !bodyStatement.IsHighOrder) {
+                                        name = bodyStatement.GetId();
+                                        if (name == "callstatic" || name == "callexternstatic" || name == "callinstance" || name == "callexterninstance") {
+                                            canSimplify = true;
+                                            funcRetVar = funcCall.GetParamId(0);
+                                            tryRetVar = retValVar.GetParamId(0);
+                                            tryRetVal = retValVar.GetParamId(1);
+                                        }
                                     }
                                 }
-                            }
-                            else if (name == "callstatic" || name == "callexternstatic" || name == "callinstance" || name == "callexterninstance") {
-                                canSimplify = true;
                             }
                             if (canSimplify) {
                                 sb.Append("(");
@@ -2179,26 +2203,31 @@ namespace Generator
                                     }
                                     GenerateArguments(bodyStatement, sb, indent, start, sig);
                                 }
-                                sb.Append(")");
+                                if (null == funcRetVar) {
+                                    sb.Append(")");
+                                }
+                                else {
+                                    sb.AppendLine(");");
+                                    --indent;
+                                    sb.AppendFormatLine("{0}if {1} then", GetIndentString(indent), retVar);
+                                    ++indent;
+                                    sb.AppendFormatLine("{0}{1} = {2};", GetIndentString(indent), funcRetVar, tryRetVar);
+                                    sb.AppendFormatLine("{0}{1} = {2};", GetIndentString(indent), tryRetVar, tryRetVal);
+                                    --indent;
+                                    sb.AppendFormat("{0}end", GetIndentString(indent));
+                                }
                             }
                         }
                     }
                     if (!canSimplify) {
                         //出于性能考虑（function对象有较大开销），忽略using与try-catch机制
                         sb.AppendLine("(nil);");
-                        string lastSubId = null;
-                        foreach (var comp in data.Params) {
-                            if (null != lastSubId) {
-                                if (lastSubId != "comments" && lastSubId != "comment") {
-                                    sb.AppendLine(";");
-                                }
-                                else {
-                                    sb.AppendLine();
-                                }
-                            }
-                            GenerateSyntaxComponent(comp, sb, indent, true);
-                            lastSubId = comp.GetId();
-                        }
+                        --indent;
+                        sb.AppendFormatLine("{0}repeat", GetIndentString(indent));
+                        ++indent;
+                        GenerateStatements(data, sb, indent);
+                        --indent;
+                        sb.AppendFormat("{0}until true", GetIndentString(indent));
                     }
                 }
             }
@@ -3130,7 +3159,5 @@ namespace Generator
         private static ConcurrentDictionary<string, bool> s_CachedNoSignatures = new ConcurrentDictionary<string, bool>();
         private static ConcurrentDictionary<string, int> s_CachedIndexerByLualibInfos = new ConcurrentDictionary<string, int>();
         private static ConcurrentDictionary<string, PrologueAndEpilogueInfo> s_CachedPrologueAndEpilogueInfos = new ConcurrentDictionary<string, PrologueAndEpilogueInfo>();
-
-        private static bool s_EnableComplexTryUsing = false;
     }
 }

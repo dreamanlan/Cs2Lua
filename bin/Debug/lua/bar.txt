@@ -4,22 +4,21 @@ bar = {
 	__new_object = function(...)
 		return newobject(bar, nil, nil, "ctor", nil, ...);
 	end,
+	cctor = function()
+		bar.__cctor();
+	end,
+	__cctor = function()
+		if bar.__cctor_called then 
+			return;
+		else
+			bar.__cctor_called = true;
+		end;
+		bar.s_DateTime = newexternobject(System.DateTime, nil, nil, nil);
+	end,
 	__define_class = function()
-		local static = bar;
-		local static_methods = {
-			cctor = function()
-				bar.__cctor();
-			end,
-			__cctor = function()
-				if bar.__cctor_called then 
-					return;
-				else
-					bar.__cctor_called = true;
-				end;
-				bar.s_DateTime = newexternobject(System.DateTime, nil, nil, nil);
-			end,
-		};
+		Utility.Warn("bar::__define_class begin");
 
+		local class = bar;
 		local static_fields_build = function()
 			local static_fields = {
 				s_DateTime = __cs2lua_nil_field_value,
@@ -27,8 +26,6 @@ bar = {
 			};
 			return static_fields;
 		end;
-		local static_props = nil;
-		local static_events = nil;
 
 		local instance_methods = {
 			test = function(this)
@@ -61,38 +58,25 @@ bar = {
 			};
 			return instance_fields;
 		end;
-		local instance_props = nil;
-		local instance_events = nil;
 
-		local interfaces = nil;
-		local interface_map = nil;
-
-		local class_info = {
-			Kind = TypeKind.Class,
-		};
-		local method_info = {
-			test = {
-				Kind = MethodKind.Ordinary,
-			},
-			ctor = {
-				Kind = MethodKind.Constructor,
-			},
-		};
-		local property_info = nil;
-		local event_info = nil;
-		local field_info = {
-			m_DateTime = {
-			},
-			s_DateTime = {
-				static = true,
-			},
-		};
-
-		Utility.Warn("bar::__define_class begin");
-		local __defineclass_return = defineclass(nil, "bar", "bar", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		local __defineclass_return = defineclass(nil, "bar", "bar", class, static_fields_build, instance_methods, instance_fields_build, false);
 		Utility.Warn("bar::__define_class end");
 		return __defineclass_return;
 	end,
+
+	__interfaces = nil,
+	__class_info = nil,
+	__method_info = {
+		test = {
+			Kind = MethodKind.Ordinary,
+		},
+		ctor = {
+			Kind = MethodKind.Constructor,
+		},
+	},
+	__property_info = nil,
+	__event_info = nil,
+	__field_info = nil,
 };
 
 

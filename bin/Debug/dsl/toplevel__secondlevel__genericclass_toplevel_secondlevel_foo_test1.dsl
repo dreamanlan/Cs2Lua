@@ -11,7 +11,7 @@ class(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1) {
 		};
 		cctor = function(){
 			callstatic(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1, "__cctor");
-			setstatic(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1, "s_Test", 9876);
+			setstatic(SymbolKind.Field, TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1, "s_Test", 9876);
 		},
 		__cctor = function(){
 			if(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.__cctor_called){
@@ -33,10 +33,10 @@ class(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1) {
 	static_events {};
 
 	instance_methods {
-		ctor = function(this, ref(v), out(v2)){
+		ctor = function(this, v, v2){
 			callinstance(this, "__ctor");
 			local(obj); obj = newtypeparamobject(TopLevel.SecondLevel.Foo.Test1);
-			setinstance(this, "m_Test", execbinary("+", v, 4, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
+			setinstance(SymbolKind.Field, this, "m_Test", execbinary("+", v, 4, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
 			v2 = 123;
 			return(this, v, v2);
 		},
@@ -44,12 +44,12 @@ class(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1) {
 			local(t); t = typeof(G);
 		};
 		__ctor = function(this){
-			if(getinstance(this, "__ctor_called")){
+			if(getinstance(SymbolKind.Field, this, "__ctor_called")){
 				return;
 			}else{
-				setinstance(this, "__ctor_called", true);
+				setinstance(SymbolKind.Field, this, "__ctor_called", true);
 			};
-			this.m_Test2 = execbinary("+", getstatic(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1, "TTT"), 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
+			this.m_Test2 = execbinary("+", getstatic(SymbolKind.Field, TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1, "TTT"), 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
 			this.m_Inst = newtypeparamobject(TopLevel.SecondLevel.Foo.Test1);
 		};
 	};
@@ -63,7 +63,6 @@ class(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1) {
 	instance_events {};
 
 	interfaces {};
-	interface_map {};
 
 	class_info(TypeKind.Class, Accessibility.Public) {
 	};

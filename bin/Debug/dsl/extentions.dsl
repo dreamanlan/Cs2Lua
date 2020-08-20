@@ -2,55 +2,54 @@ require("cs2dsl__lualib");
 require("cs2dsl__namespaces");
 require("cs2dsl__externenums");
 require("cs2dsl__interfaces");
-require("transform");
 
 class(Extentions) {
 	static_methods {
 		timeInMillisecond = function(dateTime){
-			return(execbinary("/", getinstance(dateTime, "Ticks"), 10000, System.Int64, System.Int64, TypeKind.Struct, TypeKind.Struct));
+			return(execbinary("/", getexterninstance(SymbolKind.Property, dateTime, "Ticks"), 10000, System.Int64, System.Int64, TypeKind.Struct, TypeKind.Struct));
 		};
 		timeSince1970 = function(dateTime){
 			return(typecast(( execbinary("/", callextension(Extentions, "timeSince1970InMillisecond", dateTime), 1000, System.Int64, System.Int64, TypeKind.Struct, TypeKind.Struct) ), System.Int64, TypeKind.Struct));
 		};
 		timeSince1970InMillisecond = function(dateTime){
 			comment("return (long)(Time.realtimeSinceStartup * 1000);");
-			if( execbinary("==", getinstance(getstatic(Extentions, "dateTime1970"), "Ticks"), 0, System.Int64, System.Int64, TypeKind.Struct, TypeKind.Struct) ){
+			if( execbinary("==", getexterninstance(SymbolKind.Property, getstatic(SymbolKind.Field, Extentions, "dateTime1970"), "Ticks"), 0, System.Int64, System.Int64, TypeKind.Struct, TypeKind.Struct) ){
 				comment("Debug.LogError(\"Ticks = 0\");");
-				getstatic(Extentions, "dateTime1970") = callstatic(System.DateTime, "Parse", "System.DateTime:Parse__String", "1970-1-1");
+				getstatic(SymbolKind.Field, Extentions, "dateTime1970") = callexternstatic(System.DateTime, "Parse", "System.DateTime:Parse__String", "1970-1-1");
 			};
 			local(v); v = 4;
-			local(ts); ts = invokeexternoperator(System.TimeSpan, System.DateTime, "op_Subtraction", "System.DateTime:op_Subtraction__DateTime__DateTime", dateTime, getstatic(Extentions, "dateTime1970"));
-			return(typecast(getinstance(ts, "TotalMilliseconds"), System.Int64, TypeKind.Struct));
+			local(ts); ts = invokeexternoperator(System.TimeSpan, System.DateTime, "op_Subtraction", "System.DateTime:op_Subtraction__DateTime__DateTime", dateTime, getstatic(SymbolKind.Field, Extentions, "dateTime1970"));
+			return(typecast(getexterninstance(SymbolKind.Property, ts, "TotalMilliseconds"), System.Int64, TypeKind.Struct));
 		};
 		findChildRecursively = function(transform, childName, maxDepth){
-;
-			if( execbinary("&&", execbinary("==", child, null, Transform, null, TypeKind.Error, null), execbinary(">", maxDepth, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct) ){
-				local(childCount); childCount = transform.childCount;
+			local(child); child = callexterninstance(transform, "FindChild", childName);
+			if( execbinary("&&", invokeexternoperator(System.Boolean, UnityEngine.Object, "op_Equality", child, null), execbinary(">", maxDepth, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct) ){
+				local(childCount); childCount = getexterninstance(SymbolKind.Property, transform, "childCount");
 				local(i); i = 0;
 				while( execbinary("<", i, childCount, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
-					;
-					if( execbinary("!=", child, null, Transform, null, TypeKind.Error, null) ){
+					child = callextension(Extentions, "findChildRecursively", callexterninstance(transform, "GetChild", i), childName, execbinary("-", maxDepth, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
+					if( invokeexternoperator(System.Boolean, UnityEngine.Object, "op_Inequality", child, null) ){
+						block{
 						break;
+						};
 					};
-					block{
 					break;
-					};
 				i = execbinary("+", i, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
 				};
 			};
 			return(child);
 		};
 		searchChildRecursively = function(transform, childName, maxDepth){
-			if( execbinary("!=", , -1, , System.Int32, TypeKind.Error, TypeKind.Struct) ){
+			if( execbinary("!=", invokeforbasicvalue(getexterninstance(SymbolKind.Property, transform, "name"), false, System.String, "IndexOf", "System.String:IndexOf__String", childName), -1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
 				return(transform);
 			};
-			local(count); count = transform.childCount;
+			local(count); count = getexterninstance(SymbolKind.Property, transform, "childCount");
 			if( execbinary(">", maxDepth, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
 				local(i); i = 0;
 				while( execbinary("<", i, count, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
-;
+					local(nowNode); nowNode = callexterninstance(transform, "GetChild", i);
 					local(searchRes); searchRes = callstatic(Extentions, "searchChildRecursively", nowNode, childName, execbinary("-", maxDepth, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
-					if( execbinary("!=", searchRes, null, Transform, null, TypeKind.Error, null) ){
+					if( invokeexternoperator(System.Boolean, UnityEngine.Object, "op_Inequality", searchRes, null) ){
 						return(searchRes);
 					};
 				i = execbinary("+", i, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
@@ -59,27 +58,27 @@ class(Extentions) {
 			return(null);
 		};
 		isFirstTimeToStart = function(){
-;
+			local(isFirstTimeStart); isFirstTimeStart = callexternstatic(UnityEngine.PlayerPrefs, "GetInt", "UnityEngine.PlayerPrefs:GetInt__String__Int32", "isFirstTimeToStart", 1);
 			return(execbinary("==", isFirstTimeStart, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
 		};
-		AddSorted = function(T, list, item){
-			if( execbinary("==", getinstance(list, "Count"), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
-				callinstance(list, "Add", item);
+		AddSorted = function(list, T, item){
+			if( execbinary("==", getexterninstance(SymbolKind.Property, list, "Count"), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
+				callexterninstance(list, "Add", item);
 				return();
 			};
-			if( execbinary("<=", callinstance(getexterninstanceindexer(System.Collections.Generic.List_T, typeargs(T), typekinds(TypeKind.TypeParameter), list, null, System.Collections.Generic.List_T, "get_Item", 1, execbinary("-", getinstance(list, "Count"), 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct)), "CompareTo", item), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
-				callinstance(list, "Add", item);
+			if( execbinary("<=", callexterninstance(getexterninstanceindexer(System.Collections.Generic.List_T, typeargs(T), typekinds(TypeKind.TypeParameter), list, System.Collections.Generic.List_T, "get_Item", 1, execbinary("-", getexterninstance(SymbolKind.Property, list, "Count"), 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct)), "CompareTo", item), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
+				callexterninstance(list, "Add", item);
 				return();
 			};
-			if( execbinary(">=", callinstance(getexterninstanceindexer(System.Collections.Generic.List_T, typeargs(T), typekinds(TypeKind.TypeParameter), list, null, System.Collections.Generic.List_T, "get_Item", 1, 0), "CompareTo", item), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
-				callinstance(list, "Insert", 0, item);
+			if( execbinary(">=", callexterninstance(getexterninstanceindexer(System.Collections.Generic.List_T, typeargs(T), typekinds(TypeKind.TypeParameter), list, System.Collections.Generic.List_T, "get_Item", 1, 0), "CompareTo", item), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
+				callexterninstance(list, "Insert", 0, item);
 				return();
 			};
-			local(index); index = callinstance(list, "BinarySearch", "System.Collections.Generic.List_T:BinarySearch__Object", item);
+			local(index); index = callexterninstance(list, "BinarySearch", "System.Collections.Generic.List_T:BinarySearch__Object", item);
 			if( execbinary("<", index, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
 				index = execunary("~", index, System.Int32, TypeKind.Struct);
 			};
-			callinstance(list, "Insert", index, item);
+			callexterninstance(list, "Insert", index, item);
 		};
 		cctor = function(){
 			callstatic(Extentions, "__cctor");

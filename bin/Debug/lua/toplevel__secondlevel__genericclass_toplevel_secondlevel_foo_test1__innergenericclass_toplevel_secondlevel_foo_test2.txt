@@ -4,29 +4,26 @@ TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericCla
 	__new_object = function(...)
 		return newobject(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2, {TT}, {TypeKind.TypeParameter}, "ctor", nil, ...);
 	end,
+	cctor = function()
+		TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2.__cctor();
+	end,
+	__cctor = function()
+		if TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2.__cctor_called then 
+			return;
+		else
+			TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2.__cctor_called = true;
+		end;
+	end,
 	__define_class = function()
-		local static = TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2;
-		local static_methods = {
-			cctor = function()
-				TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2.__cctor();
-			end,
-			__cctor = function()
-				if TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2.__cctor_called then 
-					return;
-				else
-					TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2.__cctor_called = true;
-				end;
-			end,
-		};
+		Utility.Warn("TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2::__define_class begin");
 
+		local class = TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2;
 		local static_fields_build = function()
 			local static_fields = {
 				__cctor_called = false,
 			};
 			return static_fields;
 		end;
-		local static_props = nil;
-		local static_events = nil;
 
 		local instance_methods = {
 			ctor = function(this, v, vv)
@@ -47,28 +44,11 @@ TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericCla
 				local f;
 				f = newobject(TopLevel.SecondLevel.Foo, nil, nil, "ctor", nil);
 				TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo(f);
-				f = invokeoperator(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.Foo, "op_Increment", f);
-				f = invokeoperator(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.Foo, "op_Increment", f);
-				f = (f - 1);
-				f = (f - 1);
-				local i;
-				i = (((((function()
-						f = invokeoperator(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.Foo, "op_Increment", f);
-						return f;
-					end)()).m_Test + ((function()
-						local __unary_313_44_313_47;
-						__unary_313_44_313_47 = f;
-						f = invokeoperator(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.Foo, "op_Increment", f);
-						return __unary_313_44_313_47;
-					end)()).m_Test) + ((function()
-						f = (f - 1);
-						return f;
-					end)()).m_Test) + ((function()
-						local __unary_313_74_313_77;
-						__unary_313_74_313_77 = f;
-						f = (f - 1);
-						return __unary_313_74_313_77;
-					end)()).m_Test);
+				--++f;
+				--f++;
+				----f;
+				--f--;
+				--int i = (++f).m_Test + (f++).m_Test + (--f).m_Test + (f--).m_Test;
 			end,
 			Test2 = function(this, GG, t, tt)
 				local t1;
@@ -102,46 +82,30 @@ TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericCla
 			};
 			return instance_fields;
 		end;
-		local instance_props = nil;
-		local instance_events = nil;
 
-		local interfaces = nil;
-		local interface_map = nil;
-
-		local class_info = {
-			Kind = TypeKind.Class,
-		};
-		local method_info = {
-			ctor = {
-				Kind = MethodKind.Constructor,
-			},
-			Test = {
-				Kind = MethodKind.Ordinary,
-				generic = true,
-			},
-			Test2 = {
-				Kind = MethodKind.Ordinary,
-				generic = true,
-			},
-		};
-		local property_info = nil;
-		local event_info = nil;
-		local field_info = {
-			m_T = {
-			},
-			m_TT = {
-			},
-			m_TypeT = {
-			},
-			m_TypeTT = {
-			},
-		};
-
-		Utility.Warn("TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2::__define_class begin");
-		local __defineclass_return = defineclass(nil, "TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2", "InnerGenericClass_TopLevel_SecondLevel_Foo_Test2", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		local __defineclass_return = defineclass(nil, "TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2", "InnerGenericClass_TopLevel_SecondLevel_Foo_Test2", class, static_fields_build, instance_methods, instance_fields_build, false);
 		Utility.Warn("TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGenericClass_TopLevel_SecondLevel_Foo_Test2::__define_class end");
 		return __defineclass_return;
 	end,
+
+	__interfaces = nil,
+	__class_info = nil,
+	__method_info = {
+		ctor = {
+			Kind = MethodKind.Constructor,
+		},
+		Test = {
+			Kind = MethodKind.Ordinary,
+			generic = true,
+		},
+		Test2 = {
+			Kind = MethodKind.Ordinary,
+			generic = true,
+		},
+	},
+	__property_info = nil,
+	__event_info = nil,
+	__field_info = nil,
 };
 
 

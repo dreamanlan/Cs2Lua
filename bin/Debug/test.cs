@@ -33,6 +33,10 @@ class CUsingHelper : IDisposable
     public void Dispose()
     {
     }
+    public static byte[] Test(int i)
+    {
+        return null;
+    }
   
     [System.CLSCompliant(true)]
 	public static byte[] ReadZip(byte[] bytes)
@@ -42,7 +46,7 @@ class CUsingHelper : IDisposable
 		ZipOutputStream ZipStream = new ZipOutputStream(zipMemory);
 		try
 		{
-			return null;
+			return Test(123);
 		}
 		catch (Exception)
 		{
@@ -307,11 +311,11 @@ namespace TopLevel
                     T v2 = (T)(object)g;
                     Foo f = new Foo();
                     f.Test3();
-                    ++f;
-                    f++;
-                    --f;
-                    f--;
-                    int i = (++f).m_Test + (f++).m_Test + (--f).m_Test + (f--).m_Test;
+                    //++f;
+                    //f++;
+                    //--f;
+                    //f--;
+                    //int i = (++f).m_Test + (f++).m_Test + (--f).m_Test + (f--).m_Test;
                 }
                 public void Test2<GG>(T t, TT tt)
                 {
@@ -534,6 +538,7 @@ namespace TopLevel
             }
             private bool TestLocal2(out int v)
             {
+                v = 0;
                 return false;
             }
             private int TestValueArg(TestStruct ts)

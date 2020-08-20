@@ -30,10 +30,10 @@ struct(TopLevel.TestStruct) {
 			callinstance(this, "__ctor");
 		};
 		__ctor = function(this){
-			if(getinstance(this, "__ctor_called")){
+			if(getinstance(SymbolKind.Field, this, "__ctor_called")){
 				return;
 			}else{
-				setinstance(this, "__ctor_called", true);
+				setinstance(SymbolKind.Field, this, "__ctor_called", true);
 			};
 		};
 	};
@@ -47,7 +47,6 @@ struct(TopLevel.TestStruct) {
 	instance_events {};
 
 	interfaces {};
-	interface_map {};
 
 	class_info(TypeKind.Struct, Accessibility.Internal) {
 		sealed(true);

@@ -28,22 +28,32 @@ namespace RoslynTool.CsToDsl
                 }
 
                 bool isLastNode = IsLastNodeOfFor(node);
-                if (isLastNode) {
+                if (!isLastNode) {
                     CodeBuilder.AppendFormat("{0}block{{", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
 
-                if (SymbolTable.EnableComplexTryUsing && mi.TryUsingLayer > 0 && mi.TryCatchUsingOrLoopSwitchStack.Peek()) {
-                    //return(3)代表是tryusing块里的break语句
-                    CodeBuilder.AppendFormat("{0}return(3);", GetIndentString());
-                    CodeBuilder.AppendLine();
+                if (mi.TryUsingLayer > 0 && mi.TryCatchUsingOrLoopSwitchStack.Peek()) {
+                    var returnAnalysis = mi.TempReturnAnalysisStack.Peek();
+                    if (mi.ExistEmbedTryOrUsing || returnAnalysis.ExistReturnInLoopOrSwitch || null == returnAnalysis.RetValVar) {
+                        //return(3)代表是tryusing块里的break语句
+                        CodeBuilder.AppendFormat("{0}return(3);", GetIndentString());
+                        CodeBuilder.AppendLine();
+                    }
+                    else {
+                        //可以不使用函数对象实现的try块，不能使用return语句，换成变量赋值与break
+                        CodeBuilder.AppendFormat("{0}{1} = 3;", GetIndentString(), returnAnalysis.RetValVar);
+                        CodeBuilder.AppendLine();
+                        CodeBuilder.AppendFormat("{0}break;", GetIndentString());
+                        CodeBuilder.AppendLine();
+                    }
                 }
                 else {
                     CodeBuilder.AppendFormat("{0}break;", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
 
-                if (isLastNode) {
+                if (!isLastNode) {
                     CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
@@ -62,22 +72,32 @@ namespace RoslynTool.CsToDsl
                 }
 
                 bool isLastNode = IsLastNodeOfFor(node);
-                if (isLastNode) {
+                if (!isLastNode) {
                     CodeBuilder.AppendFormat("{0}block{{", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
 
-                if (SymbolTable.EnableComplexTryUsing && mi.TryUsingLayer > 0 && mi.TryCatchUsingOrLoopSwitchStack.Peek()) {
-                    //return(2)代表是tryusing块里的continue语句
-                    CodeBuilder.AppendFormat("{0}return(2);", GetIndentString());
-                    CodeBuilder.AppendLine();
+                if (mi.TryUsingLayer > 0 && mi.TryCatchUsingOrLoopSwitchStack.Peek()) {
+                    var returnAnalysis = mi.TempReturnAnalysisStack.Peek();
+                    if (mi.ExistEmbedTryOrUsing || returnAnalysis.ExistReturnInLoopOrSwitch || null == returnAnalysis.RetValVar) {
+                        //return(2)代表是tryusing块里的continue语句
+                        CodeBuilder.AppendFormat("{0}return(2);", GetIndentString());
+                        CodeBuilder.AppendLine();
+                    }
+                    else {
+                        //可以不使用函数对象实现的try块，不能使用return语句，换成变量赋值与break
+                        CodeBuilder.AppendFormat("{0}{1} = 2;", GetIndentString(), returnAnalysis.RetValVar);
+                        CodeBuilder.AppendLine();
+                        CodeBuilder.AppendFormat("{0}break;", GetIndentString());
+                        CodeBuilder.AppendLine();
+                    }
                 }
                 else {
                     CodeBuilder.AppendFormat("{0}break;", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
 
-                if (isLastNode) {
+                if (!isLastNode) {
                     CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
@@ -94,7 +114,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendLine();
             }
 
-            if (SymbolTable.EnableComplexTryUsing && mi.TryUsingLayer > 0) {
+            if (mi.TryUsingLayer > 0) {
                 if (null != node.Expression) {
                     IConversionExpression opd = null;
                     var iret = m_Model.GetOperationEx(node) as IReturnStatement;
@@ -105,9 +125,19 @@ namespace RoslynTool.CsToDsl
                     OutputExpressionSyntax(node.Expression, opd);
                     CodeBuilder.AppendLine(";");
                 }
-                //return(1)代表是tryusing块里的return语句
-                CodeBuilder.AppendFormat("{0}return(1);", GetIndentString());
-                CodeBuilder.AppendLine();
+                var returnAnalysis = mi.TempReturnAnalysisStack.Peek();
+                if (mi.ExistEmbedTryOrUsing || returnAnalysis.ExistReturnInLoopOrSwitch || null == returnAnalysis.RetValVar) {
+                    //return(1)代表是tryusing块里的return语句
+                    CodeBuilder.AppendFormat("{0}return(1);", GetIndentString());
+                    CodeBuilder.AppendLine();
+                }
+                else {
+                    //可以不使用函数对象实现的try块，不能使用return语句，换成变量赋值与break
+                    CodeBuilder.AppendFormat("{0}{1} = 1;", GetIndentString(), returnAnalysis.RetValVar);
+                    CodeBuilder.AppendLine();
+                    CodeBuilder.AppendFormat("{0}break;", GetIndentString());
+                    CodeBuilder.AppendLine();
+                }
             }
             else {
                 string prestr;

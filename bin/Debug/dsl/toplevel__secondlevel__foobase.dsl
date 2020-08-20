@@ -30,10 +30,10 @@ class(TopLevel.SecondLevel.FooBase) {
 			callinstance(this, "__ctor");
 		};
 		__ctor = function(this){
-			if(getinstance(this, "__ctor_called")){
+			if(getinstance(SymbolKind.Field, this, "__ctor_called")){
 				return;
 			}else{
-				setinstance(this, "__ctor_called", true);
+				setinstance(SymbolKind.Field, this, "__ctor_called", true);
 			};
 		};
 	};
@@ -45,7 +45,6 @@ class(TopLevel.SecondLevel.FooBase) {
 	instance_events {};
 
 	interfaces {};
-	interface_map {};
 
 	class_info(TypeKind.Class, Accessibility.Internal) {
 	};

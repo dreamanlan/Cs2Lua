@@ -578,8 +578,9 @@ namespace RoslynTool.CsToDsl
                     mi.Init(msym, node);
 
                     string delegationKey = string.Format("{0}:{1}", ClassInfo.GetFullName(msym.ContainingType), manglingName);
-                    string varName = string.Format("__delegation_{0}", GetSourcePosForVar(node));
-                    string varObjName = string.Format("__delegation_obj_{0}", GetSourcePosForVar(node));
+                    string srcPos = GetSourcePosForVar(node);
+                    string varName = string.Format("__delegation_{0}", srcPos);
+                    string varObjName = string.Format("__delegation_obj_{0}", srcPos);
                     CodeBuilder.Append("(function(){ ");
                     if (string.IsNullOrEmpty(className)) {
                         CodeBuilder.AppendFormat("local({0}); {0} = ", varObjName);

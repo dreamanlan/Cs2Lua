@@ -4,38 +4,35 @@ TopLevel.Runnable = {
 	__new_object = function(...)
 		return newobject(TopLevel.Runnable, nil, nil, "ctor", nil, ...);
 	end,
+	cctor = function()
+		TopLevel.Runnable.__cctor();
+	end,
+	__cctor = function()
+		if TopLevel.Runnable.__cctor_called then 
+			return;
+		else
+			TopLevel.Runnable.__cctor_called = true;
+		end;
+	end,
 	__define_class = function()
-		local static = TopLevel.Runnable;
-		local static_methods = {
-			cctor = function()
-				TopLevel.Runnable.__cctor();
-			end,
-			__cctor = function()
-				if TopLevel.Runnable.__cctor_called then 
-					return;
-				else
-					TopLevel.Runnable.__cctor_called = true;
-				end;
-			end,
-		};
+		Utility.Warn("TopLevel.Runnable::__define_class begin");
 
+		local class = TopLevel.Runnable;
 		local static_fields_build = function()
 			local static_fields = {
 				__cctor_called = false,
 			};
 			return static_fields;
 		end;
-		local static_props = nil;
-		local static_events = nil;
 
 		local instance_methods = {
-			Runnable_Test = function(this)
+			TopLevel_IRunnable0_Test = function(this)
 				LuaConsole.Print("test.");
 			end,
-			Runnable_get_TestProp = function(this)
+			> = function(this)
 				return 1;
 			end,
-			Runnable_set_TestProp = function(this, value)
+			> = function(this, value)
 			end,
 			get_Item = function(this, ix)
 				return 1;
@@ -51,9 +48,9 @@ TopLevel.Runnable = {
 				local ss;
 				ss = invokeforbasicvalue(1, true, System.PlatformID, "ToString", "System.Enum:ToString");
 			end,
-			Runnable_add_OnAction = function(this, value)
+			> = function(this, value)
 			end,
-			Runnable_remove_OnAction = function(this, value)
+			> = function(this, value)
 			end,
 			ctor = function(this)
 				this:__ctor();
@@ -72,84 +69,54 @@ TopLevel.Runnable = {
 			};
 			return instance_fields;
 		end;
-		local instance_props = {
-			Runnable_TestProp = {
-				get = instance_methods.Runnable_get_TestProp,
-				set = instance_methods.Runnable_set_TestProp,
-			},
-		};
-		local instance_events = {
-			Runnable_TestProp = {
-				get = instance_methods.Runnable_get_TestProp,
-				set = instance_methods.Runnable_set_TestProp,
-			},
-		};
 
-		local interfaces = {
-			"TopLevel.IRunnable_System_Int32",
-			"TopLevel.IRunnable0",
-		};
-		local interface_map = {
-			IRunnable_T_Test2 = "Test2",
-			IRunnable_T_get_Item = "get_Item",
-			IRunnable_T_set_Item = "set_Item",
-			IRunnable_T_TestProp = "Runnable_TestProp",
-			IRunnable_T_get_TestProp = "Runnable_get_TestProp",
-			IRunnable_T_set_TestProp = "Runnable_set_TestProp",
-			IRunnable_T_add_OnAction = "Runnable_add_OnAction",
-			IRunnable_T_remove_OnAction = "Runnable_remove_OnAction",
-			IRunnable_T_OnAction = "Runnable_OnAction",
-			IRunnable0_Test = "Runnable_Test",
-		};
-
-		local class_info = {
-			Kind = TypeKind.Class,
-		};
-		local method_info = {
-			Runnable_Test = {
-				Kind = MethodKind.ExplicitInterfaceImplementation,
-				private = true,
-			},
-			Runnable_get_TestProp = {
-				Kind = MethodKind.PropertyGet,
-				private = true,
-			},
-			Runnable_set_TestProp = {
-				Kind = MethodKind.PropertySet,
-				private = true,
-			},
-			get_Item = {
-				Kind = MethodKind.PropertyGet,
-			},
-			set_Item = {
-				Kind = MethodKind.PropertySet,
-			},
-			Test2 = {
-				Kind = MethodKind.Ordinary,
-			},
-			Runnable_add_OnAction = {
-				Kind = MethodKind.EventAdd,
-				private = true,
-			},
-			Runnable_remove_OnAction = {
-				Kind = MethodKind.EventRemove,
-				private = true,
-			},
-			ctor = {
-				Kind = MethodKind.Constructor,
-			},
-		};
-		local property_info = {
-		};
-		local field_info = {
-		};
-		local field_info = nil;
-
-		Utility.Warn("TopLevel.Runnable::__define_class begin");
-		local __defineclass_return = defineclass(nil, "TopLevel.Runnable", "Runnable", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		local __defineclass_return = defineclass(nil, "TopLevel.Runnable", "Runnable", class, static_fields_build, instance_methods, instance_fields_build, false);
 		Utility.Warn("TopLevel.Runnable::__define_class end");
 		return __defineclass_return;
 	end,
+
+	__interfaces = {
+		"TopLevel.IRunnable_System_Int32",
+		"TopLevel.IRunnable0",
+	},
+	__class_info = nil,
+	__method_info = {
+		> = {
+			Kind = <,
+			< = TopLevel_IRunnable,
+			_get_TestProp = ,
+		},
+		> = {
+			Kind = <,
+			< = TopLevel_IRunnable,
+			_set_TestProp = ,
+		},
+		get_Item = {
+			Kind = MethodKind.PropertyGet,
+		},
+		set_Item = {
+			Kind = MethodKind.PropertySet,
+		},
+		Test2 = {
+			Kind = MethodKind.Ordinary,
+		},
+		> = {
+			Kind = <,
+			< = TopLevel_IRunnable,
+			_add_OnAction = ,
+		},
+		> = {
+			Kind = <,
+			< = TopLevel_IRunnable,
+			_remove_OnAction = ,
+		},
+		ctor = {
+			Kind = MethodKind.Constructor,
+		},
+	},
+	__property_info = nil,
+	__event_info = nil,
+	__field_info = nil,
 };
 
 

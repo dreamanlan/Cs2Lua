@@ -4,63 +4,62 @@ CUsingHelper = {
 	__new_object = function(...)
 		return newobject(CUsingHelper, nil, nil, "ctor", nil, ...);
 	end,
+	Test = function(i)
+		return nil;
+	end,
+	ReadZip = function(bytes)
+		local __method_ret_40_4_55_2;
+		__method_ret_40_4_55_2 = nil;
+		local zipInput;
+		zipInput = newobject(ZipInputStream, nil, nil, "ctor", nil, newexternobject(System.IO.MemoryStream, nil, nil, nil, "System.IO.MemoryStream:ctor__Arr_Byte", bytes));
+		local zipMemory;
+		zipMemory = newexternobject(System.IO.MemoryStream, nil, nil, nil, "System.IO.MemoryStream:ctor");
+		local ZipStream;
+		ZipStream = newobject(ZipOutputStream, nil, nil, "ctor", nil, zipMemory);
+		local __try_ret_46_2_54_3, __try_retval_46_2_54_3;
+		__try_ret_46_2_54_3,__try_retval_46_2_54_3 = luatry(CUsingHelper.Test, 123);
+		if __try_ret_46_2_54_3 then
+			__method_ret_40_4_55_2 = __try_retval_46_2_54_3;
+			__try_retval_46_2_54_3 = 1;
+		end;
+		if __try_ret_46_2_54_3 then 
+			if __try_retval_46_2_54_3 then 
+				if (__try_retval_46_2_54_3 == 1) then 
+					return __method_ret_40_4_55_2;
+				end;
+			end;
+		end;
+		local __try_handled_46_2_54_3, __try_catch_ret_val_46_2_54_3;
+		__try_handled_46_2_54_3 = false;
+		__try_catch_ret_val_46_2_54_3 = luacatch(__try_handled_46_2_54_3, __try_retval_46_2_54_3, (not __try_ret_46_2_54_3) and (function()
+				__try_handled_46_2_54_3 = true;
+				do
+					__method_ret_40_4_55_2 = nil;
+					return 1;
+				end;
+				luathrow();
+			end));
+		if __try_catch_ret_val_46_2_54_3 then 
+			if (__try_catch_ret_val_46_2_54_3 == 1) then 
+				return __method_ret_40_4_55_2;
+			end;
+		end;
+		return __method_ret_40_4_55_2;
+	end,
+	cctor = function()
+		CUsingHelper.__cctor();
+	end,
+	__cctor = function()
+		if CUsingHelper.__cctor_called then 
+			return;
+		else
+			CUsingHelper.__cctor_called = true;
+		end;
+	end,
 	__define_class = function()
-		local static = CUsingHelper;
-		local static_methods = {
-			ReadZip = function(bytes)
-				local __method_ret_36_4_51_2;
-				__method_ret_36_4_51_2 = nil;
-				local zipInput;
-				zipInput = newobject(ZipInputStream, nil, nil, "ctor", nil, newexternobject(System.IO.MemoryStream, nil, nil, nil, "System.IO.MemoryStream:ctor__Arr_Byte", bytes));
-				local zipMemory;
-				zipMemory = newexternobject(System.IO.MemoryStream, nil, nil, nil, "System.IO.MemoryStream:ctor");
-				local ZipStream;
-				ZipStream = newobject(ZipOutputStream, nil, nil, "ctor", nil, zipMemory);
-				local __try_ret_42_2_50_3, __try_retval_42_2_50_3;
-				__try_ret_42_2_50_3,__try_retval_42_2_50_3 = luatry(function()
-						do
-							__method_ret_36_4_51_2 = nil;
-							return 1;
-						end;
-					end);
-				if (__try_ret_42_2_50_3 and __try_retval_42_2_50_3) then 
-					if (__try_retval_42_2_50_3 == 1) then 
-						return __method_ret_36_4_51_2;
-					end;
-				end;
-				local __try_handled_42_2_50_3, __try_catch_ret_val_42_2_50_3;
-				__try_handled_42_2_50_3 = false;
-				__try_handled_42_2_50_3,__try_catch_ret_val_42_2_50_3 = luacatch(__try_handled_42_2_50_3, __try_ret_42_2_50_3, __try_retval_42_2_50_3, (function(__catch_handled_46_2_50_3)
-						__catch_handled_46_2_50_3 = true;
-						local __catch_body_46_2_50_3;
-						__catch_body_46_2_50_3 = function()
-								do
-									__method_ret_36_4_51_2 = nil;
-									return 1;
-								end;
-								luathrow();
-							end;
-						return __catch_handled_46_2_50_3, __catch_body_46_2_50_3();
-					end));
-				if (__try_ret_42_2_50_3 and __try_catch_ret_val_42_2_50_3) then 
-					if (__try_catch_ret_val_42_2_50_3 == 1) then 
-						return __method_ret_36_4_51_2;
-					end;
-				end;
-				return __method_ret_36_4_51_2;
-			end,
-			cctor = function()
-				CUsingHelper.__cctor();
-			end,
-			__cctor = function()
-				if CUsingHelper.__cctor_called then 
-					return;
-				else
-					CUsingHelper.__cctor_called = true;
-				end;
-			end,
-		};
+		Utility.Warn("CUsingHelper::__define_class begin");
 
+		local class = CUsingHelper;
 		local static_fields_build = function()
 			local static_fields = {
 				__attributes = CUsingHelper__Attrs,
@@ -68,8 +67,6 @@ CUsingHelper = {
 			};
 			return static_fields;
 		end;
-		local static_props = nil;
-		local static_events = nil;
 
 		local instance_methods = {
 			ctor = function(this, a1, a2)
@@ -93,40 +90,35 @@ CUsingHelper = {
 			};
 			return instance_fields;
 		end;
-		local instance_props = nil;
-		local instance_events = nil;
 
-		local interfaces = {
-			"System.IDisposable",
-		};
-		local interface_map = {
-			IDisposable_Dispose = "Dispose",
-		};
-
-		local class_info = {
-			Kind = TypeKind.Class,
-		};
-		local method_info = {
-			ctor = {
-				Kind = MethodKind.Constructor,
-			},
-			Dispose = {
-				Kind = MethodKind.Ordinary,
-			},
-			ReadZip = {
-				Kind = MethodKind.Ordinary,
-				static = true,
-			},
-		};
-		local property_info = nil;
-		local event_info = nil;
-		local field_info = nil;
-
-		Utility.Warn("CUsingHelper::__define_class begin");
-		local __defineclass_return = defineclass(nil, "CUsingHelper", "CUsingHelper", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		local __defineclass_return = defineclass(nil, "CUsingHelper", "CUsingHelper", class, static_fields_build, instance_methods, instance_fields_build, false);
 		Utility.Warn("CUsingHelper::__define_class end");
 		return __defineclass_return;
 	end,
+
+	__interfaces = {
+		"System.IDisposable",
+	},
+	__class_info = nil,
+	__method_info = {
+		ctor = {
+			Kind = MethodKind.Constructor,
+		},
+		Dispose = {
+			Kind = MethodKind.Ordinary,
+		},
+		Test = {
+			Kind = MethodKind.Ordinary,
+			static = true,
+		},
+		ReadZip = {
+			Kind = MethodKind.Ordinary,
+			static = true,
+		},
+	},
+	__property_info = nil,
+	__event_info = nil,
+	__field_info = nil,
 };
 
 

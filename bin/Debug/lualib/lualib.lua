@@ -284,7 +284,7 @@ end
 
 function luausing(func, ...)
     if nil==func then
-        return true
+        return true, 0
     else
         return pcall(func, ...)
     end
@@ -292,7 +292,7 @@ end
 
 function luatry(func, ...)
     if nil==func then
-        return true
+        return true, 0
     else
         return xpcall(
             func,
@@ -307,12 +307,12 @@ function luatry(func, ...)
     end
 end
 
-function luacatch(handled, ret, err, func)
+function luacatch(handled, err, func)
     local retval = nil
-    if not handled and not ret then
-        handled, retval = func(handled, {Message = err[1], StackTrace = err[2], ToString = function() return Message end})
+    if not handled and func then
+        retval = func({Message = err[1], StackTrace = err[2], ToString = function() return Message end})
     end
-    return handled, retval
+    return retval
 end
 
 function luathrow(obj)

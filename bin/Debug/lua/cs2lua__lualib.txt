@@ -73,6 +73,7 @@ System.Collections.Generic.KeyValuePair_TKey_TValue = {
     end
 }
 System.Array = System.Array or {}
+System.Nullable_T = System.Nullable_T or {}
 
 System.Collections.Generic.MyDictionary_TKey_TValue = System.Collections.Generic.Dictionary_TKey_TValue or {}
 
@@ -95,6 +96,29 @@ __cs2lua_bitand = 7
 __cs2lua_bitor = 8
 __cs2lua_bitxor = 9
 __cs2lua_bitnot = 10
+
+SymbolKind = {
+    Alias = 0,
+    ArrayType = 1,
+    Assembly = 2,
+    DynamicType = 3,
+    ErrorType = 4,
+    Event = 5,
+    Field = 6,
+    Label = 7,
+    Local = 8,
+    Method = 9,
+    NetModule = 10,
+    NamedType = 11,
+    Namespace = 12,
+    Parameter = 13,
+    PointerType = 14,
+    Property = 15,
+    RangeVariable = 16,
+    TypeParameter = 17,
+    Preprocessing = 18,
+    Discard = 19
+}
 
 TypeKind = {
     Unknown = 0,
@@ -200,10 +224,13 @@ Cs2LuaLibrary = {
         if obj then
             local meta = getmetatable(obj)
             if meta and rawget(meta, "__cs2lua_defined") then
-                return true;
+                return true
             end
         end
         return false
+    end,
+    FormatString = function(fmt, ...)
+        return Utility.LuaFormat(fmt, ...);
     end,
     ToString = function(T, val)
         return tostring(val)
@@ -252,29 +279,38 @@ function settempmetatable(class)
 end
 
 function lualog(fmt, ...)
-    Utility.Warn(fmt, ...);
+    CsLibrary.LogSystem.Warn(fmt, ...);
 end
 
-function luausing(func)
-    return pcall(func)
+function luausing(func, ...)
+    if nil==func then
+        return true, 0
+    else
+        return pcall(func, ...)
+    end
 end
 
-function luatry(func)
-    return xpcall(
-        func,
-        function(e)
-            local err = tostring(e)
-            local trace = debug.traceback(err)
-            UnityEngine.Debug.LogError("LogError_Object", err .. ", " .. trace)
-            return {err, trace}
-        end
-    )
+function luatry(func, ...)
+    if nil==func then
+        return true, 0
+    else
+        return xpcall(
+            func,
+            function(e)
+                local err = tostring(e)
+                local trace = debug.traceback(err)
+                UnityEngine.Debug.LogError("LogError_Object", err .. ", " .. trace)
+                return {err, trace}
+            end,
+            ...
+        )
+    end
 end
 
-function luacatch(handled, ret, err, func)
+function luacatch(handled, err, func)
     local retval = nil
-    if not handled and not ret then
-        handled, retval = func(handled, {Message = err[1], StackTrace = err[2]})
+    if not handled and func then
+        handled, retval = func(handled, {Message = err[1], StackTrace = err[2], ToString = function() return Message end})
     end
     return handled, retval
 end
@@ -325,7 +361,7 @@ end
 function getexternstaticindexer(callerClass, typeargs, typekinds, class, name, argCount, ...)
     return class[name](...)
 end
-function getexterninstanceindexer(callerClass, typeargs, typekinds, obj, intf, class, name, argCount, ...)
+function getexterninstanceindexer(callerClass, typeargs, typekinds, obj, class, name, argCount, ...)
     local args = {...}
     local index
     local meta = getmetatable(obj)
@@ -364,7 +400,7 @@ end
 function setexternstaticindexer(callerClass, typeargs, typekinds, class, name, argCount, toplevel, ...)
     return class[name](...)
 end
-function setexterninstanceindexer(callerClass, typeargs, typekinds, obj, intf, class, name, argCount, toplevel, ...)
+function setexterninstanceindexer(callerClass, typeargs, typekinds, obj, class, name, argCount, toplevel, ...)
     local args = {...}
     local num = #args
     local index
@@ -582,46 +618,6 @@ function invokeexternoperator(rettype, class, method, ...)
             elseif args[3] then
                 return args[3][method](...)
             end
-        end
-    else
-        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-    end
-    return nil
-end
-
-function invokewithinterface(obj, intf, method, ...)
-    local meta = getmetatable(obj)
-    if method then
-        if meta and rawget(meta, "__cs2lua_defined") then
-            return obj[method](obj, ...)
-        else
-            return obj[method](obj, ...)
-        end
-    else
-        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-    end
-    return nil
-end
-function getwithinterface(obj, intf, property)
-    local meta = getmetatable(obj)
-    if property then
-        if meta and rawget(meta, "__cs2lua_defined") then
-            return obj[property]
-        else
-            return obj[property]
-        end
-    else
-        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-    end
-    return nil
-end
-function setwithinterface(obj, intf, property, value)
-    local meta = getmetatable(obj)
-    if property then
-        if meta and rawget(meta, "__cs2lua_defined") then
-            obj[property] = value
-        else
-            obj[property] = value
         end
     else
         UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
@@ -870,11 +866,26 @@ function wrapchar(char, intVal)
     end
 end
 
-function wrapstruct(v)
+function wrapoutstruct(v, classObj, typeKind)
+    return classObj()
+end
+
+function wrapoutexternstruct(v, classObj, typeKind)
+    if classObj == System.Collections.Generic.KeyValuePair_TKey_TValue then
+        return nil
+    elseif classObj == UnityEngine.Vector2 then
+        return UnityEngine.Vector2.zero
+    elseif classObj == UnityEngine.Vector3 then
+        return UnityEngine.Vector3.zero
+    end
+    return classObj()
+end
+
+function wrapstruct(v, classObj, typeKind)
     return v
 end
 
-function wrapexternstruct(v)
+function wrapexternstruct(v, classObj, typeKind)
     return v
 end
 
@@ -945,7 +956,7 @@ function delegationwrap(handler)
     end
 end
 
-function delegationcomparewithnil(isevent, isStatic, key, t, inf, k, isequal)
+function delegationcomparewithnil(isstatic, key, t, k, symKind, isequal)
     if not t then
         if isequal then
             return true
@@ -962,7 +973,11 @@ function delegationcomparewithnil(isevent, isStatic, key, t, inf, k, isequal)
     end
     local v = t
     if k then
-        v = t[k]
+        if symKind == SymbolKind.Property then
+            v = t[k](t)
+        else
+            v = t[k]
+        end
     end
     if type(v) == "function" then
         if isequal then
@@ -980,10 +995,14 @@ function delegationcomparewithnil(isevent, isStatic, key, t, inf, k, isequal)
         return false
     end
 end
-function delegationset(isevent, isStatic, key, t, intf, k, handler)
+function delegationset(isstatic, key, t, k, symKind, handler)
     local v = t
     if k then
-        v = t[k]
+        if symKind == SymbolKind.Property then
+            v = t[k](t)
+        else
+            v = t[k]
+        end
     end
     if not v or type(v) ~= "table" then
         --取不到值或者值不是表，则有可能是普通的特性访问
@@ -998,10 +1017,14 @@ function delegationset(isevent, isStatic, key, t, intf, k, handler)
         return v
     end
 end
-function delegationadd(isevent, isStatic, key, t, intf, k, handler)
+function delegationadd(isstatic, key, t, k, symKind, handler)
     local v = t
     if k then
-        v = t[k]
+        if symKind == SymbolKind.Property then
+            v = t[k](t)
+        else
+            v = t[k]
+        end
     end
     if v == nil then
         v = delegationwrap(handler)
@@ -1010,10 +1033,14 @@ function delegationadd(isevent, isStatic, key, t, intf, k, handler)
     end
     return v
 end
-function delegationremove(isevent, isStatic, key, t, intf, k, handler)
+function delegationremove(isstatic, key, t, k, symKind, handler)
     local v = t
     if k then
-        v = t[k]
+        if symKind == SymbolKind.Property then
+            v = t[k](t)
+        else
+            v = t[k]
+        end
     end
     local find = false
     local pos = 1
@@ -1087,7 +1114,7 @@ function dumpexterndelegationtable()
     end
 end
 
-function externdelegationcomparewithnil(isevent, isStatic, key, t, inf, k, isequal)
+function externdelegationcomparewithnil(isstatic, key, t, k, symKind, isequal)
     local v = t
     if k then
         return true
@@ -1100,14 +1127,14 @@ function externdelegationcomparewithnil(isevent, isStatic, key, t, inf, k, isequ
         return false
     end
 end
-function externdelegationset(isevent, isStatic, key, t, intf, k, handler)
+function externdelegationset(isstatic, key, t, k, symKind, handler)
     if k then
         return handler
     else
         return handler
     end
 end
-function externdelegationadd(isevent, isStatic, key, t, intf, k, handler)
+function externdelegationadd(isstatic, key, t, k, symKind, handler)
     local str = getdelegationkey(handler)
     if str then
         setexterndelegationfunc(str .. key, handler)
@@ -1118,7 +1145,7 @@ function externdelegationadd(isevent, isStatic, key, t, intf, k, handler)
         return {"+=", handler}
     end
 end
-function externdelegationremove(isevent, isStatic, key, t, intf, k, handler)
+function externdelegationremove(isstatic, key, t, k, symKind, handler)
     local str = getdelegationkey(handler)
     local trueHandler = handler
     if str then
@@ -1247,15 +1274,17 @@ function __dec_array_count(tb)
     end
 end
 
-__mt_index_of_array = function(t, k)
-    if k == "__exist" then --禁用继承
-        return function(tb, fk)
+__mt_index_of_array_table = {
+    __exist = function(tb, fk) --禁用继承
             return false
-        end
-    elseif k == "Length" or k == "Count" then
-        return __get_array_count(t)
-    elseif k == "GetLength" then
-        return function(obj, ix)
+        end,
+    get_Length = function(obj) 
+    		    return __get_table_count(obj) 
+    		end,
+    get_Count = function(obj) 
+    		    return __get_table_count(obj) 
+    		end,
+    GetLength = function(obj, ix)
             local ret = 0
             local tb = obj
             for i = 0, ix do
@@ -1263,15 +1292,13 @@ __mt_index_of_array = function(t, k)
                 tb = rawget(tb, 0)
             end
             return ret
-        end
-    elseif k == "Add" then
-        return function(obj, v)
+        end,
+    Add = function(obj, v)
             table.insert(obj, v)
             __inc_array_count(obj)
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj);
-        end
-    elseif k == "Remove" then
-        return function(obj, p)
+        end,
+    Remove = function(obj, p)
             local pos = 0
             local ret = nil
             local ct = __get_array_count(obj)
@@ -1289,15 +1316,13 @@ __mt_index_of_array = function(t, k)
             end
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
             return ret
-        end
-    elseif k == "RemoveAt" then
-        return function(obj, ix)
+        end,
+    RemoveAt = function(obj, ix)
             table.remove(obj, ix + 1)
             __dec_array_count(obj)
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
-        end
-    elseif k == "RemoveAll" then
-        return function(obj, pred)
+        end,
+    RemoveAll = function(obj, pred)
             local deletes = {}
             local ct = __get_array_count(obj)
             for i = 1, ct do
@@ -1310,79 +1335,91 @@ __mt_index_of_array = function(t, k)
                 __dec_array_count(obj)
             end
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
-        end
-    elseif k == "AddRange" then
-        return function(obj, coll)
+        end,
+    AddRange = function(obj, coll)
             local enumer = coll:GetEnumerator()
             while enumer:MoveNext() do
                 table.insert(obj, enumer.Current)
                 __inc_array_count(obj)
             end
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
-        end
-    elseif k == "Insert" then
-        return function(obj, ix, p)
+        end,
+    Insert = function(obj, ix, p)
             table.insert(obj, ix + 1, p)
             __inc_array_count(obj)
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
-        end
-    elseif k == "IndexOf" then                      --System.Collections.Generic.List<T>::IndexOf
-        return function(obj, sig, p)
+        end,
+    InsertRange = function(obj, ix, coll)
+            local ct = 0
+            local enumer = coll:GetEnumerator()
+            while enumer:MoveNext() do
+                table.insert(obj, ix + 1 + ct, enumer.Current)
+                __inc_array_count(obj)
+                ct = ct + 1
+            end
+            -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
+        end,
+    RemoveRange = function(obj, ix, ct)
+            for i=1,ct do                
+                table.remove(obj, ix + 1)
+                __dec_array_count(obj)
+            end
+            -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
+        end,
+    IndexOf = function(obj, sig, p, start, count)
             local ct = __get_array_count(obj)
-            for i = 1, ct do
+            if count==nil then
+                count = ct
+            end
+            if start==nil then
+                start = 0
+            end
+            for i = start+1, ct do
                 local v = rawget(obj, i)
                 if rawequal(v,p) then
                     return i - 1
                 end
             end
             return -1
-        end
-    elseif k == "IndexOf__Cs2LuaList_T_T" then      --Cs2Lua<T>::IndexOf
-        return function(obj, p)
+        end,
+    LastIndexOf = function(obj, sig, p, start, count)
             local ct = __get_array_count(obj)
-            for i = 1, ct do
-                local v = rawget(obj, i)
-                if rawequal(v,p) then
-                    return i - 1
-                end
+            if count==nil then
+                count = ct
             end
-            return -1
-        end
-    elseif k == "LastIndexOf" then                  --System.Collections.Generic.List<T>::LastIndexOf
-        return function(obj, sig, p)
-            local ct = __get_array_count(obj)
-            for k = ct, 1 do
+            if start==nil then
+                start = 0
+            end
+            for k = ct, start+1 do
                 local v = rawget(obj, k)
                 if rawequal(v,p) then
                     return k - 1
                 end
             end
             return -1
-        end
-    elseif k == "LastIndexOf__Cs2LuaList_T_T" then  --Cs2LuaList<T>::LastIndexOf
-        return function(obj, p)
+        end,
+    FindIndex = function(obj, sig, p1, p2, p3)
             local ct = __get_array_count(obj)
-            for k = ct, 1 do
-                local v = rawget(obj, k)
-                if rawequal(v,p) then
-                    return k - 1
-                end
+            local start = 0
+            local count = ct
+            local pred = p1
+            if p1~=nil and p2~=nil and p3~=nil then
+                start = p1
+                count = p2
+                pred = p3
+            elseif p1~=nil and p2~=nil then
+                start = p1
+                pred = p2
             end
-            return -1
-        end
-    elseif k == "FindIndex" then
-        return function(obj, sig, predicate)
-            local ct = __get_array_count(obj)
-            for i = 1, ct do
+            for i = start+1, ct do
                 local v = rawget(obj, i)
-                if predicate(v) then
+                if pred(v) then
                     return i - 1
                 end
             end
             return -1
-        end
-    elseif k == "Find" then
-        return function(obj, predicate)
+        end,
+    Find = function(obj, predicate)
             local ct = __get_array_count(obj)
             for i = 1, ct do
                 local v = rawget(obj, i)
@@ -1391,9 +1428,8 @@ __mt_index_of_array = function(t, k)
                 end
             end
             return nil
-        end
-    elseif k == "Contains" then
-        return function(obj, p)
+        end,
+    Contains = function(obj, p)
             local ret = false
             local ct = __get_array_count(obj)
             for i = 1, ct do
@@ -1404,113 +1440,104 @@ __mt_index_of_array = function(t, k)
                 end
             end
             return ret
-        end
-    elseif k == "Peek" then
-        return function(obj)
+        end,
+    Peek = function(obj)
             local ct = __get_array_count(obj)
             local v = rawget(obj, ct)
             return v
-        end
-    elseif k == "Enqueue" then
-        return function(obj, v)
+        end,
+    Enqueue = function(obj, v)
             table.insert(obj, 1, v)
             __inc_array_count(obj)
-        end
-    elseif k == "Dequeue" then
-        return function(obj)
+        end,
+    Dequeue = function(obj)
             local ct = __get_array_count(obj)
             local v = rawget(obj, ct)
             table.remove(obj, ct)
             __dec_array_count(obj)
             return v
-        end
-    elseif k == "Push" then
-        return function(obj, v)
+        end,
+    Push = function(obj, v)
             table.insert(obj, v)
             __inc_array_count(obj)
-        end
-    elseif k == "Pop" then
-        return function(obj)
+        end,
+    Pop = function(obj)
             local ct = __get_array_count(obj)
             local v = rawget(obj, ct)
             table.remove(obj, num)
             __dec_array_count(obj)
             return v
-        end
-    elseif k == "CopyTo" then
-        return function(obj, arr)
+        end,
+    CopyTo = function(obj, arr)
             local ct = __get_array_count(obj)
             for k = 1, ct do
                 arr[k] = rawget(obj, k)
             end
-        end
-    elseif k == "ToArray" then
-        return function(obj)
+        end,
+    ToArray = function(obj)
             local ct = __get_array_count(obj)
             local ret = wraparray({}, ct)
             for k = 1, ct do
                 ret[k] = rawget(obj, k)
             end
             return ret
-        end
-    elseif k == "Clear" then
-        return function(obj)
+        end,
+    Clear = function(obj)
             local ct = __get_array_count(obj)
             for i = ct, 1, -1 do
                 table.remove(obj, i)
             end
             __set_array_count(obj, 0)
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
-        end
-    elseif k == "GetEnumerator" then
-        return function(obj)
+        end,
+    GetEnumerator = function(obj)
             return GetArrayEnumerator(obj)
-        end
-    elseif k == "Sort" then                         --System.Collections.Generic.List<T>::Sort
-        return function(obj, sig, predicate)
+        end,
+    Sort = function(obj, sig, predicate)
             table.sort(
                 obj,
                 function(a, b)
                     return predicate(a, b) < 0
                 end
             )
-        end
-    elseif k == "Sort__System_Comparison_T" then    --Cs2LuaList<T>::Sort
-        return function(obj, predicate)
+        end,
+    Sort__System_Comparison_T = function(obj, predicate)
             table.sort(
                 obj,
                 function(a, b)
                     return predicate(a, b) < 0
                 end
             )
-        end
-    elseif k == "GetType" then
-        return function(obj)
+        end,
+    GetType = function(obj)
             local meta = getmetatable(obj)
             return meta.__class
-        end
-    -- else
-    --   return rawget(t,k);
+        end,
+}
+
+__mt_index_of_array = function(t, k)
+    if k == "Length" or k == "Count" then
+        return __get_array_count(t)
+    else
+		return __mt_index_of_array_table[k]
     end
 end
 
-__mt_index_of_dictionary = function(t, k)
-    if k == "__exist" then --禁用继承
-        return function(tb, fk)
+__mt_index_of_dictionary_table = {
+    __exist = function(tb, fk)    --禁用继承
             return false
-        end
-    elseif k == "Count" then
-        return __get_table_count(t)
-    elseif k == "Add" then
-        return function(obj, p1, p2)
+        end,
+    get_Count = function(obj)
+             return __get_table_count(obj)
+         end,
+    Add = function(obj, p1, p2)
             p1 = __unwrap_if_string(p1)     
             local data = __get_table_data(obj)       
             rawset(data, p1, {value = p2})
             __inc_table_count(obj)
             return p2
-        end
-    elseif k == "Remove" then
-        return function(obj, p)
+        end,
+    Remove = function(obj, p)
             p = __unwrap_if_string(p) 
             local data = __get_table_data(obj)     
             local v = rawget(data, p)
@@ -1521,18 +1548,16 @@ __mt_index_of_dictionary = function(t, k)
             end
             __dec_table_count(obj)
             return ret
-        end
-    elseif k == "ContainsKey" then
-        return function(obj, p)
+        end,
+    ContainsKey = function(obj, p)
             p = __unwrap_if_string(p) 
             local data = __get_table_data(obj)     
             if rawget(data, p) then
                 return true
             end
             return false
-        end
-    elseif k == "ContainsValue" then
-        return function(obj, p)
+        end,
+    ContainsValue = function(obj, p)
             local ret = false 
             local data = __get_table_data(obj)     
             for k, v in pairs(data) do
@@ -1542,9 +1567,8 @@ __mt_index_of_dictionary = function(t, k)
                 end
             end
             return ret
-        end
-    elseif k == "TryGetValue" then
-        return function(obj, p)
+        end,
+    TryGetValue = function(obj, p)
             p = __unwrap_if_string(p) 
             local data = __get_table_data(obj)     
             local v = rawget(data, p)
@@ -1569,7 +1593,22 @@ __mt_index_of_dictionary = function(t, k)
                 end
             end
             return false, nil
-        end
+        end,
+    Clear = function(obj)
+            __clear_table(obj)
+        end,
+    GetEnumerator = function(obj)
+            return GetDictEnumerator(obj)
+        end,
+    GetType = function(obj)
+            local meta = getmetatable(obj)
+            return meta.__class
+        end,
+}
+
+__mt_index_of_dictionary = function(t, k)
+     if k == "Count" then
+        return __get_table_count(t)
     elseif k == "Keys" then
         local ret = wraparray {} 
         local data = __get_table_data(t)     
@@ -1587,27 +1626,19 @@ __mt_index_of_dictionary = function(t, k)
             __inc_array_count(ret)
         end
         return ret
-    elseif k == "Clear" then
-        return function(obj)
-            __clear_table(obj)
-        end
-    elseif k == "GetEnumerator" then
-        return function(obj)
-            return GetDictEnumerator(obj)
-        end
-    elseif k == "GetType" then
-        return function(obj)
-            local meta = getmetatable(obj)
-            return meta.__class
-        end
     else 
-        k = __unwrap_if_string(k) 
-        local data = __get_table_data(t)     
-        local v = rawget(data, k)
-        if v then
-            return v.value
+        local f = __mt_index_of_dictionary_table[k]
+        if f then
+            return f
+        else
+            k = __unwrap_if_string(k) 
+            local data = __get_table_data(t)     
+            local v = rawget(data, k)
+            if v then
+                return v.value
+            end
+            return nil
         end
-        return nil
     end
 end
 
@@ -1623,23 +1654,21 @@ __mt_newindex_of_dictionary = function(t, k, val)
     end
 end
 
-__mt_index_of_hashset = function(t, k)
-    if k == "__exist" then --禁用继承
-        return function(tb, fk)
+__mt_index_of_hashset_table={
+    __exist = function(tb, fk)  --禁用继承
             return false
-        end
-    elseif k == "Count" then
-        return __get_table_count(t)
-    elseif k == "Add" then
-        return function(obj, p)
+        end,
+    get_Count = function(obj)
+             return __get_table_count(obj) 
+        end,
+    Add = function(obj, p)
             p = __unwrap_if_string(p) 
             local data = __get_table_data(obj)     
             rawset(data, p, true)
             __inc_table_count(obj)
             return true
-        end
-    elseif k == "Remove" then
-        return function(obj, p)
+        end,
+    Remove = function(obj, p)
             p = __unwrap_if_string(p) 
             local data = __get_table_data(obj)     
             local ret = rawget(data, p)
@@ -1648,41 +1677,44 @@ __mt_index_of_hashset = function(t, k)
             end
             __dec_table_count(obj)
             return ret
-        end
-    elseif k == "Contains" then
-        return function(obj, p)
+        end,
+    Contains = function(obj, p)
             p = __unwrap_if_string(p) 
             local data = __get_table_data(obj)     
             if rawget(data, p) then
                 return true
             end
             return false
-        end
-    elseif k == "CopyTo" then
-        return function(obj, arr) 
+        end,
+    CopyTo = function(obj, arr) 
             local data = __get_table_data(obj)     
             for k, v in pairs(data) do
                 k = __wrap_if_string(k)
                 table.insert(arr, k)
             end
-        end
-    elseif k == "Clear" then
-        return function(obj)
+        end,
+    Clear = function(obj)
             __clear_table(obj)
-        end
-    elseif k == "GetEnumerator" then
-        return function(obj)
+        end,
+    GetEnumerator = function(obj)
             return GetHashsetEnumerator(obj)
-        end
-    elseif k == "GetType" then
-        return function(obj)
+        end,
+    GetType = function(obj)
             local meta = getmetatable(obj)
             return meta.__class
-        end
+        end,
+}
+
+__mt_index_of_hashset = function(t, k)
+    if k == "Count" then
+        return __get_table_count(t)
+    else
+        return __mt_index_of_hashset_table[k]
     end
 end
 
 function GetArrayEnumerator(tb)
+    local function __get_Current(obj) return obj.current end
     return setmetatable(
         {
             MoveNext = function(this)
@@ -1704,6 +1736,8 @@ function GetArrayEnumerator(tb)
             __index = function(t, k)
                 if k == "Current" then
                     return t.current
+                elseif k == "get_Current" then
+                    return __get_Current
                 end
                 return nil
             end
@@ -1712,6 +1746,7 @@ function GetArrayEnumerator(tb)
 end
 
 function GetDictEnumerator(tb)
+    local function __get_Current(obj) return obj.current end
     return setmetatable(
         {
             MoveNext = function(this)
@@ -1737,6 +1772,8 @@ function GetDictEnumerator(tb)
             __index = function(t, k)
                 if k == "Current" then
                     return t.current
+                elseif k == "get_Current" then
+                    return __get_Current
                 end
                 return nil
             end
@@ -1745,6 +1782,7 @@ function GetDictEnumerator(tb)
 end
 
 function GetHashsetEnumerator(tb)
+    local function __get_Current(obj) return __wrap_if_string(obj.Key) end
     return setmetatable(
         {
             MoveNext = function(this)
@@ -1765,6 +1803,8 @@ function GetHashsetEnumerator(tb)
             __index = function(t, k)
                 if k == "Current" then
                     return __wrap_if_string(t.key)
+                elseif k == "get_Current" then
+                    return __get_Current
                 end
                 return nil
             end
@@ -1788,7 +1828,7 @@ function getiterator(exp)
     end
 end
 
-function wraparray(arr, size, type)
+function wraparray(arr, size, classObj, typeKind)
     if not size then
         size = #arr
     end
@@ -1821,40 +1861,8 @@ function wrapanonymousobject(dict)
     return obj
 end
 
-function wrapclassparams(arr)
-    return wraparray(arr)
-end
-
-function wrapstructparams(arr)
-    for i, v in ipairs(arr) do
-        arr[i] = wrapstruct(v)
-    end
-    local size = #arr
-    return setmetatable(
-        arr,
-        {
-            __index = __mt_index_of_array,
-            __Count = size,
-            __cs2lua_defined = true,
-            __class = System.Collections.Generic.List_T
-        }
-    )
-end
-
-function wrapexternstructparams(arr)
-    for i, v in ipairs(arr) do
-        arr[i] = wrapexternstruct(v)
-    end
-    local size = #arr
-    return setmetatable(
-        arr,
-        {
-            __index = __mt_index_of_array,
-            __Count = size,
-            __cs2lua_defined = true,
-            __class = System.Collections.Generic.List_T
-        }
-    )
+function wrapparams(arr, elementType, elementTypeKind)
+    return wraparray(arr, nil, elementType, elementTypeKind)
 end
 
 function newdictionary(t, typeargs, typekinds, ctor, dict, ...)
@@ -1881,7 +1889,7 @@ end
 
 function newlist(t, typeargs, typekinds, ctor, list, ...)
     if list then
-        return setmetatable(list, {__index = __mt_index_of_array, __cs2lua_defined = true, __class = t})
+        return setmetatable(list, {__index = __mt_index_of_array, __count = #list, __cs2lua_defined = true, __class = t})
     end
 end
 
@@ -1931,7 +1939,7 @@ end
 
 function newexternlist(t, typeargs, typekinds, list, ...)
     if list and t == System.Collections.Generic.List_T then
-        return setmetatable(list, {__index = __mt_index_of_array, __cs2lua_defined = true, __class = t})
+        return setmetatable(list, {__index = __mt_index_of_array, __count = #list, __cs2lua_defined = true, __class = t})
     else
         local obj = t(...)
         if obj then
@@ -1949,7 +1957,7 @@ end
 
 function newexterncollection(t, typeargs, typekinds, coll, ...)
     if coll and (t == System.Collections.Generic.Queue_T or t == System.Collections.Generic.Stack_T) then
-        return setmetatable(coll, {__index = __mt_index_of_array, __cs2lua_defined = true, __class = t})
+        return setmetatable(coll, {__index = __mt_index_of_array, __count = #coll, __cs2lua_defined = true, __class = t})
     elseif coll and t == System.Collections.Generic.HashSet_T then
         return setmetatable(coll, {__index = __mt_index_of_hashset, __cs2lua_defined = true, __class = t, __cs2lua_data = {}})
     else
@@ -2030,6 +2038,15 @@ function bitnot(v)
 end
 
 function bitand(v1, v2)
+    if v1==true and v2==true then
+        return true
+    elseif v1==false and v2==false then
+        return false
+    elseif v1==true and v2==false then
+        return false
+    elseif v1==false and v2==true then
+        return false
+    end
     if bit then
         return bit.band(v1, v2)
     else
@@ -2038,6 +2055,15 @@ function bitand(v1, v2)
 end
 
 function bitor(v1, v2)
+    if v1==true and v2==true then
+        return true
+    elseif v1==false and v2==false then
+        return false
+    elseif v1==true and v2==false then
+        return true
+    elseif v1==false and v2==true then
+        return true
+    end
     if bit then
         return bit.bor(v1, v2)
     else
@@ -2510,344 +2536,144 @@ function __unwrap_if_string(val)
     end
 end
 
+function __find_base_class_key(k, base_class)
+    if nil == k then
+        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
+        return false
+    end
+    if base_class then
+        if rawget(base_class, "__cs2lua_defined") then
+            return base_class.__exist(k)
+        else
+            return find_extern_class_or_obj_key(k,base_class)
+        end
+    end
+    return false
+end
+function __find_class_key(k, class, class_fields, base_class)
+    if nil == k then
+        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
+        return false
+    end
+    local ret
+    ret = rawget(class, k)
+    if nil ~= ret then
+        return true
+    end
+    ret = class_fields[k]
+    if nil ~= ret then
+        return true
+    end
+    return __find_base_class_key(k, base_class)
+end
+function __wrap_virtual_method(k, f)
+    return function(this, ...)
+        local child = rawget(this, "__child__")
+        local final_nf = nil
+        local final_child = nil
+        while child do
+            local nf = rawget(child, k)
+            if nf then
+                final_nf = nf
+                final_child = child
+            end
+            child = rawget(child, "__child__")
+        end
+        if final_nf then
+            return final_nf(final_child, ...)
+        end
+        return f(this, ...)
+    end
+end
+
+function find_extern_class_or_obj_key(k, obj)
+    local t=getmetatable(obj)
+    repeat
+        local fun=rawget(t,k)
+        local tp=type(fun)        
+        if tp=='function' then 
+            return true 
+        elseif tp=='table' then
+            local f=fun[1]
+            if f then
+                return true
+            end
+        end
+        t = rawget(t,'__parent')
+    until t==nil
+    return false
+end
+
+function __find_base_obj_key(k, baseObj)
+    if nil == k then
+        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
+        return false
+    end
+    if baseObj then
+        local meta = getmetatable(baseObj)
+        if meta and rawget(meta, "__cs2lua_defined") then
+            return baseObj:__exist(k)
+        else
+            return find_extern_class_or_obj_key(k,baseObj)
+        end
+    end
+    return false
+end
+function __find_obj_key(k, obj, obj_fields, baseObj)
+    if nil == k then
+        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
+        return false
+    end
+    local ret
+    ret = rawget(obj, k)
+    if nil ~= ret then
+        return true
+    end
+    ret = obj_fields[k]
+    if nil ~= ret then
+        return true
+    end
+    return __find_base_obj_key(k, baseObj)
+end
+
 function defineclass(
     base,
     fullName,
     typeName,
-    static,
-    static_methods,
+    class,
     static_fields_build,
-    static_props,
-    static_events,
     instance_methods,
     instance_fields_build,
-    instance_props,
-    instance_events,
-    interfaces,
-    interface_map,
-    class_info,
-    method_info,
-    property_info,
-    event_info,
-    field_info,
     is_value_type)
+    
     local base_class = base
     local mt = getmetatable(base_class)
 
-    local class = static or {}
-    for ck, cv in pairs(static_methods) do
-        rawset(class, ck, cv)
-    end
-    local class_fields = {}
-    local class_props = static_props or {}
-    local class_events = static_events or {}
+    local class_fields = static_fields_build()
+    local interfaces = class.__interfaces
+    local method_info = class.__method_info
+    
     rawset(class, "__cs2lua_defined", true)
     rawset(class, "__cs2lua_fullname", fullName)
     rawset(class, "__cs2lua_typename", typeName)
     rawset(class, "__cs2lua_parent", base_class)
     rawset(class, "__is_value_type", is_value_type)
     rawset(class, "__interfaces", interfaces)
-    rawset(class, "__interface_map", interface_map)
 
-    local function __find_base_class_key(k)
-        if nil == k then
-            UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-            return false
-        end
-        if base_class then
-            if rawget(base_class, "__cs2lua_defined") then
-                local r, v =
-                    pcall(
-                    function()
-                        return base_class.__exist(k)
-                    end
-                )
-                if r then
-                    return v
-                end
-            else
-                local r, ret =
-                    pcall(
-                    function()
-                        return base_class[k]
-                    end
-                )
-                if r then
-                    return true
-                end
-            end
-        end
-        return false
+    local function __exist(fk)
+        return __find_class_key(fk, class, class_fields, base_class)
     end
-    local function __find_class_key(k)
-        if nil == k then
-            UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-            return false
-        end
-        local ret
-        ret = rawget(class, k)
-        if nil ~= ret then
-            return true
-        end
-        ret = class_fields[k]
-        if nil ~= ret then
-            return true
-        end
-        ret = class_props[k]
-        if nil ~= ret then
-            return true
-        end
-        ret = class_events[k]
-        if nil ~= ret then
-            return true
-        end
-        return __find_base_class_key(k)
-    end
-    local function __wrap_virtual_method(k, f)
-        return function(this, ...)
-            local child = rawget(this, "__child__")
-            local final_nf = nil
-            local final_child = nil
-            while child do
-                local nf = rawget(child, k)
-                if nf then
-                    final_nf = nf
-                    final_child = child
-                end
-                child = rawget(child, "__child__")
-            end
-            if final_nf then
-                return final_nf(final_child, ...)
-            end
-            return f(this, ...)
-        end
+
+    local function obj_GetType(tb)
+        return class
     end
 
     setmetatable(
         class,
         {
-            __call = function()
-                local baseObj = nil
-                if base_class == UnityEngine.MonoBehaviour then
-                    baseObj = nil
-                elseif mt then
-                    baseObj = mt.__call()
-                end
-                local obj = {}
-                for k, v in pairs(instance_methods) do
-                    local minfo = method_info[k]
-                    if not minfo then
-                        obj[k] = v
-                        if k ~= "__ctor" then
-                            UnityEngine.Debug.LogError("LogError_String", "can't found method " .. tostring(k))
-                        end
-                    else
-                        if minfo["abstract"] or minfo["virtual"] or minfo["override"] then
-                            obj[k] = __wrap_virtual_method(k, v)
-                        else
-                            obj[k] = v
-                        end
-                        if k == "ctor" or ((not minfo["private"]) and (not minfo["sealed"])) then
-                            obj["__self__" .. k] = v
-                        end
-                    end
-                end
-                local obj_fields
-                if instance_fields_build then
-                    obj_fields = instance_fields_build()
-                else
-                    obj_fields = {}
-                end
-                local obj_props = instance_props or {}
-                local obj_events = instance_events or {}
-                local obj_intf_map = interface_map or {}
-
-                obj["base"] = baseObj
-                if baseObj then
-                    baseObj["__child__"] = obj
-                end
-
-                local function __find_base_obj_key(k)
-                    if nil == k then
-                        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-                        return false
-                    end
-                    if baseObj then
-                        local meta = getmetatable(baseObj)
-                        if meta and rawget(meta, "__cs2lua_defined") then
-                            local r, v =
-                                pcall(
-                                function()
-                                    return baseObj:__exist(k)
-                                end
-                            )
-                            if r then
-                                return v
-                            end
-                        else
-                            local r, ret =
-                                pcall(
-                                function()
-                                    return baseObj[k]
-                                end
-                            )
-                            if r then
-                                return true
-                            end
-                        end
-                    end
-                    return false
-                end
-                local function __find_obj_key(k)
-                    if nil == k then
-                        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-                        return false
-                    end
-                    local ret
-                    ret = rawget(obj, k)
-                    if nil ~= ret then
-                        return true
-                    end
-                    ret = obj_fields[k]
-                    if nil ~= ret then
-                        return true
-                    end
-                    ret = obj_props[k]
-                    if nil ~= ret then
-                        return true
-                    end
-                    ret = obj_events[k]
-                    if nil ~= ret then
-                        return true
-                    end
-                    local nk = obj_intf_map[k]
-                    if nil ~= nk then
-                        ret = obj_fields[nk]
-                        if nil ~= ret then
-                            return true
-                        end
-                        ret = obj_props[nk]
-                        if nil ~= ret then
-                            return true
-                        end
-                        ret = obj_events[nk]
-                        if nil ~= ret then
-                            return true
-                        end
-                    end
-                    return __find_base_obj_key(k)
-                end
-
-                setmetatable(
-                    obj,
-                    {
-                        __class = class,
-                        __cs2lua_defined = true,
-                        __cs2lua_fullname = fullName,
-                        __cs2lua_typename = typeName,
-                        __cs2lua_parent = base_class,
-                        __is_value_type = is_value_type,
-                        __interfaces = interfaces,
-                        __interface_map = interface_map,
-                        __index = function(t, k)
-                            if k == "__exist" then
-                                return function(tb, fk)
-                                    return __find_obj_key(fk)
-                                end
-                            end
-                            if nil == k then
-                                UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-                                return nil
-                            end
-                            local ret
-                            ret = obj_fields[k]
-                            if nil ~= ret then
-                                return __unwrap_table_field(ret)
-                            end
-                            ret = obj_props[k]
-                            if nil ~= ret then
-                                if ret.get then
-                                    ret = ret.get(t)
-                                else
-                                    ret = nil
-                                end
-                                return ret
-                            end
-                            ret = obj_intf_map[k]
-                            if nil ~= ret then
-                                ret = obj_fields[ret]
-                                if nil ~= ret then
-                                    return ret
-                                end
-                                ret = obj_props[ret]
-                                if nil ~= ret then
-                                    if ret.get then
-                                        ret = ret.get(t)
-                                    else
-                                        ret = nil
-                                    end
-                                    return ret
-                                end
-                            end
-                            if __find_base_obj_key(k) then
-                                ret = baseObj[k]
-                                return ret
-                            end
-                            --简单支持反射方法:GetType()
-                            if k == "GetType" then
-                                return function(tb)
-                                    return class
-                                end
-                            end
-                            return ret
-                        end,
-                        __newindex = function(t, k, v)
-                            if nil == k then
-                                UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-                                return
-                            end
-                            local ret
-                            ret = obj_fields[k]
-                            if nil ~= ret then
-                                obj_fields[k] = __wrap_table_field(v)
-                                return
-                            end
-                            ret = obj_props[k]
-                            if nil ~= ret then
-                                if ret.set then
-                                    ret.set(t, v)
-                                end
-                                return
-                            end
-                            ret = obj_intf_map[k]
-                            if nil ~= ret then
-                                ret = obj_props[ret]
-                                if nil ~= ret then
-                                    if ret.set then
-                                        ret.set(t, v)
-                                    end
-                                    return
-                                end
-                            end
-                            if __find_base_obj_key(k) then
-                                baseObj[k] = v
-                                return
-                            end
-                            rawset(t, k, v)
-                        end,
-                        __setbase = function(self, base)
-                            baseObj = base
-                        end
-                    }
-                )
-
-                return obj
-            end,
             __index = function(t, k)
                 if k == "__exist" then
-                    return function(fk)
-                        return __find_class_key(fk)
-                    end
+                    return __exist
                 end
                 if nil == k then
                     UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
@@ -2858,16 +2684,7 @@ function defineclass(
                 if nil ~= ret then
                     return __unwrap_table_field(ret)
                 end
-                ret = class_props[k]
-                if nil ~= ret then
-                    if ret.get then
-                        ret = ret.get(t)
-                    else
-                        ret = nil
-                    end
-                    return ret
-                end
-                if __find_base_class_key(k) then
+                if __find_base_class_key(k, base_class) then
                     ret = base_class[k]
                     return ret
                 end
@@ -2890,30 +2707,115 @@ function defineclass(
                     class_fields[k] = __wrap_table_field(v)
                     return
                 end
-                ret = class_props[k]
-                if nil ~= ret then
-                    if ret.set then
-                        ret.set(t, v)
-                    end
-                    return
-                end
-                if __find_base_class_key(k) then
+                if __find_base_class_key(k, base_class) then
                     base_class[k] = v
                     return
                 end
                 rawset(t, k, v)
+            end,
+            __call = function()
+                local baseObj = nil
+                if base_class == UnityEngine.MonoBehaviour then
+                    baseObj = nil
+                elseif mt then
+                    baseObj = mt.__call()
+                end
+                local obj = {}
+                local obj_fields = instance_fields_build()
+                for k, v in pairs(instance_methods) do
+                    if not method_info then
+                        obj[k] = v
+                    else
+                        local minfo = method_info[k]
+                        if not minfo then
+                            obj[k] = v
+                        else
+                            if minfo["abstract"] or minfo["virtual"] or minfo["override"] then
+                                obj[k] = __wrap_virtual_method(k, v)
+                            else
+                                obj[k] = v
+                            end
+                            local result = string.find(k,"ctor",1,true)
+                            if (result==1) or ((not minfo["private"]) and (not minfo["sealed"])) then
+                                obj["__self__" .. k] = v
+                            end
+                        end
+                    end
+                end
+                
+                obj["base"] = baseObj
+                if baseObj then
+                    baseObj["__child__"] = obj
+                end
+
+                local function obj__exist(tb, fk)
+                    return __find_obj_key(fk, obj, obj_fields, baseObj)
+                end
+
+                setmetatable(
+                    obj,
+                    {
+                        __class = class,
+                        __cs2lua_defined = true,
+                        __cs2lua_fullname = fullName,
+                        __cs2lua_typename = typeName,
+                        __cs2lua_parent = base_class,
+                        __is_value_type = is_value_type,
+                        __interfaces = interfaces,
+                        __index = function(t, k)
+                            if k == "__exist" then
+                                return obj__exist
+                            end
+                            if nil == k then
+                                UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
+                                return nil
+                            end
+                            local ret
+                            ret = obj_fields[k]
+                            if nil ~= ret then
+                                return __unwrap_table_field(ret)
+                            end
+                            if __find_base_obj_key(k, baseObj) then
+                                ret = baseObj[k]
+                                return ret
+                            end
+                            --简单支持反射方法:GetType()
+                            if k == "GetType" then
+                                return obj_GetType
+                            end
+                            return ret
+                        end,
+                        __newindex = function(t, k, v)
+                            if nil == k then
+                                UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
+                                return
+                            end
+                            local ret
+                            ret = obj_fields[k]
+                            if nil ~= ret then
+                                obj_fields[k] = __wrap_table_field(v)
+                                return
+                            end
+                            if __find_base_obj_key(k, baseObj) then
+                                baseObj[k] = v
+                                return
+                            end
+                            rawset(t, k, v)
+                        end,
+                        __setbase = function(self, base)
+                            baseObj = base
+                        end
+                    }
+                )
+
+                return obj
             end
         }
     )
-    if static_fields_build then
-        local sfb = static_fields_build()
-        for sfk, sfv in pairs(sfb) do
-            rawset(class_fields, sfk, sfv)
-        end
-    end
     if class.cctor then
         class.cctor()
     end
+    
     return class
 end
 
@@ -2937,7 +2839,9 @@ end
 function newexternobject(class, typeargs, typekinds, initializer, ...)
     local obj = nil
     local args = {...}
-    if class == System.Collections.Generic.KeyValuePair_TKey_TValue then
+    if class == System.Nullable_T then
+        return nil
+    elseif class == System.Collections.Generic.KeyValuePair_TKey_TValue then
         return {Key = args[1], Value = args[2]}
     end
     if class == UnityEngine.Vector3 then

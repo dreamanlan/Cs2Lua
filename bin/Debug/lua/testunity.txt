@@ -4,34 +4,30 @@ TestUnity = {
 	__new_object = function(...)
 		return newobject(TestUnity, nil, nil, "ctor", nil, ...);
 	end,
+	cctor = function()
+		TestUnity.__cctor();
+	end,
+	__cctor = function()
+		if TestUnity.__cctor_called then 
+			return;
+		else
+			TestUnity.__cctor_called = true;
+		end;
+	end,
 	__define_class = function()
-		local static = TestUnity;
-		local static_methods = {
-			cctor = function()
-				MonoBehaviour.cctor();
-				TestUnity.__cctor();
-			end,
-			__cctor = function()
-				if TestUnity.__cctor_called then 
-					return;
-				else
-					TestUnity.__cctor_called = true;
-				end;
-			end,
-		};
+		Utility.Warn("TestUnity::__define_class begin");
 
+		local class = TestUnity;
 		local static_fields_build = function()
 			local static_fields = {
 				__cctor_called = false,
 			};
 			return static_fields;
 		end;
-		local static_props = nil;
-		local static_events = nil;
 
 		local instance_methods = {
 			Test = function(this, ...)
-				local args = wrapclassparams{...};
+				local args = wrapparams({...}, System.Object, TypeKind.Class);
 				if (args.Length >= 3) then 
 					local sagatObjId;
 					sagatObjId = typecast(args[1], System.Int32, TypeKind.Struct);
@@ -40,7 +36,12 @@ TestUnity = {
 					local attackObjId;
 					attackObjId = typecast(args[3], System.Int32, TypeKind.Struct);
 				end;
-				gameObject.active = true;
+				local t;
+				t = this.gameObject:GetComponent("UnityEngine.GameObject:GetComponent__Type", UnityEngine.Transform);
+				this.gameObject:SetActive(true);
+				local r;
+				r = this.gameObject:GetComponent("UnityEngine.GameObject:GetComponent__Type", UnityEngine.Renderer);
+				this.gameObject.active = true;
 				local v;
 				v = true;
 				local s;
@@ -55,11 +56,11 @@ TestUnity = {
 				local i3;
 				i3 = getforbasicvalue(this.m_TestString, false, System.String, "Length");
 				local c;
-				c = getexterninstanceindexer(System.String, nil, nil, this.m_TestString, nil, System.String, "get_Chars", 1, 2);
+				c = getexterninstanceindexer(System.String, nil, nil, this.m_TestString, System.String, "get_Chars", 1, 2);
 				local equal;
 				equal = (this.m_TestString == s);
 				local a;
-				a = wraparray({5, 4, 3, 2, 1}, nil, System.Int32);
+				a = wraparray({5, 4, 3, 2, 1}, nil, System.Int32, TypeKind.Struct);
 				local ix;
 				ix = invokearraystaticmethod(a, nil, "IndexOf", "System.Array:IndexOf__Arr_Object__Object", a, 3);
 				local f;
@@ -69,13 +70,13 @@ TestUnity = {
 				f(123);
 				local isLoadingHeadIcon;
 				isLoadingHeadIcon = false;
-				local __using_83_8_86_9 = newobject(CUsingHelper, nil, nil, "ctor", nil, (function()
+				local __using_87_8_90_9 = newobject(CUsingHelper, nil, nil, "ctor", nil, (function()
 						isLoadingHeadIcon = true;
 					end), (function()
 						isLoadingHeadIcon = false;
 					end));
 				LuaConsole.Print("test");
-				__using_83_8_86_9:Dispose();
+				__using_87_8_90_9:Dispose();
 				local v1s;
 				v1s = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, {[1] = 2, [3] = 4, [5] = 6}, "System.Collections.Generic.Dictionary_TKey_TValue:ctor");
 				local v2s;
@@ -108,7 +109,7 @@ TestUnity = {
 						end), (function(v1, v2)
 							return v2.Key;
 						end)}, {"into"}, {"select", function(v1, ttt0)
-							return wrapanonymousobject{}
+							return wrapanonymousobject{v1 = v1, v2 = callexternextension(System.Linq.Enumerable, "Count", ttt0)}
 								v1 = v1;
 								v2 = callexternextension(System.Linq.Enumerable, "Count", ttt0);
 							end;
@@ -121,7 +122,6 @@ TestUnity = {
 				end;
 			end,
 			ctor = function(this)
-				this.base:__self__ctor();
 				this:__ctor();
 			end,
 			__ctor = function(this)
@@ -139,42 +139,27 @@ TestUnity = {
 			};
 			return instance_fields;
 		end;
-		local instance_props = nil;
-		local instance_events = nil;
 
-		local interfaces = nil;
-		local interface_map = nil;
-
-		local class_info = {
-			Kind = TypeKind.Class,
-		};
-		local method_info = {
-			Test = {
-				Kind = MethodKind.Ordinary,
-				private = true,
-			},
-			ctor = {
-				Kind = MethodKind.Constructor,
-			},
-		};
-		local property_info = nil;
-		local event_info = nil;
-		local field_info = {
-			m_TestString = {
-			},
-		};
-
-		Utility.Warn("TestUnity::__define_class begin");
-		local __defineclass_return = defineclass(MonoBehaviour, "TestUnity", "TestUnity", static, static_methods, static_fields_build, static_props, static_events, instance_methods, instance_fields_build, instance_props, instance_events, interfaces, interface_map, class_info, method_info, property_info, event_info, field_info, false);
+		local __defineclass_return = defineclass(UnityEngine.MonoBehaviour, "TestUnity", "TestUnity", class, static_fields_build, instance_methods, instance_fields_build, false);
 		Utility.Warn("TestUnity::__define_class end");
 		return __defineclass_return;
 	end,
+
+	__interfaces = nil,
+	__class_info = nil,
+	__method_info = {
+		ctor = {
+			Kind = MethodKind.Constructor,
+		},
+	},
+	__property_info = nil,
+	__event_info = nil,
+	__field_info = nil,
 };
 
 
 require "cs2lua__lualib";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
-require "monobehaviour";
 require "cusinghelper";
 settempmetatable(TestUnity);

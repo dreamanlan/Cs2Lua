@@ -1,24 +1,4 @@
 ============<<<Translation Error:test>>>============
-<<<[Log for ClassDeclarationSyntax]>>> [code:[ class TestUnity : MonoBehaviour ] location: test.cs: (54,0)-(98,1)] Cs2Dsl class/struct can't inherit !
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ gameObject.GetComponent<Transform>() ] location: test.cs: (63,16)-(63,52)
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ gameObject.SetActive(true) ] location: test.cs: (64,8)-(64,34)
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ gameObject.GetComponent<Renderer>() ] location: test.cs: (65,16)-(65,51)
-<<<[Log for MemberAccessExpressionSyntax]>>> Can't determine symbol: None, code:[ gameObject.active ] location: test.cs: (66,8)-(66,25)
-<<<[Log for IdentifierNameSyntax]>>> Can't determine symbol: None, code:[ gameObject ] location: test.cs: (66,8)-(66,18)
-<<<[Log for QueryExpressionSyntax]>>> [code:[ from v1 in v1s let v3 = v1.Value let v4 = v3.ToString().Split(' ') from vvvv in (from v2 in v2s select v2) where !string.IsNullOrEmpty(v1.ToString()) select v1.ToString() ] location: test.cs: (90,17)-(90,187)] Cs2Dsl can't support LINQ, use -enablelinq remove this error! (c# LINQ syntax will translate to use script LINQ class in lualib.dsl)
-<<<[Log for QueryExpressionSyntax]>>> [code:[ from v2 in v2s select v2 ] location: test.cs: (90,98)-(90,122)] Cs2Dsl can't support LINQ, use -enablelinq remove this error! (c# LINQ syntax will translate to use script LINQ class in lualib.dsl)
-<<<[Log for QueryExpressionSyntax]>>> [code:[ from v1 in v1s join v2 in v2s on v1.Key equals v2.Key into ttt0 select new { v1 = v1, v2 = ttt0.Count() } into ttt group ttt by ttt.v2 ] location: test.cs: (91,17)-(91,151)] Cs2Dsl can't support LINQ, use -enablelinq remove this error! (c# LINQ syntax will translate to use script LINQ class in lualib.dsl)
-<<<[Log for ObjectCreationExpressionSyntax]>>> [code:[ new UnityEngine.WaitForSeconds(3) ] location: test.cs: (466,29)-(466,62)] Unknown ObjectCreationExpressionSyntax !
-<<<[Log for ObjectCreationExpressionSyntax]>>> [code:[ new GameObject("test test test") ] location: test.cs: (618,26)-(618,58)] Unknown ObjectCreationExpressionSyntax !
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ transform.FindChild(childName) ] location: test.cs: (678,20)-(678,50)
-<<<[Log for MemberAccessExpressionSyntax]>>> Can't determine symbol: None, code:[ transform.childCount ] location: test.cs: (681,20)-(681,40)
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ transform.GetChild(i).findChildRecursively(childName,maxDepth - 1) ] location: test.cs: (683,12)-(683,78)
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ transform.name.IndexOf(childName) ] location: test.cs: (705,12)-(705,45)
-<<<[Log for MemberAccessExpressionSyntax]>>> Can't determine symbol: None, code:[ transform.childCount ] location: test.cs: (710,20)-(710,40)
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ transform.GetChild(i) ] location: test.cs: (715,36)-(715,57)
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ PlayerPrefs.GetInt("isFirstTimeToStart", 1) ] location: test.cs: (727,25)-(727,68)
-============<<<Translation Error:test>>>============
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ Debug.LogError("Cannot have two instances in singleton") ] location: test.cs: (278,16)-(278,72)
-============<<<Translation Error:test>>>============
-<<<[Log for MemberAccessExpressionSyntax]>>> Can't determine symbol: None, code:[ (--f).m_Test ] location: test.cs: (313,58)-(313,70)
-<<<[Log for MemberAccessExpressionSyntax]>>> Can't determine symbol: None, code:[ (f--).m_Test ] location: test.cs: (313,73)-(313,85)
+<<<[Log for QueryExpressionSyntax]>>> [code:[ from v1 in v1s let v3 = v1.Value let v4 = v3.ToString().Split(' ') from vvvv in (from v2 in v2s select v2) where !string.IsNullOrEmpty(v1.ToString()) select v1.ToString() ] location: test.cs: (94,17)-(94,187)] Cs2Dsl can't support LINQ, use -enablelinq remove this error! (c# LINQ syntax will translate to use script LINQ class in lualib.dsl)
+<<<[Log for QueryExpressionSyntax]>>> [code:[ from v2 in v2s select v2 ] location: test.cs: (94,98)-(94,122)] Cs2Dsl can't support LINQ, use -enablelinq remove this error! (c# LINQ syntax will translate to use script LINQ class in lualib.dsl)
+<<<[Log for QueryExpressionSyntax]>>> [code:[ from v1 in v1s join v2 in v2s on v1.Key equals v2.Key into ttt0 select new { v1 = v1, v2 = ttt0.Count() } into ttt group ttt by ttt.v2 ] location: test.cs: (95,17)-(95,151)] Cs2Dsl can't support LINQ, use -enablelinq remove this error! (c# LINQ syntax will translate to use script LINQ class in lualib.dsl)

@@ -11,42 +11,45 @@ class(CUsingHelper) {
 		__new_object = function(...){
 			return(newobject(CUsingHelper, typeargs(), typekinds(), "ctor", null, ...));
 		};
+		Test = function(i){
+			return(null);
+		};
 		ReadZip = function(bytes){
-			local(__method_ret_36_4_51_2); __method_ret_36_4_51_2 = null;
+			local(__method_ret_40_4_55_2); __method_ret_40_4_55_2 = null;
 			local(zipInput); zipInput = newobject(ZipInputStream, typeargs(), typekinds(), "ctor", null, newexternobject(System.IO.MemoryStream, typeargs(), typekinds(), null, "System.IO.MemoryStream:ctor__Arr_Byte", bytes));
 			local(zipMemory); zipMemory = newexternobject(System.IO.MemoryStream, typeargs(), typekinds(), null, "System.IO.MemoryStream:ctor");
 			local(ZipStream); ZipStream = newobject(ZipOutputStream, typeargs(), typekinds(), "ctor", null, zipMemory);
-			local(__try_ret_42_2_50_3, __try_retval_42_2_50_3); multiassign(__try_ret_42_2_50_3, __try_retval_42_2_50_3) = dsltry(function(){
+			local(__try_ret_46_2_54_3, __try_retval_46_2_54_3); multiassign(__try_ret_46_2_54_3, __try_retval_46_2_54_3) = dsltry(false, __try_ret_46_2_54_3){
 				block{
-				__method_ret_36_4_51_2 = null;
-				return(1);
+				__method_ret_40_4_55_2 = callstatic(CUsingHelper, "Test", 123);
+				__try_retval_46_2_54_3 = 1;
+				break;
 				};
-			});
-			if(__try_ret_42_2_50_3 && __try_retval_42_2_50_3){
-			if(__try_retval_42_2_50_3==1){
-				return(__method_ret_36_4_51_2);
 			};
+			if(__try_ret_46_2_54_3){
+				if(__try_retval_46_2_54_3){
+				if(__try_retval_46_2_54_3==1){
+					return(__method_ret_40_4_55_2);
+				};
+				};
 			};
-			local(__try_handled_42_2_50_3, __try_catch_ret_val_42_2_50_3); __try_handled_42_2_50_3 = false;
-			multiassign(__try_handled_42_2_50_3, __try_catch_ret_val_42_2_50_3) = dslcatch(__try_handled_42_2_50_3, __try_ret_42_2_50_3, __try_retval_42_2_50_3,
-				(function(__catch_handled_46_2_50_3, ){
-					__catch_handled_46_2_50_3 = true;
-					local(__catch_body_46_2_50_3); __catch_body_46_2_50_3 = function(){
-						block{
-						__method_ret_36_4_51_2 = null;
-						return(1);
-						};
-						dslthrow();
+			local(__try_handled_46_2_54_3, __try_catch_ret_val_46_2_54_3); __try_handled_46_2_54_3 = false;
+			__try_catch_ret_val_46_2_54_3 = dslcatch(__try_handled_46_2_54_3, __try_retval_46_2_54_3, __try_ret_46_2_54_3,
+				(function(, ){
+					__try_handled_46_2_54_3 = true;
+					block{
+					__method_ret_40_4_55_2 = null;
+					return(1);
 					};
-					return(__catch_handled_46_2_50_3, __catch_body_46_2_50_3());
+					dslthrow();
 				})
 			);
-			if(__try_ret_42_2_50_3 && __try_catch_ret_val_42_2_50_3){
-			if(__try_catch_ret_val_42_2_50_3==1){
-				return(__method_ret_36_4_51_2);
+			if(__try_catch_ret_val_46_2_54_3){
+			if(__try_catch_ret_val_46_2_54_3==1){
+				return(__method_ret_40_4_55_2);
 			};
 			};
-			return(__method_ret_36_4_51_2);
+			return(__method_ret_40_4_55_2);
 		};
 		cctor = function(){
 			callstatic(CUsingHelper, "__cctor");
@@ -74,10 +77,10 @@ class(CUsingHelper) {
 		Dispose = function(this){
 		};
 		__ctor = function(this){
-			if(getinstance(this, "__ctor_called")){
+			if(getinstance(SymbolKind.Field, this, "__ctor_called")){
 				return;
 			}else{
-				setinstance(this, "__ctor_called", true);
+				setinstance(SymbolKind.Field, this, "__ctor_called", true);
 			};
 		};
 	};
@@ -91,9 +94,6 @@ class(CUsingHelper) {
 	interfaces {
 		"System.IDisposable";
 	};
-	interface_map {
-		IDisposable_Dispose = "Dispose";
-	};
 
 	class_info(TypeKind.Class, Accessibility.Internal) {
 	};
@@ -101,6 +101,9 @@ class(CUsingHelper) {
 		ctor(MethodKind.Constructor, Accessibility.Public){
 		};
 		Dispose(MethodKind.Ordinary, Accessibility.Public){
+		};
+		Test(MethodKind.Ordinary, Accessibility.Public){
+			static(true);
 		};
 		ReadZip(MethodKind.Ordinary, Accessibility.Public){
 			static(true);

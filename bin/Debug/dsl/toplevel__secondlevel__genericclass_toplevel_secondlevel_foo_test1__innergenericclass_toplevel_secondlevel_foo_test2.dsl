@@ -31,8 +31,8 @@ class(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGene
 	instance_methods {
 		ctor = function(this, v, vv){
 			callinstance(this, "__ctor");
-			setinstance(this, "m_T", v);
-			setinstance(this, "m_TT", vv);
+			setinstance(SymbolKind.Field, this, "m_T", v);
+			setinstance(SymbolKind.Field, this, "m_TT", vv);
 			local(obj1); obj1 = newtypeparamobject(TopLevel.SecondLevel.Foo.Test1);
 			local(obj2); obj2 = newtypeparamobject(TopLevel.SecondLevel.Foo.Test2);
 			return(this);
@@ -42,11 +42,11 @@ class(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGene
 			local(v2); v2 = typecast(typecast(g, System.Object, TypeKind.Class), TopLevel.SecondLevel.Foo.Test1, TypeKind.TypeParameter);
 			local(f); f = newobject(TopLevel.SecondLevel.Foo, typeargs(), typekinds(), "ctor", null);
 			callextension(TopLevel.SecondLevel.FooExtension, "Test3__TopLevel_SecondLevel_Foo", f);
-			f = invokeoperator(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.Foo, "op_Increment", f);
-			f = invokeoperator(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.Foo, "op_Increment", f);
-			f = execbinary("-", f, 1, TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.Foo, TypeKind.Class, TypeKind.Class);
-			f = execbinary("-", f, 1, TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.Foo, TypeKind.Class, TypeKind.Class);
-			local(i); i = execbinary("+", execbinary("+", execbinary("+", ( (function(){ f = invokeoperator(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.Foo, "op_Increment", f); return(f); })() ).m_Test, ( (function(){ local(__unary_313_44_313_47); __unary_313_44_313_47 = f; f = invokeoperator(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.Foo, "op_Increment", f); return(__unary_313_44_313_47); })() ).m_Test, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), ( (function(){ f = execbinary("-", f, 1, TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.Foo, TypeKind.Class, TypeKind.Class); return(f); })() ).m_Test, System.Int32, , TypeKind.Struct, TypeKind.Error), ( (function(){ local(__unary_313_74_313_77); __unary_313_74_313_77 = f; f = execbinary("-", f, 1, TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.Foo, TypeKind.Class, TypeKind.Class); return(__unary_313_74_313_77); })() ).m_Test, , , TypeKind.Error, TypeKind.Error);
+			comment("++f;");
+			comment("f++;");
+			comment("--f;");
+			comment("f--;");
+			comment("int i = (++f).m_Test + (f++).m_Test + (--f).m_Test + (f--).m_Test;");
 		};
 		Test2 = function(this, GG, t, tt){
 			local(t1); t1 = typeof(GG);
@@ -56,10 +56,10 @@ class(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGene
 			local(v); v = typecast(typecast(t, System.Object, TypeKind.Class), TopLevel.SecondLevel.Foo.Test2, TypeKind.TypeParameter);
 		};
 		__ctor = function(this){
-			if(getinstance(this, "__ctor_called")){
+			if(getinstance(SymbolKind.Field, this, "__ctor_called")){
 				return;
 			}else{
-				setinstance(this, "__ctor_called", true);
+				setinstance(SymbolKind.Field, this, "__ctor_called", true);
 			};
 			this.m_TypeT = typeof(TopLevel.SecondLevel.Foo.Test1);
 			this.m_TypeTT = typeof(TopLevel.SecondLevel.Foo.Test2);
@@ -76,7 +76,6 @@ class(TopLevel.SecondLevel.GenericClass_TopLevel_SecondLevel_Foo_Test1.InnerGene
 	instance_events {};
 
 	interfaces {};
-	interface_map {};
 
 	class_info(TypeKind.Class, Accessibility.Public) {
 	};

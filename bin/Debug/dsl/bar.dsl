@@ -32,8 +32,8 @@ class(bar) {
 		test = function(this){
 			local(a); a = newobject(foo_System_Int32_System_Int32, typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct), "ctor", null);
 			callinstance(a, "parse", "123", "456");
-			local(b); b = callinstance(getinstance(this, "m_DateTime"), "ToString", "System.DateTime:ToString");
-			local(c); c = callinstance(getstatic(bar, "s_DateTime"), "ToString", "System.DateTime:ToString");
+			local(b); b = callexterninstance(getinstance(SymbolKind.Field, this, "m_DateTime"), "ToString", "System.DateTime:ToString");
+			local(c); c = callexterninstance(getstatic(SymbolKind.Field, bar, "s_DateTime"), "ToString", "System.DateTime:ToString");
 			local(dt);
 			local(dt2);
 		};
@@ -41,10 +41,10 @@ class(bar) {
 			callinstance(this, "__ctor");
 		};
 		__ctor = function(this){
-			if(getinstance(this, "__ctor_called")){
+			if(getinstance(SymbolKind.Field, this, "__ctor_called")){
 				return;
 			}else{
-				setinstance(this, "__ctor_called", true);
+				setinstance(SymbolKind.Field, this, "__ctor_called", true);
 			};
 			this.m_DateTime = newexternobject(System.DateTime, typeargs(), typekinds(), null);
 		};
@@ -57,7 +57,6 @@ class(bar) {
 	instance_events {};
 
 	interfaces {};
-	interface_map {};
 
 	class_info(TypeKind.Class, Accessibility.Public) {
 	};

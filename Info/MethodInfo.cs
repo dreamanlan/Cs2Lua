@@ -30,6 +30,7 @@ namespace RoslynTool.CsToDsl
 
         internal bool ExistTry = false;
         internal bool ExistUsing = false;
+        internal bool ExistEmbedTryOrUsing = false;
         internal int TryUsingLayer = 0;
         internal string ReturnVarName = string.Empty;
         internal Stack<bool> TryCatchUsingOrLoopSwitchStack = new Stack<bool>();
