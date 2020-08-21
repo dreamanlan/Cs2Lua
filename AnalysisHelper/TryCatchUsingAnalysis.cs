@@ -23,25 +23,16 @@ namespace RoslynTool.CsToDsl
         {
             get { return m_ExistUsing; }
         }
-        public bool ExistEmbedTryOrUsing
-        {
-            get { return m_ExistEmbedTryOrUsing; }
-        }
         public override void VisitTryStatement(TryStatementSyntax node)
         {
-            if (m_ExistTry || m_ExistUsing)
-                m_ExistEmbedTryOrUsing = true;
             m_ExistTry = true;
         }
         public override void VisitUsingStatement(UsingStatementSyntax node)
         {
-            if (m_ExistTry || m_ExistUsing)
-                m_ExistEmbedTryOrUsing = true;
             m_ExistUsing = true;
         }
 
         private bool m_ExistTry = false;
         private bool m_ExistUsing = false;
-        private bool m_ExistEmbedTryOrUsing = false;
     }
 }

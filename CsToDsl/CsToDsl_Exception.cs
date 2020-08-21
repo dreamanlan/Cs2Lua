@@ -41,7 +41,7 @@ namespace RoslynTool.CsToDsl
                 returnAnalysis0.Visit(node.Block);
                 mi.TempReturnAnalysisStack.Push(returnAnalysis0);
 
-                CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}) = dsltry({3}, {1}){{", GetIndentString(), retVar, retValVar, mi.ExistEmbedTryOrUsing || returnAnalysis0.ExistReturnInLoopOrSwitch ? "true" : "false");
+                CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}) = dsltry({3}, {1}){{", GetIndentString(), retVar, retValVar, returnAnalysis0.ExistReturnInLoopOrSwitch ? "true" : "false");
                 CodeBuilder.AppendLine();
                 ++m_Indent;
                 ++mi.TryUsingLayer;

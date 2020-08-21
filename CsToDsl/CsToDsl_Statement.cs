@@ -35,7 +35,7 @@ namespace RoslynTool.CsToDsl
 
                 if (mi.TryUsingLayer > 0 && mi.TryCatchUsingOrLoopSwitchStack.Peek()) {
                     var returnAnalysis = mi.TempReturnAnalysisStack.Peek();
-                    if (mi.ExistEmbedTryOrUsing || returnAnalysis.ExistReturnInLoopOrSwitch || null == returnAnalysis.RetValVar) {
+                    if (returnAnalysis.ExistReturnInLoopOrSwitch || null == returnAnalysis.RetValVar) {
                         //return(3)代表是tryusing块里的break语句
                         CodeBuilder.AppendFormat("{0}return(3);", GetIndentString());
                         CodeBuilder.AppendLine();
@@ -79,7 +79,7 @@ namespace RoslynTool.CsToDsl
 
                 if (mi.TryUsingLayer > 0 && mi.TryCatchUsingOrLoopSwitchStack.Peek()) {
                     var returnAnalysis = mi.TempReturnAnalysisStack.Peek();
-                    if (mi.ExistEmbedTryOrUsing || returnAnalysis.ExistReturnInLoopOrSwitch || null == returnAnalysis.RetValVar) {
+                    if (returnAnalysis.ExistReturnInLoopOrSwitch || null == returnAnalysis.RetValVar) {
                         //return(2)代表是tryusing块里的continue语句
                         CodeBuilder.AppendFormat("{0}return(2);", GetIndentString());
                         CodeBuilder.AppendLine();
@@ -126,7 +126,7 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendLine(";");
                 }
                 var returnAnalysis = mi.TempReturnAnalysisStack.Peek();
-                if (mi.ExistEmbedTryOrUsing || returnAnalysis.ExistReturnInLoopOrSwitch || null == returnAnalysis.RetValVar) {
+                if (returnAnalysis.ExistReturnInLoopOrSwitch || null == returnAnalysis.RetValVar) {
                     //return(1)代表是tryusing块里的return语句
                     CodeBuilder.AppendFormat("{0}return(1);", GetIndentString());
                     CodeBuilder.AppendLine();

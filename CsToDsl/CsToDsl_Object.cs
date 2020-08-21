@@ -158,7 +158,6 @@ namespace RoslynTool.CsToDsl
             tryUsing.Visit(node);
             mi.ExistTry = tryUsing.ExistTry;
             mi.ExistUsing = tryUsing.ExistUsing;
-            mi.ExistEmbedTryOrUsing = tryUsing.ExistEmbedTryOrUsing;
 
             string manglingName = NameMangling(declSym);
             if (isStatic) {
@@ -315,7 +314,6 @@ namespace RoslynTool.CsToDsl
                     tryUsing.Visit(node);
                     mi.ExistTry = tryUsing.ExistTry;
                     mi.ExistUsing = tryUsing.ExistUsing;
-                    mi.ExistEmbedTryOrUsing = tryUsing.ExistEmbedTryOrUsing;
 
                     string manglingName = NameMangling(sym);
                     string paramStr = string.Join(", ", mi.ParamNames.ToArray());
@@ -430,7 +428,6 @@ namespace RoslynTool.CsToDsl
                         tryUsing.Visit(node);
                         mi.ExistTry = tryUsing.ExistTry;
                         mi.ExistUsing = tryUsing.ExistUsing;
-                        mi.ExistEmbedTryOrUsing = tryUsing.ExistEmbedTryOrUsing;
 
                         string manglingName = NameMangling(sym);
                         string paramStr = string.Join(", ", mi.ParamNames.ToArray());
@@ -596,7 +593,6 @@ namespace RoslynTool.CsToDsl
                     tryUsing.Visit(node);
                     mi.ExistTry = tryUsing.ExistTry;
                     mi.ExistUsing = tryUsing.ExistUsing;
-                    mi.ExistEmbedTryOrUsing = tryUsing.ExistEmbedTryOrUsing;
 
                     string manglingName = NameMangling(sym);
                     string keyword = accessor.Keyword.Text;
@@ -705,7 +701,6 @@ namespace RoslynTool.CsToDsl
                     tryUsing.Visit(node);
                     mi.ExistTry = tryUsing.ExistTry;
                     mi.ExistUsing = tryUsing.ExistUsing;
-                    mi.ExistEmbedTryOrUsing = tryUsing.ExistEmbedTryOrUsing;
 
                     string manglingName = NameMangling(sym);
                     string paramStr = string.Join(", ", mi.ParamNames.ToArray());
@@ -773,7 +768,6 @@ namespace RoslynTool.CsToDsl
                     tryUsing.Visit(node);
                     mi.ExistTry = tryUsing.ExistTry;
                     mi.ExistUsing = tryUsing.ExistUsing;
-                    mi.ExistEmbedTryOrUsing = tryUsing.ExistEmbedTryOrUsing;
 
                     string manglingName = NameMangling(sym);
                     string keyword = accessor.Keyword.Text;
@@ -968,7 +962,6 @@ namespace RoslynTool.CsToDsl
                 tryUsing.Visit(node);
                 mi.ExistTry = tryUsing.ExistTry;
                 mi.ExistUsing = tryUsing.ExistUsing;
-                mi.ExistEmbedTryOrUsing = tryUsing.ExistEmbedTryOrUsing;
 
                 CodeBuilder.Append("(function(");
                 CodeBuilder.Append(string.Join(", ", mi.ParamNames.ToArray()));
@@ -1070,7 +1063,6 @@ namespace RoslynTool.CsToDsl
                 tryUsing.Visit(node);
                 mi.ExistTry = tryUsing.ExistTry;
                 mi.ExistUsing = tryUsing.ExistUsing;
-                mi.ExistEmbedTryOrUsing = tryUsing.ExistEmbedTryOrUsing;
 
                 CodeBuilder.Append("(function(");
                 int ct = sym.Parameters.Length;
@@ -1172,7 +1164,7 @@ namespace RoslynTool.CsToDsl
                 if (returnAnalysis.Exist) {
                     mi.TempReturnAnalysisStack.Push(returnAnalysis);
 
-                    CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}) = dslusing({3}, {1}){{", GetIndentString(), retVar, retValVar, mi.ExistEmbedTryOrUsing || returnAnalysis.ExistReturnInLoopOrSwitch ? "true" : "false");
+                    CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}) = dslusing({3}, {1}){{", GetIndentString(), retVar, retValVar, returnAnalysis.ExistReturnInLoopOrSwitch ? "true" : "false");
                     CodeBuilder.AppendLine();
                     ++m_Indent;
                     ++mi.TryUsingLayer;
