@@ -1,4 +1,3 @@
-System.Array
 System.DateTime
 System.Enum
 System.Int32
@@ -14,4 +13,5 @@ UnityEngine.MonoBehaviour
 UnityEngine.PlayerPrefs
 UnityEngine.Renderer
 UnityEngine.Transform
+UnityEngine.Vector3
 UnityEngine.WaitForSeconds

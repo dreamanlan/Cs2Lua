@@ -60,6 +60,11 @@ class TestUnity : MonoBehaviour
 {
     void Test(params object[] args)
     {
+        Vector3 a = Vector3.zero;
+        var b = a;
+        b.x = 100;
+        m_Position = b;
+        this.m_Scale = a;
         if (args.Length >= 3) {
             int sagatObjId = (int)args[0];
             int protectObjId = (int)args[1];
@@ -100,6 +105,8 @@ class TestUnity : MonoBehaviour
     }
 
     private string m_TestString = "13579";
+    private Vector3 m_Position;
+    private Vector3 m_Scale;
 }
 
 public class foo<T, K>

@@ -28,6 +28,16 @@ TestUnity = {
 		local instance_methods = {
 			Test = function(this, ...)
 				local args = wrapparams({...}, System.Object, TypeKind.Class);
+				local a;
+				a = UnityEngine.Vector3.zero;
+				local b;
+				b = a;
+				b = wrapexternstruct(b, UnityEngine.Vector3);
+				b.x = 100;
+				this.m_Position = b;
+				this.m_Position = wrapexternstruct(this.m_Position, UnityEngine.Vector3);
+				this.m_Scale = a;
+				this.m_Scale = wrapexternstruct(this.m_Scale, UnityEngine.Vector3);
 				if (args.Length >= 3) then 
 					local sagatObjId;
 					sagatObjId = typecast(args[1], System.Int32, TypeKind.Struct);
@@ -61,8 +71,6 @@ TestUnity = {
 				equal = (this.m_TestString == s);
 				local a;
 				a = wraparray({5, 4, 3, 2, 1}, nil, System.Int32, TypeKind.Struct);
-				local ix;
-				ix = invokearraystaticmethod(a, nil, "IndexOf", "System.Array:IndexOf__Arr_Object__Object", a, 3);
 				local f;
 				f = typecast(((function(vv)
 						LuaConsole.Print("test");
@@ -70,13 +78,13 @@ TestUnity = {
 				f(123);
 				local isLoadingHeadIcon;
 				isLoadingHeadIcon = false;
-				local __using_87_8_90_9 = newobject(CUsingHelper, nil, nil, "ctor", nil, (function()
+				local __using_92_8_95_9 = newobject(CUsingHelper, nil, nil, "ctor", nil, (function()
 						isLoadingHeadIcon = true;
 					end), (function()
 						isLoadingHeadIcon = false;
 					end));
 				LuaConsole.Print("test");
-				__using_87_8_90_9:Dispose();
+				__using_92_8_95_9:Dispose();
 				local v1s;
 				v1s = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, {[1] = 2, [3] = 4, [5] = 6}, "System.Collections.Generic.Dictionary_TKey_TValue:ctor");
 				local v2s;
@@ -130,11 +138,15 @@ TestUnity = {
 				else
 					this.__ctor_called = true;
 				end;
+				this.m_Position = newexternobject(UnityEngine.Vector3, nil, nil, nil);
+				this.m_Scale = newexternobject(UnityEngine.Vector3, nil, nil, nil);
 			end,
 		};
 		local instance_fields_build = function()
 			local instance_fields = {
 				m_TestString = "13579",
+				m_Position = __cs2lua_nil_field_value,
+				m_Scale = __cs2lua_nil_field_value,
 				__ctor_called = false,
 			};
 			return instance_fields;

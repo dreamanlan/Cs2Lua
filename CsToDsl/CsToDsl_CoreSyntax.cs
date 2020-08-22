@@ -549,6 +549,8 @@ namespace RoslynTool.CsToDsl
                 var leftFsym = leftSym as IFieldSymbol;
 
                 var rightOper = m_Model.GetOperationEx(assign.Right);
+                var rightSymbolInfo = m_Model.GetSymbolInfoEx(assign.Right);
+                var rightSym = rightSymbolInfo.Symbol;
 
                 var curMethod = GetCurMethodSemanticInfo();
                 if (null != leftOper && null != rightOper) {
@@ -574,28 +576,29 @@ namespace RoslynTool.CsToDsl
                         }
                     }
                 }
-                VisitAssignment(ci, op, baseOp, assign, expTerminater, true, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType);
-                var oper = m_Model.GetOperationEx(assign.Right);
-                if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && !CsDslTranslater.IsImplementationOfSys(oper.Type, "IEnumerator")) {
+                VisitAssignment(ci, op, baseOp, assign, expTerminater, true, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType);                
+                if (null != rightOper && null != rightOper.Type && rightOper.Type.TypeKind == TypeKind.Struct && !CsDslTranslater.IsImplementationOfSys(rightOper.Type, "IEnumerator")) {
                     //只有变量赋值与字段赋值需要处理，其它的都在相应的函数调用里处理了
-                    if (null != leftSym && leftSym.Kind == SymbolKind.Local || null != leftFsym) {
-                        if (SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
-                            CodeBuilder.Append(GetIndentString());
-                            OutputExpressionSyntax(assign.Left);
-                            CodeBuilder.Append(" = wrapstruct(");
-                            OutputExpressionSyntax(assign.Left);
-                            CodeBuilder.AppendFormat(", {0});", ClassInfo.GetFullName(oper.Type));
-                            CodeBuilder.AppendLine();
-                        }
-                        else {
-                            string ns = ClassInfo.GetNamespaces(oper.Type);
-                            if (ns != "System") {
+                    if (null != rightSym && (rightSym.Kind == SymbolKind.Method || rightSym.Kind == SymbolKind.Property || rightSym.Kind == SymbolKind.Field || rightSym.Kind == SymbolKind.Local) && SymbolTable.Instance.IsCs2DslSymbol(rightSym)) {
+                        if (null != leftSym && (leftSym.Kind == SymbolKind.Local || SymbolTable.Instance.IsFieldSymbolKind(leftSym))) {
+                            if (SymbolTable.Instance.IsCs2DslSymbol(rightOper.Type)) {
                                 CodeBuilder.Append(GetIndentString());
                                 OutputExpressionSyntax(assign.Left);
-                                CodeBuilder.Append(" = wrapexternstruct(");
+                                CodeBuilder.Append(" = wrapstruct(");
                                 OutputExpressionSyntax(assign.Left);
-                                CodeBuilder.AppendFormat(", {0});", ClassInfo.GetFullName(oper.Type));
+                                CodeBuilder.AppendFormat(", {0});", ClassInfo.GetFullName(rightOper.Type));
                                 CodeBuilder.AppendLine();
+                            }
+                            else {
+                                string ns = ClassInfo.GetNamespaces(rightOper.Type);
+                                if (ns != "System") {
+                                    CodeBuilder.Append(GetIndentString());
+                                    OutputExpressionSyntax(assign.Left);
+                                    CodeBuilder.Append(" = wrapexternstruct(");
+                                    OutputExpressionSyntax(assign.Left);
+                                    CodeBuilder.AppendFormat(", {0});", ClassInfo.GetFullName(rightOper.Type));
+                                    CodeBuilder.AppendLine();
+                                }
                             }
                         }
                     }

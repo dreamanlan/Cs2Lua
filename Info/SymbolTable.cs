@@ -106,11 +106,18 @@ namespace RoslynTool.CsToDsl
         }
         internal string GetSymbolKind(ISymbol sym)
         {
+            if (IsFieldSymbolKind(sym))
+                return "Field";
+            else
+                return sym.Kind.ToString();
+        }
+        internal bool IsFieldSymbolKind(ISymbol sym)
+        {
             IPropertySymbol psym = sym as IPropertySymbol;
             if (null != psym) {
                 bool val;
                 if (m_NoImplProperties.TryGetValue(psym, out val)) {
-                    return val ? "Field" : sym.Kind.ToString();
+                    return val;
                 }
                 else if (IsCs2DslSymbol(psym) && psym.DeclaringSyntaxReferences.Length > 0) {
                     bool noimpl = true;
@@ -126,10 +133,10 @@ namespace RoslynTool.CsToDsl
                     }
                     m_NoImplProperties.TryAdd(psym, noimpl);
                     if (noimpl)
-                        return "Field";
+                        return true;
                 }
             }
-            return sym.Kind.ToString();
+            return sym.Kind == SymbolKind.Field;
         }
         internal bool IsIgnoredSymbol(ITypeSymbol sym)
         {

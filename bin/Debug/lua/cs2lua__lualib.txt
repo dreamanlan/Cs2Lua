@@ -310,9 +310,9 @@ end
 function luacatch(handled, err, func)
     local retval = nil
     if not handled and func then
-        handled, retval = func(handled, {Message = err[1], StackTrace = err[2], ToString = function() return Message end})
+        retval = func({Message = err[1], StackTrace = err[2], ToString = function() return Message end})
     end
-    return handled, retval
+    return retval
 end
 
 function luathrow(obj)

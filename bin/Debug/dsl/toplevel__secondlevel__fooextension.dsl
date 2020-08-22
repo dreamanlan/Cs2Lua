@@ -21,9 +21,9 @@ class(TopLevel.SecondLevel.FooExtension) {
 			callstatic(LuaConsole, "Print", 1, 2, 3, 4, 5);
 			local(f); f = newobject(TopLevel.SecondLevel.Foo, typeargs(), typekinds(), "ctor", null);
 			local(ff); ff = newobject(TopLevel.SecondLevel.Foo, typeargs(), typekinds(), "ctor", null);
-			local(f1); f1 = (function(){ local(__delegation_obj_607_28_607_34); __delegation_obj_607_28_607_34 = f; builddelegation("", __delegation_607_28_607_34, "TopLevel.SecondLevel.Foo:Test", __delegation_obj_607_28_607_34, Test, false, false); })();
+			local(f1); f1 = (function(){ local(__delegation_obj_614_28_614_34); __delegation_obj_614_28_614_34 = f; builddelegation("", __delegation_614_28_614_34, "TopLevel.SecondLevel.Foo:Test", __delegation_obj_614_28_614_34, Test, false, false); })();
 			f1();
-			local(f2); f2 = (function(){ local(__delegation_obj_610_28_610_35); __delegation_obj_610_28_610_35 = f; builddelegation("", __delegation_610_28_610_35, "TopLevel.SecondLevel.FooExtension:Test3", __delegation_obj_610_28_610_35, Test3, false, false); })();
+			local(f2); f2 = (function(){ local(__delegation_obj_617_28_617_35); __delegation_obj_617_28_617_35 = f; builddelegation("", __delegation_617_28_617_35, "TopLevel.SecondLevel.FooExtension:Test3", __delegation_obj_617_28_617_35, Test3, false, false); })();
 			f2();
 			callstatic(TopLevel.SecondLevel.FooExtension, "Test3__TopLevel_SecondLevel_Foo", f);
 			local(r); r = invokeoperator(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.Foo, "op_Addition__TopLevel_SecondLevel_Foo__TopLevel_SecondLevel_Foo", f, ff);
@@ -43,7 +43,7 @@ class(TopLevel.SecondLevel.FooExtension) {
 			local(a); a = 1;
 			local(b); b = 2;
 			local(c); c = 3;
-			a = execclosure(__assign_636_18_636_23, true){ b = (function(){ local(__unary_636_20_636_23); __unary_636_20_636_23 = c; c = execbinary("+", c, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct); return(__unary_636_20_636_23); })(); __assign_636_18_636_23 = b; };
+			a = execclosure(__assign_643_18_643_23, true){ b = (function(){ local(__unary_643_20_643_23); __unary_643_20_643_23 = c; c = execbinary("+", c, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct); return(__unary_643_20_643_23); })(); __assign_643_18_643_23 = b; };
 		};
 		cctor = function(){
 			callstatic(TopLevel.SecondLevel.FooExtension, "__cctor");

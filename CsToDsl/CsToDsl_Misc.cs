@@ -160,16 +160,20 @@ namespace RoslynTool.CsToDsl
             VisitLocalVariableDeclarator(ci, node);
             if (null != node.Initializer) {
                 var oper = m_Model.GetOperationEx(node.Initializer.Value);
+                var rightSymbolInfo = m_Model.GetSymbolInfoEx(node.Initializer.Value);
+                var rightSym = rightSymbolInfo.Symbol;
                 if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && !CsDslTranslater.IsImplementationOfSys(oper.Type, "IEnumerator")) {
-                    if (SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
-                        CodeBuilder.AppendFormat("{0}{1} = wrapstruct({2}, {3});", GetIndentString(), node.Identifier.Text, node.Identifier.Text, ClassInfo.GetFullName(oper.Type));
-                        CodeBuilder.AppendLine();
-                    }
-                    else {
-                        string ns = ClassInfo.GetNamespaces(oper.Type);
-                        if (ns != "System") {
-                            CodeBuilder.AppendFormat("{0}{1} = wrapexternstruct({2}, {3});", GetIndentString(), node.Identifier.Text, node.Identifier.Text, ClassInfo.GetFullName(oper.Type));
+                    if (null != rightSym && (rightSym.Kind == SymbolKind.Method || rightSym.Kind == SymbolKind.Property || rightSym.Kind == SymbolKind.Field || rightSym.Kind == SymbolKind.Local) && SymbolTable.Instance.IsCs2DslSymbol(rightSym)) {
+                        if (SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
+                            CodeBuilder.AppendFormat("{0}{1} = wrapstruct({2}, {3});", GetIndentString(), node.Identifier.Text, node.Identifier.Text, ClassInfo.GetFullName(oper.Type));
                             CodeBuilder.AppendLine();
+                        }
+                        else {
+                            string ns = ClassInfo.GetNamespaces(oper.Type);
+                            if (ns != "System") {
+                                CodeBuilder.AppendFormat("{0}{1} = wrapexternstruct({2}, {3});", GetIndentString(), node.Identifier.Text, node.Identifier.Text, ClassInfo.GetFullName(oper.Type));
+                                CodeBuilder.AppendLine();
+                            }
                         }
                     }
                 }

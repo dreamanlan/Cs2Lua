@@ -81,7 +81,6 @@ class(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.FooBase) {
 		set_Val = function(this, value){
 			value = wrapstruct(value, TopLevel.TestStruct);
 			setinstance(SymbolKind.Field, this, "m_TS", value);
-			getinstance(SymbolKind.Field, this, "m_TS") = wrapstruct(getinstance(SymbolKind.Field, this, "m_TS"), TopLevel.TestStruct);
 		};
 		get_Item = function(this, ...){
 			local{args = params(TopLevel.TestStruct, TypeKind.Struct);};
@@ -131,18 +130,18 @@ class(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.FooBase) {
 			callinstance(t, "Test2", System.Int32, newobject(TopLevel.SecondLevel.Foo.Test1, typeargs(), typekinds(), "ctor", null), newobject(TopLevel.SecondLevel.Foo.Test2, typeargs(), typekinds(), "ctor", null));
 			local(v);
 			local(vv); multiassign(vv, v) = callinstance(this, "TestLocal", __cs2dsl_out);
-			if( execbinary("<", execclosure(__invoke_490_19_490_35, true){ multiassign(__invoke_490_19_490_35, v) = callinstance(this, "TestLocal", __cs2dsl_out); }, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
+			if( execbinary("<", execclosure(__invoke_497_19_497_35, true){ multiassign(__invoke_497_19_497_35, v) = callinstance(this, "TestLocal", __cs2dsl_out); }, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
 			};
-			if( execclosure(__invoke_493_19_493_36, true){ multiassign(__invoke_493_19_493_36, v) = callinstance(this, "TestLocal2", __cs2dsl_out); } ){
+			if( execclosure(__invoke_500_19_500_36, true){ multiassign(__invoke_500_19_500_36, v) = callinstance(this, "TestLocal2", __cs2dsl_out); } ){
 			};
-			if( execunary("!", execclosure(__invoke_496_21_496_38, true){ multiassign(__invoke_496_21_496_38, v) = callinstance(this, "TestLocal2", __cs2dsl_out); }, System.Boolean, TypeKind.Struct) ){
-			}elseif( execclosure(__invoke_499_24_499_41, true){ multiassign(__invoke_499_24_499_41, v) = callinstance(this, "TestLocal2", __cs2dsl_out); } ){
+			if( execunary("!", execclosure(__invoke_503_21_503_38, true){ multiassign(__invoke_503_21_503_38, v) = callinstance(this, "TestLocal2", __cs2dsl_out); }, System.Boolean, TypeKind.Struct) ){
+			}elseif( execclosure(__invoke_506_24_506_41, true){ multiassign(__invoke_506_24_506_41, v) = callinstance(this, "TestLocal2", __cs2dsl_out); } ){
 			}else{
 			};
-			while( execclosure(__invoke_505_22_505_39, true){ multiassign(__invoke_505_22_505_39, v) = callinstance(this, "TestLocal2", __cs2dsl_out); } ){
+			while( execclosure(__invoke_512_22_512_39, true){ multiassign(__invoke_512_22_512_39, v) = callinstance(this, "TestLocal2", __cs2dsl_out); } ){
 			};
 			do{
-			}while(execunary("!", execclosure(__invoke_510_26_510_43, true){ multiassign(__invoke_510_26_510_43, v) = callinstance(this, "TestLocal2", __cs2dsl_out); }, System.Boolean, TypeKind.Struct));
+			}while(execunary("!", execclosure(__invoke_517_26_517_43, true){ multiassign(__invoke_517_26_517_43, v) = callinstance(this, "TestLocal2", __cs2dsl_out); }, System.Boolean, TypeKind.Struct));
 			local(ts); ts = newobject(TopLevel.TestStruct, typeargs(), typekinds(), "ctor", null);
 			ts = wrapstruct(ts, TopLevel.TestStruct);
 			setinstance(SymbolKind.Field, ts, "A", 1);
@@ -198,10 +197,10 @@ class(TopLevel.SecondLevel.Foo, TopLevel.SecondLevel.FooBase) {
 		};
 		TestSwitch = function(this){
 			local(i); i = 10;
-			local{__switch_563_16_571_17 = i;};
-			if( (__switch_563_16_571_17 == 1) || (__switch_563_16_571_17 == 3) ){
+			local{__switch_570_16_578_17 = i;};
+			if( (__switch_570_16_578_17 == 1) || (__switch_570_16_578_17 == 3) ){
 				return();
-			}elseif( __switch_563_16_571_17 == 2 ){
+			}elseif( __switch_570_16_578_17 == 2 ){
 				return();
 			}else{
 				return();

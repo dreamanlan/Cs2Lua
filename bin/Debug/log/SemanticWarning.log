@@ -1,14 +1,14 @@
 ============<<<Semantic Warning:test>>>============
 test.cs(42,23): warning CS3014: 'CUsingHelper.ReadZip(byte[])' cannot be marked as CLS-compliant because the assembly does not have a CLSCompliant attribute
-test.cs(122,18): warning CS0168: The variable 'dt' is declared but never used
-test.cs(122,21): warning CS0168: The variable 'dt2' is declared but never used
-test.cs(227,22): warning CS0219: The variable 'e' is assigned but its value is never used
-test.cs(667,13): warning CS0219: The variable 'v' is assigned but its value is never used
-test.cs(255,19): warning CS0219: The variable 't' is assigned but its value is never used
-test.cs(484,23): warning CS0219: The variable 'abc' is assigned but its value is never used
-test.cs(684,21): warning CS0618: 'Transform.FindChild(string)' is obsolete: 'FindChild has been deprecated. Use Find instead (UnityUpgradable) -> Find([mscorlib] System.String)'
-test.cs(688,32): warning CS0162: Unreachable code detected
-test.cs(573,17): warning CS0162: Unreachable code detected
-test.cs(71,9): warning CS0618: 'GameObject.active' is obsolete: 'GameObject.active is obsolete. Use GameObject.SetActive(), GameObject.activeSelf or GameObject.activeInHierarchy.'
-test.cs(87,14): warning CS0219: The variable 'isLoadingHeadIcon' is assigned but its value is never used
-test.cs(174,5): hidden CS8019: Unnecessary using directive.
+test.cs(129,18): warning CS0168: The variable 'dt' is declared but never used
+test.cs(129,21): warning CS0168: The variable 'dt2' is declared but never used
+test.cs(234,22): warning CS0219: The variable 'e' is assigned but its value is never used
+test.cs(674,13): warning CS0219: The variable 'v' is assigned but its value is never used
+test.cs(262,19): warning CS0219: The variable 't' is assigned but its value is never used
+test.cs(691,21): warning CS0618: 'Transform.FindChild(string)' is obsolete: 'FindChild has been deprecated. Use Find instead (UnityUpgradable) -> Find([mscorlib] System.String)'
+test.cs(695,32): warning CS0162: Unreachable code detected
+test.cs(491,23): warning CS0219: The variable 'abc' is assigned but its value is never used
+test.cs(580,17): warning CS0162: Unreachable code detected
+test.cs(76,9): warning CS0618: 'GameObject.active' is obsolete: 'GameObject.active is obsolete. Use GameObject.SetActive(), GameObject.activeSelf or GameObject.activeInHierarchy.'
+test.cs(92,14): warning CS0219: The variable 'isLoadingHeadIcon' is assigned but its value is never used
+test.cs(181,5): hidden CS8019: Unnecessary using directive.

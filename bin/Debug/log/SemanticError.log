@@ -1,0 +1,3 @@
+============<<<Semantic Error:test>>>============
+test.cs(86,13): error CS0128: A local variable or function named 'a' is already defined in this scope
+test.cs(87,39): error CS1503: Argument 1: cannot convert from 'UnityEngine.Vector3' to 'System.Array'

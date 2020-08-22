@@ -29,6 +29,14 @@ class(TestUnity, UnityEngine.MonoBehaviour) {
 	instance_methods {
 		Test = function(this, ...){
 			local{args = params(System.Object, TypeKind.Class);};
+			local(a); a = getexternstatic(SymbolKind.Property, UnityEngine.Vector3, "zero");
+			local(b); b = a;
+			b = wrapexternstruct(b, UnityEngine.Vector3);
+			setexterninstance(SymbolKind.Field, b, "x", 100);
+			setinstance(SymbolKind.Field, this, "m_Position", b);
+			getinstance(SymbolKind.Field, this, "m_Position") = wrapexternstruct(getinstance(SymbolKind.Field, this, "m_Position"), UnityEngine.Vector3);
+			setinstance(SymbolKind.Field, this, "m_Scale", a);
+			getinstance(SymbolKind.Field, this, "m_Scale") = wrapexternstruct(getinstance(SymbolKind.Field, this, "m_Scale"), UnityEngine.Vector3);
 			if( execbinary(">=", getexterninstance(SymbolKind.Property, args, "Length"), 3, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
 				local(sagatObjId); sagatObjId = typecast(args[1], System.Int32, TypeKind.Struct);
 				local(protectObjId); protectObjId = typecast(args[2], System.Int32, TypeKind.Struct);
@@ -48,19 +56,19 @@ class(TestUnity, UnityEngine.MonoBehaviour) {
 			local(c); c = getexterninstanceindexer(System.String, typeargs(), typekinds(), getinstance(SymbolKind.Field, this, "m_TestString"), System.String, "get_Chars", 1, 2);
 			local(equal); equal = execbinary("==", getinstance(SymbolKind.Field, this, "m_TestString"), s, System.String, System.String, TypeKind.Class, TypeKind.Class);
 			local(a); a = literalarray(System.Int32, TypeKind.Struct, 5, 4, 3, 2, 1);
-			local(ix); ix = invokearraystaticmethod(a, null, "IndexOf", "System.Array:IndexOf__Arr_Object__Object", a, 3);
+;
 			local(f); f = typecast(( (function(vv) {
 				callstatic(LuaConsole, "Print", "test");
 			};) ), "System.Action_T", TypeKind.Delegate);
 			f(123);
 			local(isLoadingHeadIcon); isLoadingHeadIcon = false;
-			local{__using_87_8_90_9 = newobject(CUsingHelper, typeargs(), typekinds(), "ctor", null, (function(){
+			local{__using_92_8_95_9 = newobject(CUsingHelper, typeargs(), typekinds(), "ctor", null, (function(){
 				isLoadingHeadIcon = true;
 			}), (function(){
 				isLoadingHeadIcon = false;
 			}));};
 			callstatic(LuaConsole, "Print", "test");
-			callexterninstance(__using_87_8_90_9, "Dispose");
+			callexterninstance(__using_92_8_95_9, "Dispose");
 			local(v1s); v1s = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct), literaldictionary(typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct), 1 => 2, 3 => 4, 5 => 6), "System.Collections.Generic.Dictionary_TKey_TValue:ctor");
 			local(v2s); v2s = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct), literaldictionary(typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct), 1 => 3, 5 => 4), "System.Collections.Generic.Dictionary_TKey_TValue:ctor");
 			local(v0); v0 = linq()from(function(){ return(v1s); })let(function(v1){ return(getexterninstance(SymbolKind.Property, v1, "Value")); })let(function(v1, v3){ return(invokeforbasicvalue(invokeforbasicvalue(v3, false, System.Int32, "ToString", "System.Int32:ToString"), false, System.String, "Split", "System.String:Split__Arr_Char", wrapchar(' ', 0x020))); })from(function(v1, v3, v4){ return(( linq()from(function(){ return(v2s); })select(function(v2){ return(v2); })end() )); })where(function(v1, v3, v4, vvvv){ return(execunary("!", callexternstatic(System.String, "IsNullOrEmpty", callexterninstance(v1, "ToString")), System.Boolean, TypeKind.Struct)); })select(function(v1, v3, v4, vvvv){ return(callexterninstance(v1, "ToString")); })end();
@@ -77,10 +85,14 @@ class(TestUnity, UnityEngine.MonoBehaviour) {
 			}else{
 				setinstance(SymbolKind.Field, this, "__ctor_called", true);
 			};
+			this.m_Position = newexternobject(UnityEngine.Vector3, typeargs(), typekinds(), null);
+			this.m_Scale = newexternobject(UnityEngine.Vector3, typeargs(), typekinds(), null);
 		};
 	};
 	instance_fields {
 		m_TestString = "13579";
+		m_Position = null;
+		m_Scale = null;
 		__ctor_called = false;
 	};
 	instance_props {};
@@ -100,6 +112,10 @@ class(TestUnity, UnityEngine.MonoBehaviour) {
 	event_info {};
 	field_info {
 		m_TestString(Accessibility.Private){
+		};
+		m_Position(Accessibility.Private){
+		};
+		m_Scale(Accessibility.Private){
 		};
 	};
 };
