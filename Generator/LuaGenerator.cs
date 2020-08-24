@@ -270,7 +270,12 @@ namespace Generator
                             var mdef = def as Dsl.FunctionData;
                             if (mdef.GetId() == "=") {
                                 string mname = mdef.GetParamId(0);
-                                var fdef = mdef.GetParam(1) as Dsl.StatementData;
+                                var mtemp = mdef.GetParam(1);
+                                var cdef = mtemp as Dsl.FunctionData;
+                                var fdef = mtemp as Dsl.StatementData;
+                                if (null != cdef) {
+                                    fdef = cdef.GetParam(0) as Dsl.StatementData;
+                                }
                                 if (null != fdef && fdef.GetFunctionNum() == 2) {
                                     var first = fdef.First;
                                     var second = fdef.Second;
@@ -279,8 +284,12 @@ namespace Generator
                                     if (second.HaveStatement()) {
                                         var fcall = second;
                                         if (second.IsHighOrder)
-                                            fcall = second.LowerOrderFunction;                                        
-                                        sb.AppendFormat("{0}{1} = {2}(", GetIndentString(indent), mname, "function");
+                                            fcall = second.LowerOrderFunction;
+                                        sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
+                                        if (null != cdef) {
+                                            sb.Append("wrapenumerable(");
+                                        }
+                                        sb.Append("function(");
                                         bool haveParams = GenerateFunctionParams(fcall, sb);
                                         sb.AppendLine(")");
                                         ++indent;
@@ -307,8 +316,12 @@ namespace Generator
                                                 sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
                                             }
                                             --indent;
-                                            sb.AppendFormatLine("{0}end,", GetIndentString(indent));
-                                            sb.AppendFormat("{0}__real_{1} = {2}(", GetIndentString(indent), mname, "function");
+                                            if(null!=cdef)
+                                                sb.AppendFormatLine("{0}end),", GetIndentString(indent));
+                                            else
+                                                sb.AppendFormatLine("{0}end,", GetIndentString(indent));
+                                            sb.AppendFormat("{0}__real_{1} = ", GetIndentString(indent), mname);
+                                            sb.Append("function(");
                                             GenerateFunctionParams(fcall, sb);
                                             sb.AppendLine(")");
                                             ++indent;
@@ -324,12 +337,10 @@ namespace Generator
                                             }
                                         }
                                         --indent;
-                                        sb.AppendFormatLine("{0}end,", GetIndentString(indent));
-                                    }
-                                    else {
-                                        sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
-                                        GenerateSyntaxComponent(fdef, sb, indent, false);
-                                        sb.AppendFormatLine(",");
+                                        if (null != cdef && null == logInfo.EpilogueInfo)
+                                            sb.AppendFormatLine("{0}end),", GetIndentString(indent));
+                                        else
+                                            sb.AppendFormatLine("{0}end,", GetIndentString(indent));
                                     }
                                 }
                             }
@@ -380,8 +391,12 @@ namespace Generator
                             var mdef = def as Dsl.FunctionData;
                             if (mdef.GetId() == "=") {
                                 string mname = mdef.GetParamId(0);
-                                var param1 = mdef.GetParam(1);
-                                var fdef = mdef.GetParam(1) as Dsl.StatementData;
+                                var mtemp = mdef.GetParam(1);
+                                var cdef = mtemp as Dsl.FunctionData;
+                                var fdef = mtemp as Dsl.StatementData;
+                                if (null != cdef) {
+                                    fdef = cdef.GetParam(0) as Dsl.StatementData;
+                                }
                                 if (null != fdef && fdef.GetFunctionNum() == 2) {
                                     var first = fdef.First;
                                     var second = fdef.Second;
@@ -391,7 +406,11 @@ namespace Generator
                                         var fcall = second;
                                         if (second.IsHighOrder)
                                             fcall = second.LowerOrderFunction;
-                                        sb.AppendFormat("{0}{1} = {2}(", GetIndentString(indent), mname, "function");
+                                        sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
+                                        if (null != cdef) {
+                                            sb.Append("wrapenumerable(");
+                                        }
+                                        sb.Append("function(");
                                         bool haveParams = GenerateFunctionParams(fcall, sb);
                                         sb.AppendLine(")");
                                         ++indent;
@@ -418,8 +437,12 @@ namespace Generator
                                                 sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
                                             }
                                             --indent;
-                                            sb.AppendFormatLine("{0}end,", GetIndentString(indent));
-                                            sb.AppendFormat("{0}__real_{1} = {2}(", GetIndentString(indent), mname, "function");
+                                            if (null != cdef)
+                                                sb.AppendFormatLine("{0}end),", GetIndentString(indent));
+                                            else
+                                                sb.AppendFormatLine("{0}end,", GetIndentString(indent));
+                                            sb.AppendFormat("{0}__real_{1} = ", GetIndentString(indent), mname);
+                                            sb.Append("function(");
                                             GenerateFunctionParams(fcall, sb);
                                             sb.AppendLine(")");
                                             ++indent;
@@ -435,12 +458,10 @@ namespace Generator
                                             }
                                         }
                                         --indent;
-                                        sb.AppendFormatLine("{0}end,", GetIndentString(indent));
-                                    }
-                                    else {
-                                        sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
-                                        GenerateSyntaxComponent(fdef, sb, indent, false);
-                                        sb.AppendFormatLine(",");
+                                        if (null != cdef && null == logInfo.EpilogueInfo)
+                                            sb.AppendFormatLine("{0}end),", GetIndentString(indent));
+                                        else
+                                            sb.AppendFormatLine("{0}end,", GetIndentString(indent));
                                     }
                                 }
                             }
