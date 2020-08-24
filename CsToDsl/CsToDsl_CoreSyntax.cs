@@ -206,7 +206,7 @@ namespace RoslynTool.CsToDsl
                 AddReferenceAndTryDeriveGenericTypeInstance(ci, targetType);
             }
             bool isStatic = declSym.IsStatic;
-            CodeBuilder.AppendFormat("{0}{1} = {2}function({3}", GetIndentString(), manglingName, mi.ExistYield ? "wrapenumerable(" : string.Empty, isStatic ? string.Empty : "this");
+            CodeBuilder.AppendFormat("{0}{1} = {2}deffunc({3})args({4}", GetIndentString(), manglingName, mi.ExistYield ? "wrapenumerable(" : string.Empty, mi.ReturnValueCount, isStatic ? string.Empty : "this");
             if (mi.ParamNames.Count > 0) {
                 if (!isStatic) {
                     CodeBuilder.Append(", ");

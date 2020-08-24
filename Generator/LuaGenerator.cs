@@ -270,13 +270,17 @@ namespace Generator
                             var mdef = def as Dsl.FunctionData;
                             if (mdef.GetId() == "=") {
                                 string mname = mdef.GetParamId(0);
-                                var fdef = mdef.GetParam(1) as Dsl.FunctionData;
-                                if (null != fdef) {
-                                    if (fdef.HaveStatement()) {
-                                        var fcall = fdef;
-                                        if (fdef.IsHighOrder)
-                                            fcall = fdef.LowerOrderFunction;                                        
-                                        sb.AppendFormat("{0}{1} = {2}(", GetIndentString(indent), mname, fcall.GetId());
+                                var fdef = mdef.GetParam(1) as Dsl.StatementData;
+                                if (null != fdef && fdef.GetFunctionNum() == 2) {
+                                    var first = fdef.First;
+                                    var second = fdef.Second;
+                                    int rct;
+                                    int.TryParse(first.GetParamId(0), out rct);
+                                    if (second.HaveStatement()) {
+                                        var fcall = second;
+                                        if (second.IsHighOrder)
+                                            fcall = second.LowerOrderFunction;                                        
+                                        sb.AppendFormat("{0}{1} = {2}(", GetIndentString(indent), mname, "function");
                                         bool haveParams = GenerateFunctionParams(fcall, sb);
                                         sb.AppendLine(")");
                                         ++indent;
@@ -285,16 +289,15 @@ namespace Generator
                                             sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.PrologueInfo, className, mname));
                                         }
                                         if (null != logInfo.EpilogueInfo) {
-                                            int rct = GetFunctionReturnCount(fdef);
                                             if (rct > 0) {
                                                 sb.AppendFormat("{0}local ", GetIndentString(indent));
-                                                GenerateFunctionRetVars(fdef, sb, rct, "__retval_");
+                                                GenerateFunctionRetVars(second, sb, rct, "__retval_");
                                                 sb.AppendFormat(" = {0}.__real_{1}(", className, mname);
                                                 GenerateFunctionParams(fcall, sb);
                                                 sb.AppendLine(");");
                                                 sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
                                                 sb.AppendFormat("{0}return ", GetIndentString(indent));
-                                                GenerateFunctionRetVars(fdef, sb, rct, "__retval_");
+                                                GenerateFunctionRetVars(second, sb, rct, "__retval_");
                                                 sb.AppendLine(";");
                                             }
                                             else {
@@ -305,12 +308,12 @@ namespace Generator
                                             }
                                             --indent;
                                             sb.AppendFormatLine("{0}end,", GetIndentString(indent));
-                                            sb.AppendFormat("{0}__real_{1} = {2}(", GetIndentString(indent), mname, fcall.GetId());
+                                            sb.AppendFormat("{0}__real_{1} = {2}(", GetIndentString(indent), mname, "function");
                                             GenerateFunctionParams(fcall, sb);
                                             sb.AppendLine(")");
                                             ++indent;
                                         }
-                                        foreach (var comp in fdef.Params) {
+                                        foreach (var comp in second.Params) {
                                             GenerateSyntaxComponent(comp, sb, indent, true);
                                             string subId = comp.GetId();
                                             if (subId != "comments" && subId != "comment") {
@@ -378,13 +381,17 @@ namespace Generator
                             if (mdef.GetId() == "=") {
                                 string mname = mdef.GetParamId(0);
                                 var param1 = mdef.GetParam(1);
-                                var fdef = param1 as Dsl.FunctionData;
-                                if (null != fdef) {
-                                    if (fdef.HaveStatement()) {
-                                        var fcall = fdef;
-                                        if (fdef.IsHighOrder)
-                                            fcall = fdef.LowerOrderFunction;
-                                        sb.AppendFormat("{0}{1} = {2}(", GetIndentString(indent), mname, fcall.GetId());
+                                var fdef = mdef.GetParam(1) as Dsl.StatementData;
+                                if (null != fdef && fdef.GetFunctionNum() == 2) {
+                                    var first = fdef.First;
+                                    var second = fdef.Second;
+                                    int rct;
+                                    int.TryParse(first.GetParamId(0), out rct);
+                                    if (second.HaveStatement()) {
+                                        var fcall = second;
+                                        if (second.IsHighOrder)
+                                            fcall = second.LowerOrderFunction;
+                                        sb.AppendFormat("{0}{1} = {2}(", GetIndentString(indent), mname, "function");
                                         bool haveParams = GenerateFunctionParams(fcall, sb);
                                         sb.AppendLine(")");
                                         ++indent;
@@ -393,16 +400,15 @@ namespace Generator
                                             sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.PrologueInfo, className, mname));
                                         }
                                         if (null != logInfo.EpilogueInfo) {
-                                            int rct = GetFunctionReturnCount(fdef);
                                             if (rct > 0) {
                                                 sb.AppendFormat("{0}local ", GetIndentString(indent));
-                                                GenerateFunctionRetVars(fdef, sb, rct, "__retval_");
+                                                GenerateFunctionRetVars(second, sb, rct, "__retval_");
                                                 sb.AppendFormat(" = {0}.__real_{1}(", "this", mname);
                                                 GenerateFunctionParams(fcall, sb);
                                                 sb.AppendLine(");");
                                                 sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
                                                 sb.AppendFormat("{0}return ", GetIndentString(indent));
-                                                GenerateFunctionRetVars(fdef, sb, rct, "__retval_");
+                                                GenerateFunctionRetVars(second, sb, rct, "__retval_");
                                                 sb.AppendLine(";");
                                             }
                                             else {
@@ -413,12 +419,12 @@ namespace Generator
                                             }
                                             --indent;
                                             sb.AppendFormatLine("{0}end,", GetIndentString(indent));
-                                            sb.AppendFormat("{0}__real_{1} = {2}(", GetIndentString(indent), mname, fcall.GetId());
+                                            sb.AppendFormat("{0}__real_{1} = {2}(", GetIndentString(indent), mname, "function");
                                             GenerateFunctionParams(fcall, sb);
                                             sb.AppendLine(")");
                                             ++indent;
                                         }
-                                        foreach (var comp in fdef.Params) {
+                                        foreach (var comp in second.Params) {
                                             GenerateSyntaxComponent(comp, sb, indent, true);
                                             string subId = comp.GetId();
                                             if (subId != "comments" && subId != "comment") {
@@ -2695,45 +2701,6 @@ namespace Generator
                     return true;
             }
             return false;
-        }
-        private static int GetFunctionReturnCount(Dsl.FunctionData data)
-        {
-            if (data.HaveStatement()) {
-                foreach (var p in data.Params) {
-                    int ct = GetFunctionReturnCount(p);
-                    if (ct >= 0)
-                        return ct;
-                }
-            }
-            else if(!data.IsHighOrder && data.HaveParam() && data.GetId() == "return") {
-                return data.GetParamNum();
-            }
-            return -1;
-        }
-        private static int GetFunctionReturnCount(Dsl.StatementData data)
-        {
-            foreach (var func in data.Functions) {
-                int ct = GetFunctionReturnCount(func);
-                if (ct >= 0)
-                    return ct;
-            }
-            return -1;
-        }
-        private static int GetFunctionReturnCount(Dsl.ISyntaxComponent data)
-        {
-            var funcData = data as Dsl.FunctionData;
-            if (null != funcData) {
-                return GetFunctionReturnCount(funcData);
-            }
-            else {
-                var stData = data as Dsl.StatementData;
-                if (null != stData) {
-                    return GetFunctionReturnCount(stData);
-                }
-                else {
-                    return -1;
-                }
-            }
         }
         private static bool CanRemoveClosure(Dsl.ISyntaxComponent param)
         {

@@ -1039,7 +1039,7 @@ namespace RoslynTool.CsToDsl
                 ++indent;
 
                 if (!isStaticClass) {
-                    sb.AppendFormat("{0}__new_object = function(...){{", GetIndentString(indent));
+                    sb.AppendFormat("{0}__new_object = deffunc(1)args(...){{", GetIndentString(indent));
                     sb.AppendLine();
                     ++indent;
 
@@ -1086,7 +1086,7 @@ namespace RoslynTool.CsToDsl
                 }
 
                 if (!haveCctor) {
-                    sb.AppendFormat("{0}cctor = function(){{", GetIndentString(indent));
+                    sb.AppendFormat("{0}cctor = deffunc(0)args(){{", GetIndentString(indent));
                     sb.AppendLine();
                     ++indent;
                     if (!string.IsNullOrEmpty(baseClass) && myselfDefinedBaseClass) {
@@ -1099,7 +1099,7 @@ namespace RoslynTool.CsToDsl
                     sb.AppendFormat("{0}}};", GetIndentString(indent));
                     sb.AppendLine();
                 }
-                sb.AppendFormat("{0}__cctor = function(){{", GetIndentString(indent));
+                sb.AppendFormat("{0}__cctor = deffunc(0)args(){{", GetIndentString(indent));
                 sb.AppendLine();
                 ++indent;
                 sb.AppendFormat("{0}if({1}.__cctor_called){{", GetIndentString(indent), key);
@@ -1212,7 +1212,7 @@ namespace RoslynTool.CsToDsl
                     }
 
                     if (!haveCtor) {
-                        sb.AppendFormat("{0}ctor = function(this){{", GetIndentString(indent));
+                        sb.AppendFormat("{0}ctor = deffunc(0)args(this){{", GetIndentString(indent));
                         sb.AppendLine();
                         ++indent;
                         if (!string.IsNullOrEmpty(baseClass) && myselfDefinedBaseClass) {
@@ -1226,7 +1226,7 @@ namespace RoslynTool.CsToDsl
                         sb.AppendLine();
                     }
 
-                    sb.AppendFormat("{0}__ctor = function(this){{", GetIndentString(indent));
+                    sb.AppendFormat("{0}__ctor = deffunc(0)args(this){{", GetIndentString(indent));
                     sb.AppendLine();
                     ++indent;
                     sb.AppendFormat("{0}if(getinstance(SymbolKind.Field, this, \"__ctor_called\")){{", GetIndentString(indent));

@@ -178,7 +178,7 @@ namespace RoslynTool.CsToDsl
             }
 
             bool myselfDefinedBaseClass = SymbolTable.Instance.IsCs2DslSymbol(ci.SemanticInfo.BaseType);
-            CodeBuilder.AppendFormat("{0}{1} = function({2}", GetIndentString(), manglingName, isStatic ? string.Empty : "this");
+            CodeBuilder.AppendFormat("{0}{1} = deffunc({2})args({3}", GetIndentString(), manglingName, mi.ReturnValueCount, isStatic ? string.Empty : "this");
             if (mi.ParamNames.Count > 0) {
                 if (!isStatic) {
                     CodeBuilder.Append(", ");
@@ -323,7 +323,7 @@ namespace RoslynTool.CsToDsl
                         else
                             paramStr = "this, " + paramStr;
                     }
-                    CodeBuilder.AppendFormat("{0}{1} = function({2}){{", GetIndentString(), manglingName, paramStr);
+                    CodeBuilder.AppendFormat("{0}{1} = deffunc({2})args({3}){{", GetIndentString(), manglingName, mi.ReturnValueCount, paramStr);
                     CodeBuilder.AppendLine();
                     ++m_Indent;
                     TryWrapValueParams(CodeBuilder, mi);
@@ -437,7 +437,7 @@ namespace RoslynTool.CsToDsl
                             else
                                 paramStr = "this, " + paramStr;
                         }
-                        CodeBuilder.AppendFormat("{0}{1} = {2}function({3}){{", GetIndentString(), manglingName, mi.ExistYield ? "wrapenumerable(" : string.Empty, paramStr);
+                        CodeBuilder.AppendFormat("{0}{1} = {2}deffunc({3})args({4}){{", GetIndentString(), manglingName, mi.ExistYield ? "wrapenumerable(" : string.Empty, mi.ReturnValueCount, paramStr);
                         CodeBuilder.AppendLine();
                         ++m_Indent;
                         bool isStatic = declSym.IsStatic;
@@ -603,7 +603,7 @@ namespace RoslynTool.CsToDsl
                         else
                             paramStr = "this, " + paramStr;
                     }
-                    CodeBuilder.AppendFormat("{0}{1} = function({2}){{", GetIndentString(), manglingName, paramStr);
+                    CodeBuilder.AppendFormat("{0}{1} = deffunc({2})args({3}){{", GetIndentString(), manglingName, mi.ReturnValueCount, paramStr);
                     CodeBuilder.AppendLine();
                     ++m_Indent;
                     bool isStatic = declSym.IsStatic;
@@ -710,7 +710,7 @@ namespace RoslynTool.CsToDsl
                         else
                             paramStr = "this, " + paramStr;
                     }
-                    CodeBuilder.AppendFormat("{0}{1} = function(this, {2}){{", GetIndentString(), manglingName, string.Join(", ", mi.ParamNames.ToArray()));
+                    CodeBuilder.AppendFormat("{0}{1} = deffunc({2})args(this, {3}){{", GetIndentString(), manglingName, mi.ReturnValueCount, string.Join(", ", mi.ParamNames.ToArray()));
                     CodeBuilder.AppendLine();
                     ++m_Indent;
                     TryWrapValueParams(CodeBuilder, mi);
@@ -771,7 +771,7 @@ namespace RoslynTool.CsToDsl
 
                     string manglingName = NameMangling(sym);
                     string keyword = accessor.Keyword.Text;
-                    CodeBuilder.AppendFormat("{0}{1} = {2}function(this, {3}){{", GetIndentString(), manglingName, mi.ExistYield ? "wrapenumerable(" : string.Empty, string.Join(", ", mi.ParamNames.ToArray()));
+                    CodeBuilder.AppendFormat("{0}{1} = {2}deffunc({3})args(this, {4}){{", GetIndentString(), manglingName, mi.ExistYield ? "wrapenumerable(" : string.Empty, mi.ReturnValueCount, string.Join(", ", mi.ParamNames.ToArray()));
                     CodeBuilder.AppendLine();
                     ++m_Indent;
                     bool isStatic = declSym.IsStatic;

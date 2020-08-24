@@ -27,6 +27,7 @@ namespace RoslynTool.CsToDsl
         internal string ParamsElementInfo = string.Empty;
         internal bool ExistYield = false;
         internal bool ExistTopLevelReturn = false;
+        internal int ReturnValueCount = 0;
 
         internal bool ExistTry = false;
         internal bool ExistUsing = false;
@@ -134,6 +135,8 @@ namespace RoslynTool.CsToDsl
                     ExistYield = analysis.YieldCount > 0;
                 }
             }
+
+            ReturnValueCount = ReturnParamNames.Count + (sym.ReturnsVoid ? 0 : 1);
         }
     }
 }
