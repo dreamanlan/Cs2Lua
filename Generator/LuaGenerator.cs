@@ -291,7 +291,7 @@ namespace Generator
                                                 GenerateFunctionRetVars(fdef, sb, rct, "__retval_");
                                                 sb.AppendFormat(" = {0}.__real_{1}(", className, mname);
                                                 GenerateFunctionParams(fcall, sb);
-                                                sb.AppendLine(")};");
+                                                sb.AppendLine(");");
                                                 sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
                                                 sb.AppendFormat("{0}return ", GetIndentString(indent));
                                                 GenerateFunctionRetVars(fdef, sb, rct, "__retval_");
@@ -300,7 +300,7 @@ namespace Generator
                                             else {
                                                 sb.AppendFormat("{0}{1}.__real_{2}(", GetIndentString(indent), className, mname);
                                                 GenerateFunctionParams(fcall, sb);
-                                                sb.AppendLine(")};");
+                                                sb.AppendLine(");");
                                                 sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
                                             }
                                             --indent;
@@ -399,7 +399,7 @@ namespace Generator
                                                 GenerateFunctionRetVars(fdef, sb, rct, "__retval_");
                                                 sb.AppendFormat(" = {0}.__real_{1}(", "this", mname);
                                                 GenerateFunctionParams(fcall, sb);
-                                                sb.AppendLine(")};");
+                                                sb.AppendLine(");");
                                                 sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
                                                 sb.AppendFormat("{0}return ", GetIndentString(indent));
                                                 GenerateFunctionRetVars(fdef, sb, rct, "__retval_");
@@ -408,7 +408,7 @@ namespace Generator
                                             else {
                                                 sb.AppendFormat("{0}{1}.__real_{2}(", GetIndentString(indent), "this", mname);
                                                 GenerateFunctionParams(fcall, sb);
-                                                sb.AppendLine(")};");
+                                                sb.AppendLine(");");
                                                 sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
                                             }
                                             --indent;
