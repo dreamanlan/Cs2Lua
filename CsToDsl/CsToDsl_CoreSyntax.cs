@@ -1197,7 +1197,7 @@ namespace RoslynTool.CsToDsl
                     AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
                 }
                 if (null != psym && psym.IsIndexer) {
-                    CodeBuilder.Append("(function(){ return(");
+                    CodeBuilder.Append("function(){ return(");
                     bool isCs2Lua = SymbolTable.Instance.IsCs2DslSymbol(psym);
                     CodeBuilder.AppendFormat("set{0}{1}indexer(", isCs2Lua ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
                     if (!isCs2Lua) {
@@ -1238,7 +1238,7 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.Append(", ");
                     OutputExpressionSyntax(assign.Right, opd);
                     CodeBuilder.Append(")");
-                    CodeBuilder.Append("); })");
+                    CodeBuilder.Append("); }");
                 }
                 else if (bindingOper.Kind == OperationKind.ArrayElementReferenceExpression) {
                     if (SymbolTable.UseArrayGetSet) {
@@ -1252,7 +1252,7 @@ namespace RoslynTool.CsToDsl
                     }
                     else {
                         string localName = string.Format("__ret_{0}", GetSourcePosForVar(assign));
-                        CodeBuilder.AppendFormat("(function(){{ local({0}); ", localName);
+                        CodeBuilder.AppendFormat("function(){{ local({0}); ", localName);
                         OutputExpressionSyntax(leftCondAccess.Expression);
                         CodeBuilder.Append("[");
                         OutputExpressionSyntax(leftCondAccess.WhenNotNull);
@@ -1262,7 +1262,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append("; };");
                         CodeBuilder.Append(" return(");
                         CodeBuilder.Append(localName);
-                        CodeBuilder.Append("); })");
+                        CodeBuilder.Append("); }");
                     }
                 }
                 else {
@@ -1271,7 +1271,7 @@ namespace RoslynTool.CsToDsl
             }
             else {
                 string localName = string.Format("__ret_{0}", GetSourcePosForVar(assign));
-                CodeBuilder.AppendFormat("(function(){{ local({0}); ", localName);
+                CodeBuilder.AppendFormat("function(){{ local({0}); ", localName);
                 OutputExpressionSyntax(leftCondAccess.Expression);
                 OutputExpressionSyntax(leftCondAccess.WhenNotNull);
                 CodeBuilder.Append(" = ");
@@ -1280,7 +1280,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.Append("; };");
                 CodeBuilder.Append(" return(");
                 CodeBuilder.Append(localName);
-                CodeBuilder.Append("); })");
+                CodeBuilder.Append("); }");
             }
             CodeBuilder.Append(")");
         }

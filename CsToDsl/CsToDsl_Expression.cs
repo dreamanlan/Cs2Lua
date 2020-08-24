@@ -97,9 +97,9 @@ namespace RoslynTool.CsToDsl
                             OutputExpressionSyntax(node.Right, ropd);
                         }
                         else {
-                            CodeBuilder.Append("false, (function(){ return(");
+                            CodeBuilder.Append("false, function(){ return(");
                             OutputExpressionSyntax(node.Right, ropd);
-                            CodeBuilder.Append("); })");
+                            CodeBuilder.Append("); }");
                         }
                     }
                     else {
@@ -142,27 +142,27 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.Append(", true, ");
             }
             else {
-                CodeBuilder.Append(", false, (function(){ return(");
+                CodeBuilder.Append(", false, function(){ return(");
             }
             OutputExpressionSyntax(node.WhenTrue);
             if (trueIsConst) {
                 CodeBuilder.Append(", ");
             }
             else {
-                CodeBuilder.Append("); }), ");
+                CodeBuilder.Append("); }, ");
             }
             if (falseIsConst) {
                 CodeBuilder.Append("true, ");
             }
             else {
-                CodeBuilder.Append("false, (function(){ return(");
+                CodeBuilder.Append("false, function(){ return(");
             }
             OutputExpressionSyntax(node.WhenFalse);
             if (falseIsConst) {
                 CodeBuilder.Append(")");
             }
             else {
-                CodeBuilder.Append("); }))");
+                CodeBuilder.Append("); })");
             }
         }
         public override void VisitThisExpression(ThisExpressionSyntax node)
@@ -753,7 +753,7 @@ namespace RoslynTool.CsToDsl
                     AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
                 }
                 if (null != psym && psym.IsIndexer) {
-                    CodeBuilder.Append("(function(){ return(");
+                    CodeBuilder.Append("function(){ return(");
                     bool isCs2Lua = SymbolTable.Instance.IsCs2DslSymbol(psym);
                     CodeBuilder.AppendFormat("get{0}{1}indexer(", isCs2Lua ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
                     if (!isCs2Lua) {
@@ -792,7 +792,7 @@ namespace RoslynTool.CsToDsl
                     ii.Init(psym.GetMethod, args, m_Model);
                     OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, elementBinding, ii.ArgConversions.ToArray());
                     CodeBuilder.Append(")");
-                    CodeBuilder.Append("); })");
+                    CodeBuilder.Append("); }");
                 }
                 else if (oper.Kind == OperationKind.ArrayElementReferenceExpression) {
                     if (SymbolTable.UseArrayGetSet) {
@@ -803,12 +803,12 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(")");
                     }
                     else {
-                        CodeBuilder.Append("(function(){ return(");
+                        CodeBuilder.Append("function(){ return(");
                         OutputExpressionSyntax(node.Expression);
                         CodeBuilder.Append("[");
                         OutputExpressionSyntax(node.WhenNotNull);
                         CodeBuilder.Append("]");
-                        CodeBuilder.Append("); })");
+                        CodeBuilder.Append("); }");
                     }
                 }
                 else {
@@ -816,10 +816,10 @@ namespace RoslynTool.CsToDsl
                 }
             }
             else {
-                CodeBuilder.Append("(function(){ return(");
+                CodeBuilder.Append("function(){ return(");
                 OutputExpressionSyntax(node.Expression);
                 OutputExpressionSyntax(node.WhenNotNull);
-                CodeBuilder.Append("); })");
+                CodeBuilder.Append("); }");
             }
             CodeBuilder.Append(")");
         }

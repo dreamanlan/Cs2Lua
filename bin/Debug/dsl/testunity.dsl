@@ -29,6 +29,8 @@ class(TestUnity, UnityEngine.MonoBehaviour) {
 	instance_methods {
 		Test = function(this, ...){
 			local{args = params(System.Object, TypeKind.Class);};
+			local(v); v = 134.00100000;
+			local(v2); v2 = execbinary("*", v, 0.00100000, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct);
 			local(a); a = getexternstatic(SymbolKind.Property, UnityEngine.Vector3, "zero");
 			local(b); b = a;
 			b = wrapexternstruct(b, UnityEngine.Vector3);
@@ -47,7 +49,7 @@ class(TestUnity, UnityEngine.MonoBehaviour) {
 			local(r); r = callexterninstance(getexterninstance(SymbolKind.Property, this, "gameObject"), "GetComponent", "UnityEngine.GameObject:GetComponent__Type", UnityEngine.Renderer);
 			setexterninstance(SymbolKind.Property, getexterninstance(SymbolKind.Property, this, "gameObject"), "active", true);
 			local(v); v = true;
-			local(s); s = invokeforbasicvalue(v, false, System.Boolean, "ToString", "System.Boolean:ToString");
+			local(s); s = invokeforbasicvalue(v, false, System.Single, "ToString", "System.Single:ToString");
 			local(i); i = 123;
 			local(s2); s2 = invokeforbasicvalue(i, false, System.Int32, "ToString", "System.Int32:ToString");
 			local(i2); i2 = invokeforbasicvalue(s2, false, System.String, "IndexOf", "System.String:IndexOf__Char", wrapchar('2', 0x032));
@@ -62,13 +64,13 @@ class(TestUnity, UnityEngine.MonoBehaviour) {
 			};) ), "System.Action_T", TypeKind.Delegate);
 			f(123);
 			local(isLoadingHeadIcon); isLoadingHeadIcon = false;
-			local{__using_92_8_95_9 = newobject(CUsingHelper, typeargs(), typekinds(), "ctor", null, (function(){
+			local{__using_94_8_97_9 = newobject(CUsingHelper, typeargs(), typekinds(), "ctor", null, (function(){
 				isLoadingHeadIcon = true;
 			}), (function(){
 				isLoadingHeadIcon = false;
 			}));};
 			callstatic(LuaConsole, "Print", "test");
-			callexterninstance(__using_92_8_95_9, "Dispose");
+			callexterninstance(__using_94_8_97_9, "Dispose");
 			local(v1s); v1s = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct), literaldictionary(typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct), 1 => 2, 3 => 4, 5 => 6), "System.Collections.Generic.Dictionary_TKey_TValue:ctor");
 			local(v2s); v2s = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct), literaldictionary(typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct), 1 => 3, 5 => 4), "System.Collections.Generic.Dictionary_TKey_TValue:ctor");
 			local(v0); v0 = linq()from(function(){ return(v1s); })let(function(v1){ return(getexterninstance(SymbolKind.Property, v1, "Value")); })let(function(v1, v3){ return(invokeforbasicvalue(invokeforbasicvalue(v3, false, System.Int32, "ToString", "System.Int32:ToString"), false, System.String, "Split", "System.String:Split__Arr_Char", wrapchar(' ', 0x020))); })from(function(v1, v3, v4){ return(( linq()from(function(){ return(v2s); })select(function(v2){ return(v2); })end() )); })where(function(v1, v3, v4, vvvv){ return(execunary("!", callexternstatic(System.String, "IsNullOrEmpty", callexterninstance(v1, "ToString")), System.Boolean, TypeKind.Struct)); })select(function(v1, v3, v4, vvvv){ return(callexterninstance(v1, "ToString")); })end();

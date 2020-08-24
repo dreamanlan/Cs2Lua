@@ -275,31 +275,9 @@ namespace Generator
                                     if (fdef.HaveStatement()) {
                                         var fcall = fdef;
                                         if (fdef.IsHighOrder)
-                                            fcall = fdef.LowerOrderFunction;
-                                        bool haveParams = false;
+                                            fcall = fdef.LowerOrderFunction;                                        
                                         sb.AppendFormat("{0}{1} = {2}(", GetIndentString(indent), mname, fcall.GetId());
-                                        prestr = string.Empty;
-                                        for (int ix = 0; ix < fcall.Params.Count; ++ix) {
-                                            var param = fcall.Params[ix];
-                                            sb.Append(prestr);
-                                            prestr = ", ";
-                                            var pv = param as Dsl.ValueData;
-                                            if (null != pv) {
-                                                var pname = pv.GetId();
-                                                if (ix == fcall.Params.Count - 1 && pname == "...")
-                                                    haveParams = true;
-                                                sb.Append(pname);
-                                            }
-                                            else {
-                                                var pc = param as Dsl.FunctionData;
-                                                if (null != pc) {
-                                                    var pname = pc.GetParamId(0);
-                                                    if (ix == fcall.Params.Count - 1 && pname == "...")
-                                                        haveParams = true;
-                                                    sb.Append(pname);
-                                                }
-                                            }
-                                        }
+                                        bool haveParams = GenerateFunctionParams(fcall, sb);
                                         sb.AppendLine(")");
                                         ++indent;
                                         var logInfo = GetPrologueAndEpilogue(className, mname);
@@ -307,7 +285,30 @@ namespace Generator
                                             sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.PrologueInfo, className, mname));
                                         }
                                         if (null != logInfo.EpilogueInfo) {
-                                            sb.AppendFormatLine("{0}return (function(...) local args={{...}}; {1}; return ...; end)((function({2}) ", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname), haveParams ? "..." : string.Empty);
+                                            int rct = GetFunctionReturnCount(fdef);
+                                            if (rct > 0) {
+                                                sb.AppendFormat("{0}local ", GetIndentString(indent));
+                                                GenerateFunctionRetVars(fdef, sb, rct, "__retval_");
+                                                sb.AppendFormat(" = {0}.__real_{1}(", className, mname);
+                                                GenerateFunctionParams(fcall, sb);
+                                                sb.AppendLine(")};");
+                                                sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
+                                                sb.AppendFormat("{0}return ", GetIndentString(indent));
+                                                GenerateFunctionRetVars(fdef, sb, rct, "__retval_");
+                                                sb.AppendLine(";");
+                                            }
+                                            else {
+                                                sb.AppendFormat("{0}{1}.__real_{2}(", GetIndentString(indent), className, mname);
+                                                GenerateFunctionParams(fcall, sb);
+                                                sb.AppendLine(")};");
+                                                sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
+                                            }
+                                            --indent;
+                                            sb.AppendFormatLine("{0}end,", GetIndentString(indent));
+                                            sb.AppendFormat("{0}__real_{1} = {2}(", GetIndentString(indent), mname, fcall.GetId());
+                                            GenerateFunctionParams(fcall, sb);
+                                            sb.AppendLine(")");
+                                            ++indent;
                                         }
                                         foreach (var comp in fdef.Params) {
                                             GenerateSyntaxComponent(comp, sb, indent, true);
@@ -318,9 +319,6 @@ namespace Generator
                                             else {
                                                 sb.AppendLine();
                                             }
-                                        }
-                                        if (null != logInfo.EpilogueInfo) {
-                                            sb.AppendFormatLine("{0}end)({1}));", GetIndentString(indent), haveParams ? "..." : string.Empty);
                                         }
                                         --indent;
                                         sb.AppendFormatLine("{0}end,", GetIndentString(indent));
@@ -386,31 +384,8 @@ namespace Generator
                                         var fcall = fdef;
                                         if (fdef.IsHighOrder)
                                             fcall = fdef.LowerOrderFunction;
-                                        bool haveParams = false;
                                         sb.AppendFormat("{0}{1} = {2}(", GetIndentString(indent), mname, fcall.GetId());
-                                        prestr = string.Empty;
-                                        for (int ix = 0; ix < fcall.Params.Count; ++ix) {
-                                            var param = fcall.Params[ix];
-                                            string paramId = param.GetId();
-                                            sb.Append(prestr);
-                                            prestr = ", ";
-                                            var pv = param as Dsl.ValueData;
-                                            if (null != pv) {
-                                                var pname = pv.GetId();
-                                                if (ix == fcall.Params.Count - 1 && pname == "...")
-                                                    haveParams = true;
-                                                sb.Append(pname);
-                                            }
-                                            else {
-                                                var pc = param as Dsl.FunctionData;
-                                                if (null != pc) {
-                                                    var pname = pc.GetParamId(0);
-                                                    if (ix == fcall.Params.Count - 1 && pname == "...")
-                                                        haveParams = true;
-                                                    sb.Append(pname);
-                                                }
-                                            }
-                                        }
+                                        bool haveParams = GenerateFunctionParams(fcall, sb);
                                         sb.AppendLine(")");
                                         ++indent;
                                         var logInfo = GetPrologueAndEpilogue(className, mname);
@@ -418,7 +393,30 @@ namespace Generator
                                             sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.PrologueInfo, className, mname));
                                         }
                                         if (null != logInfo.EpilogueInfo) {
-                                            sb.AppendFormatLine("{0}return (function(...) local args={{...}}; {1}; return ...; end)((function({2}) ", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname), haveParams ? "..." : string.Empty);
+                                            int rct = GetFunctionReturnCount(fdef);
+                                            if (rct > 0) {
+                                                sb.AppendFormat("{0}local ", GetIndentString(indent));
+                                                GenerateFunctionRetVars(fdef, sb, rct, "__retval_");
+                                                sb.AppendFormat(" = {0}.__real_{1}(", "this", mname);
+                                                GenerateFunctionParams(fcall, sb);
+                                                sb.AppendLine(")};");
+                                                sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
+                                                sb.AppendFormat("{0}return ", GetIndentString(indent));
+                                                GenerateFunctionRetVars(fdef, sb, rct, "__retval_");
+                                                sb.AppendLine(";");
+                                            }
+                                            else {
+                                                sb.AppendFormat("{0}{1}.__real_{2}(", GetIndentString(indent), "this", mname);
+                                                GenerateFunctionParams(fcall, sb);
+                                                sb.AppendLine(")};");
+                                                sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
+                                            }
+                                            --indent;
+                                            sb.AppendFormatLine("{0}end,", GetIndentString(indent));
+                                            sb.AppendFormat("{0}__real_{1} = {2}(", GetIndentString(indent), mname, fcall.GetId());
+                                            GenerateFunctionParams(fcall, sb);
+                                            sb.AppendLine(")");
+                                            ++indent;
                                         }
                                         foreach (var comp in fdef.Params) {
                                             GenerateSyntaxComponent(comp, sb, indent, true);
@@ -429,9 +427,6 @@ namespace Generator
                                             else {
                                                 sb.AppendLine();
                                             }
-                                        }
-                                        if (null != logInfo.EpilogueInfo) {
-                                            sb.AppendFormatLine("{0}end)({1}));", GetIndentString(indent), haveParams ? "..." : string.Empty);
                                         }
                                         --indent;
                                         sb.AppendFormatLine("{0}end,", GetIndentString(indent));
@@ -748,6 +743,41 @@ namespace Generator
                 File.WriteAllText(outputFile, newSb.ToString());
             }
         }
+        private static bool GenerateFunctionParams(Dsl.FunctionData fcall, StringBuilder sb)
+        {
+            bool haveParams = false;
+            string prestr = string.Empty;
+            for (int ix = 0; ix < fcall.Params.Count; ++ix) {
+                var param = fcall.Params[ix];
+                sb.Append(prestr);
+                prestr = ", ";
+                var pv = param as Dsl.ValueData;
+                if (null != pv) {
+                    var pname = pv.GetId();
+                    if (ix == fcall.Params.Count - 1 && pname == "...")
+                        haveParams = true;
+                    sb.Append(pname);
+                }
+                else {
+                    var pc = param as Dsl.FunctionData;
+                    if (null != pc) {
+                        var pname = pc.GetParamId(0);
+                        if (ix == fcall.Params.Count - 1 && pname == "...")
+                            haveParams = true;
+                        sb.Append(pname);
+                    }
+                }
+            }
+            return haveParams;
+        }
+        private static void GenerateFunctionRetVars(Dsl.FunctionData fdef, StringBuilder sb, int ct, string prefix)
+        {
+            for(int i = 0; i < ct; ++i) {
+                if (i > 0)
+                    sb.Append(", ");
+                sb.AppendFormat("{0}{1}", prefix, i + 1);
+            }
+        }
         private static void GenerateFieldValueComponent(Dsl.ISyntaxComponent comp, StringBuilder sb, int indent, bool firstLineUseIndent)
         {
             s_CurSyntax = comp;
@@ -969,6 +999,117 @@ namespace Generator
                         if (id != "=")
                             sb.Append(")");
                     }
+                }
+            }
+            else if (id == "condexp") {
+                var p1 = data.GetParam(0);
+                var p2 = data.GetParamId(1);
+                var p3 = data.GetParam(2);
+                var p3Func = p3 as Dsl.FunctionData;
+                var p4 = data.GetParamId(3);
+                var p5 = data.GetParam(4);
+                var p5Func = p5 as Dsl.FunctionData;
+                if (p2 == "false" && null != p3Func && !ExistEmbedFunctionObject(p3Func)) {
+                    var func = p3Func.GetParam(0) as Dsl.FunctionData;
+                    if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
+                        func = func.GetParam(0) as Dsl.FunctionData;
+                    }
+                    if (null != func && func.GetId() == "return") {
+                        p2 = "true";
+                        p3 = func.GetParam(0);
+                    }
+                }
+                if (p4 == "false" && null != p5Func && !ExistEmbedFunctionObject(p5Func)) {
+                    var func = p5Func.GetParam(0) as Dsl.FunctionData;
+                    if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
+                        func = func.GetParam(0) as Dsl.FunctionData;
+                    }
+                    if (null != func && func.GetId() == "return") {
+                        p4 = "true";
+                        p5 = func.GetParam(0);
+                    }
+                }
+                if (p2 == "true" && p4 == "true") {
+                    sb.Append("((");
+                    GenerateSyntaxComponent(p1, sb, indent, false);
+                    sb.Append(") and (");
+                    GenerateSyntaxComponent(p3, sb, indent, false);
+                    sb.Append(") or (");
+                    GenerateSyntaxComponent(p5, sb, indent, false);
+                    sb.Append("))");
+                }
+                else {
+                    sb.Append("condexp(");
+                    GenerateSyntaxComponent(p1, sb, indent, false);
+                    sb.Append(", ");
+                    sb.Append(p2);
+                    sb.Append(", ");
+                    GenerateSyntaxComponent(p3, sb, indent, false);
+                    sb.Append(", ");
+                    sb.Append(p4);
+                    sb.Append(", ");
+                    GenerateSyntaxComponent(p5, sb, indent, false);
+                    sb.Append(")");
+                }
+            }
+            else if (id == "condaccess") {
+                var p1 = data.GetParam(0);
+                var p2 = data.GetParam(1);
+                var p2Func = p2 as Dsl.FunctionData;
+                var isSimple = false;
+                if (null != p2Func && !ExistEmbedFunctionObject(p2Func)) {
+                    var func = p2Func.GetParam(0) as Dsl.FunctionData;
+                    if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
+                        func = func.GetParam(0) as Dsl.FunctionData;
+                    }
+                    if (null != func && func.GetId() == "return") {
+                        isSimple = true;
+                        p2 = func.GetParam(0);
+                    }
+                }
+                if (isSimple) {
+                    sb.Append("((");
+                    GenerateSyntaxComponent(p1, sb, indent, false);
+                    sb.Append(") and (");
+                    GenerateSyntaxComponent(p2, sb, indent, false);
+                    sb.Append(") or nil)");
+                }
+                else {
+                    sb.Append("condaccess(");
+                    GenerateSyntaxComponent(p1, sb, indent, false);
+                    sb.Append(", ");
+                    sb.Append(p2);
+                    sb.Append(")");
+                }
+            }
+            else if(id== "nullcoalescing") {
+                var p1 = data.GetParam(0);
+                var p2 = data.GetParamId(1);
+                var p3 = data.GetParam(2);
+                var p3Func = p3 as Dsl.FunctionData;
+                if (p2 == "false" && null != p3Func && !ExistEmbedFunctionObject(p3Func)) {
+                    var func = p3Func.GetParam(0) as Dsl.FunctionData;
+                    if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
+                        func = func.GetParam(0) as Dsl.FunctionData;
+                    }
+                    if (null != func && func.GetId() == "return") {
+                        p2 = "true";
+                        p3 = func.GetParam(0);
+                    }
+                }
+                if (p2 == "true") {
+                    sb.Append("((");
+                    GenerateSyntaxComponent(p1, sb, indent, false);
+                    sb.Append(") or (");
+                    GenerateSyntaxComponent(p3, sb, indent, false);
+                    sb.Append("))");
+                }
+                else {
+                    sb.Append("nullcoalescing(");
+                    GenerateSyntaxComponent(p1, sb, indent, false);
+                    sb.Append(", ");
+                    GenerateSyntaxComponent(p3, sb, indent, false);
+                    sb.Append(")");
                 }
             }
             else if (id == "comment") {
@@ -2490,6 +2631,107 @@ namespace Generator
                 }
                 else {
                     sb.AppendLine();
+                }
+            }
+        }
+        private static bool ExistEmbedFunctionObject(Dsl.FunctionData data)
+        {
+            if (!data.HaveId() && !data.IsHighOrder && data.GetParamNum() == 1) {
+                var func = data.GetParam(0) as Dsl.FunctionData;
+                if (null != func) {
+                    return ExistEmbedFunctionObject(func);
+                }
+                else {
+                    return false;
+                }
+            }
+            if (data.GetId() == "function" && data.IsHighOrder) {
+                var call = data.LowerOrderFunction;
+                if (call.GetParamNum() == 0) {
+                    foreach (var p in data.Params) {
+                        if (ExistFunctionObject(p))
+                            return true;
+                    }
+                }
+            }
+            return false;
+        }
+        private static bool ExistFunctionObject(Dsl.ISyntaxComponent data)
+        {
+            var funcData = data as Dsl.FunctionData;
+            if (null != funcData) {
+                return ExistFunctionObject(funcData);
+            }
+            else {
+                var stData = data as Dsl.StatementData;
+                if (null != stData) {
+                    return ExistFunctionObject(stData);
+                }
+                else {
+                    return false;
+                }
+            }
+        }
+        private static bool ExistFunctionObject(Dsl.FunctionData data)
+        {
+            if (!data.IsHighOrder && data.GetId() == "function")
+                return true;
+            else {
+                foreach(var p in data.Params) {
+                    if(ExistFunctionObject(p))
+                        return true;
+                }
+                if (data.IsHighOrder) {
+                    if (ExistFunctionObject(data.LowerOrderFunction))
+                        return true;
+                }
+                return false;
+            }
+        }
+        private static bool ExistFunctionObject(Dsl.StatementData data)
+        {
+            foreach(var func in data.Functions) {
+                if (ExistFunctionObject(func))
+                    return true;
+            }
+            return false;
+        }
+        private static int GetFunctionReturnCount(Dsl.FunctionData data)
+        {
+            if (data.HaveStatement()) {
+                foreach (var p in data.Params) {
+                    int ct = GetFunctionReturnCount(p);
+                    if (ct >= 0)
+                        return ct;
+                }
+            }
+            else if(!data.IsHighOrder && data.HaveParam() && data.GetId() == "return") {
+                return data.GetParamNum();
+            }
+            return -1;
+        }
+        private static int GetFunctionReturnCount(Dsl.StatementData data)
+        {
+            foreach (var func in data.Functions) {
+                int ct = GetFunctionReturnCount(func);
+                if (ct >= 0)
+                    return ct;
+            }
+            return -1;
+        }
+        private static int GetFunctionReturnCount(Dsl.ISyntaxComponent data)
+        {
+            var funcData = data as Dsl.FunctionData;
+            if (null != funcData) {
+                return GetFunctionReturnCount(funcData);
+            }
+            else {
+                var stData = data as Dsl.StatementData;
+                if (null != stData) {
+                    return GetFunctionReturnCount(stData);
+                }
+                else {
+                    return -1;
                 }
             }
         }

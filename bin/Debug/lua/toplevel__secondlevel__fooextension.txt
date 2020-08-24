@@ -21,24 +21,24 @@ TopLevel.SecondLevel.FooExtension = {
 		ff = newobject(TopLevel.SecondLevel.Foo, nil, nil, "ctor", nil);
 		local f1;
 		f1 = (function()
-				local __delegation_obj_614_28_614_34;
-				__delegation_obj_614_28_614_34 = f;
-				local __delegation_614_28_614_34; __delegation_614_28_614_34 = (function()
-					__delegation_obj_614_28_614_34:Test();
+				local __delegation_obj_616_28_616_34;
+				__delegation_obj_616_28_616_34 = f;
+				local __delegation_616_28_616_34; __delegation_616_28_616_34 = (function()
+					__delegation_obj_616_28_616_34:Test();
 				end);
-				setdelegationkey(__delegation_614_28_614_34, "TopLevel.SecondLevel.Foo:Test", __delegation_obj_614_28_614_34, __delegation_obj_614_28_614_34.Test);
-				return __delegation_614_28_614_34;
+				setdelegationkey(__delegation_616_28_616_34, "TopLevel.SecondLevel.Foo:Test", __delegation_obj_616_28_616_34, __delegation_obj_616_28_616_34.Test);
+				return __delegation_616_28_616_34;
 			end)();
 		f1();
 		local f2;
 		f2 = (function()
-				local __delegation_obj_617_28_617_35;
-				__delegation_obj_617_28_617_35 = f;
-				local __delegation_617_28_617_35; __delegation_617_28_617_35 = (function()
-					__delegation_obj_617_28_617_35:Test3();
+				local __delegation_obj_619_28_619_35;
+				__delegation_obj_619_28_619_35 = f;
+				local __delegation_619_28_619_35; __delegation_619_28_619_35 = (function()
+					__delegation_obj_619_28_619_35:Test3();
 				end);
-				setdelegationkey(__delegation_617_28_617_35, "TopLevel.SecondLevel.FooExtension:Test3", __delegation_obj_617_28_617_35, __delegation_obj_617_28_617_35.Test3);
-				return __delegation_617_28_617_35;
+				setdelegationkey(__delegation_619_28_619_35, "TopLevel.SecondLevel.FooExtension:Test3", __delegation_obj_619_28_619_35, __delegation_obj_619_28_619_35.Test3);
+				return __delegation_619_28_619_35;
 			end)();
 		f2();
 		TopLevel.SecondLevel.FooExtension.Test3__TopLevel_SecondLevel_Foo(f);
@@ -59,21 +59,15 @@ TopLevel.SecondLevel.FooExtension = {
 		local dict;
 		dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, {[1] = 2, [3] = 4}, "System.Collections.Generic.Dictionary_TKey_TValue:ctor");
 		local v1;
-		v1 = condaccess(dict, (function()
-				return dict[1];
-			end));
+		v1 = ((dict) and (dict[1]) or nil);
 		local list;
 		list = nil;
 		local l;
-		l = condaccess(list, (function()
-				return list.Count;
-			end));
+		l = ((list) and (list.Count) or nil);
 		local arr2;
 		arr2 = wraparray({1, 2, 3, 4}, nil, System.Int32, TypeKind.Struct);
 		local v3;
-		v3 = condaccess(arr2, (function()
-				return arr2[3];
-			end));
+		v3 = ((arr2) and (arr2[3]) or nil);
 		local a;
 		a = 1;
 		local b;
@@ -81,15 +75,15 @@ TopLevel.SecondLevel.FooExtension = {
 		local c;
 		c = 3;
 		a = (function() 
-				local __assign_643_18_643_23;
+				local __assign_645_18_645_23;
 				b = (function()
-						local __unary_643_20_643_23;
-						__unary_643_20_643_23 = c;
+						local __unary_645_20_645_23;
+						__unary_645_20_645_23 = c;
 						c = (c + 1);
-						return __unary_643_20_643_23;
+						return __unary_645_20_645_23;
 					end)();
-				__assign_643_18_643_23 = b;
-				return __assign_643_18_643_23;
+				__assign_645_18_645_23 = b;
+				return __assign_645_18_645_23;
 			end)();
 	end,
 	cctor = function()

@@ -1,3 +1,6 @@
 ============<<<Semantic Error:test>>>============
-test.cs(86,13): error CS0128: A local variable or function named 'a' is already defined in this scope
-test.cs(87,39): error CS1503: Argument 1: cannot convert from 'UnityEngine.Vector3' to 'System.Array'
+test.cs(79,14): error CS0128: A local variable or function named 'v' is already defined in this scope
+test.cs(88,13): error CS0128: A local variable or function named 'a' is already defined in this scope
+test.cs(89,39): error CS1503: Argument 1: cannot convert from 'UnityEngine.Vector3' to 'System.Array'
+test.cs(102,104): error CS1931: The range variable 'v2' conflicts with a previous declaration of 'v2'
+test.cs(103,38): error CS1931: The range variable 'v2' conflicts with a previous declaration of 'v2'

@@ -204,18 +204,9 @@ end
 local t4 = os.time()
 print("functional:",os.difftime(t4,t3))
 
-local a=0
-local b=123
-local g_TaggedFuncs = {}
-function __setfunc(key, func)    
-    if not g_TaggedFuncs[key] then
-        g_TaggedFuncs[key] = func
-    end
-    return func
+function testmr()
+    return 1,2,3,4
 end
-function __getfunc(key)
-    return g_TaggedFuncs[key]
-end
-for i=1,3 do
-    __setfunc("id", __getfunc("id") or (function() print(b);a=b;return a; end))()
-end
+local mr = {testmr()}
+table.remove(mr, #mr)
+print(unpack(mr))

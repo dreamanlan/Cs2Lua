@@ -28,6 +28,10 @@ TestUnity = {
 		local instance_methods = {
 			Test = function(this, ...)
 				local args = wrapparams({...}, System.Object, TypeKind.Class);
+				local v;
+				v = 134.00100000;
+				local v2;
+				v2 = (v * 0.00100000);
 				local a;
 				a = UnityEngine.Vector3.zero;
 				local b;
@@ -55,7 +59,7 @@ TestUnity = {
 				local v;
 				v = true;
 				local s;
-				s = invokeforbasicvalue(v, false, System.Boolean, "ToString", "System.Boolean:ToString");
+				s = invokeforbasicvalue(v, false, System.Single, "ToString", "System.Single:ToString");
 				local i;
 				i = 123;
 				local s2;
@@ -78,13 +82,13 @@ TestUnity = {
 				f(123);
 				local isLoadingHeadIcon;
 				isLoadingHeadIcon = false;
-				local __using_92_8_95_9 = newobject(CUsingHelper, nil, nil, "ctor", nil, (function()
+				local __using_94_8_97_9 = newobject(CUsingHelper, nil, nil, "ctor", nil, (function()
 						isLoadingHeadIcon = true;
 					end), (function()
 						isLoadingHeadIcon = false;
 					end));
 				LuaConsole.Print("test");
-				__using_92_8_95_9:Dispose();
+				__using_94_8_97_9:Dispose();
 				local v1s;
 				v1s = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, {[1] = 2, [3] = 4, [5] = 6}, "System.Collections.Generic.Dictionary_TKey_TValue:ctor");
 				local v2s;

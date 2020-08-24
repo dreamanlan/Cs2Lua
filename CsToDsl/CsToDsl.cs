@@ -1364,8 +1364,10 @@ namespace RoslynTool.CsToDsl
                 char c2 = sv.Length > 1 ? sv[1] : '\0';
                 char c3 = sv.Length > 2 ? sv[2] : '\0';
                 if (c1 == '-' && c2 == '.' && char.IsNumber(c3) || (c1 == '-' || c1 == '.') && char.IsNumber(c2) || char.IsNumber(c1)) {
-                    if (val is float || val is double)
-                        sb.AppendFormat("{0:f}", val);
+                    if (val is float)
+                        sb.AppendFormat("{0:f8}", val);
+                    else if(val is double)
+                        sb.AppendFormat("{0:f16}", val);
                     else
                         sb.Append(val);
                 }
@@ -1376,8 +1378,10 @@ namespace RoslynTool.CsToDsl
                         sb.AppendFormat("wrapconst({0}, \"{1}\")", ClassInfo.GetFullName(fieldSym.Type), fieldSym.Name);
                     }
                     else {
-                        if (val is float || val is double)
-                            sb.AppendFormat("{0:f}", val);
+                        if (val is float)
+                            sb.AppendFormat("{0:f8}", val);
+                        else if (val is double)
+                            sb.AppendFormat("{0:f16}", val);
                         else
                             sb.Append(val);
                     }

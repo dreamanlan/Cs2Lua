@@ -127,41 +127,41 @@ TopLevel.SecondLevel.Foo = {
 				local vv;
 				vv,v = this:TestLocal(__cs2lua_out);
 				if ((function() 
-					local __invoke_497_19_497_35;
-					__invoke_497_19_497_35,v = this:TestLocal(__cs2lua_out);
-					return __invoke_497_19_497_35;
+					local __invoke_499_19_499_35;
+					__invoke_499_19_499_35,v = this:TestLocal(__cs2lua_out);
+					return __invoke_499_19_499_35;
 				end)() < 1) then 
 				end;
-				local __invoke_500_19_500_36;
-				__invoke_500_19_500_36,v = this:TestLocal2(__cs2lua_out);
-				if __invoke_500_19_500_36 then
+				local __invoke_502_19_502_36;
+				__invoke_502_19_502_36,v = this:TestLocal2(__cs2lua_out);
+				if __invoke_502_19_502_36 then
 
 				end;
-				local __invoke_503_21_503_38;
-				__invoke_503_21_503_38,v = this:TestLocal2(__cs2lua_out);
-				if (not __invoke_503_21_503_38) then
+				local __invoke_505_21_505_38;
+				__invoke_505_21_505_38,v = this:TestLocal2(__cs2lua_out);
+				if (not __invoke_505_21_505_38) then
 
 				else
-					local __invoke_506_24_506_41;
-					__invoke_506_24_506_41,v = this:TestLocal2(__cs2lua_out);
-					if __invoke_506_24_506_41 then
+					local __invoke_508_24_508_41;
+					__invoke_508_24_508_41,v = this:TestLocal2(__cs2lua_out);
+					if __invoke_508_24_508_41 then
 
 					else
 					end;
 				end;
 				while true do
-					local __invoke_512_22_512_39;
-					__invoke_512_22_512_39,v = this:TestLocal2(__cs2lua_out);
-					if not __invoke_512_22_512_39 then
+					local __invoke_514_22_514_39;
+					__invoke_514_22_514_39,v = this:TestLocal2(__cs2lua_out);
+					if not __invoke_514_22_514_39 then
 						break;
 					end;
 
 				end;
 				repeat
 
-					local __invoke_517_26_517_43;
-					__invoke_517_26_517_43,v = this:TestLocal2(__cs2lua_out);
-				until not (not __invoke_517_26_517_43) ;
+					local __invoke_519_26_519_43;
+					__invoke_519_26_519_43,v = this:TestLocal2(__cs2lua_out);
+				until not (not __invoke_519_26_519_43) ;
 				local ts;
 				ts = newobject(TopLevel.TestStruct, nil, nil, "ctor", nil);
 				ts = wrapstruct(ts, TopLevel.TestStruct);
@@ -224,10 +224,10 @@ TopLevel.SecondLevel.Foo = {
 			TestSwitch = function(this)
 				local i;
 				i = 10;
-				local __switch_570_16_578_17 = i;
-				if (((__switch_570_16_578_17 == 1)) or ((__switch_570_16_578_17 == 3))) then 
+				local __switch_572_16_580_17 = i;
+				if (((__switch_572_16_580_17 == 1)) or ((__switch_572_16_580_17 == 3))) then 
 					return ;
-				elseif (__switch_570_16_578_17 == 2) then 
+				elseif (__switch_572_16_580_17 == 2) then 
 					return ;
 				else
 					return ;

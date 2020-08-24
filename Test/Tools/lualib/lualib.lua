@@ -2004,15 +2004,15 @@ function rshift(v, n)
     end
 end
 
-function condexp(cv, tfIsConst, tf, ffIsConst, ff)
+function condexp(cv, tfIsSimple, tf, ffIsSimple, ff)
     if cv then
-        if tfIsConst then
+        if tfIsSimple then
             return tf
         else
             return tf()
         end
     else
-        if ffIsConst then
+        if ffIsSimple then
             return ff
         else
             return ff()
@@ -2021,18 +2021,18 @@ function condexp(cv, tfIsConst, tf, ffIsConst, ff)
 end
 
 function condaccess(v, func)
-    return v and func()
+    if v then
+        return func()
+    else
+        return nil
+    end
 end
 
-function nullcoalescing(v, isConst, func)
+function nullcoalescing(v, func)
     if v then
         return v
     else
-        if isConst then
-            return func
-        else
-            return func()
-        end
+        return func()
     end
 end
 

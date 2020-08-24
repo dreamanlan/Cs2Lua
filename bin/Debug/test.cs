@@ -60,6 +60,8 @@ class TestUnity : MonoBehaviour
 {
     void Test(params object[] args)
     {
+        float v = 134.001f;
+        float v2 = v * 0.001f;
         Vector3 a = Vector3.zero;
         var b = a;
         b.x = 100;
