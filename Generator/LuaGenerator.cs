@@ -2025,15 +2025,6 @@ namespace Generator
                     sb.AppendFormat("wraparray({{}}, nil, {0}, {1})", typeStr, typeKind);
                 }
             }
-            else if (id == "foreach") {
-                sb.Append("for ");
-                var param1 = data.GetParamId(0);
-                sb.Append(param1);
-                sb.Append(" in ");
-                var param2 = data.GetParam(1);
-                GenerateSyntaxComponent(param2, sb, indent, false);
-                sb.Append(" do");
-            }
             else if (id == "for") {
                 sb.Append("for ");
                 var param0 = data.GetParamId(0);
@@ -2189,6 +2180,27 @@ namespace Generator
                     --indent;
                 }
                 sb.AppendFormat("{0}end)()", GetIndentString(indent));
+            }
+            else if (id == "foreach") {
+                var param0 = fcall.GetParamId(0);
+                var param1 = fcall.GetParamId(1);
+                var param2 = fcall.GetParam(2);
+                sb.AppendFormat("local {0} = newiterator(", param0);
+                GenerateSyntaxComponent(param2, sb, indent, false);
+                sb.AppendLine(");");
+                sb.AppendFormat("{0}for ", GetIndentString(indent));
+                sb.Append(param1);
+                sb.Append(" in getiterator(");
+                sb.Append(param0);
+                sb.Append(") do");
+                if (data.HaveStatement()) {
+                    sb.AppendLine();
+                    ++indent;
+                    GenerateStatements(data, sb, indent);
+                    --indent;
+                }
+                sb.AppendFormatLine("{0}end;", GetIndentString(indent));
+                sb.AppendFormat("{0}recycleiterator({1})", GetIndentString(indent), param0);
             }
             else if (id == "while") {
                 int num = fcall.GetParamNum();

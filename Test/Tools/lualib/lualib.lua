@@ -1526,7 +1526,7 @@ __mt_index_of_array = function(t, k)
     if k == "Length" or k == "Count" then
         return __get_array_count(t)
     else
-		return __mt_index_of_array_table[k]
+		    return __mt_index_of_array_table[k]
     end
 end
 
@@ -1724,12 +1724,16 @@ function GetArrayEnumerator(tb)
     local function __get_Current(obj) return obj.current end
     return setmetatable(
         {
+            Reset = function(this)
+                this.index = 0
+                this.current = nil
+            end,
             MoveNext = function(this)
-                local tb = this.object
-                local num = __get_array_count(tb)
+                local ltb = this.object
+                local num = __get_array_count(ltb)
                 if this.index < num then
                     this.index = this.index + 1
-                    this.current = rawget(tb, this.index)
+                    this.current = rawget(ltb, this.index)
                     return true
                 else
                     return false
@@ -1756,10 +1760,14 @@ function GetDictEnumerator(tb)
     local function __get_Current(obj) return obj.current end
     return setmetatable(
         {
+            Reset = function(this)
+                this.key = nil
+                this.current = nil
+            end,
             MoveNext = function(this)
-                local tb = this.object
+                local ltb = this.object
                 local v = nil 
-                local data = __get_table_data(tb)     
+                local data = __get_table_data(ltb)     
                 this.key, v = next(data, this.key)
                 this.current = {
                     Key = __wrap_if_string(this.key),
@@ -1792,10 +1800,13 @@ function GetHashsetEnumerator(tb)
     local function __get_Current(obj) return __wrap_if_string(obj.Key) end
     return setmetatable(
         {
+            Reset = function(this)
+                this.key = nil
+            end,
             MoveNext = function(this)
-                local tb = this.object
+                local ltb = this.object
                 local v = nil 
-                local data = __get_table_data(tb)     
+                local data = __get_table_data(ltb)     
                 this.key, v = next(data, this.key)
                 if this.key then
                     return true
@@ -1819,19 +1830,51 @@ function GetHashsetEnumerator(tb)
     )
 end
 
-function getiterator(exp)
+function newiterator(exp)
     local meta = getmetatable(exp)
     if meta and rawget(meta, "__cs2lua_defined") then
-        local enumer = exp:GetEnumerator()
-        return function()
-            if enumer:MoveNext() then
-                return enumer.Current
-            else
-                return nil
+        if meta.cachedIters and #(meta.cachedIters)>0 then
+            local iterInfo = table.remove(meta.cachedIters, 1)
+            iterInfo[2]:Reset()
+            return iterInfo
+        else
+            local enumer = exp:GetEnumerator()
+            local f = function()
+                if enumer:MoveNext() then
+                    return enumer.Current
+                else
+                    return nil
+                end
             end
+            return {f, enumer, exp}
         end
     else
         return Slua.iter(exp)
+    end
+end
+
+function getiterator(iterInfo)
+    if type(iterInfo)=="table" then
+        return iterInfo[1]
+    else
+        return iterInfo    
+    end 
+end
+
+function recycleiterator(iterInfo)   
+    if type(iterInfo)~="table" then
+        return
+    end 
+    local exp = iterInfo[3]
+    if exp then
+        local meta = getmetatable(exp)
+        if meta then
+            if meta.cachedIters then
+                table.insert(meta.cachedIters, iterInfo)
+            else
+                meta.cachedIters = {iterInfo}
+            end
+        end
     end
 end
 

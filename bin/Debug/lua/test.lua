@@ -210,3 +210,10 @@ end
 local mr = {testmr()}
 table.remove(mr, #mr)
 print(unpack(mr))
+
+local i
+for i in pairs({1,2,3,4}) do
+    print(i)
+end
+print("--")
+print(i)

@@ -327,14 +327,16 @@ namespace RoslynTool.CsToDsl
             ci.Init(node.Statement);
             m_ContinueInfoStack.Push(ci);
 
-            CodeBuilder.AppendFormat("{0}foreach({1}, getiterator(", GetIndentString(), node.Identifier.Text);
+            var srcPos = GetSourcePosForVar(node);
+            string varName = string.Format("__foreach_{0}", srcPos);
+            CodeBuilder.AppendFormat("{0}foreach({1}, {2}, ", GetIndentString(), varName, node.Identifier.Text);
             IConversionExpression opd = null;
             var oper = m_Model.GetOperationEx(node) as IForEachLoopStatement;
             if (null != oper) {
                 opd = oper.Collection as IConversionExpression;
             }
             OutputExpressionSyntax(node.Expression, opd);
-            CodeBuilder.AppendLine(")){");
+            CodeBuilder.AppendLine("){");
             if (ci.HaveContinue) {
                 if (ci.HaveBreak) {
                     CodeBuilder.AppendFormat("{0}local{{{1} = false;}};", GetIndentString(), ci.BreakFlagVarName);
