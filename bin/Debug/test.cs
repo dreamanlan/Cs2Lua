@@ -41,6 +41,7 @@ class CUsingHelper : IDisposable
     [System.CLSCompliant(true)]
 	public static byte[] ReadZip(byte[] bytes)
 	{
+        int[,] abc = new int[12, 13];
         int v = 0;
         var dict = new Dictionary<int, int>();
         if (++v > 0) {

@@ -8,6 +8,8 @@ CUsingHelper = {
 		return nil;
 	end,
 	ReadZip = function(bytes)
+		local abc;
+		abc = newarraydim2(System.Int32, TypeKind.Struct, 0, 12, 13);
 		local v;
 		v = 0;
 		local dict;
@@ -18,14 +20,14 @@ CUsingHelper = {
 
 		else
 			--
-			local __invoke_48_16_48_42;
-			__invoke_48_16_48_42,v = dict:TryGetValue(1, __cs2lua_out);
-			if (__invoke_48_16_48_42 and (v == 0)) then
+			local __invoke_49_16_49_42;
+			__invoke_49_16_49_42,v = dict:TryGetValue(1, __cs2lua_out);
+			if (__invoke_49_16_49_42 and (v == 0)) then
 
 			else
 				--
-				local __unary_50_21_50_24 = v; v = (v + 1);
-				if (__unary_50_21_50_24 > 0) then
+				local __unary_51_21_51_24 = v; v = (v + 1);
+				if (__unary_51_21_51_24 > 0) then
 
 				else
 					--
