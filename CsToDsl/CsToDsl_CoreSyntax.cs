@@ -807,7 +807,7 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.AppendFormat(" {0} ", token.Text);
                             OutputConversionInvokePrefix(iop);
                             if (ct > 0) {
-                                CodeBuilder.AppendFormat("execclosure({0}, true){{ multiassign({1}", localName, localName);
+                                CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign({1}", localName, localName);
                             }
                         }
                         else {
@@ -1159,12 +1159,12 @@ namespace RoslynTool.CsToDsl
                 else {
                     if (!toplevel) {
                         string localName = string.Format("__ret_{0}", GetSourcePosForVar(assign));
-                        CodeBuilder.AppendFormat("execclosure({0}, true){{ ", localName);
+                        CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ ", localName);
                         OutputExpressionSyntax(leftElementAccess.Expression);
                         CodeBuilder.Append("[");
                         VisitBracketedArgumentList(leftElementAccess.ArgumentList);
                         CodeBuilder.Append("] = ");
-                        CodeBuilder.AppendFormat("execclosure({0}, false){{ {1} = ", localName, localName);
+                        CodeBuilder.AppendFormat("execclosure(true, {0}, false){{ {1} = ", localName, localName);
                         OutputExpressionSyntax(assign.Right, opd);
                         CodeBuilder.Append("; };");
                         CodeBuilder.Append("; }");
@@ -1257,7 +1257,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append("[");
                         OutputExpressionSyntax(leftCondAccess.WhenNotNull);
                         CodeBuilder.Append("] = ");
-                        CodeBuilder.AppendFormat("execclosure({0}, false){{ {1} = ", localName, localName);
+                        CodeBuilder.AppendFormat("execclosure(true, {0}, false){{ {1} = ", localName, localName);
                         OutputExpressionSyntax(assign.Right, opd);
                         CodeBuilder.Append("; };");
                         CodeBuilder.Append(" return(");
@@ -1275,7 +1275,7 @@ namespace RoslynTool.CsToDsl
                 OutputExpressionSyntax(leftCondAccess.Expression);
                 OutputExpressionSyntax(leftCondAccess.WhenNotNull);
                 CodeBuilder.Append(" = ");
-                CodeBuilder.AppendFormat("execclosure({0}, false){{ {1} = ", localName, localName);
+                CodeBuilder.AppendFormat("execclosure(true, {0}, false){{ {1} = ", localName, localName);
                 OutputExpressionSyntax(assign.Right, opd);
                 CodeBuilder.Append("; };");
                 CodeBuilder.Append(" return(");
@@ -1350,7 +1350,7 @@ namespace RoslynTool.CsToDsl
                             OutputConversionInvokePrefix(iop);
                         }
                         if (ct > 0) {
-                            CodeBuilder.AppendFormat("execclosure({0}, true){{ multiassign({1}", localName, localName);
+                            CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign({1}", localName, localName);
                             outputEqualOp = true;
                         }
                     }
@@ -1362,7 +1362,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(" = ");
                         OutputConversionInvokePrefix(iop);
                         if (ct > 0) {
-                            CodeBuilder.AppendFormat("execclosure({0}, true){{ multiassign({1}", localName, localName);
+                            CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign({1}", localName, localName);
                             outputEqualOp = true;
                         }
                     }
@@ -1426,7 +1426,7 @@ namespace RoslynTool.CsToDsl
                             OutputConversionInvokePrefix(iop);
                         }
                         if (ct > 0) {
-                            CodeBuilder.AppendFormat("execclosure({0}, true){{ multiassign({1}", localName, localName);
+                            CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign({1}", localName, localName);
                             outputEqualOp = true;
                         }
                     }
@@ -1438,7 +1438,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(" = ");
                         OutputConversionInvokePrefix(iop);
                         if (ct > 0) {
-                            CodeBuilder.AppendFormat("execclosure({0}, true){{ multiassign({1}", localName, localName);
+                            CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign({1}", localName, localName);
                             outputEqualOp = true;
                         }
                     }
@@ -1590,7 +1590,7 @@ namespace RoslynTool.CsToDsl
 
                     if (ii.ReturnArgs.Count > 0) {
                         if (!toplevel) {
-                            CodeBuilder.AppendFormat("execclosure({0}, true){{ multiassign({1}, ", localName, localName);
+                            CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign({1}, ", localName, localName);
                         }
                         else if (!sym.ReturnsVoid) {
                             CodeBuilder.AppendFormat("local({0}); multiassign({1}, ", localName, localName);
@@ -1614,7 +1614,7 @@ namespace RoslynTool.CsToDsl
                 else {
                     if (ii.ReturnArgs.Count > 0) {
                         if (!toplevel) {
-                            CodeBuilder.AppendFormat("execclosure({0}, true){{ multiassign({1}, ", localName, localName);
+                            CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign({1}, ", localName, localName);
                         }
                         else if (!sym.ReturnsVoid) {
                             CodeBuilder.AppendFormat("local({0}); multiassign({1}, ", localName, localName);

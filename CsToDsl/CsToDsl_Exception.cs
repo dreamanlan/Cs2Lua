@@ -111,7 +111,7 @@ namespace RoslynTool.CsToDsl
             MethodInfo mi = m_MethodInfoStack.Peek();
             mi.TryCatchUsingOrLoopSwitchStack.Push(true);
 
-            CodeBuilder.AppendFormat("{0}(function(", GetIndentString());
+            CodeBuilder.AppendFormat("{0}function(", GetIndentString());
             if (null != node.Declaration) {
                 CodeBuilder.Append(", ");
                 CodeBuilder.Append(node.Declaration.Identifier.Text);
@@ -136,7 +136,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendLine();
             }
             --m_Indent;
-            CodeBuilder.AppendFormat("{0}}})", GetIndentString());
+            CodeBuilder.AppendFormat("{0}}}", GetIndentString());
             CodeBuilder.AppendLine();
 
             mi.TryCatchUsingOrLoopSwitchStack.Pop();

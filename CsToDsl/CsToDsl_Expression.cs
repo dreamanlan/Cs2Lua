@@ -213,33 +213,28 @@ namespace RoslynTool.CsToDsl
             }
             else if (null != assignOper && assignOper.UsesOperatorMethod) {
                 //++/--的重载调这里
-                CodeBuilder.Append("(function(){ ");
+                CodeBuilder.Append("prefixoperator(true, ");
                 OutputExpressionSyntax(node.Operand, opd);
-                CodeBuilder.Append(" = ");
+                CodeBuilder.Append(", ");
                 IMethodSymbol msym = assignOper.OperatorMethod;
                 InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), node);
                 var arglist = new List<ExpressionSyntax>() { node.Operand };
                 ii.Init(msym, arglist, m_Model, opd);
                 OutputOperatorInvoke(ii, node);
-                CodeBuilder.Append("; return(");
-                OutputExpressionSyntax(node.Operand, opd);
-                CodeBuilder.Append("); })()");
+                CodeBuilder.Append(")");
             }
             else {
                 string op = node.OperatorToken.Text;
                 if (op == "++" || op == "--") {
                     op = op == "++" ? "+" : "-";
-                    CodeBuilder.Append("(function(){ ");
+                    CodeBuilder.Append("prefixoperator(true, ");
                     OutputExpressionSyntax(node.Operand, opd);
-                    CodeBuilder.Append(" = ");
+                    CodeBuilder.Append(", ");
                     CodeBuilder.Append("execbinary(");
                     CodeBuilder.AppendFormat("\"{0}\", ", op);
                     OutputExpressionSyntax(node.Operand, opd);
                     CodeBuilder.AppendFormat(", 1, {0}, {1}, {2}, {3}", CsDslTranslater.EscapeType(type, typeKind), CsDslTranslater.EscapeType(type, typeKind), typeKind, typeKind);
-                    CodeBuilder.Append(")");
-                    CodeBuilder.Append("; return(");
-                    OutputExpressionSyntax(node.Operand, opd);
-                    CodeBuilder.Append("); })()");
+                    CodeBuilder.Append("))");
                 }
                 else {
                     ProcessUnaryOperator(node, ref op);
@@ -293,55 +288,30 @@ namespace RoslynTool.CsToDsl
             }
             else if (null != assignOper && assignOper.UsesOperatorMethod) {
                 //++/--的重载调这里
-                string op = node.OperatorToken.Text;
-                if (op == "++" || op == "--") {
-                    string varName = string.Format("__unary_{0}", GetSourcePosForVar(node));
-                    CodeBuilder.AppendFormat("(function(){{ local({0}); {0} = ", varName);
-                    OutputExpressionSyntax(node.Operand, opd);
-                    CodeBuilder.Append("; ");
-                    OutputExpressionSyntax(node.Operand, opd);
-                    CodeBuilder.Append(" = ");
-                    IMethodSymbol msym = assignOper.OperatorMethod;
-                    InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), node);
-                    var arglist = new List<ExpressionSyntax>() { node.Operand };
-                    ii.Init(msym, arglist, m_Model, opd);
-                    OutputOperatorInvoke(ii, node);
-                    CodeBuilder.Append("; return(");
-                    CodeBuilder.Append(varName);
-                    CodeBuilder.Append("); })()");
-                }
-                else {
-                    CodeBuilder.Append("(function(){ ");
-                    OutputExpressionSyntax(node.Operand, opd);
-                    CodeBuilder.Append(" = ");
-                    IMethodSymbol msym = assignOper.OperatorMethod;
-                    InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), node);
-                    var arglist = new List<ExpressionSyntax>() { node.Operand };
-                    ii.Init(msym, arglist, m_Model, opd);
-                    OutputOperatorInvoke(ii, node);
-                    CodeBuilder.Append("; return(");
-                    OutputExpressionSyntax(node.Operand, opd);
-                    CodeBuilder.Append("); })()");
-                }
+                string varName = string.Format("__unary_{0}", GetSourcePosForVar(node));
+                CodeBuilder.AppendFormat("postfixoperator(true, {0}, ", varName);
+                OutputExpressionSyntax(node.Operand, opd);
+                CodeBuilder.Append(", ");
+                IMethodSymbol msym = assignOper.OperatorMethod;
+                InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), node);
+                var arglist = new List<ExpressionSyntax>() { node.Operand };
+                ii.Init(msym, arglist, m_Model, opd);
+                OutputOperatorInvoke(ii, node);
+                CodeBuilder.Append(")");
             }
             else {
                 string op = node.OperatorToken.Text;
                 if (op == "++" || op == "--") {
                     op = op == "++" ? "+" : "-";
                     string varName = string.Format("__unary_{0}", GetSourcePosForVar(node));
-                    CodeBuilder.AppendFormat("(function(){{ local({0}); {0} = ", varName);
+                    CodeBuilder.AppendFormat("postfixoperator(true, {0}, ", varName);
                     OutputExpressionSyntax(node.Operand, opd);
-                    CodeBuilder.Append("; ");
-                    OutputExpressionSyntax(node.Operand, opd);
-                    CodeBuilder.Append(" = ");
+                    CodeBuilder.Append(", ");
                     CodeBuilder.Append("execbinary(");
                     CodeBuilder.AppendFormat("\"{0}\", ", op);
                     OutputExpressionSyntax(node.Operand, opd);
                     CodeBuilder.AppendFormat(", 1, {0}, {1}, {2}, {3}", CsDslTranslater.EscapeType(type, typeKind), CsDslTranslater.EscapeType(type, typeKind), typeKind, typeKind);
-                    CodeBuilder.Append(")");
-                    CodeBuilder.Append("; return(");
-                    CodeBuilder.Append(varName);
-                    CodeBuilder.Append("); })()");
+                    CodeBuilder.Append("))");
                 }
                 else {
                     ProcessUnaryOperator(node, ref op);
@@ -483,7 +453,7 @@ namespace RoslynTool.CsToDsl
             if (needWrapFunction) {
                 assignVar = string.Format("__assign_{0}", GetSourcePosForVar(node));
                 //顶层的赋值语句已经处理，这里的赋值都需要包装成lambda函数的样式
-                CodeBuilder.AppendFormat("execclosure({0}, true){{ ", assignVar);
+                CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ ", assignVar);
             }
             VisitAssignment(ci, op, baseOp, node, string.Empty, false, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType);
             if (null != rightOper && null != rightOper.Type && rightOper.Type.TypeKind == TypeKind.Struct && !CsDslTranslater.IsImplementationOfSys(rightOper.Type, "IEnumerator")) {
@@ -1044,7 +1014,7 @@ namespace RoslynTool.CsToDsl
                     }
                     else {
                         m_ObjectInitializerStack.Push(typeSymInfo);
-                        CodeBuilder.Append("(function(newobj){ ");
+                        CodeBuilder.Append("function(newobj){ ");
                         var args = node.Expressions;
                         int ct = args.Count;
                         for (int i = 0; i < ct; ++i) {
@@ -1063,7 +1033,7 @@ namespace RoslynTool.CsToDsl
                             }
                             CodeBuilder.Append(";");
                         }
-                        CodeBuilder.Append(" })");
+                        CodeBuilder.Append(" }");
                         m_ObjectInitializerStack.Pop();
                     }
                 }
@@ -1097,8 +1067,8 @@ namespace RoslynTool.CsToDsl
                 string ctor = NameMangling(sym);
                 string localName = string.Format("__newobject_{0}", GetSourcePosForVar(node));
                 if (ii.ReturnArgs.Count > 0) {
-                    CodeBuilder.Append("(function(){ ");
-                    CodeBuilder.AppendFormat("local({0}); multiassign({1}", localName, localName);
+                    CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ ", localName);
+                    CodeBuilder.AppendFormat("multiassign({0}", localName);
                     CodeBuilder.Append(", ");
                     OutputExpressionList(ii.ReturnArgs, node);
                     CodeBuilder.Append(") = ");
@@ -1169,8 +1139,7 @@ namespace RoslynTool.CsToDsl
                 OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, node, ii.ArgConversions.ToArray());
                 CodeBuilder.Append(")");
                 if (ii.ReturnArgs.Count > 0) {
-                    CodeBuilder.Append("; ");
-                    CodeBuilder.AppendFormat("return({0}); }})()", localName);
+                    CodeBuilder.Append("; }");
                 }
             }
             else {
@@ -1248,6 +1217,7 @@ namespace RoslynTool.CsToDsl
                 var rankspec = rankspecs[0];
                 int rank = rankspec.Rank;
                 if (rank >= 1) {
+                    //这里需要生成多层循环，不方便委托到一个lua函数里处理
                     CodeBuilder.Append("(function(){");
                     int ct = rankspec.Sizes.Count;
                     for (int i = 0; i < ct; ++i) {

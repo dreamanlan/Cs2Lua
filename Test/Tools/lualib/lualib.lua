@@ -1617,22 +1617,17 @@ __mt_index_of_dictionary = function(t, k)
      if k == "Count" then
         return __get_table_count(t)
     elseif k == "Keys" then
-        local ret = wraparray {} 
-        local data = __get_table_data(t)     
-        for k, v in pairs(data) do
-            k = __wrap_if_string(k)
-            table.insert(ret, k)
-            __inc_array_count(ret)
+        local meta = getmetatable(t)
+        if not t.cachedKeyCollection then
+            t.cachedKeyCollection = NewKeyCollection(t)
         end
-        return ret
+        return t.cachedKeyCollection
     elseif k == "Values" then
-        local ret = wraparray {} 
-        local data = __get_table_data(t)     
-        for k, v in pairs(data) do
-            table.insert(ret, v.value)
-            __inc_array_count(ret)
+        local meta = getmetatable(t)
+        if not t.cachedValueCollection then
+            t.cachedValueCollection = NewValueCollection(t)
         end
-        return ret
+        return t.cachedValueCollection
     else 
         local f = __mt_index_of_dictionary_table[k]
         if f then
@@ -1661,7 +1656,7 @@ __mt_newindex_of_dictionary = function(t, k, val)
     end
 end
 
-__mt_index_of_hashset_table={
+__mt_index_of_hashset_table = {
     __exist = function(tb, fk)  --禁用继承
             return false
         end,
@@ -1698,6 +1693,7 @@ __mt_index_of_hashset_table={
             for k, v in pairs(data) do
                 k = __wrap_if_string(k)
                 table.insert(arr, k)
+                __inc_array_count(arr)
             end
         end,
     Clear = function(obj)
@@ -1718,6 +1714,71 @@ __mt_index_of_hashset = function(t, k)
     else
         return __mt_index_of_hashset_table[k]
     end
+end
+
+__mt_index_of_keycollection_table = {
+    CopyTo = function(obj, arr) 
+        local t = obj.dict
+        local data = __get_table_data(t)     
+        for k, v in pairs(data) do
+            k = __wrap_if_string(k)
+            table.insert(arr, k)
+            __inc_array_count(arr)
+        end
+    end,
+    GetEnumerator = function(obj)
+        return GetDictKeyEnumerator(obj)
+    end,
+}
+
+__mt_index_of_keycollection = function(t, k)
+    if k == "Count" then
+        return t.dict.Count
+    else
+        return __mt_index_of_keycollection_table[k]
+    end
+end
+
+function NewKeyCollection(dict)
+    return setmetatable({
+        dict = dict
+    },
+    {
+        __index = __mt_index_of_keycollection,
+        __cs2lua_defined = true,
+    })
+end
+
+__mt_index_of_valuecollection_table = {
+    CopyTo = function(obj, arr) 
+        local t = obj.dict
+        local data = __get_table_data(t)     
+        for k, v in pairs(data) do
+            table.insert(arr, v.value)
+            __inc_array_count(arr)
+        end
+    end,
+    GetEnumerator = function(obj)
+        return GetDictValueEnumerator(obj)
+    end,
+}
+
+__mt_index_of_valuecollection = function(t, k)
+    if k == "Count" then
+        return t.dict.Count
+    else
+        return __mt_index_of_valuecollection_table[k]
+    end
+end
+
+function NewValueCollection(dict)
+    return setmetatable({
+        dict = dict
+    },
+    {
+        __index = __mt_index_of_valuecollection,
+        __cs2lua_defined = true,
+    })
 end
 
 function GetArrayEnumerator(tb)
@@ -1780,6 +1841,80 @@ function GetDictEnumerator(tb)
                 end
             end,
             object = tb,
+            key = nil,
+            current = nil
+        },
+        {
+            __index = function(t, k)
+                if k == "Current" then
+                    return t.current
+                elseif k == "get_Current" then
+                    return __get_Current
+                end
+                return nil
+            end
+        }
+    )
+end
+
+function GetDictKeyEnumerator(tb)
+    local function __get_Current(obj) return obj.current end
+    return setmetatable(
+        {
+            Reset = function(this)
+                this.key = nil
+                this.current = nil
+            end,
+            MoveNext = function(this)
+                local ltb = this.object
+                local v = nil 
+                local data = __get_table_data(ltb)     
+                this.key, v = next(data, this.key)
+                this.current = __wrap_if_string(this.key)
+                if this.key then
+                    return true
+                else
+                    return false
+                end
+            end,
+            object = tb.dict,
+            key = nil,
+            current = nil
+        },
+        {
+            __index = function(t, k)
+                if k == "Current" then
+                    return t.current
+                elseif k == "get_Current" then
+                    return __get_Current
+                end
+                return nil
+            end
+        }
+    )
+end
+
+function GetDictValueEnumerator(tb)
+    local function __get_Current(obj) return obj.current end
+    return setmetatable(
+        {
+            Reset = function(this)
+                this.key = nil
+                this.current = nil
+            end,
+            MoveNext = function(this)
+                local ltb = this.object
+                local v = nil 
+                local data = __get_table_data(ltb)     
+                this.key, v = next(data, this.key)
+                this.current = v and v.Value
+                if this.key then
+                    return true
+                else
+                    return false
+                end
+            end,
+            object = tb.dict,
             key = nil,
             current = nil
         },

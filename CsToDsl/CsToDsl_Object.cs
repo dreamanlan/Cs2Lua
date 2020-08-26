@@ -913,7 +913,7 @@ namespace RoslynTool.CsToDsl
             if (null != sym && sym.Parameters.Length == 1) {
                 if (node.Body is BlockSyntax) {
                     var param = sym.Parameters[0];
-                    CodeBuilder.AppendFormat("(function({0}) {{", param.Name);
+                    CodeBuilder.AppendFormat("function({0}) {{", param.Name);
                     CodeBuilder.AppendLine();
                     ++m_Indent;
                     node.Body.Accept(this);
@@ -922,11 +922,11 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendLine();
                     }
                     --m_Indent;
-                    CodeBuilder.AppendFormat("{0}}};)", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}}}", GetIndentString());
                 }
                 else {
                     var param = sym.Parameters[0];
-                    CodeBuilder.AppendFormat("(function({0}) {{ return(", param.Name);
+                    CodeBuilder.AppendFormat("function({0}) {{ return(", param.Name);
                     IConversionExpression opd = null;
                     var oper = m_Model.GetOperationEx(node) as ILambdaExpression;
                     if (null != oper && oper.Body.Statements.Length == 1) {
@@ -942,7 +942,7 @@ namespace RoslynTool.CsToDsl
                     else {
                         ReportIllegalSymbol(node, symInfo);
                     }
-                    CodeBuilder.Append("); };)");
+                    CodeBuilder.Append("); }");
                 }
             }
             else {
@@ -963,7 +963,7 @@ namespace RoslynTool.CsToDsl
                 mi.ExistTry = tryUsing.ExistTry;
                 mi.ExistUsing = tryUsing.ExistUsing;
 
-                CodeBuilder.Append("(function(");
+                CodeBuilder.Append("function(");
                 CodeBuilder.Append(string.Join(", ", mi.ParamNames.ToArray()));
                 if (node.Body is BlockSyntax) {
                     CodeBuilder.AppendLine("){");
@@ -1010,7 +1010,7 @@ namespace RoslynTool.CsToDsl
                         }
                     }
                     --m_Indent;
-                    CodeBuilder.AppendFormat("{0}}})", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}}}", GetIndentString());
                 }
                 else {
                     string varName = string.Format("__lambda_{0}", GetSourcePosForVar(node));
@@ -1042,7 +1042,7 @@ namespace RoslynTool.CsToDsl
                     else {
                         CodeBuilder.Append(")");
                     }
-                    CodeBuilder.Append("; })");
+                    CodeBuilder.Append("; }");
                 }
                 m_MethodInfoStack.Pop();
             }
@@ -1064,7 +1064,7 @@ namespace RoslynTool.CsToDsl
                 mi.ExistTry = tryUsing.ExistTry;
                 mi.ExistUsing = tryUsing.ExistUsing;
 
-                CodeBuilder.Append("(function(");
+                CodeBuilder.Append("function(");
                 int ct = sym.Parameters.Length;
                 if (ct > 0) {
                     for (int i = 0; i < ct; ++i) {
@@ -1114,7 +1114,7 @@ namespace RoslynTool.CsToDsl
                     }
                 }
                 --m_Indent;
-                CodeBuilder.AppendFormat("{0}}})", GetIndentString());
+                CodeBuilder.AppendFormat("{0}}}", GetIndentString());
 
                 m_MethodInfoStack.Pop();
             }

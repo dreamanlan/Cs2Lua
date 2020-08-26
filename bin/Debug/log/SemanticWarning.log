@@ -1,15 +1,5 @@
 ============<<<Semantic Warning:test>>>============
 test.cs(42,23): warning CS3014: 'CUsingHelper.ReadZip(byte[])' cannot be marked as CLS-compliant because the assembly does not have a CLSCompliant attribute
-test.cs(236,22): warning CS0219: The variable 'e' is assigned but its value is never used
-test.cs(131,18): warning CS0168: The variable 'dt' is declared but never used
-test.cs(131,21): warning CS0168: The variable 'dt2' is declared but never used
-test.cs(676,13): warning CS0219: The variable 'v' is assigned but its value is never used
-test.cs(264,19): warning CS0219: The variable 't' is assigned but its value is never used
-test.cs(693,21): warning CS0618: 'Transform.FindChild(string)' is obsolete: 'FindChild has been deprecated. Use Find instead (UnityUpgradable) -> Find([mscorlib] System.String)'
-test.cs(697,32): warning CS0162: Unreachable code detected
-test.cs(493,23): warning CS0219: The variable 'abc' is assigned but its value is never used
-test.cs(582,17): warning CS0162: Unreachable code detected
-test.cs(78,9): warning CS0618: 'GameObject.active' is obsolete: 'GameObject.active is obsolete. Use GameObject.SetActive(), GameObject.activeSelf or GameObject.activeInHierarchy.'
-test.cs(79,14): warning CS0219: The variable 'v' is assigned but its value is never used
-test.cs(94,14): warning CS0219: The variable 'isLoadingHeadIcon' is assigned but its value is never used
-test.cs(183,5): hidden CS8019: Unnecessary using directive.
+test.cs(5,1): hidden CS8019: Unnecessary using directive.
+test.cs(6,1): hidden CS8019: Unnecessary using directive.
+test.cs(2,1): hidden CS8019: Unnecessary using directive.

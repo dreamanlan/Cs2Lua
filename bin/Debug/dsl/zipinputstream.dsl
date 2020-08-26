@@ -5,13 +5,13 @@ require("cs2dsl__interfaces");
 
 class(ZipInputStream) {
 	static_methods {
-		__new_object = function(...){
+		__new_object = deffunc(1)args(...){
 			return(newobject(ZipInputStream, typeargs(), typekinds(), "ctor", null, ...));
 		};
-		cctor = function(){
+		cctor = deffunc(0)args(){
 			callstatic(ZipInputStream, "__cctor");
 		};
-		__cctor = function(){
+		__cctor = deffunc(0)args(){
 			if(ZipInputStream.__cctor_called){
 				return;
 			}else{
@@ -26,11 +26,11 @@ class(ZipInputStream) {
 	static_events {};
 
 	instance_methods {
-		ctor = function(this, ms){
+		ctor = deffunc(0)args(this, ms){
 			callinstance(this, "__ctor");
 			return(this);
 		},
-		__ctor = function(this){
+		__ctor = deffunc(0)args(this){
 			if(getinstance(SymbolKind.Field, this, "__ctor_called")){
 				return;
 			}else{

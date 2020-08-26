@@ -3,58 +3,69 @@ require("cs2dsl__attributes");
 require("cs2dsl__namespaces");
 require("cs2dsl__externenums");
 require("cs2dsl__interfaces");
-require("zipinputstream");
-require("zipoutputstream");
 
 class(CUsingHelper) {
 	static_methods {
-		__new_object = function(...){
+		__new_object = deffunc(1)args(...){
 			return(newobject(CUsingHelper, typeargs(), typekinds(), "ctor", null, ...));
 		};
-		Test = function(i){
+		Test = deffunc(1)args(i){
 			return(null);
 		};
-		ReadZip = function(bytes){
-			local(__method_ret_40_4_55_2); __method_ret_40_4_55_2 = null;
-			local(zipInput); zipInput = newobject(ZipInputStream, typeargs(), typekinds(), "ctor", null, newexternobject(System.IO.MemoryStream, typeargs(), typekinds(), null, "System.IO.MemoryStream:ctor__Arr_Byte", bytes));
-			local(zipMemory); zipMemory = newexternobject(System.IO.MemoryStream, typeargs(), typekinds(), null, "System.IO.MemoryStream:ctor");
-			local(ZipStream); ZipStream = newobject(ZipOutputStream, typeargs(), typekinds(), "ctor", null, zipMemory);
-			local(__try_ret_46_2_54_3, __try_retval_46_2_54_3); multiassign(__try_ret_46_2_54_3, __try_retval_46_2_54_3) = dsltry(false, __try_ret_46_2_54_3){
-				block{
-				__method_ret_40_4_55_2 = callstatic(CUsingHelper, "Test", 123);
-				__try_retval_46_2_54_3 = 1;
-				break;
+		ReadZip = deffunc(1)args(bytes){
+			local(v); v = 0;
+			local(dict); dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct), literaldictionary(typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct)), "System.Collections.Generic.Dictionary_TKey_TValue:ctor");
+			if( execbinary(">", prefixoperator(true, v, execbinary("+", v, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct)), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
+			}else{
+				if( execbinary("&&", execclosure(true, __invoke_48_16_48_42, true){ multiassign(__invoke_48_16_48_42, v) = callexterninstance(dict, "TryGetValue", 1, __cs2dsl_out); }, execbinary("==", v, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct) ){
+				}elseif( execbinary(">", postfixoperator(true, __unary_50_21_50_24, v, execbinary("+", v, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct)), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
+				}elseif( execbinary(">", prefixoperator(true, v, execbinary("-", v, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct)), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
+				}else{
 				};
 			};
-			if(__try_ret_46_2_54_3){
-				if(__try_retval_46_2_54_3){
-				if(__try_retval_46_2_54_3==1){
-					return(__method_ret_40_4_55_2);
-				};
-				};
+			comments {				comment("        if(dict.TryGetValue(1, out v) && v==0) {");
+				comment("        }");
+				comment("        while (dict.TryGetValue(1, out v) && v == 0) {");
+				comment("        }");
+				comment("        do {");
+				comment("        } while (dict.TryGetValue(1, out v) && v == 0);");
+				comment("        ");
+				comment("        int v1 = ++v + 2;");
+				comment("        int v2 = v++ + 2;");
+				comment("        if(++v > 0) {");
+				comment("        }");
+				comment("        if(v++ > 0) {");
+				comment("        }");
+				comment("        while(++v > 0) {");
+				comment("        }");
+				comment("        while (v-- > 0) {");
+				comment("        }");
+				comment("        do {");
+				comment("        } while (++v > 0);");
+				comment("        do {");
+				comment("        } while (v-- > 0);");
+				comment("        ");
 			};
-			local(__try_handled_46_2_54_3, __try_catch_ret_val_46_2_54_3); __try_handled_46_2_54_3 = false;
-			__try_catch_ret_val_46_2_54_3 = dslcatch(__try_handled_46_2_54_3, __try_retval_46_2_54_3, __try_ret_46_2_54_3,
-				(function(, ){
-					__try_handled_46_2_54_3 = true;
-					block{
-					__method_ret_40_4_55_2 = null;
-					return(1);
-					};
-					dslthrow();
-				})
-			);
-			if(__try_catch_ret_val_46_2_54_3){
-			if(__try_catch_ret_val_46_2_54_3==1){
-				return(__method_ret_40_4_55_2);
+			comments {				comment("        ZipInputStream zipInput = new ZipInputStream(new MemoryStream(bytes));");
+				comment("\t\tMemoryStream zipMemory = new MemoryStream();");
+				comment("\t\tZipOutputStream ZipStream = new ZipOutputStream(zipMemory);");
+				comment("\t\ttry");
+				comment("\t\t{");
+				comment("\t\t\treturn Test(123);");
+				comment("\t\t}");
+				comment("\t\tcatch (Exception)");
+				comment("\t\t{");
+				comment("\t\t\treturn null;");
+				comment("\t\t\tthrow;");
+				comment("\t\t}");
+				comment("        ");
 			};
-			};
-			return(__method_ret_40_4_55_2);
+			return(null);
 		};
-		cctor = function(){
+		cctor = deffunc(0)args(){
 			callstatic(CUsingHelper, "__cctor");
 		};
-		__cctor = function(){
+		__cctor = deffunc(0)args(){
 			if(CUsingHelper.__cctor_called){
 				return;
 			}else{
@@ -70,13 +81,13 @@ class(CUsingHelper) {
 	static_events {};
 
 	instance_methods {
-		ctor = function(this, a1, a2){
+		ctor = deffunc(0)args(this, a1, a2){
 			callinstance(this, "__ctor");
 			return(this);
 		},
-		Dispose = function(this){
+		Dispose = deffunc(0)args(this){
 		};
-		__ctor = function(this){
+		__ctor = deffunc(0)args(this){
 			if(getinstance(SymbolKind.Field, this, "__ctor_called")){
 				return;
 			}else{

@@ -8,43 +8,73 @@ CUsingHelper = {
 		return nil;
 	end,
 	ReadZip = function(bytes)
-		local __method_ret_40_4_55_2;
-		__method_ret_40_4_55_2 = nil;
-		local zipInput;
-		zipInput = newobject(ZipInputStream, nil, nil, "ctor", nil, newexternobject(System.IO.MemoryStream, nil, nil, nil, "System.IO.MemoryStream:ctor__Arr_Byte", bytes));
-		local zipMemory;
-		zipMemory = newexternobject(System.IO.MemoryStream, nil, nil, nil, "System.IO.MemoryStream:ctor");
-		local ZipStream;
-		ZipStream = newobject(ZipOutputStream, nil, nil, "ctor", nil, zipMemory);
-		local __try_ret_46_2_54_3, __try_retval_46_2_54_3;
-		__try_ret_46_2_54_3,__try_retval_46_2_54_3 = luatry(CUsingHelper.Test, 123);
-		if __try_ret_46_2_54_3 then
-			__method_ret_40_4_55_2 = __try_retval_46_2_54_3;
-			__try_retval_46_2_54_3 = 1;
-		end;
-		if __try_ret_46_2_54_3 then 
-			if __try_retval_46_2_54_3 then 
-				if (__try_retval_46_2_54_3 == 1) then 
-					return __method_ret_40_4_55_2;
+		local v;
+		v = 0;
+		local dict;
+		dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, {}, "System.Collections.Generic.Dictionary_TKey_TValue:ctor");
+		--
+		v = (v + 1);
+		if (v > 0) then
+
+		else
+			--
+			local __invoke_48_16_48_42;
+			__invoke_48_16_48_42,v = dict:TryGetValue(1, __cs2lua_out);
+			if (__invoke_48_16_48_42 and (v == 0)) then
+
+			else
+				--
+				local __unary_50_21_50_24 = v; v = (v + 1);
+				if (__unary_50_21_50_24 > 0) then
+
+				else
+					--
+					v = (v - 1);
+					if (v > 0) then
+
+					else
+					end;
 				end;
 			end;
 		end;
-		local __try_handled_46_2_54_3, __try_catch_ret_val_46_2_54_3;
-		__try_handled_46_2_54_3 = false;
-		__try_catch_ret_val_46_2_54_3 = luacatch(__try_handled_46_2_54_3, __try_retval_46_2_54_3, (not __try_ret_46_2_54_3) and (function()
-				__try_handled_46_2_54_3 = true;
-				do
-					__method_ret_40_4_55_2 = nil;
-					return 1;
-				end;
-				luathrow();
-			end));
-		if __try_catch_ret_val_46_2_54_3 then 
-			if (__try_catch_ret_val_46_2_54_3 == 1) then 
-				return __method_ret_40_4_55_2;
-			end;
-		end;
-		return __method_ret_40_4_55_2;
+				--        if(dict.TryGetValue(1, out v) && v==0) {
+		--        }
+		--        while (dict.TryGetValue(1, out v) && v == 0) {
+		--        }
+		--        do {
+		--        } while (dict.TryGetValue(1, out v) && v == 0);
+		--        
+		--        int v1 = ++v + 2;
+		--        int v2 = v++ + 2;
+		--        if(++v > 0) {
+		--        }
+		--        if(v++ > 0) {
+		--        }
+		--        while(++v > 0) {
+		--        }
+		--        while (v-- > 0) {
+		--        }
+		--        do {
+		--        } while (++v > 0);
+		--        do {
+		--        } while (v-- > 0);
+		--        
+
+				--        ZipInputStream zipInput = new ZipInputStream(new MemoryStream(bytes));
+		--		MemoryStream zipMemory = new MemoryStream();
+		--		ZipOutputStream ZipStream = new ZipOutputStream(zipMemory);
+		--		try
+		--		{
+		--			return Test(123);
+		--		}
+		--		catch (Exception)
+		--		{
+		--			return null;
+		--			throw;
+		--		}
+		--        
+
+		return nil;
 	end,
 	cctor = function()
 		CUsingHelper.__cctor();
@@ -126,6 +156,4 @@ require "cs2lua__lualib";
 require "cs2lua__attributes";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
-require "zipinputstream";
-require "zipoutputstream";
 settempmetatable(CUsingHelper);

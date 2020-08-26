@@ -1,17 +1,1 @@
-System.DateTime
-System.Enum
 System.Int32
-System.Int64
-System.IO.MemoryStream
-System.Linq.Enumerable
-System.Object
-System.PlatformID
-System.String
-UnityEngine.Debug
-UnityEngine.GameObject
-UnityEngine.MonoBehaviour
-UnityEngine.PlayerPrefs
-UnityEngine.Renderer
-UnityEngine.Transform
-UnityEngine.Vector3
-UnityEngine.WaitForSeconds
