@@ -1217,32 +1217,16 @@ namespace RoslynTool.CsToDsl
                 var rankspec = rankspecs[0];
                 int rank = rankspec.Rank;
                 if (rank >= 1) {
-                    //这里需要生成多层循环，不方便委托到一个lua函数里处理
-                    CodeBuilder.Append("(function(){");
                     int ct = rankspec.Sizes.Count;
+                    CodeBuilder.AppendFormat("newmultiarray({0}, TypeKind.{1}, ", elementType, typeKind);
+                    OutputDefaultValue(etype);
+                    CodeBuilder.AppendFormat(", {0}", ct);
                     for (int i = 0; i < ct; ++i) {
-                        CodeBuilder.AppendFormat(" local(d{0}); d{0} = ", i);
+                        CodeBuilder.Append(", ");
                         var exp = rankspec.Sizes[i];
                         OutputExpressionSyntax(exp);
-                        if (i == 0) {
-                            CodeBuilder.AppendFormat("; local{{arr = newarray({0}, TypeKind.{1}, d0);}}", elementType, typeKind);
-                        }
-                        CodeBuilder.AppendFormat("; for(i{0}, 1, d{1}){{ arr{2} = ", i, i, GetArraySubscriptString(i));
-                        if (i < ct - 1) {
-                            CodeBuilder.AppendFormat("newarray({0}, TypeKind.{1}, ", elementType, typeKind);
-                            exp = rankspec.Sizes[i + 1];
-                            OutputExpressionSyntax(exp);
-                            CodeBuilder.Append(");");
-                        }
-                        else {
-                            OutputDefaultValue(etype);
-                            CodeBuilder.Append(";");
-                        }
                     }
-                    for (int i = 0; i < ct; ++i) {
-                        CodeBuilder.Append(" };");
-                    }
-                    CodeBuilder.Append(" return(arr); })()");
+                    CodeBuilder.Append(")");
                 }
                 else {
                     CodeBuilder.AppendFormat("newarray({0}, TypeKind.{1})", elementType, typeKind);

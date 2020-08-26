@@ -1956,6 +1956,61 @@ namespace Generator
                     sb.AppendFormat("wraparray({{}}, nil, {0}, {1})", typeStr, typeKind);
                 }
             }
+            else if (id == "newmultiarray") {
+                var typeStr = CalcTypeString(data.GetParam(0));
+                var typeKind = CalcTypeString(data.GetParam(1));
+                var defVal = data.GetParam(2);
+                int ct;
+                int.TryParse(data.GetParamId(3), out ct);
+                if (ct <= 3) {
+                    //三维以下数组的定义在lualib里实现
+                    sb.AppendFormat("newarraydim{0}({1}, {2}, ", ct);
+                    GenerateSyntaxComponent(defVal, sb, 0, false);
+                    if (ct > 0) {
+                        sb.Append(", ");
+                        var exp = data.GetParam(4 + 0);
+                        GenerateSyntaxComponent(exp, sb, 0, false);
+                    }
+                    if (ct > 1) {
+                        sb.Append(", ");
+                        var exp = data.GetParam(4 + 1);
+                        GenerateSyntaxComponent(exp, sb, 0, false);
+                    }
+                    if (ct > 2) {
+                        sb.Append(", ");
+                        var exp = data.GetParam(4 + 2);
+                        GenerateSyntaxComponent(exp, sb, 0, false);
+                    }
+                    sb.Append(")");
+                }
+                else {
+                    //四维及以上数组在这里使用函数对象嵌入初始化代码，应该很少用到
+                    sb.Append("(function()");
+                    for (int i = 0; i < ct; ++i) {
+                        sb.AppendFormat(" local d{0} = ", i);
+                        var exp = data.GetParam(4 + i);
+                        GenerateSyntaxComponent(exp, sb, 0, false);
+                        if (i == 0) {
+                            sb.AppendFormat("; local arr = wraparray({{}}, d0, {0}, {1})", typeStr, typeKind);
+                        }
+                        sb.AppendFormat("; for i{0} = 1, d{1} do arr{2} = ", i, i, GetArraySubscriptString(i));
+                        if (i < ct - 1) {
+                            sb.Append("wraparray({}, ");
+                            var nextExp = data.GetParam(4 + i + 1);
+                            GenerateSyntaxComponent(nextExp, sb, 0, false);
+                            sb.AppendFormat(", {0}, {1});", typeStr, typeKind);
+                        }
+                        else {
+                            GenerateSyntaxComponent(defVal, sb, 0, false);
+                            sb.Append(";");
+                        }
+                    }
+                    for (int i = 0; i < ct; ++i) {
+                        sb.Append(" end;");
+                    }
+                    sb.Append(" return arr; end)()");
+                }
+            }
             else if (id == "for") {
                 sb.Append("for ");
                 var param0 = data.GetParamId(0);

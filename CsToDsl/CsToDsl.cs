@@ -1435,14 +1435,6 @@ namespace RoslynTool.CsToDsl
                 return type;
         }
 
-        private static string GetArraySubscriptString(int index)
-        {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i <= index; ++i) {
-                sb.AppendFormat("[i{0}]", i);
-            }
-            return sb.ToString();
-        }
         private static string Escape(string src)
         {
             StringBuilder sb = new StringBuilder();

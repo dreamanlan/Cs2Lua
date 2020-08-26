@@ -2028,6 +2028,43 @@ function wraparray(arr, size, classObj, typeKind)
     )
 end
 
+function newarraydim0(classObj, typeKind, defVal)
+    error("illegal array !")
+end
+
+function newarraydim1(classObj, typeKind, defVal, size1)
+    local arr = wraparray({}, size1, classObj, typeKind)
+    for i = 1,size1 do
+        arr[i] = defVal
+    end
+    return arr
+end
+
+function newarraydim2(classObj, typeKind, defVal, size1, size2)
+    local arr = wraparray({}, size1, classObj, typeKind)
+    for i = 1,size1 do
+        arr[i] = wraparray({}, size2, classObj, typeKind)
+        for j = 1,size2 do
+            arr[i][j] = defVal
+        end
+    end
+    return arr
+end
+
+function newarraydim3(classObj, typeKind, defVal, size1, size2, size3)
+    local arr = wraparray({}, size1, classObj, typeKind)
+    for i = 1,size1 do
+        arr[i] = wraparray({}, size2, classObj, typeKind)
+        for j = 1,size2 do
+            arr[i][j] = wraparray({}, size3, classObj, typeKind)
+            for k = 1,size3 do
+                arr[i][j][k] = defVal
+            end
+        end
+    end
+    return arr
+end
+
 function wrapanonymousobject(dict)
     local obj = {}
     setmetatable(

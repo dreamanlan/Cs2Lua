@@ -196,6 +196,14 @@ namespace Generator
             const string c_IndentString = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
             return c_IndentString.Substring(0, indent);
         }
+        private static string GetArraySubscriptString(int index)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i <= index; ++i) {
+                sb.AppendFormat("[i{0}]", i);
+            }
+            return sb.ToString();
+        }
         private static string Escape(string src)
         {
             StringBuilder sb = new StringBuilder();
