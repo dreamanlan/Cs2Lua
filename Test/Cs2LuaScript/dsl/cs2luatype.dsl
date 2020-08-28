@@ -7,13 +7,13 @@ require("cs2luatypeimpl");
 
 class(Cs2LuaType) {
 	static_methods {
-		GetFullName = function(type){
+		GetFullName = deffunc(1)args(type){
 			return(Cs2LuaTypeImpl.GetFullName(type));
 		};
-		cctor = function(){
+		cctor = deffunc(0)args(){
 			callstatic(Cs2LuaType, "__cctor");
 		};
-		__cctor = function(){
+		__cctor = deffunc(0)args(){
 			if(Cs2LuaType.__cctor_called){
 				return;
 			}else{

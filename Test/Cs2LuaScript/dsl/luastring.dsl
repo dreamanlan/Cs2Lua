@@ -5,22 +5,22 @@ require("cs2dsl__interfaces");
 
 class(LuaString) {
 	static_methods {
-		__new_object = function(...){
+		__new_object = deffunc(1)args(...){
 			return(newobject(LuaString, typeargs(), typekinds(), "ctor", null, ...));
 		};
-		Format__System_String__System_Object = function(str, arg){
+		Format__System_String__System_Object = deffunc(1)args(str, arg){
 			return(callexternstatic(System.String, "Format", "System.String:Format__String__Object", str, arg));
 		};
-		Format__System_String__System_Object__System_Object = function(str, arg1, arg2){
+		Format__System_String__System_Object__System_Object = deffunc(1)args(str, arg1, arg2){
 			return(callexternstatic(System.String, "Format", "System.String:Format__String__Object__Object", str, arg1, arg2));
 		};
-		Format__System_String__System_Object__System_Object__System_Object = function(str, arg1, arg2, arg3){
+		Format__System_String__System_Object__System_Object__System_Object = deffunc(1)args(str, arg1, arg2, arg3){
 			return(callexternstatic(System.String, "Format", "System.String:Format__String__Object__Object__Object", str, arg1, arg2, arg3));
 		};
-		cctor = function(){
+		cctor = deffunc(0)args(){
 			callstatic(LuaString, "__cctor");
 		};
-		__cctor = function(){
+		__cctor = deffunc(0)args(){
 			if(LuaString.__cctor_called){
 				return;
 			}else{
@@ -35,10 +35,10 @@ class(LuaString) {
 	static_events {};
 
 	instance_methods {
-		ctor = function(this){
+		ctor = deffunc(0)args(this){
 			callinstance(this, "__ctor");
 		};
-		__ctor = function(this){
+		__ctor = deffunc(0)args(this){
 			if(getinstance(SymbolKind.Field, this, "__ctor_called")){
 				return;
 			}else{

@@ -6,17 +6,17 @@ require("cs2dsl__interfaces");
 
 class(Program) {
 	static_methods {
-		Init = function(){
+		Init = deffunc(0)args(){
 			comment("使用c#代码时需要的初始化（平台相关代码，不会转换为lua代码，cs2lua在翻译时会添加__DSL__宏，可以据此设定代码是否要转换为lua）");
 			comment("公共初始化（也就是逻辑相关的代码）");
 		};
-		Main = function(args){
+		Main = deffunc(0)args(args){
 			callstatic(Program, "Init");
 		};
-		cctor = function(){
+		cctor = deffunc(0)args(){
 			callstatic(Program, "__cctor");
 		};
-		__cctor = function(){
+		__cctor = deffunc(0)args(){
 			if(Program.__cctor_called){
 				return;
 			}else{

@@ -1208,63 +1208,6 @@ namespace Generator
                     }
                 }
             }
-            else if (id == "invokeexternoperator") {
-                string method = data.GetParamId(2);
-                string luaOp = string.Empty;
-                //slua导出时把重载操作符导出成lua实例方法了，然后利用lua实例上支持的操作符元方法在运行时绑定到重载实现
-                //这里把lua支持的操作符方法转成lua操作（可能比invokeexternoperator要快一些）
-                if (method == "op_Addition") {
-                    luaOp = "+";
-                }
-                else if (method == "op_Subtraction") {
-                    luaOp = "-";
-                }
-                else if (method == "op_Multiply") {
-                    luaOp = "*";
-                }
-                else if (method == "op_Division") {
-                    luaOp = "/";
-                }
-                else if (method == "op_UnaryNegation") {
-                    luaOp = "-";
-                }
-                else if (method == "op_UnaryPlus") {
-                    luaOp = "+";
-                }
-                else if (method == "op_LessThan") {
-                    luaOp = "<";
-                }
-                else if (method == "op_GreaterThan") {
-                    luaOp = ">";
-                }
-                else if (method == "op_LessThanOrEqual") {
-                    luaOp = "<=";
-                }
-                else if (method == "op_GreaterThanOrEqual") {
-                    luaOp = ">= ";
-                }
-                if (string.IsNullOrEmpty(luaOp) || data.GetParamNum() > 5) {
-                    sb.Append(id);
-                    sb.Append("(");
-                    GenerateArguments(data, sb, indent, 0);
-                    sb.Append(")");
-                }
-                else if (data.GetParamNum() == 4 && luaOp == "-") {
-                    sb.Append("(- ");
-                    var param0 = data.GetParam(3);
-                    GenerateSyntaxComponent(param0, sb, indent, false);
-                    sb.Append(")");
-                }
-                else if (data.GetParamNum() == 5) {
-                    sb.Append("(");
-                    var param0 = data.GetParam(3);
-                    var param1 = data.GetParam(4);
-                    GenerateSyntaxComponent(param0, sb, indent, false);
-                    sb.AppendFormat(" {0} ", luaOp);
-                    GenerateSyntaxComponent(param1, sb, indent, false);
-                    sb.Append(")");
-                }
-            }
             else if (id == "getstatic") {
                 var kind = CalcTypeString(data.GetParam(0));
                 var obj = data.Params[1];

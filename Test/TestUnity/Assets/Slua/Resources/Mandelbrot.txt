@@ -4,22 +4,20 @@ Mandelbrot = {
 	__new_object = function(...)
 		return newobject(Mandelbrot, nil, nil, "ctor", nil, ...);
 	end,
+	cctor = function()
+		Mandelbrot.__cctor();
+	end,
+	__cctor = function()
+		if Mandelbrot.__cctor_called then 
+			return;
+		else
+			Mandelbrot.__cctor_called = true;
+		end;
+	end,
 	__define_class = function()
 		Utility.Warn("Mandelbrot::__define_class begin");
-		local static = Mandelbrot;
-		local static_methods = {
-			cctor = function()
-				Mandelbrot.__cctor();
-			end,
-			__cctor = function()
-				if Mandelbrot.__cctor_called then 
-					return;
-				else
-					Mandelbrot.__cctor_called = true;
-				end;
-			end,
-		};
 
+		local class = Mandelbrot;
 		local static_fields_build = function()
 			local static_fields = {
 				__cctor_called = false,
@@ -43,21 +41,21 @@ Mandelbrot = {
 				local maxiter;
 				maxiter = 50;
 				local limit;
-				limit = 4.00;
+				limit = 4.0000000000000000;
 				local y;
 				y = 0;
 				while (y < height) do
 					local Ci;
-					Ci = (((2.00 * y) / height) - 1.00);
+					Ci = (((2.0000000000000000 * y) / height) - 1.0000000000000000);
 					local x;
 					x = 0;
 					while (x < width) do
 						local Zr;
-						Zr = 0.00;
+						Zr = 0.0000000000000000;
 						local Zi;
-						Zi = 0.00;
+						Zi = 0.0000000000000000;
 						local Cr;
-						Cr = (((2.00 * x) / width) - 1.50);
+						Cr = (((2.0000000000000000 * x) / width) - 1.5000000000000000);
 						local i;
 						i = maxiter;
 						local isInside;
@@ -66,16 +64,16 @@ Mandelbrot = {
 
 							local Tr;
 							Tr = (((Zr * Zr) - (Zi * Zi)) + Cr);
-							Zi = (((2.00 * Zr) * Zi) + Ci);
+							Zi = (((2.0000000000000000 * Zr) * Zi) + Ci);
 							Zr = Tr;
 							if (((Zr * Zr) + (Zi * Zi)) > limit) then 
 								isInside = false;
-								break;
+								do
+									break;
+								end;
 							end;
-						until not ((function()
 							i = (i - 1);
-							return i;
-						end)() > 0) ;
+						until not (i > 0) ;
 						if isInside then 
 							this:DrawCube(x, y, width, height);
 						end;
@@ -112,36 +110,35 @@ Mandelbrot = {
 				root = __cs2lua_nil_field_value,
 				colors = __cs2lua_nil_field_value,
 				r = 10,
-				scale = 3.00,
+				scale = 3.00000000,
 				__ctor_called = false,
 			};
 			return instance_fields;
 		end;
 
-		local interfaces = {
-			"IStartupPlugin",
-		};
-
-		local class_info = nil;
-		local method_info = {
-			Init = {
-				Kind = MethodKind.Ordinary,
-			},
-			Call = {
-				Kind = MethodKind.Ordinary,
-			},
-			ctor = {
-				Kind = MethodKind.Constructor,
-			},
-		};
-		local property_info = nil;
-		local event_info = nil;
-		local field_info = nil;
-
-		local __defineclass_return = defineclass(nil, "Mandelbrot", "Mandelbrot", static, static_methods, static_fields_build, instance_methods, instance_fields_build, interfaces, class_info, method_info, property_info, event_info, field_info, false);
+		local __defineclass_return = defineclass(nil, "Mandelbrot", "Mandelbrot", class, static_fields_build, instance_methods, instance_fields_build, false);
 		Utility.Warn("Mandelbrot::__define_class end");
 		return __defineclass_return;
 	end,
+
+	__interfaces = {
+		"IStartupPlugin",
+	},
+	__class_info = nil,
+	__method_info = {
+		Init = {
+			Kind = MethodKind.Ordinary,
+		},
+		Call = {
+			Kind = MethodKind.Ordinary,
+		},
+		ctor = {
+			Kind = MethodKind.Constructor,
+		},
+	},
+	__property_info = nil,
+	__event_info = nil,
+	__field_info = nil,
 };
 
 

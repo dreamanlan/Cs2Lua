@@ -4,22 +4,20 @@ MyScript = {
 	__new_object = function(...)
 		return newobject(MyScript, nil, nil, "ctor", nil, ...);
 	end,
+	cctor = function()
+		MyScript.__cctor();
+	end,
+	__cctor = function()
+		if MyScript.__cctor_called then 
+			return;
+		else
+			MyScript.__cctor_called = true;
+		end;
+	end,
 	__define_class = function()
 		Utility.Warn("MyScript::__define_class begin");
-		local static = MyScript;
-		local static_methods = {
-			cctor = function()
-				MyScript.__cctor();
-			end,
-			__cctor = function()
-				if MyScript.__cctor_called then 
-					return;
-				else
-					MyScript.__cctor_called = true;
-				end;
-			end,
-		};
 
+		local class = MyScript;
 		local static_fields_build = function()
 			local static_fields = {
 				__attributes = MyScript__Attrs,
@@ -39,11 +37,11 @@ MyScript = {
 				slider = typeas(UnityEngine.GameObject.Find("Canvas/Slider"):GetComponent("UnityEngine.GameObject:GetComponent__Type", UnityEngine.UI.Slider), UnityEngine.UI.Slider, TypeKind.Class);
 				local counttxt;
 				counttxt = typeas(UnityEngine.GameObject.Find("Canvas/Count"):GetComponent("UnityEngine.GameObject:GetComponent__Type", UnityEngine.UI.Text), UnityEngine.UI.Text, TypeKind.Class);
-				slider.onValueChanged:AddListener((function(v)
+				slider.onValueChanged:AddListener(function(v)
 					this:Reset();
 					counttxt.text = LuaString.Format__System_String__System_Object("cube:{0}", v);
 					this.max = typecast(v, System.Int32, TypeKind.Struct);
-				end));
+				end);
 				this:Reset();
 			end,
 			Update = function(this)
@@ -51,27 +49,22 @@ MyScript = {
 				i = 0;
 				while (i < this.cubes.Length) do
 					local offset;
-					offset = condexp(((i % 2) == 1), true, 5, true, -5);
+					offset = ((((i % 2) == 1)) and (5) or (-5));
 					local nr;
 					nr = (this.r + (UnityEngine.Mathf.Sin(UnityEngine.Time.time) * offset));
 					local angle;
-					angle = condexp(((i % 2) == 1), false, (function()
-							return UnityEngine.Time.time;
-						end), true, -5);
+					angle = ((((i % 2) == 1)) and (UnityEngine.Time.time) or (-5));
 					local b;
-					b = newexternobject(UnityEngine.Vector3, nil, nil, nil, "UnityEngine.Vector3:ctor__Single__Single__Single", typecast(((UnityEngine.Mathf.Cos(((((i * 3.14) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Struct), typecast(((UnityEngine.Mathf.Sin(((((i * 3.14) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Struct), 0);
-					b = wrapexternstruct(b, UnityEngine.Vector3);
+					b = newexternobject(UnityEngine.Vector3, nil, nil, nil, "UnityEngine.Vector3:ctor__Single__Single__Single", typecast(((UnityEngine.Mathf.Cos(((((i * 3.14159300) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Struct), typecast(((UnityEngine.Mathf.Sin(((((i * 3.14159300) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Struct), 0);
 					this.cubes[(i + 1)].transform.position = b;
 					i = (i + 1);
 				end;
 				if ((this.fogStart <= 0) or (this.t > 1)) then 
 					this.fogStart = UnityEngine.Time.time;
 					this.bgCurrent = UnityEngine.Camera.main.backgroundColor;
-					this.bgCurrent = wrapexternstruct(this.bgCurrent, UnityEngine.Color);
 					local ix;
 					ix = UnityEngine.Random.Range("UnityEngine.Random:Range__Int32__Int32", 0, this.colors.Length);
 					this.bgColor = this.colors[(ix + 1)];
-					this.bgColor = wrapexternstruct(this.bgColor, UnityEngine.Color);
 				end;
 				this.t = (((UnityEngine.Time.time - this.fogStart)) / 10);
 				UnityEngine.Camera.main.backgroundColor = UnityEngine.Color.Lerp(this.bgCurrent, this.bgColor, this.t);
@@ -99,15 +92,7 @@ MyScript = {
 						i = (i + 1);
 					end;
 				end;
-				this.cubes = (function()
-					local d0;
-					d0 = this.max;
-					local arr = wraparray({}, d0, UnityEngine.GameObject, TypeKind.Class);
-					for i0 = 1, d0 do
-						arr[i0] = nil;
-					end;
-					return arr;
-				end)();
+				this.cubes = newarraydim1(UnityEngine.GameObject, TypeKind.Class, nil, this.max);
 				local P;
 				P = UnityEngine.Resources.Load("UnityEngine.Resources:Load__String", "Particle System");
 				local i;
@@ -115,7 +100,7 @@ MyScript = {
 				while (i < this.max) do
 					local cube;
 					cube = UnityEngine.GameObject.CreatePrimitive(3);
-					cube.transform.position = newexternobject(UnityEngine.Vector3, nil, nil, nil, "UnityEngine.Vector3:ctor__Single__Single__Single", (typecast(UnityEngine.Mathf.Cos((((i * 3.14) * 2) / this.max)), System.Single, TypeKind.Struct) * this.r), (typecast(UnityEngine.Mathf.Sin((((i * 3.14) * 2) / this.max)), System.Single, TypeKind.Struct) * this.r), 0);
+					cube.transform.position = newexternobject(UnityEngine.Vector3, nil, nil, nil, "UnityEngine.Vector3:ctor__Single__Single__Single", (typecast(UnityEngine.Mathf.Cos((((i * 3.14159300) * 2) / this.max)), System.Single, TypeKind.Struct) * this.r), (typecast(UnityEngine.Mathf.Sin((((i * 3.14159300) * 2) / this.max)), System.Single, TypeKind.Struct) * this.r), 0);
 					cube.transform:SetParent("UnityEngine.Transform:SetParent__Transform", this.root.transform);
 					local mat;
 					mat = cube:GetComponent("UnityEngine.GameObject:GetComponent__Type", UnityEngine.Renderer).material;
@@ -163,39 +148,38 @@ MyScript = {
 			return instance_fields;
 		end;
 
-		local interfaces = {
-			"ITickPlugin",
-		};
-
-		local class_info = nil;
-		local method_info = {
-			Init = {
-				Kind = MethodKind.Ordinary,
-			},
-			Update = {
-				Kind = MethodKind.Ordinary,
-			},
-			FixedUpdate = {
-				Kind = MethodKind.Ordinary,
-			},
-			LateUpdate = {
-				Kind = MethodKind.Ordinary,
-			},
-			Call = {
-				Kind = MethodKind.Ordinary,
-			},
-			ctor = {
-				Kind = MethodKind.Constructor,
-			},
-		};
-		local property_info = nil;
-		local event_info = nil;
-		local field_info = nil;
-
-		local __defineclass_return = defineclass(nil, "MyScript", "MyScript", static, static_methods, static_fields_build, instance_methods, instance_fields_build, interfaces, class_info, method_info, property_info, event_info, field_info, false);
+		local __defineclass_return = defineclass(nil, "MyScript", "MyScript", class, static_fields_build, instance_methods, instance_fields_build, false);
 		Utility.Warn("MyScript::__define_class end");
 		return __defineclass_return;
 	end,
+
+	__interfaces = {
+		"ITickPlugin",
+	},
+	__class_info = nil,
+	__method_info = {
+		Init = {
+			Kind = MethodKind.Ordinary,
+		},
+		Update = {
+			Kind = MethodKind.Ordinary,
+		},
+		FixedUpdate = {
+			Kind = MethodKind.Ordinary,
+		},
+		LateUpdate = {
+			Kind = MethodKind.Ordinary,
+		},
+		Call = {
+			Kind = MethodKind.Ordinary,
+		},
+		ctor = {
+			Kind = MethodKind.Constructor,
+		},
+	},
+	__property_info = nil,
+	__event_info = nil,
+	__field_info = nil,
 };
 
 

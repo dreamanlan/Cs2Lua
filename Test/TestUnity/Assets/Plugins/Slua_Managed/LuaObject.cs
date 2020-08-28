@@ -78,8 +78,11 @@ namespace SLua
 
 	public partial class LuaObject
 	{
-
-		static protected LuaCSFunction lua_gc = new LuaCSFunction(luaGC);
+        //因为cs2lua为了更好的匹配重载方法，给存在重载的方法添加了一个签名参数
+        //lua元方法调用传过来的参数是没有签名参数的，这样会导致方法匹配失败。
+        //cs2lua翻译的代码会明确调用c#的重载操作符方法。slua对lua元方法的支持
+        //只保留__gc与__tostring
+        /*
 		static protected LuaCSFunction lua_add = new LuaCSFunction(luaAdd);
 		static protected LuaCSFunction lua_sub = new LuaCSFunction(luaSub);
 		static protected LuaCSFunction lua_mul = new LuaCSFunction(luaMul);
@@ -88,6 +91,8 @@ namespace SLua
 		static protected LuaCSFunction lua_eq = new LuaCSFunction(luaEq);
         static protected LuaCSFunction lua_lt = new LuaCSFunction(luaLt);
         static protected LuaCSFunction lua_le = new LuaCSFunction(luaLe);
+        */
+        static protected LuaCSFunction lua_gc = new LuaCSFunction(luaGC);
         static protected LuaCSFunction lua_tostring = new LuaCSFunction(ToString);
 		const string DelgateTable = "__LuaDelegate";
 
@@ -350,7 +355,7 @@ return index
 			};
 		}
 
-		static int getOpFunction(IntPtr l, string f, string tip)
+        static int getOpFunction(IntPtr l, string f, string tip)
 		{
 			int err = pushTry(l);
 			checkLuaObject(l, 1);
@@ -376,7 +381,12 @@ return index
 			return err;
 		}
 
-		static int luaOp(IntPtr l, string f, string tip)
+        //因为cs2lua为了更好的匹配重载方法，给存在重载的方法添加了一个签名参数
+        //lua元方法调用传过来的参数是没有签名参数的，这样会导致方法匹配失败。
+        //cs2lua翻译的代码会明确调用c#的重载操作符方法。slua对lua元方法的支持
+        //只保留__gc与__tostring
+        /*
+        static int luaOp(IntPtr l, string f, string tip)
 		{
 			int err = getOpFunction(l, f, tip);
 			LuaDLL.lua_pushvalue(l, 1);
@@ -389,8 +399,7 @@ return index
 			return 2;
 		}
 
-
-		static int luaUnaryOp(IntPtr l, string f, string tip)
+        static int luaUnaryOp(IntPtr l, string f, string tip)
 		{
 			int err = getOpFunction(l, f, tip);
 			LuaDLL.lua_pushvalue(l, 1);
@@ -400,7 +409,7 @@ return index
 			pushValue(l, true);
 			LuaDLL.lua_insert(l, -2);
 			return 2;
-		}
+        }
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 		static public int luaAdd(IntPtr l)
@@ -505,8 +514,9 @@ return index
 				return error(l, e);
 			}
         }
+        */
 
-		public static void getEnumTable(IntPtr l, string t)
+        public static void getEnumTable(IntPtr l, string t)
 		{
 			newTypeTable(l, t);
 		}
@@ -652,6 +662,11 @@ return index
 			newindex_func.push(l);
 			LuaDLL.lua_setfield(l, -2, "__newindex");
 
+            //因为cs2lua为了更好的匹配重载方法，给存在重载的方法添加了一个签名参数
+            //lua元方法调用传过来的参数是没有签名参数的，这样会导致方法匹配失败。
+            //cs2lua翻译的代码会明确调用c#的重载操作符方法。slua对lua元方法的支持
+            //只保留__gc与__tostring
+            /*
 			pushValue(l, lua_add);
 			LuaDLL.lua_setfield(l, -2, "__add");
 			pushValue(l, lua_sub);
@@ -668,7 +683,8 @@ return index
             LuaDLL.lua_setfield(l, -2, "__le");
             pushValue(l, lua_lt);
             LuaDLL.lua_setfield(l, -2, "__lt");
-			pushValue(l, lua_tostring);
+            */
+            pushValue(l, lua_tostring);
 			LuaDLL.lua_setfield(l, -2, "__tostring");
 
 			LuaDLL.lua_pushcfunction(l, lua_gc);

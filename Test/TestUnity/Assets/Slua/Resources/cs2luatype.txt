@@ -1,25 +1,23 @@
 require "cs2lua__namespaces"; 
 
 Cs2LuaType = {
+	GetFullName = function(type)
+		return Cs2LuaTypeImpl.GetFullName(type);
+	end,
+	cctor = function()
+		Cs2LuaType.__cctor();
+	end,
+	__cctor = function()
+		if Cs2LuaType.__cctor_called then 
+			return;
+		else
+			Cs2LuaType.__cctor_called = true;
+		end;
+	end,
 	__define_class = function()
 		Utility.Warn("Cs2LuaType::__define_class begin");
-		local static = Cs2LuaType;
-		local static_methods = {
-			GetFullName = function(type)
-				return Cs2LuaTypeImpl.GetFullName(type);
-			end,
-			cctor = function()
-				Cs2LuaType.__cctor();
-			end,
-			__cctor = function()
-				if Cs2LuaType.__cctor_called then 
-					return;
-				else
-					Cs2LuaType.__cctor_called = true;
-				end;
-			end,
-		};
 
+		local class = Cs2LuaType;
 		local static_fields_build = function()
 			local static_fields = {
 				__attributes = Cs2LuaType__Attrs,
@@ -34,18 +32,17 @@ Cs2LuaType = {
 			return instance_fields;
 		end;
 
-		local interfaces = nil;
-
-		local class_info = nil;
-		local method_info = nil;
-		local property_info = nil;
-		local event_info = nil;
-		local field_info = nil;
-
-		local __defineclass_return = defineclass(nil, "Cs2LuaType", "Cs2LuaType", static, static_methods, static_fields_build, instance_methods, instance_fields_build, interfaces, class_info, method_info, property_info, event_info, field_info, false);
+		local __defineclass_return = defineclass(nil, "Cs2LuaType", "Cs2LuaType", class, static_fields_build, instance_methods, instance_fields_build, false);
 		Utility.Warn("Cs2LuaType::__define_class end");
 		return __defineclass_return;
 	end,
+
+	__interfaces = nil,
+	__class_info = nil,
+	__method_info = nil,
+	__property_info = nil,
+	__event_info = nil,
+	__field_info = nil,
 };
 
 

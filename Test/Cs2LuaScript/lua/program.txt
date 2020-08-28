@@ -1,29 +1,27 @@
 require "cs2lua__namespaces"; 
 
 Program = {
+	Init = function()
+		--使用c#代码时需要的初始化（平台相关代码，不会转换为lua代码，cs2lua在翻译时会添加__DSL__宏，可以据此设定代码是否要转换为lua）
+		--公共初始化（也就是逻辑相关的代码）
+	end,
+	Main = function(args)
+		Program.Init();
+	end,
+	cctor = function()
+		Program.__cctor();
+	end,
+	__cctor = function()
+		if Program.__cctor_called then 
+			return;
+		else
+			Program.__cctor_called = true;
+		end;
+	end,
 	__define_class = function()
 		Utility.Warn("Program::__define_class begin");
-		local static = Program;
-		local static_methods = {
-			Init = function()
-				--使用c#代码时需要的初始化（平台相关代码，不会转换为lua代码，cs2lua在翻译时会添加__DSL__宏，可以据此设定代码是否要转换为lua）
-				--公共初始化（也就是逻辑相关的代码）
-			end,
-			Main = function(args)
-				Program.Init();
-			end,
-			cctor = function()
-				Program.__cctor();
-			end,
-			__cctor = function()
-				if Program.__cctor_called then 
-					return;
-				else
-					Program.__cctor_called = true;
-				end;
-			end,
-		};
 
+		local class = Program;
 		local static_fields_build = function()
 			local static_fields = {
 				__attributes = Program__Attrs,
@@ -38,18 +36,17 @@ Program = {
 			return instance_fields;
 		end;
 
-		local interfaces = nil;
-
-		local class_info = nil;
-		local method_info = nil;
-		local property_info = nil;
-		local event_info = nil;
-		local field_info = nil;
-
-		local __defineclass_return = defineclass(nil, "Program", "Program", static, static_methods, static_fields_build, instance_methods, instance_fields_build, interfaces, class_info, method_info, property_info, event_info, field_info, false);
+		local __defineclass_return = defineclass(nil, "Program", "Program", class, static_fields_build, instance_methods, instance_fields_build, false);
 		Utility.Warn("Program::__define_class end");
 		return __defineclass_return;
 	end,
+
+	__interfaces = nil,
+	__class_info = nil,
+	__method_info = nil,
+	__property_info = nil,
+	__event_info = nil,
+	__field_info = nil,
 };
 
 

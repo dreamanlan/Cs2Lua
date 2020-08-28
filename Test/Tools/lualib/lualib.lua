@@ -279,7 +279,7 @@ function settempmetatable(class)
 end
 
 function lualog(fmt, ...)
-    CsLibrary.LogSystem.Warn(fmt, ...);
+    Utility.Warn(fmt, ...);
 end
 
 function luausing(func, ...)
@@ -440,6 +440,9 @@ end
 
 function invokeexternoperator(rettype, class, method, ...)
     local arg1,arg2,arg3 = ...
+    local marg1 = arg1 and getmetatable(arg1)
+    local marg2 = arg2 and getmetatable(arg2)
+    local marg3 = arg3 and getmetatable(arg3)
     --对slua，对应到lua元表操作符函数的操作符重载cs2lua转lua代码时已经换成对应操作符表达式。
     --执行到这里的应该是无法对应到lua操作符的操作符重载
     if arg1==nil and method == "op_Equality" then
@@ -461,12 +464,10 @@ function invokeexternoperator(rettype, class, method, ...)
     elseif arg1~=nil and arg2~=nil and method == "op_Equality" then
         if issignature(arg1, method) then
             if arg3 then
-                mt1 = getmetatable(arg2)
-                mt2 = getmetatable(arg3)
-                if mt1 and mt1.__eq then
-                    return mt1.__eq(arg2, arg3)
-                elseif mt2 and mt2.__eq then
-                    return mt2.__eq(arg3, arg2)
+                if marg2 and marg2.op_Equality then
+                    return arg2.op_Equality(arg1, arg2, arg3)
+                elseif marg3 and marg3.op_Equality then
+                    return arg3.op_Equality(arg1, arg3, arg2)
                 else
                     return arg2 == arg3
                 end
@@ -474,12 +475,10 @@ function invokeexternoperator(rettype, class, method, ...)
                 return Slua.IsNull(arg2)
             end
         else
-            mt1 = getmetatable(arg1)
-            mt2 = getmetatable(arg2)
-            if mt1 and mt1.__eq then
-                return mt1.__eq(arg1, arg2)
-            elseif mt2 and mt2.__eq then
-                return mt2.__eq(arg2, arg1)
+            if marg1 and marg1.op_Equality then
+                return arg1.op_Equality(arg1, arg2)
+            elseif marg2 and marg2.op_Equality then
+                return arg2.op_Equality(arg2, arg1)
             else
                 return arg1 == arg2
             end
@@ -487,12 +486,10 @@ function invokeexternoperator(rettype, class, method, ...)
     elseif arg1~=nil and arg2~=nil and method == "op_Inequality" then
         if issignature(arg1, method) then
             if arg3 then
-                mt1 = getmetatable(arg2)
-                mt2 = getmetatable(arg3)
-                if mt1 and mt1.__eq then
-                    return not mt1.__eq(arg2, arg3)
-                elseif mt2 and mt2.__eq then
-                    return not mt2.__eq(arg3, arg2)
+                if marg2 and marg2.op_Inequality then
+                    return arg2.op_Inequality(arg1, arg2, arg3)
+                elseif marg3 and marg3.op_Inequality then
+                    return arg3.op_Inequality(arg1, arg3, arg2)
                 else
                     return arg2 ~= arg3
                 end
@@ -500,28 +497,20 @@ function invokeexternoperator(rettype, class, method, ...)
                 return not Slua.IsNull(arg2)
             end
         else
-            mt1 = getmetatable(arg1)
-            mt2 = getmetatable(arg2)
-            if mt1 and mt1.__eq then
-                return not mt1.__eq(arg1, arg2)
-            elseif mt2 and mt2.__eq then
-                return not mt2.__eq(arg2, arg1)
+            if marg1 and marg1.op_Inequality then
+                return arg1.op_Inequality(arg1, arg2)
+            elseif marg2 and marg2.op_Inequality then
+                return arg2.op_Inequality(arg2, arg1)
             else
                 return arg1 ~= arg2
             end
         end
     elseif method == "op_Implicit" then
         local t = nil
-        if arg1~=nil and arg2==nil then
-            local meta = getmetatable(arg1)
-            if meta then
-                t = rawget(meta, "__typename")
-            end
-        elseif arg1~=nil and arg2~=nil then
-            local meta = getmetatable(arg2)
-            if meta then
-                t = rawget(meta, "__typename")
-            end
+        if marg2 then
+            t = rawget(marg2, "__typename")
+        elseif marg1 then
+            t = rawget(marg1, "__typename")
         end
         if class == UnityEngine.Vector4 then
             if t == "Vector3" then
@@ -565,13 +554,11 @@ function invokeexternoperator(rettype, class, method, ...)
         if arg1~=nil and arg2~=nil and arg3~=nil then
             local t1 = nil
             local t2 = nil
-            local meta1 = getmetatable(arg2)
-            if meta1 then
-                t1 = rawget(meta1, "__typename")
+            if marg2 then
+                t1 = rawget(marg2, "__typename")
             end
-            local meta2 = getmetatable(arg3)
-            if meta2 then
-                t2 = rawget(meta2, "__typename")
+            if marg3 then
+                t2 = rawget(marg3, "__typename")
             end
             if t1=="Vector2" and type(arg3)=="number" then
                 return Slua.CreateClass("UnityEngine.Vector2", arg2.x*arg3, arg2.y*arg3)
@@ -599,14 +586,48 @@ function invokeexternoperator(rettype, class, method, ...)
                 return arg1[method](...)
             end
         end
-    end
-    if method then
-        if arg1~=nil and arg2==nil then
-            return arg1[method](...)
+    elseif method == "op_Division" then
+        if arg1~=nil and arg2~=nil and arg3~=nil then
+            local t1 = nil
+            local t2 = nil
+            if marg2 then
+                t1 = rawget(marg2, "__typename")
+            end
+            if marg3 then
+                t2 = rawget(marg3, "__typename")
+            end
+            if t1=="Vector2" and type(arg3)=="number" then
+                return Slua.CreateClass("UnityEngine.Vector2", arg2.x/arg3, arg2.y/arg3)
+            elseif t1=="Vector3" and type(arg3)=="number" then
+                return Slua.CreateClass("UnityEngine.Vector3", arg2.x/arg3, arg2.y/arg3, arg2.z/arg3)
+            elseif t1=="Vector4" and type(arg3)=="number" then
+                return Slua.CreateClass("UnityEngine.Vector4", arg2.x/arg3, arg2.y/arg3, arg2.z/arg3, arg2.w/arg3)
+            elseif t1=="Color" and type(arg3)=="number" then
+                return Slua.CreateClass("UnityEngine.Color", arg2.r/arg3, arg2.g/arg3, arg2.b/arg3, arg2.a/arg3)
+            else
+                arg2[method](...)
+            end
         elseif arg1~=nil and arg2~=nil then
-            arg2[method](...)
-        elseif arg1~=nil and arg2~=nil and arg3~=nil then
-            arg3[method](...)
+            if type(arg1)=="number" and type(arg2)=="number" then
+                return arg1 / arg2
+            else
+                return arg1[method](...)
+            end
+        end
+    end
+    if method then        
+        if issignature(arg1, method) then
+            if marg2~=nil and marg2[method] then
+                arg2[method](...)
+            elseif marg3~=nil and marg3[method] then
+                arg3[method](...)
+            end
+        else
+            if marg1~=nil and marg1[method] then
+                return arg1[method](...)
+            elseif marg2~=nil and marg2[method] then
+                arg2[method](...)
+            end
         end
     else
         UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
