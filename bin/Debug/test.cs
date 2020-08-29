@@ -19,10 +19,32 @@ class ZipInputStream
   {}
 }
 
-class ZipOutputStream
+partial class ZipOutputStream
 {
-  public ZipOutputStream(MemoryStream ms)
-  {}
+    public ZipOutputStream(MemoryStream ms)
+    {
+        Instance.V = 1;
+        Instance.Test();
+    }
+    public int V { get; set; }
+    public void Test()
+    { }
+    class EmbedClass
+    {
+        public void Test()
+        {
+            Instance.Test();
+        }
+    }
+}
+
+partial class ZipOutputStream
+{
+    public static ZipOutputStream Instance
+    {
+        get { return s_Instance; }
+    }
+    private static ZipOutputStream s_Instance = new ZipOutputStream();
 }
 
 class CUsingHelper : IDisposable

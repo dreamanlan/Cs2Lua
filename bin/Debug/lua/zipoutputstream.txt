@@ -4,6 +4,9 @@ ZipOutputStream = {
 	__new_object = function(...)
 		return newobject(ZipOutputStream, nil, nil, "ctor", nil, ...);
 	end,
+	get_Instance = function()
+		return ZipOutputStream.s_Instance;
+	end,
 	cctor = function()
 		ZipOutputStream.__cctor();
 	end,
@@ -13,6 +16,7 @@ ZipOutputStream = {
 		else
 			ZipOutputStream.__cctor_called = true;
 		end;
+		(= ZipOutputStream.s_Instance);
 	end,
 	__define_class = function()
 		Utility.Warn("ZipOutputStream::__define_class begin");
@@ -20,6 +24,7 @@ ZipOutputStream = {
 		local class = ZipOutputStream;
 		local static_fields_build = function()
 			local static_fields = {
+				s_Instance = __cs2lua_nil_field_value,
 				__cctor_called = false,
 			};
 			return static_fields;
@@ -28,7 +33,11 @@ ZipOutputStream = {
 		local instance_methods = {
 			ctor = function(this, ms)
 				this:__ctor();
+				ZipOutputStream.get_Instance().V = 1;
+				ZipOutputStream.get_Instance():Test();
 				return this;
+			end,
+			Test = function(this)
 			end,
 			__ctor = function(this)
 				if this.__ctor_called then 
@@ -40,6 +49,7 @@ ZipOutputStream = {
 		};
 		local instance_fields_build = function()
 			local instance_fields = {
+				V = 0,
 				__ctor_called = false,
 			};
 			return instance_fields;
@@ -56,6 +66,86 @@ ZipOutputStream = {
 		ctor = {
 			Kind = MethodKind.Constructor,
 		},
+		get_V = {
+			Kind = MethodKind.PropertyGet,
+		},
+		set_V = {
+			Kind = MethodKind.PropertySet,
+		},
+		Test = {
+			Kind = MethodKind.Ordinary,
+		},
+		get_Instance = {
+			Kind = MethodKind.PropertyGet,
+			static = true,
+		},
+	},
+	__property_info = nil,
+	__event_info = nil,
+	__field_info = nil,
+};
+
+ZipOutputStream.EmbedClass = {
+	__new_object = function(...)
+		return newobject(ZipOutputStream.EmbedClass, nil, nil, "ctor", nil, ...);
+	end,
+	cctor = function()
+		ZipOutputStream.EmbedClass.__cctor();
+	end,
+	__cctor = function()
+		if ZipOutputStream.EmbedClass.__cctor_called then 
+			return;
+		else
+			ZipOutputStream.EmbedClass.__cctor_called = true;
+		end;
+	end,
+	__define_class = function()
+		Utility.Warn("ZipOutputStream.EmbedClass::__define_class begin");
+
+		local class = ZipOutputStream.EmbedClass;
+		local static_fields_build = function()
+			local static_fields = {
+				__cctor_called = false,
+			};
+			return static_fields;
+		end;
+
+		local instance_methods = {
+			Test = function(this)
+				ZipOutputStream.get_Instance():Test();
+			end,
+			ctor = function(this)
+				this:__ctor();
+			end,
+			__ctor = function(this)
+				if this.__ctor_called then 
+					return;
+				else
+					this.__ctor_called = true;
+				end;
+			end,
+		};
+		local instance_fields_build = function()
+			local instance_fields = {
+				__ctor_called = false,
+			};
+			return instance_fields;
+		end;
+
+		local __defineclass_return = defineclass(nil, "ZipOutputStream.EmbedClass", "EmbedClass", class, static_fields_build, instance_methods, instance_fields_build, false);
+		Utility.Warn("ZipOutputStream.EmbedClass::__define_class end");
+		return __defineclass_return;
+	end,
+
+	__interfaces = nil,
+	__class_info = nil,
+	__method_info = {
+		Test = {
+			Kind = MethodKind.Ordinary,
+		},
+		ctor = {
+			Kind = MethodKind.Constructor,
+		},
 	},
 	__property_info = nil,
 	__event_info = nil,
@@ -66,4 +156,5 @@ ZipOutputStream = {
 require "cs2lua__lualib";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
+settempmetatable(ZipOutputStream.EmbedClass);
 settempmetatable(ZipOutputStream);

@@ -236,52 +236,55 @@ namespace RoslynTool.CsToDsl
                         return;
                     }
                     else if (sym.Kind == SymbolKind.Field || sym.Kind == SymbolKind.Property || sym.Kind == SymbolKind.Event) {
-                        if (IsNewObjMember(name)) {
+                        if (sym.IsStatic) {
+                            string fullName = ClassInfo.GetFullName(sym.ContainingType);
+                            CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, {2}, \"{3}\")", isExtern ? "getexternstatic" : "getstatic", SymbolTable.Instance.GetSymbolKind(sym), fullName, sym.Name);
+                            return;
+                        }
+                        else if (IsNewObjMember(name)) {
                             CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, newobj, \"{2}\")", isExtern ? "getexterninstance" : "getinstance", SymbolTable.Instance.GetSymbolKind(sym), name);
                             return;
                         }
-                        if (sym.ContainingType == classInfo.SemanticInfo || sym.ContainingType == classInfo.SemanticInfo.OriginalDefinition || classInfo.IsInherit(sym.ContainingType)) {
-                            if (sym.IsStatic) {
-                                CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, {2}, \"{3}\")", isExtern ? "getexternstatic" : "getstatic", SymbolTable.Instance.GetSymbolKind(sym), classInfo.Key, sym.Name);
-                            }
-                            else {
-                                CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, this, \"{2}\")", isExtern ? "getexterninstance" : "getinstance", SymbolTable.Instance.GetSymbolKind(sym), sym.Name);
-                            }
+                        else if (sym.ContainingType == classInfo.SemanticInfo || sym.ContainingType == classInfo.SemanticInfo.OriginalDefinition || classInfo.IsInherit(sym.ContainingType)) {
+                            CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, this, \"{2}\")", isExtern ? "getexterninstance" : "getinstance", SymbolTable.Instance.GetSymbolKind(sym), sym.Name);
                             return;
                         }
                     }
-                    else if (sym.Kind == SymbolKind.Method && (sym.ContainingType == classInfo.SemanticInfo || sym.ContainingType == classInfo.SemanticInfo.OriginalDefinition || classInfo.IsInherit(sym.ContainingType))) {
+                    else if (sym.Kind == SymbolKind.Method) {
                         var msym = sym as IMethodSymbol;
                         string manglingName = NameMangling(msym);
                         var mi = new MethodInfo();
                         mi.Init(msym, node);
-                        if (node.Parent is InvocationExpressionSyntax) {
-                            if (sym.IsStatic) {
-                                CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, {2}, \"{3}\")", isExtern ? "getexternstatic" : "getstatic", SymbolTable.Instance.GetSymbolKind(sym), classInfo.Key, manglingName);
-                            }
-                            else {
+                        if (sym.IsStatic && node.Parent is InvocationExpressionSyntax) {
+                            string fullName = ClassInfo.GetFullName(sym.ContainingType);
+                            CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, {2}, \"{3}\")", isExtern ? "getexternstatic" : "getstatic", SymbolTable.Instance.GetSymbolKind(sym), fullName, manglingName);
+                            return;
+                        }
+                        else if (sym.ContainingType == classInfo.SemanticInfo || sym.ContainingType == classInfo.SemanticInfo.OriginalDefinition || classInfo.IsInherit(sym.ContainingType)) {
+                            if (node.Parent is InvocationExpressionSyntax) {
                                 CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, this, \"{2}\")", isExtern ? "getexterninstance" : "getinstance", SymbolTable.Instance.GetSymbolKind(sym), manglingName);
                             }
-                        }
-                        else {
-                            string className = ClassInfo.GetFullName(msym.ContainingType);
-                            string delegationKey = string.Format("{0}:{1}", className, manglingName);
-                            string varName = string.Format("__delegation_{0}", GetSourcePosForVar(node));
-
-                            CodeBuilder.Append("(function(){ ");
-
-                            string paramsString = string.Join(", ", mi.ParamNames.ToArray());
-                            if (msym.IsStatic) {
-                                CodeBuilder.AppendFormat("builddelegation(\"{0}\", {1}, \"{2}\", {3}, {4}, {5}, {6});", paramsString, varName, delegationKey, className, manglingName, msym.ReturnsVoid ? "false" : "true", msym.IsStatic ? "true" : "false");
-                            }
                             else {
-                                CodeBuilder.AppendFormat("builddelegation(\"{0}\", {1}, \"{2}\", {3}, {4}, {5}, {6});", paramsString, varName, delegationKey, "this", manglingName, msym.ReturnsVoid ? "false" : "true", msym.IsStatic ? "true" : "false");
-                            }
+                                string className = ClassInfo.GetFullName(msym.ContainingType);
+                                string delegationKey = string.Format("{0}:{1}", className, manglingName);
+                                string varName = string.Format("__delegation_{0}", GetSourcePosForVar(node));
 
-                            CodeBuilder.Append(" })()");
+                                CodeBuilder.Append("(function(){ ");
+
+                                string paramsString = string.Join(", ", mi.ParamNames.ToArray());
+                                if (msym.IsStatic) {
+                                    CodeBuilder.AppendFormat("builddelegation(\"{0}\", {1}, \"{2}\", {3}, {4}, {5}, {6});", paramsString, varName, delegationKey, className, manglingName, msym.ReturnsVoid ? "false" : "true", msym.IsStatic ? "true" : "false");
+                                }
+                                else {
+                                    CodeBuilder.AppendFormat("builddelegation(\"{0}\", {1}, \"{2}\", {3}, {4}, {5}, {6});", paramsString, varName, delegationKey, "this", manglingName, msym.ReturnsVoid ? "false" : "true", msym.IsStatic ? "true" : "false");
+                                }
+
+                                CodeBuilder.Append(" })()");
+                            }
+                            return;
                         }
-                        return;
                     }
+                    ReportIllegalSymbol(node, symbolInfo);
                 }
                 else {
                     SymbolKind kind;

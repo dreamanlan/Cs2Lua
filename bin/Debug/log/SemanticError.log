@@ -1,2 +1,3 @@
 ============<<<Semantic Error:test>>>============
-test.cs(42,23): error CS0161: 'CUsingHelper.ReadZip(byte[])': not all code paths return a value
+test.cs(47,53): error CS7036: There is no argument given that corresponds to the required formal parameter 'ms' of 'ZipOutputStream.ZipOutputStream(MemoryStream)'
+test.cs(64,23): error CS0161: 'CUsingHelper.ReadZip(byte[])': not all code paths return a value
