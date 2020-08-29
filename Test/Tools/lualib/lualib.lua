@@ -577,7 +577,7 @@ function invokeexternoperator(rettype, class, method, ...)
             elseif type(arg2)=="number" and t2=="Color" then
                 return Slua.CreateClass("UnityEngine.Color", arg3.r*arg2, arg3.g*arg2, arg3.b*arg2, arg3.a*arg2)
             else
-                arg2[method](...)
+                return arg2[method](...)
             end
         elseif arg1~=nil and arg2~=nil then
             if type(arg1)=="number" and type(arg2)=="number" then
@@ -605,7 +605,7 @@ function invokeexternoperator(rettype, class, method, ...)
             elseif t1=="Color" and type(arg3)=="number" then
                 return Slua.CreateClass("UnityEngine.Color", arg2.r/arg3, arg2.g/arg3, arg2.b/arg3, arg2.a/arg3)
             else
-                arg2[method](...)
+                return arg2[method](...)
             end
         elseif arg1~=nil and arg2~=nil then
             if type(arg1)=="number" and type(arg2)=="number" then
@@ -618,15 +618,15 @@ function invokeexternoperator(rettype, class, method, ...)
     if method then        
         if issignature(arg1, method) then
             if marg2~=nil and marg2[method] then
-                arg2[method](...)
+                return arg2[method](...)
             elseif marg3~=nil and marg3[method] then
-                arg3[method](...)
+                return arg3[method](...)
             end
         else
             if marg1~=nil and marg1[method] then
                 return arg1[method](...)
             elseif marg2~=nil and marg2[method] then
-                arg2[method](...)
+                return arg2[method](...)
             end
         end
     else
