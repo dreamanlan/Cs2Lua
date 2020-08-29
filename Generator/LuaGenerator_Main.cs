@@ -1364,6 +1364,14 @@ namespace Generator
                 GenerateArguments(data, sb, indent, start, sig);
                 sb.Append(")");
             }
+            else if (id == "calldelegation" || id == "callexterndelegation") {
+                var obj = data.Params[0];
+                GenerateSyntaxComponent(obj, sb, indent, false);
+                sb.Append("(");
+                int start = 1;
+                GenerateArguments(data, sb, indent, start);
+                sb.Append(")");
+            }
             else if (id == "callextension") {
                 var obj = data.Params[0];
                 var member = data.Params[1];

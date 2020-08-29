@@ -280,13 +280,24 @@ namespace RoslynTool.CsToDsl
                 if (sym.MethodKind == MethodKind.DelegateInvoke) {
                     var memberAccess = node as MemberAccessExpressionSyntax;
                     if (null != memberAccess) {
-                        if (IsExternMethod)
-                            codeBuilder.Append("callexterninstance(");
-                        else
-                            codeBuilder.Append("callinstance(");
-                        cs2dsl.OutputExpressionSyntax(exp);
-                        codeBuilder.AppendFormat(", \"{0}\"", memberAccess.Name);
-                        prestr = ", ";
+                        var symInfo = model.GetSymbolInfoEx(node);
+                        var masym = symInfo.Symbol as ISymbol;
+                        if (null != masym) {
+                            bool isCs2Lua = SymbolTable.Instance.IsCs2DslSymbol(masym);
+                            string kind = SymbolTable.Instance.GetSymbolKind(masym);
+                            if (isCs2Lua)
+                                codeBuilder.AppendFormat("call{0}delegation(getinstance(SymbolKind.", IsExternMethod ? "extern" : string.Empty);
+                            else
+                                codeBuilder.AppendFormat("call{0}delegation(getexterninstance(SymbolKind.", IsExternMethod ? "extern" : string.Empty);
+                            codeBuilder.Append(kind);
+                            codeBuilder.Append(", ");
+                            cs2dsl.OutputExpressionSyntax(exp);
+                            codeBuilder.AppendFormat(", \"{0}\")", memberAccess.Name);
+                            prestr = ", ";
+                        }
+                        else {
+                            //error;
+                        }
                     }
                     else {
                         //error;
