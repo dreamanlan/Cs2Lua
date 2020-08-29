@@ -614,24 +614,28 @@ return index
 
 		static void completeTypeMeta(IntPtr l, LuaCSFunction con, Type self)
 		{
+            //lua stack on enter:
+            //  static metatable(-1)
+            //  type table(-2)
+
 			LuaDLL.lua_pushstring(l, ObjectCache.getAQName(self));
-            LuaDLL.lua_setfield(l, -3, "__fullname");
+            LuaDLL.lua_setfield(l, -3, "__fullname");//set type table
 
             LuaDLL.lua_pushstring(l, "__fullname");
             LuaDLL.lua_pushstring(l, self.FullName);
-            LuaDLL.lua_rawset(l, -3);
+            LuaDLL.lua_rawset(l, -3);//set static metatable
 
             LuaDLL.lua_pushstring(l, "__typename");
             LuaDLL.lua_pushstring(l, self.Name);
-            LuaDLL.lua_rawset(l, -3);
+            LuaDLL.lua_rawset(l, -3);//set static metatable
 
-			index_func.push(l);
+            index_func.push(l);
 			LuaDLL.lua_setfield(l, -2, "__index");
 
-			newindex_func.push(l);
+            newindex_func.push(l);
 			LuaDLL.lua_setfield(l, -2, "__newindex");
 
-			if (con == null) con = noConstructor;
+            if (con == null) con = noConstructor;
 
 			pushValue(l, con);
 			LuaDLL.lua_setfield(l, -2, "__call");
@@ -640,23 +644,28 @@ return index
 			LuaDLL.lua_setfield(l, -2, "__tostring");
 
 			LuaDLL.lua_pushvalue(l, -1);
-			LuaDLL.lua_setmetatable(l, -3);
+			LuaDLL.lua_setmetatable(l, -3);//set type table's metatable static metatable
 
-			LuaDLL.lua_setfield(l, LuaIndexes.LUA_REGISTRYINDEX, self.FullName);
-		}
+			LuaDLL.lua_setfield(l, LuaIndexes.LUA_REGISTRYINDEX, self.FullName);// pop static metatable and reg static metatable
+        }
 
 		private static void completeInstanceMeta(IntPtr l, Type self)
         {
+            //lua stack on enter:
+            //  instance metatable(-1)
+            //  static metatable(-2)
+            //  type table(-3)
+
             LuaDLL.lua_pushstring(l, "__fullname");
             LuaDLL.lua_pushstring(l, self.FullName);
-            LuaDLL.lua_rawset(l, -3);
+            LuaDLL.lua_rawset(l, -3);//set instance metatable
 
 			LuaDLL.lua_pushstring(l, "__typename");
 			LuaDLL.lua_pushstring(l, self.Name);
-			LuaDLL.lua_rawset(l, -3);
+			LuaDLL.lua_rawset(l, -3);//set instance metatable
 
-			// for instance 
-			index_func.push(l);
+            // for instance 
+            index_func.push(l);
 			LuaDLL.lua_setfield(l, -2, "__index");
 
 			newindex_func.push(l);
@@ -693,9 +702,9 @@ return index
 			if (self.IsValueType && isImplByLua(self))
 			{
 				LuaDLL.lua_pushvalue(l, -1);
-                LuaDLL.lua_setglobal(l, self.FullName + ".Instance");
+                LuaDLL.lua_setglobal(l, self.FullName + ".Instance");//valuetype's instance metatable assign to FullTypeName+".Instance" global variable
 			}
-			LuaDLL.lua_setfield(l, LuaIndexes.LUA_REGISTRYINDEX,  ObjectCache.getAQName(self));
+			LuaDLL.lua_setfield(l, LuaIndexes.LUA_REGISTRYINDEX,  ObjectCache.getAQName(self));//pop instance metatable and reg instance metatable
 		}
 
 

@@ -480,7 +480,19 @@ namespace SLua
 							tname = LuaDLL.lua_tostring (l, -1);
 							LuaDLL.lua_pop (l, 2);
 						} else {
-							LuaDLL.lua_pushstring(l, "__raw");
+                            /**
+                             * 这里处理的是slua手写lua实现的值类型作为参数传递时的处理（比如typeof操作的结果）
+                             * slua手写lua实现的值类型，一般会提供lua端的type table，然后用__raw指向c#端定义
+                             * 的type table(注意对象实例的元表也使用了lua端的，实例在c#端会重建一个，从而可以
+                             * 正常使用c#端定义的元表，见checkType对应于值类型的重载，主要由slua.c里提供的系列
+                             * 方法luaS_checkXXX/luaS_pushXXX来进行c#/lua间值类型的转换):
+                             *      local Raw = UnityEngine.Vector4
+                             *      local Vector4 = { __typename = 'Vector4', __raw = Raw }
+                             *      local I = { __typename = 'Vector4' }
+                             *      _G['UnityEngine.Vector4.Instance'] = I
+                             *      UnityEngine.Vector4 = Vector4
+                            */
+                            LuaDLL.lua_pushstring(l, "__raw");
 							LuaDLL.lua_rawget(l, p);
 							if (!LuaDLL.lua_isnil (l, -1)) {
 								LuaDLL.lua_pushstring (l, "__type");
@@ -517,6 +529,7 @@ namespace SLua
 			t = LuaObject.FindType(tname);
             if (t != null && lt==LuaTypes.LUA_TTABLE)
             {
+                //缓存Type到__type,注意__type只是一个cache字段，不是一定存在的
                 LuaDLL.lua_pushstring(l, "__type");
 				pushLightObject(l, t);
                 LuaDLL.lua_rawset(l, p);
