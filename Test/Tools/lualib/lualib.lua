@@ -1354,9 +1354,9 @@ __mt_index_of_array_table = {
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
         end,
     AddRange = function(obj, coll)
-            local enumer = coll:GetEnumerator()
-            while enumer:MoveNext() do
-                table.insert(obj, enumer.Current)
+            local iter = newiterator(coll)
+            for v in getiterator(iter) do
+                table.insert(obj, v)
                 __inc_array_count(obj)
             end
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
