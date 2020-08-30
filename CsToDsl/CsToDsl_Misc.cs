@@ -284,7 +284,6 @@ namespace RoslynTool.CsToDsl
                             return;
                         }
                     }
-                    ReportIllegalSymbol(node, symbolInfo);
                 }
                 else {
                     SymbolKind kind;
