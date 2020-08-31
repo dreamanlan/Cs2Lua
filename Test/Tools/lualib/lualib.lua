@@ -906,6 +906,14 @@ function wrapexternstruct(v, classObj)
     return v
 end
 
+function luatoobject(arg, ...)
+    return arg, ...
+end
+
+function objecttolua(arg, ...)
+    return arg, ...
+end
+
 __mt_delegation = {
     __is_delegation = true,
     __call = function(t, ...)
