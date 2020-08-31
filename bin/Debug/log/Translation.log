@@ -1,2 +1,2 @@
 ============<<<Translation Error:test>>>============
-<<<[Log for ObjectCreationExpressionSyntax]>>> [code:[ new ZipOutputStream() ] location: test.cs: (46,48)-(46,69)] Unknown ObjectCreationExpressionSyntax !
+<<<[Log for ObjectCreationExpressionSyntax]>>> [code:[ new ZipOutputStream() ] location: test.cs: (51,48)-(51,69)] Unknown ObjectCreationExpressionSyntax !

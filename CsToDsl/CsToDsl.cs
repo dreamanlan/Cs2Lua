@@ -147,7 +147,7 @@ namespace RoslynTool.CsToDsl
             }
             return ret;
         }
-        internal void OutputArgumentList(IList<ExpressionSyntax> args, IList<ArgDefaultValueInfo> defValArgs, IList<ITypeSymbol> typeArgs, string externOverloadedMethodSignature, bool postpositionGenericTypeArgs, bool arrayToParams, bool useTypeNameString, SyntaxNode node, params IConversionExpression[] opds)
+        internal void OutputArgumentList(IList<ExpressionSyntax> args, HashSet<int> dslToObjectArgs, IList<ArgDefaultValueInfo> defValArgs, HashSet<int> dslToObjectDefArgs, IList<ITypeSymbol> typeArgs, string externOverloadedMethodSignature, bool postpositionGenericTypeArgs, bool arrayToParams, bool useTypeNameString, SyntaxNode node, params IConversionExpression[] opds)
         {
             if (!string.IsNullOrEmpty(externOverloadedMethodSignature)) {
                 CodeBuilder.AppendFormat("\"{0}\"", externOverloadedMethodSignature);
@@ -160,7 +160,7 @@ namespace RoslynTool.CsToDsl
             if (args.Count + defValArgs.Count > 0) {
                 if (!string.IsNullOrEmpty(externOverloadedMethodSignature) || !postpositionGenericTypeArgs && typeArgs.Count > 0)
                     CodeBuilder.Append(", ");
-                OutputExpressionList(args, defValArgs, arrayToParams, node, opds);
+                OutputExpressionList(args, dslToObjectArgs, defValArgs, dslToObjectDefArgs, arrayToParams, node, opds);
             }
             if (postpositionGenericTypeArgs && typeArgs.Count > 0) {
                 if (!string.IsNullOrEmpty(externOverloadedMethodSignature) || args.Count + defValArgs.Count > 0)
@@ -170,10 +170,17 @@ namespace RoslynTool.CsToDsl
         }
         internal void OutputExpressionSyntax(ExpressionSyntax node)
         {
-            OutputExpressionSyntax(node, null);
+            OutputExpressionSyntax(node, null, false);
         }
         internal void OutputExpressionSyntax(ExpressionSyntax node, IConversionExpression opd)
         {
+            OutputExpressionSyntax(node, opd, false);
+        }
+        internal void OutputExpressionSyntax(ExpressionSyntax node, IConversionExpression opd, bool dslToObject)
+        {
+            if (dslToObject) {
+                CodeBuilder.Append("dsltoobject(");
+            }
             if (null != opd && opd.UsesOperatorMethod && !(node is CastExpressionSyntax)) {
                 IMethodSymbol msym = opd.OperatorMethod;
                 InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), node);
@@ -183,6 +190,9 @@ namespace RoslynTool.CsToDsl
             }
             else {
                 VisitExpressionSyntax(node);
+            }
+            if (dslToObject) {
+                CodeBuilder.Append(")");
             }
         }
         internal ClassInfo GetCurClassInfo()
@@ -346,29 +356,30 @@ namespace RoslynTool.CsToDsl
         }
         private void OutputExpressionList(IList<ExpressionSyntax> args, SyntaxNode node)
         {
-            OutputExpressionList(args, null, false, node);
+            OutputExpressionList(args, null, null, null, false, node);
         }
-        private void OutputExpressionList(IList<ExpressionSyntax> args, IList<ArgDefaultValueInfo> defValArgs, bool arrayToParams, SyntaxNode node, params IConversionExpression[] opds)
+        private void OutputExpressionList(IList<ExpressionSyntax> args, HashSet<int> dslToObjectArgs, IList<ArgDefaultValueInfo> defValArgs, HashSet<int> dslToObjectDefArgs, bool arrayToParams, SyntaxNode node, params IConversionExpression[] opds)
         {
             int ct = args.Count;
             for (int i = 0; i < ct; ++i) {
                 var exp = args[i];
                 var opd = opds.Length > i ? opds[i] : null;
+                bool dslToObject = null != dslToObjectArgs ? dslToObjectArgs.Contains(i) : false;
                 //表达式对象为空表明这个是一个out实参，替换为__cs2dsl_out
                 if (null == exp) {
                     CodeBuilder.Append("__cs2dsl_out");
                 }
                 else if (i < ct - 1) {
-                    OutputExpressionSyntax(exp, opd);
+                    OutputExpressionSyntax(exp, opd, dslToObject);
                 }
                 else {
                     if (arrayToParams) {
                         CodeBuilder.Append("dslunpack(");
-                        OutputExpressionSyntax(exp, opd);
+                        OutputExpressionSyntax(exp, opd, dslToObject);
                         CodeBuilder.Append(")");
                     }
                     else {
-                        OutputExpressionSyntax(exp, opd);
+                        OutputExpressionSyntax(exp, opd, dslToObject);
                     }
                 }
                 if (i < ct - 1) {
@@ -383,11 +394,16 @@ namespace RoslynTool.CsToDsl
                 for (int i = 0; i < dvCt; ++i) {
                     var info = defValArgs[i];
                     var opd = opds.Length > ct + i ? opds[ct + i] : null;
+                    bool dslToObject = null != dslToObjectDefArgs ? dslToObjectDefArgs.Contains(i) : false;
                     if (null != info.Expression) {
-                        OutputExpressionSyntax(info.Expression, opd);
+                        OutputExpressionSyntax(info.Expression, opd, dslToObject);
                     }
                     else {
+                        if (dslToObject)
+                            CodeBuilder.Append("dsltoobject(");
                         OutputArgumentDefaultValue(info.Value, info.OperOrSym, opd, node);
+                        if (dslToObject)
+                            CodeBuilder.Append(")");
                     }
                     if (i < dvCt - 1) {
                         CodeBuilder.Append(", ");
@@ -845,7 +861,7 @@ namespace RoslynTool.CsToDsl
                 string manglingName = NameMangling(ii.MethodSymbol);
                 CodeBuilder.AppendFormat("\"{0}\"", manglingName);
                 CodeBuilder.Append(", ");
-                OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, node, ii.ArgConversions.ToArray());
+                OutputArgumentList(ii.Args, ii.DslToObjectArgs, ii.DefaultValueArgs, ii.DslToObjectDefArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, node, ii.ArgConversions.ToArray());
                 CodeBuilder.Append(")");
             }
             else {
@@ -853,7 +869,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("invokeexternoperator({0}, {1}, ", ClassInfo.GetFullName(ii.MethodSymbol.ReturnType), ii.GenericClassKey);
                 CodeBuilder.AppendFormat("\"{0}\"", method);
                 CodeBuilder.Append(", ");
-                OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, node, ii.ArgConversions.ToArray());
+                OutputArgumentList(ii.Args, ii.DslToObjectArgs, ii.DefaultValueArgs, ii.DslToObjectDefArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, node, ii.ArgConversions.ToArray());
                 CodeBuilder.Append(")");
             }
         }

@@ -157,12 +157,19 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendLine(";");
                 return;
             }
-            VisitLocalVariableDeclarator(ci, node);
+            bool dslToObject = false;
+            IOperation oper = null;
             if (null != node.Initializer) {
-                var oper = m_Model.GetOperationEx(node.Initializer.Value);
+                oper = m_Model.GetOperationEx(node.Initializer.Value);
+                if (null != localSym && null != localSym.Type && null != oper && null != oper.Type) {
+                    dslToObject = InvocationInfo.IsDslToObject(localSym.Type, oper.Type);
+                }
+            }
+            VisitLocalVariableDeclarator(ci, node, dslToObject);
+            if (null != node.Initializer) {
                 var rightSymbolInfo = m_Model.GetSymbolInfoEx(node.Initializer.Value);
                 var rightSym = rightSymbolInfo.Symbol;
-                if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && !CsDslTranslater.IsImplementationOfSys(oper.Type, "IEnumerator")) {
+                if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && !dslToObject && !CsDslTranslater.IsImplementationOfSys(oper.Type, "IEnumerator")) {
                     if (null != rightSym && (rightSym.Kind == SymbolKind.Method || rightSym.Kind == SymbolKind.Property || rightSym.Kind == SymbolKind.Field || rightSym.Kind == SymbolKind.Local) && SymbolTable.Instance.IsCs2DslSymbol(rightSym)) {
                         if (SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
                             CodeBuilder.AppendFormat("{0}{1} = wrapstruct({2}, {3});", GetIndentString(), node.Identifier.Text, node.Identifier.Text, ClassInfo.GetFullName(oper.Type));

@@ -576,8 +576,12 @@ namespace RoslynTool.CsToDsl
                         }
                     }
                 }
-                VisitAssignment(ci, op, baseOp, assign, expTerminater, true, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType);                
-                if (null != rightOper && null != rightOper.Type && rightOper.Type.TypeKind == TypeKind.Struct && !CsDslTranslater.IsImplementationOfSys(rightOper.Type, "IEnumerator")) {
+                bool dslToObject = false;
+                if (null != leftOper && null != leftOper.Type && null != rightOper && null != rightOper.Type) {
+                    dslToObject = InvocationInfo.IsDslToObject(leftOper.Type, rightOper.Type);
+                }
+                VisitAssignment(ci, op, baseOp, assign, expTerminater, true, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType, dslToObject);
+                if (null != rightOper && null != rightOper.Type && rightOper.Type.TypeKind == TypeKind.Struct && !dslToObject && !CsDslTranslater.IsImplementationOfSys(rightOper.Type, "IEnumerator")) {
                     //只有变量赋值与字段赋值需要处理，其它的都在相应的函数调用里处理了
                     if (null != rightSym && (rightSym.Kind == SymbolKind.Method || rightSym.Kind == SymbolKind.Property || rightSym.Kind == SymbolKind.Field || rightSym.Kind == SymbolKind.Local) && SymbolTable.Instance.IsCs2DslSymbol(rightSym)) {
                         if (null != leftSym && (leftSym.Kind == SymbolKind.Local || SymbolTable.Instance.IsFieldSymbolKind(leftSym))) {
@@ -761,7 +765,7 @@ namespace RoslynTool.CsToDsl
             if (expTerminater.Length > 0)
                 CodeBuilder.AppendLine();
         }
-        private void VisitLocalVariableDeclarator(ClassInfo ci, VariableDeclaratorSyntax node)
+        private void VisitLocalVariableDeclarator(ClassInfo ci, VariableDeclaratorSyntax node, bool dslToObject)
         {
             var declSym = m_Model.GetDeclaredSymbol(node) as ILocalSymbol;
             var namedTypeSym = null != declSym ? declSym.Type as INamedTypeSymbol : null;
@@ -805,6 +809,9 @@ namespace RoslynTool.CsToDsl
                             iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
                             CodeBuilder.AppendFormat("{0}local({1}); {2}", GetIndentString(), node.Identifier.Text, node.Identifier.Text);
                             CodeBuilder.AppendFormat(" {0} ", token.Text);
+                            if (dslToObject) {
+                                CodeBuilder.Append("dsltoobject(");
+                            }
                             OutputConversionInvokePrefix(iop);
                             if (ct > 0) {
                                 CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign({1}", localName, localName);
@@ -829,6 +836,11 @@ namespace RoslynTool.CsToDsl
                             else if (!useOperator) {
                                 CodeBuilder.AppendFormat(" {0} ", token.Text);
                             }
+                            if (!useOperator) {
+                                if (dslToObject) {
+                                    CodeBuilder.Append("dsltoobject(");
+                                }
+                            }
                             ii.OutputInvocation(CodeBuilder, this, memberAccess.Expression, true, m_Model, memberAccess);
                         }
                         else {
@@ -840,6 +852,11 @@ namespace RoslynTool.CsToDsl
                             else if (!useOperator) {
                                 CodeBuilder.AppendFormat(" {0} ", token.Text);
                             }
+                            if (!useOperator) {
+                                if (dslToObject) {
+                                    CodeBuilder.Append("dsltoobject(");
+                                }
+                            }
                             ii.OutputInvocation(CodeBuilder, this, invocation.Expression, false, m_Model, invocation);
                         }
                         if (useOperator) {
@@ -848,12 +865,15 @@ namespace RoslynTool.CsToDsl
                             }
                             CodeBuilder.Append(")");
                         }
+                        if (dslToObject) {
+                            CodeBuilder.Append(")");
+                        }
                     }
                 }
                 else {
                     CodeBuilder.AppendFormat("{0}local({1}); {2}", GetIndentString(), node.Identifier.Text, node.Identifier.Text);
                     CodeBuilder.AppendFormat(" {0} ", token.Text);
-                    OutputExpressionSyntax(init.Value, opd);
+                    OutputExpressionSyntax(init.Value, opd, dslToObject);
                 }
             }
             else if (null != namedTypeSym && namedTypeSym.IsValueType && !SymbolTable.IsBasicType(namedTypeSym)) {
@@ -892,7 +912,8 @@ namespace RoslynTool.CsToDsl
         /// <param name="leftElementAccess"></param>
         /// <param name="leftCondAccess"></param>
         /// <param name="specialType"></param>
-        private void VisitAssignment(ClassInfo ci, string op, string baseOp, AssignmentExpressionSyntax assign, string expTerminater, bool toplevel, IOperation leftOper, ISymbol leftSym, IPropertySymbol leftPsym, IEventSymbol leftEsym, IFieldSymbol leftFsym, MemberAccessExpressionSyntax leftMemberAccess, ElementAccessExpressionSyntax leftElementAccess, ConditionalAccessExpressionSyntax leftCondAccess, SpecialAssignmentType specialType)
+        /// <param name="convertType"></param>
+        private void VisitAssignment(ClassInfo ci, string op, string baseOp, AssignmentExpressionSyntax assign, string expTerminater, bool toplevel, IOperation leftOper, ISymbol leftSym, IPropertySymbol leftPsym, IEventSymbol leftEsym, IFieldSymbol leftFsym, MemberAccessExpressionSyntax leftMemberAccess, ElementAccessExpressionSyntax leftElementAccess, ConditionalAccessExpressionSyntax leftCondAccess, SpecialAssignmentType specialType, bool dslToObject)
         {
             var assignOper = m_Model.GetOperationEx(assign);
             IConversionExpression opd = null, lopd = null, ropd = null;
@@ -913,7 +934,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("setinstance(SymbolKind.Property, ");
                 OutputExpressionSyntax(leftMemberAccess.Expression);
                 CodeBuilder.AppendFormat(", \"{0}\", ", mname);
-                OutputExpressionSyntax(assign.Right, opd);
+                OutputExpressionSyntax(assign.Right, opd, dslToObject);
                 CodeBuilder.Append(")");
             }
             else if (specialType == SpecialAssignmentType.PropForBasicValueType) {
@@ -921,18 +942,18 @@ namespace RoslynTool.CsToDsl
                 string className = ClassInfo.GetFullName(leftPsym.ContainingType);
                 bool isEnumClass = leftPsym.ContainingType.TypeKind == TypeKind.Enum || className == "System.Enum";
                 string pname = leftPsym.Name;
-                string ckey = InvocationInfo.CalcInvokeTarget(isEnumClass, className, this, leftMemberAccess.Expression, m_Model);
+                string ckey = InvocationInfo.CalcInvokeTarget(isEnumClass, className, this, leftOper);
                 CodeBuilder.AppendFormat("setforbasicvalue(");
                 OutputExpressionSyntax(leftMemberAccess.Expression);
                 CodeBuilder.AppendFormat(", {0}, {1}, \"{2}\", ", isEnumClass ? "true" : "false", ckey, pname);
-                OutputExpressionSyntax(assign.Right, opd);
+                OutputExpressionSyntax(assign.Right, opd, dslToObject);
                 CodeBuilder.Append(")");
             }
             else if (null != leftElementAccess) {
-                VisitAssignmentLeftElementAccess(ci, assign, toplevel, leftOper, leftSym, leftPsym, leftElementAccess, opd);
+                VisitAssignmentLeftElementAccess(ci, assign, toplevel, leftOper, leftSym, leftPsym, leftElementAccess, opd, dslToObject);
             }
             else if (null != leftCondAccess) {
-                VisitAssignmentLeftCondAccess(ci, assign, leftSym, leftCondAccess, opd);
+                VisitAssignmentLeftCondAccess(ci, assign, leftSym, leftCondAccess, opd, dslToObject);
             }
             else if (leftOper.Type.TypeKind == TypeKind.Delegate) {
                 bool isMemberAccess = null != leftPsym || null != leftEsym || null != leftFsym;
@@ -971,7 +992,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.Append(")");
             }
             else if (null != invocation) {
-                VisitAssignmentInvocation(ci, op, baseOp, assign, invocation, opd, lopd, ropd, compAssignInfo);
+                VisitAssignmentInvocation(ci, op, baseOp, assign, invocation, opd, lopd, ropd, compAssignInfo, dslToObject);
             }
             else {
                 bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(leftSym);
@@ -1010,7 +1031,7 @@ namespace RoslynTool.CsToDsl
                         OutputExpressionSyntax(assign.Left);
                         CodeBuilder.Append(" = ");
                     }
-                    OutputExpressionSyntax(assign.Right, opd);
+                    OutputExpressionSyntax(assign.Right, opd, dslToObject);
                 }
                 else {
                     if (isMemberAccess) {
@@ -1045,6 +1066,9 @@ namespace RoslynTool.CsToDsl
                     else {
                         OutputExpressionSyntax(assign.Left);
                         CodeBuilder.Append(" = ");
+                    }
+                    if (dslToObject) {
+                        CodeBuilder.Append("dsltoobject(");
                     }
                     if (null != compAssignInfo && compAssignInfo.UsesOperatorMethod) {
                         IMethodSymbol msym = compAssignInfo.OperatorMethod;
@@ -1091,6 +1115,9 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.Append(")");
                         }
                     }
+                    if (dslToObject) {
+                        CodeBuilder.Append(")");
+                    }
                 }
                 if (isMemberAccess) {
                     CodeBuilder.Append(")");
@@ -1100,7 +1127,7 @@ namespace RoslynTool.CsToDsl
             if (expTerminater.Length > 0)
                 CodeBuilder.AppendLine();
         }
-        private void VisitAssignmentLeftElementAccess(ClassInfo ci, AssignmentExpressionSyntax assign, bool toplevel, IOperation leftOper, ISymbol leftSym, IPropertySymbol leftPsym, ElementAccessExpressionSyntax leftElementAccess, IConversionExpression opd)
+        private void VisitAssignmentLeftElementAccess(ClassInfo ci, AssignmentExpressionSyntax assign, bool toplevel, IOperation leftOper, ISymbol leftSym, IPropertySymbol leftPsym, ElementAccessExpressionSyntax leftElementAccess, IConversionExpression opd, bool dslToObject)
         {
             if (null != leftSym && leftSym.IsStatic) {
                 AddReferenceAndTryDeriveGenericTypeInstance(ci, leftSym);
@@ -1141,9 +1168,9 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("\"{0}\", {1}, {2}, ", manglingName, leftPsym.SetMethod.Parameters.Length, toplevel ? "true" : "false");
                 InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), leftElementAccess);
                 ii.Init(leftPsym.SetMethod, leftElementAccess.ArgumentList, m_Model);
-                OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, leftElementAccess, ii.ArgConversions.ToArray());
+                OutputArgumentList(ii.Args, ii.DslToObjectArgs, ii.DefaultValueArgs, ii.DslToObjectDefArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, leftElementAccess, ii.ArgConversions.ToArray());
                 CodeBuilder.Append(", ");
-                OutputExpressionSyntax(assign.Right, opd);
+                OutputExpressionSyntax(assign.Right, opd, dslToObject);
                 CodeBuilder.Append(")");
             }
             else if (leftOper.Kind == OperationKind.ArrayElementReferenceExpression) {
@@ -1153,7 +1180,7 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.Append(", ");
                     VisitBracketedArgumentList(leftElementAccess.ArgumentList);
                     CodeBuilder.Append(", ");
-                    OutputExpressionSyntax(assign.Right, opd);
+                    OutputExpressionSyntax(assign.Right, opd, dslToObject);
                     CodeBuilder.Append(")");
                 }
                 else {
@@ -1165,7 +1192,7 @@ namespace RoslynTool.CsToDsl
                         VisitBracketedArgumentList(leftElementAccess.ArgumentList);
                         CodeBuilder.Append("] = ");
                         CodeBuilder.AppendFormat("execclosure(true, {0}, false){{ {1} = ", localName, localName);
-                        OutputExpressionSyntax(assign.Right, opd);
+                        OutputExpressionSyntax(assign.Right, opd, dslToObject);
                         CodeBuilder.Append("; };");
                         CodeBuilder.Append("; }");
                     }
@@ -1174,7 +1201,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append("[");
                         VisitBracketedArgumentList(leftElementAccess.ArgumentList);
                         CodeBuilder.Append("] = ");
-                        OutputExpressionSyntax(assign.Right, opd);
+                        OutputExpressionSyntax(assign.Right, opd, dslToObject);
                     }
                 }
             }
@@ -1182,7 +1209,7 @@ namespace RoslynTool.CsToDsl
                 Log(assign, "unknown set element symbol !");
             }
         }
-        private void VisitAssignmentLeftCondAccess(ClassInfo ci, AssignmentExpressionSyntax assign, ISymbol leftSym, ConditionalAccessExpressionSyntax leftCondAccess, IConversionExpression opd)
+        private void VisitAssignmentLeftCondAccess(ClassInfo ci, AssignmentExpressionSyntax assign, ISymbol leftSym, ConditionalAccessExpressionSyntax leftCondAccess, IConversionExpression opd, bool dslToObject)
         {
             CodeBuilder.Append("condaccess(");
             OutputExpressionSyntax(leftCondAccess.Expression);
@@ -1234,9 +1261,9 @@ namespace RoslynTool.CsToDsl
                     InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), leftCondAccess);
                     List<ExpressionSyntax> args = new List<ExpressionSyntax> { leftCondAccess.WhenNotNull };
                     ii.Init(psym.SetMethod, args, m_Model);
-                    OutputArgumentList(ii.Args, ii.DefaultValueArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, leftCondAccess, ii.ArgConversions.ToArray());
+                    OutputArgumentList(ii.Args, ii.DslToObjectArgs, ii.DefaultValueArgs, ii.DslToObjectDefArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, leftCondAccess, ii.ArgConversions.ToArray());
                     CodeBuilder.Append(", ");
-                    OutputExpressionSyntax(assign.Right, opd);
+                    OutputExpressionSyntax(assign.Right, opd, dslToObject);
                     CodeBuilder.Append(")");
                     CodeBuilder.Append("); }");
                 }
@@ -1247,7 +1274,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(", ");
                         OutputExpressionSyntax(leftCondAccess.WhenNotNull);
                         CodeBuilder.Append(", ");
-                        OutputExpressionSyntax(assign.Right, opd);
+                        OutputExpressionSyntax(assign.Right, opd, dslToObject);
                         CodeBuilder.Append(")");
                     }
                     else {
@@ -1258,7 +1285,7 @@ namespace RoslynTool.CsToDsl
                         OutputExpressionSyntax(leftCondAccess.WhenNotNull);
                         CodeBuilder.Append("] = ");
                         CodeBuilder.AppendFormat("execclosure(true, {0}, false){{ {1} = ", localName, localName);
-                        OutputExpressionSyntax(assign.Right, opd);
+                        OutputExpressionSyntax(assign.Right, opd, dslToObject);
                         CodeBuilder.Append("; };");
                         CodeBuilder.Append(" return(");
                         CodeBuilder.Append(localName);
@@ -1276,7 +1303,7 @@ namespace RoslynTool.CsToDsl
                 OutputExpressionSyntax(leftCondAccess.WhenNotNull);
                 CodeBuilder.Append(" = ");
                 CodeBuilder.AppendFormat("execclosure(true, {0}, false){{ {1} = ", localName, localName);
-                OutputExpressionSyntax(assign.Right, opd);
+                OutputExpressionSyntax(assign.Right, opd, dslToObject);
                 CodeBuilder.Append("; };");
                 CodeBuilder.Append(" return(");
                 CodeBuilder.Append(localName);
@@ -1284,7 +1311,7 @@ namespace RoslynTool.CsToDsl
             }
             CodeBuilder.Append(")");
         }
-        private void VisitAssignmentInvocation(ClassInfo ci, string op, string baseOp, AssignmentExpressionSyntax assign, InvocationExpressionSyntax invocation, IConversionExpression opd, IConversionExpression lopd, IConversionExpression ropd, ICompoundAssignmentExpression compAssignInfo)
+        private void VisitAssignmentInvocation(ClassInfo ci, string op, string baseOp, AssignmentExpressionSyntax assign, InvocationExpressionSyntax invocation, IConversionExpression opd, IConversionExpression lopd, IConversionExpression ropd, ICompoundAssignmentExpression compAssignInfo, bool dslToObject)
         {
             string localName = string.Format("__assigninvoke_{0}", GetSourcePosForVar(invocation));
             SymbolInfo symInfo = m_Model.GetSymbolInfoEx(invocation);
@@ -1326,10 +1353,15 @@ namespace RoslynTool.CsToDsl
                     }
 
                     bool outputEqualOp = false;
+                    bool convertHandled = false;
                     int ct = ii.ReturnArgs.Count;
                     if (op != "=") {
                         OutputExpressionSyntax(assign.Left);
                         CodeBuilder.Append(" = ");
+                        if (dslToObject) {
+                            CodeBuilder.Append("dsltoobject(");
+                        }
+                        convertHandled = true;
                         ProcessBinaryOperator(assign, ref baseOp);
                         string functor;
                         if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
@@ -1360,6 +1392,10 @@ namespace RoslynTool.CsToDsl
                         iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
                         OutputExpressionSyntax(assign.Left);
                         CodeBuilder.Append(" = ");
+                        if (dslToObject) {
+                            CodeBuilder.Append("dsltoobject(");
+                        }
+                        convertHandled = true;
                         OutputConversionInvokePrefix(iop);
                         if (ct > 0) {
                             CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign({1}", localName, localName);
@@ -1382,6 +1418,11 @@ namespace RoslynTool.CsToDsl
                     if (outputEqualOp) {
                         CodeBuilder.Append(" = ");
                     }
+                    if (!convertHandled) {
+                        if (dslToObject) {
+                            CodeBuilder.Append("dsltoobject(");
+                        }
+                    }
                     ii.OutputInvocation(CodeBuilder, this, memberAccess.Expression, true, m_Model, memberAccess);
                     if (op != "=") {
                         if (ct > 0) {
@@ -1402,10 +1443,15 @@ namespace RoslynTool.CsToDsl
                 }
                 else {
                     bool outputEqualOp = false;
+                    bool convertHandled = false;
                     int ct = ii.ReturnArgs.Count;
                     if (op != "=") {
                         OutputExpressionSyntax(assign.Left);
                         CodeBuilder.Append(" = ");
+                        if (dslToObject) {
+                            CodeBuilder.Append("dsltoobject(");
+                        }
+                        convertHandled = true;
                         ProcessBinaryOperator(assign, ref baseOp);
                         string functor;
                         if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
@@ -1436,6 +1482,10 @@ namespace RoslynTool.CsToDsl
                         iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
                         OutputExpressionSyntax(assign.Left);
                         CodeBuilder.Append(" = ");
+                        if (dslToObject) {
+                            CodeBuilder.Append("dsltoobject(");
+                        }
+                        convertHandled = true;
                         OutputConversionInvokePrefix(iop);
                         if (ct > 0) {
                             CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign({1}", localName, localName);
@@ -1458,6 +1508,11 @@ namespace RoslynTool.CsToDsl
                     if (outputEqualOp) {
                         CodeBuilder.Append(" = ");
                     }
+                    if (!convertHandled) {
+                        if (dslToObject) {
+                            CodeBuilder.Append("dsltoobject(");
+                        }
+                    }
                     ii.OutputInvocation(CodeBuilder, this, invocation.Expression, false, m_Model, invocation);
                     if (op != "=") {
                         if (ct > 0) {
@@ -1475,6 +1530,9 @@ namespace RoslynTool.CsToDsl
                         }
                         CodeBuilder.Append(")");
                     }
+                }
+                if (dslToObject) {
+                    CodeBuilder.Append(")");
                 }
             }
         }

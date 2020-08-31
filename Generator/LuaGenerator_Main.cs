@@ -2009,14 +2009,20 @@ namespace Generator
                 else if (id == "block") {
                     sb.Append("do");
                 }
-                else if (id == "dslunpack") {
-                    sb.Append("luaunpack");
-                }
                 else if (id == "lock") {
                     sb.Append("do");
                 }
                 else if (id == "unsafe") {
                     sb.Append("do");
+                }
+                else if (id == "dsltoobject") {
+                    sb.Append("luatoobject");
+                }
+                else if (id == "objecttodsl") {
+                    sb.Append("objecttolua");
+                }
+                else if (id == "dslunpack") {
+                    sb.Append("luaunpack");
                 }
                 else if (id == "dslthrow") {
                     sb.Append("luathrow");

@@ -15,8 +15,13 @@ class LuaConsole
 
 class ZipInputStream
 {
-  public ZipInputStream(MemoryStream ms)
-  {}
+    public ZipInputStream(MemoryStream ms)
+    {
+        var os = new ZipOutputStream(new MemoryStream());
+        var os2 = Test(os, os, os) as ZipOutputStream;
+    }
+    private object Test(object o, params object[] args)
+    { }
 }
 
 partial class ZipOutputStream

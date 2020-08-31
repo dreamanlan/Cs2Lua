@@ -28,7 +28,15 @@ ZipInputStream = {
 		local instance_methods = {
 			ctor = function(this, ms)
 				this:__ctor();
+				local os;
+				os = newobject(ZipOutputStream, nil, nil, "ctor", nil, newexternobject(System.IO.MemoryStream, nil, nil, nil, "System.IO.MemoryStream:ctor"));
+				local os2;
+				os2 = typeas(objecttodsl(this:Test(os, os, os)), ZipOutputStream, TypeKind.Class);
 				return this;
+			end,
+			Test = function(this, o, ...)
+				local args = wrapparams({...}, System.Object, TypeKind.Class);
+				return nil;
 			end,
 			__ctor = function(this)
 				if this.__ctor_called then 
@@ -66,4 +74,5 @@ ZipInputStream = {
 require "cs2lua__lualib";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
+require "zipoutputstream";
 settempmetatable(ZipInputStream);
