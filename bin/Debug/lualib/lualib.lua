@@ -906,11 +906,21 @@ function wrapexternstruct(v, classObj)
     return v
 end
 
-function luatoobject(arg, ...)
+function luatoobject(symKind, isStatic, symName, arg, ...)
+    if arg and symKind==SymbolKind.Field then
+        local str = System.String("String__Arr_Char", "custom_data")
+        local meta = getmetatable(str)
+        rawset(meta, "__cs2lua_table", arg)
+        arg = str
+    end
     return arg, ...
 end
 
-function objecttolua(arg, ...)
+function objecttolua(symKind, isStatic, symName, arg, ...)
+    if arg and symKind==SymbolKind.Field then
+        local meta = getmetatable(arg)
+        arg = rawget(meta, "__cs2lua_table")
+    end
     return arg, ...
 end
 

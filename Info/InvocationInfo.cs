@@ -425,7 +425,7 @@ namespace RoslynTool.CsToDsl
                     useTypeNameString = true;
                 }
             }
-            cs2dsl.OutputArgumentList(Args, DslToObjectDefArgs, DefaultValueArgs, DslToObjectDefArgs, GenericTypeArgs, ExternOverloadedMethodSignature, PostPositionGenericTypeArgs, ArrayToParams, useTypeNameString, node, ArgConversions.ToArray());
+            cs2dsl.OutputArgumentList(Args, DslToObjectDefArgs, DefaultValueArgs, DslToObjectDefArgs, GenericTypeArgs, ExternOverloadedMethodSignature, PostPositionGenericTypeArgs, ArrayToParams, useTypeNameString, node, MethodSymbol, ArgConversions.ToArray());
             codeBuilder.Append(")");
         }
 

@@ -89,11 +89,11 @@ namespace RoslynTool.CsToDsl
                         if (null != type && null != srcOper && null != srcOper.Type) {
                             if(InvocationInfo.IsDslToObject(type, srcOper.Type)) {
                                 isConvertDsl = true;
-                                CodeBuilder.Append("dsltoobject(");
+                                OutputDslToObjectPrefix(type);
                             }
                             else if(InvocationInfo.IsObjectToDsl(type, srcOper.Type)) {
                                 isConvertDsl = true;
-                                CodeBuilder.Append("objecttodsl(");
+                                OutputObjectToDslPrefix(type);
                             }
                         }
                     }
@@ -397,11 +397,11 @@ namespace RoslynTool.CsToDsl
                 if (null != type && null != srcOper && null != srcOper.Type) {
                     if (InvocationInfo.IsDslToObject(type, srcOper.Type)) {
                         isConvertDsl = true;
-                        CodeBuilder.Append("dsltoobject(");
+                        OutputDslToObjectPrefix(type);
                     }
                     else if (InvocationInfo.IsObjectToDsl(type, srcOper.Type)) {
                         isConvertDsl = true;
-                        CodeBuilder.Append("objecttodsl(");
+                        OutputObjectToDslPrefix(type);
                     }
                 }
                 OutputExpressionSyntax(node.Expression, opd);
@@ -723,7 +723,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("\"{0}\", {1}, ", manglingName, psym.GetMethod.Parameters.Length);
                 InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), node);
                 ii.Init(psym.GetMethod, node.ArgumentList, m_Model);
-                OutputArgumentList(ii.Args, ii.DslToObjectArgs, ii.DefaultValueArgs, ii.DslToObjectDefArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, node, ii.ArgConversions.ToArray());
+                OutputArgumentList(ii.Args, ii.DslToObjectArgs, ii.DefaultValueArgs, ii.DslToObjectDefArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, node, ii.MethodSymbol, ii.ArgConversions.ToArray());
                 CodeBuilder.Append(")");
             }
             else if (oper.Kind == OperationKind.ArrayElementReferenceExpression) {
@@ -798,7 +798,7 @@ namespace RoslynTool.CsToDsl
                     InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), node);
                     List<ExpressionSyntax> args = new List<ExpressionSyntax> { node.WhenNotNull };
                     ii.Init(psym.GetMethod, args, m_Model);
-                    OutputArgumentList(ii.Args, ii.DslToObjectArgs, ii.DefaultValueArgs, ii.DslToObjectDefArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, elementBinding, ii.ArgConversions.ToArray());
+                    OutputArgumentList(ii.Args, ii.DslToObjectArgs, ii.DefaultValueArgs, ii.DslToObjectDefArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, elementBinding, ii.MethodSymbol, ii.ArgConversions.ToArray());
                     CodeBuilder.Append(")");
                     CodeBuilder.Append("); }");
                 }
@@ -1174,7 +1174,7 @@ namespace RoslynTool.CsToDsl
                 if (!string.IsNullOrEmpty(ii.ExternOverloadedMethodSignature) || ii.Args.Count + ii.DefaultValueArgs.Count + ii.GenericTypeArgs.Count > 0) {
                     CodeBuilder.Append(", ");
                 }
-                OutputArgumentList(ii.Args, ii.DslToObjectArgs, ii.DefaultValueArgs, ii.DslToObjectDefArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, node, ii.ArgConversions.ToArray());
+                OutputArgumentList(ii.Args, ii.DslToObjectArgs, ii.DefaultValueArgs, ii.DslToObjectDefArgs, ii.GenericTypeArgs, ii.ExternOverloadedMethodSignature, ii.PostPositionGenericTypeArgs, ii.ArrayToParams, false, node, ii.MethodSymbol, ii.ArgConversions.ToArray());
                 CodeBuilder.Append(")");
                 if (ii.ReturnArgs.Count > 0) {
                     CodeBuilder.Append("; }");
