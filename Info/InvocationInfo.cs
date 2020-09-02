@@ -593,6 +593,16 @@ namespace RoslynTool.CsToDsl
             return type;
         }
 
+        /// <summary>
+        /// 备忘：只要是lua类型转换到object或反过来就应该进行处理，这样能在语义上保证处理是完全的。
+        /// 这是为啥local变量与lua里的函数参数也要检查的原因。(比如存在这种情形，delegation是可以
+        /// 被赋值给一个变量，传递到其他地方后再调用的，如果只对非lua类成员与函数调用参数进行检查，
+        /// 就可能漏掉这种情形。另一方面，除非作为custom data的情况，通常也应避免这种转型到object
+        /// 的用法，在所有转换的地方进行处理也提供了对滥用的检查机会)
+        /// </summary>
+        /// <param name="param"></param>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         internal static bool IsDslToObject(ITypeSymbol param, ITypeSymbol arg)
         {
             if (null != arg) {

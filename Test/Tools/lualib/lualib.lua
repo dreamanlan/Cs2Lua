@@ -679,20 +679,44 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
             return obj[method](obj, ...)
         elseif method == "CompareTo" then
             if issignature(arg1, method) then
-                if obj > arg2 then
-                    return 1
-                elseif obj < arg2 then
-                    return -1
+                if type(obj)=="boolean" and type(arg2)=="boolean" then
+                    if obj and arg2 then
+                        return 0
+                    elseif not obj and not arg2 then
+                        return 0
+                    elseif obj and not arg2 then
+                        return 1
+                    else
+                        return -1
+                    end
                 else
-                    return 0
+                    if obj > arg2 then
+                        return 1
+                    elseif obj < arg2 then
+                        return -1
+                    else
+                        return 0
+                    end
                 end
             else
-                if obj > arg1 then
-                    return 1
-                elseif obj < arg1 then
-                    return -1
+                if type(obj)=="boolean" and type(arg2)=="boolean" then
+                    if obj and arg2 then
+                        return 0
+                    elseif not obj and not arg2 then
+                        return 0
+                    elseif obj and not arg2 then
+                        return 1
+                    else
+                        return -1
+                    end
                 else
-                    return 0
+                    if obj > arg1 then
+                        return 1
+                    elseif obj < arg1 then
+                        return -1
+                    else
+                        return 0
+                    end
                 end
             end
         elseif method == "ToString" then
@@ -906,20 +930,54 @@ function wrapexternstruct(v, classObj)
     return v
 end
 
+Cs2LuaCustomData = {
+	__new_object = function(...)
+		return newobject(Cs2LuaCustomData, nil, nil, nil, nil, ...);
+	end,
+	__define_class = function()
+		printMemDiff("Cs2LuaCustomData::__define_class begin");
+
+		local class = Cs2LuaCustomData;
+		local static_fields_build = function()
+			return {};
+		end;
+
+		local instance_methods = {};
+		local instance_fields_build = function()
+			local instance_fields = {
+				CustomData = __cs2lua_nil_field_value,
+			};
+			return instance_fields;
+		end;
+
+		local __defineclass_return = defineclass(UnityEngine.Object, "Cs2LuaCustomData", "Cs2LuaCustomData", class, static_fields_build, instance_methods, instance_fields_build, false);
+		printMemDiff("Cs2LuaCustomData::__define_class end");
+		return __defineclass_return;
+	end,
+};
+
+settempmetatable(Cs2LuaCustomData);
+
 function luatoobject(symKind, isStatic, symName, arg, ...)
     if arg and symKind==SymbolKind.Field then
-        local str = System.String("String__Arr_Char", "custom_data")
-        local meta = getmetatable(str)
-        rawset(meta, "__cs2lua_table", arg)
-        arg = str
+        local meta = getmetatable(arg)
+        if meta and rawget(meta, "__cs2lua_defined") then
+            lualog("luatoobject symKind:{0} {1} {2} {3}", symKind, isStatic, symName, meta.__cs2lua_fullname)
+            local o = Cs2LuaCustomData.__new_object()
+            o.CustomData = arg
+            arg = o
+        end
     end
     return arg, ...
 end
 
-function objecttolua(symKind, isStatic, symName, arg, ...)
-    if arg and symKind==SymbolKind.Field then
-        local meta = getmetatable(arg)
-        arg = rawget(meta, "__cs2lua_table")
+function objecttolua(arg, ...)
+    if arg then
+        local meta = getmetatable(arg)       
+        if meta and rawget(meta, "__cs2lua_fullname")=="Cs2LuaCustomData" then   
+            lualog("objecttolua symKind:{0} {1} {2} {3}", symKind, isStatic, symName, meta.__cs2lua_fullname)      
+            arg = arg.CustomData
+        end
     end
     return arg, ...
 end

@@ -222,33 +222,6 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("dsltoobject(SymbolKind.ErrorType, false, \"\", ");
             }
         }
-        internal void OutputObjectToDslPrefix(ISymbol sym)
-        {
-            var fsym = sym as IFieldSymbol;
-            var psym = sym as IPropertySymbol;
-            var esym = sym as IEventSymbol;
-            var msym = sym as IMethodSymbol;
-            string isStatic = "false";
-            if (null != sym && sym.IsStatic) {
-                isStatic = "true";
-            }
-            if (null != fsym || null != psym || null != esym || null != msym) {
-                string fullName = ClassInfo.GetFullName(sym.ContainingType);
-                CodeBuilder.AppendFormat("objecttodsl(SymbolKind.{0}, {1}, \"{2}:{3}\", ", SymbolTable.Instance.GetSymbolKind(sym), isStatic, fullName, sym.Name);
-            }
-            else if (null != sym) {
-                if (sym.Kind == SymbolKind.NamedType) {
-                    string fullName = ClassInfo.GetFullName(sym);
-                    CodeBuilder.AppendFormat("objecttodsl(SymbolKind.{0}, {1}, \"{2}\", ", SymbolTable.Instance.GetSymbolKind(sym), isStatic, fullName);
-                }
-                else {
-                    CodeBuilder.AppendFormat("objecttodsl(SymbolKind.{0}, {1}, \"{2}\", ", SymbolTable.Instance.GetSymbolKind(sym), isStatic, sym.Name);
-                }
-            }
-            else {
-                CodeBuilder.AppendFormat("objecttodsl(SymbolKind.ErrorType, false, \"\", ");
-            }
-        }
         internal ClassInfo GetCurClassInfo()
         {
             return m_ClassInfoStack.Peek();

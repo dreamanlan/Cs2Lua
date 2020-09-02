@@ -93,7 +93,7 @@ namespace RoslynTool.CsToDsl
                             }
                             else if(InvocationInfo.IsObjectToDsl(type, srcOper.Type)) {
                                 isConvertDsl = true;
-                                OutputObjectToDslPrefix(type);
+                                CodeBuilder.Append("objecttodsl(");
                             }
                         }
                     }
@@ -401,7 +401,7 @@ namespace RoslynTool.CsToDsl
                     }
                     else if (InvocationInfo.IsObjectToDsl(type, srcOper.Type)) {
                         isConvertDsl = true;
-                        OutputObjectToDslPrefix(type);
+                        CodeBuilder.Append("objecttodsl(");
                     }
                 }
                 OutputExpressionSyntax(node.Expression, opd);
