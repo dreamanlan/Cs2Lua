@@ -4,9 +4,9 @@ local function get_basic_type_func()
     end
 end
 
-Slua = Slua or {out = {}}
+Slua = Slua or {out = {}, nil_field_value = {}}
 __cs2lua_out = Slua.out
-__cs2lua_nil_field_value = {}
+__cs2lua_nil_field_value = Slua.nil_field_value
 
 System = System or {}
 System.Boolean = System.Boolean or get_basic_type_func()
@@ -161,7 +161,7 @@ MethodKind = {
 }
 
 function printStack()
-    UnityEngine.Debug.Log("Log_String", debug.traceback())
+    Utility.Warn("{0}", debug.traceback())
 end
 
 function printJitStatus()
@@ -938,19 +938,16 @@ Cs2LuaCustomData = {
 		printMemDiff("Cs2LuaCustomData::__define_class begin");
 
 		local class = Cs2LuaCustomData;
-		local static_fields_build = function()
-			return {};
-		end;
+		local class_fields = nil;
 
-		local instance_methods = {};
+		local instance_methods = nil;
 		local instance_fields_build = function()
-			local instance_fields = {
+			return {
 				CustomData = __cs2lua_nil_field_value,
 			};
-			return instance_fields;
 		end;
 
-		local __defineclass_return = defineclass(UnityEngine.Object, "Cs2LuaCustomData", "Cs2LuaCustomData", class, static_fields_build, instance_methods, instance_fields_build, false);
+		local __defineclass_return = defineclass(UnityEngine.Object, "Cs2LuaCustomData", "Cs2LuaCustomData", class, class_fields, instance_methods, instance_fields_build, false);
 		printMemDiff("Cs2LuaCustomData::__define_class end");
 		return __defineclass_return;
 	end,
@@ -963,6 +960,7 @@ function luatoobject(symKind, isStatic, symName, arg, ...)
         local meta = getmetatable(arg)
         if meta and rawget(meta, "__cs2lua_defined") then
             lualog("luatoobject symKind:{0} {1} {2} {3}", symKind, isStatic, symName, meta.__cs2lua_fullname)
+            printStack()
             local o = Cs2LuaCustomData.__new_object()
             o.CustomData = arg
             arg = o
@@ -975,8 +973,10 @@ function objecttolua(arg, ...)
     if arg then
         local meta = getmetatable(arg)       
         if meta and rawget(meta, "__cs2lua_fullname")=="Cs2LuaCustomData" then   
-            lualog("objecttolua symKind:{0} {1} {2} {3}", symKind, isStatic, symName, meta.__cs2lua_fullname)      
             arg = arg.CustomData
+            local metav = getmetatable(arg)
+            lualog("objecttolua:{0} {1}", meta.__cs2lua_fullname, metav.__cs2lua_fullname)
+            printStack()
         end
     end
     return arg, ...
@@ -1609,10 +1609,6 @@ __mt_index_of_array_table = {
 }
 
 __mt_index_of_array = function(t, k)
-    local v = rawget(t, k)
-    if v then
-        return v
-    end
     if k == "Length" or k == "Count" then
         return __get_array_count(t)
     else
@@ -1704,10 +1700,6 @@ __mt_index_of_dictionary_table = {
 }
 
 __mt_index_of_dictionary = function(t, k)
-    local v = rawget(t, k)
-    if v then
-        return v
-    end
     if k == "Count" then
         return __get_table_count(t)
     elseif k == "Keys" then
@@ -1803,10 +1795,6 @@ __mt_index_of_hashset_table = {
 }
 
 __mt_index_of_hashset = function(t, k)
-    local v = rawget(t, k)
-    if v then
-        return v
-    end
     if k == "Count" then
         return __get_table_count(t)
     else
@@ -1830,10 +1818,6 @@ __mt_index_of_keycollection_table = {
 }
 
 __mt_index_of_keycollection = function(t, k)
-    local v = rawget(t, k)
-    if v then
-        return v
-    end
     if k == "Count" then
         return t.dict.Count
     else
@@ -1866,10 +1850,6 @@ __mt_index_of_valuecollection_table = {
 }
 
 __mt_index_of_valuecollection = function(t, k)
-    local v = rawget(t, k)
-    if v then
-        return v
-    end
     if k == "Count" then
         return t.dict.Count
     else
@@ -2868,7 +2848,11 @@ function __find_base_class_key(k, base_class)
     end
     if base_class then
         if rawget(base_class, "__cs2lua_defined") then
-            return base_class.__exist(k)
+            if rawget(base_class, k) then
+                return true
+            else
+                return base_class.__exist(k)
+            end
         else
             return find_extern_class_or_obj_key(k,base_class)
         end
@@ -2885,9 +2869,11 @@ function __find_class_key(k, class, class_fields, base_class)
     if nil ~= ret then
         return true
     end
-    ret = class_fields[k]
-    if nil ~= ret then
-        return true
+    if class_fields then
+        ret = class_fields[k]
+        if nil ~= ret then
+            return true
+        end
     end
     return __find_base_class_key(k, base_class)
 end
@@ -2937,7 +2923,11 @@ function __find_base_obj_key(k, baseObj)
     if baseObj then
         local meta = getmetatable(baseObj)
         if meta and rawget(meta, "__cs2lua_defined") then
-            return baseObj:__exist(k)
+            if rawget(baseObj, k) then
+                return true
+            else
+                return baseObj:__exist(k)
+            end
         else
             return find_extern_class_or_obj_key(k,baseObj)
         end
@@ -2954,22 +2944,24 @@ function __find_obj_key(k, obj, obj_fields, baseObj)
     if nil ~= ret then
         return true
     end
-    ret = obj_fields[k]
-    if nil ~= ret then
-        return true
+    if obj_fields then
+        ret = obj_fields[k]
+        if nil ~= ret then
+            return true
+        end
     end
     return __find_base_obj_key(k, baseObj)
 end
 function __obj_exist(tb, fk)
     return __find_obj_key(fk, tb, tb.__cs2lua_fields, tb.base)
 end
-
+ 
 function defineclass(
     base,
     fullName,
     typeName,
     class,
-    static_fields_build,
+    class_fields,
     instance_methods,
     instance_fields_build,
     is_value_type)
@@ -2977,7 +2969,6 @@ function defineclass(
     local base_class = base
     local mt = getmetatable(base_class)
 
-    local class_fields = static_fields_build()
     local interfaces = class.__interfaces
     local method_info = class.__method_info
     
@@ -3014,16 +3005,14 @@ function defineclass(
                 UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
                 return nil
             end
-            local v = rawget(t, k)
-            if v then
-                return v
-            end
             local obj_fields = rawget(t, "__cs2lua_fields")
             local baseObj = rawget(t, "base")
-            local ret
-            ret = obj_fields[k]
-            if nil ~= ret then
-                return __unwrap_table_field(ret)
+            local ret = nil
+            if obj_fields then
+                ret = obj_fields[k]
+                if nil ~= ret then
+                    return __unwrap_table_field(ret)
+                end
             end
             if __find_base_obj_key(k, baseObj) then
                 ret = baseObj[k]
@@ -3042,11 +3031,13 @@ function defineclass(
             end
             local obj_fields = t.__cs2lua_fields
             local baseObj = t.base
-            local ret
-            ret = obj_fields[k]
-            if nil ~= ret then
-                obj_fields[k] = __wrap_table_field(v)
-                return
+            local ret = nil
+            if obj_fields then
+                ret = obj_fields[k]
+                if nil ~= ret then
+                    obj_fields[k] = __wrap_table_field(v)
+                    return
+                end
             end
             if __find_base_obj_key(k, baseObj) then
                 baseObj[k] = v
@@ -3069,14 +3060,12 @@ function defineclass(
                 UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
                 return nil
             end
-            local v = rawget(t, k)
-            if v then
-                return v
-            end
-            local ret
-            ret = class_fields[k]
-            if nil ~= ret then
-                return __unwrap_table_field(ret)
+            local ret = nil
+            if class_fields then
+                ret = class_fields[k]
+                if nil ~= ret then
+                    return __unwrap_table_field(ret)
+                end
             end
             if __find_base_class_key(k, base_class) then
                 ret = base_class[k]
@@ -3095,11 +3084,13 @@ function defineclass(
                 UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
                 return
             end
-            local ret
-            ret = class_fields[k]
-            if nil ~= ret then
-                class_fields[k] = __wrap_table_field(v)
-                return
+            local ret = nil
+            if class_fields then
+                ret = class_fields[k]
+                if nil ~= ret then
+                    class_fields[k] = __wrap_table_field(v)
+                    return
+                end
             end
             if __find_base_class_key(k, base_class) then
                 base_class[k] = v
@@ -3116,22 +3107,24 @@ function defineclass(
             end
             local obj_fields = instance_fields_build()
             local obj = { __cs2lua_fields = obj_fields }
-            for k, v in pairs(instance_methods) do
-                if not method_info then
-                    obj[k] = v
-                else
-                    local minfo = method_info[k]
-                    if not minfo then
+            if instance_methods then
+                for k, v in pairs(instance_methods) do
+                    if not method_info then
                         obj[k] = v
                     else
-                        if minfo["abstract"] or minfo["virtual"] or minfo["override"] then
-                            obj[k] = __wrap_virtual_method(k, v)
-                        else
+                        local minfo = method_info[k]
+                        if not minfo then
                             obj[k] = v
-                        end
-                        local result = string.find(k,"ctor",1,true)
-                        if (result==1) or ((not minfo["private"]) and (not minfo["sealed"])) then
-                            obj["__self__" .. k] = v
+                        else
+                            if minfo["abstract"] or minfo["virtual"] or minfo["override"] then
+                                obj[k] = __wrap_virtual_method(k, v)
+                            else
+                                obj[k] = v
+                            end
+                            local result = string.find(k,"ctor",1,true)
+                            if (result==1) or ((not minfo["private"]) and (not minfo["sealed"])) then
+                                obj["__self__" .. k] = v
+                            end
                         end
                     end
                 end

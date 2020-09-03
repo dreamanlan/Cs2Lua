@@ -189,7 +189,10 @@ namespace Generator
                     ++indent;
 
                     var staticMethods = FindStatement(funcData, "static_methods") as Dsl.FunctionData;
-                    if (null != staticMethods) {
+                    if (null != staticMethods && staticMethods.GetParamNum() > 0) {
+                        sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}-------- class methods --------", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
                         foreach (var def in staticMethods.Params) {
                             var mdef = def as Dsl.FunctionData;
                             if (mdef.GetId() == "=") {
@@ -260,8 +263,12 @@ namespace Generator
                                 }
                             }
                         }
+                        sb.AppendLine();
                     }
 
+                    sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}-- define class and instance --", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
                     var logInfoForDefineClass = GetPrologueAndEpilogue(className, "__define_class");
                     sb.AppendFormatLine("{0}__define_class = function()", GetIndentString(indent));
                     ++indent;
@@ -271,13 +278,12 @@ namespace Generator
                     sb.AppendLine();
 
                     sb.AppendFormatLine("{0}local class = {1};", GetIndentString(indent), className);
-                    sb.AppendFormatLine("{0}local static_fields_build = function()", GetIndentString(indent));
-                    ++indent;
-                    sb.AppendFormatLine("{0}local static_fields = {{", GetIndentString(indent));
-                    ++indent;
 
                     var staticFields = FindStatement(funcData, "static_fields") as Dsl.FunctionData;
-                    if (null != staticFields) {
+                    if (null != staticFields && staticFields.GetParamNum() > 0) {
+                        sb.AppendFormatLine("{0}local class_fields = {{", GetIndentString(indent));
+                        ++indent;
+
                         foreach (var def in staticFields.Params) {
                             var mdef = def as Dsl.FunctionData;
                             if (mdef.GetId() == "=") {
@@ -288,18 +294,18 @@ namespace Generator
                                 sb.AppendLine(",");
                             }
                         }
-                    }
 
-                    --indent;
-                    sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    sb.AppendFormatLine("{0}return static_fields;", GetIndentString(indent));
-                    --indent;
-                    sb.AppendFormatLine("{0}end;", GetIndentString(indent));
+                        --indent;
+                        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
+                    }
+                    else {
+                        sb.AppendFormatLine("{0}local class_fields = nil;", GetIndentString(indent));
+                    }
                     
                     sb.AppendLine();
 
                     var instMethods = FindStatement(funcData, "instance_methods") as Dsl.FunctionData;
-                    if (null != instMethods) {
+                    if (null != instMethods && instMethods.GetParamNum() > 0) {
                         sb.AppendFormatLine("{0}local instance_methods = {{", GetIndentString(indent));
                         ++indent;
                         foreach (var def in instMethods.Params) {
@@ -375,15 +381,17 @@ namespace Generator
                         --indent;
                         sb.AppendFormatLine("{0}}};", GetIndentString(indent));
                     }
+                    else {
+                        sb.AppendFormatLine("{0}local instance_methods = nil;", GetIndentString(indent));
+                    }
 
                     sb.AppendFormatLine("{0}local instance_fields_build = function()", GetIndentString(indent));
                     ++indent;
-					
-                    sb.AppendFormatLine("{0}local instance_fields = {{", GetIndentString(indent));
-                    ++indent;
-
                     var instFields = FindStatement(funcData, "instance_fields") as Dsl.FunctionData;
-                    if (null != instFields) {
+                    if (null != instFields && instFields.GetParamNum() > 0) {
+                        sb.AppendFormatLine("{0}return {{", GetIndentString(indent));
+                        ++indent;
+
                         foreach (var def in instFields.Params) {
                             var mdef = def as Dsl.FunctionData;
                             if (mdef.GetId() == "=") {
@@ -394,28 +402,43 @@ namespace Generator
                                 sb.AppendLine(",");
                             }
                         }
-                    }
 
-                    --indent;
-                    sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    sb.AppendFormatLine("{0}return instance_fields;", GetIndentString(indent));
+                        --indent;
+                        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
+                    }
+                    else {
+                        sb.AppendFormatLine("{0}return nil;", GetIndentString(indent));
+                    }
                     --indent;
                     sb.AppendFormatLine("{0}end;", GetIndentString(indent));
 
                     sb.AppendLine();
+                    ///备忘：
+                    ///这个对象模型分为class、class_fields, instance_methods, instance_fields_build四块目前看是必须的
+                    ///1、class表包含了静态方法
+                    ///2、class_fields表是静态字段，不能放在class表里的原因是lua table不能有key = nil这样的成员（这样是
+                    ///删除元素），所以c#初始化为空的字段在lua里需要用一个特殊值来标记，然后在访问时再转成nil。这个机制主要
+                    ///为了支持继承，需要确定某个字段是在当前类还是在父类定义。instance_fields与此类似也需要一个独立的表来
+                    ///存储。
+                    ///3、instance_methods表独立是为了支持方法换名以支持虚函数机制，参见lualib的defineclass实现。
+                    ///4、instance_fields_build是个函数，用来生成每个实例对应的字段表（因为每个实例都需要一份不同的数据，所
+                    ///以是一个反回字段表的函数）
                     if (null != logInfoForDefineClass.EpilogueInfo) {
-                        sb.AppendFormatLine("{0}local __defineclass_return = defineclass({1}, \"{2}\", \"{3}\", class, static_fields_build, instance_methods, instance_fields_build, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
+                        sb.AppendFormatLine("{0}local __defineclass_return = defineclass({1}, \"{2}\", \"{3}\", class, class_fields, instance_methods, instance_fields_build, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
                         sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfoForDefineClass.EpilogueInfo, className, "__define_class"));
                         sb.AppendFormatLine("{0}return __defineclass_return;", GetIndentString(indent));
                     }
                     else {
-                        sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", \"{3}\", class, static_fields_build, instance_methods, instance_fields_build, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
+                        sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", \"{3}\", class, class_fields, instance_methods, instance_fields_build, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
                     }
                     --indent;
                     sb.AppendFormatLine("{0}end,", GetIndentString(indent));
 
                     sb.AppendLine();
 
+                    sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}-------- metadata info --------", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
                     var interfaces = FindStatement(funcData, "interfaces") as Dsl.FunctionData;
                     if (null != interfaces && interfaces.GetParamNum() > 0) {
                         sb.AppendFormatLine("{0}__interfaces = {{", GetIndentString(indent));
