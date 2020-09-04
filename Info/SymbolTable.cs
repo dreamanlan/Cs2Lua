@@ -1125,7 +1125,7 @@ namespace RoslynTool.CsToDsl
         private static bool s_EnableComplexTryUsing = false;
 
         private static HashSet<string> s_ExtraDslKeywords = new HashSet<string> {
-            "and", "elseif", "end", "function", "local", "nil", "not", "or", "repeat", "then", "until"
+            "and", "arg", "elseif", "end", "function", "local", "nil", "not", "or", "repeat", "self", "then", "until"
         };
         private static HashSet<string> s_BasicTypes = new HashSet<string> {
             "System.Boolean", "System.Byte", "System.SByte", "System.Char", "System.Int16", "System.UInt16", "System.Int32", "System.UInt32", "System.Int64", "System.UInt64", "System.Single", "System.Decimal", "System.Double"

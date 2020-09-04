@@ -273,20 +273,14 @@ namespace RoslynTool.CsToDsl
                             }
                             else {
                                 string className = ClassInfo.GetFullName(msym.ContainingType);
+                                string srcPos = GetSourcePosForVar(node);
                                 string delegationKey = string.Format("{0}:{1}", className, manglingName);
-                                string varName = string.Format("__delegation_{0}", GetSourcePosForVar(node));
-
-                                CodeBuilder.Append("(function(){ ");
-
-                                string paramsString = string.Join(", ", mi.ParamNames.ToArray());
                                 if (msym.IsStatic) {
-                                    CodeBuilder.AppendFormat("builddelegation(\"{0}\", {1}, \"{2}\", {3}, {4}, {5}, {6});", paramsString, varName, delegationKey, className, manglingName, msym.ReturnsVoid ? "false" : "true", msym.IsStatic ? "true" : "false");
+                                    CodeBuilder.AppendFormat("builddelegation(\"{0}\", \"{1}\", {2}, {3}, {4})", srcPos, delegationKey, className, manglingName, "true");
                                 }
                                 else {
-                                    CodeBuilder.AppendFormat("builddelegation(\"{0}\", {1}, \"{2}\", {3}, {4}, {5}, {6});", paramsString, varName, delegationKey, "this", manglingName, msym.ReturnsVoid ? "false" : "true", msym.IsStatic ? "true" : "false");
+                                    CodeBuilder.AppendFormat("builddelegation(\"{0}\", \"{1}\", this, {2}, {3})", srcPos, delegationKey, manglingName, "false");
                                 }
-
-                                CodeBuilder.Append(" })()");
                             }
                             return;
                         }

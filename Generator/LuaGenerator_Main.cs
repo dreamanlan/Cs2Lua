@@ -262,6 +262,7 @@ namespace Generator
                                     }
                                 }
                             }
+                            sb.AppendLine();
                         }
                         sb.AppendLine();
                     }
@@ -306,7 +307,7 @@ namespace Generator
 
                     var instMethods = FindStatement(funcData, "instance_methods") as Dsl.FunctionData;
                     if (null != instMethods && instMethods.GetParamNum() > 0) {
-                        sb.AppendFormatLine("{0}local instance_methods = {{", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}local obj_methods = {{", GetIndentString(indent));
                         ++indent;
                         foreach (var def in instMethods.Params) {
                             var mdef = def as Dsl.FunctionData;
@@ -377,15 +378,18 @@ namespace Generator
                                     }
                                 }
                             }
+                            sb.AppendLine();
                         }
                         --indent;
                         sb.AppendFormatLine("{0}}};", GetIndentString(indent));
                     }
                     else {
-                        sb.AppendFormatLine("{0}local instance_methods = nil;", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}local obj_methods = nil;", GetIndentString(indent));
                     }
 
-                    sb.AppendFormatLine("{0}local instance_fields_build = function()", GetIndentString(indent));
+                    sb.AppendLine();
+
+                    sb.AppendFormatLine("{0}local obj_fields_build = function()", GetIndentString(indent));
                     ++indent;
                     var instFields = FindStatement(funcData, "instance_fields") as Dsl.FunctionData;
                     if (null != instFields && instFields.GetParamNum() > 0) {
@@ -414,22 +418,22 @@ namespace Generator
 
                     sb.AppendLine();
                     ///备忘：
-                    ///这个对象模型分为class、class_fields, instance_methods, instance_fields_build四块目前看是必须的
+                    ///这个对象模型分为class、class_fields, obj_methods, obj_fields_build四块目前看是必须的
                     ///1、class表包含了静态方法
                     ///2、class_fields表是静态字段，不能放在class表里的原因是lua table不能有key = nil这样的成员（这样是
                     ///删除元素），所以c#初始化为空的字段在lua里需要用一个特殊值来标记，然后在访问时再转成nil。这个机制主要
                     ///为了支持继承，需要确定某个字段是在当前类还是在父类定义。instance_fields与此类似也需要一个独立的表来
                     ///存储。
-                    ///3、instance_methods表独立是为了支持方法换名以支持虚函数机制，参见lualib的defineclass实现。
-                    ///4、instance_fields_build是个函数，用来生成每个实例对应的字段表（因为每个实例都需要一份不同的数据，所
+                    ///3、obj_methods表独立是为了支持方法换名以支持虚函数机制，参见lualib的defineclass实现。
+                    ///4、obj_fields_build是个函数，用来生成每个实例对应的字段表（因为每个实例都需要一份不同的数据，所
                     ///以是一个反回字段表的函数）
                     if (null != logInfoForDefineClass.EpilogueInfo) {
-                        sb.AppendFormatLine("{0}local __defineclass_return = defineclass({1}, \"{2}\", \"{3}\", class, class_fields, instance_methods, instance_fields_build, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
+                        sb.AppendFormatLine("{0}local __defineclass_return = defineclass({1}, \"{2}\", \"{3}\", class, class_fields, obj_methods, obj_fields_build, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
                         sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfoForDefineClass.EpilogueInfo, className, "__define_class"));
                         sb.AppendFormatLine("{0}return __defineclass_return;", GetIndentString(indent));
                     }
                     else {
-                        sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", \"{3}\", class, class_fields, instance_methods, instance_fields_build, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
+                        sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", \"{3}\", class, class_fields, obj_methods, obj_fields_build, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
                     }
                     --indent;
                     sb.AppendFormatLine("{0}end,", GetIndentString(indent));
@@ -1803,24 +1807,22 @@ namespace Generator
                 }
             }
             else if (id == "builddelegation") {
-                var paramsString = data.GetParamId(0);
-                var varName = data.GetParamId(1);
-                var delegationKey = data.GetParamId(2);
-                var objOrClassName = CalcTypeString(data.GetParam(3));
-                var methodName = data.GetParamId(4);
-                var needReturn = data.GetParamId(5) == "true";
-                var isStatic = data.GetParamId(6) == "true";
+                var srcPos = data.GetParamId(0);
+                var delegationKey = data.GetParamId(1);
+                var objOrClass = data.GetParam(2);
+                var methodName = data.GetParamId(3);
+                var isStatic = data.GetParamId(4) == "true";
 
-                sb.AppendFormat("local {0}; {0} = ", varName);
-                sb.Append("(function(");
-                sb.Append(paramsString);
-                sb.AppendLine(")");
+                sb.AppendLine("(function()");
+                ++indent;
+                sb.AppendFormat("{0}local __obj_{1} = ", GetIndentString(indent), srcPos);
+                GenerateSyntaxComponent(objOrClass, sb, 0, false);
+                sb.AppendLine(";");
+                sb.AppendFormatLine("{0}local __fk_{1} = calcdelegationkey(\"{2}\", __obj_{1});", GetIndentString(indent), srcPos, delegationKey);
+                sb.AppendFormatLine("{0}return builddelegationonce(__fk_{1}, getdelegation(__fk_{1}) or function(...)", GetIndentString(indent), srcPos, delegationKey);
                 ++indent;
                 sb.AppendFormat("{0}", GetIndentString(indent));
-                if (needReturn) {
-                    sb.Append("return ");
-                }
-                sb.Append(objOrClassName);
+                sb.AppendFormat("return __obj_{0}", srcPos);
                 if (isStatic) {
                     sb.Append(".");
                 }
@@ -1828,12 +1830,11 @@ namespace Generator
                     sb.Append(":");
                 }
                 sb.Append(methodName);
-                sb.AppendFormatLine("({0});", paramsString);
+                sb.AppendLine("(...);");
                 --indent;
                 sb.AppendFormatLine("{0}end);", GetIndentString(indent));
-                sb.AppendFormat("{0}", GetIndentString(indent));
-                sb.AppendFormatLine("setdelegationkey({0}, \"{1}\", {2}, {3}.{4});", varName, delegationKey, objOrClassName, objOrClassName, methodName);
-                sb.AppendFormat("{0}return {1}", GetIndentString(indent), varName);
+                --indent;
+                sb.AppendFormat("{0}end)()", GetIndentString(indent));
             }
             else if (id == "setdelegation") {
                 var kind = CalcTypeString(data.GetParam(0));

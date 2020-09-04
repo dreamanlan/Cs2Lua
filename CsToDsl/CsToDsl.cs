@@ -964,12 +964,11 @@ namespace RoslynTool.CsToDsl
             if (null != leftSym){
                 string containingName = ClassInfo.GetFullName(leftSym.ContainingType);
                 if (isWriteOnly) {
-                    CodeBuilder.AppendFormat("\"{0}:{1}\", null, null, SymbolKind.{2}", containingName, leftSym.Name, kind);
+                    CodeBuilder.AppendFormat("null, null, SymbolKind.{0}", kind);
                 }
                 else if (!isIndexer && (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event)) {
                     var memberAccess = left as MemberAccessExpressionSyntax;
                     if (null != memberAccess) {
-                        CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, memberAccess.Name.Identifier.Text);
                         OutputExpressionSyntax(memberAccess.Expression, opd);
                         CodeBuilder.Append(", ");
                         string mname = memberAccess.Name.Identifier.Text;
@@ -977,7 +976,6 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendFormat("\"{0}{1}\", SymbolKind.{2}", namePrefix, mname, kind);
                     }
                     else if (leftSym.ContainingType == ci.SemanticInfo || leftSym.ContainingType == ci.SemanticInfo.OriginalDefinition || ci.IsInherit(leftSym.ContainingType)) {
-                        CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
                         if (isStatic)
                             CodeBuilder.AppendFormat("{0}, ", ClassInfo.GetFullName(leftSym.ContainingType));
                         else
@@ -985,20 +983,16 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendFormat("\"{0}{1}\", SymbolKind.{2}", namePrefix, leftSym.Name, kind);
                     }
                     else {
-                        CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
                         CodeBuilder.Append("newobj, ");
                         CodeBuilder.AppendFormat("\"{0}{1}\", SymbolKind.{2}", namePrefix, leftSym.Name, kind);
                     }
                 }
                 else {
-                    CodeBuilder.AppendFormat("\"{0}:{1}\", ", containingName, leftSym.Name);
                     OutputExpressionSyntax(left, opd);
                     CodeBuilder.AppendFormat(", null, SymbolKind.{0}", kind);
                 }
             }
             else {
-                string containingName = ClassInfo.GetFullName(leftOper.Type);
-                CodeBuilder.AppendFormat("\"{0}\", ", containingName);
                 OutputExpressionSyntax(left, opd);
                 CodeBuilder.Append(", null, null");
             }

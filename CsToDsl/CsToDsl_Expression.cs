@@ -584,29 +584,16 @@ namespace RoslynTool.CsToDsl
                 var msym = sym as IMethodSymbol;
                 if (null != msym) {
                     string manglingName = NameMangling(msym);
-                    var mi = new MethodInfo();
-                    mi.Init(msym, node);
-
-                    string delegationKey = string.Format("{0}:{1}", ClassInfo.GetFullName(msym.ContainingType), manglingName);
                     string srcPos = GetSourcePosForVar(node);
-                    string varName = string.Format("__delegation_{0}", srcPos);
-                    string varObjName = string.Format("__delegation_obj_{0}", srcPos);
-                    CodeBuilder.Append("(function(){ ");
+                    string delegationKey = string.Format("{0}:{1}", ClassInfo.GetFullName(msym.ContainingType), manglingName);
                     if (string.IsNullOrEmpty(className)) {
-                        CodeBuilder.AppendFormat("local({0}); {0} = ", varObjName);
+                        CodeBuilder.AppendFormat("builddelegation(\"{0}\", \"{1}\", ", srcPos, delegationKey);
                         OutputExpressionSyntax(node.Expression);
-                        CodeBuilder.Append("; ");
-                    }
-                    string paramsString = string.Join(", ", mi.ParamNames.ToArray());
-
-                    if (string.IsNullOrEmpty(className)) {
-                        CodeBuilder.AppendFormat("builddelegation(\"{0}\", {1}, \"{2}\", {3}, {4}, {5}, {6});", paramsString, varName, delegationKey, varObjName, manglingName, msym.ReturnsVoid ? "false" : "true", string.IsNullOrEmpty(className) ? "false" : "true");
+                        CodeBuilder.AppendFormat(", {0}, {1})", manglingName, string.IsNullOrEmpty(className) ? "false" : "true");
                     }
                     else {
-                        CodeBuilder.AppendFormat("builddelegation(\"{0}\", {1}, \"{2}\", {3}, {4}, {5}, {6});", paramsString, varName, delegationKey, className, manglingName, msym.ReturnsVoid ? "false" : "true", string.IsNullOrEmpty(className) ? "false" : "true");
+                        CodeBuilder.AppendFormat("builddelegation(\"{0}\", \"{1}\", {2}, {3}, {4})", srcPos, delegationKey, className, manglingName, string.IsNullOrEmpty(className) ? "false" : "true");
                     }
-
-                    CodeBuilder.Append(" })()");
                 }
                 else {
                     var psym = sym as IPropertySymbol;
@@ -1187,26 +1174,17 @@ namespace RoslynTool.CsToDsl
                     var msym = methodBinding.Method;
                     if (null != msym) {
                         string manglingName = NameMangling(msym);
-                        var mi = new MethodInfo();
-                        mi.Init(msym, node);
 
                         AddReferenceAndTryDeriveGenericTypeInstance(ci, msym);
                         string className = ClassInfo.GetFullName(msym.ContainingType);
-
+                        string srcPos = GetSourcePosForVar(node);
                         string delegationKey = string.Format("{0}:{1}", className, manglingName);
-                        string varName = string.Format("__delegation_{0}", GetSourcePosForVar(node));
-
-                        CodeBuilder.Append("(function(){ ");
-
-                        string paramsString = string.Join(", ", mi.ParamNames.ToArray());
                         if (msym.IsStatic) {
-                            CodeBuilder.AppendFormat("builddelegation(\"{0}\", {1}, \"{2}\", {3}, {4}, {5}, {6});", paramsString, varName, delegationKey, className, manglingName, msym.ReturnsVoid ? "false" : "true", msym.IsStatic ? "true" : "false");
+                            CodeBuilder.AppendFormat("builddelegation(\"{0}\", \"{1}\", {2}, {3}, {4})", srcPos, delegationKey, className, manglingName, "true");
                         }
                         else {
-                            CodeBuilder.AppendFormat("builddelegation(\"{0}\", {1}, \"{2}\", {3}, {4}, {5}, {6});", paramsString, varName, delegationKey, "this", manglingName, msym.ReturnsVoid ? "false" : "true", msym.IsStatic ? "true" : "false");
+                            CodeBuilder.AppendFormat("builddelegation(\"{0}\", \"{1}\", this, {2}, {3})", srcPos, delegationKey, manglingName, "false");
                         }
-
-                        CodeBuilder.Append(" })()");
                     }
                     else {
                         VisitArgumentList(node.ArgumentList);
