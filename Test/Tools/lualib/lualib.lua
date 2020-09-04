@@ -6,7 +6,6 @@ end
 
 Slua = Slua or {out = {}, nil_field_value = {}}
 __cs2lua_out = Slua.out
-__cs2lua_nil_field_value = Slua.nil_field_value
 
 System = System or {}
 System.Boolean = System.Boolean or get_basic_type_func()
@@ -938,19 +937,21 @@ Cs2LuaCustomData = {
 		printMemDiff("Cs2LuaCustomData::__define_class begin");
 
 		local class = Cs2LuaCustomData;
-		local class_fields = nil;
 
-		local instance_methods = nil;
-		local instance_fields_build = function()
+		local obj_methods = nil;
+		local obj_build = function()
 			return {
-				CustomData = __cs2lua_nil_field_value,
+				CustomData = nil,
 			};
 		end;
 
-		local __defineclass_return = defineclass(UnityEngine.Object, "Cs2LuaCustomData", "Cs2LuaCustomData", class, class_fields, instance_methods, instance_fields_build, false);
+		local __defineclass_return = defineclass(UnityEngine.Object, "Cs2LuaCustomData", "Cs2LuaCustomData", class, obj_methods, obj_build, false);
 		printMemDiff("Cs2LuaCustomData::__define_class end");
 		return __defineclass_return;
 	end,
+	__obj_fields = {
+	    CustomData = true,
+	},
 };
 
 settempmetatable(Cs2LuaCustomData);
@@ -2744,22 +2745,6 @@ function isequal(v1, v2)
     end
 end
 
-function __wrap_table_field(v)
-    if nil == v then
-        return __cs2lua_nil_field_value
-    else
-        return v
-    end
-end
-
-function __unwrap_table_field(v)
-    if __cs2lua_nil_field_value == v then
-        return nil
-    else
-        return v
-    end
-end
-
 function __wrap_if_string(val)
     if type(val) == "string" then
         return System.String("String_Arr_Char", val)
@@ -2905,14 +2890,16 @@ function defineclass(
     base,
     fullName,
     typeName,
-    class,
-    class_fields,
+    class,    
     obj_methods,
-    obj_fields_build,
+    obj_build,
     is_value_type)
         
     local base_class = base
     local mt = getmetatable(base_class)
+    
+    local class_fields = class.__class_fields
+    local obj_fields = class.__obj_fields
 
     local interfaces = class.__interfaces
     local method_info = class.__method_info
@@ -2948,7 +2935,7 @@ function defineclass(
         return __find_class_key(fk, class, class_fields, base_class)
     end
     local function __obj_exist(tb, fk)
-        return __find_obj_key(fk, tb, tb.__cs2lua_fields, obj_methods, obj_ex_methods, tb.base)
+        return __find_obj_key(fk, tb, obj_fields, obj_methods, obj_ex_methods, tb.base)
     end
 
     local function obj_GetType(tb)
@@ -2986,14 +2973,14 @@ function defineclass(
                 UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
                 return nil
             end
-            local obj_fields = rawget(t, "__cs2lua_fields")
-            local baseObj = rawget(t, "base")
             if obj_fields then
                 local ret = obj_fields[k]
                 if nil ~= ret then
-                    return __unwrap_table_field(ret)
+                    --是当前类字段但仍走到元方法里了，则表明当前字段值为空
+                    return nil
                 end
             end
+            local baseObj = rawget(t, "base")
             if __find_base_obj_key(k, baseObj) then
                 return baseObj[k]
             end
@@ -3004,15 +2991,7 @@ function defineclass(
                 UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
                 return
             end
-            local obj_fields = t.__cs2lua_fields
             local baseObj = t.base
-            if obj_fields then
-                local fv = obj_fields[k]
-                if nil ~= fv then
-                    obj_fields[k] = __wrap_table_field(v)
-                    return
-                end
-            end
             if __find_base_obj_key(k, baseObj) then
                 baseObj[k] = v
                 return
@@ -3039,7 +3018,8 @@ function defineclass(
             if class_fields then
                 local ret = class_fields[k]
                 if nil ~= ret then
-                    return __unwrap_table_field(ret)
+                    --字段存在仍然调到元方法，表明值为空
+                    return nil
                 end
             end
             if __find_base_class_key(k, base_class) then
@@ -3051,13 +3031,6 @@ function defineclass(
             if nil == k then
                 UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
                 return
-            end
-            if class_fields then
-                local fv = class_fields[k]
-                if nil ~= fv then
-                    class_fields[k] = __wrap_table_field(v)
-                    return
-                end
             end
             if __find_base_class_key(k, base_class) then
                 base_class[k] = v
@@ -3072,12 +3045,14 @@ function defineclass(
             elseif mt then
                 baseObj = mt.__call()
             end
-            local obj_fields = obj_fields_build()
-            local obj = { __cs2lua_fields = obj_fields }
+            local obj = obj_build()
+            if not obj then
+                obj = {}
+            end
             
-            obj["base"] = baseObj
+            rawset(obj, "base", baseObj)
             if baseObj then
-                baseObj["__child__"] = obj
+                rawset(baseObj, "__child__", obj)
             end
 
             setmetatable(obj, obj_meta)

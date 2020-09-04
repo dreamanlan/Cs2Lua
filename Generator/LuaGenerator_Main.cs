@@ -267,6 +267,25 @@ namespace Generator
                         sb.AppendLine();
                     }
 
+                    var staticFields = FindStatement(funcData, "static_fields") as Dsl.FunctionData;
+                    if (null != staticFields && staticFields.GetParamNum() > 0) {
+                        sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}-------- class fields --------", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
+                        foreach (var def in staticFields.Params) {
+                            var mdef = def as Dsl.FunctionData;
+                            if (mdef.GetId() == "=") {
+                                string mname = mdef.GetParamId(0);
+                                var comp = mdef.GetParam(1);
+                                if (comp.GetId() != "null") {
+                                    sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
+                                    GenerateFieldValueComponent(comp, sb, indent, false);
+                                    sb.AppendLine(",");
+                                }
+                            }
+                        }
+                    }
+
                     sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
                     sb.AppendFormatLine("{0}-- define class and instance --", GetIndentString(indent));
                     sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
@@ -279,29 +298,6 @@ namespace Generator
                     sb.AppendLine();
 
                     sb.AppendFormatLine("{0}local class = {1};", GetIndentString(indent), className);
-
-                    var staticFields = FindStatement(funcData, "static_fields") as Dsl.FunctionData;
-                    if (null != staticFields && staticFields.GetParamNum() > 0) {
-                        sb.AppendFormatLine("{0}local class_fields = {{", GetIndentString(indent));
-                        ++indent;
-
-                        foreach (var def in staticFields.Params) {
-                            var mdef = def as Dsl.FunctionData;
-                            if (mdef.GetId() == "=") {
-                                string mname = mdef.GetParamId(0);
-                                var comp = mdef.GetParam(1);
-                                sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
-                                GenerateFieldValueComponent(comp, sb, indent, false);
-                                sb.AppendLine(",");
-                            }
-                        }
-
-                        --indent;
-                        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    }
-                    else {
-                        sb.AppendFormatLine("{0}local class_fields = nil;", GetIndentString(indent));
-                    }
                     
                     sb.AppendLine();
 
@@ -389,7 +385,7 @@ namespace Generator
 
                     sb.AppendLine();
 
-                    sb.AppendFormatLine("{0}local obj_fields_build = function()", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}local obj_build = function()", GetIndentString(indent));
                     ++indent;
                     var instFields = FindStatement(funcData, "instance_fields") as Dsl.FunctionData;
                     if (null != instFields && instFields.GetParamNum() > 0) {
@@ -401,9 +397,11 @@ namespace Generator
                             if (mdef.GetId() == "=") {
                                 string mname = mdef.GetParamId(0);
                                 var comp = mdef.GetParam(1);
-                                sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
-                                GenerateFieldValueComponent(comp, sb, indent, false);
-                                sb.AppendLine(",");
+                                if (comp.GetId() != "null") {
+                                    sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
+                                    GenerateFieldValueComponent(comp, sb, indent, false);
+                                    sb.AppendLine(",");
+                                }
                             }
                         }
 
@@ -418,25 +416,65 @@ namespace Generator
 
                     sb.AppendLine();
                     ///备忘：
-                    ///这个对象模型分为class、class_fields, obj_methods, obj_fields_build四块目前看是必须的
-                    ///1、class表包含了静态方法
-                    ///2、class_fields表是静态字段，不能放在class表里的原因是lua table不能有key = nil这样的成员（这样是
-                    ///删除元素），所以c#初始化为空的字段在lua里需要用一个特殊值来标记，然后在访问时再转成nil。这个机制主要
-                    ///为了支持继承，需要确定某个字段是在当前类还是在父类定义。instance_fields与此类似也需要一个独立的表来
-                    ///存储。
-                    ///3、obj_methods表独立是为了支持方法换名以支持虚函数机制，参见lualib的defineclass实现。
-                    ///4、obj_fields_build是个函数，用来生成每个实例对应的字段表（因为每个实例都需要一份不同的数据，所
-                    ///以是一个反回字段表的函数）
+                    ///这个对象模型分为class、obj_methods, obj_build三块
+                    ///1、class表包含了静态方法与静态字段
+                    ///2、obj_methods表独立有2个作用，一个方法放到obj上可能占内存会比较多，另外为了支持方法换名以支持虚函数机制
+                    ///，参见lualib的defineclass实现。
+                    ///3、obj_build是个函数，用来生成每个对象实例，已经包含了对应的字段表与初始值（因为每个实例都需要一份不同的数
+                    ///据，所以是一个返回字段表的函数）
+                    ///4、考虑继承机制需要在当前类不存在成员时往父类查找，而字段值可能是nil，此时相当于类实例里删除了这个字段，为
+                    ///了仍然能正确查到当前类是否存在字段，在类信息里额外保存了2个字段信息表，一个静态的，一个实例的。
                     if (null != logInfoForDefineClass.EpilogueInfo) {
-                        sb.AppendFormatLine("{0}local __defineclass_return = defineclass({1}, \"{2}\", \"{3}\", class, class_fields, obj_methods, obj_fields_build, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
+                        sb.AppendFormatLine("{0}local __defineclass_return = defineclass({1}, \"{2}\", \"{3}\", class, obj_methods, obj_build, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
                         sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfoForDefineClass.EpilogueInfo, className, "__define_class"));
                         sb.AppendFormatLine("{0}return __defineclass_return;", GetIndentString(indent));
                     }
                     else {
-                        sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", \"{3}\", class, class_fields, obj_methods, obj_fields_build, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
+                        sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", \"{3}\", class, obj_methods, obj_build, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
                     }
                     --indent;
                     sb.AppendFormatLine("{0}end,", GetIndentString(indent));
+
+                    sb.AppendLine();
+
+                    sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}--------- fields info ---------", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
+                    if (null != staticFields && staticFields.GetParamNum() > 0) {
+                        sb.AppendFormatLine("{0}__class_fields = {{", GetIndentString(indent));
+                        ++indent;
+                        foreach (var def in staticFields.Params) {
+                            var mdef = def as Dsl.FunctionData;
+                            if (mdef.GetId() == "=") {
+                                string mname = mdef.GetParamId(0);
+                                sb.AppendFormatLine("{0}{1} = true,", GetIndentString(indent), mname);
+                            }
+                        }
+                        --indent;
+                        sb.AppendFormatLine("{0}}},", GetIndentString(indent));
+                    }
+                    else {
+                        sb.AppendFormatLine("{0}__class_fields = nil,", GetIndentString(indent));
+                    }
+
+                    sb.AppendLine();
+
+                    if (null != instFields && instFields.GetParamNum() > 0) {
+                        sb.AppendFormatLine("{0}__obj_fields = {{", GetIndentString(indent));
+                        ++indent;
+                        foreach (var def in instFields.Params) {
+                            var mdef = def as Dsl.FunctionData;
+                            if (mdef.GetId() == "=") {
+                                string mname = mdef.GetParamId(0);
+                                sb.AppendFormatLine("{0}{1} = true,", GetIndentString(indent), mname);
+                            }
+                        }
+                        --indent;
+                        sb.AppendFormatLine("{0}}},", GetIndentString(indent));
+                    }
+                    else {
+                        sb.AppendFormatLine("{0}__obj_fields = nil,", GetIndentString(indent));
+                    }
 
                     sb.AppendLine();
 
@@ -743,7 +781,7 @@ namespace Generator
             s_CurSyntax = comp;
             var valData = comp as Dsl.ValueData;
             if (null != valData) {
-                GenerateConcreteSyntax(valData, sb, indent, firstLineUseIndent, true);
+                GenerateConcreteSyntax(valData, sb, indent, firstLineUseIndent);
             }
             else {
                 var funcData = comp as Dsl.FunctionData;
@@ -804,10 +842,6 @@ namespace Generator
         }
         private static void GenerateConcreteSyntax(Dsl.ValueData data, StringBuilder sb, int indent, bool firstLineUseIndent)
         {
-            GenerateConcreteSyntax(data, sb, indent, firstLineUseIndent, false);
-        }
-        private static void GenerateConcreteSyntax(Dsl.ValueData data, StringBuilder sb, int indent, bool firstLineUseIndent, bool useSpecNil)
-        {
             s_CurSyntax = data;
             if (firstLineUseIndent) {
                 sb.AppendFormat("{0}", GetIndentString(indent));
@@ -818,10 +852,7 @@ namespace Generator
                 case (int)Dsl.ValueData.NUM_TOKEN:
                 case (int)Dsl.ValueData.BOOL_TOKEN:
                     if (id == "null") {
-                        if (useSpecNil)
-                            id = "__cs2lua_nil_field_value";
-                        else
-                            id = "nil";
+                        id = "nil";
                     }
                     else if (id == "__cs2dsl_out") {
                         id = "__cs2lua_out";
