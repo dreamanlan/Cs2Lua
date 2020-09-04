@@ -356,14 +356,6 @@ return Class
         }
 
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static public int get_nil_field_value(IntPtr l)
-        {
-            pushValue(l, true);
-            LuaDLL.lua_pushlightuserdata(l, IntPtr.Zero);
-            return 2;
-        }
-
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 		static public int get_version(IntPtr l)
 		{
 			pushValue(l, true);
@@ -384,7 +376,6 @@ return Class
             addMember(l, MakeArray, false);
             addMember(l, ToBytes, false);
             addMember(l, "out", get_out, null, false);
-            addMember(l, "nil_field_value", get_nil_field_value, null, false);
             addMember(l, "version", get_version, null, false);
 
 			LuaFunction func = LuaState.get(l).doString(classfunc) as LuaFunction;
