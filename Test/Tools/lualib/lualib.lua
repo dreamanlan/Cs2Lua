@@ -2855,7 +2855,7 @@ function __find_base_obj_key(k, baseObj)
     end
     return false
 end
-function __find_obj_key(k, obj, obj_fields, obj_methods, obj_ex_methods, baseObj)
+function __find_obj_key(k, obj, obj_fields, obj_methods, baseObj)
     if nil == k then
         UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
         return false
@@ -2867,12 +2867,6 @@ function __find_obj_key(k, obj, obj_fields, obj_methods, obj_ex_methods, baseObj
     end
     if obj_fields then
         ret = obj_fields[k]
-        if nil ~= ret then
-            return true
-        end
-    end
-    if obj_ex_methods then
-        ret = obj_ex_methods[k]
         if nil ~= ret then
             return true
         end
@@ -2912,30 +2906,31 @@ function defineclass(
     rawset(class, "__interfaces", interfaces)
     
     --为继承与重载构建辅助函数
-    local obj_ex_methods = nil    
     if obj_methods then
-        obj_ex_methods = {}
+        local temp_methods = {}
         for k, v in pairs(obj_methods) do
+            temp_methods[k] = v
             if method_info then
                 local minfo = method_info[k]
                 if minfo then
                     if minfo["abstract"] or minfo["virtual"] or minfo["override"] then
-                        obj_ex_methods[k] = __wrap_virtual_method(k, v)
+                        temp_methods[k] = __wrap_virtual_method(k, v)
                     end
                     local result = string.find(k,"ctor",1,true)
                     if (result==1) or ((not minfo["private"]) and (not minfo["sealed"])) then
-                        obj_ex_methods["__self__" .. k] = v
+                        temp_methods["__self__" .. k] = v
                     end
                 end
             end
         end
+        obj_methods = temp_methods
     end
 
     local function __exist(fk)
         return __find_class_key(fk, class, class_fields, base_class)
     end
     local function __obj_exist(tb, fk)
-        return __find_obj_key(fk, tb, obj_fields, obj_methods, obj_ex_methods, tb.base)
+        return __find_obj_key(fk, tb, obj_fields, obj_methods, rawget(tb, "base"))
     end
 
     local function obj_GetType(tb)
@@ -2952,17 +2947,10 @@ function defineclass(
         __interfaces = interfaces,
         
         __index = function(t, k)
-            --实例方法不需要实际放在每个实例表里
-            if obj_ex_methods then
-                local r = rawget(obj_ex_methods, k)
-                if r then
-                    return r
-                end
-            end
             if obj_methods then
-                local r = rawget(obj_methods, k)
-                if r then
-                    return r
+                local f = obj_methods[k]
+                if f then
+                    return f
                 end
             end
             if k == "__exist" then
@@ -2984,6 +2972,8 @@ function defineclass(
             if __find_base_obj_key(k, baseObj) then
                 return baseObj[k]
             end
+            lualog("lookup meta for {0}.{1} base_class {2} baseObj {3}", t:GetType().FullName, k, base_class and base_class.FullName, baseObj)
+            printStack()
             return nil
         end,
         __newindex = function(t, k, v)
@@ -2991,7 +2981,14 @@ function defineclass(
                 UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
                 return
             end
-            local baseObj = t.base
+            if obj_fields then
+                local ret = obj_fields[k]
+                if nil ~= ret then
+                    rawset(t, k, v)
+                    return
+                end
+            end
+            local baseObj = rawget(t, "base")
             if __find_base_obj_key(k, baseObj) then
                 baseObj[k] = v
                 return
@@ -2999,8 +2996,8 @@ function defineclass(
             rawset(t, k, v)
         end,
         __setbase = function(self, base)
-            self.base = base
-        end
+            rawset(self, "base", base)
+        end,
     }
     
     local class_meta = {
@@ -3031,6 +3028,13 @@ function defineclass(
             if nil == k then
                 UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
                 return
+            end
+            if class_fields then
+                local ret = class_fields[k]
+                if nil ~= ret then
+                    rawset(t, k, v)
+                    return
+                end
             end
             if __find_base_class_key(k, base_class) then
                 base_class[k] = v
