@@ -193,7 +193,12 @@ namespace Generator
                         sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
                         sb.AppendFormatLine("{0}-------- class methods --------", GetIndentString(indent));
                         sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
+                        bool firstMethod = true;
                         foreach (var def in staticMethods.Params) {
+                            if (!firstMethod)
+                                sb.AppendLine();
+                            firstMethod = false;
+
                             var mdef = def as Dsl.FunctionData;
                             if (mdef.GetId() == "=") {
                                 string mname = mdef.GetParamId(0);
@@ -262,7 +267,6 @@ namespace Generator
                                     }
                                 }
                             }
-                            sb.AppendLine();
                         }
                         sb.AppendLine();
                     }
@@ -284,10 +288,11 @@ namespace Generator
                                 }
                             }
                         }
+                        sb.AppendLine();
                     }
 
                     sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
-                    sb.AppendFormatLine("{0}-- define class and instance --", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}--- define class and object ---", GetIndentString(indent));
                     sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
                     var logInfoForDefineClass = GetPrologueAndEpilogue(className, "__define_class");
                     sb.AppendFormatLine("{0}__define_class = function()", GetIndentString(indent));
@@ -305,7 +310,12 @@ namespace Generator
                     if (null != instMethods && instMethods.GetParamNum() > 0) {
                         sb.AppendFormatLine("{0}local obj_methods = {{", GetIndentString(indent));
                         ++indent;
+                        bool firstMethod = true;
                         foreach (var def in instMethods.Params) {
+                            if (!firstMethod)
+                                sb.AppendLine();
+                            firstMethod = false;
+
                             var mdef = def as Dsl.FunctionData;
                             if (mdef.GetId() == "=") {
                                 string mname = mdef.GetParamId(0);
@@ -374,7 +384,6 @@ namespace Generator
                                     }
                                 }
                             }
-                            sb.AppendLine();
                         }
                         --indent;
                         sb.AppendFormatLine("{0}}};", GetIndentString(indent));
@@ -453,9 +462,6 @@ namespace Generator
                         --indent;
                         sb.AppendFormatLine("{0}}},", GetIndentString(indent));
                     }
-                    else {
-                        sb.AppendFormatLine("{0}__class_fields = nil,", GetIndentString(indent));
-                    }
 
                     sb.AppendLine();
 
@@ -471,9 +477,6 @@ namespace Generator
                         }
                         --indent;
                         sb.AppendFormatLine("{0}}},", GetIndentString(indent));
-                    }
-                    else {
-                        sb.AppendFormatLine("{0}__obj_fields = nil,", GetIndentString(indent));
                     }
 
                     sb.AppendLine();
@@ -491,9 +494,6 @@ namespace Generator
                         }
                         --indent;
                         sb.AppendFormatLine("{0}}},", GetIndentString(indent));
-                    }
-                    else {
-                        sb.AppendFormatLine("{0}__interfaces = nil,", GetIndentString(indent));
                     }
 
                     bool sealedClass = false;
@@ -536,9 +536,6 @@ namespace Generator
                         }
                         --indent;
                         sb.AppendFormatLine("{0}}},", GetIndentString(indent));
-                    }
-                    else {
-                        sb.AppendFormatLine("{0}__class_info = nil,", GetIndentString(indent));
                     }
 
                     var methodInfo = FindStatement(funcData, "method_info") as Dsl.FunctionData;
@@ -601,9 +598,6 @@ namespace Generator
                         --indent;
                         sb.AppendFormatLine("{0}}},", GetIndentString(indent));
                     }
-                    else {
-                        sb.AppendFormatLine("{0}__method_info = nil,", GetIndentString(indent));
-                    }
 
                     var propertyInfo = FindStatement(funcData, "property_info") as Dsl.FunctionData;
                     if (s_GenPropertyInfo && null != propertyInfo && propertyInfo.GetParamNum() > 0) {
@@ -633,9 +627,6 @@ namespace Generator
                         }
                         --indent;
                         sb.AppendFormatLine("{0}}},", GetIndentString(indent));
-                    }
-                    else {
-                        sb.AppendFormatLine("{0}__property_info = nil,", GetIndentString(indent));
                     }
 
                     var eventInfo = FindStatement(funcData, "event_info") as Dsl.FunctionData;
@@ -667,9 +658,6 @@ namespace Generator
                         --indent;
                         sb.AppendFormatLine("{0}}},", GetIndentString(indent));
                     }
-                    else {
-                        sb.AppendFormatLine("{0}__event_info = nil,", GetIndentString(indent));
-                    }
 
                     var fieldInfo = FindStatement(funcData, "field_info") as Dsl.FunctionData;
                     if (s_GenFieldInfo && null != fieldInfo && fieldInfo.GetParamNum() > 0) {
@@ -697,9 +685,7 @@ namespace Generator
                         --indent;
                         sb.AppendFormatLine("{0}}},", GetIndentString(indent));
                     }
-                    else {
-                        sb.AppendFormatLine("{0}__field_info = nil,", GetIndentString(indent));
-                    }
+
                     --indent;
                     sb.AppendFormatLine("{0}}};", GetIndentString(indent));
 
