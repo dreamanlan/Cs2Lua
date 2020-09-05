@@ -242,6 +242,25 @@ GetComponent<T>() => GetCompoent(Type)
 
 3、为与Slua及dotnet reflection调用的机制一致，函数的out参数在调用时传入实参__cs2lua_out（使用Slua时此值为Slua.out否则为一空表）。
 
+4、修改了Slua导出API识别重载版本的机制，添加一个签名参数作为方法第一个参数（除self外），可以精确匹配调用的方法。
+
+5、对于翻译为lua的C#类，如果其实例传给C#对象的object类型属性，slua是无法记录的，翻译时对这种情形添加了luatoobject/objecttolua两个库调用，使用一个继承自c#实现的类型的翻译为lua的类，然后将
+普通lua类型实例作为该类的字段，并把该类实例赋给C#对象的object类型属性。从c#对象的object类型属性读取时，则进行反向操作，从而得到普通lua类实例。在FairyGUI里，常将业务对象赋给UI对象，并在事件
+处理里再取回使用。这其实是windows系统常见的custom data方式。
+
+6、c#里用方法名作参数时，编译器会自动包装成delegate，并且多次使用代表同一个delegate，这样可以让delegate/event的add/remove都传函数名即可。但这种函数名在lua里需要包装成函数对象，lua里对同一
+函数名的多次封装并不能识别为同一个delegate，这样就导致add后remove不掉对应的delegate。这个机制我们采用函数对象只在第一次构建时创建并在后续使用时能取回来处理：
+
+(function()
+  local delegate_key = calcdelegationkey(obj_member_key, obj);
+  return builddelegationonce(delegate_key, getdelegation(delegate_key) and function(...) return obj:member(...); end)
+end)()
+
+这里有2个关键点，一个是为每个函数名代表的delegation定义一个delegate_key，由三部分构成：对象名、方法名、对象实例ID，然后在一个全局表里以弱表方式记录key对应的lua函数对象。另一个是作为参数传递
+时，利用表达式短路的机制，getdelegation(delegate_key) and 函数对象定义，这样保证如果能取到已经定义的函数对象，就不会定义新的（避免函数对象开销）。builddelegationonce所做的工作是，根据delegate_key取回已经定义的函数对象（与getdelegation函数一样，从全局表里读取，可以是nil，表明不存在），然后与第二个参数比较，如果相同就直接返回取到的对象，否则记录第二个参数到全局表里，并返回第二个参数对象。
+
+7、lua里用table作类时，数据成员如果为nil，则表示这个成员在table里不存在。在继承情形需要在当前类未找到字段时访问父类字段，如果按table查找的话，这种nil值字段就会被认为是不存在。cs2lua之前采用一个单独的字段表来记录，并把字段值nil用一个lightuserdata表示，然后在元方法里读写这个字段，并进行lightuserdata到nil的来回转换，这在性能与直观方面都不太好，现在cs2lua翻译时数据字段直接放到类或实例表里，然后在类上另外提供2张表（静态与实例字段表），用来记录当前类存在哪些字段。
+
 
 
 ## 【lualib.lua】
