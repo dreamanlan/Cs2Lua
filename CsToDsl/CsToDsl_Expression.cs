@@ -366,7 +366,7 @@ namespace RoslynTool.CsToDsl
             var oper = m_Model.GetOperationEx(node) as ITypeOfExpression;
             var type = oper.TypeOperand;
 
-            TypeChecker.CheckType(type, node, GetCurMethodSemanticInfo());
+            TypeChecker.CheckType(m_Model, type, node, GetCurMethodSemanticInfo());
 
             CodeBuilder.Append("typeof(");
             OutputType(type, node, ci, "typeof");
@@ -410,7 +410,7 @@ namespace RoslynTool.CsToDsl
                 }
 
                 if (null != srcOper) {
-                    TypeChecker.CheckConvert(srcOper.Type, type, node, GetCurMethodSemanticInfo());
+                    TypeChecker.CheckConvert(m_Model, srcOper.Type, type, node, GetCurMethodSemanticInfo());
                 }
                 else {
                     Log(node, "cast type checker failed !");
@@ -455,7 +455,7 @@ namespace RoslynTool.CsToDsl
 
             var curMethod = GetCurMethodSemanticInfo();
             if (null != leftOper && null != rightOper) {
-                TypeChecker.CheckConvert(rightOper.Type, leftOper.Type, node, curMethod);
+                TypeChecker.CheckConvert(m_Model, rightOper.Type, leftOper.Type, node, curMethod);
             }
             else {
                 Log(node, "assignment type checker failed ! left oper:{0} right oper:{1}", leftOper, rightOper);
@@ -1076,7 +1076,7 @@ namespace RoslynTool.CsToDsl
                 var typeSymInfo = objectCreate.Type;
                 var sym = objectCreate.Constructor;
 
-                TypeChecker.CheckType(typeSymInfo, node, GetCurMethodSemanticInfo());
+                TypeChecker.CheckType(m_Model, typeSymInfo, node, GetCurMethodSemanticInfo());
 
                 string fullTypeName = ClassInfo.GetFullName(typeSymInfo);
                 var namedTypeSym = typeSymInfo as INamedTypeSymbol;

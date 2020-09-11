@@ -13,14 +13,23 @@ class LuaConsole
     }
 }
 
+class IntList : List<int>
+{ }
+
 class ZipInputStream
 {
     public ZipInputStream(MemoryStream ms)
     {
         var os = new ZipOutputStream(new MemoryStream());
         var os2 = Test(os, os, os) as ZipOutputStream;
+        IntList intList = new IntList();
+        List<int> a = new List<int>();
+        intList.AddRange(a);
+        var b = Test2(124);
     }
     private object Test(object o, params object[] args)
+    { }
+    private List<int> Test2(int v, IEnumerable enumer = new List<int>())
     { }
 }
 

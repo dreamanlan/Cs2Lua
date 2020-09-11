@@ -554,7 +554,7 @@ namespace RoslynTool.CsToDsl
 
                 var curMethod = GetCurMethodSemanticInfo();
                 if (null != leftOper && null != rightOper) {
-                    TypeChecker.CheckConvert(rightOper.Type, leftOper.Type, assign, curMethod);
+                    TypeChecker.CheckConvert(m_Model, rightOper.Type, leftOper.Type, assign, curMethod);
                 }
                 else {
                     Log(assign, "assignment type checker failed ! left oper:{0} right oper:{1}", leftOper, rightOper);
@@ -773,7 +773,7 @@ namespace RoslynTool.CsToDsl
                 var init = node.Initializer;
                 var srcOper = m_Model.GetOperationEx(init.Value);
                 if (null != srcOper) {
-                    TypeChecker.CheckConvert(srcOper.Type, namedTypeSym, node, GetCurMethodSemanticInfo());
+                    TypeChecker.CheckConvert(m_Model, srcOper.Type, namedTypeSym, node, GetCurMethodSemanticInfo());
                 }
                 else {
                     Log(node, "local variable type checker failed !");

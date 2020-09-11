@@ -46,6 +46,7 @@ namespace RoslynTool.CsToDsl
         internal IMethodSymbol NonGenericMethodSymbol = null;
         internal IMethodSymbol CallerMethodSymbol = null;
         internal SyntaxNode CallerSyntaxNode = null;
+        internal SemanticModel Model = null;
 
         internal InvocationInfo(IMethodSymbol caller, SyntaxNode node)
         {
@@ -55,7 +56,7 @@ namespace RoslynTool.CsToDsl
 
         internal void Init(IMethodSymbol sym, ArgumentListSyntax argList, SemanticModel model)
         {
-            Init(sym);
+            Init(sym, model);
 
             if (null != argList) {
                 var moper = model.GetOperationEx(argList) as IInvocationExpression;
@@ -160,7 +161,7 @@ namespace RoslynTool.CsToDsl
 
         internal void Init(IMethodSymbol sym, BracketedArgumentListSyntax argList, SemanticModel model)
         {
-            Init(sym);
+            Init(sym, model);
 
             if (null != argList) {
                 var moper = model.GetOperationEx(argList) as IInvocationExpression;
@@ -265,7 +266,7 @@ namespace RoslynTool.CsToDsl
 
         internal void Init(IMethodSymbol sym, List<ExpressionSyntax> argList, SemanticModel model, params IConversionExpression[] opds)
         {
-            Init(sym);
+            Init(sym, model);
 
             if (null != argList) {
                 for (int i = 0; i < argList.Count; ++i) {
@@ -425,14 +426,15 @@ namespace RoslynTool.CsToDsl
                     useTypeNameString = true;
                 }
             }
+            TypeChecker.CheckInvocation(model, sym, Args, DefaultValueArgs, ArgConversions, CallerSyntaxNode, CallerMethodSymbol);
             cs2dsl.OutputArgumentList(Args, DslToObjectDefArgs, DefaultValueArgs, DslToObjectDefArgs, GenericTypeArgs, ExternOverloadedMethodSignature, PostPositionGenericTypeArgs, ArrayToParams, useTypeNameString, node, MethodSymbol, ArgConversions.ToArray());
             codeBuilder.Append(")");
         }
 
-        private void Init(IMethodSymbol sym)
+        private void Init(IMethodSymbol sym, SemanticModel model)
         {
             MethodSymbol = sym;
-            TypeChecker.CheckInvocation(sym, CallerMethodSymbol, CallerSyntaxNode);
+            Model = model;
 
             Args.Clear();
             DslToObjectArgs.Clear();

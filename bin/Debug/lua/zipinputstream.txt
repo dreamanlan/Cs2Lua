@@ -1,12 +1,17 @@
 require "cs2lua__namespaces"; 
 
 ZipInputStream = {
+	-------------------------------
+	-------- class methods --------
+	-------------------------------
 	__new_object = function(...)
 		return newobject(ZipInputStream, nil, nil, "ctor", nil, ...);
 	end,
+
 	cctor = function()
 		ZipInputStream.__cctor();
 	end,
+
 	__cctor = function()
 		if ZipInputStream.__cctor_called then 
 			return;
@@ -14,30 +19,46 @@ ZipInputStream = {
 			ZipInputStream.__cctor_called = true;
 		end;
 	end,
+
+	-------------------------------
+	-------- class fields --------
+	-------------------------------
+	__cctor_called = false,
+
+	-------------------------------
+	--- define class and object ---
+	-------------------------------
 	__define_class = function()
 		Utility.Warn("ZipInputStream::__define_class begin");
 
 		local class = ZipInputStream;
-		local static_fields_build = function()
-			local static_fields = {
-				__cctor_called = false,
-			};
-			return static_fields;
-		end;
 
-		local instance_methods = {
+		local obj_methods = {
 			ctor = function(this, ms)
 				this:__ctor();
 				local os;
 				os = newobject(ZipOutputStream, nil, nil, "ctor", nil, newexternobject(System.IO.MemoryStream, nil, nil, nil, "System.IO.MemoryStream:ctor"));
 				local os2;
-				os2 = typeas(objecttodsl(this:Test(os, os, os)), ZipOutputStream, TypeKind.Class);
+				os2 = typeas(objecttolua(this:Test(os, os, os)), ZipOutputStream, TypeKind.Class);
+				local intList;
+				intList = newlist(IntList, nil, nil, "ctor", {});
+				local a;
+				a = newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, {}, "System.Collections.Generic.List_T:ctor");
+				intList:AddRange(a);
+				local b;
+				b = this:Test2(124, newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, {}, "System.Collections.Generic.List_T:ctor"));
 				return this;
 			end,
+
 			Test = function(this, o, ...)
 				local args = wrapparams({...}, System.Object, TypeKind.Class);
 				return nil;
 			end,
+
+			Test2 = function(this, v, enumer)
+				return nil;
+			end,
+
 			__ctor = function(this)
 				if this.__ctor_called then 
 					return;
@@ -46,28 +67,37 @@ ZipInputStream = {
 				end;
 			end,
 		};
-		local instance_fields_build = function()
-			local instance_fields = {
+
+		local obj_build = function()
+			return {
 				__ctor_called = false,
 			};
-			return instance_fields;
 		end;
 
-		local __defineclass_return = defineclass(nil, "ZipInputStream", "ZipInputStream", class, static_fields_build, instance_methods, instance_fields_build, false);
+		local __defineclass_return = defineclass(nil, "ZipInputStream", "ZipInputStream", class, obj_methods, obj_build, false);
 		Utility.Warn("ZipInputStream::__define_class end");
 		return __defineclass_return;
 	end,
 
-	__interfaces = nil,
-	__class_info = nil,
+	-------------------------------
+	--------- fields info ---------
+	-------------------------------
+	__class_fields = {
+		__cctor_called = true,
+	},
+
+	__obj_fields = {
+		__ctor_called = true,
+	},
+
+	-------------------------------
+	-------- metadata info --------
+	-------------------------------
 	__method_info = {
 		ctor = {
 			Kind = MethodKind.Constructor,
 		},
 	},
-	__property_info = nil,
-	__event_info = nil,
-	__field_info = nil,
 };
 
 
@@ -75,4 +105,5 @@ require "cs2lua__lualib";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
 require "zipoutputstream";
+require "intlist";
 settempmetatable(ZipInputStream);

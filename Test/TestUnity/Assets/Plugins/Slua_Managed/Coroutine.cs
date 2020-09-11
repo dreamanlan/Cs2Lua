@@ -91,6 +91,7 @@ end
 				yield return mb.StartCoroutine((IEnumerator)y);
 			else
 				yield return y;
+            yield return null;
 			f.call();
         }
 

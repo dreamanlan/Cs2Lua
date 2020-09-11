@@ -1,12 +1,17 @@
 require "cs2lua__namespaces"; 
 
 CUsingHelper = {
+	-------------------------------
+	-------- class methods --------
+	-------------------------------
 	__new_object = function(...)
 		return newobject(CUsingHelper, nil, nil, "ctor", nil, ...);
 	end,
+
 	Test = function(i)
 		return nil;
 	end,
+
 	ReadZip = function(bytes)
 		local abc;
 		abc = newarraydim2(System.Int32, TypeKind.Struct, 0, 12, 13);
@@ -20,14 +25,14 @@ CUsingHelper = {
 
 		else
 			--
-			local __invoke_76_16_76_42;
-			__invoke_76_16_76_42,v = dict:TryGetValue(1, __cs2lua_out);
-			if (__invoke_76_16_76_42 and (v == 0)) then
+			local __invoke_85_16_85_42;
+			__invoke_85_16_85_42,v = dict:TryGetValue(1, __cs2lua_out);
+			if (__invoke_85_16_85_42 and (v == 0)) then
 
 			else
 				--
-				local __unary_78_21_78_24 = v; v = (v + 1);
-				if (__unary_78_21_78_24 > 0) then
+				local __unary_87_21_87_24 = v; v = (v + 1);
+				if (__unary_87_21_87_24 > 0) then
 
 				else
 					--
@@ -78,9 +83,11 @@ CUsingHelper = {
 
 		return nil;
 	end,
+
 	cctor = function()
 		CUsingHelper.__cctor();
 	end,
+
 	__cctor = function()
 		if CUsingHelper.__cctor_called then 
 			return;
@@ -88,25 +95,30 @@ CUsingHelper = {
 			CUsingHelper.__cctor_called = true;
 		end;
 	end,
+
+	-------------------------------
+	-------- class fields --------
+	-------------------------------
+	__attributes = CUsingHelper__Attrs,
+	__cctor_called = false,
+
+	-------------------------------
+	--- define class and object ---
+	-------------------------------
 	__define_class = function()
 		Utility.Warn("CUsingHelper::__define_class begin");
 
 		local class = CUsingHelper;
-		local static_fields_build = function()
-			local static_fields = {
-				__attributes = CUsingHelper__Attrs,
-				__cctor_called = false,
-			};
-			return static_fields;
-		end;
 
-		local instance_methods = {
+		local obj_methods = {
 			ctor = function(this, a1, a2)
 				this:__ctor();
 				return this;
 			end,
+
 			Dispose = function(this)
 			end,
+
 			__ctor = function(this)
 				if this.__ctor_called then 
 					return;
@@ -115,23 +127,38 @@ CUsingHelper = {
 				end;
 			end,
 		};
-		local instance_fields_build = function()
-			local instance_fields = {
+
+		local obj_build = function()
+			return {
 				__attributes = CUsingHelper__Attrs,
 				__ctor_called = false,
 			};
-			return instance_fields;
 		end;
 
-		local __defineclass_return = defineclass(nil, "CUsingHelper", "CUsingHelper", class, static_fields_build, instance_methods, instance_fields_build, false);
+		local __defineclass_return = defineclass(nil, "CUsingHelper", "CUsingHelper", class, obj_methods, obj_build, false);
 		Utility.Warn("CUsingHelper::__define_class end");
 		return __defineclass_return;
 	end,
 
+	-------------------------------
+	--------- fields info ---------
+	-------------------------------
+	__class_fields = {
+		__attributes = true,
+		__cctor_called = true,
+	},
+
+	__obj_fields = {
+		__attributes = true,
+		__ctor_called = true,
+	},
+
+	-------------------------------
+	-------- metadata info --------
+	-------------------------------
 	__interfaces = {
 		"System.IDisposable",
 	},
-	__class_info = nil,
 	__method_info = {
 		ctor = {
 			Kind = MethodKind.Constructor,
@@ -148,9 +175,6 @@ CUsingHelper = {
 			static = true,
 		},
 	},
-	__property_info = nil,
-	__event_info = nil,
-	__field_info = nil,
 };
 
 

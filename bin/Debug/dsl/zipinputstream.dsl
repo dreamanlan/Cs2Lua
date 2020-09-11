@@ -3,6 +3,7 @@ require("cs2dsl__namespaces");
 require("cs2dsl__externenums");
 require("cs2dsl__interfaces");
 require("zipoutputstream");
+require("intlist");
 
 class(ZipInputStream) {
 	static_methods {
@@ -31,10 +32,17 @@ class(ZipInputStream) {
 			callinstance(this, "__ctor");
 			local(os); os = newobject(ZipOutputStream, typeargs(), typekinds(), "ctor", null, newexternobject(System.IO.MemoryStream, typeargs(), typekinds(), null, "System.IO.MemoryStream:ctor"));
 			local(os2); os2 = typeas(objecttodsl(callinstance(this, "Test", os, os, os)), ZipOutputStream, TypeKind.Class);
+			local(intList); intList = newlist(IntList, typeargs(), typekinds(), "ctor", literallist(typeargs(), typekinds()));
+			local(a); a = newexternlist(System.Collections.Generic.List_T, typeargs(System.Int32), typekinds(TypeKind.Struct), literallist(typeargs(System.Int32), typekinds(TypeKind.Struct)), "System.Collections.Generic.List_T:ctor");
+			callexterninstance(intList, "AddRange", a);
+			local(b); b = callinstance(this, "Test2", 124, newexternlist(System.Collections.Generic.List_T, typeargs(System.Int32), typekinds(TypeKind.Struct), literallist(typeargs(System.Int32), typekinds(TypeKind.Struct)), "System.Collections.Generic.List_T:ctor"));
 			return(this);
 		},
 		Test = deffunc(1)args(this, o, ...){
 			local{args = params(System.Object, TypeKind.Class);};
+			return(null);
+		};
+		Test2 = deffunc(1)args(this, v, enumer){
 			return(null);
 		};
 		__ctor = deffunc(0)args(this){
@@ -59,6 +67,8 @@ class(ZipInputStream) {
 		ctor(MethodKind.Constructor, Accessibility.Public){
 		};
 		Test(MethodKind.Ordinary, Accessibility.Private){
+		};
+		Test2(MethodKind.Ordinary, Accessibility.Private){
 		};
 	};
 	property_info {};

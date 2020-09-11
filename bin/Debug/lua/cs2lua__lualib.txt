@@ -4,9 +4,8 @@ local function get_basic_type_func()
     end
 end
 
-Slua = Slua or {out = {}}
+Slua = Slua or {out = {}, nil_field_value = {}}
 __cs2lua_out = Slua.out
-__cs2lua_nil_field_value = {}
 
 System = System or {}
 System.Boolean = System.Boolean or get_basic_type_func()
@@ -161,7 +160,7 @@ MethodKind = {
 }
 
 function printStack()
-    UnityEngine.Debug.Log("Log_String", debug.traceback())
+    Utility.Warn("{0}", debug.traceback())
 end
 
 function printJitStatus()
@@ -679,20 +678,44 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
             return obj[method](obj, ...)
         elseif method == "CompareTo" then
             if issignature(arg1, method) then
-                if obj > arg2 then
-                    return 1
-                elseif obj < arg2 then
-                    return -1
+                if type(obj)=="boolean" and type(arg2)=="boolean" then
+                    if obj and arg2 then
+                        return 0
+                    elseif not obj and not arg2 then
+                        return 0
+                    elseif obj and not arg2 then
+                        return 1
+                    else
+                        return -1
+                    end
                 else
-                    return 0
+                    if obj > arg2 then
+                        return 1
+                    elseif obj < arg2 then
+                        return -1
+                    else
+                        return 0
+                    end
                 end
             else
-                if obj > arg1 then
-                    return 1
-                elseif obj < arg1 then
-                    return -1
+                if type(obj)=="boolean" and type(arg2)=="boolean" then
+                    if obj and arg2 then
+                        return 0
+                    elseif not obj and not arg2 then
+                        return 0
+                    elseif obj and not arg2 then
+                        return 1
+                    else
+                        return -1
+                    end
                 else
-                    return 0
+                    if obj > arg1 then
+                        return 1
+                    elseif obj < arg1 then
+                        return -1
+                    else
+                        return 0
+                    end
                 end
             end
         elseif method == "ToString" then
@@ -906,6 +929,60 @@ function wrapexternstruct(v, classObj)
     return v
 end
 
+Cs2LuaCustomData = {
+	__new_object = function(...)
+		return newobject(Cs2LuaCustomData, nil, nil, nil, nil, ...);
+	end,
+	__define_class = function()
+		printMemDiff("Cs2LuaCustomData::__define_class begin");
+
+		local class = Cs2LuaCustomData;
+
+		local obj_methods = nil;
+		local obj_build = function()
+			return {
+				CustomData = nil,
+			};
+		end;
+
+		local __defineclass_return = defineclass(UnityEngine.Object, "Cs2LuaCustomData", "Cs2LuaCustomData", class, obj_methods, obj_build, false);
+		printMemDiff("Cs2LuaCustomData::__define_class end");
+		return __defineclass_return;
+	end,
+	__obj_fields = {
+	    CustomData = true,
+	},
+};
+
+settempmetatable(Cs2LuaCustomData);
+
+function luatoobject(symKind, isStatic, symName, arg1, ...)
+    if arg1 and symKind==SymbolKind.Field then
+        local meta = getmetatable(arg1)
+        if meta and rawget(meta, "__cs2lua_defined") then
+            lualog("luatoobject symKind:{0} {1} {2} {3}", symKind, isStatic, symName, meta.__cs2lua_fullname)
+            printStack()
+            local o = Cs2LuaCustomData.__new_object()
+            o.CustomData = arg1
+            arg1 = o
+        end
+    end
+    return arg1, ...
+end
+
+function objecttolua(arg1, ...)
+    if arg1 then
+        local meta = getmetatable(arg1)       
+        if meta and rawget(meta, "__cs2lua_fullname")=="Cs2LuaCustomData" then   
+            arg1 = arg1.CustomData
+            local metav = getmetatable(arg1)
+            lualog("objecttolua:{0} {1}", meta.__cs2lua_fullname, metav.__cs2lua_fullname)
+            printStack()
+        end
+    end
+    return arg1, ...
+end
+
 __mt_delegation = {
     __is_delegation = true,
     __call = function(t, ...)
@@ -923,8 +1000,6 @@ function wrapdelegation(handlers)
     return setmetatable(handlers, __mt_delegation)
 end
 
-__delegation_keys = {}
-
 local function __get_obj_string(obj)
     if type(obj) == "table" then
         local oldTblMeta = getmetatable(obj)
@@ -937,24 +1012,32 @@ local function __get_obj_string(obj)
     end
 end
 
-function setdelegationkey(func, key, obj, member)
-    rawset(__delegation_keys, func, key .. __get_obj_string(obj))
+__cs2lua_delegations = setmetatable({},{ __mode = 'v' })
+
+function calcdelegationkey(class_member_key, obj)
+    local fk = class_member_key .. __get_obj_string(obj)
+    return fk
 end
-function getdelegationkey(func)
-    return rawget(__delegation_keys, func)
+function getdelegation(key)
+    return rawget(__cs2lua_delegations, key)
 end
-function removedelegationkey(func)
-    rawset(__delegation_keys, func, nil)
+function builddelegationonce(key, handler)
+    local old = rawget(__cs2lua_delegations, key)
+    if old~=handler then
+        rawset(__cs2lua_delegations, key, handler)
+    end
+    return handler
 end
+
 function dumpdelegationtable()
     print("dumpdelegationtable")
 
-    if next(__delegation_keys) == nil then
+    if next(__cs2lua_delegations) == nil then
         print("dumpdelegationtable empty")
         return
     end
 
-    for k, v in pairs(__delegation_keys) do
+    for k, v in pairs(__cs2lua_delegations) do
         print(k)
         print(v)
     end
@@ -973,7 +1056,7 @@ function delegationwrap(handler)
     end
 end
 
-function delegationcomparewithnil(isstatic, key, t, k, symKind, isequal)
+function delegationcomparewithnil(isstatic, t, k, symKind, isequal)
     if not t then
         if isequal then
             return true
@@ -1012,7 +1095,7 @@ function delegationcomparewithnil(isstatic, key, t, k, symKind, isequal)
         return false
     end
 end
-function delegationset(isstatic, key, t, k, symKind, handler)
+function delegationset(isstatic, t, k, symKind, handler)
     local v = t
     if k then
         if symKind == SymbolKind.Property then
@@ -1034,7 +1117,7 @@ function delegationset(isstatic, key, t, k, symKind, handler)
         return v
     end
 end
-function delegationadd(isstatic, key, t, k, symKind, handler)
+function delegationadd(isstatic, t, k, symKind, handler)
     local v = t
     if k then
         if symKind == SymbolKind.Property then
@@ -1050,7 +1133,7 @@ function delegationadd(isstatic, key, t, k, symKind, handler)
     end
     return v
 end
-function delegationremove(isstatic, key, t, k, symKind, handler)
+function delegationremove(isstatic, t, k, symKind, handler)
     local v = t
     if k then
         if symKind == SymbolKind.Property then
@@ -1061,77 +1144,20 @@ function delegationremove(isstatic, key, t, k, symKind, handler)
     end
     local find = false
     local pos = 1
-    for k, v in pairs(v) do
-        if v == handler then
+    for k, h in pairs(v) do
+        if h == handler then
             find = true
             break
-        else
-            local key1 = getdelegationkey(v)
-            local key2 = getdelegationkey(handler)
-            if key1 and key2 and key1 == key2 then
-                find = true
-                break
-            end
         end
         pos = pos + 1
     end
     if find then
-        removedelegationkey(v[pos])
         table.remove(v, pos)
-        removedelegationkey(handler)
     end
     return v
 end
 
-__extern_delegation_str_func = {}
-function getexterndelegationfunc(str)
-    local tbl = rawget(__extern_delegation_str_func, str)
-    if tbl ~= nil then
-        return tbl[1]
-    end
-    return nil
-end
-function setexterndelegationfunc(str, func)
-    local tbl = rawget(__extern_delegation_str_func, str)
-    if tbl ~= nil then
-        table.insert(tbl, func)
-    else
-        tbl = {func}
-    end
-    rawset(__extern_delegation_str_func, str, tbl)
-end
-function removeexterndelegationfunc(str, handler)
-    local tbl = rawget(__extern_delegation_str_func, str)
-    if tbl == nil then
-        return
-    end
-    for k, v in pairs(tbl) do
-        if v == handler then
-            table.remove(tbl, k)
-            break
-        end
-    end
-    if next(tbl) == nil then
-        rawset(__extern_delegation_str_func, str, nil)
-    end
-end
-function dumpexterndelegationtable()
-    print("dumpexterndelegationtable")
-
-    if next(__extern_delegation_str_func) == nil then
-        print("dumpexterndelegationtable empty")
-        return
-    end
-
-    for k, v in pairs(__extern_delegation_str_func) do
-        print(k)
-        for a, b in pairs(v) do
-            print(b)
-        end
-    end
-end
-
-function externdelegationcomparewithnil(isstatic, key, t, k, symKind, isequal)
+function externdelegationcomparewithnil(isstatic, t, k, symKind, isequal)
     local v = t
     if k then
         return true
@@ -1144,39 +1170,26 @@ function externdelegationcomparewithnil(isstatic, key, t, k, symKind, isequal)
         return false
     end
 end
-function externdelegationset(isstatic, key, t, k, symKind, handler)
+function externdelegationset(isstatic, t, k, symKind, handler)
     if k then
         return handler
     else
         return handler
     end
 end
-function externdelegationadd(isstatic, key, t, k, symKind, handler)
-    local str = getdelegationkey(handler)
-    if str then
-        setexterndelegationfunc(str .. key, handler)
-    end
+function externdelegationadd(isstatic, t, k, symKind, handler)
     if k then
         return {"+=", handler}
     else
         return {"+=", handler}
     end
 end
-function externdelegationremove(isstatic, key, t, k, symKind, handler)
-    local str = getdelegationkey(handler)
-    local trueHandler = handler
-    if str then
-        trueHandler = getexterndelegationfunc(str .. key)
-    end
+function externdelegationremove(isstatic, t, k, symKind, handler)
     local ret = nil
     if k then
-        ret = {"-=", trueHandler}
+        ret = {"-=", handler}
     else
-        ret = {"-=", trueHandler}
-    end
-    removedelegationkey(handler)
-    if str then
-        removeexterndelegationfunc(str .. key, trueHandler)
+        ret = {"-=", handler}
     end
     return ret
 end
@@ -1624,7 +1637,7 @@ __mt_index_of_dictionary_table = {
 }
 
 __mt_index_of_dictionary = function(t, k)
-     if k == "Count" then
+    if k == "Count" then
         return __get_table_count(t)
     elseif k == "Keys" then
         local meta = getmetatable(t)
@@ -2732,22 +2745,6 @@ function isequal(v1, v2)
     end
 end
 
-function __wrap_table_field(v)
-    if nil == v then
-        return __cs2lua_nil_field_value
-    else
-        return v
-    end
-end
-
-function __unwrap_table_field(v)
-    if __cs2lua_nil_field_value == v then
-        return nil
-    else
-        return v
-    end
-end
-
 function __wrap_if_string(val)
     if type(val) == "string" then
         return System.String("String_Arr_Char", val)
@@ -2772,7 +2769,11 @@ function __find_base_class_key(k, base_class)
     end
     if base_class then
         if rawget(base_class, "__cs2lua_defined") then
-            return base_class.__exist(k)
+            if rawget(base_class, k) then
+                return true
+            else
+                return base_class.__exist(k)
+            end
         else
             return find_extern_class_or_obj_key(k,base_class)
         end
@@ -2789,9 +2790,11 @@ function __find_class_key(k, class, class_fields, base_class)
     if nil ~= ret then
         return true
     end
-    ret = class_fields[k]
-    if nil ~= ret then
-        return true
+    if class_fields then
+        ret = class_fields[k]
+        if nil ~= ret then
+            return true
+        end
     end
     return __find_base_class_key(k, base_class)
 end
@@ -2841,14 +2844,18 @@ function __find_base_obj_key(k, baseObj)
     if baseObj then
         local meta = getmetatable(baseObj)
         if meta and rawget(meta, "__cs2lua_defined") then
-            return baseObj:__exist(k)
+            if rawget(baseObj, k) then
+                return true
+            else
+                return baseObj:__exist(k)
+            end
         else
             return find_extern_class_or_obj_key(k,baseObj)
         end
     end
     return false
 end
-function __find_obj_key(k, obj, obj_fields, baseObj)
+function __find_obj_key(k, obj, obj_fields, obj_methods, baseObj)
     if nil == k then
         UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
         return false
@@ -2858,27 +2865,36 @@ function __find_obj_key(k, obj, obj_fields, baseObj)
     if nil ~= ret then
         return true
     end
-    ret = obj_fields[k]
-    if nil ~= ret then
-        return true
+    if obj_fields then
+        ret = obj_fields[k]
+        if nil ~= ret then
+            return true
+        end
+    end
+    if obj_methods then
+        ret = obj_methods[k]
+        if nil ~= ret then
+            return true
+        end
     end
     return __find_base_obj_key(k, baseObj)
 end
-
+ 
 function defineclass(
     base,
     fullName,
     typeName,
-    class,
-    static_fields_build,
-    instance_methods,
-    instance_fields_build,
+    class,    
+    obj_methods,
+    obj_build,
     is_value_type)
-    
+        
     local base_class = base
     local mt = getmetatable(base_class)
+    
+    local class_fields = class.__class_fields
+    local obj_fields = class.__obj_fields
 
-    local class_fields = static_fields_build()
     local interfaces = class.__interfaces
     local method_info = class.__method_info
     
@@ -2888,159 +2904,167 @@ function defineclass(
     rawset(class, "__cs2lua_parent", base_class)
     rawset(class, "__is_value_type", is_value_type)
     rawset(class, "__interfaces", interfaces)
+    
+    --为继承与重载构建辅助函数
+    if obj_methods then
+        local temp_methods = {}
+        for k, v in pairs(obj_methods) do
+            temp_methods[k] = v
+            if method_info then
+                local minfo = method_info[k]
+                if minfo then
+                    if minfo["abstract"] or minfo["virtual"] or minfo["override"] then
+                        temp_methods[k] = __wrap_virtual_method(k, v)
+                    end
+                    local result = string.find(k,"ctor",1,true)
+                    if (result==1) or ((not minfo["private"]) and (not minfo["sealed"])) then
+                        temp_methods["__self__" .. k] = v
+                    end
+                end
+            end
+        end
+        obj_methods = temp_methods
+    end
 
     local function __exist(fk)
         return __find_class_key(fk, class, class_fields, base_class)
+    end
+    local function __obj_exist(tb, fk)
+        return __find_obj_key(fk, tb, obj_fields, obj_methods, rawget(tb, "base"))
     end
 
     local function obj_GetType(tb)
         return class
     end
-
-    setmetatable(
-        class,
-        {
-            __index = function(t, k)
-                if k == "__exist" then
-                    return __exist
+    
+    local obj_meta = {
+        __class = class,
+        __cs2lua_defined = true,
+        __cs2lua_fullname = fullName,
+        __cs2lua_typename = typeName,
+        __cs2lua_parent = base_class,
+        __is_value_type = is_value_type,
+        __interfaces = interfaces,
+        
+        __index = function(t, k)
+            if obj_methods then
+                local f = obj_methods[k]
+                if f then
+                    return f
                 end
-                if nil == k then
-                    UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
+            end
+            if k == "__exist" then
+                return __obj_exist
+            elseif k == "GetType" then
+                return obj_GetType
+            elseif nil == k then
+                UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
+                return nil
+            end
+            if obj_fields then
+                local ret = obj_fields[k]
+                if nil ~= ret then
+                    --是当前类字段但仍走到元方法里了，则表明当前字段值为空
                     return nil
                 end
-                local ret
-                ret = class_fields[k]
-                if nil ~= ret then
-                    return __unwrap_table_field(ret)
-                end
-                if __find_base_class_key(k, base_class) then
-                    ret = base_class[k]
-                    return ret
-                end
-                --简单支持反射的属性:Type.Name与Type.FullName
-                if k == "Name" then
-                    ret = typeName
-                elseif k == "FullName" then
-                    ret = fullName
-                end
-                return ret
-            end,
-            __newindex = function(t, k, v)
-                if nil == k then
-                    UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-                    return
-                end
-                local ret
-                ret = class_fields[k]
-                if nil ~= ret then
-                    class_fields[k] = __wrap_table_field(v)
-                    return
-                end
-                if __find_base_class_key(k, base_class) then
-                    base_class[k] = v
-                    return
-                end
-                rawset(t, k, v)
-            end,
-            __call = function()
-                local baseObj = nil
-                if base_class == UnityEngine.MonoBehaviour then
-                    baseObj = nil
-                elseif mt then
-                    baseObj = mt.__call()
-                end
-                local obj = {}
-                local obj_fields = instance_fields_build()
-                for k, v in pairs(instance_methods) do
-                    if not method_info then
-                        obj[k] = v
-                    else
-                        local minfo = method_info[k]
-                        if not minfo then
-                            obj[k] = v
-                        else
-                            if minfo["abstract"] or minfo["virtual"] or minfo["override"] then
-                                obj[k] = __wrap_virtual_method(k, v)
-                            else
-                                obj[k] = v
-                            end
-                            local result = string.find(k,"ctor",1,true)
-                            if (result==1) or ((not minfo["private"]) and (not minfo["sealed"])) then
-                                obj["__self__" .. k] = v
-                            end
-                        end
-                    end
-                end
-                
-                obj["base"] = baseObj
-                if baseObj then
-                    baseObj["__child__"] = obj
-                end
-
-                local function obj__exist(tb, fk)
-                    return __find_obj_key(fk, obj, obj_fields, baseObj)
-                end
-
-                setmetatable(
-                    obj,
-                    {
-                        __class = class,
-                        __cs2lua_defined = true,
-                        __cs2lua_fullname = fullName,
-                        __cs2lua_typename = typeName,
-                        __cs2lua_parent = base_class,
-                        __is_value_type = is_value_type,
-                        __interfaces = interfaces,
-                        __index = function(t, k)
-                            if k == "__exist" then
-                                return obj__exist
-                            end
-                            if nil == k then
-                                UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-                                return nil
-                            end
-                            local ret
-                            ret = obj_fields[k]
-                            if nil ~= ret then
-                                return __unwrap_table_field(ret)
-                            end
-                            if __find_base_obj_key(k, baseObj) then
-                                ret = baseObj[k]
-                                return ret
-                            end
-                            --简单支持反射方法:GetType()
-                            if k == "GetType" then
-                                return obj_GetType
-                            end
-                            return ret
-                        end,
-                        __newindex = function(t, k, v)
-                            if nil == k then
-                                UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-                                return
-                            end
-                            local ret
-                            ret = obj_fields[k]
-                            if nil ~= ret then
-                                obj_fields[k] = __wrap_table_field(v)
-                                return
-                            end
-                            if __find_base_obj_key(k, baseObj) then
-                                baseObj[k] = v
-                                return
-                            end
-                            rawset(t, k, v)
-                        end,
-                        __setbase = function(self, base)
-                            baseObj = base
-                        end
-                    }
-                )
-
-                return obj
             end
-        }
-    )
+            local baseObj = rawget(t, "base")
+            if __find_base_obj_key(k, baseObj) then
+                return baseObj[k]
+            end
+            lualog("lookup meta for {0}.{1} base_class {2} baseObj {3}", t:GetType().FullName, k, base_class and base_class.FullName, baseObj)
+            printStack()
+            return nil
+        end,
+        __newindex = function(t, k, v)
+            if nil == k then
+                UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
+                return
+            end
+            if obj_fields then
+                local ret = obj_fields[k]
+                if nil ~= ret then
+                    rawset(t, k, v)
+                    return
+                end
+            end
+            local baseObj = rawget(t, "base")
+            if __find_base_obj_key(k, baseObj) then
+                baseObj[k] = v
+                return
+            end
+            rawset(t, k, v)
+        end,
+        __setbase = function(self, base)
+            rawset(self, "base", base)
+        end,
+    }
+    
+    local class_meta = {
+        __index = function(t, k)
+            if k == "__exist" then
+                return __exist
+            elseif k == "Name" then
+                return typeName
+            elseif k == "FullName" then
+                return fullName
+            elseif nil == k then
+                UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
+                return nil
+            end
+            if class_fields then
+                local ret = class_fields[k]
+                if nil ~= ret then
+                    --字段存在仍然调到元方法，表明值为空
+                    return nil
+                end
+            end
+            if __find_base_class_key(k, base_class) then
+                return base_class[k]
+            end
+            return nil
+        end,
+        __newindex = function(t, k, v)
+            if nil == k then
+                UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
+                return
+            end
+            if class_fields then
+                local ret = class_fields[k]
+                if nil ~= ret then
+                    rawset(t, k, v)
+                    return
+                end
+            end
+            if __find_base_class_key(k, base_class) then
+                base_class[k] = v
+                return
+            end
+            rawset(t, k, v)
+        end,
+        __call = function()
+            local baseObj = nil
+            if base_class == UnityEngine.MonoBehaviour then
+                baseObj = nil
+            elseif mt then
+                baseObj = mt.__call()
+            end
+            local obj = obj_build()
+            if not obj then
+                obj = {}
+            end
+            
+            rawset(obj, "base", baseObj)
+            if baseObj then
+                rawset(baseObj, "__child__", obj)
+            end
+
+            setmetatable(obj, obj_meta)
+            return obj
+        end
+    }
+
+    setmetatable(class, class_meta)
     if class.cctor then
         class.cctor()
     end
