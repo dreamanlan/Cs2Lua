@@ -217,3 +217,17 @@ for i in pairs({1,2,3,4}) do
 end
 print("--")
 print(i)
+
+local function testho()
+    return function(...) print(...) end
+end
+
+testho();
+
+(testho)();
+
+(function() print(123) end)()
+
+a,b = c,d
+
+(1+3)
