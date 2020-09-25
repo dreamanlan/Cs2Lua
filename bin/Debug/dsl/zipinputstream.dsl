@@ -31,11 +31,13 @@ class(ZipInputStream) {
 		ctor = deffunc(0)args(this, ms){
 			callinstance(this, "__ctor");
 			local(os); os = newobject(ZipOutputStream, typeargs(), typekinds(), "ctor", null, newexternobject(System.IO.MemoryStream, typeargs(), typekinds(), null, "System.IO.MemoryStream:ctor"));
-			local(os2); os2 = typeas(objecttodsl(callinstance(this, "Test", os, os, os)), ZipOutputStream, TypeKind.Class);
+			local(os2); os2 = typeas(objecttodsl(callinstance(this, "Test", dsltoobject(SymbolKind.Method, false, "ZipInputStream:Test", os), dsltoobject(SymbolKind.Method, false, "ZipInputStream:Test", os), dsltoobject(SymbolKind.Method, false, "ZipInputStream:Test", os))), ZipOutputStream, TypeKind.Class);
 			local(intList); intList = newlist(IntList, typeargs(), typekinds(), "ctor", literallist(typeargs(), typekinds()));
 			local(a); a = newexternlist(System.Collections.Generic.List_T, typeargs(System.Int32), typekinds(TypeKind.Struct), literallist(typeargs(System.Int32), typekinds(TypeKind.Struct)), "System.Collections.Generic.List_T:ctor");
 			callexterninstance(intList, "AddRange", a);
 			local(b); b = callinstance(this, "Test2", 124, newexternlist(System.Collections.Generic.List_T, typeargs(System.Int32), typekinds(TypeKind.Struct), literallist(typeargs(System.Int32), typekinds(TypeKind.Struct)), "System.Collections.Generic.List_T:ctor"));
+			local(o); o = dsltoobject(SymbolKind.Local, false, "o", literalarray(System.Int32, TypeKind.Struct, 1, 2));
+			local(arr); arr = typeas(objecttodsl(o), System.Array, TypeKind.Array);
 			return(this);
 		},
 		Test = deffunc(1)args(this, o, ...){

@@ -427,7 +427,7 @@ namespace RoslynTool.CsToDsl
                 }
             }
             TypeChecker.CheckInvocation(model, sym, Args, DefaultValueArgs, ArgConversions, CallerSyntaxNode, CallerMethodSymbol);
-            cs2dsl.OutputArgumentList(Args, DslToObjectDefArgs, DefaultValueArgs, DslToObjectDefArgs, GenericTypeArgs, ExternOverloadedMethodSignature, PostPositionGenericTypeArgs, ArrayToParams, useTypeNameString, node, MethodSymbol, ArgConversions.ToArray());
+            cs2dsl.OutputArgumentList(Args, DslToObjectArgs, DefaultValueArgs, DslToObjectDefArgs, GenericTypeArgs, ExternOverloadedMethodSignature, PostPositionGenericTypeArgs, ArrayToParams, useTypeNameString, node, MethodSymbol, ArgConversions.ToArray());
             codeBuilder.Append(")");
         }
 
@@ -609,8 +609,17 @@ namespace RoslynTool.CsToDsl
         {
             if (null != arg) {
                 string leftFullName = ClassInfo.GetFullName(param);
-                if (leftFullName == "System.Object" && SymbolTable.Instance.IsCs2DslSymbol(arg)) {
-                    return true;
+                if (leftFullName == "System.Object"){
+                    if (SymbolTable.Instance.IsCs2DslSymbol(arg)) {
+                        return true;
+                    }
+                    if (arg.TypeKind == TypeKind.Array) {
+                        return true;
+                    }
+                    var namedType = arg as INamedTypeSymbol;
+                    if (null != namedType && namedType.IsGenericType && CsDslTranslater.IsImplementationOfSys(arg, "ICollection")) {
+                        return true;
+                    }
                 }
             }
             return false;
@@ -619,8 +628,17 @@ namespace RoslynTool.CsToDsl
         {
             if (null != arg) {
                 string rightFullName = ClassInfo.GetFullName(arg);
-                if (SymbolTable.Instance.IsCs2DslSymbol(param) && rightFullName == "System.Object") {
-                    return true;
+                if (rightFullName == "System.Object") {
+                    if (SymbolTable.Instance.IsCs2DslSymbol(param)) {
+                        return true;
+                    }
+                    if (param.TypeKind == TypeKind.Array) {
+                        return true;
+                    }
+                    var namedType = param as INamedTypeSymbol;
+                    if (null != namedType && namedType.IsGenericType && CsDslTranslater.IsImplementationOfSys(param, "ICollection")) {
+                        return true;
+                    }
                 }
             }
             return false;

@@ -26,6 +26,8 @@ class ZipInputStream
         List<int> a = new List<int>();
         intList.AddRange(a);
         var b = Test2(124);
+        object o = new int[] { 1, 2 };
+        var arr = o as int[];
     }
     private object Test(object o, params object[] args)
     { }

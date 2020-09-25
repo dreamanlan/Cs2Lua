@@ -39,7 +39,7 @@ ZipInputStream = {
 				local os;
 				os = newobject(ZipOutputStream, nil, nil, "ctor", nil, newexternobject(System.IO.MemoryStream, nil, nil, nil, "System.IO.MemoryStream:ctor"));
 				local os2;
-				os2 = typeas(objecttolua(this:Test(os, os, os)), ZipOutputStream, TypeKind.Class);
+				os2 = typeas(objecttolua(this:Test(luatoobject(SymbolKind.Method, false, "ZipInputStream:Test", os), luatoobject(SymbolKind.Method, false, "ZipInputStream:Test", os), luatoobject(SymbolKind.Method, false, "ZipInputStream:Test", os))), ZipOutputStream, TypeKind.Class);
 				local intList;
 				intList = newlist(IntList, nil, nil, "ctor", {});
 				local a;
@@ -47,6 +47,10 @@ ZipInputStream = {
 				intList:AddRange(a);
 				local b;
 				b = this:Test2(124, newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, {}, "System.Collections.Generic.List_T:ctor"));
+				local o;
+				o = luatoobject(SymbolKind.Local, false, "o", wraparray({1, 2}, nil, System.Int32, TypeKind.Struct));
+				local arr;
+				arr = typeas(objecttolua(o), System.Array, TypeKind.Array);
 				return this;
 			end,
 

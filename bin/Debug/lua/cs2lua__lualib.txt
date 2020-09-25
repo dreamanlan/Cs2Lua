@@ -1988,8 +1988,8 @@ end
 function newiterator(exp)
     local meta = getmetatable(exp)
     if meta and rawget(meta, "__cs2lua_defined") then
-        if meta.cachedIters and #(meta.cachedIters)>0 then
-            local iterInfo = table.remove(meta.cachedIters, 1)
+        if meta.cachedIters and meta.cachedIters[exp] and #(meta.cachedIters[exp])>0 then
+            local iterInfo = table.remove(meta.cachedIters[exp], 1)
             iterInfo[2]:Reset()
             return iterInfo
         else
@@ -2002,6 +2002,33 @@ function newiterator(exp)
                 end
             end
             return {f, enumer, exp}
+        end
+    elseif meta and rawget(meta, "__typename")=="LuaArray" then
+        --lualog("LuaArray newiterator:{0} {1}", exp, exp.Length)
+        printStack()
+        if meta.cachedIters and meta.cachedIters[exp] and #(meta.cachedIters[exp])>0 then
+            local iterInfo = table.remove(meta.cachedIters[exp], 1)
+            iterInfo[2]()
+            return iterInfo
+        else
+            local arr = exp
+            local curIx = 0
+            local f = function()
+                --lualog("LuaArray iterator arr:{0} length:{1}", arr, arr.Length)
+                if curIx < arr.Length then
+                    curIx = curIx + 1
+                    local v = arr[curIx]
+                    --lualog("LuaArray iterator:{0} {1}", curIx, v)
+                    return v
+                else
+                    --lualog("LuaArray iterator:{0} nil", curIx)
+                    return nil
+                end
+            end
+            local reset = function()
+                curIx = 0
+            end
+            return {f, reset, exp}
         end
     else
         return Slua.iter(exp)
@@ -2025,9 +2052,13 @@ function recycleiterator(iterInfo)
         local meta = getmetatable(exp)
         if meta then
             if meta.cachedIters then
-                table.insert(meta.cachedIters, iterInfo)
+                if not meta.cachedIters[exp] then
+                    meta.cachedIters[exp] = {}
+                end
+                table.insert(meta.cachedIters[exp], iterInfo)
             else
-                meta.cachedIters = {iterInfo}
+                meta.cachedIters = {}
+                meta.cachedIters[exp] = {iterInfo}
             end
         end
     end
@@ -2125,13 +2156,37 @@ function newdictionary(t, typeargs, typekinds, ctor, dict, ...)
         for k, v in pairs(dict) do
             obj:Add(k, v)
         end
+        local arg1 = ...
+        if arg1 and (type(arg1)=="table" or type(arg1)=="userdata") then
+            local iter = newiterator(arg1)
+            for v in getiterator(iter) do
+                obj:Add(v.Key, v.Value)
+            end
+        end
         return obj
     end
 end
 
 function newlist(t, typeargs, typekinds, ctor, list, ...)
     if list then
-        return setmetatable(list, {__index = __mt_index_of_array, __count = #list, __cs2lua_defined = true, __class = t})
+        local obj = setmetatable(list, {__index = __mt_index_of_array, __count = #list, __cs2lua_defined = true, __class = t})
+        local arg1 = ...
+        --lualog("arg1:{0} {1}", arg1, type(arg1))
+        if arg1 and (type(arg1)=="table" or type(arg1)=="userdata") then
+            local meta = getmetatable(arg1)
+            if meta and not rawget(meta, "__cs2lua_defined") then
+                local typename = rawget(meta, "__typename")
+                if typename=="LuaArray" then
+                    local ct = arg1.Length
+                    for i = 1, ct do
+                        obj:Add(arg1[i])
+                    end
+                end
+            else
+                obj:AddRange(arg1)                
+            end
+        end
+        return obj
     end
 end
 
