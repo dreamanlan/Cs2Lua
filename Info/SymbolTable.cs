@@ -787,6 +787,16 @@ namespace RoslynTool.CsToDsl
             else {
                 msym = methodSym;
             }
+            sb.Append("__");
+            var retType = msym.ReturnType;
+            if (retType.Kind == SymbolKind.ArrayType) {
+                sb.Append("Arr_");
+                var arrSym = retType as IArrayTypeSymbol;
+                CalcMethodParameterTypeName(sb, arrSym.ElementType);
+            }
+            else {
+                CalcMethodParameterTypeName(sb, retType);
+            }
             foreach (var param in msym.Parameters) {
                 sb.Append("__");
                 CalcMethodParameter(sb, param);

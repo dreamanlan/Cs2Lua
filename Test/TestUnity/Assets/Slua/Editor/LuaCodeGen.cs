@@ -123,6 +123,7 @@ namespace SLua
             "UnityEngine.ImageConversionModule",
             "UnityEngine.ParticleSystemModule",
             "UnityEngine.VideoModule",
+            "UnityEngine.AudioModule",
         };
 #else
         public static string[] unityModule = null;
@@ -746,8 +747,13 @@ namespace SLua
             var pars = mi.GetParameters();
             for (int n = 0; n < pars.Length; n++) {
                 ParameterInfo p = pars[n];
+                var pt = p.ParameterType;
+                if (pt.IsByRef)
+                    pt = pt.GetElementType();
                 if (p.ParameterType.IsByRef && p.IsOut) {
                     Write(file, "LuaDLL.lua_pushnil(l);");
+                } else if (pt.Name == "BoxedValue") {
+                    Write(file, "pushValue(l, (object)a{0});", n + 1);
                 } else {
                     Write(file, "pushValue(l, a{0});", n + 1);
                 }
@@ -977,7 +983,13 @@ namespace SLua
                 Type[] tt = t.GetGenericArguments();
                 string ret = "";
                 for (int n = 0; n < tt.Length; n++) {
-                    ret += ("pushValue(l,v" + n + ");");
+                    var pt = tt[n];
+                    if (pt.IsByRef)
+                        pt = pt.GetElementType();
+                    if (pt.Name == "BoxedValue")
+                        ret += ("pushValue(l,(object)v" + n + ");");
+                    else
+                        ret += ("pushValue(l,v" + n + ");");
                 }
                 return ret;
             } catch (Exception e) {
@@ -1362,8 +1374,12 @@ namespace SLua
                         WriteSet(file, fi.FieldType, t.FullName, NormalName(fi.Name));
                     }
 
-                    if (t.IsValueType && !fi.IsStatic)
-                        Write(file, "setBack(l,self);");
+                    if (t.IsValueType && !fi.IsStatic) {
+                        if(t.Name == "BoxedValue")
+                            Write(file, "setBack(l,(object)self);");
+                        else
+                            Write(file, "setBack(l,self);");
+                    }
                     WriteOk(file);
                     Write(file, "return 1;");
                     WriteCatchExecption(file);
@@ -1442,8 +1458,12 @@ namespace SLua
                         WriteSet(file, fi.PropertyType, TypeDecl(t), NormalName(fi.Name), false, fi.CanRead);
                     }
 
-                    if (t.IsValueType)
-                        Write(file, "setBack(l,self);");
+                    if (t.IsValueType) {
+                        if(t.Name == "BoxedValue")
+                            Write(file, "setBack(l,(object)self);");
+                        else
+                            Write(file, "setBack(l,self);");
+                    }
                     WriteOk(file);
                     Write(file, "return 1;");
                     WriteCatchExecption(file);
@@ -1586,8 +1606,12 @@ namespace SLua
                             Write(file, "}");
                             first_set = false;
                         }
-                        if (t.IsValueType)
-                            Write(file, "setBack(l,self);");
+                        if (t.IsValueType) {
+                            if(t.Name == "BoxedValue")
+                                Write(file, "setBack(l,(object)self);");
+                            else
+                                Write(file, "setBack(l,self);");
+                        }
                     }
                     Write(file, "LuaDLL.lua_pushstring(l,\"No matched override function to call\");");
                 }
@@ -1776,6 +1800,8 @@ namespace SLua
                     WriteOk(file);
                     if (t.Name == "String") // if export system.string, push string as ud not lua string
                         Write(file, "pushObject(l,o);");
+                    else if (t.Name == "BoxedValue")
+                        Write(file, "pushValue(l,(object)o);");
                     else
                         Write(file, "pushValue(l,o);");
                     Write(file, "return 2;");
@@ -1821,6 +1847,8 @@ namespace SLua
                         WriteOk(file);
                         if (t.Name == "String") // if export system.string, push string as ud not lua string
                             Write(file, "pushObject(l,o);");
+                        else if (t.Name == "BoxedValue")
+                            Write(file, "pushValue(l,(object)o);");
                         else
                             Write(file, "pushValue(l,o);");
                         Write(file, "return 2;");
@@ -1833,7 +1861,10 @@ namespace SLua
                         //Write(file, "{0}(argc=={1}){{", first ? "if" : "else if", 0);
                         Write(file, "o=new {0}();", TypeDecl(t));
                         Write(file, "pushValue(l,true);");
-                        Write(file, "pushValue(l,o);");
+                        if (t.Name == "BoxedValue")
+                            Write(file, "pushValue(l,(object)o);");
+                        else
+                            Write(file, "pushValue(l,o);");
                         Write(file, "return 2;");
                         Write(file, "}");
                     }
@@ -1848,7 +1879,10 @@ namespace SLua
                 WriteTry(file);
                 Write(file, "{0} o;", TypeDecl(t));
                 Write(file, "o=new {0}();", TypeDecl(t));
-                WriteReturn(file, "o");
+                if (t.Name == "BoxedValue")
+                    WriteReturn(file, "(object)o");
+                else
+                    WriteReturn(file, "o");
                 WriteCatchExecption(file);
                 Write(file, "}");
             }
@@ -2023,8 +2057,8 @@ namespace SLua
                 (method.Name != "ToString" || method.DeclaringType.Name == "Convert") && 
                 /*method.Name != "Clone" &&*/
                 method.Name != "GetEnumerator" && 
-                /*method.Name != "CopyTo" &&*/
-                method.Name != "op_Implicit" && method.Name != "op_Explicit" &&
+                /*method.Name != "CopyTo" &&
+                method.Name != "op_Implicit" && method.Name != "op_Explicit" &&*/
                 !method.Name.StartsWith("get_", StringComparison.Ordinal) &&
                 !method.Name.StartsWith("set_", StringComparison.Ordinal) &&
                 !method.Name.StartsWith("add_", StringComparison.Ordinal) &&
@@ -2186,16 +2220,31 @@ namespace SLua
             Write(file, "}");
         }
         
-        static string CalcOverloadedMethodSignature(MethodBase mi)
+        static string CalcOverloadedMethodSignature(MethodBase mb)
         {
-            if (null == mi)
+            if (null == mb)
                 return string.Empty;
             StringBuilder sb = new StringBuilder();
-            string name = mi.Name;
+            string name = mb.Name;
             if (!string.IsNullOrEmpty(name) && name[0] == '.')
                 name = name.Substring(1);
             sb.Append(name);
-            foreach (var param in mi.GetParameters()) {
+            var mi = mb as MethodInfo;
+            if (null != mi) {
+                sb.Append("__");
+                var retType = mi.ReturnType;
+                if (retType.IsArray) {
+                    retType = retType.GetElementType();
+                    sb.Append("Arr_");
+                    string fn = CalcMethodParameterTypeName(retType);
+                    sb.Append(fn.Replace('.', '_'));
+                }
+                else {
+                    string fn = CalcMethodParameterTypeName(retType);
+                    sb.Append(fn.Replace('.', '_'));
+                }
+            }
+            foreach (var param in mb.GetParameters()) {
                 var paramType = param.ParameterType;
                 sb.Append("__");
                 if (param.IsOut) {
@@ -2309,6 +2358,10 @@ namespace SLua
                     Write(file, "{0}(a1<=a2);", ret);
                 else if (m.Name == "op_GreaterThanOrEqual")
                     Write(file, "{0}(a2<=a1);", ret);
+                else if (m.Name == "op_Implicit")
+                    Write(file, "{0} ret={1};", TypeDecl(m.ReturnType), FuncCall(m));
+                else if (m.Name == "op_Explicit")
+                    Write(file, "var ret=({0}){1};", TypeDecl(m.ReturnType), FuncCall(m));
                 else {
                     Write(file, "{3}{2}.{0}({1});", MethodDecl(m), FuncCall(m), TypeDecl(t), ret);
                 }
@@ -2339,8 +2392,12 @@ namespace SLua
                 }
             }
 
-            if (t.IsValueType && m.ReturnType == typeof(void) && !m.IsStatic)
-                Write(file, "setBack(l,self);");
+            if (t.IsValueType && m.ReturnType == typeof(void) && !m.IsStatic) {
+                if(t.Name == "BoxedValue")
+                    Write(file, "setBack(l,(object)self);");
+                else
+                    Write(file, "setBack(l,self);");
+            }
 
             Write(file, "return {0};", retcount);
         }
@@ -2376,16 +2433,24 @@ namespace SLua
 
         void WritePushValue(Type t, StreamWriter file)
         {
+            if (t.IsByRef)
+                t = t.GetElementType();
             if (t.IsEnum)
                 Write(file, "pushEnum(l,(int)ret);");
+            else if (t.Name == "BoxedValue")
+                Write(file, "pushValue(l,(object)ret);");
             else
                 Write(file, "pushValue(l,ret);");
         }
 
         void WritePushValue(Type t, StreamWriter file, string ret)
         {
+            if(t.IsByRef)
+                t = t.GetElementType();
             if (t.IsEnum)
                 Write(file, "pushEnum(l,(int){0});", ret);
+            else if (t.Name == "BoxedValue")
+                Write(file, "pushValue(l,(object){0});", ret);
             else
                 Write(file, "pushValue(l,{0});", ret);
         }
