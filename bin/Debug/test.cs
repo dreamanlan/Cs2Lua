@@ -25,14 +25,20 @@ class ZipInputStream
         IntList intList = new IntList();
         List<int> a = new List<int>();
         intList.AddRange(a);
+        UnityEngine.GameObject gobj = null;
+        var r = UnityEngine.GameObject.Instantiate(gobj);
         var b = Test2(124);
         object o = new int[] { 1, 2 };
         var arr = o as int[];
     }
     private object Test(object o, params object[] args)
-    { }
+    {
+        return null;
+    }
     private List<int> Test2(int v, IEnumerable enumer = new List<int>())
-    { }
+    {
+        return null;
+    }
 }
 
 partial class ZipOutputStream

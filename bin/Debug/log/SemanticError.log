@@ -1,6 +1,4 @@
 ============<<<Semantic Error:test>>>============
-test.cs(34,57): error CS1736: Default parameter value for 'enumer' must be a compile-time constant
-test.cs(63,53): error CS7036: There is no argument given that corresponds to the required formal parameter 'ms' of 'ZipOutputStream.ZipOutputStream(MemoryStream)'
-test.cs(32,20): error CS0161: 'ZipInputStream.Test(object, params object[])': not all code paths return a value
-test.cs(34,23): error CS0161: 'ZipInputStream.Test2(int, IEnumerable)': not all code paths return a value
-test.cs(80,23): error CS0161: 'CUsingHelper.ReadZip(byte[])': not all code paths return a value
+test.cs(38,57): error CS1736: Default parameter value for 'enumer' must be a compile-time constant
+test.cs(69,53): error CS7036: There is no argument given that corresponds to the required formal parameter 'ms' of 'ZipOutputStream.ZipOutputStream(MemoryStream)'
+test.cs(86,23): error CS0161: 'CUsingHelper.ReadZip(byte[])': not all code paths return a value

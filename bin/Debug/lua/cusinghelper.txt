@@ -18,21 +18,21 @@ CUsingHelper = {
 		local v;
 		v = 0;
 		local dict;
-		dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, {}, "System.Collections.Generic.Dictionary_TKey_TValue:ctor");
+		dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, {}, "System.Collections.Generic.Dictionary_TKey_TValue:ctor__Void");
 		--
 		v = (v + 1);
 		if (v > 0) then
 
 		else
 			--
-			local __invoke_87_16_87_42;
-			__invoke_87_16_87_42,v = dict:TryGetValue(1, __cs2lua_out);
-			if (__invoke_87_16_87_42 and (v == 0)) then
+			local __invoke_93_16_93_42;
+			__invoke_93_16_93_42,v = dict:TryGetValue(1, __cs2lua_out);
+			if (__invoke_93_16_93_42 and (v == 0)) then
 
 			else
 				--
-				local __unary_89_21_89_24 = v; v = (v + 1);
-				if (__unary_89_21_89_24 > 0) then
+				local __unary_95_21_95_24 = v; v = (v + 1);
+				if (__unary_95_21_95_24 > 0) then
 
 				else
 					--

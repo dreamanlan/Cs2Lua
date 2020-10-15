@@ -37,16 +37,20 @@ ZipInputStream = {
 			ctor = function(this, ms)
 				this:__ctor();
 				local os;
-				os = newobject(ZipOutputStream, nil, nil, "ctor", nil, newexternobject(System.IO.MemoryStream, nil, nil, nil, "System.IO.MemoryStream:ctor"));
+				os = newobject(ZipOutputStream, nil, nil, "ctor", nil, newexternobject(System.IO.MemoryStream, nil, nil, nil, "System.IO.MemoryStream:ctor__Void"));
 				local os2;
 				os2 = typeas(objecttolua(this:Test(luatoobject(SymbolKind.Method, false, "ZipInputStream:Test", os), luatoobject(SymbolKind.Method, false, "ZipInputStream:Test", os), luatoobject(SymbolKind.Method, false, "ZipInputStream:Test", os))), ZipOutputStream, TypeKind.Class);
 				local intList;
 				intList = newlist(IntList, nil, nil, "ctor", {});
 				local a;
-				a = newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, {}, "System.Collections.Generic.List_T:ctor");
+				a = newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, {}, "System.Collections.Generic.List_T:ctor__Void");
 				intList:AddRange(a);
+				local gobj;
+				gobj = nil;
+				local r;
+				r = UnityEngine.Object.Instantiate("UnityEngine.Object:Instantiate__Object__Object", gobj);
 				local b;
-				b = this:Test2(124, newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, {}, "System.Collections.Generic.List_T:ctor"));
+				b = this:Test2(124, newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, {}, "System.Collections.Generic.List_T:ctor__Void"));
 				local o;
 				o = luatoobject(SymbolKind.Local, false, "o", wraparray({1, 2}, nil, System.Int32, TypeKind.Struct));
 				local arr;

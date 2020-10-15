@@ -788,14 +788,15 @@ namespace RoslynTool.CsToDsl
                 msym = methodSym;
             }
             sb.Append("__");
-            var retType = msym.ReturnType;
+            var orimsym = msym.ConstructedFrom;
+            var retType = orimsym.ReturnType;
             if (retType.Kind == SymbolKind.ArrayType) {
                 sb.Append("Arr_");
                 var arrSym = retType as IArrayTypeSymbol;
-                CalcMethodParameterTypeName(sb, arrSym.ElementType);
+                CalcMethodParameterType(sb, arrSym.ElementType, arrSym.ElementType);
             }
             else {
-                CalcMethodParameterTypeName(sb, retType);
+                CalcMethodParameterType(sb, retType, retType);
             }
             foreach (var param in msym.Parameters) {
                 sb.Append("__");
