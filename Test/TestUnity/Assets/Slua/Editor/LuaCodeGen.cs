@@ -2229,8 +2229,12 @@ namespace SLua
             if (!string.IsNullOrEmpty(name) && name[0] == '.')
                 name = name.Substring(1);
             sb.Append(name);
+            var ci = mb as ConstructorInfo;
             var mi = mb as MethodInfo;
-            if (null != mi) {
+            if (null != ci) {
+                sb.Append("__Void");                
+            }
+            else if (null != mi) {
                 sb.Append("__");
                 var retType = mi.ReturnType;
                 if (retType.IsArray) {

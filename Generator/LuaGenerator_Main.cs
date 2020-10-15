@@ -1202,7 +1202,7 @@ namespace Generator
                 else if (op == "+" && (type1 == "System.String" || type2 == "System.String")) {
                     bool tostr1 = type1 != "System.String";
                     bool tostr2 = type2 != "System.String";
-                    sb.Append("System.String.Concat(\"System.String:Concat__String__String\", ");
+                    sb.Append("System.String.Concat(\"System.String:Concat__String__String__String\", ");
                     if (tostr1)
                         sb.Append("tostring(");
                     GenerateSyntaxComponent(p1, sb, indent, false);
