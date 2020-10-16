@@ -461,49 +461,9 @@ function invokeexternoperator(rettype, class, method, ...)
             return not Slua.IsNull(arg1)
         end
     elseif arg1~=nil and arg2~=nil and method == "op_Equality" then
-        if issignature(arg1, method) then
-            if arg3 then
-                if marg2 and marg2.op_Equality then
-                    return arg2.op_Equality(arg1, arg2, arg3)
-                elseif marg3 and marg3.op_Equality then
-                    return arg3.op_Equality(arg1, arg3, arg2)
-                else
-                    return arg2 == arg3
-                end
-            else
-                return Slua.IsNull(arg2)
-            end
-        else
-            if marg1 and marg1.op_Equality then
-                return arg1.op_Equality(arg1, arg2)
-            elseif marg2 and marg2.op_Equality then
-                return arg2.op_Equality(arg2, arg1)
-            else
-                return arg1 == arg2
-            end
-        end
+        return class[method](...)
     elseif arg1~=nil and arg2~=nil and method == "op_Inequality" then
-        if issignature(arg1, method) then
-            if arg3 then
-                if marg2 and marg2.op_Inequality then
-                    return arg2.op_Inequality(arg1, arg2, arg3)
-                elseif marg3 and marg3.op_Inequality then
-                    return arg3.op_Inequality(arg1, arg3, arg2)
-                else
-                    return arg2 ~= arg3
-                end
-            else
-                return not Slua.IsNull(arg2)
-            end
-        else
-            if marg1 and marg1.op_Inequality then
-                return arg1.op_Inequality(arg1, arg2)
-            elseif marg2 and marg2.op_Inequality then
-                return arg2.op_Inequality(arg2, arg1)
-            else
-                return arg1 ~= arg2
-            end
-        end
+        return class[method](...)
     elseif method == "op_Implicit" then
         local t = nil
         if marg2 then
@@ -545,6 +505,8 @@ function invokeexternoperator(rettype, class, method, ...)
                     math.floor(arg2.a * 255)
                 )
             end
+        elseif class == BoxedValue then
+            return class[method](arg1,arg2)
         else
             --这里就不仔细判断了，就假定是UnityEngine.Object子类了
             return not Slua.IsNull(arg1)
@@ -576,13 +538,13 @@ function invokeexternoperator(rettype, class, method, ...)
             elseif type(arg2)=="number" and t2=="Color" then
                 return Slua.CreateClass("UnityEngine.Color", arg3.r*arg2, arg3.g*arg2, arg3.b*arg2, arg3.a*arg2)
             else
-                return arg2[method](...)
+                return class[method](...)
             end
         elseif arg1~=nil and arg2~=nil then
             if type(arg1)=="number" and type(arg2)=="number" then
                 return arg1 * arg2
             else
-                return arg1[method](...)
+                return class[method](...)
             end
         end
     elseif method == "op_Division" then
@@ -604,30 +566,18 @@ function invokeexternoperator(rettype, class, method, ...)
             elseif t1=="Color" and type(arg3)=="number" then
                 return Slua.CreateClass("UnityEngine.Color", arg2.r/arg3, arg2.g/arg3, arg2.b/arg3, arg2.a/arg3)
             else
-                return arg2[method](...)
+                return class[method](...)
             end
         elseif arg1~=nil and arg2~=nil then
             if type(arg1)=="number" and type(arg2)=="number" then
                 return arg1 / arg2
             else
-                return arg1[method](...)
+                return class[method](...)
             end
         end
     end
     if method then        
-        if issignature(arg1, method) then
-            if marg2~=nil and marg2[method] then
-                return arg2[method](...)
-            elseif marg3~=nil and marg3[method] then
-                return arg3[method](...)
-            end
-        else
-            if marg1~=nil and marg1[method] then
-                return arg1[method](...)
-            elseif marg2~=nil and marg2[method] then
-                return arg2[method](...)
-            end
-        end
+        return class[method](...)
     else
         UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
     end

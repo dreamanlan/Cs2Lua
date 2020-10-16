@@ -1186,8 +1186,6 @@ namespace SLua
 
         string staticName(string name)
         {
-            if (name.StartsWith("op_"))
-                return name;
             return name + "_s";
         }
 
