@@ -2188,23 +2188,7 @@ end
 
 function newexterndictionary(t, typeargs, typekinds, dict, ...)
     if dict and t == System.Collections.Generic.Dictionary_TKey_TValue then
-        local obj = {}
-        setmetatable(
-            obj,
-            {
-                __index = __mt_index_of_dictionary,
-                __newindex = __mt_newindex_of_dictionary,
-                __cs2lua_defined = true,
-                __class = t,
-                __cs2lua_typeargs = typeargs,
-                __cs2lua_typekinds = typekinds,
-                __cs2lua_data = {}
-            }
-        )
-        for k, v in pairs(dict) do
-            obj:Add(k, v)
-        end
-        return obj
+        return newdictionary(t, typeargs, typekinds, "ctor", dict, ...)
     else
         local obj = t(...)
         if obj then
@@ -2222,7 +2206,7 @@ end
 
 function newexternlist(t, typeargs, typekinds, list, ...)
     if list and t == System.Collections.Generic.List_T then
-        return setmetatable(list, {__index = __mt_index_of_array, __count = #list, __cs2lua_defined = true, __class = t})
+        return newlist(t, typeargs, typekinds, "ctor", list, ...)
     else
         local obj = t(...)
         if obj then
@@ -2240,13 +2224,9 @@ end
 
 function newexterncollection(t, typeargs, typekinds, coll, ...)
     if coll and (t == System.Collections.Generic.Queue_T or t == System.Collections.Generic.Stack_T) then
-        return setmetatable(coll, {__index = __mt_index_of_array, __count = #coll, __cs2lua_defined = true, __class = t})
+        return newlist(t, typeargs, typekinds, "ctor", coll, ...)
     elseif coll and t == System.Collections.Generic.HashSet_T then
-        local obj = setmetatable({}, {__index = __mt_index_of_hashset, __cs2lua_defined = true, __class = t, __cs2lua_data = {}})
-        for i, v in ipairs(coll) do
-            obj:Add(v)
-        end
-        return obj
+        return newcollection(t, typeargs, typekinds, "ctor", coll, ...)
     else
         local obj = t(...)
         if obj then
