@@ -1216,6 +1216,22 @@ namespace Generator
                         sb.Append(")");
                     sb.Append(")");
                 }
+                else if ((op == "==" || op == "!=") && type1 == "System.String" && type2 == "System.String") {
+                    if (op == "==") {
+                        sb.Append("stringisequal(");
+                        GenerateSyntaxComponent(p1, sb, indent, false);
+                        sb.Append(", ");
+                        GenerateSyntaxComponent(p2, sb, indent, false);
+                        sb.Append(")");
+                    }
+                    else {
+                        sb.Append("(not stringisequal(");
+                        GenerateSyntaxComponent(p1, sb, indent, false);
+                        sb.Append(", ");
+                        GenerateSyntaxComponent(p2, sb, indent, false);
+                        sb.Append("))");
+                    }
+                }
                 else if ((op == "==" || op == "!=") && !IsBasicType(type1, typeKind1, true) && !IsBasicType(type2, typeKind2, true)) {
                     if (op == "==") {
                         sb.Append("isequal(");

@@ -30,7 +30,16 @@ class ZipInputStream
         var b = Test2(124);
         object o = new int[] { 1, 2 };
         var arr = o as int[];
-    }
+        string aa = "123";
+        string bb = "456";
+        double da = 1;
+        double db = 2;
+        bool r = aa == bb;
+        r = da == db;
+        Color ca = Color.white;
+        Color cb = Color.black;
+        r = ca == cb;
+     }
     private object Test(object o, params object[] args)
     {
         return null;

@@ -444,6 +444,13 @@ function invokeexternoperator(rettype, class, method, ...)
     local marg3 = arg3 and getmetatable(arg3)
     --对slua，对应到lua元表操作符函数的操作符重载cs2lua转lua代码时已经换成对应操作符表达式。
     --执行到这里的应该是无法对应到lua操作符的操作符重载
+    if rettype==System.Boolean and class==System.Type then
+        if method=="op_Equality" then
+            return arg1==arg2
+        elseif method=="op_Inequality" then
+            return arg1~=arg2
+        end
+    end
     if arg1==nil and method == "op_Equality" then
         return Slua.IsNull(arg2)
     elseif arg1==nil and method == "op_Inequality" then
@@ -1006,16 +1013,16 @@ function delegationwrap(handler)
     end
 end
 
-function delegationcomparewithnil(isstatic, t, k, symKind, isequal)
+function delegationcomparewithnil(isstatic, t, k, symKind, beequal)
     if not t then
-        if isequal then
+        if beequal then
             return true
         else
             return false
         end
     end
     if type(t) == "function" then
-        if isequal then
+        if beequal then
             return false
         else
             return true
@@ -1030,14 +1037,14 @@ function delegationcomparewithnil(isstatic, t, k, symKind, isequal)
         end
     end
     if type(v) == "function" then
-        if isequal then
+        if beequal then
             return false
         else
             return true
         end
     end
     local n = (v and #v) or 0
-    if isequal and n == 0 then
+    if beequal and n == 0 then
         return true
     elseif not isqual and n > 0 then
         return true
@@ -1107,14 +1114,14 @@ function delegationremove(isstatic, t, k, symKind, handler)
     return v
 end
 
-function externdelegationcomparewithnil(isstatic, t, k, symKind, isequal)
+function externdelegationcomparewithnil(isstatic, t, k, symKind, beequal)
     local v = t
     if k then
         return true
     end
-    if isequal and not v then
+    if beequal and not v then
         return true
-    elseif not isequal and v then
+    elseif not beequal and v then
         return true
     else
         return false
@@ -1955,7 +1962,7 @@ function newiterator(exp)
         end
     elseif meta and rawget(meta, "__typename")=="LuaArray" then
         --lualog("LuaArray newiterator:{0} {1}", exp, exp.Length)
-        printStack()
+        --printStack()
         if meta.cachedIters and meta.cachedIters[exp] and #(meta.cachedIters[exp])>0 then
             local iterInfo = table.remove(meta.cachedIters[exp], 1)
             iterInfo[2]()
@@ -2106,12 +2113,15 @@ function newdictionary(t, typeargs, typekinds, ctor, dict, ...)
         for k, v in pairs(dict) do
             obj:Add(k, v)
         end
-        local arg1 = ...
+        local arg1,arg2 = ...
+        if type(arg1)=="string" then
+            arg1 = arg2
+        end
         if arg1 and (type(arg1)=="table" or type(arg1)=="userdata") then
             local iter = newiterator(arg1)
             for v in getiterator(iter) do
                 obj:Add(v.Key, v.Value)
-            end
+            end        
         end
         return obj
     end
@@ -2120,9 +2130,12 @@ end
 function newlist(t, typeargs, typekinds, ctor, list, ...)
     if list then
         local obj = setmetatable(list, {__index = __mt_index_of_array, __count = #list, __cs2lua_defined = true, __class = t})
-        local arg1 = ...
-        --lualog("arg1:{0} {1}", arg1, type(arg1))
+        local arg1,arg2 = ...
+        if type(arg1)=="string" then
+            arg1 = arg2
+        end
         if arg1 and (type(arg1)=="table" or type(arg1)=="userdata") then
+            lualog("arg1:{0} {1}", arg1, type(arg1))
             local meta = getmetatable(arg1)
             if meta and not rawget(meta, "__cs2lua_defined") then
                 local typename = rawget(meta, "__typename")
@@ -2146,7 +2159,30 @@ function newcollection(t, typeargs, typekinds, ctor, coll, ...)
     elseif t == Cs2LuaIntDictionary_TValue or t == Cs2LuaStringDictionary_TValue then
         return newdictionary(t, typeargs, typekinds, ctor, coll, ...)
     elseif coll then
-        return setmetatable(coll, {__index = __mt_index_of_hashset, __cs2lua_defined = true, __class = t, __cs2lua_data = {}})
+        local obj = setmetatable({}, {__index = __mt_index_of_hashset, __cs2lua_defined = true, __class = t, __cs2lua_data = {}})
+        for i, v in ipairs(coll) do
+            obj:Add(v)
+        end
+        local arg1,arg2 = ...
+        if type(arg1)=="string" then
+            arg1 = arg2
+        end
+        if arg1 and (type(arg1)=="table" or type(arg1)=="userdata") then
+            lualog("arg1:{0} {1}", arg1, type(arg1))
+            local meta = getmetatable(arg1)
+            if meta and not rawget(meta, "__cs2lua_defined") then
+                local typename = rawget(meta, "__typename")
+                if typename=="LuaArray" then
+                    local ct = arg1.Length
+                    for i = 1, ct do
+                        obj:Add(arg1[i])
+                    end
+                end
+            else
+                obj:AddRange(arg1)                
+            end
+        end
+        return obj
     end
 end
 
@@ -2206,7 +2242,11 @@ function newexterncollection(t, typeargs, typekinds, coll, ...)
     if coll and (t == System.Collections.Generic.Queue_T or t == System.Collections.Generic.Stack_T) then
         return setmetatable(coll, {__index = __mt_index_of_array, __count = #coll, __cs2lua_defined = true, __class = t})
     elseif coll and t == System.Collections.Generic.HashSet_T then
-        return setmetatable(coll, {__index = __mt_index_of_hashset, __cs2lua_defined = true, __class = t, __cs2lua_data = {}})
+        local obj = setmetatable({}, {__index = __mt_index_of_hashset, __cs2lua_defined = true, __class = t, __cs2lua_data = {}})
+        for i, v in ipairs(coll) do
+            obj:Add(v)
+        end
+        return obj
     else
         local obj = t(...)
         if obj then
@@ -2747,6 +2787,19 @@ function isequal(v1, v2)
         return res
     else
         return rawequal(v1, v2)
+    end
+end
+
+function stringisequal(v1, v2)
+    if v1==nil or v2==nil then
+        return v1==v2
+    elseif type(v1)=="string" and type(v2)=="string" then
+        return v1==v2
+    else
+        local r = tostring(v1)==tostring(v2)
+        --lualog("[debug] stringisequal [{0}],[{1}] {2}", v1, v2, r)
+        --printStack()
+        return r
     end
 end
 
