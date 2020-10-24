@@ -106,10 +106,12 @@ namespace RoslynTool.CsToDsl
         internal void AddReference(INamedTypeSymbol refType)
         {
             if (!SymbolTable.Instance.IsCs2DslSymbol(refType)) {
-                AddExternReference(refType);
-                //外部泛型类的类型参数也需要引用
-                if (refType.IsGenericType) {
-                    foreach (var sym in refType.TypeArguments) {
+                SymbolTable.Instance.AddExternReference(refType);
+            }
+            //泛型类的类型参数也需要引用
+            if (refType.IsGenericType) {
+                foreach (var sym in refType.TypeArguments) {
+                    if (sym.TypeKind != TypeKind.TypeParameter) {
                         AddReference(sym);
                     }
                 }
@@ -134,25 +136,10 @@ namespace RoslynTool.CsToDsl
                         else {
                             if (!SemanticInfo.IsGenericType || SemanticInfo.TypeArguments.IndexOf(refType) < 0) {
                                 References.Add(key);
-                                if (refType.IsGenericType) {
-                                    foreach (var sym in refType.TypeArguments) {
-                                        AddReference(sym);
-                                    }
-                                }
                             }
                         }
                     }
                 }
-            }
-        }
-        internal void AddExternReference(INamedTypeSymbol refType)
-        {
-            while (null != refType) {
-                if (!refType.IsGenericType && !IsInnerClassOfGenericType(refType)) {
-                    string key = GetFullName(refType);
-                    SymbolTable.Instance.AddReferencedExternType(key);
-                }
-                refType = refType.ContainingType;
             }
         }
         internal bool IsInherit(INamedTypeSymbol type)

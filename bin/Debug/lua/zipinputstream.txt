@@ -44,6 +44,9 @@ ZipInputStream = {
 				intList = newlist(IntList, nil, nil, "ctor", {});
 				local a;
 				a = newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, {}, "System.Collections.Generic.List_T:ctor__Void");
+				local aa;
+				aa = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.String, UnityEngine.Component}, {TypeKind.Class, TypeKind.Class}, {}, "System.Collections.Generic.Dictionary_TKey_TValue:ctor__Void");
+				TestExtension.Test(intList, UnityEngine.ParticleSystem, nil);
 				intList:AddRange(a);
 				local gobj;
 				gobj = nil;
@@ -55,6 +58,22 @@ ZipInputStream = {
 				o = luatoobject(SymbolKind.Local, false, "o", wraparray({1, 2}, nil, System.Int32, TypeKind.Struct));
 				local arr;
 				arr = typeas(objecttolua(o), System.Array, TypeKind.Array);
+				local aa;
+				aa = "123";
+				local bb;
+				bb = "456";
+				local da;
+				da = 1;
+				local db;
+				db = 2;
+				local r;
+				r = isequal(aa, bb);
+				r = (da == db);
+				local ca;
+				ca = UnityEngine.Color.white;
+				local cb;
+				cb = UnityEngine.Color.black;
+				r = invokeexternoperator(System.Boolean, UnityEngine.Color, "op_Equality", ca, cb);
 				return this;
 			end,
 
@@ -114,4 +133,5 @@ require "cs2lua__externenums";
 require "cs2lua__interfaces";
 require "zipoutputstream";
 require "intlist";
+require "testextension";
 settempmetatable(ZipInputStream);

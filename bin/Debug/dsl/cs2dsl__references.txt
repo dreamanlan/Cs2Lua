@@ -1,3 +1,9 @@
+System.Boolean
 System.Int32
 System.IO.MemoryStream
+System.String
+UnityEngine.Color
+UnityEngine.Component
+UnityEngine.GameObject
 UnityEngine.Object
+UnityEngine.ParticleSystem

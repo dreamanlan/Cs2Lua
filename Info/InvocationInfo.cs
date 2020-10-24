@@ -542,7 +542,23 @@ namespace RoslynTool.CsToDsl
                         ExternOverloadedMethodSignature = SymbolTable.CalcOverloadedMethodSignature(sym, NonGenericMethodSymbol);
                     }
                 }
+                SymbolTable.Instance.TryAddExternReference(sym);
+                if (!sym.ReturnsVoid) {
+                    SymbolTable.Instance.TryAddExternReference(sym.ReturnType);
+                }
+                foreach(var p in sym.Parameters) {
+                    if (p.Kind != SymbolKind.TypeParameter) {
+                        SymbolTable.Instance.TryAddExternReference(p.Type);
+                    }
+                }
             }
+            if (sym.IsGenericMethod) {
+                foreach (var t in sym.TypeArguments) {
+                    if (t.TypeKind != TypeKind.TypeParameter) {
+                        SymbolTable.Instance.TryAddExternReference(t);
+                    }
+                }
+            }            
         }
 
         private void RecordRefArray(ExpressionSyntax exp)

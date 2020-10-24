@@ -141,7 +141,7 @@ namespace Generator
                     sb.AppendFormatLine("{0}defineentry({1});", GetIndentString(indent), className);
                 }
                 else if (id == "enum") {
-                    string className = CalcTypeString(callData.GetParam(0));
+                    string fullName = CalcTypeString(callData.GetParam(0));
                     var baseClass = callData.GetParam(1);
                     string baseClassName = string.Empty;
                     if (null != baseClass) {
@@ -150,20 +150,38 @@ namespace Generator
 
                     sb.AppendLine();
 
-                    sb.AppendFormatLine("{0}{1} = {{", GetIndentString(indent), className);
-                    ++indent;
-                    foreach (var comp in funcData.Params) {
-                        var cd = comp as Dsl.FunctionData;
-                        if (null != cd) {
-                            sb.AppendFormatLine("{0}[\"{1}\"] = {2},", GetIndentString(indent), cd.GetParamId(0), cd.GetParamId(1));
+                    int dotIx = fullName.LastIndexOf('.');
+                    if (dotIx > 0) {
+                        string ns = fullName.Substring(0, dotIx);
+                        string className = fullName.Substring(dotIx + 1);
+
+                        sb.AppendFormatLine("{0}rawset({1}, \"{2}\", {{", GetIndentString(indent), ns, className);
+                        ++indent;
+                        foreach (var comp in funcData.Params) {
+                            var cd = comp as Dsl.FunctionData;
+                            if (null != cd) {
+                                sb.AppendFormatLine("{0}[\"{1}\"] = {2},", GetIndentString(indent), cd.GetParamId(0), cd.GetParamId(1));
+                            }
                         }
+                        --indent;
+                        sb.AppendFormatLine("{0}}});", GetIndentString(indent));
                     }
-                    --indent;
-                    sb.AppendFormatLine("{0}}};", GetIndentString(indent));
+                    else {
+                        sb.AppendFormatLine("{0}{1} = {{", GetIndentString(indent), fullName);
+                        ++indent;
+                        foreach (var comp in funcData.Params) {
+                            var cd = comp as Dsl.FunctionData;
+                            if (null != cd) {
+                                sb.AppendFormatLine("{0}[\"{1}\"] = {2},", GetIndentString(indent), cd.GetParamId(0), cd.GetParamId(1));
+                            }
+                        }
+                        --indent;
+                        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
+                    }
 
                     sb.AppendLine();
 
-                    sb.AppendFormatLine("{0}rawset({1}, \"Value2String\", {{", GetIndentString(indent), className);
+                    sb.AppendFormatLine("{0}rawset({1}, \"Value2String\", {{", GetIndentString(indent), fullName);
                     ++indent;
                     foreach (var comp in funcData.Params) {
                         var cd = comp as Dsl.FunctionData;

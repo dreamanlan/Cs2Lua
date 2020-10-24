@@ -550,6 +550,9 @@ namespace RoslynTool.CsToDsl
                     var ci = m_ClassInfoStack.Peek();
                     AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
                 }
+                else {
+                    SymbolTable.Instance.TryAddExternReference(sym);
+                }
             }
             else {
                 ReportIllegalSymbol(node, symInfo);
@@ -670,9 +673,14 @@ namespace RoslynTool.CsToDsl
             var symInfo = m_Model.GetSymbolInfoEx(node);
             var sym = symInfo.Symbol;
             var psym = sym as IPropertySymbol;
-            if (null != sym && sym.IsStatic) {
-                var ci = m_ClassInfoStack.Peek();
-                AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
+            if (null != sym){
+                if (sym.IsStatic) {
+                    var ci = m_ClassInfoStack.Peek();
+                    AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
+                }
+                else {
+                    SymbolTable.Instance.TryAddExternReference(sym);
+                }
             }
             if (null != psym && psym.IsIndexer) {
                 bool isCs2Lua = SymbolTable.Instance.IsCs2DslSymbol(psym);
@@ -743,9 +751,14 @@ namespace RoslynTool.CsToDsl
                 var symInfo = m_Model.GetSymbolInfoEx(node.WhenNotNull);
                 var sym = symInfo.Symbol;
                 var psym = sym as IPropertySymbol;
-                if (null != sym && sym.IsStatic) {
-                    var ci = m_ClassInfoStack.Peek();
-                    AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
+                if (null != sym){
+                    if (sym.IsStatic) {
+                        var ci = m_ClassInfoStack.Peek();
+                        AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
+                    }
+                    else {
+                        SymbolTable.Instance.TryAddExternReference(sym);
+                    }
                 }
                 if (null != psym && psym.IsIndexer) {
                     CodeBuilder.Append("function(){ return(");

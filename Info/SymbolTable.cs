@@ -556,6 +556,68 @@ namespace RoslynTool.CsToDsl
             return ret;
         }
 
+        internal void TryAddExternReference(ISymbol sym)
+        {
+            var arrType = sym as IArrayTypeSymbol;
+            if (null != arrType) {
+                TryAddExternReference(arrType.ElementType);
+            }
+            else {
+                var refType = sym as INamedTypeSymbol;
+                if (null == refType) {
+                    refType = sym.ContainingType;
+                }
+                if (null != refType) {
+                    TryAddExternReference(refType);
+                }
+                else {
+                    Logger.Instance.ReportIllegalType(sym);
+                }
+            }
+        }
+        internal void TryAddExternReference(INamedTypeSymbol refType)
+        {
+            if (!SymbolTable.Instance.IsCs2DslSymbol(refType)) {
+                AddExternReference(refType);
+            }
+            //泛型类的类型参数也需要引用
+            if (refType.IsGenericType) {
+                foreach (var sym in refType.TypeArguments) {
+                    if (sym.TypeKind != TypeKind.TypeParameter) {
+                        TryAddExternReference(sym);
+                    }
+                }
+            }
+        }
+        internal void AddExternReference(INamedTypeSymbol refType)
+        {
+            while (null != refType) {
+                if (!refType.IsGenericType && !ClassInfo.IsInnerClassOfGenericType(refType)) {
+                    Stack<string> stack = new Stack<string>();
+                    stack.Push(refType.Name);
+                    var t = refType;
+                    while (null != t.ContainingType) {
+                        t = t.ContainingType;
+                        stack.Push("+");
+                        stack.Push(t.Name);
+                    }
+                    var ns = t.ContainingNamespace;
+                    while (null != ns && !string.IsNullOrEmpty(ns.Name)) {
+                        stack.Push(".");
+                        stack.Push(ns.Name);
+                        ns = ns.ContainingNamespace;
+                    }
+                    StringBuilder sb = new StringBuilder();
+                    while (stack.Count > 0) {
+                        sb.Append(stack.Pop());
+                    }
+                    string key = sb.ToString();
+                    AddReferencedExternType(key);
+                }
+                refType = refType.ContainingType;
+            }
+        }
+
         internal void CalcMemberCount(string key, Dictionary<string, int> memberCounts)
         {
             TypeTreeNode typeTreeNode;

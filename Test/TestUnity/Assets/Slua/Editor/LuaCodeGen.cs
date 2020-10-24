@@ -141,9 +141,23 @@ namespace SLua
             }
 
             string fullName = t.FullName;
-            if (!useList.Contains(fullName)) {
-                // check type not in nouselist
-                foreach (string str in noUseList) {
+            if (useList.Count > 0) {
+                if (!useList.Contains(fullName)) {
+                    // check type not in nouselist
+                    if (noUseList.Count == 0) {
+                        return false;
+                    }
+                    else {
+                        foreach (string str in noUseList) {
+                            if (fullName.Contains(str)) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                foreach(string str in noUseList) {
                     if (fullName.Contains(str)) {
                         return false;
                     }

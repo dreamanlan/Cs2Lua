@@ -938,6 +938,14 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.Append(")");
             }
             else if (specialType == SpecialAssignmentType.PropForBasicValueType) {
+                if (null != leftSym) {
+                    if (leftSym.IsStatic) {
+                        AddReferenceAndTryDeriveGenericTypeInstance(ci, leftSym);
+                    }
+                    else {
+                        SymbolTable.Instance.TryAddExternReference(leftSym);
+                    }
+                }
                 //这里不区分是否外部符号了，委托到动态语言的脚本库实现，可根据对象运行时信息判断
                 string className = ClassInfo.GetFullName(leftPsym.ContainingType);
                 bool isEnumClass = leftPsym.ContainingType.TypeKind == TypeKind.Enum || className == "System.Enum";
@@ -958,6 +966,14 @@ namespace RoslynTool.CsToDsl
             else if (leftOper.Type.TypeKind == TypeKind.Delegate) {
                 bool isMemberAccess = null != leftPsym || null != leftEsym || null != leftFsym;
                 if (isMemberAccess) {
+                    if (null != leftSym) {
+                        if (leftSym.IsStatic) {
+                            AddReferenceAndTryDeriveGenericTypeInstance(ci, leftSym);
+                        }
+                        else {
+                            SymbolTable.Instance.TryAddExternReference(leftSym);
+                        }
+                    }
                     string className = ClassInfo.GetFullName(leftSym.ContainingType);
                     string memberName = leftSym.Name;
                     //delegation就不用区分是否外部符号了，基本上在动态语言里都是函数对象，作为普通数据成员
@@ -997,6 +1013,14 @@ namespace RoslynTool.CsToDsl
             else {
                 bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(leftSym);
                 bool isMemberAccess = null != leftPsym || null != leftEsym || null != leftFsym;
+                if(isMemberAccess && null != leftSym) {
+                    if (leftSym.IsStatic) {
+                        AddReferenceAndTryDeriveGenericTypeInstance(ci, leftSym);
+                    }
+                    else {
+                        SymbolTable.Instance.TryAddExternReference(leftSym);
+                    }
+                }
                 if (op == "=") {
                     if (isMemberAccess) {
                         string className = ClassInfo.GetFullName(leftSym.ContainingType);
@@ -1129,8 +1153,13 @@ namespace RoslynTool.CsToDsl
         }
         private void VisitAssignmentLeftElementAccess(ClassInfo ci, AssignmentExpressionSyntax assign, bool toplevel, IOperation leftOper, ISymbol leftSym, IPropertySymbol leftPsym, ElementAccessExpressionSyntax leftElementAccess, IConversionExpression opd, bool dslToObject)
         {
-            if (null != leftSym && leftSym.IsStatic) {
-                AddReferenceAndTryDeriveGenericTypeInstance(ci, leftSym);
+            if (null != leftSym) {
+                if (leftSym.IsStatic) {
+                    AddReferenceAndTryDeriveGenericTypeInstance(ci, leftSym);
+                }
+                else {
+                    SymbolTable.Instance.TryAddExternReference(leftSym);
+                }
             }
             if (null != leftPsym && leftPsym.IsIndexer) {
                 bool isCs2Lua = SymbolTable.Instance.IsCs2DslSymbol(leftPsym);
@@ -1220,8 +1249,13 @@ namespace RoslynTool.CsToDsl
                 var symInfo = m_Model.GetSymbolInfoEx(leftCondAccess.WhenNotNull);
                 var sym = symInfo.Symbol;
                 var psym = sym as IPropertySymbol;
-                if (null != sym && sym.IsStatic) {
-                    AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
+                if (null != sym){
+                    if (sym.IsStatic) {
+                        AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
+                    }
+                    else {
+                        SymbolTable.Instance.TryAddExternReference(sym);
+                    }
                 }
                 if (null != psym && psym.IsIndexer) {
                     CodeBuilder.Append("function(){ return(");

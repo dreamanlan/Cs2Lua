@@ -1327,6 +1327,9 @@ namespace RoslynTool.CsToDsl
                 sb.Append("typeargs(");
                 string prestr = string.Empty;
                 foreach (var ta in namedTypeSym.TypeArguments) {
+                    if (ta.TypeKind != TypeKind.TypeParameter) {
+                        SymbolTable.Instance.TryAddExternReference(ta);
+                    }
                     sb.Append(prestr);
                     if (ta.TypeKind == TypeKind.Delegate) {
                         sb.AppendFormat("\"{0}\"", ClassInfo.GetFullName(ta));

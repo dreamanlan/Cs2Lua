@@ -16,6 +16,11 @@ class LuaConsole
 class IntList : List<int>
 { }
 
+static class TestExtension
+{
+    public static void Test<T>(this IntList list, T t) { }
+}
+
 class ZipInputStream
 {
     public ZipInputStream(MemoryStream ms)
@@ -24,6 +29,8 @@ class ZipInputStream
         var os2 = Test(os, os, os) as ZipOutputStream;
         IntList intList = new IntList();
         List<int> a = new List<int>();
+        Dictionary<string, UnityEngine.Component> aa = new Dictionary<string, UnityEngine.Component>();
+        intList.Test<UnityEngine.ParticleSystem>(null);
         intList.AddRange(a);
         UnityEngine.GameObject gobj = null;
         var r = UnityEngine.GameObject.Instantiate(gobj);

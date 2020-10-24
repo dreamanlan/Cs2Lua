@@ -25,14 +25,14 @@ CUsingHelper = {
 
 		else
 			--
-			local __invoke_93_16_93_42;
-			__invoke_93_16_93_42,v = dict:TryGetValue(1, __cs2lua_out);
-			if (__invoke_93_16_93_42 and (v == 0)) then
+			local __invoke_109_16_109_42;
+			__invoke_109_16_109_42,v = dict:TryGetValue(1, __cs2lua_out);
+			if (__invoke_109_16_109_42 and (v == 0)) then
 
 			else
 				--
-				local __unary_95_21_95_24 = v; v = (v + 1);
-				if (__unary_95_21_95_24 > 0) then
+				local __unary_111_21_111_24 = v; v = (v + 1);
+				if (__unary_111_21_111_24 > 0) then
 
 				else
 					--

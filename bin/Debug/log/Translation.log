@@ -1,0 +1,3 @@
+============<<<Translation Error:test>>>============
+<<<[Log for InvocationExpressionSyntax]>>> [code:[ intList.AddRange(a) ] location: test.cs: (33,8)-(33,27)] extern method System.Collections.Generic.List_T.AddRange parameter collection can't assign a script object to it ! caller:ZipInputStream.ctor
+<<<[Log for ObjectCreationExpressionSyntax]>>> [code:[ new ZipOutputStream() ] location: test.cs: (84,48)-(84,69)] Unknown ObjectCreationExpressionSyntax !

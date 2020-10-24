@@ -810,24 +810,42 @@ namespace RoslynTool.CsToDsl
             else {
                 ns = string.Empty;
             }
-            if (!string.IsNullOrEmpty(ns)) {
-                sb.AppendFormat("{0}enum({1}.{2}) {{", GetIndentString(indent), ns, enumSym.Name);
-                sb.AppendLine();
-                ++indent;
-
-                foreach (var sym in enumSym.GetMembers()) {
-                    if (sym.Kind != SymbolKind.Field) continue;
-                    var fsym = sym as IFieldSymbol;
-                    sb.AppendFormat("{0}member(\"{1}\", ", GetIndentString(indent), fsym.Name);
-                    CsDslTranslater.OutputConstValue(sb, fsym.ConstantValue, fsym);
-                    sb.Append(");");
-                    sb.AppendLine();
+            string baseKey = ClassInfo.GetFullName(enumSym.BaseType);
+            if (baseKey == "System.Object" || baseKey == "System.ValueType") {
+                baseKey = string.Empty;
+            }
+            if (string.IsNullOrEmpty(baseKey)) {
+                if (!string.IsNullOrEmpty(ns)) {
+                    sb.AppendFormat("{0}enum({1}.{2}) {{", GetIndentString(indent), ns, enumSym.Name);
                 }
+                else {
+                    sb.AppendFormat("{0}enum({1}) {{", GetIndentString(indent), enumSym.Name);
+                }
+            }
+            else {
+                if (!string.IsNullOrEmpty(ns)) {
+                    sb.AppendFormat("{0}enum({1}.{2}, {3}) {{", GetIndentString(indent), ns, enumSym.Name, baseKey);
+                }
+                else {
+                    sb.AppendFormat("{0}enum({1}, {2}) {{", GetIndentString(indent), enumSym.Name, baseKey);
+                }
+            }
+            sb.AppendLine();
+            ++indent;
 
-                --indent;
-                sb.AppendFormat("{0}}};", GetIndentString(indent));
+            sb.AppendLine();
+            foreach (var sym in enumSym.GetMembers()) {
+                if (sym.Kind != SymbolKind.Field) continue;
+                var fsym = sym as IFieldSymbol;
+                sb.AppendFormat("{0}member(\"{1}\", ", GetIndentString(indent), fsym.Name);
+                CsDslTranslater.OutputConstValue(sb, fsym.ConstantValue, fsym);
+                sb.Append(");");
                 sb.AppendLine();
             }
+
+            --indent;
+            sb.AppendFormat("{0}}};", GetIndentString(indent));
+            sb.AppendLine();
         }
         private static string BuildExternEnumNamespace(StringBuilder sb, int indent, INamedTypeSymbol typeSym)
         {
