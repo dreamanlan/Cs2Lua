@@ -529,7 +529,7 @@ namespace RoslynTool.CsToDsl
         public override void VisitInvocationExpression(InvocationExpressionSyntax node)
         {
             var ci = m_ClassInfoStack.Peek();
-            VisitInvocation(ci, node, string.Empty, false);
+            VisitInvocation(ci, node, string.Empty, string.Empty, false);
         }
         public override void VisitMemberAccessExpression(MemberAccessExpressionSyntax node)
         {
@@ -1099,6 +1099,7 @@ namespace RoslynTool.CsToDsl
                 ii.Init(sym, node.ArgumentList, m_Model);
                 AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
 
+                bool isValueType = typeSymInfo.TypeKind == TypeKind.Struct;
                 bool isCollection = IsImplementationOfSys(typeSymInfo, "ICollection");
                 bool isExternal = !SymbolTable.Instance.IsCs2DslSymbol(typeSymInfo);
 
@@ -1129,6 +1130,10 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendFormat("new{0}collection({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
                         CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
                     }
+                }
+                else if (isValueType) {
+                    CodeBuilder.AppendFormat("new{0}struct({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
                 }
                 else {
                     CodeBuilder.AppendFormat("new{0}object({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);

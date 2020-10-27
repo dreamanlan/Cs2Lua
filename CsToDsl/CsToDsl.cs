@@ -512,6 +512,7 @@ namespace RoslynTool.CsToDsl
                 return;
             }
 
+            bool isValueType = namedTypeSym.TypeKind == TypeKind.Struct;
             bool isCollection = IsImplementationOfSys(namedTypeSym, "ICollection");
             bool isExternal = !SymbolTable.Instance.IsCs2DslSymbol(namedTypeSym);
             string fullTypeName = ClassInfo.GetFullName(namedTypeSym);
@@ -546,6 +547,10 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendFormat("new{0}collection({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
                     CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
                 }
+            }
+            else if (isValueType) {
+                CodeBuilder.AppendFormat("new{0}struct({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
             }
             else {
                 CodeBuilder.AppendFormat("new{0}object({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);

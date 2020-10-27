@@ -856,39 +856,123 @@ function wrapchar(char, intVal)
     end
 end
 
-function wrapoutstruct(v, classObj)
+function wrapoutstruct(funcInfo, v, classObj)
     return classObj()
 end
 
-function wrapoutexternstruct(v, classObj)
+function wrapoutexternstruct(funcInfo, v, classObj)
     if classObj == System.Collections.Generic.KeyValuePair_TKey_TValue then
         return nil
     elseif classObj == UnityEngine.Vector2 then
-        return UnityEngine.Vector2.zero
+        obj = Vector2Pool.Alloc()
+        table.insert(funcInfo.v2_list, obj)
+        return obj
     elseif classObj == UnityEngine.Vector3 then
-        return UnityEngine.Vector3.zero
+        obj = Vector3Pool.Alloc()
+        table.insert(funcInfo.v3_list, obj)
+        return obj
     end
     return classObj()
 end
 
-function wrapstruct(v, classObj)
+function wrapstruct(funcInfo, v, classObj)
     return v
 end
 
-function wrapexternstruct(v, classObj)
+function wrapexternstruct(funcInfo, v, classObj)
     if v then
         if classObj == UnityEngine.Vector2 then
-            return Slua.CreateClass("UnityEngine.Vector2", v.x, v.y)
+            obj = Vector2Pool.Alloc()
+            table.insert(funcInfo.v2_list, obj)
+            if v.x~=nil then
+                obj.x = v.x
+            end
+            if v.y~=nil then
+                obj.y = v.y
+            end
         elseif classObj == UnityEngine.Vector3 then
-            return Slua.CreateClass("UnityEngine.Vector3", v.x, v.y, v.z)
+            obj = Vector3Pool.Alloc()
+            table.insert(funcInfo.v3_list, obj)
+            if v.x~=nil then
+                obj.x = v.x
+            end
+            if v.y~=nil then
+                obj.y = v.y
+            end
+            if v.z~=nil then
+                obj.z = v.z
+            end
         end
     end
     return v
 end
 
+FuncInfoPool = {
+    Alloc = function()
+        if #(FuncInfoPool.m_Data)>0 then
+            return table.remove(FuncInfoPool.m_Data)
+        else
+            return {
+                v2_list = {},
+                v3_list = {},
+                v4_list = {},
+                color_list = {},
+                color32_list = {},
+                quaternion_list = {},
+            }
+        end
+    end,
+    Recycle = function(info)
+        table.insert(FuncInfoPool.m_Data, info)
+    end,
+    m_Data = {},
+}
+Vector2Pool = {
+    Alloc = function()
+        if #(Vector2Pool.m_Data)>0 then
+            return table.remove(Vector2Pool.m_Data)
+        else
+            return Slua.CreateClass("UnityEngine.Vector2", 0, 0)
+        end
+    end,
+    Recycle = function(v2)
+        table.insert(Vector2Pool.m_Data, v2)
+    end,
+    m_Data = {},
+}
+Vector3Pool = {
+    Alloc = function()
+        if #(Vector3Pool.m_Data)>0 then
+            return table.remove(Vector3Pool.m_Data)
+        else
+            return Slua.CreateClass("UnityEngine.Vector3", 0, 0, 0)
+        end
+    end,
+    Recycle = function(v3)
+        table.insert(Vector3Pool.m_Data, v3)
+    end,
+    m_Data = {},
+}
+
+function luainitialize()
+    return FuncInfoPool.Alloc()
+end
+
+function luafinalize(funcInfo)
+    if funcInfo then
+        for i,v in ipairs(funcInfo.v3_list) do
+            Vector3Pool.Recycle(v)
+            table.remove(funcInfo.v3_list)
+        end
+        FuncInfoPool.Recycle(funcInfo)
+    end
+    return nil
+end
+
 Cs2LuaCustomData = {
 	__new_object = function(...)
-		return newobject(Cs2LuaCustomData, nil, nil, nil, nil, ...);
+		local __cs2lua_newobj = newobject(nil, Cs2LuaCustomData, nil, nil, nil, nil, ...);
+		return __cs2lua_newobj;
 	end,
 	__define_class = function()
 		printMemDiff("Cs2LuaCustomData::__define_class begin");
@@ -917,8 +1001,8 @@ function luatoobject(symKind, isStatic, symName, arg1, ...)
     if arg1 and symKind==SymbolKind.Field then
         local meta = getmetatable(arg1)
         if meta and rawget(meta, "__cs2lua_defined") then
-            lualog("luatoobject symKind:{0} {1} {2} {3}", symKind, isStatic, symName, meta.__cs2lua_fullname)
-            printStack()
+            --lualog("luatoobject symKind:{0} {1} {2} {3}", symKind, isStatic, symName, meta.__cs2lua_fullname)
+            --printStack()
             local o = Cs2LuaCustomData.__new_object()
             o.CustomData = arg1
             arg1 = o
@@ -932,9 +1016,9 @@ function objecttolua(arg1, ...)
         local meta = getmetatable(arg1)       
         if meta and rawget(meta, "__cs2lua_fullname")=="Cs2LuaCustomData" then   
             arg1 = arg1.CustomData
-            local metav = getmetatable(arg1)
-            lualog("objecttolua:{0} {1}", meta.__cs2lua_fullname, metav.__cs2lua_fullname)
-            printStack()
+            --local metav = getmetatable(arg1)
+            --lualog("objecttolua:{0} {1}", meta.__cs2lua_fullname, metav.__cs2lua_fullname)
+            --printStack()
         end
     end
     return arg1, ...
@@ -3116,7 +3200,7 @@ function defineentry(class)
     end
 end
 
-function newobject(class, typeargs, typekinds, ctor, initializer, ...)
+function newstruct(funcInfo, class, typeargs, typekinds, ctor, initializer, ...)
     local obj = class()
     if ctor then
         obj[ctor](obj, ...)
@@ -3127,7 +3211,62 @@ function newobject(class, typeargs, typekinds, ctor, initializer, ...)
     return obj
 end
 
-function newexternobject(class, typeargs, typekinds, initializer, ...)
+function newexternstruct(funcInfo, class, typeargs, typekinds, initializer, ...)
+    local obj = nil
+    local arg1,arg2 = ...
+    if class == System.Nullable_T then
+        return nil
+    elseif class == System.Collections.Generic.KeyValuePair_TKey_TValue then
+        return {Key = arg1, Value = arg2}
+    end
+    if class == UnityEngine.Vector2 then
+        obj = Vector2Pool.Alloc()
+        table.insert(funcInfo.v2_list, obj)
+        local x,y = ...
+        if x~=nil then
+            obj.x = x
+        end
+        if y~=nil then
+            obj.y = y
+        end
+    elseif class == UnityEngine.Vector3 then
+        obj = Vector3Pool.Alloc()
+        table.insert(funcInfo.v3_list, obj)
+        local _,x,y,z = ...
+        if x~=nil then
+            obj.x = x
+        end
+        if y~=nil then
+            obj.y = y
+        end
+        if z~=nil then
+            obj.z = z
+        end
+    elseif class == UnityEngine.Vector4 then
+        obj = class(...)
+    elseif class == UnityEngine.Color then
+        obj = class(...)
+    else
+        obj = class(...)
+    end
+    if obj and initializer then
+        initializer(obj)
+    end
+    return obj
+end
+
+function newobject(funcInfo, class, typeargs, typekinds, ctor, initializer, ...)
+    local obj = class()
+    if ctor then
+        obj[ctor](obj, ...)
+    end
+    if obj and initializer then
+        initializer(obj)
+    end
+    return obj
+end
+
+function newexternobject(funcInfo, class, typeargs, typekinds, initializer, ...)
     local obj = nil
     local arg1,arg2 = ...
     if class == System.Nullable_T then

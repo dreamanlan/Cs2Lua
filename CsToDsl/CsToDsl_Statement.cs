@@ -114,17 +114,35 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendLine();
             }
 
-            if (mi.TryUsingLayer > 0) {
-                if (null != node.Expression) {
-                    IConversionExpression opd = null;
-                    var iret = m_Model.GetOperationEx(node) as IReturnStatement;
-                    if (null != iret) {
-                        opd = iret.ReturnedValue as IConversionExpression;
+            if (null != node.Expression) {
+                IConversionExpression opd = null;
+                var iret = m_Model.GetOperationEx(node) as IReturnStatement;
+                if (null != iret) {
+                    opd = iret.ReturnedValue as IConversionExpression;
+                }
+                var invocation = node.Expression as InvocationExpressionSyntax;
+                if (null != invocation) {
+                    var ci = m_ClassInfoStack.Peek();
+                    VisitInvocation(ci, invocation, mi.ReturnVarName, ";", true);
+                    if (null != opd && opd.UsesOperatorMethod) {
+                        IMethodSymbol msym = opd.OperatorMethod;
+                        InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), node);
+                        ii.Init(msym, (List<ExpressionSyntax>)null, m_Model);
+                        CodeBuilder.Append(mi.ReturnVarName);
+                        CodeBuilder.AppendLine(" = ");
+                        OutputConversionInvokePrefix(ii);
+                        CodeBuilder.Append(mi.ReturnVarName);
+                        CodeBuilder.AppendLine(");");
                     }
+                }
+                else {
                     CodeBuilder.AppendFormat("{0}{1} = ", GetIndentString(), mi.ReturnVarName);
                     OutputExpressionSyntax(node.Expression, opd);
                     CodeBuilder.AppendLine(";");
                 }
+            }
+
+            if (mi.TryUsingLayer > 0) {
                 var returnAnalysis = mi.TempReturnAnalysisStack.Peek();
                 if (returnAnalysis.ExistReturnInLoopOrSwitch || null == returnAnalysis.RetValVar) {
                     //return(1)代表是tryusing块里的return语句
@@ -146,17 +164,7 @@ namespace RoslynTool.CsToDsl
                     prestr = ", ";
                 }
                 else {
-                    CodeBuilder.AppendFormat("{0}return(", GetIndentString());
-                    prestr = string.Empty;
-                }
-                if (null != node.Expression) {
-                    CodeBuilder.Append(prestr);
-                    IConversionExpression opd = null;
-                    var iret = m_Model.GetOperationEx(node) as IReturnStatement;
-                    if (null != iret) {
-                        opd = iret.ReturnedValue as IConversionExpression;
-                    }
-                    OutputExpressionSyntax(node.Expression, opd);
+                    CodeBuilder.AppendFormat("{0}return({1}", GetIndentString(), mi.ReturnVarName);
                     prestr = ", ";
                 }
                 var names = mi.ReturnParamNames;

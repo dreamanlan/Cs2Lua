@@ -1062,33 +1062,47 @@ namespace RoslynTool.CsToDsl
                     ++indent;
 
                     if (string.IsNullOrEmpty(exportConstructor)) {
-                        sb.AppendFormat("{0}return(newobject({1}, ", GetIndentString(indent), key);
+                        if(isValueType)
+                            sb.AppendFormat("{0}local(__cs2lua_newobj);__cs2lua_newobj = newstruct({1}, ", GetIndentString(indent), key);
+                        else
+                            sb.AppendFormat("{0}local(__cs2lua_newobj);__cs2lua_newobj = newobject({1}, ", GetIndentString(indent), key);
                         var namedTypeSym = csi.TypeSymbol;
                         CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
-                        sb.Append(", \"ctor\", null, ...));");
+                        sb.Append(", \"ctor\", null, ...);");
+                        sb.AppendLine();
+                        sb.AppendFormat("{0}return(__cs2lua_newobj);", GetIndentString(indent));
                         sb.AppendLine();
                     }
                     else {
                         //处理ref/out参数
                         if (exportConstructorInfo.ReturnParamNames.Count > 0) {
-                            sb.AppendFormat("{0}return((function(...){{ ", GetIndentString(indent));
                             string retArgStr = string.Join(", ", exportConstructorInfo.ReturnParamNames.ToArray());
-                            sb.AppendFormat("local(newobj, {0}); multiassign(newobj", retArgStr);
+                            sb.AppendFormat("local(__cs2lua_newobj, {0}); multiassign(__cs2lua_newobj", retArgStr);
                             if (exportConstructorInfo.ReturnParamNames.Count > 0) {
                                 sb.Append(", ");
                                 sb.Append(retArgStr);
                             }
-                            sb.AppendFormat(") = newobject({0}, ", key);
+                            if(isValueType)
+                                sb.AppendFormat(") = newstruct({0}, ", key);
+                            else
+                                sb.AppendFormat(") = newobject({0}, ", key);
                             var namedTypeSym = csi.TypeSymbol;
                             CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
-                            sb.AppendFormat(", \"{0}\", null, ...); return(newobj); }})(...));", exportConstructor);
+                            sb.AppendFormat(", \"{0}\", null, ...);", exportConstructor);
+                            sb.AppendLine();
+                            sb.AppendFormat("{0}return(__cs2lua_newobj);", GetIndentString(indent));
                             sb.AppendLine();
                         }
                         else {
-                            sb.AppendFormat("{0}return(newobject({1}, ", GetIndentString(indent), key);
+                            if(isValueType)
+                                sb.AppendFormat("{0}local(__cs2lua_newobj);__cs2lua_newobj = newstruct({1}, ", GetIndentString(indent), key);
+                            else
+                                sb.AppendFormat("{0}local(__cs2lua_newobj);__cs2lua_newobj = newobject({1}, ", GetIndentString(indent), key);
                             var namedTypeSym = csi.TypeSymbol;
                             CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
-                            sb.AppendFormat(", \"{0}\", null, ...));", exportConstructor);
+                            sb.AppendFormat(", \"{0}\", null, ...);", exportConstructor);
+                            sb.AppendLine();
+                            sb.AppendFormat("{0}return(__cs2lua_newobj);", GetIndentString(indent));
                             sb.AppendLine();
                         }
                     }

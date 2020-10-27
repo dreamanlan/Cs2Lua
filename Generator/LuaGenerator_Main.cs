@@ -276,7 +276,20 @@ namespace Generator
                                             sb.AppendLine(")");
                                             ++indent;
                                         }
+                                        sb.AppendFormatLine("{0}local __cs2lua_func_info = luainitialize();", GetIndentString(indent));
                                         GenerateStatements(second, sb, indent);
+                                        bool lastIsNotReturn = true;
+                                        int snum = second.GetParamNum();
+                                        for (; snum > 0; --snum) {
+                                            if (second.GetParamId(snum - 1) != "comment")
+                                                break;
+                                        }
+                                        if (snum > 0) {
+                                            lastIsNotReturn = second.GetParamId(snum - 1) != "return";
+                                        }
+                                        if (rct <= 0 && lastIsNotReturn) {
+                                            sb.AppendFormatLine("{0}__cs2lua_func_info = luafinalize(__cs2lua_func_info);", GetIndentString(indent));
+                                        }
                                         --indent;
                                         if (null != cdef && null == logInfo.EpilogueInfo)
                                             sb.AppendFormatLine("{0}end),", GetIndentString(indent));
@@ -393,7 +406,20 @@ namespace Generator
                                             sb.AppendLine(")");
                                             ++indent;
                                         }
+                                        sb.AppendFormatLine("{0}local __cs2lua_func_info = luainitialize();", GetIndentString(indent));
                                         GenerateStatements(second, sb, indent);
+                                        bool lastIsNotReturn = true;
+                                        int snum = second.GetParamNum();
+                                        for (; snum > 0; --snum) {
+                                            if (second.GetParamId(snum - 1) != "comment")
+                                                break;
+                                        }
+                                        if (snum > 0) {
+                                            lastIsNotReturn = second.GetParamId(snum - 1) != "return";
+                                        }
+                                        if (rct <= 0 && lastIsNotReturn) {
+                                            sb.AppendFormatLine("{0}__cs2lua_func_info = luafinalize(__cs2lua_func_info);", GetIndentString(indent));
+                                        }
                                         --indent;
                                         if (null != cdef && null == logInfo.EpilogueInfo)
                                             sb.AppendFormatLine("{0}end),", GetIndentString(indent));
@@ -1136,8 +1162,18 @@ namespace Generator
                 GenerateArguments(data, sb, indent, 0);
             }
             else if (id == "return") {
-                sb.Append("return ");
+                sb.AppendLine("__cs2lua_func_info = luafinalize(__cs2lua_func_info);");
+                sb.AppendFormat("{0}return ", GetIndentString(indent));
                 GenerateArguments(data, sb, indent, 0);
+            }
+            else if (id == "newobject" || id == "newstruct" || id == "newexternobject" || id == "newexternstruct" ||
+                id == "wrapoutstruct" || id == "wrapoutexternstruct" || id == "wrapstruct" || id == "wrapexternstruct") {
+                sb.Append(id);
+                sb.Append("(__cs2lua_func_info");
+                if (data.GetParamNum() > 0)
+                    sb.Append(", ");
+                GenerateArguments(data, sb, indent, 0);
+                sb.Append(")");
             }
             else if (id == "prefixoperator" || id == "postfixoperator") {
                 GeneratePrefixPostfixOperator(data, sb, false);
@@ -2610,6 +2646,40 @@ namespace Generator
                         else {
                             sb.Append(" ");
                         }
+                    }
+                }
+            }
+            else if (id == "deffunc") {
+                var fdef = data;
+                if (null != fdef && fdef.GetFunctionNum() == 2) {
+                    var first = fdef.First;
+                    var second = fdef.Second;
+                    int rct;
+                    int.TryParse(first.GetParamId(0), out rct);
+                    if (second.HaveStatement()) {
+                        var fcall = second;
+                        if (second.IsHighOrder)
+                            fcall = second.LowerOrderFunction;
+                        sb.Append("function(");
+                        bool haveParams = GenerateFunctionParams(fcall, sb);
+                        sb.AppendLine(")");
+                        ++indent;
+                        sb.AppendFormatLine("{0}local __cs2lua_func_info = luainitialize();", GetIndentString(indent));
+                        GenerateStatements(second, sb, indent);
+                        bool lastIsNotReturn = true;
+                        int snum = second.GetParamNum();
+                        for (; snum > 0; --snum) {
+                            if (second.GetParamId(snum - 1) != "comment")
+                                break;
+                        }
+                        if (snum > 0) {
+                            lastIsNotReturn = second.GetParamId(snum - 1) != "return";
+                        }
+                        if (rct <= 0 && lastIsNotReturn) {
+                            sb.AppendFormatLine("{0}__cs2lua_func_info = luafinalize(__cs2lua_func_info);", GetIndentString(indent));
+                        }
+                        --indent;
+                        sb.AppendFormat("{0}end", GetIndentString(indent));
                     }
                 }
             }
