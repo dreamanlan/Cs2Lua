@@ -1047,6 +1047,14 @@ function luafinalize(funcInfo)
             Vector3Pool.Recycle(v)
             table.remove(funcInfo.v3_list)
         end
+        for i,v in ipairs(funcInfo.q_identity_list) do
+            QuaternionIdentityPool.Recycle(v)
+            table.remove(funcInfo.q_identity_list)
+        end
+        for i,v in ipairs(funcInfo.q_list) do
+            QuaternionPool.Recycle(v)
+            table.remove(funcInfo.q_list)
+        end
         FuncInfoPool.Recycle(funcInfo)
     end
     return nil
@@ -3330,7 +3338,7 @@ function newexternstruct(funcInfo, class, typeargs, typekinds, initializer, ...)
     elseif class == UnityEngine.Quaternion then
         obj = QuaternionPool.Alloc()
         table.insert(funcInfo.q_list, obj)
-        local _,x,y,z,w = ...
+        local x,y,z,w = ...
         if x~=nil then
             obj.x = x
         end
