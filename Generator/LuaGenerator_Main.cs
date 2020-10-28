@@ -1174,11 +1174,15 @@ namespace Generator
             }
             else if (id == "return") {
                 sb.AppendLine("__cs2lua_func_info = luafinalize(__cs2lua_func_info);");
-                sb.AppendFormat("{0}return ", GetIndentString(indent));
+                sb.AppendFormat("{0}return", GetIndentString(indent));
+                if (data.GetParamNum() > 0)
+                    sb.Append(" ");
                 GenerateArguments(data, sb, indent, 0);
             }
             else if (id == "funcobjret") {
-                sb.AppendFormat("{0}return ", GetIndentString(indent));
+                sb.AppendFormat("{0}return", GetIndentString(indent));
+                if (data.GetParamNum() > 0)
+                    sb.Append(" ");
                 GenerateArguments(data, sb, indent, 0);
             }
             else if (id == "newobject" || id == "newstruct" || id == "newexternobject" || id == "newexternstruct" ||
