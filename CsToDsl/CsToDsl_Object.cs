@@ -1089,7 +1089,7 @@ namespace RoslynTool.CsToDsl
                 mi.ExistTry = tryUsing.ExistTry;
                 mi.ExistUsing = tryUsing.ExistUsing;
 
-                CodeBuilder.Append("function(");
+                CodeBuilder.AppendFormat("deffunc({0})args(", mi.ReturnValueCount);
                 int ct = sym.Parameters.Length;
                 if (ct > 0) {
                     for (int i = 0; i < ct; ++i) {

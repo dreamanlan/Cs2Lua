@@ -281,7 +281,8 @@ namespace Generator
                                         bool lastIsNotReturn = true;
                                         int snum = second.GetParamNum();
                                         for (; snum > 0; --snum) {
-                                            if (second.GetParamId(snum - 1) != "comment")
+                                            var cid = second.GetParamId(snum - 1);
+                                            if (cid != "comment" && cid != "comments")
                                                 break;
                                         }
                                         if (snum > 0) {
@@ -411,7 +412,8 @@ namespace Generator
                                         bool lastIsNotReturn = true;
                                         int snum = second.GetParamNum();
                                         for (; snum > 0; --snum) {
-                                            if (second.GetParamId(snum - 1) != "comment")
+                                            var cid = second.GetParamId(snum - 1);
+                                            if (cid != "comment" && cid != "comments")
                                                 break;
                                         }
                                         if (snum > 0) {
@@ -948,10 +950,10 @@ namespace Generator
                             handled = true;
                         }
                     }
-                    else if(id == "=" && (leftParamId== "getstatic"
+                    else if (id == "=" && (leftParamId == "getstatic"
                          || leftParamId == "getexternstatic"
                          || leftParamId == "getinstance"
-                         || leftParamId == "getexterninstance")) {                        
+                         || leftParamId == "getexterninstance")) {
                         var cd = param1 as Dsl.FunctionData;
                         if (null != cd.Name) {
                             cd.Name.SetId("s" + leftParamId.Substring(1));
@@ -1032,6 +1034,15 @@ namespace Generator
                             }
                         }
                     }
+                    else if (id == "=" && leftParamId == "getexternstaticstructmember") {
+                        var cd = param1 as Dsl.FunctionData;
+                        if (null != cd.Name) {
+                            cd.Name.SetId("setexternstatic");
+                            cd.AddParam(param2);
+                            GenerateConcreteSyntax(cd, sb, indent, false);
+                            handled = true;
+                        }
+                    }
                     if (!handled) {
                         if (id != "=")
                             sb.Append("(");
@@ -1056,7 +1067,7 @@ namespace Generator
                     if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
                         func = func.GetParam(0) as Dsl.FunctionData;
                     }
-                    if (null != func && func.GetId() == "return") {
+                    if (null != func && func.GetId() == "funcobjret") {
                         p2 = "true";
                         p3 = func.GetParam(0);
                     }
@@ -1066,7 +1077,7 @@ namespace Generator
                     if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
                         func = func.GetParam(0) as Dsl.FunctionData;
                     }
-                    if (null != func && func.GetId() == "return") {
+                    if (null != func && func.GetId() == "funcobjret") {
                         p4 = "true";
                         p5 = func.GetParam(0);
                     }
@@ -1104,7 +1115,7 @@ namespace Generator
                     if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
                         func = func.GetParam(0) as Dsl.FunctionData;
                     }
-                    if (null != func && func.GetId() == "return") {
+                    if (null != func && func.GetId() == "funcobjret") {
                         isSimple = true;
                         p2 = func.GetParam(0);
                     }
@@ -1134,7 +1145,7 @@ namespace Generator
                     if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
                         func = func.GetParam(0) as Dsl.FunctionData;
                     }
-                    if (null != func && func.GetId() == "return") {
+                    if (null != func && func.GetId() == "funcobjret") {
                         p2 = "true";
                         p3 = func.GetParam(0);
                     }
@@ -1166,8 +1177,13 @@ namespace Generator
                 sb.AppendFormat("{0}return ", GetIndentString(indent));
                 GenerateArguments(data, sb, indent, 0);
             }
+            else if (id == "funcobjret") {
+                sb.AppendFormat("{0}return ", GetIndentString(indent));
+                GenerateArguments(data, sb, indent, 0);
+            }
             else if (id == "newobject" || id == "newstruct" || id == "newexternobject" || id == "newexternstruct" ||
-                id == "wrapoutstruct" || id == "wrapoutexternstruct" || id == "wrapstruct" || id == "wrapexternstruct") {
+                id == "wrapoutstruct" || id == "wrapoutexternstruct" || id == "wrapstruct" || id == "wrapexternstruct" || 
+                id == "getexternstaticstructmember") {
                 sb.Append(id);
                 sb.Append("(__cs2lua_func_info");
                 if (data.GetParamNum() > 0)
@@ -2669,7 +2685,8 @@ namespace Generator
                         bool lastIsNotReturn = true;
                         int snum = second.GetParamNum();
                         for (; snum > 0; --snum) {
-                            if (second.GetParamId(snum - 1) != "comment")
+                            var cid = second.GetParamId(snum - 1);
+                            if (cid != "comment" && cid != "comments")
                                 break;
                         }
                         if (snum > 0) {

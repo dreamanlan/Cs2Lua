@@ -756,30 +756,52 @@ namespace RoslynTool.CsToDsl
                     else if (null != fieldRef) {
                         var field = fieldRef.Field;
                         bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(field);
-                        if(isExtern)
-                            CodeBuilder.Append("getexternstatic(SymbolKind.");
-                        else
-                            CodeBuilder.Append("getstatic(SymbolKind.");
-                        CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(field));
-                        CodeBuilder.Append(", ");
-                        CodeBuilder.Append(ClassInfo.GetFullName(field.Type));
-                        CodeBuilder.Append(", \"");
-                        CodeBuilder.Append(field.Name);
-                        CodeBuilder.Append("\")");
+                        if (isExtern && field.Type.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(field.Type)) {
+                            CodeBuilder.Append("getexternstaticstructmember(SymbolKind.");
+                            CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(field));
+                            CodeBuilder.Append(", ");
+                            CodeBuilder.Append(ClassInfo.GetFullName(field.ContainingType));
+                            CodeBuilder.Append(", \"");
+                            CodeBuilder.Append(field.Name);
+                            CodeBuilder.Append("\")");
+                        }
+                        else {
+                            if (isExtern)
+                                CodeBuilder.Append("getexternstatic(SymbolKind.");
+                            else
+                                CodeBuilder.Append("getstatic(SymbolKind.");
+                            CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(field));
+                            CodeBuilder.Append(", ");
+                            CodeBuilder.Append(ClassInfo.GetFullName(field.ContainingType));
+                            CodeBuilder.Append(", \"");
+                            CodeBuilder.Append(field.Name);
+                            CodeBuilder.Append("\")");
+                        }
                     }
                     else if (null != propRef) {
                         var property = propRef.Property;
                         bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(property);
-                        if (isExtern)
-                            CodeBuilder.Append("getexternstatic(SymbolKind.");
-                        else
-                            CodeBuilder.Append("getstatic(SymbolKind.");
-                        CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(property));
-                        CodeBuilder.Append(", ");
-                        CodeBuilder.Append(ClassInfo.GetFullName(property.Type));
-                        CodeBuilder.Append(", \"");
-                        CodeBuilder.Append(property.Name);
-                        CodeBuilder.Append("\")");
+                        if (isExtern && property.Type.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(property.Type)) {
+                            CodeBuilder.Append("getexternstaticstructmember(SymbolKind.");
+                            CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(property));
+                            CodeBuilder.Append(", ");
+                            CodeBuilder.Append(ClassInfo.GetFullName(property.ContainingType));
+                            CodeBuilder.Append(", \"");
+                            CodeBuilder.Append(property.Name);
+                            CodeBuilder.Append("\")");
+                        }
+                        else {
+                            if (isExtern)
+                                CodeBuilder.Append("getexternstatic(SymbolKind.");
+                            else
+                                CodeBuilder.Append("getstatic(SymbolKind.");
+                            CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(property));
+                            CodeBuilder.Append(", ");
+                            CodeBuilder.Append(ClassInfo.GetFullName(property.ContainingType));
+                            CodeBuilder.Append(", \"");
+                            CodeBuilder.Append(property.Name);
+                            CodeBuilder.Append("\")");
+                        }
                     }
                     else {
                         OutputConstValue(val, operOrSym);

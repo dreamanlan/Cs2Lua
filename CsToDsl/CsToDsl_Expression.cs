@@ -115,7 +115,7 @@ namespace RoslynTool.CsToDsl
                             OutputExpressionSyntax(node.Right, ropd);
                         }
                         else {
-                            CodeBuilder.Append("false, function(){ return(");
+                            CodeBuilder.Append("false, function(){ funcobjret(");
                             OutputExpressionSyntax(node.Right, ropd);
                             CodeBuilder.Append("); }");
                         }
@@ -160,7 +160,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.Append(", true, ");
             }
             else {
-                CodeBuilder.Append(", false, function(){ return(");
+                CodeBuilder.Append(", false, function(){ funcobjret(");
             }
             OutputExpressionSyntax(node.WhenTrue);
             if (trueIsConst) {
@@ -173,7 +173,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.Append("true, ");
             }
             else {
-                CodeBuilder.Append("false, function(){ return(");
+                CodeBuilder.Append("false, function(){ funcobjret(");
             }
             OutputExpressionSyntax(node.WhenFalse);
             if (falseIsConst) {
@@ -642,13 +642,21 @@ namespace RoslynTool.CsToDsl
                             OutputExpressionSyntax(node.Expression);
                         }
                         else {
-                            if (isExtern)
-                                CodeBuilder.Append("getexternstatic(SymbolKind.");
-                            else
-                                CodeBuilder.Append("getstatic(SymbolKind.");
-                            CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(sym));
-                            CodeBuilder.Append(", ");
-                            CodeBuilder.Append(className);
+                            if (isExtern && null != psym && psym.Type.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(psym.Type)) {
+                                CodeBuilder.Append("getexternstaticstructmember(SymbolKind.");
+                                CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(sym));
+                                CodeBuilder.Append(", ");
+                                CodeBuilder.Append(className);
+                            }
+                            else {
+                                if (isExtern)
+                                    CodeBuilder.Append("getexternstatic(SymbolKind.");
+                                else
+                                    CodeBuilder.Append("getstatic(SymbolKind.");
+                                CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(sym));
+                                CodeBuilder.Append(", ");
+                                CodeBuilder.Append(className);
+                            }
                         }
                         CodeBuilder.Append(", ");
                         CodeBuilder.AppendFormat("\"{0}\"", node.Name.Identifier.Text);
@@ -761,7 +769,7 @@ namespace RoslynTool.CsToDsl
                     }
                 }
                 if (null != psym && psym.IsIndexer) {
-                    CodeBuilder.Append("function(){ return(");
+                    CodeBuilder.Append("function(){ funcobjret(");
                     bool isCs2Lua = SymbolTable.Instance.IsCs2DslSymbol(psym);
                     CodeBuilder.AppendFormat("get{0}{1}indexer(", isCs2Lua ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
                     if (!isCs2Lua) {
@@ -811,7 +819,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(")");
                     }
                     else {
-                        CodeBuilder.Append("function(){ return(");
+                        CodeBuilder.Append("function(){ funcobjret(");
                         OutputExpressionSyntax(node.Expression);
                         CodeBuilder.Append("[");
                         OutputExpressionSyntax(node.WhenNotNull);
@@ -824,7 +832,7 @@ namespace RoslynTool.CsToDsl
                 }
             }
             else {
-                CodeBuilder.Append("function(){ return(");
+                CodeBuilder.Append("function(){ funcobjret(");
                 OutputExpressionSyntax(node.Expression);
                 OutputExpressionSyntax(node.WhenNotNull);
                 CodeBuilder.Append("); }");

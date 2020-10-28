@@ -245,7 +245,17 @@ namespace RoslynTool.CsToDsl
                     else if (sym.Kind == SymbolKind.Field || sym.Kind == SymbolKind.Property || sym.Kind == SymbolKind.Event) {
                         if (sym.IsStatic) {
                             string fullName = ClassInfo.GetFullName(sym.ContainingType);
-                            CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, {2}, \"{3}\")", isExtern ? "getexternstatic" : "getstatic", SymbolTable.Instance.GetSymbolKind(sym), fullName, sym.Name);
+                            var fsym = sym as IFieldSymbol;
+                            var psym = sym as IPropertySymbol;
+                            if (isExtern && null != fsym && fsym.Type.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(fsym.Type)) {
+                                CodeBuilder.AppendFormat("getexternstaticstructmember(SymbolKind.{0}, {1}, \"{2}\")", SymbolTable.Instance.GetSymbolKind(sym), fullName, sym.Name);
+                            }
+                            else if (isExtern && null != psym && psym.Type.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(psym.Type)) {
+                                CodeBuilder.AppendFormat("getexternstaticstructmember(SymbolKind.{0}, {1}, \"{2}\")", SymbolTable.Instance.GetSymbolKind(sym), fullName, sym.Name);
+                            }
+                            else {
+                                CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, {2}, \"{3}\")", isExtern ? "getexternstatic" : "getstatic", SymbolTable.Instance.GetSymbolKind(sym), fullName, sym.Name);
+                            }
                             return;
                         }
                         else if (IsNewObjMember(name)) {

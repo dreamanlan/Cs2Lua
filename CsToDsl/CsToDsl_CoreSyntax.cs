@@ -1281,7 +1281,7 @@ namespace RoslynTool.CsToDsl
                     }
                 }
                 if (null != psym && psym.IsIndexer) {
-                    CodeBuilder.Append("function(){ return(");
+                    CodeBuilder.Append("function(){ funcobjret(");
                     bool isCs2Lua = SymbolTable.Instance.IsCs2DslSymbol(psym);
                     CodeBuilder.AppendFormat("set{0}{1}indexer(", isCs2Lua ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
                     if (!isCs2Lua) {
@@ -1344,7 +1344,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendFormat("execclosure(true, {0}, false){{ {1} = ", localName, localName);
                         OutputExpressionSyntax(assign.Right, opd, dslToObject, leftSym);
                         CodeBuilder.Append("; };");
-                        CodeBuilder.Append(" return(");
+                        CodeBuilder.Append(" funcobjret(");
                         CodeBuilder.Append(localName);
                         CodeBuilder.Append("); }");
                     }
@@ -1362,7 +1362,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("execclosure(true, {0}, false){{ {1} = ", localName, localName);
                 OutputExpressionSyntax(assign.Right, opd, dslToObject, leftSym);
                 CodeBuilder.Append("; };");
-                CodeBuilder.Append(" return(");
+                CodeBuilder.Append(" funcobjret(");
                 CodeBuilder.Append(localName);
                 CodeBuilder.Append("); }");
             }
