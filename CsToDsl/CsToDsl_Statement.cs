@@ -123,12 +123,13 @@ namespace RoslynTool.CsToDsl
                 var invocation = node.Expression as InvocationExpressionSyntax;
                 if (null != invocation) {
                     var ci = m_ClassInfoStack.Peek();
+                    CodeBuilder.AppendFormat("{0}", GetIndentString());
                     VisitInvocation(ci, invocation, mi.ReturnVarName, ";", true);
                     if (null != opd && opd.UsesOperatorMethod) {
                         IMethodSymbol msym = opd.OperatorMethod;
                         InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), node);
                         ii.Init(msym, (List<ExpressionSyntax>)null, m_Model);
-                        CodeBuilder.Append(mi.ReturnVarName);
+                        CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), mi.ReturnVarName);
                         CodeBuilder.AppendLine(" = ");
                         OutputConversionInvokePrefix(ii);
                         CodeBuilder.Append(mi.ReturnVarName);

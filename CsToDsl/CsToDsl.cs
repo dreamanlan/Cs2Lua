@@ -1119,21 +1119,24 @@ namespace RoslynTool.CsToDsl
         }
         private bool IsNewObjMember(string name)
         {
+            string fn;
             SymbolKind kind;
-            return IsNewObjMember(name, out kind);
+            return IsNewObjMember(name, out fn, out kind);
         }
-        private bool IsNewObjMember(string name, out SymbolKind kind)
+        private bool IsNewObjMember(string name, out string fullName, out SymbolKind kind)
         {
             if (m_ObjectInitializerStack.Count > 0) {
                 ITypeSymbol symInfo = m_ObjectInitializerStack.Peek();
                 if (null != symInfo) {
                     var names = symInfo.GetMembers(name);
                     if (names.Length > 0) {
+                        fullName = ClassInfo.GetFullName(symInfo);
                         kind = names[0].Kind;
                         return true;
                     }
                 }
             }
+            fullName = string.Empty;
             kind = SymbolKind.ErrorType;
             return false;
         }
@@ -1330,7 +1333,7 @@ namespace RoslynTool.CsToDsl
         private Dictionary<string, List<ClassInfo>> m_ToplevelClasses = new Dictionary<string, List<ClassInfo>>();
         private ClassInfo m_LastToplevelClass = null;
         private string m_LastComment = string.Empty;
-
+        
         internal static string GetSourcePosForVar(SyntaxNode node)
         {
             var st = node.GetLocation().GetLineSpan().StartLinePosition;
@@ -1493,6 +1496,20 @@ namespace RoslynTool.CsToDsl
                 }
             }
             return false;
+        }
+        internal static IMethodSymbol GetDisposeMethod(ITypeSymbol type)
+        {
+            while (null != type && ClassInfo.GetFullName(type) != "System.ValueType" && ClassInfo.GetFullName(type) != "System.Object") {
+                var ms = type.GetMembers("Dispose");
+                foreach (var m in ms) {
+                    var msym = m as IMethodSymbol;
+                    if (null != msym && msym.Parameters.Length == 0 && msym.ReturnsVoid) {
+                        return msym;
+                    }
+                }
+                type = type.BaseType;
+            }
+            return null;
         }
         internal static string EscapeType(string type, string typeKind)
         {

@@ -189,7 +189,8 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitBaseExpression(BaseExpressionSyntax node)
         {
-            CodeBuilder.Append("getinstance(SymbolKind.Field, this, \"base\")");
+            var ci = m_ClassInfoStack.Peek();
+            CodeBuilder.AppendFormat("getinstance(SymbolKind.Field, this, {0}, \"base\")", ci.Key);
         }
         public override void VisitParenthesizedExpression(ParenthesizedExpressionSyntax node)
         {
@@ -539,7 +540,7 @@ namespace RoslynTool.CsToDsl
             var sym = symInfo.Symbol;
 
             string className = string.Empty;
-            if (null != sym && sym.IsStatic && null != sym.ContainingType) {
+            if (null != sym && null != sym.ContainingType) {
                 className = ClassInfo.GetFullName(sym.ContainingType);
             }
 
@@ -557,122 +558,134 @@ namespace RoslynTool.CsToDsl
             else {
                 ReportIllegalSymbol(node, symInfo);
             }
-            if (node.Parent is InvocationExpressionSyntax) {
-                var msym = sym as IMethodSymbol;
-                string manglingName = NameMangling(msym);
-                if (string.IsNullOrEmpty(className)) {
-                    if(isExtern)
-                        CodeBuilder.Append("getexterninstance(SymbolKind.");
-                    else
-                        CodeBuilder.Append("getinstance(SymbolKind.");
-                    CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(sym));
-                    CodeBuilder.Append(", ");
-                    OutputExpressionSyntax(node.Expression);
-                    CodeBuilder.Append(", \"");
-                }
-                else {
-                    if (isExtern)
-                        CodeBuilder.Append("getexternstatic(SymbolKind.");
-                    else
-                        CodeBuilder.Append("getstatic(SymbolKind.");
-                    CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(sym));
-                    CodeBuilder.Append(", ");
-                    CodeBuilder.Append(className);
-                    CodeBuilder.Append(", \"");
-                }
-                CodeBuilder.Append(manglingName);
-                CodeBuilder.Append("\")");
-            }
-            else {
-                var msym = sym as IMethodSymbol;
-                if (null != msym) {
+            if (null != sym) {
+                if (node.Parent is InvocationExpressionSyntax) {
+                    var msym = sym as IMethodSymbol;
                     string manglingName = NameMangling(msym);
-                    string srcPos = GetSourcePosForVar(node);
-                    string delegationKey = string.Format("{0}:{1}", ClassInfo.GetFullName(msym.ContainingType), manglingName);
-                    if (string.IsNullOrEmpty(className)) {
-                        CodeBuilder.AppendFormat("builddelegation(\"{0}\", \"{1}\", ", srcPos, delegationKey);
+                    if (!sym.IsStatic) {
+                        if (isExtern)
+                            CodeBuilder.Append("getexterninstance(SymbolKind.");
+                        else
+                            CodeBuilder.Append("getinstance(SymbolKind.");
+                        CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(sym));
+                        CodeBuilder.Append(", ");
                         OutputExpressionSyntax(node.Expression);
-                        CodeBuilder.AppendFormat(", {0}, {1})", manglingName, string.IsNullOrEmpty(className) ? "false" : "true");
+                        CodeBuilder.Append(", ");
+                        CodeBuilder.Append(className);
+                        CodeBuilder.Append(", \"");
                     }
                     else {
-                        CodeBuilder.AppendFormat("builddelegation(\"{0}\", \"{1}\", {2}, {3}, {4})", srcPos, delegationKey, className, manglingName, string.IsNullOrEmpty(className) ? "false" : "true");
+                        if (isExtern)
+                            CodeBuilder.Append("getexternstatic(SymbolKind.");
+                        else
+                            CodeBuilder.Append("getstatic(SymbolKind.");
+                        CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(sym));
+                        CodeBuilder.Append(", ");
+                        CodeBuilder.Append(className);
+                        CodeBuilder.Append(", \"");
                     }
+                    CodeBuilder.Append(manglingName);
+                    CodeBuilder.Append("\")");
                 }
                 else {
-                    var psym = sym as IPropertySymbol;
-                    string mname = string.Empty;
-                    bool propExplicitImplementInterface = false;
-                    bool propForBasicValueType = false;
-                    if (null != psym) {
-                        if (!psym.IsStatic) {
-                            propExplicitImplementInterface = CheckExplicitInterfaceAccess(psym, ref mname);
-                            var expOper = m_Model.GetOperationEx(node.Expression);
-                            bool expIsBasicType = false;
-                            if (null != expOper && SymbolTable.IsBasicType(expOper.Type)) {
-                                expIsBasicType = true;
-                            }
-                            propForBasicValueType = SymbolTable.IsBasicValueProperty(psym) || expIsBasicType;
-                        }
-                    }
-                    if (propExplicitImplementInterface) {
-                        //这里不区分是否外部符号了，委托到动态语言的脚本库实现，可根据对象运行时信息判断
-                        CodeBuilder.AppendFormat("getinstance(SymbolKind.Property, ");
-                        OutputExpressionSyntax(node.Expression);
-                        CodeBuilder.AppendFormat(", \"{0}\")", mname);
-                    }
-                    else if (propForBasicValueType) {
-                        //这里不区分是否外部符号了，委托到动态语言的脚本库实现，可根据对象运行时信息判断
-                        string pname = psym.Name;
-                        string cname = ClassInfo.GetFullName(psym.ContainingType);
-                        bool isEnumClass = psym.ContainingType.TypeKind == TypeKind.Enum || cname == "System.Enum";
-                        var oper = m_Model.GetOperationEx(node.Expression);
-                        string ckey = InvocationInfo.CalcInvokeTarget(isEnumClass, cname, this, oper);
-                        CodeBuilder.AppendFormat("getforbasicvalue(");
-                        OutputExpressionSyntax(node.Expression);
-                        CodeBuilder.AppendFormat(", {0}, {1}, \"{2}\")", isEnumClass ? "true" : "false", ckey, pname);
-                    }
-                    else if (null != sym) {                        
-                        if (string.IsNullOrEmpty(className)) {
-                            if (isExtern)
-                                CodeBuilder.Append("getexterninstance(SymbolKind.");
-                            else
-                                CodeBuilder.Append("getinstance(SymbolKind.");
-                            CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(sym));
-                            CodeBuilder.Append(", ");
+                    var msym = sym as IMethodSymbol;
+                    if (null != msym) {
+                        string manglingName = NameMangling(msym);
+                        string srcPos = GetSourcePosForVar(node);
+                        string delegationKey = string.Format("{0}:{1}", ClassInfo.GetFullName(msym.ContainingType), manglingName);
+                        if (!sym.IsStatic) {
+                            CodeBuilder.AppendFormat("builddelegation(\"{0}\", \"{1}\", ", srcPos, delegationKey);
                             OutputExpressionSyntax(node.Expression);
+                            CodeBuilder.AppendFormat(", {0}, {1})", manglingName, "false");
                         }
                         else {
-                            if (isExtern && null != psym && psym.Type.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(psym.Type)) {
-                                CodeBuilder.Append("getexternstaticstructmember(SymbolKind.");
-                                CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(sym));
-                                CodeBuilder.Append(", ");
-                                CodeBuilder.Append(className);
+                            CodeBuilder.AppendFormat("builddelegation(\"{0}\", \"{1}\", {2}, {3}, {4})", srcPos, delegationKey, className, manglingName, "true");
+                        }
+                    }
+                    else {
+                        var psym = sym as IPropertySymbol;
+                        string mname = string.Empty;
+                        bool propExplicitImplementInterface = false;
+                        bool propForBasicValueType = false;
+                        if (null != psym) {
+                            if (!psym.IsStatic) {
+                                propExplicitImplementInterface = CheckExplicitInterfaceAccess(psym, ref mname);
+                                var expOper = m_Model.GetOperationEx(node.Expression);
+                                bool expIsBasicType = false;
+                                if (null != expOper && SymbolTable.IsBasicType(expOper.Type)) {
+                                    expIsBasicType = true;
+                                }
+                                propForBasicValueType = SymbolTable.IsBasicValueProperty(psym) || expIsBasicType;
+                            }
+                        }
+                        if (propExplicitImplementInterface) {
+                            //这里不区分是否外部符号了，委托到动态语言的脚本库实现，可根据对象运行时信息判断
+                            CodeBuilder.Append("getinstance(SymbolKind.Property, ");
+                            OutputExpressionSyntax(node.Expression);
+                            CodeBuilder.AppendFormat(", {0}, \"{1}\")", className, mname);
+                        }
+                        else if (propForBasicValueType) {
+                            //这里不区分是否外部符号了，委托到动态语言的脚本库实现，可根据对象运行时信息判断
+                            string pname = psym.Name;
+                            string cname = ClassInfo.GetFullName(psym.ContainingType);
+                            bool isEnumClass = psym.ContainingType.TypeKind == TypeKind.Enum || cname == "System.Enum";
+                            var oper = m_Model.GetOperationEx(node.Expression);
+                            string ckey = InvocationInfo.CalcInvokeTarget(isEnumClass, cname, this, oper);
+                            CodeBuilder.AppendFormat("getforbasicvalue(");
+                            OutputExpressionSyntax(node.Expression);
+                            CodeBuilder.AppendFormat(", {0}, {1}, \"{2}\")", isEnumClass ? "true" : "false", ckey, pname);
+                        }
+                        else {
+                            bool isExternStructMember = isExtern && null != psym && psym.Type.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(psym.Type);
+                            if (!sym.IsStatic) {
+                                if (isExternStructMember) {
+                                    CodeBuilder.Append("getexterninstancestructmember(SymbolKind.");
+                                    CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(sym));
+                                    CodeBuilder.Append(", ");
+                                    OutputExpressionSyntax(node.Expression);
+                                    CodeBuilder.Append(", ");
+                                    CodeBuilder.Append(className);
+                                }
+                                else {
+                                    if (isExtern)
+                                        CodeBuilder.Append("getexterninstance(SymbolKind.");
+                                    else
+                                        CodeBuilder.Append("getinstance(SymbolKind.");
+                                    CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(sym));
+                                    CodeBuilder.Append(", ");
+                                    OutputExpressionSyntax(node.Expression);
+                                    CodeBuilder.Append(", ");
+                                    CodeBuilder.Append(className);
+                                }
                             }
                             else {
-                                if (isExtern)
-                                    CodeBuilder.Append("getexternstatic(SymbolKind.");
-                                else
-                                    CodeBuilder.Append("getstatic(SymbolKind.");
-                                CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(sym));
-                                CodeBuilder.Append(", ");
-                                CodeBuilder.Append(className);
+                                if (isExternStructMember) {
+                                    CodeBuilder.Append("getexternstaticstructmember(SymbolKind.");
+                                    CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(sym));
+                                    CodeBuilder.Append(", ");
+                                    CodeBuilder.Append(className);
+                                }
+                                else {
+                                    if (isExtern)
+                                        CodeBuilder.Append("getexternstatic(SymbolKind.");
+                                    else
+                                        CodeBuilder.Append("getstatic(SymbolKind.");
+                                    CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(sym));
+                                    CodeBuilder.Append(", ");
+                                    CodeBuilder.Append(className);
+                                }
                             }
+                            CodeBuilder.Append(", ");
+                            CodeBuilder.AppendFormat("\"{0}\"", node.Name.Identifier.Text);
+                            CodeBuilder.Append(")");
                         }
-                        CodeBuilder.Append(", ");
-                        CodeBuilder.AppendFormat("\"{0}\"", node.Name.Identifier.Text);
-                        CodeBuilder.Append(")");
-                    }
-                    else {
-                        if (string.IsNullOrEmpty(className)) {
-                            OutputExpressionSyntax(node.Expression);
-                        }
-                        else {
-                            CodeBuilder.Append(className);
-                        }
-                        CodeBuilder.Append(node.OperatorToken.Text);
-                        CodeBuilder.Append(node.Name.Identifier.Text);
                     }
                 }
+            }
+            else {
+                OutputExpressionSyntax(node.Expression);
+                CodeBuilder.Append(node.OperatorToken.Text);
+                CodeBuilder.Append(node.Name.Identifier.Text);
             }
         }
         public override void VisitElementAccessExpression(ElementAccessExpressionSyntax node)

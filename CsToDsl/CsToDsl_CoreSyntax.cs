@@ -956,7 +956,8 @@ namespace RoslynTool.CsToDsl
                 CheckExplicitInterfaceAccess(leftPsym, ref mname);
                 CodeBuilder.AppendFormat("setinstance(SymbolKind.Property, ");
                 OutputExpressionSyntax(leftMemberAccess.Expression);
-                CodeBuilder.AppendFormat(", \"{0}\", ", mname);
+                string fn = ClassInfo.GetFullName(leftSym.ContainingType);
+                CodeBuilder.AppendFormat(", {0}, \"{1}\", ", fn, mname);
                 OutputExpressionSyntax(assign.Right, opd, dslToObject, leftSym);
                 CodeBuilder.Append(")");
             }
@@ -1017,7 +1018,7 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.Append("newobj");
                         else
                             CodeBuilder.Append("this");
-                        CodeBuilder.AppendFormat(", \"{0}\", ", memberName);
+                        CodeBuilder.AppendFormat(", {0}, \"{1}\", ", className, memberName);
                     }
                 }
                 else {
@@ -1071,7 +1072,7 @@ namespace RoslynTool.CsToDsl
                                 CodeBuilder.Append("newobj");
                             else
                                 CodeBuilder.Append("this");
-                            CodeBuilder.AppendFormat(", \"{0}\", ", memberName);
+                            CodeBuilder.AppendFormat(", {0}, \"{1}\", ", className, memberName);
                         }
                     }
                     else {
@@ -1107,7 +1108,7 @@ namespace RoslynTool.CsToDsl
                                 CodeBuilder.Append("newobj");
                             else
                                 CodeBuilder.Append("this");
-                            CodeBuilder.AppendFormat(", \"{0}\", ", memberName);
+                            CodeBuilder.AppendFormat(", {0}, \"{1}\", ", className, memberName);
                         }
                     }
                     else {

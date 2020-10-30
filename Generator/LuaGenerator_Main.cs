@@ -1043,6 +1043,15 @@ namespace Generator
                             handled = true;
                         }
                     }
+                    else if (id == "=" && leftParamId == "getexterninstancestructmember") {
+                        var cd = param1 as Dsl.FunctionData;
+                        if (null != cd.Name) {
+                            cd.Name.SetId("setexterninstance");
+                            cd.AddParam(param2);
+                            GenerateConcreteSyntax(cd, sb, indent, false);
+                            handled = true;
+                        }
+                    }
                     if (!handled) {
                         if (id != "=")
                             sb.Append("(");
@@ -1186,8 +1195,9 @@ namespace Generator
                 GenerateArguments(data, sb, indent, 0);
             }
             else if (id == "newobject" || id == "newstruct" || id == "newexternobject" || id == "newexternstruct" ||
-                id == "wrapoutstruct" || id == "wrapoutexternstruct" || id == "wrapstruct" || id == "wrapexternstruct" || 
-                id == "getexternstaticstructmember") {
+                id == "wrapoutstruct" || id == "wrapoutexternstruct" || id == "wrapstruct" || id == "wrapexternstruct" ||
+                id == "getexternstaticstructmember" || id == "getexterninstancestructmember" ||
+                id == "callexterndelegationreturnstruct" || id == "callexternextensionreturnstruct" || id == "callexternstaticreturnstruct" || id == "callexterninstancereturnstruct") {
                 sb.Append(id);
                 sb.Append("(__cs2lua_func_info");
                 if (data.GetParamNum() > 0)
@@ -1356,7 +1366,8 @@ namespace Generator
             else if (id == "getinstance") {
                 var kind = CalcTypeString(data.GetParam(0));
                 var obj = data.Params[1];
-                var member = data.Params[2];
+                var className = CalcTypeString(data.GetParam(2));
+                var member = data.Params[3];
                 GenerateSyntaxComponent(obj, sb, indent, false);
                 if (kind == "SymbolKind.Property") {
                     sb.AppendFormat(":get_{0}()", member.GetId());
@@ -1385,8 +1396,9 @@ namespace Generator
             else if (id == "setinstance") {
                 var kind = CalcTypeString(data.GetParam(0));
                 var obj = data.Params[1];
-                var member = data.Params[2];
-                var val = data.Params[3];
+                var className = CalcTypeString(data.GetParam(2));
+                var member = data.Params[3];
+                var val = data.Params[4];
                 GenerateSyntaxComponent(obj, sb, indent, false);
                 if (kind == "SymbolKind.Property") {
                     sb.AppendFormat(":set_{0}(", member.GetId());
@@ -1409,7 +1421,8 @@ namespace Generator
             else if (id == "getexterninstance") {
                 var kind = CalcTypeString(data.GetParam(0));
                 var obj = data.Params[1];
-                var member = data.Params[2];
+                var className = CalcTypeString(data.GetParam(2));
+                var member = data.Params[3];
                 GenerateSyntaxComponent(obj, sb, indent, false);
                 sb.AppendFormat(".{0}", member.GetId());
             }
@@ -1426,8 +1439,9 @@ namespace Generator
             else if (id == "setexterninstance") {
                 var kind = CalcTypeString(data.GetParam(0));
                 var obj = data.Params[1];
-                var member = data.Params[2];
-                var val = data.Params[3];
+                var className = CalcTypeString(data.GetParam(2));
+                var member = data.Params[3];
+                var val = data.Params[4];
                 GenerateSyntaxComponent(obj, sb, indent, false);
                 sb.AppendFormat(".{0}", member.GetId());
                 sb.Append(" = ");
@@ -1464,23 +1478,24 @@ namespace Generator
             }
             else if (id == "callinstance" || id == "callexterninstance") {
                 var obj = data.Params[0];
-                var member = data.Params[1];
+                var className = CalcTypeString(data.GetParam(1));
+                var member = data.Params[2];
                 var mid = member.GetId();
                 var objCd = obj as Dsl.FunctionData;
                 GenerateSyntaxComponent(obj, sb, indent, false);
-                if (null != objCd && objCd.GetId() == "getinstance" && objCd.GetParamNum() == 3 && objCd.GetParamId(2) == "base") {
+                if (null != objCd && objCd.GetId() == "getinstance" && objCd.GetParamNum() == 4 && objCd.GetParamId(3) == "base") {
                     sb.AppendFormat(":__self__{0}", mid);
                 }
                 else {
                     sb.AppendFormat(":{0}", mid);
                 }
                 sb.Append("(");
-                int start = 2;
+                int start = 3;
                 string sig = string.Empty;
                 if (data.Params.Count > start) {
                     var sigParam = data.GetParam(start) as Dsl.ValueData;
                     if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
-                        start = 3;
+                        start = 4;
                         sig = sigParam.GetId();
                         string target;
                         if (NoSignatureArg(sig)) {
@@ -1499,9 +1514,10 @@ namespace Generator
             }
             else if (id == "calldelegation" || id == "callexterndelegation") {
                 var obj = data.Params[0];
+                var className = CalcTypeString(data.GetParam(1));
                 GenerateSyntaxComponent(obj, sb, indent, false);
                 sb.Append("(");
-                int start = 1;
+                int start = 2;
                 GenerateArguments(data, sb, indent, start);
                 sb.Append(")");
             }
@@ -1971,8 +1987,9 @@ namespace Generator
             else if (id == "setinstancedelegation") {
                 var kind = CalcTypeString(data.GetParam(0));
                 var obj = data.Params[1];
-                var member = data.Params[2];
-                var val = data.Params[3];
+                var className = CalcTypeString(data.GetParam(2));
+                var member = data.Params[3];
+                var val = data.Params[4];
                 if (kind == "SymbolKind.Property") {
                     GenerateSyntaxComponent(obj, sb, indent, false);
                     sb.AppendFormat(":set_{0}(", member.GetId());
@@ -2425,11 +2442,12 @@ namespace Generator
                                 }
                                 else if (name == "callinstance" || name == "callexterninstance") {
                                     var obj = bodyStatement.Params[0];
-                                    var member = bodyStatement.Params[1];
+                                    var className = CalcTypeString(data.GetParam(1));
+                                    var member = bodyStatement.Params[2];
                                     var mid = member.GetId();
                                     var objCd = obj as Dsl.FunctionData;
                                     GenerateSyntaxComponent(obj, sb, indent, false);
-                                    if (null != objCd && objCd.GetId() == "getinstance" && objCd.GetParamNum() == 3 && objCd.GetParamId(2) == "base") {
+                                    if (null != objCd && objCd.GetId() == "getinstance" && objCd.GetParamNum() == 4 && objCd.GetParamId(3) == "base") {
                                         sb.AppendFormat(".__self__{0}", mid);
                                     }
                                     else {
@@ -2437,12 +2455,12 @@ namespace Generator
                                     }
                                     sb.Append(", ");
                                     GenerateSyntaxComponent(obj, sb, indent, false);
-                                    int start = 2;
+                                    int start = 3;
                                     string sig = string.Empty;
                                     if (bodyStatement.GetParamNum() > start) {
                                         var sigParam = bodyStatement.GetParam(start) as Dsl.ValueData;
                                         if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
-                                            start = 3;
+                                            start = 4;
                                             sig = sigParam.GetId();
                                             string target;
                                             if (NoSignatureArg(sig)) {

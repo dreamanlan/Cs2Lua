@@ -199,10 +199,10 @@ namespace RoslynTool.CsToDsl
                 var oper = m_Model.GetOperationEx(init) as IInvocationExpression;
                 string manglingName2 = NameMangling(oper.TargetMethod);
                 if (init.ThisOrBaseKeyword.Text == "this") {
-                    CodeBuilder.AppendFormat("{0}callinstance(this, \"{1}\"", GetIndentString(), manglingName2);
+                    CodeBuilder.AppendFormat("{0}callinstance(this, {1}, \"{2}\"", GetIndentString(), ci.Key, manglingName2);
                 }
                 else if (init.ThisOrBaseKeyword.Text == "base") {
-                    CodeBuilder.AppendFormat("{0}callinstance(getinstance(SymbolKind.Field, this, \"base\"), \"{1}\"", GetIndentString(), manglingName2);
+                    CodeBuilder.AppendFormat("{0}callinstance(getinstance(SymbolKind.Field, this, {1}, \"base\"), {2}, \"{3}\"", GetIndentString(), ci.Key, ci.Key, manglingName2);
                 }
                 if (init.ArgumentList.Arguments.Count > 0) {
                     CodeBuilder.Append(", ");
@@ -222,10 +222,10 @@ namespace RoslynTool.CsToDsl
             else {
                 if (!string.IsNullOrEmpty(ci.BaseKey) && !ClassInfo.IsBaseInitializerCalled(node, m_Model) && myselfDefinedBaseClass) {
                     //如果当前构造没有调父类构造并且委托的其它构造也没有调父类构造，则调用默认构造。
-                    CodeBuilder.AppendFormat("{0}callinstance(getinstance(SymbolKind.Field, this, \"base\"), \"ctor\");", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}callinstance(getinstance(SymbolKind.Field, this, {1}, \"base\"), {2}, \"ctor\");", GetIndentString(), ci.Key, ci.Key);
                     CodeBuilder.AppendLine();
                 }
-                CodeBuilder.AppendFormat("{0}callinstance(this, \"__ctor\");", GetIndentString());
+                CodeBuilder.AppendFormat("{0}callinstance(this, {1}, \"__ctor\");", GetIndentString(), ci.Key);
                 CodeBuilder.AppendLine();
             }
             //再执行构造函数内容（构造函数部分）
@@ -1203,13 +1203,25 @@ namespace RoslynTool.CsToDsl
 
                     if (null != node.Declaration && null != node.Declaration.Variables) {
                         foreach (var decl in node.Declaration.Variables) {
-                            CodeBuilder.AppendFormat("{0}callexterninstance({1}, \"Dispose\");", GetIndentString(), decl.Identifier.Text);
-                            CodeBuilder.AppendLine();
+                            var declSym = m_Model.GetDeclaredSymbol(decl) as ILocalSymbol;
+                            var type = declSym.Type;
+                            var msym = GetDisposeMethod(type);
+                            if (null != msym) {
+                                var fn = ClassInfo.GetFullName(msym.ContainingType);
+                                CodeBuilder.AppendFormat("{0}callexterninstance({1}, {2}, \"Dispose\");", GetIndentString(), decl.Identifier.Text, fn);
+                                CodeBuilder.AppendLine();
+                            }
                         }
                     }
                     else if (null != node.Expression) {
-                        CodeBuilder.AppendFormat("{0}callexterninstance({1}, \"Dispose\");", GetIndentString(), varName);
-                        CodeBuilder.AppendLine();
+                        var oper = m_Model.GetOperationEx(node.Expression);
+                        var type = oper.Type;
+                        var msym = GetDisposeMethod(type);
+                        if (null != msym) {
+                            var fn = ClassInfo.GetFullName(msym.ContainingType);
+                            CodeBuilder.AppendFormat("{0}callexterninstance({1}, {2}, \"Dispose\");", GetIndentString(), varName, fn);
+                            CodeBuilder.AppendLine();
+                        }
                     }
                     else {
                         Log(node, "node.Declaration is null or node.Declaration.Variables is null, and node.Expression is null.");
@@ -1227,13 +1239,25 @@ namespace RoslynTool.CsToDsl
             }
             if (null != node.Declaration && null != node.Declaration.Variables) {
                 foreach (var decl in node.Declaration.Variables) {
-                    CodeBuilder.AppendFormat("{0}callexterninstance({1}, \"Dispose\");", GetIndentString(), decl.Identifier.Text);
-                    CodeBuilder.AppendLine();
+                    var declSym = m_Model.GetDeclaredSymbol(decl) as ILocalSymbol;
+                    var type = declSym.Type;
+                    var msym = GetDisposeMethod(type);
+                    if (null != msym) {
+                        var fn = ClassInfo.GetFullName(msym.ContainingType);
+                        CodeBuilder.AppendFormat("{0}callexterninstance({1}, {2}, \"Dispose\");", GetIndentString(), decl.Identifier.Text, fn);
+                        CodeBuilder.AppendLine();
+                    }
                 }
             }
             else if (null != node.Expression) {
-                CodeBuilder.AppendFormat("{0}callexterninstance({1}, \"Dispose\");", GetIndentString(), varName);
-                CodeBuilder.AppendLine();
+                var oper = m_Model.GetOperationEx(node.Expression);
+                var type = oper.Type;
+                var msym = GetDisposeMethod(type);
+                if (null != msym) {
+                    var fn = ClassInfo.GetFullName(msym.ContainingType);
+                    CodeBuilder.AppendFormat("{0}callexterninstance({1}, {2}, \"Dispose\");", GetIndentString(), varName, fn);
+                    CodeBuilder.AppendLine();
+                }
             }
             else {
                 Log(node, "node.Declaration is null or node.Declaration.Variables is null, and node.Expression is null.");

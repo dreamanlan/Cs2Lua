@@ -1248,10 +1248,10 @@ namespace RoslynTool.CsToDsl
                         sb.AppendLine();
                         ++indent;
                         if (!string.IsNullOrEmpty(baseClass) && myselfDefinedBaseClass) {
-                            sb.AppendFormat("{0}callinstance(getinstance(SymbolKind.Field, this, \"base\"), \"ctor\");", GetIndentString(indent));
+                            sb.AppendFormat("{0}callinstance(getinstance(SymbolKind.Field, this, {1}, \"base\"), {2}, \"ctor\");", GetIndentString(indent), key, key);
                             sb.AppendLine();
                         }
-                        sb.AppendFormat("{0}callinstance(this, \"__ctor\");", GetIndentString(indent));
+                        sb.AppendFormat("{0}callinstance(this, {1}, \"__ctor\");", GetIndentString(indent), key);
                         sb.AppendLine();
                         --indent;
                         sb.AppendFormat("{0}}};", GetIndentString(indent));
@@ -1261,7 +1261,7 @@ namespace RoslynTool.CsToDsl
                     sb.AppendFormat("{0}__ctor = deffunc(0)args(this){{", GetIndentString(indent));
                     sb.AppendLine();
                     ++indent;
-                    sb.AppendFormat("{0}if(getinstance(SymbolKind.Field, this, \"__ctor_called\")){{", GetIndentString(indent));
+                    sb.AppendFormat("{0}if(getinstance(SymbolKind.Field, this, {1}, \"__ctor_called\")){{", GetIndentString(indent), key);
                     sb.AppendLine();
                     ++indent;
                     sb.AppendFormat("{0}return;", GetIndentString(indent));
@@ -1270,7 +1270,7 @@ namespace RoslynTool.CsToDsl
                     sb.AppendFormat("{0}}}else{{", GetIndentString(indent));
                     sb.AppendLine();
                     ++indent;
-                    sb.AppendFormat("{0}setinstance(SymbolKind.Field, this, \"__ctor_called\", true);", GetIndentString(indent));
+                    sb.AppendFormat("{0}setinstance(SymbolKind.Field, this, {1}, \"__ctor_called\", true);", GetIndentString(indent), key);
                     sb.AppendLine();
                     --indent;
                     sb.AppendFormat("{0}}};", GetIndentString(indent));

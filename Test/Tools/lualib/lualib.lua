@@ -830,11 +830,6 @@ end
 FuncInfoPool = createpool(
     function()
         return {
-            v2_zero_list = {},
-            v2_one_list = {},
-            v3_zero_list = {},
-            v3_one_list = {},
-            q_identity_list = {},
             v2_list = {},
             v3_list = {},
             v4_list = {},
@@ -843,33 +838,13 @@ FuncInfoPool = createpool(
             c32_list = {},
         }
     end)
-Vector2ZeroPool = createpool(
-    function()
-        return UnityEngine.Vector2.zero
-    end)
-Vector2OnePool = createpool(
-    function()
-        return UnityEngine.Vector2.one
-    end)
 Vector2Pool = createpool(
     function()
         return Slua.CreateClass("UnityEngine.Vector2", 0, 0)
     end)
-Vector3ZeroPool = createpool(
-    function()
-        return UnityEngine.Vector3.zero
-    end)
-Vector3OnePool = createpool(
-    function()
-        return UnityEngine.Vector3.one
-    end)
 Vector3Pool = createpool(
     function()
         return Slua.CreateClass("UnityEngine.Vector3", 0, 0, 0)
-    end)
-QuaternionIdentityPool = createpool(
-    function()
-        return UnityEngine.Quaternion.identity
     end)
 QuaternionPool = createpool(
     function()
@@ -931,14 +906,23 @@ function wrapoutexternstruct(funcInfo, v, classObj)
     elseif classObj == UnityEngine.Vector2 then
         local obj = Vector2Pool.Alloc()
         table.insert(funcInfo.v2_list, obj)
+        obj.x = 0
+        obj.y = 0
         return obj
     elseif classObj == UnityEngine.Vector3 then
         local obj = Vector3Pool.Alloc()
         table.insert(funcInfo.v3_list, obj)
+        obj.x = 0
+        obj.y = 0
+        obj.z = 0
         return obj
     elseif classObj == UnityEngine.Quaternion then
         local obj = QuaternionPool.Alloc()
         table.insert(funcInfo.q_list, obj)
+        obj.x = 0
+        obj.y = 0
+        obj.z = 0
+        obj.w = 0
         return obj
     end
     return classObj()
@@ -959,6 +943,7 @@ function wrapexternstruct(funcInfo, v, classObj)
             if v.y~=nil then
                 obj.y = v.y
             end
+            return obj
         elseif classObj == UnityEngine.Vector3 then
             local obj = Vector3Pool.Alloc()
             table.insert(funcInfo.v3_list, obj)
@@ -971,6 +956,7 @@ function wrapexternstruct(funcInfo, v, classObj)
             if v.z~=nil then
                 obj.z = v.z
             end
+            return obj
         elseif classObj == UnityEngine.Quaternion then
             local obj = QuaternionPool.Alloc()
             table.insert(funcInfo.q_list, obj)
@@ -986,6 +972,7 @@ function wrapexternstruct(funcInfo, v, classObj)
             if v.w~=nil then
                 obj.w = v.w
             end
+            return obj
         end
     end
     return v
@@ -993,28 +980,62 @@ end
 
 function getexternstaticstructmember(funcInfo, symKind, class, member)
     if class==UnityEngine.Vector2 and member=="zero" then
-        local obj = Vector2ZeroPool.Alloc()
-        table.insert(funcInfo.v2_zero_list, obj)
+        local obj = Vector2Pool.Alloc()
+        table.insert(funcInfo.v2_list, obj)
+        obj.x = 0
+        obj.y = 0
         return obj
     elseif class==UnityEngine.Vector2 and member=="one" then
-        local obj = Vector2OnePool.Alloc()
-        table.insert(funcInfo.v2_one_list, obj)
+        local obj = Vector2Pool.Alloc()
+        table.insert(funcInfo.v2_list, obj)
+        obj.x = 1
+        obj.y = 1
         return obj
     elseif class==UnityEngine.Vector3 and member=="zero" then
-        local obj = Vector3ZeroPool.Alloc()
-        table.insert(funcInfo.v3_zero_list, obj)
+        local obj = Vector3Pool.Alloc()
+        table.insert(funcInfo.v3_list, obj)
+        obj.x = 0
+        obj.y = 0
+        obj.z = 0
         return obj
     elseif class==UnityEngine.Vector3 and member=="one" then
-        local obj = Vector3OnePool.Alloc()
-        table.insert(funcInfo.v3_one_list, obj)
+        local obj = Vector3Pool.Alloc()
+        table.insert(funcInfo.v3_list, obj)
+        obj.x = 1
+        obj.y = 1
+        obj.z = 1
         return obj
     elseif class==UnityEngine.Quaternion and member=="identity" then
-        local obj = QuaternionIdentityPool.Alloc()
-        table.insert(funcInfo.q_identity_list, obj)
+        local obj = QuaternionPool.Alloc()
+        table.insert(funcInfo.q_list, obj)
+        obj.x = 0
+        obj.y = 0
+        obj.z = 0
+        obj.w = 1
         return obj
     else
         return class[member]
     end
+end
+
+function getexterninstancestructmember(funcInfo, symKind, obj, class, member)
+    return obj[member]
+end
+
+function callexterndelegationreturnstruct(funcInfo, funcobj, funcobjname, ...)
+    return funcobj(...)
+end
+
+function callexternextensionreturnstruct(funcInfo, class, member, ...)
+    return class[member](...)
+end
+
+function callexternstaticreturnstruct(funcInfo, class, member, ...)
+    return class[member](...)
+end
+
+function callexterninstancereturnstruct(funcInfo, obj, class, member, ...)
+    return obj[member](obj, ...)
 end
 
 function luainitialize()
@@ -1023,37 +1044,27 @@ end
 
 function luafinalize(funcInfo)
     if funcInfo then
-        for i,v in ipairs(funcInfo.v2_zero_list) do
-            Vector2ZeroPool.Recycle(v)
-            table.remove(funcInfo.v2_zero_list)
-        end
-        for i,v in ipairs(funcInfo.v2_one_list) do
-            Vector2OnePool.Recycle(v)
-            table.remove(funcInfo.v2_one_list)
-        end
         for i,v in ipairs(funcInfo.v2_list) do
             Vector2Pool.Recycle(v)
-            table.remove(funcInfo.v2_list)
-        end
-        for i,v in ipairs(funcInfo.v3_zero_list) do
-            Vector3ZeroPool.Recycle(v)
-            table.remove(funcInfo.v3_zero_list)
-        end
-        for i,v in ipairs(funcInfo.v3_one_list) do
-            Vector3OnePool.Recycle(v)
-            table.remove(funcInfo.v3_one_list)
         end
         for i,v in ipairs(funcInfo.v3_list) do
             Vector3Pool.Recycle(v)
-            table.remove(funcInfo.v3_list)
-        end
-        for i,v in ipairs(funcInfo.q_identity_list) do
-            QuaternionIdentityPool.Recycle(v)
-            table.remove(funcInfo.q_identity_list)
         end
         for i,v in ipairs(funcInfo.q_list) do
             QuaternionPool.Recycle(v)
-            table.remove(funcInfo.q_list)
+        end
+        local ct
+        ct = #(funcInfo.v2_list)
+        for i=1,ct do
+            funcInfo.v2_list[i]=nil
+        end
+        ct = #(funcInfo.v3_list)
+        for i=1,ct do
+            funcInfo.v3_list[i]=nil
+        end
+        ct = #(funcInfo.q_list)
+        for i=1,ct do
+            funcInfo.q_list[i]=nil
         end
         FuncInfoPool.Recycle(funcInfo)
     end
@@ -1132,7 +1143,7 @@ function wrapdelegation(handlers)
     return setmetatable(handlers, __mt_delegation)
 end
 
-local function __get_obj_string(obj)
+function __get_obj_string(obj)
     if type(obj) == "table" then
         local oldTblMeta = getmetatable(obj)
         setmetatable(obj, nil)
