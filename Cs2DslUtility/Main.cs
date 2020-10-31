@@ -13,24 +13,24 @@ namespace Cs2Dsl
     [System.AttributeUsage(System.AttributeTargets.All)]
     public sealed class RequireAttribute : System.Attribute
     {
-        public RequireAttribute(params string[] luaModuleNames)
+        public RequireAttribute(params string[] scriptModuleNames)
         {
-            m_LuaModuleNames = luaModuleNames;
+            m_ScriptModuleNames = scriptModuleNames;
         }
 
-        private string[] m_LuaModuleNames = null;
+        private string[] m_ScriptModuleNames = null;
     }
 
     [System.AttributeUsage(System.AttributeTargets.Method)]
     public sealed class TranslateToAttribute : System.Attribute
     {
-        public TranslateToAttribute(string luaModuleName, string targetMethodName)
+        public TranslateToAttribute(string scriptModuleName, string targetMethodName)
         {
-            m_LuaModuleName = luaModuleName;
+            m_ScriptModuleName = scriptModuleName;
             m_TargetMethodName = targetMethodName;
         }
 
-        private string m_LuaModuleName = string.Empty;
+        private string m_ScriptModuleName = string.Empty;
         private string m_TargetMethodName = string.Empty;
     }
 

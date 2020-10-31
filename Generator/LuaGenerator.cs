@@ -37,7 +37,7 @@ namespace Generator
             if (!Directory.Exists(s_OutPath)) {
                 Directory.CreateDirectory(s_OutPath);
             }
-            File.Copy(Path.Combine(s_ExePath, "lualib/lualib.lua"), Path.Combine(s_OutPath, "cs2lua__lualib." + s_Ext), true);
+            File.Copy(Path.Combine(s_ExePath, "lualib/syslib.lua"), Path.Combine(s_OutPath, "cs2lua__syslib." + s_Ext), true);
             var files = Directory.GetFiles(s_SrcPath, "*.dsl", SearchOption.TopDirectoryOnly);
             Action<string> handler = (file) => {
                 try {

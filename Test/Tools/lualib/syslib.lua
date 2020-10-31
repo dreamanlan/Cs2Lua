@@ -159,6 +159,47 @@ MethodKind = {
     LocalFunction = 17
 }
 
+g_LuaStr2CsStrCaches = {}
+g_CsStr2LuaStrCaches = {}
+
+function csstrtoluastr(str)
+    if str==nil then
+        return nil        
+    elseif type(str) == "string" then
+        return str
+    elseif type(str) == "userdata" then
+        local v = g_CsStr2LuaStrCaches[str]
+        if v==nil then
+            local s = tostring(str)
+            g_CsStr2LuaStrCaches[str] = s
+            return s
+        else
+            return v
+        end
+    else
+        return str
+    end
+end
+
+function luastrtocsstr(str)
+    if str==nil then
+        return nil
+    elseif type(str) == "string" then
+        local v = g_LuaStr2CsStrCaches[str]
+        if v==nil then
+            local s = System.String("ctor__Void__String_Arr_Char", str)
+            g_LuaStr2CsStrCaches[str] = s
+            return s
+        else
+            return v
+        end
+    elseif type(str) == "userdata" then
+        return str
+    else
+        return str
+    end
+end
+
 function printStack()
     Utility.Warn("{0}", debug.traceback())
 end
@@ -339,6 +380,9 @@ function luaunpack(arr)
 end
 
 function issignature(sig, method)
+    if type(sig) == "userdata" then
+        sig = csstrtoluastr(sig)
+    end
     if type(sig) == "string" then
         local l = string.find(sig, ":", 1, true)        
         local s,e = string.find(sig, method, 1 + 1, true)
@@ -2300,7 +2344,7 @@ function newdictionary(t, typeargs, typekinds, ctor, dict, ...)
             obj:Add(k, v)
         end
         local arg1,arg2 = ...
-        if type(arg1)=="string" then
+        if type(arg1)=="string" or type(csstrtoluastr(arg1))=="string" then
             arg1 = arg2
         end
         if arg1 and (type(arg1)=="table" or type(arg1)=="userdata") then
@@ -2317,11 +2361,11 @@ function newlist(t, typeargs, typekinds, ctor, list, ...)
     if list then
         local obj = setmetatable(list, {__index = __mt_index_of_array, __count = #list, __cs2lua_defined = true, __class = t})
         local arg1,arg2 = ...
-        if type(arg1)=="string" then
+        if type(arg1)=="string" or type(csstrtoluastr(arg1))=="string" then
             arg1 = arg2
         end
         if arg1 and (type(arg1)=="table" or type(arg1)=="userdata") then
-            lualog("arg1:{0} {1}", arg1, type(arg1))
+            --lualog("arg1:{0} {1}", arg1, type(arg1))
             local meta = getmetatable(arg1)
             if meta and not rawget(meta, "__cs2lua_defined") then
                 local typename = rawget(meta, "__typename")
@@ -2350,11 +2394,11 @@ function newcollection(t, typeargs, typekinds, ctor, coll, ...)
             obj:Add(v)
         end
         local arg1,arg2 = ...
-        if type(arg1)=="string" then
+        if type(arg1)=="string" or type(csstrtoluastr(arg1))=="string" then
             arg1 = arg2
         end
         if arg1 and (type(arg1)=="table" or type(arg1)=="userdata") then
-            lualog("arg1:{0} {1}", arg1, type(arg1))
+            --lualog("arg1:{0} {1}", arg1, type(arg1))
             local meta = getmetatable(arg1)
             if meta and not rawget(meta, "__cs2lua_defined") then
                 local typename = rawget(meta, "__typename")

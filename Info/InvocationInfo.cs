@@ -452,7 +452,7 @@ namespace RoslynTool.CsToDsl
                 }
             }
             TypeChecker.CheckInvocation(model, sym, Args, DefaultValueArgs, ArgConversions, CallerSyntaxNode, CallerMethodSymbol);
-            cs2dsl.OutputArgumentList(Args, DslToObjectArgs, DefaultValueArgs, DslToObjectDefArgs, GenericTypeArgs, ExternOverloadedMethodSignature, PostPositionGenericTypeArgs, ArrayToParams, useTypeNameString, node, MethodSymbol, ArgConversions.ToArray());
+            cs2dsl.OutputArgumentList(this, useTypeNameString, node);
             codeBuilder.Append(")");
         }
 

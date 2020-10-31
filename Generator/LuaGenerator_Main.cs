@@ -2168,6 +2168,9 @@ namespace Generator
                 else if (id == "objecttodsl") {
                     sb.Append("objecttolua");
                 }
+                else if (id == "dslstrtocsstr") {
+                    sb.Append("luastrtocsstr");
+                }
                 else if (id == "dslunpack") {
                     sb.Append("luaunpack");
                 }

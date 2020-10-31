@@ -923,7 +923,7 @@ namespace RoslynTool.CsToDsl
                 string fileName = BuildDslClass(classBuilder, pair.Key, pair.Value, false, dsllibRefs);
                 code.Append(classBuilder.ToString());
             }
-            sb.AppendLine("require(\"cs2dsl__lualib\");");
+            sb.AppendLine("require(\"cs2dsl__syslib\");");
             sb.AppendLine("require(\"cs2dsl__attributes\");");
             sb.AppendLine("require(\"cs2dsl__externenums\");");
             sb.AppendLine("require(\"cs2dsl__interfaces\");");
@@ -1012,7 +1012,7 @@ namespace RoslynTool.CsToDsl
 
             HashSet<string> refs = new HashSet<string>();
             if (isAlone) {
-                sb.AppendLine("require(\"cs2dsl__lualib\");");
+                sb.AppendLine("require(\"cs2dsl__syslib\");");
                 if (existAttributes)
                     sb.AppendLine("require(\"cs2dsl__attributes\");");
                 sb.AppendLine("require(\"cs2dsl__namespaces\");");
@@ -1063,21 +1063,21 @@ namespace RoslynTool.CsToDsl
 
                     if (string.IsNullOrEmpty(exportConstructor)) {
                         if(isValueType)
-                            sb.AppendFormat("{0}local(__cs2lua_newobj);__cs2lua_newobj = newstruct({1}, ", GetIndentString(indent), key);
+                            sb.AppendFormat("{0}local(__cs2dsl_newobj);__cs2dsl_newobj = newstruct({1}, ", GetIndentString(indent), key);
                         else
-                            sb.AppendFormat("{0}local(__cs2lua_newobj);__cs2lua_newobj = newobject({1}, ", GetIndentString(indent), key);
+                            sb.AppendFormat("{0}local(__cs2dsl_newobj);__cs2dsl_newobj = newobject({1}, ", GetIndentString(indent), key);
                         var namedTypeSym = csi.TypeSymbol;
                         CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
                         sb.Append(", \"ctor\", null, ...);");
                         sb.AppendLine();
-                        sb.AppendFormat("{0}return(__cs2lua_newobj);", GetIndentString(indent));
+                        sb.AppendFormat("{0}return(__cs2dsl_newobj);", GetIndentString(indent));
                         sb.AppendLine();
                     }
                     else {
                         //处理ref/out参数
                         if (exportConstructorInfo.ReturnParamNames.Count > 0) {
                             string retArgStr = string.Join(", ", exportConstructorInfo.ReturnParamNames.ToArray());
-                            sb.AppendFormat("local(__cs2lua_newobj, {0}); multiassign(__cs2lua_newobj", retArgStr);
+                            sb.AppendFormat("local(__cs2dsl_newobj, {0}); multiassign(__cs2dsl_newobj", retArgStr);
                             if (exportConstructorInfo.ReturnParamNames.Count > 0) {
                                 sb.Append(", ");
                                 sb.Append(retArgStr);
@@ -1090,19 +1090,19 @@ namespace RoslynTool.CsToDsl
                             CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
                             sb.AppendFormat(", \"{0}\", null, ...);", exportConstructor);
                             sb.AppendLine();
-                            sb.AppendFormat("{0}return(__cs2lua_newobj);", GetIndentString(indent));
+                            sb.AppendFormat("{0}return(__cs2dsl_newobj);", GetIndentString(indent));
                             sb.AppendLine();
                         }
                         else {
                             if(isValueType)
-                                sb.AppendFormat("{0}local(__cs2lua_newobj);__cs2lua_newobj = newstruct({1}, ", GetIndentString(indent), key);
+                                sb.AppendFormat("{0}local(__cs2dsl_newobj);__cs2dsl_newobj = newstruct({1}, ", GetIndentString(indent), key);
                             else
-                                sb.AppendFormat("{0}local(__cs2lua_newobj);__cs2lua_newobj = newobject({1}, ", GetIndentString(indent), key);
+                                sb.AppendFormat("{0}local(__cs2dsl_newobj);__cs2dsl_newobj = newobject({1}, ", GetIndentString(indent), key);
                             var namedTypeSym = csi.TypeSymbol;
                             CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
                             sb.AppendFormat(", \"{0}\", null, ...);", exportConstructor);
                             sb.AppendLine();
-                            sb.AppendFormat("{0}return(__cs2lua_newobj);", GetIndentString(indent));
+                            sb.AppendFormat("{0}return(__cs2dsl_newobj);", GetIndentString(indent));
                             sb.AppendLine();
                         }
                     }
