@@ -477,11 +477,7 @@ function setexterninstanceindexer(callerClass, typeargs, typekinds, obj, class, 
     return nil
 end
 
-function invokeoperator(rettype, class, method, ...)
-    return nil
-end
-
-function invokeexternoperator(rettype, class, method, ...)
+function invokeexternoperatorreturnstruct(funcInfo, rettype, class, method, ...)
     local arg1,arg2,arg3 = ...
     local marg1 = arg1 and getmetatable(arg1)
     local marg2 = arg2 and getmetatable(arg2)
@@ -524,37 +520,43 @@ function invokeexternoperator(rettype, class, method, ...)
         end
         if class == UnityEngine.Vector4 then
             if t == "Vector3" then
-                return Slua.CreateClass("UnityEngine.Vector4", arg2.x, arg2.y, arg2.z, 0)
+                local v4 = UnityEngine.Vector4.New(arg2.x,arg2.y,arg2.z)
+                table.insert(funcInfo.v4_list, v4)
+                return v4
             elseif t == "Vector4" then
                 if rettype == UnityEngine.Vector3 then
-                    return Slua.CreateClass("UnityEngine.Vector3", arg2.x, arg2.y, arg2.z)
+                    local v3 = UnityEngine.Vector3.New(arg2.x,arg2.y,arg2.z)
+                    table.insert(funcInfo.v3_list, v3)
+                    return v3
                 else
-                    return Slua.CreateClass("UnityEngine.Vector2", arg2.x, arg2.y)
+                    local v2 = UnityEngine.Vector2.New(arg2.x,arg2.y)
+                    table.insert(funcInfo.v2_list, v2)
+                    return v2
                 end
             end
         elseif class == UnityEngine.Vector2 then
             if t == "Vector3" then
-                return Slua.CreateClass("UnityEngine.Vector2", arg2.x, arg2.y)
+                local v2 = UnityEngine.Vector2.New(arg2.x,arg2.y)
+                table.insert(funcInfo.v2_list, v2)
+                return v2
             else
-                return Slua.CreateClass("UnityEngine.Vector3", arg2.x, arg2.y, 0)
+                local v3 = UnityEngine.Vector3.New(arg2.x,arg2.y,0)
+                table.insert(funcInfo.v3_list, v3)
+                return v3
             end
         elseif class == UnityEngine.Color32 then
             if t == "Color32" then
-                return Slua.CreateClass(
-                    "UnityEngine.Color",
-                    arg2.r / 255.0,
-                    arg2.g / 255.0,
-                    arg2.b / 255.0,
-                    arg2.a / 255.0
-                )
+                local c = UnityEngine.Color.New(arg2.r/255.0,arg2.g/255.0,arg2.b/255.0,arg2.a/255.0)
+                table.insert(funcInfo.c_list, c)
+                return c
             else
-                return Slua.CreateClass(
-                    "UnityEngine.Color32",
-                    math.floor(arg2.r * 255),
-                    math.floor(arg2.g * 255),
-                    math.floor(arg2.b * 255),
-                    math.floor(arg2.a * 255)
-                )
+                local c32 = Color32Pool.Alloc()
+                table.insert(funcInfo.c32_list, c32)
+                c32.x = arg2.r * 255
+                c32.y = arg2.g * 255
+                c32.z = arg2.b * 255
+                c32.w = arg2.a * 255
+                return c32
             end
         elseif class == BoxedValue then
             return class[method](arg1,arg2)
@@ -573,21 +575,41 @@ function invokeexternoperator(rettype, class, method, ...)
                 t2 = rawget(marg3, "__typename")
             end
             if t1=="Vector2" and type(arg3)=="number" then
-                return Slua.CreateClass("UnityEngine.Vector2", arg2.x*arg3, arg2.y*arg3)
+                local v2 = UnityEngine.Vector2.New(arg2.x*arg3,arg2.y*arg3)
+                table.insert(funcInfo.v2_list, v2)
+                return v2
             elseif type(arg2)=="number" and t2=="Vector2" then
-                return Slua.CreateClass("UnityEngine.Vector2", arg3.x*arg2, arg3.y*arg2)
+                local v2 = UnityEngine.Vector2.New(arg3.x*arg2,arg3.y*arg2)
+                table.insert(funcInfo.v2_list, v2)
+                return v2
+            elseif t1=="Vector2" and type(arg3)=="Vector2" then
+                local v2 = UnityEngine.Vector2.New(arg2.x*arg3.x,arg2.y*arg3.y)
+                table.insert(funcInfo.v2_list, v2)
+                return v2
             elseif t1=="Vector3" and type(arg3)=="number" then
-                return Slua.CreateClass("UnityEngine.Vector3", arg2.x*arg3, arg2.y*arg3, arg2.z*arg3)
+                local v3 = UnityEngine.Vector3.New(arg2.x*arg3,arg2.y*arg3,arg2.z*arg3)
+                table.insert(funcInfo.v3_list, v3)
+                return v3
             elseif type(arg2)=="number" and t2=="Vector3" then
-                return Slua.CreateClass("UnityEngine.Vector3", arg3.x*arg2, arg3.y*arg2, arg3.z*arg2)
+                local v3 = UnityEngine.Vector3.New(arg3.x*arg2,arg3.y*arg2,arg3.z*arg2)
+                table.insert(funcInfo.v3_list, v3)
+                return v3
             elseif t1=="Vector4" and type(arg3)=="number" then
-                return Slua.CreateClass("UnityEngine.Vector4", arg2.x*arg3, arg2.y*arg3, arg2.z*arg3, arg2.w*arg3)
+                local v4 = UnityEngine.Vector4.New(arg2.x*arg3,arg2.y*arg3,arg2.z*arg3,arg2.w*arg3)
+                table.insert(funcInfo.v4_list, v4)
+                return v4
             elseif type(arg2)=="number" and t2=="Vector4" then
-                return Slua.CreateClass("UnityEngine.Vector4", arg3.x*arg2, arg3.y*arg2, arg3.z*arg2, arg3.w*arg2)
+                local v4 = UnityEngine.Vector4.New(arg3.x*arg2,arg3.y*arg2,arg3.z*arg2,arg3.w*arg2)
+                table.insert(funcInfo.v4_list, v4)
+                return v4
             elseif t1=="Color" and type(arg3)=="number" then
-                return Slua.CreateClass("UnityEngine.Color", arg2.r*arg3, arg2.g*arg3, arg2.b*arg3, arg2.a*arg3)
+                local c = UnityEngine.Color.New(arg2.r*arg3,arg2.g*arg3,arg2.b*arg3,arg2.a*arg3)
+                table.insert(funcInfo.c_list, c)
+                return c
             elseif type(arg2)=="number" and t2=="Color" then
-                return Slua.CreateClass("UnityEngine.Color", arg3.r*arg2, arg3.g*arg2, arg3.b*arg2, arg3.a*arg2)
+                local c = UnityEngine.Color.New(arg3.r*arg2,arg3.g*arg2,arg3.b*arg2,arg3.a*arg2)
+                table.insert(funcInfo.c_list, c)
+                return c
             else
                 return class[method](...)
             end
@@ -609,16 +631,102 @@ function invokeexternoperator(rettype, class, method, ...)
                 t2 = rawget(marg3, "__typename")
             end
             if t1=="Vector2" and type(arg3)=="number" then
-                return Slua.CreateClass("UnityEngine.Vector2", arg2.x/arg3, arg2.y/arg3)
+                local v2 = Vector2Pool.Alloc()
+                table.insert(funcInfo.v2_list, v2)
+                v2.x = arg2.x/arg3
+                v2.y = arg2.y/arg3
+                return v2
             elseif t1=="Vector3" and type(arg3)=="number" then
-                return Slua.CreateClass("UnityEngine.Vector3", arg2.x/arg3, arg2.y/arg3, arg2.z/arg3)
+                local v3 = Vector3Pool.Alloc()
+                table.insert(funcInfo.v3_list, v3)
+                v3.x = arg2.x/arg3
+                v3.y = arg2.y/arg3
+                v3.z = arg2.z/arg3
+                return v3
             elseif t1=="Vector4" and type(arg3)=="number" then
-                return Slua.CreateClass("UnityEngine.Vector4", arg2.x/arg3, arg2.y/arg3, arg2.z/arg3, arg2.w/arg3)
+                local v4 = Vector4Pool.Alloc()
+                table.insert(funcInfo.v4_list, v4)
+                v4.x = arg2.x/arg3
+                v4.y = arg2.y/arg3
+                v4.z = arg2.z/arg3
+                v4.w = arg2.w/arg3
+                return v4
             elseif t1=="Color" and type(arg3)=="number" then
-                return Slua.CreateClass("UnityEngine.Color", arg2.r/arg3, arg2.g/arg3, arg2.b/arg3, arg2.a/arg3)
+                local c = ColorPool.Alloc()
+                table.insert(funcInfo.c_list, c)
+                c.x = arg2.r/arg3
+                c.y = arg2.g/arg3
+                c.z = arg2.b/arg3
+                c.w = arg2.a/arg3
+                return c
             else
                 return class[method](...)
             end
+        elseif arg1~=nil and arg2~=nil then
+            if type(arg1)=="number" and type(arg2)=="number" then
+                return arg1 / arg2
+            else
+                return class[method](...)
+            end
+        end
+    end
+    if method then        
+        return class[method](...)
+    else
+        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
+    end
+    return nil
+end
+
+function invokeoperator(rettype, class, method, ...)
+    return class[method](...)
+end
+
+function invokeexternoperator(rettype, class, method, ...)
+    local arg1,arg2,arg3 = ...
+    if rettype==System.Boolean and class==System.Type then
+        if method=="op_Equality" then
+            return arg1==arg2
+        elseif method=="op_Inequality" then
+            return arg1~=arg2
+        end
+    end
+    if arg1==nil and method == "op_Equality" then
+        return Slua.IsNull(arg2)
+    elseif arg1==nil and method == "op_Inequality" then
+        return not Slua.IsNull(arg2)
+    elseif arg1~=nil and arg2==nil and method == "op_Equality" then
+        if issignature(arg1, method) then
+            return Slua.IsNull(arg3)
+        else
+            return Slua.IsNull(arg1)
+        end
+    elseif arg1~=nil and arg2==nil and method == "op_Inequality" then
+        if issignature(arg1, method) then
+            return not Slua.IsNull(arg3)
+        else
+            return not Slua.IsNull(arg1)
+        end
+    elseif method == "op_Implicit" then
+        if class == BoxedValue then
+            return class[method](arg1,arg2)
+        else
+            --这里就不仔细判断了，就假定是UnityEngine.Object子类了
+            return not Slua.IsNull(arg1)
+        end
+    elseif method == "op_Multiply" then
+        if arg1~=nil and arg2~=nil and arg3~=nil then
+            return class[method](...)
+        elseif arg1~=nil and arg2~=nil then
+            if type(arg1)=="number" and type(arg2)=="number" then
+                return arg1 * arg2
+            else
+                return class[method](...)
+            end
+        end
+    elseif method == "op_Division" then
+        if arg1~=nil and arg2~=nil and arg3~=nil then
+            return class[method](...)
         elseif arg1~=nil and arg2~=nil then
             if type(arg1)=="number" and type(arg2)=="number" then
                 return arg1 / arg2
@@ -884,15 +992,27 @@ FuncInfoPool = createpool(
     end)
 Vector2Pool = createpool(
     function()
-        return Slua.CreateClass("UnityEngine.Vector2", 0, 0)
+        return UnityEngine.Vector2.NewFunc()
     end)
 Vector3Pool = createpool(
     function()
-        return Slua.CreateClass("UnityEngine.Vector3", 0, 0, 0)
+        return UnityEngine.Vector3.NewFunc()
+    end)
+Vector4Pool = createpool(
+    function()
+        return UnityEngine.Vector4.NewFunc()
     end)
 QuaternionPool = createpool(
     function()
-        return Slua.CreateClass("UnityEngine.Quaternion", 0, 0, 0, 1)
+        return UnityEngine.Quaternion.NewFunc()
+    end)
+ColorPool = createpool(
+    function()
+        return UnityEngine.Color.NewFunc()
+    end)
+Color32Pool = createpool(
+    function()
+        return Slua.CreateClass("UnityEngine.Color32", 0, 0, 0, 0)
     end)
 
 function wrapenumerable(func)
@@ -948,26 +1068,31 @@ function wrapoutexternstruct(funcInfo, v, classObj)
     if classObj == System.Collections.Generic.KeyValuePair_TKey_TValue then
         return nil
     elseif classObj == UnityEngine.Vector2 then
-        local obj = Vector2Pool.Alloc()
+        local obj = UnityEngine.Vector2.New(0,0)
         table.insert(funcInfo.v2_list, obj)
-        obj.x = 0
-        obj.y = 0
         return obj
     elseif classObj == UnityEngine.Vector3 then
-        local obj = Vector3Pool.Alloc()
+        local obj = UnityEngine.Vector3.New(0,0,0)
         table.insert(funcInfo.v3_list, obj)
-        obj.x = 0
-        obj.y = 0
-        obj.z = 0
+        return obj
+    elseif classObj == UnityEngine.Vector4 then
+        local obj = UnityEngine.Vector4.New(0,0,0,1)
+        table.insert(funcInfo.v4_list, obj)
         return obj
     elseif classObj == UnityEngine.Quaternion then
-        local obj = QuaternionPool.Alloc()
+        local obj = UnityEngine.Quaternion.New(0,0,0,1)
         table.insert(funcInfo.q_list, obj)
-        obj.x = 0
-        obj.y = 0
-        obj.z = 0
-        obj.w = 0
         return obj
+    elseif classObj == UnityEngine.Color then
+        local obj = UnityEngine.Color.New(0,0,0,1)
+        table.insert(funcInfo.c_list, obj)
+        return obj
+    elseif classObj == UnityEngine.Color32 then
+        local obj = Color32Pool.Alloc()
+        table.insert(funcInfo.c32_list, obj)
+        return obj
+    else
+        lualog("need add handler for wrapoutexternstruct {0}", getmetatable(classObj).__typename)
     end
     return classObj()
 end
@@ -979,44 +1104,35 @@ end
 function wrapexternstruct(funcInfo, v, classObj)
     if v then
         if classObj == UnityEngine.Vector2 then
-            local obj = Vector2Pool.Alloc()
+            local obj = UnityEngine.Vector2.New(v.x,v.y)
             table.insert(funcInfo.v2_list, obj)
-            if v.x~=nil then
-                obj.x = v.x
-            end
-            if v.y~=nil then
-                obj.y = v.y
-            end
             return obj
         elseif classObj == UnityEngine.Vector3 then
-            local obj = Vector3Pool.Alloc()
+            local obj = UnityEngine.Vector3.New(v.x,v.y,v.z)
             table.insert(funcInfo.v3_list, obj)
-            if v.x~=nil then
-                obj.x = v.x
-            end
-            if v.y~=nil then
-                obj.y = v.y
-            end
-            if v.z~=nil then
-                obj.z = v.z
-            end
+            return obj
+        elseif classObj == UnityEngine.Vector4 then
+            local obj = UnityEngine.Vector4.New(v.x,v.y,v.z,v.w)
+            table.insert(funcInfo.v4_list, obj)
             return obj
         elseif classObj == UnityEngine.Quaternion then
-            local obj = QuaternionPool.Alloc()
+            local obj = UnityEngine.Quaternion.New(v.x,v.y,v.z,v.w)
             table.insert(funcInfo.q_list, obj)
-            if v.x~=nil then
-                obj.x = v.x
-            end
-            if v.y~=nil then
-                obj.y = v.y
-            end
-            if v.z~=nil then
-                obj.z = v.z
-            end
-            if v.w~=nil then
-                obj.w = v.w
-            end
             return obj
+        elseif classObj == UnityEngine.Color then
+            local obj = UnityEngine.Color.New(v.r,v.g,v.b,v.a)
+            table.insert(funcInfo.c_list, obj)
+            return obj
+        elseif classObj == UnityEngine.Color32 then
+            local obj = Color32Pool.Alloc()
+            obj.r = v.r or 0
+            obj.g = v.g or 0
+            obj.b = v.b or 0
+            obj.a = v.a or 0
+            table.insert(funcInfo.c_list, obj)
+            return obj
+        else
+            lualog("need add handler for wrapexternstruct {0}", getmetatable(classObj).__typename)
         end
     end
     return v
@@ -1024,61 +1140,61 @@ end
 
 function getexternstaticstructmember(funcInfo, symKind, class, member)
     if class==UnityEngine.Vector2 and member=="zero" then
-        local obj = Vector2Pool.Alloc()
+        local obj = UnityEngine.Vector2.New(0,0)
         table.insert(funcInfo.v2_list, obj)
-        obj.x = 0
-        obj.y = 0
         return obj
     elseif class==UnityEngine.Vector2 and member=="one" then
-        local obj = Vector2Pool.Alloc()
+        local obj = UnityEngine.Vector2.New(1,1)
         table.insert(funcInfo.v2_list, obj)
-        obj.x = 1
-        obj.y = 1
         return obj
     elseif class==UnityEngine.Vector3 and member=="zero" then
-        local obj = Vector3Pool.Alloc()
+        local obj = UnityEngine.Vector3.New(0,0,0)
         table.insert(funcInfo.v3_list, obj)
-        obj.x = 0
-        obj.y = 0
-        obj.z = 0
         return obj
     elseif class==UnityEngine.Vector3 and member=="one" then
-        local obj = Vector3Pool.Alloc()
+        local obj = UnityEngine.Vector3.New(1,1,1)
         table.insert(funcInfo.v3_list, obj)
-        obj.x = 1
-        obj.y = 1
-        obj.z = 1
+        return obj
+    elseif class==UnityEngine.Vector4 and member=="zero" then
+        local obj = UnityEngine.Vector4.New(0,0,0,0)
+        table.insert(funcInfo.v4_list, obj)
+        return obj
+    elseif class==UnityEngine.Vector4 and member=="one" then
+        local obj = UnityEngine.Vector4.New(1,1,1,1)
+        table.insert(funcInfo.v4_list, obj)
         return obj
     elseif class==UnityEngine.Quaternion and member=="identity" then
-        local obj = QuaternionPool.Alloc()
+        local obj = UnityEngine.Quaternion.New(0,0,0,1)
         table.insert(funcInfo.q_list, obj)
-        obj.x = 0
-        obj.y = 0
-        obj.z = 0
-        obj.w = 1
         return obj
     else
+        lualog("need add handler for getexternstaticstructmember {0}.{1}", getmetatable(class).__typename, member)
         return class[member]
     end
 end
 
 function getexterninstancestructmember(funcInfo, symKind, obj, class, member)
+    lualog("need add handler for getexterninstancestructmember {0}.{1}", getmetatable(class).__typename, member)
     return obj[member]
 end
 
 function callexterndelegationreturnstruct(funcInfo, funcobj, funcobjname, ...)
+    lualog("need add handler for callexterndelegationreturnstruct {0}", funcobjname)
     return funcobj(...)
 end
 
 function callexternextensionreturnstruct(funcInfo, class, member, ...)
+    lualog("need add handler for callexternextensionreturnstruct {0}.{1}", getmetatable(class).__typename, member)
     return class[member](...)
 end
 
 function callexternstaticreturnstruct(funcInfo, class, member, ...)
+    lualog("need add handler for callexternstaticreturnstruct {0}.{1}", getmetatable(class).__typename, member)
     return class[member](...)
 end
 
 function callexterninstancereturnstruct(funcInfo, obj, class, member, ...)
+    lualog("need add handler for callexterninstancereturnstruct {0}.{1}", getmetatable(class).__typename, member)
     return obj[member](obj, ...)
 end
 
@@ -3366,49 +3482,35 @@ function newexternstruct(funcInfo, class, typeargs, typekinds, initializer, ...)
         return {Key = arg1, Value = arg2}
     end
     if class == UnityEngine.Vector2 then
-        obj = Vector2Pool.Alloc()
-        table.insert(funcInfo.v2_list, obj)
         local x,y = ...
-        if x~=nil then
-            obj.x = x
-        end
-        if y~=nil then
-            obj.y = y
-        end
+        obj = UnityEngine.Vector2.New(x,y)
+        table.insert(funcInfo.v2_list, obj)
     elseif class == UnityEngine.Vector3 then
-        obj = Vector3Pool.Alloc()
-        table.insert(funcInfo.v3_list, obj)
         local _,x,y,z = ...
-        if x~=nil then
-            obj.x = x
-        end
-        if y~=nil then
-            obj.y = y
-        end
-        if z~=nil then
-            obj.z = z
-        end
+        obj = UnityEngine.Vector3.New(x,y,z)
+        table.insert(funcInfo.v3_list, obj)
     elseif class == UnityEngine.Vector4 then
-        obj = class(...)
+        local _,x,y,z,w = ...
+        obj = UnityEngine.Vector4.New(x,y,z,w)
+        table.insert(funcInfo.v4_list, obj)
     elseif class == UnityEngine.Quaternion then
-        obj = QuaternionPool.Alloc()
-        table.insert(funcInfo.q_list, obj)
         local x,y,z,w = ...
-        if x~=nil then
-            obj.x = x
-        end
-        if y~=nil then
-            obj.y = y
-        end
-        if z~=nil then
-            obj.z = z
-        end
-        if w~=nil then
-            obj.w = w
-        end
+        obj = UnityEngine.Quaternion.New(x,y,z,w)
+        table.insert(funcInfo.q_list, obj)
     elseif class == UnityEngine.Color then
-        obj = class(...)
+        local _,r,g,b,a = ...
+        obj = UnityEngine.Color.New(r,g,b,a)
+        table.insert(funcInfo.c_list, obj)
+    elseif class == UnityEngine.Color32 then
+        local r,g,b,a = ...
+        obj = Color32Pool.Alloc()
+        obj.r=r or 0
+        obj.g=g or 0
+        obj.b=b or 0
+        obj.a=a or 1
+        table.insert(funcInfo.c32_list, obj)
     else
+        lualog("need add handler for newexternstruct {0}", getmetatable(class).__typename)
         obj = class(...)
     end
     if obj and initializer then

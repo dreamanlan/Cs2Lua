@@ -293,7 +293,7 @@ namespace RoslynTool.CsToDsl
             IMethodSymbol sym = MethodSymbol;
             string mname = cs2dsl.NameMangling(IsExtensionMethod && !IsExternMethod && null != sym.ReducedFrom ? sym.ReducedFrom : sym);
             string prestr = string.Empty;
-            bool externReturnStruct = IsExternMethod && !sym.ReturnsVoid && sym.ReturnType.TypeKind == TypeKind.Struct;
+            bool externReturnStruct = IsExternMethod && !sym.ReturnsVoid && sym.ReturnType.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(sym.ReturnType);
             if (isMemberAccess) {
                 string fnOfIntf = string.Empty;
                 var expOper = model.GetOperationEx(exp);

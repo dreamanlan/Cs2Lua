@@ -1197,7 +1197,9 @@ namespace Generator
             else if (id == "newobject" || id == "newstruct" || id == "newexternobject" || id == "newexternstruct" ||
                 id == "wrapoutstruct" || id == "wrapoutexternstruct" || id == "wrapstruct" || id == "wrapexternstruct" ||
                 id == "getexternstaticstructmember" || id == "getexterninstancestructmember" ||
-                id == "callexterndelegationreturnstruct" || id == "callexternextensionreturnstruct" || id == "callexternstaticreturnstruct" || id == "callexterninstancereturnstruct") {
+                id == "callexterndelegationreturnstruct" || id == "callexternextensionreturnstruct" || 
+                id == "callexternstaticreturnstruct" || id == "callexterninstancereturnstruct" ||
+                id == "invokeexternoperatorreturnstruct") {
                 sb.Append(id);
                 sb.Append("(__cs2lua_func_info");
                 if (data.GetParamNum() > 0)

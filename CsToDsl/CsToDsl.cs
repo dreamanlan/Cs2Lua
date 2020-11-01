@@ -935,8 +935,9 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.Append(")");
             }
             else {
+                bool externReturnStruct = !ii.MethodSymbol.ReturnsVoid && ii.MethodSymbol.ReturnType.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(ii.MethodSymbol.ReturnType);
                 string method = ii.MethodSymbol.Name;
-                CodeBuilder.AppendFormat("invokeexternoperator({0}, {1}, ", ClassInfo.GetFullName(ii.MethodSymbol.ReturnType), ii.GenericClassKey);
+                CodeBuilder.AppendFormat("{0}({1}, {2}, ", externReturnStruct ? "invokeexternoperatorreturnstruct" : "invokeexternoperator", ClassInfo.GetFullName(ii.MethodSymbol.ReturnType), ii.GenericClassKey);
                 CodeBuilder.AppendFormat("\"{0}\"", method);
                 CodeBuilder.Append(", ");
                 OutputArgumentList(ii, false, node);
@@ -952,8 +953,9 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.Append(", ");
             }
             else {
+                bool externReturnStruct = !ii.MethodSymbol.ReturnsVoid && ii.MethodSymbol.ReturnType.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(ii.MethodSymbol.ReturnType);
                 string method = ii.MethodSymbol.Name;
-                CodeBuilder.AppendFormat("invokeexternoperator({0}, {1}, ", ClassInfo.GetFullName(ii.MethodSymbol.ReturnType), ii.GenericClassKey);
+                CodeBuilder.AppendFormat("{0}({1}, {2}, ", externReturnStruct ? "invokeexternoperatorreturnstruct" : "invokeexternoperator", ClassInfo.GetFullName(ii.MethodSymbol.ReturnType), ii.GenericClassKey);
                 CodeBuilder.AppendFormat("\"{0}\"", method);
                 CodeBuilder.Append(", ");
                 if (!string.IsNullOrEmpty(ii.ExternOverloadedMethodSignature)) {

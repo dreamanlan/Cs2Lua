@@ -171,10 +171,17 @@ do
     return v1~=v2
   end
 
-	Vector3.New=function (x,y,z)
-		local v={x or 0,y or 0,z or 0}
+	Vector3.NewFunc=function ()
+		local v={0,0,0}
 		setmetatable(v,I)
 		return v
+	end
+	Vector3.New=function(x,y,z)
+	  local v = Vector3Pool.Alloc()
+	  v.x = x or 0
+	  v.y = y or 0
+	  v.z = z or 0
+	  return v
 	end
 
 	Vector3.__call = function(sig,t,x,y,z)
@@ -591,10 +598,17 @@ do
 		return string.format('Color(%f,%f,%f,%f)',self[1],self[2],self[3],self[4])
 	end
 
-	function Color.New(r,g,b,a)
-		a=a or 1
-		local c={r or 0,g or 0,b or 0,a or 0}
+  function Color.NewFunc()
+		local c={0,0,0,1}
 		setmetatable(c,I)
+		return c
+	end
+	function Color.New(r,g,b,a)
+		local c = ColorPool.Alloc()
+		c.r=r or 0
+		c.g=g or 0
+		c.b=b or 0
+		c.a=a or 1
 		return c
 	end
 	
@@ -757,9 +771,15 @@ do
 		return string.format('Vector2(%f,%f)',self[1],self[2])
 	end
 
-	function Vector2.New(x,y)
-		local v={x or 0,y or 0}
+  function Vector2.NewFunc()
+		local v={0,0}
 		setmetatable(v,I)
+		return v
+	end
+	function Vector2.New(x,y)
+		local v=Vector2Pool.Alloc()
+		v.x=x or 0
+		v.y=y or 0
 		return v
 	end
 	
@@ -810,7 +830,13 @@ do
 	end
 
 	function I.__mul( a,b )
-		return Vector2.New(a[1]*b,a[2]*b)
+	  if type(a)=="number" then
+	    return Vector2.New(a*b[1],a*b[2])
+	  elseif type(b)=="number" then
+		  return Vector2.New(a[1]*b,a[2]*b)
+		else
+		  return Vector2.New(a[1]*b[1]+a[2]*b[2])
+		end
 	end
 
 	function I.__div( a,b )
@@ -900,10 +926,18 @@ do
 	I.__tostring = function(self)
 		return string.format('Vector4(%f,%f,%f,%f)',self[1],self[2],self[3],self[4])
 	end
-
-	function Vector4.New(x,y,z,w)
-		local v={x or 0,y or 0,z or 0,w or 0}
+	
+  function Vector4.NewFunc()
+		local v={0,0,0,0}
 		setmetatable(v,I)
+		return v
+	end
+	function Vector4.New(x,y,z,w)
+		local v=Vector4Pool.Alloc()
+		v.x=x or 0
+		v.y=y or 0
+		v.z=z or 0
+		v.w=w or 0
 		return v
 	end
 	
@@ -1091,10 +1125,17 @@ do
 		return Quaternion.Dot(a,b)>0.999999
 	end
 
-
-	function Quaternion.New(x,y,z,w)
-		local q={x or 0,y or 0,z or 0,w or 0}
+  function Quaternion.NewFunc()
+		local q={0,0,0,0}
 		setmetatable(q,I)
+		return q
+	end
+	function Quaternion.New(x,y,z,w)
+		local q=QuaternionPool.Alloc()
+		q.x=x or 0
+		q.y=y or 0
+		q.z=z or 0
+		q.w=w or 1
 		return q
 	end
 	
