@@ -1092,7 +1092,7 @@ function wrapoutexternstruct(funcInfo, v, classObj)
         table.insert(funcInfo.c32_list, obj)
         return obj
     else
-        lualog("need add handler for wrapoutexternstruct {0}", getmetatable(classObj).__typename)
+        lualog("need add handler for wrapoutexternstruct {0}", getclasstypename(classObj))
     end
     return classObj()
 end
@@ -1132,7 +1132,7 @@ function wrapexternstruct(funcInfo, v, classObj)
             table.insert(funcInfo.c_list, obj)
             return obj
         else
-            lualog("need add handler for wrapexternstruct {0}", getmetatable(classObj).__typename)
+            lualog("need add handler for wrapexternstruct {0}", getclasstypename(classObj))
         end
     end
     return v
@@ -1168,13 +1168,13 @@ function getexternstaticstructmember(funcInfo, symKind, class, member)
         table.insert(funcInfo.q_list, obj)
         return obj
     else
-        lualog("need add handler for getexternstaticstructmember {0}.{1}", getmetatable(class).__typename, member)
+        lualog("need add handler for getexternstaticstructmember {0}.{1}", getclasstypename(class), member)
         return class[member]
     end
 end
 
 function getexterninstancestructmember(funcInfo, symKind, obj, class, member)
-    lualog("need add handler for getexterninstancestructmember {0}.{1}", getmetatable(class).__typename, member)
+    lualog("need add handler for getexterninstancestructmember {0}.{1}", getclasstypename(class), member)
     return obj[member]
 end
 
@@ -1184,17 +1184,17 @@ function callexterndelegationreturnstruct(funcInfo, funcobj, funcobjname, ...)
 end
 
 function callexternextensionreturnstruct(funcInfo, class, member, ...)
-    lualog("need add handler for callexternextensionreturnstruct {0}.{1}", getmetatable(class).__typename, member)
+    lualog("need add handler for callexternextensionreturnstruct {0}.{1}", getclasstypename(class), member)
     return class[member](...)
 end
 
 function callexternstaticreturnstruct(funcInfo, class, member, ...)
-    lualog("need add handler for callexternstaticreturnstruct {0}.{1}", getmetatable(class).__typename, member)
+    lualog("need add handler for callexternstaticreturnstruct {0}.{1}", getclasstypename(class), member)
     return class[member](...)
 end
 
 function callexterninstancereturnstruct(funcInfo, obj, class, member, ...)
-    lualog("need add handler for callexterninstancereturnstruct {0}.{1}", getmetatable(class).__typename, member)
+    lualog("need add handler for callexterninstancereturnstruct {0}.{1}", getclasstypename(class), member)
     return obj[member](obj, ...)
 end
 
@@ -2877,12 +2877,17 @@ function getclassfullname(t)
             if rawget(t, "__cs2lua_defined") then
                 return rawget(t, "__cs2lua_fullname")
             else
-                local name = rawget(t, "__fullname")
-                local ix = string.find(name, ",")
-                if ix == nil then
-                    return name
+                local meta = getmetatable(t)
+                if meta then
+                    local name = rawget(meta, "__fullname")
+                    local ix = string.find(name, ",")
+                    if ix == nil then
+                        return name
+                    else
+                        return string.sub(name, 1, ix - 1)
+                    end
                 else
-                    return string.sub(name, 1, ix - 1)
+                    return nil
                 end
             end
         end
@@ -2900,7 +2905,12 @@ function getclasstypename(t)
             if rawget(t, "__cs2lua_defined") then
                 return rawget(t, "__cs2lua_typename")
             else
-                return rawget(t, "__typename")
+                local meta = getmetatable(t)
+                if meta then
+                    return rawget(meta, "__typename")
+                else
+                    return nil
+                end
             end
         end
     else
@@ -3510,7 +3520,7 @@ function newexternstruct(funcInfo, class, typeargs, typekinds, initializer, ...)
         obj.a=a or 1
         table.insert(funcInfo.c32_list, obj)
     else
-        lualog("need add handler for newexternstruct {0}", getmetatable(class).__typename)
+        lualog("need add handler for newexternstruct {0}", getclasstypename(class))
         obj = class(...)
     end
     if obj and initializer then
