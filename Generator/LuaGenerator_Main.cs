@@ -1199,7 +1199,9 @@ namespace Generator
                 id == "getexternstaticstructmember" || id == "getexterninstancestructmember" ||
                 id == "callexterndelegationreturnstruct" || id == "callexternextensionreturnstruct" || 
                 id == "callexternstaticreturnstruct" || id == "callexterninstancereturnstruct" ||
-                id == "invokeexternoperatorreturnstruct") {
+                id == "invokeexternoperatorreturnstruct" ||
+                id == "keepstaticstructfield" || id == "keepinstancestructfield" ||
+                id == "recyclestaticstructfield" || id == "recycleinstancestructfield") {
                 sb.Append(id);
                 sb.Append("(__cs2lua_func_info");
                 if (data.GetParamNum() > 0)

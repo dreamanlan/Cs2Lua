@@ -322,6 +322,10 @@ function lualog(fmt, ...)
     Utility.Warn(fmt, ...);
 end
 
+function tanslationlog(fmt, ...)
+    Utility.Warn(fmt, ...);
+end
+
 function luausing(func, ...)
     if nil==func then
         return true, 0
@@ -988,6 +992,7 @@ FuncInfoPool = createpool(
             q_list = {},
             c_list = {},
             c32_list = {},
+            rt_list = {},
         }
     end)
 Vector2Pool = createpool(
@@ -1014,7 +1019,11 @@ Color32Pool = createpool(
     function()
         return Slua.CreateClass("UnityEngine.Color32", 0, 0, 0, 0)
     end)
-
+RectPool = createpool(
+    function()
+        return Slua.CreateClass("UnityEngine.Rect", 0, 0, 0, 0)
+    end)
+    
 function wrapenumerable(func)
     return function(...)
         local args = {...}
@@ -1092,7 +1101,7 @@ function wrapoutexternstruct(funcInfo, v, classObj)
         table.insert(funcInfo.c32_list, obj)
         return obj
     else
-        lualog("need add handler for wrapoutexternstruct {0}", getclasstypename(classObj))
+        tanslationlog("need add handler for wrapoutexternstruct {0}", getclasstypename(classObj))
     end
     return classObj()
 end
@@ -1132,7 +1141,7 @@ function wrapexternstruct(funcInfo, v, classObj)
             table.insert(funcInfo.c_list, obj)
             return obj
         else
-            lualog("need add handler for wrapexternstruct {0}", getclasstypename(classObj))
+            tanslationlog("need add handler for wrapexternstruct {0}", getclasstypename(classObj))
         end
     end
     return v
@@ -1168,33 +1177,100 @@ function getexternstaticstructmember(funcInfo, symKind, class, member)
         table.insert(funcInfo.q_list, obj)
         return obj
     else
-        lualog("need add handler for getexternstaticstructmember {0}.{1}", getclasstypename(class), member)
+        tanslationlog("need add handler for getexternstaticstructmember {0}.{1}", getclasstypename(class), member)
         return class[member]
     end
 end
 
 function getexterninstancestructmember(funcInfo, symKind, obj, class, member)
-    lualog("need add handler for getexterninstancestructmember {0}.{1}", getclasstypename(class), member)
+    tanslationlog("need add handler for getexterninstancestructmember {0}.{1}", getclasstypename(class), member)
     return obj[member]
 end
 
+function luatableremove(tb, val)
+    for i,v in ipairs(tb) do
+        if rawequal(v,val) then
+            table.remove(tb, i)
+        end
+    end
+end
+
+function keepstructvalue(funcInfo, fieldType, val)
+    if fieldType==UnityEngine.Vector2 then
+        luatableremove(funcInfo.v2_list, val)
+    elseif fieldType==UnityEngine.Vector3 then
+        luatableremove(funcInfo.v3_list, val)
+    elseif fieldType==UnityEngine.Vector4 then
+        luatableremove(funcInfo.v4_list, val)
+    elseif fieldType==UnityEngine.Quaternion then
+        luatableremove(funcInfo.q_list, val)
+    elseif fieldType==UnityEngine.Color then
+        luatableremove(funcInfo.c_list, val)
+    elseif fieldType==UnityEngine.Color32 then
+        luatableremove(funcInfo.c32_list, val)
+    elseif fieldType==UnityEngine.Rect then
+        luatableremove(funcInfo.rt_list, val)
+    end
+end
+
+function recyclestructvalue(funcInfo, fieldType, val)
+    if val==nil then
+        return
+    end
+    if fieldType==UnityEngine.Vector2 then
+        Vector2Pool.Recycle(val)
+    elseif fieldType==UnityEngine.Vector3 then
+        Vector3Pool.Recycle(val)
+    elseif fieldType==UnityEngine.Vector4 then
+        Vector4Pool.Recycle(val)
+    elseif fieldType==UnityEngine.Quaternion then
+        QuaternionPool.Recycle(val)
+    elseif fieldType==UnityEngine.Color then
+        ColorPool.Recycle(val)
+    elseif fieldType==UnityEngine.Color32 then
+        Color32Pool.Recycle(val)
+    elseif fieldType==UnityEngine.Rect then
+        RectPool.Recycle(val)
+    end
+end
+
+function keepstaticstructfield(funcInfo, fieldType, class, member)
+    local val = class[member]
+    keepstructvalue(funcInfo, fieldType, val)
+end
+
+function keepinstancestructfield(funcInfo, fieldType, obj, class, member)
+    local val = obj[member]
+    keepstructvalue(funcInfo, fieldType, val)
+end
+
+function recyclestaticstructfield(funcInfo, fieldType, class, member)
+    local val = class[member]
+    recyclestructvalue(funcInfo, fieldType, val)
+end
+
+function recycleinstancestructfield(funcInfo, fieldType, obj, class, member)
+    local val = obj[member]
+    recyclestructvalue(funcInfo, fieldType, val)
+end
+
 function callexterndelegationreturnstruct(funcInfo, funcobj, funcobjname, ...)
-    lualog("need add handler for callexterndelegationreturnstruct {0}", funcobjname)
+    tanslationlog("need add handler for callexterndelegationreturnstruct {0}", funcobjname)
     return funcobj(...)
 end
 
 function callexternextensionreturnstruct(funcInfo, class, member, ...)
-    lualog("need add handler for callexternextensionreturnstruct {0}.{1}", getclasstypename(class), member)
+    tanslationlog("need add handler for callexternextensionreturnstruct {0}.{1}", getclasstypename(class), member)
     return class[member](...)
 end
 
 function callexternstaticreturnstruct(funcInfo, class, member, ...)
-    lualog("need add handler for callexternstaticreturnstruct {0}.{1}", getclasstypename(class), member)
+    tanslationlog("need add handler for callexternstaticreturnstruct {0}.{1}", getclasstypename(class), member)
     return class[member](...)
 end
 
 function callexterninstancereturnstruct(funcInfo, obj, class, member, ...)
-    lualog("need add handler for callexterninstancereturnstruct {0}.{1}", getclasstypename(class), member)
+    tanslationlog("need add handler for callexterninstancereturnstruct {0}.{1}", getclasstypename(class), member)
     return obj[member](obj, ...)
 end
 
@@ -1210,8 +1286,20 @@ function luafinalize(funcInfo)
         for i,v in ipairs(funcInfo.v3_list) do
             Vector3Pool.Recycle(v)
         end
+        for i,v in ipairs(funcInfo.v4_list) do
+            Vector4Pool.Recycle(v)
+        end
         for i,v in ipairs(funcInfo.q_list) do
             QuaternionPool.Recycle(v)
+        end
+        for i,v in ipairs(funcInfo.c_list) do
+            ColorPool.Recycle(v)
+        end
+        for i,v in ipairs(funcInfo.c32_list) do
+            Color32Pool.Recycle(v)
+        end
+        for i,v in ipairs(funcInfo.rt_list) do
+            RectPool.Recycle(v)
         end
         local ct
         ct = #(funcInfo.v2_list)
@@ -1222,9 +1310,25 @@ function luafinalize(funcInfo)
         for i=1,ct do
             funcInfo.v3_list[i]=nil
         end
+        ct = #(funcInfo.v4_list)
+        for i=1,ct do
+            funcInfo.v4_list[i]=nil
+        end
         ct = #(funcInfo.q_list)
         for i=1,ct do
             funcInfo.q_list[i]=nil
+        end
+        ct = #(funcInfo.c_list)
+        for i=1,ct do
+            funcInfo.c_list[i]=nil
+        end
+        ct = #(funcInfo.c32_list)
+        for i=1,ct do
+            funcInfo.c32_list[i]=nil
+        end
+        ct = #(funcInfo.rt_list)
+        for i=1,ct do
+            funcInfo.rt_list[i]=nil
         end
         FuncInfoPool.Recycle(funcInfo)
     end
@@ -3520,7 +3624,7 @@ function newexternstruct(funcInfo, class, typeargs, typekinds, initializer, ...)
         obj.a=a or 1
         table.insert(funcInfo.c32_list, obj)
     else
-        lualog("need add handler for newexternstruct {0}", getclasstypename(class))
+        translationlog("need add handler for newexternstruct {0}", getclasstypename(class))
         obj = class(...)
     end
     if obj and initializer then

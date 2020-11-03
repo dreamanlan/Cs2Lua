@@ -607,11 +607,47 @@ namespace RoslynTool.CsToDsl
                 if (null != leftOper && null != leftOper.Type && null != rightOper && null != rightOper.Type) {
                     dslToObject = InvocationInfo.IsDslToObject(leftOper.Type, rightOper.Type);
                 }
+                bool needWrapStruct = null != rightOper && null != rightOper.Type && rightOper.Type.TypeKind == TypeKind.Struct && !dslToObject && !SymbolTable.IsBasicType(rightOper.Type) && !CsDslTranslater.IsImplementationOfSys(rightOper.Type, "IEnumerator");
+                if (needWrapStruct) {
+                    //dsl脚本里的字段赋值前，先把旧值回收到对象池
+                    if (null != leftSym && SymbolTable.Instance.IsCs2DslSymbol(leftSym) && SymbolTable.Instance.IsFieldSymbolKind(leftSym)) {
+                        string fieldType = string.Empty;
+                        if (null != leftPsym)
+                            fieldType = ClassInfo.GetFullName(leftPsym.Type);
+                        else if (null != leftFsym)
+                            fieldType = ClassInfo.GetFullName(leftFsym.Type);
+                        string className = ClassInfo.GetFullName(leftSym.ContainingType);
+                        string memberName = leftSym.Name;
+                        if (leftSym.IsStatic) {
+                            CodeBuilder.Append(GetIndentString());
+                            CodeBuilder.Append("recyclestaticstructfield(");
+                            CodeBuilder.Append(fieldType);
+                            CodeBuilder.Append(", ");
+                            CodeBuilder.Append(className);
+                            CodeBuilder.AppendFormat(", \"{0}\");", memberName);
+                            CodeBuilder.AppendLine();
+                        }
+                        else {
+                            CodeBuilder.Append(GetIndentString());
+                            CodeBuilder.Append("recycleinstancestructfield(");
+                            CodeBuilder.Append(fieldType);
+                            CodeBuilder.Append(", ");
+                            if (null != leftMemberAccess)
+                                OutputExpressionSyntax(leftMemberAccess.Expression);
+                            else if (IsNewObjMember(memberName))
+                                CodeBuilder.Append("newobj");
+                            else
+                                CodeBuilder.Append("this");
+                            CodeBuilder.AppendFormat(", {0}, \"{1}\");", className, memberName);
+                            CodeBuilder.AppendLine();
+                        }
+                    }
+                }
                 VisitAssignment(ci, op, baseOp, assign, expTerminater, true, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType, dslToObject);
-                if (null != rightOper && null != rightOper.Type && rightOper.Type.TypeKind == TypeKind.Struct && !dslToObject && !CsDslTranslater.IsImplementationOfSys(rightOper.Type, "IEnumerator")) {
+                if (needWrapStruct) {
                     //只有变量赋值与字段赋值需要处理，其它的都在相应的函数调用里处理了
-                    if (null != rightSym && (rightSym.Kind == SymbolKind.Method || rightSym.Kind == SymbolKind.Property || rightSym.Kind == SymbolKind.Field || rightSym.Kind == SymbolKind.Local) && SymbolTable.Instance.IsCs2DslSymbol(rightSym)) {
-                        if (null != leftSym && (leftSym.Kind == SymbolKind.Local || SymbolTable.Instance.IsFieldSymbolKind(leftSym))) {
+                    if (null != rightSym && (rightSym.Kind == SymbolKind.Method || rightSym.Kind == SymbolKind.Property || rightSym.Kind == SymbolKind.Field || rightSym.Kind == SymbolKind.Local || rightSym.Kind == SymbolKind.Parameter) && SymbolTable.Instance.IsCs2DslSymbol(rightSym)) {
+                        if (null != leftSym && (leftSym.Kind == SymbolKind.Local || leftSym.Kind == SymbolKind.Parameter || SymbolTable.Instance.IsFieldSymbolKind(leftSym))) {
                             if (SymbolTable.Instance.IsCs2DslSymbol(rightOper.Type)) {
                                 CodeBuilder.Append(GetIndentString());
                                 OutputExpressionSyntax(assign.Left);
@@ -631,6 +667,39 @@ namespace RoslynTool.CsToDsl
                                     CodeBuilder.AppendLine();
                                 }
                             }
+                        }
+                    }
+                    //dsl脚本里的字段赋值，需要保证该对象不在函数退出时回收
+                    if (null != leftSym && SymbolTable.Instance.IsCs2DslSymbol(leftSym) && SymbolTable.Instance.IsFieldSymbolKind(leftSym)) {
+                        string fieldType = string.Empty;
+                        if (null != leftPsym)
+                            fieldType = ClassInfo.GetFullName(leftPsym.Type);
+                        else if (null != leftFsym)
+                            fieldType = ClassInfo.GetFullName(leftFsym.Type);
+                        string className = ClassInfo.GetFullName(leftSym.ContainingType);
+                        string memberName = leftSym.Name;
+                        if (leftSym.IsStatic) {
+                            CodeBuilder.Append(GetIndentString());
+                            CodeBuilder.Append("keepstaticstructfield(");
+                            CodeBuilder.Append(fieldType);
+                            CodeBuilder.Append(", ");
+                            CodeBuilder.Append(className);
+                            CodeBuilder.AppendFormat(", \"{0}\");", memberName);
+                            CodeBuilder.AppendLine();
+                        }
+                        else {
+                            CodeBuilder.Append(GetIndentString());
+                            CodeBuilder.Append("keepinstancestructfield(");
+                            CodeBuilder.Append(fieldType);
+                            CodeBuilder.Append(", ");
+                            if (null != leftMemberAccess)
+                                OutputExpressionSyntax(leftMemberAccess.Expression);
+                            else if (IsNewObjMember(memberName))
+                                CodeBuilder.Append("newobj");
+                            else
+                                CodeBuilder.Append("this");
+                            CodeBuilder.AppendFormat(", {0}, \"{1}\");", className, memberName);
+                            CodeBuilder.AppendLine();
                         }
                     }
                 }
@@ -1039,7 +1108,8 @@ namespace RoslynTool.CsToDsl
                 VisitAssignmentInvocation(ci, op, baseOp, assign, invocation, leftSym, opd, lopd, ropd, compAssignInfo, dslToObject);
             }
             else {
-                bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(leftSym);
+                bool isCs2Lua = SymbolTable.Instance.IsCs2DslSymbol(leftSym);
+                bool isExtern = !isCs2Lua;
                 bool isMemberAccess = null != leftPsym || null != leftEsym || null != leftFsym;
                 if(isMemberAccess && null != leftSym) {
                     if (leftSym.IsStatic) {
