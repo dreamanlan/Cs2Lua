@@ -673,6 +673,7 @@ namespace RoslynTool.CsToDsl
                     }
                     else {
                         var psym = sym as IPropertySymbol;
+                        var fsym = sym as IFieldSymbol;
                         string mname = string.Empty;
                         bool propExplicitImplementInterface = false;
                         bool propForBasicValueType = false;
@@ -705,7 +706,8 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.AppendFormat(", {0}, {1}, \"{2}\")", isEnumClass ? "true" : "false", ckey, pname);
                         }
                         else {
-                            bool isExternStructMember = isExtern && null != psym && psym.Type.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(psym.Type);
+                            bool isExternStructMember = isExtern && (null != psym && psym.Type.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(psym.Type) ||
+                                    null != fsym && fsym.Type.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(fsym.Type));
                             if (!sym.IsStatic) {
                                 if (isExternStructMember) {
                                     CodeBuilder.Append("getexterninstancestructmember(SymbolKind.");
