@@ -1,2 +1,10 @@
+ITestIntf = {
+	__cs2lua_defined = true, 
+	__cs2lua_fullname = "ITestIntf", 
+	__cs2lua_typename = "ITestIntf", 
+	__interfaces = {
+	}, 
+	__exist = function(k) return false; end
+};
 
 

@@ -5,24 +5,36 @@ ZipOutputStream = {
 	-------- class methods --------
 	-------------------------------
 	__new_object = function(...)
-		return newobject(ZipOutputStream, nil, nil, "ctor", nil, ...);
+		local __cs2lua_func_info = luainitialize();
+		local __cs2dsl_newobj;
+		__cs2dsl_newobj = newobject(__cs2lua_func_info, ZipOutputStream, nil, nil, "ctor", nil, ...);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		return __cs2dsl_newobj;
 	end,
 
 	get_Instance = function()
-		return ZipOutputStream.s_Instance;
+		local __cs2lua_func_info = luainitialize();
+		local __method_ret_90_4_93_5;
+		__method_ret_90_4_93_5 = ZipOutputStream.s_Instance;
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		return __method_ret_90_4_93_5;
 	end,
 
 	cctor = function()
+		local __cs2lua_func_info = luainitialize();
 		ZipOutputStream.__cctor();
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	__cctor = function()
+		local __cs2lua_func_info = luainitialize();
 		if ZipOutputStream.__cctor_called then 
 			return;
 		else
 			ZipOutputStream.__cctor_called = true;
 		end;
 		(= ZipOutputStream.s_Instance);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	-------------------------------
@@ -40,21 +52,27 @@ ZipOutputStream = {
 
 		local obj_methods = {
 			ctor = function(this, ms)
+				local __cs2lua_func_info = luainitialize();
 				this:__ctor();
 				ZipOutputStream.get_Instance().V = 1;
 				ZipOutputStream.get_Instance():Test();
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 				return this;
 			end,
 
 			Test = function(this)
+				local __cs2lua_func_info = luainitialize();
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 
 			__ctor = function(this)
+				local __cs2lua_func_info = luainitialize();
 				if this.__ctor_called then 
 					return;
 				else
 					this.__ctor_called = true;
 				end;
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 		};
 
@@ -111,19 +129,27 @@ ZipOutputStream.EmbedClass = {
 	-------- class methods --------
 	-------------------------------
 	__new_object = function(...)
-		return newobject(ZipOutputStream.EmbedClass, nil, nil, "ctor", nil, ...);
+		local __cs2lua_func_info = luainitialize();
+		local __cs2dsl_newobj;
+		__cs2dsl_newobj = newobject(__cs2lua_func_info, ZipOutputStream.EmbedClass, nil, nil, "ctor", nil, ...);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		return __cs2dsl_newobj;
 	end,
 
 	cctor = function()
+		local __cs2lua_func_info = luainitialize();
 		ZipOutputStream.EmbedClass.__cctor();
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	__cctor = function()
+		local __cs2lua_func_info = luainitialize();
 		if ZipOutputStream.EmbedClass.__cctor_called then 
 			return;
 		else
 			ZipOutputStream.EmbedClass.__cctor_called = true;
 		end;
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	-------------------------------
@@ -141,19 +167,25 @@ ZipOutputStream.EmbedClass = {
 
 		local obj_methods = {
 			Test = function(this)
+				local __cs2lua_func_info = luainitialize();
 				ZipOutputStream.get_Instance():Test();
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 
 			ctor = function(this)
+				local __cs2lua_func_info = luainitialize();
 				this:__ctor();
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 
 			__ctor = function(this)
+				local __cs2lua_func_info = luainitialize();
 				if this.__ctor_called then 
 					return;
 				else
 					this.__ctor_called = true;
 				end;
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 		};
 
@@ -193,7 +225,7 @@ ZipOutputStream.EmbedClass = {
 };
 
 
-require "cs2lua__lualib";
+require "cs2lua__syslib";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
 settempmetatable(ZipOutputStream.EmbedClass);

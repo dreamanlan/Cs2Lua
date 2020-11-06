@@ -16,6 +16,16 @@ class LuaConsole
 class IntList : List<int>
 { }
 
+interface ITestIntf
+{
+    int prop { get; set; }
+}
+
+class TestIntfImpl : ITestIntf
+{
+    public int prop { get; set; }
+}
+
 static class TestExtension
 {
     public static void Test<T>(this IntList list, T t) { }

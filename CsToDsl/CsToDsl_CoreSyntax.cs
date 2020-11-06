@@ -227,7 +227,7 @@ namespace RoslynTool.CsToDsl
                 string retVar = string.Format("__method_ret_{0}", GetSourcePosForVar(node));
                 mi.ReturnVarName = retVar;
 
-                CodeBuilder.AppendFormat("{0}local({1}); {1} = null;", GetIndentString(), retVar);
+                CodeBuilder.AppendFormat("{0}local({1});", GetIndentString(), retVar);
                 CodeBuilder.AppendLine();
             }
             if (string.IsNullOrEmpty(dslModule) && string.IsNullOrEmpty(dslFuncName)) {                
@@ -608,39 +608,13 @@ namespace RoslynTool.CsToDsl
                     dslToObject = InvocationInfo.IsDslToObject(leftOper.Type, rightOper.Type);
                 }
                 bool needWrapStruct = null != rightOper && null != rightOper.Type && rightOper.Type.TypeKind == TypeKind.Struct && !dslToObject && !SymbolTable.IsBasicType(rightOper.Type) && !CsDslTranslater.IsImplementationOfSys(rightOper.Type, "IEnumerator");
+                string tempValVar = string.Format("__temp_val_{0}", GetSourcePosForVar(expression));
                 if (needWrapStruct) {
-                    //dsl脚本里的字段赋值前，先把旧值回收到对象池
                     if (null != leftSym && SymbolTable.Instance.IsCs2DslSymbol(leftSym) && SymbolTable.Instance.IsFieldSymbolKind(leftSym)) {
-                        string fieldType = string.Empty;
-                        if (null != leftPsym)
-                            fieldType = ClassInfo.GetFullName(leftPsym.Type);
-                        else if (null != leftFsym)
-                            fieldType = ClassInfo.GetFullName(leftFsym.Type);
-                        string className = ClassInfo.GetFullName(leftSym.ContainingType);
-                        string memberName = leftSym.Name;
-                        if (leftSym.IsStatic) {
-                            CodeBuilder.Append(GetIndentString());
-                            CodeBuilder.Append("recyclestaticstructfield(");
-                            CodeBuilder.Append(fieldType);
-                            CodeBuilder.Append(", ");
-                            CodeBuilder.Append(className);
-                            CodeBuilder.AppendFormat(", \"{0}\");", memberName);
-                            CodeBuilder.AppendLine();
-                        }
-                        else {
-                            CodeBuilder.Append(GetIndentString());
-                            CodeBuilder.Append("recycleinstancestructfield(");
-                            CodeBuilder.Append(fieldType);
-                            CodeBuilder.Append(", ");
-                            if (null != leftMemberAccess)
-                                OutputExpressionSyntax(leftMemberAccess.Expression);
-                            else if (IsNewObjMember(memberName))
-                                CodeBuilder.Append("newobj");
-                            else
-                                CodeBuilder.Append("this");
-                            CodeBuilder.AppendFormat(", {0}, \"{1}\");", className, memberName);
-                            CodeBuilder.AppendLine();
-                        }
+                        CodeBuilder.Append(GetIndentString());
+                        CodeBuilder.AppendFormat("local({0}); {0} = ", tempValVar);
+                        OutputExpressionSyntax(assign.Left);
+                        CodeBuilder.AppendLine(";");
                     }
                 }
                 VisitAssignment(ci, op, baseOp, assign, expTerminater, true, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType, dslToObject);
@@ -676,31 +650,23 @@ namespace RoslynTool.CsToDsl
                             fieldType = ClassInfo.GetFullName(leftPsym.Type);
                         else if (null != leftFsym)
                             fieldType = ClassInfo.GetFullName(leftFsym.Type);
-                        string className = ClassInfo.GetFullName(leftSym.ContainingType);
-                        string memberName = leftSym.Name;
-                        if (leftSym.IsStatic) {
-                            CodeBuilder.Append(GetIndentString());
-                            CodeBuilder.Append("keepstaticstructfield(");
-                            CodeBuilder.Append(fieldType);
-                            CodeBuilder.Append(", ");
-                            CodeBuilder.Append(className);
-                            CodeBuilder.AppendFormat(", \"{0}\");", memberName);
-                            CodeBuilder.AppendLine();
-                        }
-                        else {
-                            CodeBuilder.Append(GetIndentString());
-                            CodeBuilder.Append("keepinstancestructfield(");
-                            CodeBuilder.Append(fieldType);
-                            CodeBuilder.Append(", ");
-                            if (null != leftMemberAccess)
-                                OutputExpressionSyntax(leftMemberAccess.Expression);
-                            else if (IsNewObjMember(memberName))
-                                CodeBuilder.Append("newobj");
-                            else
-                                CodeBuilder.Append("this");
-                            CodeBuilder.AppendFormat(", {0}, \"{1}\");", className, memberName);
-                            CodeBuilder.AppendLine();
-                        }
+                        //回收旧值
+                        CodeBuilder.Append(GetIndentString());
+                        CodeBuilder.Append("recyclestructvalue(");
+                        CodeBuilder.Append(fieldType);
+                        CodeBuilder.AppendFormat(", {0});", tempValVar);
+                        CodeBuilder.AppendLine();
+                        //获取新值
+                        CodeBuilder.Append(GetIndentString());
+                        CodeBuilder.AppendFormat("{0} = ", tempValVar);
+                        OutputExpressionSyntax(assign.Left);
+                        CodeBuilder.AppendLine(";");
+                        //保持新值
+                        CodeBuilder.Append(GetIndentString());
+                        CodeBuilder.Append("keepstructvalue(");
+                        CodeBuilder.Append(fieldType);
+                        CodeBuilder.AppendFormat(", {0});", tempValVar);
+                        CodeBuilder.AppendLine();
                     }
                 }
                 return;

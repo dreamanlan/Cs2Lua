@@ -5,34 +5,44 @@ CUsingHelper = {
 	-------- class methods --------
 	-------------------------------
 	__new_object = function(...)
-		return newobject(CUsingHelper, nil, nil, "ctor", nil, ...);
+		local __cs2lua_func_info = luainitialize();
+		local __cs2dsl_newobj;
+		__cs2dsl_newobj = newobject(__cs2lua_func_info, CUsingHelper, nil, nil, "ctor", nil, ...);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		return __cs2dsl_newobj;
 	end,
 
 	Test = function(i)
-		return nil;
+		local __cs2lua_func_info = luainitialize();
+		local __method_ret_105_4_108_5;
+		__method_ret_105_4_108_5 = nil;
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		return __method_ret_105_4_108_5;
 	end,
 
 	ReadZip = function(bytes)
+		local __cs2lua_func_info = luainitialize();
+		local __method_ret_110_4_167_5;
 		local abc;
 		abc = newarraydim2(System.Int32, TypeKind.Struct, 0, 12, 13);
 		local v;
 		v = 0;
 		local dict;
-		dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, {}, "System.Collections.Generic.Dictionary_TKey_TValue:ctor__Void");
+		dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, {}, luastrtocsstr("System.Collections.Generic.Dictionary_TKey_TValue:ctor__Void"));
 		--
 		v = (v + 1);
 		if (v > 0) then
 
 		else
 			--
-			local __invoke_109_16_109_42;
-			__invoke_109_16_109_42,v = dict:TryGetValue(1, __cs2lua_out);
-			if (__invoke_109_16_109_42 and (v == 0)) then
+			local __invoke_119_16_119_42;
+			__invoke_119_16_119_42,v = dict:TryGetValue(1, __cs2lua_out);
+			if (__invoke_119_16_119_42 and (v == 0)) then
 
 			else
 				--
-				local __unary_111_21_111_24 = v; v = (v + 1);
-				if (__unary_111_21_111_24 > 0) then
+				local __unary_121_21_121_24 = v; v = (v + 1);
+				if (__unary_121_21_121_24 > 0) then
 
 				else
 					--
@@ -81,19 +91,24 @@ CUsingHelper = {
 		--		}
 		--        
 
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 		return nil;
 	end,
 
 	cctor = function()
+		local __cs2lua_func_info = luainitialize();
 		CUsingHelper.__cctor();
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	__cctor = function()
+		local __cs2lua_func_info = luainitialize();
 		if CUsingHelper.__cctor_called then 
 			return;
 		else
 			CUsingHelper.__cctor_called = true;
 		end;
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	-------------------------------
@@ -112,19 +127,25 @@ CUsingHelper = {
 
 		local obj_methods = {
 			ctor = function(this, a1, a2)
+				local __cs2lua_func_info = luainitialize();
 				this:__ctor();
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 				return this;
 			end,
 
 			Dispose = function(this)
+				local __cs2lua_func_info = luainitialize();
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 
 			__ctor = function(this)
+				local __cs2lua_func_info = luainitialize();
 				if this.__ctor_called then 
 					return;
 				else
 					this.__ctor_called = true;
 				end;
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 		};
 
@@ -178,7 +199,7 @@ CUsingHelper = {
 };
 
 
-require "cs2lua__lualib";
+require "cs2lua__syslib";
 require "cs2lua__attributes";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";

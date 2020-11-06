@@ -1,4 +1,4 @@
-require("cs2dsl__lualib");
+require("cs2dsl__syslib");
 require("cs2dsl__namespaces");
 require("cs2dsl__externenums");
 require("cs2dsl__interfaces");
@@ -6,7 +6,8 @@ require("cs2dsl__interfaces");
 class(IntList, System.Collections.Generic.List_T) {
 	static_methods {
 		__new_object = deffunc(1)args(...){
-			return(newobject(IntList, typeargs(), typekinds(), "ctor", null, ...));
+			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(IntList, typeargs(), typekinds(), "ctor", null, ...);
+			return(__cs2dsl_newobj);
 		};
 		cctor = deffunc(0)args(){
 			callstatic(IntList, "__cctor");
@@ -27,13 +28,13 @@ class(IntList, System.Collections.Generic.List_T) {
 
 	instance_methods {
 		ctor = deffunc(0)args(this){
-			callinstance(this, "__ctor");
+			callinstance(this, IntList, "__ctor");
 		};
 		__ctor = deffunc(0)args(this){
-			if(getinstance(SymbolKind.Field, this, "__ctor_called")){
+			if(getinstance(SymbolKind.Field, this, IntList, "__ctor_called")){
 				return;
 			}else{
-				setinstance(SymbolKind.Field, this, "__ctor_called", true);
+				setinstance(SymbolKind.Field, this, IntList, "__ctor_called", true);
 			};
 		};
 	};

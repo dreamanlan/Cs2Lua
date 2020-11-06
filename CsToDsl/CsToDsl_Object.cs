@@ -292,7 +292,11 @@ namespace RoslynTool.CsToDsl
                 if (declSym.IsAbstract)
                     return;
             }
+            else {
+                return;
+            }
 
+            string propertyName = SymbolTable.GetPropertyName(declSym);
             if (null != node.ExpressionBody) {
                 SymbolTable.Instance.NoImplProperties.TryAdd(declSym, false);
                 //只读特性表达式体初始化写法
@@ -353,7 +357,7 @@ namespace RoslynTool.CsToDsl
                 }
                 ci.CurrentCodeBuilder = curBuilder;
 
-                CodeBuilder.AppendFormat("{0}{1} = {{", GetIndentString(), SymbolTable.GetPropertyName(declSym));
+                CodeBuilder.AppendFormat("{0}{1} = {{", GetIndentString(), propertyName);
                 CodeBuilder.AppendLine();
                 ++m_Indent;
                 CodeBuilder.AppendFormat("{0}get = {1}.get_{2};", GetIndentString(), declSym.IsStatic ? "static_methods" : "instance_methods", declSym.Name);
@@ -374,7 +378,19 @@ namespace RoslynTool.CsToDsl
             }
             SymbolTable.Instance.NoImplProperties.TryAdd(declSym, noimpl);
 
+            bool noimplAndIntfImpl = false;
             if (noimpl) {
+                foreach (var intf in ci.ClassSemanticInfo.InterfaceSymbols) {
+                    foreach(var prop in intf.GetMembers()) {
+                        if (prop.Kind == SymbolKind.Property) {
+                            var implSym = ci.SemanticInfo.FindImplementationForInterfaceMember(prop);
+                            if (implSym == declSym) {
+                                noimplAndIntfImpl = true;
+                                break;
+                            }
+                        }
+                    }
+                }
                 //退化为field
                 StringBuilder curBuilder = ci.CurrentCodeBuilder;
 
@@ -386,7 +402,7 @@ namespace RoslynTool.CsToDsl
                 }
 
                 ++m_Indent;
-                CodeBuilder.AppendFormat("{0}{1} = ", GetIndentString(), SymbolTable.GetPropertyName(declSym));
+                CodeBuilder.AppendFormat("{0}{1} = ", GetIndentString(), propertyName);
                 if (null != node.Initializer) {
                     IConversionExpression opd = null;
                     var oper = m_Model.GetOperationEx(node.Initializer) as ISymbolInitializer;
@@ -404,7 +420,7 @@ namespace RoslynTool.CsToDsl
 
                 ci.CurrentCodeBuilder = curBuilder;
             }
-            else {
+            if(!noimpl || noimplAndIntfImpl) {
                 StringBuilder curBuilder = ci.CurrentCodeBuilder;
                 if (declSym.IsStatic) {
                     ci.CurrentCodeBuilder = ci.StaticFunctionCodeBuilder;
@@ -420,7 +436,7 @@ namespace RoslynTool.CsToDsl
                         m_MethodInfoStack.Push(mi);
 
                         TryUsingAnalysis tryUsing = new TryUsingAnalysis();
-                        tryUsing.Visit(node);
+                        tryUsing.Visit(accessor);
                         mi.ExistTry = tryUsing.ExistTry;
                         mi.ExistUsing = tryUsing.ExistUsing;
 
@@ -442,7 +458,7 @@ namespace RoslynTool.CsToDsl
                             string retVar = string.Format("__method_ret_{0}", GetSourcePosForVar(node));
                             mi.ReturnVarName = retVar;
 
-                            CodeBuilder.AppendFormat("{0}local({1}); {1} = null;", GetIndentString(), retVar);
+                            CodeBuilder.AppendFormat("{0}local({1});", GetIndentString(), retVar);
                             CodeBuilder.AppendLine();
                         }
                         if (!string.IsNullOrEmpty(dslModule) || !string.IsNullOrEmpty(dslFuncName)) {
@@ -512,9 +528,8 @@ namespace RoslynTool.CsToDsl
                         }
                         else if (null != accessor.ExpressionBody) {
                             TryWrapValueParams(CodeBuilder, mi);
-                            string varName = string.Format("__expbody_{0}", GetSourcePosForVar(node));
                             if (!sym.ReturnsVoid) {
-                                CodeBuilder.AppendFormat("{0}local({1}); {1} = ", GetIndentString(), varName);
+                                CodeBuilder.AppendFormat("{0}{1} = ", GetIndentString(), mi.ReturnVarName);
                             }
                             IConversionExpression opd = null;
                             var oper = m_Model.GetOperationEx(accessor.ExpressionBody) as IBlockStatement;
@@ -540,12 +555,85 @@ namespace RoslynTool.CsToDsl
                             else {
                                 OutputExpressionSyntax(accessor.ExpressionBody.Expression, opd);
                                 if (mi.ReturnParamNames.Count > 0) {
-                                    CodeBuilder.AppendFormat("; return({0}, {1})", varName, string.Join(", ", mi.ReturnParamNames));
+                                    CodeBuilder.AppendFormat("; return({0}, {1})", mi.ReturnVarName, string.Join(", ", mi.ReturnParamNames));
                                 }
                                 else {
-                                    CodeBuilder.AppendFormat("; return({0})", varName);
+                                    CodeBuilder.AppendFormat("; return({0})", mi.ReturnVarName);
                                 }
                                 CodeBuilder.AppendLine(";");
+                            }
+                        }
+                        else if (noimplAndIntfImpl) {
+                            TryWrapValueParams(CodeBuilder, mi);
+                            if (!sym.ReturnsVoid) {
+                                CodeBuilder.AppendFormat("{0}{1} = ", GetIndentString(), mi.ReturnVarName);
+                                if (declSym.IsStatic) {
+                                    CodeBuilder.AppendFormat("getstatic(SymbolKind.Field, {0}, \"{1}\")", ci.Key, propertyName);
+                                }
+                                else {
+                                    CodeBuilder.AppendFormat("getinstance(SymbolKind.Field, this, {0}, \"{1}\")", ci.Key, propertyName);
+                                }
+                                CodeBuilder.AppendFormat("; return({0})", mi.ReturnVarName);
+                                CodeBuilder.AppendLine(";");
+                            }
+                            else {
+                                string tempValVar = string.Format("__temp_val_{0}", GetSourcePosForVar(node));
+                                string fieldType = ClassInfo.GetFullName(declSym.Type);
+                                bool isStruct = declSym.Type.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(declSym.Type);
+                                if (isStruct) {
+                                    //记录旧值
+                                    CodeBuilder.Append(GetIndentString());
+                                    CodeBuilder.AppendFormat("local({0}); {0} = ", tempValVar);
+                                    if (declSym.IsStatic) {
+                                        CodeBuilder.Append("getstatic(SymbolKind.Field, ");
+                                        CodeBuilder.Append(ci.Key);
+                                        CodeBuilder.AppendFormat(", \"{0}\");", propertyName);
+                                        CodeBuilder.AppendLine();
+                                    }
+                                    else {
+                                        CodeBuilder.Append("getinstance(SymbolKind.Field, this, ");
+                                        CodeBuilder.AppendFormat("{0}, \"{1}\");", ci.Key, propertyName);
+                                        CodeBuilder.AppendLine();
+                                    }
+                                }
+                                CodeBuilder.Append(GetIndentString());
+                                if (declSym.IsStatic) {
+                                    CodeBuilder.AppendFormat("setstatic(SymbolKind.Field, {0}, \"{1}\", {2})", ci.Key, propertyName, mi.ParamNames[0]);
+                                }
+                                else {
+                                    CodeBuilder.AppendFormat("setinstance(SymbolKind.Field, this, {0}, \"{1}\", {2})", ci.Key, propertyName, mi.ParamNames[0]);
+                                }
+                                CodeBuilder.AppendLine(";");
+                                if (isStruct) {
+                                    //回收旧值
+                                    CodeBuilder.Append(GetIndentString());
+                                    CodeBuilder.Append("recyclestructvalue(");
+                                    CodeBuilder.Append(fieldType);
+                                    CodeBuilder.Append(", ");
+                                    CodeBuilder.Append(tempValVar);
+                                    CodeBuilder.AppendLine(");");
+                                    //记录新值
+                                    CodeBuilder.Append(GetIndentString());
+                                    CodeBuilder.AppendFormat("{0} = ", tempValVar);
+                                    if (declSym.IsStatic) {
+                                        CodeBuilder.Append("getstatic(SymbolKind.Field, ");
+                                        CodeBuilder.Append(ci.Key);
+                                        CodeBuilder.AppendFormat(", \"{0}\");", propertyName);
+                                        CodeBuilder.AppendLine();
+                                    }
+                                    else {
+                                        CodeBuilder.Append("getinstance(SymbolKind.Field, this, ");
+                                        CodeBuilder.AppendFormat("{0}, \"{1}\");", ci.Key, propertyName);
+                                        CodeBuilder.AppendLine();
+                                    }
+                                    //保持新值
+                                    CodeBuilder.Append(GetIndentString());
+                                    CodeBuilder.Append("keepstructvalue(");
+                                    CodeBuilder.Append(fieldType);
+                                    CodeBuilder.Append(", ");
+                                    CodeBuilder.Append(tempValVar);
+                                    CodeBuilder.AppendLine(");");
+                                }
                             }
                         }
                         --m_Indent;
@@ -557,7 +645,7 @@ namespace RoslynTool.CsToDsl
                 }
                 ci.CurrentCodeBuilder = curBuilder;
 
-                CodeBuilder.AppendFormat("{0}{1} = {{", GetIndentString(), SymbolTable.GetPropertyName(declSym));
+                CodeBuilder.AppendFormat("{0}{1} = {{", GetIndentString(), propertyName);
                 CodeBuilder.AppendLine();
                 ++m_Indent;
                 foreach (var accessor in node.AccessorList.Accessors) {
@@ -789,7 +877,7 @@ namespace RoslynTool.CsToDsl
                         string retVar = string.Format("__method_ret_{0}", GetSourcePosForVar(node));
                         mi.ReturnVarName = retVar;
 
-                        CodeBuilder.AppendFormat("{0}local({1}); {1} = null;", GetIndentString(), retVar);
+                        CodeBuilder.AppendFormat("{0}local({1});", GetIndentString(), retVar);
                         CodeBuilder.AppendLine();
                     }
                     if (!string.IsNullOrEmpty(dslModule) || !string.IsNullOrEmpty(dslFuncName)) {
@@ -1002,7 +1090,7 @@ namespace RoslynTool.CsToDsl
                         string retVar = string.Format("__method_ret_{0}", GetSourcePosForVar(node));
                         mi.ReturnVarName = retVar;
 
-                        CodeBuilder.AppendFormat("{0}local({1}); {1} = null;", GetIndentString(), retVar);
+                        CodeBuilder.AppendFormat("{0}local({1});", GetIndentString(), retVar);
                         CodeBuilder.AppendLine();
                     }
                     TryWrapValueParams(CodeBuilder, mi);
@@ -1106,7 +1194,7 @@ namespace RoslynTool.CsToDsl
                     string retVar = string.Format("__method_ret_{0}", GetSourcePosForVar(node));
                     mi.ReturnVarName = retVar;
 
-                    CodeBuilder.AppendFormat("{0}local({1}); {1} = null;", GetIndentString(), retVar);
+                    CodeBuilder.AppendFormat("{0}local({1});", GetIndentString(), retVar);
                     CodeBuilder.AppendLine();
                 }
                 node.Body.Accept(this);

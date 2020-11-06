@@ -1,4 +1,4 @@
-require("cs2dsl__lualib");
+require("cs2dsl__syslib");
 require("cs2dsl__namespaces");
 require("cs2dsl__externenums");
 require("cs2dsl__interfaces");
@@ -6,10 +6,13 @@ require("cs2dsl__interfaces");
 class(ZipOutputStream) {
 	static_methods {
 		__new_object = deffunc(1)args(...){
-			return(newobject(ZipOutputStream, typeargs(), typekinds(), "ctor", null, ...));
+			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(ZipOutputStream, typeargs(), typekinds(), "ctor", null, ...);
+			return(__cs2dsl_newobj);
 		};
 		get_Instance = deffunc(1)args(){
-			return(getstatic(SymbolKind.Field, ZipOutputStream, "s_Instance"));
+			local(__method_ret_90_4_93_5);
+			__method_ret_90_4_93_5 = getstatic(SymbolKind.Field, ZipOutputStream, "s_Instance");
+			return(__method_ret_90_4_93_5);
 		};
 		cctor = deffunc(0)args(){
 			callstatic(ZipOutputStream, "__cctor");
@@ -36,18 +39,18 @@ class(ZipOutputStream) {
 
 	instance_methods {
 		ctor = deffunc(0)args(this, ms){
-			callinstance(this, "__ctor");
-			setinstance(SymbolKind.Field, getstatic(SymbolKind.Property, ZipOutputStream, "Instance"), "V", 1);
-			callinstance(getstatic(SymbolKind.Property, ZipOutputStream, "Instance"), "Test");
+			callinstance(this, ZipOutputStream, "__ctor");
+			setinstance(SymbolKind.Field, getstatic(SymbolKind.Property, ZipOutputStream, "Instance"), ZipOutputStream, "V", 1);
+			callinstance(getstatic(SymbolKind.Property, ZipOutputStream, "Instance"), ZipOutputStream, "Test");
 			return(this);
 		},
 		Test = deffunc(0)args(this){
 		};
 		__ctor = deffunc(0)args(this){
-			if(getinstance(SymbolKind.Field, this, "__ctor_called")){
+			if(getinstance(SymbolKind.Field, this, ZipOutputStream, "__ctor_called")){
 				return;
 			}else{
-				setinstance(SymbolKind.Field, this, "__ctor_called", true);
+				setinstance(SymbolKind.Field, this, ZipOutputStream, "__ctor_called", true);
 			};
 		};
 	};
@@ -100,7 +103,8 @@ class(ZipOutputStream) {
 class(ZipOutputStream.EmbedClass) {
 	static_methods {
 		__new_object = deffunc(1)args(...){
-			return(newobject(ZipOutputStream.EmbedClass, typeargs(), typekinds(), "ctor", null, ...));
+			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(ZipOutputStream.EmbedClass, typeargs(), typekinds(), "ctor", null, ...);
+			return(__cs2dsl_newobj);
 		};
 		cctor = deffunc(0)args(){
 			callstatic(ZipOutputStream.EmbedClass, "__cctor");
@@ -121,16 +125,16 @@ class(ZipOutputStream.EmbedClass) {
 
 	instance_methods {
 		Test = deffunc(0)args(this){
-			callinstance(getstatic(SymbolKind.Property, ZipOutputStream, "Instance"), "Test");
+			callinstance(getstatic(SymbolKind.Property, ZipOutputStream, "Instance"), ZipOutputStream, "Test");
 		};
 		ctor = deffunc(0)args(this){
-			callinstance(this, "__ctor");
+			callinstance(this, ZipOutputStream.EmbedClass, "__ctor");
 		};
 		__ctor = deffunc(0)args(this){
-			if(getinstance(SymbolKind.Field, this, "__ctor_called")){
+			if(getinstance(SymbolKind.Field, this, ZipOutputStream.EmbedClass, "__ctor_called")){
 				return;
 			}else{
-				setinstance(SymbolKind.Field, this, "__ctor_called", true);
+				setinstance(SymbolKind.Field, this, ZipOutputStream.EmbedClass, "__ctor_called", true);
 			};
 		};
 	};

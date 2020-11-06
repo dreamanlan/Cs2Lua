@@ -1,0 +1,123 @@
+require "cs2lua__namespaces"; 
+
+TestIntfImpl = {
+	-------------------------------
+	-------- class methods --------
+	-------------------------------
+	__new_object = function(...)
+		local __cs2lua_func_info = luainitialize();
+		local __cs2dsl_newobj;
+		__cs2dsl_newobj = newobject(__cs2lua_func_info, TestIntfImpl, nil, nil, "ctor", nil, ...);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		return __cs2dsl_newobj;
+	end,
+
+	cctor = function()
+		local __cs2lua_func_info = luainitialize();
+		TestIntfImpl.__cctor();
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+	end,
+
+	__cctor = function()
+		local __cs2lua_func_info = luainitialize();
+		if TestIntfImpl.__cctor_called then 
+			return;
+		else
+			TestIntfImpl.__cctor_called = true;
+		end;
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+	end,
+
+	-------------------------------
+	-------- class fields --------
+	-------------------------------
+	__cctor_called = false,
+
+	-------------------------------
+	--- define class and object ---
+	-------------------------------
+	__define_class = function()
+		Utility.Warn("TestIntfImpl::__define_class begin");
+
+		local class = TestIntfImpl;
+
+		local obj_methods = {
+			get_prop = function(this)
+				local __cs2lua_func_info = luainitialize();
+				local __method_ret_25_4_25_33;
+				__method_ret_25_4_25_33 = this.prop;
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+				return __method_ret_25_4_25_33;
+			end,
+
+			set_prop = function(this, value)
+				local __cs2lua_func_info = luainitialize();
+				this.prop = value;
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+			end,
+
+			ctor = function(this)
+				local __cs2lua_func_info = luainitialize();
+				this:__ctor();
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+			end,
+
+			__ctor = function(this)
+				local __cs2lua_func_info = luainitialize();
+				if this.__ctor_called then 
+					return;
+				else
+					this.__ctor_called = true;
+				end;
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+			end,
+		};
+
+		local obj_build = function()
+			return {
+				prop = 0,
+				__ctor_called = false,
+			};
+		end;
+
+		local __defineclass_return = defineclass(nil, "TestIntfImpl", "TestIntfImpl", class, obj_methods, obj_build, false);
+		Utility.Warn("TestIntfImpl::__define_class end");
+		return __defineclass_return;
+	end,
+
+	-------------------------------
+	--------- fields info ---------
+	-------------------------------
+	__class_fields = {
+		__cctor_called = true,
+	},
+
+	__obj_fields = {
+		prop = true,
+		__ctor_called = true,
+	},
+
+	-------------------------------
+	-------- metadata info --------
+	-------------------------------
+	__interfaces = {
+		"ITestIntf",
+	},
+	__method_info = {
+		get_prop = {
+			Kind = MethodKind.PropertyGet,
+		},
+		set_prop = {
+			Kind = MethodKind.PropertySet,
+		},
+		ctor = {
+			Kind = MethodKind.Constructor,
+		},
+	},
+};
+
+
+require "cs2lua__syslib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+settempmetatable(TestIntfImpl);

@@ -5,19 +5,27 @@ ZipInputStream = {
 	-------- class methods --------
 	-------------------------------
 	__new_object = function(...)
-		return newobject(ZipInputStream, nil, nil, "ctor", nil, ...);
+		local __cs2lua_func_info = luainitialize();
+		local __cs2dsl_newobj;
+		__cs2dsl_newobj = newobject(__cs2lua_func_info, ZipInputStream, nil, nil, "ctor", nil, ...);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		return __cs2dsl_newobj;
 	end,
 
 	cctor = function()
+		local __cs2lua_func_info = luainitialize();
 		ZipInputStream.__cctor();
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	__cctor = function()
+		local __cs2lua_func_info = luainitialize();
 		if ZipInputStream.__cctor_called then 
 			return;
 		else
 			ZipInputStream.__cctor_called = true;
 		end;
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	-------------------------------
@@ -35,25 +43,26 @@ ZipInputStream = {
 
 		local obj_methods = {
 			ctor = function(this, ms)
+				local __cs2lua_func_info = luainitialize();
 				this:__ctor();
 				local os;
-				os = newobject(ZipOutputStream, nil, nil, "ctor", nil, newexternobject(System.IO.MemoryStream, nil, nil, nil, "System.IO.MemoryStream:ctor__Void"));
+				os = newobject(__cs2lua_func_info, ZipOutputStream, nil, nil, "ctor", nil, newexternobject(__cs2lua_func_info, System.IO.MemoryStream, nil, nil, nil, luastrtocsstr("System.IO.MemoryStream:ctor__Void")));
 				local os2;
 				os2 = typeas(objecttolua(this:Test(luatoobject(SymbolKind.Method, false, "ZipInputStream:Test", os), luatoobject(SymbolKind.Method, false, "ZipInputStream:Test", os), luatoobject(SymbolKind.Method, false, "ZipInputStream:Test", os))), ZipOutputStream, TypeKind.Class);
 				local intList;
 				intList = newlist(IntList, nil, nil, "ctor", {});
 				local a;
-				a = newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, {}, "System.Collections.Generic.List_T:ctor__Void");
+				a = newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, {}, luastrtocsstr("System.Collections.Generic.List_T:ctor__Void"));
 				local aa;
-				aa = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.String, UnityEngine.Component}, {TypeKind.Class, TypeKind.Class}, {}, "System.Collections.Generic.Dictionary_TKey_TValue:ctor__Void");
+				aa = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.String, UnityEngine.Component}, {TypeKind.Class, TypeKind.Class}, {}, luastrtocsstr("System.Collections.Generic.Dictionary_TKey_TValue:ctor__Void"));
 				TestExtension.Test(intList, UnityEngine.ParticleSystem, nil);
 				intList:AddRange(a);
 				local gobj;
 				gobj = nil;
 				local r;
-				r = UnityEngine.Object.Instantiate("UnityEngine.Object:Instantiate__Object__Object", gobj);
+				r = UnityEngine.Object.Instantiate(luastrtocsstr("UnityEngine.Object:Instantiate__Object__Object"), gobj);
 				local b;
-				b = this:Test2(124, newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, {}, "System.Collections.Generic.List_T:ctor__Void"));
+				b = this:Test2(124, newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, {}, luastrtocsstr("System.Collections.Generic.List_T:ctor__Void")));
 				local o;
 				o = luatoobject(SymbolKind.Local, false, "o", wraparray({1, 2}, nil, System.Int32, TypeKind.Struct));
 				local arr;
@@ -70,28 +79,39 @@ ZipInputStream = {
 				r = isequal(aa, bb);
 				r = (da == db);
 				local ca;
-				ca = UnityEngine.Color.white;
+				ca = getexternstaticstructmember(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "white");
 				local cb;
-				cb = UnityEngine.Color.black;
+				cb = getexternstaticstructmember(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "black");
 				r = invokeexternoperator(System.Boolean, UnityEngine.Color, "op_Equality", ca, cb);
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 				return this;
 			end,
 
 			Test = function(this, o, ...)
+				local __cs2lua_func_info = luainitialize();
+				local __method_ret_59_4_62_5;
 				local args = wrapparams({...}, System.Object, TypeKind.Class);
-				return nil;
+				__method_ret_59_4_62_5 = nil;
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+				return __method_ret_59_4_62_5;
 			end,
 
 			Test2 = function(this, v, enumer)
-				return nil;
+				local __cs2lua_func_info = luainitialize();
+				local __method_ret_63_4_66_5;
+				__method_ret_63_4_66_5 = nil;
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+				return __method_ret_63_4_66_5;
 			end,
 
 			__ctor = function(this)
+				local __cs2lua_func_info = luainitialize();
 				if this.__ctor_called then 
 					return;
 				else
 					this.__ctor_called = true;
 				end;
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 		};
 
@@ -128,7 +148,7 @@ ZipInputStream = {
 };
 
 
-require "cs2lua__lualib";
+require "cs2lua__syslib";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
 require "zipoutputstream";

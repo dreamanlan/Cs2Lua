@@ -1187,6 +1187,26 @@ function getexterninstancestructmember(funcInfo, symKind, obj, class, member)
     return obj[member]
 end
 
+function callexterndelegationreturnstruct(funcInfo, funcobj, funcobjname, ...)
+    tanslationlog("need add handler for callexterndelegationreturnstruct {0}", funcobjname)
+    return funcobj(...)
+end
+
+function callexternextensionreturnstruct(funcInfo, class, member, ...)
+    tanslationlog("need add handler for callexternextensionreturnstruct {0}.{1}", getclasstypename(class), member)
+    return class[member](...)
+end
+
+function callexternstaticreturnstruct(funcInfo, class, member, ...)
+    tanslationlog("need add handler for callexternstaticreturnstruct {0}.{1}", getclasstypename(class), member)
+    return class[member](...)
+end
+
+function callexterninstancereturnstruct(funcInfo, obj, class, member, ...)
+    tanslationlog("need add handler for callexterninstancereturnstruct {0}.{1}", getclasstypename(class), member)
+    return obj[member](obj, ...)
+end
+
 function luatableremove(tb, val)
     for i,v in ipairs(tb) do
         if rawequal(v,val) then
@@ -1196,6 +1216,9 @@ function luatableremove(tb, val)
 end
 
 function keepstructvalue(funcInfo, fieldType, val)
+    if val==nil then
+        return
+    end
     if fieldType==UnityEngine.Vector2 then
         luatableremove(funcInfo.v2_list, val)
     elseif fieldType==UnityEngine.Vector3 then
@@ -1210,6 +1233,10 @@ function keepstructvalue(funcInfo, fieldType, val)
         luatableremove(funcInfo.c32_list, val)
     elseif fieldType==UnityEngine.Rect then
         luatableremove(funcInfo.rt_list, val)
+    elseif fieldType==CsLibrary.DateTime then
+        luatableremove(funcInfo.dt_list, val)
+    elseif fieldType==CsLibrary.TimeSpan then
+        luatableremove(funcInfo.ts_list, val)
     end
 end
 
@@ -1231,47 +1258,11 @@ function recyclestructvalue(funcInfo, fieldType, val)
         Color32Pool.Recycle(val)
     elseif fieldType==UnityEngine.Rect then
         RectPool.Recycle(val)
+    elseif fieldType==CsLibrary.DateTime then
+        DateTimePool.Recycle(val)
+    elseif fieldType==CsLibrary.TimeSpan then
+        TimeSpanPool.Recycle(val)
     end
-end
-
-function keepstaticstructfield(funcInfo, fieldType, class, member)
-    local val = class[member]
-    keepstructvalue(funcInfo, fieldType, val)
-end
-
-function keepinstancestructfield(funcInfo, fieldType, obj, class, member)
-    local val = obj[member]
-    keepstructvalue(funcInfo, fieldType, val)
-end
-
-function recyclestaticstructfield(funcInfo, fieldType, class, member)
-    local val = class[member]
-    recyclestructvalue(funcInfo, fieldType, val)
-end
-
-function recycleinstancestructfield(funcInfo, fieldType, obj, class, member)
-    local val = obj[member]
-    recyclestructvalue(funcInfo, fieldType, val)
-end
-
-function callexterndelegationreturnstruct(funcInfo, funcobj, funcobjname, ...)
-    tanslationlog("need add handler for callexterndelegationreturnstruct {0}", funcobjname)
-    return funcobj(...)
-end
-
-function callexternextensionreturnstruct(funcInfo, class, member, ...)
-    tanslationlog("need add handler for callexternextensionreturnstruct {0}.{1}", getclasstypename(class), member)
-    return class[member](...)
-end
-
-function callexternstaticreturnstruct(funcInfo, class, member, ...)
-    tanslationlog("need add handler for callexternstaticreturnstruct {0}.{1}", getclasstypename(class), member)
-    return class[member](...)
-end
-
-function callexterninstancereturnstruct(funcInfo, obj, class, member, ...)
-    tanslationlog("need add handler for callexterninstancereturnstruct {0}.{1}", getclasstypename(class), member)
-    return obj[member](obj, ...)
 end
 
 function luainitialize()

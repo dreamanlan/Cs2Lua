@@ -5,19 +5,27 @@ IntList = {
 	-------- class methods --------
 	-------------------------------
 	__new_object = function(...)
-		return newobject(IntList, nil, nil, "ctor", nil, ...);
+		local __cs2lua_func_info = luainitialize();
+		local __cs2dsl_newobj;
+		__cs2dsl_newobj = newobject(__cs2lua_func_info, IntList, nil, nil, "ctor", nil, ...);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		return __cs2dsl_newobj;
 	end,
 
 	cctor = function()
+		local __cs2lua_func_info = luainitialize();
 		IntList.__cctor();
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	__cctor = function()
+		local __cs2lua_func_info = luainitialize();
 		if IntList.__cctor_called then 
 			return;
 		else
 			IntList.__cctor_called = true;
 		end;
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	-------------------------------
@@ -35,15 +43,19 @@ IntList = {
 
 		local obj_methods = {
 			ctor = function(this)
+				local __cs2lua_func_info = luainitialize();
 				this:__ctor();
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 
 			__ctor = function(this)
+				local __cs2lua_func_info = luainitialize();
 				if this.__ctor_called then 
 					return;
 				else
 					this.__ctor_called = true;
 				end;
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 		};
 
@@ -90,7 +102,7 @@ IntList = {
 };
 
 
-require "cs2lua__lualib";
+require "cs2lua__syslib";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
 settempmetatable(IntList);
