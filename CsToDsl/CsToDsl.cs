@@ -599,7 +599,7 @@ namespace RoslynTool.CsToDsl
             else {
                 CodeBuilder.Append(", null");
             }
-            CodeBuilder.Append(");");
+            CodeBuilder.Append(")");
         }
         private void OutputDefaultValue(ITypeSymbol type)
         {

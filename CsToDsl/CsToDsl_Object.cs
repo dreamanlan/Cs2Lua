@@ -190,7 +190,7 @@ namespace RoslynTool.CsToDsl
             ++m_Indent;
             TryWrapValueParams(CodeBuilder, mi);
             if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
-                CodeBuilder.AppendFormat("{0}local{{{1} = params({2});}};", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
+                CodeBuilder.AppendFormat("{0}local({1}); {1} = params({2});", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
                 CodeBuilder.AppendLine();
             }
             //首先执行初始化列表
@@ -401,7 +401,6 @@ namespace RoslynTool.CsToDsl
                     ci.CurrentCodeBuilder = ci.InstanceFieldCodeBuilder;
                 }
 
-                ++m_Indent;
                 CodeBuilder.AppendFormat("{0}{1} = ", GetIndentString(), propertyName);
                 if (null != node.Initializer) {
                     IConversionExpression opd = null;
@@ -416,7 +415,6 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.Append(";");
                 }
                 CodeBuilder.AppendLine();
-                --m_Indent;
 
                 ci.CurrentCodeBuilder = curBuilder;
             }
@@ -577,13 +575,15 @@ namespace RoslynTool.CsToDsl
                                 CodeBuilder.AppendLine(";");
                             }
                             else {
-                                string tempValVar = string.Format("__temp_val_{0}", GetSourcePosForVar(node));
+                                string postfix = GetSourcePosForVar(node);
+                                string oldValVar = string.Format("__old_val_{0}", postfix);
+                                string newValVar = string.Format("__new_val_{0}", postfix);
                                 string fieldType = ClassInfo.GetFullName(declSym.Type);
                                 bool isStruct = declSym.Type.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(declSym.Type);
                                 if (isStruct) {
                                     //记录旧值
                                     CodeBuilder.Append(GetIndentString());
-                                    CodeBuilder.AppendFormat("local({0}); {0} = ", tempValVar);
+                                    CodeBuilder.AppendFormat("local({0}); {0} = ", oldValVar);
                                     if (declSym.IsStatic) {
                                         CodeBuilder.Append("getstatic(SymbolKind.Field, ");
                                         CodeBuilder.Append(ci.Key);
@@ -605,16 +605,9 @@ namespace RoslynTool.CsToDsl
                                 }
                                 CodeBuilder.AppendLine(";");
                                 if (isStruct) {
-                                    //回收旧值
-                                    CodeBuilder.Append(GetIndentString());
-                                    CodeBuilder.Append("recyclestructvalue(");
-                                    CodeBuilder.Append(fieldType);
-                                    CodeBuilder.Append(", ");
-                                    CodeBuilder.Append(tempValVar);
-                                    CodeBuilder.AppendLine(");");
                                     //记录新值
                                     CodeBuilder.Append(GetIndentString());
-                                    CodeBuilder.AppendFormat("{0} = ", tempValVar);
+                                    CodeBuilder.AppendFormat("local({0}); {0} = ", newValVar);
                                     if (declSym.IsStatic) {
                                         CodeBuilder.Append("getstatic(SymbolKind.Field, ");
                                         CodeBuilder.Append(ci.Key);
@@ -626,12 +619,14 @@ namespace RoslynTool.CsToDsl
                                         CodeBuilder.AppendFormat("{0}, \"{1}\");", ci.Key, propertyName);
                                         CodeBuilder.AppendLine();
                                     }
-                                    //保持新值
+                                    //回收旧值，保持新值
                                     CodeBuilder.Append(GetIndentString());
-                                    CodeBuilder.Append("keepstructvalue(");
+                                    CodeBuilder.Append("recycleandkeepstructvalue(");
                                     CodeBuilder.Append(fieldType);
                                     CodeBuilder.Append(", ");
-                                    CodeBuilder.Append(tempValVar);
+                                    CodeBuilder.Append(oldValVar);
+                                    CodeBuilder.Append(", ");
+                                    CodeBuilder.Append(newValVar);
                                     CodeBuilder.AppendLine(");");
                                 }
                             }
@@ -816,7 +811,7 @@ namespace RoslynTool.CsToDsl
                     ++m_Indent;
                     TryWrapValueParams(CodeBuilder, mi);
                     if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
-                        CodeBuilder.AppendFormat("{0}local{{{1} = params({2});}};", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
+                        CodeBuilder.AppendFormat("{0}local({1}); {1} = params({2});", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
                         CodeBuilder.AppendLine();
                     }
                     string varName = string.Format("__expbody_{0}", GetSourcePosForVar(node));
@@ -933,13 +928,13 @@ namespace RoslynTool.CsToDsl
                         TryWrapValueParams(CodeBuilder, mi);
                         if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
                             if (keyword == "get") {
-                                CodeBuilder.AppendFormat("{0}local{{{1} = params({2});}};", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
+                                CodeBuilder.AppendFormat("{0}local({1}); {1} = params({2});", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
                                 CodeBuilder.AppendLine();
                             }
                             else {
-                                CodeBuilder.AppendFormat("{0}local{{{1} = params({2});}};", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
+                                CodeBuilder.AppendFormat("{0}local({1}); {1} = params({2});", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
                                 CodeBuilder.AppendLine();
-                                CodeBuilder.AppendFormat("{0}local{{value = paramsremove({1});}};", GetIndentString(), mi.OriginalParamsName);
+                                CodeBuilder.AppendFormat("{0}local(value); value = paramsremove({1});", GetIndentString(), mi.OriginalParamsName);
                                 CodeBuilder.AppendLine();
                             }
                         }
@@ -1095,7 +1090,7 @@ namespace RoslynTool.CsToDsl
                     }
                     TryWrapValueParams(CodeBuilder, mi);
                     if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
-                        CodeBuilder.AppendFormat("{0}local{{{1} = params({2});}};", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
+                        CodeBuilder.AppendFormat("{0}local({1}); {1} = params({2});", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
                         CodeBuilder.AppendLine();
                     }
                     node.Body.Accept(this);
@@ -1262,10 +1257,10 @@ namespace RoslynTool.CsToDsl
                 VisitVariableDeclaration(node.Declaration);
             }
             else if (null != node.Expression) {
-                CodeBuilder.AppendFormat("{0}local{{{1} = ", GetIndentString(), varName);
+                CodeBuilder.AppendFormat("{0}local({1}); {1} = ", GetIndentString(), varName);
                 IConversionExpression opd = m_Model.GetOperationEx(node.Expression) as IConversionExpression;
                 OutputExpressionSyntax(node.Expression, opd);
-                CodeBuilder.AppendLine(";};");
+                CodeBuilder.AppendLine(";");
             }
             else {
                 Log(node, "node.Declaration and node.Expression are null.");

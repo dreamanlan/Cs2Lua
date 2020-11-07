@@ -322,7 +322,7 @@ function lualog(fmt, ...)
     Utility.Warn(fmt, ...);
 end
 
-function tanslationlog(fmt, ...)
+function translationlog(fmt, ...)
     Utility.Warn(fmt, ...);
 end
 
@@ -977,7 +977,18 @@ function createpool(newFunc)
             end
         end
     pool.Recycle = function(data)
-            table.insert(pool.m_Data, data)
+            local exists = false
+            for i,v in ipairs(pool.m_Data) do
+                if rawequal(v,data) then
+                    exists=true
+                    lualog("pool.Recycle duplicate !")
+                    printStack()
+                    break
+                end
+            end
+            if not exists then
+                table.insert(pool.m_Data, data)
+            end
         end
     pool.m_Data = {}
     return pool
@@ -1100,9 +1111,8 @@ function wrapoutexternstruct(funcInfo, v, classObj)
         local obj = Color32Pool.Alloc()
         table.insert(funcInfo.c32_list, obj)
         return obj
-    else
-        tanslationlog("need add handler for wrapoutexternstruct {0}", getclasstypename(classObj))
     end
+    translationlog("need add handler for wrapoutexternstruct {0}", getclasstypename(classObj))
     return classObj()
 end
 
@@ -1138,11 +1148,10 @@ function wrapexternstruct(funcInfo, v, classObj)
             obj.g = v.g or 0
             obj.b = v.b or 0
             obj.a = v.a or 0
-            table.insert(funcInfo.c_list, obj)
+            table.insert(funcInfo.c32_list, obj)
             return obj
-        else
-            tanslationlog("need add handler for wrapexternstruct {0}", getclasstypename(classObj))
         end
+        translationlog("need add handler for wrapexternstruct {0}", getclasstypename(classObj))
     end
     return v
 end
@@ -1156,6 +1165,14 @@ function getexternstaticstructmember(funcInfo, symKind, class, member)
         local obj = UnityEngine.Vector2.New(1,1)
         table.insert(funcInfo.v2_list, obj)
         return obj
+    elseif class==UnityEngine.Vector2 and member=="up" then
+        local obj = UnityEngine.Vector2.New(0,1)
+        table.insert(funcInfo.v2_list, obj)
+        return obj
+    elseif class==UnityEngine.Vector2 and member=="down" then
+        local obj = UnityEngine.Vector2.New(0,-1)
+        table.insert(funcInfo.v2_list, obj)
+        return obj
     elseif class==UnityEngine.Vector3 and member=="zero" then
         local obj = UnityEngine.Vector3.New(0,0,0)
         table.insert(funcInfo.v3_list, obj)
@@ -1163,6 +1180,30 @@ function getexternstaticstructmember(funcInfo, symKind, class, member)
     elseif class==UnityEngine.Vector3 and member=="one" then
         local obj = UnityEngine.Vector3.New(1,1,1)
         table.insert(funcInfo.v3_list, obj)
+        return obj
+    elseif class == UnityEngine.Vector3 and member=="left" then
+        local obj = UnityEngine.Vector3.New(-1,0,0)
+        table.insert(funcInfo.v3_list,obj)
+        return obj
+    elseif class == UnityEngine.Vector3 and member=="right" then
+        local obj = UnityEngine.Vector3.New(1,0,0)
+        table.insert(funcInfo.v3_list,obj)
+        return obj
+    elseif class == UnityEngine.Vector3 and member=="forward" then
+        local obj = UnityEngine.Vector3.New(0,0,1)
+        table.insert(funcInfo.v3_list,obj)
+        return obj
+    elseif class == UnityEngine.Vector3 and member=="back" then
+        local obj = UnityEngine.Vector3.New(0,0,-1)
+        table.insert(funcInfo.v3_list,obj)
+        return obj
+    elseif class == UnityEngine.Vector3 and member == "up" then
+        local obj = UnityEngine.Vector3.New(0,1,0)
+        table.insert(funcInfo.v3_list,obj)
+        return obj
+    elseif class == UnityEngine.Vector3 and member=="down" then
+        local obj = UnityEngine.Vector3.New(0,-1,0)
+        table.insert(funcInfo.v3_list,obj)
         return obj
     elseif class==UnityEngine.Vector4 and member=="zero" then
         local obj = UnityEngine.Vector4.New(0,0,0,0)
@@ -1176,34 +1217,82 @@ function getexternstaticstructmember(funcInfo, symKind, class, member)
         local obj = UnityEngine.Quaternion.New(0,0,0,1)
         table.insert(funcInfo.q_list, obj)
         return obj
-    else
-        tanslationlog("need add handler for getexternstaticstructmember {0}.{1}", getclasstypename(class), member)
-        return class[member]
+    elseif class == UnityEngine.Color and member=="white" then
+        local obj = UnityEngine.Color.white
+        table.insert(funcInfo.c_list , obj)
+        return obj
+    elseif class == UnityEngine.Color and member=="red" then
+        local obj = UnityEngine.Color.red
+        table.insert(funcInfo.c_list , obj)
+        return obj
+    elseif class == UnityEngine.Color and member=="green" then
+        local obj = UnityEngine.Color.green
+        table.insert(funcInfo.c_list , obj)
+        return obj
+    elseif class == UnityEngine.Color and member=="blue" then
+        local obj = UnityEngine.Color.blue
+        table.insert(funcInfo.c_list , obj)
+        return obj
+    elseif class == UnityEngine.Color and member=="black" then
+        local obj = UnityEngine.Color.black
+        table.insert(funcInfo.c_list , obj)
+        return obj
+    elseif class == UnityEngine.Color and member=="gray" then
+        local obj = UnityEngine.Color.gray
+        table.insert(funcInfo.c_list , obj)
+        return obj
+    elseif class == UnityEngine.Color and member == "yellow" then
+        local obj = UnityEngine.Color.yellow
+        table.insert(funcInfo.c_list , obj)
+        return obj
+    elseif class == CsLibrary.DateTime and member == "Now" then
+        local y,m,d,hh,mm,ss,ms = CsLibrary.DateTime.GetNow(Slua.out, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out)
+        local obj = DateTimePool.Alloc()
+        obj:SetDateTime(y,m,d,hh,mm,ss,ms)
+        table.insert(funcInfo.dt_list, obj)
+        return obj
+    elseif class == CsLibrary.AudioManager and member == "Listener_Pos" then
+        local _,x,y,z = CsLibrary.AudioManager.GetListenerPos(Slua.out, Slua.out, Slua.out)        
+        local obj = UnityEngine.Vector3.New(x,y,z)
+        table.insert(funcInfo.v3_list,obj)
+        return obj
+    elseif class == CsLibrary.UnityGeometry and member == "InvalidPos" then
+        local x,y,z = CsLibrary.UnityGeometry.GetInvalidPos(Slua.out, Slua.out, Slua.out)        
+        local obj = UnityEngine.Vector3.New(x,y,z)
+        table.insert(funcInfo.v3_list,obj)
+        return obj
+    elseif class == CsLibrary.UnityGeometry and member == "InvalidDir2D" then
+        local x,y = CsLibrary.UnityGeometry.GetInvalidDir2D(Slua.out, Slua.out, Slua.out)        
+        local obj = UnityEngine.Vector2.New(x,y)
+        table.insert(funcInfo.v2_list,obj)
+        return obj
     end
+    translationlog("need add handler for getexternstaticstructmember {0}.{1}", getclasstypename(class), member)
+    return class[member]
 end
 
 function getexterninstancestructmember(funcInfo, symKind, obj, class, member)
-    tanslationlog("need add handler for getexterninstancestructmember {0}.{1}", getclasstypename(class), member)
+    translationlog("need add handler for getexterninstancestructmember {0}.{1}", getclasstypename(class), member)
     return obj[member]
 end
 
 function callexterndelegationreturnstruct(funcInfo, funcobj, funcobjname, ...)
-    tanslationlog("need add handler for callexterndelegationreturnstruct {0}", funcobjname)
+    translationlog("need add handler for callexterndelegationreturnstruct {0}", funcobjname)
     return funcobj(...)
 end
 
 function callexternextensionreturnstruct(funcInfo, class, member, ...)
-    tanslationlog("need add handler for callexternextensionreturnstruct {0}.{1}", getclasstypename(class), member)
+    translationlog("need add handler for callexternextensionreturnstruct {0}.{1}", getclasstypename(class), member)
     return class[member](...)
 end
 
 function callexternstaticreturnstruct(funcInfo, class, member, ...)
-    tanslationlog("need add handler for callexternstaticreturnstruct {0}.{1}", getclasstypename(class), member)
+    translationlog("need add handler for callexternstaticreturnstruct {0}.{1}", getclasstypename(class), member)
     return class[member](...)
 end
 
 function callexterninstancereturnstruct(funcInfo, obj, class, member, ...)
-    tanslationlog("need add handler for callexterninstancereturnstruct {0}.{1}", getclasstypename(class), member)
+    translationlog("need add handler for callexterninstancereturnstruct {0}.{1}", getclasstypename(class), member)
     return obj[member](obj, ...)
 end
 
@@ -1215,53 +1304,47 @@ function luatableremove(tb, val)
     end
 end
 
-function keepstructvalue(funcInfo, fieldType, val)
-    if val==nil then
-        return
+function recycleandkeepstructvalue(funcInfo, fieldType, oldVal, newVal)
+    if rawequal(oldVal,newVal) then
+        lualog("[recycleandkeepstructvalue] oldVal==newVal")
+        printStack()
     end
-    if fieldType==UnityEngine.Vector2 then
-        luatableremove(funcInfo.v2_list, val)
-    elseif fieldType==UnityEngine.Vector3 then
-        luatableremove(funcInfo.v3_list, val)
-    elseif fieldType==UnityEngine.Vector4 then
-        luatableremove(funcInfo.v4_list, val)
-    elseif fieldType==UnityEngine.Quaternion then
-        luatableremove(funcInfo.q_list, val)
-    elseif fieldType==UnityEngine.Color then
-        luatableremove(funcInfo.c_list, val)
-    elseif fieldType==UnityEngine.Color32 then
-        luatableremove(funcInfo.c32_list, val)
-    elseif fieldType==UnityEngine.Rect then
-        luatableremove(funcInfo.rt_list, val)
-    elseif fieldType==CsLibrary.DateTime then
-        luatableremove(funcInfo.dt_list, val)
-    elseif fieldType==CsLibrary.TimeSpan then
-        luatableremove(funcInfo.ts_list, val)
+    if not rawequal(oldVal,newVal) and oldVal~=nil then
+        local val = oldVal
+        if fieldType==UnityEngine.Vector2 then
+            Vector2Pool.Recycle(val)
+        elseif fieldType==UnityEngine.Vector3 then
+            Vector3Pool.Recycle(val)
+        elseif fieldType==UnityEngine.Vector4 then
+            Vector4Pool.Recycle(val)
+        elseif fieldType==UnityEngine.Quaternion then
+            QuaternionPool.Recycle(val)
+        elseif fieldType==UnityEngine.Color then
+            ColorPool.Recycle(val)
+        elseif fieldType==UnityEngine.Color32 then
+            Color32Pool.Recycle(val)
+        elseif fieldType==UnityEngine.Rect then
+            RectPool.Recycle(val)
+            TimeSpanPool.Recycle(val)
+        end
     end
-end
-
-function recyclestructvalue(funcInfo, fieldType, val)
-    if val==nil then
-        return
-    end
-    if fieldType==UnityEngine.Vector2 then
-        Vector2Pool.Recycle(val)
-    elseif fieldType==UnityEngine.Vector3 then
-        Vector3Pool.Recycle(val)
-    elseif fieldType==UnityEngine.Vector4 then
-        Vector4Pool.Recycle(val)
-    elseif fieldType==UnityEngine.Quaternion then
-        QuaternionPool.Recycle(val)
-    elseif fieldType==UnityEngine.Color then
-        ColorPool.Recycle(val)
-    elseif fieldType==UnityEngine.Color32 then
-        Color32Pool.Recycle(val)
-    elseif fieldType==UnityEngine.Rect then
-        RectPool.Recycle(val)
-    elseif fieldType==CsLibrary.DateTime then
-        DateTimePool.Recycle(val)
-    elseif fieldType==CsLibrary.TimeSpan then
-        TimeSpanPool.Recycle(val)
+    if newVal~=nil then
+        local val = newVal
+        if fieldType==UnityEngine.Vector2 then
+            luatableremove(funcInfo.v2_list, val)
+        elseif fieldType==UnityEngine.Vector3 then
+            luatableremove(funcInfo.v3_list, val)
+        elseif fieldType==UnityEngine.Vector4 then
+            luatableremove(funcInfo.v4_list, val)
+        elseif fieldType==UnityEngine.Quaternion then
+            luatableremove(funcInfo.q_list, val)
+        elseif fieldType==UnityEngine.Color then
+            luatableremove(funcInfo.c_list, val)
+        elseif fieldType==UnityEngine.Color32 then
+            luatableremove(funcInfo.c32_list, val)
+        elseif fieldType==UnityEngine.Rect then
+            luatableremove(funcInfo.rt_list, val)
+        end
     end
 end
 
@@ -2070,8 +2153,8 @@ __mt_newindex_of_dictionary = function(t, k, val)
     local data = __get_table_data(t)     
     local v = rawget(data, uk)
     if not v then
-        __inc_table_count(t)
         rawset(data, uk, {Key = k, Value = val})
+        __inc_table_count(t)
     else
         v.Value = val;
     end

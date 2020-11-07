@@ -494,11 +494,13 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ ", assignVar);
             }
             bool needWrapStruct = null != rightOper && null != rightOper.Type && rightOper.Type.TypeKind == TypeKind.Struct && !dslToObject && !SymbolTable.IsBasicType(rightOper.Type) && !CsDslTranslater.IsImplementationOfSys(rightOper.Type, "IEnumerator");
-            string tempValVar = string.Format("__temp_val_{0}", GetSourcePosForVar(node));
+            string postfix = GetSourcePosForVar(node);
+            string oldValVar = string.Format("__old_val_{0}", postfix);
+            string newValVar = string.Format("__new_val_{0}", postfix);
             if (needWrapStruct) {
                 if (null != leftSym && SymbolTable.Instance.IsCs2DslSymbol(leftSym) && SymbolTable.Instance.IsFieldSymbolKind(leftSym)) {
                     CodeBuilder.Append(GetIndentString());
-                    CodeBuilder.AppendFormat("local({0}); {0} = ", tempValVar);
+                    CodeBuilder.AppendFormat("local({0}); {0} = ", oldValVar);
                     OutputExpressionSyntax(node.Left);
                     CodeBuilder.AppendLine(";");
                 }
@@ -536,22 +538,16 @@ namespace RoslynTool.CsToDsl
                         fieldType = ClassInfo.GetFullName(leftPsym.Type);
                     else if (null != leftFsym)
                         fieldType = ClassInfo.GetFullName(leftFsym.Type);
-                    //回收旧值
-                    CodeBuilder.Append(GetIndentString());
-                    CodeBuilder.Append("recyclestructvalue(");
-                    CodeBuilder.Append(fieldType);
-                    CodeBuilder.AppendFormat(", {0});", tempValVar);
-                    CodeBuilder.AppendLine();
                     //获取新值
                     CodeBuilder.Append(GetIndentString());
-                    CodeBuilder.AppendFormat("{0} = ", tempValVar);
+                    CodeBuilder.AppendFormat("local({0}); {0} = ", newValVar);
                     OutputExpressionSyntax(node.Left);
                     CodeBuilder.AppendLine(";");
-                    //保持新值
+                    //回收旧值，保持新值
                     CodeBuilder.Append(GetIndentString());
-                    CodeBuilder.Append("keepstructvalue(");
+                    CodeBuilder.Append("recycleandkeepstructvalue(");
                     CodeBuilder.Append(fieldType);
-                    CodeBuilder.AppendFormat(", {0});", tempValVar);
+                    CodeBuilder.AppendFormat(", {0}, {1});", oldValVar, newValVar);
                     CodeBuilder.AppendLine();
                 }
             }

@@ -203,7 +203,7 @@ namespace RoslynTool.CsToDsl
             CodeBuilder.AppendLine(" ){");
             if (ci.HaveContinue) {
                 if (ci.HaveBreak) {
-                    CodeBuilder.AppendFormat("{0}local{{{1} = false;}};", GetIndentString(), ci.BreakFlagVarName);
+                    CodeBuilder.AppendFormat("{0}local({1}); {1} = false;", GetIndentString(), ci.BreakFlagVarName);
                     CodeBuilder.AppendLine();
                 }
                 CodeBuilder.AppendFormat("{0}do{{", GetIndentString());
@@ -239,7 +239,7 @@ namespace RoslynTool.CsToDsl
             CodeBuilder.AppendLine();
             if (ci.HaveContinue) {
                 if (ci.HaveBreak) {
-                    CodeBuilder.AppendFormat("{0}local{{{1} = false;}};", GetIndentString(), ci.BreakFlagVarName);
+                    CodeBuilder.AppendFormat("{0}local({1}); {1} = false;", GetIndentString(), ci.BreakFlagVarName);
                     CodeBuilder.AppendLine();
                 }
                 CodeBuilder.AppendFormat("{0}do{{", GetIndentString());
@@ -300,7 +300,7 @@ namespace RoslynTool.CsToDsl
             CodeBuilder.AppendLine(" ){");
             if (ci.HaveContinue) {
                 if (ci.HaveBreak) {
-                    CodeBuilder.AppendFormat("{0}local{{{1} = false;}};", GetIndentString(), ci.BreakFlagVarName);
+                    CodeBuilder.AppendFormat("{0}local({1}); {1} = false;", GetIndentString(), ci.BreakFlagVarName);
                     CodeBuilder.AppendLine();
                 }
                 CodeBuilder.AppendFormat("{0}do{{", GetIndentString());
@@ -348,7 +348,7 @@ namespace RoslynTool.CsToDsl
             CodeBuilder.AppendLine("){");
             if (ci.HaveContinue) {
                 if (ci.HaveBreak) {
-                    CodeBuilder.AppendFormat("{0}local{{{1} = false;}};", GetIndentString(), ci.BreakFlagVarName);
+                    CodeBuilder.AppendFormat("{0}local({1}); {1} = false;", GetIndentString(), ci.BreakFlagVarName);
                     CodeBuilder.AppendLine();
                 }
                 CodeBuilder.AppendFormat("{0}do{{", GetIndentString());
@@ -434,14 +434,14 @@ namespace RoslynTool.CsToDsl
             si.SwitchVarName = varName;
             m_SwitchInfoStack.Push(si);
 
-            CodeBuilder.AppendFormat("{0}local{{{1} = ", GetIndentString(), varName);
+            CodeBuilder.AppendFormat("{0}local({1}); {1} = ", GetIndentString(), varName);
             IConversionExpression opd = null;
             var oper = m_Model.GetOperationEx(node) as ISwitchStatement;
             if (null != oper) {
                 opd = oper.Value as IConversionExpression;
             }
             OutputExpressionSyntax(node.Expression, opd);
-            CodeBuilder.AppendLine(";};");
+            CodeBuilder.AppendLine(";");
 
             int ct = node.Sections.Count;
             SwitchSectionSyntax defaultSection = null;

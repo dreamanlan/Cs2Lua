@@ -233,7 +233,7 @@ namespace RoslynTool.CsToDsl
             if (string.IsNullOrEmpty(dslModule) && string.IsNullOrEmpty(dslFuncName)) {                
                 TryWrapValueParams(CodeBuilder, mi);
                 if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
-                    CodeBuilder.AppendFormat("{0}local{{{1} = params({2});}};", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
+                    CodeBuilder.AppendFormat("{0}local({1}); {1} = params({2});", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
                     CodeBuilder.AppendLine();
                 }
             }
@@ -413,11 +413,37 @@ namespace RoslynTool.CsToDsl
                                 ci.CurrentCodeBuilder = ci.InstanceInitializerCodeBuilder;
                             }
                             ++m_Indent;
-                            CodeBuilder.AppendFormat("{0}{1}.{2}", GetIndentString(), isStatic ? ci.Key : "this", name);
-                            CodeBuilder.Append(" = ");
+                            CodeBuilder.Append(GetIndentString());
+                            if (isStatic) {
+                                CodeBuilder.Append("setstatic(SymbolKind.Field, ");
+                                CodeBuilder.Append(ci.Key);
+                                CodeBuilder.AppendFormat(", \"{0}\", ", name);
+                            }
+                            else {
+                                CodeBuilder.Append("setinstance(SymbolKind.Field, this, ");
+                                CodeBuilder.Append(ci.Key);
+                                CodeBuilder.AppendFormat(", \"{0}\", ", name);
+                            }
                             OutputExpressionSyntax(v.Initializer.Value, opd);
-                            CodeBuilder.Append(";");
-                            CodeBuilder.AppendLine();
+                            CodeBuilder.AppendLine(");");
+                            if (type.IsValueType && !SymbolTable.IsBasicType(type)) {
+                                //回收旧值，保持新值
+                                CodeBuilder.Append(GetIndentString());
+                                CodeBuilder.Append("recycleandkeepstructvalue(");
+                                CodeBuilder.Append(ClassInfo.GetFullName(type));
+                                CodeBuilder.Append(", nil, ");
+                                if (isStatic) {
+                                    CodeBuilder.Append("getstatic(SymbolKind.Field, ");
+                                    CodeBuilder.Append(ci.Key);
+                                    CodeBuilder.AppendFormat(", \"{0}\")", name);
+                                }
+                                else {
+                                    CodeBuilder.Append("getinstance(SymbolKind.Field, this, ");
+                                    CodeBuilder.Append(ci.Key);
+                                    CodeBuilder.AppendFormat(", \"{0}\")", name);
+                                }
+                                CodeBuilder.AppendLine(");");
+                            }
                             --m_Indent;
                             if (isStatic) {
                                 ci.CurrentCodeBuilder = ci.StaticFieldCodeBuilder;
@@ -452,9 +478,37 @@ namespace RoslynTool.CsToDsl
                                     ci.CurrentCodeBuilder = ci.InstanceInitializerCodeBuilder;
                                 }
                                 ++m_Indent;
-                                CodeBuilder.AppendFormat("{0}{1}.{2} = ", GetIndentString(), isStatic ? ci.Key : "this", name);
+                                CodeBuilder.Append(GetIndentString());
+                                if (isStatic) {
+                                    CodeBuilder.Append("setstatic(SymbolKind.Field, ");
+                                    CodeBuilder.Append(ci.Key);
+                                    CodeBuilder.AppendFormat(", \"{0}\", ", name);
+                                }
+                                else {
+                                    CodeBuilder.Append("setinstance(SymbolKind.Field, this, ");
+                                    CodeBuilder.Append(ci.Key);
+                                    CodeBuilder.AppendFormat(", \"{0}\", ", name);
+                                }
                                 OutputNewValueType(type as INamedTypeSymbol);
-                                CodeBuilder.AppendLine();
+                                CodeBuilder.AppendLine(");");
+                                if (!SymbolTable.IsBasicType(type)) {
+                                    //回收旧值，保持新值
+                                    CodeBuilder.Append(GetIndentString());
+                                    CodeBuilder.Append("recycleandkeepstructvalue(");
+                                    CodeBuilder.Append(ClassInfo.GetFullName(type));
+                                    CodeBuilder.Append(", nil, ");
+                                    if (isStatic) {
+                                        CodeBuilder.Append("getstatic(SymbolKind.Field, ");
+                                        CodeBuilder.Append(ci.Key);
+                                        CodeBuilder.AppendFormat(", \"{0}\")", name);
+                                    }
+                                    else {
+                                        CodeBuilder.Append("getinstance(SymbolKind.Field, this, ");
+                                        CodeBuilder.Append(ci.Key);
+                                        CodeBuilder.AppendFormat(", \"{0}\")", name);
+                                    }
+                                    CodeBuilder.AppendLine(");");
+                                }
                                 --m_Indent;
                                 if (isStatic) {
                                     ci.CurrentCodeBuilder = ci.StaticFieldCodeBuilder;
@@ -483,9 +537,37 @@ namespace RoslynTool.CsToDsl
                                 ci.CurrentCodeBuilder = ci.InstanceInitializerCodeBuilder;
                             }
                             ++m_Indent;
-                            CodeBuilder.AppendFormat("{0}{1}.{2} = ", GetIndentString(), isStatic ? ci.Key : "this", name);
+                            CodeBuilder.Append(GetIndentString());
+                            if (isStatic) {
+                                CodeBuilder.Append("setstatic(SymbolKind.Field, ");
+                                CodeBuilder.Append(ci.Key);
+                                CodeBuilder.AppendFormat(", \"{0}\", ", name);
+                            }
+                            else {
+                                CodeBuilder.Append("setinstance(SymbolKind.Field, this, ");
+                                CodeBuilder.Append(ci.Key);
+                                CodeBuilder.AppendFormat(", \"{0}\", ", name);
+                            }
                             OutputNewValueType(type as INamedTypeSymbol);
-                            CodeBuilder.AppendLine();
+                            CodeBuilder.AppendLine(");");
+                            if (type.IsValueType) {
+                                //回收旧值，保持新值
+                                CodeBuilder.Append(GetIndentString());
+                                CodeBuilder.Append("recycleandkeepstructvalue(");
+                                CodeBuilder.Append(ClassInfo.GetFullName(type));
+                                CodeBuilder.Append(", nil, ");
+                                if (isStatic) {
+                                    CodeBuilder.Append("getstatic(SymbolKind.Field, ");
+                                    CodeBuilder.Append(ci.Key);
+                                    CodeBuilder.AppendFormat(", \"{0}\")", name);
+                                }
+                                else {
+                                    CodeBuilder.Append("getinstance(SymbolKind.Field, this, ");
+                                    CodeBuilder.Append(ci.Key);
+                                    CodeBuilder.AppendFormat(", \"{0}\")", name);
+                                }
+                                CodeBuilder.AppendLine(");");
+                            }
                             --m_Indent;
                             if (isStatic) {
                                 ci.CurrentCodeBuilder = ci.StaticFieldCodeBuilder;
@@ -608,11 +690,13 @@ namespace RoslynTool.CsToDsl
                     dslToObject = InvocationInfo.IsDslToObject(leftOper.Type, rightOper.Type);
                 }
                 bool needWrapStruct = null != rightOper && null != rightOper.Type && rightOper.Type.TypeKind == TypeKind.Struct && !dslToObject && !SymbolTable.IsBasicType(rightOper.Type) && !CsDslTranslater.IsImplementationOfSys(rightOper.Type, "IEnumerator");
-                string tempValVar = string.Format("__temp_val_{0}", GetSourcePosForVar(expression));
+                string postfix = GetSourcePosForVar(expression);
+                string oldValVar = string.Format("__old_val_{0}", postfix);
+                string newValVar = string.Format("__new_val_{0}", postfix);
                 if (needWrapStruct) {
                     if (null != leftSym && SymbolTable.Instance.IsCs2DslSymbol(leftSym) && SymbolTable.Instance.IsFieldSymbolKind(leftSym)) {
                         CodeBuilder.Append(GetIndentString());
-                        CodeBuilder.AppendFormat("local({0}); {0} = ", tempValVar);
+                        CodeBuilder.AppendFormat("local({0}); {0} = ", oldValVar);
                         OutputExpressionSyntax(assign.Left);
                         CodeBuilder.AppendLine(";");
                     }
@@ -650,22 +734,16 @@ namespace RoslynTool.CsToDsl
                             fieldType = ClassInfo.GetFullName(leftPsym.Type);
                         else if (null != leftFsym)
                             fieldType = ClassInfo.GetFullName(leftFsym.Type);
-                        //回收旧值
-                        CodeBuilder.Append(GetIndentString());
-                        CodeBuilder.Append("recyclestructvalue(");
-                        CodeBuilder.Append(fieldType);
-                        CodeBuilder.AppendFormat(", {0});", tempValVar);
-                        CodeBuilder.AppendLine();
                         //获取新值
                         CodeBuilder.Append(GetIndentString());
-                        CodeBuilder.AppendFormat("{0} = ", tempValVar);
+                        CodeBuilder.AppendFormat("local({0}); {0} = ", newValVar);
                         OutputExpressionSyntax(assign.Left);
                         CodeBuilder.AppendLine(";");
-                        //保持新值
+                        //回收旧值，保持新值
                         CodeBuilder.Append(GetIndentString());
-                        CodeBuilder.Append("keepstructvalue(");
+                        CodeBuilder.Append("recycleandkeepstructvalue(");
                         CodeBuilder.Append(fieldType);
-                        CodeBuilder.AppendFormat(", {0});", tempValVar);
+                        CodeBuilder.AppendFormat(", {0}, {1});", oldValVar, newValVar);
                         CodeBuilder.AppendLine();
                     }
                 }
@@ -943,9 +1021,9 @@ namespace RoslynTool.CsToDsl
                 LocalVariableAccessAnalysis analysis = new LocalVariableAccessAnalysis(node.Identifier.Text);
                 analysis.Visit(block);
                 if (analysis.NeedInitOnDeclaration) {
-                    CodeBuilder.AppendFormat("{0}local{{{1} = ", GetIndentString(), node.Identifier.Text);
+                    CodeBuilder.AppendFormat("{0}local({1}); {1} = ", GetIndentString(), node.Identifier.Text);
                     OutputNewValueType(namedTypeSym);
-                    CodeBuilder.Append("}");
+                    CodeBuilder.Append(";");
                 }
                 else {
                     CodeBuilder.AppendFormat("{0}local({1})", GetIndentString(), node.Identifier.Text);

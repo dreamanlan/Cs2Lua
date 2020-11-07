@@ -1199,8 +1199,8 @@ namespace Generator
                 id == "getexternstaticstructmember" || id == "getexterninstancestructmember" ||
                 id == "callexterndelegationreturnstruct" || id == "callexternextensionreturnstruct" || 
                 id == "callexternstaticreturnstruct" || id == "callexterninstancereturnstruct" ||
-                id == "invokeexternoperatorreturnstruct" ||
-                id == "keepstructvalue" || id == "recyclestructvalue") {
+                id == "invokeexternoperatorreturnstruct" || 
+                id == "recycleandkeepstructvalue") {
                 sb.Append(id);
                 sb.Append("(__cs2lua_func_info");
                 if (data.GetParamNum() > 0)
@@ -2247,19 +2247,6 @@ namespace Generator
                 foreach (var comp in data.Params) {
                     GenerateSyntaxComponent(comp, sb, indent, true);
                     sb.AppendLine();
-                }
-            }
-            else if (id == "local") {
-                bool first = true;
-                foreach (var comp in data.Params) {
-                    if (!first) {
-                        sb.AppendLine(";");
-                    }
-                    else {
-                        first = false;
-                    }
-                    sb.Append("local ");
-                    GenerateSyntaxComponent(comp, sb, indent, false);
                 }
             }
             else if (id == "execclosure") {
