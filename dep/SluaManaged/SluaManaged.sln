@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SluaManaged", "SluaManaged\SluaManaged.csproj", "{FC09D89D-7820-4514-99B4-F9962C5B07F6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		DebugIos|Any CPU = DebugIos|Any CPU
+		Release|Any CPU = Release|Any CPU
+		ReleaseIos|Any CPU = ReleaseIos|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FC09D89D-7820-4514-99B4-F9962C5B07F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC09D89D-7820-4514-99B4-F9962C5B07F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC09D89D-7820-4514-99B4-F9962C5B07F6}.DebugIos|Any CPU.ActiveCfg = DebugIos|Any CPU
+		{FC09D89D-7820-4514-99B4-F9962C5B07F6}.DebugIos|Any CPU.Build.0 = DebugIos|Any CPU
+		{FC09D89D-7820-4514-99B4-F9962C5B07F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC09D89D-7820-4514-99B4-F9962C5B07F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC09D89D-7820-4514-99B4-F9962C5B07F6}.ReleaseIos|Any CPU.ActiveCfg = ReleaseIos|Any CPU
+		{FC09D89D-7820-4514-99B4-F9962C5B07F6}.ReleaseIos|Any CPU.Build.0 = ReleaseIos|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1137,7 +1137,7 @@ namespace RoslynTool.CsToDsl
                 sb.AppendFormat("{0}if({1}.__cctor_called){{", GetIndentString(indent), key);
                 sb.AppendLine();
                 ++indent;
-                sb.AppendFormat("{0}return;", GetIndentString(indent));
+                sb.AppendFormat("{0}return();", GetIndentString(indent));
                 sb.AppendLine();
                 --indent;
                 sb.AppendFormat("{0}}}else{{", GetIndentString(indent));
@@ -1264,7 +1264,7 @@ namespace RoslynTool.CsToDsl
                     sb.AppendFormat("{0}if(getinstance(SymbolKind.Field, this, {1}, \"__ctor_called\")){{", GetIndentString(indent), key);
                     sb.AppendLine();
                     ++indent;
-                    sb.AppendFormat("{0}return;", GetIndentString(indent));
+                    sb.AppendFormat("{0}return();", GetIndentString(indent));
                     sb.AppendLine();
                     --indent;
                     sb.AppendFormat("{0}}}else{{", GetIndentString(indent));

@@ -75,6 +75,7 @@
     <Compile Include="CsToDsl\CsToDsl_Object.cs" />
     <Compile Include="CsToDsl\CsToDsl_Statement.cs" />
     <Compile Include="CsToDsl\Logger.cs" />
+    <Compile Include="dep\DslCalculator.cs" />
     <Compile Include="Generator\LuaGenerator_Helper.cs" />
     <Compile Include="Generator\LuaGenerator_Main.cs" />
     <Compile Include="Info\ClassInfo.cs" />

@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">IOS</Platform>
+    <ProjectGuid>{FC09D89D-7820-4514-99B4-F9962C5B07F6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Slua</RootNamespace>
+    <AssemblyName>SluaManaged</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;ENABLE_USE_INHERIT_INTERFACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;ENABLE_USE_INHERIT_INTERFACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugIos|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;UNITY_IOS;ENABLE_USE_INHERIT_INTERFACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseIos|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;ENABLE_USE_INHERIT_INTERFACE;UNITY_IOS</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\CsLibrary\ExternLibrary\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\CsLibrary\ExternLibrary\UnityEngine.UI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Slua_Managed\ByteArray.cs" />
+    <Compile Include="Slua_Managed\Coroutine.cs" />
+    <Compile Include="Slua_Managed\Helper.cs" />
+    <Compile Include="Slua_Managed\Logger.cs" />
+    <Compile Include="Slua_Managed\Lua3rdDLL.cs" />
+    <Compile Include="Slua_Managed\Lua3rdMeta.cs" />
+    <Compile Include="Slua_Managed\LuaArray.cs" />
+    <Compile Include="Slua_Managed\LuaByteArray.cs" />
+    <Compile Include="Slua_Managed\LuaDLL.cs" />
+    <Compile Include="Slua_Managed\LuaDLLWrapper.cs" />
+    <Compile Include="Slua_Managed\LuaObject.cs" />
+    <Compile Include="Slua_Managed\LuaObject_basetype.cs" />
+    <Compile Include="Slua_Managed\LuaObject_overload.cs" />
+    <Compile Include="Slua_Managed\LuaState.cs" />
+    <Compile Include="Slua_Managed\LuaSvr.cs" />
+    <Compile Include="Slua_Managed\LuaSvrGameObject.cs" />
+    <Compile Include="Slua_Managed\LuaVarObject.cs" />
+    <Compile Include="Slua_Managed\ObjectCache.cs" />
+    <Compile Include="Slua_Managed\SLuaSetting.cs" />
+    <Compile Include="Slua_Managed\Timer.cs" />
+    <Compile Include="Slua_Managed\WeakDictionary.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
