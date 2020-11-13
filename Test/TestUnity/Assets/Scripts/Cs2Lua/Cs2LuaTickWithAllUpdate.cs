@@ -65,15 +65,14 @@ public class Cs2LuaTickWithAllUpdate : MonoBehaviour
     {
         while (!Cs2LuaAssembly.Instance.LuaInited)
             yield return null;
-        svr = Cs2LuaAssembly.Instance.LuaSvr;
 		string fileName = LuaClassFileName.ToLower();
         var sb = new System.Text.StringBuilder();
         sb.Append("require ");
         sb.Append('"');
         sb.Append(fileName);
         sb.Append('"');
-        svr.luaState.doString(sb.ToString());
-        classObj = (LuaTable)svr.luaState[className];
+        LuaState.main.doString(sb.ToString());
+        classObj = (LuaTable)LuaState.main[className];
         self = (LuaTable)((LuaFunction)classObj["__new_object"]).call();
         init = (LuaFunction)self["Init"];
         update = (LuaFunction)self["Update"];
@@ -81,7 +80,8 @@ public class Cs2LuaTickWithAllUpdate : MonoBehaviour
         lateUpdate = (LuaFunction)self["LateUpdate"];
         call = (LuaFunction)self["Call"];
         if (null != init) {
-            init.call(self, gameObject, this);
+            monoBehaviourProxy = new MonoBehaviourProxy(this);
+            init.call(self, gameObject, monoBehaviourProxy);
         }
         luaInited = true;
         yield return null;
@@ -115,7 +115,6 @@ public class Cs2LuaTickWithAllUpdate : MonoBehaviour
 
     private ITickPlugin csObject;
     
-    private LuaSvr svr;
     private LuaTable classObj;
     private LuaTable self;
     private LuaFunction init;

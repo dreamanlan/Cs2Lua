@@ -56,6 +56,8 @@ internal static class Cs2LuaLibrary
         return Mathf.Min(a, b);
     }
 }
+
+[Cs2Dsl.Require("lualib_valuetypescript")]
 [Cs2Dsl.Entry]
 public static class Program
 {

@@ -9,7 +9,7 @@ public class Lua_UnityEngine_Jobs_TransformAccessArray : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Jobs.TransformAccessArray o;
-			if(matchType(l, "ctor__Arr_Transform__Int32", argc, 2,typeof(UnityEngine.Transform[]),typeof(int))){
+			if(matchType(l, "ctor__Void__Arr_Transform__Int32", argc, 2,typeof(UnityEngine.Transform[]),typeof(int))){
 				UnityEngine.Transform[] a1;
 				checkArray(l,3,out a1);
 				System.Int32 a2;
@@ -19,7 +19,7 @@ public class Lua_UnityEngine_Jobs_TransformAccessArray : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__Int32__Int32", argc, 2,typeof(int),typeof(int))){
+			else if(matchType(l, "ctor__Void__Int32__Int32", argc, 2,typeof(int),typeof(int))){
 				System.Int32 a1;
 				checkType(l,3,out a1);
 				System.Int32 a2;

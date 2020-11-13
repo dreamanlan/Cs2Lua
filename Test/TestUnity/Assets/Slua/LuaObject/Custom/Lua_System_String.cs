@@ -47,6 +47,48 @@ public class Lua_System_String : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int Equals(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==4){
+				System.String self=(System.String)checkSelf(l);
+				System.String a1;
+				checkType(l,3,out a1);
+				System.StringComparison a2;
+				checkEnum(l,4,out a2);
+				var ret=self.Equals(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(matchType(l, "Equals__Boolean__String", argc, 2,typeof(string))){
+				System.String self=(System.String)checkSelf(l);
+				System.String a1;
+				checkType(l,3,out a1);
+				var ret=self.Equals(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(matchType(l, "Equals__Boolean__Object", argc, 2,typeof(System.Object))){
+				System.String self=(System.String)checkSelf(l);
+				System.Object a1;
+				checkType(l,3,out a1);
+				var ret=self.Equals(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CopyTo(IntPtr l) {
 		try {
 			System.String self=(System.String)checkSelf(l);
@@ -102,7 +144,7 @@ public class Lua_System_String : LuaObject {
 	static public int Split(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Split__Arr_Char__Int32__StringSplitOptions", argc, 2,typeof(System.Char[]),typeof(int),typeof(System.StringSplitOptions))){
+			if(matchType(l, "Split__Arr_String__Arr_Char__Int32__StringSplitOptions", argc, 2,typeof(System.Char[]),typeof(int),typeof(System.StringSplitOptions))){
 				System.String self=(System.String)checkSelf(l);
 				System.Char[] a1;
 				checkArray(l,3,out a1);
@@ -115,7 +157,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Split__Arr_String__Int32__StringSplitOptions", argc, 2,typeof(System.String[]),typeof(int),typeof(System.StringSplitOptions))){
+			else if(matchType(l, "Split__Arr_String__Arr_String__Int32__StringSplitOptions", argc, 2,typeof(System.String[]),typeof(int),typeof(System.StringSplitOptions))){
 				System.String self=(System.String)checkSelf(l);
 				System.String[] a1;
 				checkArray(l,3,out a1);
@@ -128,7 +170,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Split__Arr_Char__Int32", argc, 2,typeof(System.Char[]),typeof(int))){
+			else if(matchType(l, "Split__Arr_String__Arr_Char__Int32", argc, 2,typeof(System.Char[]),typeof(int))){
 				System.String self=(System.String)checkSelf(l);
 				System.Char[] a1;
 				checkArray(l,3,out a1);
@@ -139,7 +181,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Split__Arr_Char__StringSplitOptions", argc, 2,typeof(System.Char[]),typeof(System.StringSplitOptions))){
+			else if(matchType(l, "Split__Arr_String__Arr_Char__StringSplitOptions", argc, 2,typeof(System.Char[]),typeof(System.StringSplitOptions))){
 				System.String self=(System.String)checkSelf(l);
 				System.Char[] a1;
 				checkArray(l,3,out a1);
@@ -150,7 +192,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Split__Arr_String__StringSplitOptions", argc, 2,typeof(System.String[]),typeof(System.StringSplitOptions))){
+			else if(matchType(l, "Split__Arr_String__Arr_String__StringSplitOptions", argc, 2,typeof(System.String[]),typeof(System.StringSplitOptions))){
 				System.String self=(System.String)checkSelf(l);
 				System.String[] a1;
 				checkArray(l,3,out a1);
@@ -335,7 +377,7 @@ public class Lua_System_String : LuaObject {
 	static public int CompareTo(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "CompareTo__Object", argc, 2,typeof(System.Object))){
+			if(matchType(l, "CompareTo__Int32__Object", argc, 2,typeof(System.Object))){
 				System.String self=(System.String)checkSelf(l);
 				System.Object a1;
 				checkType(l,3,out a1);
@@ -344,7 +386,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "CompareTo__String", argc, 2,typeof(string))){
+			else if(matchType(l, "CompareTo__Int32__String", argc, 2,typeof(string))){
 				System.String self=(System.String)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);
@@ -443,7 +485,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "IndexOf__String__Int32__Int32", argc, 2,typeof(string),typeof(int),typeof(int))){
+			else if(matchType(l, "IndexOf__Int32__String__Int32__Int32", argc, 2,typeof(string),typeof(int),typeof(int))){
 				System.String self=(System.String)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);
@@ -456,7 +498,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "IndexOf__String__Int32__StringComparison", argc, 2,typeof(string),typeof(int),typeof(System.StringComparison))){
+			else if(matchType(l, "IndexOf__Int32__String__Int32__StringComparison", argc, 2,typeof(string),typeof(int),typeof(System.StringComparison))){
 				System.String self=(System.String)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);
@@ -469,7 +511,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "IndexOf__Char__Int32__Int32", argc, 2,typeof(System.Char),typeof(int),typeof(int))){
+			else if(matchType(l, "IndexOf__Int32__Char__Int32__Int32", argc, 2,typeof(System.Char),typeof(int),typeof(int))){
 				System.String self=(System.String)checkSelf(l);
 				System.Char a1;
 				checkType(l,3,out a1);
@@ -482,7 +524,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "IndexOf__Char__Int32", argc, 2,typeof(System.Char),typeof(int))){
+			else if(matchType(l, "IndexOf__Int32__Char__Int32", argc, 2,typeof(System.Char),typeof(int))){
 				System.String self=(System.String)checkSelf(l);
 				System.Char a1;
 				checkType(l,3,out a1);
@@ -493,7 +535,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "IndexOf__String__Int32", argc, 2,typeof(string),typeof(int))){
+			else if(matchType(l, "IndexOf__Int32__String__Int32", argc, 2,typeof(string),typeof(int))){
 				System.String self=(System.String)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);
@@ -504,7 +546,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "IndexOf__String__StringComparison", argc, 2,typeof(string),typeof(System.StringComparison))){
+			else if(matchType(l, "IndexOf__Int32__String__StringComparison", argc, 2,typeof(string),typeof(System.StringComparison))){
 				System.String self=(System.String)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);
@@ -515,7 +557,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "IndexOf__Char", argc, 2,typeof(System.Char))){
+			else if(matchType(l, "IndexOf__Int32__Char", argc, 2,typeof(System.Char))){
 				System.String self=(System.String)checkSelf(l);
 				System.Char a1;
 				checkType(l,3,out a1);
@@ -524,7 +566,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "IndexOf__String", argc, 2,typeof(string))){
+			else if(matchType(l, "IndexOf__Int32__String", argc, 2,typeof(string))){
 				System.String self=(System.String)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);
@@ -607,7 +649,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "LastIndexOf__String__Int32__Int32", argc, 2,typeof(string),typeof(int),typeof(int))){
+			else if(matchType(l, "LastIndexOf__Int32__String__Int32__Int32", argc, 2,typeof(string),typeof(int),typeof(int))){
 				System.String self=(System.String)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);
@@ -620,7 +662,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "LastIndexOf__String__Int32__StringComparison", argc, 2,typeof(string),typeof(int),typeof(System.StringComparison))){
+			else if(matchType(l, "LastIndexOf__Int32__String__Int32__StringComparison", argc, 2,typeof(string),typeof(int),typeof(System.StringComparison))){
 				System.String self=(System.String)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);
@@ -633,7 +675,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "LastIndexOf__Char__Int32__Int32", argc, 2,typeof(System.Char),typeof(int),typeof(int))){
+			else if(matchType(l, "LastIndexOf__Int32__Char__Int32__Int32", argc, 2,typeof(System.Char),typeof(int),typeof(int))){
 				System.String self=(System.String)checkSelf(l);
 				System.Char a1;
 				checkType(l,3,out a1);
@@ -646,7 +688,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "LastIndexOf__Char__Int32", argc, 2,typeof(System.Char),typeof(int))){
+			else if(matchType(l, "LastIndexOf__Int32__Char__Int32", argc, 2,typeof(System.Char),typeof(int))){
 				System.String self=(System.String)checkSelf(l);
 				System.Char a1;
 				checkType(l,3,out a1);
@@ -657,7 +699,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "LastIndexOf__String__Int32", argc, 2,typeof(string),typeof(int))){
+			else if(matchType(l, "LastIndexOf__Int32__String__Int32", argc, 2,typeof(string),typeof(int))){
 				System.String self=(System.String)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);
@@ -668,7 +710,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "LastIndexOf__String__StringComparison", argc, 2,typeof(string),typeof(System.StringComparison))){
+			else if(matchType(l, "LastIndexOf__Int32__String__StringComparison", argc, 2,typeof(string),typeof(System.StringComparison))){
 				System.String self=(System.String)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);
@@ -679,7 +721,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "LastIndexOf__Char", argc, 2,typeof(System.Char))){
+			else if(matchType(l, "LastIndexOf__Int32__Char", argc, 2,typeof(System.Char))){
 				System.String self=(System.String)checkSelf(l);
 				System.Char a1;
 				checkType(l,3,out a1);
@@ -688,7 +730,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "LastIndexOf__String", argc, 2,typeof(string))){
+			else if(matchType(l, "LastIndexOf__Int32__String", argc, 2,typeof(string))){
 				System.String self=(System.String)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);
@@ -986,7 +1028,7 @@ public class Lua_System_String : LuaObject {
 	static public int Replace(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Replace__Char__Char", argc, 2,typeof(System.Char),typeof(System.Char))){
+			if(matchType(l, "Replace__String__Char__Char", argc, 2,typeof(System.Char),typeof(System.Char))){
 				System.String self=(System.String)checkSelf(l);
 				System.Char a1;
 				checkType(l,3,out a1);
@@ -997,7 +1039,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Replace__String__String", argc, 2,typeof(string),typeof(string))){
+			else if(matchType(l, "Replace__String__String__String", argc, 2,typeof(string),typeof(string))){
 				System.String self=(System.String)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);
@@ -1082,7 +1124,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Join__String__Arr_String", argc, 1,typeof(string),typeof(System.String[]))){
+			else if(matchType(l, "Join__String__String__Arr_String", argc, 1,typeof(string),typeof(System.String[]))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.String[] a2;
@@ -1092,7 +1134,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Join__String__Arr_Object", argc, 1,typeof(string),typeof(object[]))){
+			else if(matchType(l, "Join__String__String__Arr_Object", argc, 1,typeof(string),typeof(object[]))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.Object[] a2;
@@ -1102,7 +1144,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Join__String__IEnumerable`1_String", argc, 1,typeof(string),typeof(IEnumerable<System.String>))){
+			else if(matchType(l, "Join__String__String__IEnumerable`1_String", argc, 1,typeof(string),typeof(IEnumerable<System.String>))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.Collections.Generic.IEnumerable<System.String> a2;
@@ -1122,7 +1164,42 @@ public class Lua_System_String : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Equality(IntPtr l) {
+	static public int Equals_s(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==4){
+				System.String a1;
+				checkType(l,2,out a1);
+				System.String a2;
+				checkType(l,3,out a2);
+				System.StringComparison a3;
+				checkEnum(l,4,out a3);
+				var ret=System.String.Equals(a1,a2,a3);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==3){
+				System.String a1;
+				checkType(l,2,out a1);
+				System.String a2;
+				checkType(l,3,out a2);
+				var ret=System.String.Equals(a1,a2);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Equality_s(IntPtr l) {
 		try {
 			System.String a1;
 			checkType(l,1,out a1);
@@ -1139,7 +1216,7 @@ public class Lua_System_String : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Inequality(IntPtr l) {
+	static public int op_Inequality_s(IntPtr l) {
 		try {
 			System.String a1;
 			checkType(l,1,out a1);
@@ -1189,7 +1266,7 @@ public class Lua_System_String : LuaObject {
 	static public int Compare_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Compare__String__Int32__String__Int32__Int32__Boolean__CultureInfo", argc, 1,typeof(string),typeof(int),typeof(string),typeof(int),typeof(int),typeof(bool),typeof(System.Globalization.CultureInfo))){
+			if(matchType(l, "Compare__Int32__String__Int32__String__Int32__Int32__Boolean__CultureInfo", argc, 1,typeof(string),typeof(int),typeof(string),typeof(int),typeof(int),typeof(bool),typeof(System.Globalization.CultureInfo))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -1209,7 +1286,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Compare__String__Int32__String__Int32__Int32__CultureInfo__CompareOptions", argc, 1,typeof(string),typeof(int),typeof(string),typeof(int),typeof(int),typeof(System.Globalization.CultureInfo),typeof(System.Globalization.CompareOptions))){
+			else if(matchType(l, "Compare__Int32__String__Int32__String__Int32__Int32__CultureInfo__CompareOptions", argc, 1,typeof(string),typeof(int),typeof(string),typeof(int),typeof(int),typeof(System.Globalization.CultureInfo),typeof(System.Globalization.CompareOptions))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -1229,7 +1306,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Compare__String__Int32__String__Int32__Int32__Boolean", argc, 1,typeof(string),typeof(int),typeof(string),typeof(int),typeof(int),typeof(bool))){
+			else if(matchType(l, "Compare__Int32__String__Int32__String__Int32__Int32__Boolean", argc, 1,typeof(string),typeof(int),typeof(string),typeof(int),typeof(int),typeof(bool))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -1247,7 +1324,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Compare__String__Int32__String__Int32__Int32__StringComparison", argc, 1,typeof(string),typeof(int),typeof(string),typeof(int),typeof(int),typeof(System.StringComparison))){
+			else if(matchType(l, "Compare__Int32__String__Int32__String__Int32__Int32__StringComparison", argc, 1,typeof(string),typeof(int),typeof(string),typeof(int),typeof(int),typeof(System.StringComparison))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -1281,7 +1358,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Compare__String__String__CultureInfo__CompareOptions", argc, 1,typeof(string),typeof(string),typeof(System.Globalization.CultureInfo),typeof(System.Globalization.CompareOptions))){
+			else if(matchType(l, "Compare__Int32__String__String__CultureInfo__CompareOptions", argc, 1,typeof(string),typeof(string),typeof(System.Globalization.CultureInfo),typeof(System.Globalization.CompareOptions))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.String a2;
@@ -1295,7 +1372,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Compare__String__String__Boolean__CultureInfo", argc, 1,typeof(string),typeof(string),typeof(bool),typeof(System.Globalization.CultureInfo))){
+			else if(matchType(l, "Compare__Int32__String__String__Boolean__CultureInfo", argc, 1,typeof(string),typeof(string),typeof(bool),typeof(System.Globalization.CultureInfo))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.String a2;
@@ -1309,7 +1386,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Compare__String__String__Boolean", argc, 1,typeof(string),typeof(string),typeof(bool))){
+			else if(matchType(l, "Compare__Int32__String__String__Boolean", argc, 1,typeof(string),typeof(string),typeof(bool))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.String a2;
@@ -1321,7 +1398,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Compare__String__String__StringComparison", argc, 1,typeof(string),typeof(string),typeof(System.StringComparison))){
+			else if(matchType(l, "Compare__Int32__String__String__StringComparison", argc, 1,typeof(string),typeof(string),typeof(System.StringComparison))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.String a2;
@@ -1411,7 +1488,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Format__String__Object__Object__Object", argc, 1,typeof(string),typeof(System.Object),typeof(System.Object),typeof(System.Object))){
+			else if(matchType(l, "Format__String__String__Object__Object__Object", argc, 1,typeof(string),typeof(System.Object),typeof(System.Object),typeof(System.Object))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.Object a2;
@@ -1425,7 +1502,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Format__IFormatProvider__String__Object__Object", argc, 1,typeof(System.IFormatProvider),typeof(string),typeof(System.Object),typeof(System.Object))){
+			else if(matchType(l, "Format__String__IFormatProvider__String__Object__Object", argc, 1,typeof(System.IFormatProvider),typeof(string),typeof(System.Object),typeof(System.Object))){
 				System.IFormatProvider a1;
 				checkType(l,2,out a1);
 				System.String a2;
@@ -1439,7 +1516,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Format__String__Object__Object", argc, 1,typeof(string),typeof(System.Object),typeof(System.Object))){
+			else if(matchType(l, "Format__String__String__Object__Object", argc, 1,typeof(string),typeof(System.Object),typeof(System.Object))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.Object a2;
@@ -1451,7 +1528,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Format__IFormatProvider__String__Object", argc, 1,typeof(System.IFormatProvider),typeof(string),typeof(System.Object))){
+			else if(matchType(l, "Format__String__IFormatProvider__String__Object", argc, 1,typeof(System.IFormatProvider),typeof(string),typeof(System.Object))){
 				System.IFormatProvider a1;
 				checkType(l,2,out a1);
 				System.String a2;
@@ -1463,7 +1540,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Format__IFormatProvider__String__Arr_Object", argc, 1,typeof(System.IFormatProvider),typeof(string),typeof(object[]))){
+			else if(matchType(l, "Format__String__IFormatProvider__String__Arr_Object", argc, 1,typeof(System.IFormatProvider),typeof(string),typeof(object[]))){
 				System.IFormatProvider a1;
 				checkType(l,2,out a1);
 				System.String a2;
@@ -1475,7 +1552,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Format__String__Object", argc, 1,typeof(string),typeof(System.Object))){
+			else if(matchType(l, "Format__String__String__Object", argc, 1,typeof(string),typeof(System.Object))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.Object a2;
@@ -1485,7 +1562,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Format__String__Arr_Object", argc, 1,typeof(string),typeof(object[]))){
+			else if(matchType(l, "Format__String__String__Arr_Object", argc, 1,typeof(string),typeof(object[]))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.Object[] a2;
@@ -1523,7 +1600,7 @@ public class Lua_System_String : LuaObject {
 	static public int Concat_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Concat__Object__Object__Object__Object", argc, 1,typeof(System.Object),typeof(System.Object),typeof(System.Object),typeof(System.Object))){
+			if(matchType(l, "Concat__String__Object__Object__Object__Object", argc, 1,typeof(System.Object),typeof(System.Object),typeof(System.Object),typeof(System.Object))){
 				System.Object a1;
 				checkType(l,2,out a1);
 				System.Object a2;
@@ -1537,7 +1614,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Concat__String__String__String__String", argc, 1,typeof(string),typeof(string),typeof(string),typeof(string))){
+			else if(matchType(l, "Concat__String__String__String__String__String", argc, 1,typeof(string),typeof(string),typeof(string),typeof(string))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.String a2;
@@ -1551,7 +1628,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Concat__Object__Object__Object", argc, 1,typeof(System.Object),typeof(System.Object),typeof(System.Object))){
+			else if(matchType(l, "Concat__String__Object__Object__Object", argc, 1,typeof(System.Object),typeof(System.Object),typeof(System.Object))){
 				System.Object a1;
 				checkType(l,2,out a1);
 				System.Object a2;
@@ -1563,7 +1640,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Concat__String__String__String", argc, 1,typeof(string),typeof(string),typeof(string))){
+			else if(matchType(l, "Concat__String__String__String__String", argc, 1,typeof(string),typeof(string),typeof(string))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.String a2;
@@ -1575,7 +1652,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Concat__Object__Object", argc, 1,typeof(System.Object),typeof(System.Object))){
+			else if(matchType(l, "Concat__String__Object__Object", argc, 1,typeof(System.Object),typeof(System.Object))){
 				System.Object a1;
 				checkType(l,2,out a1);
 				System.Object a2;
@@ -1585,7 +1662,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Concat__String__String", argc, 1,typeof(string),typeof(string))){
+			else if(matchType(l, "Concat__String__String__String", argc, 1,typeof(string),typeof(string))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.String a2;
@@ -1595,7 +1672,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Concat__Object", argc, 1,typeof(System.Object))){
+			else if(matchType(l, "Concat__String__Object", argc, 1,typeof(System.Object))){
 				System.Object a1;
 				checkType(l,2,out a1);
 				var ret=System.String.Concat(a1);
@@ -1603,7 +1680,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Concat__Arr_Object", argc, 1,typeof(object[]))){
+			else if(matchType(l, "Concat__String__Arr_Object", argc, 1,typeof(object[]))){
 				System.Object[] a1;
 				checkParams(l,2,out a1);
 				var ret=System.String.Concat(a1);
@@ -1611,7 +1688,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Concat__IEnumerable`1_String", argc, 1,typeof(IEnumerable<System.String>))){
+			else if(matchType(l, "Concat__String__IEnumerable`1_String", argc, 1,typeof(IEnumerable<System.String>))){
 				System.Collections.Generic.IEnumerable<System.String> a1;
 				checkType(l,2,out a1);
 				var ret=System.String.Concat(a1);
@@ -1619,7 +1696,7 @@ public class Lua_System_String : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Concat__Arr_String", argc, 1,typeof(System.String[]))){
+			else if(matchType(l, "Concat__String__Arr_String", argc, 1,typeof(System.String[]))){
 				System.String[] a1;
 				checkParams(l,2,out a1);
 				var ret=System.String.Concat(a1);
@@ -1709,6 +1786,7 @@ public class Lua_System_String : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"System.String");
+		addMember(l,Equals);
 		addMember(l,CopyTo);
 		addMember(l,ToCharArray);
 		addMember(l,Split);
@@ -1738,8 +1816,9 @@ public class Lua_System_String : LuaObject {
 		addMember(l,Remove);
 		addMember(l,GetTypeCode);
 		addMember(l,Join_s);
-		addMember(l,op_Equality);
-		addMember(l,op_Inequality);
+		addMember(l,Equals_s);
+		addMember(l,op_Equality_s);
+		addMember(l,op_Inequality_s);
 		addMember(l,IsNullOrEmpty_s);
 		addMember(l,IsNullOrWhiteSpace_s);
 		addMember(l,Compare_s);

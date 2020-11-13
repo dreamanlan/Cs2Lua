@@ -19,7 +19,7 @@ public class Lua_UnityEngine_Assertions_Comparers_FloatComparer : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__Boolean", argc, 2,typeof(bool))){
+			else if(matchType(l, "ctor__Void__Boolean", argc, 2,typeof(bool))){
 				System.Boolean a1;
 				checkType(l,3,out a1);
 				o=new UnityEngine.Assertions.Comparers.FloatComparer(a1);
@@ -27,7 +27,7 @@ public class Lua_UnityEngine_Assertions_Comparers_FloatComparer : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__Single", argc, 2,typeof(float))){
+			else if(matchType(l, "ctor__Void__Single", argc, 2,typeof(float))){
 				System.Single a1;
 				checkType(l,3,out a1);
 				o=new UnityEngine.Assertions.Comparers.FloatComparer(a1);

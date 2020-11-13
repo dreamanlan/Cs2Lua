@@ -1,4 +1,4 @@
-require("cs2dsl__lualib");
+require("cs2dsl__syslib");
 require("cs2dsl__attributes");
 require("cs2dsl__namespaces");
 require("cs2dsl__externenums");
@@ -8,14 +8,16 @@ require("cs2luatypeimpl");
 class(Cs2LuaType) {
 	static_methods {
 		GetFullName = deffunc(1)args(type){
-			return(Cs2LuaTypeImpl.GetFullName(type));
+			local(__method_ret_7_4_11_5);
+			__method_ret_7_4_11_5 = Cs2LuaTypeImpl.GetFullName(type);
+			return(__method_ret_7_4_11_5);
 		};
 		cctor = deffunc(0)args(){
 			callstatic(Cs2LuaType, "__cctor");
 		};
 		__cctor = deffunc(0)args(){
 			if(Cs2LuaType.__cctor_called){
-				return;
+				return();
 			}else{
 				Cs2LuaType.__cctor_called = true;
 			};

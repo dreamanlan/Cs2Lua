@@ -1122,10 +1122,10 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.Append(")");
             }
             else if (null != leftElementAccess) {
-                VisitAssignmentLeftElementAccess(ci, assign, toplevel, leftOper, leftSym, leftPsym, leftElementAccess, opd, dslToObject);
+                VisitAssignmentLeftElementAccess(ci, op, baseOp, assign, toplevel, leftOper, leftSym, leftPsym, leftElementAccess, opd, lopd, ropd, compAssignInfo, dslToObject);
             }
             else if (null != leftCondAccess) {
-                VisitAssignmentLeftCondAccess(ci, assign, leftSym, leftCondAccess, opd, dslToObject);
+                VisitAssignmentLeftCondAccess(ci, op, baseOp, assign, leftSym, leftCondAccess, opd, lopd, ropd, compAssignInfo, dslToObject);
             }
             else if (leftOper.Type.TypeKind == TypeKind.Delegate) {
                 bool isMemberAccess = null != leftPsym || null != leftEsym || null != leftFsym;
@@ -1286,23 +1286,9 @@ namespace RoslynTool.CsToDsl
                             }
                         }
                         ProcessBinaryOperator(assign, ref baseOp);
-                        string functor;
-                        if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
-                            CodeBuilder.AppendFormat("{0}(", functor);
-                            OutputExpressionSyntax(assign.Left, lopd);
-                            CodeBuilder.Append(", ");
-                            OutputExpressionSyntax(assign.Right, ropd);
-                            CodeBuilder.AppendFormat(", {0}, {1}", CsDslTranslater.EscapeType(ltype, ltypeKind), CsDslTranslater.EscapeType(rtype, rtypeKind));
-                            CodeBuilder.Append(")");
-                        }
-                        else {
-                            CodeBuilder.AppendFormat("execbinary(\"{0}\", ", baseOp);
-                            OutputExpressionSyntax(assign.Left, lopd);
-                            CodeBuilder.Append(", ");
-                            OutputExpressionSyntax(assign.Right, ropd);
-                            CodeBuilder.AppendFormat(", {0}, {1}, {2}, {3}", CsDslTranslater.EscapeType(ltype, ltypeKind), CsDslTranslater.EscapeType(rtype, rtypeKind), ltypeKind, rtypeKind);
-                            CodeBuilder.Append(")");
-                        }
+                        CompoundAssignBegin(baseOp, assign, lopd);
+                        OutputExpressionSyntax(assign.Right, ropd);
+                        CompoundAssignEnd(ltype, rtype, ltypeKind, rtypeKind);
                     }
                     if (dslToObject) {
                         CodeBuilder.Append(")");
@@ -1316,8 +1302,32 @@ namespace RoslynTool.CsToDsl
             if (expTerminater.Length > 0)
                 CodeBuilder.AppendLine();
         }
-        private void VisitAssignmentLeftElementAccess(ClassInfo ci, AssignmentExpressionSyntax assign, bool toplevel, IOperation leftOper, ISymbol leftSym, IPropertySymbol leftPsym, ElementAccessExpressionSyntax leftElementAccess, IConversionExpression opd, bool dslToObject)
+        private void VisitAssignmentLeftElementAccess(ClassInfo ci, string op, string baseOp, AssignmentExpressionSyntax assign, bool toplevel, IOperation leftOper, ISymbol leftSym, IPropertySymbol leftPsym, ElementAccessExpressionSyntax leftElementAccess, IConversionExpression opd, IConversionExpression lopd, IConversionExpression ropd, ICompoundAssignmentExpression compAssignInfo, bool dslToObject)
         {
+            ProcessBinaryOperator(assign, ref baseOp);
+            if (op != "=" && (null == compAssignInfo || null == compAssignInfo.Target || null == compAssignInfo.Value)) {
+                Log(leftElementAccess, "illegal compound assign !");
+            }
+
+            ITypeSymbol ltype = null;
+            ITypeSymbol rtype = null;
+            string leftType = "null";
+            string rightType = "null";
+            string leftTypeKind = "null";
+            string rightTypeKind = "null";
+            if (null != compAssignInfo) {
+                ltype = compAssignInfo.Target.Type;
+                rtype = compAssignInfo.Value.Type;
+                if (null != ltype) {
+                    leftType = ClassInfo.GetFullName(ltype);
+                    leftTypeKind = "TypeKind." + ltype.TypeKind.ToString();
+                }
+                if (null != rtype) {
+                    rightType = ClassInfo.GetFullName(rtype);
+                    rightTypeKind = "TypeKind." + rtype.TypeKind.ToString();
+                }
+            }
+
             if (null != leftSym) {
                 if (leftSym.IsStatic) {
                     AddReferenceAndTryDeriveGenericTypeInstance(ci, leftSym);
@@ -1364,7 +1374,15 @@ namespace RoslynTool.CsToDsl
                 ii.Init(leftPsym.SetMethod, leftElementAccess.ArgumentList, m_Model);
                 OutputArgumentList(ii, false, leftElementAccess);
                 CodeBuilder.Append(", ");
-                OutputExpressionSyntax(assign.Right, opd, dslToObject, ii.IsExternMethod, leftSym);
+
+                if (op != "=") {
+                    CompoundAssignBegin(baseOp, assign, lopd);
+                    OutputExpressionSyntax(assign.Right, ropd, dslToObject, ii.IsExternMethod, leftSym);
+                    CompoundAssignEnd(leftType, rightType, leftTypeKind, rightTypeKind);
+                }
+                else {
+                    OutputExpressionSyntax(assign.Right, opd, dslToObject, ii.IsExternMethod, leftSym);
+                }
                 CodeBuilder.Append(")");
             }
             else if (leftOper.Kind == OperationKind.ArrayElementReferenceExpression) {
@@ -1374,7 +1392,15 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.Append(", ");
                     VisitBracketedArgumentList(leftElementAccess.ArgumentList);
                     CodeBuilder.Append(", ");
-                    OutputExpressionSyntax(assign.Right, opd, dslToObject, false, leftSym);
+
+                    if (op != "=") {
+                        CompoundAssignBegin(baseOp, assign, lopd);
+                        OutputExpressionSyntax(assign.Right, ropd, dslToObject, false, leftSym);
+                        CompoundAssignEnd(leftType, rightType, leftTypeKind, rightTypeKind);
+                    }
+                    else {
+                        OutputExpressionSyntax(assign.Right, opd, dslToObject, false, leftSym);
+                    }
                     CodeBuilder.Append(")");
                 }
                 else {
@@ -1385,9 +1411,17 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append("[");
                         VisitBracketedArgumentList(leftElementAccess.ArgumentList);
                         CodeBuilder.Append("] = ");
-                        CodeBuilder.AppendFormat("execclosure(true, {0}, false){{ {1} = ", localName, localName);
-                        OutputExpressionSyntax(assign.Right, opd, dslToObject, false, leftSym);
-                        CodeBuilder.Append("; };");
+
+                        if (op != "=") {
+                            CompoundAssignBegin(baseOp, assign, lopd);
+                            OutputExpressionSyntax(assign.Right, ropd, dslToObject, false, leftSym);
+                            CompoundAssignEnd(leftType, rightType, leftTypeKind, rightTypeKind);
+                        }
+                        else {
+                            CodeBuilder.AppendFormat("execclosure(true, {0}, false){{ {1} = ", localName, localName);
+                            OutputExpressionSyntax(assign.Right, opd, dslToObject, false, leftSym);
+                            CodeBuilder.Append("; };");
+                        }
                         CodeBuilder.Append("; }");
                     }
                     else {
@@ -1395,7 +1429,15 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append("[");
                         VisitBracketedArgumentList(leftElementAccess.ArgumentList);
                         CodeBuilder.Append("] = ");
-                        OutputExpressionSyntax(assign.Right, opd, dslToObject, false, leftSym);
+
+                        if (op != "=") {
+                            CompoundAssignBegin(baseOp, assign, lopd);
+                            OutputExpressionSyntax(assign.Right, ropd, dslToObject, false, leftSym);
+                            CompoundAssignEnd(leftType, rightType, leftTypeKind, rightTypeKind);
+                        }
+                        else {
+                            OutputExpressionSyntax(assign.Right, opd, dslToObject, false, leftSym);
+                        }
                     }
                 }
             }
@@ -1403,8 +1445,32 @@ namespace RoslynTool.CsToDsl
                 Log(assign, "unknown set element symbol !");
             }
         }
-        private void VisitAssignmentLeftCondAccess(ClassInfo ci, AssignmentExpressionSyntax assign, ISymbol leftSym, ConditionalAccessExpressionSyntax leftCondAccess, IConversionExpression opd, bool dslToObject)
+        private void VisitAssignmentLeftCondAccess(ClassInfo ci, string op, string baseOp, AssignmentExpressionSyntax assign, ISymbol leftSym, ConditionalAccessExpressionSyntax leftCondAccess, IConversionExpression opd, IConversionExpression lopd, IConversionExpression ropd, ICompoundAssignmentExpression compAssignInfo, bool dslToObject)
         {
+            ProcessBinaryOperator(assign, ref baseOp);
+            if (op != "=" && (null == compAssignInfo || null == compAssignInfo.Target || null == compAssignInfo.Value)) {
+                Log(leftCondAccess, "illegal compound assign !");
+            }
+
+            ITypeSymbol ltype = null;
+            ITypeSymbol rtype = null;
+            string leftType = "null";
+            string rightType = "null";
+            string leftTypeKind = "null";
+            string rightTypeKind = "null";
+            if (null != compAssignInfo) {
+                ltype = compAssignInfo.Target.Type;
+                rtype = compAssignInfo.Value.Type;
+                if (null != ltype) {
+                    leftType = ClassInfo.GetFullName(ltype);
+                    leftTypeKind = "TypeKind." + ltype.TypeKind.ToString();
+                }
+                if (null != rtype) {
+                    rightType = ClassInfo.GetFullName(rtype);
+                    rightTypeKind = "TypeKind." + rtype.TypeKind.ToString();
+                }
+            }
+
             CodeBuilder.Append("condaccess(");
             OutputExpressionSyntax(leftCondAccess.Expression);
             CodeBuilder.Append(", ");
@@ -1462,7 +1528,15 @@ namespace RoslynTool.CsToDsl
                     ii.Init(psym.SetMethod, args, m_Model);
                     OutputArgumentList(ii, false, leftCondAccess);
                     CodeBuilder.Append(", ");
-                    OutputExpressionSyntax(assign.Right, opd, dslToObject, ii.IsExternMethod, leftSym);
+
+                    if (op != "=") {
+                        CompoundAssignBegin(baseOp, assign, lopd);
+                        OutputExpressionSyntax(assign.Right, ropd, dslToObject, ii.IsExternMethod, leftSym);
+                        CompoundAssignEnd(leftType, rightType, leftTypeKind, rightTypeKind);
+                    }
+                    else {
+                        OutputExpressionSyntax(assign.Right, opd, dslToObject, ii.IsExternMethod, leftSym);
+                    }
                     CodeBuilder.Append(")");
                     CodeBuilder.Append("); }");
                 }
@@ -1473,7 +1547,15 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(", ");
                         OutputExpressionSyntax(leftCondAccess.WhenNotNull);
                         CodeBuilder.Append(", ");
-                        OutputExpressionSyntax(assign.Right, opd, dslToObject, false, leftSym);
+
+                        if (op != "=") {
+                            CompoundAssignBegin(baseOp, assign, lopd);
+                            OutputExpressionSyntax(assign.Right, ropd, dslToObject, false, leftSym);
+                            CompoundAssignEnd(leftType, rightType, leftTypeKind, rightTypeKind);
+                        }
+                        else {
+                            OutputExpressionSyntax(assign.Right, opd, dslToObject, false, leftSym);
+                        }
                         CodeBuilder.Append(")");
                     }
                     else {
@@ -1483,9 +1565,17 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append("[");
                         OutputExpressionSyntax(leftCondAccess.WhenNotNull);
                         CodeBuilder.Append("] = ");
-                        CodeBuilder.AppendFormat("execclosure(true, {0}, false){{ {1} = ", localName, localName);
-                        OutputExpressionSyntax(assign.Right, opd, dslToObject, false, leftSym);
-                        CodeBuilder.Append("; };");
+
+                        if (op != "=") {
+                            CompoundAssignBegin(baseOp, assign, lopd);
+                            OutputExpressionSyntax(assign.Right, ropd, dslToObject, false, leftSym);
+                            CompoundAssignEnd(leftType, rightType, leftTypeKind, rightTypeKind);
+                        }
+                        else {
+                            CodeBuilder.AppendFormat("execclosure(true, {0}, false){{ {1} = ", localName, localName);
+                            OutputExpressionSyntax(assign.Right, opd, dslToObject, false, leftSym);
+                            CodeBuilder.Append("; };");
+                        }
                         CodeBuilder.Append(" funcobjret(");
                         CodeBuilder.Append(localName);
                         CodeBuilder.Append("); }");
@@ -1501,9 +1591,17 @@ namespace RoslynTool.CsToDsl
                 OutputExpressionSyntax(leftCondAccess.Expression);
                 OutputExpressionSyntax(leftCondAccess.WhenNotNull);
                 CodeBuilder.Append(" = ");
-                CodeBuilder.AppendFormat("execclosure(true, {0}, false){{ {1} = ", localName, localName);
-                OutputExpressionSyntax(assign.Right, opd, dslToObject, false, leftSym);
-                CodeBuilder.Append("; };");
+
+                if (op != "=") {
+                    CompoundAssignBegin(baseOp, assign, lopd);
+                    OutputExpressionSyntax(assign.Right, ropd, dslToObject, false, leftSym);
+                    CompoundAssignEnd(leftType, rightType, leftTypeKind, rightTypeKind);
+                }
+                else {
+                    CodeBuilder.AppendFormat("execclosure(true, {0}, false){{ {1} = ", localName, localName);
+                    OutputExpressionSyntax(assign.Right, opd, dslToObject, false, leftSym);
+                    CodeBuilder.Append("; };");
+                }
                 CodeBuilder.Append(" funcobjret(");
                 CodeBuilder.Append(localName);
                 CodeBuilder.Append("); }");
@@ -1548,6 +1646,7 @@ namespace RoslynTool.CsToDsl
                     ci.CurrentCodeBuilder = old;
                 }
 
+                ProcessBinaryOperator(assign, ref baseOp);
                 ITypeSymbol ltype = null;
                 ITypeSymbol rtype = null;
                 string leftType = "null";
@@ -1582,19 +1681,7 @@ namespace RoslynTool.CsToDsl
                             OutputDslToObjectPrefix(leftSym);
                         }
                         convertHandled = true;
-                        ProcessBinaryOperator(assign, ref baseOp);
-                        string functor;
-                        if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
-                            CodeBuilder.AppendFormat("{0}(", functor);
-                            OutputExpressionSyntax(assign.Left, lopd);
-                            CodeBuilder.Append(", ");
-                        }
-                        else {
-                            CodeBuilder.Append("execbinary(");
-                            CodeBuilder.AppendFormat("\"{0}\", ", baseOp);
-                            OutputExpressionSyntax(assign.Left, lopd);
-                            CodeBuilder.Append(", ");
-                        }
+                        CompoundAssignBegin(baseOp, assign, lopd);
                         if (null != ropd && ropd.UsesOperatorMethod) {
                             IMethodSymbol msym = ropd.OperatorMethod;
                             InvocationInfo iop = new InvocationInfo(GetCurMethodSemanticInfo(), assign);
@@ -1651,8 +1738,7 @@ namespace RoslynTool.CsToDsl
                         if (null != ropd && ropd.UsesOperatorMethod) {
                             CodeBuilder.Append(")");
                         }
-                        CodeBuilder.AppendFormat(", {0}, {1}, {2}, {3}", CsDslTranslater.EscapeType(leftType, leftTypeKind), CsDslTranslater.EscapeType(rightType, rightTypeKind), leftTypeKind, rightTypeKind);
-                        CodeBuilder.Append(")");
+                        CompoundAssignEnd(leftType, rightType, leftTypeKind, rightTypeKind);
                     }
                     else if (null != opd && opd.UsesOperatorMethod) {
                         if (ct > 0) {
@@ -1671,19 +1757,7 @@ namespace RoslynTool.CsToDsl
                             OutputDslToObjectPrefix(leftSym);
                         }
                         convertHandled = true;
-                        ProcessBinaryOperator(assign, ref baseOp);
-                        string functor;
-                        if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
-                            CodeBuilder.AppendFormat("{0}(", functor);
-                            OutputExpressionSyntax(assign.Left, lopd);
-                            CodeBuilder.Append(", ");
-                        }
-                        else {
-                            CodeBuilder.Append("execbinary(");
-                            CodeBuilder.AppendFormat("\"{0}\", ", baseOp);
-                            OutputExpressionSyntax(assign.Left, lopd);
-                            CodeBuilder.Append(", ");
-                        }
+                        CompoundAssignBegin(baseOp, assign, lopd);
                         if (null != ropd && ropd.UsesOperatorMethod) {
                             IMethodSymbol msym = ropd.OperatorMethod;
                             InvocationInfo iop = new InvocationInfo(GetCurMethodSemanticInfo(), assign);
@@ -1740,8 +1814,7 @@ namespace RoslynTool.CsToDsl
                         if (null != ropd && ropd.UsesOperatorMethod) {
                             CodeBuilder.Append(")");
                         }
-                        CodeBuilder.AppendFormat(", {0}, {1}, {2}, {3}", CsDslTranslater.EscapeType(leftType, leftTypeKind), CsDslTranslater.EscapeType(rightType, rightTypeKind), leftTypeKind, rightTypeKind);
-                        CodeBuilder.Append(")");
+                        CompoundAssignEnd(leftType, rightType, leftTypeKind, rightTypeKind);
                     }
                     else if (null != opd && opd.UsesOperatorMethod) {
                         if (ct > 0) {
@@ -1960,6 +2033,26 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendLine();
                 }
             }
+        }
+        private void CompoundAssignBegin(string baseOp, AssignmentExpressionSyntax assign, IConversionExpression lopd)
+        {
+            string functor;
+            if (s_BinaryFunctor.TryGetValue(baseOp, out functor)) {
+                CodeBuilder.AppendFormat("{0}(", functor);
+                OutputExpressionSyntax(assign.Left, lopd);
+                CodeBuilder.Append(", ");
+            }
+            else {
+                CodeBuilder.Append("execbinary(");
+                CodeBuilder.AppendFormat("\"{0}\", ", baseOp);
+                OutputExpressionSyntax(assign.Left, lopd);
+                CodeBuilder.Append(", ");
+            }
+        }
+        private void CompoundAssignEnd(string leftType, string rightType, string leftTypeKind, string rightTypeKind)
+        {
+            CodeBuilder.AppendFormat(", {0}, {1}, {2}, {3}", CsDslTranslater.EscapeType(leftType, leftTypeKind), CsDslTranslater.EscapeType(rightType, rightTypeKind), leftTypeKind, rightTypeKind);
+            CodeBuilder.Append(")");
         }
     }
 }

@@ -22,7 +22,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 	static public int SetResolution_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetResolution__Int32__Int32__FullScreenMode__Int32", argc, 1,typeof(int),typeof(int),typeof(UnityEngine.FullScreenMode),typeof(int))){
+			if(matchType(l, "SetResolution__Void__Int32__Int32__FullScreenMode__Int32", argc, 1,typeof(int),typeof(int),typeof(UnityEngine.FullScreenMode),typeof(int))){
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -35,7 +35,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SetResolution__Int32__Int32__Boolean__Int32", argc, 1,typeof(int),typeof(int),typeof(bool),typeof(int))){
+			else if(matchType(l, "SetResolution__Void__Int32__Int32__Boolean__Int32", argc, 1,typeof(int),typeof(int),typeof(bool),typeof(int))){
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -48,7 +48,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SetResolution__Int32__Int32__FullScreenMode", argc, 1,typeof(int),typeof(int),typeof(UnityEngine.FullScreenMode))){
+			else if(matchType(l, "SetResolution__Void__Int32__Int32__FullScreenMode", argc, 1,typeof(int),typeof(int),typeof(UnityEngine.FullScreenMode))){
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -59,7 +59,7 @@ public class Lua_UnityEngine_Screen : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SetResolution__Int32__Int32__Boolean", argc, 1,typeof(int),typeof(int),typeof(bool))){
+			else if(matchType(l, "SetResolution__Void__Int32__Int32__Boolean", argc, 1,typeof(int),typeof(int),typeof(bool))){
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;

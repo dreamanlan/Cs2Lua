@@ -1,6 +1,7 @@
 ﻿using System;
 using SLua;
 using System.Collections.Generic;
+using UnityEngine;
 [UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Renderer : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -117,6 +118,19 @@ public class Lua_UnityEngine_Renderer : LuaObject {
 			System.Collections.Generic.List<UnityEngine.Rendering.ReflectionProbeBlendInfo> a1;
 			checkType(l,2,out a1);
 			self.GetClosestReflectionProbes(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int UpdateGIMaterials(IntPtr l) {
+		try {
+			UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
+			self.UpdateGIMaterials();
 			pushValue(l,true);
 			return 1;
 		}
@@ -814,6 +828,7 @@ public class Lua_UnityEngine_Renderer : LuaObject {
 		addMember(l,GetMaterials);
 		addMember(l,GetSharedMaterials);
 		addMember(l,GetClosestReflectionProbes);
+		addMember(l,UpdateGIMaterials);
 		addMember(l,"bounds",get_bounds,null,true);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
 		addMember(l,"isVisible",get_isVisible,null,true);

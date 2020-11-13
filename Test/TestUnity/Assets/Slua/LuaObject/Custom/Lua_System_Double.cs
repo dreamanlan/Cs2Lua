@@ -22,7 +22,7 @@ public class Lua_System_Double : LuaObject {
 	static public int CompareTo(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "CompareTo__Object", argc, 2,typeof(System.Object))){
+			if(matchType(l, "CompareTo__Int32__Object", argc, 2,typeof(System.Object))){
 				System.Double self;
 				checkType(l,1,out self);
 				System.Object a1;
@@ -32,7 +32,7 @@ public class Lua_System_Double : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "CompareTo__Double", argc, 2,typeof(double))){
+			else if(matchType(l, "CompareTo__Int32__Double", argc, 2,typeof(double))){
 				System.Double self;
 				checkType(l,1,out self);
 				System.Double a1;
@@ -127,7 +127,7 @@ public class Lua_System_Double : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Equality(IntPtr l) {
+	static public int op_Equality_s(IntPtr l) {
 		try {
 			System.Double a1;
 			checkType(l,1,out a1);
@@ -144,7 +144,7 @@ public class Lua_System_Double : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Inequality(IntPtr l) {
+	static public int op_Inequality_s(IntPtr l) {
 		try {
 			System.Double a1;
 			checkType(l,1,out a1);
@@ -161,7 +161,7 @@ public class Lua_System_Double : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_LessThan(IntPtr l) {
+	static public int op_LessThan_s(IntPtr l) {
 		try {
 			System.Double a1;
 			checkType(l,1,out a1);
@@ -178,7 +178,7 @@ public class Lua_System_Double : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_GreaterThan(IntPtr l) {
+	static public int op_GreaterThan_s(IntPtr l) {
 		try {
 			System.Double a1;
 			checkType(l,1,out a1);
@@ -195,7 +195,7 @@ public class Lua_System_Double : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_LessThanOrEqual(IntPtr l) {
+	static public int op_LessThanOrEqual_s(IntPtr l) {
 		try {
 			System.Double a1;
 			checkType(l,1,out a1);
@@ -212,7 +212,7 @@ public class Lua_System_Double : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_GreaterThanOrEqual(IntPtr l) {
+	static public int op_GreaterThanOrEqual_s(IntPtr l) {
 		try {
 			System.Double a1;
 			checkType(l,1,out a1);
@@ -244,7 +244,7 @@ public class Lua_System_Double : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Parse__String__NumberStyles", argc, 1,typeof(string),typeof(System.Globalization.NumberStyles))){
+			else if(matchType(l, "Parse__Double__String__NumberStyles", argc, 1,typeof(string),typeof(System.Globalization.NumberStyles))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.Globalization.NumberStyles a2;
@@ -254,7 +254,7 @@ public class Lua_System_Double : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Parse__String__IFormatProvider", argc, 1,typeof(string),typeof(System.IFormatProvider))){
+			else if(matchType(l, "Parse__Double__String__IFormatProvider", argc, 1,typeof(string),typeof(System.IFormatProvider))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.IFormatProvider a2;
@@ -398,12 +398,12 @@ public class Lua_System_Double : LuaObject {
 		addMember(l,IsPositiveInfinity_s);
 		addMember(l,IsNegativeInfinity_s);
 		addMember(l,IsNaN_s);
-		addMember(l,op_Equality);
-		addMember(l,op_Inequality);
-		addMember(l,op_LessThan);
-		addMember(l,op_GreaterThan);
-		addMember(l,op_LessThanOrEqual);
-		addMember(l,op_GreaterThanOrEqual);
+		addMember(l,op_Equality_s);
+		addMember(l,op_Inequality_s);
+		addMember(l,op_LessThan_s);
+		addMember(l,op_GreaterThan_s);
+		addMember(l,op_LessThanOrEqual_s);
+		addMember(l,op_GreaterThanOrEqual_s);
 		addMember(l,Parse_s);
 		addMember(l,TryParse_s);
 		addMember(l,"MinValue",get_MinValue,null,false);

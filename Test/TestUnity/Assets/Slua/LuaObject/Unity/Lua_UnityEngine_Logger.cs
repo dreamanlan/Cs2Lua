@@ -54,7 +54,7 @@ public class Lua_UnityEngine_Logger : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "Log__LogType__Object__Object", argc, 2,typeof(UnityEngine.LogType),typeof(System.Object),typeof(UnityEngine.Object))){
+			else if(matchType(l, "Log__Void__LogType__Object__Object", argc, 2,typeof(UnityEngine.LogType),typeof(System.Object),typeof(UnityEngine.Object))){
 				UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
 				UnityEngine.LogType a1;
 				checkEnum(l,3,out a1);
@@ -66,7 +66,7 @@ public class Lua_UnityEngine_Logger : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "Log__LogType__String__Object", argc, 2,typeof(UnityEngine.LogType),typeof(string),typeof(System.Object))){
+			else if(matchType(l, "Log__Void__LogType__String__Object", argc, 2,typeof(UnityEngine.LogType),typeof(string),typeof(System.Object))){
 				UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
 				UnityEngine.LogType a1;
 				checkEnum(l,3,out a1);
@@ -78,7 +78,7 @@ public class Lua_UnityEngine_Logger : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "Log__String__Object__Object", argc, 2,typeof(string),typeof(System.Object),typeof(UnityEngine.Object))){
+			else if(matchType(l, "Log__Void__String__Object__Object", argc, 2,typeof(string),typeof(System.Object),typeof(UnityEngine.Object))){
 				UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);
@@ -90,7 +90,7 @@ public class Lua_UnityEngine_Logger : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "Log__LogType__Object", argc, 2,typeof(UnityEngine.LogType),typeof(System.Object))){
+			else if(matchType(l, "Log__Void__LogType__Object", argc, 2,typeof(UnityEngine.LogType),typeof(System.Object))){
 				UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
 				UnityEngine.LogType a1;
 				checkEnum(l,3,out a1);
@@ -100,7 +100,7 @@ public class Lua_UnityEngine_Logger : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "Log__String__Object", argc, 2,typeof(string),typeof(System.Object))){
+			else if(matchType(l, "Log__Void__String__Object", argc, 2,typeof(string),typeof(System.Object))){
 				UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);

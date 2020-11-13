@@ -9,7 +9,7 @@ public class Lua_UnityEngine_Texture3D : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Texture3D o;
-			if(matchType(l, "ctor__Int32__Int32__Int32__GraphicsFormat__TextureCreationFlags", argc, 2,typeof(int),typeof(int),typeof(int),typeof(UnityEngine.Experimental.Rendering.GraphicsFormat),typeof(UnityEngine.Experimental.Rendering.TextureCreationFlags))){
+			if(matchType(l, "ctor__Void__Int32__Int32__Int32__GraphicsFormat__TextureCreationFlags", argc, 2,typeof(int),typeof(int),typeof(int),typeof(UnityEngine.Experimental.Rendering.GraphicsFormat),typeof(UnityEngine.Experimental.Rendering.TextureCreationFlags))){
 				System.Int32 a1;
 				checkType(l,3,out a1);
 				System.Int32 a2;
@@ -25,7 +25,7 @@ public class Lua_UnityEngine_Texture3D : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__Int32__Int32__Int32__TextureFormat__Boolean", argc, 2,typeof(int),typeof(int),typeof(int),typeof(UnityEngine.TextureFormat),typeof(bool))){
+			else if(matchType(l, "ctor__Void__Int32__Int32__Int32__TextureFormat__Boolean", argc, 2,typeof(int),typeof(int),typeof(int),typeof(UnityEngine.TextureFormat),typeof(bool))){
 				System.Int32 a1;
 				checkType(l,3,out a1);
 				System.Int32 a2;

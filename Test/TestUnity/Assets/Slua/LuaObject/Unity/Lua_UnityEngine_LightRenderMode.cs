@@ -8,6 +8,7 @@ public class Lua_UnityEngine_LightRenderMode : LuaObject {
 		addMember(l,0,"Auto");
 		addMember(l,1,"ForcePixel");
 		addMember(l,2,"ForceVertex");
+		addMember(l,3,"M1MainLight");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

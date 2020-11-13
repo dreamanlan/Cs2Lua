@@ -1,8 +1,9 @@
-require("cs2dsl__lualib");
+require("cs2dsl__syslib");
 require("cs2dsl__attributes");
 require("cs2dsl__namespaces");
 require("cs2dsl__externenums");
 require("cs2dsl__interfaces");
+require("lualib_valuetypescript");
 
 class(Program) {
 	static_methods {
@@ -18,7 +19,7 @@ class(Program) {
 		};
 		__cctor = deffunc(0)args(){
 			if(Program.__cctor_called){
-				return;
+				return();
 			}else{
 				Program.__cctor_called = true;
 			};

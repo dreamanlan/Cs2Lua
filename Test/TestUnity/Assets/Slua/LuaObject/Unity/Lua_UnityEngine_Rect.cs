@@ -93,7 +93,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Contains__Vector3", argc, 2,typeof(UnityEngine.Vector3))){
+			else if(matchType(l, "Contains__Boolean__Vector3", argc, 2,typeof(UnityEngine.Vector3))){
 				UnityEngine.Rect self;
 				checkValueType(l,1,out self);
 				UnityEngine.Vector3 a1;
@@ -103,7 +103,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Contains__Vector2", argc, 2,typeof(UnityEngine.Vector2))){
+			else if(matchType(l, "Contains__Boolean__Vector2", argc, 2,typeof(UnityEngine.Vector2))){
 				UnityEngine.Rect self;
 				checkValueType(l,1,out self);
 				UnityEngine.Vector2 a1;
@@ -213,7 +213,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Inequality(IntPtr l) {
+	static public int op_Inequality_s(IntPtr l) {
 		try {
 			UnityEngine.Rect a1;
 			checkValueType(l,1,out a1);
@@ -230,7 +230,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Equality(IntPtr l) {
+	static public int op_Equality_s(IntPtr l) {
 		try {
 			UnityEngine.Rect a1;
 			checkValueType(l,1,out a1);
@@ -669,8 +669,8 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		addMember(l,MinMaxRect_s);
 		addMember(l,NormalizedToPoint_s);
 		addMember(l,PointToNormalized_s);
-		addMember(l,op_Inequality);
-		addMember(l,op_Equality);
+		addMember(l,op_Inequality_s);
+		addMember(l,op_Equality_s);
 		addMember(l,"zero",get_zero,null,false);
 		addMember(l,"x",get_x,set_x,true);
 		addMember(l,"y",get_y,set_y,true);

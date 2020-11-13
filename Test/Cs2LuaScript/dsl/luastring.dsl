@@ -1,4 +1,4 @@
-require("cs2dsl__lualib");
+require("cs2dsl__syslib");
 require("cs2dsl__namespaces");
 require("cs2dsl__externenums");
 require("cs2dsl__interfaces");
@@ -6,23 +6,30 @@ require("cs2dsl__interfaces");
 class(LuaString) {
 	static_methods {
 		__new_object = deffunc(1)args(...){
-			return(newobject(LuaString, typeargs(), typekinds(), "ctor", null, ...));
+			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(LuaString, typeargs(), typekinds(), "ctor", null, ...);
+			return(__cs2dsl_newobj);
 		};
-		Format__System_String__System_Object = deffunc(1)args(str, arg){
-			return(callexternstatic(System.String, "Format", "System.String:Format__String__Object", str, arg));
+		Format__System_String__System_Object = deffunc(1)args(str, __dsl_arg){
+			local(__method_ret_6_4_9_5);
+			__method_ret_6_4_9_5 = callexternstatic(System.String, "Format", dslstrtocsstr("System.String:Format__String__String__Object"), str, __dsl_arg);
+			return(__method_ret_6_4_9_5);
 		};
 		Format__System_String__System_Object__System_Object = deffunc(1)args(str, arg1, arg2){
-			return(callexternstatic(System.String, "Format", "System.String:Format__String__Object__Object", str, arg1, arg2));
+			local(__method_ret_10_4_13_5);
+			__method_ret_10_4_13_5 = callexternstatic(System.String, "Format", dslstrtocsstr("System.String:Format__String__String__Object__Object"), str, arg1, arg2);
+			return(__method_ret_10_4_13_5);
 		};
 		Format__System_String__System_Object__System_Object__System_Object = deffunc(1)args(str, arg1, arg2, arg3){
-			return(callexternstatic(System.String, "Format", "System.String:Format__String__Object__Object__Object", str, arg1, arg2, arg3));
+			local(__method_ret_14_4_17_5);
+			__method_ret_14_4_17_5 = callexternstatic(System.String, "Format", dslstrtocsstr("System.String:Format__String__String__Object__Object__Object"), str, arg1, arg2, arg3);
+			return(__method_ret_14_4_17_5);
 		};
 		cctor = deffunc(0)args(){
 			callstatic(LuaString, "__cctor");
 		};
 		__cctor = deffunc(0)args(){
 			if(LuaString.__cctor_called){
-				return;
+				return();
 			}else{
 				LuaString.__cctor_called = true;
 			};
@@ -36,13 +43,13 @@ class(LuaString) {
 
 	instance_methods {
 		ctor = deffunc(0)args(this){
-			callinstance(this, "__ctor");
+			callinstance(this, LuaString, "__ctor");
 		};
 		__ctor = deffunc(0)args(this){
-			if(getinstance(SymbolKind.Field, this, "__ctor_called")){
-				return;
+			if(getinstance(SymbolKind.Field, this, LuaString, "__ctor_called")){
+				return();
 			}else{
-				setinstance(SymbolKind.Field, this, "__ctor_called", true);
+				setinstance(SymbolKind.Field, this, LuaString, "__ctor_called", true);
 			};
 		};
 	};

@@ -37,6 +37,35 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int op_Implicit_s(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(matchType(l, "op_Implicit__Color32__Color", argc, 1,typeof(UnityEngine.Color))){
+				UnityEngine.Color a1;
+				checkType(l,2,out a1);
+				UnityEngine.Color32 ret=a1;
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(matchType(l, "op_Implicit__Color__Color32", argc, 1,typeof(UnityEngine.Color32))){
+				UnityEngine.Color32 a1;
+				checkValueType(l,2,out a1);
+				UnityEngine.Color ret=a1;
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Lerp_s(IntPtr l) {
 		try {
 			UnityEngine.Color32 a1;
@@ -200,6 +229,7 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Color32");
+		addMember(l,op_Implicit_s);
 		addMember(l,Lerp_s);
 		addMember(l,LerpUnclamped_s);
 		addMember(l,"r",get_r,set_r,true);

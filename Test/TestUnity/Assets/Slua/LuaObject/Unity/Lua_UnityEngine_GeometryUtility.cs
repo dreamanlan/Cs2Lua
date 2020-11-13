@@ -22,7 +22,7 @@ public class Lua_UnityEngine_GeometryUtility : LuaObject {
 	static public int CalculateFrustumPlanes_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "CalculateFrustumPlanes__Camera__Arr_Plane", argc, 1,typeof(UnityEngine.Camera),typeof(UnityEngine.Plane[]))){
+			if(matchType(l, "CalculateFrustumPlanes__Void__Camera__Arr_Plane", argc, 1,typeof(UnityEngine.Camera),typeof(UnityEngine.Plane[]))){
 				UnityEngine.Camera a1;
 				checkType(l,2,out a1);
 				UnityEngine.Plane[] a2;
@@ -31,7 +31,7 @@ public class Lua_UnityEngine_GeometryUtility : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "CalculateFrustumPlanes__Matrix4x4__Arr_Plane", argc, 1,typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Plane[]))){
+			else if(matchType(l, "CalculateFrustumPlanes__Void__Matrix4x4__Arr_Plane", argc, 1,typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Plane[]))){
 				UnityEngine.Matrix4x4 a1;
 				checkValueType(l,2,out a1);
 				UnityEngine.Plane[] a2;
@@ -40,7 +40,7 @@ public class Lua_UnityEngine_GeometryUtility : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "CalculateFrustumPlanes__Camera", argc, 1,typeof(UnityEngine.Camera))){
+			else if(matchType(l, "CalculateFrustumPlanes__Arr_Plane__Camera", argc, 1,typeof(UnityEngine.Camera))){
 				UnityEngine.Camera a1;
 				checkType(l,2,out a1);
 				var ret=UnityEngine.GeometryUtility.CalculateFrustumPlanes(a1);
@@ -48,7 +48,7 @@ public class Lua_UnityEngine_GeometryUtility : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "CalculateFrustumPlanes__Matrix4x4", argc, 1,typeof(UnityEngine.Matrix4x4))){
+			else if(matchType(l, "CalculateFrustumPlanes__Arr_Plane__Matrix4x4", argc, 1,typeof(UnityEngine.Matrix4x4))){
 				UnityEngine.Matrix4x4 a1;
 				checkValueType(l,2,out a1);
 				var ret=UnityEngine.GeometryUtility.CalculateFrustumPlanes(a1);

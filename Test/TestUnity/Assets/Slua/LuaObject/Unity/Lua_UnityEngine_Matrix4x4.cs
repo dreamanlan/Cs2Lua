@@ -381,10 +381,10 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Multiply(IntPtr l) {
+	static public int op_Multiply_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "op_Multiply__Matrix4x4__Matrix4x4", argc, 1,typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Matrix4x4))){
+			if(matchType(l, "op_Multiply__Matrix4x4__Matrix4x4__Matrix4x4", argc, 1,typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Matrix4x4))){
 				UnityEngine.Matrix4x4 a1;
 				checkValueType(l,2,out a1);
 				UnityEngine.Matrix4x4 a2;
@@ -394,7 +394,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "op_Multiply__Matrix4x4__Vector4", argc, 1,typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Vector4))){
+			else if(matchType(l, "op_Multiply__Vector4__Matrix4x4__Vector4", argc, 1,typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Vector4))){
 				UnityEngine.Matrix4x4 a1;
 				checkValueType(l,2,out a1);
 				UnityEngine.Vector4 a2;
@@ -414,7 +414,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Equality(IntPtr l) {
+	static public int op_Equality_s(IntPtr l) {
 		try {
 			UnityEngine.Matrix4x4 a1;
 			checkValueType(l,1,out a1);
@@ -431,7 +431,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Inequality(IntPtr l) {
+	static public int op_Inequality_s(IntPtr l) {
 		try {
 			UnityEngine.Matrix4x4 a1;
 			checkValueType(l,1,out a1);
@@ -1165,9 +1165,9 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 		addMember(l,Perspective_s);
 		addMember(l,LookAt_s);
 		addMember(l,Frustum_s);
-		addMember(l,op_Multiply);
-		addMember(l,op_Equality);
-		addMember(l,op_Inequality);
+		addMember(l,op_Multiply_s);
+		addMember(l,op_Equality_s);
+		addMember(l,op_Inequality_s);
 		addMember(l,Scale_s);
 		addMember(l,Translate_s);
 		addMember(l,Rotate_s);

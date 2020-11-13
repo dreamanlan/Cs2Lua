@@ -19,7 +19,7 @@ public class Lua_UnityEngine_BoneWeight : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Equality(IntPtr l) {
+	static public int op_Equality_s(IntPtr l) {
 		try {
 			UnityEngine.BoneWeight a1;
 			checkValueType(l,1,out a1);
@@ -36,7 +36,7 @@ public class Lua_UnityEngine_BoneWeight : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Inequality(IntPtr l) {
+	static public int op_Inequality_s(IntPtr l) {
 		try {
 			UnityEngine.BoneWeight a1;
 			checkValueType(l,1,out a1);
@@ -302,8 +302,8 @@ public class Lua_UnityEngine_BoneWeight : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.BoneWeight");
-		addMember(l,op_Equality);
-		addMember(l,op_Inequality);
+		addMember(l,op_Equality_s);
+		addMember(l,op_Inequality_s);
 		addMember(l,"weight0",get_weight0,set_weight0,true);
 		addMember(l,"weight1",get_weight1,set_weight1,true);
 		addMember(l,"weight2",get_weight2,set_weight2,true);

@@ -19,7 +19,7 @@ public class Lua_UnityEngine_Playables_PlayableOutputHandle : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Equality(IntPtr l) {
+	static public int op_Equality_s(IntPtr l) {
 		try {
 			UnityEngine.Playables.PlayableOutputHandle a1;
 			checkValueType(l,1,out a1);
@@ -36,7 +36,7 @@ public class Lua_UnityEngine_Playables_PlayableOutputHandle : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Inequality(IntPtr l) {
+	static public int op_Inequality_s(IntPtr l) {
 		try {
 			UnityEngine.Playables.PlayableOutputHandle a1;
 			checkValueType(l,1,out a1);
@@ -66,8 +66,8 @@ public class Lua_UnityEngine_Playables_PlayableOutputHandle : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Playables.PlayableOutputHandle");
-		addMember(l,op_Equality);
-		addMember(l,op_Inequality);
+		addMember(l,op_Equality_s);
+		addMember(l,op_Inequality_s);
 		addMember(l,"Null",get_Null,null,false);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.Playables.PlayableOutputHandle),typeof(System.ValueType));
 	}

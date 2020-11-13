@@ -9,7 +9,7 @@ public class Lua_UnityEngine_PropertyName : LuaObject {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.PropertyName o;
-			if(matchType(l, "ctor__String", argc, 2,typeof(string))){
+			if(matchType(l, "ctor__Void__String", argc, 2,typeof(string))){
 				System.String a1;
 				checkType(l,3,out a1);
 				o=new UnityEngine.PropertyName(a1);
@@ -17,7 +17,7 @@ public class Lua_UnityEngine_PropertyName : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__PropertyName", argc, 2,typeof(UnityEngine.PropertyName))){
+			else if(matchType(l, "ctor__Void__PropertyName", argc, 2,typeof(UnityEngine.PropertyName))){
 				UnityEngine.PropertyName a1;
 				checkValueType(l,3,out a1);
 				o=new UnityEngine.PropertyName(a1);
@@ -25,7 +25,7 @@ public class Lua_UnityEngine_PropertyName : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__Int32", argc, 2,typeof(int))){
+			else if(matchType(l, "ctor__Void__Int32", argc, 2,typeof(int))){
 				System.Int32 a1;
 				checkType(l,3,out a1);
 				o=new UnityEngine.PropertyName(a1);
@@ -62,7 +62,7 @@ public class Lua_UnityEngine_PropertyName : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Equality(IntPtr l) {
+	static public int op_Equality_s(IntPtr l) {
 		try {
 			UnityEngine.PropertyName a1;
 			checkValueType(l,1,out a1);
@@ -79,7 +79,7 @@ public class Lua_UnityEngine_PropertyName : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Inequality(IntPtr l) {
+	static public int op_Inequality_s(IntPtr l) {
 		try {
 			UnityEngine.PropertyName a1;
 			checkValueType(l,1,out a1);
@@ -94,12 +94,42 @@ public class Lua_UnityEngine_PropertyName : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Implicit_s(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(matchType(l, "op_Implicit__PropertyName__String", argc, 1,typeof(string))){
+				System.String a1;
+				checkType(l,2,out a1);
+				UnityEngine.PropertyName ret=a1;
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(matchType(l, "op_Implicit__PropertyName__Int32", argc, 1,typeof(int))){
+				System.Int32 a1;
+				checkType(l,2,out a1);
+				UnityEngine.PropertyName ret=a1;
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.PropertyName");
 		addMember(l,IsNullOrEmpty_s);
-		addMember(l,op_Equality);
-		addMember(l,op_Inequality);
+		addMember(l,op_Equality_s);
+		addMember(l,op_Inequality_s);
+		addMember(l,op_Implicit_s);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.PropertyName),typeof(System.ValueType));
 	}
 }

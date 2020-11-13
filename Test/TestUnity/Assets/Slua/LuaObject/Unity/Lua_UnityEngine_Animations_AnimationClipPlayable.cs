@@ -128,6 +128,36 @@ public class Lua_UnityEngine_Animations_AnimationClipPlayable : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Implicit_s(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimationClipPlayable a1;
+			checkValueType(l,1,out a1);
+			UnityEngine.Playables.Playable ret=a1;
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Explicit_s(IntPtr l) {
+		try {
+			UnityEngine.Playables.Playable a1;
+			checkValueType(l,1,out a1);
+			var ret=(UnityEngine.Animations.AnimationClipPlayable)a1;
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Animations.AnimationClipPlayable");
@@ -138,6 +168,8 @@ public class Lua_UnityEngine_Animations_AnimationClipPlayable : LuaObject {
 		addMember(l,GetApplyPlayableIK);
 		addMember(l,SetApplyPlayableIK);
 		addMember(l,Create_s);
+		addMember(l,op_Implicit_s);
+		addMember(l,op_Explicit_s);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.Animations.AnimationClipPlayable),typeof(System.ValueType));
 	}
 }

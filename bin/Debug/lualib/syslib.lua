@@ -1,3 +1,6 @@
+collectgarbage("setpause", 125)
+collectgarbage("setstepmul", 200)
+
 local function get_basic_type_func()
     return function(v)
         return v
@@ -187,7 +190,11 @@ function luastrtocsstr(str)
     elseif type(str) == "string" then
         local v = g_LuaStr2CsStrCaches[str]
         if v==nil then
-            local s = System.String("ctor__Void__String_Arr_Char", str)
+            local sig = "ctor__Void__String_Arr_Char"
+            if sig~=str then
+                sig = luastrtocsstr(sig)
+            end
+            local s = System.String(sig, str)
             g_LuaStr2CsStrCaches[str] = s
             return s
         else
@@ -200,6 +207,10 @@ function luastrtocsstr(str)
     end
 end
 
+function getStack()
+    return debug.traceback()
+end
+
 function printStack()
     Utility.Warn("{0}", debug.traceback())
 end
@@ -207,13 +218,13 @@ end
 function printJitStatus()
     local infos = Slua.CreateClass("System.Text.StringBuilder")
     local results = {jit.status()}
-    infos:AppendFormat("jit status count {0}", #results)
+    Utility.AppendFormat(infos, "jit status count {0}", #results)
     infos:AppendLine("AppendLine")
     for i, v in ipairs(results) do
         if i == 1 then
-            infos:AppendFormat("jit status {0}", v)
+            Utility.AppendFormat(infos, "jit status {0}", v)
         else
-            infos:AppendFormat(" {0}", v)
+            Utility.AppendFormat(infos, " {0}", v)
         end
         infos:AppendLine("AppendLine")
     end
@@ -481,6 +492,29 @@ function setexterninstanceindexer(callerClass, typeargs, typekinds, obj, class, 
     return nil
 end
 
+function addtofuncinfostructlist(funcInfo, class, obj)
+    if not funcInfo or not class or not obj then return end 
+    if class==UnityEngine.Vector2 then
+        table.insert(funcInfo.v2_list, obj)
+    elseif class==UnityEngine.Vector3 then
+        table.insert(funcInfo.v3_list, obj)
+    elseif class==UnityEngine.Vector4 then
+        table.insert(funcInfo.v4_list, obj)
+    elseif class==UnityEngine.Quaternion then
+        table.insert(funcInfo.q_list, obj)
+    elseif class==UnityEngine.Color then
+        table.insert(funcInfo.c_list, obj)
+    elseif class==UnityEngine.Color32 then
+        table.insert(funcInfo.c32_list, obj)
+    elseif class==UnityEngine.Rect then
+        table.insert(funcInfo.rt_list, obj)
+    elseif class==CsLibrary.DateTime then
+        table.insert(funcInfo.dt_list, obj)
+    elseif class==CsLibrary.TimeSpan then
+        table.insert(funcInfo.ts_list, obj)
+    end
+end
+
 function invokeexternoperatorreturnstruct(funcInfo, rettype, class, method, ...)
     local arg1,arg2,arg3 = ...
     local marg1 = arg1 and getmetatable(arg1)
@@ -615,13 +649,17 @@ function invokeexternoperatorreturnstruct(funcInfo, rettype, class, method, ...)
                 table.insert(funcInfo.c_list, c)
                 return c
             else
-                return class[method](...)
+                local re = class[method](...)
+                addtofuncinfostructlist(funcInfo, rettype, re);
+                return re
             end
         elseif arg1~=nil and arg2~=nil then
             if type(arg1)=="number" and type(arg2)=="number" then
                 return arg1 * arg2
             else
-                return class[method](...)
+                local re = class[method](...)
+                addtofuncinfostructlist(funcInfo, rettype, re);
+                return re
             end
         end
     elseif method == "op_Division" then
@@ -664,18 +702,28 @@ function invokeexternoperatorreturnstruct(funcInfo, rettype, class, method, ...)
                 c.w = arg2.a/arg3
                 return c
             else
-                return class[method](...)
+                local re = class[method](...)
+                addtofuncinfostructlist(funcInfo, rettype, re);
+                return re
             end
         elseif arg1~=nil and arg2~=nil then
             if type(arg1)=="number" and type(arg2)=="number" then
                 return arg1 / arg2
             else
-                return class[method](...)
+                local re = class[method](...)
+                addtofuncinfostructlist(funcInfo, rettype, re);
+                return re
             end
         end
+    elseif method == "op_Addition" or method == "op_Subtraction" then
+        local re = class[method](...)
+        addtofuncinfostructlist(funcInfo, rettype, re);
+        return re
     end
     if method then        
-        return class[method](...)
+        local re = class[method](...)
+        addtofuncinfostructlist(funcInfo, rettype, re);
+        return re
     else
         UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
     end
@@ -801,6 +849,10 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
                     else
                         return -1
                     end
+                elseif type(obj)=="userdata" then
+                    return obj:CompareTo(arg2)
+                elseif type(arg2)=="userdata" then
+                    return arg2:CompareTo(obj)
                 else
                     if obj > arg2 then
                         return 1
@@ -967,21 +1019,26 @@ function invokeintegeroperator(op, luaop, opd1, opd2, type1, type2)
     end
 end
 
-function createpool(newFunc)
+function createpool(tag, newFunc)
     local pool = {}
     pool.Alloc = function()
+            local data = nil
             if #(pool.m_Data)>0 then
-                return table.remove(pool.m_Data)
+                data = table.remove(pool.m_Data)
+                --lualog("pool.Alloc reuse {0}:{1} stack:{2}", tag, __get_obj_string(data), getStack())
             else
-                return newFunc()
+                data = newFunc()
+                --lualog("pool.Alloc new {0}:{1} stack:{2}", tag, __get_obj_string(data), getStack())
             end
+            return data
         end
     pool.Recycle = function(data)
+            --lualog("pool.Recycle {0}:{1} count:{2}", tag, __get_obj_string(data), #(pool.m_Data)+1)
             local exists = false
             for i,v in ipairs(pool.m_Data) do
                 if rawequal(v,data) then
                     exists=true
-                    lualog("pool.Recycle duplicate !")
+                    lualog("pool.Recycle {0}:{1} duplicate !", tag, __get_obj_string(data))
                     printStack()
                     break
                 end
@@ -994,7 +1051,7 @@ function createpool(newFunc)
     return pool
 end
 
-FuncInfoPool = createpool(
+FuncInfoPool = createpool("FuncInfo",
     function()
         return {
             v2_list = {},
@@ -1006,31 +1063,31 @@ FuncInfoPool = createpool(
             rt_list = {},
         }
     end)
-Vector2Pool = createpool(
+Vector2Pool = createpool("Vector2",
     function()
         return UnityEngine.Vector2.NewFunc()
     end)
-Vector3Pool = createpool(
+Vector3Pool = createpool("Vector3",
     function()
         return UnityEngine.Vector3.NewFunc()
     end)
-Vector4Pool = createpool(
+Vector4Pool = createpool("Vector4",
     function()
         return UnityEngine.Vector4.NewFunc()
     end)
-QuaternionPool = createpool(
+QuaternionPool = createpool("Quaternion",
     function()
         return UnityEngine.Quaternion.NewFunc()
     end)
-ColorPool = createpool(
+ColorPool = createpool("Color",
     function()
         return UnityEngine.Color.NewFunc()
     end)
-Color32Pool = createpool(
+Color32Pool = createpool("Color32",
     function()
         return Slua.CreateClass("UnityEngine.Color32", 0, 0, 0, 0)
     end)
-RectPool = createpool(
+RectPool = createpool("Rect",
     function()
         return Slua.CreateClass("UnityEngine.Rect", 0, 0, 0, 0)
     end)
@@ -1087,30 +1144,6 @@ end
 function wrapoutexternstruct(funcInfo, v, classObj)
     if classObj == System.Collections.Generic.KeyValuePair_TKey_TValue then
         return nil
-    elseif classObj == UnityEngine.Vector2 then
-        local obj = UnityEngine.Vector2.New(0,0)
-        table.insert(funcInfo.v2_list, obj)
-        return obj
-    elseif classObj == UnityEngine.Vector3 then
-        local obj = UnityEngine.Vector3.New(0,0,0)
-        table.insert(funcInfo.v3_list, obj)
-        return obj
-    elseif classObj == UnityEngine.Vector4 then
-        local obj = UnityEngine.Vector4.New(0,0,0,1)
-        table.insert(funcInfo.v4_list, obj)
-        return obj
-    elseif classObj == UnityEngine.Quaternion then
-        local obj = UnityEngine.Quaternion.New(0,0,0,1)
-        table.insert(funcInfo.q_list, obj)
-        return obj
-    elseif classObj == UnityEngine.Color then
-        local obj = UnityEngine.Color.New(0,0,0,1)
-        table.insert(funcInfo.c_list, obj)
-        return obj
-    elseif classObj == UnityEngine.Color32 then
-        local obj = Color32Pool.Alloc()
-        table.insert(funcInfo.c32_list, obj)
-        return obj
     end
     translationlog("need add handler for wrapoutexternstruct {0}", getclasstypename(classObj))
     return classObj()
@@ -1121,152 +1154,11 @@ function wrapstruct(funcInfo, v, classObj)
 end
 
 function wrapexternstruct(funcInfo, v, classObj)
-    if v then
-        if classObj == UnityEngine.Vector2 then
-            local obj = UnityEngine.Vector2.New(v.x,v.y)
-            table.insert(funcInfo.v2_list, obj)
-            return obj
-        elseif classObj == UnityEngine.Vector3 then
-            local obj = UnityEngine.Vector3.New(v.x,v.y,v.z)
-            table.insert(funcInfo.v3_list, obj)
-            return obj
-        elseif classObj == UnityEngine.Vector4 then
-            local obj = UnityEngine.Vector4.New(v.x,v.y,v.z,v.w)
-            table.insert(funcInfo.v4_list, obj)
-            return obj
-        elseif classObj == UnityEngine.Quaternion then
-            local obj = UnityEngine.Quaternion.New(v.x,v.y,v.z,v.w)
-            table.insert(funcInfo.q_list, obj)
-            return obj
-        elseif classObj == UnityEngine.Color then
-            local obj = UnityEngine.Color.New(v.r,v.g,v.b,v.a)
-            table.insert(funcInfo.c_list, obj)
-            return obj
-        elseif classObj == UnityEngine.Color32 then
-            local obj = Color32Pool.Alloc()
-            obj.r = v.r or 0
-            obj.g = v.g or 0
-            obj.b = v.b or 0
-            obj.a = v.a or 0
-            table.insert(funcInfo.c32_list, obj)
-            return obj
-        end
-        translationlog("need add handler for wrapexternstruct {0}", getclasstypename(classObj))
-    end
+    translationlog("need add handler for wrapexternstruct {0}", getclasstypename(classObj))
     return v
 end
 
 function getexternstaticstructmember(funcInfo, symKind, class, member)
-    if class==UnityEngine.Vector2 and member=="zero" then
-        local obj = UnityEngine.Vector2.New(0,0)
-        table.insert(funcInfo.v2_list, obj)
-        return obj
-    elseif class==UnityEngine.Vector2 and member=="one" then
-        local obj = UnityEngine.Vector2.New(1,1)
-        table.insert(funcInfo.v2_list, obj)
-        return obj
-    elseif class==UnityEngine.Vector2 and member=="up" then
-        local obj = UnityEngine.Vector2.New(0,1)
-        table.insert(funcInfo.v2_list, obj)
-        return obj
-    elseif class==UnityEngine.Vector2 and member=="down" then
-        local obj = UnityEngine.Vector2.New(0,-1)
-        table.insert(funcInfo.v2_list, obj)
-        return obj
-    elseif class==UnityEngine.Vector3 and member=="zero" then
-        local obj = UnityEngine.Vector3.New(0,0,0)
-        table.insert(funcInfo.v3_list, obj)
-        return obj
-    elseif class==UnityEngine.Vector3 and member=="one" then
-        local obj = UnityEngine.Vector3.New(1,1,1)
-        table.insert(funcInfo.v3_list, obj)
-        return obj
-    elseif class == UnityEngine.Vector3 and member=="left" then
-        local obj = UnityEngine.Vector3.New(-1,0,0)
-        table.insert(funcInfo.v3_list,obj)
-        return obj
-    elseif class == UnityEngine.Vector3 and member=="right" then
-        local obj = UnityEngine.Vector3.New(1,0,0)
-        table.insert(funcInfo.v3_list,obj)
-        return obj
-    elseif class == UnityEngine.Vector3 and member=="forward" then
-        local obj = UnityEngine.Vector3.New(0,0,1)
-        table.insert(funcInfo.v3_list,obj)
-        return obj
-    elseif class == UnityEngine.Vector3 and member=="back" then
-        local obj = UnityEngine.Vector3.New(0,0,-1)
-        table.insert(funcInfo.v3_list,obj)
-        return obj
-    elseif class == UnityEngine.Vector3 and member == "up" then
-        local obj = UnityEngine.Vector3.New(0,1,0)
-        table.insert(funcInfo.v3_list,obj)
-        return obj
-    elseif class == UnityEngine.Vector3 and member=="down" then
-        local obj = UnityEngine.Vector3.New(0,-1,0)
-        table.insert(funcInfo.v3_list,obj)
-        return obj
-    elseif class==UnityEngine.Vector4 and member=="zero" then
-        local obj = UnityEngine.Vector4.New(0,0,0,0)
-        table.insert(funcInfo.v4_list, obj)
-        return obj
-    elseif class==UnityEngine.Vector4 and member=="one" then
-        local obj = UnityEngine.Vector4.New(1,1,1,1)
-        table.insert(funcInfo.v4_list, obj)
-        return obj
-    elseif class==UnityEngine.Quaternion and member=="identity" then
-        local obj = UnityEngine.Quaternion.New(0,0,0,1)
-        table.insert(funcInfo.q_list, obj)
-        return obj
-    elseif class == UnityEngine.Color and member=="white" then
-        local obj = UnityEngine.Color.white
-        table.insert(funcInfo.c_list , obj)
-        return obj
-    elseif class == UnityEngine.Color and member=="red" then
-        local obj = UnityEngine.Color.red
-        table.insert(funcInfo.c_list , obj)
-        return obj
-    elseif class == UnityEngine.Color and member=="green" then
-        local obj = UnityEngine.Color.green
-        table.insert(funcInfo.c_list , obj)
-        return obj
-    elseif class == UnityEngine.Color and member=="blue" then
-        local obj = UnityEngine.Color.blue
-        table.insert(funcInfo.c_list , obj)
-        return obj
-    elseif class == UnityEngine.Color and member=="black" then
-        local obj = UnityEngine.Color.black
-        table.insert(funcInfo.c_list , obj)
-        return obj
-    elseif class == UnityEngine.Color and member=="gray" then
-        local obj = UnityEngine.Color.gray
-        table.insert(funcInfo.c_list , obj)
-        return obj
-    elseif class == UnityEngine.Color and member == "yellow" then
-        local obj = UnityEngine.Color.yellow
-        table.insert(funcInfo.c_list , obj)
-        return obj
-    elseif class == CsLibrary.DateTime and member == "Now" then
-        local y,m,d,hh,mm,ss,ms = CsLibrary.DateTime.GetNow(Slua.out, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out)
-        local obj = DateTimePool.Alloc()
-        obj:SetDateTime(y,m,d,hh,mm,ss,ms)
-        table.insert(funcInfo.dt_list, obj)
-        return obj
-    elseif class == CsLibrary.AudioManager and member == "Listener_Pos" then
-        local _,x,y,z = CsLibrary.AudioManager.GetListenerPos(Slua.out, Slua.out, Slua.out)        
-        local obj = UnityEngine.Vector3.New(x,y,z)
-        table.insert(funcInfo.v3_list,obj)
-        return obj
-    elseif class == CsLibrary.UnityGeometry and member == "InvalidPos" then
-        local x,y,z = CsLibrary.UnityGeometry.GetInvalidPos(Slua.out, Slua.out, Slua.out)        
-        local obj = UnityEngine.Vector3.New(x,y,z)
-        table.insert(funcInfo.v3_list,obj)
-        return obj
-    elseif class == CsLibrary.UnityGeometry and member == "InvalidDir2D" then
-        local x,y = CsLibrary.UnityGeometry.GetInvalidDir2D(Slua.out, Slua.out, Slua.out)        
-        local obj = UnityEngine.Vector2.New(x,y)
-        table.insert(funcInfo.v2_list,obj)
-        return obj
-    end
     translationlog("need add handler for getexternstaticstructmember {0}.{1}", getclasstypename(class), member)
     return class[member]
 end
@@ -1301,6 +1193,13 @@ function luatableremove(tb, val)
         if rawequal(v,val) then
             table.remove(tb, i)
         end
+    end
+end
+
+function recycleandkeepcheck(funcInfo, fieldType, oldVal, newVal)   
+    if rawequal(oldVal,newVal) then
+        lualog("[recycleandkeepstructvalue] oldVal==newVal")
+        printStack()
     end
 end
 
@@ -3770,3 +3669,6 @@ function defaultvalue(t, typename, isExtern)
         return t.__new_object()
     end
 end
+
+require "lualib_valuetypescript"
+require "lualib_special"

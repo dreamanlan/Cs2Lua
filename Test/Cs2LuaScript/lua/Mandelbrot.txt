@@ -1,39 +1,64 @@
 require "cs2lua__namespaces"; 
 
 Mandelbrot = {
+	-------------------------------
+	-------- class methods --------
+	-------------------------------
 	__new_object = function(...)
-		return newobject(Mandelbrot, nil, nil, "ctor", nil, ...);
+		local __cs2lua_func_info = luainitialize();
+		local __cs2dsl_newobj;
+		__cs2dsl_newobj = newobject(__cs2lua_func_info, Mandelbrot, nil, nil, "ctor", nil, ...);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		return __cs2dsl_newobj;
 	end,
+
 	cctor = function()
+		local __cs2lua_func_info = luainitialize();
 		Mandelbrot.__cctor();
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
+
 	__cctor = function()
+		local __cs2lua_func_info = luainitialize();
 		if Mandelbrot.__cctor_called then 
+			__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			return;
 		else
 			Mandelbrot.__cctor_called = true;
 		end;
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
+
+	-------------------------------
+	-------- class fields --------
+	-------------------------------
+	__cctor_called = false,
+
+	-------------------------------
+	--- define class and object ---
+	-------------------------------
 	__define_class = function()
 		Utility.Warn("Mandelbrot::__define_class begin");
 
 		local class = Mandelbrot;
-		local static_fields_build = function()
-			local static_fields = {
-				__cctor_called = false,
-			};
-			return static_fields;
-		end;
 
-		local instance_methods = {
+		local obj_methods = {
 			Init = function(this, obj, mb)
-				this.root = newexternobject(UnityEngine.GameObject, nil, nil, nil, "UnityEngine.GameObject:ctor__String", "mandelbrot");
+				local __cs2lua_func_info = luainitialize();
+				this.root = newexternobject(__cs2lua_func_info, UnityEngine.GameObject, nil, nil, nil, luastrtocsstr("UnityEngine.GameObject:ctor__Void__String"), luastrtocsstr("mandelbrot"));
 				this:Exec();
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
+
 			Call = function(this, name, ...)
-				local args = wrapparams({...}, System.Object, TypeKind.Class);
+				local __cs2lua_func_info = luainitialize();
+				local args;
+				args = wrapparams({...}, System.Object, TypeKind.Class);
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
+
 			Exec = function(this)
+				local __cs2lua_func_info = luainitialize();
 				local width;
 				width = 50;
 				local height;
@@ -81,50 +106,76 @@ Mandelbrot = {
 					end;
 					y = (y + 1);
 				end;
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
+
 			DrawCube = function(this, x, y, w, h)
+				local __cs2lua_func_info = luainitialize();
 				local cube;
 				cube = UnityEngine.GameObject.CreatePrimitive(3);
-				cube.transform.position = newexternobject(UnityEngine.Vector3, nil, nil, nil, "UnityEngine.Vector3:ctor__Single__Single__Single", (((x * this.r) * this.scale) / w), ((((y * this.r) * this.scale) / h) - 12), 0);
-				cube.transform:SetParent("UnityEngine.Transform:SetParent__Transform", this.root.transform);
+				cube.transform.position = new_vector3(__cs2lua_func_info, UnityEngine.Vector3, nil, nil, nil, luastrtocsstr("UnityEngine.Vector3:ctor__Void__Single__Single__Single"), (((x * this.r) * this.scale) / w), ((((y * this.r) * this.scale) / h) - 12), 0);
+				cube.transform:SetParent(luastrtocsstr("UnityEngine.Transform:SetParent__Void__Transform"), this.root.transform);
 				local mat;
-				mat = cube:GetComponent("UnityEngine.GameObject:GetComponent__Type", UnityEngine.Renderer).material;
+				mat = cube:GetComponent(luastrtocsstr("UnityEngine.GameObject:GetComponent__Component__Type"), UnityEngine.Renderer).material;
 				local ix;
-				ix = UnityEngine.Random.Range("UnityEngine.Random:Range__Int32__Int32", 0, this.colors.Length);
+				ix = UnityEngine.Random.Range(luastrtocsstr("UnityEngine.Random:Range__Int32__Int32__Int32"), 0, this.colors.Length);
 				mat.color = this.colors[(ix + 1)];
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
+
 			ctor = function(this)
+				local __cs2lua_func_info = luainitialize();
 				this:__ctor();
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
+
 			__ctor = function(this)
+				local __cs2lua_func_info = luainitialize();
 				if this.__ctor_called then 
+					__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 					return;
 				else
 					this.__ctor_called = true;
 				end;
-				this.colors = wraparray({UnityEngine.Color.red, UnityEngine.Color.blue, UnityEngine.Color.green, UnityEngine.Color.cyan, UnityEngine.Color.grey, UnityEngine.Color.white, UnityEngine.Color.yellow, UnityEngine.Color.magenta, UnityEngine.Color.black}, nil, UnityEngine.Color, TypeKind.Struct);
+				this.colors = wraparray({get_unity_color_red(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "red"), get_unity_color_blue(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "blue"), get_unity_color_green(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "green"), getexternstaticstructmember(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "cyan"), getexternstaticstructmember(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "grey"), get_unity_color_white(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "white"), get_unity_color_yellow(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "yellow"), getexternstaticstructmember(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "magenta"), get_unity_color_black(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "black")}, nil, UnityEngine.Color, TypeKind.Struct);
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 		};
-		local instance_fields_build = function()
-			local instance_fields = {
-				root = __cs2lua_nil_field_value,
-				colors = __cs2lua_nil_field_value,
+
+		local obj_build = function()
+			return {
 				r = 10,
 				scale = 3.00000000,
 				__ctor_called = false,
 			};
-			return instance_fields;
 		end;
 
-		local __defineclass_return = defineclass(nil, "Mandelbrot", "Mandelbrot", class, static_fields_build, instance_methods, instance_fields_build, false);
+		local __defineclass_return = defineclass(nil, "Mandelbrot", "Mandelbrot", class, obj_methods, obj_build, false);
 		Utility.Warn("Mandelbrot::__define_class end");
 		return __defineclass_return;
 	end,
 
+	-------------------------------
+	--------- fields info ---------
+	-------------------------------
+	__class_fields = {
+		__cctor_called = true,
+	},
+
+	__obj_fields = {
+		root = true,
+		colors = true,
+		r = true,
+		scale = true,
+		__ctor_called = true,
+	},
+
+	-------------------------------
+	-------- metadata info --------
+	-------------------------------
 	__interfaces = {
 		"IStartupPlugin",
 	},
-	__class_info = nil,
 	__method_info = {
 		Init = {
 			Kind = MethodKind.Ordinary,
@@ -136,13 +187,10 @@ Mandelbrot = {
 			Kind = MethodKind.Constructor,
 		},
 	},
-	__property_info = nil,
-	__event_info = nil,
-	__field_info = nil,
 };
 
 
-require "cs2lua__lualib";
+require "cs2lua__syslib";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
 settempmetatable(Mandelbrot);

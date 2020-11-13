@@ -318,7 +318,7 @@ public class Lua_UnityEngine_Vector4 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Addition(IntPtr l) {
+	static public int op_Addition_s(IntPtr l) {
 		try {
 			UnityEngine.Vector4 a1;
 			checkType(l,1,out a1);
@@ -335,7 +335,7 @@ public class Lua_UnityEngine_Vector4 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Subtraction(IntPtr l) {
+	static public int op_Subtraction_s(IntPtr l) {
 		try {
 			UnityEngine.Vector4 a1;
 			checkType(l,1,out a1);
@@ -352,7 +352,7 @@ public class Lua_UnityEngine_Vector4 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_UnaryNegation(IntPtr l) {
+	static public int op_UnaryNegation_s(IntPtr l) {
 		try {
 			UnityEngine.Vector4 a1;
 			checkType(l,1,out a1);
@@ -367,10 +367,10 @@ public class Lua_UnityEngine_Vector4 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Multiply(IntPtr l) {
+	static public int op_Multiply_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "op_Multiply__Vector4__Single", argc, 1,typeof(UnityEngine.Vector4),typeof(float))){
+			if(matchType(l, "op_Multiply__Vector4__Vector4__Single", argc, 1,typeof(UnityEngine.Vector4),typeof(float))){
 				UnityEngine.Vector4 a1;
 				checkType(l,2,out a1);
 				System.Single a2;
@@ -380,7 +380,7 @@ public class Lua_UnityEngine_Vector4 : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "op_Multiply__Single__Vector4", argc, 1,typeof(float),typeof(UnityEngine.Vector4))){
+			else if(matchType(l, "op_Multiply__Vector4__Single__Vector4", argc, 1,typeof(float),typeof(UnityEngine.Vector4))){
 				System.Single a1;
 				checkType(l,2,out a1);
 				UnityEngine.Vector4 a2;
@@ -400,7 +400,7 @@ public class Lua_UnityEngine_Vector4 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Division(IntPtr l) {
+	static public int op_Division_s(IntPtr l) {
 		try {
 			UnityEngine.Vector4 a1;
 			checkType(l,1,out a1);
@@ -417,7 +417,7 @@ public class Lua_UnityEngine_Vector4 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Equality(IntPtr l) {
+	static public int op_Equality_s(IntPtr l) {
 		try {
 			UnityEngine.Vector4 a1;
 			checkType(l,1,out a1);
@@ -434,7 +434,7 @@ public class Lua_UnityEngine_Vector4 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Inequality(IntPtr l) {
+	static public int op_Inequality_s(IntPtr l) {
 		try {
 			UnityEngine.Vector4 a1;
 			checkType(l,1,out a1);
@@ -443,6 +443,51 @@ public class Lua_UnityEngine_Vector4 : LuaObject {
 			var ret=(a1!=a2);
 			pushValue(l,true);
 			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Implicit_s(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(matchType(l, "op_Implicit__Vector4__Vector3", argc, 1,typeof(UnityEngine.Vector3))){
+				UnityEngine.Vector3 a1;
+				checkType(l,2,out a1);
+				UnityEngine.Vector4 ret=a1;
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(matchType(l, "op_Implicit__Vector3__Vector4", argc, 1,typeof(UnityEngine.Vector4))){
+				UnityEngine.Vector4 a1;
+				checkType(l,2,out a1);
+				UnityEngine.Vector3 ret=a1;
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(matchType(l, "op_Implicit__Vector4__Vector2", argc, 1,typeof(UnityEngine.Vector2))){
+				UnityEngine.Vector2 a1;
+				checkType(l,2,out a1);
+				UnityEngine.Vector4 ret=a1;
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(matchType(l, "op_Implicit__Vector2__Vector4", argc, 1,typeof(UnityEngine.Vector4))){
+				UnityEngine.Vector4 a1;
+				checkType(l,2,out a1);
+				UnityEngine.Vector2 ret=a1;
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
 			return 2;
 		}
 		catch(Exception e) {
@@ -743,13 +788,14 @@ public class Lua_UnityEngine_Vector4 : LuaObject {
 		addMember(l,Magnitude_s);
 		addMember(l,Min_s);
 		addMember(l,Max_s);
-		addMember(l,op_Addition);
-		addMember(l,op_Subtraction);
-		addMember(l,op_UnaryNegation);
-		addMember(l,op_Multiply);
-		addMember(l,op_Division);
-		addMember(l,op_Equality);
-		addMember(l,op_Inequality);
+		addMember(l,op_Addition_s);
+		addMember(l,op_Subtraction_s);
+		addMember(l,op_UnaryNegation_s);
+		addMember(l,op_Multiply_s);
+		addMember(l,op_Division_s);
+		addMember(l,op_Equality_s);
+		addMember(l,op_Inequality_s);
+		addMember(l,op_Implicit_s);
 		addMember(l,SqrMagnitude_s);
 		addMember(l,getItem);
 		addMember(l,setItem);

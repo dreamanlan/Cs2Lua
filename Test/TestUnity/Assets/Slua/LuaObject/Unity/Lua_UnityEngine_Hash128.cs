@@ -50,7 +50,7 @@ public class Lua_UnityEngine_Hash128 : LuaObject {
 	static public int CompareTo(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "CompareTo__Hash128", argc, 2,typeof(UnityEngine.Hash128))){
+			if(matchType(l, "CompareTo__Int32__Hash128", argc, 2,typeof(UnityEngine.Hash128))){
 				UnityEngine.Hash128 self;
 				checkValueType(l,1,out self);
 				UnityEngine.Hash128 a1;
@@ -60,7 +60,7 @@ public class Lua_UnityEngine_Hash128 : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "CompareTo__Object", argc, 2,typeof(System.Object))){
+			else if(matchType(l, "CompareTo__Int32__Object", argc, 2,typeof(System.Object))){
 				UnityEngine.Hash128 self;
 				checkValueType(l,1,out self);
 				System.Object a1;
@@ -110,7 +110,7 @@ public class Lua_UnityEngine_Hash128 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Equality(IntPtr l) {
+	static public int op_Equality_s(IntPtr l) {
 		try {
 			UnityEngine.Hash128 a1;
 			checkValueType(l,1,out a1);
@@ -127,7 +127,7 @@ public class Lua_UnityEngine_Hash128 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Inequality(IntPtr l) {
+	static public int op_Inequality_s(IntPtr l) {
 		try {
 			UnityEngine.Hash128 a1;
 			checkValueType(l,1,out a1);
@@ -144,7 +144,7 @@ public class Lua_UnityEngine_Hash128 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_LessThan(IntPtr l) {
+	static public int op_LessThan_s(IntPtr l) {
 		try {
 			UnityEngine.Hash128 a1;
 			checkValueType(l,1,out a1);
@@ -161,7 +161,7 @@ public class Lua_UnityEngine_Hash128 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_GreaterThan(IntPtr l) {
+	static public int op_GreaterThan_s(IntPtr l) {
 		try {
 			UnityEngine.Hash128 a1;
 			checkValueType(l,1,out a1);
@@ -196,10 +196,10 @@ public class Lua_UnityEngine_Hash128 : LuaObject {
 		addMember(l,CompareTo);
 		addMember(l,Parse_s);
 		addMember(l,Compute_s);
-		addMember(l,op_Equality);
-		addMember(l,op_Inequality);
-		addMember(l,op_LessThan);
-		addMember(l,op_GreaterThan);
+		addMember(l,op_Equality_s);
+		addMember(l,op_Inequality_s);
+		addMember(l,op_LessThan_s);
+		addMember(l,op_GreaterThan_s);
 		addMember(l,"isValid",get_isValid,null,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.Hash128),typeof(System.ValueType));
 	}

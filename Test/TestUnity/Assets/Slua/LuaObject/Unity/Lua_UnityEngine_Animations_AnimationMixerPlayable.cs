@@ -53,6 +53,36 @@ public class Lua_UnityEngine_Animations_AnimationMixerPlayable : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int op_Implicit_s(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimationMixerPlayable a1;
+			checkValueType(l,1,out a1);
+			UnityEngine.Playables.Playable ret=a1;
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Explicit_s(IntPtr l) {
+		try {
+			UnityEngine.Playables.Playable a1;
+			checkValueType(l,1,out a1);
+			var ret=(UnityEngine.Animations.AnimationMixerPlayable)a1;
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_Null(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -68,6 +98,8 @@ public class Lua_UnityEngine_Animations_AnimationMixerPlayable : LuaObject {
 		getTypeTable(l,"UnityEngine.Animations.AnimationMixerPlayable");
 		addMember(l,GetHandle);
 		addMember(l,Create_s);
+		addMember(l,op_Implicit_s);
+		addMember(l,op_Explicit_s);
 		addMember(l,"Null",get_Null,null,false);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.Animations.AnimationMixerPlayable),typeof(System.ValueType));
 	}

@@ -5,6 +5,7 @@ attributes(Cs2LuaType){
 };
 attributes(Program){
 	class{
+		attribute(Cs2Dsl.RequireAttribute([luaModuleNames(["lualib_valuetypescript"])], []));
 		attribute(Cs2Dsl.EntryAttribute([], []));
 	};
 };

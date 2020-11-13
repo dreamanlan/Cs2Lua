@@ -2,10 +2,8 @@
 using System;
 using System.Linq;
 using System.Reflection;
-#if !SLUA_STANDALONE
 using UnityEngine;
 using UnityEditor;
-#endif
 using System.IO;
 
 namespace SLua
@@ -13,14 +11,11 @@ namespace SLua
 
     public static class SluaEditorUtility
     {
-
-#if !SLUA_STANDALONE
         [MenuItem("SLua/Setting")]
         public static void Open()
         {
             Selection.activeObject = InstanceOfSLuaSetting;
         }
-#endif
         public static void ReBuildTypes()
         {
             SLuaSetting.Instance = InstanceOfSLuaSetting;
@@ -52,7 +47,6 @@ namespace SLua
         {
             get
             {
-#if !SLUA_STANDALONE
                 if (_instance_lua3rd_meta == null) {
                     _instance_lua3rd_meta = Resources.Load<Lua3rdMeta>("lua3rdmeta");
                 }
@@ -65,8 +59,6 @@ namespace SLua
                     }
                     UnityEditor.AssetDatabase.CreateAsset(_instance_lua3rd_meta, Path.Combine(path, "lua3rdmeta.asset"));
                 }
-
-#endif
                 return _instance_lua3rd_meta;
             }
         }
@@ -74,7 +66,6 @@ namespace SLua
         {
             get
             {
-#if !SLUA_STANDALONE
                 if (_instance_slua_setting == null) {
                     _instance_slua_setting = Resources.Load<SLuaSetting>("setting");
 
@@ -83,7 +74,6 @@ namespace SLua
                         AssetDatabase.CreateAsset(_instance_slua_setting, "Assets/Slua/Meta/Resources/setting.asset");
                     }
                 }
-#endif
                 return _instance_slua_setting;
             }
         }

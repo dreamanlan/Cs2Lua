@@ -405,6 +405,90 @@ public class Lua_UnityEngine_Texture : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_lowDetail(IntPtr l) {
+		try {
+			UnityEngine.Texture self=(UnityEngine.Texture)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.lowDetail);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_lowDetail(IntPtr l) {
+		try {
+			UnityEngine.Texture self=(UnityEngine.Texture)checkSelf(l);
+			int v;
+			checkType(l,2,out v);
+			self.lowDetail=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_customFlag(IntPtr l) {
+		try {
+			UnityEngine.Texture self=(UnityEngine.Texture)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.customFlag);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_customFlag(IntPtr l) {
+		try {
+			UnityEngine.Texture self=(UnityEngine.Texture)checkSelf(l);
+			int v;
+			checkType(l,2,out v);
+			self.customFlag=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_customValue(IntPtr l) {
+		try {
+			UnityEngine.Texture self=(UnityEngine.Texture)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.customValue);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_customValue(IntPtr l) {
+		try {
+			UnityEngine.Texture self=(UnityEngine.Texture)checkSelf(l);
+			int v;
+			checkType(l,2,out v);
+			self.customValue=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_texelSize(IntPtr l) {
 		try {
 			UnityEngine.Texture self=(UnityEngine.Texture)checkSelf(l);
@@ -661,6 +745,9 @@ public class Lua_UnityEngine_Texture : LuaObject {
 		addMember(l,"filterMode",get_filterMode,set_filterMode,true);
 		addMember(l,"anisoLevel",get_anisoLevel,set_anisoLevel,true);
 		addMember(l,"mipMapBias",get_mipMapBias,set_mipMapBias,true);
+		addMember(l,"lowDetail",get_lowDetail,set_lowDetail,true);
+		addMember(l,"customFlag",get_customFlag,set_customFlag,true);
+		addMember(l,"customValue",get_customValue,set_customValue,true);
 		addMember(l,"texelSize",get_texelSize,null,true);
 		addMember(l,"updateCount",get_updateCount,null,true);
 		addMember(l,"imageContentsHash",get_imageContentsHash,set_imageContentsHash,true);

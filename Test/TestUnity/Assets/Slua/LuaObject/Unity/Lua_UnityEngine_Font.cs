@@ -145,7 +145,7 @@ public class Lua_UnityEngine_Font : LuaObject {
 	static public int CreateDynamicFontFromOSFont_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "CreateDynamicFontFromOSFont__String__Int32", argc, 1,typeof(string),typeof(int))){
+			if(matchType(l, "CreateDynamicFontFromOSFont__Font__String__Int32", argc, 1,typeof(string),typeof(int))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -155,7 +155,7 @@ public class Lua_UnityEngine_Font : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "CreateDynamicFontFromOSFont__Arr_String__Int32", argc, 1,typeof(System.String[]),typeof(int))){
+			else if(matchType(l, "CreateDynamicFontFromOSFont__Font__Arr_String__Int32", argc, 1,typeof(System.String[]),typeof(int))){
 				System.String[] a1;
 				checkArray(l,2,out a1);
 				System.Int32 a2;
@@ -193,19 +193,6 @@ public class Lua_UnityEngine_Font : LuaObject {
 	static public int GetOSInstalledFontNames_s(IntPtr l) {
 		try {
 			var ret=UnityEngine.Font.GetOSInstalledFontNames();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetPathsToOSFonts_s(IntPtr l) {
-		try {
-			var ret=UnityEngine.Font.GetPathsToOSFonts();
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -359,7 +346,6 @@ public class Lua_UnityEngine_Font : LuaObject {
 		addMember(l,CreateDynamicFontFromOSFont_s);
 		addMember(l,GetMaxVertsForString_s);
 		addMember(l,GetOSInstalledFontNames_s);
-		addMember(l,GetPathsToOSFonts_s);
 		addMember(l,"material",get_material,set_material,true);
 		addMember(l,"fontNames",get_fontNames,set_fontNames,true);
 		addMember(l,"dynamic",get_dynamic,null,true);

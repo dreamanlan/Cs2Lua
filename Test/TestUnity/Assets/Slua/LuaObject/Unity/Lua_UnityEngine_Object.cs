@@ -33,10 +33,72 @@ public class Lua_UnityEngine_Object : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int CompareName(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(matchType(l, "CompareName__Boolean__Object", argc, 2,typeof(UnityEngine.Object))){
+				UnityEngine.Object self=(UnityEngine.Object)checkSelf(l);
+				UnityEngine.Object a1;
+				checkType(l,3,out a1);
+				var ret=self.CompareName(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(matchType(l, "CompareName__Boolean__String", argc, 2,typeof(string))){
+				UnityEngine.Object self=(UnityEngine.Object)checkSelf(l);
+				System.String a1;
+				checkType(l,3,out a1);
+				var ret=self.CompareName(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int NameContains(IntPtr l) {
+		try {
+			UnityEngine.Object self=(UnityEngine.Object)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.NameContains(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Implicit_s(IntPtr l) {
+		try {
+			UnityEngine.Object a1;
+			checkType(l,1,out a1);
+			System.Boolean ret=a1;
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Instantiate_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Instantiate__Object__Vector3__Quaternion__Transform", argc, 1,typeof(UnityEngine.Object),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Transform))){
+			if(matchType(l, "Instantiate__Object__Object__Vector3__Quaternion__Transform", argc, 1,typeof(UnityEngine.Object),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Transform))){
 				UnityEngine.Object a1;
 				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
@@ -50,7 +112,7 @@ public class Lua_UnityEngine_Object : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Instantiate__Object__Vector3__Quaternion__Transform", argc, 1,typeof(UnityEngine.Object),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Transform))){
+			else if(matchType(l, "Instantiate__Object__Object__Vector3__Quaternion__Transform", argc, 1,typeof(UnityEngine.Object),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Transform))){
 				UnityEngine.Object a1;
 				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
@@ -64,7 +126,7 @@ public class Lua_UnityEngine_Object : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Instantiate__Object__Vector3__Quaternion", argc, 1,typeof(UnityEngine.Object),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion))){
+			else if(matchType(l, "Instantiate__Object__Object__Vector3__Quaternion", argc, 1,typeof(UnityEngine.Object),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion))){
 				UnityEngine.Object a1;
 				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
@@ -76,7 +138,7 @@ public class Lua_UnityEngine_Object : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Instantiate__Object__Transform__Boolean", argc, 1,typeof(UnityEngine.Object),typeof(UnityEngine.Transform),typeof(bool))){
+			else if(matchType(l, "Instantiate__Object__Object__Transform__Boolean", argc, 1,typeof(UnityEngine.Object),typeof(UnityEngine.Transform),typeof(bool))){
 				UnityEngine.Object a1;
 				checkType(l,2,out a1);
 				UnityEngine.Transform a2;
@@ -88,7 +150,7 @@ public class Lua_UnityEngine_Object : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Instantiate__Object__Vector3__Quaternion", argc, 1,typeof(UnityEngine.Object),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion))){
+			else if(matchType(l, "Instantiate__Object__Object__Vector3__Quaternion", argc, 1,typeof(UnityEngine.Object),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion))){
 				UnityEngine.Object a1;
 				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
@@ -100,7 +162,7 @@ public class Lua_UnityEngine_Object : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Instantiate__Object__Transform__Boolean", argc, 1,typeof(UnityEngine.Object),typeof(UnityEngine.Transform),typeof(bool))){
+			else if(matchType(l, "Instantiate__Object__Object__Transform__Boolean", argc, 1,typeof(UnityEngine.Object),typeof(UnityEngine.Transform),typeof(bool))){
 				UnityEngine.Object a1;
 				checkType(l,2,out a1);
 				UnityEngine.Transform a2;
@@ -112,7 +174,7 @@ public class Lua_UnityEngine_Object : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Instantiate__Object__Transform", argc, 1,typeof(UnityEngine.Object),typeof(UnityEngine.Transform))){
+			else if(matchType(l, "Instantiate__Object__Object__Transform", argc, 1,typeof(UnityEngine.Object),typeof(UnityEngine.Transform))){
 				UnityEngine.Object a1;
 				checkType(l,2,out a1);
 				UnityEngine.Transform a2;
@@ -122,7 +184,7 @@ public class Lua_UnityEngine_Object : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Instantiate__Object__Transform", argc, 1,typeof(UnityEngine.Object),typeof(UnityEngine.Transform))){
+			else if(matchType(l, "Instantiate__Object__Object__Transform", argc, 1,typeof(UnityEngine.Object),typeof(UnityEngine.Transform))){
 				UnityEngine.Object a1;
 				checkType(l,2,out a1);
 				UnityEngine.Transform a2;
@@ -132,7 +194,7 @@ public class Lua_UnityEngine_Object : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Instantiate__Object", argc, 1,typeof(UnityEngine.Object))){
+			else if(matchType(l, "Instantiate__Object__Object", argc, 1,typeof(UnityEngine.Object))){
 				UnityEngine.Object a1;
 				checkType(l,2,out a1);
 				var ret=UnityEngine.Object.Instantiate(a1);
@@ -140,7 +202,7 @@ public class Lua_UnityEngine_Object : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Instantiate__Object", argc, 1,typeof(UnityEngine.Object))){
+			else if(matchType(l, "Instantiate__Object__Object", argc, 1,typeof(UnityEngine.Object))){
 				UnityEngine.Object a1;
 				checkType(l,2,out a1);
 				var ret=UnityEngine.Object.Instantiate<UnityEngine.Object>(a1);
@@ -284,7 +346,7 @@ public class Lua_UnityEngine_Object : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Equality(IntPtr l) {
+	static public int op_Equality_s(IntPtr l) {
 		try {
 			UnityEngine.Object a1;
 			checkType(l,1,out a1);
@@ -301,7 +363,7 @@ public class Lua_UnityEngine_Object : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Inequality(IntPtr l) {
+	static public int op_Inequality_s(IntPtr l) {
 		try {
 			UnityEngine.Object a1;
 			checkType(l,1,out a1);
@@ -376,14 +438,17 @@ public class Lua_UnityEngine_Object : LuaObject {
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Object");
 		addMember(l,GetInstanceID);
+		addMember(l,CompareName);
+		addMember(l,NameContains);
+		addMember(l,op_Implicit_s);
 		addMember(l,Instantiate_s);
 		addMember(l,Destroy_s);
 		addMember(l,DestroyImmediate_s);
 		addMember(l,FindObjectsOfType_s);
 		addMember(l,DontDestroyOnLoad_s);
 		addMember(l,FindObjectOfType_s);
-		addMember(l,op_Equality);
-		addMember(l,op_Inequality);
+		addMember(l,op_Equality_s);
+		addMember(l,op_Inequality_s);
 		addMember(l,"name",get_name,set_name,true);
 		addMember(l,"hideFlags",get_hideFlags,set_hideFlags,true);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.Object));

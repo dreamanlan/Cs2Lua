@@ -194,39 +194,6 @@ public class Lua_UnityEngine_Debug : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int LogFormat_s(IntPtr l) {
-		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc>=4){
-				UnityEngine.Object a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.Object[] a3;
-				checkParams(l,4,out a3);
-				UnityEngine.Debug.LogFormat(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc>=3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Object[] a2;
-				checkParams(l,3,out a2);
-				UnityEngine.Debug.LogFormat(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int LogError_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -243,39 +210,6 @@ public class Lua_UnityEngine_Debug : LuaObject {
 				System.Object a1;
 				checkType(l,2,out a1);
 				UnityEngine.Debug.LogError(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int LogErrorFormat_s(IntPtr l) {
-		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc>=4){
-				UnityEngine.Object a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.Object[] a3;
-				checkParams(l,4,out a3);
-				UnityEngine.Debug.LogErrorFormat(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc>=3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Object[] a2;
-				checkParams(l,3,out a2);
-				UnityEngine.Debug.LogErrorFormat(a1,a2);
 				pushValue(l,true);
 				return 1;
 			}
@@ -359,43 +293,10 @@ public class Lua_UnityEngine_Debug : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int LogWarningFormat_s(IntPtr l) {
-		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc>=4){
-				UnityEngine.Object a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.Object[] a3;
-				checkParams(l,4,out a3);
-				UnityEngine.Debug.LogWarningFormat(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc>=3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Object[] a2;
-				checkParams(l,3,out a2);
-				UnityEngine.Debug.LogWarningFormat(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int Assert_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Assert__Boolean__Object__Object", argc, 1,typeof(bool),typeof(System.Object),typeof(UnityEngine.Object))){
+			if(matchType(l, "Assert__Void__Boolean__Object__Object", argc, 1,typeof(bool),typeof(System.Object),typeof(UnityEngine.Object))){
 				System.Boolean a1;
 				checkType(l,2,out a1);
 				System.Object a2;
@@ -406,7 +307,7 @@ public class Lua_UnityEngine_Debug : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "Assert__Boolean__String__Object", argc, 1,typeof(bool),typeof(string),typeof(UnityEngine.Object))){
+			else if(matchType(l, "Assert__Void__Boolean__String__Object", argc, 1,typeof(bool),typeof(string),typeof(UnityEngine.Object))){
 				System.Boolean a1;
 				checkType(l,2,out a1);
 				System.String a2;
@@ -417,7 +318,7 @@ public class Lua_UnityEngine_Debug : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "Assert__Boolean__Object", argc, 1,typeof(bool),typeof(UnityEngine.Object))){
+			else if(matchType(l, "Assert__Void__Boolean__Object", argc, 1,typeof(bool),typeof(UnityEngine.Object))){
 				System.Boolean a1;
 				checkType(l,2,out a1);
 				UnityEngine.Object a2;
@@ -426,7 +327,7 @@ public class Lua_UnityEngine_Debug : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "Assert__Boolean__Object", argc, 1,typeof(bool),typeof(System.Object))){
+			else if(matchType(l, "Assert__Void__Boolean__Object", argc, 1,typeof(bool),typeof(System.Object))){
 				System.Boolean a1;
 				checkType(l,2,out a1);
 				System.Object a2;
@@ -435,7 +336,7 @@ public class Lua_UnityEngine_Debug : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "Assert__Boolean__String", argc, 1,typeof(bool),typeof(string))){
+			else if(matchType(l, "Assert__Void__Boolean__String", argc, 1,typeof(bool),typeof(string))){
 				System.Boolean a1;
 				checkType(l,2,out a1);
 				System.String a2;
@@ -527,39 +428,6 @@ public class Lua_UnityEngine_Debug : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int LogAssertionFormat_s(IntPtr l) {
-		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc>=4){
-				UnityEngine.Object a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.Object[] a3;
-				checkParams(l,4,out a3);
-				UnityEngine.Debug.LogAssertionFormat(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc>=3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Object[] a2;
-				checkParams(l,3,out a2);
-				UnityEngine.Debug.LogAssertionFormat(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_unityLogger(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -616,17 +484,13 @@ public class Lua_UnityEngine_Debug : LuaObject {
 		addMember(l,Break_s);
 		addMember(l,DebugBreak_s);
 		addMember(l,Log_s);
-		addMember(l,LogFormat_s);
 		addMember(l,LogError_s);
-		addMember(l,LogErrorFormat_s);
 		addMember(l,ClearDeveloperConsole_s);
 		addMember(l,LogException_s);
 		addMember(l,LogWarning_s);
-		addMember(l,LogWarningFormat_s);
 		addMember(l,Assert_s);
 		addMember(l,AssertFormat_s);
 		addMember(l,LogAssertion_s);
-		addMember(l,LogAssertionFormat_s);
 		addMember(l,"unityLogger",get_unityLogger,null,false);
 		addMember(l,"developerConsoleVisible",get_developerConsoleVisible,set_developerConsoleVisible,false);
 		addMember(l,"isDebugBuild",get_isDebugBuild,null,false);

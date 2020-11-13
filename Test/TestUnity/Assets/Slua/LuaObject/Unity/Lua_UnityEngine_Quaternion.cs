@@ -304,10 +304,10 @@ public class Lua_UnityEngine_Quaternion : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Multiply(IntPtr l) {
+	static public int op_Multiply_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "op_Multiply__Quaternion__Quaternion", argc, 1,typeof(UnityEngine.Quaternion),typeof(UnityEngine.Quaternion))){
+			if(matchType(l, "op_Multiply__Quaternion__Quaternion__Quaternion", argc, 1,typeof(UnityEngine.Quaternion),typeof(UnityEngine.Quaternion))){
 				UnityEngine.Quaternion a1;
 				checkType(l,2,out a1);
 				UnityEngine.Quaternion a2;
@@ -317,7 +317,7 @@ public class Lua_UnityEngine_Quaternion : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "op_Multiply__Quaternion__Vector3", argc, 1,typeof(UnityEngine.Quaternion),typeof(UnityEngine.Vector3))){
+			else if(matchType(l, "op_Multiply__Vector3__Quaternion__Vector3", argc, 1,typeof(UnityEngine.Quaternion),typeof(UnityEngine.Vector3))){
 				UnityEngine.Quaternion a1;
 				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
@@ -337,7 +337,7 @@ public class Lua_UnityEngine_Quaternion : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Equality(IntPtr l) {
+	static public int op_Equality_s(IntPtr l) {
 		try {
 			UnityEngine.Quaternion a1;
 			checkType(l,1,out a1);
@@ -354,7 +354,7 @@ public class Lua_UnityEngine_Quaternion : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Inequality(IntPtr l) {
+	static public int op_Inequality_s(IntPtr l) {
 		try {
 			UnityEngine.Quaternion a1;
 			checkType(l,1,out a1);
@@ -714,9 +714,9 @@ public class Lua_UnityEngine_Quaternion : LuaObject {
 		addMember(l,LerpUnclamped_s);
 		addMember(l,AngleAxis_s);
 		addMember(l,LookRotation_s);
-		addMember(l,op_Multiply);
-		addMember(l,op_Equality);
-		addMember(l,op_Inequality);
+		addMember(l,op_Multiply_s);
+		addMember(l,op_Equality_s);
+		addMember(l,op_Inequality_s);
 		addMember(l,Dot_s);
 		addMember(l,Angle_s);
 		addMember(l,Euler_s);

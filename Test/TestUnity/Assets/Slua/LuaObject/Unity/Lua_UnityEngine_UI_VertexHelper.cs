@@ -1,6 +1,7 @@
 ﻿using System;
 using SLua;
 using System.Collections.Generic;
+using UnityEngine.Experimental.UI;
 [UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -110,7 +111,29 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 	static public int AddVert(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(argc==8){
+			if(argc==10){
+				UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
+				UnityEngine.Vector3 a2;
+				checkType(l,3,out a2);
+				UnityEngine.Color32 a3;
+				checkValueType(l,4,out a3);
+				UnityEngine.Vector2 a4;
+				checkType(l,5,out a4);
+				UnityEngine.Vector2 a5;
+				checkType(l,6,out a5);
+				UnityEngine.Vector2 a6;
+				checkType(l,7,out a6);
+				UnityEngine.Vector2 a7;
+				checkType(l,8,out a7);
+				UnityEngine.Vector3 a8;
+				checkType(l,9,out a8);
+				UnityEngine.Vector4 a9;
+				checkType(l,10,out a9);
+				self.AddVert(a2,a3,a4,a5,a6,a7,a8,a9);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==8){
 				UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
 				UnityEngine.Vector3 a1;
 				checkType(l,3,out a1);

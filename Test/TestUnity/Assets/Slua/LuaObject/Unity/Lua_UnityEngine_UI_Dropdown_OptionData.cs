@@ -19,7 +19,7 @@ public class Lua_UnityEngine_UI_Dropdown_OptionData : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__String", argc, 2,typeof(string))){
+			else if(matchType(l, "ctor__Void__String", argc, 2,typeof(string))){
 				System.String a1;
 				checkType(l,3,out a1);
 				o=new UnityEngine.UI.Dropdown.OptionData(a1);
@@ -27,7 +27,7 @@ public class Lua_UnityEngine_UI_Dropdown_OptionData : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__Sprite", argc, 2,typeof(UnityEngine.Sprite))){
+			else if(matchType(l, "ctor__Void__Sprite", argc, 2,typeof(UnityEngine.Sprite))){
 				UnityEngine.Sprite a1;
 				checkType(l,3,out a1);
 				o=new UnityEngine.UI.Dropdown.OptionData(a1);

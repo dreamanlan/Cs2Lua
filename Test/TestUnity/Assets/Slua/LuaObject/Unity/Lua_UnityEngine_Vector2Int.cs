@@ -156,6 +156,36 @@ public class Lua_UnityEngine_Vector2Int : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int op_Implicit_s(IntPtr l) {
+		try {
+			UnityEngine.Vector2Int a1;
+			checkValueType(l,1,out a1);
+			UnityEngine.Vector2 ret=a1;
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Explicit_s(IntPtr l) {
+		try {
+			UnityEngine.Vector2Int a1;
+			checkValueType(l,1,out a1);
+			var ret=(UnityEngine.Vector3Int)a1;
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int FloorToInt_s(IntPtr l) {
 		try {
 			UnityEngine.Vector2 a1;
@@ -201,7 +231,7 @@ public class Lua_UnityEngine_Vector2Int : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Addition(IntPtr l) {
+	static public int op_Addition_s(IntPtr l) {
 		try {
 			UnityEngine.Vector2Int a1;
 			checkValueType(l,1,out a1);
@@ -218,7 +248,7 @@ public class Lua_UnityEngine_Vector2Int : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Subtraction(IntPtr l) {
+	static public int op_Subtraction_s(IntPtr l) {
 		try {
 			UnityEngine.Vector2Int a1;
 			checkValueType(l,1,out a1);
@@ -235,10 +265,10 @@ public class Lua_UnityEngine_Vector2Int : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Multiply(IntPtr l) {
+	static public int op_Multiply_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "op_Multiply__Vector2Int__Vector2Int", argc, 1,typeof(UnityEngine.Vector2Int),typeof(UnityEngine.Vector2Int))){
+			if(matchType(l, "op_Multiply__Vector2Int__Vector2Int__Vector2Int", argc, 1,typeof(UnityEngine.Vector2Int),typeof(UnityEngine.Vector2Int))){
 				UnityEngine.Vector2Int a1;
 				checkValueType(l,2,out a1);
 				UnityEngine.Vector2Int a2;
@@ -248,7 +278,7 @@ public class Lua_UnityEngine_Vector2Int : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "op_Multiply__Vector2Int__Int32", argc, 1,typeof(UnityEngine.Vector2Int),typeof(int))){
+			else if(matchType(l, "op_Multiply__Vector2Int__Vector2Int__Int32", argc, 1,typeof(UnityEngine.Vector2Int),typeof(int))){
 				UnityEngine.Vector2Int a1;
 				checkValueType(l,2,out a1);
 				System.Int32 a2;
@@ -268,7 +298,7 @@ public class Lua_UnityEngine_Vector2Int : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Equality(IntPtr l) {
+	static public int op_Equality_s(IntPtr l) {
 		try {
 			UnityEngine.Vector2Int a1;
 			checkValueType(l,1,out a1);
@@ -285,7 +315,7 @@ public class Lua_UnityEngine_Vector2Int : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Inequality(IntPtr l) {
+	static public int op_Inequality_s(IntPtr l) {
 		try {
 			UnityEngine.Vector2Int a1;
 			checkValueType(l,1,out a1);
@@ -507,14 +537,16 @@ public class Lua_UnityEngine_Vector2Int : LuaObject {
 		addMember(l,Min_s);
 		addMember(l,Max_s);
 		addMember(l,Scale_s);
+		addMember(l,op_Implicit_s);
+		addMember(l,op_Explicit_s);
 		addMember(l,FloorToInt_s);
 		addMember(l,CeilToInt_s);
 		addMember(l,RoundToInt_s);
-		addMember(l,op_Addition);
-		addMember(l,op_Subtraction);
-		addMember(l,op_Multiply);
-		addMember(l,op_Equality);
-		addMember(l,op_Inequality);
+		addMember(l,op_Addition_s);
+		addMember(l,op_Subtraction_s);
+		addMember(l,op_Multiply_s);
+		addMember(l,op_Equality_s);
+		addMember(l,op_Inequality_s);
 		addMember(l,getItem);
 		addMember(l,setItem);
 		addMember(l,"x",get_x,set_x,true);

@@ -111,7 +111,7 @@ public class Lua_UnityEngine_MonoBehaviour : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "StartCoroutine__IEnumerator", argc, 2,typeof(System.Collections.IEnumerator))){
+			else if(matchType(l, "StartCoroutine__Coroutine__IEnumerator", argc, 2,typeof(System.Collections.IEnumerator))){
 				UnityEngine.MonoBehaviour self=(UnityEngine.MonoBehaviour)checkSelf(l);
 				System.Collections.IEnumerator a1;
 				checkType(l,3,out a1);
@@ -120,7 +120,7 @@ public class Lua_UnityEngine_MonoBehaviour : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "StartCoroutine__String", argc, 2,typeof(string))){
+			else if(matchType(l, "StartCoroutine__Coroutine__String", argc, 2,typeof(string))){
 				UnityEngine.MonoBehaviour self=(UnityEngine.MonoBehaviour)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);
@@ -142,7 +142,7 @@ public class Lua_UnityEngine_MonoBehaviour : LuaObject {
 	static public int StopCoroutine(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "StopCoroutine__IEnumerator", argc, 2,typeof(System.Collections.IEnumerator))){
+			if(matchType(l, "StopCoroutine__Void__IEnumerator", argc, 2,typeof(System.Collections.IEnumerator))){
 				UnityEngine.MonoBehaviour self=(UnityEngine.MonoBehaviour)checkSelf(l);
 				System.Collections.IEnumerator a1;
 				checkType(l,3,out a1);
@@ -150,7 +150,7 @@ public class Lua_UnityEngine_MonoBehaviour : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "StopCoroutine__Coroutine", argc, 2,typeof(UnityEngine.Coroutine))){
+			else if(matchType(l, "StopCoroutine__Void__Coroutine", argc, 2,typeof(UnityEngine.Coroutine))){
 				UnityEngine.MonoBehaviour self=(UnityEngine.MonoBehaviour)checkSelf(l);
 				UnityEngine.Coroutine a1;
 				checkType(l,3,out a1);
@@ -158,7 +158,7 @@ public class Lua_UnityEngine_MonoBehaviour : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "StopCoroutine__String", argc, 2,typeof(string))){
+			else if(matchType(l, "StopCoroutine__Void__String", argc, 2,typeof(string))){
 				UnityEngine.MonoBehaviour self=(UnityEngine.MonoBehaviour)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);

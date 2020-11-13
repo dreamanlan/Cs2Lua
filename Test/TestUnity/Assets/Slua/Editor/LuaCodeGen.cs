@@ -37,7 +37,7 @@ namespace SLua
 
     public class LuaCodeGen : MonoBehaviour
     {
-        static public string GenPath = SLuaSetting.Instance.UnityEngineGeneratePath;
+        static public string GenPath => SLuaSetting.Instance.UnityEngineGeneratePath;
         public delegate void ExportGenericDelegate(Type t, string ns);
 
         static bool IsCompiling

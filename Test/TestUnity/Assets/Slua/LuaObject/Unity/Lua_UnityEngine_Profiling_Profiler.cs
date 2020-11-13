@@ -304,6 +304,32 @@ public class Lua_UnityEngine_Profiling_Profiler : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_loadingTexture(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Profiling.Profiler.loadingTexture);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_loadingTexture(IntPtr l) {
+		try {
+			bool v;
+			checkType(l,2,out v);
+			UnityEngine.Profiling.Profiler.loadingTexture=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_maxUsedMemory(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -323,6 +349,18 @@ public class Lua_UnityEngine_Profiling_Profiler : LuaObject {
 			UnityEngine.Profiling.Profiler.maxUsedMemory=v;
 			pushValue(l,true);
 			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_shaderLabMemory(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Profiling.Profiler.shaderLabMemory);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -400,7 +438,9 @@ public class Lua_UnityEngine_Profiling_Profiler : LuaObject {
 		addMember(l,"supported",get_supported,null,false);
 		addMember(l,"logFile",get_logFile,set_logFile,false);
 		addMember(l,"enableBinaryLog",get_enableBinaryLog,set_enableBinaryLog,false);
+		addMember(l,"loadingTexture",get_loadingTexture,set_loadingTexture,false);
 		addMember(l,"maxUsedMemory",get_maxUsedMemory,set_maxUsedMemory,false);
+		addMember(l,"shaderLabMemory",get_shaderLabMemory,null,false);
 		addMember(l,"enabled",get_enabled,set_enabled,false);
 		addMember(l,"areaCount",get_areaCount,null,false);
 		addMember(l,"usedHeapSizeLong",get_usedHeapSizeLong,null,false);

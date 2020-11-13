@@ -1,6 +1,7 @@
 ﻿using System;
 using SLua;
 using System.Collections.Generic;
+using UnityEngine.Experimental.Video;
 [UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Video_VideoPlayer : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -243,6 +244,22 @@ public class Lua_UnityEngine_Video_VideoPlayer : LuaObject {
 			self.SetTargetAudioSource(a1,a2);
 			pushValue(l,true);
 			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetAudioSampleProvider(IntPtr l) {
+		try {
+			UnityEngine.Video.VideoPlayer self=(UnityEngine.Video.VideoPlayer)checkSelf(l);
+			System.UInt16 a2;
+			checkType(l,2,out a2);
+			var ret=self.GetAudioSampleProvider(a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -1198,6 +1215,7 @@ public class Lua_UnityEngine_Video_VideoPlayer : LuaObject {
 		addMember(l,SetDirectAudioMute);
 		addMember(l,GetTargetAudioSource);
 		addMember(l,SetTargetAudioSource);
+		addMember(l,GetAudioSampleProvider);
 		addMember(l,"source",get_source,set_source,true);
 		addMember(l,"url",get_url,set_url,true);
 		addMember(l,"clip",get_clip,set_clip,true);

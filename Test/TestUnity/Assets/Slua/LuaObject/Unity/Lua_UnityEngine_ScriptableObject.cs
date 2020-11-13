@@ -22,7 +22,7 @@ public class Lua_UnityEngine_ScriptableObject : LuaObject {
 	static public int CreateInstance_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "CreateInstance__Type", argc, 1,typeof(System.Type))){
+			if(matchType(l, "CreateInstance__ScriptableObject__Type", argc, 1,typeof(System.Type))){
 				System.Type a1;
 				checkType(l,2,out a1);
 				var ret=UnityEngine.ScriptableObject.CreateInstance(a1);
@@ -30,7 +30,7 @@ public class Lua_UnityEngine_ScriptableObject : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "CreateInstance__String", argc, 1,typeof(string))){
+			else if(matchType(l, "CreateInstance__ScriptableObject__String", argc, 1,typeof(string))){
 				System.String a1;
 				checkType(l,2,out a1);
 				var ret=UnityEngine.ScriptableObject.CreateInstance(a1);

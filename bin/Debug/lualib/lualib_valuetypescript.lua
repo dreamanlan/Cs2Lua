@@ -30,7 +30,7 @@ local function clamp(v,min,max)
 	return v>max and max or (v<min and min or v)
 end
 
-local function  lerpf(a,b,t)
+local function lerpf(a,b,t)
 	t=clamp(t,0,1)
 	return a+(b-a)*t
 end
@@ -293,7 +293,11 @@ do
 	end
 
 	function Vector3.Angle(a,b)
-		local dot = Vector3.Dot(Vector3.Normalize(a), Vector3.Normalize(b))
+		local aa = Vector3.Normalize(a)
+		local bb = Vector3.Normalize(b)
+		local dot = Vector3.Dot(aa, bb)
+		Vector3Pool.Recycle(aa)
+		Vector3Pool.Recycle(bb)
 		return acos(dot)*ToAngle
 	end
 
@@ -374,6 +378,8 @@ do
 			Matrix3x3.SetAxisAngle(m,axis,PI*t)
 			local slerped = Matrix3x3.Mul(m,na)
 			Vector3.Mul(slerped,lerpedMagnitude)
+			Vector3Pool.Recycle(na)
+			Vector3Pool.Recycle(axis)
 			return slerped
 		else
 			local lerpedMagnitude = lerpf (ma, mb, t)
@@ -385,11 +391,18 @@ do
 			Matrix3x3.SetAxisAngle(m,axis,angle)
 			local slerped = Matrix3x3.Mul(m,na)
 			Vector3.Mul(slerped,lerpedMagnitude)
+			Vector3Pool.Recycle(na)
+			Vector3Pool.Recycle(axis)
 			return slerped
 		end
 	end
 
 	function Vector3.Lerp(a,b,t)
+		if t > 1 then
+			t = 1
+		elseif t < 0 then
+			t = 0
+		end
 		return Vector3.New(a[1]+(b[1]-a[1])*t
 			,a[2]+(b[2]-a[2])*t
 			,a[3]+(b[3]-a[3])*t
@@ -439,6 +452,8 @@ do
 			
 			local dot = Vector3.Dot(na, nb)
 			if dot > 1.0 - Epsilon then
+				Vector3Pool.Recycle(na)
+				Vector3Pool.Recycle(nb)
 				return Vector3.MoveTowards (a, b, mag)
 			elseif dot < -1.0 + Epsilon then
 				local axis = Vector3.OrthoNormalVector(na)
@@ -446,6 +461,9 @@ do
 				Matrix3x3.SetAxisAngle(m, axis, angleMove)
 				local rotated = Matrix3x3.Mul(m,na)
 				Vector3.Mul(rotated,ClampedMove(ma, mb, mag))
+				Vector3Pool.Recycle(na)
+				Vector3Pool.Recycle(nb)
+				Vector3Pool.Recycle(axis)
 				return rotated
 			else
 				local angle = acos(dot);
@@ -455,6 +473,9 @@ do
 				Matrix3x3.SetAxisAngle(m,axis, min(angleMove, angle))
 				local rotated = Matrix3x3.Mul(m,na)
 				Vector3.Mul(rotated,ClampedMove(ma, mb, mag))
+				Vector3Pool.Recycle(na)
+				Vector3Pool.Recycle(nb)
+				Vector3Pool.Recycle(axis)
 				return rotated
 			end
 		else
@@ -465,7 +486,9 @@ do
 	function Vector3.Distance(a,b)
 		a=Vector3.Clone(a)
 		Vector3.Sub(a,b)
-		return Vector3.Magnitude(a)
+		local c = Vector3.Magnitude(a)
+		Vector3Pool.Recycle(a)
+		return c
 	end
 
 	function Vector3.OrthoNormalize(u,v,w)
@@ -476,7 +499,7 @@ do
 		Vector3.Mul(tu,dot0)
 		Vector3.Sub(v,tu)
 		Vector3.Normalized(v)
-
+		Vector3Pool.Recycle(tu)
 		if w then
 			local dot1 = Vector3.Dot(v,w)
 			local dot0 = Vector3.Dot(u,w)
@@ -484,6 +507,8 @@ do
 			local tv=I.__mul(v,dot1)
 			Vector3.Add(tv,tw)
 			Vector3.Sub(w,tv)
+			Vector3Pool.Recycle(tw)
+			Vector3Pool.Recycle(tv)
 			Vector3.Normalized(w)
 		end
 	end
@@ -966,7 +991,7 @@ do
     if sig=="op_Implicit__Vector4__Vector3" then
         return Vector4.New(v.x,v.y,v.z,0)
     elseif sig=="op_Implicit__Vector3__Vector4" then
-        return Vector3.Net(v.x,v.y,v.z)
+        return Vector3.New(v.x,v.y,v.z)
     elseif sig=="op_Implicit__Vector4__Vector2" then
         return Vector4.New(v.x,v.y,0,0)
     else
@@ -1215,7 +1240,17 @@ do
 		
 		Quaternion.Mul(qY,qX)
 		Quaternion.Mul(qY,qZ)
+		QuaternionPool.Recycle(qX)
+		QuaternionPool.Recycle(qZ)
 		return qY
+	end
+
+	function Quaternion.Inverse(q)
+		return Quaternion.New(-q[1], -q[2], -q[3], q[4])
+	end
+	
+	function Quaternion.Angle(a,b)
+	    return Utility.QuaternionCalcAngle(a,b)
 	end
 
 	-- code from reflector unityengine
@@ -1231,6 +1266,11 @@ do
 	end
 
 	function Quaternion.Lerp( q1,q2,t )
+		if t > 1 then
+			t = 1
+		elseif t < 0 then
+			t = 0
+		end
 		local tmpQuat=Quaternion.New(0,0,0,1)
 		if Quaternion.Dot(q1, q2) < 0 then
 			tmpQuat:Set(q1[1] + t * (-q2[1] - q1[1]),
@@ -1243,7 +1283,9 @@ do
 			            q1[3] + t * (q2[3] - q1[3]),
 			            q1[4] + t * (q2[4] - q1[4]))
 		end
-		return Quaternion.Normalize(tmpQuat)
+		local reQuat = Quaternion.Normalize(tmpQuat)
+		QuaternionPool.Recycle(tmpQuat)
+		return reQuat
 	end
 
 	-- code from unityengine

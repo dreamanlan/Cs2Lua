@@ -36,7 +36,7 @@ public class Lua_UnityEngine_Random : LuaObject {
 	static public int Range_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Range__Int32__Int32", argc, 1,typeof(int),typeof(int))){
+			if(matchType(l, "Range__Int32__Int32__Int32", argc, 1,typeof(int),typeof(int))){
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -46,7 +46,7 @@ public class Lua_UnityEngine_Random : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Range__Single__Single", argc, 1,typeof(float),typeof(float))){
+			else if(matchType(l, "Range__Single__Single__Single", argc, 1,typeof(float),typeof(float))){
 				System.Single a1;
 				checkType(l,2,out a1);
 				System.Single a2;

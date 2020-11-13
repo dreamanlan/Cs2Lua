@@ -1,6 +1,7 @@
 ﻿using System;
 using SLua;
 using System.Collections.Generic;
+using UnityEngine.Experimental.U2D;
 [UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Sprite : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -78,6 +79,167 @@ public class Lua_UnityEngine_Sprite : LuaObject {
 			self.OverrideGeometry(a1,a2);
 			pushValue(l,true);
 			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetBindPoses(IntPtr l) {
+		try {
+			UnityEngine.Sprite self=(UnityEngine.Sprite)checkSelf(l);
+			var ret=self.GetBindPoses();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetBindPoses(IntPtr l) {
+		try {
+			UnityEngine.Sprite self=(UnityEngine.Sprite)checkSelf(l);
+			Unity.Collections.NativeArray<UnityEngine.Matrix4x4> a2;
+			checkValueType(l,2,out a2);
+			self.SetBindPoses(a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetIndices(IntPtr l) {
+		try {
+			UnityEngine.Sprite self=(UnityEngine.Sprite)checkSelf(l);
+			var ret=self.GetIndices();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetIndices(IntPtr l) {
+		try {
+			UnityEngine.Sprite self=(UnityEngine.Sprite)checkSelf(l);
+			Unity.Collections.NativeArray<System.UInt16> a2;
+			checkValueType(l,2,out a2);
+			self.SetIndices(a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetBoneWeights(IntPtr l) {
+		try {
+			UnityEngine.Sprite self=(UnityEngine.Sprite)checkSelf(l);
+			var ret=self.GetBoneWeights();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetBoneWeights(IntPtr l) {
+		try {
+			UnityEngine.Sprite self=(UnityEngine.Sprite)checkSelf(l);
+			Unity.Collections.NativeArray<UnityEngine.BoneWeight> a2;
+			checkValueType(l,2,out a2);
+			self.SetBoneWeights(a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetBones(IntPtr l) {
+		try {
+			UnityEngine.Sprite self=(UnityEngine.Sprite)checkSelf(l);
+			var ret=self.GetBones();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetBones(IntPtr l) {
+		try {
+			UnityEngine.Sprite self=(UnityEngine.Sprite)checkSelf(l);
+			UnityEngine.Experimental.U2D.SpriteBone[] a2;
+			checkArray(l,2,out a2);
+			self.SetBones(a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HasVertexAttribute(IntPtr l) {
+		try {
+			UnityEngine.Sprite self=(UnityEngine.Sprite)checkSelf(l);
+			UnityEngine.Rendering.VertexAttribute a2;
+			checkEnum(l,2,out a2);
+			var ret=self.HasVertexAttribute(a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetVertexCount(IntPtr l) {
+		try {
+			UnityEngine.Sprite self=(UnityEngine.Sprite)checkSelf(l);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			self.SetVertexCount(a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetVertexCount(IntPtr l) {
+		try {
+			UnityEngine.Sprite self=(UnityEngine.Sprite)checkSelf(l);
+			var ret=self.GetVertexCount();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -401,6 +563,17 @@ public class Lua_UnityEngine_Sprite : LuaObject {
 		addMember(l,GetPhysicsShape);
 		addMember(l,OverridePhysicsShape);
 		addMember(l,OverrideGeometry);
+		addMember(l,GetBindPoses);
+		addMember(l,SetBindPoses);
+		addMember(l,GetIndices);
+		addMember(l,SetIndices);
+		addMember(l,GetBoneWeights);
+		addMember(l,SetBoneWeights);
+		addMember(l,GetBones);
+		addMember(l,SetBones);
+		addMember(l,HasVertexAttribute);
+		addMember(l,SetVertexCount);
+		addMember(l,GetVertexCount);
 		addMember(l,Create_s);
 		addMember(l,"bounds",get_bounds,null,true);
 		addMember(l,"rect",get_rect,null,true);

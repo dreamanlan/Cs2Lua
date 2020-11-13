@@ -51,7 +51,7 @@ public class Lua_UnityEngine_ParticleSystem_Burst : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__Single__Int16", argc, 2,typeof(float),typeof(System.Int16))){
+			else if(matchType(l, "ctor__Void__Single__Int16", argc, 2,typeof(float),typeof(System.Int16))){
 				System.Single a1;
 				checkType(l,3,out a1);
 				System.Int16 a2;
@@ -61,7 +61,7 @@ public class Lua_UnityEngine_ParticleSystem_Burst : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__Single__MinMaxCurve", argc, 2,typeof(float),typeof(UnityEngine.ParticleSystem.MinMaxCurve))){
+			else if(matchType(l, "ctor__Void__Single__MinMaxCurve", argc, 2,typeof(float),typeof(UnityEngine.ParticleSystem.MinMaxCurve))){
 				System.Single a1;
 				checkType(l,3,out a1);
 				UnityEngine.ParticleSystem.MinMaxCurve a2;

@@ -59,7 +59,7 @@ public class Lua_UnityEngine_Application : LuaObject {
 	static public int CanStreamedLevelBeLoaded_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "CanStreamedLevelBeLoaded__Int32", argc, 1,typeof(int))){
+			if(matchType(l, "CanStreamedLevelBeLoaded__Boolean__Int32", argc, 1,typeof(int))){
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				var ret=UnityEngine.Application.CanStreamedLevelBeLoaded(a1);
@@ -67,7 +67,7 @@ public class Lua_UnityEngine_Application : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "CanStreamedLevelBeLoaded__String", argc, 1,typeof(string))){
+			else if(matchType(l, "CanStreamedLevelBeLoaded__Boolean__String", argc, 1,typeof(string))){
 				System.String a1;
 				checkType(l,2,out a1);
 				var ret=UnityEngine.Application.CanStreamedLevelBeLoaded(a1);
@@ -412,6 +412,18 @@ public class Lua_UnityEngine_Application : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_engineVersion(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Application.engineVersion);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_version(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -660,6 +672,7 @@ public class Lua_UnityEngine_Application : LuaObject {
 		addMember(l,"temporaryCachePath",get_temporaryCachePath,null,false);
 		addMember(l,"absoluteURL",get_absoluteURL,null,false);
 		addMember(l,"unityVersion",get_unityVersion,null,false);
+		addMember(l,"engineVersion",get_engineVersion,null,false);
 		addMember(l,"version",get_version,null,false);
 		addMember(l,"installerName",get_installerName,null,false);
 		addMember(l,"identifier",get_identifier,null,false);

@@ -1,65 +1,115 @@
 require "cs2lua__namespaces"; 
 
 LuaString = {
+	-------------------------------
+	-------- class methods --------
+	-------------------------------
 	__new_object = function(...)
-		return newobject(LuaString, nil, nil, "ctor", nil, ...);
+		local __cs2lua_func_info = luainitialize();
+		local __cs2dsl_newobj;
+		__cs2dsl_newobj = newobject(__cs2lua_func_info, LuaString, nil, nil, "ctor", nil, ...);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		return __cs2dsl_newobj;
 	end,
-	Format__System_String__System_Object = function(str, arg)
-		return System.String.Format("System.String:Format__String__Object", str, arg);
+
+	Format__System_String__System_Object = function(str, __dsl_arg)
+		local __cs2lua_func_info = luainitialize();
+		local __method_ret_6_4_9_5;
+		__method_ret_6_4_9_5 = System.String.Format(luastrtocsstr("System.String:Format__String__String__Object"), str, __dsl_arg);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		return __method_ret_6_4_9_5;
 	end,
+
 	Format__System_String__System_Object__System_Object = function(str, arg1, arg2)
-		return System.String.Format("System.String:Format__String__Object__Object", str, arg1, arg2);
+		local __cs2lua_func_info = luainitialize();
+		local __method_ret_10_4_13_5;
+		__method_ret_10_4_13_5 = System.String.Format(luastrtocsstr("System.String:Format__String__String__Object__Object"), str, arg1, arg2);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		return __method_ret_10_4_13_5;
 	end,
+
 	Format__System_String__System_Object__System_Object__System_Object = function(str, arg1, arg2, arg3)
-		return System.String.Format("System.String:Format__String__Object__Object__Object", str, arg1, arg2, arg3);
+		local __cs2lua_func_info = luainitialize();
+		local __method_ret_14_4_17_5;
+		__method_ret_14_4_17_5 = System.String.Format(luastrtocsstr("System.String:Format__String__String__Object__Object__Object"), str, arg1, arg2, arg3);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		return __method_ret_14_4_17_5;
 	end,
+
 	cctor = function()
+		local __cs2lua_func_info = luainitialize();
 		LuaString.__cctor();
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
+
 	__cctor = function()
+		local __cs2lua_func_info = luainitialize();
 		if LuaString.__cctor_called then 
+			__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			return;
 		else
 			LuaString.__cctor_called = true;
 		end;
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
+
+	-------------------------------
+	-------- class fields --------
+	-------------------------------
+	__cctor_called = false,
+
+	-------------------------------
+	--- define class and object ---
+	-------------------------------
 	__define_class = function()
 		Utility.Warn("LuaString::__define_class begin");
 
 		local class = LuaString;
-		local static_fields_build = function()
-			local static_fields = {
-				__cctor_called = false,
-			};
-			return static_fields;
-		end;
 
-		local instance_methods = {
+		local obj_methods = {
 			ctor = function(this)
+				local __cs2lua_func_info = luainitialize();
 				this:__ctor();
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
+
 			__ctor = function(this)
+				local __cs2lua_func_info = luainitialize();
 				if this.__ctor_called then 
+					__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 					return;
 				else
 					this.__ctor_called = true;
 				end;
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 		};
-		local instance_fields_build = function()
-			local instance_fields = {
+
+		local obj_build = function()
+			return {
 				__ctor_called = false,
 			};
-			return instance_fields;
 		end;
 
-		local __defineclass_return = defineclass(nil, "LuaString", "LuaString", class, static_fields_build, instance_methods, instance_fields_build, false);
+		local __defineclass_return = defineclass(nil, "LuaString", "LuaString", class, obj_methods, obj_build, false);
 		Utility.Warn("LuaString::__define_class end");
 		return __defineclass_return;
 	end,
 
-	__interfaces = nil,
-	__class_info = nil,
+	-------------------------------
+	--------- fields info ---------
+	-------------------------------
+	__class_fields = {
+		__cctor_called = true,
+	},
+
+	__obj_fields = {
+		__ctor_called = true,
+	},
+
+	-------------------------------
+	-------- metadata info --------
+	-------------------------------
 	__method_info = {
 		Format__System_String__System_Object = {
 			Kind = MethodKind.Ordinary,
@@ -77,13 +127,10 @@ LuaString = {
 			Kind = MethodKind.Constructor,
 		},
 	},
-	__property_info = nil,
-	__event_info = nil,
-	__field_info = nil,
 };
 
 
-require "cs2lua__lualib";
+require "cs2lua__syslib";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
 settempmetatable(LuaString);

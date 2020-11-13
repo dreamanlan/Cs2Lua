@@ -55,7 +55,7 @@ public class Lua_UnityEngine_Bounds : LuaObject {
 	static public int Encapsulate(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Encapsulate__Vector3", argc, 2,typeof(UnityEngine.Vector3))){
+			if(matchType(l, "Encapsulate__Void__Vector3", argc, 2,typeof(UnityEngine.Vector3))){
 				UnityEngine.Bounds self;
 				checkValueType(l,1,out self);
 				UnityEngine.Vector3 a1;
@@ -65,7 +65,7 @@ public class Lua_UnityEngine_Bounds : LuaObject {
 				setBack(l,self);
 				return 1;
 			}
-			else if(matchType(l, "Encapsulate__Bounds", argc, 2,typeof(UnityEngine.Bounds))){
+			else if(matchType(l, "Encapsulate__Void__Bounds", argc, 2,typeof(UnityEngine.Bounds))){
 				UnityEngine.Bounds self;
 				checkValueType(l,1,out self);
 				UnityEngine.Bounds a1;
@@ -88,7 +88,7 @@ public class Lua_UnityEngine_Bounds : LuaObject {
 	static public int Expand(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Expand__Vector3", argc, 2,typeof(UnityEngine.Vector3))){
+			if(matchType(l, "Expand__Void__Vector3", argc, 2,typeof(UnityEngine.Vector3))){
 				UnityEngine.Bounds self;
 				checkValueType(l,1,out self);
 				UnityEngine.Vector3 a1;
@@ -98,7 +98,7 @@ public class Lua_UnityEngine_Bounds : LuaObject {
 				setBack(l,self);
 				return 1;
 			}
-			else if(matchType(l, "Expand__Single", argc, 2,typeof(float))){
+			else if(matchType(l, "Expand__Void__Single", argc, 2,typeof(float))){
 				UnityEngine.Bounds self;
 				checkValueType(l,1,out self);
 				System.Single a1;
@@ -221,7 +221,7 @@ public class Lua_UnityEngine_Bounds : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Equality(IntPtr l) {
+	static public int op_Equality_s(IntPtr l) {
 		try {
 			UnityEngine.Bounds a1;
 			checkValueType(l,1,out a1);
@@ -238,7 +238,7 @@ public class Lua_UnityEngine_Bounds : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Inequality(IntPtr l) {
+	static public int op_Inequality_s(IntPtr l) {
 		try {
 			UnityEngine.Bounds a1;
 			checkValueType(l,1,out a1);
@@ -419,8 +419,8 @@ public class Lua_UnityEngine_Bounds : LuaObject {
 		addMember(l,Contains);
 		addMember(l,SqrDistance);
 		addMember(l,ClosestPoint);
-		addMember(l,op_Equality);
-		addMember(l,op_Inequality);
+		addMember(l,op_Equality_s);
+		addMember(l,op_Inequality_s);
 		addMember(l,"center",get_center,set_center,true);
 		addMember(l,"size",get_size,set_size,true);
 		addMember(l,"extents",get_extents,set_extents,true);

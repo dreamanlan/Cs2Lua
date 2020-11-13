@@ -44,7 +44,7 @@ public class Lua_UnityEngine_GameObject : LuaObject {
 	static public int GetComponent(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetComponent__Type", argc, 2,typeof(System.Type))){
+			if(matchType(l, "GetComponent__Component__Type", argc, 2,typeof(System.Type))){
 				UnityEngine.GameObject self=(UnityEngine.GameObject)checkSelf(l);
 				System.Type a1;
 				checkType(l,3,out a1);
@@ -53,7 +53,7 @@ public class Lua_UnityEngine_GameObject : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "GetComponent__String", argc, 2,typeof(string))){
+			else if(matchType(l, "GetComponent__Component__String", argc, 2,typeof(string))){
 				UnityEngine.GameObject self=(UnityEngine.GameObject)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);
@@ -234,7 +234,7 @@ public class Lua_UnityEngine_GameObject : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SendMessageUpwards__String__SendMessageOptions", argc, 2,typeof(string),typeof(UnityEngine.SendMessageOptions))){
+			else if(matchType(l, "SendMessageUpwards__Void__String__SendMessageOptions", argc, 2,typeof(string),typeof(UnityEngine.SendMessageOptions))){
 				UnityEngine.GameObject self=(UnityEngine.GameObject)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);
@@ -244,7 +244,7 @@ public class Lua_UnityEngine_GameObject : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SendMessageUpwards__String__Object", argc, 2,typeof(string),typeof(System.Object))){
+			else if(matchType(l, "SendMessageUpwards__Void__String__Object", argc, 2,typeof(string),typeof(System.Object))){
 				UnityEngine.GameObject self=(UnityEngine.GameObject)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);
@@ -287,7 +287,7 @@ public class Lua_UnityEngine_GameObject : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SendMessage__String__SendMessageOptions", argc, 2,typeof(string),typeof(UnityEngine.SendMessageOptions))){
+			else if(matchType(l, "SendMessage__Void__String__SendMessageOptions", argc, 2,typeof(string),typeof(UnityEngine.SendMessageOptions))){
 				UnityEngine.GameObject self=(UnityEngine.GameObject)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);
@@ -297,7 +297,7 @@ public class Lua_UnityEngine_GameObject : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SendMessage__String__Object", argc, 2,typeof(string),typeof(System.Object))){
+			else if(matchType(l, "SendMessage__Void__String__Object", argc, 2,typeof(string),typeof(System.Object))){
 				UnityEngine.GameObject self=(UnityEngine.GameObject)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);
@@ -340,7 +340,7 @@ public class Lua_UnityEngine_GameObject : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "BroadcastMessage__String__SendMessageOptions", argc, 2,typeof(string),typeof(UnityEngine.SendMessageOptions))){
+			else if(matchType(l, "BroadcastMessage__Void__String__SendMessageOptions", argc, 2,typeof(string),typeof(UnityEngine.SendMessageOptions))){
 				UnityEngine.GameObject self=(UnityEngine.GameObject)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);
@@ -350,7 +350,7 @@ public class Lua_UnityEngine_GameObject : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "BroadcastMessage__String__Object", argc, 2,typeof(string),typeof(System.Object))){
+			else if(matchType(l, "BroadcastMessage__Void__String__Object", argc, 2,typeof(string),typeof(System.Object))){
 				UnityEngine.GameObject self=(UnityEngine.GameObject)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);

@@ -21,7 +21,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 	static public int AddOptions(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "AddOptions__List`1_OptionData", argc, 2,typeof(List<UnityEngine.UI.Dropdown.OptionData>))){
+			if(matchType(l, "AddOptions__Void__List`1_OptionData", argc, 2,typeof(List<UnityEngine.UI.Dropdown.OptionData>))){
 				UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
 				System.Collections.Generic.List<UnityEngine.UI.Dropdown.OptionData> a1;
 				checkType(l,3,out a1);
@@ -29,7 +29,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AddOptions__List`1_String", argc, 2,typeof(List<System.String>))){
+			else if(matchType(l, "AddOptions__Void__List`1_String", argc, 2,typeof(List<System.String>))){
 				UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
 				System.Collections.Generic.List<System.String> a1;
 				checkType(l,3,out a1);
@@ -37,7 +37,7 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AddOptions__List`1_Sprite", argc, 2,typeof(List<UnityEngine.Sprite>))){
+			else if(matchType(l, "AddOptions__Void__List`1_Sprite", argc, 2,typeof(List<UnityEngine.Sprite>))){
 				UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
 				System.Collections.Generic.List<UnityEngine.Sprite> a1;
 				checkType(l,3,out a1);

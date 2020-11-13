@@ -1,6 +1,7 @@
 ﻿using System;
 using SLua;
 using System.Collections.Generic;
+using UnityEngine;
 [UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_SceneManagement_Scene : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -65,7 +66,22 @@ public class Lua_UnityEngine_SceneManagement_Scene : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Equality(IntPtr l) {
+	static public int GetPhysicsScene(IntPtr l) {
+		try {
+			UnityEngine.SceneManagement.Scene self;
+			checkValueType(l,1,out self);
+			var ret=self.GetPhysicsScene();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Equality_s(IntPtr l) {
 		try {
 			UnityEngine.SceneManagement.Scene a1;
 			checkValueType(l,1,out a1);
@@ -82,7 +98,7 @@ public class Lua_UnityEngine_SceneManagement_Scene : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Inequality(IntPtr l) {
+	static public int op_Inequality_s(IntPtr l) {
 		try {
 			UnityEngine.SceneManagement.Scene a1;
 			checkValueType(l,1,out a1);
@@ -217,8 +233,9 @@ public class Lua_UnityEngine_SceneManagement_Scene : LuaObject {
 		getTypeTable(l,"UnityEngine.SceneManagement.Scene");
 		addMember(l,IsValid);
 		addMember(l,GetRootGameObjects);
-		addMember(l,op_Equality);
-		addMember(l,op_Inequality);
+		addMember(l,GetPhysicsScene);
+		addMember(l,op_Equality_s);
+		addMember(l,op_Inequality_s);
 		addMember(l,"handle",get_handle,null,true);
 		addMember(l,"path",get_path,null,true);
 		addMember(l,"name",get_name,set_name,true);

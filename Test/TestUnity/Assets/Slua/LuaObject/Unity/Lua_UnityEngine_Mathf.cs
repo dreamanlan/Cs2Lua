@@ -281,7 +281,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 	static public int Abs_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Abs__Int32", argc, 1,typeof(int))){
+			if(matchType(l, "Abs__Int32__Int32", argc, 1,typeof(int))){
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				var ret=UnityEngine.Mathf.Abs(a1);
@@ -289,7 +289,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Abs__Single", argc, 1,typeof(float))){
+			else if(matchType(l, "Abs__Single__Single", argc, 1,typeof(float))){
 				System.Single a1;
 				checkType(l,2,out a1);
 				var ret=UnityEngine.Mathf.Abs(a1);
@@ -310,7 +310,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 	static public int Min_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Min__Int32__Int32", argc, 1,typeof(int),typeof(int))){
+			if(matchType(l, "Min__Int32__Int32__Int32", argc, 1,typeof(int),typeof(int))){
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -320,7 +320,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Min__Single__Single", argc, 1,typeof(float),typeof(float))){
+			else if(matchType(l, "Min__Single__Single__Single", argc, 1,typeof(float),typeof(float))){
 				System.Single a1;
 				checkType(l,2,out a1);
 				System.Single a2;
@@ -330,7 +330,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Min__Arr_Single", argc, 1,typeof(System.Single[]))){
+			else if(matchType(l, "Min__Single__Arr_Single", argc, 1,typeof(System.Single[]))){
 				System.Single[] a1;
 				checkParams(l,2,out a1);
 				var ret=UnityEngine.Mathf.Min(a1);
@@ -338,7 +338,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Min__Arr_Int32", argc, 1,typeof(System.Int32[]))){
+			else if(matchType(l, "Min__Int32__Arr_Int32", argc, 1,typeof(System.Int32[]))){
 				System.Int32[] a1;
 				checkParams(l,2,out a1);
 				var ret=UnityEngine.Mathf.Min(a1);
@@ -359,7 +359,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 	static public int Max_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Max__Int32__Int32", argc, 1,typeof(int),typeof(int))){
+			if(matchType(l, "Max__Int32__Int32__Int32", argc, 1,typeof(int),typeof(int))){
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -369,7 +369,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Max__Single__Single", argc, 1,typeof(float),typeof(float))){
+			else if(matchType(l, "Max__Single__Single__Single", argc, 1,typeof(float),typeof(float))){
 				System.Single a1;
 				checkType(l,2,out a1);
 				System.Single a2;
@@ -379,7 +379,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Max__Arr_Single", argc, 1,typeof(System.Single[]))){
+			else if(matchType(l, "Max__Single__Arr_Single", argc, 1,typeof(System.Single[]))){
 				System.Single[] a1;
 				checkParams(l,2,out a1);
 				var ret=UnityEngine.Mathf.Max(a1);
@@ -387,7 +387,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Max__Arr_Int32", argc, 1,typeof(System.Int32[]))){
+			else if(matchType(l, "Max__Int32__Arr_Int32", argc, 1,typeof(System.Int32[]))){
 				System.Int32[] a1;
 				checkParams(l,2,out a1);
 				var ret=UnityEngine.Mathf.Max(a1);
@@ -591,7 +591,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 	static public int Clamp_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Clamp__Int32__Int32__Int32", argc, 1,typeof(int),typeof(int),typeof(int))){
+			if(matchType(l, "Clamp__Int32__Int32__Int32__Int32", argc, 1,typeof(int),typeof(int),typeof(int))){
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -603,7 +603,7 @@ public class Lua_UnityEngine_Mathf : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Clamp__Single__Single__Single", argc, 1,typeof(float),typeof(float),typeof(float))){
+			else if(matchType(l, "Clamp__Single__Single__Single__Single", argc, 1,typeof(float),typeof(float),typeof(float))){
 				System.Single a1;
 				checkType(l,2,out a1);
 				System.Single a2;

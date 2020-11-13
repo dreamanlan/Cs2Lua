@@ -25,7 +25,7 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__Int32__Int32__Int32__GraphicsFormat", argc, 2,typeof(int),typeof(int),typeof(int),typeof(UnityEngine.Experimental.Rendering.GraphicsFormat))){
+			else if(matchType(l, "ctor__Void__Int32__Int32__Int32__GraphicsFormat", argc, 2,typeof(int),typeof(int),typeof(int),typeof(UnityEngine.Experimental.Rendering.GraphicsFormat))){
 				System.Int32 a1;
 				checkType(l,3,out a1);
 				System.Int32 a2;
@@ -39,7 +39,7 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__Int32__Int32__Int32__RenderTextureFormat", argc, 2,typeof(int),typeof(int),typeof(int),typeof(UnityEngine.RenderTextureFormat))){
+			else if(matchType(l, "ctor__Void__Int32__Int32__Int32__RenderTextureFormat", argc, 2,typeof(int),typeof(int),typeof(int),typeof(UnityEngine.RenderTextureFormat))){
 				System.Int32 a1;
 				checkType(l,3,out a1);
 				System.Int32 a2;
@@ -65,7 +65,7 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__RenderTextureDescriptor", argc, 2,typeof(UnityEngine.RenderTextureDescriptor))){
+			else if(matchType(l, "ctor__Void__RenderTextureDescriptor", argc, 2,typeof(UnityEngine.RenderTextureDescriptor))){
 				UnityEngine.RenderTextureDescriptor a1;
 				checkValueType(l,3,out a1);
 				o=new UnityEngine.RenderTexture(a1);
@@ -73,7 +73,7 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__RenderTexture", argc, 2,typeof(UnityEngine.RenderTexture))){
+			else if(matchType(l, "ctor__Void__RenderTexture", argc, 2,typeof(UnityEngine.RenderTexture))){
 				UnityEngine.RenderTexture a1;
 				checkType(l,3,out a1);
 				o=new UnityEngine.RenderTexture(a1);

@@ -79,7 +79,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SetRenderTarget__RenderTexture__Int32__CubemapFace__Int32", argc, 1,typeof(UnityEngine.RenderTexture),typeof(int),typeof(UnityEngine.CubemapFace),typeof(int))){
+			else if(matchType(l, "SetRenderTarget__Void__RenderTexture__Int32__CubemapFace__Int32", argc, 1,typeof(UnityEngine.RenderTexture),typeof(int),typeof(UnityEngine.CubemapFace),typeof(int))){
 				UnityEngine.RenderTexture a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -92,7 +92,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SetRenderTarget__RenderBuffer__RenderBuffer__Int32__CubemapFace", argc, 1,typeof(UnityEngine.RenderBuffer),typeof(UnityEngine.RenderBuffer),typeof(int),typeof(UnityEngine.CubemapFace))){
+			else if(matchType(l, "SetRenderTarget__Void__RenderBuffer__RenderBuffer__Int32__CubemapFace", argc, 1,typeof(UnityEngine.RenderBuffer),typeof(UnityEngine.RenderBuffer),typeof(int),typeof(UnityEngine.CubemapFace))){
 				UnityEngine.RenderBuffer a1;
 				checkValueType(l,2,out a1);
 				UnityEngine.RenderBuffer a2;
@@ -105,7 +105,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SetRenderTarget__RenderTexture__Int32__CubemapFace", argc, 1,typeof(UnityEngine.RenderTexture),typeof(int),typeof(UnityEngine.CubemapFace))){
+			else if(matchType(l, "SetRenderTarget__Void__RenderTexture__Int32__CubemapFace", argc, 1,typeof(UnityEngine.RenderTexture),typeof(int),typeof(UnityEngine.CubemapFace))){
 				UnityEngine.RenderTexture a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -116,7 +116,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SetRenderTarget__RenderBuffer__RenderBuffer__Int32", argc, 1,typeof(UnityEngine.RenderBuffer),typeof(UnityEngine.RenderBuffer),typeof(int))){
+			else if(matchType(l, "SetRenderTarget__Void__RenderBuffer__RenderBuffer__Int32", argc, 1,typeof(UnityEngine.RenderBuffer),typeof(UnityEngine.RenderBuffer),typeof(int))){
 				UnityEngine.RenderBuffer a1;
 				checkValueType(l,2,out a1);
 				UnityEngine.RenderBuffer a2;
@@ -127,7 +127,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SetRenderTarget__Arr_RenderBuffer__RenderBuffer", argc, 1,typeof(UnityEngine.RenderBuffer[]),typeof(UnityEngine.RenderBuffer))){
+			else if(matchType(l, "SetRenderTarget__Void__Arr_RenderBuffer__RenderBuffer", argc, 1,typeof(UnityEngine.RenderBuffer[]),typeof(UnityEngine.RenderBuffer))){
 				UnityEngine.RenderBuffer[] a1;
 				checkArray(l,2,out a1);
 				UnityEngine.RenderBuffer a2;
@@ -136,7 +136,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SetRenderTarget__RenderTexture__Int32", argc, 1,typeof(UnityEngine.RenderTexture),typeof(int))){
+			else if(matchType(l, "SetRenderTarget__Void__RenderTexture__Int32", argc, 1,typeof(UnityEngine.RenderTexture),typeof(int))){
 				UnityEngine.RenderTexture a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -145,7 +145,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SetRenderTarget__RenderBuffer__RenderBuffer", argc, 1,typeof(UnityEngine.RenderBuffer),typeof(UnityEngine.RenderBuffer))){
+			else if(matchType(l, "SetRenderTarget__Void__RenderBuffer__RenderBuffer", argc, 1,typeof(UnityEngine.RenderBuffer),typeof(UnityEngine.RenderBuffer))){
 				UnityEngine.RenderBuffer a1;
 				checkValueType(l,2,out a1);
 				UnityEngine.RenderBuffer a2;
@@ -154,14 +154,14 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SetRenderTarget__RenderTargetSetup", argc, 1,typeof(UnityEngine.RenderTargetSetup))){
+			else if(matchType(l, "SetRenderTarget__Void__RenderTargetSetup", argc, 1,typeof(UnityEngine.RenderTargetSetup))){
 				UnityEngine.RenderTargetSetup a1;
 				checkValueType(l,2,out a1);
 				UnityEngine.Graphics.SetRenderTarget(a1);
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SetRenderTarget__RenderTexture", argc, 1,typeof(UnityEngine.RenderTexture))){
+			else if(matchType(l, "SetRenderTarget__Void__RenderTexture", argc, 1,typeof(UnityEngine.RenderTexture))){
 				UnityEngine.RenderTexture a1;
 				checkType(l,2,out a1);
 				UnityEngine.Graphics.SetRenderTarget(a1);
@@ -192,7 +192,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SetRandomWriteTarget__Int32__ComputeBuffer", argc, 1,typeof(int),typeof(UnityEngine.ComputeBuffer))){
+			else if(matchType(l, "SetRandomWriteTarget__Void__Int32__ComputeBuffer", argc, 1,typeof(int),typeof(UnityEngine.ComputeBuffer))){
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				UnityEngine.ComputeBuffer a2;
@@ -201,7 +201,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SetRandomWriteTarget__Int32__RenderTexture", argc, 1,typeof(int),typeof(UnityEngine.RenderTexture))){
+			else if(matchType(l, "SetRandomWriteTarget__Void__Int32__RenderTexture", argc, 1,typeof(int),typeof(UnityEngine.RenderTexture))){
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				UnityEngine.RenderTexture a2;
@@ -422,7 +422,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawTexture__Rect__Texture__Rect__Int32__Int32__Int32__Int32__Material__Int32", argc, 1,typeof(UnityEngine.Rect),typeof(UnityEngine.Texture),typeof(UnityEngine.Rect),typeof(int),typeof(int),typeof(int),typeof(int),typeof(UnityEngine.Material),typeof(int))){
+			else if(matchType(l, "DrawTexture__Void__Rect__Texture__Rect__Int32__Int32__Int32__Int32__Material__Int32", argc, 1,typeof(UnityEngine.Rect),typeof(UnityEngine.Texture),typeof(UnityEngine.Rect),typeof(int),typeof(int),typeof(int),typeof(int),typeof(UnityEngine.Material),typeof(int))){
 				UnityEngine.Rect a1;
 				checkValueType(l,2,out a1);
 				UnityEngine.Texture a2;
@@ -445,7 +445,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawTexture__Rect__Texture__Rect__Int32__Int32__Int32__Int32__Color__Material", argc, 1,typeof(UnityEngine.Rect),typeof(UnityEngine.Texture),typeof(UnityEngine.Rect),typeof(int),typeof(int),typeof(int),typeof(int),typeof(UnityEngine.Color),typeof(UnityEngine.Material))){
+			else if(matchType(l, "DrawTexture__Void__Rect__Texture__Rect__Int32__Int32__Int32__Int32__Color__Material", argc, 1,typeof(UnityEngine.Rect),typeof(UnityEngine.Texture),typeof(UnityEngine.Rect),typeof(int),typeof(int),typeof(int),typeof(int),typeof(UnityEngine.Color),typeof(UnityEngine.Material))){
 				UnityEngine.Rect a1;
 				checkValueType(l,2,out a1);
 				UnityEngine.Texture a2;
@@ -468,7 +468,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawTexture__Rect__Texture__Int32__Int32__Int32__Int32__Material__Int32", argc, 1,typeof(UnityEngine.Rect),typeof(UnityEngine.Texture),typeof(int),typeof(int),typeof(int),typeof(int),typeof(UnityEngine.Material),typeof(int))){
+			else if(matchType(l, "DrawTexture__Void__Rect__Texture__Int32__Int32__Int32__Int32__Material__Int32", argc, 1,typeof(UnityEngine.Rect),typeof(UnityEngine.Texture),typeof(int),typeof(int),typeof(int),typeof(int),typeof(UnityEngine.Material),typeof(int))){
 				UnityEngine.Rect a1;
 				checkValueType(l,2,out a1);
 				UnityEngine.Texture a2;
@@ -489,7 +489,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawTexture__Rect__Texture__Rect__Int32__Int32__Int32__Int32__Color", argc, 1,typeof(UnityEngine.Rect),typeof(UnityEngine.Texture),typeof(UnityEngine.Rect),typeof(int),typeof(int),typeof(int),typeof(int),typeof(UnityEngine.Color))){
+			else if(matchType(l, "DrawTexture__Void__Rect__Texture__Rect__Int32__Int32__Int32__Int32__Color", argc, 1,typeof(UnityEngine.Rect),typeof(UnityEngine.Texture),typeof(UnityEngine.Rect),typeof(int),typeof(int),typeof(int),typeof(int),typeof(UnityEngine.Color))){
 				UnityEngine.Rect a1;
 				checkValueType(l,2,out a1);
 				UnityEngine.Texture a2;
@@ -510,7 +510,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawTexture__Rect__Texture__Rect__Int32__Int32__Int32__Int32__Material", argc, 1,typeof(UnityEngine.Rect),typeof(UnityEngine.Texture),typeof(UnityEngine.Rect),typeof(int),typeof(int),typeof(int),typeof(int),typeof(UnityEngine.Material))){
+			else if(matchType(l, "DrawTexture__Void__Rect__Texture__Rect__Int32__Int32__Int32__Int32__Material", argc, 1,typeof(UnityEngine.Rect),typeof(UnityEngine.Texture),typeof(UnityEngine.Rect),typeof(int),typeof(int),typeof(int),typeof(int),typeof(UnityEngine.Material))){
 				UnityEngine.Rect a1;
 				checkValueType(l,2,out a1);
 				UnityEngine.Texture a2;
@@ -531,7 +531,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawTexture__Rect__Texture__Rect__Int32__Int32__Int32__Int32", argc, 1,typeof(UnityEngine.Rect),typeof(UnityEngine.Texture),typeof(UnityEngine.Rect),typeof(int),typeof(int),typeof(int),typeof(int))){
+			else if(matchType(l, "DrawTexture__Void__Rect__Texture__Rect__Int32__Int32__Int32__Int32", argc, 1,typeof(UnityEngine.Rect),typeof(UnityEngine.Texture),typeof(UnityEngine.Rect),typeof(int),typeof(int),typeof(int),typeof(int))){
 				UnityEngine.Rect a1;
 				checkValueType(l,2,out a1);
 				UnityEngine.Texture a2;
@@ -550,7 +550,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawTexture__Rect__Texture__Int32__Int32__Int32__Int32__Material", argc, 1,typeof(UnityEngine.Rect),typeof(UnityEngine.Texture),typeof(int),typeof(int),typeof(int),typeof(int),typeof(UnityEngine.Material))){
+			else if(matchType(l, "DrawTexture__Void__Rect__Texture__Int32__Int32__Int32__Int32__Material", argc, 1,typeof(UnityEngine.Rect),typeof(UnityEngine.Texture),typeof(int),typeof(int),typeof(int),typeof(int),typeof(UnityEngine.Material))){
 				UnityEngine.Rect a1;
 				checkValueType(l,2,out a1);
 				UnityEngine.Texture a2;
@@ -645,7 +645,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMeshNow__Mesh__Matrix4x4__Int32", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(int))){
+			else if(matchType(l, "DrawMeshNow__Void__Mesh__Matrix4x4__Int32", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(int))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Matrix4x4 a2;
@@ -656,7 +656,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMeshNow__Mesh__Vector3__Quaternion", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion))){
+			else if(matchType(l, "DrawMeshNow__Void__Mesh__Vector3__Quaternion", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
@@ -689,7 +689,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 	static public int DrawMesh_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "DrawMesh__Mesh__Vector3__Quaternion__Material__Int32__Camera__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean__Transform__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(UnityEngine.Transform),typeof(bool))){
+			if(matchType(l, "DrawMesh__Void__Mesh__Vector3__Quaternion__Material__Int32__Camera__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean__Transform__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(UnityEngine.Transform),typeof(bool))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
@@ -718,7 +718,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Matrix4x4__Material__Int32__Camera__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean__Transform__LightProbeUsage__LightProbeProxyVolume", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(UnityEngine.Transform),typeof(UnityEngine.Rendering.LightProbeUsage),typeof(UnityEngine.LightProbeProxyVolume))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Matrix4x4__Material__Int32__Camera__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean__Transform__LightProbeUsage__LightProbeProxyVolume", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(UnityEngine.Transform),typeof(UnityEngine.Rendering.LightProbeUsage),typeof(UnityEngine.LightProbeProxyVolume))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Matrix4x4 a2;
@@ -747,7 +747,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Matrix4x4__Material__Int32__Camera__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean__Transform__LightProbeUsage", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(UnityEngine.Transform),typeof(UnityEngine.Rendering.LightProbeUsage))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Matrix4x4__Material__Int32__Camera__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean__Transform__LightProbeUsage", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(UnityEngine.Transform),typeof(UnityEngine.Rendering.LightProbeUsage))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Matrix4x4 a2;
@@ -774,7 +774,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Vector3__Quaternion__Material__Int32__Camera__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean__Transform", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(UnityEngine.Transform))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Vector3__Quaternion__Material__Int32__Camera__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean__Transform", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(UnityEngine.Transform))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
@@ -801,7 +801,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Matrix4x4__Material__Int32__Camera__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean__Transform__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(UnityEngine.Transform),typeof(bool))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Matrix4x4__Material__Int32__Camera__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean__Transform__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(UnityEngine.Transform),typeof(bool))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Matrix4x4 a2;
@@ -828,7 +828,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Vector3__Quaternion__Material__Int32__Camera__Int32__MaterialPropertyBlock__Boolean__Boolean__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(bool),typeof(bool),typeof(bool))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Vector3__Quaternion__Material__Int32__Camera__Int32__MaterialPropertyBlock__Boolean__Boolean__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(bool),typeof(bool),typeof(bool))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
@@ -855,7 +855,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Vector3__Quaternion__Material__Int32__Camera__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Vector3__Quaternion__Material__Int32__Camera__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
@@ -880,7 +880,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Matrix4x4__Material__Int32__Camera__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean__Transform", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(UnityEngine.Transform))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Matrix4x4__Material__Int32__Camera__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean__Transform", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(UnityEngine.Transform))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Matrix4x4 a2;
@@ -905,7 +905,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Matrix4x4__Material__Int32__Camera__Int32__MaterialPropertyBlock__Boolean__Boolean__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(bool),typeof(bool),typeof(bool))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Matrix4x4__Material__Int32__Camera__Int32__MaterialPropertyBlock__Boolean__Boolean__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(bool),typeof(bool),typeof(bool))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Matrix4x4 a2;
@@ -930,7 +930,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Vector3__Quaternion__Material__Int32__Camera__Int32__MaterialPropertyBlock__Boolean__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(bool),typeof(bool))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Vector3__Quaternion__Material__Int32__Camera__Int32__MaterialPropertyBlock__Boolean__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(bool),typeof(bool))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
@@ -955,7 +955,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Vector3__Quaternion__Material__Int32__Camera__Int32__MaterialPropertyBlock__ShadowCastingMode", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Vector3__Quaternion__Material__Int32__Camera__Int32__MaterialPropertyBlock__ShadowCastingMode", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
@@ -978,7 +978,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Matrix4x4__Material__Int32__Camera__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Matrix4x4__Material__Int32__Camera__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Matrix4x4 a2;
@@ -1001,7 +1001,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Vector3__Quaternion__Material__Int32__Camera__Int32__MaterialPropertyBlock__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(bool))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Vector3__Quaternion__Material__Int32__Camera__Int32__MaterialPropertyBlock__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(bool))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
@@ -1024,7 +1024,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Matrix4x4__Material__Int32__Camera__Int32__MaterialPropertyBlock__Boolean__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(bool),typeof(bool))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Matrix4x4__Material__Int32__Camera__Int32__MaterialPropertyBlock__Boolean__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(bool),typeof(bool))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Matrix4x4 a2;
@@ -1047,7 +1047,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Matrix4x4__Material__Int32__Camera__Int32__MaterialPropertyBlock__ShadowCastingMode", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Matrix4x4__Material__Int32__Camera__Int32__MaterialPropertyBlock__ShadowCastingMode", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Matrix4x4 a2;
@@ -1068,7 +1068,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Vector3__Quaternion__Material__Int32__Camera__Int32__MaterialPropertyBlock", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Vector3__Quaternion__Material__Int32__Camera__Int32__MaterialPropertyBlock", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
@@ -1089,7 +1089,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Matrix4x4__Material__Int32__Camera__Int32__MaterialPropertyBlock__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(bool))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Matrix4x4__Material__Int32__Camera__Int32__MaterialPropertyBlock__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(bool))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Matrix4x4 a2;
@@ -1110,7 +1110,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Matrix4x4__Material__Int32__Camera__Int32__MaterialPropertyBlock", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Matrix4x4__Material__Int32__Camera__Int32__MaterialPropertyBlock", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int),typeof(UnityEngine.MaterialPropertyBlock))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Matrix4x4 a2;
@@ -1129,7 +1129,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Vector3__Quaternion__Material__Int32__Camera__Int32", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Vector3__Quaternion__Material__Int32__Camera__Int32", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
@@ -1148,7 +1148,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Vector3__Quaternion__Material__Int32__Camera", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Vector3__Quaternion__Material__Int32__Camera", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
@@ -1165,7 +1165,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Matrix4x4__Material__Int32__Camera__Int32", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Matrix4x4__Material__Int32__Camera__Int32", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera),typeof(int))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Matrix4x4 a2;
@@ -1182,7 +1182,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Vector3__Quaternion__Material__Int32", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Vector3__Quaternion__Material__Int32", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Vector3),typeof(UnityEngine.Quaternion),typeof(UnityEngine.Material),typeof(int))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Vector3 a2;
@@ -1197,7 +1197,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMesh__Mesh__Matrix4x4__Material__Int32__Camera", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera))){
+			else if(matchType(l, "DrawMesh__Void__Mesh__Matrix4x4__Material__Int32__Camera", argc, 1,typeof(UnityEngine.Mesh),typeof(UnityEngine.Matrix4x4),typeof(UnityEngine.Material),typeof(int),typeof(UnityEngine.Camera))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				UnityEngine.Matrix4x4 a2;
@@ -1267,7 +1267,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMeshInstanced__Mesh__Int32__Material__List`1_Matrix4x4__MaterialPropertyBlock__ShadowCastingMode__Boolean__Int32__Camera__LightProbeUsage__LightProbeProxyVolume", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(List<UnityEngine.Matrix4x4>),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(int),typeof(UnityEngine.Camera),typeof(UnityEngine.Rendering.LightProbeUsage),typeof(UnityEngine.LightProbeProxyVolume))){
+			else if(matchType(l, "DrawMeshInstanced__Void__Mesh__Int32__Material__List`1_Matrix4x4__MaterialPropertyBlock__ShadowCastingMode__Boolean__Int32__Camera__LightProbeUsage__LightProbeProxyVolume", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(List<UnityEngine.Matrix4x4>),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(int),typeof(UnityEngine.Camera),typeof(UnityEngine.Rendering.LightProbeUsage),typeof(UnityEngine.LightProbeProxyVolume))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -1294,7 +1294,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMeshInstanced__Mesh__Int32__Material__Arr_Matrix4x4__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean__Int32__Camera__LightProbeUsage", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(UnityEngine.Matrix4x4[]),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(int),typeof(UnityEngine.Camera),typeof(UnityEngine.Rendering.LightProbeUsage))){
+			else if(matchType(l, "DrawMeshInstanced__Void__Mesh__Int32__Material__Arr_Matrix4x4__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean__Int32__Camera__LightProbeUsage", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(UnityEngine.Matrix4x4[]),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(int),typeof(UnityEngine.Camera),typeof(UnityEngine.Rendering.LightProbeUsage))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -1321,7 +1321,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMeshInstanced__Mesh__Int32__Material__List`1_Matrix4x4__MaterialPropertyBlock__ShadowCastingMode__Boolean__Int32__Camera__LightProbeUsage", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(List<UnityEngine.Matrix4x4>),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(int),typeof(UnityEngine.Camera),typeof(UnityEngine.Rendering.LightProbeUsage))){
+			else if(matchType(l, "DrawMeshInstanced__Void__Mesh__Int32__Material__List`1_Matrix4x4__MaterialPropertyBlock__ShadowCastingMode__Boolean__Int32__Camera__LightProbeUsage", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(List<UnityEngine.Matrix4x4>),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(int),typeof(UnityEngine.Camera),typeof(UnityEngine.Rendering.LightProbeUsage))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -1346,7 +1346,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMeshInstanced__Mesh__Int32__Material__Arr_Matrix4x4__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean__Int32__Camera", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(UnityEngine.Matrix4x4[]),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(int),typeof(UnityEngine.Camera))){
+			else if(matchType(l, "DrawMeshInstanced__Void__Mesh__Int32__Material__Arr_Matrix4x4__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean__Int32__Camera", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(UnityEngine.Matrix4x4[]),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(int),typeof(UnityEngine.Camera))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -1371,7 +1371,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMeshInstanced__Mesh__Int32__Material__List`1_Matrix4x4__MaterialPropertyBlock__ShadowCastingMode__Boolean__Int32__Camera", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(List<UnityEngine.Matrix4x4>),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(int),typeof(UnityEngine.Camera))){
+			else if(matchType(l, "DrawMeshInstanced__Void__Mesh__Int32__Material__List`1_Matrix4x4__MaterialPropertyBlock__ShadowCastingMode__Boolean__Int32__Camera", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(List<UnityEngine.Matrix4x4>),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(int),typeof(UnityEngine.Camera))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -1394,7 +1394,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMeshInstanced__Mesh__Int32__Material__Arr_Matrix4x4__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean__Int32", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(UnityEngine.Matrix4x4[]),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(int))){
+			else if(matchType(l, "DrawMeshInstanced__Void__Mesh__Int32__Material__Arr_Matrix4x4__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean__Int32", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(UnityEngine.Matrix4x4[]),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(int))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -1417,7 +1417,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMeshInstanced__Mesh__Int32__Material__Arr_Matrix4x4__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(UnityEngine.Matrix4x4[]),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool))){
+			else if(matchType(l, "DrawMeshInstanced__Void__Mesh__Int32__Material__Arr_Matrix4x4__Int32__MaterialPropertyBlock__ShadowCastingMode__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(UnityEngine.Matrix4x4[]),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -1438,7 +1438,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMeshInstanced__Mesh__Int32__Material__List`1_Matrix4x4__MaterialPropertyBlock__ShadowCastingMode__Boolean__Int32", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(List<UnityEngine.Matrix4x4>),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(int))){
+			else if(matchType(l, "DrawMeshInstanced__Void__Mesh__Int32__Material__List`1_Matrix4x4__MaterialPropertyBlock__ShadowCastingMode__Boolean__Int32", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(List<UnityEngine.Matrix4x4>),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool),typeof(int))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -1459,7 +1459,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMeshInstanced__Mesh__Int32__Material__Arr_Matrix4x4__Int32__MaterialPropertyBlock__ShadowCastingMode", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(UnityEngine.Matrix4x4[]),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode))){
+			else if(matchType(l, "DrawMeshInstanced__Void__Mesh__Int32__Material__Arr_Matrix4x4__Int32__MaterialPropertyBlock__ShadowCastingMode", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(UnityEngine.Matrix4x4[]),typeof(int),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -1478,7 +1478,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMeshInstanced__Mesh__Int32__Material__List`1_Matrix4x4__MaterialPropertyBlock__ShadowCastingMode__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(List<UnityEngine.Matrix4x4>),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool))){
+			else if(matchType(l, "DrawMeshInstanced__Void__Mesh__Int32__Material__List`1_Matrix4x4__MaterialPropertyBlock__ShadowCastingMode__Boolean", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(List<UnityEngine.Matrix4x4>),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode),typeof(bool))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -1497,7 +1497,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMeshInstanced__Mesh__Int32__Material__List`1_Matrix4x4__MaterialPropertyBlock__ShadowCastingMode", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(List<UnityEngine.Matrix4x4>),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode))){
+			else if(matchType(l, "DrawMeshInstanced__Void__Mesh__Int32__Material__List`1_Matrix4x4__MaterialPropertyBlock__ShadowCastingMode", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(List<UnityEngine.Matrix4x4>),typeof(UnityEngine.MaterialPropertyBlock),typeof(UnityEngine.Rendering.ShadowCastingMode))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -1514,7 +1514,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMeshInstanced__Mesh__Int32__Material__Arr_Matrix4x4__Int32__MaterialPropertyBlock", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(UnityEngine.Matrix4x4[]),typeof(int),typeof(UnityEngine.MaterialPropertyBlock))){
+			else if(matchType(l, "DrawMeshInstanced__Void__Mesh__Int32__Material__Arr_Matrix4x4__Int32__MaterialPropertyBlock", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(UnityEngine.Matrix4x4[]),typeof(int),typeof(UnityEngine.MaterialPropertyBlock))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -1531,7 +1531,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMeshInstanced__Mesh__Int32__Material__List`1_Matrix4x4__MaterialPropertyBlock", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(List<UnityEngine.Matrix4x4>),typeof(UnityEngine.MaterialPropertyBlock))){
+			else if(matchType(l, "DrawMeshInstanced__Void__Mesh__Int32__Material__List`1_Matrix4x4__MaterialPropertyBlock", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(List<UnityEngine.Matrix4x4>),typeof(UnityEngine.MaterialPropertyBlock))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -1546,7 +1546,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMeshInstanced__Mesh__Int32__Material__Arr_Matrix4x4__Int32", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(UnityEngine.Matrix4x4[]),typeof(int))){
+			else if(matchType(l, "DrawMeshInstanced__Void__Mesh__Int32__Material__Arr_Matrix4x4__Int32", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(UnityEngine.Matrix4x4[]),typeof(int))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -1561,7 +1561,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMeshInstanced__Mesh__Int32__Material__List`1_Matrix4x4", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(List<UnityEngine.Matrix4x4>))){
+			else if(matchType(l, "DrawMeshInstanced__Void__Mesh__Int32__Material__List`1_Matrix4x4", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(List<UnityEngine.Matrix4x4>))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -1574,7 +1574,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "DrawMeshInstanced__Mesh__Int32__Material__Arr_Matrix4x4", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(UnityEngine.Matrix4x4[]))){
+			else if(matchType(l, "DrawMeshInstanced__Void__Mesh__Int32__Material__Arr_Matrix4x4", argc, 1,typeof(UnityEngine.Mesh),typeof(int),typeof(UnityEngine.Material),typeof(UnityEngine.Matrix4x4[]))){
 				UnityEngine.Mesh a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -1886,7 +1886,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 	static public int Blit_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Blit__Texture__RenderTexture__Vector2__Vector2", argc, 1,typeof(UnityEngine.Texture),typeof(UnityEngine.RenderTexture),typeof(UnityEngine.Vector2),typeof(UnityEngine.Vector2))){
+			if(matchType(l, "Blit__Void__Texture__RenderTexture__Vector2__Vector2", argc, 1,typeof(UnityEngine.Texture),typeof(UnityEngine.RenderTexture),typeof(UnityEngine.Vector2),typeof(UnityEngine.Vector2))){
 				UnityEngine.Texture a1;
 				checkType(l,2,out a1);
 				UnityEngine.RenderTexture a2;
@@ -1899,7 +1899,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "Blit__Texture__RenderTexture__Material__Int32", argc, 1,typeof(UnityEngine.Texture),typeof(UnityEngine.RenderTexture),typeof(UnityEngine.Material),typeof(int))){
+			else if(matchType(l, "Blit__Void__Texture__RenderTexture__Material__Int32", argc, 1,typeof(UnityEngine.Texture),typeof(UnityEngine.RenderTexture),typeof(UnityEngine.Material),typeof(int))){
 				UnityEngine.Texture a1;
 				checkType(l,2,out a1);
 				UnityEngine.RenderTexture a2;
@@ -1912,7 +1912,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "Blit__Texture__RenderTexture__Material", argc, 1,typeof(UnityEngine.Texture),typeof(UnityEngine.RenderTexture),typeof(UnityEngine.Material))){
+			else if(matchType(l, "Blit__Void__Texture__RenderTexture__Material", argc, 1,typeof(UnityEngine.Texture),typeof(UnityEngine.RenderTexture),typeof(UnityEngine.Material))){
 				UnityEngine.Texture a1;
 				checkType(l,2,out a1);
 				UnityEngine.RenderTexture a2;
@@ -1923,7 +1923,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "Blit__Texture__Material__Int32", argc, 1,typeof(UnityEngine.Texture),typeof(UnityEngine.Material),typeof(int))){
+			else if(matchType(l, "Blit__Void__Texture__Material__Int32", argc, 1,typeof(UnityEngine.Texture),typeof(UnityEngine.Material),typeof(int))){
 				UnityEngine.Texture a1;
 				checkType(l,2,out a1);
 				UnityEngine.Material a2;
@@ -1934,7 +1934,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "Blit__Texture__RenderTexture", argc, 1,typeof(UnityEngine.Texture),typeof(UnityEngine.RenderTexture))){
+			else if(matchType(l, "Blit__Void__Texture__RenderTexture", argc, 1,typeof(UnityEngine.Texture),typeof(UnityEngine.RenderTexture))){
 				UnityEngine.Texture a1;
 				checkType(l,2,out a1);
 				UnityEngine.RenderTexture a2;
@@ -1943,7 +1943,7 @@ public class Lua_UnityEngine_Graphics : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "Blit__Texture__Material", argc, 1,typeof(UnityEngine.Texture),typeof(UnityEngine.Material))){
+			else if(matchType(l, "Blit__Void__Texture__Material", argc, 1,typeof(UnityEngine.Texture),typeof(UnityEngine.Material))){
 				UnityEngine.Texture a1;
 				checkType(l,2,out a1);
 				UnityEngine.Material a2;

@@ -25,7 +25,7 @@ public class Lua_UnityEngine_SparseTexture : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__Int32__Int32__TextureFormat__Int32", argc, 2,typeof(int),typeof(int),typeof(UnityEngine.TextureFormat),typeof(int))){
+			else if(matchType(l, "ctor__Void__Int32__Int32__TextureFormat__Int32", argc, 2,typeof(int),typeof(int),typeof(UnityEngine.TextureFormat),typeof(int))){
 				System.Int32 a1;
 				checkType(l,3,out a1);
 				System.Int32 a2;
@@ -39,7 +39,7 @@ public class Lua_UnityEngine_SparseTexture : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__Int32__Int32__GraphicsFormat__Int32", argc, 2,typeof(int),typeof(int),typeof(UnityEngine.Experimental.Rendering.GraphicsFormat),typeof(int))){
+			else if(matchType(l, "ctor__Void__Int32__Int32__GraphicsFormat__Int32", argc, 2,typeof(int),typeof(int),typeof(UnityEngine.Experimental.Rendering.GraphicsFormat),typeof(int))){
 				System.Int32 a1;
 				checkType(l,3,out a1);
 				System.Int32 a2;

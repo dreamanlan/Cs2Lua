@@ -1,52 +1,75 @@
 require "cs2lua__namespaces"; 
 
 Cs2LuaType = {
+	-------------------------------
+	-------- class methods --------
+	-------------------------------
 	GetFullName = function(type)
-		return Cs2LuaTypeImpl.GetFullName(type);
+		local __cs2lua_func_info = luainitialize();
+		local __method_ret_7_4_11_5;
+		__method_ret_7_4_11_5 = Cs2LuaTypeImpl.GetFullName(type);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		return __method_ret_7_4_11_5;
 	end,
+
 	cctor = function()
+		local __cs2lua_func_info = luainitialize();
 		Cs2LuaType.__cctor();
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
+
 	__cctor = function()
+		local __cs2lua_func_info = luainitialize();
 		if Cs2LuaType.__cctor_called then 
+			__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			return;
 		else
 			Cs2LuaType.__cctor_called = true;
 		end;
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
+
+	-------------------------------
+	-------- class fields --------
+	-------------------------------
+	__attributes = Cs2LuaType__Attrs,
+	__cctor_called = false,
+
+	-------------------------------
+	--- define class and object ---
+	-------------------------------
 	__define_class = function()
 		Utility.Warn("Cs2LuaType::__define_class begin");
 
 		local class = Cs2LuaType;
-		local static_fields_build = function()
-			local static_fields = {
-				__attributes = Cs2LuaType__Attrs,
-				__cctor_called = false,
-			};
-			return static_fields;
+
+		local obj_methods = nil;
+
+		local obj_build = function()
+			return nil;
 		end;
 
-		local instance_fields_build = function()
-			local instance_fields = {
-			};
-			return instance_fields;
-		end;
-
-		local __defineclass_return = defineclass(nil, "Cs2LuaType", "Cs2LuaType", class, static_fields_build, instance_methods, instance_fields_build, false);
+		local __defineclass_return = defineclass(nil, "Cs2LuaType", "Cs2LuaType", class, obj_methods, obj_build, false);
 		Utility.Warn("Cs2LuaType::__define_class end");
 		return __defineclass_return;
 	end,
 
-	__interfaces = nil,
-	__class_info = nil,
-	__method_info = nil,
-	__property_info = nil,
-	__event_info = nil,
-	__field_info = nil,
+	-------------------------------
+	--------- fields info ---------
+	-------------------------------
+	__class_fields = {
+		__attributes = true,
+		__cctor_called = true,
+	},
+
+
+	-------------------------------
+	-------- metadata info --------
+	-------------------------------
 };
 
 
-require "cs2lua__lualib";
+require "cs2lua__syslib";
 require "cs2lua__attributes";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";

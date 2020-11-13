@@ -90,7 +90,7 @@ public class Lua_UnityEngine_Camera : LuaObject {
 	static public int SetTargetBuffers(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetTargetBuffers__RenderBuffer__RenderBuffer", argc, 2,typeof(UnityEngine.RenderBuffer),typeof(UnityEngine.RenderBuffer))){
+			if(matchType(l, "SetTargetBuffers__Void__RenderBuffer__RenderBuffer", argc, 2,typeof(UnityEngine.RenderBuffer),typeof(UnityEngine.RenderBuffer))){
 				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
 				UnityEngine.RenderBuffer a1;
 				checkValueType(l,3,out a1);
@@ -100,7 +100,7 @@ public class Lua_UnityEngine_Camera : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SetTargetBuffers__Arr_RenderBuffer__RenderBuffer", argc, 2,typeof(UnityEngine.RenderBuffer[]),typeof(UnityEngine.RenderBuffer))){
+			else if(matchType(l, "SetTargetBuffers__Void__Arr_RenderBuffer__RenderBuffer", argc, 2,typeof(UnityEngine.RenderBuffer[]),typeof(UnityEngine.RenderBuffer))){
 				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
 				UnityEngine.RenderBuffer[] a1;
 				checkArray(l,3,out a1);
@@ -536,6 +536,64 @@ public class Lua_UnityEngine_Camera : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int GetLODMasks(IntPtr l) {
+		try {
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			var ret=self.GetLODMasks();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetVisibleLODGroupCount(IntPtr l) {
+		try {
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			var ret=self.GetVisibleLODGroupCount();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetVisibleLODGroupAt(IntPtr l) {
+		try {
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetVisibleLODGroupAt(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetVisibleLODGroup(IntPtr l) {
+		try {
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			var ret=self.GetVisibleLODGroup();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RenderToCubemap(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
@@ -552,7 +610,7 @@ public class Lua_UnityEngine_Camera : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "RenderToCubemap__Cubemap__Int32", argc, 2,typeof(UnityEngine.Cubemap),typeof(int))){
+			else if(matchType(l, "RenderToCubemap__Boolean__Cubemap__Int32", argc, 2,typeof(UnityEngine.Cubemap),typeof(int))){
 				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
 				UnityEngine.Cubemap a1;
 				checkType(l,3,out a1);
@@ -563,7 +621,7 @@ public class Lua_UnityEngine_Camera : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "RenderToCubemap__RenderTexture__Int32", argc, 2,typeof(UnityEngine.RenderTexture),typeof(int))){
+			else if(matchType(l, "RenderToCubemap__Boolean__RenderTexture__Int32", argc, 2,typeof(UnityEngine.RenderTexture),typeof(int))){
 				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
 				UnityEngine.RenderTexture a1;
 				checkType(l,3,out a1);
@@ -574,7 +632,7 @@ public class Lua_UnityEngine_Camera : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "RenderToCubemap__Cubemap", argc, 2,typeof(UnityEngine.Cubemap))){
+			else if(matchType(l, "RenderToCubemap__Boolean__Cubemap", argc, 2,typeof(UnityEngine.Cubemap))){
 				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
 				UnityEngine.Cubemap a1;
 				checkType(l,3,out a1);
@@ -583,7 +641,7 @@ public class Lua_UnityEngine_Camera : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "RenderToCubemap__RenderTexture", argc, 2,typeof(UnityEngine.RenderTexture))){
+			else if(matchType(l, "RenderToCubemap__Boolean__RenderTexture", argc, 2,typeof(UnityEngine.RenderTexture))){
 				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
 				UnityEngine.RenderTexture a1;
 				checkType(l,3,out a1);
@@ -2343,6 +2401,10 @@ public class Lua_UnityEngine_Camera : LuaObject {
 		addMember(l,ResetStereoProjectionMatrices);
 		addMember(l,SetStereoViewMatrix);
 		addMember(l,ResetStereoViewMatrices);
+		addMember(l,GetLODMasks);
+		addMember(l,GetVisibleLODGroupCount);
+		addMember(l,GetVisibleLODGroupAt);
+		addMember(l,GetVisibleLODGroup);
 		addMember(l,RenderToCubemap);
 		addMember(l,Render);
 		addMember(l,RenderWithShader);

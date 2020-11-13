@@ -197,7 +197,7 @@ public class Lua_UnityEngine_Input : LuaObject {
 	static public int GetKey_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetKey__KeyCode", argc, 1,typeof(UnityEngine.KeyCode))){
+			if(matchType(l, "GetKey__Boolean__KeyCode", argc, 1,typeof(UnityEngine.KeyCode))){
 				UnityEngine.KeyCode a1;
 				checkEnum(l,2,out a1);
 				var ret=UnityEngine.Input.GetKey(a1);
@@ -205,7 +205,7 @@ public class Lua_UnityEngine_Input : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "GetKey__String", argc, 1,typeof(string))){
+			else if(matchType(l, "GetKey__Boolean__String", argc, 1,typeof(string))){
 				System.String a1;
 				checkType(l,2,out a1);
 				var ret=UnityEngine.Input.GetKey(a1);
@@ -226,7 +226,7 @@ public class Lua_UnityEngine_Input : LuaObject {
 	static public int GetKeyUp_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetKeyUp__KeyCode", argc, 1,typeof(UnityEngine.KeyCode))){
+			if(matchType(l, "GetKeyUp__Boolean__KeyCode", argc, 1,typeof(UnityEngine.KeyCode))){
 				UnityEngine.KeyCode a1;
 				checkEnum(l,2,out a1);
 				var ret=UnityEngine.Input.GetKeyUp(a1);
@@ -234,7 +234,7 @@ public class Lua_UnityEngine_Input : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "GetKeyUp__String", argc, 1,typeof(string))){
+			else if(matchType(l, "GetKeyUp__Boolean__String", argc, 1,typeof(string))){
 				System.String a1;
 				checkType(l,2,out a1);
 				var ret=UnityEngine.Input.GetKeyUp(a1);
@@ -255,7 +255,7 @@ public class Lua_UnityEngine_Input : LuaObject {
 	static public int GetKeyDown_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetKeyDown__KeyCode", argc, 1,typeof(UnityEngine.KeyCode))){
+			if(matchType(l, "GetKeyDown__Boolean__KeyCode", argc, 1,typeof(UnityEngine.KeyCode))){
 				UnityEngine.KeyCode a1;
 				checkEnum(l,2,out a1);
 				var ret=UnityEngine.Input.GetKeyDown(a1);
@@ -263,7 +263,7 @@ public class Lua_UnityEngine_Input : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "GetKeyDown__String", argc, 1,typeof(string))){
+			else if(matchType(l, "GetKeyDown__Boolean__String", argc, 1,typeof(string))){
 				System.String a1;
 				checkType(l,2,out a1);
 				var ret=UnityEngine.Input.GetKeyDown(a1);

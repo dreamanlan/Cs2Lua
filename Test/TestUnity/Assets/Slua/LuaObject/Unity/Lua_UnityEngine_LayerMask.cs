@@ -19,6 +19,35 @@ public class Lua_UnityEngine_LayerMask : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int op_Implicit_s(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(matchType(l, "op_Implicit__Int32__LayerMask", argc, 1,typeof(UnityEngine.LayerMask))){
+				UnityEngine.LayerMask a1;
+				checkValueType(l,2,out a1);
+				System.Int32 ret=a1;
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(matchType(l, "op_Implicit__LayerMask__Int32", argc, 1,typeof(int))){
+				System.Int32 a1;
+				checkType(l,2,out a1);
+				UnityEngine.LayerMask ret=a1;
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int LayerToName_s(IntPtr l) {
 		try {
 			System.Int32 a1;
@@ -96,6 +125,7 @@ public class Lua_UnityEngine_LayerMask : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.LayerMask");
+		addMember(l,op_Implicit_s);
 		addMember(l,LayerToName_s);
 		addMember(l,NameToLayer_s);
 		addMember(l,GetMask_s);

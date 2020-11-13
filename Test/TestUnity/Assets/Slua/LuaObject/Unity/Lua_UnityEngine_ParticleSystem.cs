@@ -1,6 +1,7 @@
 ﻿using System;
 using SLua;
 using System.Collections.Generic;
+using UnityEngine;
 [UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_ParticleSystem : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -43,7 +44,7 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 	static public int TriggerSubEmitter(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "TriggerSubEmitter__Int32__Ref_Particle", argc, 2,typeof(int),typeof(UnityEngine.ParticleSystem.Particle))){
+			if(matchType(l, "TriggerSubEmitter__Void__Int32__Ref_Particle", argc, 2,typeof(int),typeof(UnityEngine.ParticleSystem.Particle))){
 				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
 				System.Int32 a1;
 				checkType(l,3,out a1);
@@ -54,7 +55,7 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 				pushValue(l,a2);
 				return 2;
 			}
-			else if(matchType(l, "TriggerSubEmitter__Int32__List`1_Particle", argc, 2,typeof(int),typeof(List<UnityEngine.ParticleSystem.Particle>))){
+			else if(matchType(l, "TriggerSubEmitter__Void__Int32__List`1_Particle", argc, 2,typeof(int),typeof(List<UnityEngine.ParticleSystem.Particle>))){
 				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
 				System.Int32 a1;
 				checkType(l,3,out a1);
@@ -393,6 +394,109 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 				System.Int32 a1;
 				checkType(l,3,out a1);
 				self.Emit(a1);
+				pushValue(l,true);
+				return 1;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetSafeCollisionEventSize(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			var ret=self.GetSafeCollisionEventSize();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetCollisionEvents(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			UnityEngine.GameObject a2;
+			checkType(l,2,out a2);
+			System.Collections.Generic.List<UnityEngine.ParticleCollisionEvent> a3;
+			checkType(l,3,out a3);
+			var ret=self.GetCollisionEvents(a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetSafeTriggerParticlesSize(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			UnityEngine.ParticleSystemTriggerEventType a2;
+			checkEnum(l,2,out a2);
+			var ret=self.GetSafeTriggerParticlesSize(a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTriggerParticles(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			UnityEngine.ParticleSystemTriggerEventType a2;
+			checkEnum(l,2,out a2);
+			System.Collections.Generic.List<UnityEngine.ParticleSystem.Particle> a3;
+			checkType(l,3,out a3);
+			var ret=self.GetTriggerParticles(a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetTriggerParticles(IntPtr l) {
+		try {
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==6){
+				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+				UnityEngine.ParticleSystemTriggerEventType a2;
+				checkEnum(l,3,out a2);
+				System.Collections.Generic.List<UnityEngine.ParticleSystem.Particle> a3;
+				checkType(l,4,out a3);
+				System.Int32 a4;
+				checkType(l,5,out a4);
+				System.Int32 a5;
+				checkType(l,6,out a5);
+				self.SetTriggerParticles(a2,a3,a4,a5);
+				pushValue(l,true);
+				return 1;
+			}
+			else if(argc==4){
+				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+				UnityEngine.ParticleSystemTriggerEventType a2;
+				checkEnum(l,3,out a2);
+				System.Collections.Generic.List<UnityEngine.ParticleSystem.Particle> a3;
+				checkType(l,4,out a3);
+				self.SetTriggerParticles(a2,a3);
 				pushValue(l,true);
 				return 1;
 			}
@@ -879,6 +983,11 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 		addMember(l,Clear);
 		addMember(l,IsAlive);
 		addMember(l,Emit);
+		addMember(l,GetSafeCollisionEventSize);
+		addMember(l,GetCollisionEvents);
+		addMember(l,GetSafeTriggerParticlesSize);
+		addMember(l,GetTriggerParticles);
+		addMember(l,SetTriggerParticles);
 		addMember(l,ResetPreMappedBufferMemory_s);
 		addMember(l,"isPlaying",get_isPlaying,null,true);
 		addMember(l,"isEmitting",get_isEmitting,null,true);

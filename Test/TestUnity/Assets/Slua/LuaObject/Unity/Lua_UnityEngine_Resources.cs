@@ -59,7 +59,7 @@ public class Lua_UnityEngine_Resources : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Load__String", argc, 1,typeof(string))){
+			else if(matchType(l, "Load__Object__String", argc, 1,typeof(string))){
 				System.String a1;
 				checkType(l,2,out a1);
 				var ret=UnityEngine.Resources.Load<UnityEngine.Object>(a1);
@@ -67,7 +67,7 @@ public class Lua_UnityEngine_Resources : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Load__String", argc, 1,typeof(string))){
+			else if(matchType(l, "Load__Object__String", argc, 1,typeof(string))){
 				System.String a1;
 				checkType(l,2,out a1);
 				var ret=UnityEngine.Resources.Load(a1);
@@ -98,7 +98,7 @@ public class Lua_UnityEngine_Resources : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "LoadAsync__String", argc, 1,typeof(string))){
+			else if(matchType(l, "LoadAsync__ResourceRequest__String", argc, 1,typeof(string))){
 				System.String a1;
 				checkType(l,2,out a1);
 				var ret=UnityEngine.Resources.LoadAsync<UnityEngine.Object>(a1);
@@ -106,7 +106,7 @@ public class Lua_UnityEngine_Resources : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "LoadAsync__String", argc, 1,typeof(string))){
+			else if(matchType(l, "LoadAsync__ResourceRequest__String", argc, 1,typeof(string))){
 				System.String a1;
 				checkType(l,2,out a1);
 				var ret=UnityEngine.Resources.LoadAsync(a1);
@@ -137,7 +137,7 @@ public class Lua_UnityEngine_Resources : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "LoadAll__String", argc, 1,typeof(string))){
+			else if(matchType(l, "LoadAll__Arr_Object__String", argc, 1,typeof(string))){
 				System.String a1;
 				checkType(l,2,out a1);
 				var ret=UnityEngine.Resources.LoadAll<UnityEngine.Object>(a1);
@@ -145,7 +145,7 @@ public class Lua_UnityEngine_Resources : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "LoadAll__String", argc, 1,typeof(string))){
+			else if(matchType(l, "LoadAll__Arr_Object__String", argc, 1,typeof(string))){
 				System.String a1;
 				checkType(l,2,out a1);
 				var ret=UnityEngine.Resources.LoadAll(a1);

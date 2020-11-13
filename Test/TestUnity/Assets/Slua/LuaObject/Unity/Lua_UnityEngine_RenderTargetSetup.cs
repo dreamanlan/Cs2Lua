@@ -47,7 +47,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__RenderBuffer__RenderBuffer__Int32__CubemapFace", argc, 2,typeof(UnityEngine.RenderBuffer),typeof(UnityEngine.RenderBuffer),typeof(int),typeof(UnityEngine.CubemapFace))){
+			else if(matchType(l, "ctor__Void__RenderBuffer__RenderBuffer__Int32__CubemapFace", argc, 2,typeof(UnityEngine.RenderBuffer),typeof(UnityEngine.RenderBuffer),typeof(int),typeof(UnityEngine.CubemapFace))){
 				UnityEngine.RenderBuffer a1;
 				checkValueType(l,3,out a1);
 				UnityEngine.RenderBuffer a2;
@@ -61,7 +61,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__Arr_RenderBuffer__RenderBuffer__Int32__CubemapFace", argc, 2,typeof(UnityEngine.RenderBuffer[]),typeof(UnityEngine.RenderBuffer),typeof(int),typeof(UnityEngine.CubemapFace))){
+			else if(matchType(l, "ctor__Void__Arr_RenderBuffer__RenderBuffer__Int32__CubemapFace", argc, 2,typeof(UnityEngine.RenderBuffer[]),typeof(UnityEngine.RenderBuffer),typeof(int),typeof(UnityEngine.CubemapFace))){
 				UnityEngine.RenderBuffer[] a1;
 				checkArray(l,3,out a1);
 				UnityEngine.RenderBuffer a2;
@@ -75,7 +75,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__RenderBuffer__RenderBuffer__Int32", argc, 2,typeof(UnityEngine.RenderBuffer),typeof(UnityEngine.RenderBuffer),typeof(int))){
+			else if(matchType(l, "ctor__Void__RenderBuffer__RenderBuffer__Int32", argc, 2,typeof(UnityEngine.RenderBuffer),typeof(UnityEngine.RenderBuffer),typeof(int))){
 				UnityEngine.RenderBuffer a1;
 				checkValueType(l,3,out a1);
 				UnityEngine.RenderBuffer a2;
@@ -87,7 +87,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__Arr_RenderBuffer__RenderBuffer__Int32", argc, 2,typeof(UnityEngine.RenderBuffer[]),typeof(UnityEngine.RenderBuffer),typeof(int))){
+			else if(matchType(l, "ctor__Void__Arr_RenderBuffer__RenderBuffer__Int32", argc, 2,typeof(UnityEngine.RenderBuffer[]),typeof(UnityEngine.RenderBuffer),typeof(int))){
 				UnityEngine.RenderBuffer[] a1;
 				checkArray(l,3,out a1);
 				UnityEngine.RenderBuffer a2;
@@ -99,7 +99,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__RenderBuffer__RenderBuffer", argc, 2,typeof(UnityEngine.RenderBuffer),typeof(UnityEngine.RenderBuffer))){
+			else if(matchType(l, "ctor__Void__RenderBuffer__RenderBuffer", argc, 2,typeof(UnityEngine.RenderBuffer),typeof(UnityEngine.RenderBuffer))){
 				UnityEngine.RenderBuffer a1;
 				checkValueType(l,3,out a1);
 				UnityEngine.RenderBuffer a2;
@@ -109,7 +109,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 				pushValue(l,o);
 				return 2;
 			}
-			else if(matchType(l, "ctor__Arr_RenderBuffer__RenderBuffer", argc, 2,typeof(UnityEngine.RenderBuffer[]),typeof(UnityEngine.RenderBuffer))){
+			else if(matchType(l, "ctor__Void__Arr_RenderBuffer__RenderBuffer", argc, 2,typeof(UnityEngine.RenderBuffer[]),typeof(UnityEngine.RenderBuffer))){
 				UnityEngine.RenderBuffer[] a1;
 				checkArray(l,3,out a1);
 				UnityEngine.RenderBuffer a2;

@@ -102,7 +102,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Play__PlayMode", argc, 2,typeof(UnityEngine.PlayMode))){
+			else if(matchType(l, "Play__Boolean__PlayMode", argc, 2,typeof(UnityEngine.PlayMode))){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				UnityEngine.PlayMode a1;
 				checkEnum(l,3,out a1);
@@ -111,7 +111,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Play__String", argc, 2,typeof(string))){
+			else if(matchType(l, "Play__Boolean__String", argc, 2,typeof(string))){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);
@@ -386,7 +386,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 	static public int RemoveClip(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "RemoveClip__AnimationClip", argc, 2,typeof(UnityEngine.AnimationClip))){
+			if(matchType(l, "RemoveClip__Void__AnimationClip", argc, 2,typeof(UnityEngine.AnimationClip))){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				UnityEngine.AnimationClip a1;
 				checkType(l,3,out a1);
@@ -394,7 +394,7 @@ public class Lua_UnityEngine_Animation : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "RemoveClip__String", argc, 2,typeof(string))){
+			else if(matchType(l, "RemoveClip__Void__String", argc, 2,typeof(string))){
 				UnityEngine.Animation self=(UnityEngine.Animation)checkSelf(l);
 				System.String a1;
 				checkType(l,3,out a1);

@@ -36,7 +36,7 @@ public class Lua_UnityEngine_Pose : LuaObject {
 	static public int GetTransformedBy(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetTransformedBy__Pose", argc, 2,typeof(UnityEngine.Pose))){
+			if(matchType(l, "GetTransformedBy__Pose__Pose", argc, 2,typeof(UnityEngine.Pose))){
 				UnityEngine.Pose self;
 				checkValueType(l,1,out self);
 				UnityEngine.Pose a1;
@@ -46,7 +46,7 @@ public class Lua_UnityEngine_Pose : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "GetTransformedBy__Transform", argc, 2,typeof(UnityEngine.Transform))){
+			else if(matchType(l, "GetTransformedBy__Pose__Transform", argc, 2,typeof(UnityEngine.Transform))){
 				UnityEngine.Pose self;
 				checkValueType(l,1,out self);
 				UnityEngine.Transform a1;
@@ -66,7 +66,7 @@ public class Lua_UnityEngine_Pose : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Equality(IntPtr l) {
+	static public int op_Equality_s(IntPtr l) {
 		try {
 			UnityEngine.Pose a1;
 			checkValueType(l,1,out a1);
@@ -83,7 +83,7 @@ public class Lua_UnityEngine_Pose : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Inequality(IntPtr l) {
+	static public int op_Inequality_s(IntPtr l) {
 		try {
 			UnityEngine.Pose a1;
 			checkValueType(l,1,out a1);
@@ -218,8 +218,8 @@ public class Lua_UnityEngine_Pose : LuaObject {
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Pose");
 		addMember(l,GetTransformedBy);
-		addMember(l,op_Equality);
-		addMember(l,op_Inequality);
+		addMember(l,op_Equality_s);
+		addMember(l,op_Inequality_s);
 		addMember(l,"position",get_position,set_position,true);
 		addMember(l,"rotation",get_rotation,set_rotation,true);
 		addMember(l,"forward",get_forward,null,true);

@@ -39,7 +39,7 @@ public class Lua_UnityEngine_ParticleSystem_ExternalForcesModule : LuaObject {
 	static public int RemoveInfluence(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "RemoveInfluence__Int32", argc, 2,typeof(int))){
+			if(matchType(l, "RemoveInfluence__Void__Int32", argc, 2,typeof(int))){
 				UnityEngine.ParticleSystem.ExternalForcesModule self;
 				checkValueType(l,1,out self);
 				System.Int32 a1;
@@ -49,7 +49,7 @@ public class Lua_UnityEngine_ParticleSystem_ExternalForcesModule : LuaObject {
 				setBack(l,self);
 				return 1;
 			}
-			else if(matchType(l, "RemoveInfluence__ParticleSystemForceField", argc, 2,typeof(UnityEngine.ParticleSystemForceField))){
+			else if(matchType(l, "RemoveInfluence__Void__ParticleSystemForceField", argc, 2,typeof(UnityEngine.ParticleSystemForceField))){
 				UnityEngine.ParticleSystem.ExternalForcesModule self;
 				checkValueType(l,1,out self);
 				UnityEngine.ParticleSystemForceField a1;

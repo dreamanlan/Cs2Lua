@@ -69,7 +69,7 @@ public class Lua_UnityEngine_PhysicsScene : LuaObject {
 	static public int Raycast(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Raycast__Vector3__Vector3__Out_RaycastHit__Single__Int32__QueryTriggerInteraction", argc, 2,typeof(UnityEngine.Vector3),typeof(UnityEngine.Vector3),typeof(LuaOut),typeof(float),typeof(int),typeof(UnityEngine.QueryTriggerInteraction))){
+			if(matchType(l, "Raycast__Boolean__Vector3__Vector3__Out_RaycastHit__Single__Int32__QueryTriggerInteraction", argc, 2,typeof(UnityEngine.Vector3),typeof(UnityEngine.Vector3),typeof(LuaOut),typeof(float),typeof(int),typeof(UnityEngine.QueryTriggerInteraction))){
 				UnityEngine.PhysicsScene self;
 				checkValueType(l,1,out self);
 				UnityEngine.Vector3 a1;
@@ -89,7 +89,7 @@ public class Lua_UnityEngine_PhysicsScene : LuaObject {
 				pushValue(l,a3);
 				return 3;
 			}
-			else if(matchType(l, "Raycast__Vector3__Vector3__Arr_RaycastHit__Single__Int32__QueryTriggerInteraction", argc, 2,typeof(UnityEngine.Vector3),typeof(UnityEngine.Vector3),typeof(UnityEngine.RaycastHit[]),typeof(float),typeof(int),typeof(UnityEngine.QueryTriggerInteraction))){
+			else if(matchType(l, "Raycast__Int32__Vector3__Vector3__Arr_RaycastHit__Single__Int32__QueryTriggerInteraction", argc, 2,typeof(UnityEngine.Vector3),typeof(UnityEngine.Vector3),typeof(UnityEngine.RaycastHit[]),typeof(float),typeof(int),typeof(UnityEngine.QueryTriggerInteraction))){
 				UnityEngine.PhysicsScene self;
 				checkValueType(l,1,out self);
 				UnityEngine.Vector3 a1;
@@ -137,7 +137,7 @@ public class Lua_UnityEngine_PhysicsScene : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Equality(IntPtr l) {
+	static public int op_Equality_s(IntPtr l) {
 		try {
 			UnityEngine.PhysicsScene a1;
 			checkValueType(l,1,out a1);
@@ -154,7 +154,7 @@ public class Lua_UnityEngine_PhysicsScene : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Inequality(IntPtr l) {
+	static public int op_Inequality_s(IntPtr l) {
 		try {
 			UnityEngine.PhysicsScene a1;
 			checkValueType(l,1,out a1);
@@ -176,8 +176,8 @@ public class Lua_UnityEngine_PhysicsScene : LuaObject {
 		addMember(l,IsEmpty);
 		addMember(l,Simulate);
 		addMember(l,Raycast);
-		addMember(l,op_Equality);
-		addMember(l,op_Inequality);
+		addMember(l,op_Equality_s);
+		addMember(l,op_Inequality_s);
 		createTypeMetatable(l,constructor, typeof(UnityEngine.PhysicsScene),typeof(System.ValueType));
 	}
 }

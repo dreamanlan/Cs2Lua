@@ -79,7 +79,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreApproximatelyEqual__Single__Single__String", argc, 1,typeof(float),typeof(float),typeof(string))){
+			else if(matchType(l, "AreApproximatelyEqual__Void__Single__Single__String", argc, 1,typeof(float),typeof(float),typeof(string))){
 				System.Single a1;
 				checkType(l,2,out a1);
 				System.Single a2;
@@ -90,7 +90,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreApproximatelyEqual__Single__Single__Single", argc, 1,typeof(float),typeof(float),typeof(float))){
+			else if(matchType(l, "AreApproximatelyEqual__Void__Single__Single__Single", argc, 1,typeof(float),typeof(float),typeof(float))){
 				System.Single a1;
 				checkType(l,2,out a1);
 				System.Single a2;
@@ -136,7 +136,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreNotApproximatelyEqual__Single__Single__String", argc, 1,typeof(float),typeof(float),typeof(string))){
+			else if(matchType(l, "AreNotApproximatelyEqual__Void__Single__Single__String", argc, 1,typeof(float),typeof(float),typeof(string))){
 				System.Single a1;
 				checkType(l,2,out a1);
 				System.Single a2;
@@ -147,7 +147,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreNotApproximatelyEqual__Single__Single__Single", argc, 1,typeof(float),typeof(float),typeof(float))){
+			else if(matchType(l, "AreNotApproximatelyEqual__Void__Single__Single__Single", argc, 1,typeof(float),typeof(float),typeof(float))){
 				System.Single a1;
 				checkType(l,2,out a1);
 				System.Single a2;
@@ -180,7 +180,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 	static public int AreEqual_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "AreEqual__Int64__Int64__String", argc, 1,typeof(System.Int64),typeof(System.Int64),typeof(string))){
+			if(matchType(l, "AreEqual__Void__Int64__Int64__String", argc, 1,typeof(System.Int64),typeof(System.Int64),typeof(string))){
 				System.Int64 a1;
 				checkType(l,2,out a1);
 				System.Int64 a2;
@@ -191,7 +191,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreEqual__SByte__SByte__String", argc, 1,typeof(System.SByte),typeof(System.SByte),typeof(string))){
+			else if(matchType(l, "AreEqual__Void__SByte__SByte__String", argc, 1,typeof(System.SByte),typeof(System.SByte),typeof(string))){
 				System.SByte a1;
 				checkType(l,2,out a1);
 				System.SByte a2;
@@ -202,7 +202,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreEqual__Byte__Byte__String", argc, 1,typeof(System.Byte),typeof(System.Byte),typeof(string))){
+			else if(matchType(l, "AreEqual__Void__Byte__Byte__String", argc, 1,typeof(System.Byte),typeof(System.Byte),typeof(string))){
 				System.Byte a1;
 				checkType(l,2,out a1);
 				System.Byte a2;
@@ -213,7 +213,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreEqual__Char__Char__String", argc, 1,typeof(System.Char),typeof(System.Char),typeof(string))){
+			else if(matchType(l, "AreEqual__Void__Char__Char__String", argc, 1,typeof(System.Char),typeof(System.Char),typeof(string))){
 				System.Char a1;
 				checkType(l,2,out a1);
 				System.Char a2;
@@ -224,7 +224,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreEqual__Int16__Int16__String", argc, 1,typeof(System.Int16),typeof(System.Int16),typeof(string))){
+			else if(matchType(l, "AreEqual__Void__Int16__Int16__String", argc, 1,typeof(System.Int16),typeof(System.Int16),typeof(string))){
 				System.Int16 a1;
 				checkType(l,2,out a1);
 				System.Int16 a2;
@@ -235,7 +235,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreEqual__Object__Object__String", argc, 1,typeof(UnityEngine.Object),typeof(UnityEngine.Object),typeof(string))){
+			else if(matchType(l, "AreEqual__Void__Object__Object__String", argc, 1,typeof(UnityEngine.Object),typeof(UnityEngine.Object),typeof(string))){
 				UnityEngine.Object a1;
 				checkType(l,2,out a1);
 				UnityEngine.Object a2;
@@ -246,7 +246,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreEqual__Int32__Int32__String", argc, 1,typeof(int),typeof(int),typeof(string))){
+			else if(matchType(l, "AreEqual__Void__Int32__Int32__String", argc, 1,typeof(int),typeof(int),typeof(string))){
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -257,7 +257,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreEqual__UInt32__UInt32__String", argc, 1,typeof(System.UInt32),typeof(System.UInt32),typeof(string))){
+			else if(matchType(l, "AreEqual__Void__UInt32__UInt32__String", argc, 1,typeof(System.UInt32),typeof(System.UInt32),typeof(string))){
 				System.UInt32 a1;
 				checkType(l,2,out a1);
 				System.UInt32 a2;
@@ -268,7 +268,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreEqual__UInt16__UInt16__String", argc, 1,typeof(System.UInt16),typeof(System.UInt16),typeof(string))){
+			else if(matchType(l, "AreEqual__Void__UInt16__UInt16__String", argc, 1,typeof(System.UInt16),typeof(System.UInt16),typeof(string))){
 				System.UInt16 a1;
 				checkType(l,2,out a1);
 				System.UInt16 a2;
@@ -279,7 +279,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreEqual__UInt64__UInt64__String", argc, 1,typeof(System.UInt64),typeof(System.UInt64),typeof(string))){
+			else if(matchType(l, "AreEqual__Void__UInt64__UInt64__String", argc, 1,typeof(System.UInt64),typeof(System.UInt64),typeof(string))){
 				System.UInt64 a1;
 				checkType(l,2,out a1);
 				System.UInt64 a2;
@@ -290,7 +290,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreEqual__UInt64__UInt64", argc, 1,typeof(System.UInt64),typeof(System.UInt64))){
+			else if(matchType(l, "AreEqual__Void__UInt64__UInt64", argc, 1,typeof(System.UInt64),typeof(System.UInt64))){
 				System.UInt64 a1;
 				checkType(l,2,out a1);
 				System.UInt64 a2;
@@ -299,7 +299,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreEqual__UInt32__UInt32", argc, 1,typeof(System.UInt32),typeof(System.UInt32))){
+			else if(matchType(l, "AreEqual__Void__UInt32__UInt32", argc, 1,typeof(System.UInt32),typeof(System.UInt32))){
 				System.UInt32 a1;
 				checkType(l,2,out a1);
 				System.UInt32 a2;
@@ -308,7 +308,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreEqual__Int16__Int16", argc, 1,typeof(System.Int16),typeof(System.Int16))){
+			else if(matchType(l, "AreEqual__Void__Int16__Int16", argc, 1,typeof(System.Int16),typeof(System.Int16))){
 				System.Int16 a1;
 				checkType(l,2,out a1);
 				System.Int16 a2;
@@ -317,7 +317,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreEqual__Char__Char", argc, 1,typeof(System.Char),typeof(System.Char))){
+			else if(matchType(l, "AreEqual__Void__Char__Char", argc, 1,typeof(System.Char),typeof(System.Char))){
 				System.Char a1;
 				checkType(l,2,out a1);
 				System.Char a2;
@@ -326,7 +326,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreEqual__Int64__Int64", argc, 1,typeof(System.Int64),typeof(System.Int64))){
+			else if(matchType(l, "AreEqual__Void__Int64__Int64", argc, 1,typeof(System.Int64),typeof(System.Int64))){
 				System.Int64 a1;
 				checkType(l,2,out a1);
 				System.Int64 a2;
@@ -335,7 +335,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreEqual__Byte__Byte", argc, 1,typeof(System.Byte),typeof(System.Byte))){
+			else if(matchType(l, "AreEqual__Void__Byte__Byte", argc, 1,typeof(System.Byte),typeof(System.Byte))){
 				System.Byte a1;
 				checkType(l,2,out a1);
 				System.Byte a2;
@@ -344,7 +344,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreEqual__SByte__SByte", argc, 1,typeof(System.SByte),typeof(System.SByte))){
+			else if(matchType(l, "AreEqual__Void__SByte__SByte", argc, 1,typeof(System.SByte),typeof(System.SByte))){
 				System.SByte a1;
 				checkType(l,2,out a1);
 				System.SByte a2;
@@ -353,7 +353,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreEqual__Int32__Int32", argc, 1,typeof(int),typeof(int))){
+			else if(matchType(l, "AreEqual__Void__Int32__Int32", argc, 1,typeof(int),typeof(int))){
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -362,7 +362,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreEqual__UInt16__UInt16", argc, 1,typeof(System.UInt16),typeof(System.UInt16))){
+			else if(matchType(l, "AreEqual__Void__UInt16__UInt16", argc, 1,typeof(System.UInt16),typeof(System.UInt16))){
 				System.UInt16 a1;
 				checkType(l,2,out a1);
 				System.UInt16 a2;
@@ -384,7 +384,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 	static public int AreNotEqual_s(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "AreNotEqual__Int64__Int64__String", argc, 1,typeof(System.Int64),typeof(System.Int64),typeof(string))){
+			if(matchType(l, "AreNotEqual__Void__Int64__Int64__String", argc, 1,typeof(System.Int64),typeof(System.Int64),typeof(string))){
 				System.Int64 a1;
 				checkType(l,2,out a1);
 				System.Int64 a2;
@@ -395,7 +395,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreNotEqual__SByte__SByte__String", argc, 1,typeof(System.SByte),typeof(System.SByte),typeof(string))){
+			else if(matchType(l, "AreNotEqual__Void__SByte__SByte__String", argc, 1,typeof(System.SByte),typeof(System.SByte),typeof(string))){
 				System.SByte a1;
 				checkType(l,2,out a1);
 				System.SByte a2;
@@ -406,7 +406,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreNotEqual__Byte__Byte__String", argc, 1,typeof(System.Byte),typeof(System.Byte),typeof(string))){
+			else if(matchType(l, "AreNotEqual__Void__Byte__Byte__String", argc, 1,typeof(System.Byte),typeof(System.Byte),typeof(string))){
 				System.Byte a1;
 				checkType(l,2,out a1);
 				System.Byte a2;
@@ -417,7 +417,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreNotEqual__Char__Char__String", argc, 1,typeof(System.Char),typeof(System.Char),typeof(string))){
+			else if(matchType(l, "AreNotEqual__Void__Char__Char__String", argc, 1,typeof(System.Char),typeof(System.Char),typeof(string))){
 				System.Char a1;
 				checkType(l,2,out a1);
 				System.Char a2;
@@ -428,7 +428,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreNotEqual__Int16__Int16__String", argc, 1,typeof(System.Int16),typeof(System.Int16),typeof(string))){
+			else if(matchType(l, "AreNotEqual__Void__Int16__Int16__String", argc, 1,typeof(System.Int16),typeof(System.Int16),typeof(string))){
 				System.Int16 a1;
 				checkType(l,2,out a1);
 				System.Int16 a2;
@@ -439,7 +439,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreNotEqual__Object__Object__String", argc, 1,typeof(UnityEngine.Object),typeof(UnityEngine.Object),typeof(string))){
+			else if(matchType(l, "AreNotEqual__Void__Object__Object__String", argc, 1,typeof(UnityEngine.Object),typeof(UnityEngine.Object),typeof(string))){
 				UnityEngine.Object a1;
 				checkType(l,2,out a1);
 				UnityEngine.Object a2;
@@ -450,7 +450,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreNotEqual__Int32__Int32__String", argc, 1,typeof(int),typeof(int),typeof(string))){
+			else if(matchType(l, "AreNotEqual__Void__Int32__Int32__String", argc, 1,typeof(int),typeof(int),typeof(string))){
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -461,7 +461,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreNotEqual__UInt32__UInt32__String", argc, 1,typeof(System.UInt32),typeof(System.UInt32),typeof(string))){
+			else if(matchType(l, "AreNotEqual__Void__UInt32__UInt32__String", argc, 1,typeof(System.UInt32),typeof(System.UInt32),typeof(string))){
 				System.UInt32 a1;
 				checkType(l,2,out a1);
 				System.UInt32 a2;
@@ -472,7 +472,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreNotEqual__UInt16__UInt16__String", argc, 1,typeof(System.UInt16),typeof(System.UInt16),typeof(string))){
+			else if(matchType(l, "AreNotEqual__Void__UInt16__UInt16__String", argc, 1,typeof(System.UInt16),typeof(System.UInt16),typeof(string))){
 				System.UInt16 a1;
 				checkType(l,2,out a1);
 				System.UInt16 a2;
@@ -483,7 +483,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreNotEqual__UInt64__UInt64__String", argc, 1,typeof(System.UInt64),typeof(System.UInt64),typeof(string))){
+			else if(matchType(l, "AreNotEqual__Void__UInt64__UInt64__String", argc, 1,typeof(System.UInt64),typeof(System.UInt64),typeof(string))){
 				System.UInt64 a1;
 				checkType(l,2,out a1);
 				System.UInt64 a2;
@@ -494,7 +494,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreNotEqual__UInt64__UInt64", argc, 1,typeof(System.UInt64),typeof(System.UInt64))){
+			else if(matchType(l, "AreNotEqual__Void__UInt64__UInt64", argc, 1,typeof(System.UInt64),typeof(System.UInt64))){
 				System.UInt64 a1;
 				checkType(l,2,out a1);
 				System.UInt64 a2;
@@ -503,7 +503,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreNotEqual__UInt32__UInt32", argc, 1,typeof(System.UInt32),typeof(System.UInt32))){
+			else if(matchType(l, "AreNotEqual__Void__UInt32__UInt32", argc, 1,typeof(System.UInt32),typeof(System.UInt32))){
 				System.UInt32 a1;
 				checkType(l,2,out a1);
 				System.UInt32 a2;
@@ -512,7 +512,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreNotEqual__Int16__Int16", argc, 1,typeof(System.Int16),typeof(System.Int16))){
+			else if(matchType(l, "AreNotEqual__Void__Int16__Int16", argc, 1,typeof(System.Int16),typeof(System.Int16))){
 				System.Int16 a1;
 				checkType(l,2,out a1);
 				System.Int16 a2;
@@ -521,7 +521,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreNotEqual__Char__Char", argc, 1,typeof(System.Char),typeof(System.Char))){
+			else if(matchType(l, "AreNotEqual__Void__Char__Char", argc, 1,typeof(System.Char),typeof(System.Char))){
 				System.Char a1;
 				checkType(l,2,out a1);
 				System.Char a2;
@@ -530,7 +530,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreNotEqual__Int64__Int64", argc, 1,typeof(System.Int64),typeof(System.Int64))){
+			else if(matchType(l, "AreNotEqual__Void__Int64__Int64", argc, 1,typeof(System.Int64),typeof(System.Int64))){
 				System.Int64 a1;
 				checkType(l,2,out a1);
 				System.Int64 a2;
@@ -539,7 +539,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreNotEqual__Byte__Byte", argc, 1,typeof(System.Byte),typeof(System.Byte))){
+			else if(matchType(l, "AreNotEqual__Void__Byte__Byte", argc, 1,typeof(System.Byte),typeof(System.Byte))){
 				System.Byte a1;
 				checkType(l,2,out a1);
 				System.Byte a2;
@@ -548,7 +548,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreNotEqual__SByte__SByte", argc, 1,typeof(System.SByte),typeof(System.SByte))){
+			else if(matchType(l, "AreNotEqual__Void__SByte__SByte", argc, 1,typeof(System.SByte),typeof(System.SByte))){
 				System.SByte a1;
 				checkType(l,2,out a1);
 				System.SByte a2;
@@ -557,7 +557,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreNotEqual__Int32__Int32", argc, 1,typeof(int),typeof(int))){
+			else if(matchType(l, "AreNotEqual__Void__Int32__Int32", argc, 1,typeof(int),typeof(int))){
 				System.Int32 a1;
 				checkType(l,2,out a1);
 				System.Int32 a2;
@@ -566,7 +566,7 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "AreNotEqual__UInt16__UInt16", argc, 1,typeof(System.UInt16),typeof(System.UInt16))){
+			else if(matchType(l, "AreNotEqual__Void__UInt16__UInt16", argc, 1,typeof(System.UInt16),typeof(System.UInt16))){
 				System.UInt16 a1;
 				checkType(l,2,out a1);
 				System.UInt16 a2;

@@ -50,7 +50,7 @@ public class Lua_UnityEngine_BillboardAsset : LuaObject {
 	static public int SetImageTexCoords(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetImageTexCoords__List`1_Vector4", argc, 2,typeof(List<UnityEngine.Vector4>))){
+			if(matchType(l, "SetImageTexCoords__Void__List`1_Vector4", argc, 2,typeof(List<UnityEngine.Vector4>))){
 				UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
 				System.Collections.Generic.List<UnityEngine.Vector4> a1;
 				checkType(l,3,out a1);
@@ -58,7 +58,7 @@ public class Lua_UnityEngine_BillboardAsset : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SetImageTexCoords__Arr_Vector4", argc, 2,typeof(UnityEngine.Vector4[]))){
+			else if(matchType(l, "SetImageTexCoords__Void__Arr_Vector4", argc, 2,typeof(UnityEngine.Vector4[]))){
 				UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
 				UnityEngine.Vector4[] a1;
 				checkArray(l,3,out a1);
@@ -107,7 +107,7 @@ public class Lua_UnityEngine_BillboardAsset : LuaObject {
 	static public int SetVertices(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetVertices__List`1_Vector2", argc, 2,typeof(List<UnityEngine.Vector2>))){
+			if(matchType(l, "SetVertices__Void__List`1_Vector2", argc, 2,typeof(List<UnityEngine.Vector2>))){
 				UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
 				System.Collections.Generic.List<UnityEngine.Vector2> a1;
 				checkType(l,3,out a1);
@@ -115,7 +115,7 @@ public class Lua_UnityEngine_BillboardAsset : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SetVertices__Arr_Vector2", argc, 2,typeof(UnityEngine.Vector2[]))){
+			else if(matchType(l, "SetVertices__Void__Arr_Vector2", argc, 2,typeof(UnityEngine.Vector2[]))){
 				UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
 				UnityEngine.Vector2[] a1;
 				checkArray(l,3,out a1);
@@ -164,7 +164,7 @@ public class Lua_UnityEngine_BillboardAsset : LuaObject {
 	static public int SetIndices(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetIndices__List`1_UInt16", argc, 2,typeof(List<System.UInt16>))){
+			if(matchType(l, "SetIndices__Void__List`1_UInt16", argc, 2,typeof(List<System.UInt16>))){
 				UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
 				System.Collections.Generic.List<System.UInt16> a1;
 				checkType(l,3,out a1);
@@ -172,7 +172,7 @@ public class Lua_UnityEngine_BillboardAsset : LuaObject {
 				pushValue(l,true);
 				return 1;
 			}
-			else if(matchType(l, "SetIndices__Arr_UInt16", argc, 2,typeof(System.UInt16[]))){
+			else if(matchType(l, "SetIndices__Void__Arr_UInt16", argc, 2,typeof(System.UInt16[]))){
 				UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
 				System.UInt16[] a1;
 				checkArray(l,3,out a1);

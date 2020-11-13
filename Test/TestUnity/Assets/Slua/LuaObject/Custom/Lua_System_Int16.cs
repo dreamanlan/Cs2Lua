@@ -22,7 +22,7 @@ public class Lua_System_Int16 : LuaObject {
 	static public int CompareTo(IntPtr l) {
 		try {
 			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "CompareTo__Object", argc, 2,typeof(System.Object))){
+			if(matchType(l, "CompareTo__Int32__Object", argc, 2,typeof(System.Object))){
 				System.Int16 self;
 				checkType(l,1,out self);
 				System.Object a1;
@@ -32,7 +32,7 @@ public class Lua_System_Int16 : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "CompareTo__Int16", argc, 2,typeof(System.Int16))){
+			else if(matchType(l, "CompareTo__Int32__Int16", argc, 2,typeof(System.Int16))){
 				System.Int16 self;
 				checkType(l,1,out self);
 				System.Int16 a1;
@@ -82,7 +82,7 @@ public class Lua_System_Int16 : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Parse__String__NumberStyles", argc, 1,typeof(string),typeof(System.Globalization.NumberStyles))){
+			else if(matchType(l, "Parse__Int16__String__NumberStyles", argc, 1,typeof(string),typeof(System.Globalization.NumberStyles))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.Globalization.NumberStyles a2;
@@ -92,7 +92,7 @@ public class Lua_System_Int16 : LuaObject {
 				pushValue(l,ret);
 				return 2;
 			}
-			else if(matchType(l, "Parse__String__IFormatProvider", argc, 1,typeof(string),typeof(System.IFormatProvider))){
+			else if(matchType(l, "Parse__Int16__String__IFormatProvider", argc, 1,typeof(string),typeof(System.IFormatProvider))){
 				System.String a1;
 				checkType(l,2,out a1);
 				System.IFormatProvider a2;

@@ -104,7 +104,7 @@ public class Lua_UnityEngine_BoundsInt : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Equality(IntPtr l) {
+	static public int op_Equality_s(IntPtr l) {
 		try {
 			UnityEngine.BoundsInt a1;
 			checkValueType(l,1,out a1);
@@ -121,7 +121,7 @@ public class Lua_UnityEngine_BoundsInt : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Inequality(IntPtr l) {
+	static public int op_Inequality_s(IntPtr l) {
 		try {
 			UnityEngine.BoundsInt a1;
 			checkValueType(l,1,out a1);
@@ -573,8 +573,8 @@ public class Lua_UnityEngine_BoundsInt : LuaObject {
 		addMember(l,SetMinMax);
 		addMember(l,ClampToBounds);
 		addMember(l,Contains);
-		addMember(l,op_Equality);
-		addMember(l,op_Inequality);
+		addMember(l,op_Equality_s);
+		addMember(l,op_Inequality_s);
 		addMember(l,"x",get_x,set_x,true);
 		addMember(l,"y",get_y,set_y,true);
 		addMember(l,"z",get_z,set_z,true);

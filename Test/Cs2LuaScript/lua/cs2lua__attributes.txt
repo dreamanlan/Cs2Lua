@@ -6,6 +6,7 @@ __cs2lua__AllAttrs["Cs2LuaType"] = {
 };
 __cs2lua__AllAttrs["Program"] = {
 	Class = {
+		{"Cs2Dsl.RequireAttribute", {luaModuleNames = ""}, {}};
 		{"Cs2Dsl.EntryAttribute", {}, {}};
 	};
 };
