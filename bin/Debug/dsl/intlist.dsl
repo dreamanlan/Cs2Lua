@@ -14,7 +14,7 @@ class(IntList, System.Collections.Generic.List_T) {
 		};
 		__cctor = deffunc(0)args(){
 			if(IntList.__cctor_called){
-				return;
+				return();
 			}else{
 				IntList.__cctor_called = true;
 			};
@@ -32,7 +32,7 @@ class(IntList, System.Collections.Generic.List_T) {
 		};
 		__ctor = deffunc(0)args(this){
 			if(getinstance(SymbolKind.Field, this, IntList, "__ctor_called")){
-				return;
+				return();
 			}else{
 				setinstance(SymbolKind.Field, this, IntList, "__ctor_called", true);
 			};

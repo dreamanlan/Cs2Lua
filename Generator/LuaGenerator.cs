@@ -45,6 +45,7 @@ namespace Generator
 
                     Dsl.DslFile dslFile = new Dsl.DslFile();
                     dslFile.Load(file, s => Log(file, s));
+
                     GenerateLua(dslFile, Path.Combine(s_OutPath, Path.ChangeExtension(fileName.Replace("cs2dsl__", "cs2lua__"), s_Ext)), fileName);
                 }
                 catch (Exception ex) {
@@ -58,7 +59,7 @@ namespace Generator
                     }
                     Log(file, string.Format("[{0}:{1}]:exception:{2}\n{3}", id, line, ex.Message, ex.StackTrace));
                     File.WriteAllText(Path.Combine(s_LogPath, "Generator.log"), s_LogBuilder.ToString());
-                    System.Environment.Exit(-1);
+                    throw ex;
                 }
             };
             if (parallel) {
@@ -85,30 +86,88 @@ namespace Generator
                 File.WriteAllText(Path.Combine(s_OutPath, Path.ChangeExtension(info.MergedFileName, s_Ext)), sb.ToString());
             }
             File.WriteAllText(Path.Combine(s_LogPath, "Generator.log"), s_LogBuilder.ToString());
-            System.Environment.Exit(0);
+            string specialLib = Path.Combine(s_OutPath, "lualib_special.txt");
+            using (var sw = new StreamWriter(specialLib, false)) {
+                foreach (var pair in s_FunctionsFromDslHook) {
+                    sw.Write(pair.Value);
+                    sw.WriteLine();
+                }
+                sw.Close();
+            }
         }
-        private static bool IsSignature(string sig, string method)
+        internal static void GenerateArguments(Dsl.FunctionData data, StringBuilder sb, int indent, int start, DslExpression.DslCalculator calculator)
+        {
+            s_CurSyntax = data;
+            GenerateArguments(data, sb, indent, start, string.Empty, calculator);
+        }
+        internal static void GenerateArguments(Dsl.FunctionData data, StringBuilder sb, int indent, int start, string sig, DslExpression.DslCalculator calculator)
+        {
+            s_CurSyntax = data;
+            string prestr = string.Empty;
+            if (!string.IsNullOrEmpty(sig)) {
+                sb.Append(prestr);
+                sb.AppendFormat("\"{0}\"", Escape(sig));
+                prestr = ", ";
+            }
+            for (int ix = start; ix < data.Params.Count; ++ix) {
+                var param = data.Params[ix];
+                sb.Append(prestr);
+                string paramId = param.GetId();
+                if (param.GetIdType() == (int)Dsl.ValueData.ID_TOKEN && paramId == "...") {
+                    sb.Append("...");
+                    continue;
+                }
+                GenerateSyntaxComponent(param, sb, indent, false, calculator);
+                prestr = ", ";
+            }
+        }
+        internal static void GenerateCodeBlock(StringBuilder sb, int indent, string code)
+        {
+            GenerateCodeBlock(sb, indent, code, false);
+        }
+        internal static void GenerateCodeBlock(StringBuilder sb, int indent, string code, bool removeSemiColonAndNewLine)
+        {
+            int ix = 0;
+            int whiteCount = 0;
+            while (code.Length > ix && (code[ix] == '\t' || code[ix] == ' ')) {
+                if (code[ix] == '\t')
+                    whiteCount += 4;
+                else
+                    ++whiteCount;
+                ++ix;
+            }
+            var lines = code.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            for (int lineIx = 0; lineIx < lines.Length; ++lineIx) {
+                var line = lines[lineIx].TrimEnd();
+                int left = whiteCount;
+                ix = 0;
+                while (line.Length > ix && left > 0 && (line[ix] == '\t' || line[ix] == ' ')) {
+                    if (line[ix] == '\t')
+                        left -= 4;
+                    else
+                        --left;
+                    ++ix;
+                }
+                sb.Append(GetIndentString(indent));
+                if (removeSemiColonAndNewLine && lineIx == lines.Length - 1) {
+                    int lastIx = line.Length - 1;
+                    if (lastIx > 0 && line[lastIx] == ';')
+                        sb.Append(line.Substring(ix, lastIx - ix));
+                    else
+                        sb.Append(line.Substring(ix));
+                }
+                else {
+                    sb.AppendLine(line.Substring(ix));
+                }
+            }
+        }
+        internal static bool IsSignature(string sig, string method)
         {
             int ix = sig.IndexOf(':');
             int startIndex = ix + 1;
             return startIndex == sig.IndexOf(method, startIndex);
         }
-        private static string CalcLogInfo(PrologueOrEpilogueInfo info, string className, string methodName)
-        {
-            string fmt = info.Format;
-            var args = new string[info.Args.Length];
-            for (int ix = 0; ix < args.Length; ++ix) {
-                var arg = info.Args[ix];
-                if (arg == "$class")
-                    args[ix] = className;
-                else if (arg == "$member")
-                    args[ix] = methodName;
-                else
-                    args[ix] = arg;
-            }
-            return string.Format(fmt, args);
-        }
-        private static string CalcTypesString(Dsl.FunctionData cd)
+        internal static string CalcTypesString(Dsl.FunctionData cd)
         {
             StringBuilder sb = new StringBuilder();
             string prestr = string.Empty;
@@ -120,7 +179,7 @@ namespace Generator
             }
             return sb.ToString();
         }
-        private static string CalcTypeString(Dsl.ISyntaxComponent comp)
+        internal static string CalcTypeString(Dsl.ISyntaxComponent comp)
         {
             string ret = comp.GetId();
             var cd = comp as Dsl.FunctionData;
@@ -136,13 +195,13 @@ namespace Generator
             }
             return ret;
         }
-        private static string CalcExpressionString(Dsl.ISyntaxComponent comp)
+        internal static string CalcExpressionString(Dsl.ISyntaxComponent comp, DslExpression.DslCalculator calculator)
         {
             StringBuilder sb = new StringBuilder();
-            GenerateSyntaxComponent(comp, sb, 0, false);
+            GenerateSyntaxComponent(comp, sb, 0, false, calculator);
             return sb.ToString();
         }
-        private static Dsl.ISyntaxComponent FindParam(Dsl.FunctionData funcData, string key)
+        internal static Dsl.ISyntaxComponent FindParam(Dsl.FunctionData funcData, string key)
         {
             var fcd = funcData;
             if (funcData.IsHighOrder)
@@ -154,7 +213,7 @@ namespace Generator
             }
             return null;
         }
-        private static Dsl.ISyntaxComponent FindStatement(Dsl.FunctionData funcData, string key)
+        internal static Dsl.ISyntaxComponent FindStatement(Dsl.FunctionData funcData, string key)
         {
             foreach (var statement in funcData.Params) {
                 if (key == statement.GetId()) {
@@ -163,7 +222,7 @@ namespace Generator
             }
             return null;
         }
-        private static string GetLastName(string fullName)
+        internal static string GetLastName(string fullName)
         {
             int ix = fullName.LastIndexOf('.');
             if (ix < 0)
@@ -171,7 +230,7 @@ namespace Generator
             else
                 return fullName.Substring(ix + 1);
         }
-        private static string ConvertOperator(string id)
+        internal static string ConvertOperator(string id)
         {
             if (id == "!=") {
                 id = "~=";
@@ -187,16 +246,16 @@ namespace Generator
             }
             return id;
         }
-        private static void Log(string file, string msg)
+        internal static void Log(string file, string msg)
         {
             s_LogBuilder.AppendFormatLine("[{0}]:{1}", file, msg);
         }
-        private static string GetIndentString(int indent)
+        internal static string GetIndentString(int indent)
         {
             const string c_IndentString = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
             return c_IndentString.Substring(0, indent);
         }
-        private static string GetArraySubscriptString(int index)
+        internal static string GetArraySubscriptString(int index)
         {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i <= index; ++i) {
@@ -204,7 +263,7 @@ namespace Generator
             }
             return sb.ToString();
         }
-        private static string Escape(string src)
+        internal static string Escape(string src)
         {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < src.Length; ++i) {
@@ -214,7 +273,7 @@ namespace Generator
             }
             return sb.ToString();
         }
-        private static string Escape(char c)
+        internal static string Escape(char c)
         {
             switch (c) {
                 case '\a':
@@ -243,12 +302,12 @@ namespace Generator
                     return c.ToString();
             }
         }
-        private static bool TryGetSpecialIntegerOperatorIndex(string op, out int index)
+        internal static bool TryGetSpecialIntegerOperatorIndex(string op, out int index)
         {
             index = s_SpecialIntegerOperators.IndexOf(op);
             return index >= 0;
         }
-        private static bool IsBasicType(string t, string typeKind, bool includeString)
+        internal static bool IsBasicType(string t, string typeKind, bool includeString)
         {
             if (typeKind == "TypeKind.Enum" || t == "System.Enum")
                 return true;
@@ -256,11 +315,15 @@ namespace Generator
                 return true;
             return s_BasicTypes.Contains(t);
         }
-        private static bool IsIntegerType(string t, string typeKind)
+        internal static bool IsIntegerType(string t, string typeKind)
         {
             if (typeKind == "TypeKind.Enum" || t == "System.Enum")
                 return true;
             return s_IntegerTypes.Contains(t);
+        }
+        internal static ConcurrentDictionary<string, string> FunctionsFromDslHook
+        {
+            get => s_FunctionsFromDslHook;
         }
         private static bool DontRequire(string file, string require)
         {
@@ -355,6 +418,21 @@ namespace Generator
             }
             s_CachedIndexerByLualibInfos.TryAdd(key, 0);
             return false;
+        }
+        private static string CalcLogInfo(PrologueOrEpilogueInfo info, string className, string methodName)
+        {
+            string fmt = info.Format;
+            var args = new string[info.Args.Length];
+            for (int ix = 0; ix < args.Length; ++ix) {
+                var arg = info.Args[ix];
+                if (arg == "$class")
+                    args[ix] = className;
+                else if (arg == "$member")
+                    args[ix] = methodName;
+                else
+                    args[ix] = arg;
+            }
+            return string.Format(fmt, args);
         }
         private static PrologueAndEpilogueInfo GetPrologueAndEpilogue(string _class, string _method)
         {
@@ -720,5 +798,6 @@ namespace Generator
         private static ConcurrentDictionary<string, bool> s_CachedNoSignatures = new ConcurrentDictionary<string, bool>();
         private static ConcurrentDictionary<string, int> s_CachedIndexerByLualibInfos = new ConcurrentDictionary<string, int>();
         private static ConcurrentDictionary<string, PrologueAndEpilogueInfo> s_CachedPrologueAndEpilogueInfos = new ConcurrentDictionary<string, PrologueAndEpilogueInfo>();
+        private static ConcurrentDictionary<string, string> s_FunctionsFromDslHook = new ConcurrentDictionary<string, string>();
     }
 }

@@ -695,10 +695,10 @@ namespace RoslynTool.CsToDsl
                 string newValVar = string.Format("__new_val_{0}", postfix);
                 if (needWrapStruct) {
                     if (null != leftSym && SymbolTable.Instance.IsCs2DslSymbol(leftSym) && SymbolTable.Instance.IsFieldSymbolKind(leftSym)) {
-                        CodeBuilder.Append(GetIndentString());
                         CodeBuilder.AppendFormat("local({0}); {0} = ", oldValVar);
                         OutputExpressionSyntax(assign.Left);
                         CodeBuilder.AppendLine(";");
+                        CodeBuilder.Append(GetIndentString());
                     }
                 }
                 VisitAssignment(ci, op, baseOp, assign, expTerminater, true, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType, dslToObject);
@@ -926,7 +926,8 @@ namespace RoslynTool.CsToDsl
                 var token = init.EqualsToken;
                 var invocation = init.Value as InvocationExpressionSyntax;
                 if (null != invocation) {
-                    string localName = string.Format("__localdecl_{0}", GetSourcePosForVar(invocation));
+                    string srcPos = GetSourcePosForVar(invocation);
+                    string localName = string.Format("__localdecl_{0}", srcPos);
                     SymbolInfo symInfo = m_Model.GetSymbolInfoEx(invocation);
                     IMethodSymbol sym = symInfo.Symbol as IMethodSymbol;
 
@@ -941,6 +942,26 @@ namespace RoslynTool.CsToDsl
                             AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
                         }
                         int ct = ii.ReturnArgs.Count;
+                        string preCodeBlock = string.Empty;
+                        string postCodeBlock = string.Empty;
+                        if (ct > 0) {
+                            int indent = m_Indent + 1;
+                            StringBuilder old = ci.CurrentCodeBuilder;
+                            StringBuilder sb = new StringBuilder();
+                            ci.CurrentCodeBuilder = sb;
+                            sb.AppendLine();
+                            ii.OutputStructFieldsValue(sb, indent + 1, this, "__old_var", srcPos);
+                            sb.Append(GetIndentString(indent));
+                            preCodeBlock = sb.ToString();
+                            sb.Length = 0;
+                            sb.AppendLine();
+                            ii.OutputWrapStructFields(sb, indent + 1, this);
+                            ii.OutputStructFieldsValue(sb, indent + 1, this, "__new_var", srcPos);
+                            ii.OutputRecycleAndKeepStructFields(sb, indent + 1, this, "__old_var", "__new_var", srcPos);
+                            sb.Append(GetIndentString(indent));
+                            postCodeBlock = sb.ToString();
+                            ci.CurrentCodeBuilder = old;
+                        }
                         bool useOperator = false;
                         if (null != opd && opd.UsesOperatorMethod) {
                             useOperator = true;
@@ -954,14 +975,16 @@ namespace RoslynTool.CsToDsl
                             }
                             OutputConversionInvokePrefix(iop);
                             if (ct > 0) {
-                                CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign({1}", localName, localName);
+                                CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign(precode{{{1}}},postcode{{{2}}})varlist({0}", localName, preCodeBlock, postCodeBlock);
                             }
                         }
                         else {
-                            if (ct > 0)
-                                CodeBuilder.AppendFormat("{0}local({1}); multiassign({2}", GetIndentString(), node.Identifier.Text, node.Identifier.Text);
-                            else
+                            if (ct > 0) {
+                                CodeBuilder.AppendFormat("{0}local({1}); multiassign(precode{{{2}}},postcode{{{3}}})varlist({1}", GetIndentString(), node.Identifier.Text, preCodeBlock, postCodeBlock);
+                            }
+                            else {
                                 CodeBuilder.AppendFormat("{0}local({1}); {2}", GetIndentString(), node.Identifier.Text, node.Identifier.Text);
+                            }
                         }
                         MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
                         if (null != memberAccess) {
@@ -1489,7 +1512,8 @@ namespace RoslynTool.CsToDsl
         }
         private void VisitAssignmentInvocation(ClassInfo ci, string op, string baseOp, AssignmentExpressionSyntax assign, InvocationExpressionSyntax invocation, ISymbol leftSym, IConversionExpression opd, IConversionExpression lopd, IConversionExpression ropd, ICompoundAssignmentExpression compAssignInfo, bool dslToObject)
         {
-            string localName = string.Format("__assigninvoke_{0}", GetSourcePosForVar(invocation));
+            string srcPos = GetSourcePosForVar(invocation);
+            string localName = string.Format("__assigninvoke_{0}", srcPos);
             SymbolInfo symInfo = m_Model.GetSymbolInfoEx(invocation);
             IMethodSymbol sym = symInfo.Symbol as IMethodSymbol;
             if (null == sym || op != "=" && (null == compAssignInfo || null == compAssignInfo.Target || null == compAssignInfo.Value)) {
@@ -1501,6 +1525,27 @@ namespace RoslynTool.CsToDsl
                 ii.Init(sym, invocation.ArgumentList, m_Model);
                 if (sym.IsStatic || sym.IsExtensionMethod) {
                     AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
+                }
+                int ct = ii.ReturnArgs.Count;
+                string preCodeBlock = string.Empty;
+                string postCodeBlock = string.Empty;
+                if (ct > 0) {
+                    int indent = m_Indent + 1;
+                    StringBuilder old = ci.CurrentCodeBuilder;
+                    StringBuilder sb = new StringBuilder();
+                    ci.CurrentCodeBuilder = sb;
+                    sb.AppendLine();
+                    ii.OutputStructFieldsValue(sb, indent + 1, this, "__old_var", srcPos);
+                    sb.Append(GetIndentString(indent));
+                    preCodeBlock = sb.ToString();
+                    sb.Length = 0;
+                    sb.AppendLine();
+                    ii.OutputWrapStructFields(sb, indent + 1, this);
+                    ii.OutputStructFieldsValue(sb, indent + 1, this, "__new_var", srcPos);
+                    ii.OutputRecycleAndKeepStructFields(sb, indent + 1, this, "__old_var", "__new_var", srcPos);
+                    sb.Append(GetIndentString(indent));
+                    postCodeBlock = sb.ToString();
+                    ci.CurrentCodeBuilder = old;
                 }
 
                 ITypeSymbol ltype = null;
@@ -1530,7 +1575,6 @@ namespace RoslynTool.CsToDsl
 
                     bool outputEqualOp = false;
                     bool convertHandled = false;
-                    int ct = ii.ReturnArgs.Count;
                     if (op != "=") {
                         OutputExpressionSyntax(assign.Left);
                         CodeBuilder.Append(" = ");
@@ -1558,7 +1602,7 @@ namespace RoslynTool.CsToDsl
                             OutputConversionInvokePrefix(iop);
                         }
                         if (ct > 0) {
-                            CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign({1}", localName, localName);
+                            CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign(precode{{{1}}},postcode{{{2}}})varlist({0}", localName, preCodeBlock, postCodeBlock);
                             outputEqualOp = true;
                         }
                     }
@@ -1574,13 +1618,13 @@ namespace RoslynTool.CsToDsl
                         convertHandled = true;
                         OutputConversionInvokePrefix(iop);
                         if (ct > 0) {
-                            CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign({1}", localName, localName);
+                            CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign(precode{{{1}}},postcode{{{2}}})varlist({0}", localName, preCodeBlock, postCodeBlock);
                             outputEqualOp = true;
                         }
                     }
                     else {
                         if (ct > 0) {
-                            CodeBuilder.Append("multiassign(");
+                            CodeBuilder.AppendFormat("multiassign(precode{{{0}}},postcode{{{1}}})varlist(", preCodeBlock, postCodeBlock);
                         }
                         OutputExpressionSyntax(assign.Left);
                         outputEqualOp = true;
@@ -1620,7 +1664,6 @@ namespace RoslynTool.CsToDsl
                 else {
                     bool outputEqualOp = false;
                     bool convertHandled = false;
-                    int ct = ii.ReturnArgs.Count;
                     if (op != "=") {
                         OutputExpressionSyntax(assign.Left);
                         CodeBuilder.Append(" = ");
@@ -1648,7 +1691,7 @@ namespace RoslynTool.CsToDsl
                             OutputConversionInvokePrefix(iop);
                         }
                         if (ct > 0) {
-                            CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign({1}", localName, localName);
+                            CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign(precode{{{1}}},postcode{{{2}}})varlist({0}", localName, preCodeBlock, postCodeBlock);
                             outputEqualOp = true;
                         }
                     }
@@ -1664,13 +1707,13 @@ namespace RoslynTool.CsToDsl
                         convertHandled = true;
                         OutputConversionInvokePrefix(iop);
                         if (ct > 0) {
-                            CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign({1}", localName, localName);
+                            CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign(precode{{{1}}},postcode{{{2}}})varlist({0}", localName, preCodeBlock, postCodeBlock);
                             outputEqualOp = true;
                         }
                     }
                     else {
                         if (ct > 0) {
-                            CodeBuilder.Append("multiassign(");
+                            CodeBuilder.AppendFormat("multiassign(precode{{{0}}},postcode{{{1}}})varlist(", preCodeBlock, postCodeBlock);
                         }
                         OutputExpressionSyntax(assign.Left);
                         outputEqualOp = true;
@@ -1785,9 +1828,10 @@ namespace RoslynTool.CsToDsl
         }
         private void VisitInvocation(ClassInfo ci, InvocationExpressionSyntax invocation, string returnVarName, string expTerminater, bool toplevel)
         {
+            string srcPos = GetSourcePosForVar(invocation);
             string localName = string.Empty;
             if (!toplevel || string.IsNullOrEmpty(returnVarName)) {
-                localName = string.Format("__invoke_{0}", GetSourcePosForVar(invocation));
+                localName = string.Format("__invoke_{0}", srcPos);
             }
             SymbolInfo symInfo = m_Model.GetSymbolInfoEx(invocation);
             IMethodSymbol sym = symInfo.Symbol as IMethodSymbol;
@@ -1814,6 +1858,27 @@ namespace RoslynTool.CsToDsl
                 if (sym.IsStatic || sym.IsExtensionMethod) {
                     AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
                 }
+                int ct = ii.ReturnArgs.Count;
+                string preCodeBlock = string.Empty;
+                string postCodeBlock = string.Empty;
+                if (ct > 0) {
+                    int indent = m_Indent + 1;
+                    StringBuilder old = ci.CurrentCodeBuilder;
+                    StringBuilder sb = new StringBuilder();
+                    ci.CurrentCodeBuilder = sb;
+                    sb.AppendLine();
+                    ii.OutputStructFieldsValue(sb, indent + 1, this, "__old_var", srcPos);
+                    sb.Append(GetIndentString(indent));
+                    preCodeBlock = sb.ToString();
+                    sb.Length = 0;
+                    sb.AppendLine();
+                    ii.OutputWrapStructFields(sb, indent + 1, this);
+                    ii.OutputStructFieldsValue(sb, indent + 1, this, "__new_var", srcPos);
+                    ii.OutputRecycleAndKeepStructFields(sb, indent + 1, this, "__old_var", "__new_var", srcPos);
+                    sb.Append(GetIndentString(indent));
+                    postCodeBlock = sb.ToString();
+                    ci.CurrentCodeBuilder = old;
+                }
 
                 MemberAccessExpressionSyntax memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
                 if (null != memberAccess) {
@@ -1821,20 +1886,20 @@ namespace RoslynTool.CsToDsl
                         Log(memberAccess, "Unsupported -> member access !");
                     }
 
-                    if (!sym.ReturnsVoid && ii.ReturnArgs.Count > 0 || ii.ReturnArgs.Count > 1) {
+                    if (!sym.ReturnsVoid && ct > 0 || ct > 1) {
                         if (!toplevel) {
-                            CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign({1}, ", localName, localName);
+                            CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign(precode{{{1}}},postcode{{{2}}})varlist({0}, ", localName, preCodeBlock, postCodeBlock);
                         }
                         else if (!sym.ReturnsVoid) {
                             if (!string.IsNullOrEmpty(returnVarName)) {
-                                CodeBuilder.AppendFormat("multiassign({0}, ", returnVarName);
+                                CodeBuilder.AppendFormat("multiassign(precode{{{1}}},postcode{{{2}}})varlist({0}, ", returnVarName, preCodeBlock, postCodeBlock);
                             }
                             else {
-                                CodeBuilder.AppendFormat("local({0}); multiassign({1}, ", localName, localName);
+                                CodeBuilder.AppendFormat("local({0}); multiassign(precode{{{1}}},postcode{{{2}}})varlist({0}, ", localName, preCodeBlock, postCodeBlock);
                             }
                         }
                         else {
-                            CodeBuilder.Append("multiassign(");
+                            CodeBuilder.AppendFormat("multiassign(precode{{{0}}},postcode{{{1}}})varlist(", preCodeBlock, postCodeBlock);
                         }
                         OutputExpressionList(ii.ReturnArgs, memberAccess);
                         CodeBuilder.Append(") = ");
@@ -1843,12 +1908,12 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(returnVarName);
                         CodeBuilder.Append(" = ");
                     }
-                    else if(ii.ReturnArgs.Count > 0) {
+                    else if(ct > 0) {
                         OutputExpressionList(ii.ReturnArgs, memberAccess);
                         CodeBuilder.Append(" = ");
                     }
                     ii.OutputInvocation(CodeBuilder, this, memberAccess.Expression, true, m_Model, memberAccess);
-                    if (ii.ReturnArgs.Count > 0) {
+                    if (ct > 0) {
                         if (!toplevel) {
                             CodeBuilder.Append("; }");
                         }
@@ -1858,20 +1923,20 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendLine();
                 }
                 else {
-                    if (!sym.ReturnsVoid && ii.ReturnArgs.Count > 0 || ii.ReturnArgs.Count > 1) {
+                    if (!sym.ReturnsVoid && ct > 0 || ct > 1) {
                         if (!toplevel) {
-                            CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign({1}, ", localName, localName);
+                            CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign(precode{{{1}}},postcode{{{2}}})varlist({0}, ", localName, preCodeBlock, postCodeBlock);
                         }
                         else if (!sym.ReturnsVoid) {
                             if (!string.IsNullOrEmpty(returnVarName)) {
-                                CodeBuilder.AppendFormat("multiassign({0}, ", returnVarName);
+                                CodeBuilder.AppendFormat("multiassign(precode{{{1}}},postcode{{{2}}})varlist({0}, ", returnVarName, preCodeBlock, postCodeBlock);
                             }
                             else {
-                                CodeBuilder.AppendFormat("local({0}); multiassign({1}, ", localName, localName);
+                                CodeBuilder.AppendFormat("local({0}); multiassign(precode{{{1}}},postcode{{{2}}})varlist({0}, ", localName, preCodeBlock, postCodeBlock);
                             }
                         }
                         else {
-                            CodeBuilder.Append("multiassign(");
+                            CodeBuilder.AppendFormat("multiassign(precode{{{0}}},postcode{{{1}}})varlist(", preCodeBlock, postCodeBlock);
                         }
                         OutputExpressionList(ii.ReturnArgs, memberAccess);
                         CodeBuilder.Append(") = ");
@@ -1880,12 +1945,12 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(returnVarName);
                         CodeBuilder.Append(" = ");
                     }
-                    else if (ii.ReturnArgs.Count > 0) {
+                    else if (ct > 0) {
                         OutputExpressionList(ii.ReturnArgs, memberAccess);
                         CodeBuilder.Append(" = ");
                     }
                     ii.OutputInvocation(CodeBuilder, this, invocation.Expression, false, m_Model, invocation);
-                    if (ii.ReturnArgs.Count > 0) {
+                    if (ct > 0) {
                         if (!toplevel) {
                             CodeBuilder.Append("; }");
                         }

@@ -21,6 +21,7 @@ TestIntfImpl = {
 	__cctor = function()
 		local __cs2lua_func_info = luainitialize();
 		if TestIntfImpl.__cctor_called then 
+			__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			return;
 		else
 			TestIntfImpl.__cctor_called = true;
@@ -65,6 +66,7 @@ TestIntfImpl = {
 			__ctor = function(this)
 				local __cs2lua_func_info = luainitialize();
 				if this.__ctor_called then 
+					__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 					return;
 				else
 					this.__ctor_called = true;

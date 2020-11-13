@@ -13,7 +13,7 @@ class(TestExtension) {
 		};
 		__cctor = deffunc(0)args(){
 			if(TestExtension.__cctor_called){
-				return;
+				return();
 			}else{
 				TestExtension.__cctor_called = true;
 			};

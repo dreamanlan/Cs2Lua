@@ -499,10 +499,10 @@ namespace RoslynTool.CsToDsl
             string newValVar = string.Format("__new_val_{0}", postfix);
             if (needWrapStruct) {
                 if (null != leftSym && SymbolTable.Instance.IsCs2DslSymbol(leftSym) && SymbolTable.Instance.IsFieldSymbolKind(leftSym)) {
-                    CodeBuilder.Append(GetIndentString());
                     CodeBuilder.AppendFormat("local({0}); {0} = ", oldValVar);
                     OutputExpressionSyntax(node.Left);
                     CodeBuilder.AppendLine(";");
+                    CodeBuilder.Append(GetIndentString());
                 }
             }
             VisitAssignment(ci, op, baseOp, node, string.Empty, false, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType, dslToObject);
@@ -1153,15 +1153,38 @@ namespace RoslynTool.CsToDsl
                 ii.Init(sym, node.ArgumentList, m_Model);
                 AddReferenceAndTryDeriveGenericTypeInstance(ci, sym);
 
+                string srcPos = GetSourcePosForVar(node);
+                int ct = ii.ReturnArgs.Count;
+                string preCodeBlock = string.Empty;
+                string postCodeBlock = string.Empty;
+                if (ct > 0) {
+                    int indent = m_Indent + 1;
+                    StringBuilder old = ci.CurrentCodeBuilder;
+                    StringBuilder sb = new StringBuilder();
+                    ci.CurrentCodeBuilder = sb;
+                    sb.AppendLine();
+                    ii.OutputStructFieldsValue(sb, indent + 1, this, "__old_var", srcPos);
+                    sb.Append(GetIndentString(indent));
+                    preCodeBlock = sb.ToString();
+                    sb.Length = 0;
+                    sb.AppendLine();
+                    ii.OutputWrapStructFields(sb, indent + 1, this);
+                    ii.OutputStructFieldsValue(sb, indent + 1, this, "__new_var", srcPos);
+                    ii.OutputRecycleAndKeepStructFields(sb, indent + 1, this, "__old_var", "__new_var", srcPos);
+                    sb.Append(GetIndentString(indent));
+                    postCodeBlock = sb.ToString();
+                    ci.CurrentCodeBuilder = old;
+                }
+
                 bool isValueType = typeSymInfo.TypeKind == TypeKind.Struct;
                 bool isCollection = IsImplementationOfSys(typeSymInfo, "ICollection");
                 bool isExternal = !SymbolTable.Instance.IsCs2DslSymbol(typeSymInfo);
 
                 string ctor = NameMangling(sym);
-                string localName = string.Format("__newobject_{0}", GetSourcePosForVar(node));
+                string localName = string.Format("__newobject_{0}", srcPos);
                 if (ii.ReturnArgs.Count > 0) {
                     CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ ", localName);
-                    CodeBuilder.AppendFormat("multiassign({0}", localName);
+                    CodeBuilder.AppendFormat("multiassign(precode{{{1}}},postcode{{{2}}})varlist({0}", localName, preCodeBlock, postCodeBlock);
                     CodeBuilder.Append(", ");
                     OutputExpressionList(ii.ReturnArgs, node);
                     CodeBuilder.Append(") = ");

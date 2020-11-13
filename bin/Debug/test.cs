@@ -56,6 +56,9 @@ class ZipInputStream
         Color ca = Color.white;
         Color cb = Color.black;
         r = ca == cb;
+
+        Vector3 va, vb;
+        Test3(out va, out vb);
      }
     private object Test(object o, params object[] args)
     {
@@ -64,6 +67,11 @@ class ZipInputStream
     private List<int> Test2(int v, IEnumerable enumer = new List<int>())
     {
         return null;
+    }
+    private void Test3(out Vector3 v1, out Vector3 v2)
+    {
+        v1 = Vector3.zero;
+        v2 = Vector3.zero;
     }
 }
 
@@ -76,7 +84,12 @@ partial class ZipOutputStream
     }
     public int V { get; set; }
     public void Test()
-    { }
+    {
+        Dictionary<int, int> dict = new Dictionary<int, int>();
+        dict.Add(1, 1);
+        dict.Add(2, 2);
+        dict[1] += dict[2];
+    }
     class EmbedClass
     {
         public void Test()
@@ -88,6 +101,10 @@ partial class ZipOutputStream
 
 partial class ZipOutputStream
 {
+    public ZipOutputStream()
+    {
+    }
+    private int m_I = 1;
     public static ZipOutputStream Instance
     {
         get { return s_Instance; }

@@ -10,20 +10,20 @@ class(ZipOutputStream) {
 			return(__cs2dsl_newobj);
 		};
 		get_Instance = deffunc(1)args(){
-			local(__method_ret_90_4_93_5);
-			__method_ret_90_4_93_5 = getstatic(SymbolKind.Field, ZipOutputStream, "s_Instance");
-			return(__method_ret_90_4_93_5);
+			local(__method_ret_102_4_105_5);
+			__method_ret_102_4_105_5 = getstatic(SymbolKind.Field, ZipOutputStream, "s_Instance");
+			return(__method_ret_102_4_105_5);
 		};
 		cctor = deffunc(0)args(){
 			callstatic(ZipOutputStream, "__cctor");
 		};
 		__cctor = deffunc(0)args(){
 			if(ZipOutputStream.__cctor_called){
-				return;
+				return();
 			}else{
 				ZipOutputStream.__cctor_called = true;
 			};
-			ZipOutputStream.s_Instance = ;
+			setstatic(SymbolKind.Field, ZipOutputStream, "s_Instance", newobject(ZipOutputStream, typeargs(), typekinds(), "ctor", null));
 		};
 	};
 	static_fields {
@@ -38,7 +38,7 @@ class(ZipOutputStream) {
 	static_events {};
 
 	instance_methods {
-		ctor = deffunc(0)args(this, ms){
+		ctor__System_IO_MemoryStream = deffunc(0)args(this, ms){
 			callinstance(this, ZipOutputStream, "__ctor");
 			setinstance(SymbolKind.Field, getstatic(SymbolKind.Property, ZipOutputStream, "Instance"), ZipOutputStream, "V", 1);
 			callinstance(getstatic(SymbolKind.Property, ZipOutputStream, "Instance"), ZipOutputStream, "Test");
@@ -46,16 +46,21 @@ class(ZipOutputStream) {
 		},
 		Test = deffunc(0)args(this){
 		};
+		ctor = deffunc(0)args(this){
+			callinstance(this, ZipOutputStream, "__ctor");
+			return(this);
+		},
 		__ctor = deffunc(0)args(this){
 			if(getinstance(SymbolKind.Field, this, ZipOutputStream, "__ctor_called")){
-				return;
+				return();
 			}else{
 				setinstance(SymbolKind.Field, this, ZipOutputStream, "__ctor_called", true);
 			};
 		};
 	};
 	instance_fields {
-			V = 0;
+		V = 0;
+		m_I = 1;
 		__ctor_called = false;
 	};
 	instance_props {};
@@ -66,13 +71,15 @@ class(ZipOutputStream) {
 	class_info(TypeKind.Class, Accessibility.Internal) {
 	};
 	method_info {
-		ctor(MethodKind.Constructor, Accessibility.Public){
+		ctor__System_IO_MemoryStream(MethodKind.Constructor, Accessibility.Public){
 		};
 		get_V(MethodKind.PropertyGet, Accessibility.Public){
 		};
 		set_V(MethodKind.PropertySet, Accessibility.Public){
 		};
 		Test(MethodKind.Ordinary, Accessibility.Public){
+		};
+		ctor(MethodKind.Constructor, Accessibility.Public){
 		};
 		get_Instance(MethodKind.PropertyGet, Accessibility.Public){
 			static(true);
@@ -91,6 +98,8 @@ class(ZipOutputStream) {
 	};
 	event_info {};
 	field_info {
+		m_I(Accessibility.Private){
+		};
 		s_Instance(Accessibility.Private){
 			static(true);
 		};
@@ -111,7 +120,7 @@ class(ZipOutputStream.EmbedClass) {
 		};
 		__cctor = deffunc(0)args(){
 			if(ZipOutputStream.EmbedClass.__cctor_called){
-				return;
+				return();
 			}else{
 				ZipOutputStream.EmbedClass.__cctor_called = true;
 			};
@@ -132,7 +141,7 @@ class(ZipOutputStream.EmbedClass) {
 		};
 		__ctor = deffunc(0)args(this){
 			if(getinstance(SymbolKind.Field, this, ZipOutputStream.EmbedClass, "__ctor_called")){
-				return;
+				return();
 			}else{
 				setinstance(SymbolKind.Field, this, ZipOutputStream.EmbedClass, "__ctor_called", true);
 			};

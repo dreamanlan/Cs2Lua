@@ -14,7 +14,7 @@ class(TestIntfImpl) {
 		};
 		__cctor = deffunc(0)args(){
 			if(TestIntfImpl.__cctor_called){
-				return;
+				return();
 			}else{
 				TestIntfImpl.__cctor_called = true;
 			};
@@ -39,14 +39,14 @@ class(TestIntfImpl) {
 		};
 		__ctor = deffunc(0)args(this){
 			if(getinstance(SymbolKind.Field, this, TestIntfImpl, "__ctor_called")){
-				return;
+				return();
 			}else{
 				setinstance(SymbolKind.Field, this, TestIntfImpl, "__ctor_called", true);
 			};
 		};
 	};
 	instance_fields {
-			prop = 0;
+		prop = 0;
 		__ctor_called = false;
 	};
 	instance_props {

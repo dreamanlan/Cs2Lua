@@ -18,6 +18,7 @@ TestExtension = {
 	__cctor = function()
 		local __cs2lua_func_info = luainitialize();
 		if TestExtension.__cctor_called then 
+			__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			return;
 		else
 			TestExtension.__cctor_called = true;

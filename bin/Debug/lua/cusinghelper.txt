@@ -14,15 +14,15 @@ CUsingHelper = {
 
 	Test = function(i)
 		local __cs2lua_func_info = luainitialize();
-		local __method_ret_105_4_108_5;
-		__method_ret_105_4_108_5 = nil;
+		local __method_ret_117_4_120_5;
+		__method_ret_117_4_120_5 = nil;
 		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
-		return __method_ret_105_4_108_5;
+		return __method_ret_117_4_120_5;
 	end,
 
 	ReadZip = function(bytes)
 		local __cs2lua_func_info = luainitialize();
-		local __method_ret_110_4_167_5;
+		local __method_ret_122_4_179_5;
 		local abc;
 		abc = newarraydim2(System.Int32, TypeKind.Struct, 0, 12, 13);
 		local v;
@@ -35,14 +35,14 @@ CUsingHelper = {
 
 		else
 			--
-			local __invoke_119_16_119_42;
-			__invoke_119_16_119_42,v = dict:TryGetValue(1, __cs2lua_out);
-			if (__invoke_119_16_119_42 and (v == 0)) then
+			local __invoke_131_16_131_42;
+			__invoke_131_16_131_42,v = dict:TryGetValue(1, __cs2lua_out);
+			if (__invoke_131_16_131_42 and (v == 0)) then
 
 			else
 				--
-				local __unary_121_21_121_24 = v; v = (v + 1);
-				if (__unary_121_21_121_24 > 0) then
+				local __unary_133_21_133_24 = v; v = (v + 1);
+				if (__unary_133_21_133_24 > 0) then
 
 				else
 					--
@@ -104,6 +104,7 @@ CUsingHelper = {
 	__cctor = function()
 		local __cs2lua_func_info = luainitialize();
 		if CUsingHelper.__cctor_called then 
+			__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			return;
 		else
 			CUsingHelper.__cctor_called = true;
@@ -141,6 +142,7 @@ CUsingHelper = {
 			__ctor = function(this)
 				local __cs2lua_func_info = luainitialize();
 				if this.__ctor_called then 
+					__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 					return;
 				else
 					this.__ctor_called = true;

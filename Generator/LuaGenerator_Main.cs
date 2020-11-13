@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Threading.Tasks;
+using Dsl;
 
 namespace Generator
 {
@@ -13,16 +14,18 @@ namespace Generator
     {
         private static void GenerateLua(Dsl.DslFile dslFile, string outputFile, string fileName)
         {
+            var calculator = InitCalculator();
+
             var myselfNewRequire = GetMergedFile(fileName);
             FileMergeInfo mergedInfo = null;
             if (!string.IsNullOrEmpty(myselfNewRequire)) {
                 s_FileMergeInfos.TryGetValue(myselfNewRequire, out mergedInfo);
             }
 
+            StringBuilder sb = new StringBuilder();
             string entryClass = string.Empty;
             HashSet<string> requires = new HashSet<string>();
             List<string> requireList = new List<string>();
-            StringBuilder sb = new StringBuilder();
             Stack<string> classDefineStack = new Stack<string>();
             string prestr = string.Empty;
             int indent = 0;
@@ -277,7 +280,7 @@ namespace Generator
                                             ++indent;
                                         }
                                         sb.AppendFormatLine("{0}local __cs2lua_func_info = luainitialize();", GetIndentString(indent));
-                                        GenerateStatements(second, sb, indent);
+                                        GenerateStatements(second, sb, indent, calculator);
                                         bool lastIsNotReturn = true;
                                         int snum = second.GetParamNum();
                                         for (; snum > 0; --snum) {
@@ -315,7 +318,7 @@ namespace Generator
                                 var comp = mdef.GetParam(1);
                                 if (comp.GetId() != "null") {
                                     sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
-                                    GenerateFieldValueComponent(comp, sb, indent, false);
+                                    GenerateFieldValueComponent(comp, sb, indent, false, calculator);
                                     sb.AppendLine(",");
                                 }
                             }
@@ -408,7 +411,7 @@ namespace Generator
                                             ++indent;
                                         }
                                         sb.AppendFormatLine("{0}local __cs2lua_func_info = luainitialize();", GetIndentString(indent));
-                                        GenerateStatements(second, sb, indent);
+                                        GenerateStatements(second, sb, indent, calculator);
                                         bool lastIsNotReturn = true;
                                         int snum = second.GetParamNum();
                                         for (; snum > 0; --snum) {
@@ -454,7 +457,7 @@ namespace Generator
                                 var comp = mdef.GetParam(1);
                                 if (comp.GetId() != "null") {
                                     sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
-                                    GenerateFieldValueComponent(comp, sb, indent, false);
+                                    GenerateFieldValueComponent(comp, sb, indent, false, calculator);
                                     sb.AppendLine(",");
                                 }
                             }
@@ -773,6 +776,33 @@ namespace Generator
                 File.WriteAllText(outputFile, newSb.ToString());
             }
         }
+        private static DslExpression.DslCalculator InitCalculator()
+        {
+            var scpfile = Path.Combine(s_ExePath, "generator.dsl");
+            DslExpression.DslCalculator calculator = new DslExpression.DslCalculator();
+            calculator.OnLog = (string s) => {
+                Console.WriteLine(s);
+                Log(scpfile, s);
+            };
+            calculator.Init();
+            calculator.Register("getargument", new DslExpression.ExpressionFactoryHelper<DslExpression.GetArgmentExp>());
+            calculator.Register("writeindent", new DslExpression.ExpressionFactoryHelper<DslExpression.WriteIndentExp>());
+            calculator.Register("writesymbol", new DslExpression.ExpressionFactoryHelper<DslExpression.WriteSymbolExp>());
+            calculator.Register("writestring", new DslExpression.ExpressionFactoryHelper<DslExpression.WriteStringExp>());
+            calculator.Register("writearguments", new DslExpression.ExpressionFactoryHelper<DslExpression.WriteArgumentsExp>());
+            calculator.Register("usefunc", new DslExpression.ExpressionFactoryHelper<DslExpression.UseFunctionExp>());
+            calculator.LoadDsl(scpfile);
+            return calculator;
+        }
+        private static bool CallDslHook(DslExpression.DslCalculator calculator, string id, Dsl.FunctionData data, StringBuilder sb, int indent)
+        {
+            bool ret = false;
+            var r = calculator.Calc(id, DslExpression.CalculatorValue.FromObject(data), DslExpression.CalculatorValue.FromObject(sb), indent);
+            if (!r.IsNullObject) {
+                ret = r;
+            }
+            return ret;
+        }
         private static bool GenerateFunctionParams(Dsl.FunctionData fcall, StringBuilder sb)
         {
             bool haveParams = false;
@@ -808,7 +838,7 @@ namespace Generator
                 sb.AppendFormat("{0}{1}", prefix, i + 1);
             }
         }
-        private static void GenerateFieldValueComponent(Dsl.ISyntaxComponent comp, StringBuilder sb, int indent, bool firstLineUseIndent)
+        private static void GenerateFieldValueComponent(Dsl.ISyntaxComponent comp, StringBuilder sb, int indent, bool firstLineUseIndent, DslExpression.DslCalculator calculator)
         {
             s_CurSyntax = comp;
             var valData = comp as Dsl.ValueData;
@@ -818,12 +848,12 @@ namespace Generator
             else {
                 var funcData = comp as Dsl.FunctionData;
                 if (null != funcData) {
-                    GenerateConcreteSyntax(funcData, sb, indent, firstLineUseIndent);
+                    GenerateConcreteSyntax(funcData, sb, indent, firstLineUseIndent, calculator);
                 }
                 else {
                     var statementData = comp as Dsl.StatementData;
                     if (null != statementData) {
-                        GenerateConcreteSyntax(statementData, sb, indent, firstLineUseIndent);
+                        GenerateConcreteSyntax(statementData, sb, indent, firstLineUseIndent, calculator);
                     }
                     else {
                         System.Diagnostics.Debugger.Break();
@@ -832,7 +862,7 @@ namespace Generator
                 }
             }
         }
-        private static void GenerateStatement(Dsl.ISyntaxComponent comp, StringBuilder sb, int indent)
+        private static void GenerateStatement(Dsl.ISyntaxComponent comp, StringBuilder sb, int indent, DslExpression.DslCalculator calculator)
         {
             var func = comp as Dsl.FunctionData;
             if (null != func && !func.HaveStatement()) {
@@ -840,21 +870,21 @@ namespace Generator
                 bool prefix;
                 if (CanSplitPrefixPostfixOperator(comp, out oper, out prefix)) {
                     sb.AppendFormat("{0}", GetIndentString(indent));
-                    GeneratePrefixPostfixOperator(oper, sb, true);
+                    GeneratePrefixPostfixOperator(oper, sb, true, calculator);
                     sb.AppendLine(";");
                     var p = oper.GetParam(0) as Dsl.ValueData;
                     p.SetId("false");
-                    GenerateSyntaxComponent(comp, sb, indent, true);
+                    GenerateSyntaxComponent(comp, sb, indent, true, calculator);
                 }
                 else {
-                    GenerateSyntaxComponent(comp, sb, indent, true);
+                    GenerateSyntaxComponent(comp, sb, indent, true, calculator);
                 }
             }
             else {
-                GenerateSyntaxComponent(comp, sb, indent, true);
+                GenerateSyntaxComponent(comp, sb, indent, true, calculator);
             }
         }
-        private static void GenerateSyntaxComponent(Dsl.ISyntaxComponent comp, StringBuilder sb, int indent, bool firstLineUseIndent)
+        private static void GenerateSyntaxComponent(Dsl.ISyntaxComponent comp, StringBuilder sb, int indent, bool firstLineUseIndent, DslExpression.DslCalculator calculator)
         {
             s_CurSyntax = comp;
             var valData = comp as Dsl.ValueData;
@@ -864,11 +894,11 @@ namespace Generator
             else {
                 var funcData = comp as Dsl.FunctionData;
                 if (null != funcData) {
-                    GenerateConcreteSyntax(funcData, sb, indent, firstLineUseIndent);
+                    GenerateConcreteSyntax(funcData, sb, indent, firstLineUseIndent, calculator);
                 }
                 else {
                     var statementData = comp as Dsl.StatementData;
-                    GenerateConcreteSyntax(statementData, sb, indent, firstLineUseIndent);
+                    GenerateConcreteSyntax(statementData, sb, indent, firstLineUseIndent, calculator);
                 }
             }
         }
@@ -895,16 +925,13 @@ namespace Generator
                     break;
             }
         }
-        private static void GenerateConcreteSyntaxForCall(Dsl.FunctionData data, StringBuilder sb, int indent, bool firstLineUseIndent)
+        private static void GenerateConcreteSyntaxForCall(Dsl.FunctionData data, StringBuilder sb, int indent, bool firstLineUseIndent, DslExpression.DslCalculator calculator)
         {
             //这个方法生成函数名与参数表部分，需要注意的是data可能是函数名+函数体，在这个方法里不应生成函数体部分
             s_CurSyntax = data;
-            if (firstLineUseIndent) {
-                sb.AppendFormat("{0}", GetIndentString(indent));
-            }
             string id = string.Empty;
             if (data.IsHighOrder) {
-                GenerateConcreteSyntaxForCall(data.LowerOrderFunction, sb, indent, false);
+                GenerateConcreteSyntaxForCall(data.LowerOrderFunction, sb, indent, firstLineUseIndent, calculator);
             } else {
                 id = data.GetId();
             }
@@ -912,42 +939,77 @@ namespace Generator
                 id = ConvertOperator(id);
                 int paramNum = data.GetParamNum();
                 if (paramNum == 1) {
+                    if (firstLineUseIndent) {
+                        sb.AppendFormat("{0}", GetIndentString(indent));
+                    }
                     var param1 = data.GetParam(0);
                     sb.AppendFormat("({0} ", id);
-                    GenerateSyntaxComponent(param1, sb, indent, false);
+                    GenerateSyntaxComponent(param1, sb, indent, false, calculator);
                     sb.Append(")");
                 }
                 else if (paramNum == 2) {
-                    ++indent;
                     var param1 = data.GetParam(0);
                     var param2 = data.GetParam(1);
                     bool handled = false;
                     var fd = param1 as Dsl.FunctionData;
+                    var sd = param1 as Dsl.StatementData;
                     string leftParamId = string.Empty;
                     if (null != fd && !fd.IsHighOrder && fd.HaveParam()) {
                         leftParamId = fd.GetId();
                     }
+                    else if (null != sd) {
+                        leftParamId = sd.GetId();
+                    }
                     if (id == "=" && leftParamId == "multiassign") {
                         var cd = param1 as Dsl.FunctionData;
+                        var _sd = param1 as Dsl.StatementData;
+                        Dsl.FunctionData preCodeBlock = null;
+                        Dsl.FunctionData postCodeBlock = null;
+                        if (null != _sd) {
+                            //带有前置与后置代码块的情形（代码块内容可能为空）
+                            var codeBlocks = _sd.First;
+                            preCodeBlock = codeBlocks.GetParam(0) as Dsl.FunctionData;
+                            postCodeBlock = codeBlocks.GetParam(1) as Dsl.FunctionData;
+                            cd = _sd.Second;
+                        }
+                        if (null != preCodeBlock) {
+                            GenerateStatements(preCodeBlock, sb, indent, calculator);
+                        }
                         if (null != cd) {
+                            if (firstLineUseIndent) {
+                                sb.AppendFormat("{0}", GetIndentString(indent));
+                            }
                             if (cd.GetParamNum() > 1) {
                                 int varNum = cd.GetParamNum();
                                 for (int i = 0; i < varNum; ++i) {
                                     var parami = cd.GetParam(i);
-                                    GenerateSyntaxComponent(parami, sb, indent, false);
+                                    GenerateSyntaxComponent(parami, sb, indent, false, calculator);
                                     if (i < varNum - 1) {
                                         sb.Append(",");
                                     }
                                 }
                                 sb.AppendFormat(" {0} ", id);
-                                GenerateSyntaxComponent(param2, sb, indent, false);
+                                GenerateSyntaxComponent(param2, sb, indent, false, calculator);
                             }
                             else {
-                                GenerateSyntaxComponent(cd.GetParam(0), sb, indent, false);
+                                GenerateSyntaxComponent(cd.GetParam(0), sb, indent, false, calculator);
                                 sb.AppendFormat(" {0} ", id);
-                                GenerateSyntaxComponent(param2, sb, indent, false);
+                                GenerateSyntaxComponent(param2, sb, indent, false, calculator);
                             }
                             handled = true;
+                        }
+                        if (null != postCodeBlock) {
+                            if (postCodeBlock.GetParamNum() > 0) {
+                                sb.AppendLine(";");
+                            }
+                            bool first = true;
+                            foreach (var comp in postCodeBlock.Params) {
+                                if (first)
+                                    first = false;
+                                else
+                                    sb.AppendLine(";");
+                                GenerateStatement(comp, sb, indent, calculator);
+                            }
                         }
                     }
                     else if (id == "=" && (leftParamId == "getstatic"
@@ -958,7 +1020,7 @@ namespace Generator
                         if (null != cd.Name) {
                             cd.Name.SetId("s" + leftParamId.Substring(1));
                             cd.AddParam(param2);
-                            GenerateConcreteSyntax(cd, sb, indent, false);
+                            GenerateConcreteSyntax(cd, sb, indent, firstLineUseIndent, calculator);
                             handled = true;
                         }
                     }
@@ -975,7 +1037,7 @@ namespace Generator
 
                                 cd.Name.SetId("s" + leftParamId.Substring(1));
                                 cd.AddParam(param2);
-                                GenerateConcreteSyntax(cd, sb, indent, false);
+                                GenerateConcreteSyntax(cd, sb, indent, firstLineUseIndent, calculator);
                                 handled = true;
                             }
                         }
@@ -993,7 +1055,7 @@ namespace Generator
 
                                 cd.Name.SetId("s" + leftParamId.Substring(1));
                                 cd.AddParam(param2);
-                                GenerateConcreteSyntax(cd, sb, indent, false);
+                                GenerateConcreteSyntax(cd, sb, indent, firstLineUseIndent, calculator);
                                 handled = true;
                             }
                         }
@@ -1011,7 +1073,7 @@ namespace Generator
 
                                 cd.Name.SetId("s" + leftParamId.Substring(1));
                                 cd.AddParam(param2);
-                                GenerateConcreteSyntax(cd, sb, indent, false);
+                                GenerateConcreteSyntax(cd, sb, indent, firstLineUseIndent, calculator);
                                 handled = true;
                             }
                         }
@@ -1029,7 +1091,7 @@ namespace Generator
 
                                 cd.Name.SetId("s" + leftParamId.Substring(1));
                                 cd.AddParam(param2);
-                                GenerateConcreteSyntax(cd, sb, indent, false);
+                                GenerateConcreteSyntax(cd, sb, indent, firstLineUseIndent, calculator);
                                 handled = true;
                             }
                         }
@@ -1039,7 +1101,7 @@ namespace Generator
                         if (null != cd.Name) {
                             cd.Name.SetId("setexternstatic");
                             cd.AddParam(param2);
-                            GenerateConcreteSyntax(cd, sb, indent, false);
+                            GenerateConcreteSyntax(cd, sb, indent, firstLineUseIndent, calculator);
                             handled = true;
                         }
                     }
@@ -1048,1187 +1110,1198 @@ namespace Generator
                         if (null != cd.Name) {
                             cd.Name.SetId("setexterninstance");
                             cd.AddParam(param2);
-                            GenerateConcreteSyntax(cd, sb, indent, false);
+                            GenerateConcreteSyntax(cd, sb, indent, firstLineUseIndent, calculator);
                             handled = true;
                         }
                     }
                     if (!handled) {
+                        if (firstLineUseIndent) {
+                            sb.AppendFormat("{0}", GetIndentString(indent));
+                        }
                         if (id != "=")
                             sb.Append("(");
-                        GenerateSyntaxComponent(param1, sb, indent, false);
+                        GenerateSyntaxComponent(param1, sb, indent, false, calculator);
                         sb.AppendFormat(" {0} ", id);
-                        GenerateSyntaxComponent(param2, sb, indent, false);
+                        GenerateSyntaxComponent(param2, sb, indent, false, calculator);
                         if (id != "=")
                             sb.Append(")");
                     }
                 }
             }
-            else if (id == "condexp") {
-                var p1 = data.GetParam(0);
-                var p2 = data.GetParamId(1);
-                var p3 = data.GetParam(2);
-                var p3Func = p3 as Dsl.FunctionData;
-                var p4 = data.GetParamId(3);
-                var p5 = data.GetParam(4);
-                var p5Func = p5 as Dsl.FunctionData;
-                if (p2 == "false" && null != p3Func && !ExistEmbedFunctionObject(p3Func)) {
-                    var func = p3Func.GetParam(0) as Dsl.FunctionData;
-                    if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
-                        func = func.GetParam(0) as Dsl.FunctionData;
-                    }
-                    if (null != func && func.GetId() == "funcobjret") {
-                        p2 = "true";
-                        p3 = func.GetParam(0);
-                    }
-                }
-                if (p4 == "false" && null != p5Func && !ExistEmbedFunctionObject(p5Func)) {
-                    var func = p5Func.GetParam(0) as Dsl.FunctionData;
-                    if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
-                        func = func.GetParam(0) as Dsl.FunctionData;
-                    }
-                    if (null != func && func.GetId() == "funcobjret") {
-                        p4 = "true";
-                        p5 = func.GetParam(0);
-                    }
-                }
-                if (p2 == "true" && p4 == "true") {
-                    sb.Append("((");
-                    GenerateSyntaxComponent(p1, sb, indent, false);
-                    sb.Append(") and (");
-                    GenerateSyntaxComponent(p3, sb, indent, false);
-                    sb.Append(") or (");
-                    GenerateSyntaxComponent(p5, sb, indent, false);
-                    sb.Append("))");
-                }
-                else {
-                    sb.Append("condexp(");
-                    GenerateSyntaxComponent(p1, sb, indent, false);
-                    sb.Append(", ");
-                    sb.Append(p2);
-                    sb.Append(", ");
-                    GenerateSyntaxComponent(p3, sb, indent, false);
-                    sb.Append(", ");
-                    sb.Append(p4);
-                    sb.Append(", ");
-                    GenerateSyntaxComponent(p5, sb, indent, false);
-                    sb.Append(")");
-                }
-            }
-            else if (id == "condaccess") {
-                var p1 = data.GetParam(0);
-                var p2 = data.GetParam(1);
-                var p2Func = p2 as Dsl.FunctionData;
-                var isSimple = false;
-                if (null != p2Func && !ExistEmbedFunctionObject(p2Func)) {
-                    var func = p2Func.GetParam(0) as Dsl.FunctionData;
-                    if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
-                        func = func.GetParam(0) as Dsl.FunctionData;
-                    }
-                    if (null != func && func.GetId() == "funcobjret") {
-                        isSimple = true;
-                        p2 = func.GetParam(0);
-                    }
-                }
-                if (isSimple) {
-                    sb.Append("((");
-                    GenerateSyntaxComponent(p1, sb, indent, false);
-                    sb.Append(") and (");
-                    GenerateSyntaxComponent(p2, sb, indent, false);
-                    sb.Append(") or nil)");
-                }
-                else {
-                    sb.Append("condaccess(");
-                    GenerateSyntaxComponent(p1, sb, indent, false);
-                    sb.Append(", ");
-                    sb.Append(p2);
-                    sb.Append(")");
-                }
-            }
-            else if(id== "nullcoalescing") {
-                var p1 = data.GetParam(0);
-                var p2 = data.GetParamId(1);
-                var p3 = data.GetParam(2);
-                var p3Func = p3 as Dsl.FunctionData;
-                if (p2 == "false" && null != p3Func && !ExistEmbedFunctionObject(p3Func)) {
-                    var func = p3Func.GetParam(0) as Dsl.FunctionData;
-                    if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
-                        func = func.GetParam(0) as Dsl.FunctionData;
-                    }
-                    if (null != func && func.GetId() == "funcobjret") {
-                        p2 = "true";
-                        p3 = func.GetParam(0);
-                    }
-                }
-                if (p2 == "true") {
-                    sb.Append("((");
-                    GenerateSyntaxComponent(p1, sb, indent, false);
-                    sb.Append(") or (");
-                    GenerateSyntaxComponent(p3, sb, indent, false);
-                    sb.Append("))");
-                }
-                else {
-                    sb.Append("nullcoalescing(");
-                    GenerateSyntaxComponent(p1, sb, indent, false);
-                    sb.Append(", ");
-                    GenerateSyntaxComponent(p3, sb, indent, false);
-                    sb.Append(")");
-                }
-            }
-            else if (id == "comment") {
-                sb.AppendFormat("--{0}", data.GetParamId(0));
-            }
-            else if (id == "local") {
-                sb.Append("local ");
-                GenerateArguments(data, sb, indent, 0);
-            }
-            else if (id == "return") {
-                sb.AppendLine("__cs2lua_func_info = luafinalize(__cs2lua_func_info);");
-                sb.AppendFormat("{0}return", GetIndentString(indent));
-                if (data.GetParamNum() > 0)
-                    sb.Append(" ");
-                GenerateArguments(data, sb, indent, 0);
-            }
-            else if (id == "funcobjret") {
-                sb.AppendFormat("{0}return", GetIndentString(indent));
-                if (data.GetParamNum() > 0)
-                    sb.Append(" ");
-                GenerateArguments(data, sb, indent, 0);
-            }
-            else if (id == "newobject" || id == "newstruct" || id == "newexternobject" || id == "newexternstruct" ||
-                id == "wrapoutstruct" || id == "wrapoutexternstruct" || id == "wrapstruct" || id == "wrapexternstruct" ||
-                id == "getexternstaticstructmember" || id == "getexterninstancestructmember" ||
-                id == "callexterndelegationreturnstruct" || id == "callexternextensionreturnstruct" || 
-                id == "callexternstaticreturnstruct" || id == "callexterninstancereturnstruct" ||
-                id == "invokeexternoperatorreturnstruct" || 
-                id == "recycleandkeepstructvalue") {
-                sb.Append(id);
-                sb.Append("(__cs2lua_func_info");
-                if (data.GetParamNum() > 0)
-                    sb.Append(", ");
-                GenerateArguments(data, sb, indent, 0);
-                sb.Append(")");
-            }
-            else if (id == "prefixoperator" || id == "postfixoperator") {
-                GeneratePrefixPostfixOperator(data, sb, false);
-            }
-            else if (id == "execunary") {
-                string op = data.GetParamId(0);
-                var p1 = data.GetParam(1);
-                string type1 = CalcTypeString(data.GetParam(2));
-                string typeKind1 = CalcTypeString(data.GetParam(3));
-                string intOp = op;
-                if (op == "++")
-                    intOp = "+";
-                else if (op == "--")
-                    intOp = "-";
-                int intOpIndex;
-                if (IsIntegerType(type1, typeKind1) && TryGetSpecialIntegerOperatorIndex(intOp, out intOpIndex)) {
-                    if (op == "++" || op == "--") {
-                        if (s_IntegerTypes.Contains(type1)) {
-                            sb.Append("(");
-                            GenerateSyntaxComponent(p1, sb, indent, false);
-                            sb.AppendFormat(" {0} 1)", intOp);
-                        }
-                        else {
-                            sb.AppendFormat("invokeintegeroperator({0}, \"{1}\", ", intOpIndex, intOp);
-                            GenerateSyntaxComponent(p1, sb, indent, false);
-                            sb.AppendFormat(", 1, {0}, {1})", type1, type1);
-                        }
-                    }
-                    if (s_IntegerTypes.Contains(type1) && (op == "+" || op == "-")) {
-                        sb.AppendFormat("( {0} ", intOp);
-                        GenerateSyntaxComponent(p1, sb, indent, false);
-                        sb.Append(")");
-                    }
-                    else {
-                        sb.AppendFormat("invokeintegeroperator({0}, \"{1}\", nil, ", intOpIndex, intOp);
-                        GenerateSyntaxComponent(p1, sb, indent, false);
-                        sb.AppendFormat(", nil, {0})", type1, type1);
-                    }
-                }
-                else {
-                    string functor;
-                    if (s_UnaryFunctor.TryGetValue(op, out functor)) {
-                        sb.AppendFormat("{0}(", functor);
-                        GenerateSyntaxComponent(data.GetParam(1), sb, indent, false);
-                        sb.Append(")");
-                    }
-                    else {
-                        op = ConvertOperator(op);
-                        sb.AppendFormat("({0} ", op);
-                        GenerateSyntaxComponent(data.GetParam(1), sb, indent, false);
-                        sb.Append(")");
-                    }
-                }
-            }
-            else if (id == "execbinary") {
-                string op = data.GetParamId(0);
-                var p1 = data.GetParam(1);
-                var p2 = data.GetParam(2);
-                string type1 = CalcTypeString(data.GetParam(3));
-                string type2 = CalcTypeString(data.GetParam(4));
-                string typeKind1 = CalcTypeString(data.GetParam(5));
-                string typeKind2 = CalcTypeString(data.GetParam(6));
-                int intOpIndex;
-                if (IsIntegerType(type1, typeKind1) && IsIntegerType(type2, typeKind2) && TryGetSpecialIntegerOperatorIndex(op, out intOpIndex)) {
-                    if (s_IntegerTypes.Contains(type1) && s_IntegerTypes.Contains(type2) && (op == "+" || op == "-" || op == "%")) {
-                        sb.Append("(");
-                        GenerateSyntaxComponent(p1, sb, indent, false);
-                        sb.AppendFormat(" {0} ", op);
-                        GenerateSyntaxComponent(p2, sb, indent, false);
-                        sb.Append(")");
-                    }
-                    else {
-                        sb.AppendFormat("invokeintegeroperator({0}, \"{1}\", ", intOpIndex, op);
-                        GenerateSyntaxComponent(p1, sb, indent, false);
-                        sb.Append(", ");
-                        GenerateSyntaxComponent(p2, sb, indent, false);
-                        sb.AppendFormat(", {0}, {1})", type1, type2);
-                    }
-                }
-                else if (op == "+" && (type1 == "System.String" || type2 == "System.String")) {
-                    bool tostr1 = type1 != "System.String";
-                    bool tostr2 = type2 != "System.String";
-                    sb.Append("System.String.Concat(\"System.String:Concat__String__String__String\", ");
-                    if (tostr1)
-                        sb.Append("tostring(");
-                    GenerateSyntaxComponent(p1, sb, indent, false);
-                    if (tostr1)
-                        sb.Append(")");
-                    sb.Append(", ");
-                    if (tostr2)
-                        sb.Append("tostring(");
-                    GenerateSyntaxComponent(p2, sb, indent, false);
-                    if (tostr2)
-                        sb.Append(")");
-                    sb.Append(")");
-                }
-                else if ((op == "==" || op == "!=") && type1 == "System.String" && type2 == "System.String") {
-                    if (op == "==") {
-                        sb.Append("stringisequal(");
-                        GenerateSyntaxComponent(p1, sb, indent, false);
-                        sb.Append(", ");
-                        GenerateSyntaxComponent(p2, sb, indent, false);
-                        sb.Append(")");
-                    }
-                    else {
-                        sb.Append("(not stringisequal(");
-                        GenerateSyntaxComponent(p1, sb, indent, false);
-                        sb.Append(", ");
-                        GenerateSyntaxComponent(p2, sb, indent, false);
-                        sb.Append("))");
-                    }
-                }
-                else if ((op == "==" || op == "!=") && !IsBasicType(type1, typeKind1, true) && !IsBasicType(type2, typeKind2, true)) {
-                    if (op == "==") {
-                        sb.Append("isequal(");
-                        GenerateSyntaxComponent(p1, sb, indent, false);
-                        sb.Append(", ");
-                        GenerateSyntaxComponent(p2, sb, indent, false);
-                        sb.Append(")");
-                    }
-                    else {
-                        sb.Append("(not isequal(");
-                        GenerateSyntaxComponent(p1, sb, indent, false);
-                        sb.Append(", ");
-                        GenerateSyntaxComponent(p2, sb, indent, false);
-                        sb.Append("))");
-                    }
-                }
-                else {
-                    string functor;
-                    if (s_BinaryFunctor.TryGetValue(op, out functor)) {
-                        sb.AppendFormat("{0}(", functor);
-                        GenerateSyntaxComponent(p1, sb, indent, false);
-                        sb.Append(", ");
-                        GenerateSyntaxComponent(p2, sb, indent, false);
-                        sb.Append(")");
-                    }
-                    else {
-                        op = ConvertOperator(op);
-                        sb.Append("(");
-                        GenerateSyntaxComponent(p1, sb, indent, false);
-                        sb.AppendFormat(" {0} ", op);
-                        GenerateSyntaxComponent(p2, sb, indent, false);
-                        sb.Append(")");
-                    }
-                }
-            }
-            else if (id == "getstatic") {
-                var kind = CalcTypeString(data.GetParam(0));
-                var obj = data.Params[1];
-                var member = data.Params[2];
-                GenerateSyntaxComponent(obj, sb, indent, false);
-                if (kind == "SymbolKind.Property") {
-                    sb.AppendFormat(".get_{0}()", member.GetId());
-                }
-                else {
-                    sb.AppendFormat(".{0}", member.GetId());
-                }
-            }
-            else if (id == "getinstance") {
-                var kind = CalcTypeString(data.GetParam(0));
-                var obj = data.Params[1];
-                var className = CalcTypeString(data.GetParam(2));
-                var member = data.Params[3];
-                GenerateSyntaxComponent(obj, sb, indent, false);
-                if (kind == "SymbolKind.Property") {
-                    sb.AppendFormat(":get_{0}()", member.GetId());
-                }
-                else {
-                    sb.AppendFormat(".{0}", member.GetId());
-                }
-            }
-            else if (id == "setstatic") {
-                var kind = CalcTypeString(data.GetParam(0));
-                var obj = data.Params[1];
-                var member = data.Params[2];
-                var val = data.Params[3];
-                GenerateSyntaxComponent(obj, sb, indent, false);
-                if (kind == "SymbolKind.Property") {
-                    sb.AppendFormat(".set_{0}(", member.GetId());
-                    GenerateSyntaxComponent(val, sb, indent, false);
-                    sb.Append(")");
-                }
-                else {
-                    sb.AppendFormat(".{0}", member.GetId());
-                    sb.Append(" = ");
-                    GenerateSyntaxComponent(val, sb, indent, false);
-                }
-            }
-            else if (id == "setinstance") {
-                var kind = CalcTypeString(data.GetParam(0));
-                var obj = data.Params[1];
-                var className = CalcTypeString(data.GetParam(2));
-                var member = data.Params[3];
-                var val = data.Params[4];
-                GenerateSyntaxComponent(obj, sb, indent, false);
-                if (kind == "SymbolKind.Property") {
-                    sb.AppendFormat(":set_{0}(", member.GetId());
-                    GenerateSyntaxComponent(val, sb, indent, false);
-                    sb.Append(")");
-                }
-                else {
-                    sb.AppendFormat(".{0}", member.GetId());
-                    sb.Append(" = ");
-                    GenerateSyntaxComponent(val, sb, indent, false);
-                }
-            }
-            else if (id == "getexternstatic") {
-                var kind = CalcTypeString(data.GetParam(0));
-                var obj = data.Params[1];
-                var member = data.Params[2];
-                GenerateSyntaxComponent(obj, sb, indent, false);
-                sb.AppendFormat(".{0}", member.GetId());
-            }
-            else if (id == "getexterninstance") {
-                var kind = CalcTypeString(data.GetParam(0));
-                var obj = data.Params[1];
-                var className = CalcTypeString(data.GetParam(2));
-                var member = data.Params[3];
-                GenerateSyntaxComponent(obj, sb, indent, false);
-                sb.AppendFormat(".{0}", member.GetId());
-            }
-            else if (id == "setexternstatic") {
-                var kind = CalcTypeString(data.GetParam(0));
-                var obj = data.Params[1];
-                var member = data.Params[2];
-                var val = data.Params[3];
-                GenerateSyntaxComponent(obj, sb, indent, false);
-                sb.AppendFormat(".{0}", member.GetId());
-                sb.Append(" = ");
-                GenerateSyntaxComponent(val, sb, indent, false);
-            }
-            else if (id == "setexterninstance") {
-                var kind = CalcTypeString(data.GetParam(0));
-                var obj = data.Params[1];
-                var className = CalcTypeString(data.GetParam(2));
-                var member = data.Params[3];
-                var val = data.Params[4];
-                GenerateSyntaxComponent(obj, sb, indent, false);
-                sb.AppendFormat(".{0}", member.GetId());
-                sb.Append(" = ");
-                GenerateSyntaxComponent(val, sb, indent, false);
-            }
-            else if (id == "callstatic" || id == "callexternstatic") {
-                var obj = data.Params[0];
-                var member = data.Params[1];
-                var mid = member.GetId();
-                GenerateSyntaxComponent(obj, sb, indent, false);
-                sb.AppendFormat(".{0}", mid);
-                sb.Append("(");
-                int start = 2;
-                string sig = string.Empty;
-                if (data.Params.Count > start) {
-                    var sigParam = data.GetParam(start) as Dsl.ValueData;
-                    if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
-                        start = 3;
-                        sig = sigParam.GetId();
-                        string target;
-                        if (NoSignatureArg(sig)) {
-                            sig = string.Empty;
-                        }
-                        else if (TryReplaceSignatureArg(sig, out target)) {
-                            sig = target;
-                        }
-                    }
-                    else {
-                        sig = string.Empty;
-                    }
-                }
-                GenerateArguments(data, sb, indent, start, sig);
-                sb.Append(")");
-            }
-            else if (id == "callinstance" || id == "callexterninstance") {
-                var obj = data.Params[0];
-                var className = CalcTypeString(data.GetParam(1));
-                var member = data.Params[2];
-                var mid = member.GetId();
-                var objCd = obj as Dsl.FunctionData;
-                GenerateSyntaxComponent(obj, sb, indent, false);
-                if (null != objCd && objCd.GetId() == "getinstance" && objCd.GetParamNum() == 4 && objCd.GetParamId(3) == "base") {
-                    sb.AppendFormat(":__self__{0}", mid);
-                }
-                else {
-                    sb.AppendFormat(":{0}", mid);
-                }
-                sb.Append("(");
-                int start = 3;
-                string sig = string.Empty;
-                if (data.Params.Count > start) {
-                    var sigParam = data.GetParam(start) as Dsl.ValueData;
-                    if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
-                        start = 4;
-                        sig = sigParam.GetId();
-                        string target;
-                        if (NoSignatureArg(sig)) {
-                            sig = string.Empty;
-                        }
-                        else if (TryReplaceSignatureArg(sig, out target)) {
-                            sig = target;
-                        }
-                    }
-                    else {
-                        sig = string.Empty;
-                    }
-                }
-                GenerateArguments(data, sb, indent, start, sig);
-                sb.Append(")");
-            }
-            else if (id == "calldelegation" || id == "callexterndelegation") {
-                var obj = data.Params[0];
-                var className = CalcTypeString(data.GetParam(1));
-                GenerateSyntaxComponent(obj, sb, indent, false);
-                sb.Append("(");
-                int start = 2;
-                GenerateArguments(data, sb, indent, start);
-                sb.Append(")");
-            }
-            else if (id == "callextension") {
-                var obj = data.Params[0];
-                var member = data.Params[1];
-                var mid = member.GetId();
-                GenerateSyntaxComponent(obj, sb, indent, false);
-                sb.AppendFormat(".{0}", mid);
-                sb.Append("(");
-                int start = 2;
-                string sig = string.Empty;
-                if (data.Params.Count > start) {
-                    var sigParam = data.GetParam(start) as Dsl.ValueData;
-                    if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
-                        start = 3;
-                        sig = sigParam.GetId();
-                        string target;
-                        if (NoSignatureArg(sig)) {
-                            sig = string.Empty;
-                        }
-                        else if (TryReplaceSignatureArg(sig, out target)) {
-                            sig = target;
-                        }
-                    }
-                    else {
-                        sig = string.Empty;
-                    }
-                }
-                GenerateArguments(data, sb, indent, start, sig);
-                sb.Append(")");
-            }
-            else if (id == "callexternextension") {
-                sb.Append(id);
-                sb.Append('(');
-                GenerateArguments(data, sb, indent, 0);
-                sb.Append(')');
-            }
-            else if (id == "getstaticindexer") {
-                var _class = data.Params[0];
-                var _member = data.Params[1].GetId();
-                var _pct = data.Params[2].GetId();
-                int ct;
-                int.TryParse(_pct, out ct);
-                if (ct == 1) {
-                    var strClass = CalcTypeString(_class);
-                    var strMember = _member;
-                    int indexerType;
-                    bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, string.Empty, strClass, strMember, out indexerType);
-
-                    var _index = data.Params[3];
-                    GenerateSyntaxComponent(_class, sb, 0, false);
-                    sb.Append('[');
-                    GenerateSyntaxComponent(_index, sb, 0, false);
-                    if (isIndexerByLua && indexerType == (int)IndexerTypeEnum.LikeArray) {
-                        sb.Append(" + 1");
-                    }
-                    sb.Append(']');
-                }
-                else {
-                    int start = 3;
-                    GenerateSyntaxComponent(_class, sb, 0, false);
-                    sb.Append('.');
-                    sb.Append(_member);
-                    sb.Append('(');
-                    GenerateArguments(data, sb, indent, start);
-                    sb.Append(')');
-                }
-            }
-            else if (id == "getinstanceindexer") {
-                var _obj = data.Params[0];
-                var _class = data.Params[1];
-                var _member = data.Params[2].GetId();
-                var _pct = data.Params[3].GetId();
-                int ct;
-                int.TryParse(_pct, out ct);
-                if (ct == 1) {
-                    var strObj = CalcExpressionString(_obj);
-                    var strClass = CalcTypeString(_class);
-                    var strMember = _member;
-                    int indexerType;
-                    bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, strObj, strClass, strMember, out indexerType);
-
-                    var _index = data.Params[4];
-                    GenerateSyntaxComponent(_obj, sb, indent, false);
-                    sb.Append('[');
-                    GenerateSyntaxComponent(_index, sb, 0, false);
-                    if (isIndexerByLua && indexerType == (int)IndexerTypeEnum.LikeArray) {
-                        sb.Append(" + 1");
-                    }
-                    sb.Append(']');
-                }
-                else {
-                    int start = 4;
-                    GenerateSyntaxComponent(_obj, sb, indent, false);
-                    sb.Append(':');
-                    sb.Append(_member);
-                    sb.Append('(');
-                    GenerateSyntaxComponent(_obj, sb, indent, false);
-                    sb.Append(", ");
-                    GenerateArguments(data, sb, indent, start);
-                    sb.Append(')');
-                }
-            }
-            else if (id == "setstaticindexer") {
-                var _class = data.Params[0];
-                var _member = data.Params[1].GetId();
-                var _pct = data.Params[2].GetId();
-                var _toplevel = data.Params[3].GetId();
-                int ct;
-                int.TryParse(_pct, out ct);
-                if (ct == 2 && _toplevel == "true") {
-                    var strClass = CalcTypeString(_class);
-                    var strMember = _member;
-                    int indexerType;
-                    bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, string.Empty, strClass, strMember, out indexerType);
-
-                    var _index = data.Params[4];
-                    var _val = data.Params[5];
-                    GenerateSyntaxComponent(_class, sb, 0, false);
-                    sb.Append('[');
-                    GenerateSyntaxComponent(_index, sb, 0, false);
-                    if (isIndexerByLua && indexerType == (int)IndexerTypeEnum.LikeArray) {
-                        sb.Append(" + 1");
-                    }
-                    sb.Append(']');
-                    sb.Append(" = ");
-                    GenerateSyntaxComponent(_val, sb, 0, false);
-                }
-                else {
-                    int start = 4;
-                    GenerateSyntaxComponent(_class, sb, 0, false);
-                    sb.Append('.');
-                    sb.Append(_member);
-                    sb.Append('(');
-                    GenerateArguments(data, sb, indent, start);
-                    sb.Append(')');
-                }
-            }
-            else if (id == "setinstanceindexer") {
-                var _obj = data.Params[0];
-                var _class = data.Params[1];
-                var _member = data.Params[2].GetId();
-                var _pct = data.Params[3].GetId();
-                var _toplevel = data.Params[4].GetId();
-                int ct;
-                int.TryParse(_pct, out ct);
-                if (ct == 2 && _toplevel == "true") {
-                    var strObj = CalcExpressionString(_obj);
-                    var strClass = CalcTypeString(_class);
-                    var strMember = _member;
-                    int indexerType;
-                    bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, strObj, strClass, strMember, out indexerType);
-
-                    var _index = data.Params[5];
-                    var _val = data.Params[6];
-                    GenerateSyntaxComponent(_obj, sb, indent, false);
-                    sb.Append('[');
-                    GenerateSyntaxComponent(_index, sb, 0, false);
-                    if (isIndexerByLua && indexerType == (int)IndexerTypeEnum.LikeArray) {
-                        sb.Append(" + 1");
-                    }
-                    sb.Append(']');
-                    sb.Append(" = ");
-                    GenerateSyntaxComponent(_val, sb, 0, false);
-                }
-                else {
-                    int start = 5;
-                    GenerateSyntaxComponent(_obj, sb, indent, false);
-                    sb.Append(':');
-                    sb.Append(_member);
-                    sb.Append('(');
-                    GenerateSyntaxComponent(_obj, sb, indent, false);
-                    sb.Append(", ");
-                    GenerateArguments(data, sb, indent, start);
-                    sb.Append(')');
-                }
-            }
-            else if (id == "getexternstaticindexer") {
-                var _callerClass = data.Params[0];
-                var _typeargs = data.Params[1] as Dsl.FunctionData;
-                var _typekinds = data.Params[2] as Dsl.FunctionData;
-                var _class = data.Params[3];
-                var _member = data.Params[4];
-                var strCallerClass = CalcTypeString(_callerClass);
-                var strTypeArgs = CalcTypesString(_typeargs);
-                var strTypeKinds = CalcTypesString(_typekinds);
-                var strClass = CalcTypeString(_class);
-                var strMember = CalcTypeString(_member);
-                int indexerType;
-                if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, string.Empty, strClass, strMember, out indexerType)) {
-                    var _pct = data.Params[5].GetId();
-                    int ct;
-                    int.TryParse(_pct, out ct);
-                    if (ct == 1) {
-                        var _index = data.Params[6];
-                        sb.Append(strClass);
-                        sb.Append('[');
-                        GenerateSyntaxComponent(_index, sb, 0, false);
-                        if (indexerType == (int)IndexerTypeEnum.LikeArray) {
-                            sb.Append(" + 1");
-                        }
-                        sb.Append(']');
-                    }
-                    else {
-                        int start = 6;
-                        sb.Append(strClass);
-                        sb.Append('[');
-                        sb.Append('"');
-                        sb.Append(strMember);
-                        sb.Append('"');
-                        sb.Append(']');
-                        sb.Append('(');
-                        GenerateArguments(data, sb, indent, start);
-                        sb.Append(')');
-                    }
-                }
-                else {
-                    sb.Append(id);
-                    sb.Append('(');
-                    GenerateArguments(data, sb, indent, 0);
-                    sb.Append(')');
-                }
-            }
-            else if (id == "getexterninstanceindexer") {
-                var _callerClass = data.Params[0];
-                var _typeargs = data.Params[1] as Dsl.FunctionData;
-                var _typekinds = data.Params[2] as Dsl.FunctionData;
-                var _obj = data.Params[3];
-                var _class = data.Params[4];
-                var _member = data.Params[5];
-                var strCallerClass = CalcTypeString(_callerClass);
-                var strTypeArgs = CalcTypesString(_typeargs);
-                var strTypeKinds = CalcTypesString(_typekinds);
-                var strObj = CalcExpressionString(_obj);
-                var strClass = CalcTypeString(_class);
-                var strMember = CalcTypeString(_member);
-                int indexerType;
-                if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, strObj, strClass, strMember, out indexerType)) {
-                    var _pct = data.Params[6].GetId();
-                    int ct;
-                    int.TryParse(_pct, out ct);
-                    if (ct == 1) {
-                        var _index = data.Params[7];
-                        sb.Append(strObj);
-                        sb.Append('[');
-                        GenerateSyntaxComponent(_index, sb, 0, false);
-                        if (indexerType == (int)IndexerTypeEnum.LikeArray) {
-                            sb.Append(" + 1");
-                        }
-                        sb.Append(']');
-                    }
-                    else {
-                        int start = 7;
-                        GenerateSyntaxComponent(_obj, sb, indent, false);
-                        sb.Append('[');
-                        sb.Append('"');
-                        sb.Append(strMember);
-                        sb.Append('"');
-                        sb.Append(']');
-                        sb.Append('(');
-                        GenerateSyntaxComponent(_obj, sb, indent, false);
-                        sb.Append(", ");
-                        GenerateArguments(data, sb, indent, start);
-                        sb.Append(')');
-                    }
-                }
-                else {
-                    sb.Append(id);
-                    sb.Append('(');
-                    GenerateArguments(data, sb, indent, 0);
-                    sb.Append(')');
-                }
-            }
-            else if (id == "setexternstaticindexer") {
-                var _callerClass = data.Params[0];
-                var _typeargs = data.Params[1] as Dsl.FunctionData;
-                var _typekinds = data.Params[2] as Dsl.FunctionData;
-                var _class = data.Params[3];
-                var _member = data.Params[4];
-                var strCallerClass = CalcTypeString(_callerClass);
-                var strTypeArgs = CalcTypesString(_typeargs);
-                var strTypeKinds = CalcTypesString(_typekinds);
-                var strClass = CalcTypeString(_class);
-                var strMember = CalcTypeString(_member);
-                int indexerType;
-                if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, string.Empty, strClass, strMember, out indexerType)) {
-                    var _pct = data.Params[5].GetId();
-                    var _toplevel = data.Params[6].GetId();
-                    int ct;
-                    int.TryParse(_pct, out ct);
-                    if (ct == 2 && _toplevel == "true") {
-                        var _index = data.Params[7];
-                        var _val = data.Params[8];
-                        sb.Append(strClass);
-                        sb.Append('[');
-                        GenerateSyntaxComponent(_index, sb, 0, false);
-                        if (indexerType == (int)IndexerTypeEnum.LikeArray) {
-                            sb.Append(" + 1");
-                        }
-                        sb.Append(']');
-                        sb.Append(" = ");
-                        GenerateSyntaxComponent(_val, sb, 0, false);
-                    }
-                    else {
-                        int start = 7;
-                        sb.Append(strClass);
-                        sb.Append('[');
-                        sb.Append('"');
-                        sb.Append(strMember);
-                        sb.Append('"');
-                        sb.Append(']');
-                        sb.Append('(');
-                        GenerateArguments(data, sb, indent, start);
-                        sb.Append(')');
-                    }
-                }
-                else {
-                    sb.Append(id);
-                    sb.Append('(');
-                    GenerateArguments(data, sb, indent, 0);
-                    sb.Append(')');
-                }
-            }
-            else if (id == "setexterninstanceindexer") {
-                var _callerClass = data.Params[0];
-                var _typeargs = data.Params[1] as Dsl.FunctionData;
-                var _typekinds = data.Params[2] as Dsl.FunctionData;
-                var _obj = data.Params[3];
-                var _class = data.Params[4];
-                var _member = data.Params[5];
-                var strCallerClass = CalcTypeString(_callerClass);
-                var strTypeArgs = CalcTypesString(_typeargs);
-                var strTypeKinds = CalcTypesString(_typekinds);
-                var strObj = CalcExpressionString(_obj);
-                var strClass = CalcTypeString(_class);
-                var strMember = CalcTypeString(_member);
-                int indexerType;
-                if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, strObj, strClass, strMember, out indexerType)) {
-                    var _pct = data.Params[6].GetId();
-                    var _toplevel = data.Params[7].GetId();
-                    int ct;
-                    int.TryParse(_pct, out ct);
-                    if (ct == 2 && _toplevel == "true") {
-                        var _index = data.Params[8];
-                        var _val = data.Params[9];
-                        sb.Append(strObj);
-                        sb.Append('[');
-                        GenerateSyntaxComponent(_index, sb, 0, false);
-                        if (indexerType == (int)IndexerTypeEnum.LikeArray) {
-                            sb.Append(" + 1");
-                        }
-                        sb.Append(']');
-                        sb.Append(" = ");
-                        GenerateSyntaxComponent(_val, sb, 0, false);
-                    }
-                    else {
-                        int start = 8;
-                        GenerateSyntaxComponent(_obj, sb, indent, false);
-                        sb.Append('[');
-                        sb.Append('"');
-                        sb.Append(strMember);
-                        sb.Append('"');
-                        sb.Append(']');
-                        sb.Append('(');
-                        GenerateSyntaxComponent(_obj, sb, indent, false);
-                        sb.Append(", ");
-                        GenerateArguments(data, sb, indent, start);
-                        sb.Append(')');
-                    }
-                }
-                else {
-                    sb.Append(id);
-                    sb.Append('(');
-                    GenerateArguments(data, sb, indent, 0);
-                    sb.Append(')');
-                }
-            }
-            else if (id == "typeof") {
-                var typeStr = CalcTypeString(data.GetParam(0));
-                sb.AppendFormat("{0}", typeStr);
-            }
-            else if (id == "params") {
-                var typeStr = CalcTypeString(data.GetParam(0));
-                var typeKind = CalcTypeString(data.GetParam(1));
-                sb.AppendFormat("wrapparams({{...}}, {0}, {1})", typeStr, typeKind);
-            }
-            else if (id == "paramsremove") {
-                sb.AppendFormat("table.remove({0})", data.GetParamId(0));
-            }
-            else if (id == "typeargs") {
-                if (data.GetParamNum() > 0) {
-                    sb.Append("{");
-                    GenerateArguments(data, sb, indent, 0);
-                    sb.Append("}");
-                }
-                else {
-                    sb.Append("nil");
-                }
-            }
-            else if (id == "typekinds") {
-                if (data.GetParamNum() > 0) {
-                    sb.Append("{");
-                    GenerateArguments(data, sb, indent, 0);
-                    sb.Append("}");
-                }
-                else {
-                    sb.Append("nil");
-                }
-            }
-            else if (id == "builddelegation") {
-                var srcPos = data.GetParamId(0);
-                var delegationKey = data.GetParamId(1);
-                var objOrClass = data.GetParam(2);
-                var methodName = data.GetParamId(3);
-                var isStatic = data.GetParamId(4) == "true";
-
-                sb.AppendLine("(function()");
-                ++indent;
-                sb.AppendFormat("{0}local __obj_{1} = ", GetIndentString(indent), srcPos);
-                GenerateSyntaxComponent(objOrClass, sb, 0, false);
-                sb.AppendLine(";");
-                sb.AppendFormatLine("{0}local __fk_{1} = calcdelegationkey(\"{2}\", __obj_{1});", GetIndentString(indent), srcPos, delegationKey);
-                sb.AppendFormatLine("{0}return builddelegationonce(__fk_{1}, getdelegation(__fk_{1}) or function(...)", GetIndentString(indent), srcPos, delegationKey);
-                ++indent;
-                sb.AppendFormat("{0}", GetIndentString(indent));
-                sb.AppendFormat("return __obj_{0}", srcPos);
-                if (isStatic) {
-                    sb.Append(".");
-                }
-                else {
-                    sb.Append(":");
-                }
-                sb.Append(methodName);
-                sb.AppendLine("(...);");
-                --indent;
-                sb.AppendFormatLine("{0}end);", GetIndentString(indent));
-                --indent;
-                sb.AppendFormat("{0}end)()", GetIndentString(indent));
-            }
-            else if (id == "setdelegation") {
-                var kind = CalcTypeString(data.GetParam(0));
-                var obj = data.Params[1];
-                var val = data.Params[2];
-                GenerateSyntaxComponent(obj, sb, indent, false);
-                sb.Append(" = ");
-                GenerateSyntaxComponent(val, sb, indent, false);
-            }
-            else if (id == "setstaticdelegation") {
-                var kind = CalcTypeString(data.GetParam(0));
-                var obj = data.Params[1];
-                var member = data.Params[2];
-                var val = data.Params[3];
-                if (kind == "SymbolKind.Property") {
-                    GenerateSyntaxComponent(obj, sb, indent, false);
-                    sb.AppendFormat(".set_{0}(", member.GetId());
-                    GenerateSyntaxComponent(val, sb, indent, false);
-                    sb.Append(")");
-                }
-                else {
-                    GenerateSyntaxComponent(obj, sb, indent, false);
-                    sb.AppendFormat(".{0}", member.GetId());
-                    sb.Append(" = ");
-                    GenerateSyntaxComponent(val, sb, indent, false);
-                }
-            }
-            else if (id == "setinstancedelegation") {
-                var kind = CalcTypeString(data.GetParam(0));
-                var obj = data.Params[1];
-                var className = CalcTypeString(data.GetParam(2));
-                var member = data.Params[3];
-                var val = data.Params[4];
-                if (kind == "SymbolKind.Property") {
-                    GenerateSyntaxComponent(obj, sb, indent, false);
-                    sb.AppendFormat(":set_{0}(", member.GetId());
-                    GenerateSyntaxComponent(val, sb, indent, false);
-                    sb.Append(")");
-                }
-                else {
-                    GenerateSyntaxComponent(obj, sb, indent, false);
-                    sb.AppendFormat(".{0}", member.GetId());
-                    sb.Append(" = ");
-                    GenerateSyntaxComponent(val, sb, indent, false);
-                }
-            }
-            else if (id == "anonymousobject") {
-                sb.Append("wrapanonymousobject{");
-                GenerateArguments(data, sb, indent, 0);
-                sb.Append("}");
-            }
-            else if (id == "literaldictionary") {
-                sb.Append("{");
-                string prestr = string.Empty;
-                for (int ix = 2; ix < data.Params.Count; ++ix) {
-                    var param = data.Params[ix] as Dsl.FunctionData;
-                    sb.Append(prestr);
-                    var k = param.GetParam(0);
-                    var kcd = k as Dsl.FunctionData;
-                    var v = param.GetParam(1);
-                    if (null != kcd) {
-                        sb.AppendFormat("[{0}] = ", CalcTypeString(k));
-                    }
-                    else if (k.GetIdType() == Dsl.ValueData.STRING_TOKEN) {
-                        sb.AppendFormat("[\"{0}\"] = ", Escape(k.GetId()));
-                    }
-                    else {
-                        sb.AppendFormat("[{0}] = ", k.GetId());
-                    }
-                    GenerateSyntaxComponent(v, sb, indent, false);
-                    prestr = ", ";
-                }
-                sb.Append("}");
-            }
-            else if (id == "literallist" || id == "literalcollection" || id == "literalcomplex") {
-                sb.Append("{");
-                GenerateArguments(data, sb, indent, 2);
-                sb.Append("}");
-            }
-            else if (id == "literalarray") {
-                var typeStr = CalcTypeString(data.GetParam(0));
-                var typeKind = CalcTypeString(data.GetParam(1));
-                sb.Append("wraparray({");
-                GenerateArguments(data, sb, indent, 2);
-                sb.AppendFormat("}}, nil, {0}, {1})", typeStr, typeKind);
-            }
-            else if (id == "newarray") {
-                var typeStr = CalcTypeString(data.GetParam(0));
-                var typeKind = CalcTypeString(data.GetParam(1));
-                if (data.GetParamNum() > 2) {
-                    var vname = data.GetParamId(2);
-                    sb.AppendFormat("wraparray({{}}, {0}, {1}, {2})", vname, typeStr, typeKind);
-                }
-                else {
-                    sb.AppendFormat("wraparray({{}}, nil, {0}, {1})", typeStr, typeKind);
-                }
-            }
-            else if (id == "newmultiarray") {
-                var typeStr = CalcTypeString(data.GetParam(0));
-                var typeKind = CalcTypeString(data.GetParam(1));
-                var defVal = data.GetParam(2);
-                int ct;
-                int.TryParse(data.GetParamId(3), out ct);
-                if (ct <= 3) {
-                    //三维以下数组的定义在lualib里实现
-                    sb.AppendFormat("newarraydim{0}({1}, {2}, ", ct, typeStr, typeKind);
-                    GenerateSyntaxComponent(defVal, sb, 0, false);
-                    if (ct > 0) {
-                        sb.Append(", ");
-                        var exp = data.GetParam(4 + 0);
-                        GenerateSyntaxComponent(exp, sb, 0, false);
-                    }
-                    if (ct > 1) {
-                        sb.Append(", ");
-                        var exp = data.GetParam(4 + 1);
-                        GenerateSyntaxComponent(exp, sb, 0, false);
-                    }
-                    if (ct > 2) {
-                        sb.Append(", ");
-                        var exp = data.GetParam(4 + 2);
-                        GenerateSyntaxComponent(exp, sb, 0, false);
-                    }
-                    sb.Append(")");
-                }
-                else {
-                    //四维及以上数组在这里使用函数对象嵌入初始化代码，应该很少用到
-                    sb.Append("(function()");
-                    for (int i = 0; i < ct; ++i) {
-                        sb.AppendFormat(" local d{0} = ", i);
-                        var exp = data.GetParam(4 + i);
-                        GenerateSyntaxComponent(exp, sb, 0, false);
-                        if (i == 0) {
-                            sb.AppendFormat("; local arr = wraparray({{}}, d0, {0}, {1})", typeStr, typeKind);
-                        }
-                        sb.AppendFormat("; for i{0} = 1, d{1} do arr{2} = ", i, i, GetArraySubscriptString(i));
-                        if (i < ct - 1) {
-                            sb.Append("wraparray({}, ");
-                            var nextExp = data.GetParam(4 + i + 1);
-                            GenerateSyntaxComponent(nextExp, sb, 0, false);
-                            sb.AppendFormat(", {0}, {1});", typeStr, typeKind);
-                        }
-                        else {
-                            GenerateSyntaxComponent(defVal, sb, 0, false);
-                            sb.Append(";");
-                        }
-                    }
-                    for (int i = 0; i < ct; ++i) {
-                        sb.Append(" end;");
-                    }
-                    sb.Append(" return arr; end)()");
-                }
-            }
-            else if (id == "for") {
-                sb.Append("for ");
-                var param0 = data.GetParamId(0);
-                sb.Append(param0);
-                sb.Append(" = ");
-                var param1 = data.GetParam(1);
-                GenerateSyntaxComponent(param1, sb, indent, false);
-                sb.Append(", ");
-                var param2 = data.GetParam(2);
-                GenerateSyntaxComponent(param2, sb, indent, false);
-                if (data.GetParamNum() > 3) {
-                    sb.Append(", ");
-                    var param3 = data.GetParam(3);
-                    GenerateSyntaxComponent(param3, sb, indent, false);
-                }
-                sb.Append(" do");
-            }
-            else if (id == "dslcatch") {
-                sb.Append("luacatch(");
-                var param0 = data.GetParam(0);
-                GenerateSyntaxComponent(param0, sb, indent, false);
-                sb.Append(", ");
-                var param1 = data.GetParam(1);
-                GenerateSyntaxComponent(param1, sb, indent, false);
-                sb.Append(", (not ");
-                var param2 = data.GetParam(2);
-                GenerateSyntaxComponent(param2, sb, indent, false);
-                sb.Append(") and ");
-                GenerateArguments(data, sb, indent, 3);
-                sb.Append(")");
-            }
             else {
-                if (id == "if") {
-                    sb.Append("if ");
+                if (firstLineUseIndent) {
+                    sb.AppendFormat("{0}", GetIndentString(indent));
                 }
-                else if (id == "elseif") {
-                    sb.Append("elseif ");
-                }
-                else if (id == "while") {
-                    sb.Append("while ");
-                }
-                else if (id == "until") {
-                    sb.Append("until ");
-                }
-                else if (id == "block") {
-                    sb.Append("do");
-                }
-                else if (id == "lock") {
-                    sb.Append("do");
-                }
-                else if (id == "unsafe") {
-                    sb.Append("do");
-                }
-                else if (id == "dsltoobject") {
-                    sb.Append("luatoobject");
-                }
-                else if (id == "objecttodsl") {
-                    sb.Append("objecttolua");
-                }
-                else if (id == "dslstrtocsstr") {
-                    sb.Append("luastrtocsstr");
-                }
-                else if (id == "dslunpack") {
-                    sb.Append("luaunpack");
-                }
-                else if (id == "dslthrow") {
-                    sb.Append("luathrow");
-                }
-                else if(!string.IsNullOrEmpty(id)) {
-                    sb.Append(id);
-                }
-                if (data.HaveParam()) {
-                    if (id == "if" || id == "elseif" || id == "while" || id == "until") {
-                    }
-                    else {
-                        switch (data.GetParamClass()) {
-                            case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS:
-                                sb.Append("(");
-                                break;
-                            case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_BRACKET:
-                                sb.Append("[");
-                                break;
-                            case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PERIOD:
-                                sb.AppendFormat(".{0}", data.GetParamId(0));
-                                break;
+                //这里对委托到syslib的翻译提供一个基于dsl脚本翻译的机会，理论上可以提升运行效率                
+                if (!CallDslHook(calculator, id, data, sb, indent)) {
+                    if (id == "condexp") {
+                        var p1 = data.GetParam(0);
+                        var p2 = data.GetParamId(1);
+                        var p3 = data.GetParam(2);
+                        var p3Func = p3 as Dsl.FunctionData;
+                        var p4 = data.GetParamId(3);
+                        var p5 = data.GetParam(4);
+                        var p5Func = p5 as Dsl.FunctionData;
+                        if (p2 == "false" && null != p3Func && !ExistEmbedFunctionObject(p3Func)) {
+                            var func = p3Func.GetParam(0) as Dsl.FunctionData;
+                            if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
+                                func = func.GetParam(0) as Dsl.FunctionData;
+                            }
+                            if (null != func && func.GetId() == "funcobjret") {
+                                p2 = "true";
+                                p3 = func.GetParam(0);
+                            }
+                        }
+                        if (p4 == "false" && null != p5Func && !ExistEmbedFunctionObject(p5Func)) {
+                            var func = p5Func.GetParam(0) as Dsl.FunctionData;
+                            if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
+                                func = func.GetParam(0) as Dsl.FunctionData;
+                            }
+                            if (null != func && func.GetId() == "funcobjret") {
+                                p4 = "true";
+                                p5 = func.GetParam(0);
+                            }
+                        }
+                        if (p2 == "true" && p4 == "true") {
+                            sb.Append("((");
+                            GenerateSyntaxComponent(p1, sb, indent, false, calculator);
+                            sb.Append(") and (");
+                            GenerateSyntaxComponent(p3, sb, indent, false, calculator);
+                            sb.Append(") or (");
+                            GenerateSyntaxComponent(p5, sb, indent, false, calculator);
+                            sb.Append("))");
+                        }
+                        else {
+                            sb.Append("condexp(");
+                            GenerateSyntaxComponent(p1, sb, indent, false, calculator);
+                            sb.Append(", ");
+                            sb.Append(p2);
+                            sb.Append(", ");
+                            GenerateSyntaxComponent(p3, sb, indent, false, calculator);
+                            sb.Append(", ");
+                            sb.Append(p4);
+                            sb.Append(", ");
+                            GenerateSyntaxComponent(p5, sb, indent, false, calculator);
+                            sb.Append(")");
                         }
                     }
-                    if (data.GetParamClass() != (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PERIOD) {
-                        GenerateArguments(data, sb, indent, 0);
+                    else if (id == "condaccess") {
+                        var p1 = data.GetParam(0);
+                        var p2 = data.GetParam(1);
+                        var p2Func = p2 as Dsl.FunctionData;
+                        var isSimple = false;
+                        if (null != p2Func && !ExistEmbedFunctionObject(p2Func)) {
+                            var func = p2Func.GetParam(0) as Dsl.FunctionData;
+                            if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
+                                func = func.GetParam(0) as Dsl.FunctionData;
+                            }
+                            if (null != func && func.GetId() == "funcobjret") {
+                                isSimple = true;
+                                p2 = func.GetParam(0);
+                            }
+                        }
+                        if (isSimple) {
+                            sb.Append("((");
+                            GenerateSyntaxComponent(p1, sb, indent, false, calculator);
+                            sb.Append(") and (");
+                            GenerateSyntaxComponent(p2, sb, indent, false, calculator);
+                            sb.Append(") or nil)");
+                        }
+                        else {
+                            sb.Append("condaccess(");
+                            GenerateSyntaxComponent(p1, sb, indent, false, calculator);
+                            sb.Append(", ");
+                            sb.Append(p2);
+                            sb.Append(")");
+                        }
                     }
-                    if (id == "if" || id == "elseif" || id == "while" || id == "until") {
+                    else if (id == "nullcoalescing") {
+                        var p1 = data.GetParam(0);
+                        var p2 = data.GetParamId(1);
+                        var p3 = data.GetParam(2);
+                        var p3Func = p3 as Dsl.FunctionData;
+                        if (p2 == "false" && null != p3Func && !ExistEmbedFunctionObject(p3Func)) {
+                            var func = p3Func.GetParam(0) as Dsl.FunctionData;
+                            if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
+                                func = func.GetParam(0) as Dsl.FunctionData;
+                            }
+                            if (null != func && func.GetId() == "funcobjret") {
+                                p2 = "true";
+                                p3 = func.GetParam(0);
+                            }
+                        }
+                        if (p2 == "true") {
+                            sb.Append("((");
+                            GenerateSyntaxComponent(p1, sb, indent, false, calculator);
+                            sb.Append(") or (");
+                            GenerateSyntaxComponent(p3, sb, indent, false, calculator);
+                            sb.Append("))");
+                        }
+                        else {
+                            sb.Append("nullcoalescing(");
+                            GenerateSyntaxComponent(p1, sb, indent, false, calculator);
+                            sb.Append(", ");
+                            GenerateSyntaxComponent(p3, sb, indent, false, calculator);
+                            sb.Append(")");
+                        }
                     }
-                    else {
-                        switch (data.GetParamClass()) {
-                            case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS:
+                    else if (id == "comment") {
+                        sb.AppendFormat("--{0}", data.GetParamId(0));
+                    }
+                    else if (id == "local") {
+                        sb.Append("local ");
+                        GenerateArguments(data, sb, indent, 0, calculator);
+                    }
+                    else if (id == "return") {
+                        sb.AppendLine("__cs2lua_func_info = luafinalize(__cs2lua_func_info);");
+                        sb.AppendFormat("{0}return", GetIndentString(indent));
+                        if (data.GetParamNum() > 0)
+                            sb.Append(" ");
+                        GenerateArguments(data, sb, indent, 0, calculator);
+                    }
+                    else if (id == "funcobjret") {
+                        sb.AppendFormat("{0}return", GetIndentString(indent));
+                        if (data.GetParamNum() > 0)
+                            sb.Append(" ");
+                        GenerateArguments(data, sb, indent, 0, calculator);
+                    }
+                    else if (id == "newobject" || id == "newstruct" || id == "newexternobject" || id == "newexternstruct" ||
+                        id == "wrapoutstruct" || id == "wrapoutexternstruct" || id == "wrapstruct" || id == "wrapexternstruct" ||
+                        id == "getexternstaticstructmember" || id == "getexterninstancestructmember" ||
+                        id == "callexterndelegationreturnstruct" || id == "callexternextensionreturnstruct" ||
+                        id == "callexternstaticreturnstruct" || id == "callexterninstancereturnstruct" ||
+                        id == "invokeexternoperatorreturnstruct" ||
+                        id == "recycleandkeepstructvalue") {
+                        sb.Append(id);
+                        sb.Append("(__cs2lua_func_info");
+                        if (data.GetParamNum() > 0)
+                            sb.Append(", ");
+                        GenerateArguments(data, sb, indent, 0, calculator);
+                        sb.Append(")");
+                    }
+                    else if (id == "prefixoperator" || id == "postfixoperator") {
+                        GeneratePrefixPostfixOperator(data, sb, false, calculator);
+                    }
+                    else if (id == "execunary") {
+                        string op = data.GetParamId(0);
+                        var p1 = data.GetParam(1);
+                        string type1 = CalcTypeString(data.GetParam(2));
+                        string typeKind1 = CalcTypeString(data.GetParam(3));
+                        string intOp = op;
+                        if (op == "++")
+                            intOp = "+";
+                        else if (op == "--")
+                            intOp = "-";
+                        int intOpIndex;
+                        if (IsIntegerType(type1, typeKind1) && TryGetSpecialIntegerOperatorIndex(intOp, out intOpIndex)) {
+                            if (op == "++" || op == "--") {
+                                if (s_IntegerTypes.Contains(type1)) {
+                                    sb.Append("(");
+                                    GenerateSyntaxComponent(p1, sb, indent, false, calculator);
+                                    sb.AppendFormat(" {0} 1)", intOp);
+                                }
+                                else {
+                                    sb.AppendFormat("invokeintegeroperator({0}, \"{1}\", ", intOpIndex, intOp);
+                                    GenerateSyntaxComponent(p1, sb, indent, false, calculator);
+                                    sb.AppendFormat(", 1, {0}, {1})", type1, type1);
+                                }
+                            }
+                            if (s_IntegerTypes.Contains(type1) && (op == "+" || op == "-")) {
+                                sb.AppendFormat("( {0} ", intOp);
+                                GenerateSyntaxComponent(p1, sb, indent, false, calculator);
                                 sb.Append(")");
-                                break;
-                            case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_BRACKET:
-                                sb.Append("]");
-                                break;
-                            case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PERIOD:
-                                break;
+                            }
+                            else {
+                                sb.AppendFormat("invokeintegeroperator({0}, \"{1}\", nil, ", intOpIndex, intOp);
+                                GenerateSyntaxComponent(p1, sb, indent, false, calculator);
+                                sb.AppendFormat(", nil, {0})", type1, type1);
+                            }
+                        }
+                        else {
+                            string functor;
+                            if (s_UnaryFunctor.TryGetValue(op, out functor)) {
+                                sb.AppendFormat("{0}(", functor);
+                                GenerateSyntaxComponent(data.GetParam(1), sb, indent, false, calculator);
+                                sb.Append(")");
+                            }
+                            else {
+                                op = ConvertOperator(op);
+                                sb.AppendFormat("({0} ", op);
+                                GenerateSyntaxComponent(data.GetParam(1), sb, indent, false, calculator);
+                                sb.Append(")");
+                            }
                         }
                     }
-                    if (id == "if" || id == "elseif") {
-                        sb.Append(" then ");
+                    else if (id == "execbinary") {
+                        string op = data.GetParamId(0);
+                        var p1 = data.GetParam(1);
+                        var p2 = data.GetParam(2);
+                        string type1 = CalcTypeString(data.GetParam(3));
+                        string type2 = CalcTypeString(data.GetParam(4));
+                        string typeKind1 = CalcTypeString(data.GetParam(5));
+                        string typeKind2 = CalcTypeString(data.GetParam(6));
+                        int intOpIndex;
+                        if (IsIntegerType(type1, typeKind1) && IsIntegerType(type2, typeKind2) && TryGetSpecialIntegerOperatorIndex(op, out intOpIndex)) {
+                            if (s_IntegerTypes.Contains(type1) && s_IntegerTypes.Contains(type2) && (op == "+" || op == "-" || op == "%")) {
+                                sb.Append("(");
+                                GenerateSyntaxComponent(p1, sb, indent, false, calculator);
+                                sb.AppendFormat(" {0} ", op);
+                                GenerateSyntaxComponent(p2, sb, indent, false, calculator);
+                                sb.Append(")");
+                            }
+                            else {
+                                sb.AppendFormat("invokeintegeroperator({0}, \"{1}\", ", intOpIndex, op);
+                                GenerateSyntaxComponent(p1, sb, indent, false, calculator);
+                                sb.Append(", ");
+                                GenerateSyntaxComponent(p2, sb, indent, false, calculator);
+                                sb.AppendFormat(", {0}, {1})", type1, type2);
+                            }
+                        }
+                        else if (op == "+" && (type1 == "System.String" || type2 == "System.String")) {
+                            bool tostr1 = type1 != "System.String";
+                            bool tostr2 = type2 != "System.String";
+                            sb.Append("System.String.Concat(\"System.String:Concat__String__String__String\", ");
+                            if (tostr1)
+                                sb.Append("tostring(");
+                            GenerateSyntaxComponent(p1, sb, indent, false, calculator);
+                            if (tostr1)
+                                sb.Append(")");
+                            sb.Append(", ");
+                            if (tostr2)
+                                sb.Append("tostring(");
+                            GenerateSyntaxComponent(p2, sb, indent, false, calculator);
+                            if (tostr2)
+                                sb.Append(")");
+                            sb.Append(")");
+                        }
+                        else if ((op == "==" || op == "!=") && type1 == "System.String" && type2 == "System.String") {
+                            if (op == "==") {
+                                sb.Append("stringisequal(");
+                                GenerateSyntaxComponent(p1, sb, indent, false, calculator);
+                                sb.Append(", ");
+                                GenerateSyntaxComponent(p2, sb, indent, false, calculator);
+                                sb.Append(")");
+                            }
+                            else {
+                                sb.Append("(not stringisequal(");
+                                GenerateSyntaxComponent(p1, sb, indent, false, calculator);
+                                sb.Append(", ");
+                                GenerateSyntaxComponent(p2, sb, indent, false, calculator);
+                                sb.Append("))");
+                            }
+                        }
+                        else if ((op == "==" || op == "!=") && !IsBasicType(type1, typeKind1, true) && !IsBasicType(type2, typeKind2, true)) {
+                            if (op == "==") {
+                                sb.Append("isequal(");
+                                GenerateSyntaxComponent(p1, sb, indent, false, calculator);
+                                sb.Append(", ");
+                                GenerateSyntaxComponent(p2, sb, indent, false, calculator);
+                                sb.Append(")");
+                            }
+                            else {
+                                sb.Append("(not isequal(");
+                                GenerateSyntaxComponent(p1, sb, indent, false, calculator);
+                                sb.Append(", ");
+                                GenerateSyntaxComponent(p2, sb, indent, false, calculator);
+                                sb.Append("))");
+                            }
+                        }
+                        else {
+                            string functor;
+                            if (s_BinaryFunctor.TryGetValue(op, out functor)) {
+                                sb.AppendFormat("{0}(", functor);
+                                GenerateSyntaxComponent(p1, sb, indent, false, calculator);
+                                sb.Append(", ");
+                                GenerateSyntaxComponent(p2, sb, indent, false, calculator);
+                                sb.Append(")");
+                            }
+                            else {
+                                op = ConvertOperator(op);
+                                sb.Append("(");
+                                GenerateSyntaxComponent(p1, sb, indent, false, calculator);
+                                sb.AppendFormat(" {0} ", op);
+                                GenerateSyntaxComponent(p2, sb, indent, false, calculator);
+                                sb.Append(")");
+                            }
+                        }
                     }
-                    else if (id == "while") {
+                    else if (id == "getstatic") {
+                        var kind = CalcTypeString(data.GetParam(0));
+                        var obj = data.Params[1];
+                        var member = data.Params[2];
+                        GenerateSyntaxComponent(obj, sb, indent, false, calculator);
+                        if (kind == "SymbolKind.Property") {
+                            sb.AppendFormat(".get_{0}()", member.GetId());
+                        }
+                        else {
+                            sb.AppendFormat(".{0}", member.GetId());
+                        }
+                    }
+                    else if (id == "getinstance") {
+                        var kind = CalcTypeString(data.GetParam(0));
+                        var obj = data.Params[1];
+                        var className = CalcTypeString(data.GetParam(2));
+                        var member = data.Params[3];
+                        GenerateSyntaxComponent(obj, sb, indent, false, calculator);
+                        if (kind == "SymbolKind.Property") {
+                            sb.AppendFormat(":get_{0}()", member.GetId());
+                        }
+                        else {
+                            sb.AppendFormat(".{0}", member.GetId());
+                        }
+                    }
+                    else if (id == "setstatic") {
+                        var kind = CalcTypeString(data.GetParam(0));
+                        var obj = data.Params[1];
+                        var member = data.Params[2];
+                        var val = data.Params[3];
+                        GenerateSyntaxComponent(obj, sb, indent, false, calculator);
+                        if (kind == "SymbolKind.Property") {
+                            sb.AppendFormat(".set_{0}(", member.GetId());
+                            GenerateSyntaxComponent(val, sb, indent, false, calculator);
+                            sb.Append(")");
+                        }
+                        else {
+                            sb.AppendFormat(".{0}", member.GetId());
+                            sb.Append(" = ");
+                            GenerateSyntaxComponent(val, sb, indent, false, calculator);
+                        }
+                    }
+                    else if (id == "setinstance") {
+                        var kind = CalcTypeString(data.GetParam(0));
+                        var obj = data.Params[1];
+                        var className = CalcTypeString(data.GetParam(2));
+                        var member = data.Params[3];
+                        var val = data.Params[4];
+                        GenerateSyntaxComponent(obj, sb, indent, false, calculator);
+                        if (kind == "SymbolKind.Property") {
+                            sb.AppendFormat(":set_{0}(", member.GetId());
+                            GenerateSyntaxComponent(val, sb, indent, false, calculator);
+                            sb.Append(")");
+                        }
+                        else {
+                            sb.AppendFormat(".{0}", member.GetId());
+                            sb.Append(" = ");
+                            GenerateSyntaxComponent(val, sb, indent, false, calculator);
+                        }
+                    }
+                    else if (id == "getexternstatic") {
+                        var kind = CalcTypeString(data.GetParam(0));
+                        var obj = data.Params[1];
+                        var member = data.Params[2];
+                        GenerateSyntaxComponent(obj, sb, indent, false, calculator);
+                        sb.AppendFormat(".{0}", member.GetId());
+                    }
+                    else if (id == "getexterninstance") {
+                        var kind = CalcTypeString(data.GetParam(0));
+                        var obj = data.Params[1];
+                        var className = CalcTypeString(data.GetParam(2));
+                        var member = data.Params[3];
+                        GenerateSyntaxComponent(obj, sb, indent, false, calculator);
+                        sb.AppendFormat(".{0}", member.GetId());
+                    }
+                    else if (id == "setexternstatic") {
+                        var kind = CalcTypeString(data.GetParam(0));
+                        var obj = data.Params[1];
+                        var member = data.Params[2];
+                        var val = data.Params[3];
+                        GenerateSyntaxComponent(obj, sb, indent, false, calculator);
+                        sb.AppendFormat(".{0}", member.GetId());
+                        sb.Append(" = ");
+                        GenerateSyntaxComponent(val, sb, indent, false, calculator);
+                    }
+                    else if (id == "setexterninstance") {
+                        var kind = CalcTypeString(data.GetParam(0));
+                        var obj = data.Params[1];
+                        var className = CalcTypeString(data.GetParam(2));
+                        var member = data.Params[3];
+                        var val = data.Params[4];
+                        GenerateSyntaxComponent(obj, sb, indent, false, calculator);
+                        sb.AppendFormat(".{0}", member.GetId());
+                        sb.Append(" = ");
+                        GenerateSyntaxComponent(val, sb, indent, false, calculator);
+                    }
+                    else if (id == "callstatic" || id == "callexternstatic") {
+                        var obj = data.Params[0];
+                        var member = data.Params[1];
+                        var mid = member.GetId();
+                        GenerateSyntaxComponent(obj, sb, indent, false, calculator);
+                        sb.AppendFormat(".{0}", mid);
+                        sb.Append("(");
+                        int start = 2;
+                        string sig = string.Empty;
+                        if (data.Params.Count > start) {
+                            var sigParam = data.GetParam(start) as Dsl.ValueData;
+                            if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
+                                start = 3;
+                                sig = sigParam.GetId();
+                                string target;
+                                if (NoSignatureArg(sig)) {
+                                    sig = string.Empty;
+                                }
+                                else if (TryReplaceSignatureArg(sig, out target)) {
+                                    sig = target;
+                                }
+                            }
+                            else {
+                                sig = string.Empty;
+                            }
+                        }
+                        GenerateArguments(data, sb, indent, start, sig, calculator);
+                        sb.Append(")");
+                    }
+                    else if (id == "callinstance" || id == "callexterninstance") {
+                        var obj = data.Params[0];
+                        var className = CalcTypeString(data.GetParam(1));
+                        var member = data.Params[2];
+                        var mid = member.GetId();
+                        var objCd = obj as Dsl.FunctionData;
+                        GenerateSyntaxComponent(obj, sb, indent, false, calculator);
+                        if (null != objCd && objCd.GetId() == "getinstance" && objCd.GetParamNum() == 4 && objCd.GetParamId(3) == "base") {
+                            sb.AppendFormat(":__self__{0}", mid);
+                        }
+                        else {
+                            sb.AppendFormat(":{0}", mid);
+                        }
+                        sb.Append("(");
+                        int start = 3;
+                        string sig = string.Empty;
+                        if (data.Params.Count > start) {
+                            var sigParam = data.GetParam(start) as Dsl.ValueData;
+                            if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
+                                start = 4;
+                                sig = sigParam.GetId();
+                                string target;
+                                if (NoSignatureArg(sig)) {
+                                    sig = string.Empty;
+                                }
+                                else if (TryReplaceSignatureArg(sig, out target)) {
+                                    sig = target;
+                                }
+                            }
+                            else {
+                                sig = string.Empty;
+                            }
+                        }
+                        GenerateArguments(data, sb, indent, start, sig, calculator);
+                        sb.Append(")");
+                    }
+                    else if (id == "calldelegation" || id == "callexterndelegation") {
+                        var obj = data.Params[0];
+                        var className = CalcTypeString(data.GetParam(1));
+                        GenerateSyntaxComponent(obj, sb, indent, false, calculator);
+                        sb.Append("(");
+                        int start = 2;
+                        GenerateArguments(data, sb, indent, start, calculator);
+                        sb.Append(")");
+                    }
+                    else if (id == "callextension") {
+                        var obj = data.Params[0];
+                        var member = data.Params[1];
+                        var mid = member.GetId();
+                        GenerateSyntaxComponent(obj, sb, indent, false, calculator);
+                        sb.AppendFormat(".{0}", mid);
+                        sb.Append("(");
+                        int start = 2;
+                        string sig = string.Empty;
+                        if (data.Params.Count > start) {
+                            var sigParam = data.GetParam(start) as Dsl.ValueData;
+                            if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
+                                start = 3;
+                                sig = sigParam.GetId();
+                                string target;
+                                if (NoSignatureArg(sig)) {
+                                    sig = string.Empty;
+                                }
+                                else if (TryReplaceSignatureArg(sig, out target)) {
+                                    sig = target;
+                                }
+                            }
+                            else {
+                                sig = string.Empty;
+                            }
+                        }
+                        GenerateArguments(data, sb, indent, start, sig, calculator);
+                        sb.Append(")");
+                    }
+                    else if (id == "callexternextension") {
+                        sb.Append(id);
+                        sb.Append('(');
+                        GenerateArguments(data, sb, indent, 0, calculator);
+                        sb.Append(')');
+                    }
+                    else if (id == "getstaticindexer") {
+                        var _class = data.Params[0];
+                        var _member = data.Params[1].GetId();
+                        var _pct = data.Params[2].GetId();
+                        int ct;
+                        int.TryParse(_pct, out ct);
+                        if (ct == 1) {
+                            var strClass = CalcTypeString(_class);
+                            var strMember = _member;
+                            int indexerType;
+                            bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, string.Empty, strClass, strMember, out indexerType);
+
+                            var _index = data.Params[3];
+                            GenerateSyntaxComponent(_class, sb, 0, false, calculator);
+                            sb.Append('[');
+                            GenerateSyntaxComponent(_index, sb, 0, false, calculator);
+                            if (isIndexerByLua && indexerType == (int)IndexerTypeEnum.LikeArray) {
+                                sb.Append(" + 1");
+                            }
+                            sb.Append(']');
+                        }
+                        else {
+                            int start = 3;
+                            GenerateSyntaxComponent(_class, sb, 0, false, calculator);
+                            sb.Append('.');
+                            sb.Append(_member);
+                            sb.Append('(');
+                            GenerateArguments(data, sb, indent, start, calculator);
+                            sb.Append(')');
+                        }
+                    }
+                    else if (id == "getinstanceindexer") {
+                        var _obj = data.Params[0];
+                        var _class = data.Params[1];
+                        var _member = data.Params[2].GetId();
+                        var _pct = data.Params[3].GetId();
+                        int ct;
+                        int.TryParse(_pct, out ct);
+                        if (ct == 1) {
+                            var strObj = CalcExpressionString(_obj, calculator);
+                            var strClass = CalcTypeString(_class);
+                            var strMember = _member;
+                            int indexerType;
+                            bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, strObj, strClass, strMember, out indexerType);
+
+                            var _index = data.Params[4];
+                            GenerateSyntaxComponent(_obj, sb, indent, false, calculator);
+                            sb.Append('[');
+                            GenerateSyntaxComponent(_index, sb, 0, false, calculator);
+                            if (isIndexerByLua && indexerType == (int)IndexerTypeEnum.LikeArray) {
+                                sb.Append(" + 1");
+                            }
+                            sb.Append(']');
+                        }
+                        else {
+                            int start = 4;
+                            GenerateSyntaxComponent(_obj, sb, indent, false, calculator);
+                            sb.Append(':');
+                            sb.Append(_member);
+                            sb.Append('(');
+                            GenerateSyntaxComponent(_obj, sb, indent, false, calculator);
+                            sb.Append(", ");
+                            GenerateArguments(data, sb, indent, start, calculator);
+                            sb.Append(')');
+                        }
+                    }
+                    else if (id == "setstaticindexer") {
+                        var _class = data.Params[0];
+                        var _member = data.Params[1].GetId();
+                        var _pct = data.Params[2].GetId();
+                        var _toplevel = data.Params[3].GetId();
+                        int ct;
+                        int.TryParse(_pct, out ct);
+                        if (ct == 2 && _toplevel == "true") {
+                            var strClass = CalcTypeString(_class);
+                            var strMember = _member;
+                            int indexerType;
+                            bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, string.Empty, strClass, strMember, out indexerType);
+
+                            var _index = data.Params[4];
+                            var _val = data.Params[5];
+                            GenerateSyntaxComponent(_class, sb, 0, false, calculator);
+                            sb.Append('[');
+                            GenerateSyntaxComponent(_index, sb, 0, false, calculator);
+                            if (isIndexerByLua && indexerType == (int)IndexerTypeEnum.LikeArray) {
+                                sb.Append(" + 1");
+                            }
+                            sb.Append(']');
+                            sb.Append(" = ");
+                            GenerateSyntaxComponent(_val, sb, 0, false, calculator);
+                        }
+                        else {
+                            int start = 4;
+                            GenerateSyntaxComponent(_class, sb, 0, false, calculator);
+                            sb.Append('.');
+                            sb.Append(_member);
+                            sb.Append('(');
+                            GenerateArguments(data, sb, indent, start, calculator);
+                            sb.Append(')');
+                        }
+                    }
+                    else if (id == "setinstanceindexer") {
+                        var _obj = data.Params[0];
+                        var _class = data.Params[1];
+                        var _member = data.Params[2].GetId();
+                        var _pct = data.Params[3].GetId();
+                        var _toplevel = data.Params[4].GetId();
+                        int ct;
+                        int.TryParse(_pct, out ct);
+                        if (ct == 2 && _toplevel == "true") {
+                            var strObj = CalcExpressionString(_obj, calculator);
+                            var strClass = CalcTypeString(_class);
+                            var strMember = _member;
+                            int indexerType;
+                            bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, strObj, strClass, strMember, out indexerType);
+
+                            var _index = data.Params[5];
+                            var _val = data.Params[6];
+                            GenerateSyntaxComponent(_obj, sb, indent, false, calculator);
+                            sb.Append('[');
+                            GenerateSyntaxComponent(_index, sb, 0, false, calculator);
+                            if (isIndexerByLua && indexerType == (int)IndexerTypeEnum.LikeArray) {
+                                sb.Append(" + 1");
+                            }
+                            sb.Append(']');
+                            sb.Append(" = ");
+                            GenerateSyntaxComponent(_val, sb, 0, false, calculator);
+                        }
+                        else {
+                            int start = 5;
+                            GenerateSyntaxComponent(_obj, sb, indent, false, calculator);
+                            sb.Append(':');
+                            sb.Append(_member);
+                            sb.Append('(');
+                            GenerateSyntaxComponent(_obj, sb, indent, false, calculator);
+                            sb.Append(", ");
+                            GenerateArguments(data, sb, indent, start, calculator);
+                            sb.Append(')');
+                        }
+                    }
+                    else if (id == "getexternstaticindexer") {
+                        var _callerClass = data.Params[0];
+                        var _typeargs = data.Params[1] as Dsl.FunctionData;
+                        var _typekinds = data.Params[2] as Dsl.FunctionData;
+                        var _class = data.Params[3];
+                        var _member = data.Params[4];
+                        var strCallerClass = CalcTypeString(_callerClass);
+                        var strTypeArgs = CalcTypesString(_typeargs);
+                        var strTypeKinds = CalcTypesString(_typekinds);
+                        var strClass = CalcTypeString(_class);
+                        var strMember = CalcTypeString(_member);
+                        int indexerType;
+                        if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, string.Empty, strClass, strMember, out indexerType)) {
+                            var _pct = data.Params[5].GetId();
+                            int ct;
+                            int.TryParse(_pct, out ct);
+                            if (ct == 1) {
+                                var _index = data.Params[6];
+                                sb.Append(strClass);
+                                sb.Append('[');
+                                GenerateSyntaxComponent(_index, sb, 0, false, calculator);
+                                if (indexerType == (int)IndexerTypeEnum.LikeArray) {
+                                    sb.Append(" + 1");
+                                }
+                                sb.Append(']');
+                            }
+                            else {
+                                int start = 6;
+                                sb.Append(strClass);
+                                sb.Append('[');
+                                sb.Append('"');
+                                sb.Append(strMember);
+                                sb.Append('"');
+                                sb.Append(']');
+                                sb.Append('(');
+                                GenerateArguments(data, sb, indent, start, calculator);
+                                sb.Append(')');
+                            }
+                        }
+                        else {
+                            sb.Append(id);
+                            sb.Append('(');
+                            GenerateArguments(data, sb, indent, 0, calculator);
+                            sb.Append(')');
+                        }
+                    }
+                    else if (id == "getexterninstanceindexer") {
+                        var _callerClass = data.Params[0];
+                        var _typeargs = data.Params[1] as Dsl.FunctionData;
+                        var _typekinds = data.Params[2] as Dsl.FunctionData;
+                        var _obj = data.Params[3];
+                        var _class = data.Params[4];
+                        var _member = data.Params[5];
+                        var strCallerClass = CalcTypeString(_callerClass);
+                        var strTypeArgs = CalcTypesString(_typeargs);
+                        var strTypeKinds = CalcTypesString(_typekinds);
+                        var strObj = CalcExpressionString(_obj, calculator);
+                        var strClass = CalcTypeString(_class);
+                        var strMember = CalcTypeString(_member);
+                        int indexerType;
+                        if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, strObj, strClass, strMember, out indexerType)) {
+                            var _pct = data.Params[6].GetId();
+                            int ct;
+                            int.TryParse(_pct, out ct);
+                            if (ct == 1) {
+                                var _index = data.Params[7];
+                                sb.Append(strObj);
+                                sb.Append('[');
+                                GenerateSyntaxComponent(_index, sb, 0, false, calculator);
+                                if (indexerType == (int)IndexerTypeEnum.LikeArray) {
+                                    sb.Append(" + 1");
+                                }
+                                sb.Append(']');
+                            }
+                            else {
+                                int start = 7;
+                                GenerateSyntaxComponent(_obj, sb, indent, false, calculator);
+                                sb.Append('[');
+                                sb.Append('"');
+                                sb.Append(strMember);
+                                sb.Append('"');
+                                sb.Append(']');
+                                sb.Append('(');
+                                GenerateSyntaxComponent(_obj, sb, indent, false, calculator);
+                                sb.Append(", ");
+                                GenerateArguments(data, sb, indent, start, calculator);
+                                sb.Append(')');
+                            }
+                        }
+                        else {
+                            sb.Append(id);
+                            sb.Append('(');
+                            GenerateArguments(data, sb, indent, 0, calculator);
+                            sb.Append(')');
+                        }
+                    }
+                    else if (id == "setexternstaticindexer") {
+                        var _callerClass = data.Params[0];
+                        var _typeargs = data.Params[1] as Dsl.FunctionData;
+                        var _typekinds = data.Params[2] as Dsl.FunctionData;
+                        var _class = data.Params[3];
+                        var _member = data.Params[4];
+                        var strCallerClass = CalcTypeString(_callerClass);
+                        var strTypeArgs = CalcTypesString(_typeargs);
+                        var strTypeKinds = CalcTypesString(_typekinds);
+                        var strClass = CalcTypeString(_class);
+                        var strMember = CalcTypeString(_member);
+                        int indexerType;
+                        if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, string.Empty, strClass, strMember, out indexerType)) {
+                            var _pct = data.Params[5].GetId();
+                            var _toplevel = data.Params[6].GetId();
+                            int ct;
+                            int.TryParse(_pct, out ct);
+                            if (ct == 2 && _toplevel == "true") {
+                                var _index = data.Params[7];
+                                var _val = data.Params[8];
+                                sb.Append(strClass);
+                                sb.Append('[');
+                                GenerateSyntaxComponent(_index, sb, 0, false, calculator);
+                                if (indexerType == (int)IndexerTypeEnum.LikeArray) {
+                                    sb.Append(" + 1");
+                                }
+                                sb.Append(']');
+                                sb.Append(" = ");
+                                GenerateSyntaxComponent(_val, sb, 0, false, calculator);
+                            }
+                            else {
+                                int start = 7;
+                                sb.Append(strClass);
+                                sb.Append('[');
+                                sb.Append('"');
+                                sb.Append(strMember);
+                                sb.Append('"');
+                                sb.Append(']');
+                                sb.Append('(');
+                                GenerateArguments(data, sb, indent, start, calculator);
+                                sb.Append(')');
+                            }
+                        }
+                        else {
+                            sb.Append(id);
+                            sb.Append('(');
+                            GenerateArguments(data, sb, indent, 0, calculator);
+                            sb.Append(')');
+                        }
+                    }
+                    else if (id == "setexterninstanceindexer") {
+                        var _callerClass = data.Params[0];
+                        var _typeargs = data.Params[1] as Dsl.FunctionData;
+                        var _typekinds = data.Params[2] as Dsl.FunctionData;
+                        var _obj = data.Params[3];
+                        var _class = data.Params[4];
+                        var _member = data.Params[5];
+                        var strCallerClass = CalcTypeString(_callerClass);
+                        var strTypeArgs = CalcTypesString(_typeargs);
+                        var strTypeKinds = CalcTypesString(_typekinds);
+                        var strObj = CalcExpressionString(_obj, calculator);
+                        var strClass = CalcTypeString(_class);
+                        var strMember = CalcTypeString(_member);
+                        int indexerType;
+                        if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, strObj, strClass, strMember, out indexerType)) {
+                            var _pct = data.Params[6].GetId();
+                            var _toplevel = data.Params[7].GetId();
+                            int ct;
+                            int.TryParse(_pct, out ct);
+                            if (ct == 2 && _toplevel == "true") {
+                                var _index = data.Params[8];
+                                var _val = data.Params[9];
+                                sb.Append(strObj);
+                                sb.Append('[');
+                                GenerateSyntaxComponent(_index, sb, 0, false, calculator);
+                                if (indexerType == (int)IndexerTypeEnum.LikeArray) {
+                                    sb.Append(" + 1");
+                                }
+                                sb.Append(']');
+                                sb.Append(" = ");
+                                GenerateSyntaxComponent(_val, sb, 0, false, calculator);
+                            }
+                            else {
+                                int start = 8;
+                                GenerateSyntaxComponent(_obj, sb, indent, false, calculator);
+                                sb.Append('[');
+                                sb.Append('"');
+                                sb.Append(strMember);
+                                sb.Append('"');
+                                sb.Append(']');
+                                sb.Append('(');
+                                GenerateSyntaxComponent(_obj, sb, indent, false, calculator);
+                                sb.Append(", ");
+                                GenerateArguments(data, sb, indent, start, calculator);
+                                sb.Append(')');
+                            }
+                        }
+                        else {
+                            sb.Append(id);
+                            sb.Append('(');
+                            GenerateArguments(data, sb, indent, 0, calculator);
+                            sb.Append(')');
+                        }
+                    }
+                    else if (id == "typeof") {
+                        var typeStr = CalcTypeString(data.GetParam(0));
+                        sb.AppendFormat("{0}", typeStr);
+                    }
+                    else if (id == "params") {
+                        var typeStr = CalcTypeString(data.GetParam(0));
+                        var typeKind = CalcTypeString(data.GetParam(1));
+                        sb.AppendFormat("wrapparams({{...}}, {0}, {1})", typeStr, typeKind);
+                    }
+                    else if (id == "paramsremove") {
+                        sb.AppendFormat("table.remove({0})", data.GetParamId(0));
+                    }
+                    else if (id == "typeargs") {
+                        if (data.GetParamNum() > 0) {
+                            sb.Append("{");
+                            GenerateArguments(data, sb, indent, 0, calculator);
+                            sb.Append("}");
+                        }
+                        else {
+                            sb.Append("nil");
+                        }
+                    }
+                    else if (id == "typekinds") {
+                        if (data.GetParamNum() > 0) {
+                            sb.Append("{");
+                            GenerateArguments(data, sb, indent, 0, calculator);
+                            sb.Append("}");
+                        }
+                        else {
+                            sb.Append("nil");
+                        }
+                    }
+                    else if (id == "builddelegation") {
+                        var srcPos = data.GetParamId(0);
+                        var delegationKey = data.GetParamId(1);
+                        var objOrClass = data.GetParam(2);
+                        var methodName = data.GetParamId(3);
+                        var isStatic = data.GetParamId(4) == "true";
+
+                        sb.AppendLine("(function()");
+                        ++indent;
+                        sb.AppendFormat("{0}local __obj_{1} = ", GetIndentString(indent), srcPos);
+                        GenerateSyntaxComponent(objOrClass, sb, 0, false, calculator);
+                        sb.AppendLine(";");
+                        sb.AppendFormatLine("{0}local __fk_{1} = calcdelegationkey(\"{2}\", __obj_{1});", GetIndentString(indent), srcPos, delegationKey);
+                        sb.AppendFormatLine("{0}return builddelegationonce(__fk_{1}, getdelegation(__fk_{1}) or function(...)", GetIndentString(indent), srcPos, delegationKey);
+                        ++indent;
+                        sb.AppendFormat("{0}", GetIndentString(indent));
+                        sb.AppendFormat("return __obj_{0}", srcPos);
+                        if (isStatic) {
+                            sb.Append(".");
+                        }
+                        else {
+                            sb.Append(":");
+                        }
+                        sb.Append(methodName);
+                        sb.AppendLine("(...);");
+                        --indent;
+                        sb.AppendFormatLine("{0}end);", GetIndentString(indent));
+                        --indent;
+                        sb.AppendFormat("{0}end)()", GetIndentString(indent));
+                    }
+                    else if (id == "setdelegation") {
+                        var kind = CalcTypeString(data.GetParam(0));
+                        var obj = data.Params[1];
+                        var val = data.Params[2];
+                        GenerateSyntaxComponent(obj, sb, indent, false, calculator);
+                        sb.Append(" = ");
+                        GenerateSyntaxComponent(val, sb, indent, false, calculator);
+                    }
+                    else if (id == "setstaticdelegation") {
+                        var kind = CalcTypeString(data.GetParam(0));
+                        var obj = data.Params[1];
+                        var member = data.Params[2];
+                        var val = data.Params[3];
+                        if (kind == "SymbolKind.Property") {
+                            GenerateSyntaxComponent(obj, sb, indent, false, calculator);
+                            sb.AppendFormat(".set_{0}(", member.GetId());
+                            GenerateSyntaxComponent(val, sb, indent, false, calculator);
+                            sb.Append(")");
+                        }
+                        else {
+                            GenerateSyntaxComponent(obj, sb, indent, false, calculator);
+                            sb.AppendFormat(".{0}", member.GetId());
+                            sb.Append(" = ");
+                            GenerateSyntaxComponent(val, sb, indent, false, calculator);
+                        }
+                    }
+                    else if (id == "setinstancedelegation") {
+                        var kind = CalcTypeString(data.GetParam(0));
+                        var obj = data.Params[1];
+                        var className = CalcTypeString(data.GetParam(2));
+                        var member = data.Params[3];
+                        var val = data.Params[4];
+                        if (kind == "SymbolKind.Property") {
+                            GenerateSyntaxComponent(obj, sb, indent, false, calculator);
+                            sb.AppendFormat(":set_{0}(", member.GetId());
+                            GenerateSyntaxComponent(val, sb, indent, false, calculator);
+                            sb.Append(")");
+                        }
+                        else {
+                            GenerateSyntaxComponent(obj, sb, indent, false, calculator);
+                            sb.AppendFormat(".{0}", member.GetId());
+                            sb.Append(" = ");
+                            GenerateSyntaxComponent(val, sb, indent, false, calculator);
+                        }
+                    }
+                    else if (id == "anonymousobject") {
+                        sb.Append("wrapanonymousobject{");
+                        GenerateArguments(data, sb, indent, 0, calculator);
+                        sb.Append("}");
+                    }
+                    else if (id == "literaldictionary") {
+                        sb.Append("{");
+                        string prestr = string.Empty;
+                        for (int ix = 2; ix < data.Params.Count; ++ix) {
+                            var param = data.Params[ix] as Dsl.FunctionData;
+                            sb.Append(prestr);
+                            var k = param.GetParam(0);
+                            var kcd = k as Dsl.FunctionData;
+                            var v = param.GetParam(1);
+                            if (null != kcd) {
+                                sb.AppendFormat("[{0}] = ", CalcTypeString(k));
+                            }
+                            else if (k.GetIdType() == Dsl.ValueData.STRING_TOKEN) {
+                                sb.AppendFormat("[\"{0}\"] = ", Escape(k.GetId()));
+                            }
+                            else {
+                                sb.AppendFormat("[{0}] = ", k.GetId());
+                            }
+                            GenerateSyntaxComponent(v, sb, indent, false, calculator);
+                            prestr = ", ";
+                        }
+                        sb.Append("}");
+                    }
+                    else if (id == "literallist" || id == "literalcollection" || id == "literalcomplex") {
+                        sb.Append("{");
+                        GenerateArguments(data, sb, indent, 2, calculator);
+                        sb.Append("}");
+                    }
+                    else if (id == "literalarray") {
+                        var typeStr = CalcTypeString(data.GetParam(0));
+                        var typeKind = CalcTypeString(data.GetParam(1));
+                        sb.Append("wraparray({");
+                        GenerateArguments(data, sb, indent, 2, calculator);
+                        sb.AppendFormat("}}, nil, {0}, {1})", typeStr, typeKind);
+                    }
+                    else if (id == "newarray") {
+                        var typeStr = CalcTypeString(data.GetParam(0));
+                        var typeKind = CalcTypeString(data.GetParam(1));
+                        if (data.GetParamNum() > 2) {
+                            var vname = data.GetParamId(2);
+                            sb.AppendFormat("wraparray({{}}, {0}, {1}, {2})", vname, typeStr, typeKind);
+                        }
+                        else {
+                            sb.AppendFormat("wraparray({{}}, nil, {0}, {1})", typeStr, typeKind);
+                        }
+                    }
+                    else if (id == "newmultiarray") {
+                        var typeStr = CalcTypeString(data.GetParam(0));
+                        var typeKind = CalcTypeString(data.GetParam(1));
+                        var defVal = data.GetParam(2);
+                        int ct;
+                        int.TryParse(data.GetParamId(3), out ct);
+                        if (ct <= 3) {
+                            //三维以下数组的定义在lualib里实现
+                            sb.AppendFormat("newarraydim{0}({1}, {2}, ", ct, typeStr, typeKind);
+                            GenerateSyntaxComponent(defVal, sb, 0, false, calculator);
+                            if (ct > 0) {
+                                sb.Append(", ");
+                                var exp = data.GetParam(4 + 0);
+                                GenerateSyntaxComponent(exp, sb, 0, false, calculator);
+                            }
+                            if (ct > 1) {
+                                sb.Append(", ");
+                                var exp = data.GetParam(4 + 1);
+                                GenerateSyntaxComponent(exp, sb, 0, false, calculator);
+                            }
+                            if (ct > 2) {
+                                sb.Append(", ");
+                                var exp = data.GetParam(4 + 2);
+                                GenerateSyntaxComponent(exp, sb, 0, false, calculator);
+                            }
+                            sb.Append(")");
+                        }
+                        else {
+                            //四维及以上数组在这里使用函数对象嵌入初始化代码，应该很少用到
+                            sb.Append("(function()");
+                            for (int i = 0; i < ct; ++i) {
+                                sb.AppendFormat(" local d{0} = ", i);
+                                var exp = data.GetParam(4 + i);
+                                GenerateSyntaxComponent(exp, sb, 0, false, calculator);
+                                if (i == 0) {
+                                    sb.AppendFormat("; local arr = wraparray({{}}, d0, {0}, {1})", typeStr, typeKind);
+                                }
+                                sb.AppendFormat("; for i{0} = 1, d{1} do arr{2} = ", i, i, GetArraySubscriptString(i));
+                                if (i < ct - 1) {
+                                    sb.Append("wraparray({}, ");
+                                    var nextExp = data.GetParam(4 + i + 1);
+                                    GenerateSyntaxComponent(nextExp, sb, 0, false, calculator);
+                                    sb.AppendFormat(", {0}, {1});", typeStr, typeKind);
+                                }
+                                else {
+                                    GenerateSyntaxComponent(defVal, sb, 0, false, calculator);
+                                    sb.Append(";");
+                                }
+                            }
+                            for (int i = 0; i < ct; ++i) {
+                                sb.Append(" end;");
+                            }
+                            sb.Append(" return arr; end)()");
+                        }
+                    }
+                    else if (id == "for") {
+                        sb.Append("for ");
+                        var param0 = data.GetParamId(0);
+                        sb.Append(param0);
+                        sb.Append(" = ");
+                        var param1 = data.GetParam(1);
+                        GenerateSyntaxComponent(param1, sb, indent, false, calculator);
+                        sb.Append(", ");
+                        var param2 = data.GetParam(2);
+                        GenerateSyntaxComponent(param2, sb, indent, false, calculator);
+                        if (data.GetParamNum() > 3) {
+                            sb.Append(", ");
+                            var param3 = data.GetParam(3);
+                            GenerateSyntaxComponent(param3, sb, indent, false, calculator);
+                        }
                         sb.Append(" do");
+                    }
+                    else if (id == "dslcatch") {
+                        sb.Append("luacatch(");
+                        var param0 = data.GetParam(0);
+                        GenerateSyntaxComponent(param0, sb, indent, false, calculator);
+                        sb.Append(", ");
+                        var param1 = data.GetParam(1);
+                        GenerateSyntaxComponent(param1, sb, indent, false, calculator);
+                        sb.Append(", (not ");
+                        var param2 = data.GetParam(2);
+                        GenerateSyntaxComponent(param2, sb, indent, false, calculator);
+                        sb.Append(") and ");
+                        GenerateArguments(data, sb, indent, 3, calculator);
+                        sb.Append(")");
+                    }
+                    else {
+                        if (id == "if") {
+                            sb.Append("if ");
+                        }
+                        else if (id == "elseif") {
+                            sb.Append("elseif ");
+                        }
+                        else if (id == "while") {
+                            sb.Append("while ");
+                        }
+                        else if (id == "until") {
+                            sb.Append("until ");
+                        }
+                        else if (id == "block") {
+                            sb.Append("do");
+                        }
+                        else if (id == "lock") {
+                            sb.Append("do");
+                        }
+                        else if (id == "unsafe") {
+                            sb.Append("do");
+                        }
+                        else if (id == "dsltoobject") {
+                            sb.Append("luatoobject");
+                        }
+                        else if (id == "objecttodsl") {
+                            sb.Append("objecttolua");
+                        }
+                        else if (id == "dslstrtocsstr") {
+                            sb.Append("luastrtocsstr");
+                        }
+                        else if (id == "dslunpack") {
+                            sb.Append("luaunpack");
+                        }
+                        else if (id == "dslthrow") {
+                            sb.Append("luathrow");
+                        }
+                        else if (!string.IsNullOrEmpty(id)) {
+                            sb.Append(id);
+                        }
+                        if (data.HaveParam()) {
+                            if (id == "if" || id == "elseif" || id == "while" || id == "until") {
+                            }
+                            else {
+                                switch (data.GetParamClass()) {
+                                    case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS:
+                                        sb.Append("(");
+                                        break;
+                                    case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_BRACKET:
+                                        sb.Append("[");
+                                        break;
+                                    case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PERIOD:
+                                        sb.AppendFormat(".{0}", data.GetParamId(0));
+                                        break;
+                                }
+                            }
+                            if (data.GetParamClass() != (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PERIOD) {
+                                GenerateArguments(data, sb, indent, 0, calculator);
+                            }
+                            if (id == "if" || id == "elseif" || id == "while" || id == "until") {
+                            }
+                            else {
+                                switch (data.GetParamClass()) {
+                                    case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS:
+                                        sb.Append(")");
+                                        break;
+                                    case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_BRACKET:
+                                        sb.Append("]");
+                                        break;
+                                    case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PERIOD:
+                                        break;
+                                }
+                            }
+                            if (id == "if" || id == "elseif") {
+                                sb.Append(" then ");
+                            }
+                            else if (id == "while") {
+                                sb.Append(" do");
+                            }
+                        }
                     }
                 }
             }
         }
-        private static void GenerateConcreteSyntax(Dsl.FunctionData data, StringBuilder sb, int indent, bool firstLineUseIndent)
+        private static void GenerateConcreteSyntax(Dsl.FunctionData data, StringBuilder sb, int indent, bool firstLineUseIndent, DslExpression.DslCalculator calculator)
         {
             if (data.HaveParam()) {
-                GenerateConcreteSyntaxForCall(data, sb, indent, firstLineUseIndent);
+                GenerateConcreteSyntaxForCall(data, sb, indent, firstLineUseIndent, calculator);
                 return;
             }
             s_CurSyntax = data;
@@ -2245,19 +2318,19 @@ namespace Generator
             }
             if (id == "comments") {
                 foreach (var comp in data.Params) {
-                    GenerateSyntaxComponent(comp, sb, indent, true);
+                    GenerateSyntaxComponent(comp, sb, indent, true, calculator);
                     sb.AppendLine();
                 }
             }
             else if (id == "execclosure") {
-                GenerateClosure(data, sb, indent, false);
+                GenerateClosure(data, sb, indent, false, calculator);
             }
             else if (id == "foreach") {
                 var param0 = fcall.GetParamId(0);
                 var param1 = fcall.GetParamId(1);
                 var param2 = fcall.GetParam(2);
                 sb.AppendFormat("local {0} = newiterator(", param0);
-                GenerateSyntaxComponent(param2, sb, indent, false);
+                GenerateSyntaxComponent(param2, sb, indent, false, calculator);
                 sb.AppendLine(");");
                 sb.AppendFormat("{0}for ", GetIndentString(indent));
                 sb.Append(param1);
@@ -2267,7 +2340,7 @@ namespace Generator
                 if (data.HaveStatement()) {
                     sb.AppendLine();
                     ++indent;
-                    GenerateStatements(data, sb, indent);
+                    GenerateStatements(data, sb, indent, calculator);
                     --indent;
                 }
                 sb.AppendFormatLine("{0}end;", GetIndentString(indent));
@@ -2283,19 +2356,19 @@ namespace Generator
                     sb.AppendLine("while true do");
                     ++indent;
                     if (null != closure) {
-                        GenerateClosure(closure, sb, indent, true);
+                        GenerateClosure(closure, sb, indent, true, calculator);
                         var p = closure.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
                         p.SetId("false");
                     }
                     if (null != oper) {
                         sb.AppendFormat("{0}", GetIndentString(indent));
-                        GeneratePrefixPostfixOperator(oper, sb, true);
+                        GeneratePrefixPostfixOperator(oper, sb, true, calculator);
                         sb.AppendLine(";");
                         var p = oper.GetParam(0) as Dsl.ValueData;
                         p.SetId("false");
                     }
                     sb.AppendFormat("{0}if not ", GetIndentString(indent));
-                    GenerateSyntaxComponent(condExp, sb, 0, false);
+                    GenerateSyntaxComponent(condExp, sb, 0, false, calculator);
                     sb.AppendLine(" then");
                     ++indent;
                     sb.AppendFormatLine("{0}break;", GetIndentString(indent));
@@ -2304,12 +2377,12 @@ namespace Generator
                     --indent;
                 }
                 else {
-                    GenerateConcreteSyntaxForCall(fcall, sb, indent, false);
+                    GenerateConcreteSyntaxForCall(fcall, sb, indent, false, calculator);
                 }
                 if (data.HaveStatement()) {
                     sb.AppendLine();
                     ++indent;
-                    GenerateStatements(data, sb, indent);
+                    GenerateStatements(data, sb, indent, calculator);
                     --indent;
                     sb.AppendFormat("{0}end", GetIndentString(indent));
                 }
@@ -2323,29 +2396,29 @@ namespace Generator
                     //TryGetValue这样的单一条件表达式可以提到if语句外面
                     if (null != closure) {
                         sb.AppendLine("--");
-                        GenerateClosure(closure, sb, indent, true);
+                        GenerateClosure(closure, sb, indent, true, calculator);
                         var p = closure.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
                         p.SetId("false");
                     }
                     if (null != oper) {
                         sb.AppendLine("--");
                         sb.AppendFormat("{0}", GetIndentString(indent));
-                        GeneratePrefixPostfixOperator(oper, sb, true);
+                        GeneratePrefixPostfixOperator(oper, sb, true, calculator);
                         sb.AppendLine(";");
                         var p = oper.GetParam(0) as Dsl.ValueData;
                         p.SetId("false");
                     }
                     sb.AppendFormat("{0}if ", GetIndentString(indent));
-                    GenerateSyntaxComponent(condExp, sb, 0, false);
+                    GenerateSyntaxComponent(condExp, sb, 0, false, calculator);
                     sb.AppendLine(" then");
                 }
                 else {
-                    GenerateConcreteSyntaxForCall(fcall, sb, indent, false);
+                    GenerateConcreteSyntaxForCall(fcall, sb, indent, false, calculator);
                 }
                 if (data.HaveStatement()) {
                     sb.AppendLine();
                     ++indent;
-                    GenerateStatements(data, sb, indent);
+                    GenerateStatements(data, sb, indent, calculator);
                     --indent;
                     sb.AppendFormat("{0}end", GetIndentString(indent));
                 }
@@ -2365,7 +2438,7 @@ namespace Generator
                         sb.AppendLine();
                         //赋值操作会++indent
                         //++indent;
-                        GenerateStatements(data, sb, indent);
+                        GenerateStatements(data, sb, indent, calculator);
                         --indent;
                     }
                     sb.AppendFormat("{0}end)", GetIndentString(indent));
@@ -2407,7 +2480,7 @@ namespace Generator
                                     var obj = bodyStatement.Params[0];
                                     var member = bodyStatement.Params[1];
                                     var mid = member.GetId();
-                                    GenerateSyntaxComponent(obj, sb, indent, false);
+                                    GenerateSyntaxComponent(obj, sb, indent, false, calculator);
                                     sb.AppendFormat(".{0}", mid);
                                     int start = 2;
                                     string sig = string.Empty;
@@ -2431,7 +2504,7 @@ namespace Generator
                                     if (bodyStatement.GetParamNum() > start) {
                                         sb.Append(", ");
                                     }
-                                    GenerateArguments(bodyStatement, sb, indent, start, sig);
+                                    GenerateArguments(bodyStatement, sb, indent, start, sig, calculator);
                                 }
                                 else if (name == "callinstance" || name == "callexterninstance") {
                                     var obj = bodyStatement.Params[0];
@@ -2439,7 +2512,7 @@ namespace Generator
                                     var member = bodyStatement.Params[2];
                                     var mid = member.GetId();
                                     var objCd = obj as Dsl.FunctionData;
-                                    GenerateSyntaxComponent(obj, sb, indent, false);
+                                    GenerateSyntaxComponent(obj, sb, indent, false, calculator);
                                     if (null != objCd && objCd.GetId() == "getinstance" && objCd.GetParamNum() == 4 && objCd.GetParamId(3) == "base") {
                                         sb.AppendFormat(".__self__{0}", mid);
                                     }
@@ -2447,7 +2520,7 @@ namespace Generator
                                         sb.AppendFormat(".{0}", mid);
                                     }
                                     sb.Append(", ");
-                                    GenerateSyntaxComponent(obj, sb, indent, false);
+                                    GenerateSyntaxComponent(obj, sb, indent, false, calculator);
                                     int start = 3;
                                     string sig = string.Empty;
                                     if (bodyStatement.GetParamNum() > start) {
@@ -2470,7 +2543,7 @@ namespace Generator
                                     if (bodyStatement.GetParamNum() > start) {
                                         sb.Append(", ");
                                     }
-                                    GenerateArguments(bodyStatement, sb, indent, start, sig);
+                                    GenerateArguments(bodyStatement, sb, indent, start, sig, calculator);
                                 }
                                 if (null == funcRetVar) {
                                     sb.Append(")");
@@ -2494,7 +2567,7 @@ namespace Generator
                         --indent;
                         sb.AppendFormatLine("{0}repeat", GetIndentString(indent));
                         ++indent;
-                        GenerateStatements(data, sb, indent);
+                        GenerateStatements(data, sb, indent, calculator);
                         --indent;
                         sb.AppendFormat("{0}until true", GetIndentString(indent));
                     }
@@ -2502,18 +2575,18 @@ namespace Generator
             }
             else {
                 //函数名与参数部分由另一方法生成（有可能没有参数）
-                GenerateConcreteSyntaxForCall(fcall, sb, indent, false);
+                GenerateConcreteSyntaxForCall(fcall, sb, indent, false, calculator);
                 //函数体部分
                 if (data.HaveStatement()) {
                     sb.AppendLine();
                     ++indent;
-                    GenerateStatements(data, sb, indent);
+                    GenerateStatements(data, sb, indent, calculator);
                     --indent;
                     sb.AppendFormat("{0}end", GetIndentString(indent));
                 }
             }
         }
-        private static void GenerateConcreteSyntax(Dsl.StatementData data, StringBuilder sb, int indent, bool firstLineUseIndent)
+        private static void GenerateConcreteSyntax(Dsl.StatementData data, StringBuilder sb, int indent, bool firstLineUseIndent, DslExpression.DslCalculator calculator)
         {
             s_CurSyntax = data;
             if (firstLineUseIndent) {
@@ -2539,7 +2612,7 @@ namespace Generator
                         ++indent;
                         foreach (var comp in fcall.Params) {
                             sb.Append(prestr);
-                            GenerateSyntaxComponent(comp, sb, indent, false);
+                            GenerateSyntaxComponent(comp, sb, indent, false, calculator);
                         }
                         --indent;
                         sb.Append("}");
@@ -2567,33 +2640,33 @@ namespace Generator
                         if (CanRemoveClosure(condExp, out closure) || CanSplitPrefixPostfixOperator(condExp, out oper, out prefix)) {
                             ++indent;
                             if (null != closure) {
-                                GenerateClosure(closure, sb, indent, true);
+                                GenerateClosure(closure, sb, indent, true, calculator);
                                 var p = closure.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
                                 p.SetId("false");
                             }
                             if (null != oper) {
                                 sb.AppendFormat("{0}", GetIndentString(indent));
-                                GeneratePrefixPostfixOperator(oper, sb, true);
+                                GeneratePrefixPostfixOperator(oper, sb, true, calculator);
                                 sb.AppendLine(";");
                                 var p = oper.GetParam(0) as Dsl.ValueData;
                                 p.SetId("false");
                             }
                             --indent;
                             sb.AppendFormat("{0}until not ", GetIndentString(indent));
-                            GenerateSyntaxComponent(condExp, sb, 0, false);
+                            GenerateSyntaxComponent(condExp, sb, 0, false, calculator);
                         }
                         else if (condExp.GetId() == "false") {
                             sb.AppendFormat("{0}until true", GetIndentString(indent));
                         }
                         else {
                             sb.AppendFormat("{0}until not ", GetIndentString(indent));
-                            GenerateSyntaxComponent(condExp, sb, indent, false);
+                            GenerateSyntaxComponent(condExp, sb, indent, false, calculator);
                         }
                     }
                     if (funcData.HaveStatement()) {
                         sb.AppendLine();
                         ++indent;
-                        GenerateStatements(funcData, sb, indent);
+                        GenerateStatements(funcData, sb, indent, calculator);
                         --indent;
                         if (funcData == data.Last) {
                             sb.AppendFormat("{0}end", GetIndentString(indent));
@@ -2615,29 +2688,29 @@ namespace Generator
                     //TryGetValue这样的单一条件表达式可以提到if语句外面
                     if (null != closure) {
                         sb.AppendLine("--");
-                        GenerateClosure(closure, sb, indent, true);
+                        GenerateClosure(closure, sb, indent, true, calculator);
                         var p = closure.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
                         p.SetId("false");
                     }
                     if (null != oper) {
                         sb.AppendLine("--");
                         sb.AppendFormat("{0}", GetIndentString(indent));
-                        GeneratePrefixPostfixOperator(oper, sb, true);
+                        GeneratePrefixPostfixOperator(oper, sb, true, calculator);
                         sb.AppendLine(";");
                         var p = oper.GetParam(0) as Dsl.ValueData;
                         p.SetId("false");
                     }
                     sb.AppendFormat("{0}if ", GetIndentString(indent));
-                    GenerateSyntaxComponent(condExp, sb, 0, false);
+                    GenerateSyntaxComponent(condExp, sb, 0, false, calculator);
                     sb.AppendLine(" then");
                 }
                 else {
-                    GenerateConcreteSyntaxForCall(fcall, sb, indent, false);
+                    GenerateConcreteSyntaxForCall(fcall, sb, indent, false, calculator);
                 }
                 if (fdata.HaveStatement()) {
                     sb.AppendLine();
                     ++indent;
-                    GenerateStatements(fdata, sb, indent);
+                    GenerateStatements(fdata, sb, indent, calculator);
                     --indent;
                 }
                 if (data.GetFunctionNum() == 1) {
@@ -2657,18 +2730,18 @@ namespace Generator
                                 data.First.LowerOrderFunction.Name.SetId("if");
                                 sb.AppendFormatLine("{0}else", GetIndentString(indent));
                                 ++indent;
-                                GenerateConcreteSyntax(data, sb, indent, true);
+                                GenerateConcreteSyntax(data, sb, indent, true, calculator);
                                 --indent;
                                 sb.AppendLine(";");
                                 sb.AppendFormat("{0}end", GetIndentString(indent));
                                 break;
                             }
                         }
-                        GenerateConcreteSyntaxForCall(fcd, sb, indent, funcData == data.First ? false : true);
+                        GenerateConcreteSyntaxForCall(fcd, sb, indent, funcData == data.First ? false : true, calculator);
                         if (funcData.HaveStatement()) {
                             sb.AppendLine();
                             ++indent;
-                            GenerateStatements(funcData, sb, indent);
+                            GenerateStatements(funcData, sb, indent, calculator);
                             --indent;
                             if (funcData == data.Last) {
                                 sb.AppendFormat("{0}end", GetIndentString(indent));
@@ -2696,7 +2769,7 @@ namespace Generator
                         sb.AppendLine(")");
                         ++indent;
                         sb.AppendFormatLine("{0}local __cs2lua_func_info = luainitialize();", GetIndentString(indent));
-                        GenerateStatements(second, sb, indent);
+                        GenerateStatements(second, sb, indent, calculator);
                         bool lastIsNotReturn = true;
                         int snum = second.GetParamNum();
                         for (; snum > 0; --snum) {
@@ -2720,11 +2793,11 @@ namespace Generator
                     var fcall = funcData;
                     if (funcData.IsHighOrder)
                         fcall = funcData.LowerOrderFunction;
-                    GenerateConcreteSyntaxForCall(fcall, sb, indent, funcData == data.First ? false : true);
+                    GenerateConcreteSyntaxForCall(fcall, sb, indent, funcData == data.First ? false : true, calculator);
                     if (funcData.HaveStatement()) {
                         sb.AppendLine();
                         ++indent;
-                        GenerateStatements(funcData, sb, indent);
+                        GenerateStatements(funcData, sb, indent, calculator);
                         --indent;
                         if (funcData == data.Last) {
                             sb.AppendFormat("{0}end", GetIndentString(indent));
@@ -2773,37 +2846,11 @@ namespace Generator
                 sb.AppendLine("}};");
             }
         }
-        private static void GenerateArguments(Dsl.FunctionData data, StringBuilder sb, int indent, int start)
-        {
-            s_CurSyntax = data;
-            GenerateArguments(data, sb, indent, start, string.Empty);
-        }
-        private static void GenerateArguments(Dsl.FunctionData data, StringBuilder sb, int indent, int start, string sig)
-        {
-            s_CurSyntax = data;
-            string prestr = string.Empty;
-            if (!string.IsNullOrEmpty(sig)) {
-                sb.Append(prestr);
-                sb.AppendFormat("\"{0}\"", Escape(sig));
-                prestr = ", ";
-            }
-            for (int ix = start; ix < data.Params.Count; ++ix) {
-                var param = data.Params[ix];
-                sb.Append(prestr);
-                string paramId = param.GetId();
-                if (param.GetIdType() == (int)Dsl.ValueData.ID_TOKEN && paramId == "...") {
-                    sb.Append("...");
-                    continue;
-                }
-                GenerateSyntaxComponent(param, sb, indent, false);
-                prestr = ", ";
-            }
-        }
-        private static void GenerateStatements(Dsl.FunctionData data, StringBuilder sb, int indent)
+        private static void GenerateStatements(Dsl.FunctionData data, StringBuilder sb, int indent, DslExpression.DslCalculator calculator)
         {
             s_CurSyntax = data;
             foreach (var comp in data.Params) {
-                GenerateStatement(comp, sb, indent);
+                GenerateStatement(comp, sb, indent, calculator);
                 string subId = comp.GetId();
                 if (subId != "comments" && subId != "comment") {
                     sb.AppendLine(";");
@@ -2813,5 +2860,170 @@ namespace Generator
                 }
             }
         }
+    }
+}
+namespace DslExpression
+{
+    internal sealed class GetArgmentExp : SimpleExpressionBase
+    {
+        protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
+        {
+            string r = string.Empty;
+            if (operands.Count >= 2) {
+                var data = operands[0].As<Dsl.FunctionData>();
+                var index = operands[1].Get<int>();
+                if (null != data && index >= 0 && index < data.GetParamNum()) {
+                    var arg = data.GetParam(index);
+                    r = Generator.LuaGenerator.CalcTypeString(arg);
+                }
+            }
+            return r;
+        }
+    }
+    internal sealed class WriteIndentExp : SimpleExpressionBase
+    {
+        protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
+        {
+            bool r = false;
+            if (operands.Count >= 2) {
+                var sb = operands[0].As<StringBuilder>();
+                var indent = operands[1].Get<int>();
+                if (null != sb && indent >= 0) {
+                    string str = Generator.LuaGenerator.GetIndentString(indent);
+                    sb.Append(str);
+                    r = true;
+                }
+            }
+            return r;
+        }
+    }
+    internal sealed class WriteSymbolExp : SimpleExpressionBase
+    {
+        protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
+        {
+            bool r = false;
+            if (operands.Count >= 2) {
+                var sb = operands[0].As<StringBuilder>();
+                var name = operands[1].Get<string>();
+                if (null != sb && null != name) {
+                    sb.Append(name);
+                }
+            }
+            return r;
+        }
+    }
+    internal sealed class WriteStringExp : SimpleExpressionBase
+    {
+        protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
+        {
+            bool r = false;
+            if (operands.Count >= 2) {
+                var sb = operands[0].As<StringBuilder>();
+                var str = operands[1].Get<string>();
+                if (null != sb && null != str) {
+                    sb.AppendFormat("\"{0}\"", Generator.LuaGenerator.Escape(str));
+                }
+            }
+            return r;
+        }
+    }
+    internal sealed class WriteArgumentsExp : SimpleExpressionBase
+    {
+        protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
+        {
+            bool r = false;
+            if (operands.Count >= 2) {
+                var sb = operands[0].As<StringBuilder>();
+                var funcData = operands[1].As<Dsl.FunctionData>();
+                int start = 0;
+                if (operands.Count >= 3)
+                    start = operands[2].Get<int>();
+                if (null != sb && null != funcData) {
+                    Generator.LuaGenerator.GenerateArguments(funcData, sb, 0, start, Calculator);
+                }
+            }
+            return r;
+        }
+    }
+    internal sealed class UseFunctionExp : AbstractExpression
+    {
+        protected override CalculatorValue DoCalc()
+        {
+            bool r = false;
+            if (null != m_NameExp) {
+                var name = m_NameExp.Calc().AsString;
+                var pstr = m_ParamsStrExp.Calc().AsString;
+                var code = m_CodeBlock;
+                if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(pstr) && !string.IsNullOrEmpty(code)) {
+                    var tsb = new StringBuilder();
+                    tsb.AppendFormat("function {0}{1}", name, pstr);
+                    tsb.AppendLine();
+                    Generator.LuaGenerator.GenerateCodeBlock(tsb, 1, code);
+                    tsb.AppendLine("end");
+                    Generator.LuaGenerator.FunctionsFromDslHook.TryAdd(name, tsb.ToString());
+                    if (null != m_FuncDataExp && null != m_StringBuilderExp && null != m_IndentExp) {
+                        var funcData = m_FuncDataExp.Calc().As<FunctionData>();
+                        var sb = m_StringBuilderExp.Calc().As<StringBuilder>();
+                        int indent = m_IndentExp.Calc().Get<int>();
+                        sb.Append(name);
+                        sb.Append("(");
+                        string prestr = string.Empty;
+                        foreach(var fp in m_FirstArgs) {
+                            sb.Append(prestr);
+                            var str = fp.Calc().AsString;
+                            if (!string.IsNullOrEmpty(str)) {
+                                sb.Append(str);
+                            }
+                            else {
+                                sb.Append("nil");
+                            }
+                            prestr = ", ";
+                        }
+                        sb.Append(prestr);
+                        Generator.LuaGenerator.GenerateArguments(funcData, sb, indent, 0, Calculator);
+                        sb.Append(")");
+                    }
+                    r = true;
+                }
+            }
+            return r;
+        }
+        protected override bool Load(FunctionData funcData)
+        {
+            if (funcData.IsHighOrder) {
+                var cd = funcData.LowerOrderFunction;
+                int num = cd.GetParamNum();
+                if (num >= 2) {
+                    var name = cd.GetParam(0);
+                    m_NameExp = Calculator.Load(name);
+                    var pstr = cd.GetParam(1);
+                    m_ParamsStrExp = Calculator.Load(pstr);
+                    if (num >= 5) {
+                        var fd = cd.GetParam(2);
+                        m_FuncDataExp = Calculator.Load(fd);
+                        var sb = cd.GetParam(3);
+                        m_StringBuilderExp = Calculator.Load(sb);
+                        var indent = cd.GetParam(4);
+                        m_IndentExp = Calculator.Load(indent);
+                        for(int ix = 5; ix < num; ++ix) {
+                            var p = cd.GetParam(ix);
+                            var exp = Calculator.Load(p);
+                            m_FirstArgs.Add(exp);
+                        }
+                    }
+                }
+            }
+            if (funcData.HaveExternScript()) {
+                m_CodeBlock = funcData.GetParamId(0);
+            }
+            return true;
+        }
+        private IExpression m_NameExp = null;
+        private IExpression m_ParamsStrExp = null;
+        private IExpression m_FuncDataExp = null;
+        private IExpression m_StringBuilderExp = null;
+        private IExpression m_IndentExp = null;
+        private List<IExpression> m_FirstArgs = new List<IExpression>();
+        private string m_CodeBlock = string.Empty;
     }
 }

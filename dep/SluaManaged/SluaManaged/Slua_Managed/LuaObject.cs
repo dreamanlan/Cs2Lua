@@ -532,6 +532,8 @@ namespace SLua
                 LuaDLL.lua_pushvalue(l, -1);
                 LuaDLL.lua_setglobal(l, self.FullName + ".Instance");//valuetype's instance metatable assign to FullTypeName+".Instance" global variable
             }
+            LuaDLL.lua_pushvalue(l, -1);
+            LuaDLL.lua_setglobal(l, "__cslib_instance_meta_" + self.FullName.Replace(".", "_"));//instance metatable assign to "__cslib_instance_meta_{full_name_rep_dot_with_}" global variable
             LuaDLL.lua_setfield(l, LuaIndexes.LUA_REGISTRYINDEX, ObjectCache.getAQName(self));//pop instance metatable and reg instance metatable
         }
 
@@ -1070,6 +1072,7 @@ namespace SLua
                     checkType(l, -1, out pars[k]);
                     LuaDLL.lua_pop(l, 1);
                 }
+                return true;
             }
             else if (top - p >= 0) {
                 pars = new T[top - p + 1];
@@ -1093,6 +1096,7 @@ namespace SLua
                     checkValueType(l, -1, out pars[k]);
                     LuaDLL.lua_pop(l, 1);
                 }
+                return true;
             }
             else if (top - p >= 0) {
                 pars = new T[top - p + 1];
@@ -1116,6 +1120,7 @@ namespace SLua
                     checkType(l, -1, out pars[k]);
                     LuaDLL.lua_pop(l, 1);
                 }
+                return true;
             }
             else if (top - p >= 0) {
                 pars = new bool[top - p + 1];
@@ -1139,6 +1144,7 @@ namespace SLua
                     checkType(l, -1, out pars[k]);
                     LuaDLL.lua_pop(l, 1);
                 }
+                return true;
             }
             else if (top - p >= 0) {
                 pars = new float[top - p + 1];
@@ -1162,6 +1168,7 @@ namespace SLua
                     checkType(l, -1, out pars[k]);
                     LuaDLL.lua_pop(l, 1);
                 }
+                return true;
             }
             else if (top - p >= 0) {
                 pars = new int[top - p + 1];
@@ -1185,6 +1192,7 @@ namespace SLua
                     checkType(l, -1, out pars[k]);
                     LuaDLL.lua_pop(l, 1);
                 }
+                return true;
             }
             else if (top - p >= 0) {
                 pars = new long[top - p + 1];
@@ -1208,6 +1216,7 @@ namespace SLua
                     checkType(l, -1, out pars[k]);
                     LuaDLL.lua_pop(l, 1);
                 }
+                return true;
             }
             else if (top - p >= 0) {
                 pars = new string[top - p + 1];

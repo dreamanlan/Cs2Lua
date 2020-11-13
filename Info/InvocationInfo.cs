@@ -29,6 +29,9 @@ namespace RoslynTool.CsToDsl
         internal List<ArgDefaultValueInfo> DefaultValueArgs = new List<ArgDefaultValueInfo>();
         internal HashSet<int> DslToObjectDefArgs = new HashSet<int>();
         internal List<ExpressionSyntax> ReturnArgs = new List<ExpressionSyntax>();
+        internal List<bool> ReturnValueArgFlags = new List<bool>();
+        internal List<IOperation> ReturnArgOperations = new List<IOperation>();
+        internal List<ISymbol> ReturnArgSymbols = new List<ISymbol>();
         internal List<ITypeSymbol> GenericTypeArgs = new List<ITypeSymbol>();
         internal bool ArrayToParams = false;
         internal bool PostPositionGenericTypeArgs = false;
@@ -90,11 +93,29 @@ namespace RoslynTool.CsToDsl
                         if (param.RefKind == RefKind.Ref) {
                             Args.Add(arg.Expression);
                             ReturnArgs.Add(arg.Expression);
+                            var argSym = model.GetSymbolInfoEx(arg.Expression);
+                            ReturnArgOperations.Add(argOper);
+                            ReturnArgSymbols.Add(argSym.Symbol);
+                            if (null != argOper && argOper.Type.IsValueType && !SymbolTable.IsBasicType(argOper.Type)) {
+                                ReturnValueArgFlags.Add(true);
+                            }
+                            else {
+                                ReturnValueArgFlags.Add(false);
+                            }
                         }
                         else if (param.RefKind == RefKind.Out) {
                             //方法的out参数，为与脚本引擎的机制一致，在调用时传入__cs2dsl_out，这里用null标记一下，在实际输出参数时再变为__cs2dsl_out
                             Args.Add(null);
                             ReturnArgs.Add(arg.Expression);
+                            var argSym = model.GetSymbolInfoEx(arg.Expression);
+                            ReturnArgOperations.Add(argOper);
+                            ReturnArgSymbols.Add(argSym.Symbol);
+                            if (null != argOper && argOper.Type.IsValueType && !SymbolTable.IsBasicType(argOper.Type)) {
+                                ReturnValueArgFlags.Add(true);
+                            }
+                            else {
+                                ReturnValueArgFlags.Add(false);
+                            }
                         }
                         else if (param.IsParams) {
                             if (null != argOper && null != argOper.Type && argOper.Type.TypeKind == TypeKind.Array) {
@@ -195,11 +216,29 @@ namespace RoslynTool.CsToDsl
                         if (param.RefKind == RefKind.Ref) {
                             Args.Add(arg.Expression);
                             ReturnArgs.Add(arg.Expression);
+                            var argSym = model.GetSymbolInfoEx(arg.Expression);
+                            ReturnArgOperations.Add(argOper);
+                            ReturnArgSymbols.Add(argSym.Symbol);
+                            if (null != argOper && argOper.Type.IsValueType && !SymbolTable.IsBasicType(argOper.Type)) {
+                                ReturnValueArgFlags.Add(true);
+                            }
+                            else {
+                                ReturnValueArgFlags.Add(false);
+                            }
                         }
                         else if (param.RefKind == RefKind.Out) {
                             //方法的out参数，为与脚本引擎的机制一致，在调用时传入__cs2dsl_out，这里用null标记一下，在实际输出参数时再变为__cs2dsl_out
                             Args.Add(null);
                             ReturnArgs.Add(arg.Expression);
+                            var argSym = model.GetSymbolInfoEx(arg.Expression);
+                            ReturnArgOperations.Add(argOper);
+                            ReturnArgSymbols.Add(argSym.Symbol);
+                            if (null != argOper && argOper.Type.IsValueType && !SymbolTable.IsBasicType(argOper.Type)) {
+                                ReturnValueArgFlags.Add(true);
+                            }
+                            else {
+                                ReturnValueArgFlags.Add(false);
+                            }
                         }
                         else if (param.IsParams) {
                             if (null != argOper && null != argOper.Type && argOper.Type.TypeKind == TypeKind.Array) {
@@ -284,6 +323,78 @@ namespace RoslynTool.CsToDsl
                         ArgConversions.Add(opds[i]);
                     else
                         ArgConversions.Add(null);
+                }
+            }
+        }
+
+        internal void OutputStructFieldsValue(StringBuilder codeBuilder, int indent, CsDslTranslater cs2dsl, string varPrefix, string varPostfix)
+        {
+            for (int i = 0; i < ReturnValueArgFlags.Count; ++i) {
+                bool flag = ReturnValueArgFlags[i];
+                if (flag) {
+                    var exp = ReturnArgs[i];
+                    var oper = ReturnArgOperations[i];
+                    var leftSym = ReturnArgSymbols[i];
+                    if (null != leftSym && SymbolTable.Instance.IsCs2DslSymbol(leftSym) && SymbolTable.Instance.IsFieldSymbolKind(leftSym)) {
+                        codeBuilder.Append(CsDslTranslater.GetIndentString(indent));
+                        codeBuilder.AppendFormat("local({0}_{1}_{2}); {0}_{1}_{2} = ", varPrefix, i, varPostfix);
+                        cs2dsl.OutputExpressionSyntax(exp);
+                        codeBuilder.AppendLine(";");
+                    }
+                }
+            }
+        }
+
+        internal void OutputWrapStructFields(StringBuilder codeBuilder, int indent, CsDslTranslater cs2dsl)
+        {
+            for (int i = 0; i < ReturnValueArgFlags.Count; ++i) {
+                bool flag = ReturnValueArgFlags[i];
+                if (flag) {
+                    var exp = ReturnArgs[i];
+                    var oper = ReturnArgOperations[i];
+                    var leftSym = ReturnArgSymbols[i];
+                    if (null != leftSym && (leftSym.Kind == SymbolKind.Local || leftSym.Kind == SymbolKind.Parameter || SymbolTable.Instance.IsFieldSymbolKind(leftSym))) {
+                        if (SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
+                            codeBuilder.Append(CsDslTranslater.GetIndentString(indent));
+                            cs2dsl.OutputExpressionSyntax(exp);
+                            codeBuilder.Append(" = wrapstruct(");
+                            cs2dsl.OutputExpressionSyntax(exp);
+                            codeBuilder.AppendFormat(", {0});", ClassInfo.GetFullName(oper.Type));
+                            codeBuilder.AppendLine();
+                        }
+                        else {
+                            string ns = ClassInfo.GetNamespaces(oper.Type);
+                            if (ns != "System") {
+                                codeBuilder.Append(CsDslTranslater.GetIndentString(indent));
+                                cs2dsl.OutputExpressionSyntax(exp);
+                                codeBuilder.Append(" = wrapexternstruct(");
+                                cs2dsl.OutputExpressionSyntax(exp);
+                                codeBuilder.AppendFormat(", {0});", ClassInfo.GetFullName(oper.Type));
+                                codeBuilder.AppendLine();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        internal void OutputRecycleAndKeepStructFields(StringBuilder codeBuilder, int indent, CsDslTranslater cs2dsl, string oldVarPrefix, string newVarPrefix, string varPostfix)
+        {
+            for (int i = 0; i < ReturnValueArgFlags.Count; ++i) {
+                bool flag = ReturnValueArgFlags[i];
+                if (flag) {
+                    var exp = ReturnArgs[i];
+                    var oper = ReturnArgOperations[i];
+                    var leftSym = ReturnArgSymbols[i];
+                    if (null != leftSym && SymbolTable.Instance.IsCs2DslSymbol(leftSym) && SymbolTable.Instance.IsFieldSymbolKind(leftSym)) {
+                        string fieldType = fieldType = ClassInfo.GetFullName(oper.Type);
+                        //回收旧值，保持新值
+                        codeBuilder.Append(CsDslTranslater.GetIndentString(indent));
+                        codeBuilder.Append("recycleandkeepstructvalue(");
+                        codeBuilder.Append(fieldType);
+                        codeBuilder.AppendFormat(", {0}_{2}_{3}, {1}_{2}_{3});", oldVarPrefix, newVarPrefix, i, varPostfix);
+                        codeBuilder.AppendLine();
+                    }
                 }
             }
         }
@@ -467,6 +578,9 @@ namespace RoslynTool.CsToDsl
             DefaultValueArgs.Clear();
             DslToObjectDefArgs.Clear();
             ReturnArgs.Clear();
+            ReturnValueArgFlags.Clear();
+            ReturnArgOperations.Clear();
+            ReturnArgSymbols.Clear();
             GenericTypeArgs.Clear();
 
             ClassKey = ClassInfo.GetFullName(sym.ContainingType);

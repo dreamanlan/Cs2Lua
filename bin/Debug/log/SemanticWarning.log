@@ -1,4 +1,4 @@
 ============<<<Semantic Warning:test>>>============
-test.cs(112,23): warning CS3014: 'CUsingHelper.ReadZip(byte[])' cannot be marked as CLS-compliant because the assembly does not have a CLSCompliant attribute
+test.cs(124,23): warning CS3014: 'CUsingHelper.ReadZip(byte[])' cannot be marked as CLS-compliant because the assembly does not have a CLSCompliant attribute
 test.cs(50,16): warning CS0219: The variable 'aa' is assigned but its value is never used
 test.cs(5,1): hidden CS8019: Unnecessary using directive.

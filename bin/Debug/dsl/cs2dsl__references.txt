@@ -7,3 +7,4 @@ UnityEngine.Component
 UnityEngine.GameObject
 UnityEngine.Object
 UnityEngine.ParticleSystem
+UnityEngine.Vector3

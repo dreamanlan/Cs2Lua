@@ -73,7 +73,7 @@ namespace Generator
             }
             return false;
         }
-        private static void GenerateClosure(Dsl.FunctionData data, StringBuilder sb, int indent, bool forRemove)
+        private static void GenerateClosure(Dsl.FunctionData data, StringBuilder sb, int indent, bool forRemove, DslExpression.DslCalculator calculator)
         {
             var fcall = data.LowerOrderFunction;
             bool fullCode = fcall.GetParamId(0) == "true";
@@ -83,7 +83,7 @@ namespace Generator
                 if (needDecl) {
                     sb.AppendFormatLine("{0}local {1};", GetIndentString(indent), localName);
                 }
-                GenerateStatements(data, sb, indent);
+                GenerateStatements(data, sb, indent, calculator);
             }
             else if (fullCode) {
                 sb.AppendLine("(function() ");
@@ -92,7 +92,7 @@ namespace Generator
                     if (needDecl) {
                         sb.AppendFormatLine("{0}local {1};", GetIndentString(indent), localName);
                     }
-                    GenerateStatements(data, sb, indent);
+                    GenerateStatements(data, sb, indent, calculator);
                     sb.AppendFormatLine("{0}return {1};", GetIndentString(indent), localName);
                     --indent;
                 }
@@ -191,7 +191,7 @@ namespace Generator
             }
             return false;
         }
-        private static void GeneratePrefixPostfixOperator(Dsl.FunctionData data, StringBuilder sb, bool forSplit)
+        private static void GeneratePrefixPostfixOperator(Dsl.FunctionData data, StringBuilder sb, bool forSplit, DslExpression.DslCalculator calculator)
         {
             string id = data.GetId();
             if (id == "prefixoperator") {
@@ -199,21 +199,21 @@ namespace Generator
                 var varExp = data.GetParam(1);
                 var opExp = data.GetParam(2);
                 if (forSplit) {
-                    GenerateSyntaxComponent(varExp, sb, 0, false);
+                    GenerateSyntaxComponent(varExp, sb, 0, false, calculator);
                     sb.Append(" = ");
-                    GenerateSyntaxComponent(opExp, sb, 0, false);
+                    GenerateSyntaxComponent(opExp, sb, 0, false, calculator);
                 }
                 else if (fullCode) {
                     sb.Append("(function() ");
-                    GenerateSyntaxComponent(varExp, sb, 0, false);
+                    GenerateSyntaxComponent(varExp, sb, 0, false, calculator);
                     sb.Append(" = ");
-                    GenerateSyntaxComponent(opExp, sb, 0, false);
+                    GenerateSyntaxComponent(opExp, sb, 0, false, calculator);
                     sb.Append("; return ");
-                    GenerateSyntaxComponent(varExp, sb, 0, false);
+                    GenerateSyntaxComponent(varExp, sb, 0, false, calculator);
                     sb.Append("; end)()");
                 }
                 else {
-                    GenerateSyntaxComponent(varExp, sb, 0, false);
+                    GenerateSyntaxComponent(varExp, sb, 0, false, calculator);
                 }
             }
             else if (id == "postfixoperator") {
@@ -225,21 +225,21 @@ namespace Generator
                     sb.Append("local ");
                     sb.Append(oldVal);
                     sb.Append(" = ");
-                    GenerateSyntaxComponent(varExp, sb, 0, false);
+                    GenerateSyntaxComponent(varExp, sb, 0, false, calculator);
                     sb.Append("; ");
-                    GenerateSyntaxComponent(varExp, sb, 0, false);
+                    GenerateSyntaxComponent(varExp, sb, 0, false, calculator);
                     sb.Append(" = ");
-                    GenerateSyntaxComponent(opExp, sb, 0, false);
+                    GenerateSyntaxComponent(opExp, sb, 0, false, calculator);
                 }
                 else if (fullCode) {
                     sb.Append("(function() local ");
                     sb.Append(oldVal);
                     sb.Append(" = ");
-                    GenerateSyntaxComponent(varExp, sb, 0, false);
+                    GenerateSyntaxComponent(varExp, sb, 0, false, calculator);
                     sb.Append("; ");
-                    GenerateSyntaxComponent(varExp, sb, 0, false);
+                    GenerateSyntaxComponent(varExp, sb, 0, false, calculator);
                     sb.Append(" = ");
-                    GenerateSyntaxComponent(opExp, sb, 0, false);
+                    GenerateSyntaxComponent(opExp, sb, 0, false, calculator);
                     sb.Append("; return ");
                     sb.Append(oldVal);
                     sb.Append("; end)()");

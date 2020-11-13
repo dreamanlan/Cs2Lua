@@ -14,10 +14,10 @@ ZipOutputStream = {
 
 	get_Instance = function()
 		local __cs2lua_func_info = luainitialize();
-		local __method_ret_90_4_93_5;
-		__method_ret_90_4_93_5 = ZipOutputStream.s_Instance;
+		local __method_ret_102_4_105_5;
+		__method_ret_102_4_105_5 = ZipOutputStream.s_Instance;
 		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
-		return __method_ret_90_4_93_5;
+		return __method_ret_102_4_105_5;
 	end,
 
 	cctor = function()
@@ -29,11 +29,12 @@ ZipOutputStream = {
 	__cctor = function()
 		local __cs2lua_func_info = luainitialize();
 		if ZipOutputStream.__cctor_called then 
+			__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			return;
 		else
 			ZipOutputStream.__cctor_called = true;
 		end;
-		(= ZipOutputStream.s_Instance);
+		ZipOutputStream.s_Instance = newobject(__cs2lua_func_info, ZipOutputStream, nil, nil, "ctor", nil);
 		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
@@ -51,7 +52,7 @@ ZipOutputStream = {
 		local class = ZipOutputStream;
 
 		local obj_methods = {
-			ctor = function(this, ms)
+			ctor__System_IO_MemoryStream = function(this, ms)
 				local __cs2lua_func_info = luainitialize();
 				this:__ctor();
 				ZipOutputStream.get_Instance().V = 1;
@@ -65,9 +66,17 @@ ZipOutputStream = {
 				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 
+			ctor = function(this)
+				local __cs2lua_func_info = luainitialize();
+				this:__ctor();
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+				return this;
+			end,
+
 			__ctor = function(this)
 				local __cs2lua_func_info = luainitialize();
 				if this.__ctor_called then 
+					__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 					return;
 				else
 					this.__ctor_called = true;
@@ -79,6 +88,7 @@ ZipOutputStream = {
 		local obj_build = function()
 			return {
 				V = 0,
+				m_I = 1,
 				__ctor_called = false,
 			};
 		end;
@@ -98,6 +108,7 @@ ZipOutputStream = {
 
 	__obj_fields = {
 		V = true,
+		m_I = true,
 		__ctor_called = true,
 	},
 
@@ -105,7 +116,7 @@ ZipOutputStream = {
 	-------- metadata info --------
 	-------------------------------
 	__method_info = {
-		ctor = {
+		ctor__System_IO_MemoryStream = {
 			Kind = MethodKind.Constructor,
 		},
 		get_V = {
@@ -116,6 +127,9 @@ ZipOutputStream = {
 		},
 		Test = {
 			Kind = MethodKind.Ordinary,
+		},
+		ctor = {
+			Kind = MethodKind.Constructor,
 		},
 		get_Instance = {
 			Kind = MethodKind.PropertyGet,
@@ -145,6 +159,7 @@ ZipOutputStream.EmbedClass = {
 	__cctor = function()
 		local __cs2lua_func_info = luainitialize();
 		if ZipOutputStream.EmbedClass.__cctor_called then 
+			__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			return;
 		else
 			ZipOutputStream.EmbedClass.__cctor_called = true;
@@ -181,6 +196,7 @@ ZipOutputStream.EmbedClass = {
 			__ctor = function(this)
 				local __cs2lua_func_info = luainitialize();
 				if this.__ctor_called then 
+					__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 					return;
 				else
 					this.__ctor_called = true;

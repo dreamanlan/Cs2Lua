@@ -8,7 +8,7 @@ using System.Security.Cryptography;
 using System.Runtime.InteropServices;
 using System.Linq;
 
-namespace Calculator
+namespace DslExpression
 {
     public struct Float2
     {
@@ -2744,7 +2744,7 @@ namespace Calculator
             }
             else {
                 //error
-                Console.WriteLine("DslCalculator error, {0} line {1}", statementData.ToScriptString(false), statementData.GetLine());
+                Calculator.Log("DslCalculator error, {0} line {1}", statementData.ToScriptString(false), statementData.GetLine());
             }
             return true;
         }
@@ -2798,7 +2798,7 @@ namespace Calculator
             }
             else {
                 //error
-                Console.WriteLine("DslCalculator error, {0} line {1}", funcData.ToScriptString(false), funcData.GetLine());
+                Calculator.Log("DslCalculator error, {0} line {1}", funcData.ToScriptString(false), funcData.GetLine());
             }
             return true;
         }
@@ -2820,7 +2820,7 @@ namespace Calculator
                     }
                     else {
                         //error
-                        Console.WriteLine("DslCalculator error, {0} line {1}", first.ToScriptString(false), first.GetLine());
+                        Calculator.Log("DslCalculator error, {0} line {1}", first.ToScriptString(false), first.GetLine());
                     }
                     IExpression subExp = Calculator.Load(second);
                     item.Expressions.Add(subExp);
@@ -2838,7 +2838,7 @@ namespace Calculator
                     }
                     else {
                         //error
-                        Console.WriteLine("DslCalculator error, {0} line {1}", fData.ToScriptString(false), fData.GetLine());
+                        Calculator.Log("DslCalculator error, {0} line {1}", fData.ToScriptString(false), fData.GetLine());
                     }
                     for (int ix = 0; ix < fData.GetParamNum(); ++ix) {
                         IExpression subExp = Calculator.Load(fData.GetParam(ix));
@@ -2849,7 +2849,7 @@ namespace Calculator
                 else if (fData.GetId() == "else") {
                     if (fData != statementData.Last) {
                         //error
-                        Console.WriteLine("DslCalculator error, {0} line {1}", fData.ToScriptString(false), fData.GetLine());
+                        Calculator.Log("DslCalculator error, {0} line {1}", fData.ToScriptString(false), fData.GetLine());
                     }
                     else {
                         IfExp.Clause item = new IfExp.Clause();
@@ -2862,7 +2862,7 @@ namespace Calculator
                 }
                 else {
                     //error
-                    Console.WriteLine("DslCalculator error, {0} line {1}", fData.ToScriptString(false), fData.GetLine());
+                    Calculator.Log("DslCalculator error, {0} line {1}", fData.ToScriptString(false), fData.GetLine());
                 }
             }
             return true;
@@ -2915,7 +2915,7 @@ namespace Calculator
             }
             else {
                 //error
-                Console.WriteLine("DslCalculator error, {0} line {1}", funcData.ToScriptString(false), funcData.GetLine());
+                Calculator.Log("DslCalculator error, {0} line {1}", funcData.ToScriptString(false), funcData.GetLine());
             }
             return true;
         }
@@ -2935,7 +2935,7 @@ namespace Calculator
                     }
                     else {
                         //error
-                        Console.WriteLine("DslCalculator error, {0} line {1}", first.ToScriptString(false), first.GetLine());
+                        Calculator.Log("DslCalculator error, {0} line {1}", first.ToScriptString(false), first.GetLine());
                     }
                     IExpression subExp = Calculator.Load(second);
                     m_Expressions.Add(subExp);
@@ -2984,7 +2984,7 @@ namespace Calculator
             }
             else {
                 //error
-                Console.WriteLine("DslCalculator error, {0} line {1}", funcData.ToScriptString(false), funcData.GetLine());
+                Calculator.Log("DslCalculator error, {0} line {1}", funcData.ToScriptString(false), funcData.GetLine());
             }
             return true;
         }
@@ -3004,7 +3004,7 @@ namespace Calculator
                     }
                     else {
                         //error
-                        Console.WriteLine("DslCalculator error, {0} line {1}", first.ToScriptString(false), first.GetLine());
+                        Calculator.Log("DslCalculator error, {0} line {1}", first.ToScriptString(false), first.GetLine());
                     }
                     IExpression subExp = Calculator.Load(second);
                     m_Expressions.Add(subExp);
@@ -3057,7 +3057,7 @@ namespace Calculator
             }
             else {
                 //error
-                Console.WriteLine("DslCalculator error, {0} line {1}", funcData.ToScriptString(false), funcData.GetLine());
+                Calculator.Log("DslCalculator error, {0} line {1}", funcData.ToScriptString(false), funcData.GetLine());
             }
             return true;
         }
@@ -3077,7 +3077,7 @@ namespace Calculator
                     }
                     else {
                         //error
-                        Console.WriteLine("DslCalculator error, {0} line {1}", first.ToScriptString(false), first.GetLine());
+                        Calculator.Log("DslCalculator error, {0} line {1}", first.ToScriptString(false), first.GetLine());
                     }
                     IExpression subExp = Calculator.Load(second);
                     m_Expressions.Add(subExp);
@@ -3157,7 +3157,7 @@ namespace Calculator
                     }
                     else {
                         //error
-                        Console.WriteLine("DslCalculator error, {0} line {1}", first.ToScriptString(false), first.GetLine());
+                        Calculator.Log("DslCalculator error, {0} line {1}", first.ToScriptString(false), first.GetLine());
                     }
                     IExpression subExp = Calculator.Load(second);
                     m_Expressions.Add(subExp);
@@ -3232,7 +3232,7 @@ namespace Calculator
                     ret = obj.GetType().AssemblyQualifiedName;
                 }
                 catch (Exception ex) {
-                    Console.WriteLine("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
+                    Calculator.Log("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
                 }
             }
             return ret;
@@ -3259,7 +3259,7 @@ namespace Calculator
                     ret = obj.GetType().FullName;
                 }
                 catch (Exception ex) {
-                    Console.WriteLine("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
+                    Calculator.Log("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
                 }
             }
             return ret;
@@ -3286,7 +3286,7 @@ namespace Calculator
                     ret = obj.GetType().Name;
                 }
                 catch (Exception ex) {
-                    Console.WriteLine("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
+                    Calculator.Log("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
                 }
             }
             return ret;
@@ -3312,14 +3312,14 @@ namespace Calculator
                 try {
                     var r = Type.GetType(type);
                     if (null == r) {
-                        Console.WriteLine("null == Type.GetType({0})", type);
+                        Calculator.Log("null == Type.GetType({0})", type);
                     }
                     else {
                         ret = CalculatorValue.FromObject(r);
                     }
                 }
                 catch (Exception ex) {
-                    Console.WriteLine("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
+                    Calculator.Log("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
                 }
             }
             return ret;
@@ -3344,54 +3344,104 @@ namespace Calculator
                 var obj = m_Expressions[0].Calc();
                 string type = m_Expressions[1].Calc().AsString;
                 try {
-                    if (0 == type.CompareTo("sbyte")) {
-                        ret = obj.Get<sbyte>();
-                    }
-                    else if (0 == type.CompareTo("byte")) {
-                        ret = obj.Get<byte>();
-                    }
-                    else if (0 == type.CompareTo("short")) {
-                        ret = obj.Get<short>();
-                    }
-                    else if (0 == type.CompareTo("ushort")) {
-                        ret = obj.Get<ushort>();
-                    }
-                    else if (0 == type.CompareTo("int")) {
-                        ret = obj.Get<int>();
-                    }
-                    else if (0 == type.CompareTo("uint")) {
-                        ret = obj.Get<uint>();
-                    }
-                    else if (0 == type.CompareTo("long")) {
-                        ret = obj.Get<long>();
-                    }
-                    else if (0 == type.CompareTo("ulong")) {
-                        ret = obj.Get<ulong>();
-                    }
-                    else if (0 == type.CompareTo("float")) {
-                        ret = obj.Get<float>();
-                    }
-                    else if (0 == type.CompareTo("double")) {
-                        ret = obj.Get<double>();
-                    }
-                    else if (0 == type.CompareTo("string")) {
-                        ret = obj.Get<string>();
-                    }
-                    else if (0 == type.CompareTo("bool")) {
-                        ret = obj.Get<bool>();
-                    }
-                    else {
-                        Type t = Type.GetType(type);
-                        if (null != t) {
-                            ret = CalculatorValue.FromObject(obj.Get(t));
+                    string str = obj.AsString;
+                    if (obj.IsString) {
+                        if (0 == type.CompareTo("sbyte")) {
+                            ret = CastTo<sbyte>(str);
+                        }
+                        else if (0 == type.CompareTo("byte")) {
+                            ret = CastTo<byte>(str);
+                        }
+                        else if (0 == type.CompareTo("short")) {
+                            ret = CastTo<short>(str);
+                        }
+                        else if (0 == type.CompareTo("ushort")) {
+                            ret = CastTo<ushort>(str);
+                        }
+                        else if (0 == type.CompareTo("int")) {
+                            ret = CastTo<int>(str);
+                        }
+                        else if (0 == type.CompareTo("uint")) {
+                            ret = CastTo<uint>(str);
+                        }
+                        else if (0 == type.CompareTo("long")) {
+                            ret = CastTo<long>(str);
+                        }
+                        else if (0 == type.CompareTo("ulong")) {
+                            ret = CastTo<ulong>(str);
+                        }
+                        else if (0 == type.CompareTo("float")) {
+                            ret = CastTo<float>(str);
+                        }
+                        else if (0 == type.CompareTo("double")) {
+                            ret = CastTo<double>(str);
+                        }
+                        else if (0 == type.CompareTo("string")) {
+                            ret = str;
+                        }
+                        else if (0 == type.CompareTo("bool")) {
+                            ret = CastTo<bool>(str);
                         }
                         else {
-                            Console.WriteLine("null == Type.GetType({0})", type);
+                            Type t = Type.GetType(type);
+                            if (null != t) {
+                                ret = CalculatorValue.FromObject(CastTo(t, str));
+                            }
+                            else {
+                                Calculator.Log("null == Type.GetType({0})", type);
+                            }
+                        }
+                    }
+                    else {
+                        if (0 == type.CompareTo("sbyte")) {
+                            ret = obj.Get<sbyte>();
+                        }
+                        else if (0 == type.CompareTo("byte")) {
+                            ret = obj.Get<byte>();
+                        }
+                        else if (0 == type.CompareTo("short")) {
+                            ret = obj.Get<short>();
+                        }
+                        else if (0 == type.CompareTo("ushort")) {
+                            ret = obj.Get<ushort>();
+                        }
+                        else if (0 == type.CompareTo("int")) {
+                            ret = obj.Get<int>();
+                        }
+                        else if (0 == type.CompareTo("uint")) {
+                            ret = obj.Get<uint>();
+                        }
+                        else if (0 == type.CompareTo("long")) {
+                            ret = obj.Get<long>();
+                        }
+                        else if (0 == type.CompareTo("ulong")) {
+                            ret = obj.Get<ulong>();
+                        }
+                        else if (0 == type.CompareTo("float")) {
+                            ret = obj.Get<float>();
+                        }
+                        else if (0 == type.CompareTo("double")) {
+                            ret = obj.Get<double>();
+                        }
+                        else if (0 == type.CompareTo("string")) {
+                            ret = obj.Get<string>();
+                        }
+                        else if (0 == type.CompareTo("bool")) {
+                            ret = obj.Get<bool>();
+                        }
+                        else {
+                            Type t = Type.GetType(type);
+                            if (null != t) {
+                                ret = CalculatorValue.FromObject(obj.Get(t));
+                            }
+                            else {
+                                Calculator.Log("null == Type.GetType({0})", type);
+                            }
                         }
                     }
                 }
                 catch (Exception ex) {
-                    Console.WriteLine("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
+                    Calculator.Log("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
                 }
             }
             return ret;
@@ -3421,11 +3471,11 @@ namespace Calculator
                         ret = CalculatorValue.FromObject(Enum.Parse(t, val, true));
                     }
                     else {
-                        Console.WriteLine("null == Type.GetType({0})", type);
+                        Calculator.Log("null == Type.GetType({0})", type);
                     }
                 }
                 catch (Exception ex) {
-                    Console.WriteLine("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
+                    Calculator.Log("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
                 }
             }
             return ret;
@@ -3483,7 +3533,7 @@ namespace Calculator
                                 ret = CalculatorValue.FromObject(t.InvokeMember(method, flags, null, null, _args));
                             }
                             catch (Exception ex) {
-                                Console.WriteLine("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
+                                Calculator.Log("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
                             }
                         }
                         else {
@@ -3495,7 +3545,7 @@ namespace Calculator
                                     ret = CalculatorValue.FromObject(t.InvokeMember(method, flags, null, obj, _args));
                                 }
                                 catch (Exception ex) {
-                                    Console.WriteLine("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
+                                    Calculator.Log("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
                                 }
                             }
                         }
@@ -3577,7 +3627,7 @@ namespace Calculator
                                 ret = CalculatorValue.FromObject(t.InvokeMember(method, flags, null, null, _args));
                             }
                             catch (Exception ex) {
-                                Console.WriteLine("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
+                                Calculator.Log("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
                             }
                         }
                         else {
@@ -3589,7 +3639,7 @@ namespace Calculator
                                     ret = CalculatorValue.FromObject(t.InvokeMember(method, flags, null, obj, _args));
                                 }
                                 catch (Exception ex) {
-                                    Console.WriteLine("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
+                                    Calculator.Log("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
                                 }
                             }
                         }
@@ -3663,7 +3713,7 @@ namespace Calculator
                                 ret = CalculatorValue.FromObject(t.InvokeMember(method, flags, null, null, _args));
                             }
                             catch (Exception ex) {
-                                Console.WriteLine("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
+                                Calculator.Log("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
                             }
                         }
                         else {
@@ -3675,7 +3725,7 @@ namespace Calculator
                                     ret = CalculatorValue.FromObject(t.InvokeMember(method, flags, null, obj, _args));
                                 }
                                 catch (Exception ex) {
-                                    Console.WriteLine("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
+                                    Calculator.Log("Exception:{0}\n{1}", ex.Message, ex.StackTrace);
                                 }
                             }
                         }
@@ -5453,6 +5503,7 @@ namespace Calculator
     }
     public sealed class DslCalculator
     {
+        public Dsl.DslLogDelegation OnLog;
         public IDictionary<string, CalculatorValue> NamedGlobalVariables
         {
             get { return m_NamedGlobalVariables; }
@@ -5657,7 +5708,7 @@ namespace Calculator
         {
             Dsl.DslFile file = new Dsl.DslFile();
             string path = dslFile;
-            if (file.Load(path, (string s) => { Console.WriteLine(s); })) {
+            if (file.Load(path, OnLog)) {
                 foreach (Dsl.ISyntaxComponent info in file.DslInfos) {
                     LoadDsl(info);
                 }
@@ -5824,30 +5875,30 @@ namespace Calculator
                             }
                         }
                         catch (DirectoryNotFoundException ex5) {
-                            Console.WriteLine("calc:[{0}] exception:{1}\n{2}", exp.ToString(), ex5.Message, ex5.StackTrace);
+                            Log("calc:[{0}] exception:{1}\n{2}", exp.ToString(), ex5.Message, ex5.StackTrace);
                             OutputInnerException(ex5);
                         }
                         catch (FileNotFoundException ex4) {
-                            Console.WriteLine("calc:[{0}] exception:{1}\n{2}", exp.ToString(), ex4.Message, ex4.StackTrace);
+                            Log("calc:[{0}] exception:{1}\n{2}", exp.ToString(), ex4.Message, ex4.StackTrace);
                             OutputInnerException(ex4);
                         }
                         catch (IOException ex3) {
-                            Console.WriteLine("calc:[{0}] exception:{1}\n{2}", exp.ToString(), ex3.Message, ex3.StackTrace);
+                            Log("calc:[{0}] exception:{1}\n{2}", exp.ToString(), ex3.Message, ex3.StackTrace);
                             OutputInnerException(ex3);
                             ret = -1;
                         }
                         catch (UnauthorizedAccessException ex2) {
-                            Console.WriteLine("calc:[{0}] exception:{1}\n{2}", exp.ToString(), ex2.Message, ex2.StackTrace);
+                            Log("calc:[{0}] exception:{1}\n{2}", exp.ToString(), ex2.Message, ex2.StackTrace);
                             OutputInnerException(ex2);
                             ret = -1;
                         }
                         catch (NotSupportedException ex1) {
-                            Console.WriteLine("calc:[{0}] exception:{1}\n{2}", exp.ToString(), ex1.Message, ex1.StackTrace);
+                            Log("calc:[{0}] exception:{1}\n{2}", exp.ToString(), ex1.Message, ex1.StackTrace);
                             OutputInnerException(ex1);
                             ret = -1;
                         }
                         catch (Exception ex) {
-                            Console.WriteLine("calc:[{0}] exception:{1}\n{2}", exp.ToString(), ex.Message, ex.StackTrace);
+                            Log("calc:[{0}] exception:{1}\n{2}", exp.ToString(), ex.Message, ex.StackTrace);
                             OutputInnerException(ex);
                             ret = -1;
                             break;
@@ -5865,32 +5916,44 @@ namespace Calculator
             get { return m_RunState; }
             internal set { m_RunState = value; }
         }
-        internal IList<CalculatorValue> Arguments
+        public void Log(string fmt, params object[] args)
+        {
+            if (null != OnLog) {
+                OnLog(string.Format(fmt, args));
+            }
+        }
+        public void Log(object arg)
+        {
+            if (null != OnLog) {
+                OnLog(string.Format("{0}", arg));
+            }
+        }
+        public IList<CalculatorValue> Arguments
         {
             get {
                 var stackInfo = m_Stack.Peek();
                 return stackInfo.Args;
             }
         }
-        internal bool TryGetVariable(int v, out CalculatorValue result)
+        public bool TryGetVariable(int v, out CalculatorValue result)
         {
             return Variables.TryGetValue(v, out result);
         }
-        internal CalculatorValue GetVariable(int v)
+        public CalculatorValue GetVariable(int v)
         {
             CalculatorValue result;
             Variables.TryGetValue(v, out result);
             return result;
         }
-        internal void SetVariable(int v, CalculatorValue val)
+        public void SetVariable(int v, CalculatorValue val)
         {
             Variables[v] = val;
         }
-        internal bool RemoveVariable(int v)
+        public bool RemoveVariable(int v)
         {
             return Variables.Remove(v);
         }
-        internal bool TryGetVariable(string v, out CalculatorValue result)
+        public bool TryGetVariable(string v, out CalculatorValue result)
         {
             bool ret = false;
             if (v.Length > 0) {
@@ -5909,7 +5972,7 @@ namespace Calculator
             }
             return ret;
         }
-        internal CalculatorValue GetVariable(string v)
+        public CalculatorValue GetVariable(string v)
         {
             CalculatorValue result = CalculatorValue.NullObject;
             if (v.Length > 0) {
@@ -5925,7 +5988,7 @@ namespace Calculator
             }
             return result;
         }
-        internal void SetVariable(string v, CalculatorValue val)
+        public void SetVariable(string v, CalculatorValue val)
         {
             if (v.Length > 0) {
                 if (v[0] == '@') {
@@ -5939,7 +6002,7 @@ namespace Calculator
                 }
             }
         }
-        internal bool RemoveVariable(string v)
+        public bool RemoveVariable(string v)
         {
             bool ret = false;
             if (v.Length > 0) {
@@ -5955,7 +6018,7 @@ namespace Calculator
             }
             return ret;
         }
-        internal IExpression Load(Dsl.ISyntaxComponent comp)
+        public IExpression Load(Dsl.ISyntaxComponent comp)
         {
             Dsl.ValueData valueData = comp as Dsl.ValueData;
             if (null != valueData) {
@@ -5970,7 +6033,7 @@ namespace Calculator
                         fd.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
                         if (!p.Load(fd, this)) {
                             //error
-                            Console.WriteLine("DslCalculator error, {0} line {1}", comp.ToScriptString(false), comp.GetLine());
+                            Log("DslCalculator error, {0} line {1}", comp.ToScriptString(false), comp.GetLine());
                         }
                         return p;
                     }
@@ -6068,7 +6131,7 @@ namespace Calculator
                                 }
                                 else {
                                     //error
-                                    Console.WriteLine("DslCalculator error, {0} line {1}", callData.ToScriptString(false), callData.GetLine());
+                                    Log("DslCalculator error, {0} line {1}", callData.ToScriptString(false), callData.GetLine());
                                 }
                                 return exp;
                             }
@@ -6184,19 +6247,19 @@ namespace Calculator
                         }
                         if (!ret.Load(fd, this)) {
                             //error
-                            Console.WriteLine("DslCalculator error, {0} line {1}", comp.ToScriptString(false), comp.GetLine());
+                            Log("DslCalculator error, {0} line {1}", comp.ToScriptString(false), comp.GetLine());
                         }
                         return ret;
                     }
                 }
                 if (!ret.Load(comp, this)) {
                     //error
-                    Console.WriteLine("DslCalculator error, {0} line {1}", comp.ToScriptString(false), comp.GetLine());
+                    Log("DslCalculator error, {0} line {1}", comp.ToScriptString(false), comp.GetLine());
                 }
             }
             else {
                 //error
-                Console.WriteLine("DslCalculator error, {0} line {1}", comp.ToScriptString(false), comp.GetLine());
+                Log("DslCalculator error, {0} line {1}", comp.ToScriptString(false), comp.GetLine());
             }
             return ret;
         }
@@ -6227,7 +6290,7 @@ namespace Calculator
         {
             while (null != ex.InnerException) {
                 ex = ex.InnerException;
-                Console.WriteLine("\t=> exception:{0} stack:{1}", ex.Message, ex.StackTrace);
+                Log("\t=> exception:{0} stack:{1}", ex.Message, ex.StackTrace);
             }
         }
 
