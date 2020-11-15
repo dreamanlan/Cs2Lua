@@ -267,7 +267,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendLine(";");
             }
             --m_Indent;
-            CodeBuilder.AppendFormat("{0}}},", GetIndentString());
+            CodeBuilder.AppendFormat("{0}}}options[needfuncinfo({1})],", GetIndentString(), mi.NeedFuncInfo ? "true" : "false");
             CodeBuilder.AppendLine();
             m_MethodInfoStack.Pop();
         }
@@ -350,7 +350,7 @@ namespace RoslynTool.CsToDsl
                     }
                     CodeBuilder.AppendLine(";");
                     --m_Indent;
-                    CodeBuilder.AppendFormat("{0}}},", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}}}options[needfuncinfo({1})],", GetIndentString(), mi.NeedFuncInfo ? "true" : "false");
                     CodeBuilder.AppendLine();
 
                     m_MethodInfoStack.Pop();
@@ -579,7 +579,7 @@ namespace RoslynTool.CsToDsl
                                 string oldValVar = string.Format("__old_val_{0}", postfix);
                                 string newValVar = string.Format("__new_val_{0}", postfix);
                                 string fieldType = ClassInfo.GetFullName(declSym.Type);
-                                bool isStruct = declSym.Type.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(declSym.Type);
+                                bool isStruct = declSym.Type.IsValueType && !SymbolTable.IsBasicType(declSym.Type);
                                 if (isStruct) {
                                     //记录旧值
                                     CodeBuilder.Append(GetIndentString());
@@ -632,7 +632,7 @@ namespace RoslynTool.CsToDsl
                             }
                         }
                         --m_Indent;
-                        CodeBuilder.AppendFormat("{0}}}{1};", GetIndentString(), mi.ExistYield ? ")" : string.Empty);
+                        CodeBuilder.AppendFormat("{0}}}options[needfuncinfo({1})]{2};", GetIndentString(), mi.NeedFuncInfo ? "true" : "false", mi.ExistYield ? ")" : string.Empty);
                         CodeBuilder.AppendLine();
 
                         m_MethodInfoStack.Pop();
@@ -726,7 +726,7 @@ namespace RoslynTool.CsToDsl
                         VisitBlock(accessor.Body);
                     }
                     --m_Indent;
-                    CodeBuilder.AppendFormat("{0}}};", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}}}options[needfuncinfo({1})];", GetIndentString(), mi.NeedFuncInfo ? "true" : "false");
                     CodeBuilder.AppendLine();
 
                     m_MethodInfoStack.Pop();
@@ -833,7 +833,7 @@ namespace RoslynTool.CsToDsl
                     }
                     CodeBuilder.AppendLine(";");
                     --m_Indent;
-                    CodeBuilder.AppendFormat("{0}}};", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}}}options[needfuncinfo({1})];", GetIndentString(), mi.NeedFuncInfo ? "true" : "false");
                     CodeBuilder.AppendLine();
 
                     m_MethodInfoStack.Pop();
@@ -1008,7 +1008,7 @@ namespace RoslynTool.CsToDsl
                         }
                     }
                     --m_Indent;
-                    CodeBuilder.AppendFormat("{0}}}{1};", GetIndentString(), mi.ExistYield ? ")" : string.Empty);
+                    CodeBuilder.AppendFormat("{0}}}options[needfuncinfo({1})]{2};", GetIndentString(), mi.NeedFuncInfo ? "true" : "false", mi.ExistYield ? ")" : string.Empty);
                     CodeBuilder.AppendLine();
 
                     m_MethodInfoStack.Pop();
@@ -1023,6 +1023,9 @@ namespace RoslynTool.CsToDsl
             var sym = symInfo.Symbol as IMethodSymbol;
 
             if (null != sym && sym.Parameters.Length == 1) {
+                var mi = new MethodInfo();
+                mi.Init(sym, node);
+                m_MethodInfoStack.Push(mi);
                 if (node.Body is BlockSyntax) {
                     var param = sym.Parameters[0];
                     CodeBuilder.AppendFormat("deffunc({0})args({1}) {{", sym.ReturnsVoid ? 0 : 1, param.Name);
@@ -1034,7 +1037,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendLine();
                     }
                     --m_Indent;
-                    CodeBuilder.AppendFormat("{0}}}", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}}}options[needfuncinfo({1})]", GetIndentString(), mi.NeedFuncInfo ? "true" : "false");
                 }
                 else {
                     var param = sym.Parameters[0];
@@ -1055,8 +1058,9 @@ namespace RoslynTool.CsToDsl
                     else {
                         ReportIllegalSymbol(node, symInfo);
                     }
-                    CodeBuilder.AppendFormat("; return({0}); }}", varName);
+                    CodeBuilder.AppendFormat("; return({0}); }}options[needfuncinfo({1})]", varName, mi.NeedFuncInfo ? "true" : "false");
                 }
+                m_MethodInfoStack.Pop();
             }
             else {
                 ReportIllegalSymbol(node, symInfo);
@@ -1123,7 +1127,7 @@ namespace RoslynTool.CsToDsl
                         }
                     }
                     --m_Indent;
-                    CodeBuilder.AppendFormat("{0}}}", GetIndentString());
+                    CodeBuilder.AppendFormat("{0}}}options[needfuncinfo({1})]", GetIndentString(), mi.NeedFuncInfo ? "true" : "false");
                 }
                 else {
                     string varName = string.Format("__lambda_{0}", GetSourcePosForVar(node));
@@ -1151,6 +1155,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendFormat("; return({0})", varName);
                     }
                     CodeBuilder.Append("; }");
+                    CodeBuilder.AppendFormat("options[needfuncinfo({0})]", mi.NeedFuncInfo ? "true" : "false");
                 }
                 m_MethodInfoStack.Pop();
             }
@@ -1222,7 +1227,7 @@ namespace RoslynTool.CsToDsl
                     }
                 }
                 --m_Indent;
-                CodeBuilder.AppendFormat("{0}}}", GetIndentString());
+                CodeBuilder.AppendFormat("{0}}}options[needfuncinfo({1})]", GetIndentString(), mi.NeedFuncInfo ? "true" : "false");
 
                 m_MethodInfoStack.Pop();
             }

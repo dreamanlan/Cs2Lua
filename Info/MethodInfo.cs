@@ -27,6 +27,7 @@ namespace RoslynTool.CsToDsl
         internal string ParamsElementInfo = string.Empty;
         internal bool ExistYield = false;
         internal bool ExistTopLevelReturn = false;
+        internal bool NeedFuncInfo = false;
         internal int ReturnValueCount = 0;
 
         internal bool ExistTry = false;
@@ -75,6 +76,13 @@ namespace RoslynTool.CsToDsl
                         string elementType = ClassInfo.GetFullName(arrTypeSym.ElementType);
                         string elementTypeKind = "TypeKind." + arrTypeSym.ElementType.TypeKind.ToString();
                         ParamsElementInfo = string.Format("{0}, {1}", elementType, elementTypeKind);
+                        if (arrTypeSym.ElementType.IsValueType && !SymbolTable.IsBasicType(arrTypeSym.ElementType) && !CsDslTranslater.IsImplementationOfSys(arrTypeSym.ElementType, "IEnumerator")) {
+                            string ns = ClassInfo.GetNamespaces(arrTypeSym.ElementType);
+                            if (SymbolTable.Instance.IsCs2DslSymbol(arrTypeSym.ElementType))
+                                NeedFuncInfo = true;
+                            else if (ns != "System")
+                                NeedFuncInfo = true;
+                        }
                     }
                     ParamNames.Add("...");
                     ParamTypes.Add(ClassInfo.GetFullName(param.Type));
@@ -84,6 +92,17 @@ namespace RoslynTool.CsToDsl
                     break;
                 }
                 else if (param.RefKind == RefKind.Ref) {
+                    if (param.Type.IsValueType && !SymbolTable.IsBasicType(param.Type) && !CsDslTranslater.IsImplementationOfSys(param.Type, "IEnumerator")) {
+                        string ns = ClassInfo.GetNamespaces(param.Type);
+                        if (SymbolTable.Instance.IsCs2DslSymbol(param.Type)) {
+                            ValueParams.Add(ParamNames.Count);
+                            NeedFuncInfo = true;
+                        }
+                        else if (ns != "System") {
+                            ExternValueParams.Add(ParamNames.Count);
+                            NeedFuncInfo = true;
+                        }
+                    }
                     //ref参数与out参数在形参处理时机制相同，实参时out参数传入__cs2dsl_out（适应脚本引擎与dotnet反射的调用规则）
                     ParamNames.Add(param.Name);
                     ParamTypes.Add(ClassInfo.GetFullName(param.Type));
@@ -91,12 +110,16 @@ namespace RoslynTool.CsToDsl
                     ReturnParamNames.Add(param.Name);
                 }
                 else if (param.RefKind == RefKind.Out) {
-                    if (param.Type.TypeKind == TypeKind.Struct && !CsDslTranslater.IsImplementationOfSys(param.Type, "IEnumerator")) {
+                    if (param.Type.IsValueType && !SymbolTable.IsBasicType(param.Type) && !CsDslTranslater.IsImplementationOfSys(param.Type, "IEnumerator")) {
                         string ns = ClassInfo.GetNamespaces(param.Type);
-                        if (SymbolTable.Instance.IsCs2DslSymbol(param.Type))
+                        if (SymbolTable.Instance.IsCs2DslSymbol(param.Type)) {
                             OutValueParams.Add(ParamNames.Count);
-                        else if (ns != "System")
+                            NeedFuncInfo = true;
+                        }
+                        else if (ns != "System") {
                             OutExternValueParams.Add(ParamNames.Count);
+                            NeedFuncInfo = true;
+                        }
                     }
                     //ref参数与out参数在形参处理时机制相同，实参时out参数传入__cs2dsl_out（适应脚本引擎与dotnet反射的调用规则）
                     ParamNames.Add(param.Name);
@@ -105,12 +128,16 @@ namespace RoslynTool.CsToDsl
                     ReturnParamNames.Add(param.Name);
                 }
                 else {
-                    if (param.Type.TypeKind == TypeKind.Struct && !CsDslTranslater.IsImplementationOfSys(param.Type, "IEnumerator")) {
+                    if (param.Type.IsValueType && !SymbolTable.IsBasicType(param.Type) && !CsDslTranslater.IsImplementationOfSys(param.Type, "IEnumerator")) {
                         string ns = ClassInfo.GetNamespaces(param.Type);
-                        if (SymbolTable.Instance.IsCs2DslSymbol(param.Type))
+                        if (SymbolTable.Instance.IsCs2DslSymbol(param.Type)) {
                             ValueParams.Add(ParamNames.Count);
-                        else if (ns != "System")
+                            NeedFuncInfo = true;
+                        }
+                        else if (ns != "System") {
                             ExternValueParams.Add(ParamNames.Count);
+                            NeedFuncInfo = true;
+                        }
                     }
                     ParamNames.Add(param.Name);
                     ParamTypes.Add(ClassInfo.GetFullName(param.Type));

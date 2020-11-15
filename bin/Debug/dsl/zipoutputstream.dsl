@@ -8,12 +8,12 @@ class(ZipOutputStream) {
 		__new_object = deffunc(1)args(...){
 			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(ZipOutputStream, typeargs(), typekinds(), "ctor", null, ...);
 			return(__cs2dsl_newobj);
-		};
+		}options[needfuncinfo(false)];
 		get_Instance = deffunc(1)args(){
-			local(__method_ret_102_4_105_5);
-			__method_ret_102_4_105_5 = getstatic(SymbolKind.Field, ZipOutputStream, "s_Instance");
-			return(__method_ret_102_4_105_5);
-		};
+			local(__method_ret_108_4_111_5);
+			__method_ret_108_4_111_5 = getstatic(SymbolKind.Field, ZipOutputStream, "s_Instance");
+			return(__method_ret_108_4_111_5);
+		}options[needfuncinfo(false)];
 		cctor = deffunc(0)args(){
 			callstatic(ZipOutputStream, "__cctor");
 		};
@@ -24,7 +24,7 @@ class(ZipOutputStream) {
 				ZipOutputStream.__cctor_called = true;
 			};
 			setstatic(SymbolKind.Field, ZipOutputStream, "s_Instance", newobject(ZipOutputStream, typeargs(), typekinds(), "ctor", null));
-		};
+		}options[needfuncinfo(false)];
 	};
 	static_fields {
 		s_Instance = null;
@@ -43,20 +43,24 @@ class(ZipOutputStream) {
 			setinstance(SymbolKind.Field, getstatic(SymbolKind.Property, ZipOutputStream, "Instance"), ZipOutputStream, "V", 1);
 			callinstance(getstatic(SymbolKind.Property, ZipOutputStream, "Instance"), ZipOutputStream, "Test");
 			return(this);
-		},
+		}options[needfuncinfo(false)],
 		Test = deffunc(0)args(this){
-		};
+			local(dict); dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct), literaldictionary(typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct)), dslstrtocsstr("System.Collections.Generic.Dictionary_TKey_TValue:ctor__Void"));
+			callexterninstance(dict, System.Collections.Generic.Dictionary_TKey_TValue, "Add", 1, 1);
+			callexterninstance(dict, System.Collections.Generic.Dictionary_TKey_TValue, "Add", 2, 2);
+			setexterninstanceindexer(System.Collections.Generic.Dictionary_TKey_TValue, typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct), dict, System.Collections.Generic.Dictionary_TKey_TValue, "set_Item", 2, true, 1, execbinary("+", getexterninstanceindexer(System.Collections.Generic.Dictionary_TKey_TValue, typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct), dict, System.Collections.Generic.Dictionary_TKey_TValue, "get_Item", 1, 1), getexterninstanceindexer(System.Collections.Generic.Dictionary_TKey_TValue, typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct), dict, System.Collections.Generic.Dictionary_TKey_TValue, "get_Item", 1, 2), System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
+		}options[needfuncinfo(false)];
 		ctor = deffunc(0)args(this){
 			callinstance(this, ZipOutputStream, "__ctor");
 			return(this);
-		},
+		}options[needfuncinfo(false)],
 		__ctor = deffunc(0)args(this){
 			if(getinstance(SymbolKind.Field, this, ZipOutputStream, "__ctor_called")){
 				return();
 			}else{
 				setinstance(SymbolKind.Field, this, ZipOutputStream, "__ctor_called", true);
 			};
-		};
+		}options[needfuncinfo(false)];
 	};
 	instance_fields {
 		V = 0;
@@ -114,7 +118,7 @@ class(ZipOutputStream.EmbedClass) {
 		__new_object = deffunc(1)args(...){
 			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(ZipOutputStream.EmbedClass, typeargs(), typekinds(), "ctor", null, ...);
 			return(__cs2dsl_newobj);
-		};
+		}options[needfuncinfo(false)];
 		cctor = deffunc(0)args(){
 			callstatic(ZipOutputStream.EmbedClass, "__cctor");
 		};
@@ -124,7 +128,7 @@ class(ZipOutputStream.EmbedClass) {
 			}else{
 				ZipOutputStream.EmbedClass.__cctor_called = true;
 			};
-		};
+		}options[needfuncinfo(false)];
 	};
 	static_fields {
 		__cctor_called = false;
@@ -135,7 +139,7 @@ class(ZipOutputStream.EmbedClass) {
 	instance_methods {
 		Test = deffunc(0)args(this){
 			callinstance(getstatic(SymbolKind.Property, ZipOutputStream, "Instance"), ZipOutputStream, "Test");
-		};
+		}options[needfuncinfo(false)];
 		ctor = deffunc(0)args(this){
 			callinstance(this, ZipOutputStream.EmbedClass, "__ctor");
 		};
@@ -145,7 +149,7 @@ class(ZipOutputStream.EmbedClass) {
 			}else{
 				setinstance(SymbolKind.Field, this, ZipOutputStream.EmbedClass, "__ctor_called", true);
 			};
-		};
+		}options[needfuncinfo(false)];
 	};
 	instance_fields {
 		__ctor_called = false;

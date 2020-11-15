@@ -10,7 +10,7 @@ class(MyScript) {
 		__new_object = deffunc(1)args(...){
 			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(MyScript, typeargs(), typekinds(), "ctor", null, ...);
 			return(__cs2dsl_newobj);
-		};
+		}options[needfuncinfo(false)];
 		cctor = deffunc(0)args(){
 			callstatic(MyScript, "__cctor");
 		};
@@ -20,7 +20,7 @@ class(MyScript) {
 			}else{
 				MyScript.__cctor_called = true;
 			};
-		};
+		}options[needfuncinfo(false)];
 	};
 	static_fields {
 		__attributes = MyScript__Attrs;
@@ -41,9 +41,9 @@ class(MyScript) {
 				callinstance(this, MyScript, "Reset");
 				getexterninstance(SymbolKind.Property, counttxt, UnityEngine.UI.Text, "text") = callstatic(LuaString, "Format__System_String__System_Object", "cube:{0}", v);
 				setinstance(SymbolKind.Field, this, MyScript, "max", typecast(v, System.Int32, TypeKind.Struct));
-			});
+			}options[needfuncinfo(false)]);
 			callinstance(this, MyScript, "Reset");
-		};
+		}options[needfuncinfo(false)];
 		Update = deffunc(0)args(this){
 			local(i); i = 0;
 			while( execbinary("<", i, getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, MyScript, "cubes"), System.Array, "Length"), System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
@@ -68,10 +68,10 @@ class(MyScript) {
 			};
 			setinstance(SymbolKind.Field, this, MyScript, "t", execbinary("/", ( execbinary("-", getexternstatic(SymbolKind.Property, UnityEngine.Time, "time"), getinstance(SymbolKind.Field, this, MyScript, "fogStart"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct) ), 10, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct));
 			getexterninstancestructmember(SymbolKind.Property, getexternstatic(SymbolKind.Property, UnityEngine.Camera, "main"), UnityEngine.Camera, "backgroundColor") = callexternstaticreturnstruct(UnityEngine.Color, "Lerp", getinstance(SymbolKind.Field, this, MyScript, "bgCurrent"), getinstance(SymbolKind.Field, this, MyScript, "bgColor"), getinstance(SymbolKind.Field, this, MyScript, "t"));
-		};
+		}options[needfuncinfo(true)];
 		Call = deffunc(0)args(this, name, ...){
 			local(args); args = params(System.Object, TypeKind.Class);
-		};
+		}options[needfuncinfo(false)];
 		TestCoroutine = wrapenumerable(deffunc(1)args(this){
 			local(__method_ret_69_4_76_5);
 			wrapyield(newexternobject(UnityEngine.WaitForSeconds, typeargs(), typekinds(), null, 10), false, true);
@@ -82,7 +82,7 @@ class(MyScript) {
 			i = execbinary("+", i, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
 			};
 			return(null);
-		});
+		}options[needfuncinfo(false)]);
 		Reset = deffunc(0)args(this){
 			if( execbinary("!=", null, getinstance(SymbolKind.Field, this, MyScript, "cubes"), System.Object, System.Object, TypeKind.Class, TypeKind.Class) ){
 				local(i); i = 0;
@@ -108,7 +108,7 @@ class(MyScript) {
 				getinstance(SymbolKind.Field, this, MyScript, "cubes")[i + 1] = cube;
 			i = execbinary("+", i, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
 			};
-		};
+		}options[needfuncinfo(true)];
 		ctor = deffunc(0)args(this){
 			callinstance(this, MyScript, "__ctor");
 		};
@@ -123,7 +123,7 @@ class(MyScript) {
 			setinstance(SymbolKind.Field, this, MyScript, "bgColor", newexternstruct(UnityEngine.Color, typeargs(), typekinds(), null));
 			recycleandkeepstructvalue(UnityEngine.Color, nil, getinstance(SymbolKind.Field, this, MyScript, "bgColor"));
 			setinstance(SymbolKind.Field, this, MyScript, "colors", literalarray(UnityEngine.Color, TypeKind.Struct, getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "red"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "blue"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "green"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "cyan"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "grey"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "white"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "yellow"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "magenta"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "black")));
-		};
+		}options[needfuncinfo(true)];
 	};
 	instance_fields {
 		root = null;

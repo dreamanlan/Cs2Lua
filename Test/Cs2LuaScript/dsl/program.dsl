@@ -10,10 +10,10 @@ class(Program) {
 		Init = deffunc(0)args(){
 			comment("使用c#代码时需要的初始化（平台相关代码，不会转换为lua代码，cs2lua在翻译时会添加__DSL__宏，可以据此设定代码是否要转换为lua）");
 			comment("公共初始化（也就是逻辑相关的代码）");
-		};
+		}options[needfuncinfo(false)];
 		Main = deffunc(0)args(args){
 			callstatic(Program, "Init");
-		};
+		}options[needfuncinfo(false)];
 		cctor = deffunc(0)args(){
 			callstatic(Program, "__cctor");
 		};
@@ -23,7 +23,7 @@ class(Program) {
 			}else{
 				Program.__cctor_called = true;
 			};
-		};
+		}options[needfuncinfo(false)];
 	};
 	static_fields {
 		__attributes = Program__Attrs;

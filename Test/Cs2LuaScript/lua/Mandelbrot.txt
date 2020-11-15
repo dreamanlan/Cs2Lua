@@ -5,28 +5,21 @@ Mandelbrot = {
 	-------- class methods --------
 	-------------------------------
 	__new_object = function(...)
-		local __cs2lua_func_info = luainitialize();
 		local __cs2dsl_newobj;
-		__cs2dsl_newobj = newobject(__cs2lua_func_info, Mandelbrot, nil, nil, "ctor", nil, ...);
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		__cs2dsl_newobj = newobject(Mandelbrot, nil, nil, "ctor", nil, ...);
 		return __cs2dsl_newobj;
 	end,
 
 	cctor = function()
-		local __cs2lua_func_info = luainitialize();
 		Mandelbrot.__cctor();
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	__cctor = function()
-		local __cs2lua_func_info = luainitialize();
 		if Mandelbrot.__cctor_called then 
-			__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			return;
 		else
 			Mandelbrot.__cctor_called = true;
 		end;
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	-------------------------------
@@ -44,21 +37,16 @@ Mandelbrot = {
 
 		local obj_methods = {
 			Init = function(this, obj, mb)
-				local __cs2lua_func_info = luainitialize();
-				this.root = newexternobject(__cs2lua_func_info, UnityEngine.GameObject, nil, nil, nil, luastrtocsstr("UnityEngine.GameObject:ctor__Void__String"), luastrtocsstr("mandelbrot"));
+				this.root = newexternobject(UnityEngine.GameObject, nil, nil, nil, luastrtocsstr("UnityEngine.GameObject:ctor__Void__String"), luastrtocsstr("mandelbrot"));
 				this:Exec();
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 
 			Call = function(this, name, ...)
-				local __cs2lua_func_info = luainitialize();
 				local args;
 				args = wrapparams({...}, System.Object, TypeKind.Class);
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 
 			Exec = function(this)
-				local __cs2lua_func_info = luainitialize();
 				local width;
 				width = 50;
 				local height;
@@ -106,7 +94,6 @@ Mandelbrot = {
 					end;
 					y = (y + 1);
 				end;
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 
 			DrawCube = function(this, x, y, w, h)
@@ -124,9 +111,7 @@ Mandelbrot = {
 			end,
 
 			ctor = function(this)
-				local __cs2lua_func_info = luainitialize();
 				this:__ctor();
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 
 			__ctor = function(this)
@@ -137,7 +122,7 @@ Mandelbrot = {
 				else
 					this.__ctor_called = true;
 				end;
-				this.colors = wraparray({get_unity_color_red(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "red"), get_unity_color_blue(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "blue"), get_unity_color_green(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "green"), getexternstaticstructmember(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "cyan"), getexternstaticstructmember(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "grey"), get_unity_color_white(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "white"), get_unity_color_yellow(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "yellow"), getexternstaticstructmember(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "magenta"), get_unity_color_black(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "black")}, nil, UnityEngine.Color, TypeKind.Struct);
+				this.colors = wraparray({get_unity_color_red(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "red"), get_unity_color_blue(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "blue"), get_unity_color_green(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "green"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "cyan"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "grey"), get_unity_color_white(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "white"), get_unity_color_yellow(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "yellow"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "magenta"), get_unity_color_black(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "black")}, nil, UnityEngine.Color, TypeKind.Struct);
 				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 		};

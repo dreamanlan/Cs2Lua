@@ -5,24 +5,19 @@ CUsingHelper = {
 	-------- class methods --------
 	-------------------------------
 	__new_object = function(...)
-		local __cs2lua_func_info = luainitialize();
 		local __cs2dsl_newobj;
-		__cs2dsl_newobj = newobject(__cs2lua_func_info, CUsingHelper, nil, nil, "ctor", nil, ...);
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		__cs2dsl_newobj = newobject(CUsingHelper, nil, nil, "ctor", nil, ...);
 		return __cs2dsl_newobj;
 	end,
 
 	Test = function(i)
-		local __cs2lua_func_info = luainitialize();
-		local __method_ret_117_4_120_5;
-		__method_ret_117_4_120_5 = nil;
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
-		return __method_ret_117_4_120_5;
+		local __method_ret_123_4_126_5;
+		__method_ret_123_4_126_5 = nil;
+		return __method_ret_123_4_126_5;
 	end,
 
 	ReadZip = function(bytes)
-		local __cs2lua_func_info = luainitialize();
-		local __method_ret_122_4_179_5;
+		local __method_ret_128_4_185_5;
 		local abc;
 		abc = newarraydim2(System.Int32, TypeKind.Struct, 0, 12, 13);
 		local v;
@@ -35,14 +30,14 @@ CUsingHelper = {
 
 		else
 			--
-			local __invoke_131_16_131_42;
-			__invoke_131_16_131_42,v = dict:TryGetValue(1, __cs2lua_out);
-			if (__invoke_131_16_131_42 and (v == 0)) then
+			local __invoke_137_16_137_42;
+			__invoke_137_16_137_42,v = dict:TryGetValue(1, __cs2lua_out);
+			if (__invoke_137_16_137_42 and (v == 0)) then
 
 			else
 				--
-				local __unary_133_21_133_24 = v; v = (v + 1);
-				if (__unary_133_21_133_24 > 0) then
+				local __unary_139_21_139_24 = v; v = (v + 1);
+				if (__unary_139_21_139_24 > 0) then
 
 				else
 					--
@@ -91,25 +86,19 @@ CUsingHelper = {
 		--		}
 		--        
 
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 		return nil;
 	end,
 
 	cctor = function()
-		local __cs2lua_func_info = luainitialize();
 		CUsingHelper.__cctor();
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	__cctor = function()
-		local __cs2lua_func_info = luainitialize();
 		if CUsingHelper.__cctor_called then 
-			__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			return;
 		else
 			CUsingHelper.__cctor_called = true;
 		end;
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	-------------------------------
@@ -128,26 +117,19 @@ CUsingHelper = {
 
 		local obj_methods = {
 			ctor = function(this, a1, a2)
-				local __cs2lua_func_info = luainitialize();
 				this:__ctor();
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 				return this;
 			end,
 
 			Dispose = function(this)
-				local __cs2lua_func_info = luainitialize();
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 
 			__ctor = function(this)
-				local __cs2lua_func_info = luainitialize();
 				if this.__ctor_called then 
-					__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 					return;
 				else
 					this.__ctor_called = true;
 				end;
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 		};
 

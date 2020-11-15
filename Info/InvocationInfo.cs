@@ -355,6 +355,7 @@ namespace RoslynTool.CsToDsl
                     var leftSym = ReturnArgSymbols[i];
                     if (null != leftSym && (leftSym.Kind == SymbolKind.Local || leftSym.Kind == SymbolKind.Parameter || SymbolTable.Instance.IsFieldSymbolKind(leftSym))) {
                         if (SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
+                            cs2dsl.MarkNeedFuncInfo();
                             codeBuilder.Append(CsDslTranslater.GetIndentString(indent));
                             cs2dsl.OutputExpressionSyntax(exp);
                             codeBuilder.Append(" = wrapstruct(");
@@ -365,6 +366,7 @@ namespace RoslynTool.CsToDsl
                         else {
                             string ns = ClassInfo.GetNamespaces(oper.Type);
                             if (ns != "System") {
+                                cs2dsl.MarkNeedFuncInfo();
                                 codeBuilder.Append(CsDslTranslater.GetIndentString(indent));
                                 cs2dsl.OutputExpressionSyntax(exp);
                                 codeBuilder.Append(" = wrapexternstruct(");
@@ -387,6 +389,7 @@ namespace RoslynTool.CsToDsl
                     var oper = ReturnArgOperations[i];
                     var leftSym = ReturnArgSymbols[i];
                     if (null != leftSym && SymbolTable.Instance.IsCs2DslSymbol(leftSym) && SymbolTable.Instance.IsFieldSymbolKind(leftSym)) {
+                        cs2dsl.MarkNeedFuncInfo();
                         string fieldType = fieldType = ClassInfo.GetFullName(oper.Type);
                         //回收旧值，保持新值
                         codeBuilder.Append(CsDslTranslater.GetIndentString(indent));
@@ -404,7 +407,10 @@ namespace RoslynTool.CsToDsl
             IMethodSymbol sym = MethodSymbol;
             string mname = cs2dsl.NameMangling(IsExtensionMethod && !IsExternMethod && null != sym.ReducedFrom ? sym.ReducedFrom : sym);
             string prestr = string.Empty;
-            bool externReturnStruct = IsExternMethod && !sym.ReturnsVoid && sym.ReturnType.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(sym.ReturnType);
+            bool externReturnStruct = IsExternMethod && !sym.ReturnsVoid && sym.ReturnType.IsValueType && !SymbolTable.IsBasicType(sym.ReturnType);
+            if (externReturnStruct) {
+                cs2dsl.MarkNeedFuncInfo();
+            }
             if (isMemberAccess) {
                 string fnOfIntf = string.Empty;
                 var expOper = model.GetOperationEx(exp);

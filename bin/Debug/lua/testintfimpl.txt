@@ -5,28 +5,21 @@ TestIntfImpl = {
 	-------- class methods --------
 	-------------------------------
 	__new_object = function(...)
-		local __cs2lua_func_info = luainitialize();
 		local __cs2dsl_newobj;
-		__cs2dsl_newobj = newobject(__cs2lua_func_info, TestIntfImpl, nil, nil, "ctor", nil, ...);
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		__cs2dsl_newobj = newobject(TestIntfImpl, nil, nil, "ctor", nil, ...);
 		return __cs2dsl_newobj;
 	end,
 
 	cctor = function()
-		local __cs2lua_func_info = luainitialize();
 		TestIntfImpl.__cctor();
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	__cctor = function()
-		local __cs2lua_func_info = luainitialize();
 		if TestIntfImpl.__cctor_called then 
-			__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			return;
 		else
 			TestIntfImpl.__cctor_called = true;
 		end;
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	-------------------------------
@@ -44,34 +37,25 @@ TestIntfImpl = {
 
 		local obj_methods = {
 			get_prop = function(this)
-				local __cs2lua_func_info = luainitialize();
 				local __method_ret_25_4_25_33;
 				__method_ret_25_4_25_33 = this.prop;
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 				return __method_ret_25_4_25_33;
 			end,
 
 			set_prop = function(this, value)
-				local __cs2lua_func_info = luainitialize();
 				this.prop = value;
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 
 			ctor = function(this)
-				local __cs2lua_func_info = luainitialize();
 				this:__ctor();
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 
 			__ctor = function(this)
-				local __cs2lua_func_info = luainitialize();
 				if this.__ctor_called then 
-					__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 					return;
 				else
 					this.__ctor_called = true;
 				end;
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 		};
 

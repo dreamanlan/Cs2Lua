@@ -11,7 +11,7 @@ class(Cs2LuaType) {
 			local(__method_ret_7_4_11_5);
 			__method_ret_7_4_11_5 = Cs2LuaTypeImpl.GetFullName(type);
 			return(__method_ret_7_4_11_5);
-		};
+		}options[needfuncinfo(false)];
 		cctor = deffunc(0)args(){
 			callstatic(Cs2LuaType, "__cctor");
 		};
@@ -21,7 +21,7 @@ class(Cs2LuaType) {
 			}else{
 				Cs2LuaType.__cctor_called = true;
 			};
-		};
+		}options[needfuncinfo(false)];
 	};
 	static_fields {
 		__attributes = Cs2LuaType__Attrs;

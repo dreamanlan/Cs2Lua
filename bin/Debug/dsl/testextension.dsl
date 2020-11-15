@@ -7,7 +7,7 @@ require("intlist");
 class(TestExtension) {
 	static_methods {
 		Test = deffunc(0)args(list, T, t){
-		};
+		}options[needfuncinfo(false)];
 		cctor = deffunc(0)args(){
 			callstatic(TestExtension, "__cctor");
 		};
@@ -17,7 +17,7 @@ class(TestExtension) {
 			}else{
 				TestExtension.__cctor_called = true;
 			};
-		};
+		}options[needfuncinfo(false)];
 	};
 	static_fields {
 		__cctor_called = false;

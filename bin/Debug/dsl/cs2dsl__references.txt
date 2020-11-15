@@ -1,6 +1,7 @@
 System.Boolean
 System.Int32
 System.IO.MemoryStream
+System.Single
 System.String
 UnityEngine.Color
 UnityEngine.Component

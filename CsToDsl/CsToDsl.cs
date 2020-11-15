@@ -271,9 +271,42 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("dsltoobject(SymbolKind.ErrorType, false, \"\", ");
             }
         }
+        internal void MarkNeedFuncInfo()
+        {
+            var minfo = GetCurMethodInfo();
+            if (null != minfo) {
+                minfo.NeedFuncInfo = true;
+            }
+            else if (m_FieldInitializerStack.Count > 0) {
+                var fieldSym = m_FieldInitializerStack.Peek();
+                if (fieldSym.IsStatic) {
+                    MarkStaticCtorNeedFuncInfo();
+                }
+                else {
+                    MarkCtorNeedFuncInfo();
+                }
+            }
+        }
+        internal void MarkCtorNeedFuncInfo()
+        {
+            var cinfo = GetCurClassInfo();
+            if (null != cinfo) {
+                cinfo.CtorNeedFuncInfo = true;
+            }
+        }
+        internal void MarkStaticCtorNeedFuncInfo()
+        {
+            var cinfo = GetCurClassInfo();
+            if (null != cinfo) {
+                cinfo.StaticCtorNeedFuncInfo = true;
+            }
+        }
         internal ClassInfo GetCurClassInfo()
         {
-            return m_ClassInfoStack.Peek();
+            if (m_ClassInfoStack.Count > 0)
+                return m_ClassInfoStack.Peek();
+            else
+                return null;
         }
         internal INamedTypeSymbol GetCurClassSemanticInfo()
         {
@@ -287,7 +320,10 @@ namespace RoslynTool.CsToDsl
         }
         internal MethodInfo GetCurMethodInfo()
         {
-            return m_MethodInfoStack.Peek();
+            if (m_MethodInfoStack.Count > 0)
+                return m_MethodInfoStack.Peek();
+            else
+                return null;
         }
         internal IMethodSymbol GetCurMethodSemanticInfo()
         {
@@ -524,7 +560,7 @@ namespace RoslynTool.CsToDsl
                 return;
             }
 
-            bool isValueType = namedTypeSym.TypeKind == TypeKind.Struct;
+            bool isValueType = namedTypeSym.IsValueType;
             bool isCollection = IsImplementationOfSys(namedTypeSym, "ICollection");
             bool isExternal = !SymbolTable.Instance.IsCs2DslSymbol(namedTypeSym);
             string fullTypeName = ClassInfo.GetFullName(namedTypeSym);
@@ -547,26 +583,27 @@ namespace RoslynTool.CsToDsl
                 if (isDictionary) {
                     //字典对象的处理
                     CodeBuilder.AppendFormat("new{0}dictionary({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym, this);
                 }
                 else if (isList) {
                     //列表对象的处理
                     CodeBuilder.AppendFormat("new{0}list({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym, this);
                 }
                 else {
                     //集合对象的处理
                     CodeBuilder.AppendFormat("new{0}collection({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym, this);
                 }
             }
             else if (isValueType) {
+                MarkNeedFuncInfo();
                 CodeBuilder.AppendFormat("new{0}struct({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym, this);
             }
             else {
                 CodeBuilder.AppendFormat("new{0}object({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym, this);
             }
             if (!isExternal) {
                 //外部对象函数名不会换名，所以没必要提供名字，总是ctor。翻译的类在没有明确构造时，会生成
@@ -582,17 +619,17 @@ namespace RoslynTool.CsToDsl
                 bool isList = IsImplementationOfSys(namedTypeSym, "IList");
                 if (isDictionary) {
                     CodeBuilder.Append(", literaldictionary(");
-                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym, this);
                     CodeBuilder.Append(")");
                 }
                 else if (isList) {
                     CodeBuilder.Append(", literallist(");
-                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym, this);
                     CodeBuilder.Append(")");
                 }
                 else {
                     CodeBuilder.Append(", literalcollection(");
-                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym, this);
                     CodeBuilder.Append(")");
                 }
             }
@@ -642,6 +679,10 @@ namespace RoslynTool.CsToDsl
 
                             trans.m_MethodInfoStack.Pop();
                             trans.m_ClassInfoStack.Pop();
+
+                            if (mi.NeedFuncInfo) {
+                                MarkNeedFuncInfo();
+                            }
                             handled = true;
                         }
                     }
@@ -672,22 +713,27 @@ namespace RoslynTool.CsToDsl
                             if (isDictionary) {
                                 //字典对象的处理
                                 CodeBuilder.AppendFormat("new{0}dictionary({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                                CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                                CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym, this);
                             }
                             else if (isList) {
                                 //列表对象的处理
                                 CodeBuilder.AppendFormat("new{0}list({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                                CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                                CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym, this);
                             }
                             else {
                                 //集合对象的处理
                                 CodeBuilder.AppendFormat("new{0}collection({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                                CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                                CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym, this);
                             }
+                        }
+                        else if (namedTypeSym.IsValueType) {
+                            MarkNeedFuncInfo();
+                            CodeBuilder.AppendFormat("new{0}struct({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
+                            CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym, this);
                         }
                         else {
                             CodeBuilder.AppendFormat("new{0}object({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
-                            CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                            CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym, this);
                         }
                         if (!isExternal) {
                             //外部对象函数名不会换名，所以没必要提供名字，总是ctor
@@ -704,17 +750,17 @@ namespace RoslynTool.CsToDsl
                                 bool isList = IsImplementationOfSys(namedTypeSym, "IList");
                                 if (isDictionary) {
                                     CodeBuilder.Append(", literaldictionary(");
-                                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym, this);
                                     CodeBuilder.Append(")");
                                 }
                                 else if (isList) {
                                     CodeBuilder.Append(", literallist(");
-                                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym, this);
                                     CodeBuilder.Append(")");
                                 }
                                 else {
                                     CodeBuilder.Append(", literalcollection(");
-                                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                                    CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym, this);
                                     CodeBuilder.Append(")");
                                 }
                             }
@@ -740,6 +786,9 @@ namespace RoslynTool.CsToDsl
                     }
                     else if (null != arrCreate) {
                         ITypeSymbol etype = SymbolTable.GetElementType(arrCreate.ElementType);
+                        if (etype.IsValueType && !SymbolTable.IsBasicType(etype)) {
+                            MarkNeedFuncInfo();
+                        }
                         string elementType = ClassInfo.GetFullName(etype);
                         if (arrCreate.DimensionSizes.Length == 1) {
                             if (null == arrCreate.Initializer || arrCreate.Initializer.ElementValues.Length == 0) {
@@ -768,7 +817,8 @@ namespace RoslynTool.CsToDsl
                     else if (null != fieldRef) {
                         var field = fieldRef.Field;
                         bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(field);
-                        if (isExtern && field.Type.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(field.Type)) {
+                        if (isExtern && field.Type.IsValueType && !SymbolTable.IsBasicType(field.Type)) {
+                            MarkNeedFuncInfo();
                             CodeBuilder.Append("getexternstaticstructmember(SymbolKind.");
                             CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(field));
                             CodeBuilder.Append(", ");
@@ -793,7 +843,8 @@ namespace RoslynTool.CsToDsl
                     else if (null != propRef) {
                         var property = propRef.Property;
                         bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(property);
-                        if (isExtern && property.Type.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(property.Type)) {
+                        if (isExtern && property.Type.IsValueType && !SymbolTable.IsBasicType(property.Type)) {
+                            MarkNeedFuncInfo();
                             CodeBuilder.Append("getexternstaticstructmember(SymbolKind.");
                             CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(property));
                             CodeBuilder.Append(", ");
@@ -935,7 +986,10 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.Append(")");
             }
             else {
-                bool externReturnStruct = !ii.MethodSymbol.ReturnsVoid && ii.MethodSymbol.ReturnType.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(ii.MethodSymbol.ReturnType);
+                bool externReturnStruct = !ii.MethodSymbol.ReturnsVoid && ii.MethodSymbol.ReturnType.IsValueType && !SymbolTable.IsBasicType(ii.MethodSymbol.ReturnType);
+                if (externReturnStruct) {
+                    MarkNeedFuncInfo();
+                }
                 string method = ii.MethodSymbol.Name;
                 CodeBuilder.AppendFormat("{0}({1}, {2}, ", externReturnStruct ? "invokeexternoperatorreturnstruct" : "invokeexternoperator", ClassInfo.GetFullName(ii.MethodSymbol.ReturnType), ii.GenericClassKey);
                 CodeBuilder.AppendFormat("\"{0}\"", method);
@@ -953,7 +1007,10 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.Append(", ");
             }
             else {
-                bool externReturnStruct = !ii.MethodSymbol.ReturnsVoid && ii.MethodSymbol.ReturnType.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(ii.MethodSymbol.ReturnType);
+                bool externReturnStruct = !ii.MethodSymbol.ReturnsVoid && ii.MethodSymbol.ReturnType.IsValueType && !SymbolTable.IsBasicType(ii.MethodSymbol.ReturnType);
+                if (externReturnStruct) {
+                    MarkNeedFuncInfo();
+                }
                 string method = ii.MethodSymbol.Name;
                 CodeBuilder.AppendFormat("{0}({1}, {2}, ", externReturnStruct ? "invokeexternoperatorreturnstruct" : "invokeexternoperator", ClassInfo.GetFullName(ii.MethodSymbol.ReturnType), ii.GenericClassKey);
                 CodeBuilder.AppendFormat("\"{0}\"", method);
@@ -1334,6 +1391,7 @@ namespace RoslynTool.CsToDsl
 
         private Stack<ClassInfo> m_ClassInfoStack = new Stack<ClassInfo>();
         private Stack<MethodInfo> m_MethodInfoStack = new Stack<MethodInfo>();
+        private Stack<IFieldSymbol> m_FieldInitializerStack = new Stack<IFieldSymbol>();
         private Stack<ITypeSymbol> m_ObjectInitializerStack = new Stack<ITypeSymbol>();
         private Stack<ContinueInfo> m_ContinueInfoStack = new Stack<ContinueInfo>();
         private Stack<SwitchInfo> m_SwitchInfoStack = new Stack<SwitchInfo>();
@@ -1369,12 +1427,15 @@ namespace RoslynTool.CsToDsl
             const string c_IndentString = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
             return c_IndentString.Substring(0, indent);
         }
-        internal static void OutputTypeArgsInfo(StringBuilder sb, INamedTypeSymbol namedTypeSym)
+        internal static void OutputTypeArgsInfo(StringBuilder sb, INamedTypeSymbol namedTypeSym, CsDslTranslater cs2dsl)
         {
             if (null != namedTypeSym) {
                 sb.Append("typeargs(");
                 string prestr = string.Empty;
                 foreach (var ta in namedTypeSym.TypeArguments) {
+                    if (null != cs2dsl && ta.IsValueType && !SymbolTable.IsBasicType(ta)) {
+                        cs2dsl.MarkNeedFuncInfo();
+                    }
                     if (ta.TypeKind != TypeKind.TypeParameter) {
                         SymbolTable.Instance.TryAddExternReference(ta);
                     }

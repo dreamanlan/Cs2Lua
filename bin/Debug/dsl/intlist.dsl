@@ -8,7 +8,7 @@ class(IntList, System.Collections.Generic.List_T) {
 		__new_object = deffunc(1)args(...){
 			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(IntList, typeargs(), typekinds(), "ctor", null, ...);
 			return(__cs2dsl_newobj);
-		};
+		}options[needfuncinfo(false)];
 		cctor = deffunc(0)args(){
 			callstatic(IntList, "__cctor");
 		};
@@ -18,7 +18,7 @@ class(IntList, System.Collections.Generic.List_T) {
 			}else{
 				IntList.__cctor_called = true;
 			};
-		};
+		}options[needfuncinfo(false)];
 	};
 	static_fields {
 		__cctor_called = false;
@@ -36,7 +36,7 @@ class(IntList, System.Collections.Generic.List_T) {
 			}else{
 				setinstance(SymbolKind.Field, this, IntList, "__ctor_called", true);
 			};
-		};
+		}options[needfuncinfo(false)];
 	};
 	instance_fields {
 		__ctor_called = false;

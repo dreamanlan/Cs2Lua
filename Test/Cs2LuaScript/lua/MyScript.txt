@@ -5,28 +5,21 @@ MyScript = {
 	-------- class methods --------
 	-------------------------------
 	__new_object = function(...)
-		local __cs2lua_func_info = luainitialize();
 		local __cs2dsl_newobj;
-		__cs2dsl_newobj = newobject(__cs2lua_func_info, MyScript, nil, nil, "ctor", nil, ...);
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		__cs2dsl_newobj = newobject(MyScript, nil, nil, "ctor", nil, ...);
 		return __cs2dsl_newobj;
 	end,
 
 	cctor = function()
-		local __cs2lua_func_info = luainitialize();
 		MyScript.__cctor();
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	__cctor = function()
-		local __cs2lua_func_info = luainitialize();
 		if MyScript.__cctor_called then 
-			__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			return;
 		else
 			MyScript.__cctor_called = true;
 		end;
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	-------------------------------
@@ -45,25 +38,21 @@ MyScript = {
 
 		local obj_methods = {
 			Init = function(this, obj, mb)
-				local __cs2lua_func_info = luainitialize();
 				local s;
 				s = "test test test from cs2lua !";
 				UnityEngine.Debug.Log(luastrtocsstr("UnityEngine.Debug:Log__Void__Object"), s);
 				mb:StartCoroutine(this:TestCoroutine());
-				this.root = newexternobject(__cs2lua_func_info, UnityEngine.GameObject, nil, nil, nil, luastrtocsstr("UnityEngine.GameObject:ctor__Void__String"), luastrtocsstr("root"));
+				this.root = newexternobject(UnityEngine.GameObject, nil, nil, nil, luastrtocsstr("UnityEngine.GameObject:ctor__Void__String"), luastrtocsstr("root"));
 				local slider;
 				slider = typeas(UnityEngine.GameObject.Find(luastrtocsstr("Canvas/Slider")):GetComponent(luastrtocsstr("UnityEngine.GameObject:GetComponent__Component__Type"), UnityEngine.UI.Slider), UnityEngine.UI.Slider, TypeKind.Class);
 				local counttxt;
 				counttxt = typeas(UnityEngine.GameObject.Find(luastrtocsstr("Canvas/Count")):GetComponent(luastrtocsstr("UnityEngine.GameObject:GetComponent__Component__Type"), UnityEngine.UI.Text), UnityEngine.UI.Text, TypeKind.Class);
 				slider.onValueChanged:AddListener(function(v)
-					local __cs2lua_func_info = luainitialize();
 					this:Reset();
 					counttxt.text = LuaString.Format__System_String__System_Object("cube:{0}", v);
 					this.max = typecast(v, System.Int32, TypeKind.Struct);
-					__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 				end);
 				this:Reset();
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 
 			Update = function(this)
@@ -86,7 +75,7 @@ MyScript = {
 					this.fogStart = UnityEngine.Time.time;
 					local __old_val_52_12_52_51;
 					__old_val_52_12_52_51 = this.bgCurrent;
-					this.bgCurrent = getexterninstancestructmember(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Camera.main, UnityEngine.Camera, "backgroundColor");
+					this.bgCurrent = getexterninstancestructmember(SymbolKind.Property, UnityEngine.Camera.main, UnityEngine.Camera, "backgroundColor");
 					local __new_val_52_12_52_51;
 					__new_val_52_12_52_51 = this.bgCurrent;
 					recycle_and_keep_color(__cs2lua_func_info, UnityEngine.Color, __old_val_52_12_52_51, __new_val_52_12_52_51);
@@ -105,24 +94,20 @@ MyScript = {
 			end,
 
 			Call = function(this, name, ...)
-				local __cs2lua_func_info = luainitialize();
 				local args;
 				args = wrapparams({...}, System.Object, TypeKind.Class);
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 
 			TestCoroutine = wrapenumerable(function(this)
-				local __cs2lua_func_info = luainitialize();
 				local __method_ret_69_4_76_5;
-				wrapyield(newexternobject(__cs2lua_func_info, UnityEngine.WaitForSeconds, nil, nil, nil, 10), false, true);
+				wrapyield(newexternobject(UnityEngine.WaitForSeconds, nil, nil, nil, 10), false, true);
 				local i;
 				i = 0;
 				while (i < 60) do
-					wrapyield(newexternobject(__cs2lua_func_info, UnityEngine.WaitForSeconds, nil, nil, nil, 1), false, true);
+					wrapyield(newexternobject(UnityEngine.WaitForSeconds, nil, nil, nil, 1), false, true);
 					UnityEngine.Debug.Log(luastrtocsstr("UnityEngine.Debug:Log__Void__Object"), System.String.Format(luastrtocsstr("System.String:Format__String__String__Object"), luastrtocsstr("{0} seconds"), i));
 					i = (i + 1);
 				end;
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 				return nil;
 			end),
 
@@ -164,9 +149,7 @@ MyScript = {
 			end,
 
 			ctor = function(this)
-				local __cs2lua_func_info = luainitialize();
 				this:__ctor();
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 
 			__ctor = function(this)
@@ -181,7 +164,7 @@ MyScript = {
 				recycle_and_keep_color(__cs2lua_func_info, UnityEngine.Color, nil, this.bgCurrent);
 				this.bgColor = new_color(__cs2lua_func_info, UnityEngine.Color, nil, nil, nil);
 				recycle_and_keep_color(__cs2lua_func_info, UnityEngine.Color, nil, this.bgColor);
-				this.colors = wraparray({get_unity_color_red(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "red"), get_unity_color_blue(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "blue"), get_unity_color_green(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "green"), getexternstaticstructmember(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "cyan"), getexternstaticstructmember(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "grey"), get_unity_color_white(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "white"), get_unity_color_yellow(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "yellow"), getexternstaticstructmember(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "magenta"), get_unity_color_black(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "black")}, nil, UnityEngine.Color, TypeKind.Struct);
+				this.colors = wraparray({get_unity_color_red(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "red"), get_unity_color_blue(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "blue"), get_unity_color_green(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "green"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "cyan"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "grey"), get_unity_color_white(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "white"), get_unity_color_yellow(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "yellow"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "magenta"), get_unity_color_black(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "black")}, nil, UnityEngine.Color, TypeKind.Struct);
 				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 		};

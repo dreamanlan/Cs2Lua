@@ -8,7 +8,7 @@ class(Mandelbrot) {
 		__new_object = deffunc(1)args(...){
 			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(Mandelbrot, typeargs(), typekinds(), "ctor", null, ...);
 			return(__cs2dsl_newobj);
-		};
+		}options[needfuncinfo(false)];
 		cctor = deffunc(0)args(){
 			callstatic(Mandelbrot, "__cctor");
 		};
@@ -18,7 +18,7 @@ class(Mandelbrot) {
 			}else{
 				Mandelbrot.__cctor_called = true;
 			};
-		};
+		}options[needfuncinfo(false)];
 	};
 	static_fields {
 		__cctor_called = false;
@@ -30,10 +30,10 @@ class(Mandelbrot) {
 		Init = deffunc(0)args(this, obj, mb){
 			setinstance(SymbolKind.Field, this, Mandelbrot, "root", newexternobject(UnityEngine.GameObject, typeargs(), typekinds(), null, dslstrtocsstr("UnityEngine.GameObject:ctor__Void__String"), dslstrtocsstr("mandelbrot")));
 			callinstance(this, Mandelbrot, "Exec");
-		};
+		}options[needfuncinfo(false)];
 		Call = deffunc(0)args(this, name, ...){
 			local(args); args = params(System.Object, TypeKind.Class);
-		};
+		}options[needfuncinfo(false)];
 		Exec = deffunc(0)args(this){
 			local(width); width = 50;
 			local(height); height = width;
@@ -67,7 +67,7 @@ class(Mandelbrot) {
 				};
 			y = execbinary("+", y, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
 			};
-		};
+		}options[needfuncinfo(false)];
 		DrawCube = deffunc(0)args(this, x, y, w, h){
 			local(cube); cube = callexternstatic(UnityEngine.GameObject, "CreatePrimitive", 3);
 			setexterninstance(SymbolKind.Property, getexterninstance(SymbolKind.Property, cube, UnityEngine.GameObject, "transform"), UnityEngine.Transform, "position", newexternstruct(UnityEngine.Vector3, typeargs(), typekinds(), null, dslstrtocsstr("UnityEngine.Vector3:ctor__Void__Single__Single__Single"), execbinary("/", execbinary("*", execbinary("*", x, getinstance(SymbolKind.Field, this, Mandelbrot, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(SymbolKind.Field, this, Mandelbrot, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), w, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), execbinary("-", execbinary("/", execbinary("*", execbinary("*", y, getinstance(SymbolKind.Field, this, Mandelbrot, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(SymbolKind.Field, this, Mandelbrot, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), h, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 12, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 0));
@@ -75,7 +75,7 @@ class(Mandelbrot) {
 			local(mat); mat = getexterninstance(SymbolKind.Property, callexterninstance(cube, UnityEngine.GameObject, "GetComponent", dslstrtocsstr("UnityEngine.GameObject:GetComponent__Component__Type"), UnityEngine.Renderer), UnityEngine.Renderer, "material");
 			local(ix); ix = callexternstatic(UnityEngine.Random, "Range", dslstrtocsstr("UnityEngine.Random:Range__Int32__Int32__Int32"), 0, getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, Mandelbrot, "colors"), System.Array, "Length"));
 			setexterninstance(SymbolKind.Property, mat, UnityEngine.Material, "color", getinstance(SymbolKind.Field, this, Mandelbrot, "colors")[ix + 1]);
-		};
+		}options[needfuncinfo(true)];
 		ctor = deffunc(0)args(this){
 			callinstance(this, Mandelbrot, "__ctor");
 		};
@@ -86,7 +86,7 @@ class(Mandelbrot) {
 				setinstance(SymbolKind.Field, this, Mandelbrot, "__ctor_called", true);
 			};
 			setinstance(SymbolKind.Field, this, Mandelbrot, "colors", literalarray(UnityEngine.Color, TypeKind.Struct, getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "red"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "blue"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "green"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "cyan"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "grey"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "white"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "yellow"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "magenta"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "black")));
-		};
+		}options[needfuncinfo(true)];
 	};
 	instance_fields {
 		root = null;

@@ -355,7 +355,7 @@ namespace RoslynTool.CsToDsl
                 }
             }
             --m_Indent;
-            CodeBuilder.AppendFormat("{0}}}{1};", GetIndentString(), mi.ExistYield ? ")" : string.Empty);
+            CodeBuilder.AppendFormat("{0}}}options[needfuncinfo({1})]{2};", GetIndentString(), mi.NeedFuncInfo ? "true" : "false", mi.ExistYield ? ")" : string.Empty);
             CodeBuilder.AppendLine();
             m_MethodInfoStack.Pop();
         }
@@ -394,6 +394,8 @@ namespace RoslynTool.CsToDsl
 
                     string name = v.Identifier.Text;
                     if (null != v.Initializer) {
+                        m_FieldInitializerStack.Push(fieldSym);
+
                         IConversionExpression opd = null;
                         var initOper = m_Model.GetOperationEx(v.Initializer) as ISymbolInitializer;
                         if (null != initOper) {
@@ -427,6 +429,10 @@ namespace RoslynTool.CsToDsl
                             OutputExpressionSyntax(v.Initializer.Value, opd);
                             CodeBuilder.AppendLine(");");
                             if (type.IsValueType && !SymbolTable.IsBasicType(type)) {
+                                if (isStatic)
+                                    MarkStaticCtorNeedFuncInfo();
+                                else
+                                    MarkCtorNeedFuncInfo();
                                 //回收旧值，保持新值
                                 CodeBuilder.Append(GetIndentString());
                                 CodeBuilder.Append("recycleandkeepstructvalue(");
@@ -451,6 +457,8 @@ namespace RoslynTool.CsToDsl
                             else {
                                 ci.CurrentCodeBuilder = ci.InstanceFieldCodeBuilder;
                             }
+
+                            m_FieldInitializerStack.Pop();
                             continue;
                         }
                         else if (type.TypeKind == TypeKind.Delegate) {
@@ -492,6 +500,10 @@ namespace RoslynTool.CsToDsl
                                 OutputNewValueType(type as INamedTypeSymbol);
                                 CodeBuilder.AppendLine(");");
                                 if (!SymbolTable.IsBasicType(type)) {
+                                    if (isStatic)
+                                        MarkStaticCtorNeedFuncInfo();
+                                    else
+                                        MarkCtorNeedFuncInfo();
                                     //回收旧值，保持新值
                                     CodeBuilder.Append(GetIndentString());
                                     CodeBuilder.Append("recycleandkeepstructvalue(");
@@ -521,6 +533,8 @@ namespace RoslynTool.CsToDsl
                                 OutputDefaultValue(type);
                             }
                         }
+
+                        m_FieldInitializerStack.Pop();
                     }
                     else if (type.IsValueType) {
                         if (SymbolTable.IsBasicType(type)) {
@@ -550,24 +564,26 @@ namespace RoslynTool.CsToDsl
                             }
                             OutputNewValueType(type as INamedTypeSymbol);
                             CodeBuilder.AppendLine(");");
-                            if (type.IsValueType) {
-                                //回收旧值，保持新值
-                                CodeBuilder.Append(GetIndentString());
-                                CodeBuilder.Append("recycleandkeepstructvalue(");
-                                CodeBuilder.Append(ClassInfo.GetFullName(type));
-                                CodeBuilder.Append(", nil, ");
-                                if (isStatic) {
-                                    CodeBuilder.Append("getstatic(SymbolKind.Field, ");
-                                    CodeBuilder.Append(ci.Key);
-                                    CodeBuilder.AppendFormat(", \"{0}\")", name);
-                                }
-                                else {
-                                    CodeBuilder.Append("getinstance(SymbolKind.Field, this, ");
-                                    CodeBuilder.Append(ci.Key);
-                                    CodeBuilder.AppendFormat(", \"{0}\")", name);
-                                }
-                                CodeBuilder.AppendLine(");");
+                            if (isStatic)
+                                MarkStaticCtorNeedFuncInfo();
+                            else
+                                MarkCtorNeedFuncInfo();
+                            //回收旧值，保持新值
+                            CodeBuilder.Append(GetIndentString());
+                            CodeBuilder.Append("recycleandkeepstructvalue(");
+                            CodeBuilder.Append(ClassInfo.GetFullName(type));
+                            CodeBuilder.Append(", nil, ");
+                            if (isStatic) {
+                                CodeBuilder.Append("getstatic(SymbolKind.Field, ");
+                                CodeBuilder.Append(ci.Key);
+                                CodeBuilder.AppendFormat(", \"{0}\")", name);
                             }
+                            else {
+                                CodeBuilder.Append("getinstance(SymbolKind.Field, this, ");
+                                CodeBuilder.Append(ci.Key);
+                                CodeBuilder.AppendFormat(", \"{0}\")", name);
+                            }
+                            CodeBuilder.AppendLine(");");
                             --m_Indent;
                             if (isStatic) {
                                 ci.CurrentCodeBuilder = ci.StaticFieldCodeBuilder;
@@ -689,11 +705,12 @@ namespace RoslynTool.CsToDsl
                 if (null != leftOper && null != leftOper.Type && null != rightOper && null != rightOper.Type) {
                     dslToObject = InvocationInfo.IsDslToObject(leftOper.Type, rightOper.Type);
                 }
-                bool needWrapStruct = null != rightOper && null != rightOper.Type && rightOper.Type.TypeKind == TypeKind.Struct && !dslToObject && !SymbolTable.IsBasicType(rightOper.Type) && !CsDslTranslater.IsImplementationOfSys(rightOper.Type, "IEnumerator");
+                bool needWrapStruct = null != rightOper && null != rightOper.Type && rightOper.Type.IsValueType && !dslToObject && !SymbolTable.IsBasicType(rightOper.Type) && !CsDslTranslater.IsImplementationOfSys(rightOper.Type, "IEnumerator");
                 string postfix = GetSourcePosForVar(expression);
                 string oldValVar = string.Format("__old_val_{0}", postfix);
                 string newValVar = string.Format("__new_val_{0}", postfix);
                 if (needWrapStruct) {
+                    MarkNeedFuncInfo();
                     if (null != leftSym && SymbolTable.Instance.IsCs2DslSymbol(leftSym) && SymbolTable.Instance.IsFieldSymbolKind(leftSym)) {
                         CodeBuilder.AppendFormat("local({0}); {0} = ", oldValVar);
                         OutputExpressionSyntax(assign.Left);
@@ -1351,7 +1368,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append("null");
                     }
                     CodeBuilder.Append(", ");
-                    OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                    OutputTypeArgsInfo(CodeBuilder, namedTypeSym, this);
                     CodeBuilder.Append(", ");
                 }
                 if (leftPsym.IsStatic) {
@@ -1504,7 +1521,7 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.Append("null");
                         }
                         CodeBuilder.Append(", ");
-                        OutputTypeArgsInfo(CodeBuilder, namedTypeSym);
+                        OutputTypeArgsInfo(CodeBuilder, namedTypeSym, this);
                         CodeBuilder.Append(", ");
                     }
                     if (psym.IsStatic) {

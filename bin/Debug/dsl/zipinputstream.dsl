@@ -11,7 +11,7 @@ class(ZipInputStream) {
 		__new_object = deffunc(1)args(...){
 			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(ZipInputStream, typeargs(), typekinds(), "ctor", null, ...);
 			return(__cs2dsl_newobj);
-		};
+		}options[needfuncinfo(false)];
 		cctor = deffunc(0)args(){
 			callstatic(ZipInputStream, "__cctor");
 		};
@@ -21,7 +21,7 @@ class(ZipInputStream) {
 			}else{
 				ZipInputStream.__cctor_called = true;
 			};
-		};
+		}options[needfuncinfo(false)];
 	};
 	static_fields {
 		__cctor_called = false;
@@ -61,32 +61,33 @@ class(ZipInputStream) {
 					vb = wrapexternstruct(vb, UnityEngine.Vector3);
 				})varlist(va, vb) = callinstance(this, ZipInputStream, "Test3", __cs2dsl_out, __cs2dsl_out);
 			return(this);
-		},
+		}options[needfuncinfo(true)],
 		Test = deffunc(1)args(this, o, ...){
-			local(__method_ret_62_4_65_5);
+			local(__method_ret_62_4_66_5);
 			local(args); args = params(System.Object, TypeKind.Class);
-			__method_ret_62_4_65_5 = null;
-			return(__method_ret_62_4_65_5);
-		};
+			local(v3); v3 = newexternstruct(UnityEngine.Vector3, typeargs(), typekinds(), null, dslstrtocsstr("UnityEngine.Vector3:ctor__Void__Single__Single__Single"), 1, 2, 3);
+			__method_ret_62_4_66_5 = null;
+			return(__method_ret_62_4_66_5);
+		}options[needfuncinfo(true)];
 		Test2 = deffunc(1)args(this, v, enumer){
-			local(__method_ret_66_4_69_5);
-			__method_ret_66_4_69_5 = null;
-			return(__method_ret_66_4_69_5);
-		};
+			local(__method_ret_67_4_70_5);
+			__method_ret_67_4_70_5 = null;
+			return(__method_ret_67_4_70_5);
+		}options[needfuncinfo(false)];
 		Test3 = deffunc(2)args(this, v1, v2){
 			v1 = wrapoutexternstruct(v1, UnityEngine.Vector3);
 			v2 = wrapoutexternstruct(v2, UnityEngine.Vector3);
 			v1 = getexternstaticstructmember(SymbolKind.Property, UnityEngine.Vector3, "zero");
 			v2 = getexternstaticstructmember(SymbolKind.Property, UnityEngine.Vector3, "zero");
 			return(v1, v2);
-		};
+		}options[needfuncinfo(true)];
 		__ctor = deffunc(0)args(this){
 			if(getinstance(SymbolKind.Field, this, ZipInputStream, "__ctor_called")){
 				return();
 			}else{
 				setinstance(SymbolKind.Field, this, ZipInputStream, "__ctor_called", true);
 			};
-		};
+		}options[needfuncinfo(false)];
 	};
 	instance_fields {
 		__ctor_called = false;

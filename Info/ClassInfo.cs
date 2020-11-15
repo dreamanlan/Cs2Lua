@@ -34,6 +34,8 @@ namespace RoslynTool.CsToDsl
 
         internal bool ExistConstructor = false;
         internal bool ExistStaticConstructor = false;
+        internal bool CtorNeedFuncInfo = false;
+        internal bool StaticCtorNeedFuncInfo = false;
 
         internal INamedTypeSymbol SemanticInfo = null;
         internal ClassSymbolInfo ClassSemanticInfo = null;

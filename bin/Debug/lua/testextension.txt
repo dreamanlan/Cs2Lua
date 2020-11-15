@@ -5,25 +5,18 @@ TestExtension = {
 	-------- class methods --------
 	-------------------------------
 	Test = function(list, T, t)
-		local __cs2lua_func_info = luainitialize();
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	cctor = function()
-		local __cs2lua_func_info = luainitialize();
 		TestExtension.__cctor();
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	__cctor = function()
-		local __cs2lua_func_info = luainitialize();
 		if TestExtension.__cctor_called then 
-			__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			return;
 		else
 			TestExtension.__cctor_called = true;
 		end;
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	-------------------------------

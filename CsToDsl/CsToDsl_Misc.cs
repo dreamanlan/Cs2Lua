@@ -169,8 +169,9 @@ namespace RoslynTool.CsToDsl
             if (null != node.Initializer) {
                 var rightSymbolInfo = m_Model.GetSymbolInfoEx(node.Initializer.Value);
                 var rightSym = rightSymbolInfo.Symbol;
-                if (null != oper && null != oper.Type && oper.Type.TypeKind == TypeKind.Struct && !dslToObject && !CsDslTranslater.IsImplementationOfSys(oper.Type, "IEnumerator")) {
+                if (null != oper && null != oper.Type && oper.Type.IsValueType && !dslToObject && !SymbolTable.IsBasicType(oper.Type) && !CsDslTranslater.IsImplementationOfSys(oper.Type, "IEnumerator")) {
                     if (null != rightSym && (rightSym.Kind == SymbolKind.Method || rightSym.Kind == SymbolKind.Property || rightSym.Kind == SymbolKind.Field || rightSym.Kind == SymbolKind.Local) && SymbolTable.Instance.IsCs2DslSymbol(rightSym)) {
+                        MarkNeedFuncInfo();
                         if (SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
                             CodeBuilder.AppendFormat("{0}{1} = wrapstruct({2}, {3});", GetIndentString(), node.Identifier.Text, node.Identifier.Text, ClassInfo.GetFullName(oper.Type));
                             CodeBuilder.AppendLine();
@@ -247,10 +248,12 @@ namespace RoslynTool.CsToDsl
                         var psym = sym as IPropertySymbol;
                         string fullName = ClassInfo.GetFullName(sym.ContainingType);
                         if (sym.IsStatic) {
-                            if (isExtern && null != fsym && fsym.Type.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(fsym.Type)) {
+                            if (isExtern && null != fsym && fsym.Type.IsValueType && !SymbolTable.IsBasicType(fsym.Type)) {
+                                MarkNeedFuncInfo();
                                 CodeBuilder.AppendFormat("getexternstaticstructmember(SymbolKind.{0}, {1}, \"{2}\")", SymbolTable.Instance.GetSymbolKind(sym), fullName, sym.Name);
                             }
-                            else if (isExtern && null != psym && psym.Type.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(psym.Type)) {
+                            else if (isExtern && null != psym && psym.Type.IsValueType && !SymbolTable.IsBasicType(psym.Type)) {
+                                MarkNeedFuncInfo();
                                 CodeBuilder.AppendFormat("getexternstaticstructmember(SymbolKind.{0}, {1}, \"{2}\")", SymbolTable.Instance.GetSymbolKind(sym), fullName, sym.Name);
                             }
                             else {
@@ -259,10 +262,12 @@ namespace RoslynTool.CsToDsl
                             return;
                         }
                         else if (IsNewObjMember(name)) {
-                            if (isExtern && null != fsym && fsym.Type.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(fsym.Type)) {
+                            if (isExtern && null != fsym && fsym.Type.IsValueType && !SymbolTable.IsBasicType(fsym.Type)) {
+                                MarkNeedFuncInfo();
                                 CodeBuilder.AppendFormat("getexterninstancestructmember(SymbolKind.{0}, newobj, {1}, \"{2}\")", SymbolTable.Instance.GetSymbolKind(sym), fullName, name);
                             }
-                            else if (isExtern && null != psym && psym.Type.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(psym.Type)) {
+                            else if (isExtern && null != psym && psym.Type.IsValueType && !SymbolTable.IsBasicType(psym.Type)) {
+                                MarkNeedFuncInfo();
                                 CodeBuilder.AppendFormat("getexterninstancestructmember(SymbolKind.{0}, newobj, {1}, \"{2}\")", SymbolTable.Instance.GetSymbolKind(sym), fullName, name);
                             }
                             else {
@@ -271,10 +276,12 @@ namespace RoslynTool.CsToDsl
                             return;
                         }
                         else if (sym.ContainingType == classInfo.SemanticInfo || sym.ContainingType == classInfo.SemanticInfo.OriginalDefinition || classInfo.IsInherit(sym.ContainingType)) {
-                            if (isExtern && null != fsym && fsym.Type.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(fsym.Type)) {
+                            if (isExtern && null != fsym && fsym.Type.IsValueType && !SymbolTable.IsBasicType(fsym.Type)) {
+                                MarkNeedFuncInfo();
                                 CodeBuilder.AppendFormat("getexterninstancestructmember(SymbolKind.{0}, this, {1}, \"{2}\")", SymbolTable.Instance.GetSymbolKind(sym), fullName, sym.Name);
                             }
-                            else if (isExtern && null != psym && psym.Type.TypeKind == TypeKind.Struct && !SymbolTable.IsBasicType(psym.Type)) {
+                            else if (isExtern && null != psym && psym.Type.IsValueType && !SymbolTable.IsBasicType(psym.Type)) {
+                                MarkNeedFuncInfo();
                                 CodeBuilder.AppendFormat("getexterninstancestructmember(SymbolKind.{0}, this, {1}, \"{2}\")", SymbolTable.Instance.GetSymbolKind(sym), fullName, sym.Name);
                             }
                             else {

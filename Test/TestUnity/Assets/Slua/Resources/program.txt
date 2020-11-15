@@ -5,33 +5,24 @@ Program = {
 	-------- class methods --------
 	-------------------------------
 	Init = function()
-		local __cs2lua_func_info = luainitialize();
 		--使用c#代码时需要的初始化（平台相关代码，不会转换为lua代码，cs2lua在翻译时会添加__DSL__宏，可以据此设定代码是否要转换为lua）
 		--公共初始化（也就是逻辑相关的代码）
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	Main = function(args)
-		local __cs2lua_func_info = luainitialize();
 		Program.Init();
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	cctor = function()
-		local __cs2lua_func_info = luainitialize();
 		Program.__cctor();
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	__cctor = function()
-		local __cs2lua_func_info = luainitialize();
 		if Program.__cctor_called then 
-			__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			return;
 		else
 			Program.__cctor_called = true;
 		end;
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	-------------------------------

@@ -998,6 +998,8 @@ namespace RoslynTool.CsToDsl
             }
 
             bool isEntryClass = false;
+            bool ctorNeedFuncInfo = false;
+            bool staticCtorNeedFuncInfo = false;
             string exportConstructor = string.Empty;
             MethodInfo exportConstructorInfo = null;
             foreach (var ci in classes) {
@@ -1008,6 +1010,10 @@ namespace RoslynTool.CsToDsl
                     exportConstructor = ci.ExportConstructor;
                     exportConstructorInfo = ci.ExportConstructorInfo;
                 }
+                if (ci.CtorNeedFuncInfo)
+                    ctorNeedFuncInfo = true;
+                if (ci.StaticCtorNeedFuncInfo)
+                    staticCtorNeedFuncInfo = true;
             }
 
             HashSet<string> refs = new HashSet<string>();
@@ -1067,7 +1073,7 @@ namespace RoslynTool.CsToDsl
                         else
                             sb.AppendFormat("{0}local(__cs2dsl_newobj);__cs2dsl_newobj = newobject({1}, ", GetIndentString(indent), key);
                         var namedTypeSym = csi.TypeSymbol;
-                        CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
+                        CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym, null);
                         sb.Append(", \"ctor\", null, ...);");
                         sb.AppendLine();
                         sb.AppendFormat("{0}return(__cs2dsl_newobj);", GetIndentString(indent));
@@ -1087,7 +1093,7 @@ namespace RoslynTool.CsToDsl
                             else
                                 sb.AppendFormat(") = newobject({0}, ", key);
                             var namedTypeSym = csi.TypeSymbol;
-                            CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
+                            CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym, null);
                             sb.AppendFormat(", \"{0}\", null, ...);", exportConstructor);
                             sb.AppendLine();
                             sb.AppendFormat("{0}return(__cs2dsl_newobj);", GetIndentString(indent));
@@ -1099,7 +1105,7 @@ namespace RoslynTool.CsToDsl
                             else
                                 sb.AppendFormat("{0}local(__cs2dsl_newobj);__cs2dsl_newobj = newobject({1}, ", GetIndentString(indent), key);
                             var namedTypeSym = csi.TypeSymbol;
-                            CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym);
+                            CsDslTranslater.OutputTypeArgsInfo(sb, namedTypeSym, null);
                             sb.AppendFormat(", \"{0}\", null, ...);", exportConstructor);
                             sb.AppendLine();
                             sb.AppendFormat("{0}return(__cs2dsl_newobj);", GetIndentString(indent));
@@ -1108,7 +1114,7 @@ namespace RoslynTool.CsToDsl
                     }
 
                     --indent;
-                    sb.AppendFormat("{0}}};", GetIndentString(indent));
+                    sb.AppendFormat("{0}}}options[needfuncinfo({1})];", GetIndentString(indent), isValueType ? "true" : "false");
                     sb.AppendLine();
                 }
 
@@ -1153,7 +1159,7 @@ namespace RoslynTool.CsToDsl
                     sb.Append(ci.StaticInitializerCodeBuilder.ToString());
                 }
                 --indent;
-                sb.AppendFormat("{0}}};", GetIndentString(indent));
+                sb.AppendFormat("{0}}}options[needfuncinfo({1})];", GetIndentString(indent), staticCtorNeedFuncInfo ? "true" : "false");
                 sb.AppendLine();
 
                 --indent;
@@ -1280,7 +1286,7 @@ namespace RoslynTool.CsToDsl
                         sb.Append(ci.InstanceInitializerCodeBuilder.ToString());
                     }
                     --indent;
-                    sb.AppendFormat("{0}}};", GetIndentString(indent));
+                    sb.AppendFormat("{0}}}options[needfuncinfo({1})];", GetIndentString(indent), ctorNeedFuncInfo ? "true" : "false");
                     sb.AppendLine();
 
                     --indent;

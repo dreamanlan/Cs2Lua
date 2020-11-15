@@ -62,6 +62,7 @@ class ZipInputStream
      }
     private object Test(object o, params object[] args)
     {
+        var v3 = new Vector3(1,2,3);
         return null;
     }
     private List<int> Test2(int v, IEnumerable enumer = new List<int>())

@@ -5,28 +5,21 @@ ZipInputStream = {
 	-------- class methods --------
 	-------------------------------
 	__new_object = function(...)
-		local __cs2lua_func_info = luainitialize();
 		local __cs2dsl_newobj;
-		__cs2dsl_newobj = newobject(__cs2lua_func_info, ZipInputStream, nil, nil, "ctor", nil, ...);
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		__cs2dsl_newobj = newobject(ZipInputStream, nil, nil, "ctor", nil, ...);
 		return __cs2dsl_newobj;
 	end,
 
 	cctor = function()
-		local __cs2lua_func_info = luainitialize();
 		ZipInputStream.__cctor();
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	__cctor = function()
-		local __cs2lua_func_info = luainitialize();
 		if ZipInputStream.__cctor_called then 
-			__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			return;
 		else
 			ZipInputStream.__cctor_called = true;
 		end;
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 
 	-------------------------------
@@ -47,7 +40,7 @@ ZipInputStream = {
 				local __cs2lua_func_info = luainitialize();
 				this:__ctor();
 				local os;
-				os = newobject(__cs2lua_func_info, ZipOutputStream, nil, nil, "ctor__System_IO_MemoryStream", nil, newexternobject(__cs2lua_func_info, System.IO.MemoryStream, nil, nil, nil, luastrtocsstr("System.IO.MemoryStream:ctor__Void")));
+				os = newobject(ZipOutputStream, nil, nil, "ctor__System_IO_MemoryStream", nil, newexternobject(System.IO.MemoryStream, nil, nil, nil, luastrtocsstr("System.IO.MemoryStream:ctor__Void")));
 				local os2;
 				os2 = typeas(objecttolua(this:Test(luatoobject(SymbolKind.Method, false, "ZipInputStream:Test", os), luatoobject(SymbolKind.Method, false, "ZipInputStream:Test", os), luatoobject(SymbolKind.Method, false, "ZipInputStream:Test", os))), ZipOutputStream, TypeKind.Class);
 				local intList;
@@ -95,20 +88,20 @@ ZipInputStream = {
 
 			Test = function(this, o, ...)
 				local __cs2lua_func_info = luainitialize();
-				local __method_ret_62_4_65_5;
+				local __method_ret_62_4_66_5;
 				local args;
 				args = wrapparams({...}, System.Object, TypeKind.Class);
-				__method_ret_62_4_65_5 = nil;
+				local v3;
+				v3 = new_vector3(__cs2lua_func_info, UnityEngine.Vector3, nil, nil, nil, luastrtocsstr("UnityEngine.Vector3:ctor__Void__Single__Single__Single"), 1, 2, 3);
+				__method_ret_62_4_66_5 = nil;
 				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
-				return __method_ret_62_4_65_5;
+				return __method_ret_62_4_66_5;
 			end,
 
 			Test2 = function(this, v, enumer)
-				local __cs2lua_func_info = luainitialize();
-				local __method_ret_66_4_69_5;
-				__method_ret_66_4_69_5 = nil;
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
-				return __method_ret_66_4_69_5;
+				local __method_ret_67_4_70_5;
+				__method_ret_67_4_70_5 = nil;
+				return __method_ret_67_4_70_5;
 			end,
 
 			Test3 = function(this, v1, v2)
@@ -122,14 +115,11 @@ ZipInputStream = {
 			end,
 
 			__ctor = function(this)
-				local __cs2lua_func_info = luainitialize();
 				if this.__ctor_called then 
-					__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 					return;
 				else
 					this.__ctor_called = true;
 				end;
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 		};
 

@@ -515,7 +515,7 @@ function addtofuncinfostructlist(funcInfo, class, obj)
     end
 end
 
-function invokeexternoperatorreturnstruct(funcInfo, rettype, class, method, ...)
+function invokeexternoperatorreturnstructimpl(funcInfo, rettype, class, method, ...)
     local arg1,arg2,arg3 = ...
     local marg1 = arg1 and getmetatable(arg1)
     local marg2 = arg2 and getmetatable(arg2)
@@ -728,6 +728,10 @@ function invokeexternoperatorreturnstruct(funcInfo, rettype, class, method, ...)
         UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
     end
     return nil
+end
+
+function invokeexternoperatorreturnstruct(rettype, class, method, ...)
+    return class[method](...)
 end
 
 function invokeoperator(rettype, class, method, ...)
@@ -1137,11 +1141,11 @@ function wrapchar(char, intVal)
     end
 end
 
-function wrapoutstruct(funcInfo, v, classObj)
+function wrapoutstruct(v, classObj)
     return classObj()
 end
 
-function wrapoutexternstruct(funcInfo, v, classObj)
+function wrapoutexternstruct(v, classObj)
     if classObj == System.Collections.Generic.KeyValuePair_TKey_TValue then
         return nil
     end
@@ -1149,43 +1153,47 @@ function wrapoutexternstruct(funcInfo, v, classObj)
     return classObj()
 end
 
-function wrapstruct(funcInfo, v, classObj)
+function wrapstruct(v, classObj)
     return v
 end
 
-function wrapexternstruct(funcInfo, v, classObj)
+function wrapexternstruct(v, classObj)
     translationlog("need add handler for wrapexternstruct {0}", getclasstypename(classObj))
     return v
 end
 
-function getexternstaticstructmember(funcInfo, symKind, class, member)
+function getexternstaticstructmember(symKind, class, member)
     translationlog("need add handler for getexternstaticstructmember {0}.{1}", getclasstypename(class), member)
     return class[member]
 end
 
-function getexterninstancestructmember(funcInfo, symKind, obj, class, member)
+function getexterninstancestructmember(symKind, obj, class, member)
     translationlog("need add handler for getexterninstancestructmember {0}.{1}", getclasstypename(class), member)
     return obj[member]
 end
 
-function callexterndelegationreturnstruct(funcInfo, funcobj, funcobjname, ...)
+function callexterndelegationreturnstruct(funcobj, funcobjname, ...)
     translationlog("need add handler for callexterndelegationreturnstruct {0}", funcobjname)
     return funcobj(...)
 end
 
-function callexternextensionreturnstruct(funcInfo, class, member, ...)
+function callexternextensionreturnstruct(class, member, ...)
     translationlog("need add handler for callexternextensionreturnstruct {0}.{1}", getclasstypename(class), member)
     return class[member](...)
 end
 
-function callexternstaticreturnstruct(funcInfo, class, member, ...)
+function callexternstaticreturnstruct(class, member, ...)
     translationlog("need add handler for callexternstaticreturnstruct {0}.{1}", getclasstypename(class), member)
     return class[member](...)
 end
 
-function callexterninstancereturnstruct(funcInfo, obj, class, member, ...)
+function callexterninstancereturnstruct(obj, class, member, ...)
     translationlog("need add handler for callexterninstancereturnstruct {0}.{1}", getclasstypename(class), member)
     return obj[member](obj, ...)
+end
+
+function recycleandkeepstructvalue(fieldType, oldVal, newVal)
+    translationlog("need add handler for recycleandkeepstructvalue {0}", getclasstypename(fieldType))
 end
 
 function luatableremove(tb, val)
@@ -1196,54 +1204,10 @@ function luatableremove(tb, val)
     end
 end
 
-function recycleandkeepcheck(funcInfo, fieldType, oldVal, newVal)   
+function recycleandkeepcheck(fieldType, oldVal, newVal)   
     if rawequal(oldVal,newVal) then
         lualog("[recycleandkeepstructvalue] oldVal==newVal")
         printStack()
-    end
-end
-
-function recycleandkeepstructvalue(funcInfo, fieldType, oldVal, newVal)
-    if rawequal(oldVal,newVal) then
-        lualog("[recycleandkeepstructvalue] oldVal==newVal")
-        printStack()
-    end
-    if not rawequal(oldVal,newVal) and oldVal~=nil then
-        local val = oldVal
-        if fieldType==UnityEngine.Vector2 then
-            Vector2Pool.Recycle(val)
-        elseif fieldType==UnityEngine.Vector3 then
-            Vector3Pool.Recycle(val)
-        elseif fieldType==UnityEngine.Vector4 then
-            Vector4Pool.Recycle(val)
-        elseif fieldType==UnityEngine.Quaternion then
-            QuaternionPool.Recycle(val)
-        elseif fieldType==UnityEngine.Color then
-            ColorPool.Recycle(val)
-        elseif fieldType==UnityEngine.Color32 then
-            Color32Pool.Recycle(val)
-        elseif fieldType==UnityEngine.Rect then
-            RectPool.Recycle(val)
-            TimeSpanPool.Recycle(val)
-        end
-    end
-    if newVal~=nil then
-        local val = newVal
-        if fieldType==UnityEngine.Vector2 then
-            luatableremove(funcInfo.v2_list, val)
-        elseif fieldType==UnityEngine.Vector3 then
-            luatableremove(funcInfo.v3_list, val)
-        elseif fieldType==UnityEngine.Vector4 then
-            luatableremove(funcInfo.v4_list, val)
-        elseif fieldType==UnityEngine.Quaternion then
-            luatableremove(funcInfo.q_list, val)
-        elseif fieldType==UnityEngine.Color then
-            luatableremove(funcInfo.c_list, val)
-        elseif fieldType==UnityEngine.Color32 then
-            luatableremove(funcInfo.c32_list, val)
-        elseif fieldType==UnityEngine.Rect then
-            luatableremove(funcInfo.rt_list, val)
-        end
     end
 end
 
@@ -1310,7 +1274,7 @@ end
 
 Cs2LuaCustomData = {
 	__new_object = function(...)
-		local __cs2lua_newobj = newobject(nil, Cs2LuaCustomData, nil, nil, nil, nil, ...);
+		local __cs2lua_newobj = newobject(Cs2LuaCustomData, nil, nil, nil, nil, ...);
 		return __cs2lua_newobj;
 	end,
 	__define_class = function()
@@ -3549,7 +3513,7 @@ function defineentry(class)
     end
 end
 
-function newstruct(funcInfo, class, typeargs, typekinds, ctor, initializer, ...)
+function newstruct(class, typeargs, typekinds, ctor, initializer, ...)
     local obj = class()
     if ctor then
         obj[ctor](obj, ...)
@@ -3560,7 +3524,7 @@ function newstruct(funcInfo, class, typeargs, typekinds, ctor, initializer, ...)
     return obj
 end
 
-function newexternstruct(funcInfo, class, typeargs, typekinds, initializer, ...)
+function newexternstruct(class, typeargs, typekinds, initializer, ...)
     local obj = nil
     local arg1,arg2 = ...
     if class == System.Nullable_T then
@@ -3568,45 +3532,15 @@ function newexternstruct(funcInfo, class, typeargs, typekinds, initializer, ...)
     elseif class == System.Collections.Generic.KeyValuePair_TKey_TValue then
         return {Key = arg1, Value = arg2}
     end
-    if class == UnityEngine.Vector2 then
-        local x,y = ...
-        obj = UnityEngine.Vector2.New(x,y)
-        table.insert(funcInfo.v2_list, obj)
-    elseif class == UnityEngine.Vector3 then
-        local _,x,y,z = ...
-        obj = UnityEngine.Vector3.New(x,y,z)
-        table.insert(funcInfo.v3_list, obj)
-    elseif class == UnityEngine.Vector4 then
-        local _,x,y,z,w = ...
-        obj = UnityEngine.Vector4.New(x,y,z,w)
-        table.insert(funcInfo.v4_list, obj)
-    elseif class == UnityEngine.Quaternion then
-        local x,y,z,w = ...
-        obj = UnityEngine.Quaternion.New(x,y,z,w)
-        table.insert(funcInfo.q_list, obj)
-    elseif class == UnityEngine.Color then
-        local _,r,g,b,a = ...
-        obj = UnityEngine.Color.New(r,g,b,a)
-        table.insert(funcInfo.c_list, obj)
-    elseif class == UnityEngine.Color32 then
-        local r,g,b,a = ...
-        obj = Color32Pool.Alloc()
-        obj.r=r or 0
-        obj.g=g or 0
-        obj.b=b or 0
-        obj.a=a or 1
-        table.insert(funcInfo.c32_list, obj)
-    else
-        translationlog("need add handler for newexternstruct {0}", getclasstypename(class))
-        obj = class(...)
-    end
+    translationlog("need add handler for newexternstruct {0}", getclasstypename(class))
+    obj = class(...)
     if obj and initializer then
         initializer(obj)
     end
     return obj
 end
 
-function newobject(funcInfo, class, typeargs, typekinds, ctor, initializer, ...)
+function newobject(class, typeargs, typekinds, ctor, initializer, ...)
     local obj = class()
     if ctor then
         obj[ctor](obj, ...)
@@ -3617,7 +3551,7 @@ function newobject(funcInfo, class, typeargs, typekinds, ctor, initializer, ...)
     return obj
 end
 
-function newexternobject(funcInfo, class, typeargs, typekinds, initializer, ...)
+function newexternobject(class, typeargs, typekinds, initializer, ...)
     local obj = nil
     local arg1,arg2 = ...
     if class == System.Nullable_T then

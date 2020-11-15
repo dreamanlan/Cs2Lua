@@ -95,12 +95,12 @@ namespace Generator
                 sw.Close();
             }
         }
-        internal static void GenerateArguments(Dsl.FunctionData data, StringBuilder sb, int indent, int start, DslExpression.DslCalculator calculator)
+        internal static void GenerateArguments(Dsl.FunctionData data, StringBuilder sb, int indent, int start, FunctionOptions funcOpts, DslExpression.DslCalculator calculator)
         {
             s_CurSyntax = data;
-            GenerateArguments(data, sb, indent, start, string.Empty, calculator);
+            GenerateArguments(data, sb, indent, start, string.Empty, funcOpts, calculator);
         }
-        internal static void GenerateArguments(Dsl.FunctionData data, StringBuilder sb, int indent, int start, string sig, DslExpression.DslCalculator calculator)
+        internal static void GenerateArguments(Dsl.FunctionData data, StringBuilder sb, int indent, int start, string sig, FunctionOptions funcOpts, DslExpression.DslCalculator calculator)
         {
             s_CurSyntax = data;
             string prestr = string.Empty;
@@ -117,7 +117,7 @@ namespace Generator
                     sb.Append("...");
                     continue;
                 }
-                GenerateSyntaxComponent(param, sb, indent, false, calculator);
+                GenerateSyntaxComponent(param, sb, indent, false, funcOpts, calculator);
                 prestr = ", ";
             }
         }
@@ -195,10 +195,10 @@ namespace Generator
             }
             return ret;
         }
-        internal static string CalcExpressionString(Dsl.ISyntaxComponent comp, DslExpression.DslCalculator calculator)
+        internal static string CalcExpressionString(Dsl.ISyntaxComponent comp, FunctionOptions funcOpts, DslExpression.DslCalculator calculator)
         {
             StringBuilder sb = new StringBuilder();
-            GenerateSyntaxComponent(comp, sb, 0, false, calculator);
+            GenerateSyntaxComponent(comp, sb, 0, false, funcOpts, calculator);
             return sb.ToString();
         }
         internal static Dsl.ISyntaxComponent FindParam(Dsl.FunctionData funcData, string key)
@@ -714,6 +714,11 @@ namespace Generator
         private static HashSet<string> s_IntegerTypes = new HashSet<string> {
             "System.Byte", "System.SByte", "System.Int16", "System.UInt16", "System.Int32", "System.UInt32", "System.Int64", "System.UInt64"
         };
+
+        internal class FunctionOptions
+        {
+            internal bool NeedFuncInfo = false;
+        }
 
         private class DontRequireInfo
         {
