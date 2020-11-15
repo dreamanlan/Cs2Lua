@@ -1334,6 +1334,20 @@ namespace DslExpression
                 var obj = ToObject();
                 return CalculatorValueConverter.CastTo<T>(obj);
             }
+            else if (Type == c_StringType) {
+                if (t == typeof(CalculatorValue)) {
+                    return CalculatorValueConverter.From<T>(this);
+                }
+                else if (t == typeof(string)) {
+                    return CalculatorValueConverter.From<T>(StringVal);
+                }
+                else if (t == typeof(object)) {
+                    return CalculatorValueConverter.From<T>(ObjectVal);
+                }
+                else {
+                    return CalculatorValueConverter.CastTo<T>(ObjectVal);
+                }
+            }
             else {
                 if (t == typeof(CalculatorValue)) {
                     return CalculatorValueConverter.From<T>(this);
