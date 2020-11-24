@@ -722,7 +722,7 @@ namespace RoslynTool.CsToDsl
                 if (needWrapStruct) {
                     //只有变量赋值与字段赋值需要处理，其它的都在相应的函数调用里处理了
                     if (null != rightSym && (rightSym.Kind == SymbolKind.Method || rightSym.Kind == SymbolKind.Property || rightSym.Kind == SymbolKind.Field || rightSym.Kind == SymbolKind.Local || rightSym.Kind == SymbolKind.Parameter) && SymbolTable.Instance.IsCs2DslSymbol(rightSym)) {
-                        if (null != leftSym && (leftSym.Kind == SymbolKind.Local || leftSym.Kind == SymbolKind.Parameter || SymbolTable.Instance.IsFieldSymbolKind(leftSym))) {
+                        if (null != leftSym && (leftSym.Kind == SymbolKind.Local || leftSym.Kind == SymbolKind.Parameter || SymbolTable.Instance.IsFieldSymbolKind(leftSym)) && SymbolTable.Instance.IsCs2DslSymbol(leftSym)) {
                             if (SymbolTable.Instance.IsCs2DslSymbol(rightOper.Type)) {
                                 CodeBuilder.Append(GetIndentString());
                                 OutputExpressionSyntax(assign.Left);

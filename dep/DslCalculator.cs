@@ -2123,6 +2123,35 @@ namespace DslExpression
 
         private CalculatorValue m_Val;
     }
+    internal sealed class FunctionCall : AbstractExpression
+    {
+        protected override CalculatorValue DoCalc()
+        {
+            var args = Calculator.NewCalculatorValueList();
+            foreach (var arg in m_Args) {
+                var o = arg.Calc();
+                args.Add(o);
+            }
+            var r = Calculator.Calc(m_Func, args);
+            Calculator.RecycleCalculatorValueList(args);
+            return r;
+        }
+        protected override bool Load(Dsl.FunctionData funcData)
+        {
+            if (!funcData.IsHighOrder && funcData.HaveParam()) {
+                m_Func = funcData.GetId();
+                int num = funcData.GetParamNum();
+                for (int ix = 0; ix < num; ++ix) {
+                    Dsl.ISyntaxComponent param = funcData.GetParam(ix);
+                    m_Args.Add(Calculator.Load(param));
+                }
+                return true;
+            }
+            return false;
+        }
+        private string m_Func = string.Empty;
+        private List<IExpression> m_Args = new List<IExpression>();
+    }
     internal sealed class AddExp : AbstractExpression
     {
         protected override CalculatorValue DoCalc()
@@ -6035,6 +6064,7 @@ namespace DslExpression
         public IExpression Load(Dsl.ISyntaxComponent comp)
         {
             Dsl.ValueData valueData = comp as Dsl.ValueData;
+            Dsl.FunctionData funcData = null;
             if (null != valueData) {
                 int idType = valueData.GetIdType();
                 if (idType == Dsl.ValueData.ID_TOKEN) {
@@ -6069,7 +6099,7 @@ namespace DslExpression
                 }
             }
             else {
-                Dsl.FunctionData funcData = comp as Dsl.FunctionData;
+                funcData = comp as Dsl.FunctionData;
                 if (null != funcData) {
                     if (funcData.HaveParam()) {
                         var callData = funcData;
@@ -6241,7 +6271,14 @@ namespace DslExpression
                     }
                 }
             }
-            IExpression ret = Create(comp.GetId());
+            IExpression ret = null;
+            string expId = comp.GetId();
+            if (null != funcData && !funcData.IsHighOrder && m_Procs.ContainsKey(expId)) {
+                ret = new FunctionCall();
+            }
+            else {
+                ret = Create(comp.GetId());
+            }
             if (null != ret) {
                 Dsl.StatementData stData = comp as Dsl.StatementData;
                 if (null != stData) {
