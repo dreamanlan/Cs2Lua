@@ -103,7 +103,7 @@ namespace SLua
     public class LuaDLL
     {
         public static int LUA_MULTRET = -1;
-#if UNITY_IPHONE
+#if UNITY_IOS
 		const string LUADLL = "__Internal";
 #else
         const string LUADLL = "slua";

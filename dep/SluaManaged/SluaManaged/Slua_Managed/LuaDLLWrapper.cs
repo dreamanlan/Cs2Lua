@@ -68,7 +68,7 @@ namespace SLua
     public class LuaDLLWrapper
     {
 
-#if UNITY_IPHONE
+#if UNITY_IOS
 	const string LUADLL = "__Internal";
 #else
 	const string LUADLL = "slua";
