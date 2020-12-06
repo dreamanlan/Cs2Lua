@@ -1,8 +1,10 @@
 ============<<<Semantic Error:test>>>============
 test.cs(68,57): error CS1736: Default parameter value for 'enumer' must be a compile-time constant
-test.cs(130,23): error CS0161: 'CUsingHelper.ReadZip(byte[])': not all code paths return a value
+test.cs(139,23): error CS0161: 'CUsingHelper.ReadZip(byte[])': not all code paths return a value
 test.cs(50,16): error CS0128: A local variable or function named 'aa' is already defined in this scope
 test.cs(54,14): error CS0128: A local variable or function named 'r' is already defined in this scope
 test.cs(54,18): error CS0019: Operator '==' cannot be applied to operands of type 'Dictionary<string, Component>' and 'string'
 test.cs(55,13): error CS0029: Cannot implicitly convert type 'bool' to 'UnityEngine.GameObject'
 test.cs(58,13): error CS0029: Cannot implicitly convert type 'bool' to 'UnityEngine.GameObject'
+test.cs(71,20): error CS0103: The name 'a' does not exist in the current context
+test.cs(71,24): error CS0103: The name 'b' does not exist in the current context

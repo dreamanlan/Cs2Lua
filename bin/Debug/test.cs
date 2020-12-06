@@ -67,6 +67,15 @@ class ZipInputStream
     }
     private List<int> Test2(int v, IEnumerable enumer = new List<int>())
     {
+        try {
+            return a + b;
+        }
+        catch (Exception e) {
+            UnityEngine.Debug.LogFormat("{0}\n{1}", e.Message, e.StackTrace);
+        }
+        finally {
+            UnityEngine.Debug.Log("finally");
+        }
         return null;
     }
     private void Test3(out Vector3 v1, out Vector3 v2)

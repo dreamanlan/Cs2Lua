@@ -99,9 +99,35 @@ ZipInputStream = {
 			end,
 
 			Test2 = function(this, v, enumer)
-				local __method_ret_67_4_70_5;
-				__method_ret_67_4_70_5 = nil;
-				return __method_ret_67_4_70_5;
+				local __method_ret_67_4_79_5;
+				local __try_ret_69_8_77_9, __try_retval_69_8_77_9;
+				__try_ret_69_8_77_9,__try_retval_69_8_77_9 = luatry(nil);
+			repeat
+				do
+					__method_ret_67_4_79_5 = (a + b);
+					__try_retval_69_8_77_9 = 1;
+					break;
+				end;
+			until true;
+				if __try_ret_69_8_77_9 then 
+					UnityEngine.Debug.Log(luastrtocsstr("UnityEngine.Debug:Log__Void__Object"), luastrtocsstr("finally"));
+					if __try_retval_69_8_77_9 then 
+						if (__try_retval_69_8_77_9 == 1) then 
+							return __method_ret_67_4_79_5;
+						end;
+					end;
+				end;
+				local __catch_handled_69_8_77_9, __catch_retval_69_8_77_9;
+				__catch_handled_69_8_77_9 = false;
+				__catch_retval_69_8_77_9 = luacatch(__catch_handled_69_8_77_9, __try_retval_69_8_77_9, (not __try_ret_69_8_77_9) and function(e)
+					__catch_handled_69_8_77_9 = true;
+					UnityEngine.Debug.LogFormat(luastrtocsstr("UnityEngine.Debug:LogFormat__Void__String__Arr_Object"), luastrtocsstr("{0}\n{1}"), e.Message, e.StackTrace);
+				end);
+				if (not __try_ret_69_8_77_9) then 
+					UnityEngine.Debug.Log(luastrtocsstr("UnityEngine.Debug:Log__Void__Object"), luastrtocsstr("finally"));
+				end;
+				__method_ret_67_4_79_5 = nil;
+				return __method_ret_67_4_79_5;
 			end,
 
 			Test3 = function(this, v1, v2)

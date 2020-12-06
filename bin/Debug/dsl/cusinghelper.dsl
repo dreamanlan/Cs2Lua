@@ -11,21 +11,21 @@ class(CUsingHelper) {
 			return(__cs2dsl_newobj);
 		}options[needfuncinfo(false)];
 		Test = deffunc(1)args(i){
-			local(__method_ret_123_4_126_5);
-			__method_ret_123_4_126_5 = null;
-			return(__method_ret_123_4_126_5);
+			local(__method_ret_132_4_135_5);
+			__method_ret_132_4_135_5 = null;
+			return(__method_ret_132_4_135_5);
 		}options[needfuncinfo(false)];
 		ReadZip = deffunc(1)args(bytes){
-			local(__method_ret_128_4_185_5);
+			local(__method_ret_137_4_194_5);
 			local(abc); abc = newmultiarray(System.Int32, TypeKind.Struct, 0, 2, 12, 13);
 			local(v); v = 0;
 			local(dict); dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct), literaldictionary(typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct)), dslstrtocsstr("System.Collections.Generic.Dictionary_TKey_TValue:ctor__Void"));
 			if( execbinary(">", prefixoperator(true, v, execbinary("+", v, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct)), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
 			}else{
-				if( execbinary("&&", execclosure(true, __invoke_137_16_137_42, true){ multiassign(precode{
+				if( execbinary("&&", execclosure(true, __invoke_146_16_146_42, true){ multiassign(precode{
 					},postcode{
-					})varlist(__invoke_137_16_137_42, v) = callexterninstance(dict, System.Collections.Generic.Dictionary_TKey_TValue, "TryGetValue", 1, __cs2dsl_out); }, execbinary("==", v, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct) ){
-				}elseif( execbinary(">", postfixoperator(true, __unary_139_21_139_24, v, execbinary("+", v, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct)), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
+					})varlist(__invoke_146_16_146_42, v) = callexterninstance(dict, System.Collections.Generic.Dictionary_TKey_TValue, "TryGetValue", 1, __cs2dsl_out); }, execbinary("==", v, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct) ){
+				}elseif( execbinary(">", postfixoperator(true, __unary_148_21_148_24, v, execbinary("+", v, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct)), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
 				}elseif( execbinary(">", prefixoperator(true, v, execbinary("-", v, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct)), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
 				}else{
 				};

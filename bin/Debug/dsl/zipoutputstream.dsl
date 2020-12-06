@@ -10,9 +10,9 @@ class(ZipOutputStream) {
 			return(__cs2dsl_newobj);
 		}options[needfuncinfo(false)];
 		get_Instance = deffunc(1)args(){
-			local(__method_ret_108_4_111_5);
-			__method_ret_108_4_111_5 = getstatic(SymbolKind.Field, ZipOutputStream, "s_Instance");
-			return(__method_ret_108_4_111_5);
+			local(__method_ret_117_4_120_5);
+			__method_ret_117_4_120_5 = getstatic(SymbolKind.Field, ZipOutputStream, "s_Instance");
+			return(__method_ret_117_4_120_5);
 		}options[needfuncinfo(false)];
 		cctor = deffunc(0)args(){
 			callstatic(ZipOutputStream, "__cctor");

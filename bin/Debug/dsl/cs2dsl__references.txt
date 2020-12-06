@@ -1,10 +1,13 @@
 System.Boolean
+System.Exception
 System.Int32
 System.IO.MemoryStream
+System.Object
 System.Single
 System.String
 UnityEngine.Color
 UnityEngine.Component
+UnityEngine.Debug
 UnityEngine.GameObject
 UnityEngine.Object
 UnityEngine.ParticleSystem

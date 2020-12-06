@@ -31,8 +31,8 @@ namespace RoslynTool.CsToDsl
                 string srcPos = GetSourcePosForVar(node);
                 string retVar = string.Format("__try_ret_{0}", srcPos);
                 string retValVar = string.Format("__try_retval_{0}", srcPos);
-                string handledVar = string.Format("__try_handled_{0}", srcPos);
-                string catchRetValVar = string.Format("__try_catch_ret_val_{0}", srcPos);
+                string handledVar = string.Format("__catch_handled_{0}", srcPos);
+                string catchRetValVar = string.Format("__catch_retval_{0}", srcPos);
 
                 mi.TryCatchUsingOrLoopSwitchStack.Push(true);
 
@@ -55,12 +55,12 @@ namespace RoslynTool.CsToDsl
                 mi.TryCatchUsingOrLoopSwitchStack.Pop();
 
                 if (returnAnalysis0.Exist) {
-                    if (null != node.Finally) {
-                        VisitFinallyClause(node.Finally);
-                    }
                     CodeBuilder.AppendFormat("{0}if({1}){{", GetIndentString(), retVar);
                     CodeBuilder.AppendLine();
                     ++m_Indent;
+                    if (null != node.Finally) {
+                        VisitFinallyClause(node.Finally);
+                    }
                     OutputTryCatchUsingReturn(returnAnalysis0, mi, retValVar);
                     --m_Indent;
                     CodeBuilder.AppendFormat("{0}}};", GetIndentString());
@@ -101,9 +101,20 @@ namespace RoslynTool.CsToDsl
                         }
                     }
                 }
-            }
-            if (null != node.Finally) {
-                VisitFinallyClause(node.Finally);
+                if (null != node.Finally) {
+                    if (returnAnalysis0.Exist) {
+                        CodeBuilder.AppendFormat("{0}if(! {1}){{", GetIndentString(), retVar);
+                        CodeBuilder.AppendLine();
+                        ++m_Indent;
+                        VisitFinallyClause(node.Finally);
+                        --m_Indent;
+                        CodeBuilder.AppendFormat("{0}}};", GetIndentString());
+                        CodeBuilder.AppendLine();
+                    }
+                    else {
+                        VisitFinallyClause(node.Finally);
+                    }
+                }
             }
         }
         private void VisitCatchClause(CatchClauseSyntax node, string handledVar)

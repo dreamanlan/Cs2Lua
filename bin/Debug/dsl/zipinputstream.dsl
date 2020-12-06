@@ -70,9 +70,34 @@ class(ZipInputStream) {
 			return(__method_ret_62_4_66_5);
 		}options[needfuncinfo(true)];
 		Test2 = deffunc(1)args(this, v, enumer){
-			local(__method_ret_67_4_70_5);
-			__method_ret_67_4_70_5 = null;
-			return(__method_ret_67_4_70_5);
+			local(__method_ret_67_4_79_5);
+			local(__try_ret_69_8_77_9, __try_retval_69_8_77_9); multiassign(__try_ret_69_8_77_9, __try_retval_69_8_77_9) = dsltry(false, __try_ret_69_8_77_9){
+				block{
+				__method_ret_67_4_79_5 = execbinary("+", a, b, , , TypeKind.Error, TypeKind.Error);
+				__try_retval_69_8_77_9 = 1;
+				break;
+				};
+			};
+			if(__try_ret_69_8_77_9){
+				callexternstatic(UnityEngine.Debug, "Log", dslstrtocsstr("UnityEngine.Debug:Log__Void__Object"), dslstrtocsstr("finally"));
+				if(__try_retval_69_8_77_9){
+				if(__try_retval_69_8_77_9==1){
+					return(__method_ret_67_4_79_5);
+				};
+				};
+			};
+			local(__catch_handled_69_8_77_9, __catch_retval_69_8_77_9); __catch_handled_69_8_77_9 = false;
+			__catch_retval_69_8_77_9 = dslcatch(__catch_handled_69_8_77_9, __try_retval_69_8_77_9, __try_ret_69_8_77_9,
+				function(, e){
+					__catch_handled_69_8_77_9 = true;
+					callexternstatic(UnityEngine.Debug, "LogFormat", dslstrtocsstr("UnityEngine.Debug:LogFormat__Void__String__Arr_Object"), dslstrtocsstr("{0}\n{1}"), getexterninstance(SymbolKind.Property, e, System.Exception, "Message"), getexterninstance(SymbolKind.Property, e, System.Exception, "StackTrace"));
+				}
+			);
+			if(! __try_ret_69_8_77_9){
+				callexternstatic(UnityEngine.Debug, "Log", dslstrtocsstr("UnityEngine.Debug:Log__Void__Object"), dslstrtocsstr("finally"));
+			};
+			__method_ret_67_4_79_5 = null;
+			return(__method_ret_67_4_79_5);
 		}options[needfuncinfo(false)];
 		Test3 = deffunc(2)args(this, v1, v2){
 			v1 = wrapoutexternstruct(v1, UnityEngine.Vector3);

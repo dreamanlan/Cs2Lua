@@ -11,9 +11,9 @@ ZipOutputStream = {
 	end,
 
 	get_Instance = function()
-		local __method_ret_108_4_111_5;
-		__method_ret_108_4_111_5 = ZipOutputStream.s_Instance;
-		return __method_ret_108_4_111_5;
+		local __method_ret_117_4_120_5;
+		__method_ret_117_4_120_5 = ZipOutputStream.s_Instance;
+		return __method_ret_117_4_120_5;
 	end,
 
 	cctor = function()
