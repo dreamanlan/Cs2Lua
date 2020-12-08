@@ -242,7 +242,7 @@ GetComponent<T>() => GetCompoent(Type)
 
 3、为与Slua及dotnet reflection调用的机制一致，函数的out参数在调用时传入实参__cs2lua_out（使用Slua时此值为Slua.out否则为一空表）。
 
-4、修改了Slua导出API识别重载版本的机制，添加一个签名参数作为方法第一个参数（除self外），可以精确匹配调用的方法。
+4、修改了Slua导出API识别重载版本的机制，修改为每个重载版本导出一个换名后的API，这样可以精确匹配调用的方法。
 
 5、对于翻译为lua的C#类，如果其实例传给C#对象的object类型属性，slua是无法记录的，翻译时对这种情形添加了luatoobject/objecttolua两个库调用，使用一个继承自c#实现的类型的翻译为lua的类，然后将
 普通lua类型实例作为该类的字段，并把该类实例赋给C#对象的object类型属性。从c#对象的object类型属性读取时，则进行反向操作，从而得到普通lua类实例。在FairyGUI里，常将业务对象赋给UI对象，并在事件
