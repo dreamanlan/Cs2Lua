@@ -993,12 +993,21 @@ namespace Generator
                     bool handled = false;
                     var fd = param1 as Dsl.FunctionData;
                     var sd = param1 as Dsl.StatementData;
+                    var fd2 = param2 as Dsl.FunctionData;
+                    var sd2 = param2 as Dsl.StatementData;
                     string leftParamId = string.Empty;
+                    string rightParamId = string.Empty;
                     if (null != fd && !fd.IsHighOrder && fd.HaveParam()) {
                         leftParamId = fd.GetId();
                     }
                     else if (null != sd) {
                         leftParamId = sd.GetId();
+                    }
+                    if (null != fd2 && !fd2.IsHighOrder && fd2.HaveParam()) {
+                        rightParamId = fd2.GetId();
+                    }
+                    else if (null != sd2) {
+                        rightParamId = sd2.GetId();
                     }
                     if (id == "=" && leftParamId == "multiassign") {
                         var cd = param1 as Dsl.FunctionData;
@@ -1154,6 +1163,10 @@ namespace Generator
                             handled = true;
                         }
                     }
+                    else if (id == "=" && rightParamId == "condexp" && null != fd2) {
+                        GenerateAssignmentCondExp(param1, fd2, sb, indent, firstLineUseIndent, funcOpts, calculator);
+                        handled = true;
+                    }
                     if (!handled) {
                         if (firstLineUseIndent) {
                             sb.AppendFormat("{0}", GetIndentString(indent));
@@ -1178,51 +1191,22 @@ namespace Generator
                         var p1 = data.GetParam(0);
                         var p2 = data.GetParamId(1);
                         var p3 = data.GetParam(2);
-                        var p3Func = p3 as Dsl.FunctionData;
                         var p4 = data.GetParamId(3);
                         var p5 = data.GetParam(4);
-                        var p5Func = p5 as Dsl.FunctionData;
-                        if (p2 == "false" && null != p3Func && !ExistEmbedFunctionObject(p3Func)) {
-                            var func = p3Func.GetParam(0) as Dsl.FunctionData;
-                            if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
-                                func = func.GetParam(0) as Dsl.FunctionData;
-                            }
-                            if (null != func && func.GetId() == "funcobjret") {
-                                p2 = "true";
-                                p3 = func.GetParam(0);
-                            }
-                        }
-                        if (p4 == "false" && null != p5Func && !ExistEmbedFunctionObject(p5Func)) {
-                            var func = p5Func.GetParam(0) as Dsl.FunctionData;
-                            if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
-                                func = func.GetParam(0) as Dsl.FunctionData;
-                            }
-                            if (null != func && func.GetId() == "funcobjret") {
-                                p4 = "true";
-                                p5 = func.GetParam(0);
-                            }
-                        }
+
                         if (p2 == "true" && p4 == "true") {
-                            sb.Append("((");
-                            GenerateSyntaxComponent(p1, sb, indent, false, funcOpts, calculator);
-                            sb.Append(") and (");
-                            GenerateSyntaxComponent(p3, sb, indent, false, funcOpts, calculator);
-                            sb.Append(") or (");
-                            GenerateSyntaxComponent(p5, sb, indent, false, funcOpts, calculator);
-                            sb.Append("))");
-                        }
-                        else {
-                            sb.Append("condexp(");
+                            sb.Append("simplecondexp(");
                             GenerateSyntaxComponent(p1, sb, indent, false, funcOpts, calculator);
                             sb.Append(", ");
-                            sb.Append(p2);
-                            sb.Append(", ");
                             GenerateSyntaxComponent(p3, sb, indent, false, funcOpts, calculator);
-                            sb.Append(", ");
-                            sb.Append(p4);
                             sb.Append(", ");
                             GenerateSyntaxComponent(p5, sb, indent, false, funcOpts, calculator);
                             sb.Append(")");
+                        }
+                        else {
+                            sb.Append("(function() ");
+                            GenerateOtherCondExp(data, sb, indent, funcOpts, calculator);
+                            sb.Append(" end)()");
                         }
                     }
                     else if (id == "condaccess") {
@@ -1391,7 +1375,7 @@ namespace Generator
                         else if (op == "+" && (type1 == "System.String" || type2 == "System.String")) {
                             bool tostr1 = type1 != "System.String";
                             bool tostr2 = type2 != "System.String";
-                            sb.Append("strconcat(");
+                            sb.Append("stringconcat(");
                             if (tostr1)
                                 sb.Append("tostring(");
                             GenerateSyntaxComponent(p1, sb, indent, false, funcOpts, calculator);
@@ -2786,6 +2770,157 @@ namespace Generator
                     }
                 }
             }
+        }
+        private static void GenerateAssignmentCondExp(Dsl.ISyntaxComponent leftParam, Dsl.FunctionData data, StringBuilder sb, int indent, bool firstLineUseIndent, FunctionOptions funcOpts, DslExpression.DslCalculator calculator)
+        {
+            var p1 = data.GetParam(0);
+            var p2 = data.GetParamId(1);
+            var p3 = data.GetParam(2);
+            var p3Func = p3 as Dsl.FunctionData;
+            var p4 = data.GetParamId(3);
+            var p5 = data.GetParam(4);
+            var p5Func = p5 as Dsl.FunctionData;
+            string p2n = p2;
+            var p3n = p3;
+            string p4n = p4;
+            var p5n = p5;
+            bool p3IsCondExp = false;
+            bool p5IsCondExp = false;
+            if (p2 == "false" && null != p3Func && p3Func.GetId() == "condexp") {
+                p3IsCondExp = true;
+            }
+            else if (p2 == "false" && null != p3Func && !ExistEmbedFunctionObject(p3Func)) {
+                var func = p3Func.GetParam(0) as Dsl.FunctionData;
+                if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
+                    func = func.GetParam(0) as Dsl.FunctionData;
+                }
+                if (null != func && func.GetId() == "funcobjret") {
+                    p2n = "true";
+                    p3n = func.GetParam(0);
+                }
+            }
+            if (p4 == "false" && null != p5Func && p5Func.GetId() == "condexp") {
+                p5IsCondExp = true;
+            }
+            else if (p4 == "false" && null != p5Func && !ExistEmbedFunctionObject(p5Func)) {
+                var func = p5Func.GetParam(0) as Dsl.FunctionData;
+                if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
+                    func = func.GetParam(0) as Dsl.FunctionData;
+                }
+                if (null != func && func.GetId() == "funcobjret") {
+                    p4n = "true";
+                    p5n = func.GetParam(0);
+                }
+            }
+
+            if (firstLineUseIndent) {
+                sb.AppendFormat("{0}", GetIndentString(indent));
+            }
+            sb.Append("if ");
+            GenerateSyntaxComponent(p1, sb, indent, false, funcOpts, calculator);
+            sb.Append(" then ");
+            if (p3IsCondExp) {
+                GenerateAssignmentCondExp(leftParam, p3Func, sb, indent, false, funcOpts, calculator);
+            }
+            else if (p2n == "true") {
+                GenerateSyntaxComponent(leftParam, sb, indent, false, funcOpts, calculator);
+                sb.Append(" = ");
+                GenerateSyntaxComponent(p3n, sb, indent, false, funcOpts, calculator);
+            }
+            else {
+                GenerateSyntaxComponent(leftParam, sb, indent, false, funcOpts, calculator);
+                sb.Append(" = (");
+                GenerateSyntaxComponent(p3, sb, indent, false, funcOpts, calculator);
+                sb.Append(")()");
+            }
+            sb.Append(" else ");
+            if (p5IsCondExp) {
+                GenerateAssignmentCondExp(leftParam, p5Func, sb, indent, false, funcOpts, calculator);
+            }
+            else if (p4n == "true") {
+                GenerateSyntaxComponent(leftParam, sb, indent, false, funcOpts, calculator);
+                sb.Append(" = ");
+                GenerateSyntaxComponent(p5n, sb, indent, false, funcOpts, calculator);
+            }
+            else {
+                GenerateSyntaxComponent(leftParam, sb, indent, false, funcOpts, calculator);
+                sb.Append(" = (");
+                GenerateSyntaxComponent(p5, sb, indent, false, funcOpts, calculator);
+                sb.Append(")()");
+            }
+            sb.Append(" end");
+        }
+        private static void GenerateOtherCondExp(Dsl.FunctionData data, StringBuilder sb, int indent, FunctionOptions funcOpts, DslExpression.DslCalculator calculator)
+        {
+            var p1 = data.GetParam(0);
+            var p2 = data.GetParamId(1);
+            var p3 = data.GetParam(2);
+            var p3Func = p3 as Dsl.FunctionData;
+            var p4 = data.GetParamId(3);
+            var p5 = data.GetParam(4);
+            var p5Func = p5 as Dsl.FunctionData;
+            string p2n = p2;
+            var p3n = p3;
+            string p4n = p4;
+            var p5n = p5;
+            bool p3IsCondExp = false;
+            bool p5IsCondExp = false;
+            if (p2 == "false" && null != p3Func && p3Func.GetId() == "condexp") {
+                p3IsCondExp = true;
+            }
+            else if (p2 == "false" && null != p3Func && !ExistEmbedFunctionObject(p3Func)) {
+                var func = p3Func.GetParam(0) as Dsl.FunctionData;
+                if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
+                    func = func.GetParam(0) as Dsl.FunctionData;
+                }
+                if (null != func && func.GetId() == "funcobjret") {
+                    p2n = "true";
+                    p3n = func.GetParam(0);
+                }
+            }
+            if (p4 == "false" && null != p5Func && p5Func.GetId() == "condexp") {
+                p5IsCondExp = true;
+            }
+            else if (p4 == "false" && null != p5Func && !ExistEmbedFunctionObject(p5Func)) {
+                var func = p5Func.GetParam(0) as Dsl.FunctionData;
+                if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
+                    func = func.GetParam(0) as Dsl.FunctionData;
+                }
+                if (null != func && func.GetId() == "funcobjret") {
+                    p4n = "true";
+                    p5n = func.GetParam(0);
+                }
+            }
+
+            sb.Append("if ");
+            GenerateSyntaxComponent(p1, sb, indent, false, funcOpts, calculator);
+            sb.Append(" then ");
+            if (p3IsCondExp) {
+                GenerateOtherCondExp(p3Func, sb, indent, funcOpts, calculator);
+            }
+            else if (p2n == "true") {
+                sb.Append("return ");
+                GenerateSyntaxComponent(p3n, sb, indent, false, funcOpts, calculator);
+            }
+            else {
+                sb.Append("return (");
+                GenerateSyntaxComponent(p3, sb, indent, false, funcOpts, calculator);
+                sb.Append(")()");
+            }
+            sb.Append(" else ");
+            if (p5IsCondExp) {
+                GenerateOtherCondExp(p5Func, sb, indent, funcOpts, calculator);
+            }
+            else if (p4n == "true") {
+                sb.Append("return ");
+                GenerateSyntaxComponent(p5n, sb, indent, false, funcOpts, calculator);
+            }
+            else {
+                sb.Append("return (");
+                GenerateSyntaxComponent(p5, sb, indent, false, funcOpts, calculator);
+                sb.Append(")()");
+            }
+            sb.Append(" end");
         }
         private static void GenerateAttribute(Dsl.ISyntaxComponent comp, StringBuilder sb, int indent)
         {

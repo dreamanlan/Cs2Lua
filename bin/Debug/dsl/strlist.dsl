@@ -28,17 +28,17 @@ class(StrList, System.Collections.Generic.List_T) {
 
 	instance_methods {
 		ctor = deffunc(0)args(this){
-			callinstance(getinstance(SymbolKind.Field, this, StrList, "base"), StrList, "ctor");
+			buildexternbaseobj(this, StrList, System.Collections.Generic.List_T, "ctor");
 			callinstance(this, StrList, "__ctor");
 			return(this);
 		}options[needfuncinfo(false)],
 		ctor__Int32 = deffunc(0)args(this, c){
-			callinstance(getinstance(SymbolKind.Field, this, StrList, "base"), StrList, "ctor__Int32", c);
+			buildexternbaseobj(this, StrList, System.Collections.Generic.List_T, "ctor__Int32", c);
 			callinstance(this, StrList, "__ctor");
 			return(this);
 		}options[needfuncinfo(false)],
-		ctor__ICollection_1_T = deffunc(0)args(this, coll){
-			callinstance(getinstance(SymbolKind.Field, this, StrList, "base"), StrList, "ctor__IEnumerable_1_Object", coll);
+		ctor__ICollection_1_String = deffunc(0)args(this, coll){
+			buildexternbaseobj(this, StrList, System.Collections.Generic.List_T, "ctor__IEnumerable_1_T", coll);
 			callinstance(this, StrList, "__ctor");
 			return(this);
 		}options[needfuncinfo(false)],
@@ -74,7 +74,7 @@ class(StrList, System.Collections.Generic.List_T) {
 		};
 		ctor__Int32(MethodKind.Constructor, Accessibility.Public){
 		};
-		ctor__ICollection_1_T(MethodKind.Constructor, Accessibility.Public){
+		ctor__ICollection_1_String(MethodKind.Constructor, Accessibility.Public){
 		};
 	};
 	property_info {};

@@ -36,12 +36,12 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 		local class = Cs2LuaObjectPoolEx_DataChangeCallBackInfo;
 
 		local obj_methods = {
-			Init__Func_1_TResult__Action_1_T = function(this, creater, destroyer)
+			Init__Func_1_T__Action_1_T = function(this, creater, destroyer)
 				this.m_Creater = delegationset(false, this, "m_Creater", SymbolKind.Field, creater);
 				this.m_Destroyer = delegationset(false, this, "m_Destroyer", SymbolKind.Field, destroyer);
 			end,
 
-			Init__Int32__Func_1_TResult__Action_1_T = function(this, initPoolSize, creater, destroyer)
+			Init__Int32__Func_1_T__Action_1_T = function(this, initPoolSize, creater, destroyer)
 				this.m_Creater = delegationset(false, this, "m_Creater", SymbolKind.Field, creater);
 				this.m_Destroyer = delegationset(false, this, "m_Destroyer", SymbolKind.Field, destroyer);
 				local i;

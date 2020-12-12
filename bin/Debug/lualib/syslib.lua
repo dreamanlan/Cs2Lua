@@ -203,7 +203,7 @@ function luastrtocsstr(str)
     end
 end
 
-function strconcat(str1, str2)
+function stringconcat(str1, str2)
     return System.String.Concat__String__String(str1, str2)
 end
 
@@ -811,12 +811,12 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
         elseif meta then
             return obj[method](obj, ...)
         elseif method == "CompareTo" or 1 == string.find(method, "CompareTo__") then            
-            if type(obj)=="boolean" and type(arg2)=="boolean" then
-                if obj and arg2 then
+            if type(obj)=="boolean" and type(arg1)=="boolean" then
+                if obj and arg1 then
                     return 0
-                elseif not obj and not arg2 then
+                elseif not obj and not arg1 then
                     return 0
-                elseif obj and not arg2 then
+                elseif obj and not arg1 then
                     return 1
                 else
                     return -1
@@ -2603,19 +2603,12 @@ function rshift(v, n)
     end
 end
 
-function condexp(cv, tfIsSimple, tf, ffIsSimple, ff)
+--tv与fv都是常量时使用
+function simplecondexp(cv, tv, fv)
     if cv then
-        if tfIsSimple then
-            return tf
-        else
-            return tf()
-        end
+        return tv
     else
-        if ffIsSimple then
-            return ff
-        else
-            return ff()
-        end
+        return fv
     end
 end
 

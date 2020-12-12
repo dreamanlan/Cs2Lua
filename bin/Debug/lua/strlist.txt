@@ -37,19 +37,19 @@ StrList = {
 
 		local obj_methods = {
 			ctor = function(this)
-				this.base:__self__ctor();
+				buildexternbaseobj(this, StrList, System.Collections.Generic.List_T, "ctor");
 				this:__ctor();
 				return this;
 			end,
 
 			ctor__Int32 = function(this, c)
-				this.base:__self__ctor__Int32(c);
+				buildexternbaseobj(this, StrList, System.Collections.Generic.List_T, "ctor__Int32", c);
 				this:__ctor();
 				return this;
 			end,
 
-			ctor__ICollection_1_T = function(this, coll)
-				this.base:__self__ctor__IEnumerable_1_Object(coll);
+			ctor__ICollection_1_String = function(this, coll)
+				buildexternbaseobj(this, StrList, System.Collections.Generic.List_T, "ctor__IEnumerable_1_T", coll);
 				this:__ctor();
 				return this;
 			end,
@@ -105,7 +105,7 @@ StrList = {
 		ctor__Int32 = {
 			Kind = MethodKind.Constructor,
 		},
-		ctor__ICollection_1_T = {
+		ctor__ICollection_1_String = {
 			Kind = MethodKind.Constructor,
 		},
 	},

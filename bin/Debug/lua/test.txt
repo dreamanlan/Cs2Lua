@@ -37,11 +37,11 @@ Test = {
 
 		local obj_methods = {
 			Init = function(this)
-				this.m_DataChangeCallBackInfoPool:Init__Func_1_TResult__Action_1_T(nil, nil);
+				this.m_DataChangeCallBackInfoPool:Init__Func_1_T__Action_1_T(nil, nil);
 				local strlist;
 				strlist = newlist(StrList, nil, nil, "ctor", {});
 				strlist:Add(System.String.Empty);
-				strlist:Sort__Comparison_1_Object(function(a, b)
+				strlist:Sort__Comparison_1_T(function(a, b)
 					local __lambda_112_21_112_45;
 					__lambda_112_21_112_45 = invokeforbasicvalue(a, false, System.String, "CompareTo__String", b);
 					return __lambda_112_21_112_45;
@@ -49,11 +49,13 @@ Test = {
 				local intlist;
 				intlist = newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, "ctor", {});
 				intlist:Add(1);
-				intlist:Sort__Comparison_1_Object(function(a, b)
+				intlist:Sort__Comparison_1_T(function(a, b)
 					local __lambda_115_21_115_45;
 					__lambda_115_21_115_45 = invokeforbasicvalue(a, false, System.Int32, "CompareTo__Int32", b);
 					return __lambda_115_21_115_45;
 				end);
+				local aa;
+if (not isequal(nil, strlist)) then aa = strlist.Count else aa = intlist.Count end;
 			end,
 
 			ctor = function(this)

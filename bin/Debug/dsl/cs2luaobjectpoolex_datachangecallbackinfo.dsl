@@ -27,11 +27,11 @@ class(Cs2LuaObjectPoolEx_DataChangeCallBackInfo) {
 	static_events {};
 
 	instance_methods {
-		Init__Func_1_TResult__Action_1_T = deffunc(0)args(this, creater, destroyer){
+		Init__Func_1_T__Action_1_T = deffunc(0)args(this, creater, destroyer){
 			setinstancedelegation(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_Creater", delegationset(false, this, "m_Creater", SymbolKind.Field, creater));
 			setinstancedelegation(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_Destroyer", delegationset(false, this, "m_Destroyer", SymbolKind.Field, destroyer));
 		}options[needfuncinfo(false)];
-		Init__Int32__Func_1_TResult__Action_1_T = deffunc(0)args(this, initPoolSize, creater, destroyer){
+		Init__Int32__Func_1_T__Action_1_T = deffunc(0)args(this, initPoolSize, creater, destroyer){
 			setinstancedelegation(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_Creater", delegationset(false, this, "m_Creater", SymbolKind.Field, creater));
 			setinstancedelegation(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_Destroyer", delegationset(false, this, "m_Destroyer", SymbolKind.Field, destroyer));
 			local(i); i = 0;
@@ -106,9 +106,9 @@ class(Cs2LuaObjectPoolEx_DataChangeCallBackInfo) {
 		sealed(true);
 	};
 	method_info {
-		Init__Func_1_TResult__Action_1_T(MethodKind.Ordinary, Accessibility.Public){
+		Init__Func_1_T__Action_1_T(MethodKind.Ordinary, Accessibility.Public){
 		};
-		Init__Int32__Func_1_TResult__Action_1_T(MethodKind.Ordinary, Accessibility.Public){
+		Init__Int32__Func_1_T__Action_1_T(MethodKind.Ordinary, Accessibility.Public){
 		};
 		Alloc(MethodKind.Ordinary, Accessibility.Public){
 		};

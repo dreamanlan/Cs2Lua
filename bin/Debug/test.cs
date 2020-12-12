@@ -114,6 +114,7 @@ class Test
         List<int> intlist = new List<int>();
         intlist.Add(1);
         intlist.Sort((a, b) => a.CompareTo(b));
+        int aa = null != strlist ? strlist.Count : intlist.Count;
     }
     private Cs2LuaObjectPoolEx<DataChangeCallBackInfo> m_DataChangeCallBackInfoPool = new Cs2LuaObjectPoolEx<DataChangeCallBackInfo>();
 }
