@@ -5,11 +5,11 @@ using System.Collections.Generic;
 public class Lua_MonoBehaviourProxy : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			MonoBehaviourProxy o;
 			UnityEngine.MonoBehaviour a1;
-			checkType(l,2,out a1);
+			checkType(l,1,out a1);
 			o=new MonoBehaviourProxy(a1);
 			pushValue(l,true);
 			pushValue(l,o);
@@ -66,9 +66,10 @@ public class Lua_MonoBehaviourProxy : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"MonoBehaviourProxy");
+		addMember(l,ctor_s);
 		addMember(l,StartCoroutine);
 		addMember(l,StopAllCoroutines);
 		addMember(l,StartOneCoroutine);
-		createTypeMetatable(l,constructor, typeof(MonoBehaviourProxy));
+		createTypeMetatable(l,null, typeof(MonoBehaviourProxy));
 	}
 }

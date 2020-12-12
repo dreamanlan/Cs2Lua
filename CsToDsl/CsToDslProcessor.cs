@@ -668,7 +668,7 @@ namespace RoslynTool.CsToDsl
             foreach (var sym in typesym.GetMembers()) {
                 var msym = sym as IMethodSymbol;
                 if (null != msym && msym.GetAttributes().Length > 0 && !ClassInfo.HasAttribute(sym, "Cs2Dsl.IgnoreAttribute")) {
-                    string mname = SymbolTable.Instance.NameMangling(msym);
+                    string mname = SymbolTable.Instance.NameCs2DslMangling(msym);
                     temp.AppendFormat("{0}method({1}){{", GetIndentString(indent), mname);
                     temp.AppendLine();
                     ++indent;
@@ -1249,12 +1249,12 @@ namespace RoslynTool.CsToDsl
                         sb.Append(ci.InstanceFunctionCodeBuilder.ToString());
                     }
 
-                    if (!haveCtor) {
+                    if (!haveCtor || isValueType) {
                         sb.AppendFormat("{0}ctor = deffunc(0)args(this){{", GetIndentString(indent));
                         sb.AppendLine();
                         ++indent;
                         if (!string.IsNullOrEmpty(baseClass) && myselfDefinedBaseClass) {
-                            sb.AppendFormat("{0}callinstance(getinstance(SymbolKind.Field, this, {1}, \"base\"), {2}, \"ctor\");", GetIndentString(indent), key, key);
+                            sb.AppendFormat("{0}buildbaseobj(this, {1}, {2}, \"ctor\");", GetIndentString(indent), key, baseClass);
                             sb.AppendLine();
                         }
                         sb.AppendFormat("{0}callinstance(this, {1}, \"__ctor\");", GetIndentString(indent), key);
@@ -1416,7 +1416,7 @@ namespace RoslynTool.CsToDsl
                         ++indent;
 
                         foreach (var msym in csi.MethodSymbols) {
-                            var name = SymbolTable.Instance.NameMangling(msym);
+                            var name = SymbolTable.Instance.NameCs2DslMangling(msym);
                             sb.AppendFormat("{0}{1}(MethodKind.{2}, Accessibility.{3}){{", GetIndentString(indent), name, msym.MethodKind, msym.DeclaredAccessibility);
                             sb.AppendLine();
                             ++indent;

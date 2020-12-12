@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ExecuteAlways : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ExecuteAlways o;
 			o=new UnityEngine.ExecuteAlways();
@@ -20,6 +20,7 @@ public class Lua_UnityEngine_ExecuteAlways : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ExecuteAlways");
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ExecuteAlways),typeof(System.Attribute));
+		addMember(l,ctor_s);
+		createTypeMetatable(l,null, typeof(UnityEngine.ExecuteAlways),typeof(System.Attribute));
 	}
 }

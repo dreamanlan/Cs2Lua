@@ -10,21 +10,21 @@ LuaString = {
 		return __cs2dsl_newobj;
 	end,
 
-	Format__System_String__System_Object = function(str, __dsl_arg)
+	Format__String__Object = function(str, __dsl_arg)
 		local __method_ret_6_4_9_5;
-		__method_ret_6_4_9_5 = System.String.Format(luastrtocsstr("System.String:Format__String__String__Object"), str, __dsl_arg);
+		__method_ret_6_4_9_5 = System.String.Format__String__Object(str, __dsl_arg);
 		return __method_ret_6_4_9_5;
 	end,
 
-	Format__System_String__System_Object__System_Object = function(str, arg1, arg2)
+	Format__String__Object__Object = function(str, arg1, arg2)
 		local __method_ret_10_4_13_5;
-		__method_ret_10_4_13_5 = System.String.Format(luastrtocsstr("System.String:Format__String__String__Object__Object"), str, arg1, arg2);
+		__method_ret_10_4_13_5 = System.String.Format__String__Object__Object(str, arg1, arg2);
 		return __method_ret_10_4_13_5;
 	end,
 
-	Format__System_String__System_Object__System_Object__System_Object = function(str, arg1, arg2, arg3)
+	Format__String__Object__Object__Object = function(str, arg1, arg2, arg3)
 		local __method_ret_14_4_17_5;
-		__method_ret_14_4_17_5 = System.String.Format(luastrtocsstr("System.String:Format__String__String__Object__Object__Object"), str, arg1, arg2, arg3);
+		__method_ret_14_4_17_5 = System.String.Format__String__Object__Object__Object(str, arg1, arg2, arg3);
 		return __method_ret_14_4_17_5;
 	end,
 
@@ -93,15 +93,15 @@ LuaString = {
 	-------- metadata info --------
 	-------------------------------
 	__method_info = {
-		Format__System_String__System_Object = {
+		Format__String__Object = {
 			Kind = MethodKind.Ordinary,
 			static = true,
 		},
-		Format__System_String__System_Object__System_Object = {
+		Format__String__Object__Object = {
 			Kind = MethodKind.Ordinary,
 			static = true,
 		},
-		Format__System_String__System_Object__System_Object__System_Object = {
+		Format__String__Object__Object__Object = {
 			Kind = MethodKind.Ordinary,
 			static = true,
 		},

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Flare : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Flare o;
 			o=new UnityEngine.Flare();
@@ -20,6 +20,7 @@ public class Lua_UnityEngine_Flare : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Flare");
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Flare),typeof(UnityEngine.Object));
+		addMember(l,ctor_s);
+		createTypeMetatable(l,null, typeof(UnityEngine.Flare),typeof(UnityEngine.Object));
 	}
 }

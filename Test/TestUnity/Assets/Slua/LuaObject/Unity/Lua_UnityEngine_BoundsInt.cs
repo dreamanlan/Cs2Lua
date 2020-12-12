@@ -5,45 +5,57 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_BoundsInt : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.BoundsInt o;
-			if(argc==8){
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				System.Int32 a4;
-				checkType(l,6,out a4);
-				System.Int32 a5;
-				checkType(l,7,out a5);
-				System.Int32 a6;
-				checkType(l,8,out a6);
-				o=new UnityEngine.BoundsInt(a1,a2,a3,a4,a5,a6);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==4){
-				UnityEngine.Vector3Int a1;
-				checkValueType(l,3,out a1);
-				UnityEngine.Vector3Int a2;
-				checkValueType(l,4,out a2);
-				o=new UnityEngine.BoundsInt(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc<=2){
-				o=new UnityEngine.BoundsInt();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.BoundsInt();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Vector3Int__Vector3Int_s(IntPtr l) {
+		try {
+			UnityEngine.BoundsInt o;
+			UnityEngine.Vector3Int a1;
+			checkValueType(l,1,out a1);
+			UnityEngine.Vector3Int a2;
+			checkValueType(l,2,out a2);
+			o=new UnityEngine.BoundsInt(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__Int32__Int32__Int32__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.BoundsInt o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			System.Int32 a4;
+			checkType(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
+			System.Int32 a6;
+			checkType(l,6,out a6);
+			o=new UnityEngine.BoundsInt(a1,a2,a3,a4,a5,a6);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -94,6 +106,55 @@ public class Lua_UnityEngine_BoundsInt : LuaObject {
 			UnityEngine.Vector3Int a1;
 			checkValueType(l,2,out a1);
 			var ret=self.Contains(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static new public int ToString(IntPtr l) {
+		try {
+			UnityEngine.BoundsInt self;
+			checkValueType(l,1,out self);
+			var ret=self.ToString();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			UnityEngine.BoundsInt self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__BoundsInt(IntPtr l) {
+		try {
+			UnityEngine.BoundsInt self;
+			checkValueType(l,1,out self);
+			UnityEngine.BoundsInt a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Equals(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -570,9 +631,15 @@ public class Lua_UnityEngine_BoundsInt : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.BoundsInt");
+		addMember(l,ctor_s);
+		addMember(l,ctor__Vector3Int__Vector3Int_s);
+		addMember(l,ctor__Int32__Int32__Int32__Int32__Int32__Int32_s);
 		addMember(l,SetMinMax);
 		addMember(l,ClampToBounds);
 		addMember(l,Contains);
+		addMember(l,ToString);
+		addMember(l,Equals__Object);
+		addMember(l,Equals__BoundsInt);
 		addMember(l,op_Equality_s);
 		addMember(l,op_Inequality_s);
 		addMember(l,"x",get_x,set_x,true);
@@ -590,6 +657,6 @@ public class Lua_UnityEngine_BoundsInt : LuaObject {
 		addMember(l,"position",get_position,set_position,true);
 		addMember(l,"size",get_size,set_size,true);
 		addMember(l,"allPositionsWithin",get_allPositionsWithin,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.BoundsInt),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.BoundsInt),typeof(System.ValueType));
 	}
 }

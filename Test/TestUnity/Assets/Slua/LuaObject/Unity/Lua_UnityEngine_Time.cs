@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Time : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Time o;
 			o=new UnityEngine.Time();
@@ -306,6 +306,7 @@ public class Lua_UnityEngine_Time : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Time");
+		addMember(l,ctor_s);
 		addMember(l,"time",get_time,null,false);
 		addMember(l,"timeSinceLevelLoad",get_timeSinceLevelLoad,null,false);
 		addMember(l,"deltaTime",get_deltaTime,null,false);
@@ -324,6 +325,6 @@ public class Lua_UnityEngine_Time : LuaObject {
 		addMember(l,"realtimeSinceStartup",get_realtimeSinceStartup,null,false);
 		addMember(l,"captureFramerate",get_captureFramerate,set_captureFramerate,false);
 		addMember(l,"inFixedTimeStep",get_inFixedTimeStep,null,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Time));
+		createTypeMetatable(l,null, typeof(UnityEngine.Time));
 	}
 }

@@ -5,87 +5,12 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_MinMaxGradient : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.ParticleSystem.MinMaxGradient o;
-			if(matchType(l, "ctor__Void__Color__Color", argc, 2,typeof(UnityEngine.Color),typeof(UnityEngine.Color))){
-				UnityEngine.Color a1;
-				checkType(l,3,out a1);
-				UnityEngine.Color a2;
-				checkType(l,4,out a2);
-				o=new UnityEngine.ParticleSystem.MinMaxGradient(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Gradient__Gradient", argc, 2,typeof(UnityEngine.Gradient),typeof(UnityEngine.Gradient))){
-				UnityEngine.Gradient a1;
-				checkType(l,3,out a1);
-				UnityEngine.Gradient a2;
-				checkType(l,4,out a2);
-				o=new UnityEngine.ParticleSystem.MinMaxGradient(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Color", argc, 2,typeof(UnityEngine.Color))){
-				UnityEngine.Color a1;
-				checkType(l,3,out a1);
-				o=new UnityEngine.ParticleSystem.MinMaxGradient(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Gradient", argc, 2,typeof(UnityEngine.Gradient))){
-				UnityEngine.Gradient a1;
-				checkType(l,3,out a1);
-				o=new UnityEngine.ParticleSystem.MinMaxGradient(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc<=2){
-				o=new UnityEngine.ParticleSystem.MinMaxGradient();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Evaluate(IntPtr l) {
-		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.ParticleSystem.MinMaxGradient self;
-				checkValueType(l,1,out self);
-				System.Single a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				var ret=self.Evaluate(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				UnityEngine.ParticleSystem.MinMaxGradient self;
-				checkValueType(l,1,out self);
-				System.Single a1;
-				checkType(l,3,out a1);
-				var ret=self.Evaluate(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			o=new UnityEngine.ParticleSystem.MinMaxGradient();
+			pushValue(l,true);
+			pushValue(l,o);
 			return 2;
 		}
 		catch(Exception e) {
@@ -94,27 +19,132 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxGradient : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Implicit_s(IntPtr l) {
+	static public int ctor__Color_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "op_Implicit__MinMaxGradient__Color", argc, 1,typeof(UnityEngine.Color))){
-				UnityEngine.Color a1;
-				checkType(l,2,out a1);
-				UnityEngine.ParticleSystem.MinMaxGradient ret=a1;
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "op_Implicit__MinMaxGradient__Gradient", argc, 1,typeof(UnityEngine.Gradient))){
-				UnityEngine.Gradient a1;
-				checkType(l,2,out a1);
-				UnityEngine.ParticleSystem.MinMaxGradient ret=a1;
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.ParticleSystem.MinMaxGradient o;
+			UnityEngine.Color a1;
+			checkType(l,1,out a1);
+			o=new UnityEngine.ParticleSystem.MinMaxGradient(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Gradient_s(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.MinMaxGradient o;
+			UnityEngine.Gradient a1;
+			checkType(l,1,out a1);
+			o=new UnityEngine.ParticleSystem.MinMaxGradient(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Color__Color_s(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.MinMaxGradient o;
+			UnityEngine.Color a1;
+			checkType(l,1,out a1);
+			UnityEngine.Color a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.ParticleSystem.MinMaxGradient(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Gradient__Gradient_s(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.MinMaxGradient o;
+			UnityEngine.Gradient a1;
+			checkType(l,1,out a1);
+			UnityEngine.Gradient a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.ParticleSystem.MinMaxGradient(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Evaluate__Single(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.MinMaxGradient self;
+			checkValueType(l,1,out self);
+			System.Single a1;
+			checkType(l,2,out a1);
+			var ret=self.Evaluate(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Evaluate__Single__Single(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.MinMaxGradient self;
+			checkValueType(l,1,out self);
+			System.Single a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			var ret=self.Evaluate(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Implicit__MinMaxGradient__Color_s(IntPtr l) {
+		try {
+			UnityEngine.Color a1;
+			checkType(l,1,out a1);
+			UnityEngine.ParticleSystem.MinMaxGradient ret=a1;
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Implicit__MinMaxGradient__Gradient_s(IntPtr l) {
+		try {
+			UnityEngine.Gradient a1;
+			checkType(l,1,out a1);
+			UnityEngine.ParticleSystem.MinMaxGradient ret=a1;
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -341,8 +371,15 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxGradient : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.MinMaxGradient");
-		addMember(l,Evaluate);
-		addMember(l,op_Implicit_s);
+		addMember(l,ctor_s);
+		addMember(l,ctor__Color_s);
+		addMember(l,ctor__Gradient_s);
+		addMember(l,ctor__Color__Color_s);
+		addMember(l,ctor__Gradient__Gradient_s);
+		addMember(l,Evaluate__Single);
+		addMember(l,Evaluate__Single__Single);
+		addMember(l,op_Implicit__MinMaxGradient__Color_s);
+		addMember(l,op_Implicit__MinMaxGradient__Gradient_s);
 		addMember(l,"mode",get_mode,set_mode,true);
 		addMember(l,"gradientMax",get_gradientMax,set_gradientMax,true);
 		addMember(l,"gradientMin",get_gradientMin,set_gradientMin,true);
@@ -350,6 +387,6 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxGradient : LuaObject {
 		addMember(l,"colorMin",get_colorMin,set_colorMin,true);
 		addMember(l,"color",get_color,set_color,true);
 		addMember(l,"gradient",get_gradient,set_gradient,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.MinMaxGradient),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.MinMaxGradient),typeof(System.ValueType));
 	}
 }

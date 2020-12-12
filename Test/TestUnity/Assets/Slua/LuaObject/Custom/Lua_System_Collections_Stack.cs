@@ -5,33 +5,45 @@ using System.Collections.Generic;
 public class Lua_System_Collections_Stack : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			System.Collections.Stack o;
-			if(matchType(l, "ctor__Void__Int32", argc, 2,typeof(int))){
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				o=new System.Collections.Stack(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__ICollection", argc, 2,typeof(System.Collections.ICollection))){
-				System.Collections.ICollection a1;
-				checkType(l,3,out a1);
-				o=new System.Collections.Stack(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==2){
-				o=new System.Collections.Stack();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new System.Collections.Stack();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32_s(IntPtr l) {
+		try {
+			System.Collections.Stack o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			o=new System.Collections.Stack(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__ICollection_s(IntPtr l) {
+		try {
+			System.Collections.Stack o;
+			System.Collections.ICollection a1;
+			checkType(l,1,out a1);
+			o=new System.Collections.Stack(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -92,6 +104,20 @@ public class Lua_System_Collections_Stack : LuaObject {
 			self.CopyTo(a1,a2);
 			pushValue(l,true);
 			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetEnumerator(IntPtr l) {
+		try {
+			System.Collections.Stack self=(System.Collections.Stack)checkSelf(l);
+			var ret=self.GetEnumerator();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -211,10 +237,14 @@ public class Lua_System_Collections_Stack : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"System.Collections.Stack");
+		addMember(l,ctor_s);
+		addMember(l,ctor__Int32_s);
+		addMember(l,ctor__ICollection_s);
 		addMember(l,Clear);
 		addMember(l,Clone);
 		addMember(l,Contains);
 		addMember(l,CopyTo);
+		addMember(l,GetEnumerator);
 		addMember(l,Peek);
 		addMember(l,Pop);
 		addMember(l,Push);
@@ -223,6 +253,6 @@ public class Lua_System_Collections_Stack : LuaObject {
 		addMember(l,"Count",get_Count,null,true);
 		addMember(l,"IsSynchronized",get_IsSynchronized,null,true);
 		addMember(l,"SyncRoot",get_SyncRoot,null,true);
-		createTypeMetatable(l,constructor, typeof(System.Collections.Stack));
+		createTypeMetatable(l,null, typeof(System.Collections.Stack));
 	}
 }

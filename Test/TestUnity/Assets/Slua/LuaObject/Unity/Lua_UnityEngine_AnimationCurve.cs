@@ -5,25 +5,29 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_AnimationCurve : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.AnimationCurve o;
-			if(argc==2){
-				o=new UnityEngine.AnimationCurve();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc>=3){
-				UnityEngine.Keyframe[] a1;
-				checkValueParams(l,3,out a1);
-				o=new UnityEngine.AnimationCurve(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.AnimationCurve();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__A_Keyframe_s(IntPtr l) {
+		try {
+			UnityEngine.AnimationCurve o;
+			UnityEngine.Keyframe[] a1;
+			checkValueParams(l,1,out a1);
+			o=new UnityEngine.AnimationCurve(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -47,31 +51,32 @@ public class Lua_UnityEngine_AnimationCurve : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int AddKey(IntPtr l) {
+	static public int AddKey__Keyframe(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.AnimationCurve self=(UnityEngine.AnimationCurve)checkSelf(l);
-				System.Single a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				var ret=self.AddKey(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				UnityEngine.AnimationCurve self=(UnityEngine.AnimationCurve)checkSelf(l);
-				UnityEngine.Keyframe a1;
-				checkValueType(l,3,out a1);
-				var ret=self.AddKey(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.AnimationCurve self=(UnityEngine.AnimationCurve)checkSelf(l);
+			UnityEngine.Keyframe a1;
+			checkValueType(l,2,out a1);
+			var ret=self.AddKey(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AddKey__Single__Single(IntPtr l) {
+		try {
+			UnityEngine.AnimationCurve self=(UnityEngine.AnimationCurve)checkSelf(l);
+			System.Single a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			var ret=self.AddKey(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -123,6 +128,38 @@ public class Lua_UnityEngine_AnimationCurve : LuaObject {
 			self.SmoothTangents(a1,a2);
 			pushValue(l,true);
 			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			UnityEngine.AnimationCurve self=(UnityEngine.AnimationCurve)checkSelf(l);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__AnimationCurve(IntPtr l) {
+		try {
+			UnityEngine.AnimationCurve self=(UnityEngine.AnimationCurve)checkSelf(l);
+			UnityEngine.AnimationCurve a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -305,11 +342,16 @@ public class Lua_UnityEngine_AnimationCurve : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AnimationCurve");
+		addMember(l,ctor_s);
+		addMember(l,ctor__A_Keyframe_s);
 		addMember(l,Evaluate);
-		addMember(l,AddKey);
+		addMember(l,AddKey__Keyframe);
+		addMember(l,AddKey__Single__Single);
 		addMember(l,MoveKey);
 		addMember(l,RemoveKey);
 		addMember(l,SmoothTangents);
+		addMember(l,Equals__Object);
+		addMember(l,Equals__AnimationCurve);
 		addMember(l,Constant_s);
 		addMember(l,Linear_s);
 		addMember(l,EaseInOut_s);
@@ -318,6 +360,6 @@ public class Lua_UnityEngine_AnimationCurve : LuaObject {
 		addMember(l,"length",get_length,null,true);
 		addMember(l,"preWrapMode",get_preWrapMode,set_preWrapMode,true);
 		addMember(l,"postWrapMode",get_postWrapMode,set_postWrapMode,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.AnimationCurve));
+		createTypeMetatable(l,null, typeof(UnityEngine.AnimationCurve));
 	}
 }

@@ -5,28 +5,29 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_UI_Shadow : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int ModifyMesh(IntPtr l) {
+	static public int ModifyMesh__VertexHelper(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "ModifyMesh__Void__VertexHelper", argc, 2,typeof(UnityEngine.UI.VertexHelper))){
-				UnityEngine.UI.Shadow self=(UnityEngine.UI.Shadow)checkSelf(l);
-				UnityEngine.UI.VertexHelper a1;
-				checkType(l,3,out a1);
-				self.ModifyMesh(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "ModifyMesh__Void__Mesh", argc, 2,typeof(UnityEngine.Mesh))){
-				UnityEngine.UI.Shadow self=(UnityEngine.UI.Shadow)checkSelf(l);
-				UnityEngine.Mesh a1;
-				checkType(l,3,out a1);
-				self.ModifyMesh(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.UI.Shadow self=(UnityEngine.UI.Shadow)checkSelf(l);
+			UnityEngine.UI.VertexHelper a1;
+			checkType(l,2,out a1);
+			self.ModifyMesh(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ModifyMesh__Mesh(IntPtr l) {
+		try {
+			UnityEngine.UI.Shadow self=(UnityEngine.UI.Shadow)checkSelf(l);
+			UnityEngine.Mesh a1;
+			checkType(l,2,out a1);
+			self.ModifyMesh(a1);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -119,7 +120,8 @@ public class Lua_UnityEngine_UI_Shadow : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.Shadow");
-		addMember(l,ModifyMesh);
+		addMember(l,ModifyMesh__VertexHelper);
+		addMember(l,ModifyMesh__Mesh);
 		addMember(l,"effectColor",get_effectColor,set_effectColor,true);
 		addMember(l,"effectDistance",get_effectDistance,set_effectDistance,true);
 		addMember(l,"useGraphicAlpha",get_useGraphicAlpha,set_useGraphicAlpha,true);

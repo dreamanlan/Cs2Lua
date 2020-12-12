@@ -5,13 +5,13 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Assertions_AssertionException : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Assertions.AssertionException o;
 			System.String a1;
-			checkType(l,2,out a1);
+			checkType(l,1,out a1);
 			System.String a2;
-			checkType(l,3,out a2);
+			checkType(l,2,out a2);
 			o=new UnityEngine.Assertions.AssertionException(a1,a2);
 			pushValue(l,true);
 			pushValue(l,o);
@@ -37,7 +37,8 @@ public class Lua_UnityEngine_Assertions_AssertionException : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Assertions.AssertionException");
+		addMember(l,ctor_s);
 		addMember(l,"Message",get_Message,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Assertions.AssertionException),typeof(System.Exception));
+		createTypeMetatable(l,null, typeof(UnityEngine.Assertions.AssertionException),typeof(System.Exception));
 	}
 }

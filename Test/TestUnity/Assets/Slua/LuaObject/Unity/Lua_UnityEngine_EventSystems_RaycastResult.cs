@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_EventSystems_RaycastResult : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.RaycastResult o;
 			o=new UnityEngine.EventSystems.RaycastResult();
@@ -27,6 +27,21 @@ public class Lua_UnityEngine_EventSystems_RaycastResult : LuaObject {
 			pushValue(l,true);
 			setBack(l,self);
 			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static new public int ToString(IntPtr l) {
+		try {
+			UnityEngine.EventSystems.RaycastResult self;
+			checkValueType(l,1,out self);
+			var ret=self.ToString();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -359,7 +374,9 @@ public class Lua_UnityEngine_EventSystems_RaycastResult : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.EventSystems.RaycastResult");
+		addMember(l,ctor_s);
 		addMember(l,Clear);
+		addMember(l,ToString);
 		addMember(l,"module",get_module,set_module,true);
 		addMember(l,"distance",get_distance,set_distance,true);
 		addMember(l,"index",get_index,set_index,true);
@@ -371,6 +388,6 @@ public class Lua_UnityEngine_EventSystems_RaycastResult : LuaObject {
 		addMember(l,"screenPosition",get_screenPosition,set_screenPosition,true);
 		addMember(l,"gameObject",get_gameObject,set_gameObject,true);
 		addMember(l,"isValid",get_isValid,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.EventSystems.RaycastResult),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.EventSystems.RaycastResult),typeof(System.ValueType));
 	}
 }

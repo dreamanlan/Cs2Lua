@@ -22,6 +22,20 @@ public class Lua_System_Text_RegularExpressions_GroupCollection : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int GetEnumerator(IntPtr l) {
+		try {
+			System.Text.RegularExpressions.GroupCollection self=(System.Text.RegularExpressions.GroupCollection)checkSelf(l);
+			var ret=self.GetEnumerator();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_SyncRoot(IntPtr l) {
 		try {
 			System.Text.RegularExpressions.GroupCollection self=(System.Text.RegularExpressions.GroupCollection)checkSelf(l);
@@ -106,6 +120,7 @@ public class Lua_System_Text_RegularExpressions_GroupCollection : LuaObject {
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"System.Text.RegularExpressions.GroupCollection");
 		addMember(l,CopyTo);
+		addMember(l,GetEnumerator);
 		addMember(l,getItem);
 		addMember(l,"SyncRoot",get_SyncRoot,null,true);
 		addMember(l,"IsSynchronized",get_IsSynchronized,null,true);

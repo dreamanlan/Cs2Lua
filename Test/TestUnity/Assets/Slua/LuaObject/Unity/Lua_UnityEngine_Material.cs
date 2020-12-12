@@ -5,27 +5,15 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Material : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor__Shader_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Material o;
-			if(matchType(l, "ctor__Void__Shader", argc, 2,typeof(UnityEngine.Shader))){
-				UnityEngine.Shader a1;
-				checkType(l,3,out a1);
-				o=new UnityEngine.Material(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Material", argc, 2,typeof(UnityEngine.Material))){
-				UnityEngine.Material a1;
-				checkType(l,3,out a1);
-				o=new UnityEngine.Material(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			UnityEngine.Shader a1;
+			checkType(l,1,out a1);
+			o=new UnityEngine.Material(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -33,29 +21,46 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int HasProperty(IntPtr l) {
+	static public int ctor__Material_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "HasProperty__Boolean__Int32", argc, 2,typeof(int))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				var ret=self.HasProperty(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "HasProperty__Boolean__String", argc, 2,typeof(string))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.HasProperty(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material o;
+			UnityEngine.Material a1;
+			checkType(l,1,out a1);
+			o=new UnityEngine.Material(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HasProperty__Int32(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.HasProperty(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HasProperty__String(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.HasProperty(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -192,35 +197,36 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetTag(IntPtr l) {
+	static public int GetTag__String__Boolean(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Boolean a2;
-				checkType(l,4,out a2);
-				System.String a3;
-				checkType(l,5,out a3);
-				var ret=self.GetTag(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==4){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Boolean a2;
-				checkType(l,4,out a2);
-				var ret=self.GetTag(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Boolean a2;
+			checkType(l,3,out a2);
+			var ret=self.GetTag(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTag__String__Boolean__String(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Boolean a2;
+			checkType(l,3,out a2);
+			System.String a3;
+			checkType(l,4,out a3);
+			var ret=self.GetTag(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -281,25 +287,26 @@ public class Lua_UnityEngine_Material : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int GetTexturePropertyNames(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Collections.Generic.List<System.String> a1;
-				checkType(l,3,out a1);
-				self.GetTexturePropertyNames(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				var ret=self.GetTexturePropertyNames();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			var ret=self.GetTexturePropertyNames();
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTexturePropertyNames__List_1_String(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Collections.Generic.List<System.String> a1;
+			checkType(l,2,out a1);
+			self.GetTexturePropertyNames(a1);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -309,24 +316,10 @@ public class Lua_UnityEngine_Material : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int GetTexturePropertyNameIDs(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Collections.Generic.List<System.Int32> a1;
-				checkType(l,3,out a1);
-				self.GetTexturePropertyNameIDs(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				var ret=self.GetTexturePropertyNameIDs();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			var ret=self.GetTexturePropertyNameIDs();
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -335,31 +328,539 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetFloat(IntPtr l) {
+	static public int GetTexturePropertyNameIDs__List_1_Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetFloat__Void__String__Single", argc, 2,typeof(string),typeof(float))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				self.SetFloat(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetFloat__Void__Int32__Single", argc, 2,typeof(int),typeof(float))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				self.SetFloat(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Collections.Generic.List<System.Int32> a1;
+			checkType(l,2,out a1);
+			self.GetTexturePropertyNameIDs(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetFloat__String__Single(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			self.SetFloat(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetFloat__Int32__Single(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			self.SetFloat(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetInt__String__Int32(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			self.SetInt(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetInt__Int32__Int32(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			self.SetInt(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetColor__String__Color(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			UnityEngine.Color a2;
+			checkType(l,3,out a2);
+			self.SetColor(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetColor__Int32__Color(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Color a2;
+			checkType(l,3,out a2);
+			self.SetColor(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetVector__String__Vector4(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			UnityEngine.Vector4 a2;
+			checkType(l,3,out a2);
+			self.SetVector(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetVector__Int32__Vector4(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Vector4 a2;
+			checkType(l,3,out a2);
+			self.SetVector(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetMatrix__String__Matrix4x4(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			UnityEngine.Matrix4x4 a2;
+			checkValueType(l,3,out a2);
+			self.SetMatrix(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetMatrix__Int32__Matrix4x4(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Matrix4x4 a2;
+			checkValueType(l,3,out a2);
+			self.SetMatrix(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetTexture__String__Texture(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			UnityEngine.Texture a2;
+			checkType(l,3,out a2);
+			self.SetTexture(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetTexture__Int32__Texture(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Texture a2;
+			checkType(l,3,out a2);
+			self.SetTexture(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetBuffer__String__ComputeBuffer(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			UnityEngine.ComputeBuffer a2;
+			checkType(l,3,out a2);
+			self.SetBuffer(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetBuffer__Int32__ComputeBuffer(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			UnityEngine.ComputeBuffer a2;
+			checkType(l,3,out a2);
+			self.SetBuffer(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetFloatArray__String__List_1_Single(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Collections.Generic.List<System.Single> a2;
+			checkType(l,3,out a2);
+			self.SetFloatArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetFloatArray__Int32__List_1_Single(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Collections.Generic.List<System.Single> a2;
+			checkType(l,3,out a2);
+			self.SetFloatArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetFloatArray__String__A_Single(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Single[] a2;
+			checkArray(l,3,out a2);
+			self.SetFloatArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetFloatArray__Int32__A_Single(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Single[] a2;
+			checkArray(l,3,out a2);
+			self.SetFloatArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetColorArray__String__List_1_Color(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Collections.Generic.List<UnityEngine.Color> a2;
+			checkType(l,3,out a2);
+			self.SetColorArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetColorArray__Int32__List_1_Color(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Collections.Generic.List<UnityEngine.Color> a2;
+			checkType(l,3,out a2);
+			self.SetColorArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetColorArray__String__A_Color(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			UnityEngine.Color[] a2;
+			checkArray(l,3,out a2);
+			self.SetColorArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetColorArray__Int32__A_Color(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Color[] a2;
+			checkArray(l,3,out a2);
+			self.SetColorArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetVectorArray__String__List_1_Vector4(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Collections.Generic.List<UnityEngine.Vector4> a2;
+			checkType(l,3,out a2);
+			self.SetVectorArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetVectorArray__Int32__List_1_Vector4(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Collections.Generic.List<UnityEngine.Vector4> a2;
+			checkType(l,3,out a2);
+			self.SetVectorArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetVectorArray__String__A_Vector4(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			UnityEngine.Vector4[] a2;
+			checkArray(l,3,out a2);
+			self.SetVectorArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetVectorArray__Int32__A_Vector4(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Vector4[] a2;
+			checkArray(l,3,out a2);
+			self.SetVectorArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetMatrixArray__String__List_1_Matrix4x4(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Collections.Generic.List<UnityEngine.Matrix4x4> a2;
+			checkType(l,3,out a2);
+			self.SetMatrixArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetMatrixArray__Int32__List_1_Matrix4x4(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Collections.Generic.List<UnityEngine.Matrix4x4> a2;
+			checkType(l,3,out a2);
+			self.SetMatrixArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetMatrixArray__String__A_Matrix4x4(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			UnityEngine.Matrix4x4[] a2;
+			checkArray(l,3,out a2);
+			self.SetMatrixArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetMatrixArray__Int32__A_Matrix4x4(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Matrix4x4[] a2;
+			checkArray(l,3,out a2);
+			self.SetMatrixArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetFloat__String(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetFloat(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -368,31 +869,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetInt(IntPtr l) {
+	static public int GetFloat__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetInt__Void__String__Int32", argc, 2,typeof(string),typeof(int))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				self.SetInt(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetInt__Void__Int32__Int32", argc, 2,typeof(int),typeof(int))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				self.SetInt(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetFloat(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -401,31 +885,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetColor(IntPtr l) {
+	static public int GetInt__String(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetColor__Void__String__Color", argc, 2,typeof(string),typeof(UnityEngine.Color))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				UnityEngine.Color a2;
-				checkType(l,4,out a2);
-				self.SetColor(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetColor__Void__Int32__Color", argc, 2,typeof(int),typeof(UnityEngine.Color))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				UnityEngine.Color a2;
-				checkType(l,4,out a2);
-				self.SetColor(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetInt(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -434,31 +901,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetVector(IntPtr l) {
+	static public int GetInt__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetVector__Void__String__Vector4", argc, 2,typeof(string),typeof(UnityEngine.Vector4))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				UnityEngine.Vector4 a2;
-				checkType(l,4,out a2);
-				self.SetVector(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetVector__Void__Int32__Vector4", argc, 2,typeof(int),typeof(UnityEngine.Vector4))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				UnityEngine.Vector4 a2;
-				checkType(l,4,out a2);
-				self.SetVector(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetInt(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -467,31 +917,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetMatrix(IntPtr l) {
+	static public int GetColor__String(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetMatrix__Void__String__Matrix4x4", argc, 2,typeof(string),typeof(UnityEngine.Matrix4x4))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				UnityEngine.Matrix4x4 a2;
-				checkValueType(l,4,out a2);
-				self.SetMatrix(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetMatrix__Void__Int32__Matrix4x4", argc, 2,typeof(int),typeof(UnityEngine.Matrix4x4))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				UnityEngine.Matrix4x4 a2;
-				checkValueType(l,4,out a2);
-				self.SetMatrix(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetColor(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -500,31 +933,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetTexture(IntPtr l) {
+	static public int GetColor__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetTexture__Void__String__Texture", argc, 2,typeof(string),typeof(UnityEngine.Texture))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				UnityEngine.Texture a2;
-				checkType(l,4,out a2);
-				self.SetTexture(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetTexture__Void__Int32__Texture", argc, 2,typeof(int),typeof(UnityEngine.Texture))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				UnityEngine.Texture a2;
-				checkType(l,4,out a2);
-				self.SetTexture(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetColor(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -533,31 +949,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetBuffer(IntPtr l) {
+	static public int GetVector__String(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetBuffer__Void__String__ComputeBuffer", argc, 2,typeof(string),typeof(UnityEngine.ComputeBuffer))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				UnityEngine.ComputeBuffer a2;
-				checkType(l,4,out a2);
-				self.SetBuffer(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetBuffer__Void__Int32__ComputeBuffer", argc, 2,typeof(int),typeof(UnityEngine.ComputeBuffer))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				UnityEngine.ComputeBuffer a2;
-				checkType(l,4,out a2);
-				self.SetBuffer(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetVector(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -566,51 +965,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetFloatArray(IntPtr l) {
+	static public int GetVector__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetFloatArray__Void__String__List`1_Single", argc, 2,typeof(string),typeof(List<System.Single>))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Collections.Generic.List<System.Single> a2;
-				checkType(l,4,out a2);
-				self.SetFloatArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetFloatArray__Void__Int32__List`1_Single", argc, 2,typeof(int),typeof(List<System.Single>))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Collections.Generic.List<System.Single> a2;
-				checkType(l,4,out a2);
-				self.SetFloatArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetFloatArray__Void__String__Arr_Single", argc, 2,typeof(string),typeof(System.Single[]))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Single[] a2;
-				checkArray(l,4,out a2);
-				self.SetFloatArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetFloatArray__Void__Int32__Arr_Single", argc, 2,typeof(int),typeof(System.Single[]))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Single[] a2;
-				checkArray(l,4,out a2);
-				self.SetFloatArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetVector(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -619,51 +981,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetColorArray(IntPtr l) {
+	static public int GetMatrix__String(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetColorArray__Void__String__List`1_Color", argc, 2,typeof(string),typeof(List<UnityEngine.Color>))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Collections.Generic.List<UnityEngine.Color> a2;
-				checkType(l,4,out a2);
-				self.SetColorArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetColorArray__Void__Int32__List`1_Color", argc, 2,typeof(int),typeof(List<UnityEngine.Color>))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Collections.Generic.List<UnityEngine.Color> a2;
-				checkType(l,4,out a2);
-				self.SetColorArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetColorArray__Void__String__Arr_Color", argc, 2,typeof(string),typeof(UnityEngine.Color[]))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				UnityEngine.Color[] a2;
-				checkArray(l,4,out a2);
-				self.SetColorArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetColorArray__Void__Int32__Arr_Color", argc, 2,typeof(int),typeof(UnityEngine.Color[]))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				UnityEngine.Color[] a2;
-				checkArray(l,4,out a2);
-				self.SetColorArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetMatrix(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -672,51 +997,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetVectorArray(IntPtr l) {
+	static public int GetMatrix__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetVectorArray__Void__String__List`1_Vector4", argc, 2,typeof(string),typeof(List<UnityEngine.Vector4>))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Collections.Generic.List<UnityEngine.Vector4> a2;
-				checkType(l,4,out a2);
-				self.SetVectorArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetVectorArray__Void__Int32__List`1_Vector4", argc, 2,typeof(int),typeof(List<UnityEngine.Vector4>))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Collections.Generic.List<UnityEngine.Vector4> a2;
-				checkType(l,4,out a2);
-				self.SetVectorArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetVectorArray__Void__String__Arr_Vector4", argc, 2,typeof(string),typeof(UnityEngine.Vector4[]))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				UnityEngine.Vector4[] a2;
-				checkArray(l,4,out a2);
-				self.SetVectorArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetVectorArray__Void__Int32__Arr_Vector4", argc, 2,typeof(int),typeof(UnityEngine.Vector4[]))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				UnityEngine.Vector4[] a2;
-				checkArray(l,4,out a2);
-				self.SetVectorArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetMatrix(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -725,51 +1013,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetMatrixArray(IntPtr l) {
+	static public int GetTexture__String(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetMatrixArray__Void__String__List`1_Matrix4x4", argc, 2,typeof(string),typeof(List<UnityEngine.Matrix4x4>))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Collections.Generic.List<UnityEngine.Matrix4x4> a2;
-				checkType(l,4,out a2);
-				self.SetMatrixArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetMatrixArray__Void__Int32__List`1_Matrix4x4", argc, 2,typeof(int),typeof(List<UnityEngine.Matrix4x4>))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Collections.Generic.List<UnityEngine.Matrix4x4> a2;
-				checkType(l,4,out a2);
-				self.SetMatrixArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetMatrixArray__Void__String__Arr_Matrix4x4", argc, 2,typeof(string),typeof(UnityEngine.Matrix4x4[]))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				UnityEngine.Matrix4x4[] a2;
-				checkArray(l,4,out a2);
-				self.SetMatrixArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetMatrixArray__Void__Int32__Arr_Matrix4x4", argc, 2,typeof(int),typeof(UnityEngine.Matrix4x4[]))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				UnityEngine.Matrix4x4[] a2;
-				checkArray(l,4,out a2);
-				self.SetMatrixArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetTexture(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -778,29 +1029,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetFloat(IntPtr l) {
+	static public int GetTexture__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetFloat__Single__String", argc, 2,typeof(string))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetFloat(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetFloat__Single__Int32", argc, 2,typeof(int))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				var ret=self.GetFloat(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetTexture(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -809,29 +1045,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetInt(IntPtr l) {
+	static public int GetFloatArray__String(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetInt__Int32__String", argc, 2,typeof(string))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetInt(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetInt__Int32__Int32", argc, 2,typeof(int))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				var ret=self.GetInt(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetFloatArray(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -840,29 +1061,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetColor(IntPtr l) {
+	static public int GetFloatArray__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetColor__Color__String", argc, 2,typeof(string))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetColor(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetColor__Color__Int32", argc, 2,typeof(int))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				var ret=self.GetColor(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetFloatArray(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -871,29 +1077,48 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetVector(IntPtr l) {
+	static public int GetFloatArray__String__List_1_Single(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetVector__Vector4__String", argc, 2,typeof(string))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetVector(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetVector__Vector4__Int32", argc, 2,typeof(int))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				var ret=self.GetVector(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Collections.Generic.List<System.Single> a2;
+			checkType(l,3,out a2);
+			self.GetFloatArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetFloatArray__Int32__List_1_Single(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Collections.Generic.List<System.Single> a2;
+			checkType(l,3,out a2);
+			self.GetFloatArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetColorArray__String(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetColorArray(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -902,29 +1127,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetMatrix(IntPtr l) {
+	static public int GetColorArray__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetMatrix__Matrix4x4__String", argc, 2,typeof(string))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetMatrix(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetMatrix__Matrix4x4__Int32", argc, 2,typeof(int))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				var ret=self.GetMatrix(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetColorArray(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -933,29 +1143,48 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetTexture(IntPtr l) {
+	static public int GetColorArray__String__List_1_Color(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetTexture__Texture__String", argc, 2,typeof(string))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetTexture(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetTexture__Texture__Int32", argc, 2,typeof(int))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				var ret=self.GetTexture(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Collections.Generic.List<UnityEngine.Color> a2;
+			checkType(l,3,out a2);
+			self.GetColorArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetColorArray__Int32__List_1_Color(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Collections.Generic.List<UnityEngine.Color> a2;
+			checkType(l,3,out a2);
+			self.GetColorArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetVectorArray__String(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetVectorArray(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -964,49 +1193,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetFloatArray(IntPtr l) {
+	static public int GetVectorArray__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetFloatArray__Void__String__List`1_Single", argc, 2,typeof(string),typeof(List<System.Single>))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Collections.Generic.List<System.Single> a2;
-				checkType(l,4,out a2);
-				self.GetFloatArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "GetFloatArray__Void__Int32__List`1_Single", argc, 2,typeof(int),typeof(List<System.Single>))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Collections.Generic.List<System.Single> a2;
-				checkType(l,4,out a2);
-				self.GetFloatArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "GetFloatArray__Arr_Single__String", argc, 2,typeof(string))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetFloatArray(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetFloatArray__Arr_Single__Int32", argc, 2,typeof(int))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				var ret=self.GetFloatArray(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetVectorArray(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -1015,49 +1209,48 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetColorArray(IntPtr l) {
+	static public int GetVectorArray__String__List_1_Vector4(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetColorArray__Void__String__List`1_Color", argc, 2,typeof(string),typeof(List<UnityEngine.Color>))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Collections.Generic.List<UnityEngine.Color> a2;
-				checkType(l,4,out a2);
-				self.GetColorArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "GetColorArray__Void__Int32__List`1_Color", argc, 2,typeof(int),typeof(List<UnityEngine.Color>))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Collections.Generic.List<UnityEngine.Color> a2;
-				checkType(l,4,out a2);
-				self.GetColorArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "GetColorArray__Arr_Color__String", argc, 2,typeof(string))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetColorArray(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetColorArray__Arr_Color__Int32", argc, 2,typeof(int))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				var ret=self.GetColorArray(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Collections.Generic.List<UnityEngine.Vector4> a2;
+			checkType(l,3,out a2);
+			self.GetVectorArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetVectorArray__Int32__List_1_Vector4(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Collections.Generic.List<UnityEngine.Vector4> a2;
+			checkType(l,3,out a2);
+			self.GetVectorArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetMatrixArray__String(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetMatrixArray(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -1066,49 +1259,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetVectorArray(IntPtr l) {
+	static public int GetMatrixArray__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetVectorArray__Void__String__List`1_Vector4", argc, 2,typeof(string),typeof(List<UnityEngine.Vector4>))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Collections.Generic.List<UnityEngine.Vector4> a2;
-				checkType(l,4,out a2);
-				self.GetVectorArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "GetVectorArray__Void__Int32__List`1_Vector4", argc, 2,typeof(int),typeof(List<UnityEngine.Vector4>))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Collections.Generic.List<UnityEngine.Vector4> a2;
-				checkType(l,4,out a2);
-				self.GetVectorArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "GetVectorArray__Arr_Vector4__String", argc, 2,typeof(string))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetVectorArray(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetVectorArray__Arr_Vector4__Int32", argc, 2,typeof(int))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				var ret=self.GetVectorArray(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetMatrixArray(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -1117,49 +1275,116 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetMatrixArray(IntPtr l) {
+	static public int GetMatrixArray__String__List_1_Matrix4x4(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetMatrixArray__Void__String__List`1_Matrix4x4", argc, 2,typeof(string),typeof(List<UnityEngine.Matrix4x4>))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Collections.Generic.List<UnityEngine.Matrix4x4> a2;
-				checkType(l,4,out a2);
-				self.GetMatrixArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "GetMatrixArray__Void__Int32__List`1_Matrix4x4", argc, 2,typeof(int),typeof(List<UnityEngine.Matrix4x4>))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Collections.Generic.List<UnityEngine.Matrix4x4> a2;
-				checkType(l,4,out a2);
-				self.GetMatrixArray(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "GetMatrixArray__Arr_Matrix4x4__String", argc, 2,typeof(string))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetMatrixArray(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetMatrixArray__Arr_Matrix4x4__Int32", argc, 2,typeof(int))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				var ret=self.GetMatrixArray(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Collections.Generic.List<UnityEngine.Matrix4x4> a2;
+			checkType(l,3,out a2);
+			self.GetMatrixArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetMatrixArray__Int32__List_1_Matrix4x4(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Collections.Generic.List<UnityEngine.Matrix4x4> a2;
+			checkType(l,3,out a2);
+			self.GetMatrixArray(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetTextureOffset__String__Vector2(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			UnityEngine.Vector2 a2;
+			checkType(l,3,out a2);
+			self.SetTextureOffset(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetTextureOffset__Int32__Vector2(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Vector2 a2;
+			checkType(l,3,out a2);
+			self.SetTextureOffset(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetTextureScale__String__Vector2(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			UnityEngine.Vector2 a2;
+			checkType(l,3,out a2);
+			self.SetTextureScale(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetTextureScale__Int32__Vector2(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Vector2 a2;
+			checkType(l,3,out a2);
+			self.SetTextureScale(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTextureOffset__String(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetTextureOffset(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -1168,31 +1393,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetTextureOffset(IntPtr l) {
+	static public int GetTextureOffset__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetTextureOffset__Void__String__Vector2", argc, 2,typeof(string),typeof(UnityEngine.Vector2))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				UnityEngine.Vector2 a2;
-				checkType(l,4,out a2);
-				self.SetTextureOffset(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetTextureOffset__Void__Int32__Vector2", argc, 2,typeof(int),typeof(UnityEngine.Vector2))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				UnityEngine.Vector2 a2;
-				checkType(l,4,out a2);
-				self.SetTextureOffset(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetTextureOffset(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -1201,31 +1409,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetTextureScale(IntPtr l) {
+	static public int GetTextureScale__String(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetTextureScale__Void__String__Vector2", argc, 2,typeof(string),typeof(UnityEngine.Vector2))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				UnityEngine.Vector2 a2;
-				checkType(l,4,out a2);
-				self.SetTextureScale(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetTextureScale__Void__Int32__Vector2", argc, 2,typeof(int),typeof(UnityEngine.Vector2))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				UnityEngine.Vector2 a2;
-				checkType(l,4,out a2);
-				self.SetTextureScale(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetTextureScale(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -1234,60 +1425,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetTextureOffset(IntPtr l) {
+	static public int GetTextureScale__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetTextureOffset__Vector2__String", argc, 2,typeof(string))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetTextureOffset(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetTextureOffset__Vector2__Int32", argc, 2,typeof(int))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				var ret=self.GetTextureOffset(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetTextureScale(IntPtr l) {
-		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetTextureScale__Vector2__String", argc, 2,typeof(string))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetTextureScale(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetTextureScale__Vector2__Int32", argc, 2,typeof(int))){
-				UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				var ret=self.GetTextureScale(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetTextureScale(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -1590,7 +1735,10 @@ public class Lua_UnityEngine_Material : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Material");
-		addMember(l,HasProperty);
+		addMember(l,ctor__Shader_s);
+		addMember(l,ctor__Material_s);
+		addMember(l,HasProperty__Int32);
+		addMember(l,HasProperty__String);
 		addMember(l,EnableKeyword);
 		addMember(l,DisableKeyword);
 		addMember(l,IsKeywordEnabled);
@@ -1599,37 +1747,81 @@ public class Lua_UnityEngine_Material : LuaObject {
 		addMember(l,GetPassName);
 		addMember(l,FindPass);
 		addMember(l,SetOverrideTag);
-		addMember(l,GetTag);
+		addMember(l,GetTag__String__Boolean);
+		addMember(l,GetTag__String__Boolean__String);
 		addMember(l,Lerp);
 		addMember(l,SetPass);
 		addMember(l,CopyPropertiesFromMaterial);
 		addMember(l,GetTexturePropertyNames);
+		addMember(l,GetTexturePropertyNames__List_1_String);
 		addMember(l,GetTexturePropertyNameIDs);
-		addMember(l,SetFloat);
-		addMember(l,SetInt);
-		addMember(l,SetColor);
-		addMember(l,SetVector);
-		addMember(l,SetMatrix);
-		addMember(l,SetTexture);
-		addMember(l,SetBuffer);
-		addMember(l,SetFloatArray);
-		addMember(l,SetColorArray);
-		addMember(l,SetVectorArray);
-		addMember(l,SetMatrixArray);
-		addMember(l,GetFloat);
-		addMember(l,GetInt);
-		addMember(l,GetColor);
-		addMember(l,GetVector);
-		addMember(l,GetMatrix);
-		addMember(l,GetTexture);
-		addMember(l,GetFloatArray);
-		addMember(l,GetColorArray);
-		addMember(l,GetVectorArray);
-		addMember(l,GetMatrixArray);
-		addMember(l,SetTextureOffset);
-		addMember(l,SetTextureScale);
-		addMember(l,GetTextureOffset);
-		addMember(l,GetTextureScale);
+		addMember(l,GetTexturePropertyNameIDs__List_1_Int32);
+		addMember(l,SetFloat__String__Single);
+		addMember(l,SetFloat__Int32__Single);
+		addMember(l,SetInt__String__Int32);
+		addMember(l,SetInt__Int32__Int32);
+		addMember(l,SetColor__String__Color);
+		addMember(l,SetColor__Int32__Color);
+		addMember(l,SetVector__String__Vector4);
+		addMember(l,SetVector__Int32__Vector4);
+		addMember(l,SetMatrix__String__Matrix4x4);
+		addMember(l,SetMatrix__Int32__Matrix4x4);
+		addMember(l,SetTexture__String__Texture);
+		addMember(l,SetTexture__Int32__Texture);
+		addMember(l,SetBuffer__String__ComputeBuffer);
+		addMember(l,SetBuffer__Int32__ComputeBuffer);
+		addMember(l,SetFloatArray__String__List_1_Single);
+		addMember(l,SetFloatArray__Int32__List_1_Single);
+		addMember(l,SetFloatArray__String__A_Single);
+		addMember(l,SetFloatArray__Int32__A_Single);
+		addMember(l,SetColorArray__String__List_1_Color);
+		addMember(l,SetColorArray__Int32__List_1_Color);
+		addMember(l,SetColorArray__String__A_Color);
+		addMember(l,SetColorArray__Int32__A_Color);
+		addMember(l,SetVectorArray__String__List_1_Vector4);
+		addMember(l,SetVectorArray__Int32__List_1_Vector4);
+		addMember(l,SetVectorArray__String__A_Vector4);
+		addMember(l,SetVectorArray__Int32__A_Vector4);
+		addMember(l,SetMatrixArray__String__List_1_Matrix4x4);
+		addMember(l,SetMatrixArray__Int32__List_1_Matrix4x4);
+		addMember(l,SetMatrixArray__String__A_Matrix4x4);
+		addMember(l,SetMatrixArray__Int32__A_Matrix4x4);
+		addMember(l,GetFloat__String);
+		addMember(l,GetFloat__Int32);
+		addMember(l,GetInt__String);
+		addMember(l,GetInt__Int32);
+		addMember(l,GetColor__String);
+		addMember(l,GetColor__Int32);
+		addMember(l,GetVector__String);
+		addMember(l,GetVector__Int32);
+		addMember(l,GetMatrix__String);
+		addMember(l,GetMatrix__Int32);
+		addMember(l,GetTexture__String);
+		addMember(l,GetTexture__Int32);
+		addMember(l,GetFloatArray__String);
+		addMember(l,GetFloatArray__Int32);
+		addMember(l,GetFloatArray__String__List_1_Single);
+		addMember(l,GetFloatArray__Int32__List_1_Single);
+		addMember(l,GetColorArray__String);
+		addMember(l,GetColorArray__Int32);
+		addMember(l,GetColorArray__String__List_1_Color);
+		addMember(l,GetColorArray__Int32__List_1_Color);
+		addMember(l,GetVectorArray__String);
+		addMember(l,GetVectorArray__Int32);
+		addMember(l,GetVectorArray__String__List_1_Vector4);
+		addMember(l,GetVectorArray__Int32__List_1_Vector4);
+		addMember(l,GetMatrixArray__String);
+		addMember(l,GetMatrixArray__Int32);
+		addMember(l,GetMatrixArray__String__List_1_Matrix4x4);
+		addMember(l,GetMatrixArray__Int32__List_1_Matrix4x4);
+		addMember(l,SetTextureOffset__String__Vector2);
+		addMember(l,SetTextureOffset__Int32__Vector2);
+		addMember(l,SetTextureScale__String__Vector2);
+		addMember(l,SetTextureScale__Int32__Vector2);
+		addMember(l,GetTextureOffset__String);
+		addMember(l,GetTextureOffset__Int32);
+		addMember(l,GetTextureScale__String);
+		addMember(l,GetTextureScale__Int32);
 		addMember(l,"shader",get_shader,set_shader,true);
 		addMember(l,"color",get_color,set_color,true);
 		addMember(l,"mainTexture",get_mainTexture,set_mainTexture,true);
@@ -1641,6 +1833,6 @@ public class Lua_UnityEngine_Material : LuaObject {
 		addMember(l,"enableInstancing",get_enableInstancing,set_enableInstancing,true);
 		addMember(l,"passCount",get_passCount,null,true);
 		addMember(l,"shaderKeywords",get_shaderKeywords,set_shaderKeywords,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Material),typeof(UnityEngine.Object));
+		createTypeMetatable(l,null, typeof(UnityEngine.Material),typeof(UnityEngine.Object));
 	}
 }

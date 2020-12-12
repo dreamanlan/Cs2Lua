@@ -5,43 +5,63 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_UI_Dropdown_OptionData : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.UI.Dropdown.OptionData o;
-			if(argc==4){
-				System.String a1;
-				checkType(l,3,out a1);
-				UnityEngine.Sprite a2;
-				checkType(l,4,out a2);
-				o=new UnityEngine.UI.Dropdown.OptionData(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__String", argc, 2,typeof(string))){
-				System.String a1;
-				checkType(l,3,out a1);
-				o=new UnityEngine.UI.Dropdown.OptionData(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Sprite", argc, 2,typeof(UnityEngine.Sprite))){
-				UnityEngine.Sprite a1;
-				checkType(l,3,out a1);
-				o=new UnityEngine.UI.Dropdown.OptionData(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==2){
-				o=new UnityEngine.UI.Dropdown.OptionData();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.UI.Dropdown.OptionData();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__String_s(IntPtr l) {
+		try {
+			UnityEngine.UI.Dropdown.OptionData o;
+			System.String a1;
+			checkType(l,1,out a1);
+			o=new UnityEngine.UI.Dropdown.OptionData(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Sprite_s(IntPtr l) {
+		try {
+			UnityEngine.UI.Dropdown.OptionData o;
+			UnityEngine.Sprite a1;
+			checkType(l,1,out a1);
+			o=new UnityEngine.UI.Dropdown.OptionData(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__String__Sprite_s(IntPtr l) {
+		try {
+			UnityEngine.UI.Dropdown.OptionData o;
+			System.String a1;
+			checkType(l,1,out a1);
+			UnityEngine.Sprite a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.UI.Dropdown.OptionData(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -106,8 +126,12 @@ public class Lua_UnityEngine_UI_Dropdown_OptionData : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.Dropdown.OptionData");
+		addMember(l,ctor_s);
+		addMember(l,ctor__String_s);
+		addMember(l,ctor__Sprite_s);
+		addMember(l,ctor__String__Sprite_s);
 		addMember(l,"text",get_text,set_text,true);
 		addMember(l,"image",get_image,set_image,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.UI.Dropdown.OptionData));
+		createTypeMetatable(l,null, typeof(UnityEngine.UI.Dropdown.OptionData));
 	}
 }

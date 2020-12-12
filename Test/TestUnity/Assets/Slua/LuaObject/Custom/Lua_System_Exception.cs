@@ -5,35 +5,47 @@ using System.Collections.Generic;
 public class Lua_System_Exception : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			System.Exception o;
-			if(argc==4){
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Exception a2;
-				checkType(l,4,out a2);
-				o=new System.Exception(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==3){
-				System.String a1;
-				checkType(l,3,out a1);
-				o=new System.Exception(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==2){
-				o=new System.Exception();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new System.Exception();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__String_s(IntPtr l) {
+		try {
+			System.Exception o;
+			System.String a1;
+			checkType(l,1,out a1);
+			o=new System.Exception(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__String__Exception_s(IntPtr l) {
+		try {
+			System.Exception o;
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Exception a2;
+			checkType(l,2,out a2);
+			o=new System.Exception(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -45,6 +57,20 @@ public class Lua_System_Exception : LuaObject {
 		try {
 			System.Exception self=(System.Exception)checkSelf(l);
 			var ret=self.GetBaseException();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static new public int ToString(IntPtr l) {
+		try {
+			System.Exception self=(System.Exception)checkSelf(l);
+			var ret=self.ToString();
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -207,7 +233,11 @@ public class Lua_System_Exception : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"System.Exception");
+		addMember(l,ctor_s);
+		addMember(l,ctor__String_s);
+		addMember(l,ctor__String__Exception_s);
 		addMember(l,GetBaseException);
+		addMember(l,ToString);
 		addMember(l,GetObjectData);
 		addMember(l,"Message",get_Message,null,true);
 		addMember(l,"Data",get_Data,null,true);
@@ -217,6 +247,6 @@ public class Lua_System_Exception : LuaObject {
 		addMember(l,"HelpLink",get_HelpLink,set_HelpLink,true);
 		addMember(l,"Source",get_Source,set_Source,true);
 		addMember(l,"HResult",get_HResult,null,true);
-		createTypeMetatable(l,constructor, typeof(System.Exception));
+		createTypeMetatable(l,null, typeof(System.Exception));
 	}
 }

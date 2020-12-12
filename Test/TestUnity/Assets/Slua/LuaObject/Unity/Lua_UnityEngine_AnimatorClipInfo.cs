@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_AnimatorClipInfo : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.AnimatorClipInfo o;
 			o=new UnityEngine.AnimatorClipInfo();
@@ -48,8 +48,9 @@ public class Lua_UnityEngine_AnimatorClipInfo : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AnimatorClipInfo");
+		addMember(l,ctor_s);
 		addMember(l,"clip",get_clip,null,true);
 		addMember(l,"weight",get_weight,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.AnimatorClipInfo),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.AnimatorClipInfo),typeof(System.ValueType));
 	}
 }

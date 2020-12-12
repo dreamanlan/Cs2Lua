@@ -6,7 +6,7 @@ using UnityEngine.Assertions.Must;
 public class Lua_System_Boolean : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			System.Boolean o;
 			o=new System.Boolean();
@@ -20,31 +20,98 @@ public class Lua_System_Boolean : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int CompareTo(IntPtr l) {
+	static new public int ToString(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "CompareTo__Int32__Object", argc, 2,typeof(System.Object))){
-				System.Boolean self;
-				checkType(l,1,out self);
-				System.Object a1;
-				checkType(l,3,out a1);
-				var ret=self.CompareTo(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "CompareTo__Int32__Boolean", argc, 2,typeof(bool))){
-				System.Boolean self;
-				checkType(l,1,out self);
-				System.Boolean a1;
-				checkType(l,3,out a1);
-				var ret=self.CompareTo(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Boolean self;
+			checkType(l,1,out self);
+			var ret=self.ToString();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ToString__IFormatProvider(IntPtr l) {
+		try {
+			System.Boolean self;
+			checkType(l,1,out self);
+			System.IFormatProvider a1;
+			checkType(l,2,out a1);
+			var ret=self.ToString(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			System.Boolean self;
+			checkType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Boolean(IntPtr l) {
+		try {
+			System.Boolean self;
+			checkType(l,1,out self);
+			System.Boolean a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CompareTo__Object(IntPtr l) {
+		try {
+			System.Boolean self;
+			checkType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.CompareTo(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CompareTo__Boolean(IntPtr l) {
+		try {
+			System.Boolean self;
+			checkType(l,1,out self);
+			System.Boolean a1;
+			checkType(l,2,out a1);
+			var ret=self.CompareTo(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -125,12 +192,18 @@ public class Lua_System_Boolean : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"System.Boolean");
-		addMember(l,CompareTo);
+		addMember(l,ctor_s);
+		addMember(l,ToString);
+		addMember(l,ToString__IFormatProvider);
+		addMember(l,Equals__Object);
+		addMember(l,Equals__Boolean);
+		addMember(l,CompareTo__Object);
+		addMember(l,CompareTo__Boolean);
 		addMember(l,GetTypeCode);
 		addMember(l,Parse_s);
 		addMember(l,TryParse_s);
 		addMember(l,"TrueString",get_TrueString,null,false);
 		addMember(l,"FalseString",get_FalseString,null,false);
-		createTypeMetatable(l,constructor, typeof(System.Boolean),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(System.Boolean),typeof(System.ValueType));
 	}
 }

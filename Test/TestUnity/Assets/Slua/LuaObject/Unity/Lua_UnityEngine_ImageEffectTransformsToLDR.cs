@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ImageEffectTransformsToLDR : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ImageEffectTransformsToLDR o;
 			o=new UnityEngine.ImageEffectTransformsToLDR();
@@ -20,6 +20,7 @@ public class Lua_UnityEngine_ImageEffectTransformsToLDR : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ImageEffectTransformsToLDR");
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ImageEffectTransformsToLDR),typeof(System.Attribute));
+		addMember(l,ctor_s);
+		createTypeMetatable(l,null, typeof(UnityEngine.ImageEffectTransformsToLDR),typeof(System.Attribute));
 	}
 }

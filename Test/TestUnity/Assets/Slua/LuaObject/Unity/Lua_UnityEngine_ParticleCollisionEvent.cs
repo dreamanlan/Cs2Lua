@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleCollisionEvent : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleCollisionEvent o;
 			o=new UnityEngine.ParticleCollisionEvent();
@@ -76,10 +76,11 @@ public class Lua_UnityEngine_ParticleCollisionEvent : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleCollisionEvent");
+		addMember(l,ctor_s);
 		addMember(l,"intersection",get_intersection,null,true);
 		addMember(l,"normal",get_normal,null,true);
 		addMember(l,"velocity",get_velocity,null,true);
 		addMember(l,"colliderComponent",get_colliderComponent,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleCollisionEvent),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleCollisionEvent),typeof(System.ValueType));
 	}
 }

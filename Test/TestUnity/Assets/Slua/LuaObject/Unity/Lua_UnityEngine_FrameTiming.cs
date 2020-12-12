@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_FrameTiming : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.FrameTiming o;
 			o=new UnityEngine.FrameTiming();
@@ -237,6 +237,7 @@ public class Lua_UnityEngine_FrameTiming : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.FrameTiming");
+		addMember(l,ctor_s);
 		addMember(l,"cpuTimePresentCalled",get_cpuTimePresentCalled,set_cpuTimePresentCalled,true);
 		addMember(l,"cpuFrameTime",get_cpuFrameTime,set_cpuFrameTime,true);
 		addMember(l,"cpuTimeFrameComplete",get_cpuTimeFrameComplete,set_cpuTimeFrameComplete,true);
@@ -244,6 +245,6 @@ public class Lua_UnityEngine_FrameTiming : LuaObject {
 		addMember(l,"heightScale",get_heightScale,set_heightScale,true);
 		addMember(l,"widthScale",get_widthScale,set_widthScale,true);
 		addMember(l,"syncInterval",get_syncInterval,set_syncInterval,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.FrameTiming),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.FrameTiming),typeof(System.ValueType));
 	}
 }

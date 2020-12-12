@@ -1,1 +1,1 @@
-interface(ITestIntf) { interfaces {}; };
+interface(ICs2LuaPoolAllocatedObjectEx_T) { interfaces {}; };

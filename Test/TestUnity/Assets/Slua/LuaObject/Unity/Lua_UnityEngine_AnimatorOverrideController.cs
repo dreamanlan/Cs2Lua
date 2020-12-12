@@ -5,25 +5,29 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_AnimatorOverrideController : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.AnimatorOverrideController o;
-			if(argc==3){
-				UnityEngine.RuntimeAnimatorController a1;
-				checkType(l,3,out a1);
-				o=new UnityEngine.AnimatorOverrideController(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==2){
-				o=new UnityEngine.AnimatorOverrideController();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.AnimatorOverrideController();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__RuntimeAnimatorController_s(IntPtr l) {
+		try {
+			UnityEngine.AnimatorOverrideController o;
+			UnityEngine.RuntimeAnimatorController a1;
+			checkType(l,1,out a1);
+			o=new UnityEngine.AnimatorOverrideController(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -164,12 +168,14 @@ public class Lua_UnityEngine_AnimatorOverrideController : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AnimatorOverrideController");
+		addMember(l,ctor_s);
+		addMember(l,ctor__RuntimeAnimatorController_s);
 		addMember(l,GetOverrides);
 		addMember(l,ApplyOverrides);
 		addMember(l,getItem);
 		addMember(l,setItem);
 		addMember(l,"runtimeAnimatorController",get_runtimeAnimatorController,set_runtimeAnimatorController,true);
 		addMember(l,"overridesCount",get_overridesCount,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.AnimatorOverrideController),typeof(UnityEngine.RuntimeAnimatorController));
+		createTypeMetatable(l,null, typeof(UnityEngine.AnimatorOverrideController),typeof(UnityEngine.RuntimeAnimatorController));
 	}
 }

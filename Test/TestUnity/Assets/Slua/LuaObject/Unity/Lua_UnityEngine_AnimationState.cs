@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_AnimationState : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.AnimationState o;
 			o=new UnityEngine.AnimationState();
@@ -19,30 +19,31 @@ public class Lua_UnityEngine_AnimationState : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int AddMixingTransform(IntPtr l) {
+	static public int AddMixingTransform__Transform(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.AnimationState self=(UnityEngine.AnimationState)checkSelf(l);
-				UnityEngine.Transform a1;
-				checkType(l,3,out a1);
-				System.Boolean a2;
-				checkType(l,4,out a2);
-				self.AddMixingTransform(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.AnimationState self=(UnityEngine.AnimationState)checkSelf(l);
-				UnityEngine.Transform a1;
-				checkType(l,3,out a1);
-				self.AddMixingTransform(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.AnimationState self=(UnityEngine.AnimationState)checkSelf(l);
+			UnityEngine.Transform a1;
+			checkType(l,2,out a1);
+			self.AddMixingTransform(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AddMixingTransform__Transform__Boolean(IntPtr l) {
+		try {
+			UnityEngine.AnimationState self=(UnityEngine.AnimationState)checkSelf(l);
+			UnityEngine.Transform a1;
+			checkType(l,2,out a1);
+			System.Boolean a2;
+			checkType(l,3,out a2);
+			self.AddMixingTransform(a1,a2);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -372,7 +373,9 @@ public class Lua_UnityEngine_AnimationState : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AnimationState");
-		addMember(l,AddMixingTransform);
+		addMember(l,ctor_s);
+		addMember(l,AddMixingTransform__Transform);
+		addMember(l,AddMixingTransform__Transform__Boolean);
 		addMember(l,RemoveMixingTransform);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
 		addMember(l,"weight",get_weight,set_weight,true);
@@ -386,6 +389,6 @@ public class Lua_UnityEngine_AnimationState : LuaObject {
 		addMember(l,"clip",get_clip,null,true);
 		addMember(l,"name",get_name,set_name,true);
 		addMember(l,"blendMode",get_blendMode,set_blendMode,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.AnimationState),typeof(UnityEngine.TrackedReference));
+		createTypeMetatable(l,null, typeof(UnityEngine.AnimationState),typeof(UnityEngine.TrackedReference));
 	}
 }

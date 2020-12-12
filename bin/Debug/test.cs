@@ -13,184 +13,107 @@ class LuaConsole
     }
 }
 
-class IntList : List<int>
-{ }
-
-interface ITestIntf
+public class StrList : List<string>
 {
-    int prop { get; set; }
+    public StrList():base() { }
+    public StrList(int c):base(c) { }
+    public StrList(ICollection<string> coll) : base(coll) { }
 }
 
-class TestIntfImpl : ITestIntf
+public interface ICs2LuaPoolAllocatedObjectEx<T> where T : ICs2LuaPoolAllocatedObjectEx<T>
 {
-    public int prop { get; set; }
+    void InitPool(Cs2LuaObjectPoolEx<T> pool);
+    T Downcast();
 }
-
-static class TestExtension
+public sealed class Cs2LuaObjectPoolEx<T> where T : ICs2LuaPoolAllocatedObjectEx<T>
 {
-    public static void Test<T>(this IntList list, T t) { }
-}
-
-class ZipInputStream
-{
-    public ZipInputStream(MemoryStream ms)
+    public void Init(Func<T> creater, Action<T> destroyer)
     {
-        var os = new ZipOutputStream(new MemoryStream());
-        var os2 = Test(os, os, os) as ZipOutputStream;
-        IntList intList = new IntList();
-        List<int> a = new List<int>();
-        Dictionary<string, UnityEngine.Component> aa = new Dictionary<string, UnityEngine.Component>();
-        intList.Test<UnityEngine.ParticleSystem>(null);
-        intList.AddRange(a);
-        UnityEngine.GameObject gobj = null;
-        var r = UnityEngine.GameObject.Instantiate(gobj);
-        var b = Test2(124);
-        object o = new int[] { 1, 2 };
-        var arr = o as int[];
-        string aa = "123";
-        string bb = "456";
-        double da = 1;
-        double db = 2;
-        bool r = aa == bb;
-        r = da == db;
-        Color ca = Color.white;
-        Color cb = Color.black;
-        r = ca == cb;
-
-        Vector3 va, vb;
-        Test3(out va, out vb);
-     }
-    private object Test(object o, params object[] args)
-    {
-        var v3 = new Vector3(1,2,3);
-        return null;
+        m_Creater = creater;
+        m_Destroyer = destroyer;
     }
-    private List<int> Test2(int v, IEnumerable enumer = new List<int>())
+    public void Init(int initPoolSize, Func<T> creater, Action<T> destroyer)
     {
-        try {
-            return a + b;
-        }
-        catch (Exception e) {
-            UnityEngine.Debug.LogFormat("{0}\n{1}", e.Message, e.StackTrace);
-        }
-        finally {
-            UnityEngine.Debug.Log("finally");
-        }
-        return null;
-    }
-    private void Test3(out Vector3 v1, out Vector3 v2)
-    {
-        v1 = Vector3.zero;
-        v2 = Vector3.zero;
-    }
-}
-
-partial class ZipOutputStream
-{
-    public ZipOutputStream(MemoryStream ms)
-    {
-        Instance.V = 1;
-        Instance.Test();
-    }
-    public int V { get; set; }
-    public void Test()
-    {
-        Dictionary<int, int> dict = new Dictionary<int, int>();
-        dict.Add(1, 1);
-        dict.Add(2, 2);
-        dict[1] += dict[2];
-    }
-    class EmbedClass
-    {
-        public void Test()
-        {
-            Instance.Test();
+        m_Creater = creater;
+        m_Destroyer = destroyer;
+        for (int i = 0; i < initPoolSize; ++i) {
+            T t = creater();
+            t.InitPool(this);
+            m_UnusedObjects.Enqueue(t);
         }
     }
-}
-
-partial class ZipOutputStream
-{
-    public ZipOutputStream()
+    public T Alloc()
     {
-    }
-    private int m_I = 1;
-    public static ZipOutputStream Instance
-    {
-        get { return s_Instance; }
-    }
-    private static ZipOutputStream s_Instance = new ZipOutputStream();
-}
-
-class CUsingHelper : IDisposable
-{
-    public CUsingHelper(Action a1, Action a2)
-    {    
-    }
-    public void Dispose()
-    {
-    }
-    public static byte[] Test(int i)
-    {
-        return null;
-    }
-  
-    [System.CLSCompliant(true)]
-	public static byte[] ReadZip(byte[] bytes)
-	{
-        int[,] abc = new int[12, 13];
-        int v = 0;
-        var dict = new Dictionary<int, int>();
-        if (++v > 0) {
-        }
+        if (m_UnusedObjects.Count > 0)
+            return m_UnusedObjects.Dequeue();
         else {
-            if (dict.TryGetValue(1, out v) && v == 0) {
+            T t = m_Creater();
+            if (null != t) {
+                t.InitPool(this);
             }
-            else if (v++ > 0) {
-            }
-            else if (--v > 0) {
-            }
-            else {
-
-            }
+            return t;
         }
-        /*
-        if(dict.TryGetValue(1, out v) && v==0) {
-
-        }
-        while (dict.TryGetValue(1, out v) && v == 0) {
-        }
-        do {
-        } while (dict.TryGetValue(1, out v) && v == 0);
-        
-        int v1 = ++v + 2;
-        int v2 = v++ + 2;
-        if(++v > 0) {
-        }
-        if(v++ > 0) {
-        }
-        while(++v > 0) {
-        }
-        while (v-- > 0) {
-        }
-        do {
-        } while (++v > 0);
-        do {
-        } while (v-- > 0);
-        */
-        /*
-        ZipInputStream zipInput = new ZipInputStream(new MemoryStream(bytes));
-		MemoryStream zipMemory = new MemoryStream();
-		ZipOutputStream ZipStream = new ZipOutputStream(zipMemory);
-		try
-		{
-			return Test(123);
-		}
-		catch (Exception)
-		{
-			return null;
-			throw;
-		}
-        */
     }
+    public void Recycle(ICs2LuaPoolAllocatedObjectEx<T> t)
+    {
+        if (null != t) {
+            m_UnusedObjects.Enqueue(t.Downcast());
+        }
+    }
+    public void Clear()
+    {
+        if (null != m_Destroyer) {
+            foreach (var item in m_UnusedObjects) {
+                m_Destroyer(item);
+            }
+        }
+        m_UnusedObjects.Clear();
+    }
+    public int Count
+    {
+        get {
+            return m_UnusedObjects.Count;
+        }
+    }
+
+    private Queue<T> m_UnusedObjects = new Queue<T>();
+    private Func<T> m_Creater = null;
+    private Action<T> m_Destroyer = null;
+}
+
+internal sealed class DataChangeCallBackInfo : ICs2LuaPoolAllocatedObjectEx<DataChangeCallBackInfo>
+{
+    public int m_ActorId;
+
+    public DataChangeCallBackInfo()
+    {
+        reset();
+    }
+    public void reset()
+    {
+        m_ActorId = 0;
+    }
+    public DataChangeCallBackInfo Downcast()
+    {
+        return this;
+    }
+    public void InitPool(Cs2LuaObjectPoolEx<DataChangeCallBackInfo> pool)
+    {
+
+    }
+}
+
+class Test
+{
+    public void Init()
+    {
+        m_DataChangeCallBackInfoPool.Init(null, null);
+        StrList strlist = new StrList();
+        strlist.Add(string.Empty);
+        strlist.Sort((a, b) => a.CompareTo(b));
+        List<int> intlist = new List<int>();
+        intlist.Add(1);
+        intlist.Sort((a, b) => a.CompareTo(b));
+    }
+    private Cs2LuaObjectPoolEx<DataChangeCallBackInfo> m_DataChangeCallBackInfoPool = new Cs2LuaObjectPoolEx<DataChangeCallBackInfo>();
 }

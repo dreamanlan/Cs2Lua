@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_WheelFrictionCurve : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.WheelFrictionCurve o;
 			o=new UnityEngine.WheelFrictionCurve();
@@ -175,11 +175,12 @@ public class Lua_UnityEngine_WheelFrictionCurve : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.WheelFrictionCurve");
+		addMember(l,ctor_s);
 		addMember(l,"extremumSlip",get_extremumSlip,set_extremumSlip,true);
 		addMember(l,"extremumValue",get_extremumValue,set_extremumValue,true);
 		addMember(l,"asymptoteSlip",get_asymptoteSlip,set_asymptoteSlip,true);
 		addMember(l,"asymptoteValue",get_asymptoteValue,set_asymptoteValue,true);
 		addMember(l,"stiffness",get_stiffness,set_stiffness,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.WheelFrictionCurve),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.WheelFrictionCurve),typeof(System.ValueType));
 	}
 }

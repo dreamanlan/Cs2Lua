@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Screen : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Screen o;
 			o=new UnityEngine.Screen();
@@ -19,60 +19,75 @@ public class Lua_UnityEngine_Screen : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetResolution_s(IntPtr l) {
+	static public int SetResolution__Int32__Int32__FullScreenMode_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetResolution__Void__Int32__Int32__FullScreenMode__Int32", argc, 1,typeof(int),typeof(int),typeof(UnityEngine.FullScreenMode),typeof(int))){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				UnityEngine.FullScreenMode a3;
-				checkEnum(l,4,out a3);
-				System.Int32 a4;
-				checkType(l,5,out a4);
-				UnityEngine.Screen.SetResolution(a1,a2,a3,a4);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetResolution__Void__Int32__Int32__Boolean__Int32", argc, 1,typeof(int),typeof(int),typeof(bool),typeof(int))){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.Boolean a3;
-				checkType(l,4,out a3);
-				System.Int32 a4;
-				checkType(l,5,out a4);
-				UnityEngine.Screen.SetResolution(a1,a2,a3,a4);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetResolution__Void__Int32__Int32__FullScreenMode", argc, 1,typeof(int),typeof(int),typeof(UnityEngine.FullScreenMode))){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				UnityEngine.FullScreenMode a3;
-				checkEnum(l,4,out a3);
-				UnityEngine.Screen.SetResolution(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetResolution__Void__Int32__Int32__Boolean", argc, 1,typeof(int),typeof(int),typeof(bool))){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.Boolean a3;
-				checkType(l,4,out a3);
-				UnityEngine.Screen.SetResolution(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			UnityEngine.FullScreenMode a3;
+			checkEnum(l,3,out a3);
+			UnityEngine.Screen.SetResolution(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetResolution__Int32__Int32__Boolean_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Boolean a3;
+			checkType(l,3,out a3);
+			UnityEngine.Screen.SetResolution(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetResolution__Int32__Int32__FullScreenMode__Int32_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			UnityEngine.FullScreenMode a3;
+			checkEnum(l,3,out a3);
+			System.Int32 a4;
+			checkType(l,4,out a4);
+			UnityEngine.Screen.SetResolution(a1,a2,a3,a4);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetResolution__Int32__Int32__Boolean__Int32_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Boolean a3;
+			checkType(l,3,out a3);
+			System.Int32 a4;
+			checkType(l,4,out a4);
+			UnityEngine.Screen.SetResolution(a1,a2,a3,a4);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -361,7 +376,11 @@ public class Lua_UnityEngine_Screen : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Screen");
-		addMember(l,SetResolution_s);
+		addMember(l,ctor_s);
+		addMember(l,SetResolution__Int32__Int32__FullScreenMode_s);
+		addMember(l,SetResolution__Int32__Int32__Boolean_s);
+		addMember(l,SetResolution__Int32__Int32__FullScreenMode__Int32_s);
+		addMember(l,SetResolution__Int32__Int32__Boolean__Int32_s);
 		addMember(l,"width",get_width,null,false);
 		addMember(l,"height",get_height,null,false);
 		addMember(l,"dpi",get_dpi,null,false);
@@ -376,6 +395,6 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		addMember(l,"fullScreenMode",get_fullScreenMode,set_fullScreenMode,false);
 		addMember(l,"safeArea",get_safeArea,null,false);
 		addMember(l,"resolutions",get_resolutions,null,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Screen));
+		createTypeMetatable(l,null, typeof(UnityEngine.Screen));
 	}
 }

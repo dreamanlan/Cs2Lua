@@ -537,7 +537,6 @@ namespace SLua
             LuaDLL.lua_setfield(l, LuaIndexes.LUA_REGISTRYINDEX, ObjectCache.getAQName(self));//pop instance metatable and reg instance metatable
         }
 
-
         public static bool isImplByLua(Type t)
         {
             return t == typeof(Color)
@@ -740,211 +739,6 @@ namespace SLua
         static bool isLuaValueType(IntPtr l, int p)
         {
             return LuaDLL.luaS_checkluatype(l, p, null) == 1;
-        }
-
-        public static bool matchType(IntPtr l, int p, Type t1)
-        {
-            LuaTypes t = LuaDLL.lua_type(l, p);
-            if (t == LuaTypes.LUA_TNONE && t1.IsArray)
-                return true;
-            return matchType(l, p, t, t1);
-        }
-
-        public static bool matchType(IntPtr l, string signature, int total, int from, Type t1)
-        {
-            int bias = 0;
-            if (t1.IsArray) {
-                bias = -1;
-            }
-            if (total - from != 1 && total - from != 1 + bias)
-                return false;
-            string sig;
-            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
-                return false;
-            ++from;
-            return matchType(l, from, t1);
-        }
-
-        public static bool matchType(IntPtr l, string signature, int total, int from, Type t1, Type t2)
-        {
-            int bias = 0;
-            if (t2.IsArray) {
-                bias = -1;
-            }
-            if (total - from != 2 && total - from != 2 + bias)
-                return false;
-            string sig;
-            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
-                return false;
-            ++from;
-            return matchType(l, from, t1) && matchType(l, from + 1, t2);
-        }
-
-        public static bool matchType(IntPtr l, string signature, int total, int from, Type t1, Type t2, Type t3)
-        {
-            int bias = 0;
-            if (t3.IsArray) {
-                bias = -1;
-            }
-            if (total - from != 3 && total - from != 3 + bias)
-                return false;
-            string sig;
-            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
-                return false;
-            ++from;
-            return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3);
-        }
-
-        public static bool matchType(IntPtr l, string signature, int total, int from, Type t1, Type t2, Type t3, Type t4)
-        {
-            int bias = 0;
-            if (t4.IsArray) {
-                bias = -1;
-            }
-            if (total - from != 4 && total - from != 4 + bias)
-                return false;
-            string sig;
-            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
-                return false;
-            ++from;
-            return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3) && matchType(l, from + 3, t4);
-        }
-
-        public static bool matchType(IntPtr l, string signature, int total, int from, Type t1, Type t2, Type t3, Type t4, Type t5)
-        {
-            int bias = 0;
-            if (t5.IsArray) {
-                bias = -1;
-            }
-            if (total - from != 5 && total - from != 5 + bias)
-                return false;
-            string sig;
-            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
-                return false;
-            ++from;
-            return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3) && matchType(l, from + 3, t4)
-                && matchType(l, from + 4, t5);
-        }
-
-        public static bool matchType
-            (IntPtr l, string signature, int total, int from, Type t1, Type t2, Type t3, Type t4, Type t5, Type t6)
-        {
-            int bias = 0;
-            if (t6.IsArray) {
-                bias = -1;
-            }
-            if (total - from != 6 && total - from != 6 + bias)
-                return false;
-            string sig;
-            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
-                return false;
-            ++from;
-            return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3) && matchType(l, from + 3, t4)
-                && matchType(l, from + 4, t5)
-                && matchType(l, from + 5, t6);
-        }
-
-        public static bool matchType
-            (IntPtr l, string signature, int total, int from, Type t1, Type t2, Type t3, Type t4, Type t5, Type t6, Type t7)
-        {
-            int bias = 0;
-            if (t7.IsArray) {
-                bias = -1;
-            }
-            if (total - from != 7 && total - from != 7 + bias)
-                return false;
-            string sig;
-            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
-                return false;
-            ++from;
-            return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3) && matchType(l, from + 3, t4)
-                && matchType(l, from + 4, t5)
-                && matchType(l, from + 5, t6)
-                && matchType(l, from + 6, t7);
-        }
-
-        public static bool matchType
-            (IntPtr l, string signature, int total, int from, Type t1, Type t2, Type t3, Type t4, Type t5, Type t6, Type t7, Type t8)
-        {
-            int bias = 0;
-            if (t8.IsArray) {
-                bias = -1;
-            }
-            if (total - from != 8 && total - from != 8 + bias)
-                return false;
-            string sig;
-            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
-                return false;
-            ++from;
-            return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3) && matchType(l, from + 3, t4)
-                && matchType(l, from + 4, t5)
-                && matchType(l, from + 5, t6)
-                && matchType(l, from + 6, t7)
-                && matchType(l, from + 7, t8);
-        }
-
-
-        public static bool matchType
-            (IntPtr l, string signature, int total, int from, Type t1, Type t2, Type t3, Type t4, Type t5, Type t6, Type t7, Type t8, Type t9)
-        {
-            int bias = 0;
-            if (t9.IsArray) {
-                bias = -1;
-            }
-            if (total - from != 9 && total - from != 9 + bias)
-                return false;
-            string sig;
-            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
-                return false;
-            ++from;
-            return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3) && matchType(l, from + 3, t4)
-                && matchType(l, from + 4, t5)
-                && matchType(l, from + 5, t6)
-                && matchType(l, from + 6, t7)
-                && matchType(l, from + 7, t8)
-                && matchType(l, from + 8, t9);
-        }
-
-        public static bool matchType
-            (IntPtr l, string signature, int total, int from, Type t1, Type t2, Type t3, Type t4, Type t5, Type t6, Type t7, Type t8, Type t9, Type t10)
-        {
-            int bias = 0;
-            if (t10.IsArray) {
-                bias = -1;
-            }
-            if (total - from != 10 && total - from != 10 + bias)
-                return false;
-            string sig;
-            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
-                return false;
-            ++from;
-            return matchType(l, from, t1) && matchType(l, from + 1, t2) && matchType(l, from + 2, t3) && matchType(l, from + 3, t4)
-                && matchType(l, from + 4, t5)
-                    && matchType(l, from + 5, t6)
-                    && matchType(l, from + 6, t7)
-                    && matchType(l, from + 7, t8)
-                    && matchType(l, from + 8, t9)
-                    && matchType(l, from + 9, t10);
-        }
-
-        public static bool matchType(IntPtr l, string signature, int total, int from, params Type[] t)
-        {
-            int bias = 0;
-            if (t.Length > 0 && t[t.Length - 1].IsArray) {
-                bias = -1;
-            }
-            if (total - from != t.Length && total - from != t.Length + bias)
-                return false;
-            string sig;
-            if (!checkType(l, from, out sig) || !sig.EndsWith(signature))
-                return false;
-            ++from;
-            for (int i = 0; i < t.Length; ++i) {
-                if (!matchType(l, from + i, t[i]))
-                    return false;
-            }
-
-            return true;
         }
 
         public static bool matchType(IntPtr l, int total, int from, ParameterInfo[] pars)
@@ -1361,7 +1155,6 @@ namespace SLua
             }
         }
 
-
         public static void pushValue(IntPtr l, object o)
         {
             pushVar(l, o);
@@ -1395,8 +1188,6 @@ namespace SLua
                 pushObject(l, o);
 
         }
-
-
 
         public static T checkSelf<T>(IntPtr l)
         {
@@ -1518,7 +1309,7 @@ namespace SLua
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static public int noConstructor(IntPtr l)
         {
-            return error(l, "Can't new this object");
+            return error(l, "Cs2Lua doesn't support new object by __call，you should new object by calling static method ctor or ctor__XXX");
         }
 
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

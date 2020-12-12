@@ -1,7 +1,7 @@
-ITestIntf = {
+ICs2LuaPoolAllocatedObjectEx_T = {
 	__cs2lua_defined = true, 
-	__cs2lua_fullname = "ITestIntf", 
-	__cs2lua_typename = "ITestIntf", 
+	__cs2lua_fullname = "ICs2LuaPoolAllocatedObjectEx_T", 
+	__cs2lua_typename = "ICs2LuaPoolAllocatedObjectEx_T", 
 	__interfaces = {
 	}, 
 	__exist = function(k) return false; end

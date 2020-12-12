@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Playables_FrameData : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Playables.FrameData o;
 			o=new UnityEngine.Playables.FrameData();
@@ -202,6 +202,7 @@ public class Lua_UnityEngine_Playables_FrameData : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Playables.FrameData");
+		addMember(l,ctor_s);
 		addMember(l,"frameId",get_frameId,null,true);
 		addMember(l,"deltaTime",get_deltaTime,null,true);
 		addMember(l,"weight",get_weight,null,true);
@@ -215,6 +216,6 @@ public class Lua_UnityEngine_Playables_FrameData : LuaObject {
 		addMember(l,"timeHeld",get_timeHeld,null,true);
 		addMember(l,"output",get_output,null,true);
 		addMember(l,"effectivePlayState",get_effectivePlayState,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Playables.FrameData),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Playables.FrameData),typeof(System.ValueType));
 	}
 }

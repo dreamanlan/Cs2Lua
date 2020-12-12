@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_InheritVelocityModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.InheritVelocityModule o;
 			o=new UnityEngine.ParticleSystem.InheritVelocityModule();
@@ -144,10 +144,11 @@ public class Lua_UnityEngine_ParticleSystem_InheritVelocityModule : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.InheritVelocityModule");
+		addMember(l,ctor_s);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
 		addMember(l,"mode",get_mode,set_mode,true);
 		addMember(l,"curve",get_curve,set_curve,true);
 		addMember(l,"curveMultiplier",get_curveMultiplier,set_curveMultiplier,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.InheritVelocityModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.InheritVelocityModule),typeof(System.ValueType));
 	}
 }

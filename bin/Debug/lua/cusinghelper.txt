@@ -23,7 +23,7 @@ CUsingHelper = {
 		local v;
 		v = 0;
 		local dict;
-		dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, {}, luastrtocsstr("System.Collections.Generic.Dictionary_TKey_TValue:ctor__Void"));
+		dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, "ctor__Void", {});
 		--
 		v = (v + 1);
 		if (v > 0) then

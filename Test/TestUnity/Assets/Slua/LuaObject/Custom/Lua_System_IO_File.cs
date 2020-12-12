@@ -5,32 +5,33 @@ using System.Collections.Generic;
 public class Lua_System_IO_File : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int AppendAllText_s(IntPtr l) {
+	static public int AppendAllText__String__String_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.Text.Encoding a3;
-				checkType(l,4,out a3);
-				System.IO.File.AppendAllText(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.IO.File.AppendAllText(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.IO.File.AppendAllText(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AppendAllText__String__String__Encoding_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.Text.Encoding a3;
+			checkType(l,3,out a3);
+			System.IO.File.AppendAllText(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -53,31 +54,47 @@ public class Lua_System_IO_File : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Copy_s(IntPtr l) {
+	static public int Copy__String__String_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.Boolean a3;
-				checkType(l,4,out a3);
-				System.IO.File.Copy(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.IO.File.Copy(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.IO.File.Copy(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Copy__String__String__Boolean_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.Boolean a3;
+			checkType(l,3,out a3);
+			System.IO.File.Copy(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Create__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=System.IO.File.Create(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -86,55 +103,55 @@ public class Lua_System_IO_File : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Create_s(IntPtr l) {
+	static public int Create__String__Int32_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.IO.FileOptions a3;
-				checkEnum(l,4,out a3);
-				System.Security.AccessControl.FileSecurity a4;
-				checkType(l,5,out a4);
-				var ret=System.IO.File.Create(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==4){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.IO.FileOptions a3;
-				checkEnum(l,4,out a3);
-				var ret=System.IO.File.Create(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				var ret=System.IO.File.Create(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=System.IO.File.Create(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			var ret=System.IO.File.Create(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Create__String__Int32__FileOptions_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.IO.FileOptions a3;
+			checkEnum(l,3,out a3);
+			var ret=System.IO.File.Create(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Create__String__Int32__FileOptions__FileSecurity_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.IO.FileOptions a3;
+			checkEnum(l,3,out a3);
+			System.Security.AccessControl.FileSecurity a4;
+			checkType(l,4,out a4);
+			var ret=System.IO.File.Create(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -187,29 +204,30 @@ public class Lua_System_IO_File : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetAccessControl_s(IntPtr l) {
+	static public int GetAccessControl__String_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Security.AccessControl.AccessControlSections a2;
-				checkEnum(l,3,out a2);
-				var ret=System.IO.File.GetAccessControl(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=System.IO.File.GetAccessControl(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=System.IO.File.GetAccessControl(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetAccessControl__String__AccessControlSections_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Security.AccessControl.AccessControlSections a2;
+			checkEnum(l,2,out a2);
+			var ret=System.IO.File.GetAccessControl(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -339,47 +357,55 @@ public class Lua_System_IO_File : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Open_s(IntPtr l) {
+	static public int Open__String__FileMode_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.IO.FileMode a2;
-				checkEnum(l,3,out a2);
-				System.IO.FileAccess a3;
-				checkEnum(l,4,out a3);
-				System.IO.FileShare a4;
-				checkEnum(l,5,out a4);
-				var ret=System.IO.File.Open(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==4){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.IO.FileMode a2;
-				checkEnum(l,3,out a2);
-				System.IO.FileAccess a3;
-				checkEnum(l,4,out a3);
-				var ret=System.IO.File.Open(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.IO.FileMode a2;
-				checkEnum(l,3,out a2);
-				var ret=System.IO.File.Open(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			System.IO.FileMode a2;
+			checkEnum(l,2,out a2);
+			var ret=System.IO.File.Open(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Open__String__FileMode__FileAccess_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.IO.FileMode a2;
+			checkEnum(l,2,out a2);
+			System.IO.FileAccess a3;
+			checkEnum(l,3,out a3);
+			var ret=System.IO.File.Open(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Open__String__FileMode__FileAccess__FileShare_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.IO.FileMode a2;
+			checkEnum(l,2,out a2);
+			System.IO.FileAccess a3;
+			checkEnum(l,3,out a3);
+			System.IO.FileShare a4;
+			checkEnum(l,4,out a4);
+			var ret=System.IO.File.Open(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -433,36 +459,37 @@ public class Lua_System_IO_File : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Replace_s(IntPtr l) {
+	static public int Replace__String__String__String_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.String a3;
-				checkType(l,4,out a3);
-				System.Boolean a4;
-				checkType(l,5,out a4);
-				System.IO.File.Replace(a1,a2,a3,a4);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==4){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.String a3;
-				checkType(l,4,out a3);
-				System.IO.File.Replace(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.String a3;
+			checkType(l,3,out a3);
+			System.IO.File.Replace(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Replace__String__String__String__Boolean_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.String a3;
+			checkType(l,3,out a3);
+			System.Boolean a4;
+			checkType(l,4,out a4);
+			System.IO.File.Replace(a1,a2,a3,a4);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -613,29 +640,13 @@ public class Lua_System_IO_File : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int ReadAllLines_s(IntPtr l) {
+	static public int ReadAllLines__String_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Text.Encoding a2;
-				checkType(l,3,out a2);
-				var ret=System.IO.File.ReadAllLines(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=System.IO.File.ReadAllLines(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=System.IO.File.ReadAllLines(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -644,29 +655,47 @@ public class Lua_System_IO_File : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int ReadAllText_s(IntPtr l) {
+	static public int ReadAllLines__String__Encoding_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Text.Encoding a2;
-				checkType(l,3,out a2);
-				var ret=System.IO.File.ReadAllText(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=System.IO.File.ReadAllText(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Text.Encoding a2;
+			checkType(l,2,out a2);
+			var ret=System.IO.File.ReadAllLines(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ReadAllText__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=System.IO.File.ReadAllText(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ReadAllText__String__Encoding_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Text.Encoding a2;
+			checkType(l,2,out a2);
+			var ret=System.IO.File.ReadAllText(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -691,52 +720,15 @@ public class Lua_System_IO_File : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int WriteAllLines_s(IntPtr l) {
+	static public int WriteAllLines__String__A_String_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "WriteAllLines__Void__String__Arr_String__Encoding", argc, 1,typeof(string),typeof(System.String[]),typeof(System.Text.Encoding))){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String[] a2;
-				checkArray(l,3,out a2);
-				System.Text.Encoding a3;
-				checkType(l,4,out a3);
-				System.IO.File.WriteAllLines(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "WriteAllLines__Void__String__IEnumerable`1_String__Encoding", argc, 1,typeof(string),typeof(IEnumerable<System.String>),typeof(System.Text.Encoding))){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Collections.Generic.IEnumerable<System.String> a2;
-				checkType(l,3,out a2);
-				System.Text.Encoding a3;
-				checkType(l,4,out a3);
-				System.IO.File.WriteAllLines(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "WriteAllLines__Void__String__Arr_String", argc, 1,typeof(string),typeof(System.String[]))){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String[] a2;
-				checkArray(l,3,out a2);
-				System.IO.File.WriteAllLines(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "WriteAllLines__Void__String__IEnumerable`1_String", argc, 1,typeof(string),typeof(IEnumerable<System.String>))){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Collections.Generic.IEnumerable<System.String> a2;
-				checkType(l,3,out a2);
-				System.IO.File.WriteAllLines(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String[] a2;
+			checkArray(l,2,out a2);
+			System.IO.File.WriteAllLines(a1,a2);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -744,32 +736,85 @@ public class Lua_System_IO_File : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int WriteAllText_s(IntPtr l) {
+	static public int WriteAllLines__String__IEnumerable_1_String_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.Text.Encoding a3;
-				checkType(l,4,out a3);
-				System.IO.File.WriteAllText(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.IO.File.WriteAllText(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Collections.Generic.IEnumerable<System.String> a2;
+			checkType(l,2,out a2);
+			System.IO.File.WriteAllLines(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int WriteAllLines__String__A_String__Encoding_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String[] a2;
+			checkArray(l,2,out a2);
+			System.Text.Encoding a3;
+			checkType(l,3,out a3);
+			System.IO.File.WriteAllLines(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int WriteAllLines__String__IEnumerable_1_String__Encoding_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Collections.Generic.IEnumerable<System.String> a2;
+			checkType(l,2,out a2);
+			System.Text.Encoding a3;
+			checkType(l,3,out a3);
+			System.IO.File.WriteAllLines(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int WriteAllText__String__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.IO.File.WriteAllText(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int WriteAllText__String__String__Encoding_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.Text.Encoding a3;
+			checkType(l,3,out a3);
+			System.IO.File.WriteAllText(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -805,29 +850,13 @@ public class Lua_System_IO_File : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int ReadLines_s(IntPtr l) {
+	static public int ReadLines__String_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Text.Encoding a2;
-				checkType(l,3,out a2);
-				var ret=System.IO.File.ReadLines(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=System.IO.File.ReadLines(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=System.IO.File.ReadLines(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -836,32 +865,50 @@ public class Lua_System_IO_File : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int AppendAllLines_s(IntPtr l) {
+	static public int ReadLines__String__Encoding_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Collections.Generic.IEnumerable<System.String> a2;
-				checkType(l,3,out a2);
-				System.Text.Encoding a3;
-				checkType(l,4,out a3);
-				System.IO.File.AppendAllLines(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Collections.Generic.IEnumerable<System.String> a2;
-				checkType(l,3,out a2);
-				System.IO.File.AppendAllLines(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Text.Encoding a2;
+			checkType(l,2,out a2);
+			var ret=System.IO.File.ReadLines(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AppendAllLines__String__IEnumerable_1_String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Collections.Generic.IEnumerable<System.String> a2;
+			checkType(l,2,out a2);
+			System.IO.File.AppendAllLines(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AppendAllLines__String__IEnumerable_1_String__Encoding_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Collections.Generic.IEnumerable<System.String> a2;
+			checkType(l,2,out a2);
+			System.Text.Encoding a3;
+			checkType(l,3,out a3);
+			System.IO.File.AppendAllLines(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -870,14 +917,20 @@ public class Lua_System_IO_File : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"System.IO.File");
-		addMember(l,AppendAllText_s);
+		addMember(l,AppendAllText__String__String_s);
+		addMember(l,AppendAllText__String__String__Encoding_s);
 		addMember(l,AppendText_s);
-		addMember(l,Copy_s);
-		addMember(l,Create_s);
+		addMember(l,Copy__String__String_s);
+		addMember(l,Copy__String__String__Boolean_s);
+		addMember(l,Create__String_s);
+		addMember(l,Create__String__Int32_s);
+		addMember(l,Create__String__Int32__FileOptions_s);
+		addMember(l,Create__String__Int32__FileOptions__FileSecurity_s);
 		addMember(l,CreateText_s);
 		addMember(l,Delete_s);
 		addMember(l,Exists_s);
-		addMember(l,GetAccessControl_s);
+		addMember(l,GetAccessControl__String_s);
+		addMember(l,GetAccessControl__String__AccessControlSections_s);
 		addMember(l,GetAttributes_s);
 		addMember(l,GetCreationTime_s);
 		addMember(l,GetCreationTimeUtc_s);
@@ -886,11 +939,14 @@ public class Lua_System_IO_File : LuaObject {
 		addMember(l,GetLastWriteTime_s);
 		addMember(l,GetLastWriteTimeUtc_s);
 		addMember(l,Move_s);
-		addMember(l,Open_s);
+		addMember(l,Open__String__FileMode_s);
+		addMember(l,Open__String__FileMode__FileAccess_s);
+		addMember(l,Open__String__FileMode__FileAccess__FileShare_s);
 		addMember(l,OpenRead_s);
 		addMember(l,OpenText_s);
 		addMember(l,OpenWrite_s);
-		addMember(l,Replace_s);
+		addMember(l,Replace__String__String__String_s);
+		addMember(l,Replace__String__String__String__Boolean_s);
 		addMember(l,SetAccessControl_s);
 		addMember(l,SetAttributes_s);
 		addMember(l,SetCreationTime_s);
@@ -900,15 +956,23 @@ public class Lua_System_IO_File : LuaObject {
 		addMember(l,SetLastWriteTime_s);
 		addMember(l,SetLastWriteTimeUtc_s);
 		addMember(l,ReadAllBytes_s);
-		addMember(l,ReadAllLines_s);
-		addMember(l,ReadAllText_s);
+		addMember(l,ReadAllLines__String_s);
+		addMember(l,ReadAllLines__String__Encoding_s);
+		addMember(l,ReadAllText__String_s);
+		addMember(l,ReadAllText__String__Encoding_s);
 		addMember(l,WriteAllBytes_s);
-		addMember(l,WriteAllLines_s);
-		addMember(l,WriteAllText_s);
+		addMember(l,WriteAllLines__String__A_String_s);
+		addMember(l,WriteAllLines__String__IEnumerable_1_String_s);
+		addMember(l,WriteAllLines__String__A_String__Encoding_s);
+		addMember(l,WriteAllLines__String__IEnumerable_1_String__Encoding_s);
+		addMember(l,WriteAllText__String__String_s);
+		addMember(l,WriteAllText__String__String__Encoding_s);
 		addMember(l,Encrypt_s);
 		addMember(l,Decrypt_s);
-		addMember(l,ReadLines_s);
-		addMember(l,AppendAllLines_s);
+		addMember(l,ReadLines__String_s);
+		addMember(l,ReadLines__String__Encoding_s);
+		addMember(l,AppendAllLines__String__IEnumerable_1_String_s);
+		addMember(l,AppendAllLines__String__IEnumerable_1_String__Encoding_s);
 		createTypeMetatable(l,null, typeof(System.IO.File));
 	}
 }

@@ -31,34 +31,16 @@ public class Lua_UnityEngine_Light : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int AddCommandBuffer(IntPtr l) {
+	static public int AddCommandBuffer__LightEvent__CommandBuffer(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
-				UnityEngine.Rendering.LightEvent a1;
-				checkEnum(l,3,out a1);
-				UnityEngine.Rendering.CommandBuffer a2;
-				checkType(l,4,out a2);
-				UnityEngine.Rendering.ShadowMapPass a3;
-				checkEnum(l,5,out a3);
-				self.AddCommandBuffer(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==4){
-				UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
-				UnityEngine.Rendering.LightEvent a1;
-				checkEnum(l,3,out a1);
-				UnityEngine.Rendering.CommandBuffer a2;
-				checkType(l,4,out a2);
-				self.AddCommandBuffer(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			UnityEngine.Rendering.LightEvent a1;
+			checkEnum(l,2,out a1);
+			UnityEngine.Rendering.CommandBuffer a2;
+			checkType(l,3,out a2);
+			self.AddCommandBuffer(a1,a2);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -66,38 +48,58 @@ public class Lua_UnityEngine_Light : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int AddCommandBufferAsync(IntPtr l) {
+	static public int AddCommandBuffer__LightEvent__CommandBuffer__ShadowMapPass(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==6){
-				UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
-				UnityEngine.Rendering.LightEvent a1;
-				checkEnum(l,3,out a1);
-				UnityEngine.Rendering.CommandBuffer a2;
-				checkType(l,4,out a2);
-				UnityEngine.Rendering.ShadowMapPass a3;
-				checkEnum(l,5,out a3);
-				UnityEngine.Rendering.ComputeQueueType a4;
-				checkEnum(l,6,out a4);
-				self.AddCommandBufferAsync(a1,a2,a3,a4);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==5){
-				UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
-				UnityEngine.Rendering.LightEvent a1;
-				checkEnum(l,3,out a1);
-				UnityEngine.Rendering.CommandBuffer a2;
-				checkType(l,4,out a2);
-				UnityEngine.Rendering.ComputeQueueType a3;
-				checkEnum(l,5,out a3);
-				self.AddCommandBufferAsync(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			UnityEngine.Rendering.LightEvent a1;
+			checkEnum(l,2,out a1);
+			UnityEngine.Rendering.CommandBuffer a2;
+			checkType(l,3,out a2);
+			UnityEngine.Rendering.ShadowMapPass a3;
+			checkEnum(l,4,out a3);
+			self.AddCommandBuffer(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AddCommandBufferAsync__LightEvent__CommandBuffer__ComputeQueueType(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			UnityEngine.Rendering.LightEvent a1;
+			checkEnum(l,2,out a1);
+			UnityEngine.Rendering.CommandBuffer a2;
+			checkType(l,3,out a2);
+			UnityEngine.Rendering.ComputeQueueType a3;
+			checkEnum(l,4,out a3);
+			self.AddCommandBufferAsync(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AddCommandBufferAsync__LightEvent__CommandBuffer__ShadowMapPass__ComputeQueueType(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			UnityEngine.Rendering.LightEvent a1;
+			checkEnum(l,2,out a1);
+			UnityEngine.Rendering.CommandBuffer a2;
+			checkType(l,3,out a2);
+			UnityEngine.Rendering.ShadowMapPass a3;
+			checkEnum(l,4,out a3);
+			UnityEngine.Rendering.ComputeQueueType a4;
+			checkEnum(l,5,out a4);
+			self.AddCommandBufferAsync(a1,a2,a3,a4);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -899,8 +901,10 @@ public class Lua_UnityEngine_Light : LuaObject {
 		getTypeTable(l,"UnityEngine.Light");
 		addMember(l,Reset);
 		addMember(l,SetLightDirty);
-		addMember(l,AddCommandBuffer);
-		addMember(l,AddCommandBufferAsync);
+		addMember(l,AddCommandBuffer__LightEvent__CommandBuffer);
+		addMember(l,AddCommandBuffer__LightEvent__CommandBuffer__ShadowMapPass);
+		addMember(l,AddCommandBufferAsync__LightEvent__CommandBuffer__ComputeQueueType);
+		addMember(l,AddCommandBufferAsync__LightEvent__CommandBuffer__ShadowMapPass__ComputeQueueType);
 		addMember(l,RemoveCommandBuffer);
 		addMember(l,RemoveCommandBuffers);
 		addMember(l,RemoveAllCommandBuffers);

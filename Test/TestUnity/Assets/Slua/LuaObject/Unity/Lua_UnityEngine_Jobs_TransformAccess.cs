@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Jobs_TransformAccess : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Jobs.TransformAccess o;
 			o=new UnityEngine.Jobs.TransformAccess();
@@ -175,11 +175,12 @@ public class Lua_UnityEngine_Jobs_TransformAccess : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Jobs.TransformAccess");
+		addMember(l,ctor_s);
 		addMember(l,"position",get_position,set_position,true);
 		addMember(l,"rotation",get_rotation,set_rotation,true);
 		addMember(l,"localPosition",get_localPosition,set_localPosition,true);
 		addMember(l,"localRotation",get_localRotation,set_localRotation,true);
 		addMember(l,"localScale",get_localScale,set_localScale,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Jobs.TransformAccess),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Jobs.TransformAccess),typeof(System.ValueType));
 	}
 }

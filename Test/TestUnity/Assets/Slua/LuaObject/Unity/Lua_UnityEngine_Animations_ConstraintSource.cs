@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Animations_ConstraintSource : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Animations.ConstraintSource o;
 			o=new UnityEngine.Animations.ConstraintSource();
@@ -82,8 +82,9 @@ public class Lua_UnityEngine_Animations_ConstraintSource : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Animations.ConstraintSource");
+		addMember(l,ctor_s);
 		addMember(l,"sourceTransform",get_sourceTransform,set_sourceTransform,true);
 		addMember(l,"weight",get_weight,set_weight,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Animations.ConstraintSource),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Animations.ConstraintSource),typeof(System.ValueType));
 	}
 }

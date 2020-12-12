@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Compass : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Compass o;
 			o=new UnityEngine.Compass();
@@ -113,12 +113,13 @@ public class Lua_UnityEngine_Compass : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Compass");
+		addMember(l,ctor_s);
 		addMember(l,"magneticHeading",get_magneticHeading,null,true);
 		addMember(l,"trueHeading",get_trueHeading,null,true);
 		addMember(l,"headingAccuracy",get_headingAccuracy,null,true);
 		addMember(l,"rawVector",get_rawVector,null,true);
 		addMember(l,"timestamp",get_timestamp,null,true);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Compass));
+		createTypeMetatable(l,null, typeof(UnityEngine.Compass));
 	}
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_PluginManager : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			PluginManager o;
 			o=new PluginManager();
@@ -131,6 +131,7 @@ public class Lua_PluginManager : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"PluginManager");
+		addMember(l,ctor_s);
 		addMember(l,CreateObject);
 		addMember(l,CreateStartup);
 		addMember(l,CreateTick);
@@ -138,6 +139,6 @@ public class Lua_PluginManager : LuaObject {
 		addMember(l,RegisterStartupFactory);
 		addMember(l,RegisterTickFactory);
 		addMember(l,"Instance",get_Instance,null,false);
-		createTypeMetatable(l,constructor, typeof(PluginManager));
+		createTypeMetatable(l,null, typeof(PluginManager));
 	}
 }

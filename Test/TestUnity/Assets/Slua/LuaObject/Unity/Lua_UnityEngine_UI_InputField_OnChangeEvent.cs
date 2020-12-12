@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_UI_InputField_OnChangeEvent : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField.OnChangeEvent o;
 			o=new UnityEngine.UI.InputField.OnChangeEvent();
@@ -138,10 +138,41 @@ public class Lua_UnityEngine_UI_InputField_OnChangeEvent : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static new public int ToString(IntPtr l) {
+		try {
+			UnityEngine.UI.InputField.OnChangeEvent self=(UnityEngine.UI.InputField.OnChangeEvent)checkSelf(l);
+			var ret=self.ToString();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static new public int Equals(IntPtr l) {
+		try {
+			UnityEngine.UI.InputField.OnChangeEvent self=(UnityEngine.UI.InputField.OnChangeEvent)checkSelf(l);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		LuaUnityEvent_string.reg(l);
 		getTypeTable(l,"UnityEngine.UI.InputField.OnChangeEvent");
+		addMember(l,ctor_s);
 		addMember(l,AddListener);
 		addMember(l,RemoveListener);
 		addMember(l,Invoke);
@@ -150,6 +181,8 @@ public class Lua_UnityEngine_UI_InputField_OnChangeEvent : LuaObject {
 		addMember(l,GetPersistentMethodName);
 		addMember(l,SetPersistentListenerState);
 		addMember(l,RemoveAllListeners);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.UI.InputField.OnChangeEvent),typeof(LuaUnityEvent_string));
+		addMember(l,ToString);
+		addMember(l,Equals);
+		createTypeMetatable(l,null, typeof(UnityEngine.UI.InputField.OnChangeEvent),typeof(LuaUnityEvent_string));
 	}
 }

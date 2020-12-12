@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Playables_ScriptPlayableOutput : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Playables.ScriptPlayableOutput o;
 			o=new UnityEngine.Playables.ScriptPlayableOutput();
@@ -94,11 +94,12 @@ public class Lua_UnityEngine_Playables_ScriptPlayableOutput : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Playables.ScriptPlayableOutput");
+		addMember(l,ctor_s);
 		addMember(l,GetHandle);
 		addMember(l,Create_s);
 		addMember(l,op_Implicit_s);
 		addMember(l,op_Explicit_s);
 		addMember(l,"Null",get_Null,null,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Playables.ScriptPlayableOutput),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Playables.ScriptPlayableOutput),typeof(System.ValueType));
 	}
 }

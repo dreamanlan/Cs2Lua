@@ -5,67 +5,95 @@ using System.Collections.Generic;
 public class Lua_System_TimeSpan : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			System.TimeSpan o;
-			if(argc==7){
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				System.Int32 a4;
-				checkType(l,6,out a4);
-				System.Int32 a5;
-				checkType(l,7,out a5);
-				o=new System.TimeSpan(a1,a2,a3,a4,a5);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==6){
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				System.Int32 a4;
-				checkType(l,6,out a4);
-				o=new System.TimeSpan(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==5){
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				o=new System.TimeSpan(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==3){
-				System.Int64 a1;
-				checkType(l,3,out a1);
-				o=new System.TimeSpan(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc<=2){
-				o=new System.TimeSpan();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new System.TimeSpan();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int64_s(IntPtr l) {
+		try {
+			System.TimeSpan o;
+			System.Int64 a1;
+			checkType(l,1,out a1);
+			o=new System.TimeSpan(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__Int32_s(IntPtr l) {
+		try {
+			System.TimeSpan o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			o=new System.TimeSpan(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__Int32__Int32_s(IntPtr l) {
+		try {
+			System.TimeSpan o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			System.Int32 a4;
+			checkType(l,4,out a4);
+			o=new System.TimeSpan(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__Int32__Int32__Int32_s(IntPtr l) {
+		try {
+			System.TimeSpan o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			System.Int32 a4;
+			checkType(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
+			o=new System.TimeSpan(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -90,31 +118,32 @@ public class Lua_System_TimeSpan : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int CompareTo(IntPtr l) {
+	static public int CompareTo__Object(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "CompareTo__Int32__Object", argc, 2,typeof(System.Object))){
-				System.TimeSpan self;
-				checkValueType(l,1,out self);
-				System.Object a1;
-				checkType(l,3,out a1);
-				var ret=self.CompareTo(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "CompareTo__Int32__TimeSpan", argc, 2,typeof(System.TimeSpan))){
-				System.TimeSpan self;
-				checkValueType(l,1,out self);
-				System.TimeSpan a1;
-				checkValueType(l,3,out a1);
-				var ret=self.CompareTo(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.TimeSpan self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.CompareTo(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CompareTo__TimeSpan(IntPtr l) {
+		try {
+			System.TimeSpan self;
+			checkValueType(l,1,out self);
+			System.TimeSpan a1;
+			checkValueType(l,2,out a1);
+			var ret=self.CompareTo(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -128,6 +157,40 @@ public class Lua_System_TimeSpan : LuaObject {
 			System.TimeSpan self;
 			checkValueType(l,1,out self);
 			var ret=self.Duration();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			System.TimeSpan self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__TimeSpan(IntPtr l) {
+		try {
+			System.TimeSpan self;
+			checkValueType(l,1,out self);
+			System.TimeSpan a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Equals(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -170,6 +233,57 @@ public class Lua_System_TimeSpan : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static new public int ToString(IntPtr l) {
+		try {
+			System.TimeSpan self;
+			checkValueType(l,1,out self);
+			var ret=self.ToString();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ToString__String(IntPtr l) {
+		try {
+			System.TimeSpan self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.ToString(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ToString__String__IFormatProvider(IntPtr l) {
+		try {
+			System.TimeSpan self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.IFormatProvider a2;
+			checkType(l,3,out a2);
+			var ret=self.ToString(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Compare_s(IntPtr l) {
 		try {
 			System.TimeSpan a1;
@@ -192,6 +306,23 @@ public class Lua_System_TimeSpan : LuaObject {
 			System.Double a1;
 			checkType(l,1,out a1);
 			var ret=System.TimeSpan.FromDays(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals_s(IntPtr l) {
+		try {
+			System.TimeSpan a1;
+			checkValueType(l,1,out a1);
+			System.TimeSpan a2;
+			checkValueType(l,2,out a2);
+			var ret=System.TimeSpan.Equals(a1,a2);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -277,29 +408,13 @@ public class Lua_System_TimeSpan : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Parse_s(IntPtr l) {
+	static public int Parse__String_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.IFormatProvider a2;
-				checkType(l,3,out a2);
-				var ret=System.TimeSpan.Parse(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=System.TimeSpan.Parse(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=System.TimeSpan.Parse(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -308,63 +423,15 @@ public class Lua_System_TimeSpan : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int ParseExact_s(IntPtr l) {
+	static public int Parse__String__IFormatProvider_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "ParseExact__TimeSpan__String__String__IFormatProvider__TimeSpanStyles", argc, 1,typeof(string),typeof(string),typeof(System.IFormatProvider),typeof(System.Globalization.TimeSpanStyles))){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.IFormatProvider a3;
-				checkType(l,4,out a3);
-				System.Globalization.TimeSpanStyles a4;
-				checkEnum(l,5,out a4);
-				var ret=System.TimeSpan.ParseExact(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "ParseExact__TimeSpan__String__Arr_String__IFormatProvider__TimeSpanStyles", argc, 1,typeof(string),typeof(System.String[]),typeof(System.IFormatProvider),typeof(System.Globalization.TimeSpanStyles))){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String[] a2;
-				checkArray(l,3,out a2);
-				System.IFormatProvider a3;
-				checkType(l,4,out a3);
-				System.Globalization.TimeSpanStyles a4;
-				checkEnum(l,5,out a4);
-				var ret=System.TimeSpan.ParseExact(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "ParseExact__TimeSpan__String__String__IFormatProvider", argc, 1,typeof(string),typeof(string),typeof(System.IFormatProvider))){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.IFormatProvider a3;
-				checkType(l,4,out a3);
-				var ret=System.TimeSpan.ParseExact(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "ParseExact__TimeSpan__String__Arr_String__IFormatProvider", argc, 1,typeof(string),typeof(System.String[]),typeof(System.IFormatProvider))){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String[] a2;
-				checkArray(l,3,out a2);
-				System.IFormatProvider a3;
-				checkType(l,4,out a3);
-				var ret=System.TimeSpan.ParseExact(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			System.IFormatProvider a2;
+			checkType(l,2,out a2);
+			var ret=System.TimeSpan.Parse(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -373,33 +440,17 @@ public class Lua_System_TimeSpan : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int TryParse_s(IntPtr l) {
+	static public int ParseExact__String__String__IFormatProvider_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.IFormatProvider a2;
-				checkType(l,3,out a2);
-				System.TimeSpan a3;
-				var ret=System.TimeSpan.TryParse(a1,a2,out a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				pushValue(l,a3);
-				return 3;
-			}
-			else if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.TimeSpan a2;
-				var ret=System.TimeSpan.TryParse(a1,out a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				pushValue(l,a2);
-				return 3;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.IFormatProvider a3;
+			checkType(l,3,out a3);
+			var ret=System.TimeSpan.ParseExact(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -408,72 +459,184 @@ public class Lua_System_TimeSpan : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int TryParseExact_s(IntPtr l) {
+	static public int ParseExact__String__A_String__IFormatProvider_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "TryParseExact__Boolean__String__String__IFormatProvider__TimeSpanStyles__Out_TimeSpan", argc, 1,typeof(string),typeof(string),typeof(System.IFormatProvider),typeof(System.Globalization.TimeSpanStyles),typeof(LuaOut))){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.IFormatProvider a3;
-				checkType(l,4,out a3);
-				System.Globalization.TimeSpanStyles a4;
-				checkEnum(l,5,out a4);
-				System.TimeSpan a5;
-				var ret=System.TimeSpan.TryParseExact(a1,a2,a3,a4,out a5);
-				pushValue(l,true);
-				pushValue(l,ret);
-				pushValue(l,a5);
-				return 3;
-			}
-			else if(matchType(l, "TryParseExact__Boolean__String__Arr_String__IFormatProvider__TimeSpanStyles__Out_TimeSpan", argc, 1,typeof(string),typeof(System.String[]),typeof(System.IFormatProvider),typeof(System.Globalization.TimeSpanStyles),typeof(LuaOut))){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String[] a2;
-				checkArray(l,3,out a2);
-				System.IFormatProvider a3;
-				checkType(l,4,out a3);
-				System.Globalization.TimeSpanStyles a4;
-				checkEnum(l,5,out a4);
-				System.TimeSpan a5;
-				var ret=System.TimeSpan.TryParseExact(a1,a2,a3,a4,out a5);
-				pushValue(l,true);
-				pushValue(l,ret);
-				pushValue(l,a5);
-				return 3;
-			}
-			else if(matchType(l, "TryParseExact__Boolean__String__String__IFormatProvider__Out_TimeSpan", argc, 1,typeof(string),typeof(string),typeof(System.IFormatProvider),typeof(LuaOut))){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.IFormatProvider a3;
-				checkType(l,4,out a3);
-				System.TimeSpan a4;
-				var ret=System.TimeSpan.TryParseExact(a1,a2,a3,out a4);
-				pushValue(l,true);
-				pushValue(l,ret);
-				pushValue(l,a4);
-				return 3;
-			}
-			else if(matchType(l, "TryParseExact__Boolean__String__Arr_String__IFormatProvider__Out_TimeSpan", argc, 1,typeof(string),typeof(System.String[]),typeof(System.IFormatProvider),typeof(LuaOut))){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String[] a2;
-				checkArray(l,3,out a2);
-				System.IFormatProvider a3;
-				checkType(l,4,out a3);
-				System.TimeSpan a4;
-				var ret=System.TimeSpan.TryParseExact(a1,a2,a3,out a4);
-				pushValue(l,true);
-				pushValue(l,ret);
-				pushValue(l,a4);
-				return 3;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String[] a2;
+			checkArray(l,2,out a2);
+			System.IFormatProvider a3;
+			checkType(l,3,out a3);
+			var ret=System.TimeSpan.ParseExact(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ParseExact__String__String__IFormatProvider__TimeSpanStyles_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.IFormatProvider a3;
+			checkType(l,3,out a3);
+			System.Globalization.TimeSpanStyles a4;
+			checkEnum(l,4,out a4);
+			var ret=System.TimeSpan.ParseExact(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ParseExact__String__A_String__IFormatProvider__TimeSpanStyles_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String[] a2;
+			checkArray(l,2,out a2);
+			System.IFormatProvider a3;
+			checkType(l,3,out a3);
+			System.Globalization.TimeSpanStyles a4;
+			checkEnum(l,4,out a4);
+			var ret=System.TimeSpan.ParseExact(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int TryParse__String__O_TimeSpan_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.TimeSpan a2;
+			var ret=System.TimeSpan.TryParse(a1,out a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a2);
+			return 3;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int TryParse__String__IFormatProvider__O_TimeSpan_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.IFormatProvider a2;
+			checkType(l,2,out a2);
+			System.TimeSpan a3;
+			var ret=System.TimeSpan.TryParse(a1,a2,out a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a3);
+			return 3;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int TryParseExact__String__String__IFormatProvider__O_TimeSpan_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.IFormatProvider a3;
+			checkType(l,3,out a3);
+			System.TimeSpan a4;
+			var ret=System.TimeSpan.TryParseExact(a1,a2,a3,out a4);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a4);
+			return 3;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int TryParseExact__String__A_String__IFormatProvider__O_TimeSpan_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String[] a2;
+			checkArray(l,2,out a2);
+			System.IFormatProvider a3;
+			checkType(l,3,out a3);
+			System.TimeSpan a4;
+			var ret=System.TimeSpan.TryParseExact(a1,a2,a3,out a4);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a4);
+			return 3;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int TryParseExact__String__String__IFormatProvider__TimeSpanStyles__O_TimeSpan_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.IFormatProvider a3;
+			checkType(l,3,out a3);
+			System.Globalization.TimeSpanStyles a4;
+			checkEnum(l,4,out a4);
+			System.TimeSpan a5;
+			var ret=System.TimeSpan.TryParseExact(a1,a2,a3,a4,out a5);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a5);
+			return 3;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int TryParseExact__String__A_String__IFormatProvider__TimeSpanStyles__O_TimeSpan_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String[] a2;
+			checkArray(l,2,out a2);
+			System.IFormatProvider a3;
+			checkType(l,3,out a3);
+			System.Globalization.TimeSpanStyles a4;
+			checkEnum(l,4,out a4);
+			System.TimeSpan a5;
+			var ret=System.TimeSpan.TryParseExact(a1,a2,a3,a4,out a5);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a5);
+			return 3;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -898,22 +1061,42 @@ public class Lua_System_TimeSpan : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"System.TimeSpan");
+		addMember(l,ctor_s);
+		addMember(l,ctor__Int64_s);
+		addMember(l,ctor__Int32__Int32__Int32_s);
+		addMember(l,ctor__Int32__Int32__Int32__Int32_s);
+		addMember(l,ctor__Int32__Int32__Int32__Int32__Int32_s);
 		addMember(l,Add);
-		addMember(l,CompareTo);
+		addMember(l,CompareTo__Object);
+		addMember(l,CompareTo__TimeSpan);
 		addMember(l,Duration);
+		addMember(l,Equals__Object);
+		addMember(l,Equals__TimeSpan);
 		addMember(l,Negate);
 		addMember(l,Subtract);
+		addMember(l,ToString);
+		addMember(l,ToString__String);
+		addMember(l,ToString__String__IFormatProvider);
 		addMember(l,Compare_s);
 		addMember(l,FromDays_s);
+		addMember(l,Equals_s);
 		addMember(l,FromHours_s);
 		addMember(l,FromMilliseconds_s);
 		addMember(l,FromMinutes_s);
 		addMember(l,FromSeconds_s);
 		addMember(l,FromTicks_s);
-		addMember(l,Parse_s);
-		addMember(l,ParseExact_s);
-		addMember(l,TryParse_s);
-		addMember(l,TryParseExact_s);
+		addMember(l,Parse__String_s);
+		addMember(l,Parse__String__IFormatProvider_s);
+		addMember(l,ParseExact__String__String__IFormatProvider_s);
+		addMember(l,ParseExact__String__A_String__IFormatProvider_s);
+		addMember(l,ParseExact__String__String__IFormatProvider__TimeSpanStyles_s);
+		addMember(l,ParseExact__String__A_String__IFormatProvider__TimeSpanStyles_s);
+		addMember(l,TryParse__String__O_TimeSpan_s);
+		addMember(l,TryParse__String__IFormatProvider__O_TimeSpan_s);
+		addMember(l,TryParseExact__String__String__IFormatProvider__O_TimeSpan_s);
+		addMember(l,TryParseExact__String__A_String__IFormatProvider__O_TimeSpan_s);
+		addMember(l,TryParseExact__String__String__IFormatProvider__TimeSpanStyles__O_TimeSpan_s);
+		addMember(l,TryParseExact__String__A_String__IFormatProvider__TimeSpanStyles__O_TimeSpan_s);
 		addMember(l,op_UnaryNegation_s);
 		addMember(l,op_Subtraction_s);
 		addMember(l,op_UnaryPlus_s);
@@ -943,6 +1126,6 @@ public class Lua_System_TimeSpan : LuaObject {
 		addMember(l,"TotalMilliseconds",get_TotalMilliseconds,null,true);
 		addMember(l,"TotalMinutes",get_TotalMinutes,null,true);
 		addMember(l,"TotalSeconds",get_TotalSeconds,null,true);
-		createTypeMetatable(l,constructor, typeof(System.TimeSpan),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(System.TimeSpan),typeof(System.ValueType));
 	}
 }

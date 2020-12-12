@@ -1,8 +1,2 @@
-__cs2lua__AllAttrs = {};
-__cs2lua__AllAttrs["CUsingHelper"] = {
-	ReadZip = {
-		{"System.CLSCompliantAttribute", {isCompliant = "True"}, {}};
-	};
-};
 
 

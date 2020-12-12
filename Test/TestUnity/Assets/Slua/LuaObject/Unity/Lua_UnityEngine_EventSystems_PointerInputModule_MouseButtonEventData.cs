@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_EventSystems_PointerInputModule_MouseButtonEventData : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.PointerInputModule.MouseButtonEventData o;
 			o=new UnityEngine.EventSystems.PointerInputModule.MouseButtonEventData();
@@ -104,10 +104,11 @@ public class Lua_UnityEngine_EventSystems_PointerInputModule_MouseButtonEventDat
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.EventSystems.PointerInputModule.MouseButtonEventData");
+		addMember(l,ctor_s);
 		addMember(l,PressedThisFrame);
 		addMember(l,ReleasedThisFrame);
 		addMember(l,"buttonState",get_buttonState,set_buttonState,true);
 		addMember(l,"buttonData",get_buttonData,set_buttonData,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.EventSystems.PointerInputModule.MouseButtonEventData));
+		createTypeMetatable(l,null, typeof(UnityEngine.EventSystems.PointerInputModule.MouseButtonEventData));
 	}
 }

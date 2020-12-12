@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_CombineInstance : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.CombineInstance o;
 			o=new UnityEngine.CombineInstance();
@@ -175,11 +175,12 @@ public class Lua_UnityEngine_CombineInstance : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.CombineInstance");
+		addMember(l,ctor_s);
 		addMember(l,"mesh",get_mesh,set_mesh,true);
 		addMember(l,"subMeshIndex",get_subMeshIndex,set_subMeshIndex,true);
 		addMember(l,"transform",get_transform,set_transform,true);
 		addMember(l,"lightmapScaleOffset",get_lightmapScaleOffset,set_lightmapScaleOffset,true);
 		addMember(l,"realtimeLightmapScaleOffset",get_realtimeLightmapScaleOffset,set_realtimeLightmapScaleOffset,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.CombineInstance),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.CombineInstance),typeof(System.ValueType));
 	}
 }

@@ -98,17 +98,7 @@ namespace Generator
         internal static void GenerateArguments(Dsl.FunctionData data, StringBuilder sb, int indent, int start, FunctionOptions funcOpts, DslExpression.DslCalculator calculator)
         {
             s_CurSyntax = data;
-            GenerateArguments(data, sb, indent, start, string.Empty, funcOpts, calculator);
-        }
-        internal static void GenerateArguments(Dsl.FunctionData data, StringBuilder sb, int indent, int start, string sig, FunctionOptions funcOpts, DslExpression.DslCalculator calculator)
-        {
-            s_CurSyntax = data;
             string prestr = string.Empty;
-            if (!string.IsNullOrEmpty(sig)) {
-                sb.Append(prestr);
-                sb.AppendFormat("\"{0}\"", Escape(sig));
-                prestr = ", ";
-            }
             for (int ix = start; ix < data.Params.Count; ++ix) {
                 var param = data.Params[ix];
                 sb.Append(prestr);
@@ -160,12 +150,6 @@ namespace Generator
                     sb.AppendLine(line.Substring(ix));
                 }
             }
-        }
-        internal static bool IsSignature(string sig, string method)
-        {
-            int ix = sig.IndexOf(':');
-            int startIndex = ix + 1;
-            return startIndex == sig.IndexOf(method, startIndex);
         }
         internal static string CalcTypesString(Dsl.FunctionData cd)
         {
@@ -377,27 +361,6 @@ namespace Generator
             s_CachedFile2MergedFiles.TryAdd(file, null);
             return null;
         }
-        private static bool NoSignatureArg(string signature)
-        {
-            bool ret;
-            if (s_CachedNoSignatures.TryGetValue(signature, out ret)) {
-                return ret;
-            }
-            foreach (var info in s_NoSignatureArgInfos) {
-                foreach (var regex in info.Matches) {
-                    if (regex.IsMatch(signature)) {
-                        s_CachedNoSignatures.TryAdd(signature, true);
-                        return true;
-                    }
-                }
-            }
-            s_CachedNoSignatures.TryAdd(signature, false);
-            return false;
-        }
-        private static bool TryReplaceSignatureArg(string signature, out string target)
-        {
-            return s_ReplaceSignatureArgInfos.TryGetValue(signature, out target);
-        }
         private static bool IndexerByLualib(string objClassName, string typeArgs, string typeKinds, string obj, string className, string member, out int val)
         {
             string key = string.Format("{0}|{1}|{2}|{3}|{4}|{5}", objClassName, typeArgs, typeKinds, obj, className, member);
@@ -471,12 +434,9 @@ namespace Generator
 
             s_DontRequireInfos.Clear();
             s_FileMergeInfos.Clear();
-            s_NoSignatureArgInfos.Clear();
-            s_ReplaceSignatureArgInfos.Clear();
             s_IndexerByLualibInfos.Clear();
             s_AddPrologueOrEpilogueInfos.Clear();
             s_CachedFile2MergedFiles.Clear();
-            s_CachedNoSignatures.Clear();
             s_CachedIndexerByLualibInfos.Clear();
             s_CachedPrologueAndEpilogueInfos.Clear();
 
@@ -559,22 +519,6 @@ namespace Generator
                     }
                 }
                 s_FileMergeInfos.Add(cfg.MergedFileName, cfg);
-            }
-            else if (id == "nosignaturearg") {
-                var cfg = new NoSignatureArgInfo();
-                foreach (var s in f.Params) {
-                    var str = s.GetId();
-                    var regex = new Regex(str, RegexOptions.Compiled);
-                    cfg.Matches.Add(regex);
-                }
-                s_NoSignatureArgInfos.Add(cfg);
-            }
-            else if (id == "replacesignaturearg") {
-                for (int i = 0; i < f.GetParamNum(); i += 2) {
-                    var src = f.GetParamId(i);
-                    var target = f.GetParamId(i + 1);
-                    s_ReplaceSignatureArgInfos[src] = target;
-                }
             }
             else if (id == "indexerbylualib") {
                 var cfg = new IndexerByLualibInfo();
@@ -744,11 +688,6 @@ namespace Generator
             internal List<string> DefinedClasses = new List<string>();
         }
 
-        private class NoSignatureArgInfo
-        {
-            internal List<Regex> Matches = new List<Regex>();
-        }
-
         private enum IndexerTypeEnum : int
         {
             NotByLualib = 0,
@@ -795,12 +734,9 @@ namespace Generator
 
         private static List<DontRequireInfo> s_DontRequireInfos = new List<DontRequireInfo>();
         private static Dictionary<string, FileMergeInfo> s_FileMergeInfos = new Dictionary<string, FileMergeInfo>();
-        private static List<NoSignatureArgInfo> s_NoSignatureArgInfos = new List<NoSignatureArgInfo>();
-        private static Dictionary<string, string> s_ReplaceSignatureArgInfos = new Dictionary<string, string>();
         private static List<IndexerByLualibInfo> s_IndexerByLualibInfos = new List<IndexerByLualibInfo>();
         private static List<AddPrologueOrEpilogueInfo> s_AddPrologueOrEpilogueInfos = new List<AddPrologueOrEpilogueInfo>();
         private static ConcurrentDictionary<string, string> s_CachedFile2MergedFiles = new ConcurrentDictionary<string, string>();
-        private static ConcurrentDictionary<string, bool> s_CachedNoSignatures = new ConcurrentDictionary<string, bool>();
         private static ConcurrentDictionary<string, int> s_CachedIndexerByLualibInfos = new ConcurrentDictionary<string, int>();
         private static ConcurrentDictionary<string, PrologueAndEpilogueInfo> s_CachedPrologueAndEpilogueInfos = new ConcurrentDictionary<string, PrologueAndEpilogueInfo>();
         private static ConcurrentDictionary<string, string> s_FunctionsFromDslHook = new ConcurrentDictionary<string, string>();

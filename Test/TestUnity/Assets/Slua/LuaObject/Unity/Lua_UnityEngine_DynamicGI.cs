@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_DynamicGI : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.DynamicGI o;
 			o=new UnityEngine.DynamicGI();
@@ -178,6 +178,7 @@ public class Lua_UnityEngine_DynamicGI : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.DynamicGI");
+		addMember(l,ctor_s);
 		addMember(l,SetEmissive_s);
 		addMember(l,SetEnvironmentData_s);
 		addMember(l,UpdateEnvironment_s);
@@ -186,6 +187,6 @@ public class Lua_UnityEngine_DynamicGI : LuaObject {
 		addMember(l,"materialUpdateTimeSlice",get_materialUpdateTimeSlice,set_materialUpdateTimeSlice,false);
 		addMember(l,"synchronousMode",get_synchronousMode,set_synchronousMode,false);
 		addMember(l,"isConverged",get_isConverged,null,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.DynamicGI));
+		createTypeMetatable(l,null, typeof(UnityEngine.DynamicGI));
 	}
 }

@@ -5,12 +5,46 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.UI.ColorBlock o;
 			o=new UnityEngine.UI.ColorBlock();
 			pushValue(l,true);
 			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			UnityEngine.UI.ColorBlock self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__ColorBlock(IntPtr l) {
+		try {
+			UnityEngine.UI.ColorBlock self;
+			checkValueType(l,1,out self);
+			UnityEngine.UI.ColorBlock a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -252,6 +286,9 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.ColorBlock");
+		addMember(l,ctor_s);
+		addMember(l,Equals__Object);
+		addMember(l,Equals__ColorBlock);
 		addMember(l,op_Equality_s);
 		addMember(l,op_Inequality_s);
 		addMember(l,"normalColor",get_normalColor,set_normalColor,true);
@@ -261,6 +298,6 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 		addMember(l,"colorMultiplier",get_colorMultiplier,set_colorMultiplier,true);
 		addMember(l,"fadeDuration",get_fadeDuration,set_fadeDuration,true);
 		addMember(l,"defaultColorBlock",get_defaultColorBlock,null,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.UI.ColorBlock),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.UI.ColorBlock),typeof(System.ValueType));
 	}
 }

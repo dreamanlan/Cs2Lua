@@ -127,7 +127,7 @@ namespace RoslynTool.CsToDsl
                 string callerInfo = string.Empty;
                 if (null != callerSym) {
                     var callerClass = ClassInfo.GetFullName(callerSym.ContainingType);
-                    var callerMethod = SymbolTable.Instance.NameMangling(callerSym);
+                    var callerMethod = SymbolTable.Instance.NameCs2DslMangling(callerSym);
                     callerInfo = string.Format(" caller:{0}.{1}", callerClass, callerMethod);
                 }
 

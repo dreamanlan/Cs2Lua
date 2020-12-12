@@ -202,7 +202,10 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendFormat("{0}callinstance(this, {1}, \"{2}\"", GetIndentString(), ci.Key, manglingName2);
                 }
                 else if (init.ThisOrBaseKeyword.Text == "base") {
-                    CodeBuilder.AppendFormat("{0}callinstance(getinstance(SymbolKind.Field, this, {1}, \"base\"), {2}, \"{3}\"", GetIndentString(), ci.Key, ci.Key, manglingName2);
+                    if(myselfDefinedBaseClass)
+                        CodeBuilder.AppendFormat("{0}buildbaseobj(this, {1}, {2}, \"{3}\"", GetIndentString(), ci.Key, ci.BaseKey, manglingName2);
+                    else
+                        CodeBuilder.AppendFormat("{0}buildexternbaseobj(this, {1}, {2}, \"{3}\"", GetIndentString(), ci.Key, ci.BaseKey, manglingName2);
                 }
                 if (init.ArgumentList.Arguments.Count > 0) {
                     CodeBuilder.Append(", ");
@@ -222,7 +225,7 @@ namespace RoslynTool.CsToDsl
             else {
                 if (!string.IsNullOrEmpty(ci.BaseKey) && !ClassInfo.IsBaseInitializerCalled(node, m_Model) && myselfDefinedBaseClass) {
                     //如果当前构造没有调父类构造并且委托的其它构造也没有调父类构造，则调用默认构造。
-                    CodeBuilder.AppendFormat("{0}callinstance(getinstance(SymbolKind.Field, this, {1}, \"base\"), {2}, \"ctor\");", GetIndentString(), ci.Key, ci.Key);
+                    CodeBuilder.AppendFormat("{0}buildbaseobj(this, {1}, {2}, \"ctor\");", GetIndentString(), ci.Key, ci.BaseKey);
                     CodeBuilder.AppendLine();
                 }
                 CodeBuilder.AppendFormat("{0}callinstance(this, {1}, \"__ctor\");", GetIndentString(), ci.Key);

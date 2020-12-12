@@ -5,32 +5,33 @@ using System.Collections.Generic;
 public class Lua_System_Array : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int CopyTo(IntPtr l) {
+	static public int CopyTo__Array__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "CopyTo__Void__Array__Int32", argc, 2,typeof(System.Array),typeof(int))){
-				System.Array self=(System.Array)checkSelf(l);
-				System.Array a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				self.CopyTo(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "CopyTo__Void__Array__Int64", argc, 2,typeof(System.Array),typeof(System.Int64))){
-				System.Array self=(System.Array)checkSelf(l);
-				System.Array a1;
-				checkType(l,3,out a1);
-				System.Int64 a2;
-				checkType(l,4,out a2);
-				self.CopyTo(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			System.Array self=(System.Array)checkSelf(l);
+			System.Array a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			self.CopyTo(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CopyTo__Array__Int64(IntPtr l) {
+		try {
+			System.Array self=(System.Array)checkSelf(l);
+			System.Array a1;
+			checkType(l,2,out a1);
+			System.Int64 a2;
+			checkType(l,3,out a2);
+			self.CopyTo(a1,a2);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -68,95 +69,14 @@ public class Lua_System_Array : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetValue(IntPtr l) {
+	static public int GetValue__Int64(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetValue__Object__Int64__Int64__Int64", argc, 2,typeof(System.Int64),typeof(System.Int64),typeof(System.Int64))){
-				System.Array self=(System.Array)checkSelf(l);
-				System.Int64 a1;
-				checkType(l,3,out a1);
-				System.Int64 a2;
-				checkType(l,4,out a2);
-				System.Int64 a3;
-				checkType(l,5,out a3);
-				var ret=self.GetValue(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetValue__Object__Int32__Int32__Int32", argc, 2,typeof(int),typeof(int),typeof(int))){
-				System.Array self=(System.Array)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				var ret=self.GetValue(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetValue__Object__Int64__Int64", argc, 2,typeof(System.Int64),typeof(System.Int64))){
-				System.Array self=(System.Array)checkSelf(l);
-				System.Int64 a1;
-				checkType(l,3,out a1);
-				System.Int64 a2;
-				checkType(l,4,out a2);
-				var ret=self.GetValue(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetValue__Object__Int32__Int32", argc, 2,typeof(int),typeof(int))){
-				System.Array self=(System.Array)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				var ret=self.GetValue(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetValue__Object__Int64", argc, 2,typeof(System.Int64))){
-				System.Array self=(System.Array)checkSelf(l);
-				System.Int64 a1;
-				checkType(l,3,out a1);
-				var ret=self.GetValue(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetValue__Object__Arr_Int64", argc, 2,typeof(System.Int64[]))){
-				System.Array self=(System.Array)checkSelf(l);
-				System.Int64[] a1;
-				checkParams(l,3,out a1);
-				var ret=self.GetValue(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetValue__Object__Arr_Int32", argc, 2,typeof(System.Int32[]))){
-				System.Array self=(System.Array)checkSelf(l);
-				System.Int32[] a1;
-				checkParams(l,3,out a1);
-				var ret=self.GetValue(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetValue__Object__Int32", argc, 2,typeof(int))){
-				System.Array self=(System.Array)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				var ret=self.GetValue(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Array self=(System.Array)checkSelf(l);
+			System.Int64 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetValue(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -165,103 +85,284 @@ public class Lua_System_Array : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetValue(IntPtr l) {
+	static public int GetValue__A_Int64(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetValue__Void__Object__Int64__Int64__Int64", argc, 2,typeof(System.Object),typeof(System.Int64),typeof(System.Int64),typeof(System.Int64))){
-				System.Array self=(System.Array)checkSelf(l);
-				System.Object a1;
-				checkType(l,3,out a1);
-				System.Int64 a2;
-				checkType(l,4,out a2);
-				System.Int64 a3;
-				checkType(l,5,out a3);
-				System.Int64 a4;
-				checkType(l,6,out a4);
-				self.SetValue(a1,a2,a3,a4);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetValue__Void__Object__Int32__Int32__Int32", argc, 2,typeof(System.Object),typeof(int),typeof(int),typeof(int))){
-				System.Array self=(System.Array)checkSelf(l);
-				System.Object a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				System.Int32 a4;
-				checkType(l,6,out a4);
-				self.SetValue(a1,a2,a3,a4);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetValue__Void__Object__Int64__Int64", argc, 2,typeof(System.Object),typeof(System.Int64),typeof(System.Int64))){
-				System.Array self=(System.Array)checkSelf(l);
-				System.Object a1;
-				checkType(l,3,out a1);
-				System.Int64 a2;
-				checkType(l,4,out a2);
-				System.Int64 a3;
-				checkType(l,5,out a3);
-				self.SetValue(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetValue__Void__Object__Int32__Int32", argc, 2,typeof(System.Object),typeof(int),typeof(int))){
-				System.Array self=(System.Array)checkSelf(l);
-				System.Object a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				self.SetValue(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetValue__Void__Object__Int64", argc, 2,typeof(System.Object),typeof(System.Int64))){
-				System.Array self=(System.Array)checkSelf(l);
-				System.Object a1;
-				checkType(l,3,out a1);
-				System.Int64 a2;
-				checkType(l,4,out a2);
-				self.SetValue(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetValue__Void__Object__Arr_Int64", argc, 2,typeof(System.Object),typeof(System.Int64[]))){
-				System.Array self=(System.Array)checkSelf(l);
-				System.Object a1;
-				checkType(l,3,out a1);
-				System.Int64[] a2;
-				checkParams(l,4,out a2);
-				self.SetValue(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetValue__Void__Object__Arr_Int32", argc, 2,typeof(System.Object),typeof(System.Int32[]))){
-				System.Array self=(System.Array)checkSelf(l);
-				System.Object a1;
-				checkType(l,3,out a1);
-				System.Int32[] a2;
-				checkParams(l,4,out a2);
-				self.SetValue(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetValue__Void__Object__Int32", argc, 2,typeof(System.Object),typeof(int))){
-				System.Array self=(System.Array)checkSelf(l);
-				System.Object a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				self.SetValue(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Array self=(System.Array)checkSelf(l);
+			System.Int64[] a1;
+			checkParams(l,2,out a1);
+			var ret=self.GetValue(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetValue__A_Int32(IntPtr l) {
+		try {
+			System.Array self=(System.Array)checkSelf(l);
+			System.Int32[] a1;
+			checkParams(l,2,out a1);
+			var ret=self.GetValue(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetValue__Int32(IntPtr l) {
+		try {
+			System.Array self=(System.Array)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetValue(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetValue__Int64__Int64(IntPtr l) {
+		try {
+			System.Array self=(System.Array)checkSelf(l);
+			System.Int64 a1;
+			checkType(l,2,out a1);
+			System.Int64 a2;
+			checkType(l,3,out a2);
+			var ret=self.GetValue(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetValue__Int32__Int32(IntPtr l) {
+		try {
+			System.Array self=(System.Array)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			var ret=self.GetValue(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetValue__Int64__Int64__Int64(IntPtr l) {
+		try {
+			System.Array self=(System.Array)checkSelf(l);
+			System.Int64 a1;
+			checkType(l,2,out a1);
+			System.Int64 a2;
+			checkType(l,3,out a2);
+			System.Int64 a3;
+			checkType(l,4,out a3);
+			var ret=self.GetValue(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetValue__Int32__Int32__Int32(IntPtr l) {
+		try {
+			System.Array self=(System.Array)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			var ret=self.GetValue(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetValue__Object__Int64(IntPtr l) {
+		try {
+			System.Array self=(System.Array)checkSelf(l);
+			System.Object a1;
+			checkType(l,2,out a1);
+			System.Int64 a2;
+			checkType(l,3,out a2);
+			self.SetValue(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetValue__Object__A_Int64(IntPtr l) {
+		try {
+			System.Array self=(System.Array)checkSelf(l);
+			System.Object a1;
+			checkType(l,2,out a1);
+			System.Int64[] a2;
+			checkParams(l,3,out a2);
+			self.SetValue(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetValue__Object__A_Int32(IntPtr l) {
+		try {
+			System.Array self=(System.Array)checkSelf(l);
+			System.Object a1;
+			checkType(l,2,out a1);
+			System.Int32[] a2;
+			checkParams(l,3,out a2);
+			self.SetValue(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetValue__Object__Int32(IntPtr l) {
+		try {
+			System.Array self=(System.Array)checkSelf(l);
+			System.Object a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			self.SetValue(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetValue__Object__Int64__Int64(IntPtr l) {
+		try {
+			System.Array self=(System.Array)checkSelf(l);
+			System.Object a1;
+			checkType(l,2,out a1);
+			System.Int64 a2;
+			checkType(l,3,out a2);
+			System.Int64 a3;
+			checkType(l,4,out a3);
+			self.SetValue(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetValue__Object__Int32__Int32(IntPtr l) {
+		try {
+			System.Array self=(System.Array)checkSelf(l);
+			System.Object a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			self.SetValue(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetValue__Object__Int64__Int64__Int64(IntPtr l) {
+		try {
+			System.Array self=(System.Array)checkSelf(l);
+			System.Object a1;
+			checkType(l,2,out a1);
+			System.Int64 a2;
+			checkType(l,3,out a2);
+			System.Int64 a3;
+			checkType(l,4,out a3);
+			System.Int64 a4;
+			checkType(l,5,out a4);
+			self.SetValue(a1,a2,a3,a4);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetValue__Object__Int32__Int32__Int32(IntPtr l) {
+		try {
+			System.Array self=(System.Array)checkSelf(l);
+			System.Object a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			System.Int32 a4;
+			checkType(l,5,out a4);
+			self.SetValue(a1,a2,a3,a4);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetEnumerator(IntPtr l) {
+		try {
+			System.Array self=(System.Array)checkSelf(l);
+			var ret=self.GetEnumerator();
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -331,79 +432,15 @@ public class Lua_System_Array : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int CreateInstance_s(IntPtr l) {
+	static public int CreateInstance__Type__A_Int64_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				System.Type a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				System.Int32 a4;
-				checkType(l,5,out a4);
-				var ret=System.Array.CreateInstance(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "CreateInstance__Array__Type__Int32__Int32", argc, 1,typeof(System.Type),typeof(int),typeof(int))){
-				System.Type a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				var ret=System.Array.CreateInstance(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "CreateInstance__Array__Type__Arr_Int32__Arr_Int32", argc, 1,typeof(System.Type),typeof(System.Int32[]),typeof(System.Int32[]))){
-				System.Type a1;
-				checkType(l,2,out a1);
-				System.Int32[] a2;
-				checkArray(l,3,out a2);
-				System.Int32[] a3;
-				checkArray(l,4,out a3);
-				var ret=System.Array.CreateInstance(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "CreateInstance__Array__Type__Arr_Int64", argc, 1,typeof(System.Type),typeof(System.Int64[]))){
-				System.Type a1;
-				checkType(l,2,out a1);
-				System.Int64[] a2;
-				checkParams(l,3,out a2);
-				var ret=System.Array.CreateInstance(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "CreateInstance__Array__Type__Int32", argc, 1,typeof(System.Type),typeof(int))){
-				System.Type a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				var ret=System.Array.CreateInstance(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "CreateInstance__Array__Type__Arr_Int32", argc, 1,typeof(System.Type),typeof(System.Int32[]))){
-				System.Type a1;
-				checkType(l,2,out a1);
-				System.Int32[] a2;
-				checkParams(l,3,out a2);
-				var ret=System.Array.CreateInstance(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type a1;
+			checkType(l,1,out a1);
+			System.Int64[] a2;
+			checkParams(l,2,out a2);
+			var ret=System.Array.CreateInstance(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -412,63 +449,15 @@ public class Lua_System_Array : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int BinarySearch_s(IntPtr l) {
+	static public int CreateInstance__Type__Int32_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==6){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				System.Object a4;
-				checkType(l,5,out a4);
-				System.Collections.IComparer a5;
-				checkType(l,6,out a5);
-				var ret=System.Array.BinarySearch(a1,a2,a3,a4,a5);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==5){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				System.Object a4;
-				checkType(l,5,out a4);
-				var ret=System.Array.BinarySearch(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==4){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Object a2;
-				checkType(l,3,out a2);
-				System.Collections.IComparer a3;
-				checkType(l,4,out a3);
-				var ret=System.Array.BinarySearch(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Object a2;
-				checkType(l,3,out a2);
-				var ret=System.Array.BinarySearch(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			var ret=System.Array.CreateInstance(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -477,63 +466,15 @@ public class Lua_System_Array : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Copy_s(IntPtr l) {
+	static public int CreateInstance__Type__A_Int32_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Copy__Void__Array__Int64__Array__Int64__Int64", argc, 1,typeof(System.Array),typeof(System.Int64),typeof(System.Array),typeof(System.Int64),typeof(System.Int64))){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Int64 a2;
-				checkType(l,3,out a2);
-				System.Array a3;
-				checkType(l,4,out a3);
-				System.Int64 a4;
-				checkType(l,5,out a4);
-				System.Int64 a5;
-				checkType(l,6,out a5);
-				System.Array.Copy(a1,a2,a3,a4,a5);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "Copy__Void__Array__Int32__Array__Int32__Int32", argc, 1,typeof(System.Array),typeof(int),typeof(System.Array),typeof(int),typeof(int))){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.Array a3;
-				checkType(l,4,out a3);
-				System.Int32 a4;
-				checkType(l,5,out a4);
-				System.Int32 a5;
-				checkType(l,6,out a5);
-				System.Array.Copy(a1,a2,a3,a4,a5);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "Copy__Void__Array__Array__Int64", argc, 1,typeof(System.Array),typeof(System.Array),typeof(System.Int64))){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Array a2;
-				checkType(l,3,out a2);
-				System.Int64 a3;
-				checkType(l,4,out a3);
-				System.Array.Copy(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "Copy__Void__Array__Array__Int32", argc, 1,typeof(System.Array),typeof(System.Array),typeof(int))){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Array a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				System.Array.Copy(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type a1;
+			checkType(l,1,out a1);
+			System.Int32[] a2;
+			checkParams(l,2,out a2);
+			var ret=System.Array.CreateInstance(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -542,47 +483,17 @@ public class Lua_System_Array : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int IndexOf_s(IntPtr l) {
+	static public int CreateInstance__Type__Int32__Int32_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Object a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				System.Int32 a4;
-				checkType(l,5,out a4);
-				var ret=System.Array.IndexOf(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==4){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Object a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				var ret=System.Array.IndexOf(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Object a2;
-				checkType(l,3,out a2);
-				var ret=System.Array.IndexOf(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			var ret=System.Array.CreateInstance(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -591,47 +502,17 @@ public class Lua_System_Array : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int LastIndexOf_s(IntPtr l) {
+	static public int CreateInstance__Type__A_Int32__A_Int32_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Object a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				System.Int32 a4;
-				checkType(l,5,out a4);
-				var ret=System.Array.LastIndexOf(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==4){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Object a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				var ret=System.Array.LastIndexOf(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Object a2;
-				checkType(l,3,out a2);
-				var ret=System.Array.LastIndexOf(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type a1;
+			checkType(l,1,out a1);
+			System.Int32[] a2;
+			checkArray(l,2,out a2);
+			System.Int32[] a3;
+			checkArray(l,3,out a3);
+			var ret=System.Array.CreateInstance(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -640,29 +521,19 @@ public class Lua_System_Array : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Reverse_s(IntPtr l) {
+	static public int CreateInstance__Type__Int32__Int32__Int32_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				System.Array.Reverse(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Array.Reverse(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			System.Int32 a4;
+			checkType(l,4,out a4);
+			var ret=System.Array.CreateInstance(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -671,100 +542,449 @@ public class Lua_System_Array : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Sort_s(IntPtr l) {
+	static public int BinarySearch__Array__Object_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==6){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Array a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				System.Int32 a4;
-				checkType(l,5,out a4);
-				System.Collections.IComparer a5;
-				checkType(l,6,out a5);
-				System.Array.Sort(a1,a2,a3,a4,a5);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "Sort__Void__Array__Int32__Int32__IComparer", argc, 1,typeof(System.Array),typeof(int),typeof(int),typeof(System.Collections.IComparer))){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				System.Collections.IComparer a4;
-				checkType(l,5,out a4);
-				System.Array.Sort(a1,a2,a3,a4);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "Sort__Void__Array__Array__Int32__Int32", argc, 1,typeof(System.Array),typeof(System.Array),typeof(int),typeof(int))){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Array a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				System.Int32 a4;
-				checkType(l,5,out a4);
-				System.Array.Sort(a1,a2,a3,a4);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "Sort__Void__Array__Int32__Int32", argc, 1,typeof(System.Array),typeof(int),typeof(int))){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				System.Array.Sort(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "Sort__Void__Array__Array__IComparer", argc, 1,typeof(System.Array),typeof(System.Array),typeof(System.Collections.IComparer))){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Array a2;
-				checkType(l,3,out a2);
-				System.Collections.IComparer a3;
-				checkType(l,4,out a3);
-				System.Array.Sort(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "Sort__Void__Array__IComparer", argc, 1,typeof(System.Array),typeof(System.Collections.IComparer))){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Collections.IComparer a2;
-				checkType(l,3,out a2);
-				System.Array.Sort(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "Sort__Void__Array__Array", argc, 1,typeof(System.Array),typeof(System.Array))){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Array a2;
-				checkType(l,3,out a2);
-				System.Array.Sort(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				System.Array a1;
-				checkType(l,2,out a1);
-				System.Array.Sort(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Object a2;
+			checkType(l,2,out a2);
+			var ret=System.Array.BinarySearch(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int BinarySearch__Array__Object__IComparer_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Object a2;
+			checkType(l,2,out a2);
+			System.Collections.IComparer a3;
+			checkType(l,3,out a3);
+			var ret=System.Array.BinarySearch(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int BinarySearch__Array__Int32__Int32__Object_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			System.Object a4;
+			checkType(l,4,out a4);
+			var ret=System.Array.BinarySearch(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int BinarySearch__Array__Int32__Int32__Object__IComparer_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			System.Object a4;
+			checkType(l,4,out a4);
+			System.Collections.IComparer a5;
+			checkType(l,5,out a5);
+			var ret=System.Array.BinarySearch(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Copy__Array__Array__Int64_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Array a2;
+			checkType(l,2,out a2);
+			System.Int64 a3;
+			checkType(l,3,out a3);
+			System.Array.Copy(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Copy__Array__Array__Int32_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Array a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			System.Array.Copy(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Copy__Array__Int64__Array__Int64__Int64_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Int64 a2;
+			checkType(l,2,out a2);
+			System.Array a3;
+			checkType(l,3,out a3);
+			System.Int64 a4;
+			checkType(l,4,out a4);
+			System.Int64 a5;
+			checkType(l,5,out a5);
+			System.Array.Copy(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Copy__Array__Int32__Array__Int32__Int32_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Array a3;
+			checkType(l,3,out a3);
+			System.Int32 a4;
+			checkType(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
+			System.Array.Copy(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int IndexOf__Array__Object_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Object a2;
+			checkType(l,2,out a2);
+			var ret=System.Array.IndexOf(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int IndexOf__Array__Object__Int32_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Object a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			var ret=System.Array.IndexOf(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int IndexOf__Array__Object__Int32__Int32_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Object a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			System.Int32 a4;
+			checkType(l,4,out a4);
+			var ret=System.Array.IndexOf(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int LastIndexOf__Array__Object_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Object a2;
+			checkType(l,2,out a2);
+			var ret=System.Array.LastIndexOf(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int LastIndexOf__Array__Object__Int32_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Object a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			var ret=System.Array.LastIndexOf(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int LastIndexOf__Array__Object__Int32__Int32_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Object a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			System.Int32 a4;
+			checkType(l,4,out a4);
+			var ret=System.Array.LastIndexOf(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Reverse__Array_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Array.Reverse(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Reverse__Array__Int32__Int32_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			System.Array.Reverse(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Sort__Array_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Array.Sort(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Sort__Array__IComparer_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Collections.IComparer a2;
+			checkType(l,2,out a2);
+			System.Array.Sort(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Sort__Array__Array_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Array a2;
+			checkType(l,2,out a2);
+			System.Array.Sort(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Sort__Array__Int32__Int32_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			System.Array.Sort(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Sort__Array__Array__IComparer_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Array a2;
+			checkType(l,2,out a2);
+			System.Collections.IComparer a3;
+			checkType(l,3,out a3);
+			System.Array.Sort(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Sort__Array__Int32__Int32__IComparer_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			System.Collections.IComparer a4;
+			checkType(l,4,out a4);
+			System.Array.Sort(a1,a2,a3,a4);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Sort__Array__Array__Int32__Int32_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Array a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			System.Int32 a4;
+			checkType(l,4,out a4);
+			System.Array.Sort(a1,a2,a3,a4);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Sort__Array__Array__Int32__Int32__IComparer_s(IntPtr l) {
+		try {
+			System.Array a1;
+			checkType(l,1,out a1);
+			System.Array a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			System.Int32 a4;
+			checkType(l,4,out a4);
+			System.Collections.IComparer a5;
+			checkType(l,5,out a5);
+			System.Array.Sort(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -904,22 +1124,61 @@ public class Lua_System_Array : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"System.Array");
-		addMember(l,CopyTo);
+		addMember(l,CopyTo__Array__Int32);
+		addMember(l,CopyTo__Array__Int64);
 		addMember(l,Clone);
 		addMember(l,GetLongLength);
-		addMember(l,GetValue);
-		addMember(l,SetValue);
+		addMember(l,GetValue__Int64);
+		addMember(l,GetValue__A_Int64);
+		addMember(l,GetValue__A_Int32);
+		addMember(l,GetValue__Int32);
+		addMember(l,GetValue__Int64__Int64);
+		addMember(l,GetValue__Int32__Int32);
+		addMember(l,GetValue__Int64__Int64__Int64);
+		addMember(l,GetValue__Int32__Int32__Int32);
+		addMember(l,SetValue__Object__Int64);
+		addMember(l,SetValue__Object__A_Int64);
+		addMember(l,SetValue__Object__A_Int32);
+		addMember(l,SetValue__Object__Int32);
+		addMember(l,SetValue__Object__Int64__Int64);
+		addMember(l,SetValue__Object__Int32__Int32);
+		addMember(l,SetValue__Object__Int64__Int64__Int64);
+		addMember(l,SetValue__Object__Int32__Int32__Int32);
+		addMember(l,GetEnumerator);
 		addMember(l,GetLength);
 		addMember(l,GetLowerBound);
 		addMember(l,GetUpperBound);
 		addMember(l,Initialize);
-		addMember(l,CreateInstance_s);
-		addMember(l,BinarySearch_s);
-		addMember(l,Copy_s);
-		addMember(l,IndexOf_s);
-		addMember(l,LastIndexOf_s);
-		addMember(l,Reverse_s);
-		addMember(l,Sort_s);
+		addMember(l,CreateInstance__Type__A_Int64_s);
+		addMember(l,CreateInstance__Type__Int32_s);
+		addMember(l,CreateInstance__Type__A_Int32_s);
+		addMember(l,CreateInstance__Type__Int32__Int32_s);
+		addMember(l,CreateInstance__Type__A_Int32__A_Int32_s);
+		addMember(l,CreateInstance__Type__Int32__Int32__Int32_s);
+		addMember(l,BinarySearch__Array__Object_s);
+		addMember(l,BinarySearch__Array__Object__IComparer_s);
+		addMember(l,BinarySearch__Array__Int32__Int32__Object_s);
+		addMember(l,BinarySearch__Array__Int32__Int32__Object__IComparer_s);
+		addMember(l,Copy__Array__Array__Int64_s);
+		addMember(l,Copy__Array__Array__Int32_s);
+		addMember(l,Copy__Array__Int64__Array__Int64__Int64_s);
+		addMember(l,Copy__Array__Int32__Array__Int32__Int32_s);
+		addMember(l,IndexOf__Array__Object_s);
+		addMember(l,IndexOf__Array__Object__Int32_s);
+		addMember(l,IndexOf__Array__Object__Int32__Int32_s);
+		addMember(l,LastIndexOf__Array__Object_s);
+		addMember(l,LastIndexOf__Array__Object__Int32_s);
+		addMember(l,LastIndexOf__Array__Object__Int32__Int32_s);
+		addMember(l,Reverse__Array_s);
+		addMember(l,Reverse__Array__Int32__Int32_s);
+		addMember(l,Sort__Array_s);
+		addMember(l,Sort__Array__IComparer_s);
+		addMember(l,Sort__Array__Array_s);
+		addMember(l,Sort__Array__Int32__Int32_s);
+		addMember(l,Sort__Array__Array__IComparer_s);
+		addMember(l,Sort__Array__Int32__Int32__IComparer_s);
+		addMember(l,Sort__Array__Array__Int32__Int32_s);
+		addMember(l,Sort__Array__Array__Int32__Int32__IComparer_s);
 		addMember(l,Clear_s);
 		addMember(l,ConstrainedCopy_s);
 		addMember(l,"LongLength",get_LongLength,null,true);

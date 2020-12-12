@@ -5,27 +5,13 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Pose : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Pose o;
-			if(argc==3){
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				UnityEngine.Quaternion a2;
-				checkType(l,3,out a2);
-				o=new UnityEngine.Pose(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc<=2){
-				o=new UnityEngine.Pose();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.Pose();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -33,31 +19,116 @@ public class Lua_UnityEngine_Pose : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetTransformedBy(IntPtr l) {
+	static public int ctor__Vector3__Quaternion_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetTransformedBy__Pose__Pose", argc, 2,typeof(UnityEngine.Pose))){
-				UnityEngine.Pose self;
-				checkValueType(l,1,out self);
-				UnityEngine.Pose a1;
-				checkValueType(l,3,out a1);
-				var ret=self.GetTransformedBy(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetTransformedBy__Pose__Transform", argc, 2,typeof(UnityEngine.Transform))){
-				UnityEngine.Pose self;
-				checkValueType(l,1,out self);
-				UnityEngine.Transform a1;
-				checkType(l,3,out a1);
-				var ret=self.GetTransformedBy(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Pose o;
+			UnityEngine.Vector3 a1;
+			checkType(l,1,out a1);
+			UnityEngine.Quaternion a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.Pose(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static new public int ToString(IntPtr l) {
+		try {
+			UnityEngine.Pose self;
+			checkValueType(l,1,out self);
+			var ret=self.ToString();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ToString__String(IntPtr l) {
+		try {
+			UnityEngine.Pose self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.ToString(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTransformedBy__Pose(IntPtr l) {
+		try {
+			UnityEngine.Pose self;
+			checkValueType(l,1,out self);
+			UnityEngine.Pose a1;
+			checkValueType(l,2,out a1);
+			var ret=self.GetTransformedBy(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTransformedBy__Transform(IntPtr l) {
+		try {
+			UnityEngine.Pose self;
+			checkValueType(l,1,out self);
+			UnityEngine.Transform a1;
+			checkType(l,2,out a1);
+			var ret=self.GetTransformedBy(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			UnityEngine.Pose self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Pose(IntPtr l) {
+		try {
+			UnityEngine.Pose self;
+			checkValueType(l,1,out self);
+			UnityEngine.Pose a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -217,7 +288,14 @@ public class Lua_UnityEngine_Pose : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Pose");
-		addMember(l,GetTransformedBy);
+		addMember(l,ctor_s);
+		addMember(l,ctor__Vector3__Quaternion_s);
+		addMember(l,ToString);
+		addMember(l,ToString__String);
+		addMember(l,GetTransformedBy__Pose);
+		addMember(l,GetTransformedBy__Transform);
+		addMember(l,Equals__Object);
+		addMember(l,Equals__Pose);
 		addMember(l,op_Equality_s);
 		addMember(l,op_Inequality_s);
 		addMember(l,"position",get_position,set_position,true);
@@ -226,6 +304,6 @@ public class Lua_UnityEngine_Pose : LuaObject {
 		addMember(l,"right",get_right,null,true);
 		addMember(l,"up",get_up,null,true);
 		addMember(l,"identity",get_identity,null,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Pose),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Pose),typeof(System.ValueType));
 	}
 }

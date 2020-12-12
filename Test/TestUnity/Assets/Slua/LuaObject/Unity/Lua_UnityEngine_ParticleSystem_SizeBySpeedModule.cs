@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_SizeBySpeedModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.SizeBySpeedModule o;
 			o=new UnityEngine.ParticleSystem.SizeBySpeedModule();
@@ -361,6 +361,7 @@ public class Lua_UnityEngine_ParticleSystem_SizeBySpeedModule : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.SizeBySpeedModule");
+		addMember(l,ctor_s);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
 		addMember(l,"size",get_size,set_size,true);
 		addMember(l,"sizeMultiplier",get_sizeMultiplier,set_sizeMultiplier,true);
@@ -372,6 +373,6 @@ public class Lua_UnityEngine_ParticleSystem_SizeBySpeedModule : LuaObject {
 		addMember(l,"zMultiplier",get_zMultiplier,set_zMultiplier,true);
 		addMember(l,"separateAxes",get_separateAxes,set_separateAxes,true);
 		addMember(l,"range",get_range,set_range,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.SizeBySpeedModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.SizeBySpeedModule),typeof(System.ValueType));
 	}
 }

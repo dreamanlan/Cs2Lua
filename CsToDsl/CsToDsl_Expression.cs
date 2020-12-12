@@ -1190,7 +1190,7 @@ namespace RoslynTool.CsToDsl
                 bool isCollection = IsImplementationOfSys(typeSymInfo, "ICollection");
                 bool isExternal = !SymbolTable.Instance.IsCs2DslSymbol(typeSymInfo);
 
-                string ctor = NameMangling(sym);
+                string ctor = ii.GetMethodName();
                 string localName = string.Format("__newobject_{0}", srcPos);
                 if (ii.ReturnArgs.Count > 0) {
                     CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ ", localName);
@@ -1227,14 +1227,11 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendFormat("new{0}object({1}, ", isExternal ? "extern" : string.Empty, fullTypeName);
                     CsDslTranslater.OutputTypeArgsInfo(CodeBuilder, namedTypeSym, this);
                 }
-                if (!isExternal) {
-                    //外部对象函数名不会换名，所以没必要提供名字，总是ctor
-                    if (string.IsNullOrEmpty(ctor)) {
-                        CodeBuilder.Append(", null");
-                    }
-                    else {
-                        CodeBuilder.AppendFormat(", \"{0}\"", ctor);
-                    }
+                if (string.IsNullOrEmpty(ctor)) {
+                    CodeBuilder.Append(", null");
+                }
+                else {
+                    CodeBuilder.AppendFormat(", \"{0}\"", ctor);
                 }
                 if (null != node.Initializer) {
                     CodeBuilder.Append(", ");
@@ -1264,7 +1261,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(", null");
                     }
                 }
-                if (!string.IsNullOrEmpty(ii.ExternOverloadedMethodSignature) || ii.Args.Count + ii.DefaultValueArgs.Count + ii.GenericTypeArgs.Count > 0) {
+                if (ii.Args.Count + ii.DefaultValueArgs.Count + ii.GenericTypeArgs.Count > 0) {
                     CodeBuilder.Append(", ");
                 }
                 OutputArgumentList(ii, false, node);

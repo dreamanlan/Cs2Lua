@@ -5,41 +5,53 @@ using System.Collections.Generic;
 public class Lua_System_IO_BinaryReader : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor__Stream_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			System.IO.BinaryReader o;
-			if(argc==5){
-				System.IO.Stream a1;
-				checkType(l,3,out a1);
-				System.Text.Encoding a2;
-				checkType(l,4,out a2);
-				System.Boolean a3;
-				checkType(l,5,out a3);
-				o=new System.IO.BinaryReader(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==4){
-				System.IO.Stream a1;
-				checkType(l,3,out a1);
-				System.Text.Encoding a2;
-				checkType(l,4,out a2);
-				o=new System.IO.BinaryReader(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==3){
-				System.IO.Stream a1;
-				checkType(l,3,out a1);
-				o=new System.IO.BinaryReader(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			System.IO.Stream a1;
+			checkType(l,1,out a1);
+			o=new System.IO.BinaryReader(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Stream__Encoding_s(IntPtr l) {
+		try {
+			System.IO.BinaryReader o;
+			System.IO.Stream a1;
+			checkType(l,1,out a1);
+			System.Text.Encoding a2;
+			checkType(l,2,out a2);
+			o=new System.IO.BinaryReader(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Stream__Encoding__Boolean_s(IntPtr l) {
+		try {
+			System.IO.BinaryReader o;
+			System.IO.Stream a1;
+			checkType(l,1,out a1);
+			System.Text.Encoding a2;
+			checkType(l,2,out a2);
+			System.Boolean a3;
+			checkType(l,3,out a3);
+			o=new System.IO.BinaryReader(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -89,42 +101,50 @@ public class Lua_System_IO_BinaryReader : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int Read(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Read__Int32__Arr_Char__Int32__Int32", argc, 2,typeof(System.Char[]),typeof(int),typeof(int))){
-				System.IO.BinaryReader self=(System.IO.BinaryReader)checkSelf(l);
-				System.Char[] a1;
-				checkArray(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				var ret=self.Read(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Read__Int32__Arr_Byte__Int32__Int32", argc, 2,typeof(System.Byte[]),typeof(int),typeof(int))){
-				System.IO.BinaryReader self=(System.IO.BinaryReader)checkSelf(l);
-				System.Byte[] a1;
-				checkArray(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				var ret=self.Read(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.IO.BinaryReader self=(System.IO.BinaryReader)checkSelf(l);
-				var ret=self.Read();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.IO.BinaryReader self=(System.IO.BinaryReader)checkSelf(l);
+			var ret=self.Read();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Read__A_Char__Int32__Int32(IntPtr l) {
+		try {
+			System.IO.BinaryReader self=(System.IO.BinaryReader)checkSelf(l);
+			System.Char[] a1;
+			checkArray(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			var ret=self.Read(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Read__A_Byte__Int32__Int32(IntPtr l) {
+		try {
+			System.IO.BinaryReader self=(System.IO.BinaryReader)checkSelf(l);
+			System.Byte[] a1;
+			checkArray(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			var ret=self.Read(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -361,19 +381,6 @@ public class Lua_System_IO_BinaryReader : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Dispose_s(IntPtr l) {
-		try {
-			int argc = LuaDLL.lua_gettop(l);
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_BaseStream(IntPtr l) {
 		try {
 			System.IO.BinaryReader self=(System.IO.BinaryReader)checkSelf(l);
@@ -388,10 +395,15 @@ public class Lua_System_IO_BinaryReader : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"System.IO.BinaryReader");
+		addMember(l,ctor__Stream_s);
+		addMember(l,ctor__Stream__Encoding_s);
+		addMember(l,ctor__Stream__Encoding__Boolean_s);
 		addMember(l,Close);
 		addMember(l,Dispose);
 		addMember(l,PeekChar);
 		addMember(l,Read);
+		addMember(l,Read__A_Char__Int32__Int32);
+		addMember(l,Read__A_Byte__Int32__Int32);
 		addMember(l,ReadBoolean);
 		addMember(l,ReadByte);
 		addMember(l,ReadSByte);
@@ -408,8 +420,7 @@ public class Lua_System_IO_BinaryReader : LuaObject {
 		addMember(l,ReadString);
 		addMember(l,ReadChars);
 		addMember(l,ReadBytes);
-		addMember(l,Dispose_s);
 		addMember(l,"BaseStream",get_BaseStream,null,true);
-		createTypeMetatable(l,constructor, typeof(System.IO.BinaryReader));
+		createTypeMetatable(l,null, typeof(System.IO.BinaryReader));
 	}
 }

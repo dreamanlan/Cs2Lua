@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Application : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Application o;
 			o=new UnityEngine.Application();
@@ -21,22 +21,23 @@ public class Lua_UnityEngine_Application : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int Quit_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				UnityEngine.Application.Quit(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==1){
-				UnityEngine.Application.Quit();
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.Application.Quit();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Quit__Int32_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			UnityEngine.Application.Quit(a1);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -56,27 +57,28 @@ public class Lua_UnityEngine_Application : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int CanStreamedLevelBeLoaded_s(IntPtr l) {
+	static public int CanStreamedLevelBeLoaded__Int32_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "CanStreamedLevelBeLoaded__Boolean__Int32", argc, 1,typeof(int))){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				var ret=UnityEngine.Application.CanStreamedLevelBeLoaded(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "CanStreamedLevelBeLoaded__Boolean__String", argc, 1,typeof(string))){
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=UnityEngine.Application.CanStreamedLevelBeLoaded(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Application.CanStreamedLevelBeLoaded(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CanStreamedLevelBeLoaded__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Application.CanStreamedLevelBeLoaded(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -645,9 +647,12 @@ public class Lua_UnityEngine_Application : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Application");
+		addMember(l,ctor_s);
 		addMember(l,Quit_s);
+		addMember(l,Quit__Int32_s);
 		addMember(l,Unload_s);
-		addMember(l,CanStreamedLevelBeLoaded_s);
+		addMember(l,CanStreamedLevelBeLoaded__Int32_s);
+		addMember(l,CanStreamedLevelBeLoaded__String_s);
 		addMember(l,IsPlaying_s);
 		addMember(l,GetBuildTags_s);
 		addMember(l,SetBuildTags_s);
@@ -689,6 +694,6 @@ public class Lua_UnityEngine_Application : LuaObject {
 		addMember(l,"genuine",get_genuine,null,false);
 		addMember(l,"genuineCheckAvailable",get_genuineCheckAvailable,null,false);
 		addMember(l,"isEditor",get_isEditor,null,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Application));
+		createTypeMetatable(l,null, typeof(UnityEngine.Application));
 	}
 }

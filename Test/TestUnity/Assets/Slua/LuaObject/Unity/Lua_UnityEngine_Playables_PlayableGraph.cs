@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Playables_PlayableGraph : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Playables.PlayableGraph o;
 			o=new UnityEngine.Playables.PlayableGraph();
@@ -55,28 +55,29 @@ public class Lua_UnityEngine_Playables_PlayableGraph : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int Evaluate(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				UnityEngine.Playables.PlayableGraph self;
-				checkValueType(l,1,out self);
-				System.Single a1;
-				checkType(l,3,out a1);
-				self.Evaluate(a1);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.Playables.PlayableGraph self;
-				checkValueType(l,1,out self);
-				self.Evaluate();
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.Playables.PlayableGraph self;
+			checkValueType(l,1,out self);
+			self.Evaluate();
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Evaluate__Single(IntPtr l) {
+		try {
+			UnityEngine.Playables.PlayableGraph self;
+			checkValueType(l,1,out self);
+			System.Single a1;
+			checkType(l,2,out a1);
+			self.Evaluate(a1);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -300,23 +301,24 @@ public class Lua_UnityEngine_Playables_PlayableGraph : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int Create_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=UnityEngine.Playables.PlayableGraph.Create(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==1){
-				var ret=UnityEngine.Playables.PlayableGraph.Create();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			var ret=UnityEngine.Playables.PlayableGraph.Create();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Create__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Playables.PlayableGraph.Create(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -326,9 +328,11 @@ public class Lua_UnityEngine_Playables_PlayableGraph : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Playables.PlayableGraph");
+		addMember(l,ctor_s);
 		addMember(l,GetRootPlayable);
 		addMember(l,GetOutput);
 		addMember(l,Evaluate);
+		addMember(l,Evaluate__Single);
 		addMember(l,Destroy);
 		addMember(l,IsValid);
 		addMember(l,IsPlaying);
@@ -344,6 +348,7 @@ public class Lua_UnityEngine_Playables_PlayableGraph : LuaObject {
 		addMember(l,GetOutputCount);
 		addMember(l,GetEditorName);
 		addMember(l,Create_s);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Playables.PlayableGraph),typeof(System.ValueType));
+		addMember(l,Create__String_s);
+		createTypeMetatable(l,null, typeof(UnityEngine.Playables.PlayableGraph),typeof(System.ValueType));
 	}
 }

@@ -103,7 +103,11 @@ namespace RoslynTool.CsToDsl
                         name = name.Substring(1);
                     bool isOverloaded;
                     int count;
-                    if (memberCounts.TryGetValue(name, out count)) {
+                    if (msym.MethodKind == MethodKind.Constructor && msym.ContainingType.IsValueType) {
+                        //值类型构造都按重载处理，总是会生成一个默认构造
+                        isOverloaded = true;
+                    }
+                    else if (memberCounts.TryGetValue(name, out count)) {
                         isOverloaded = count > 1;
                     }
                     else {

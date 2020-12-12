@@ -81,6 +81,20 @@ public class Lua_UnityEngine_Events_UnityEventBase : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static new public int ToString(IntPtr l) {
+		try {
+			UnityEngine.Events.UnityEventBase self=(UnityEngine.Events.UnityEventBase)checkSelf(l);
+			var ret=self.ToString();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetValidMethodInfo_s(IntPtr l) {
 		try {
 			System.Object a1;
@@ -106,6 +120,7 @@ public class Lua_UnityEngine_Events_UnityEventBase : LuaObject {
 		addMember(l,GetPersistentMethodName);
 		addMember(l,SetPersistentListenerState);
 		addMember(l,RemoveAllListeners);
+		addMember(l,ToString);
 		addMember(l,GetValidMethodInfo_s);
 		createTypeMetatable(l,null, typeof(UnityEngine.Events.UnityEventBase));
 	}

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_UICharInfo : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.UICharInfo o;
 			o=new UnityEngine.UICharInfo();
@@ -82,8 +82,9 @@ public class Lua_UnityEngine_UICharInfo : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UICharInfo");
+		addMember(l,ctor_s);
 		addMember(l,"cursorPos",get_cursorPos,set_cursorPos,true);
 		addMember(l,"charWidth",get_charWidth,set_charWidth,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.UICharInfo),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.UICharInfo),typeof(System.ValueType));
 	}
 }

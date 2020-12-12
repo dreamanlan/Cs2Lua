@@ -1,5 +1,5 @@
-function new_color(funcInfo, class, typeargs, typekinds, initializer, ...)
-	local _,r,g,b,a = ...
+function new_color(funcInfo, class, typeargs, typekinds, ctor, initializer, ...)
+	local r,g,b,a = ...
 	local obj = UnityEngine.Color.New(r,g,b,a)
 	table.insert(funcInfo.c_list, obj)
 	if obj and initializer then
@@ -42,8 +42,8 @@ function get_unity_color_red(funcInfo, symKind, class, member)
 	return obj
 end
 
-function new_vector3(funcInfo, class, typeargs, typekinds, initializer, ...)
-	local _,x,y,z = ...
+function new_vector3(funcInfo, class, typeargs, typekinds, ctor, initializer, ...)
+	local x,y,z = ...
 	local obj = UnityEngine.Vector3.New(x,y,z)
 	table.insert(funcInfo.v3_list, obj)
 	if obj and initializer then

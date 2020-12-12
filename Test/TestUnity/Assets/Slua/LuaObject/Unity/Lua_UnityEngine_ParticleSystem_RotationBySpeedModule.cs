@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_RotationBySpeedModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.RotationBySpeedModule o;
 			o=new UnityEngine.ParticleSystem.RotationBySpeedModule();
@@ -299,6 +299,7 @@ public class Lua_UnityEngine_ParticleSystem_RotationBySpeedModule : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.RotationBySpeedModule");
+		addMember(l,ctor_s);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
 		addMember(l,"x",get_x,set_x,true);
 		addMember(l,"xMultiplier",get_xMultiplier,set_xMultiplier,true);
@@ -308,6 +309,6 @@ public class Lua_UnityEngine_ParticleSystem_RotationBySpeedModule : LuaObject {
 		addMember(l,"zMultiplier",get_zMultiplier,set_zMultiplier,true);
 		addMember(l,"separateAxes",get_separateAxes,set_separateAxes,true);
 		addMember(l,"range",get_range,set_range,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.RotationBySpeedModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.RotationBySpeedModule),typeof(System.ValueType));
 	}
 }

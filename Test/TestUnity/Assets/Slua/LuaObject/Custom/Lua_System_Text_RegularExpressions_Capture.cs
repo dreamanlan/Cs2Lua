@@ -5,6 +5,20 @@ using System.Collections.Generic;
 public class Lua_System_Text_RegularExpressions_Capture : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static new public int ToString(IntPtr l) {
+		try {
+			System.Text.RegularExpressions.Capture self=(System.Text.RegularExpressions.Capture)checkSelf(l);
+			var ret=self.ToString();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_Index(IntPtr l) {
 		try {
 			System.Text.RegularExpressions.Capture self=(System.Text.RegularExpressions.Capture)checkSelf(l);
@@ -45,6 +59,7 @@ public class Lua_System_Text_RegularExpressions_Capture : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"System.Text.RegularExpressions.Capture");
+		addMember(l,ToString);
 		addMember(l,"Index",get_Index,null,true);
 		addMember(l,"Length",get_Length,null,true);
 		addMember(l,"Value",get_Value,null,true);

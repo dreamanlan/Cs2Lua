@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ExposedPropertyResolver : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ExposedPropertyResolver o;
 			o=new UnityEngine.ExposedPropertyResolver();
@@ -20,6 +20,7 @@ public class Lua_UnityEngine_ExposedPropertyResolver : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ExposedPropertyResolver");
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ExposedPropertyResolver),typeof(System.ValueType));
+		addMember(l,ctor_s);
+		createTypeMetatable(l,null, typeof(UnityEngine.ExposedPropertyResolver),typeof(System.ValueType));
 	}
 }

@@ -5,27 +5,31 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Vector2Int : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Vector2Int o;
-			if(argc==3){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				o=new UnityEngine.Vector2Int(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc<=2){
-				o=new UnityEngine.Vector2Int();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.Vector2Int();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.Vector2Int o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.Vector2Int(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -81,6 +85,55 @@ public class Lua_UnityEngine_Vector2Int : LuaObject {
 			pushValue(l,true);
 			setBack(l,self);
 			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			UnityEngine.Vector2Int self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Vector2Int(IntPtr l) {
+		try {
+			UnityEngine.Vector2Int self;
+			checkValueType(l,1,out self);
+			UnityEngine.Vector2Int a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static new public int ToString(IntPtr l) {
+		try {
+			UnityEngine.Vector2Int self;
+			checkValueType(l,1,out self);
+			var ret=self.ToString();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -265,31 +318,32 @@ public class Lua_UnityEngine_Vector2Int : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Multiply_s(IntPtr l) {
+	static public int op_Multiply__Vector2Int__Vector2Int_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "op_Multiply__Vector2Int__Vector2Int__Vector2Int", argc, 1,typeof(UnityEngine.Vector2Int),typeof(UnityEngine.Vector2Int))){
-				UnityEngine.Vector2Int a1;
-				checkValueType(l,2,out a1);
-				UnityEngine.Vector2Int a2;
-				checkValueType(l,3,out a2);
-				var ret=a1*a2;
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "op_Multiply__Vector2Int__Vector2Int__Int32", argc, 1,typeof(UnityEngine.Vector2Int),typeof(int))){
-				UnityEngine.Vector2Int a1;
-				checkValueType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				var ret=a1*a2;
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Vector2Int a1;
+			checkValueType(l,1,out a1);
+			UnityEngine.Vector2Int a2;
+			checkValueType(l,2,out a2);
+			var ret=a1*a2;
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Multiply__Vector2Int__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.Vector2Int a1;
+			checkValueType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			var ret=a1*a2;
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -530,9 +584,14 @@ public class Lua_UnityEngine_Vector2Int : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Vector2Int");
+		addMember(l,ctor_s);
+		addMember(l,ctor__Int32__Int32_s);
 		addMember(l,Set);
 		addMember(l,Scale);
 		addMember(l,Clamp);
+		addMember(l,Equals__Object);
+		addMember(l,Equals__Vector2Int);
+		addMember(l,ToString);
 		addMember(l,Distance_s);
 		addMember(l,Min_s);
 		addMember(l,Max_s);
@@ -544,7 +603,8 @@ public class Lua_UnityEngine_Vector2Int : LuaObject {
 		addMember(l,RoundToInt_s);
 		addMember(l,op_Addition_s);
 		addMember(l,op_Subtraction_s);
-		addMember(l,op_Multiply_s);
+		addMember(l,op_Multiply__Vector2Int__Vector2Int_s);
+		addMember(l,op_Multiply__Vector2Int__Int32_s);
 		addMember(l,op_Equality_s);
 		addMember(l,op_Inequality_s);
 		addMember(l,getItem);
@@ -559,6 +619,6 @@ public class Lua_UnityEngine_Vector2Int : LuaObject {
 		addMember(l,"down",get_down,null,false);
 		addMember(l,"left",get_left,null,false);
 		addMember(l,"right",get_right,null,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Vector2Int),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Vector2Int),typeof(System.ValueType));
 	}
 }

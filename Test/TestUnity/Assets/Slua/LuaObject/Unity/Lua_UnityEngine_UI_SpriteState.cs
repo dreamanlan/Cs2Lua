@@ -5,12 +5,46 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_UI_SpriteState : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.UI.SpriteState o;
 			o=new UnityEngine.UI.SpriteState();
 			pushValue(l,true);
 			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__SpriteState(IntPtr l) {
+		try {
+			UnityEngine.UI.SpriteState self;
+			checkValueType(l,1,out self);
+			UnityEngine.UI.SpriteState a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			UnityEngine.UI.SpriteState self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -113,9 +147,12 @@ public class Lua_UnityEngine_UI_SpriteState : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.SpriteState");
+		addMember(l,ctor_s);
+		addMember(l,Equals__SpriteState);
+		addMember(l,Equals__Object);
 		addMember(l,"highlightedSprite",get_highlightedSprite,set_highlightedSprite,true);
 		addMember(l,"pressedSprite",get_pressedSprite,set_pressedSprite,true);
 		addMember(l,"disabledSprite",get_disabledSprite,set_disabledSprite,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.UI.SpriteState),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.UI.SpriteState),typeof(System.ValueType));
 	}
 }

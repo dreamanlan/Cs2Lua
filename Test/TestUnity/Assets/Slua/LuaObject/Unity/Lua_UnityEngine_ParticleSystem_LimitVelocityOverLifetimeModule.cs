@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_LimitVelocityOverLifetimeModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.LimitVelocityOverLifetimeModule o;
 			o=new UnityEngine.ParticleSystem.LimitVelocityOverLifetimeModule();
@@ -516,6 +516,7 @@ public class Lua_UnityEngine_ParticleSystem_LimitVelocityOverLifetimeModule : Lu
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.LimitVelocityOverLifetimeModule");
+		addMember(l,ctor_s);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
 		addMember(l,"limitX",get_limitX,set_limitX,true);
 		addMember(l,"limitXMultiplier",get_limitXMultiplier,set_limitXMultiplier,true);
@@ -532,6 +533,6 @@ public class Lua_UnityEngine_ParticleSystem_LimitVelocityOverLifetimeModule : Lu
 		addMember(l,"dragMultiplier",get_dragMultiplier,set_dragMultiplier,true);
 		addMember(l,"multiplyDragByParticleSize",get_multiplyDragByParticleSize,set_multiplyDragByParticleSize,true);
 		addMember(l,"multiplyDragByParticleVelocity",get_multiplyDragByParticleVelocity,set_multiplyDragByParticleVelocity,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.LimitVelocityOverLifetimeModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.LimitVelocityOverLifetimeModule),typeof(System.ValueType));
 	}
 }

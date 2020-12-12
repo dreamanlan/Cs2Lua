@@ -7,28 +7,29 @@ public class Lua_UnityEngine_Display : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int Activate(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				UnityEngine.Display self=(UnityEngine.Display)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				self.Activate(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.Display self=(UnityEngine.Display)checkSelf(l);
-				self.Activate();
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.Display self=(UnityEngine.Display)checkSelf(l);
+			self.Activate();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Activate__Int32__Int32__Int32(IntPtr l) {
+		try {
+			UnityEngine.Display self=(UnityEngine.Display)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			self.Activate(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -220,6 +221,7 @@ public class Lua_UnityEngine_Display : LuaObject {
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Display");
 		addMember(l,Activate);
+		addMember(l,Activate__Int32__Int32__Int32);
 		addMember(l,SetParams);
 		addMember(l,SetRenderingResolution);
 		addMember(l,RelativeMouseAt_s);

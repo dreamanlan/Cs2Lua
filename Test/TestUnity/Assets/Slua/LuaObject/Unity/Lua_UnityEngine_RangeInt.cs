@@ -5,27 +5,31 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_RangeInt : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.RangeInt o;
-			if(argc==3){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				o=new UnityEngine.RangeInt(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc<=2){
-				o=new UnityEngine.RangeInt();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.RangeInt();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.RangeInt o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.RangeInt(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -110,9 +114,11 @@ public class Lua_UnityEngine_RangeInt : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.RangeInt");
+		addMember(l,ctor_s);
+		addMember(l,ctor__Int32__Int32_s);
 		addMember(l,"start",get_start,set_start,true);
 		addMember(l,"length",get_length,set_length,true);
 		addMember(l,"end",get_end,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.RangeInt),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.RangeInt),typeof(System.ValueType));
 	}
 }

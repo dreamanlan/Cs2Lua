@@ -5,27 +5,31 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Ray : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Ray o;
-			if(argc==3){
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				UnityEngine.Vector3 a2;
-				checkType(l,3,out a2);
-				o=new UnityEngine.Ray(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc<=2){
-				o=new UnityEngine.Ray();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.Ray();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Vector3__Vector3_s(IntPtr l) {
+		try {
+			UnityEngine.Ray o;
+			UnityEngine.Vector3 a1;
+			checkType(l,1,out a1);
+			UnityEngine.Vector3 a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.Ray(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -40,6 +44,38 @@ public class Lua_UnityEngine_Ray : LuaObject {
 			System.Single a1;
 			checkType(l,2,out a1);
 			var ret=self.GetPoint(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static new public int ToString(IntPtr l) {
+		try {
+			UnityEngine.Ray self;
+			checkValueType(l,1,out self);
+			var ret=self.ToString();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ToString__String(IntPtr l) {
+		try {
+			UnityEngine.Ray self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.ToString(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -113,9 +149,13 @@ public class Lua_UnityEngine_Ray : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Ray");
+		addMember(l,ctor_s);
+		addMember(l,ctor__Vector3__Vector3_s);
 		addMember(l,GetPoint);
+		addMember(l,ToString);
+		addMember(l,ToString__String);
 		addMember(l,"origin",get_origin,set_origin,true);
 		addMember(l,"direction",get_direction,set_direction,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Ray),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Ray),typeof(System.ValueType));
 	}
 }

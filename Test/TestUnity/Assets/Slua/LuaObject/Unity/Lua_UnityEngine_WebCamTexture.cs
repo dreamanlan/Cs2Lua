@@ -5,73 +5,109 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_WebCamTexture : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.WebCamTexture o;
-			if(argc==6){
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				System.Int32 a4;
-				checkType(l,6,out a4);
-				o=new UnityEngine.WebCamTexture(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__String__Int32__Int32", argc, 2,typeof(string),typeof(int),typeof(int))){
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				o=new UnityEngine.WebCamTexture(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Int32__Int32__Int32", argc, 2,typeof(int),typeof(int),typeof(int))){
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				o=new UnityEngine.WebCamTexture(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==4){
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				o=new UnityEngine.WebCamTexture(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==3){
-				System.String a1;
-				checkType(l,3,out a1);
-				o=new UnityEngine.WebCamTexture(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==2){
-				o=new UnityEngine.WebCamTexture();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.WebCamTexture();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__String_s(IntPtr l) {
+		try {
+			UnityEngine.WebCamTexture o;
+			System.String a1;
+			checkType(l,1,out a1);
+			o=new UnityEngine.WebCamTexture(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.WebCamTexture o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.WebCamTexture(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__String__Int32__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.WebCamTexture o;
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			o=new UnityEngine.WebCamTexture(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.WebCamTexture o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			o=new UnityEngine.WebCamTexture(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__String__Int32__Int32__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.WebCamTexture o;
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			System.Int32 a4;
+			checkType(l,4,out a4);
+			o=new UnityEngine.WebCamTexture(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -138,31 +174,32 @@ public class Lua_UnityEngine_WebCamTexture : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int GetPixels(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==6){
-				UnityEngine.WebCamTexture self=(UnityEngine.WebCamTexture)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				System.Int32 a4;
-				checkType(l,6,out a4);
-				var ret=self.GetPixels(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				UnityEngine.WebCamTexture self=(UnityEngine.WebCamTexture)checkSelf(l);
-				var ret=self.GetPixels();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.WebCamTexture self=(UnityEngine.WebCamTexture)checkSelf(l);
+			var ret=self.GetPixels();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetPixels__Int32__Int32__Int32__Int32(IntPtr l) {
+		try {
+			UnityEngine.WebCamTexture self=(UnityEngine.WebCamTexture)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			System.Int32 a4;
+			checkType(l,5,out a4);
+			var ret=self.GetPixels(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -173,25 +210,26 @@ public class Lua_UnityEngine_WebCamTexture : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int GetPixels32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				UnityEngine.WebCamTexture self=(UnityEngine.WebCamTexture)checkSelf(l);
-				UnityEngine.Color32[] a1;
-				checkArray(l,3,out a1);
-				var ret=self.GetPixels32(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				UnityEngine.WebCamTexture self=(UnityEngine.WebCamTexture)checkSelf(l);
-				var ret=self.GetPixels32();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.WebCamTexture self=(UnityEngine.WebCamTexture)checkSelf(l);
+			var ret=self.GetPixels32();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetPixels32__A_Color32(IntPtr l) {
+		try {
+			UnityEngine.WebCamTexture self=(UnityEngine.WebCamTexture)checkSelf(l);
+			UnityEngine.Color32[] a1;
+			checkArray(l,2,out a1);
+			var ret=self.GetPixels32(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -418,12 +456,20 @@ public class Lua_UnityEngine_WebCamTexture : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.WebCamTexture");
+		addMember(l,ctor_s);
+		addMember(l,ctor__String_s);
+		addMember(l,ctor__Int32__Int32_s);
+		addMember(l,ctor__String__Int32__Int32_s);
+		addMember(l,ctor__Int32__Int32__Int32_s);
+		addMember(l,ctor__String__Int32__Int32__Int32_s);
 		addMember(l,Play);
 		addMember(l,Pause);
 		addMember(l,Stop);
 		addMember(l,GetPixel);
 		addMember(l,GetPixels);
+		addMember(l,GetPixels__Int32__Int32__Int32__Int32);
 		addMember(l,GetPixels32);
+		addMember(l,GetPixels32__A_Color32);
 		addMember(l,"isPlaying",get_isPlaying,null,true);
 		addMember(l,"deviceName",get_deviceName,set_deviceName,true);
 		addMember(l,"requestedFPS",get_requestedFPS,set_requestedFPS,true);
@@ -435,6 +481,6 @@ public class Lua_UnityEngine_WebCamTexture : LuaObject {
 		addMember(l,"didUpdateThisFrame",get_didUpdateThisFrame,null,true);
 		addMember(l,"autoFocusPoint",get_autoFocusPoint,set_autoFocusPoint,true);
 		addMember(l,"isDepth",get_isDepth,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.WebCamTexture),typeof(UnityEngine.Texture));
+		createTypeMetatable(l,null, typeof(UnityEngine.WebCamTexture),typeof(UnityEngine.Texture));
 	}
 }

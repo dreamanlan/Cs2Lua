@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_EventSystems_EventTrigger_Entry : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.EventTrigger.Entry o;
 			o=new UnityEngine.EventSystems.EventTrigger.Entry();
@@ -76,8 +76,9 @@ public class Lua_UnityEngine_EventSystems_EventTrigger_Entry : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.EventSystems.EventTrigger.Entry");
+		addMember(l,ctor_s);
 		addMember(l,"eventID",get_eventID,set_eventID,true);
 		addMember(l,"callback",get_callback,set_callback,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.EventSystems.EventTrigger.Entry));
+		createTypeMetatable(l,null, typeof(UnityEngine.EventSystems.EventTrigger.Entry));
 	}
 }

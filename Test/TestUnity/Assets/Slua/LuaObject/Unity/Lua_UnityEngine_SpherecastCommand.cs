@@ -5,33 +5,37 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_SpherecastCommand : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.SpherecastCommand o;
-			if(argc==6){
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				UnityEngine.Vector3 a3;
-				checkType(l,4,out a3);
-				System.Single a4;
-				checkType(l,5,out a4);
-				System.Int32 a5;
-				checkType(l,6,out a5);
-				o=new UnityEngine.SpherecastCommand(a1,a2,a3,a4,a5);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc<=2){
-				o=new UnityEngine.SpherecastCommand();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.SpherecastCommand();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Vector3__Single__Vector3__Single__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.SpherecastCommand o;
+			UnityEngine.Vector3 a1;
+			checkType(l,1,out a1);
+			System.Single a2;
+			checkType(l,2,out a2);
+			UnityEngine.Vector3 a3;
+			checkType(l,3,out a3);
+			System.Single a4;
+			checkType(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
+			o=new UnityEngine.SpherecastCommand(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -216,12 +220,14 @@ public class Lua_UnityEngine_SpherecastCommand : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.SpherecastCommand");
+		addMember(l,ctor_s);
+		addMember(l,ctor__Vector3__Single__Vector3__Single__Int32_s);
 		addMember(l,ScheduleBatch_s);
 		addMember(l,"origin",get_origin,set_origin,true);
 		addMember(l,"radius",get_radius,set_radius,true);
 		addMember(l,"direction",get_direction,set_direction,true);
 		addMember(l,"distance",get_distance,set_distance,true);
 		addMember(l,"layerMask",get_layerMask,set_layerMask,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.SpherecastCommand),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.SpherecastCommand),typeof(System.ValueType));
 	}
 }

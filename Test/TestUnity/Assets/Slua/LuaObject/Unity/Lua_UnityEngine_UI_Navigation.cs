@@ -5,12 +5,46 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_UI_Navigation : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.UI.Navigation o;
 			o=new UnityEngine.UI.Navigation();
 			pushValue(l,true);
 			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Navigation(IntPtr l) {
+		try {
+			UnityEngine.UI.Navigation self;
+			checkValueType(l,1,out self);
+			UnityEngine.UI.Navigation a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			UnityEngine.UI.Navigation self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -187,12 +221,15 @@ public class Lua_UnityEngine_UI_Navigation : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.Navigation");
+		addMember(l,ctor_s);
+		addMember(l,Equals__Navigation);
+		addMember(l,Equals__Object);
 		addMember(l,"mode",get_mode,set_mode,true);
 		addMember(l,"selectOnUp",get_selectOnUp,set_selectOnUp,true);
 		addMember(l,"selectOnDown",get_selectOnDown,set_selectOnDown,true);
 		addMember(l,"selectOnLeft",get_selectOnLeft,set_selectOnLeft,true);
 		addMember(l,"selectOnRight",get_selectOnRight,set_selectOnRight,true);
 		addMember(l,"defaultNavigation",get_defaultNavigation,null,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.UI.Navigation),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.UI.Navigation),typeof(System.ValueType));
 	}
 }

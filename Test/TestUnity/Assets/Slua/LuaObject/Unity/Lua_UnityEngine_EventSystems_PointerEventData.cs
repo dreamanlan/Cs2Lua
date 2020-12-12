@@ -5,11 +5,11 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_EventSystems_PointerEventData : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.PointerEventData o;
 			UnityEngine.EventSystems.EventSystem a1;
-			checkType(l,2,out a1);
+			checkType(l,1,out a1);
 			o=new UnityEngine.EventSystems.PointerEventData(a1);
 			pushValue(l,true);
 			pushValue(l,o);
@@ -39,6 +39,20 @@ public class Lua_UnityEngine_EventSystems_PointerEventData : LuaObject {
 		try {
 			UnityEngine.EventSystems.PointerEventData self=(UnityEngine.EventSystems.PointerEventData)checkSelf(l);
 			var ret=self.IsScrolling();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static new public int ToString(IntPtr l) {
+		try {
+			UnityEngine.EventSystems.PointerEventData self=(UnityEngine.EventSystems.PointerEventData)checkSelf(l);
+			var ret=self.ToString();
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -593,8 +607,10 @@ public class Lua_UnityEngine_EventSystems_PointerEventData : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.EventSystems.PointerEventData");
+		addMember(l,ctor_s);
 		addMember(l,IsPointerMoving);
 		addMember(l,IsScrolling);
+		addMember(l,ToString);
 		addMember(l,"hovered",get_hovered,set_hovered,true);
 		addMember(l,"pointerEnter",get_pointerEnter,set_pointerEnter,true);
 		addMember(l,"lastPress",get_lastPress,null,true);
@@ -616,6 +632,6 @@ public class Lua_UnityEngine_EventSystems_PointerEventData : LuaObject {
 		addMember(l,"enterEventCamera",get_enterEventCamera,null,true);
 		addMember(l,"pressEventCamera",get_pressEventCamera,null,true);
 		addMember(l,"pointerPress",get_pointerPress,set_pointerPress,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.EventSystems.PointerEventData),typeof(UnityEngine.EventSystems.BaseEventData));
+		createTypeMetatable(l,null, typeof(UnityEngine.EventSystems.PointerEventData),typeof(UnityEngine.EventSystems.BaseEventData));
 	}
 }

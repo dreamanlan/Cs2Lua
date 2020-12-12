@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_LocationService : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.LocationService o;
 			o=new UnityEngine.LocationService();
@@ -21,34 +21,42 @@ public class Lua_UnityEngine_LocationService : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int Start(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.LocationService self=(UnityEngine.LocationService)checkSelf(l);
-				System.Single a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				self.Start(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.LocationService self=(UnityEngine.LocationService)checkSelf(l);
-				System.Single a1;
-				checkType(l,3,out a1);
-				self.Start(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.LocationService self=(UnityEngine.LocationService)checkSelf(l);
-				self.Start();
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.LocationService self=(UnityEngine.LocationService)checkSelf(l);
+			self.Start();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Start__Single(IntPtr l) {
+		try {
+			UnityEngine.LocationService self=(UnityEngine.LocationService)checkSelf(l);
+			System.Single a1;
+			checkType(l,2,out a1);
+			self.Start(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Start__Single__Single(IntPtr l) {
+		try {
+			UnityEngine.LocationService self=(UnityEngine.LocationService)checkSelf(l);
+			System.Single a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			self.Start(a1,a2);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -109,11 +117,14 @@ public class Lua_UnityEngine_LocationService : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.LocationService");
+		addMember(l,ctor_s);
 		addMember(l,Start);
+		addMember(l,Start__Single);
+		addMember(l,Start__Single__Single);
 		addMember(l,Stop);
 		addMember(l,"isEnabledByUser",get_isEnabledByUser,null,true);
 		addMember(l,"status",get_status,null,true);
 		addMember(l,"lastData",get_lastData,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.LocationService));
+		createTypeMetatable(l,null, typeof(UnityEngine.LocationService));
 	}
 }

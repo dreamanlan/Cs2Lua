@@ -40,23 +40,23 @@ ZipInputStream = {
 				local __cs2lua_func_info = luainitialize();
 				this:__ctor();
 				local os;
-				os = newobject(ZipOutputStream, nil, nil, "ctor__System_IO_MemoryStream", nil, newexternobject(System.IO.MemoryStream, nil, nil, nil, luastrtocsstr("System.IO.MemoryStream:ctor__Void")));
+				(= os);
 				local os2;
 				os2 = typeas(objecttolua(this:Test(luatoobject(SymbolKind.Method, false, "ZipInputStream:Test", os), luatoobject(SymbolKind.Method, false, "ZipInputStream:Test", os), luatoobject(SymbolKind.Method, false, "ZipInputStream:Test", os))), ZipOutputStream, TypeKind.Class);
 				local intList;
 				intList = newlist(IntList, nil, nil, "ctor", {});
 				local a;
-				a = newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, {}, luastrtocsstr("System.Collections.Generic.List_T:ctor__Void"));
+				a = newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, "ctor__Void", {});
 				local aa;
-				aa = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.String, UnityEngine.Component}, {TypeKind.Class, TypeKind.Class}, {}, luastrtocsstr("System.Collections.Generic.Dictionary_TKey_TValue:ctor__Void"));
+				aa = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.String, UnityEngine.Component}, {TypeKind.Class, TypeKind.Class}, "ctor__Void", {});
 				TestExtension.Test(intList, UnityEngine.ParticleSystem, nil);
 				intList:AddRange(a);
 				local gobj;
 				gobj = nil;
 				local r;
-				r = UnityEngine.Object.Instantiate(luastrtocsstr("UnityEngine.Object:Instantiate__Object__Object"), gobj);
+				r = UnityEngine.Object.Instantiate__Object__Object(gobj);
 				local b;
-				b = this:Test2(124, newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, {}, luastrtocsstr("System.Collections.Generic.List_T:ctor__Void")));
+				b = this:Test2(124, newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, "ctor__Void", {}));
 				local o;
 				o = luatoobject(SymbolKind.Local, false, "o", wraparray({1, 2}, nil, System.Int32, TypeKind.Struct));
 				local arr;
@@ -92,7 +92,7 @@ ZipInputStream = {
 				local args;
 				args = wrapparams({...}, System.Object, TypeKind.Class);
 				local v3;
-				v3 = new_vector3(__cs2lua_func_info, UnityEngine.Vector3, nil, nil, nil, luastrtocsstr("UnityEngine.Vector3:ctor__Void__Single__Single__Single"), 1, 2, 3);
+				v3 = new_vector3(__cs2lua_func_info, UnityEngine.Vector3, nil, nil, "ctor__Void__Single__Single__Single", nil, 1, 2, 3);
 				__method_ret_62_4_66_5 = nil;
 				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 				return __method_ret_62_4_66_5;
@@ -110,7 +110,7 @@ ZipInputStream = {
 				end;
 			until true;
 				if __try_ret_69_8_77_9 then 
-					UnityEngine.Debug.Log(luastrtocsstr("UnityEngine.Debug:Log__Void__Object"), luastrtocsstr("finally"));
+					UnityEngine.Debug.Log__Void__Object(luastrtocsstr("finally"));
 					if __try_retval_69_8_77_9 then 
 						if (__try_retval_69_8_77_9 == 1) then 
 							return __method_ret_67_4_79_5;
@@ -121,10 +121,10 @@ ZipInputStream = {
 				__catch_handled_69_8_77_9 = false;
 				__catch_retval_69_8_77_9 = luacatch(__catch_handled_69_8_77_9, __try_retval_69_8_77_9, (not __try_ret_69_8_77_9) and function(e)
 					__catch_handled_69_8_77_9 = true;
-					UnityEngine.Debug.LogFormat(luastrtocsstr("UnityEngine.Debug:LogFormat__Void__String__Arr_Object"), luastrtocsstr("{0}\n{1}"), e.Message, e.StackTrace);
+					UnityEngine.Debug.LogFormat__Void__String__A_Object(luastrtocsstr("{0}\n{1}"), e.Message, e.StackTrace);
 				end);
 				if (not __try_ret_69_8_77_9) then 
-					UnityEngine.Debug.Log(luastrtocsstr("UnityEngine.Debug:Log__Void__Object"), luastrtocsstr("finally"));
+					UnityEngine.Debug.Log__Void__Object(luastrtocsstr("finally"));
 				end;
 				__method_ret_67_4_79_5 = nil;
 				return __method_ret_67_4_79_5;

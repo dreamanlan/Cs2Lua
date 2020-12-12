@@ -5,30 +5,31 @@ using System.Collections.Generic;
 public class Lua_System_IO_Stream : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int CopyTo(IntPtr l) {
+	static public int CopyTo__Stream(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				System.IO.Stream self=(System.IO.Stream)checkSelf(l);
-				System.IO.Stream a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				self.CopyTo(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				System.IO.Stream self=(System.IO.Stream)checkSelf(l);
-				System.IO.Stream a1;
-				checkType(l,3,out a1);
-				self.CopyTo(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			System.IO.Stream self=(System.IO.Stream)checkSelf(l);
+			System.IO.Stream a1;
+			checkType(l,2,out a1);
+			self.CopyTo(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CopyTo__Stream__Int32(IntPtr l) {
+		try {
+			System.IO.Stream self=(System.IO.Stream)checkSelf(l);
+			System.IO.Stream a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			self.CopyTo(a1,a2);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -183,19 +184,6 @@ public class Lua_System_IO_Stream : LuaObject {
 			var ret=System.IO.Stream.Synchronized(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Dispose_s(IntPtr l) {
-		try {
-			int argc = LuaDLL.lua_gettop(l);
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
 			return 2;
 		}
 		catch(Exception e) {
@@ -366,7 +354,8 @@ public class Lua_System_IO_Stream : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"System.IO.Stream");
-		addMember(l,CopyTo);
+		addMember(l,CopyTo__Stream);
+		addMember(l,CopyTo__Stream__Int32);
 		addMember(l,Close);
 		addMember(l,Dispose);
 		addMember(l,Flush);
@@ -377,7 +366,6 @@ public class Lua_System_IO_Stream : LuaObject {
 		addMember(l,Write);
 		addMember(l,WriteByte);
 		addMember(l,Synchronized_s);
-		addMember(l,Dispose_s);
 		addMember(l,"Null",get_Null,null,false);
 		addMember(l,"CanRead",get_CanRead,null,true);
 		addMember(l,"CanSeek",get_CanSeek,null,true);

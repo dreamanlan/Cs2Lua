@@ -5,65 +5,101 @@ using System.Collections.Generic;
 public class Lua_System_Collections_Hashtable : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			System.Collections.Hashtable o;
-			if(matchType(l, "ctor__Void__Int32__Single__IEqualityComparer", argc, 2,typeof(int),typeof(float),typeof(System.Collections.IEqualityComparer))){
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				System.Collections.IEqualityComparer a3;
-				checkType(l,5,out a3);
-				o=new System.Collections.Hashtable(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Int32__IEqualityComparer", argc, 2,typeof(int),typeof(System.Collections.IEqualityComparer))){
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Collections.IEqualityComparer a2;
-				checkType(l,4,out a2);
-				o=new System.Collections.Hashtable(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Int32__Single", argc, 2,typeof(int),typeof(float))){
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				o=new System.Collections.Hashtable(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Int32", argc, 2,typeof(int))){
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				o=new System.Collections.Hashtable(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__IEqualityComparer", argc, 2,typeof(System.Collections.IEqualityComparer))){
-				System.Collections.IEqualityComparer a1;
-				checkType(l,3,out a1);
-				o=new System.Collections.Hashtable(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==2){
-				o=new System.Collections.Hashtable();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new System.Collections.Hashtable();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32_s(IntPtr l) {
+		try {
+			System.Collections.Hashtable o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			o=new System.Collections.Hashtable(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__IEqualityComparer_s(IntPtr l) {
+		try {
+			System.Collections.Hashtable o;
+			System.Collections.IEqualityComparer a1;
+			checkType(l,1,out a1);
+			o=new System.Collections.Hashtable(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__IEqualityComparer_s(IntPtr l) {
+		try {
+			System.Collections.Hashtable o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Collections.IEqualityComparer a2;
+			checkType(l,2,out a2);
+			o=new System.Collections.Hashtable(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Single_s(IntPtr l) {
+		try {
+			System.Collections.Hashtable o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Single a2;
+			checkType(l,2,out a2);
+			o=new System.Collections.Hashtable(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Single__IEqualityComparer_s(IntPtr l) {
+		try {
+			System.Collections.Hashtable o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Single a2;
+			checkType(l,2,out a2);
+			System.Collections.IEqualityComparer a3;
+			checkType(l,3,out a3);
+			o=new System.Collections.Hashtable(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -173,6 +209,20 @@ public class Lua_System_Collections_Hashtable : LuaObject {
 			self.CopyTo(a1,a2);
 			pushValue(l,true);
 			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetEnumerator(IntPtr l) {
+		try {
+			System.Collections.Hashtable self=(System.Collections.Hashtable)checkSelf(l);
+			var ret=self.GetEnumerator();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -367,6 +417,12 @@ public class Lua_System_Collections_Hashtable : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"System.Collections.Hashtable");
+		addMember(l,ctor_s);
+		addMember(l,ctor__Int32_s);
+		addMember(l,ctor__IEqualityComparer_s);
+		addMember(l,ctor__Int32__IEqualityComparer_s);
+		addMember(l,ctor__Int32__Single_s);
+		addMember(l,ctor__Int32__Single__IEqualityComparer_s);
 		addMember(l,Add);
 		addMember(l,Clear);
 		addMember(l,Clone);
@@ -374,6 +430,7 @@ public class Lua_System_Collections_Hashtable : LuaObject {
 		addMember(l,ContainsKey);
 		addMember(l,ContainsValue);
 		addMember(l,CopyTo);
+		addMember(l,GetEnumerator);
 		addMember(l,Remove);
 		addMember(l,GetObjectData);
 		addMember(l,OnDeserialization);
@@ -387,6 +444,6 @@ public class Lua_System_Collections_Hashtable : LuaObject {
 		addMember(l,"Values",get_Values,null,true);
 		addMember(l,"SyncRoot",get_SyncRoot,null,true);
 		addMember(l,"Count",get_Count,null,true);
-		createTypeMetatable(l,constructor, typeof(System.Collections.Hashtable));
+		createTypeMetatable(l,null, typeof(System.Collections.Hashtable));
 	}
 }

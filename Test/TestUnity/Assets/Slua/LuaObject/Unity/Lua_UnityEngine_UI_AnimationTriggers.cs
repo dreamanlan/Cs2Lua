@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_UI_AnimationTriggers : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.UI.AnimationTriggers o;
 			o=new UnityEngine.UI.AnimationTriggers();
@@ -132,10 +132,11 @@ public class Lua_UnityEngine_UI_AnimationTriggers : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.AnimationTriggers");
+		addMember(l,ctor_s);
 		addMember(l,"normalTrigger",get_normalTrigger,set_normalTrigger,true);
 		addMember(l,"highlightedTrigger",get_highlightedTrigger,set_highlightedTrigger,true);
 		addMember(l,"pressedTrigger",get_pressedTrigger,set_pressedTrigger,true);
 		addMember(l,"disabledTrigger",get_disabledTrigger,set_disabledTrigger,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.UI.AnimationTriggers));
+		createTypeMetatable(l,null, typeof(UnityEngine.UI.AnimationTriggers));
 	}
 }

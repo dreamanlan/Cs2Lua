@@ -5,11 +5,11 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_WaitForSecondsRealtime : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.WaitForSecondsRealtime o;
 			System.Single a1;
-			checkType(l,2,out a1);
+			checkType(l,1,out a1);
 			o=new UnityEngine.WaitForSecondsRealtime(a1);
 			pushValue(l,true);
 			pushValue(l,o);
@@ -63,8 +63,9 @@ public class Lua_UnityEngine_WaitForSecondsRealtime : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.WaitForSecondsRealtime");
+		addMember(l,ctor_s);
 		addMember(l,"waitTime",get_waitTime,set_waitTime,true);
 		addMember(l,"keepWaiting",get_keepWaiting,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.WaitForSecondsRealtime),typeof(UnityEngine.CustomYieldInstruction));
+		createTypeMetatable(l,null, typeof(UnityEngine.WaitForSecondsRealtime),typeof(UnityEngine.CustomYieldInstruction));
 	}
 }

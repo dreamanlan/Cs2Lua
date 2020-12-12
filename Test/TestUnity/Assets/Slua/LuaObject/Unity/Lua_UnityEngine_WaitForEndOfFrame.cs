@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_WaitForEndOfFrame : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.WaitForEndOfFrame o;
 			o=new UnityEngine.WaitForEndOfFrame();
@@ -20,6 +20,7 @@ public class Lua_UnityEngine_WaitForEndOfFrame : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.WaitForEndOfFrame");
-		createTypeMetatable(l,constructor, typeof(UnityEngine.WaitForEndOfFrame),typeof(UnityEngine.YieldInstruction));
+		addMember(l,ctor_s);
+		createTypeMetatable(l,null, typeof(UnityEngine.WaitForEndOfFrame),typeof(UnityEngine.YieldInstruction));
 	}
 }

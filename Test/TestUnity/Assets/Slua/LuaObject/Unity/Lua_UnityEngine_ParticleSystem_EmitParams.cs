@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_EmitParams : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.EmitParams o;
 			o=new UnityEngine.ParticleSystem.EmitParams();
@@ -558,6 +558,7 @@ public class Lua_UnityEngine_ParticleSystem_EmitParams : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.EmitParams");
+		addMember(l,ctor_s);
 		addMember(l,ResetPosition);
 		addMember(l,ResetVelocity);
 		addMember(l,ResetAxisOfRotation);
@@ -580,6 +581,6 @@ public class Lua_UnityEngine_ParticleSystem_EmitParams : LuaObject {
 		addMember(l,"angularVelocity3D",get_angularVelocity3D,set_angularVelocity3D,true);
 		addMember(l,"startColor",get_startColor,set_startColor,true);
 		addMember(l,"randomSeed",get_randomSeed,set_randomSeed,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.EmitParams),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.EmitParams),typeof(System.ValueType));
 	}
 }

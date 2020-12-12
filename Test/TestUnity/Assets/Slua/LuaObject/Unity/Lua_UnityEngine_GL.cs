@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_GL : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.GL o;
 			o=new UnityEngine.GL();
@@ -205,6 +205,22 @@ public class Lua_UnityEngine_GL : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int IssuePluginEvent_s(IntPtr l) {
+		try {
+			System.IntPtr a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			UnityEngine.GL.IssuePluginEvent(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int PushMatrix_s(IntPtr l) {
 		try {
 			UnityEngine.GL.PushMatrix();
@@ -255,28 +271,29 @@ public class Lua_UnityEngine_GL : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int LoadPixelMatrix_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				System.Single a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				System.Single a3;
-				checkType(l,4,out a3);
-				System.Single a4;
-				checkType(l,5,out a4);
-				UnityEngine.GL.LoadPixelMatrix(a1,a2,a3,a4);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==1){
-				UnityEngine.GL.LoadPixelMatrix();
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.GL.LoadPixelMatrix();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int LoadPixelMatrix__Single__Single__Single__Single_s(IntPtr l) {
+		try {
+			System.Single a1;
+			checkType(l,1,out a1);
+			System.Single a2;
+			checkType(l,2,out a2);
+			System.Single a3;
+			checkType(l,3,out a3);
+			System.Single a4;
+			checkType(l,4,out a4);
+			UnityEngine.GL.LoadPixelMatrix(a1,a2,a3,a4);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -327,22 +344,6 @@ public class Lua_UnityEngine_GL : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int IssuePluginEvent_s(IntPtr l) {
-		try {
-			System.IntPtr a1;
-			checkType(l,1,out a1);
-			System.Int32 a2;
-			checkType(l,2,out a2);
-			UnityEngine.GL.IssuePluginEvent(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int Begin_s(IntPtr l) {
 		try {
 			System.Int32 a1;
@@ -369,36 +370,37 @@ public class Lua_UnityEngine_GL : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Clear_s(IntPtr l) {
+	static public int Clear__Boolean__Boolean__Color_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				System.Boolean a1;
-				checkType(l,2,out a1);
-				System.Boolean a2;
-				checkType(l,3,out a2);
-				UnityEngine.Color a3;
-				checkType(l,4,out a3);
-				System.Single a4;
-				checkType(l,5,out a4);
-				UnityEngine.GL.Clear(a1,a2,a3,a4);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==4){
-				System.Boolean a1;
-				checkType(l,2,out a1);
-				System.Boolean a2;
-				checkType(l,3,out a2);
-				UnityEngine.Color a3;
-				checkType(l,4,out a3);
-				UnityEngine.GL.Clear(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			System.Boolean a1;
+			checkType(l,1,out a1);
+			System.Boolean a2;
+			checkType(l,2,out a2);
+			UnityEngine.Color a3;
+			checkType(l,3,out a3);
+			UnityEngine.GL.Clear(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Clear__Boolean__Boolean__Color__Single_s(IntPtr l) {
+		try {
+			System.Boolean a1;
+			checkType(l,1,out a1);
+			System.Boolean a2;
+			checkType(l,2,out a2);
+			UnityEngine.Color a3;
+			checkType(l,3,out a3);
+			System.Single a4;
+			checkType(l,4,out a4);
+			UnityEngine.GL.Clear(a1,a2,a3,a4);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -601,6 +603,7 @@ public class Lua_UnityEngine_GL : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.GL");
+		addMember(l,ctor_s);
 		addMember(l,Vertex3_s);
 		addMember(l,Vertex_s);
 		addMember(l,TexCoord3_s);
@@ -613,18 +616,20 @@ public class Lua_UnityEngine_GL : LuaObject {
 		addMember(l,Flush_s);
 		addMember(l,RenderTargetBarrier_s);
 		addMember(l,MultMatrix_s);
+		addMember(l,IssuePluginEvent_s);
 		addMember(l,PushMatrix_s);
 		addMember(l,PopMatrix_s);
 		addMember(l,LoadIdentity_s);
 		addMember(l,LoadOrtho_s);
 		addMember(l,LoadPixelMatrix_s);
+		addMember(l,LoadPixelMatrix__Single__Single__Single__Single_s);
 		addMember(l,LoadProjectionMatrix_s);
 		addMember(l,InvalidateState_s);
 		addMember(l,GetGPUProjectionMatrix_s);
-		addMember(l,IssuePluginEvent_s);
 		addMember(l,Begin_s);
 		addMember(l,End_s);
-		addMember(l,Clear_s);
+		addMember(l,Clear__Boolean__Boolean__Color_s);
+		addMember(l,Clear__Boolean__Boolean__Color__Single_s);
 		addMember(l,Viewport_s);
 		addMember(l,ClearWithSkybox_s);
 		addMember(l,"TRIANGLES",get_TRIANGLES,null,false);
@@ -636,6 +641,6 @@ public class Lua_UnityEngine_GL : LuaObject {
 		addMember(l,"sRGBWrite",get_sRGBWrite,set_sRGBWrite,false);
 		addMember(l,"invertCulling",get_invertCulling,set_invertCulling,false);
 		addMember(l,"modelview",get_modelview,set_modelview,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.GL));
+		createTypeMetatable(l,null, typeof(UnityEngine.GL));
 	}
 }

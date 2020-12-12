@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_HumanPose : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.HumanPose o;
 			o=new UnityEngine.HumanPose();
@@ -113,9 +113,10 @@ public class Lua_UnityEngine_HumanPose : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.HumanPose");
+		addMember(l,ctor_s);
 		addMember(l,"bodyPosition",get_bodyPosition,set_bodyPosition,true);
 		addMember(l,"bodyRotation",get_bodyRotation,set_bodyRotation,true);
 		addMember(l,"muscles",get_muscles,set_muscles,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.HumanPose),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.HumanPose),typeof(System.ValueType));
 	}
 }

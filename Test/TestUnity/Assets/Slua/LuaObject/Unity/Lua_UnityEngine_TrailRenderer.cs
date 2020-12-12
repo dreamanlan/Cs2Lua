@@ -51,34 +51,35 @@ public class Lua_UnityEngine_TrailRenderer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int BakeMesh(IntPtr l) {
+	static public int BakeMesh__Mesh__Boolean(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				UnityEngine.TrailRenderer self=(UnityEngine.TrailRenderer)checkSelf(l);
-				UnityEngine.Mesh a1;
-				checkType(l,3,out a1);
-				UnityEngine.Camera a2;
-				checkType(l,4,out a2);
-				System.Boolean a3;
-				checkType(l,5,out a3);
-				self.BakeMesh(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==4){
-				UnityEngine.TrailRenderer self=(UnityEngine.TrailRenderer)checkSelf(l);
-				UnityEngine.Mesh a1;
-				checkType(l,3,out a1);
-				System.Boolean a2;
-				checkType(l,4,out a2);
-				self.BakeMesh(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.TrailRenderer self=(UnityEngine.TrailRenderer)checkSelf(l);
+			UnityEngine.Mesh a1;
+			checkType(l,2,out a1);
+			System.Boolean a2;
+			checkType(l,3,out a2);
+			self.BakeMesh(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int BakeMesh__Mesh__Camera__Boolean(IntPtr l) {
+		try {
+			UnityEngine.TrailRenderer self=(UnityEngine.TrailRenderer)checkSelf(l);
+			UnityEngine.Mesh a1;
+			checkType(l,2,out a1);
+			UnityEngine.Camera a2;
+			checkType(l,3,out a2);
+			System.Boolean a3;
+			checkType(l,4,out a3);
+			self.BakeMesh(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -640,7 +641,8 @@ public class Lua_UnityEngine_TrailRenderer : LuaObject {
 		addMember(l,SetPosition);
 		addMember(l,GetPosition);
 		addMember(l,Clear);
-		addMember(l,BakeMesh);
+		addMember(l,BakeMesh__Mesh__Boolean);
+		addMember(l,BakeMesh__Mesh__Camera__Boolean);
 		addMember(l,GetPositions);
 		addMember(l,SetPositions);
 		addMember(l,AddPosition);

@@ -7,22 +7,23 @@ public class Lua_UnityEngine_QualitySettings : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int IncreaseLevel_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
-				System.Boolean a1;
-				checkType(l,2,out a1);
-				UnityEngine.QualitySettings.IncreaseLevel(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==1){
-				UnityEngine.QualitySettings.IncreaseLevel();
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.QualitySettings.IncreaseLevel();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int IncreaseLevel__Boolean_s(IntPtr l) {
+		try {
+			System.Boolean a1;
+			checkType(l,1,out a1);
+			UnityEngine.QualitySettings.IncreaseLevel(a1);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -32,22 +33,9 @@ public class Lua_UnityEngine_QualitySettings : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int DecreaseLevel_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==2){
-				System.Boolean a1;
-				checkType(l,2,out a1);
-				UnityEngine.QualitySettings.DecreaseLevel(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==1){
-				UnityEngine.QualitySettings.DecreaseLevel();
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.QualitySettings.DecreaseLevel();
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -55,28 +43,43 @@ public class Lua_UnityEngine_QualitySettings : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetQualityLevel_s(IntPtr l) {
+	static public int DecreaseLevel__Boolean_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Boolean a2;
-				checkType(l,3,out a2);
-				UnityEngine.QualitySettings.SetQualityLevel(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				UnityEngine.QualitySettings.SetQualityLevel(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			System.Boolean a1;
+			checkType(l,1,out a1);
+			UnityEngine.QualitySettings.DecreaseLevel(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetQualityLevel__Int32_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			UnityEngine.QualitySettings.SetQualityLevel(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetQualityLevel__Int32__Boolean_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Boolean a2;
+			checkType(l,2,out a2);
+			UnityEngine.QualitySettings.SetQualityLevel(a1,a2);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -993,8 +996,11 @@ public class Lua_UnityEngine_QualitySettings : LuaObject {
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.QualitySettings");
 		addMember(l,IncreaseLevel_s);
+		addMember(l,IncreaseLevel__Boolean_s);
 		addMember(l,DecreaseLevel_s);
-		addMember(l,SetQualityLevel_s);
+		addMember(l,DecreaseLevel__Boolean_s);
+		addMember(l,SetQualityLevel__Int32_s);
+		addMember(l,SetQualityLevel__Int32__Boolean_s);
 		addMember(l,GetQualityLevel_s);
 		addMember(l,"pixelLightCount",get_pixelLightCount,set_pixelLightCount,false);
 		addMember(l,"shadows",get_shadows,set_shadows,false);

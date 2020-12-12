@@ -7,24 +7,25 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int Play(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
-				System.UInt64 a1;
-				checkType(l,3,out a1);
-				self.Play(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
-				self.Play();
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
+			self.Play();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Play__UInt64(IntPtr l) {
+		try {
+			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
+			System.UInt64 a1;
+			checkType(l,2,out a1);
+			self.Play(a1);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -131,30 +132,31 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int PlayOneShot(IntPtr l) {
+	static public int PlayOneShot__AudioClip(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
-				UnityEngine.AudioClip a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				self.PlayOneShot(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
-				UnityEngine.AudioClip a1;
-				checkType(l,3,out a1);
-				self.PlayOneShot(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
+			UnityEngine.AudioClip a1;
+			checkType(l,2,out a1);
+			self.PlayOneShot(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int PlayOneShot__AudioClip__Single(IntPtr l) {
+		try {
+			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
+			UnityEngine.AudioClip a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			self.PlayOneShot(a1,a2);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -303,32 +305,33 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int PlayClipAtPoint_s(IntPtr l) {
+	static public int PlayClipAtPoint__AudioClip__Vector3_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.AudioClip a1;
-				checkType(l,2,out a1);
-				UnityEngine.Vector3 a2;
-				checkType(l,3,out a2);
-				System.Single a3;
-				checkType(l,4,out a3);
-				UnityEngine.AudioSource.PlayClipAtPoint(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.AudioClip a1;
-				checkType(l,2,out a1);
-				UnityEngine.Vector3 a2;
-				checkType(l,3,out a2);
-				UnityEngine.AudioSource.PlayClipAtPoint(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.AudioClip a1;
+			checkType(l,1,out a1);
+			UnityEngine.Vector3 a2;
+			checkType(l,2,out a2);
+			UnityEngine.AudioSource.PlayClipAtPoint(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int PlayClipAtPoint__AudioClip__Vector3__Single_s(IntPtr l) {
+		try {
+			UnityEngine.AudioClip a1;
+			checkType(l,1,out a1);
+			UnityEngine.Vector3 a2;
+			checkType(l,2,out a2);
+			System.Single a3;
+			checkType(l,3,out a3);
+			UnityEngine.AudioSource.PlayClipAtPoint(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -1092,6 +1095,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AudioSource");
 		addMember(l,Play);
+		addMember(l,Play__UInt64);
 		addMember(l,PlayDelayed);
 		addMember(l,PlayScheduled);
 		addMember(l,SetScheduledStartTime);
@@ -1099,7 +1103,8 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		addMember(l,Stop);
 		addMember(l,Pause);
 		addMember(l,UnPause);
-		addMember(l,PlayOneShot);
+		addMember(l,PlayOneShot__AudioClip);
+		addMember(l,PlayOneShot__AudioClip__Single);
 		addMember(l,SetCustomCurve);
 		addMember(l,GetCustomCurve);
 		addMember(l,GetOutputData);
@@ -1108,7 +1113,8 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		addMember(l,GetSpatializerFloat);
 		addMember(l,SetAmbisonicDecoderFloat);
 		addMember(l,GetAmbisonicDecoderFloat);
-		addMember(l,PlayClipAtPoint_s);
+		addMember(l,PlayClipAtPoint__AudioClip__Vector3_s);
+		addMember(l,PlayClipAtPoint__AudioClip__Vector3__Single_s);
 		addMember(l,"volume",get_volume,set_volume,true);
 		addMember(l,"pitch",get_pitch,set_pitch,true);
 		addMember(l,"time",get_time,set_time,true);

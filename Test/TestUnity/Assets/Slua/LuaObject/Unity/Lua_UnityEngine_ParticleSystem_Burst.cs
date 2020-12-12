@@ -5,79 +5,115 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_Burst : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.ParticleSystem.Burst o;
-			if(argc==7){
-				System.Single a1;
-				checkType(l,3,out a1);
-				System.Int16 a2;
-				checkType(l,4,out a2);
-				System.Int16 a3;
-				checkType(l,5,out a3);
-				System.Int32 a4;
-				checkType(l,6,out a4);
-				System.Single a5;
-				checkType(l,7,out a5);
-				o=new UnityEngine.ParticleSystem.Burst(a1,a2,a3,a4,a5);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==6){
-				System.Single a1;
-				checkType(l,3,out a1);
-				UnityEngine.ParticleSystem.MinMaxCurve a2;
-				checkValueType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				System.Single a4;
-				checkType(l,6,out a4);
-				o=new UnityEngine.ParticleSystem.Burst(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==5){
-				System.Single a1;
-				checkType(l,3,out a1);
-				System.Int16 a2;
-				checkType(l,4,out a2);
-				System.Int16 a3;
-				checkType(l,5,out a3);
-				o=new UnityEngine.ParticleSystem.Burst(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Single__Int16", argc, 2,typeof(float),typeof(System.Int16))){
-				System.Single a1;
-				checkType(l,3,out a1);
-				System.Int16 a2;
-				checkType(l,4,out a2);
-				o=new UnityEngine.ParticleSystem.Burst(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Single__MinMaxCurve", argc, 2,typeof(float),typeof(UnityEngine.ParticleSystem.MinMaxCurve))){
-				System.Single a1;
-				checkType(l,3,out a1);
-				UnityEngine.ParticleSystem.MinMaxCurve a2;
-				checkValueType(l,4,out a2);
-				o=new UnityEngine.ParticleSystem.Burst(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc<=2){
-				o=new UnityEngine.ParticleSystem.Burst();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.ParticleSystem.Burst();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Single__Int16_s(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.Burst o;
+			System.Single a1;
+			checkType(l,1,out a1);
+			System.Int16 a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.ParticleSystem.Burst(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Single__MinMaxCurve_s(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.Burst o;
+			System.Single a1;
+			checkType(l,1,out a1);
+			UnityEngine.ParticleSystem.MinMaxCurve a2;
+			checkValueType(l,2,out a2);
+			o=new UnityEngine.ParticleSystem.Burst(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Single__Int16__Int16_s(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.Burst o;
+			System.Single a1;
+			checkType(l,1,out a1);
+			System.Int16 a2;
+			checkType(l,2,out a2);
+			System.Int16 a3;
+			checkType(l,3,out a3);
+			o=new UnityEngine.ParticleSystem.Burst(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Single__MinMaxCurve__Int32__Single_s(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.Burst o;
+			System.Single a1;
+			checkType(l,1,out a1);
+			UnityEngine.ParticleSystem.MinMaxCurve a2;
+			checkValueType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			System.Single a4;
+			checkType(l,4,out a4);
+			o=new UnityEngine.ParticleSystem.Burst(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Single__Int16__Int16__Int32__Single_s(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.Burst o;
+			System.Single a1;
+			checkType(l,1,out a1);
+			System.Int16 a2;
+			checkType(l,2,out a2);
+			System.Int16 a3;
+			checkType(l,3,out a3);
+			System.Int32 a4;
+			checkType(l,4,out a4);
+			System.Single a5;
+			checkType(l,5,out a5);
+			o=new UnityEngine.ParticleSystem.Burst(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -303,6 +339,12 @@ public class Lua_UnityEngine_ParticleSystem_Burst : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.Burst");
+		addMember(l,ctor_s);
+		addMember(l,ctor__Single__Int16_s);
+		addMember(l,ctor__Single__MinMaxCurve_s);
+		addMember(l,ctor__Single__Int16__Int16_s);
+		addMember(l,ctor__Single__MinMaxCurve__Int32__Single_s);
+		addMember(l,ctor__Single__Int16__Int16__Int32__Single_s);
 		addMember(l,"time",get_time,set_time,true);
 		addMember(l,"count",get_count,set_count,true);
 		addMember(l,"minCount",get_minCount,set_minCount,true);
@@ -310,6 +352,6 @@ public class Lua_UnityEngine_ParticleSystem_Burst : LuaObject {
 		addMember(l,"cycleCount",get_cycleCount,set_cycleCount,true);
 		addMember(l,"repeatInterval",get_repeatInterval,set_repeatInterval,true);
 		addMember(l,"probability",get_probability,set_probability,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.Burst),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.Burst),typeof(System.ValueType));
 	}
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_AnimatorStateInfo : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.AnimatorStateInfo o;
 			o=new UnityEngine.AnimatorStateInfo();
@@ -166,6 +166,7 @@ public class Lua_UnityEngine_AnimatorStateInfo : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AnimatorStateInfo");
+		addMember(l,ctor_s);
 		addMember(l,IsName);
 		addMember(l,IsTag);
 		addMember(l,"fullPathHash",get_fullPathHash,null,true);
@@ -176,6 +177,6 @@ public class Lua_UnityEngine_AnimatorStateInfo : LuaObject {
 		addMember(l,"speedMultiplier",get_speedMultiplier,null,true);
 		addMember(l,"tagHash",get_tagHash,null,true);
 		addMember(l,"loop",get_loop,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.AnimatorStateInfo),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.AnimatorStateInfo),typeof(System.ValueType));
 	}
 }

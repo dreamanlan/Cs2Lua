@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_HumanLimit : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.HumanLimit o;
 			o=new UnityEngine.HumanLimit();
@@ -175,11 +175,12 @@ public class Lua_UnityEngine_HumanLimit : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.HumanLimit");
+		addMember(l,ctor_s);
 		addMember(l,"useDefaultValues",get_useDefaultValues,set_useDefaultValues,true);
 		addMember(l,"min",get_min,set_min,true);
 		addMember(l,"max",get_max,set_max,true);
 		addMember(l,"center",get_center,set_center,true);
 		addMember(l,"axisLength",get_axisLength,set_axisLength,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.HumanLimit),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.HumanLimit),typeof(System.ValueType));
 	}
 }

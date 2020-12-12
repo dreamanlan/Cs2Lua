@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_Unity_Profiling_ProfilerMarker_AutoScope : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			Unity.Profiling.ProfilerMarker.AutoScope o;
 			o=new Unity.Profiling.ProfilerMarker.AutoScope();
@@ -32,24 +32,11 @@ public class Lua_Unity_Profiling_ProfilerMarker_AutoScope : LuaObject {
 			return error(l,e);
 		}
 	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Dispose_s(IntPtr l) {
-		try {
-			int argc = LuaDLL.lua_gettop(l);
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"Unity.Profiling.ProfilerMarker.AutoScope");
+		addMember(l,ctor_s);
 		addMember(l,Dispose);
-		addMember(l,Dispose_s);
-		createTypeMetatable(l,constructor, typeof(Unity.Profiling.ProfilerMarker.AutoScope),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(Unity.Profiling.ProfilerMarker.AutoScope),typeof(System.ValueType));
 	}
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_BillboardAsset : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.BillboardAsset o;
 			o=new UnityEngine.BillboardAsset();
@@ -21,24 +21,10 @@ public class Lua_UnityEngine_BillboardAsset : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int GetImageTexCoords(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
-				System.Collections.Generic.List<UnityEngine.Vector4> a1;
-				checkType(l,3,out a1);
-				self.GetImageTexCoords(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
-				var ret=self.GetImageTexCoords();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
+			var ret=self.GetImageTexCoords();
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -47,28 +33,44 @@ public class Lua_UnityEngine_BillboardAsset : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetImageTexCoords(IntPtr l) {
+	static public int GetImageTexCoords__List_1_Vector4(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetImageTexCoords__Void__List`1_Vector4", argc, 2,typeof(List<UnityEngine.Vector4>))){
-				UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
-				System.Collections.Generic.List<UnityEngine.Vector4> a1;
-				checkType(l,3,out a1);
-				self.SetImageTexCoords(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetImageTexCoords__Void__Arr_Vector4", argc, 2,typeof(UnityEngine.Vector4[]))){
-				UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
-				UnityEngine.Vector4[] a1;
-				checkArray(l,3,out a1);
-				self.SetImageTexCoords(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
+			System.Collections.Generic.List<UnityEngine.Vector4> a1;
+			checkType(l,2,out a1);
+			self.GetImageTexCoords(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetImageTexCoords__List_1_Vector4(IntPtr l) {
+		try {
+			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
+			System.Collections.Generic.List<UnityEngine.Vector4> a1;
+			checkType(l,2,out a1);
+			self.SetImageTexCoords(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetImageTexCoords__A_Vector4(IntPtr l) {
+		try {
+			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
+			UnityEngine.Vector4[] a1;
+			checkArray(l,2,out a1);
+			self.SetImageTexCoords(a1);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -78,24 +80,10 @@ public class Lua_UnityEngine_BillboardAsset : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int GetVertices(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
-				System.Collections.Generic.List<UnityEngine.Vector2> a1;
-				checkType(l,3,out a1);
-				self.GetVertices(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
-				var ret=self.GetVertices();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
+			var ret=self.GetVertices();
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -104,28 +92,44 @@ public class Lua_UnityEngine_BillboardAsset : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetVertices(IntPtr l) {
+	static public int GetVertices__List_1_Vector2(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetVertices__Void__List`1_Vector2", argc, 2,typeof(List<UnityEngine.Vector2>))){
-				UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
-				System.Collections.Generic.List<UnityEngine.Vector2> a1;
-				checkType(l,3,out a1);
-				self.SetVertices(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetVertices__Void__Arr_Vector2", argc, 2,typeof(UnityEngine.Vector2[]))){
-				UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
-				UnityEngine.Vector2[] a1;
-				checkArray(l,3,out a1);
-				self.SetVertices(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
+			System.Collections.Generic.List<UnityEngine.Vector2> a1;
+			checkType(l,2,out a1);
+			self.GetVertices(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetVertices__List_1_Vector2(IntPtr l) {
+		try {
+			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
+			System.Collections.Generic.List<UnityEngine.Vector2> a1;
+			checkType(l,2,out a1);
+			self.SetVertices(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetVertices__A_Vector2(IntPtr l) {
+		try {
+			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
+			UnityEngine.Vector2[] a1;
+			checkArray(l,2,out a1);
+			self.SetVertices(a1);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -135,24 +139,10 @@ public class Lua_UnityEngine_BillboardAsset : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int GetIndices(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
-				System.Collections.Generic.List<System.UInt16> a1;
-				checkType(l,3,out a1);
-				self.GetIndices(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
-				var ret=self.GetIndices();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
+			var ret=self.GetIndices();
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -161,28 +151,44 @@ public class Lua_UnityEngine_BillboardAsset : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetIndices(IntPtr l) {
+	static public int GetIndices__List_1_UInt16(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetIndices__Void__List`1_UInt16", argc, 2,typeof(List<System.UInt16>))){
-				UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
-				System.Collections.Generic.List<System.UInt16> a1;
-				checkType(l,3,out a1);
-				self.SetIndices(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetIndices__Void__Arr_UInt16", argc, 2,typeof(System.UInt16[]))){
-				UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
-				System.UInt16[] a1;
-				checkArray(l,3,out a1);
-				self.SetIndices(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
+			System.Collections.Generic.List<System.UInt16> a1;
+			checkType(l,2,out a1);
+			self.GetIndices(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetIndices__List_1_UInt16(IntPtr l) {
+		try {
+			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
+			System.Collections.Generic.List<System.UInt16> a1;
+			checkType(l,2,out a1);
+			self.SetIndices(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetIndices__A_UInt16(IntPtr l) {
+		try {
+			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
+			System.UInt16[] a1;
+			checkArray(l,2,out a1);
+			self.SetIndices(a1);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -342,12 +348,19 @@ public class Lua_UnityEngine_BillboardAsset : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.BillboardAsset");
+		addMember(l,ctor_s);
 		addMember(l,GetImageTexCoords);
-		addMember(l,SetImageTexCoords);
+		addMember(l,GetImageTexCoords__List_1_Vector4);
+		addMember(l,SetImageTexCoords__List_1_Vector4);
+		addMember(l,SetImageTexCoords__A_Vector4);
 		addMember(l,GetVertices);
-		addMember(l,SetVertices);
+		addMember(l,GetVertices__List_1_Vector2);
+		addMember(l,SetVertices__List_1_Vector2);
+		addMember(l,SetVertices__A_Vector2);
 		addMember(l,GetIndices);
-		addMember(l,SetIndices);
+		addMember(l,GetIndices__List_1_UInt16);
+		addMember(l,SetIndices__List_1_UInt16);
+		addMember(l,SetIndices__A_UInt16);
 		addMember(l,"width",get_width,set_width,true);
 		addMember(l,"height",get_height,set_height,true);
 		addMember(l,"bottom",get_bottom,set_bottom,true);
@@ -355,6 +368,6 @@ public class Lua_UnityEngine_BillboardAsset : LuaObject {
 		addMember(l,"vertexCount",get_vertexCount,null,true);
 		addMember(l,"indexCount",get_indexCount,null,true);
 		addMember(l,"material",get_material,set_material,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.BillboardAsset),typeof(UnityEngine.Object));
+		createTypeMetatable(l,null, typeof(UnityEngine.BillboardAsset),typeof(UnityEngine.Object));
 	}
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_SortingLayer : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.SortingLayer o;
 			o=new UnityEngine.SortingLayer();
@@ -149,6 +149,7 @@ public class Lua_UnityEngine_SortingLayer : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.SortingLayer");
+		addMember(l,ctor_s);
 		addMember(l,GetLayerValueFromID_s);
 		addMember(l,GetLayerValueFromName_s);
 		addMember(l,NameToID_s);
@@ -158,6 +159,6 @@ public class Lua_UnityEngine_SortingLayer : LuaObject {
 		addMember(l,"name",get_name,null,true);
 		addMember(l,"value",get_value,null,true);
 		addMember(l,"layers",get_layers,null,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.SortingLayer),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.SortingLayer),typeof(System.ValueType));
 	}
 }

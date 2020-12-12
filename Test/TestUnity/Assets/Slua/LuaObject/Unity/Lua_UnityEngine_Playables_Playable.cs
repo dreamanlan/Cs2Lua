@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Playables_Playable : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Playables.Playable o;
 			o=new UnityEngine.Playables.Playable();
@@ -49,6 +49,40 @@ public class Lua_UnityEngine_Playables_Playable : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Playable(IntPtr l) {
+		try {
+			UnityEngine.Playables.Playable self;
+			checkValueType(l,1,out self);
+			UnityEngine.Playables.Playable a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			UnityEngine.Playables.Playable self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Create_s(IntPtr l) {
 		try {
 			UnityEngine.Playables.PlayableGraph a1;
@@ -79,10 +113,13 @@ public class Lua_UnityEngine_Playables_Playable : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Playables.Playable");
+		addMember(l,ctor_s);
 		addMember(l,GetHandle);
 		addMember(l,GetPlayableType);
+		addMember(l,Equals__Playable);
+		addMember(l,Equals__Object);
 		addMember(l,Create_s);
 		addMember(l,"Null",get_Null,null,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Playables.Playable),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Playables.Playable),typeof(System.ValueType));
 	}
 }

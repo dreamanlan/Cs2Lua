@@ -1,0 +1,116 @@
+require "cs2lua__namespaces"; 
+
+Test = {
+	-------------------------------
+	-------- class methods --------
+	-------------------------------
+	__new_object = function(...)
+		local __cs2dsl_newobj;
+		__cs2dsl_newobj = newobject(Test, nil, nil, "ctor", nil, ...);
+		return __cs2dsl_newobj;
+	end,
+
+	cctor = function()
+		Test.__cctor();
+	end,
+
+	__cctor = function()
+		if Test.__cctor_called then 
+			return;
+		else
+			Test.__cctor_called = true;
+		end;
+	end,
+
+	-------------------------------
+	-------- class fields --------
+	-------------------------------
+	__cctor_called = false,
+
+	-------------------------------
+	--- define class and object ---
+	-------------------------------
+	__define_class = function()
+		Utility.Warn("Test::__define_class begin");
+
+		local class = Test;
+
+		local obj_methods = {
+			Init = function(this)
+				this.m_DataChangeCallBackInfoPool:Init__Func_1_TResult__Action_1_T(nil, nil);
+				local strlist;
+				strlist = newlist(StrList, nil, nil, "ctor", {});
+				strlist:Add(System.String.Empty);
+				strlist:Sort__Comparison_1_Object(function(a, b)
+					local __lambda_112_21_112_45;
+					__lambda_112_21_112_45 = invokeforbasicvalue(a, false, System.String, "CompareTo__String", b);
+					return __lambda_112_21_112_45;
+				end);
+				local intlist;
+				intlist = newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, "ctor", {});
+				intlist:Add(1);
+				intlist:Sort__Comparison_1_Object(function(a, b)
+					local __lambda_115_21_115_45;
+					__lambda_115_21_115_45 = invokeforbasicvalue(a, false, System.Int32, "CompareTo__Int32", b);
+					return __lambda_115_21_115_45;
+				end);
+			end,
+
+			ctor = function(this)
+				this:__ctor();
+			end,
+
+			__ctor = function(this)
+				if this.__ctor_called then 
+					return;
+				else
+					this.__ctor_called = true;
+				end;
+				this.m_DataChangeCallBackInfoPool = newobject(Cs2LuaObjectPoolEx_DataChangeCallBackInfo, {DataChangeCallBackInfo}, {TypeKind.Class}, "ctor", nil);
+			end,
+		};
+
+		local obj_build = function()
+			return {
+				__ctor_called = false,
+			};
+		end;
+
+		local __defineclass_return = defineclass(nil, "Test", "Test", class, obj_methods, obj_build, false);
+		Utility.Warn("Test::__define_class end");
+		return __defineclass_return;
+	end,
+
+	-------------------------------
+	--------- fields info ---------
+	-------------------------------
+	__class_fields = {
+		__cctor_called = true,
+	},
+
+	__obj_fields = {
+		m_DataChangeCallBackInfoPool = true,
+		__ctor_called = true,
+	},
+
+	-------------------------------
+	-------- metadata info --------
+	-------------------------------
+	__method_info = {
+		Init = {
+			Kind = MethodKind.Ordinary,
+		},
+		ctor = {
+			Kind = MethodKind.Constructor,
+		},
+	},
+};
+
+
+require "cs2lua__syslib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+require "strlist";
+require "datachangecallbackinfo";
+require "cs2luaobjectpoolex_datachangecallbackinfo";
+settempmetatable(Test);

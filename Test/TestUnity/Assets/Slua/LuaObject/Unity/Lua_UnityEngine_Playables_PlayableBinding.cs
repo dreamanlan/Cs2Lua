@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Playables_PlayableBinding : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Playables.PlayableBinding o;
 			o=new UnityEngine.Playables.PlayableBinding();
@@ -120,11 +120,12 @@ public class Lua_UnityEngine_Playables_PlayableBinding : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Playables.PlayableBinding");
+		addMember(l,ctor_s);
 		addMember(l,"None",get_None,null,false);
 		addMember(l,"DefaultDuration",get_DefaultDuration,null,false);
 		addMember(l,"streamName",get_streamName,set_streamName,true);
 		addMember(l,"sourceObject",get_sourceObject,set_sourceObject,true);
 		addMember(l,"outputTargetType",get_outputTargetType,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Playables.PlayableBinding),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Playables.PlayableBinding),typeof(System.ValueType));
 	}
 }

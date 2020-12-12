@@ -87,32 +87,33 @@ public class Lua_UnityEngine_Camera : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetTargetBuffers(IntPtr l) {
+	static public int SetTargetBuffers__RenderBuffer__RenderBuffer(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetTargetBuffers__Void__RenderBuffer__RenderBuffer", argc, 2,typeof(UnityEngine.RenderBuffer),typeof(UnityEngine.RenderBuffer))){
-				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
-				UnityEngine.RenderBuffer a1;
-				checkValueType(l,3,out a1);
-				UnityEngine.RenderBuffer a2;
-				checkValueType(l,4,out a2);
-				self.SetTargetBuffers(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SetTargetBuffers__Void__Arr_RenderBuffer__RenderBuffer", argc, 2,typeof(UnityEngine.RenderBuffer[]),typeof(UnityEngine.RenderBuffer))){
-				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
-				UnityEngine.RenderBuffer[] a1;
-				checkArray(l,3,out a1);
-				UnityEngine.RenderBuffer a2;
-				checkValueType(l,4,out a2);
-				self.SetTargetBuffers(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			UnityEngine.RenderBuffer a1;
+			checkValueType(l,2,out a1);
+			UnityEngine.RenderBuffer a2;
+			checkValueType(l,3,out a2);
+			self.SetTargetBuffers(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetTargetBuffers__A_RenderBuffer__RenderBuffer(IntPtr l) {
+		try {
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			UnityEngine.RenderBuffer[] a1;
+			checkArray(l,2,out a1);
+			UnityEngine.RenderBuffer a2;
+			checkValueType(l,3,out a2);
+			self.SetTargetBuffers(a1,a2);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -162,31 +163,14 @@ public class Lua_UnityEngine_Camera : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int WorldToScreenPoint(IntPtr l) {
+	static public int WorldToScreenPoint__Vector3(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,3,out a1);
-				UnityEngine.Camera.MonoOrStereoscopicEye a2;
-				checkEnum(l,4,out a2);
-				var ret=self.WorldToScreenPoint(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,3,out a1);
-				var ret=self.WorldToScreenPoint(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			var ret=self.WorldToScreenPoint(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -195,31 +179,16 @@ public class Lua_UnityEngine_Camera : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int WorldToViewportPoint(IntPtr l) {
+	static public int WorldToScreenPoint__Vector3__MonoOrStereoscopicEye(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,3,out a1);
-				UnityEngine.Camera.MonoOrStereoscopicEye a2;
-				checkEnum(l,4,out a2);
-				var ret=self.WorldToViewportPoint(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,3,out a1);
-				var ret=self.WorldToViewportPoint(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Camera.MonoOrStereoscopicEye a2;
+			checkEnum(l,3,out a2);
+			var ret=self.WorldToScreenPoint(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -228,31 +197,14 @@ public class Lua_UnityEngine_Camera : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int ViewportToWorldPoint(IntPtr l) {
+	static public int WorldToViewportPoint__Vector3(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,3,out a1);
-				UnityEngine.Camera.MonoOrStereoscopicEye a2;
-				checkEnum(l,4,out a2);
-				var ret=self.ViewportToWorldPoint(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,3,out a1);
-				var ret=self.ViewportToWorldPoint(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			var ret=self.WorldToViewportPoint(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -261,31 +213,84 @@ public class Lua_UnityEngine_Camera : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int ScreenToWorldPoint(IntPtr l) {
+	static public int WorldToViewportPoint__Vector3__MonoOrStereoscopicEye(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,3,out a1);
-				UnityEngine.Camera.MonoOrStereoscopicEye a2;
-				checkEnum(l,4,out a2);
-				var ret=self.ScreenToWorldPoint(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,3,out a1);
-				var ret=self.ScreenToWorldPoint(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Camera.MonoOrStereoscopicEye a2;
+			checkEnum(l,3,out a2);
+			var ret=self.WorldToViewportPoint(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ViewportToWorldPoint__Vector3(IntPtr l) {
+		try {
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			var ret=self.ViewportToWorldPoint(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ViewportToWorldPoint__Vector3__MonoOrStereoscopicEye(IntPtr l) {
+		try {
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Camera.MonoOrStereoscopicEye a2;
+			checkEnum(l,3,out a2);
+			var ret=self.ViewportToWorldPoint(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ScreenToWorldPoint__Vector3(IntPtr l) {
+		try {
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			var ret=self.ScreenToWorldPoint(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ScreenToWorldPoint__Vector3__MonoOrStereoscopicEye(IntPtr l) {
+		try {
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Camera.MonoOrStereoscopicEye a2;
+			checkEnum(l,3,out a2);
+			var ret=self.ScreenToWorldPoint(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -326,31 +331,14 @@ public class Lua_UnityEngine_Camera : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int ViewportPointToRay(IntPtr l) {
+	static public int ViewportPointToRay__Vector3(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,3,out a1);
-				UnityEngine.Camera.MonoOrStereoscopicEye a2;
-				checkEnum(l,4,out a2);
-				var ret=self.ViewportPointToRay(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,3,out a1);
-				var ret=self.ViewportPointToRay(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			var ret=self.ViewportPointToRay(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -359,31 +347,50 @@ public class Lua_UnityEngine_Camera : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int ScreenPointToRay(IntPtr l) {
+	static public int ViewportPointToRay__Vector3__MonoOrStereoscopicEye(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,3,out a1);
-				UnityEngine.Camera.MonoOrStereoscopicEye a2;
-				checkEnum(l,4,out a2);
-				var ret=self.ScreenPointToRay(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
-				UnityEngine.Vector3 a1;
-				checkType(l,3,out a1);
-				var ret=self.ScreenPointToRay(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Camera.MonoOrStereoscopicEye a2;
+			checkEnum(l,3,out a2);
+			var ret=self.ViewportPointToRay(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ScreenPointToRay__Vector3(IntPtr l) {
+		try {
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			var ret=self.ScreenPointToRay(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ScreenPointToRay__Vector3__MonoOrStereoscopicEye(IntPtr l) {
+		try {
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Camera.MonoOrStereoscopicEye a2;
+			checkEnum(l,3,out a2);
+			var ret=self.ScreenPointToRay(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -594,64 +601,86 @@ public class Lua_UnityEngine_Camera : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int RenderToCubemap(IntPtr l) {
+	static public int RenderToCubemap__Cubemap(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
-				UnityEngine.RenderTexture a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				UnityEngine.Camera.MonoOrStereoscopicEye a3;
-				checkEnum(l,5,out a3);
-				var ret=self.RenderToCubemap(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "RenderToCubemap__Boolean__Cubemap__Int32", argc, 2,typeof(UnityEngine.Cubemap),typeof(int))){
-				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
-				UnityEngine.Cubemap a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				var ret=self.RenderToCubemap(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "RenderToCubemap__Boolean__RenderTexture__Int32", argc, 2,typeof(UnityEngine.RenderTexture),typeof(int))){
-				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
-				UnityEngine.RenderTexture a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				var ret=self.RenderToCubemap(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "RenderToCubemap__Boolean__Cubemap", argc, 2,typeof(UnityEngine.Cubemap))){
-				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
-				UnityEngine.Cubemap a1;
-				checkType(l,3,out a1);
-				var ret=self.RenderToCubemap(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "RenderToCubemap__Boolean__RenderTexture", argc, 2,typeof(UnityEngine.RenderTexture))){
-				UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
-				UnityEngine.RenderTexture a1;
-				checkType(l,3,out a1);
-				var ret=self.RenderToCubemap(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			UnityEngine.Cubemap a1;
+			checkType(l,2,out a1);
+			var ret=self.RenderToCubemap(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int RenderToCubemap__RenderTexture(IntPtr l) {
+		try {
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			UnityEngine.RenderTexture a1;
+			checkType(l,2,out a1);
+			var ret=self.RenderToCubemap(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int RenderToCubemap__Cubemap__Int32(IntPtr l) {
+		try {
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			UnityEngine.Cubemap a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			var ret=self.RenderToCubemap(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int RenderToCubemap__RenderTexture__Int32(IntPtr l) {
+		try {
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			UnityEngine.RenderTexture a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			var ret=self.RenderToCubemap(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int RenderToCubemap__RenderTexture__Int32__MonoOrStereoscopicEye(IntPtr l) {
+		try {
+			UnityEngine.Camera self=(UnityEngine.Camera)checkSelf(l);
+			UnityEngine.RenderTexture a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			UnityEngine.Camera.MonoOrStereoscopicEye a3;
+			checkEnum(l,4,out a3);
+			var ret=self.RenderToCubemap(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -2380,18 +2409,25 @@ public class Lua_UnityEngine_Camera : LuaObject {
 		addMember(l,ResetCullingMatrix);
 		addMember(l,SetReplacementShader);
 		addMember(l,ResetReplacementShader);
-		addMember(l,SetTargetBuffers);
+		addMember(l,SetTargetBuffers__RenderBuffer__RenderBuffer);
+		addMember(l,SetTargetBuffers__A_RenderBuffer__RenderBuffer);
 		addMember(l,ResetWorldToCameraMatrix);
 		addMember(l,ResetProjectionMatrix);
 		addMember(l,CalculateObliqueMatrix);
-		addMember(l,WorldToScreenPoint);
-		addMember(l,WorldToViewportPoint);
-		addMember(l,ViewportToWorldPoint);
-		addMember(l,ScreenToWorldPoint);
+		addMember(l,WorldToScreenPoint__Vector3);
+		addMember(l,WorldToScreenPoint__Vector3__MonoOrStereoscopicEye);
+		addMember(l,WorldToViewportPoint__Vector3);
+		addMember(l,WorldToViewportPoint__Vector3__MonoOrStereoscopicEye);
+		addMember(l,ViewportToWorldPoint__Vector3);
+		addMember(l,ViewportToWorldPoint__Vector3__MonoOrStereoscopicEye);
+		addMember(l,ScreenToWorldPoint__Vector3);
+		addMember(l,ScreenToWorldPoint__Vector3__MonoOrStereoscopicEye);
 		addMember(l,ScreenToViewportPoint);
 		addMember(l,ViewportToScreenPoint);
-		addMember(l,ViewportPointToRay);
-		addMember(l,ScreenPointToRay);
+		addMember(l,ViewportPointToRay__Vector3);
+		addMember(l,ViewportPointToRay__Vector3__MonoOrStereoscopicEye);
+		addMember(l,ScreenPointToRay__Vector3);
+		addMember(l,ScreenPointToRay__Vector3__MonoOrStereoscopicEye);
 		addMember(l,CalculateFrustumCorners);
 		addMember(l,GetStereoNonJitteredProjectionMatrix);
 		addMember(l,GetStereoViewMatrix);
@@ -2405,7 +2441,11 @@ public class Lua_UnityEngine_Camera : LuaObject {
 		addMember(l,GetVisibleLODGroupCount);
 		addMember(l,GetVisibleLODGroupAt);
 		addMember(l,GetVisibleLODGroup);
-		addMember(l,RenderToCubemap);
+		addMember(l,RenderToCubemap__Cubemap);
+		addMember(l,RenderToCubemap__RenderTexture);
+		addMember(l,RenderToCubemap__Cubemap__Int32);
+		addMember(l,RenderToCubemap__RenderTexture__Int32);
+		addMember(l,RenderToCubemap__RenderTexture__Int32__MonoOrStereoscopicEye);
 		addMember(l,Render);
 		addMember(l,RenderWithShader);
 		addMember(l,RenderDontRestore);

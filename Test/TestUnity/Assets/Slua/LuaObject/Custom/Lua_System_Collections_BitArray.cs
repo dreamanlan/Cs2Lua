@@ -5,61 +5,97 @@ using System.Collections.Generic;
 public class Lua_System_Collections_BitArray : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor__Int32_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			System.Collections.BitArray o;
-			if(argc==4){
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Boolean a2;
-				checkType(l,4,out a2);
-				o=new System.Collections.BitArray(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Int32", argc, 2,typeof(int))){
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				o=new System.Collections.BitArray(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Arr_Byte", argc, 2,typeof(System.Byte[]))){
-				System.Byte[] a1;
-				checkArray(l,3,out a1);
-				o=new System.Collections.BitArray(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Arr_Boolean", argc, 2,typeof(System.Boolean[]))){
-				System.Boolean[] a1;
-				checkArray(l,3,out a1);
-				o=new System.Collections.BitArray(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Arr_Int32", argc, 2,typeof(System.Int32[]))){
-				System.Int32[] a1;
-				checkArray(l,3,out a1);
-				o=new System.Collections.BitArray(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__BitArray", argc, 2,typeof(System.Collections.BitArray))){
-				System.Collections.BitArray a1;
-				checkType(l,3,out a1);
-				o=new System.Collections.BitArray(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			o=new System.Collections.BitArray(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__A_Byte_s(IntPtr l) {
+		try {
+			System.Collections.BitArray o;
+			System.Byte[] a1;
+			checkArray(l,1,out a1);
+			o=new System.Collections.BitArray(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__A_Boolean_s(IntPtr l) {
+		try {
+			System.Collections.BitArray o;
+			System.Boolean[] a1;
+			checkArray(l,1,out a1);
+			o=new System.Collections.BitArray(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__A_Int32_s(IntPtr l) {
+		try {
+			System.Collections.BitArray o;
+			System.Int32[] a1;
+			checkArray(l,1,out a1);
+			o=new System.Collections.BitArray(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__BitArray_s(IntPtr l) {
+		try {
+			System.Collections.BitArray o;
+			System.Collections.BitArray a1;
+			checkType(l,1,out a1);
+			o=new System.Collections.BitArray(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Boolean_s(IntPtr l) {
+		try {
+			System.Collections.BitArray o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Boolean a2;
+			checkType(l,2,out a2);
+			o=new System.Collections.BitArray(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -208,6 +244,20 @@ public class Lua_System_Collections_BitArray : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int GetEnumerator(IntPtr l) {
+		try {
+			System.Collections.BitArray self=(System.Collections.BitArray)checkSelf(l);
+			var ret=self.GetEnumerator();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_Length(IntPtr l) {
 		try {
 			System.Collections.BitArray self=(System.Collections.BitArray)checkSelf(l);
@@ -322,6 +372,12 @@ public class Lua_System_Collections_BitArray : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"System.Collections.BitArray");
+		addMember(l,ctor__Int32_s);
+		addMember(l,ctor__A_Byte_s);
+		addMember(l,ctor__A_Boolean_s);
+		addMember(l,ctor__A_Int32_s);
+		addMember(l,ctor__BitArray_s);
+		addMember(l,ctor__Int32__Boolean_s);
 		addMember(l,Get);
 		addMember(l,Set);
 		addMember(l,SetAll);
@@ -331,6 +387,7 @@ public class Lua_System_Collections_BitArray : LuaObject {
 		addMember(l,Not);
 		addMember(l,CopyTo);
 		addMember(l,Clone);
+		addMember(l,GetEnumerator);
 		addMember(l,getItem);
 		addMember(l,setItem);
 		addMember(l,"Length",get_Length,set_Length,true);
@@ -338,6 +395,6 @@ public class Lua_System_Collections_BitArray : LuaObject {
 		addMember(l,"SyncRoot",get_SyncRoot,null,true);
 		addMember(l,"IsReadOnly",get_IsReadOnly,null,true);
 		addMember(l,"IsSynchronized",get_IsSynchronized,null,true);
-		createTypeMetatable(l,constructor, typeof(System.Collections.BitArray));
+		createTypeMetatable(l,null, typeof(System.Collections.BitArray));
 	}
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_WebCamDevice : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.WebCamDevice o;
 			o=new UnityEngine.WebCamDevice();
@@ -104,12 +104,13 @@ public class Lua_UnityEngine_WebCamDevice : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.WebCamDevice");
+		addMember(l,ctor_s);
 		addMember(l,"name",get_name,null,true);
 		addMember(l,"isFrontFacing",get_isFrontFacing,null,true);
 		addMember(l,"kind",get_kind,null,true);
 		addMember(l,"depthCameraName",get_depthCameraName,null,true);
 		addMember(l,"isAutoFocusPointSupported",get_isAutoFocusPointSupported,null,true);
 		addMember(l,"availableResolutions",get_availableResolutions,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.WebCamDevice),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.WebCamDevice),typeof(System.ValueType));
 	}
 }

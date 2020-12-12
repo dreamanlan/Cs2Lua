@@ -5,173 +5,249 @@ using System.Collections.Generic;
 public class Lua_System_IO_FileStream : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor__String__FileMode_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			System.IO.FileStream o;
-			if(argc==9){
-				System.String a1;
-				checkType(l,3,out a1);
-				System.IO.FileMode a2;
-				checkEnum(l,4,out a2);
-				System.Security.AccessControl.FileSystemRights a3;
-				checkEnum(l,5,out a3);
-				System.IO.FileShare a4;
-				checkEnum(l,6,out a4);
-				System.Int32 a5;
-				checkType(l,7,out a5);
-				System.IO.FileOptions a6;
-				checkEnum(l,8,out a6);
-				System.Security.AccessControl.FileSecurity a7;
-				checkType(l,9,out a7);
-				o=new System.IO.FileStream(a1,a2,a3,a4,a5,a6,a7);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__String__FileMode__FileAccess__FileShare__Int32__Boolean", argc, 2,typeof(string),typeof(System.IO.FileMode),typeof(System.IO.FileAccess),typeof(System.IO.FileShare),typeof(int),typeof(bool))){
-				System.String a1;
-				checkType(l,3,out a1);
-				System.IO.FileMode a2;
-				checkEnum(l,4,out a2);
-				System.IO.FileAccess a3;
-				checkEnum(l,5,out a3);
-				System.IO.FileShare a4;
-				checkEnum(l,6,out a4);
-				System.Int32 a5;
-				checkType(l,7,out a5);
-				System.Boolean a6;
-				checkType(l,8,out a6);
-				o=new System.IO.FileStream(a1,a2,a3,a4,a5,a6);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__String__FileMode__FileAccess__FileShare__Int32__FileOptions", argc, 2,typeof(string),typeof(System.IO.FileMode),typeof(System.IO.FileAccess),typeof(System.IO.FileShare),typeof(int),typeof(System.IO.FileOptions))){
-				System.String a1;
-				checkType(l,3,out a1);
-				System.IO.FileMode a2;
-				checkEnum(l,4,out a2);
-				System.IO.FileAccess a3;
-				checkEnum(l,5,out a3);
-				System.IO.FileShare a4;
-				checkEnum(l,6,out a4);
-				System.Int32 a5;
-				checkType(l,7,out a5);
-				System.IO.FileOptions a6;
-				checkEnum(l,8,out a6);
-				o=new System.IO.FileStream(a1,a2,a3,a4,a5,a6);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__String__FileMode__FileSystemRights__FileShare__Int32__FileOptions", argc, 2,typeof(string),typeof(System.IO.FileMode),typeof(System.Security.AccessControl.FileSystemRights),typeof(System.IO.FileShare),typeof(int),typeof(System.IO.FileOptions))){
-				System.String a1;
-				checkType(l,3,out a1);
-				System.IO.FileMode a2;
-				checkEnum(l,4,out a2);
-				System.Security.AccessControl.FileSystemRights a3;
-				checkEnum(l,5,out a3);
-				System.IO.FileShare a4;
-				checkEnum(l,6,out a4);
-				System.Int32 a5;
-				checkType(l,7,out a5);
-				System.IO.FileOptions a6;
-				checkEnum(l,8,out a6);
-				o=new System.IO.FileStream(a1,a2,a3,a4,a5,a6);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==7){
-				System.String a1;
-				checkType(l,3,out a1);
-				System.IO.FileMode a2;
-				checkEnum(l,4,out a2);
-				System.IO.FileAccess a3;
-				checkEnum(l,5,out a3);
-				System.IO.FileShare a4;
-				checkEnum(l,6,out a4);
-				System.Int32 a5;
-				checkType(l,7,out a5);
-				o=new System.IO.FileStream(a1,a2,a3,a4,a5);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__String__FileMode__FileAccess__FileShare", argc, 2,typeof(string),typeof(System.IO.FileMode),typeof(System.IO.FileAccess),typeof(System.IO.FileShare))){
-				System.String a1;
-				checkType(l,3,out a1);
-				System.IO.FileMode a2;
-				checkEnum(l,4,out a2);
-				System.IO.FileAccess a3;
-				checkEnum(l,5,out a3);
-				System.IO.FileShare a4;
-				checkEnum(l,6,out a4);
-				o=new System.IO.FileStream(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__SafeFileHandle__FileAccess__Int32__Boolean", argc, 2,typeof(Microsoft.Win32.SafeHandles.SafeFileHandle),typeof(System.IO.FileAccess),typeof(int),typeof(bool))){
-				Microsoft.Win32.SafeHandles.SafeFileHandle a1;
-				checkType(l,3,out a1);
-				System.IO.FileAccess a2;
-				checkEnum(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				System.Boolean a4;
-				checkType(l,6,out a4);
-				o=new System.IO.FileStream(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__String__FileMode__FileAccess", argc, 2,typeof(string),typeof(System.IO.FileMode),typeof(System.IO.FileAccess))){
-				System.String a1;
-				checkType(l,3,out a1);
-				System.IO.FileMode a2;
-				checkEnum(l,4,out a2);
-				System.IO.FileAccess a3;
-				checkEnum(l,5,out a3);
-				o=new System.IO.FileStream(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__SafeFileHandle__FileAccess__Int32", argc, 2,typeof(Microsoft.Win32.SafeHandles.SafeFileHandle),typeof(System.IO.FileAccess),typeof(int))){
-				Microsoft.Win32.SafeHandles.SafeFileHandle a1;
-				checkType(l,3,out a1);
-				System.IO.FileAccess a2;
-				checkEnum(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				o=new System.IO.FileStream(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__String__FileMode", argc, 2,typeof(string),typeof(System.IO.FileMode))){
-				System.String a1;
-				checkType(l,3,out a1);
-				System.IO.FileMode a2;
-				checkEnum(l,4,out a2);
-				o=new System.IO.FileStream(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__SafeFileHandle__FileAccess", argc, 2,typeof(Microsoft.Win32.SafeHandles.SafeFileHandle),typeof(System.IO.FileAccess))){
-				Microsoft.Win32.SafeHandles.SafeFileHandle a1;
-				checkType(l,3,out a1);
-				System.IO.FileAccess a2;
-				checkEnum(l,4,out a2);
-				o=new System.IO.FileStream(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			System.String a1;
+			checkType(l,1,out a1);
+			System.IO.FileMode a2;
+			checkEnum(l,2,out a2);
+			o=new System.IO.FileStream(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__SafeFileHandle__FileAccess_s(IntPtr l) {
+		try {
+			System.IO.FileStream o;
+			Microsoft.Win32.SafeHandles.SafeFileHandle a1;
+			checkType(l,1,out a1);
+			System.IO.FileAccess a2;
+			checkEnum(l,2,out a2);
+			o=new System.IO.FileStream(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__String__FileMode__FileAccess_s(IntPtr l) {
+		try {
+			System.IO.FileStream o;
+			System.String a1;
+			checkType(l,1,out a1);
+			System.IO.FileMode a2;
+			checkEnum(l,2,out a2);
+			System.IO.FileAccess a3;
+			checkEnum(l,3,out a3);
+			o=new System.IO.FileStream(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__SafeFileHandle__FileAccess__Int32_s(IntPtr l) {
+		try {
+			System.IO.FileStream o;
+			Microsoft.Win32.SafeHandles.SafeFileHandle a1;
+			checkType(l,1,out a1);
+			System.IO.FileAccess a2;
+			checkEnum(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			o=new System.IO.FileStream(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__String__FileMode__FileAccess__FileShare_s(IntPtr l) {
+		try {
+			System.IO.FileStream o;
+			System.String a1;
+			checkType(l,1,out a1);
+			System.IO.FileMode a2;
+			checkEnum(l,2,out a2);
+			System.IO.FileAccess a3;
+			checkEnum(l,3,out a3);
+			System.IO.FileShare a4;
+			checkEnum(l,4,out a4);
+			o=new System.IO.FileStream(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__SafeFileHandle__FileAccess__Int32__Boolean_s(IntPtr l) {
+		try {
+			System.IO.FileStream o;
+			Microsoft.Win32.SafeHandles.SafeFileHandle a1;
+			checkType(l,1,out a1);
+			System.IO.FileAccess a2;
+			checkEnum(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			System.Boolean a4;
+			checkType(l,4,out a4);
+			o=new System.IO.FileStream(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__String__FileMode__FileAccess__FileShare__Int32_s(IntPtr l) {
+		try {
+			System.IO.FileStream o;
+			System.String a1;
+			checkType(l,1,out a1);
+			System.IO.FileMode a2;
+			checkEnum(l,2,out a2);
+			System.IO.FileAccess a3;
+			checkEnum(l,3,out a3);
+			System.IO.FileShare a4;
+			checkEnum(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
+			o=new System.IO.FileStream(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__String__FileMode__FileAccess__FileShare__Int32__Boolean_s(IntPtr l) {
+		try {
+			System.IO.FileStream o;
+			System.String a1;
+			checkType(l,1,out a1);
+			System.IO.FileMode a2;
+			checkEnum(l,2,out a2);
+			System.IO.FileAccess a3;
+			checkEnum(l,3,out a3);
+			System.IO.FileShare a4;
+			checkEnum(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
+			System.Boolean a6;
+			checkType(l,6,out a6);
+			o=new System.IO.FileStream(a1,a2,a3,a4,a5,a6);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__String__FileMode__FileAccess__FileShare__Int32__FileOptions_s(IntPtr l) {
+		try {
+			System.IO.FileStream o;
+			System.String a1;
+			checkType(l,1,out a1);
+			System.IO.FileMode a2;
+			checkEnum(l,2,out a2);
+			System.IO.FileAccess a3;
+			checkEnum(l,3,out a3);
+			System.IO.FileShare a4;
+			checkEnum(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
+			System.IO.FileOptions a6;
+			checkEnum(l,6,out a6);
+			o=new System.IO.FileStream(a1,a2,a3,a4,a5,a6);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__String__FileMode__FileSystemRights__FileShare__Int32__FileOptions_s(IntPtr l) {
+		try {
+			System.IO.FileStream o;
+			System.String a1;
+			checkType(l,1,out a1);
+			System.IO.FileMode a2;
+			checkEnum(l,2,out a2);
+			System.Security.AccessControl.FileSystemRights a3;
+			checkEnum(l,3,out a3);
+			System.IO.FileShare a4;
+			checkEnum(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
+			System.IO.FileOptions a6;
+			checkEnum(l,6,out a6);
+			o=new System.IO.FileStream(a1,a2,a3,a4,a5,a6);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__String__FileMode__FileSystemRights__FileShare__Int32__FileOptions__FileSecurity_s(IntPtr l) {
+		try {
+			System.IO.FileStream o;
+			System.String a1;
+			checkType(l,1,out a1);
+			System.IO.FileMode a2;
+			checkEnum(l,2,out a2);
+			System.Security.AccessControl.FileSystemRights a3;
+			checkEnum(l,3,out a3);
+			System.IO.FileShare a4;
+			checkEnum(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
+			System.IO.FileOptions a6;
+			checkEnum(l,6,out a6);
+			System.Security.AccessControl.FileSecurity a7;
+			checkType(l,7,out a7);
+			o=new System.IO.FileStream(a1,a2,a3,a4,a5,a6,a7);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -361,24 +437,25 @@ public class Lua_System_IO_FileStream : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int Flush(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.IO.FileStream self=(System.IO.FileStream)checkSelf(l);
-				System.Boolean a1;
-				checkType(l,3,out a1);
-				self.Flush(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				System.IO.FileStream self=(System.IO.FileStream)checkSelf(l);
-				self.Flush();
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			System.IO.FileStream self=(System.IO.FileStream)checkSelf(l);
+			self.Flush();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Flush__Boolean(IntPtr l) {
+		try {
+			System.IO.FileStream self=(System.IO.FileStream)checkSelf(l);
+			System.Boolean a1;
+			checkType(l,2,out a1);
+			self.Flush(a1);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -629,6 +706,17 @@ public class Lua_System_IO_FileStream : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"System.IO.FileStream");
+		addMember(l,ctor__String__FileMode_s);
+		addMember(l,ctor__SafeFileHandle__FileAccess_s);
+		addMember(l,ctor__String__FileMode__FileAccess_s);
+		addMember(l,ctor__SafeFileHandle__FileAccess__Int32_s);
+		addMember(l,ctor__String__FileMode__FileAccess__FileShare_s);
+		addMember(l,ctor__SafeFileHandle__FileAccess__Int32__Boolean_s);
+		addMember(l,ctor__String__FileMode__FileAccess__FileShare__Int32_s);
+		addMember(l,ctor__String__FileMode__FileAccess__FileShare__Int32__Boolean_s);
+		addMember(l,ctor__String__FileMode__FileAccess__FileShare__Int32__FileOptions_s);
+		addMember(l,ctor__String__FileMode__FileSystemRights__FileShare__Int32__FileOptions_s);
+		addMember(l,ctor__String__FileMode__FileSystemRights__FileShare__Int32__FileOptions__FileSecurity_s);
 		addMember(l,ReadByte);
 		addMember(l,WriteByte);
 		addMember(l,Read);
@@ -640,6 +728,7 @@ public class Lua_System_IO_FileStream : LuaObject {
 		addMember(l,Seek);
 		addMember(l,SetLength);
 		addMember(l,Flush);
+		addMember(l,Flush__Boolean);
 		addMember(l,Lock);
 		addMember(l,Unlock);
 		addMember(l,GetAccessControl);
@@ -655,6 +744,6 @@ public class Lua_System_IO_FileStream : LuaObject {
 		addMember(l,"Length",get_Length,null,true);
 		addMember(l,"Position",get_Position,set_Position,true);
 		addMember(l,"SafeFileHandle",get_SafeFileHandle,null,true);
-		createTypeMetatable(l,constructor, typeof(System.IO.FileStream),typeof(System.IO.Stream));
+		createTypeMetatable(l,null, typeof(System.IO.FileStream),typeof(System.IO.Stream));
 	}
 }

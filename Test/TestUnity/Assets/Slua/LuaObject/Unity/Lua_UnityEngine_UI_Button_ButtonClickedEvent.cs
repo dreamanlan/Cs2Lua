@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_UI_Button_ButtonClickedEvent : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.UI.Button.ButtonClickedEvent o;
 			o=new UnityEngine.UI.Button.ButtonClickedEvent();
@@ -20,6 +20,7 @@ public class Lua_UnityEngine_UI_Button_ButtonClickedEvent : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.Button.ButtonClickedEvent");
-		createTypeMetatable(l,constructor, typeof(UnityEngine.UI.Button.ButtonClickedEvent),typeof(UnityEngine.Events.UnityEvent));
+		addMember(l,ctor_s);
+		createTypeMetatable(l,null, typeof(UnityEngine.UI.Button.ButtonClickedEvent),typeof(UnityEngine.Events.UnityEvent));
 	}
 }

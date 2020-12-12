@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Component : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Component o;
 			o=new UnityEngine.Component();
@@ -19,29 +19,14 @@ public class Lua_UnityEngine_Component : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetComponent(IntPtr l) {
+	static public int GetComponent__Type(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetComponent__Component__Type", argc, 2,typeof(System.Type))){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.Type a1;
-				checkType(l,3,out a1);
-				var ret=self.GetComponent(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetComponent__Component__String", argc, 2,typeof(string))){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetComponent(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.Type a1;
+			checkType(l,2,out a1);
+			var ret=self.GetComponent(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -50,31 +35,14 @@ public class Lua_UnityEngine_Component : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetComponentInChildren(IntPtr l) {
+	static public int GetComponent__String(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.Type a1;
-				checkType(l,3,out a1);
-				System.Boolean a2;
-				checkType(l,4,out a2);
-				var ret=self.GetComponentInChildren(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.Type a1;
-				checkType(l,3,out a1);
-				var ret=self.GetComponentInChildren(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetComponent(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -83,31 +51,66 @@ public class Lua_UnityEngine_Component : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetComponentsInChildren(IntPtr l) {
+	static public int GetComponentInChildren__Type(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.Type a1;
-				checkType(l,3,out a1);
-				System.Boolean a2;
-				checkType(l,4,out a2);
-				var ret=self.GetComponentsInChildren(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.Type a1;
-				checkType(l,3,out a1);
-				var ret=self.GetComponentsInChildren(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.Type a1;
+			checkType(l,2,out a1);
+			var ret=self.GetComponentInChildren(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetComponentInChildren__Type__Boolean(IntPtr l) {
+		try {
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.Type a1;
+			checkType(l,2,out a1);
+			System.Boolean a2;
+			checkType(l,3,out a2);
+			var ret=self.GetComponentInChildren(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetComponentsInChildren__Type(IntPtr l) {
+		try {
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.Type a1;
+			checkType(l,2,out a1);
+			var ret=self.GetComponentsInChildren(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetComponentsInChildren__Type__Boolean(IntPtr l) {
+		try {
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.Type a1;
+			checkType(l,2,out a1);
+			System.Boolean a2;
+			checkType(l,3,out a2);
+			var ret=self.GetComponentsInChildren(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -132,31 +135,14 @@ public class Lua_UnityEngine_Component : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetComponentsInParent(IntPtr l) {
+	static public int GetComponentsInParent__Type(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.Type a1;
-				checkType(l,3,out a1);
-				System.Boolean a2;
-				checkType(l,4,out a2);
-				var ret=self.GetComponentsInParent(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.Type a1;
-				checkType(l,3,out a1);
-				var ret=self.GetComponentsInParent(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.Type a1;
+			checkType(l,2,out a1);
+			var ret=self.GetComponentsInParent(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -165,31 +151,50 @@ public class Lua_UnityEngine_Component : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetComponents(IntPtr l) {
+	static public int GetComponentsInParent__Type__Boolean(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.Type a1;
-				checkType(l,3,out a1);
-				System.Collections.Generic.List<UnityEngine.Component> a2;
-				checkType(l,4,out a2);
-				self.GetComponents(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.Type a1;
-				checkType(l,3,out a1);
-				var ret=self.GetComponents(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.Type a1;
+			checkType(l,2,out a1);
+			System.Boolean a2;
+			checkType(l,3,out a2);
+			var ret=self.GetComponentsInParent(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetComponents__Type(IntPtr l) {
+		try {
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.Type a1;
+			checkType(l,2,out a1);
+			var ret=self.GetComponents(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetComponents__Type__List_1_Component(IntPtr l) {
+		try {
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.Type a1;
+			checkType(l,2,out a1);
+			System.Collections.Generic.List<UnityEngine.Component> a2;
+			checkType(l,3,out a2);
+			self.GetComponents(a1,a2);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -213,52 +218,14 @@ public class Lua_UnityEngine_Component : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SendMessageUpwards(IntPtr l) {
+	static public int SendMessageUpwards__String(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Object a2;
-				checkType(l,4,out a2);
-				UnityEngine.SendMessageOptions a3;
-				checkEnum(l,5,out a3);
-				self.SendMessageUpwards(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SendMessageUpwards__Void__String__Object", argc, 2,typeof(string),typeof(System.Object))){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Object a2;
-				checkType(l,4,out a2);
-				self.SendMessageUpwards(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SendMessageUpwards__Void__String__SendMessageOptions", argc, 2,typeof(string),typeof(UnityEngine.SendMessageOptions))){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				UnityEngine.SendMessageOptions a2;
-				checkEnum(l,4,out a2);
-				self.SendMessageUpwards(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				self.SendMessageUpwards(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			self.SendMessageUpwards(a1);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -266,52 +233,16 @@ public class Lua_UnityEngine_Component : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SendMessage(IntPtr l) {
+	static public int SendMessageUpwards__String__Object(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Object a2;
-				checkType(l,4,out a2);
-				UnityEngine.SendMessageOptions a3;
-				checkEnum(l,5,out a3);
-				self.SendMessage(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SendMessage__Void__String__Object", argc, 2,typeof(string),typeof(System.Object))){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Object a2;
-				checkType(l,4,out a2);
-				self.SendMessage(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "SendMessage__Void__String__SendMessageOptions", argc, 2,typeof(string),typeof(UnityEngine.SendMessageOptions))){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				UnityEngine.SendMessageOptions a2;
-				checkEnum(l,4,out a2);
-				self.SendMessage(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				self.SendMessage(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Object a2;
+			checkType(l,3,out a2);
+			self.SendMessageUpwards(a1,a2);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -319,52 +250,171 @@ public class Lua_UnityEngine_Component : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int BroadcastMessage(IntPtr l) {
+	static public int SendMessageUpwards__String__SendMessageOptions(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Object a2;
-				checkType(l,4,out a2);
-				UnityEngine.SendMessageOptions a3;
-				checkEnum(l,5,out a3);
-				self.BroadcastMessage(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "BroadcastMessage__Void__String__Object", argc, 2,typeof(string),typeof(System.Object))){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Object a2;
-				checkType(l,4,out a2);
-				self.BroadcastMessage(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "BroadcastMessage__Void__String__SendMessageOptions", argc, 2,typeof(string),typeof(UnityEngine.SendMessageOptions))){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				UnityEngine.SendMessageOptions a2;
-				checkEnum(l,4,out a2);
-				self.BroadcastMessage(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				self.BroadcastMessage(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			UnityEngine.SendMessageOptions a2;
+			checkEnum(l,3,out a2);
+			self.SendMessageUpwards(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SendMessageUpwards__String__Object__SendMessageOptions(IntPtr l) {
+		try {
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Object a2;
+			checkType(l,3,out a2);
+			UnityEngine.SendMessageOptions a3;
+			checkEnum(l,4,out a3);
+			self.SendMessageUpwards(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SendMessage__String(IntPtr l) {
+		try {
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			self.SendMessage(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SendMessage__String__Object(IntPtr l) {
+		try {
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Object a2;
+			checkType(l,3,out a2);
+			self.SendMessage(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SendMessage__String__SendMessageOptions(IntPtr l) {
+		try {
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			UnityEngine.SendMessageOptions a2;
+			checkEnum(l,3,out a2);
+			self.SendMessage(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SendMessage__String__Object__SendMessageOptions(IntPtr l) {
+		try {
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Object a2;
+			checkType(l,3,out a2);
+			UnityEngine.SendMessageOptions a3;
+			checkEnum(l,4,out a3);
+			self.SendMessage(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int BroadcastMessage__String(IntPtr l) {
+		try {
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			self.BroadcastMessage(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int BroadcastMessage__String__Object(IntPtr l) {
+		try {
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Object a2;
+			checkType(l,3,out a2);
+			self.BroadcastMessage(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int BroadcastMessage__String__SendMessageOptions(IntPtr l) {
+		try {
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			UnityEngine.SendMessageOptions a2;
+			checkEnum(l,3,out a2);
+			self.BroadcastMessage(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int BroadcastMessage__String__Object__SendMessageOptions(IntPtr l) {
+		try {
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Object a2;
+			checkType(l,3,out a2);
+			UnityEngine.SendMessageOptions a3;
+			checkEnum(l,4,out a3);
+			self.BroadcastMessage(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -427,19 +477,34 @@ public class Lua_UnityEngine_Component : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Component");
-		addMember(l,GetComponent);
-		addMember(l,GetComponentInChildren);
-		addMember(l,GetComponentsInChildren);
+		addMember(l,ctor_s);
+		addMember(l,GetComponent__Type);
+		addMember(l,GetComponent__String);
+		addMember(l,GetComponentInChildren__Type);
+		addMember(l,GetComponentInChildren__Type__Boolean);
+		addMember(l,GetComponentsInChildren__Type);
+		addMember(l,GetComponentsInChildren__Type__Boolean);
 		addMember(l,GetComponentInParent);
-		addMember(l,GetComponentsInParent);
-		addMember(l,GetComponents);
+		addMember(l,GetComponentsInParent__Type);
+		addMember(l,GetComponentsInParent__Type__Boolean);
+		addMember(l,GetComponents__Type);
+		addMember(l,GetComponents__Type__List_1_Component);
 		addMember(l,CompareTag);
-		addMember(l,SendMessageUpwards);
-		addMember(l,SendMessage);
-		addMember(l,BroadcastMessage);
+		addMember(l,SendMessageUpwards__String);
+		addMember(l,SendMessageUpwards__String__Object);
+		addMember(l,SendMessageUpwards__String__SendMessageOptions);
+		addMember(l,SendMessageUpwards__String__Object__SendMessageOptions);
+		addMember(l,SendMessage__String);
+		addMember(l,SendMessage__String__Object);
+		addMember(l,SendMessage__String__SendMessageOptions);
+		addMember(l,SendMessage__String__Object__SendMessageOptions);
+		addMember(l,BroadcastMessage__String);
+		addMember(l,BroadcastMessage__String__Object);
+		addMember(l,BroadcastMessage__String__SendMessageOptions);
+		addMember(l,BroadcastMessage__String__Object__SendMessageOptions);
 		addMember(l,"transform",get_transform,null,true);
 		addMember(l,"gameObject",get_gameObject,null,true);
 		addMember(l,"tag",get_tag,set_tag,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Component),typeof(UnityEngine.Object));
+		createTypeMetatable(l,null, typeof(UnityEngine.Component),typeof(UnityEngine.Object));
 	}
 }

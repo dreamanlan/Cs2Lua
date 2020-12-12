@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_LightBakingOutput : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.LightBakingOutput o;
 			o=new UnityEngine.LightBakingOutput();
@@ -175,11 +175,12 @@ public class Lua_UnityEngine_LightBakingOutput : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.LightBakingOutput");
+		addMember(l,ctor_s);
 		addMember(l,"probeOcclusionLightIndex",get_probeOcclusionLightIndex,set_probeOcclusionLightIndex,true);
 		addMember(l,"occlusionMaskChannel",get_occlusionMaskChannel,set_occlusionMaskChannel,true);
 		addMember(l,"lightmapBakeType",get_lightmapBakeType,set_lightmapBakeType,true);
 		addMember(l,"mixedLightingMode",get_mixedLightingMode,set_mixedLightingMode,true);
 		addMember(l,"isBaked",get_isBaked,set_isBaked,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.LightBakingOutput),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.LightBakingOutput),typeof(System.ValueType));
 	}
 }

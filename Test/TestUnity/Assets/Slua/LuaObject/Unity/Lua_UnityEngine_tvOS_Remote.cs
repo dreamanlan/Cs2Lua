@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_tvOS_Remote : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.tvOS.Remote o;
 			o=new UnityEngine.tvOS.Remote();
@@ -124,10 +124,11 @@ public class Lua_UnityEngine_tvOS_Remote : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.tvOS.Remote");
+		addMember(l,ctor_s);
 		addMember(l,"allowExitToHome",get_allowExitToHome,set_allowExitToHome,false);
 		addMember(l,"allowRemoteRotation",get_allowRemoteRotation,set_allowRemoteRotation,false);
 		addMember(l,"reportAbsoluteDpadValues",get_reportAbsoluteDpadValues,set_reportAbsoluteDpadValues,false);
 		addMember(l,"touchesEnabled",get_touchesEnabled,set_touchesEnabled,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.tvOS.Remote));
+		createTypeMetatable(l,null, typeof(UnityEngine.tvOS.Remote));
 	}
 }

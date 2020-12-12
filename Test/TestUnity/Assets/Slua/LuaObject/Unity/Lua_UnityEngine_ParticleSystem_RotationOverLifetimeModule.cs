@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_RotationOverLifetimeModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.RotationOverLifetimeModule o;
 			o=new UnityEngine.ParticleSystem.RotationOverLifetimeModule();
@@ -268,6 +268,7 @@ public class Lua_UnityEngine_ParticleSystem_RotationOverLifetimeModule : LuaObje
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.RotationOverLifetimeModule");
+		addMember(l,ctor_s);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
 		addMember(l,"x",get_x,set_x,true);
 		addMember(l,"xMultiplier",get_xMultiplier,set_xMultiplier,true);
@@ -276,6 +277,6 @@ public class Lua_UnityEngine_ParticleSystem_RotationOverLifetimeModule : LuaObje
 		addMember(l,"z",get_z,set_z,true);
 		addMember(l,"zMultiplier",get_zMultiplier,set_zMultiplier,true);
 		addMember(l,"separateAxes",get_separateAxes,set_separateAxes,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.RotationOverLifetimeModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.RotationOverLifetimeModule),typeof(System.ValueType));
 	}
 }

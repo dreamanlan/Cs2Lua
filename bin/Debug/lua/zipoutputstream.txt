@@ -43,16 +43,9 @@ ZipOutputStream = {
 		local class = ZipOutputStream;
 
 		local obj_methods = {
-			ctor__System_IO_MemoryStream = function(this, ms)
-				this:__ctor();
-				ZipOutputStream.get_Instance().V = 1;
-				ZipOutputStream.get_Instance():Test();
-				return this;
-			end,
-
 			Test = function(this)
 				local dict;
-				dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, {}, luastrtocsstr("System.Collections.Generic.Dictionary_TKey_TValue:ctor__Void"));
+				dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, "ctor__Void", {});
 				dict:Add(1, 1);
 				dict:Add(2, 2);
 				dict[1] = (dict[1] + dict[2]);
@@ -103,9 +96,6 @@ ZipOutputStream = {
 	-------- metadata info --------
 	-------------------------------
 	__method_info = {
-		ctor__System_IO_MemoryStream = {
-			Kind = MethodKind.Constructor,
-		},
 		get_V = {
 			Kind = MethodKind.PropertyGet,
 		},

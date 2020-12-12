@@ -834,7 +834,7 @@ return index
             string resumefunc = @"
 local resume = coroutine.resume
 local function check(co, ok, err, ...)
-	if not ok then UnityEngine.Debug.LogError(""LogError__Object"", debug.traceback(co,err)) end
+	if not ok then UnityEngine.Debug.LogError__Object(debug.traceback(co,err)) end
 	return ok, err, ...
 end
 coroutine.resume=function(co,...)

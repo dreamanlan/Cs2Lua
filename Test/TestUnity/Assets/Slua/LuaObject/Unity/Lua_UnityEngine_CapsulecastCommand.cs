@@ -5,35 +5,39 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_CapsulecastCommand : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.CapsulecastCommand o;
-			if(argc==7){
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				UnityEngine.Vector3 a2;
-				checkType(l,3,out a2);
-				System.Single a3;
-				checkType(l,4,out a3);
-				UnityEngine.Vector3 a4;
-				checkType(l,5,out a4);
-				System.Single a5;
-				checkType(l,6,out a5);
-				System.Int32 a6;
-				checkType(l,7,out a6);
-				o=new UnityEngine.CapsulecastCommand(a1,a2,a3,a4,a5,a6);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc<=2){
-				o=new UnityEngine.CapsulecastCommand();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.CapsulecastCommand();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Vector3__Vector3__Single__Vector3__Single__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.CapsulecastCommand o;
+			UnityEngine.Vector3 a1;
+			checkType(l,1,out a1);
+			UnityEngine.Vector3 a2;
+			checkType(l,2,out a2);
+			System.Single a3;
+			checkType(l,3,out a3);
+			UnityEngine.Vector3 a4;
+			checkType(l,4,out a4);
+			System.Single a5;
+			checkType(l,5,out a5);
+			System.Int32 a6;
+			checkType(l,6,out a6);
+			o=new UnityEngine.CapsulecastCommand(a1,a2,a3,a4,a5,a6);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -249,6 +253,8 @@ public class Lua_UnityEngine_CapsulecastCommand : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.CapsulecastCommand");
+		addMember(l,ctor_s);
+		addMember(l,ctor__Vector3__Vector3__Single__Vector3__Single__Int32_s);
 		addMember(l,ScheduleBatch_s);
 		addMember(l,"point1",get_point1,set_point1,true);
 		addMember(l,"point2",get_point2,set_point2,true);
@@ -256,6 +262,6 @@ public class Lua_UnityEngine_CapsulecastCommand : LuaObject {
 		addMember(l,"direction",get_direction,set_direction,true);
 		addMember(l,"distance",get_distance,set_distance,true);
 		addMember(l,"layerMask",get_layerMask,set_layerMask,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.CapsulecastCommand),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.CapsulecastCommand),typeof(System.ValueType));
 	}
 }

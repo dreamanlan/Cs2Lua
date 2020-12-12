@@ -5,83 +5,119 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_RenderTexture : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor__RenderTextureDescriptor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.RenderTexture o;
-			if(argc==7){
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				UnityEngine.RenderTextureFormat a4;
-				checkEnum(l,6,out a4);
-				UnityEngine.RenderTextureReadWrite a5;
-				checkEnum(l,7,out a5);
-				o=new UnityEngine.RenderTexture(a1,a2,a3,a4,a5);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Int32__Int32__Int32__GraphicsFormat", argc, 2,typeof(int),typeof(int),typeof(int),typeof(UnityEngine.Experimental.Rendering.GraphicsFormat))){
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				UnityEngine.Experimental.Rendering.GraphicsFormat a4;
-				checkEnum(l,6,out a4);
-				o=new UnityEngine.RenderTexture(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Int32__Int32__Int32__RenderTextureFormat", argc, 2,typeof(int),typeof(int),typeof(int),typeof(UnityEngine.RenderTextureFormat))){
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				UnityEngine.RenderTextureFormat a4;
-				checkEnum(l,6,out a4);
-				o=new UnityEngine.RenderTexture(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==5){
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				o=new UnityEngine.RenderTexture(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__RenderTextureDescriptor", argc, 2,typeof(UnityEngine.RenderTextureDescriptor))){
-				UnityEngine.RenderTextureDescriptor a1;
-				checkValueType(l,3,out a1);
-				o=new UnityEngine.RenderTexture(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__RenderTexture", argc, 2,typeof(UnityEngine.RenderTexture))){
-				UnityEngine.RenderTexture a1;
-				checkType(l,3,out a1);
-				o=new UnityEngine.RenderTexture(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			UnityEngine.RenderTextureDescriptor a1;
+			checkValueType(l,1,out a1);
+			o=new UnityEngine.RenderTexture(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__RenderTexture_s(IntPtr l) {
+		try {
+			UnityEngine.RenderTexture o;
+			UnityEngine.RenderTexture a1;
+			checkType(l,1,out a1);
+			o=new UnityEngine.RenderTexture(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.RenderTexture o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			o=new UnityEngine.RenderTexture(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__Int32__GraphicsFormat_s(IntPtr l) {
+		try {
+			UnityEngine.RenderTexture o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.Experimental.Rendering.GraphicsFormat a4;
+			checkEnum(l,4,out a4);
+			o=new UnityEngine.RenderTexture(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__Int32__RenderTextureFormat_s(IntPtr l) {
+		try {
+			UnityEngine.RenderTexture o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.RenderTextureFormat a4;
+			checkEnum(l,4,out a4);
+			o=new UnityEngine.RenderTexture(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__Int32__RenderTextureFormat__RenderTextureReadWrite_s(IntPtr l) {
+		try {
+			UnityEngine.RenderTexture o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.RenderTextureFormat a4;
+			checkEnum(l,4,out a4);
+			UnityEngine.RenderTextureReadWrite a5;
+			checkEnum(l,5,out a5);
+			o=new UnityEngine.RenderTexture(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -105,26 +141,27 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int DiscardContents(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
-				System.Boolean a1;
-				checkType(l,3,out a1);
-				System.Boolean a2;
-				checkType(l,4,out a2);
-				self.DiscardContents(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
-				self.DiscardContents();
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
+			self.DiscardContents();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int DiscardContents__Boolean__Boolean(IntPtr l) {
+		try {
+			UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
+			System.Boolean a1;
+			checkType(l,2,out a1);
+			System.Boolean a2;
+			checkType(l,3,out a2);
+			self.DiscardContents(a1,a2);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -147,24 +184,25 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int ResolveAntiAliasedSurface(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
-				UnityEngine.RenderTexture a1;
-				checkType(l,3,out a1);
-				self.ResolveAntiAliasedSurface(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
-				self.ResolveAntiAliasedSurface();
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
+			self.ResolveAntiAliasedSurface();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ResolveAntiAliasedSurface__RenderTexture(IntPtr l) {
+		try {
+			UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
+			UnityEngine.RenderTexture a1;
+			checkType(l,2,out a1);
+			self.ResolveAntiAliasedSurface(a1);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -287,155 +325,205 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetTemporary_s(IntPtr l) {
+	static public int GetTemporary__RenderTextureDescriptor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==10){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				UnityEngine.RenderTextureFormat a4;
-				checkEnum(l,5,out a4);
-				UnityEngine.RenderTextureReadWrite a5;
-				checkEnum(l,6,out a5);
-				System.Int32 a6;
-				checkType(l,7,out a6);
-				UnityEngine.RenderTextureMemoryless a7;
-				checkEnum(l,8,out a7);
-				UnityEngine.VRTextureUsage a8;
-				checkEnum(l,9,out a8);
-				System.Boolean a9;
-				checkType(l,10,out a9);
-				var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3,a4,a5,a6,a7,a8,a9);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==9){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				UnityEngine.RenderTextureFormat a4;
-				checkEnum(l,5,out a4);
-				UnityEngine.RenderTextureReadWrite a5;
-				checkEnum(l,6,out a5);
-				System.Int32 a6;
-				checkType(l,7,out a6);
-				UnityEngine.RenderTextureMemoryless a7;
-				checkEnum(l,8,out a7);
-				UnityEngine.VRTextureUsage a8;
-				checkEnum(l,9,out a8);
-				var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3,a4,a5,a6,a7,a8);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==8){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				UnityEngine.RenderTextureFormat a4;
-				checkEnum(l,5,out a4);
-				UnityEngine.RenderTextureReadWrite a5;
-				checkEnum(l,6,out a5);
-				System.Int32 a6;
-				checkType(l,7,out a6);
-				UnityEngine.RenderTextureMemoryless a7;
-				checkEnum(l,8,out a7);
-				var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3,a4,a5,a6,a7);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==7){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				UnityEngine.RenderTextureFormat a4;
-				checkEnum(l,5,out a4);
-				UnityEngine.RenderTextureReadWrite a5;
-				checkEnum(l,6,out a5);
-				System.Int32 a6;
-				checkType(l,7,out a6);
-				var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3,a4,a5,a6);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==6){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				UnityEngine.RenderTextureFormat a4;
-				checkEnum(l,5,out a4);
-				UnityEngine.RenderTextureReadWrite a5;
-				checkEnum(l,6,out a5);
-				var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3,a4,a5);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==5){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				UnityEngine.RenderTextureFormat a4;
-				checkEnum(l,5,out a4);
-				var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==4){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				checkType(l,4,out a3);
-				var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				UnityEngine.RenderTextureDescriptor a1;
-				checkValueType(l,2,out a1);
-				var ret=UnityEngine.RenderTexture.GetTemporary(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.RenderTextureDescriptor a1;
+			checkValueType(l,1,out a1);
+			var ret=UnityEngine.RenderTexture.GetTemporary(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTemporary__Int32__Int32_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTemporary__Int32__Int32__Int32_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTemporary__Int32__Int32__Int32__RenderTextureFormat_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.RenderTextureFormat a4;
+			checkEnum(l,4,out a4);
+			var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTemporary__Int32__Int32__Int32__RenderTextureFormat__RenderTextureReadWrite_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.RenderTextureFormat a4;
+			checkEnum(l,4,out a4);
+			UnityEngine.RenderTextureReadWrite a5;
+			checkEnum(l,5,out a5);
+			var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTemporary__Int32__Int32__Int32__RenderTextureFormat__RenderTextureReadWrite__Int32_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.RenderTextureFormat a4;
+			checkEnum(l,4,out a4);
+			UnityEngine.RenderTextureReadWrite a5;
+			checkEnum(l,5,out a5);
+			System.Int32 a6;
+			checkType(l,6,out a6);
+			var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3,a4,a5,a6);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTemporary__Int32__Int32__Int32__RenderTextureFormat__RenderTextureReadWrite__Int32__RenderTextureMemoryless_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.RenderTextureFormat a4;
+			checkEnum(l,4,out a4);
+			UnityEngine.RenderTextureReadWrite a5;
+			checkEnum(l,5,out a5);
+			System.Int32 a6;
+			checkType(l,6,out a6);
+			UnityEngine.RenderTextureMemoryless a7;
+			checkEnum(l,7,out a7);
+			var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3,a4,a5,a6,a7);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTemporary__Int32__Int32__Int32__RenderTextureFormat__RenderTextureReadWrite__Int32__RenderTextureMemoryless__VRTextureUsage_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.RenderTextureFormat a4;
+			checkEnum(l,4,out a4);
+			UnityEngine.RenderTextureReadWrite a5;
+			checkEnum(l,5,out a5);
+			System.Int32 a6;
+			checkType(l,6,out a6);
+			UnityEngine.RenderTextureMemoryless a7;
+			checkEnum(l,7,out a7);
+			UnityEngine.VRTextureUsage a8;
+			checkEnum(l,8,out a8);
+			var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3,a4,a5,a6,a7,a8);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTemporary__Int32__Int32__Int32__RenderTextureFormat__RenderTextureReadWrite__Int32__RenderTextureMemoryless__VRTextureUsage__Boolean_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.RenderTextureFormat a4;
+			checkEnum(l,4,out a4);
+			UnityEngine.RenderTextureReadWrite a5;
+			checkEnum(l,5,out a5);
+			System.Int32 a6;
+			checkType(l,6,out a6);
+			UnityEngine.RenderTextureMemoryless a7;
+			checkEnum(l,7,out a7);
+			UnityEngine.VRTextureUsage a8;
+			checkEnum(l,8,out a8);
+			System.Boolean a9;
+			checkType(l,9,out a9);
+			var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3,a4,a5,a6,a7,a8,a9);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -958,10 +1046,18 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.RenderTexture");
+		addMember(l,ctor__RenderTextureDescriptor_s);
+		addMember(l,ctor__RenderTexture_s);
+		addMember(l,ctor__Int32__Int32__Int32_s);
+		addMember(l,ctor__Int32__Int32__Int32__GraphicsFormat_s);
+		addMember(l,ctor__Int32__Int32__Int32__RenderTextureFormat_s);
+		addMember(l,ctor__Int32__Int32__Int32__RenderTextureFormat__RenderTextureReadWrite_s);
 		addMember(l,GetNativeDepthBufferPtr);
 		addMember(l,DiscardContents);
+		addMember(l,DiscardContents__Boolean__Boolean);
 		addMember(l,MarkRestoreExpected);
 		addMember(l,ResolveAntiAliasedSurface);
+		addMember(l,ResolveAntiAliasedSurface__RenderTexture);
 		addMember(l,SetGlobalShaderProperty);
 		addMember(l,Create);
 		addMember(l,Release);
@@ -970,7 +1066,15 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 		addMember(l,ConvertToEquirect);
 		addMember(l,SupportsStencil_s);
 		addMember(l,ReleaseTemporary_s);
-		addMember(l,GetTemporary_s);
+		addMember(l,GetTemporary__RenderTextureDescriptor_s);
+		addMember(l,GetTemporary__Int32__Int32_s);
+		addMember(l,GetTemporary__Int32__Int32__Int32_s);
+		addMember(l,GetTemporary__Int32__Int32__Int32__RenderTextureFormat_s);
+		addMember(l,GetTemporary__Int32__Int32__Int32__RenderTextureFormat__RenderTextureReadWrite_s);
+		addMember(l,GetTemporary__Int32__Int32__Int32__RenderTextureFormat__RenderTextureReadWrite__Int32_s);
+		addMember(l,GetTemporary__Int32__Int32__Int32__RenderTextureFormat__RenderTextureReadWrite__Int32__RenderTextureMemoryless_s);
+		addMember(l,GetTemporary__Int32__Int32__Int32__RenderTextureFormat__RenderTextureReadWrite__Int32__RenderTextureMemoryless__VRTextureUsage_s);
+		addMember(l,GetTemporary__Int32__Int32__Int32__RenderTextureFormat__RenderTextureReadWrite__Int32__RenderTextureMemoryless__VRTextureUsage__Boolean_s);
 		addMember(l,"width",get_width,set_width,true);
 		addMember(l,"height",get_height,set_height,true);
 		addMember(l,"dimension",get_dimension,set_dimension,true);
@@ -991,6 +1095,6 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 		addMember(l,"depthBuffer",get_depthBuffer,null,true);
 		addMember(l,"depth",get_depth,set_depth,true);
 		addMember(l,"descriptor",get_descriptor,set_descriptor,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.RenderTexture),typeof(UnityEngine.Texture));
+		createTypeMetatable(l,null, typeof(UnityEngine.RenderTexture),typeof(UnityEngine.Texture));
 	}
 }

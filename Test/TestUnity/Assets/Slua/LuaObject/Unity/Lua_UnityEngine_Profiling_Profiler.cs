@@ -78,28 +78,29 @@ public class Lua_UnityEngine_Profiling_Profiler : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int BeginSample_s(IntPtr l) {
+	static public int BeginSample__String_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				UnityEngine.Object a2;
-				checkType(l,3,out a2);
-				UnityEngine.Profiling.Profiler.BeginSample(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				System.String a1;
-				checkType(l,2,out a1);
-				UnityEngine.Profiling.Profiler.BeginSample(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			System.String a1;
+			checkType(l,1,out a1);
+			UnityEngine.Profiling.Profiler.BeginSample(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int BeginSample__String__Object_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			UnityEngine.Object a2;
+			checkType(l,2,out a2);
+			UnityEngine.Profiling.Profiler.BeginSample(a1,a2);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -424,7 +425,8 @@ public class Lua_UnityEngine_Profiling_Profiler : LuaObject {
 		addMember(l,AddFramesFromFile_s);
 		addMember(l,BeginThreadProfiling_s);
 		addMember(l,EndThreadProfiling_s);
-		addMember(l,BeginSample_s);
+		addMember(l,BeginSample__String_s);
+		addMember(l,BeginSample__String__Object_s);
 		addMember(l,EndSample_s);
 		addMember(l,GetRuntimeMemorySizeLong_s);
 		addMember(l,GetMonoHeapSizeLong_s);

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.TextureSheetAnimationModule o;
 			o=new UnityEngine.ParticleSystem.TextureSheetAnimationModule();
@@ -600,6 +600,7 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.TextureSheetAnimationModule");
+		addMember(l,ctor_s);
 		addMember(l,AddSprite);
 		addMember(l,RemoveSprite);
 		addMember(l,SetSprite);
@@ -621,6 +622,6 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 		addMember(l,"uvChannelMask",get_uvChannelMask,set_uvChannelMask,true);
 		addMember(l,"spriteCount",get_spriteCount,null,true);
 		addMember(l,"speedRange",get_speedRange,set_speedRange,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.TextureSheetAnimationModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.TextureSheetAnimationModule),typeof(System.ValueType));
 	}
 }

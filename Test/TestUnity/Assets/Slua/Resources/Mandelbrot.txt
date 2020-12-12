@@ -37,7 +37,7 @@ Mandelbrot = {
 
 		local obj_methods = {
 			Init = function(this, obj, mb)
-				this.root = newexternobject(UnityEngine.GameObject, nil, nil, nil, luastrtocsstr("UnityEngine.GameObject:ctor__Void__String"), luastrtocsstr("mandelbrot"));
+				this.root = newexternobject(UnityEngine.GameObject, nil, nil, "ctor__String", nil, luastrtocsstr("mandelbrot"));
 				this:Exec();
 			end,
 
@@ -100,12 +100,12 @@ Mandelbrot = {
 				local __cs2lua_func_info = luainitialize();
 				local cube;
 				cube = UnityEngine.GameObject.CreatePrimitive(3);
-				cube.transform.position = new_vector3(__cs2lua_func_info, UnityEngine.Vector3, nil, nil, nil, luastrtocsstr("UnityEngine.Vector3:ctor__Void__Single__Single__Single"), (((x * this.r) * this.scale) / w), ((((y * this.r) * this.scale) / h) - 12), 0);
-				cube.transform:SetParent(luastrtocsstr("UnityEngine.Transform:SetParent__Void__Transform"), this.root.transform);
+				cube.transform.position = new_vector3(__cs2lua_func_info, UnityEngine.Vector3, nil, nil, "ctor__Single__Single__Single", nil, (((x * this.r) * this.scale) / w), ((((y * this.r) * this.scale) / h) - 12), 0);
+				cube.transform:SetParent__Transform(this.root.transform);
 				local mat;
-				mat = cube:GetComponent(luastrtocsstr("UnityEngine.GameObject:GetComponent__Component__Type"), UnityEngine.Renderer).material;
+				mat = cube:GetComponent__Type(UnityEngine.Renderer).material;
 				local ix;
-				ix = UnityEngine.Random.Range(luastrtocsstr("UnityEngine.Random:Range__Int32__Int32__Int32"), 0, this.colors.Length);
+				ix = UnityEngine.Random.Range__Int32__Int32(0, this.colors.Length);
 				mat.color = this.colors[(ix + 1)];
 				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,

@@ -5,59 +5,79 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Keyframe : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Keyframe o;
-			if(argc==8){
-				System.Single a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				System.Single a3;
-				checkType(l,5,out a3);
-				System.Single a4;
-				checkType(l,6,out a4);
-				System.Single a5;
-				checkType(l,7,out a5);
-				System.Single a6;
-				checkType(l,8,out a6);
-				o=new UnityEngine.Keyframe(a1,a2,a3,a4,a5,a6);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==6){
-				System.Single a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				System.Single a3;
-				checkType(l,5,out a3);
-				System.Single a4;
-				checkType(l,6,out a4);
-				o=new UnityEngine.Keyframe(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==4){
-				System.Single a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				o=new UnityEngine.Keyframe(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc<=2){
-				o=new UnityEngine.Keyframe();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.Keyframe();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Single__Single_s(IntPtr l) {
+		try {
+			UnityEngine.Keyframe o;
+			System.Single a1;
+			checkType(l,1,out a1);
+			System.Single a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.Keyframe(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Single__Single__Single__Single_s(IntPtr l) {
+		try {
+			UnityEngine.Keyframe o;
+			System.Single a1;
+			checkType(l,1,out a1);
+			System.Single a2;
+			checkType(l,2,out a2);
+			System.Single a3;
+			checkType(l,3,out a3);
+			System.Single a4;
+			checkType(l,4,out a4);
+			o=new UnityEngine.Keyframe(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Single__Single__Single__Single__Single__Single_s(IntPtr l) {
+		try {
+			UnityEngine.Keyframe o;
+			System.Single a1;
+			checkType(l,1,out a1);
+			System.Single a2;
+			checkType(l,2,out a2);
+			System.Single a3;
+			checkType(l,3,out a3);
+			System.Single a4;
+			checkType(l,4,out a4);
+			System.Single a5;
+			checkType(l,5,out a5);
+			System.Single a6;
+			checkType(l,6,out a6);
+			o=new UnityEngine.Keyframe(a1,a2,a3,a4,a5,a6);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -283,6 +303,10 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Keyframe");
+		addMember(l,ctor_s);
+		addMember(l,ctor__Single__Single_s);
+		addMember(l,ctor__Single__Single__Single__Single_s);
+		addMember(l,ctor__Single__Single__Single__Single__Single__Single_s);
 		addMember(l,"time",get_time,set_time,true);
 		addMember(l,"value",get_value,set_value,true);
 		addMember(l,"inTangent",get_inTangent,set_inTangent,true);
@@ -290,6 +314,6 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 		addMember(l,"inWeight",get_inWeight,set_inWeight,true);
 		addMember(l,"outWeight",get_outWeight,set_outWeight,true);
 		addMember(l,"weightedMode",get_weightedMode,set_weightedMode,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Keyframe),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Keyframe),typeof(System.ValueType));
 	}
 }

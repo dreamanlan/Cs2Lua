@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.TrailModule o;
 			o=new UnityEngine.ParticleSystem.TrailModule();
@@ -671,6 +671,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.TrailModule");
+		addMember(l,ctor_s);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
 		addMember(l,"mode",get_mode,set_mode,true);
 		addMember(l,"ratio",get_ratio,set_ratio,true);
@@ -692,6 +693,6 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 		addMember(l,"shadowBias",get_shadowBias,set_shadowBias,true);
 		addMember(l,"splitSubEmitterRibbons",get_splitSubEmitterRibbons,set_splitSubEmitterRibbons,true);
 		addMember(l,"attachRibbonsToTransform",get_attachRibbonsToTransform,set_attachRibbonsToTransform,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.TrailModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.TrailModule),typeof(System.ValueType));
 	}
 }

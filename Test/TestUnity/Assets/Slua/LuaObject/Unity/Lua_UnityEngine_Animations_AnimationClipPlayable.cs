@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Animations_AnimationClipPlayable : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Animations.AnimationClipPlayable o;
 			o=new UnityEngine.Animations.AnimationClipPlayable();
@@ -24,6 +24,40 @@ public class Lua_UnityEngine_Animations_AnimationClipPlayable : LuaObject {
 			UnityEngine.Animations.AnimationClipPlayable self;
 			checkValueType(l,1,out self);
 			var ret=self.GetHandle();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__AnimationClipPlayable(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimationClipPlayable self;
+			checkValueType(l,1,out self);
+			UnityEngine.Animations.AnimationClipPlayable a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimationClipPlayable self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -161,7 +195,10 @@ public class Lua_UnityEngine_Animations_AnimationClipPlayable : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Animations.AnimationClipPlayable");
+		addMember(l,ctor_s);
 		addMember(l,GetHandle);
+		addMember(l,Equals__AnimationClipPlayable);
+		addMember(l,Equals__Object);
 		addMember(l,GetAnimationClip);
 		addMember(l,GetApplyFootIK);
 		addMember(l,SetApplyFootIK);
@@ -170,6 +207,6 @@ public class Lua_UnityEngine_Animations_AnimationClipPlayable : LuaObject {
 		addMember(l,Create_s);
 		addMember(l,op_Implicit_s);
 		addMember(l,op_Explicit_s);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Animations.AnimationClipPlayable),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Animations.AnimationClipPlayable),typeof(System.ValueType));
 	}
 }

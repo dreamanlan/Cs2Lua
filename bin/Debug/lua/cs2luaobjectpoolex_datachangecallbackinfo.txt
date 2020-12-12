@@ -1,0 +1,146 @@
+require "cs2lua__namespaces"; 
+
+Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
+	-------------------------------
+	-------- class methods --------
+	-------------------------------
+	__new_object = function(...)
+		local __cs2dsl_newobj;
+		__cs2dsl_newobj = newobject(Cs2LuaObjectPoolEx_DataChangeCallBackInfo, {T}, {TypeKind.TypeParameter}, "ctor", nil, ...);
+		return __cs2dsl_newobj;
+	end,
+
+	cctor = function()
+		Cs2LuaObjectPoolEx_DataChangeCallBackInfo.__cctor();
+	end,
+
+	__cctor = function()
+		if Cs2LuaObjectPoolEx_DataChangeCallBackInfo.__cctor_called then 
+			return;
+		else
+			Cs2LuaObjectPoolEx_DataChangeCallBackInfo.__cctor_called = true;
+		end;
+	end,
+
+	-------------------------------
+	-------- class fields --------
+	-------------------------------
+	__cctor_called = false,
+
+	-------------------------------
+	--- define class and object ---
+	-------------------------------
+	__define_class = function()
+		Utility.Warn("Cs2LuaObjectPoolEx_DataChangeCallBackInfo::__define_class begin");
+
+		local class = Cs2LuaObjectPoolEx_DataChangeCallBackInfo;
+
+		local obj_methods = {
+			Init__Func_1_TResult__Action_1_T = function(this, creater, destroyer)
+				this.m_Creater = delegationset(false, this, "m_Creater", SymbolKind.Field, creater);
+				this.m_Destroyer = delegationset(false, this, "m_Destroyer", SymbolKind.Field, destroyer);
+			end,
+
+			Init__Int32__Func_1_TResult__Action_1_T = function(this, initPoolSize, creater, destroyer)
+				this.m_Creater = delegationset(false, this, "m_Creater", SymbolKind.Field, creater);
+				this.m_Destroyer = delegationset(false, this, "m_Destroyer", SymbolKind.Field, destroyer);
+				local i;
+				i = 0;
+				while (i < initPoolSize) do
+					local t;
+					t = creater();
+					t:InitPool(this);
+					this.m_UnusedObjects:Enqueue(t);
+					i = (i + 1);
+				end;
+			end,
+
+			Alloc = function(this)
+				local __method_ret_44_4_55_5;
+				if (this.m_UnusedObjects.Count > 0) then 
+					__method_ret_44_4_55_5 = this.m_UnusedObjects:Dequeue();
+					return __method_ret_44_4_55_5;
+				else
+					local t;
+					t = this.m_Creater();
+					if (not isequal(nil, t)) then 
+						t:InitPool(this);
+					end;
+					__method_ret_44_4_55_5 = t;
+					return __method_ret_44_4_55_5;
+				end;
+				return nil;
+			end,
+
+			Recycle = function(this, t)
+				if (not isequal(nil, t)) then 
+					this.m_UnusedObjects:Enqueue(t:Downcast());
+				end;
+			end,
+
+			Clear = function(this)
+				if delegationcomparewithnil(false, this, "m_Destroyer", SymbolKind.Field, false) then 
+					local __foreach_65_12_67_13 = newiterator(this.m_UnusedObjects);
+					for item in getiterator(__foreach_65_12_67_13) do
+						this.m_Destroyer						(item);
+					end;
+					recycleiterator(__foreach_65_12_67_13);
+				end;
+				this.m_UnusedObjects:Clear();
+			end,
+
+			get_Count = function(this)
+				local __method_ret_71_4_76_5;
+				__method_ret_71_4_76_5 = this.m_UnusedObjects.Count;
+				return __method_ret_71_4_76_5;
+			end,
+
+			ctor = function(this)
+				this:__ctor();
+			end,
+
+			__ctor = function(this)
+				if this.__ctor_called then 
+					return;
+				else
+					this.__ctor_called = true;
+				end;
+				this.m_UnusedObjects = newexterncollection(System.Collections.Generic.Queue_T, {T}, {TypeKind.TypeParameter}, "ctor", {});
+			end,
+		};
+
+		local obj_build = function()
+			return {
+				__ctor_called = false,
+			};
+		end;
+
+		local __defineclass_return = defineclass(nil, "Cs2LuaObjectPoolEx_DataChangeCallBackInfo", "Cs2LuaObjectPoolEx_DataChangeCallBackInfo", class, obj_methods, obj_build, false);
+		Utility.Warn("Cs2LuaObjectPoolEx_DataChangeCallBackInfo::__define_class end");
+		return __defineclass_return;
+	end,
+
+	-------------------------------
+	--------- fields info ---------
+	-------------------------------
+	__class_fields = {
+		__cctor_called = true,
+	},
+
+	__obj_fields = {
+		m_UnusedObjects = true,
+		m_Creater = true,
+		m_Destroyer = true,
+		__ctor_called = true,
+	},
+
+	-------------------------------
+	-------- metadata info --------
+	-------------------------------
+};
+
+
+require "cs2lua__syslib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+settempmetatable(Cs2LuaObjectPoolEx_DataChangeCallBackInfo);

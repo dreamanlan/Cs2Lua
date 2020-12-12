@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_FrustumPlanes : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.FrustumPlanes o;
 			o=new UnityEngine.FrustumPlanes();
@@ -206,12 +206,13 @@ public class Lua_UnityEngine_FrustumPlanes : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.FrustumPlanes");
+		addMember(l,ctor_s);
 		addMember(l,"left",get_left,set_left,true);
 		addMember(l,"right",get_right,set_right,true);
 		addMember(l,"bottom",get_bottom,set_bottom,true);
 		addMember(l,"top",get_top,set_top,true);
 		addMember(l,"zNear",get_zNear,set_zNear,true);
 		addMember(l,"zFar",get_zFar,set_zFar,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.FrustumPlanes),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.FrustumPlanes),typeof(System.ValueType));
 	}
 }

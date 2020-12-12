@@ -5,43 +5,63 @@ using System.Collections.Generic;
 public class Lua_System_Collections_SortedList : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			System.Collections.SortedList o;
-			if(matchType(l, "ctor__Void__IComparer__Int32", argc, 2,typeof(System.Collections.IComparer),typeof(int))){
-				System.Collections.IComparer a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				o=new System.Collections.SortedList(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Int32", argc, 2,typeof(int))){
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				o=new System.Collections.SortedList(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__IComparer", argc, 2,typeof(System.Collections.IComparer))){
-				System.Collections.IComparer a1;
-				checkType(l,3,out a1);
-				o=new System.Collections.SortedList(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==2){
-				o=new System.Collections.SortedList();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new System.Collections.SortedList();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32_s(IntPtr l) {
+		try {
+			System.Collections.SortedList o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			o=new System.Collections.SortedList(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__IComparer_s(IntPtr l) {
+		try {
+			System.Collections.SortedList o;
+			System.Collections.IComparer a1;
+			checkType(l,1,out a1);
+			o=new System.Collections.SortedList(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__IComparer__Int32_s(IntPtr l) {
+		try {
+			System.Collections.SortedList o;
+			System.Collections.IComparer a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			o=new System.Collections.SortedList(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -164,6 +184,20 @@ public class Lua_System_Collections_SortedList : LuaObject {
 			System.Int32 a1;
 			checkType(l,2,out a1);
 			var ret=self.GetByIndex(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetEnumerator(IntPtr l) {
+		try {
+			System.Collections.SortedList self=(System.Collections.SortedList)checkSelf(l);
+			var ret=self.GetEnumerator();
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -478,6 +512,10 @@ public class Lua_System_Collections_SortedList : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"System.Collections.SortedList");
+		addMember(l,ctor_s);
+		addMember(l,ctor__Int32_s);
+		addMember(l,ctor__IComparer_s);
+		addMember(l,ctor__IComparer__Int32_s);
 		addMember(l,Add);
 		addMember(l,Clear);
 		addMember(l,Clone);
@@ -486,6 +524,7 @@ public class Lua_System_Collections_SortedList : LuaObject {
 		addMember(l,ContainsValue);
 		addMember(l,CopyTo);
 		addMember(l,GetByIndex);
+		addMember(l,GetEnumerator);
 		addMember(l,GetKey);
 		addMember(l,GetKeyList);
 		addMember(l,GetValueList);
@@ -506,6 +545,6 @@ public class Lua_System_Collections_SortedList : LuaObject {
 		addMember(l,"IsFixedSize",get_IsFixedSize,null,true);
 		addMember(l,"IsSynchronized",get_IsSynchronized,null,true);
 		addMember(l,"SyncRoot",get_SyncRoot,null,true);
-		createTypeMetatable(l,constructor, typeof(System.Collections.SortedList));
+		createTypeMetatable(l,null, typeof(System.Collections.SortedList));
 	}
 }

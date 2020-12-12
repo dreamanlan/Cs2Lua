@@ -35,25 +35,10 @@ public class Lua_System_Type : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int MakeArrayType(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.Type self=(System.Type)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				var ret=self.MakeArrayType(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.Type self=(System.Type)checkSelf(l);
-				var ret=self.MakeArrayType();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type self=(System.Type)checkSelf(l);
+			var ret=self.MakeArrayType();
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -62,70 +47,94 @@ public class Lua_System_Type : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int InvokeMember(IntPtr l) {
+	static public int MakeArrayType__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==10){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Reflection.BindingFlags a2;
-				checkEnum(l,4,out a2);
-				System.Reflection.Binder a3;
-				checkType(l,5,out a3);
-				System.Object a4;
-				checkType(l,6,out a4);
-				System.Object[] a5;
-				checkArray(l,7,out a5);
-				System.Reflection.ParameterModifier[] a6;
-				checkArray(l,8,out a6);
-				System.Globalization.CultureInfo a7;
-				checkType(l,9,out a7);
-				System.String[] a8;
-				checkArray(l,10,out a8);
-				var ret=self.InvokeMember(a1,a2,a3,a4,a5,a6,a7,a8);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==8){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Reflection.BindingFlags a2;
-				checkEnum(l,4,out a2);
-				System.Reflection.Binder a3;
-				checkType(l,5,out a3);
-				System.Object a4;
-				checkType(l,6,out a4);
-				System.Object[] a5;
-				checkArray(l,7,out a5);
-				System.Globalization.CultureInfo a6;
-				checkType(l,8,out a6);
-				var ret=self.InvokeMember(a1,a2,a3,a4,a5,a6);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==7){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Reflection.BindingFlags a2;
-				checkEnum(l,4,out a2);
-				System.Reflection.Binder a3;
-				checkType(l,5,out a3);
-				System.Object a4;
-				checkType(l,6,out a4);
-				System.Object[] a5;
-				checkArray(l,7,out a5);
-				var ret=self.InvokeMember(a1,a2,a3,a4,a5);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type self=(System.Type)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.MakeArrayType(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int InvokeMember__String__BindingFlags__Binder__Object__A_Object(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Reflection.BindingFlags a2;
+			checkEnum(l,3,out a2);
+			System.Reflection.Binder a3;
+			checkType(l,4,out a3);
+			System.Object a4;
+			checkType(l,5,out a4);
+			System.Object[] a5;
+			checkArray(l,6,out a5);
+			var ret=self.InvokeMember(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int InvokeMember__String__BindingFlags__Binder__Object__A_Object__CultureInfo(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Reflection.BindingFlags a2;
+			checkEnum(l,3,out a2);
+			System.Reflection.Binder a3;
+			checkType(l,4,out a3);
+			System.Object a4;
+			checkType(l,5,out a4);
+			System.Object[] a5;
+			checkArray(l,6,out a5);
+			System.Globalization.CultureInfo a6;
+			checkType(l,7,out a6);
+			var ret=self.InvokeMember(a1,a2,a3,a4,a5,a6);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int InvokeMember__String__BindingFlags__Binder__Object__A_Object__A_ParameterModifier__CultureInfo__A_String(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Reflection.BindingFlags a2;
+			checkEnum(l,3,out a2);
+			System.Reflection.Binder a3;
+			checkType(l,4,out a3);
+			System.Object a4;
+			checkType(l,5,out a4);
+			System.Object[] a5;
+			checkArray(l,6,out a5);
+			System.Reflection.ParameterModifier[] a6;
+			checkArray(l,7,out a6);
+			System.Globalization.CultureInfo a7;
+			checkType(l,8,out a7);
+			System.String[] a8;
+			checkArray(l,9,out a8);
+			var ret=self.InvokeMember(a1,a2,a3,a4,a5,a6,a7,a8);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -148,52 +157,60 @@ public class Lua_System_Type : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetConstructor(IntPtr l) {
+	static public int GetConstructor__A_Type(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==7){
-				System.Type self=(System.Type)checkSelf(l);
-				System.Reflection.BindingFlags a1;
-				checkEnum(l,3,out a1);
-				System.Reflection.Binder a2;
-				checkType(l,4,out a2);
-				System.Reflection.CallingConventions a3;
-				checkEnum(l,5,out a3);
-				System.Type[] a4;
-				checkArray(l,6,out a4);
-				System.Reflection.ParameterModifier[] a5;
-				checkArray(l,7,out a5);
-				var ret=self.GetConstructor(a1,a2,a3,a4,a5);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==6){
-				System.Type self=(System.Type)checkSelf(l);
-				System.Reflection.BindingFlags a1;
-				checkEnum(l,3,out a1);
-				System.Reflection.Binder a2;
-				checkType(l,4,out a2);
-				System.Type[] a3;
-				checkArray(l,5,out a3);
-				System.Reflection.ParameterModifier[] a4;
-				checkArray(l,6,out a4);
-				var ret=self.GetConstructor(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.Type self=(System.Type)checkSelf(l);
-				System.Type[] a1;
-				checkArray(l,3,out a1);
-				var ret=self.GetConstructor(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type self=(System.Type)checkSelf(l);
+			System.Type[] a1;
+			checkArray(l,2,out a1);
+			var ret=self.GetConstructor(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetConstructor__BindingFlags__Binder__A_Type__A_ParameterModifier(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.Reflection.BindingFlags a1;
+			checkEnum(l,2,out a1);
+			System.Reflection.Binder a2;
+			checkType(l,3,out a2);
+			System.Type[] a3;
+			checkArray(l,4,out a3);
+			System.Reflection.ParameterModifier[] a4;
+			checkArray(l,5,out a4);
+			var ret=self.GetConstructor(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetConstructor__BindingFlags__Binder__CallingConventions__A_Type__A_ParameterModifier(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.Reflection.BindingFlags a1;
+			checkEnum(l,2,out a1);
+			System.Reflection.Binder a2;
+			checkType(l,3,out a2);
+			System.Reflection.CallingConventions a3;
+			checkEnum(l,4,out a3);
+			System.Type[] a4;
+			checkArray(l,5,out a4);
+			System.Reflection.ParameterModifier[] a5;
+			checkArray(l,6,out a5);
+			var ret=self.GetConstructor(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -204,25 +221,10 @@ public class Lua_System_Type : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int GetConstructors(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.Type self=(System.Type)checkSelf(l);
-				System.Reflection.BindingFlags a1;
-				checkEnum(l,3,out a1);
-				var ret=self.GetConstructors(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.Type self=(System.Type)checkSelf(l);
-				var ret=self.GetConstructors();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type self=(System.Type)checkSelf(l);
+			var ret=self.GetConstructors();
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -231,91 +233,136 @@ public class Lua_System_Type : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetMethod(IntPtr l) {
+	static public int GetConstructors__BindingFlags(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==8){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Reflection.BindingFlags a2;
-				checkEnum(l,4,out a2);
-				System.Reflection.Binder a3;
-				checkType(l,5,out a3);
-				System.Reflection.CallingConventions a4;
-				checkEnum(l,6,out a4);
-				System.Type[] a5;
-				checkArray(l,7,out a5);
-				System.Reflection.ParameterModifier[] a6;
-				checkArray(l,8,out a6);
-				var ret=self.GetMethod(a1,a2,a3,a4,a5,a6);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==7){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Reflection.BindingFlags a2;
-				checkEnum(l,4,out a2);
-				System.Reflection.Binder a3;
-				checkType(l,5,out a3);
-				System.Type[] a4;
-				checkArray(l,6,out a4);
-				System.Reflection.ParameterModifier[] a5;
-				checkArray(l,7,out a5);
-				var ret=self.GetMethod(a1,a2,a3,a4,a5);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==5){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Type[] a2;
-				checkArray(l,4,out a2);
-				System.Reflection.ParameterModifier[] a3;
-				checkArray(l,5,out a3);
-				var ret=self.GetMethod(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetMethod__MethodInfo__String__Arr_Type", argc, 2,typeof(string),typeof(System.Type[]))){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Type[] a2;
-				checkArray(l,4,out a2);
-				var ret=self.GetMethod(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetMethod__MethodInfo__String__BindingFlags", argc, 2,typeof(string),typeof(System.Reflection.BindingFlags))){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Reflection.BindingFlags a2;
-				checkEnum(l,4,out a2);
-				var ret=self.GetMethod(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetMethod(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type self=(System.Type)checkSelf(l);
+			System.Reflection.BindingFlags a1;
+			checkEnum(l,2,out a1);
+			var ret=self.GetConstructors(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetMethod__String(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetMethod(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetMethod__String__A_Type(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Type[] a2;
+			checkArray(l,3,out a2);
+			var ret=self.GetMethod(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetMethod__String__BindingFlags(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Reflection.BindingFlags a2;
+			checkEnum(l,3,out a2);
+			var ret=self.GetMethod(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetMethod__String__A_Type__A_ParameterModifier(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Type[] a2;
+			checkArray(l,3,out a2);
+			System.Reflection.ParameterModifier[] a3;
+			checkArray(l,4,out a3);
+			var ret=self.GetMethod(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetMethod__String__BindingFlags__Binder__A_Type__A_ParameterModifier(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Reflection.BindingFlags a2;
+			checkEnum(l,3,out a2);
+			System.Reflection.Binder a3;
+			checkType(l,4,out a3);
+			System.Type[] a4;
+			checkArray(l,5,out a4);
+			System.Reflection.ParameterModifier[] a5;
+			checkArray(l,6,out a5);
+			var ret=self.GetMethod(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetMethod__String__BindingFlags__Binder__CallingConventions__A_Type__A_ParameterModifier(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Reflection.BindingFlags a2;
+			checkEnum(l,3,out a2);
+			System.Reflection.Binder a3;
+			checkType(l,4,out a3);
+			System.Reflection.CallingConventions a4;
+			checkEnum(l,5,out a4);
+			System.Type[] a5;
+			checkArray(l,6,out a5);
+			System.Reflection.ParameterModifier[] a6;
+			checkArray(l,7,out a6);
+			var ret=self.GetMethod(a1,a2,a3,a4,a5,a6);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -326,25 +373,10 @@ public class Lua_System_Type : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int GetMethods(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.Type self=(System.Type)checkSelf(l);
-				System.Reflection.BindingFlags a1;
-				checkEnum(l,3,out a1);
-				var ret=self.GetMethods(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.Type self=(System.Type)checkSelf(l);
-				var ret=self.GetMethods();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type self=(System.Type)checkSelf(l);
+			var ret=self.GetMethods();
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -353,31 +385,48 @@ public class Lua_System_Type : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetField(IntPtr l) {
+	static public int GetMethods__BindingFlags(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Reflection.BindingFlags a2;
-				checkEnum(l,4,out a2);
-				var ret=self.GetField(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetField(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type self=(System.Type)checkSelf(l);
+			System.Reflection.BindingFlags a1;
+			checkEnum(l,2,out a1);
+			var ret=self.GetMethods(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetField__String(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetField(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetField__String__BindingFlags(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Reflection.BindingFlags a2;
+			checkEnum(l,3,out a2);
+			var ret=self.GetField(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -388,25 +437,10 @@ public class Lua_System_Type : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int GetFields(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.Type self=(System.Type)checkSelf(l);
-				System.Reflection.BindingFlags a1;
-				checkEnum(l,3,out a1);
-				var ret=self.GetFields(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.Type self=(System.Type)checkSelf(l);
-				var ret=self.GetFields();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type self=(System.Type)checkSelf(l);
+			var ret=self.GetFields();
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -415,31 +449,48 @@ public class Lua_System_Type : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetInterface(IntPtr l) {
+	static public int GetFields__BindingFlags(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Boolean a2;
-				checkType(l,4,out a2);
-				var ret=self.GetInterface(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetInterface(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type self=(System.Type)checkSelf(l);
+			System.Reflection.BindingFlags a1;
+			checkEnum(l,2,out a1);
+			var ret=self.GetFields(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetInterface__String(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetInterface(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetInterface__String__Boolean(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Boolean a2;
+			checkType(l,3,out a2);
+			var ret=self.GetInterface(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -480,31 +531,32 @@ public class Lua_System_Type : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetEvent(IntPtr l) {
+	static public int GetEvent__String(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Reflection.BindingFlags a2;
-				checkEnum(l,4,out a2);
-				var ret=self.GetEvent(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetEvent(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetEvent(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetEvent__String__BindingFlags(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Reflection.BindingFlags a2;
+			checkEnum(l,3,out a2);
+			var ret=self.GetEvent(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -515,25 +567,10 @@ public class Lua_System_Type : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int GetEvents(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.Type self=(System.Type)checkSelf(l);
-				System.Reflection.BindingFlags a1;
-				checkEnum(l,3,out a1);
-				var ret=self.GetEvents(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.Type self=(System.Type)checkSelf(l);
-				var ret=self.GetEvents();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type self=(System.Type)checkSelf(l);
+			var ret=self.GetEvents();
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -542,100 +579,152 @@ public class Lua_System_Type : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetProperty(IntPtr l) {
+	static public int GetEvents__BindingFlags(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==8){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Reflection.BindingFlags a2;
-				checkEnum(l,4,out a2);
-				System.Reflection.Binder a3;
-				checkType(l,5,out a3);
-				System.Type a4;
-				checkType(l,6,out a4);
-				System.Type[] a5;
-				checkArray(l,7,out a5);
-				System.Reflection.ParameterModifier[] a6;
-				checkArray(l,8,out a6);
-				var ret=self.GetProperty(a1,a2,a3,a4,a5,a6);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==6){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Type a2;
-				checkType(l,4,out a2);
-				System.Type[] a3;
-				checkArray(l,5,out a3);
-				System.Reflection.ParameterModifier[] a4;
-				checkArray(l,6,out a4);
-				var ret=self.GetProperty(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==5){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Type a2;
-				checkType(l,4,out a2);
-				System.Type[] a3;
-				checkArray(l,5,out a3);
-				var ret=self.GetProperty(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetProperty__PropertyInfo__String__BindingFlags", argc, 2,typeof(string),typeof(System.Reflection.BindingFlags))){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Reflection.BindingFlags a2;
-				checkEnum(l,4,out a2);
-				var ret=self.GetProperty(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetProperty__PropertyInfo__String__Arr_Type", argc, 2,typeof(string),typeof(System.Type[]))){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Type[] a2;
-				checkArray(l,4,out a2);
-				var ret=self.GetProperty(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetProperty__PropertyInfo__String__Type", argc, 2,typeof(string),typeof(System.Type))){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Type a2;
-				checkType(l,4,out a2);
-				var ret=self.GetProperty(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetProperty(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type self=(System.Type)checkSelf(l);
+			System.Reflection.BindingFlags a1;
+			checkEnum(l,2,out a1);
+			var ret=self.GetEvents(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetProperty__String(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetProperty(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetProperty__String__BindingFlags(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Reflection.BindingFlags a2;
+			checkEnum(l,3,out a2);
+			var ret=self.GetProperty(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetProperty__String__A_Type(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Type[] a2;
+			checkArray(l,3,out a2);
+			var ret=self.GetProperty(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetProperty__String__Type(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Type a2;
+			checkType(l,3,out a2);
+			var ret=self.GetProperty(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetProperty__String__Type__A_Type(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Type a2;
+			checkType(l,3,out a2);
+			System.Type[] a3;
+			checkArray(l,4,out a3);
+			var ret=self.GetProperty(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetProperty__String__Type__A_Type__A_ParameterModifier(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Type a2;
+			checkType(l,3,out a2);
+			System.Type[] a3;
+			checkArray(l,4,out a3);
+			System.Reflection.ParameterModifier[] a4;
+			checkArray(l,5,out a4);
+			var ret=self.GetProperty(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetProperty__String__BindingFlags__Binder__Type__A_Type__A_ParameterModifier(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Reflection.BindingFlags a2;
+			checkEnum(l,3,out a2);
+			System.Reflection.Binder a3;
+			checkType(l,4,out a3);
+			System.Type a4;
+			checkType(l,5,out a4);
+			System.Type[] a5;
+			checkArray(l,6,out a5);
+			System.Reflection.ParameterModifier[] a6;
+			checkArray(l,7,out a6);
+			var ret=self.GetProperty(a1,a2,a3,a4,a5,a6);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -646,25 +735,26 @@ public class Lua_System_Type : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int GetProperties(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.Type self=(System.Type)checkSelf(l);
-				System.Reflection.BindingFlags a1;
-				checkEnum(l,3,out a1);
-				var ret=self.GetProperties(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.Type self=(System.Type)checkSelf(l);
-				var ret=self.GetProperties();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type self=(System.Type)checkSelf(l);
+			var ret=self.GetProperties();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetProperties__BindingFlags(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.Reflection.BindingFlags a1;
+			checkEnum(l,2,out a1);
+			var ret=self.GetProperties(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -675,25 +765,10 @@ public class Lua_System_Type : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int GetNestedTypes(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.Type self=(System.Type)checkSelf(l);
-				System.Reflection.BindingFlags a1;
-				checkEnum(l,3,out a1);
-				var ret=self.GetNestedTypes(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.Type self=(System.Type)checkSelf(l);
-				var ret=self.GetNestedTypes();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type self=(System.Type)checkSelf(l);
+			var ret=self.GetNestedTypes();
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -702,31 +777,14 @@ public class Lua_System_Type : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetNestedType(IntPtr l) {
+	static public int GetNestedTypes__BindingFlags(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Reflection.BindingFlags a2;
-				checkEnum(l,4,out a2);
-				var ret=self.GetNestedType(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetNestedType(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type self=(System.Type)checkSelf(l);
+			System.Reflection.BindingFlags a1;
+			checkEnum(l,2,out a1);
+			var ret=self.GetNestedTypes(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -735,44 +793,86 @@ public class Lua_System_Type : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetMember(IntPtr l) {
+	static public int GetNestedType__String(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Reflection.MemberTypes a2;
-				checkEnum(l,4,out a2);
-				System.Reflection.BindingFlags a3;
-				checkEnum(l,5,out a3);
-				var ret=self.GetMember(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==4){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Reflection.BindingFlags a2;
-				checkEnum(l,4,out a2);
-				var ret=self.GetMember(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.Type self=(System.Type)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetMember(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetNestedType(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetNestedType__String__BindingFlags(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Reflection.BindingFlags a2;
+			checkEnum(l,3,out a2);
+			var ret=self.GetNestedType(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetMember__String(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetMember(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetMember__String__BindingFlags(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Reflection.BindingFlags a2;
+			checkEnum(l,3,out a2);
+			var ret=self.GetMember(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetMember__String__MemberTypes__BindingFlags(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Reflection.MemberTypes a2;
+			checkEnum(l,3,out a2);
+			System.Reflection.BindingFlags a3;
+			checkEnum(l,4,out a3);
+			var ret=self.GetMember(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -783,25 +883,26 @@ public class Lua_System_Type : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int GetMembers(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.Type self=(System.Type)checkSelf(l);
-				System.Reflection.BindingFlags a1;
-				checkEnum(l,3,out a1);
-				var ret=self.GetMembers(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.Type self=(System.Type)checkSelf(l);
-				var ret=self.GetMembers();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Type self=(System.Type)checkSelf(l);
+			var ret=self.GetMembers();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetMembers__BindingFlags(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.Reflection.BindingFlags a1;
+			checkEnum(l,2,out a1);
+			var ret=self.GetMembers(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -1056,6 +1157,52 @@ public class Lua_System_Type : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static new public int ToString(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			var ret=self.ToString();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Type(IntPtr l) {
+		try {
+			System.Type self=(System.Type)checkSelf(l);
+			System.Type a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetInterfaceMap(IntPtr l) {
 		try {
 			System.Type self=(System.Type)checkSelf(l);
@@ -1072,51 +1219,13 @@ public class Lua_System_Type : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetTypeFromProgID_s(IntPtr l) {
+	static public int GetType__String_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.Boolean a3;
-				checkType(l,4,out a3);
-				var ret=System.Type.GetTypeFromProgID(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetTypeFromProgID__Type__String__Boolean", argc, 1,typeof(string),typeof(bool))){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Boolean a2;
-				checkType(l,3,out a2);
-				var ret=System.Type.GetTypeFromProgID(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetTypeFromProgID__Type__String__String", argc, 1,typeof(string),typeof(string))){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				var ret=System.Type.GetTypeFromProgID(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=System.Type.GetTypeFromProgID(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=System.Type.GetType(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -1125,51 +1234,233 @@ public class Lua_System_Type : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetTypeFromCLSID_s(IntPtr l) {
+	static public int GetType__String__Boolean_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				System.Guid a1;
-				checkValueType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.Boolean a3;
-				checkType(l,4,out a3);
-				var ret=System.Type.GetTypeFromCLSID(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetTypeFromCLSID__Type__Guid__Boolean", argc, 1,typeof(System.Guid),typeof(bool))){
-				System.Guid a1;
-				checkValueType(l,2,out a1);
-				System.Boolean a2;
-				checkType(l,3,out a2);
-				var ret=System.Type.GetTypeFromCLSID(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetTypeFromCLSID__Type__Guid__String", argc, 1,typeof(System.Guid),typeof(string))){
-				System.Guid a1;
-				checkValueType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				var ret=System.Type.GetTypeFromCLSID(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.Guid a1;
-				checkValueType(l,2,out a1);
-				var ret=System.Type.GetTypeFromCLSID(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Boolean a2;
+			checkType(l,2,out a2);
+			var ret=System.Type.GetType(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetType__String__Func_2_AssemblyName_Assembly__Func_4_Assembly_String_Boolean_Type_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Func<System.Reflection.AssemblyName,System.Reflection.Assembly> a2;
+			LuaDelegation.checkDelegate(l,2,out a2);
+			System.Func<System.Reflection.Assembly,System.String,System.Boolean,System.Type> a3;
+			LuaDelegation.checkDelegate(l,3,out a3);
+			var ret=System.Type.GetType(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetType__String__Boolean__Boolean_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Boolean a2;
+			checkType(l,2,out a2);
+			System.Boolean a3;
+			checkType(l,3,out a3);
+			var ret=System.Type.GetType(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetType__String__Func_2_AssemblyName_Assembly__Func_4_Assembly_String_Boolean_Type__Boolean_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Func<System.Reflection.AssemblyName,System.Reflection.Assembly> a2;
+			LuaDelegation.checkDelegate(l,2,out a2);
+			System.Func<System.Reflection.Assembly,System.String,System.Boolean,System.Type> a3;
+			LuaDelegation.checkDelegate(l,3,out a3);
+			System.Boolean a4;
+			checkType(l,4,out a4);
+			var ret=System.Type.GetType(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetType__String__Func_2_AssemblyName_Assembly__Func_4_Assembly_String_Boolean_Type__Boolean__Boolean_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Func<System.Reflection.AssemblyName,System.Reflection.Assembly> a2;
+			LuaDelegation.checkDelegate(l,2,out a2);
+			System.Func<System.Reflection.Assembly,System.String,System.Boolean,System.Type> a3;
+			LuaDelegation.checkDelegate(l,3,out a3);
+			System.Boolean a4;
+			checkType(l,4,out a4);
+			System.Boolean a5;
+			checkType(l,5,out a5);
+			var ret=System.Type.GetType(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTypeFromProgID__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=System.Type.GetTypeFromProgID(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTypeFromProgID__String__Boolean_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Boolean a2;
+			checkType(l,2,out a2);
+			var ret=System.Type.GetTypeFromProgID(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTypeFromProgID__String__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			var ret=System.Type.GetTypeFromProgID(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTypeFromProgID__String__String__Boolean_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.Boolean a3;
+			checkType(l,3,out a3);
+			var ret=System.Type.GetTypeFromProgID(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTypeFromCLSID__Guid_s(IntPtr l) {
+		try {
+			System.Guid a1;
+			checkValueType(l,1,out a1);
+			var ret=System.Type.GetTypeFromCLSID(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTypeFromCLSID__Guid__Boolean_s(IntPtr l) {
+		try {
+			System.Guid a1;
+			checkValueType(l,1,out a1);
+			System.Boolean a2;
+			checkType(l,2,out a2);
+			var ret=System.Type.GetTypeFromCLSID(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTypeFromCLSID__Guid__String_s(IntPtr l) {
+		try {
+			System.Guid a1;
+			checkValueType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			var ret=System.Type.GetTypeFromCLSID(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTypeFromCLSID__Guid__String__Boolean_s(IntPtr l) {
+		try {
+			System.Guid a1;
+			checkValueType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.Boolean a3;
+			checkType(l,3,out a3);
+			var ret=System.Type.GetTypeFromCLSID(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -2123,25 +2414,54 @@ public class Lua_System_Type : LuaObject {
 		addMember(l,MakePointerType);
 		addMember(l,MakeByRefType);
 		addMember(l,MakeArrayType);
-		addMember(l,InvokeMember);
+		addMember(l,MakeArrayType__Int32);
+		addMember(l,InvokeMember__String__BindingFlags__Binder__Object__A_Object);
+		addMember(l,InvokeMember__String__BindingFlags__Binder__Object__A_Object__CultureInfo);
+		addMember(l,InvokeMember__String__BindingFlags__Binder__Object__A_Object__A_ParameterModifier__CultureInfo__A_String);
 		addMember(l,GetArrayRank);
-		addMember(l,GetConstructor);
+		addMember(l,GetConstructor__A_Type);
+		addMember(l,GetConstructor__BindingFlags__Binder__A_Type__A_ParameterModifier);
+		addMember(l,GetConstructor__BindingFlags__Binder__CallingConventions__A_Type__A_ParameterModifier);
 		addMember(l,GetConstructors);
-		addMember(l,GetMethod);
+		addMember(l,GetConstructors__BindingFlags);
+		addMember(l,GetMethod__String);
+		addMember(l,GetMethod__String__A_Type);
+		addMember(l,GetMethod__String__BindingFlags);
+		addMember(l,GetMethod__String__A_Type__A_ParameterModifier);
+		addMember(l,GetMethod__String__BindingFlags__Binder__A_Type__A_ParameterModifier);
+		addMember(l,GetMethod__String__BindingFlags__Binder__CallingConventions__A_Type__A_ParameterModifier);
 		addMember(l,GetMethods);
-		addMember(l,GetField);
+		addMember(l,GetMethods__BindingFlags);
+		addMember(l,GetField__String);
+		addMember(l,GetField__String__BindingFlags);
 		addMember(l,GetFields);
-		addMember(l,GetInterface);
+		addMember(l,GetFields__BindingFlags);
+		addMember(l,GetInterface__String);
+		addMember(l,GetInterface__String__Boolean);
 		addMember(l,GetInterfaces);
 		addMember(l,FindInterfaces);
-		addMember(l,GetEvent);
+		addMember(l,GetEvent__String);
+		addMember(l,GetEvent__String__BindingFlags);
 		addMember(l,GetEvents);
-		addMember(l,GetProperty);
+		addMember(l,GetEvents__BindingFlags);
+		addMember(l,GetProperty__String);
+		addMember(l,GetProperty__String__BindingFlags);
+		addMember(l,GetProperty__String__A_Type);
+		addMember(l,GetProperty__String__Type);
+		addMember(l,GetProperty__String__Type__A_Type);
+		addMember(l,GetProperty__String__Type__A_Type__A_ParameterModifier);
+		addMember(l,GetProperty__String__BindingFlags__Binder__Type__A_Type__A_ParameterModifier);
 		addMember(l,GetProperties);
+		addMember(l,GetProperties__BindingFlags);
 		addMember(l,GetNestedTypes);
-		addMember(l,GetNestedType);
-		addMember(l,GetMember);
+		addMember(l,GetNestedTypes__BindingFlags);
+		addMember(l,GetNestedType__String);
+		addMember(l,GetNestedType__String__BindingFlags);
+		addMember(l,GetMember__String);
+		addMember(l,GetMember__String__BindingFlags);
+		addMember(l,GetMember__String__MemberTypes__BindingFlags);
 		addMember(l,GetMembers);
+		addMember(l,GetMembers__BindingFlags);
 		addMember(l,GetDefaultMembers);
 		addMember(l,FindMembers);
 		addMember(l,GetGenericParameterConstraints);
@@ -2158,9 +2478,24 @@ public class Lua_System_Type : LuaObject {
 		addMember(l,IsInstanceOfType);
 		addMember(l,IsAssignableFrom);
 		addMember(l,IsEquivalentTo);
+		addMember(l,ToString);
+		addMember(l,Equals__Object);
+		addMember(l,Equals__Type);
 		addMember(l,GetInterfaceMap);
-		addMember(l,GetTypeFromProgID_s);
-		addMember(l,GetTypeFromCLSID_s);
+		addMember(l,GetType__String_s);
+		addMember(l,GetType__String__Boolean_s);
+		addMember(l,GetType__String__Func_2_AssemblyName_Assembly__Func_4_Assembly_String_Boolean_Type_s);
+		addMember(l,GetType__String__Boolean__Boolean_s);
+		addMember(l,GetType__String__Func_2_AssemblyName_Assembly__Func_4_Assembly_String_Boolean_Type__Boolean_s);
+		addMember(l,GetType__String__Func_2_AssemblyName_Assembly__Func_4_Assembly_String_Boolean_Type__Boolean__Boolean_s);
+		addMember(l,GetTypeFromProgID__String_s);
+		addMember(l,GetTypeFromProgID__String__Boolean_s);
+		addMember(l,GetTypeFromProgID__String__String_s);
+		addMember(l,GetTypeFromProgID__String__String__Boolean_s);
+		addMember(l,GetTypeFromCLSID__Guid_s);
+		addMember(l,GetTypeFromCLSID__Guid__Boolean_s);
+		addMember(l,GetTypeFromCLSID__Guid__String_s);
+		addMember(l,GetTypeFromCLSID__Guid__String__Boolean_s);
 		addMember(l,GetTypeCode_s);
 		addMember(l,GetTypeHandle_s);
 		addMember(l,GetTypeArray_s);

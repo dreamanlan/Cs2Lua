@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_LightsModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.LightsModule o;
 			o=new UnityEngine.ParticleSystem.LightsModule();
@@ -392,6 +392,7 @@ public class Lua_UnityEngine_ParticleSystem_LightsModule : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.LightsModule");
+		addMember(l,ctor_s);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
 		addMember(l,"ratio",get_ratio,set_ratio,true);
 		addMember(l,"useRandomDistribution",get_useRandomDistribution,set_useRandomDistribution,true);
@@ -404,6 +405,6 @@ public class Lua_UnityEngine_ParticleSystem_LightsModule : LuaObject {
 		addMember(l,"intensity",get_intensity,set_intensity,true);
 		addMember(l,"intensityMultiplier",get_intensityMultiplier,set_intensityMultiplier,true);
 		addMember(l,"maxLights",get_maxLights,set_maxLights,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.LightsModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.LightsModule),typeof(System.ValueType));
 	}
 }

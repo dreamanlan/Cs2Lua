@@ -22,55 +22,70 @@ public class Lua_System_IO_Path : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Combine_s(IntPtr l) {
+	static public int Combine__A_String_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.String a3;
-				checkType(l,4,out a3);
-				System.String a4;
-				checkType(l,5,out a4);
-				var ret=System.IO.Path.Combine(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==4){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.String a3;
-				checkType(l,4,out a3);
-				var ret=System.IO.Path.Combine(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				var ret=System.IO.Path.Combine(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc>=2){
-				System.String[] a1;
-				checkParams(l,2,out a1);
-				var ret=System.IO.Path.Combine(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String[] a1;
+			checkParams(l,1,out a1);
+			var ret=System.IO.Path.Combine(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Combine__String__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			var ret=System.IO.Path.Combine(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Combine__String__String__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.String a3;
+			checkType(l,3,out a3);
+			var ret=System.IO.Path.Combine(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Combine__String__String__String__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.String a3;
+			checkType(l,3,out a3);
+			System.String a4;
+			checkType(l,4,out a4);
+			var ret=System.IO.Path.Combine(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -314,7 +329,10 @@ public class Lua_System_IO_Path : LuaObject {
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"System.IO.Path");
 		addMember(l,ChangeExtension_s);
-		addMember(l,Combine_s);
+		addMember(l,Combine__A_String_s);
+		addMember(l,Combine__String__String_s);
+		addMember(l,Combine__String__String__String_s);
+		addMember(l,Combine__String__String__String__String_s);
 		addMember(l,GetDirectoryName_s);
 		addMember(l,GetExtension_s);
 		addMember(l,GetFileName_s);

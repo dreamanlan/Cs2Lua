@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Audio_AudioClipPlayable : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Audio.AudioClipPlayable o;
 			o=new UnityEngine.Audio.AudioClipPlayable();
@@ -24,6 +24,40 @@ public class Lua_UnityEngine_Audio_AudioClipPlayable : LuaObject {
 			UnityEngine.Audio.AudioClipPlayable self;
 			checkValueType(l,1,out self);
 			var ret=self.GetHandle();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__AudioClipPlayable(IntPtr l) {
+		try {
+			UnityEngine.Audio.AudioClipPlayable self;
+			checkValueType(l,1,out self);
+			UnityEngine.Audio.AudioClipPlayable a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			UnityEngine.Audio.AudioClipPlayable self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -143,38 +177,39 @@ public class Lua_UnityEngine_Audio_AudioClipPlayable : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Seek(IntPtr l) {
+	static public int Seek__Double__Double(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				UnityEngine.Audio.AudioClipPlayable self;
-				checkValueType(l,1,out self);
-				System.Double a1;
-				checkType(l,3,out a1);
-				System.Double a2;
-				checkType(l,4,out a2);
-				System.Double a3;
-				checkType(l,5,out a3);
-				self.Seek(a1,a2,a3);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(argc==4){
-				UnityEngine.Audio.AudioClipPlayable self;
-				checkValueType(l,1,out self);
-				System.Double a1;
-				checkType(l,3,out a1);
-				System.Double a2;
-				checkType(l,4,out a2);
-				self.Seek(a1,a2);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.Audio.AudioClipPlayable self;
+			checkValueType(l,1,out self);
+			System.Double a1;
+			checkType(l,2,out a1);
+			System.Double a2;
+			checkType(l,3,out a2);
+			self.Seek(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Seek__Double__Double__Double(IntPtr l) {
+		try {
+			UnityEngine.Audio.AudioClipPlayable self;
+			checkValueType(l,1,out self);
+			System.Double a1;
+			checkType(l,2,out a1);
+			System.Double a2;
+			checkType(l,3,out a2);
+			System.Double a3;
+			checkType(l,4,out a3);
+			self.Seek(a1,a2,a3);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -232,7 +267,10 @@ public class Lua_UnityEngine_Audio_AudioClipPlayable : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Audio.AudioClipPlayable");
+		addMember(l,ctor_s);
 		addMember(l,GetHandle);
+		addMember(l,Equals__AudioClipPlayable);
+		addMember(l,Equals__Object);
 		addMember(l,GetClip);
 		addMember(l,SetClip);
 		addMember(l,GetLooped);
@@ -240,10 +278,11 @@ public class Lua_UnityEngine_Audio_AudioClipPlayable : LuaObject {
 		addMember(l,IsChannelPlaying);
 		addMember(l,GetStartDelay);
 		addMember(l,GetPauseDelay);
-		addMember(l,Seek);
+		addMember(l,Seek__Double__Double);
+		addMember(l,Seek__Double__Double__Double);
 		addMember(l,Create_s);
 		addMember(l,op_Implicit_s);
 		addMember(l,op_Explicit_s);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Audio.AudioClipPlayable),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Audio.AudioClipPlayable),typeof(System.ValueType));
 	}
 }

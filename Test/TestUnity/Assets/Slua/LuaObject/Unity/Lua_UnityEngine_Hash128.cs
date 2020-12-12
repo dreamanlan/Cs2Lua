@@ -5,41 +5,13 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Hash128 : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Hash128 o;
-			if(argc==6){
-				System.UInt32 a1;
-				checkType(l,3,out a1);
-				System.UInt32 a2;
-				checkType(l,4,out a2);
-				System.UInt32 a3;
-				checkType(l,5,out a3);
-				System.UInt32 a4;
-				checkType(l,6,out a4);
-				o=new UnityEngine.Hash128(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==4){
-				System.UInt64 a1;
-				checkType(l,3,out a1);
-				System.UInt64 a2;
-				checkType(l,4,out a2);
-				o=new UnityEngine.Hash128(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc<=2){
-				o=new UnityEngine.Hash128();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.Hash128();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -47,31 +19,121 @@ public class Lua_UnityEngine_Hash128 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int CompareTo(IntPtr l) {
+	static public int ctor__UInt64__UInt64_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "CompareTo__Int32__Hash128", argc, 2,typeof(UnityEngine.Hash128))){
-				UnityEngine.Hash128 self;
-				checkValueType(l,1,out self);
-				UnityEngine.Hash128 a1;
-				checkValueType(l,3,out a1);
-				var ret=self.CompareTo(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "CompareTo__Int32__Object", argc, 2,typeof(System.Object))){
-				UnityEngine.Hash128 self;
-				checkValueType(l,1,out self);
-				System.Object a1;
-				checkType(l,3,out a1);
-				var ret=self.CompareTo(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Hash128 o;
+			System.UInt64 a1;
+			checkType(l,1,out a1);
+			System.UInt64 a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.Hash128(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__UInt32__UInt32__UInt32__UInt32_s(IntPtr l) {
+		try {
+			UnityEngine.Hash128 o;
+			System.UInt32 a1;
+			checkType(l,1,out a1);
+			System.UInt32 a2;
+			checkType(l,2,out a2);
+			System.UInt32 a3;
+			checkType(l,3,out a3);
+			System.UInt32 a4;
+			checkType(l,4,out a4);
+			o=new UnityEngine.Hash128(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CompareTo__Hash128(IntPtr l) {
+		try {
+			UnityEngine.Hash128 self;
+			checkValueType(l,1,out self);
+			UnityEngine.Hash128 a1;
+			checkValueType(l,2,out a1);
+			var ret=self.CompareTo(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CompareTo__Object(IntPtr l) {
+		try {
+			UnityEngine.Hash128 self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.CompareTo(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static new public int ToString(IntPtr l) {
+		try {
+			UnityEngine.Hash128 self;
+			checkValueType(l,1,out self);
+			var ret=self.ToString();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			UnityEngine.Hash128 self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Hash128(IntPtr l) {
+		try {
+			UnityEngine.Hash128 self;
+			checkValueType(l,1,out self);
+			UnityEngine.Hash128 a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -193,7 +255,14 @@ public class Lua_UnityEngine_Hash128 : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Hash128");
-		addMember(l,CompareTo);
+		addMember(l,ctor_s);
+		addMember(l,ctor__UInt64__UInt64_s);
+		addMember(l,ctor__UInt32__UInt32__UInt32__UInt32_s);
+		addMember(l,CompareTo__Hash128);
+		addMember(l,CompareTo__Object);
+		addMember(l,ToString);
+		addMember(l,Equals__Object);
+		addMember(l,Equals__Hash128);
 		addMember(l,Parse_s);
 		addMember(l,Compute_s);
 		addMember(l,op_Equality_s);
@@ -201,6 +270,6 @@ public class Lua_UnityEngine_Hash128 : LuaObject {
 		addMember(l,op_LessThan_s);
 		addMember(l,op_GreaterThan_s);
 		addMember(l,"isValid",get_isValid,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Hash128),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Hash128),typeof(System.ValueType));
 	}
 }

@@ -38,14 +38,8 @@ class(ZipOutputStream) {
 	static_events {};
 
 	instance_methods {
-		ctor__System_IO_MemoryStream = deffunc(0)args(this, ms){
-			callinstance(this, ZipOutputStream, "__ctor");
-			setinstance(SymbolKind.Field, getstatic(SymbolKind.Property, ZipOutputStream, "Instance"), ZipOutputStream, "V", 1);
-			callinstance(getstatic(SymbolKind.Property, ZipOutputStream, "Instance"), ZipOutputStream, "Test");
-			return(this);
-		}options[needfuncinfo(false)],
 		Test = deffunc(0)args(this){
-			local(dict); dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct), literaldictionary(typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct)), dslstrtocsstr("System.Collections.Generic.Dictionary_TKey_TValue:ctor__Void"));
+			local(dict); dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct), "ctor__Void", literaldictionary(typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct)));
 			callexterninstance(dict, System.Collections.Generic.Dictionary_TKey_TValue, "Add", 1, 1);
 			callexterninstance(dict, System.Collections.Generic.Dictionary_TKey_TValue, "Add", 2, 2);
 			setexterninstanceindexer(System.Collections.Generic.Dictionary_TKey_TValue, typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct), dict, System.Collections.Generic.Dictionary_TKey_TValue, "set_Item", 2, true, 1, execbinary("+", getexterninstanceindexer(System.Collections.Generic.Dictionary_TKey_TValue, typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct), dict, System.Collections.Generic.Dictionary_TKey_TValue, "get_Item", 1, 1), getexterninstanceindexer(System.Collections.Generic.Dictionary_TKey_TValue, typeargs(System.Int32, System.Int32), typekinds(TypeKind.Struct, TypeKind.Struct), dict, System.Collections.Generic.Dictionary_TKey_TValue, "get_Item", 1, 2), System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
@@ -75,8 +69,6 @@ class(ZipOutputStream) {
 	class_info(TypeKind.Class, Accessibility.Internal) {
 	};
 	method_info {
-		ctor__System_IO_MemoryStream(MethodKind.Constructor, Accessibility.Public){
-		};
 		get_V(MethodKind.PropertyGet, Accessibility.Public){
 		};
 		set_V(MethodKind.PropertySet, Accessibility.Public){

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_ExternalForcesModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.ExternalForcesModule o;
 			o=new UnityEngine.ParticleSystem.ExternalForcesModule();
@@ -36,32 +36,33 @@ public class Lua_UnityEngine_ParticleSystem_ExternalForcesModule : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int RemoveInfluence(IntPtr l) {
+	static public int RemoveInfluence__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "RemoveInfluence__Void__Int32", argc, 2,typeof(int))){
-				UnityEngine.ParticleSystem.ExternalForcesModule self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				self.RemoveInfluence(a1);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "RemoveInfluence__Void__ParticleSystemForceField", argc, 2,typeof(UnityEngine.ParticleSystemForceField))){
-				UnityEngine.ParticleSystem.ExternalForcesModule self;
-				checkValueType(l,1,out self);
-				UnityEngine.ParticleSystemForceField a1;
-				checkType(l,3,out a1);
-				self.RemoveInfluence(a1);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.ParticleSystem.ExternalForcesModule self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			self.RemoveInfluence(a1);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int RemoveInfluence__ParticleSystemForceField(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.ExternalForcesModule self;
+			checkValueType(l,1,out self);
+			UnityEngine.ParticleSystemForceField a1;
+			checkType(l,2,out a1);
+			self.RemoveInfluence(a1);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -230,8 +231,10 @@ public class Lua_UnityEngine_ParticleSystem_ExternalForcesModule : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.ExternalForcesModule");
+		addMember(l,ctor_s);
 		addMember(l,AddInfluence);
-		addMember(l,RemoveInfluence);
+		addMember(l,RemoveInfluence__Int32);
+		addMember(l,RemoveInfluence__ParticleSystemForceField);
 		addMember(l,SetInfluence);
 		addMember(l,GetInfluence);
 		addMember(l,IsAffectedBy);
@@ -239,6 +242,6 @@ public class Lua_UnityEngine_ParticleSystem_ExternalForcesModule : LuaObject {
 		addMember(l,"multiplier",get_multiplier,set_multiplier,true);
 		addMember(l,"influenceFilter",get_influenceFilter,set_influenceFilter,true);
 		addMember(l,"influenceCount",get_influenceCount,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.ExternalForcesModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.ExternalForcesModule),typeof(System.ValueType));
 	}
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_SystemInfo : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.SystemInfo o;
 			o=new UnityEngine.SystemInfo();
@@ -778,6 +778,7 @@ public class Lua_UnityEngine_SystemInfo : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.SystemInfo");
+		addMember(l,ctor_s);
 		addMember(l,SupportsRenderTextureFormat_s);
 		addMember(l,SupportsBlendingOnRenderTextureFormat_s);
 		addMember(l,SupportsTextureFormat_s);
@@ -840,6 +841,6 @@ public class Lua_UnityEngine_SystemInfo : LuaObject {
 		addMember(l,"supportsGPUFence",get_supportsGPUFence,null,false);
 		addMember(l,"supportsAsyncGPUReadback",get_supportsAsyncGPUReadback,null,false);
 		addMember(l,"supportsMipStreaming",get_supportsMipStreaming,null,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.SystemInfo));
+		createTypeMetatable(l,null, typeof(UnityEngine.SystemInfo));
 	}
 }

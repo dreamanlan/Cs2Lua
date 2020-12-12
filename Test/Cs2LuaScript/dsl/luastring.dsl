@@ -9,19 +9,19 @@ class(LuaString) {
 			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(LuaString, typeargs(), typekinds(), "ctor", null, ...);
 			return(__cs2dsl_newobj);
 		}options[needfuncinfo(false)];
-		Format__System_String__System_Object = deffunc(1)args(str, __dsl_arg){
+		Format__String__Object = deffunc(1)args(str, __dsl_arg){
 			local(__method_ret_6_4_9_5);
-			__method_ret_6_4_9_5 = callexternstatic(System.String, "Format", dslstrtocsstr("System.String:Format__String__String__Object"), str, __dsl_arg);
+			__method_ret_6_4_9_5 = callexternstatic(System.String, "Format__String__Object", str, __dsl_arg);
 			return(__method_ret_6_4_9_5);
 		}options[needfuncinfo(false)];
-		Format__System_String__System_Object__System_Object = deffunc(1)args(str, arg1, arg2){
+		Format__String__Object__Object = deffunc(1)args(str, arg1, arg2){
 			local(__method_ret_10_4_13_5);
-			__method_ret_10_4_13_5 = callexternstatic(System.String, "Format", dslstrtocsstr("System.String:Format__String__String__Object__Object"), str, arg1, arg2);
+			__method_ret_10_4_13_5 = callexternstatic(System.String, "Format__String__Object__Object", str, arg1, arg2);
 			return(__method_ret_10_4_13_5);
 		}options[needfuncinfo(false)];
-		Format__System_String__System_Object__System_Object__System_Object = deffunc(1)args(str, arg1, arg2, arg3){
+		Format__String__Object__Object__Object = deffunc(1)args(str, arg1, arg2, arg3){
 			local(__method_ret_14_4_17_5);
-			__method_ret_14_4_17_5 = callexternstatic(System.String, "Format", dslstrtocsstr("System.String:Format__String__String__Object__Object__Object"), str, arg1, arg2, arg3);
+			__method_ret_14_4_17_5 = callexternstatic(System.String, "Format__String__Object__Object__Object", str, arg1, arg2, arg3);
 			return(__method_ret_14_4_17_5);
 		}options[needfuncinfo(false)];
 		cctor = deffunc(0)args(){
@@ -64,13 +64,13 @@ class(LuaString) {
 	class_info(TypeKind.Class, Accessibility.Internal) {
 	};
 	method_info {
-		Format__System_String__System_Object(MethodKind.Ordinary, Accessibility.Public){
+		Format__String__Object(MethodKind.Ordinary, Accessibility.Public){
 			static(true);
 		};
-		Format__System_String__System_Object__System_Object(MethodKind.Ordinary, Accessibility.Public){
+		Format__String__Object__Object(MethodKind.Ordinary, Accessibility.Public){
 			static(true);
 		};
-		Format__System_String__System_Object__System_Object__System_Object(MethodKind.Ordinary, Accessibility.Public){
+		Format__String__Object__Object__Object(MethodKind.Ordinary, Accessibility.Public){
 			static(true);
 		};
 		ctor(MethodKind.Constructor, Accessibility.Public){

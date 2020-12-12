@@ -32,6 +32,10 @@ namespace RoslynTool.CsToDsl
         {
             get { return m_ClassSymbols; }
         }
+        internal ConcurrentDictionary<IMethodSymbol, InvocationInfo> ExternMethodInfos
+        {
+            get { return m_ExternMethodInfos; }
+        }
         internal ConcurrentDictionary<string, INamedTypeSymbol> ExternTypes
         {
             get { return m_ExternTypes; }
@@ -519,18 +523,16 @@ namespace RoslynTool.CsToDsl
                 }
             }
         }
-        internal string NameMangling(IMethodSymbol sym)
+        internal string NameCs2DslMangling(IMethodSymbol sym)
         {
             string ret = GetMethodName(sym);
-            if (!string.IsNullOrEmpty(ret) && ret[0] == '.')
-                ret = ret.Substring(1);
             string key = ClassInfo.GetFullNameWithTypeParameters(sym.ContainingType);
             ClassSymbolInfo csi;
             if (m_ClassSymbols.TryGetValue(key, out csi)) {
                 bool isMangling;
                 csi.SymbolOverloadFlags.TryGetValue(ret, out isMangling);
                 if (isMangling) {
-                    ret = CalcMethodMangling(sym);
+                    ret = CalcCs2DslMethodMangling(sym);
                 }
             }
             return ret;
@@ -627,10 +629,10 @@ namespace RoslynTool.CsToDsl
                     var members = baseTypeNode.Type.GetMembers();
                     foreach (var sym in members) {
                         var msym = sym as IMethodSymbol;
-                        if (null != msym) {
+                        if (null != msym && !msym.IsImplicitlyDeclared) {
                             string name = msym.Name;
-                            if (name[0] == '.')
-                                name = name.Substring(1);
+                            if (name[0] == '.' || name.StartsWith("op_"))
+                                continue;
                             if (memberCounts.ContainsKey(name)) {
                                 if (!msym.IsOverride) {
                                     ++memberCounts[name];
@@ -643,18 +645,23 @@ namespace RoslynTool.CsToDsl
                     }
                     baseTypeNode = baseTypeNode.BaseTypeNode;
                 }
-                CalcMemberCountRecursively(typeTreeNode, memberCounts);
+                CalcMemberCountRecursively(typeTreeNode, true, memberCounts);
             }
         }
-        private void CalcMemberCountRecursively(TypeTreeNode typeTreeNode, Dictionary<string, int> memberCounts)
+        private void CalcMemberCountRecursively(TypeTreeNode typeTreeNode, bool isMyself, Dictionary<string, int> memberCounts)
         {
             var members = typeTreeNode.Type.GetMembers();
             foreach (var sym in members) {
                 var msym = sym as IMethodSymbol;
-                if (null != msym) {
+                if (null != msym && !msym.IsImplicitlyDeclared) {
                     string name = msym.Name;
-                    if (name[0] == '.')
+                    if (!isMyself && name.StartsWith("op_"))
+                        continue;
+                    if (name[0] == '.') {
+                        if (!isMyself)
+                            continue;
                         name = name.Substring(1);
+                    }
                     if (memberCounts.ContainsKey(name)) {
                         if (!msym.IsOverride) {
                             ++memberCounts[name];
@@ -666,7 +673,7 @@ namespace RoslynTool.CsToDsl
                 }
             }
             foreach (var cnode in typeTreeNode.ChildTypeNodes) {
-                CalcMemberCountRecursively(cnode, memberCounts);
+                CalcMemberCountRecursively(cnode, false, memberCounts);
             }
         }
         private string CalcFullNameAndTypeArguments(string name, INamedTypeSymbol sym)
@@ -768,8 +775,9 @@ namespace RoslynTool.CsToDsl
         private IAssemblySymbol m_AssemblySymbol = null;
         private Dictionary<string, INamespaceSymbol> m_NamespaceSymbols = new Dictionary<string, INamespaceSymbol>();
         private Dictionary<string, ClassSymbolInfo> m_ClassSymbols = new Dictionary<string, ClassSymbolInfo>();
-        
+
         //多线程访问部分，注意加锁
+        private ConcurrentDictionary<IMethodSymbol, InvocationInfo> m_ExternMethodInfos = new ConcurrentDictionary<IMethodSymbol, InvocationInfo>();
         private ConcurrentDictionary<string, INamedTypeSymbol> m_ExternTypes = new ConcurrentDictionary<string, INamedTypeSymbol>();
         private ConcurrentDictionary<string, INamedTypeSymbol> m_InternTypes = new ConcurrentDictionary<string, INamedTypeSymbol>();
         private ConcurrentDictionary<string, INamedTypeSymbol> m_IgnoredTypes = new ConcurrentDictionary<string, INamedTypeSymbol>();
@@ -828,44 +836,6 @@ namespace RoslynTool.CsToDsl
             }
             return ret;
         }
-        //外部导出的api只能使用具体类型，所以调用时泛型参数按提供的参数的类型来生成用于确定调哪个重载版本的签名
-        internal static string CalcOverloadedMethodSignature(IMethodSymbol methodSym, IMethodSymbol nonGenericMethodSym)
-        {
-            if (null == methodSym)
-                return string.Empty;
-            StringBuilder sb = new StringBuilder();
-            var typeSym = methodSym.ContainingType;
-            var typeName = ClassInfo.GetFullName(typeSym);
-            sb.Append(typeName);
-            sb.Append(":");
-            string name = methodSym.Name;
-            if (!string.IsNullOrEmpty(name) && name[0] == '.')
-                name = name.Substring(1);
-            sb.Append(name);
-            IMethodSymbol msym;
-            if (null != nonGenericMethodSym) {
-                msym = nonGenericMethodSym;
-            }
-            else {
-                msym = methodSym;
-            }
-            sb.Append("__");
-            var orimsym = msym.ConstructedFrom;
-            var retType = orimsym.ReturnType;
-            if (retType.Kind == SymbolKind.ArrayType) {
-                sb.Append("Arr_");
-                var arrSym = retType as IArrayTypeSymbol;
-                CalcMethodParameterType(sb, arrSym.ElementType, arrSym.ElementType);
-            }
-            else {
-                CalcMethodParameterType(sb, retType, retType);
-            }
-            foreach (var param in msym.Parameters) {
-                sb.Append("__");
-                CalcMethodParameter(sb, param);
-            }
-            return sb.ToString();
-        }
         internal static void MergeTypeParamsAndArgs(List<ITypeParameterSymbol> tParams, List<ITypeSymbol> tArgs, INamedTypeSymbol refType)
         {
             var typeParams = refType.TypeParameters;
@@ -912,55 +882,71 @@ namespace RoslynTool.CsToDsl
             }
             return -1;
         }
-        internal static string CalcMethodMangling(IMethodSymbol methodSym)
+        //外部导出的api只能使用具体类型，所以调用时泛型参数按提供的参数的类型来生成用于确定调哪个重载版本的签名
+        internal static string CalcExternOverloadedMethodSignature(IMethodSymbol methodSym, IMethodSymbol nonGenericMethodSym)
+        {
+            if (null == methodSym)
+                return string.Empty;
+            StringBuilder sb = new StringBuilder();
+            string name = methodSym.Name;
+            if (!string.IsNullOrEmpty(name) && name[0] == '.')
+                name = name.Substring(1);
+            sb.Append(name);
+            IMethodSymbol msym;
+            if (null != nonGenericMethodSym) {
+                msym = nonGenericMethodSym;
+            }
+            else {
+                msym = methodSym;
+            }
+            var orimsym = msym.OriginalDefinition;
+            if (name == "op_Implicit" || name == "op_Explicit") {
+                sb.Append("__");
+                var retType = orimsym.ReturnType;
+                if (retType.Kind == SymbolKind.ArrayType) {
+                    sb.Append("A_");
+                    var arrSym = retType as IArrayTypeSymbol;
+                    CalcMethodParameterType(sb, arrSym.ElementType);
+                }
+                else {
+                    CalcMethodParameterType(sb, retType);
+                }
+            }
+            foreach (var param in orimsym.Parameters) {
+                sb.Append("__");
+                CalcMethodParameter(sb, param);
+            }
+            return sb.ToString();
+        }
+        internal static string CalcCs2DslMethodMangling(IMethodSymbol methodSym)
         {
             IAssemblySymbol assemblySym = SymbolTable.Instance.AssemblySymbol;
             if (null == methodSym)
                 return string.Empty;
             StringBuilder sb = new StringBuilder();
             string name = GetMethodName(methodSym);
-            if (!string.IsNullOrEmpty(name) && name[0] == '.')
-                name = name.Substring(1);
             sb.Append(name);
-            if (SymbolTable.Instance.IsCs2DslSymbol(methodSym)) {
-                foreach(var tparam in methodSym.TypeParameters) {
-                    sb.Append("_");
-                    sb.Append(tparam.Name);
+            IMethodSymbol msym = methodSym;
+            msym = msym.OriginalDefinition;
+            if (name == "op_Implicit" || name == "op_Explicit") {
+                sb.Append("__");
+                var retType = msym.ReturnType;
+                if (retType.Kind == SymbolKind.ArrayType) {
+                    sb.Append("A_");
+                    var arrSym = retType as IArrayTypeSymbol;
+                    CalcMethodParameterType(sb, arrSym.ElementType);
                 }
-                foreach (var param in methodSym.Parameters) {
-                    sb.Append("__");
-                    if (param.RefKind == RefKind.Ref) {
-                        sb.Append("Ref_");
-                    }
-                    else if (param.RefKind == RefKind.Out) {
-                        sb.Append("Out_");
-                    }
-                    var oriparam = param.OriginalDefinition;
-                    if (oriparam.Type.Kind == SymbolKind.ArrayType) {
-                        sb.Append("Arr_");
-                        var arrSym = oriparam.Type as IArrayTypeSymbol;
-                        string fn;
-                        if (arrSym.ElementType.TypeKind == TypeKind.TypeParameter) {
-                            //fn = ClassInfo.GetFullNameWithTypeParameters(arrSym.ElementType);
-                            fn = arrSym.ElementType.Name;
-                        }
-                        else {
-                            fn = ClassInfo.GetFullName(arrSym.ElementType);
-                        }
-                        sb.Append(fn.Replace('.', '_'));
-                    }
-                    else if (oriparam.Type.TypeKind == TypeKind.TypeParameter) {
-                        //string fn = ClassInfo.GetFullNameWithTypeParameters(oriparam.Type);
-                        string fn = oriparam.Type.Name;
-                        sb.Append(fn.Replace('.', '_'));
-                    }
-                    else {
-                        //这里使用泛型形参名作为函数签名的一部分，主要是为适应泛型类实例化后仍能保持函数签名一致
-                        //因此导致的缺陷是不能支持依靠泛型类型的实参类型来区分的重载函数（这时候就在c#里给函数换个名字吧）
-                        string fn = ClassInfo.GetFullName(oriparam.Type);
-                        sb.Append(fn.Replace('.', '_'));
-                    }
+                else {
+                    CalcMethodParameterType(sb, retType);
                 }
+            }
+            foreach(var typeparam in msym.TypeParameters) {
+                sb.Append("__");
+                sb.Append(typeparam.Name);
+            }
+            foreach (var param in msym.Parameters) {
+                sb.Append("__");
+                CalcMethodParameter(sb, param);
             }
             return sb.ToString();
         }
@@ -973,7 +959,10 @@ namespace RoslynTool.CsToDsl
                 return sym.Name.Replace('.', '_');
             }
             else {
-                return sym.Name;
+                string ret = sym.Name;
+                if (!string.IsNullOrEmpty(ret) && ret[0] == '.')
+                    ret = ret.Substring(1);
+                return ret;
             }
         }
         internal static string GetPropertyName(IPropertySymbol sym)
@@ -1132,41 +1121,32 @@ namespace RoslynTool.CsToDsl
         private static void CalcMethodParameter(StringBuilder sb, IParameterSymbol param)
         {
             if (param.RefKind == RefKind.Ref) {
-                sb.Append("Ref_");
+                sb.Append("R_");
             }
             else if (param.RefKind == RefKind.Out) {
-                sb.Append("Out_");
+                sb.Append("O_");
             }
-            var oriparam = param.OriginalDefinition;
-            if (oriparam.Type.Kind == SymbolKind.ArrayType) {
-                sb.Append("Arr_");
-                var oriArrSym = oriparam.Type as IArrayTypeSymbol;
+            if (param.Type.Kind == SymbolKind.ArrayType) {
+                sb.Append("A_");
                 var arrSym = param.Type as IArrayTypeSymbol;
-                CalcMethodParameterType(sb, oriArrSym.ElementType, arrSym.ElementType);
+                CalcMethodParameterType(sb, arrSym.ElementType);
             }
             else {
-                CalcMethodParameterType(sb, oriparam.Type, param.Type);
+                CalcMethodParameterType(sb, param.Type);
             }
         }
-        private static void CalcMethodParameterType(StringBuilder sb, ITypeSymbol orisym, ITypeSymbol sym)
+        private static void CalcMethodParameterType(StringBuilder sb, ITypeSymbol sym)
         {
-            if (orisym.Kind == SymbolKind.TypeParameter) {
-                var tp = orisym as ITypeParameterSymbol;
-                if (tp.ConstraintTypes.Length > 0) {
-                    sb.Append(tp.ConstraintTypes[0].Name);
-                }
-                else {
-                    sb.Append("Object");
-                }
+            if (sym.Kind == SymbolKind.TypeParameter) {
+                sb.Append(sym.Name);
+            }
+            else if (sym.Kind == SymbolKind.ArrayType) {
+                sb.Append("A_");
+                var arrSym = sym as IArrayTypeSymbol;
+                CalcMethodParameterType(sb, arrSym.ElementType);
             }
             else {
-                var namedType = orisym as INamedTypeSymbol;
-                if (null != namedType && namedType.IsGenericType) {
-                    CalcMethodParameterTypeName(sb, sym);
-                }
-                else {
-                    CalcMethodParameterTypeName(sb, orisym);
-                }
+                CalcMethodParameterTypeName(sb, sym);
             }
         }
         private static void CalcMethodParameterTypeName(StringBuilder sb, ITypeSymbol sym)
@@ -1178,14 +1158,14 @@ namespace RoslynTool.CsToDsl
             }
             List<string> list = new List<string>();
             if (type.TypeArguments.Length > 0) {
-                sb.AppendFormat("{0}`{1}", type.Name, type.TypeArguments.Length);
+                sb.AppendFormat("{0}_{1}", type.Name, type.TypeArguments.Length);
             }
             else {
                 sb.Append(type.Name);
             }
             foreach (var arg in type.TypeArguments) {
                 sb.Append('_');
-                CalcMethodParameterTypeName(sb, arg);
+                CalcMethodParameterType(sb, arg);
             }
         }
 

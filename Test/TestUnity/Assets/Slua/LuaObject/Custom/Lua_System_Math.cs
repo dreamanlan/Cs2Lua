@@ -67,27 +67,28 @@ public class Lua_System_Math : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Ceiling_s(IntPtr l) {
+	static public int Ceiling__Decimal_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Ceiling__Decimal__Decimal", argc, 1,typeof(System.Decimal))){
-				System.Decimal a1;
-				checkValueType(l,2,out a1);
-				var ret=System.Math.Ceiling(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Ceiling__Double__Double", argc, 1,typeof(double))){
-				System.Double a1;
-				checkType(l,2,out a1);
-				var ret=System.Math.Ceiling(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Decimal a1;
+			checkValueType(l,1,out a1);
+			var ret=System.Math.Ceiling(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Ceiling__Double_s(IntPtr l) {
+		try {
+			System.Double a1;
+			checkType(l,1,out a1);
+			var ret=System.Math.Ceiling(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -126,27 +127,28 @@ public class Lua_System_Math : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Floor_s(IntPtr l) {
+	static public int Floor__Decimal_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Floor__Decimal__Decimal", argc, 1,typeof(System.Decimal))){
-				System.Decimal a1;
-				checkValueType(l,2,out a1);
-				var ret=System.Math.Floor(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Floor__Double__Double", argc, 1,typeof(double))){
-				System.Double a1;
-				checkType(l,2,out a1);
-				var ret=System.Math.Floor(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Decimal a1;
+			checkValueType(l,1,out a1);
+			var ret=System.Math.Floor(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Floor__Double_s(IntPtr l) {
+		try {
+			System.Double a1;
+			checkType(l,1,out a1);
+			var ret=System.Math.Floor(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -215,91 +217,13 @@ public class Lua_System_Math : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Round_s(IntPtr l) {
+	static public int Round__Decimal_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Round__Decimal__Decimal__Int32__MidpointRounding", argc, 1,typeof(System.Decimal),typeof(int),typeof(System.MidpointRounding))){
-				System.Decimal a1;
-				checkValueType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.MidpointRounding a3;
-				checkEnum(l,4,out a3);
-				var ret=System.Math.Round(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Round__Double__Double__Int32__MidpointRounding", argc, 1,typeof(double),typeof(int),typeof(System.MidpointRounding))){
-				System.Double a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.MidpointRounding a3;
-				checkEnum(l,4,out a3);
-				var ret=System.Math.Round(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Round__Decimal__Decimal__Int32", argc, 1,typeof(System.Decimal),typeof(int))){
-				System.Decimal a1;
-				checkValueType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Round(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Round__Decimal__Decimal__MidpointRounding", argc, 1,typeof(System.Decimal),typeof(System.MidpointRounding))){
-				System.Decimal a1;
-				checkValueType(l,2,out a1);
-				System.MidpointRounding a2;
-				checkEnum(l,3,out a2);
-				var ret=System.Math.Round(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Round__Double__Double__Int32", argc, 1,typeof(double),typeof(int))){
-				System.Double a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Round(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Round__Double__Double__MidpointRounding", argc, 1,typeof(double),typeof(System.MidpointRounding))){
-				System.Double a1;
-				checkType(l,2,out a1);
-				System.MidpointRounding a2;
-				checkEnum(l,3,out a2);
-				var ret=System.Math.Round(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Round__Decimal__Decimal", argc, 1,typeof(System.Decimal))){
-				System.Decimal a1;
-				checkValueType(l,2,out a1);
-				var ret=System.Math.Round(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Round__Double__Double", argc, 1,typeof(double))){
-				System.Double a1;
-				checkType(l,2,out a1);
-				var ret=System.Math.Round(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Decimal a1;
+			checkValueType(l,1,out a1);
+			var ret=System.Math.Round(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -308,27 +232,149 @@ public class Lua_System_Math : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Truncate_s(IntPtr l) {
+	static public int Round__Double_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Truncate__Decimal__Decimal", argc, 1,typeof(System.Decimal))){
-				System.Decimal a1;
-				checkValueType(l,2,out a1);
-				var ret=System.Math.Truncate(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Truncate__Double__Double", argc, 1,typeof(double))){
-				System.Double a1;
-				checkType(l,2,out a1);
-				var ret=System.Math.Truncate(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Double a1;
+			checkType(l,1,out a1);
+			var ret=System.Math.Round(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Round__Decimal__Int32_s(IntPtr l) {
+		try {
+			System.Decimal a1;
+			checkValueType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Round(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Round__Decimal__MidpointRounding_s(IntPtr l) {
+		try {
+			System.Decimal a1;
+			checkValueType(l,1,out a1);
+			System.MidpointRounding a2;
+			checkEnum(l,2,out a2);
+			var ret=System.Math.Round(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Round__Double__Int32_s(IntPtr l) {
+		try {
+			System.Double a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Round(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Round__Double__MidpointRounding_s(IntPtr l) {
+		try {
+			System.Double a1;
+			checkType(l,1,out a1);
+			System.MidpointRounding a2;
+			checkEnum(l,2,out a2);
+			var ret=System.Math.Round(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Round__Decimal__Int32__MidpointRounding_s(IntPtr l) {
+		try {
+			System.Decimal a1;
+			checkValueType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.MidpointRounding a3;
+			checkEnum(l,3,out a3);
+			var ret=System.Math.Round(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Round__Double__Int32__MidpointRounding_s(IntPtr l) {
+		try {
+			System.Double a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.MidpointRounding a3;
+			checkEnum(l,3,out a3);
+			var ret=System.Math.Round(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Truncate__Decimal_s(IntPtr l) {
+		try {
+			System.Decimal a1;
+			checkValueType(l,1,out a1);
+			var ret=System.Math.Truncate(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Truncate__Double_s(IntPtr l) {
+		try {
+			System.Double a1;
+			checkType(l,1,out a1);
+			var ret=System.Math.Truncate(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -352,29 +398,30 @@ public class Lua_System_Math : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Log_s(IntPtr l) {
+	static public int Log__Double_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.Double a1;
-				checkType(l,2,out a1);
-				System.Double a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Log(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.Double a1;
-				checkType(l,2,out a1);
-				var ret=System.Math.Log(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Double a1;
+			checkType(l,1,out a1);
+			var ret=System.Math.Log(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Log__Double__Double_s(IntPtr l) {
+		try {
+			System.Double a1;
+			checkType(l,1,out a1);
+			System.Double a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Log(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -447,67 +494,13 @@ public class Lua_System_Math : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Abs_s(IntPtr l) {
+	static public int Abs__SByte_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Abs__SByte__SByte", argc, 1,typeof(System.SByte))){
-				System.SByte a1;
-				checkType(l,2,out a1);
-				var ret=System.Math.Abs(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Abs__Int16__Int16", argc, 1,typeof(System.Int16))){
-				System.Int16 a1;
-				checkType(l,2,out a1);
-				var ret=System.Math.Abs(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Abs__Int32__Int32", argc, 1,typeof(int))){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				var ret=System.Math.Abs(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Abs__Int64__Int64", argc, 1,typeof(System.Int64))){
-				System.Int64 a1;
-				checkType(l,2,out a1);
-				var ret=System.Math.Abs(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Abs__Decimal__Decimal", argc, 1,typeof(System.Decimal))){
-				System.Decimal a1;
-				checkValueType(l,2,out a1);
-				var ret=System.Math.Abs(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Abs__Single__Single", argc, 1,typeof(float))){
-				System.Single a1;
-				checkType(l,2,out a1);
-				var ret=System.Math.Abs(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Abs__Double__Double", argc, 1,typeof(double))){
-				System.Double a1;
-				checkType(l,2,out a1);
-				var ret=System.Math.Abs(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.SByte a1;
+			checkType(l,1,out a1);
+			var ret=System.Math.Abs(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -516,121 +509,13 @@ public class Lua_System_Math : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Max_s(IntPtr l) {
+	static public int Abs__Int16_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Max__SByte__SByte__SByte", argc, 1,typeof(System.SByte),typeof(System.SByte))){
-				System.SByte a1;
-				checkType(l,2,out a1);
-				System.SByte a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Max(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Max__Byte__Byte__Byte", argc, 1,typeof(System.Byte),typeof(System.Byte))){
-				System.Byte a1;
-				checkType(l,2,out a1);
-				System.Byte a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Max(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Max__Int16__Int16__Int16", argc, 1,typeof(System.Int16),typeof(System.Int16))){
-				System.Int16 a1;
-				checkType(l,2,out a1);
-				System.Int16 a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Max(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Max__UInt16__UInt16__UInt16", argc, 1,typeof(System.UInt16),typeof(System.UInt16))){
-				System.UInt16 a1;
-				checkType(l,2,out a1);
-				System.UInt16 a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Max(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Max__Int32__Int32__Int32", argc, 1,typeof(int),typeof(int))){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Max(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Max__UInt32__UInt32__UInt32", argc, 1,typeof(System.UInt32),typeof(System.UInt32))){
-				System.UInt32 a1;
-				checkType(l,2,out a1);
-				System.UInt32 a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Max(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Max__Int64__Int64__Int64", argc, 1,typeof(System.Int64),typeof(System.Int64))){
-				System.Int64 a1;
-				checkType(l,2,out a1);
-				System.Int64 a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Max(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Max__UInt64__UInt64__UInt64", argc, 1,typeof(System.UInt64),typeof(System.UInt64))){
-				System.UInt64 a1;
-				checkType(l,2,out a1);
-				System.UInt64 a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Max(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Max__Decimal__Decimal__Decimal", argc, 1,typeof(System.Decimal),typeof(System.Decimal))){
-				System.Decimal a1;
-				checkValueType(l,2,out a1);
-				System.Decimal a2;
-				checkValueType(l,3,out a2);
-				var ret=System.Math.Max(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Max__Single__Single__Single", argc, 1,typeof(float),typeof(float))){
-				System.Single a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Max(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Max__Double__Double__Double", argc, 1,typeof(double),typeof(double))){
-				System.Double a1;
-				checkType(l,2,out a1);
-				System.Double a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Max(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Int16 a1;
+			checkType(l,1,out a1);
+			var ret=System.Math.Abs(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -639,121 +524,13 @@ public class Lua_System_Math : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Min_s(IntPtr l) {
+	static public int Abs__Int32_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Min__SByte__SByte__SByte", argc, 1,typeof(System.SByte),typeof(System.SByte))){
-				System.SByte a1;
-				checkType(l,2,out a1);
-				System.SByte a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Min(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Min__Byte__Byte__Byte", argc, 1,typeof(System.Byte),typeof(System.Byte))){
-				System.Byte a1;
-				checkType(l,2,out a1);
-				System.Byte a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Min(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Min__Int16__Int16__Int16", argc, 1,typeof(System.Int16),typeof(System.Int16))){
-				System.Int16 a1;
-				checkType(l,2,out a1);
-				System.Int16 a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Min(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Min__UInt16__UInt16__UInt16", argc, 1,typeof(System.UInt16),typeof(System.UInt16))){
-				System.UInt16 a1;
-				checkType(l,2,out a1);
-				System.UInt16 a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Min(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Min__Int32__Int32__Int32", argc, 1,typeof(int),typeof(int))){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Min(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Min__UInt32__UInt32__UInt32", argc, 1,typeof(System.UInt32),typeof(System.UInt32))){
-				System.UInt32 a1;
-				checkType(l,2,out a1);
-				System.UInt32 a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Min(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Min__Int64__Int64__Int64", argc, 1,typeof(System.Int64),typeof(System.Int64))){
-				System.Int64 a1;
-				checkType(l,2,out a1);
-				System.Int64 a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Min(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Min__UInt64__UInt64__UInt64", argc, 1,typeof(System.UInt64),typeof(System.UInt64))){
-				System.UInt64 a1;
-				checkType(l,2,out a1);
-				System.UInt64 a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Min(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Min__Decimal__Decimal__Decimal", argc, 1,typeof(System.Decimal),typeof(System.Decimal))){
-				System.Decimal a1;
-				checkValueType(l,2,out a1);
-				System.Decimal a2;
-				checkValueType(l,3,out a2);
-				var ret=System.Math.Min(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Min__Single__Single__Single", argc, 1,typeof(float),typeof(float))){
-				System.Single a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Min(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Min__Double__Double__Double", argc, 1,typeof(double),typeof(double))){
-				System.Double a1;
-				checkType(l,2,out a1);
-				System.Double a2;
-				checkType(l,3,out a2);
-				var ret=System.Math.Min(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			var ret=System.Math.Abs(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -762,67 +539,537 @@ public class Lua_System_Math : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Sign_s(IntPtr l) {
+	static public int Abs__Int64_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Sign__Int32__SByte", argc, 1,typeof(System.SByte))){
-				System.SByte a1;
-				checkType(l,2,out a1);
-				var ret=System.Math.Sign(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Sign__Int32__Int16", argc, 1,typeof(System.Int16))){
-				System.Int16 a1;
-				checkType(l,2,out a1);
-				var ret=System.Math.Sign(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Sign__Int32__Int32", argc, 1,typeof(int))){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				var ret=System.Math.Sign(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Sign__Int32__Int64", argc, 1,typeof(System.Int64))){
-				System.Int64 a1;
-				checkType(l,2,out a1);
-				var ret=System.Math.Sign(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Sign__Int32__Decimal", argc, 1,typeof(System.Decimal))){
-				System.Decimal a1;
-				checkValueType(l,2,out a1);
-				var ret=System.Math.Sign(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Sign__Int32__Single", argc, 1,typeof(float))){
-				System.Single a1;
-				checkType(l,2,out a1);
-				var ret=System.Math.Sign(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Sign__Int32__Double", argc, 1,typeof(double))){
-				System.Double a1;
-				checkType(l,2,out a1);
-				var ret=System.Math.Sign(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Int64 a1;
+			checkType(l,1,out a1);
+			var ret=System.Math.Abs(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Abs__Decimal_s(IntPtr l) {
+		try {
+			System.Decimal a1;
+			checkValueType(l,1,out a1);
+			var ret=System.Math.Abs(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Abs__Single_s(IntPtr l) {
+		try {
+			System.Single a1;
+			checkType(l,1,out a1);
+			var ret=System.Math.Abs(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Abs__Double_s(IntPtr l) {
+		try {
+			System.Double a1;
+			checkType(l,1,out a1);
+			var ret=System.Math.Abs(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Max__SByte__SByte_s(IntPtr l) {
+		try {
+			System.SByte a1;
+			checkType(l,1,out a1);
+			System.SByte a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Max(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Max__Byte__Byte_s(IntPtr l) {
+		try {
+			System.Byte a1;
+			checkType(l,1,out a1);
+			System.Byte a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Max(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Max__Int16__Int16_s(IntPtr l) {
+		try {
+			System.Int16 a1;
+			checkType(l,1,out a1);
+			System.Int16 a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Max(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Max__UInt16__UInt16_s(IntPtr l) {
+		try {
+			System.UInt16 a1;
+			checkType(l,1,out a1);
+			System.UInt16 a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Max(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Max__Int32__Int32_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Max(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Max__UInt32__UInt32_s(IntPtr l) {
+		try {
+			System.UInt32 a1;
+			checkType(l,1,out a1);
+			System.UInt32 a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Max(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Max__Int64__Int64_s(IntPtr l) {
+		try {
+			System.Int64 a1;
+			checkType(l,1,out a1);
+			System.Int64 a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Max(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Max__UInt64__UInt64_s(IntPtr l) {
+		try {
+			System.UInt64 a1;
+			checkType(l,1,out a1);
+			System.UInt64 a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Max(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Max__Decimal__Decimal_s(IntPtr l) {
+		try {
+			System.Decimal a1;
+			checkValueType(l,1,out a1);
+			System.Decimal a2;
+			checkValueType(l,2,out a2);
+			var ret=System.Math.Max(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Max__Single__Single_s(IntPtr l) {
+		try {
+			System.Single a1;
+			checkType(l,1,out a1);
+			System.Single a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Max(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Max__Double__Double_s(IntPtr l) {
+		try {
+			System.Double a1;
+			checkType(l,1,out a1);
+			System.Double a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Max(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Min__SByte__SByte_s(IntPtr l) {
+		try {
+			System.SByte a1;
+			checkType(l,1,out a1);
+			System.SByte a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Min(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Min__Byte__Byte_s(IntPtr l) {
+		try {
+			System.Byte a1;
+			checkType(l,1,out a1);
+			System.Byte a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Min(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Min__Int16__Int16_s(IntPtr l) {
+		try {
+			System.Int16 a1;
+			checkType(l,1,out a1);
+			System.Int16 a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Min(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Min__UInt16__UInt16_s(IntPtr l) {
+		try {
+			System.UInt16 a1;
+			checkType(l,1,out a1);
+			System.UInt16 a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Min(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Min__Int32__Int32_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Min(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Min__UInt32__UInt32_s(IntPtr l) {
+		try {
+			System.UInt32 a1;
+			checkType(l,1,out a1);
+			System.UInt32 a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Min(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Min__Int64__Int64_s(IntPtr l) {
+		try {
+			System.Int64 a1;
+			checkType(l,1,out a1);
+			System.Int64 a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Min(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Min__UInt64__UInt64_s(IntPtr l) {
+		try {
+			System.UInt64 a1;
+			checkType(l,1,out a1);
+			System.UInt64 a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Min(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Min__Decimal__Decimal_s(IntPtr l) {
+		try {
+			System.Decimal a1;
+			checkValueType(l,1,out a1);
+			System.Decimal a2;
+			checkValueType(l,2,out a2);
+			var ret=System.Math.Min(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Min__Single__Single_s(IntPtr l) {
+		try {
+			System.Single a1;
+			checkType(l,1,out a1);
+			System.Single a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Min(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Min__Double__Double_s(IntPtr l) {
+		try {
+			System.Double a1;
+			checkType(l,1,out a1);
+			System.Double a2;
+			checkType(l,2,out a2);
+			var ret=System.Math.Min(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Sign__SByte_s(IntPtr l) {
+		try {
+			System.SByte a1;
+			checkType(l,1,out a1);
+			var ret=System.Math.Sign(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Sign__Int16_s(IntPtr l) {
+		try {
+			System.Int16 a1;
+			checkType(l,1,out a1);
+			var ret=System.Math.Sign(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Sign__Int32_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			var ret=System.Math.Sign(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Sign__Int64_s(IntPtr l) {
+		try {
+			System.Int64 a1;
+			checkType(l,1,out a1);
+			var ret=System.Math.Sign(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Sign__Decimal_s(IntPtr l) {
+		try {
+			System.Decimal a1;
+			checkValueType(l,1,out a1);
+			var ret=System.Math.Sign(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Sign__Single_s(IntPtr l) {
+		try {
+			System.Single a1;
+			checkType(l,1,out a1);
+			var ret=System.Math.Sign(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Sign__Double_s(IntPtr l) {
+		try {
+			System.Double a1;
+			checkType(l,1,out a1);
+			var ret=System.Math.Sign(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -848,36 +1095,37 @@ public class Lua_System_Math : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int DivRem_s(IntPtr l) {
+	static public int DivRem__Int32__Int32__O_Int32_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "DivRem__Int32__Int32__Int32__Out_Int32", argc, 1,typeof(int),typeof(int),typeof(LuaOut))){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				System.Int32 a3;
-				var ret=System.Math.DivRem(a1,a2,out a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				pushValue(l,a3);
-				return 3;
-			}
-			else if(matchType(l, "DivRem__Int64__Int64__Int64__Out_Int64", argc, 1,typeof(System.Int64),typeof(System.Int64),typeof(LuaOut))){
-				System.Int64 a1;
-				checkType(l,2,out a1);
-				System.Int64 a2;
-				checkType(l,3,out a2);
-				System.Int64 a3;
-				var ret=System.Math.DivRem(a1,a2,out a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				pushValue(l,a3);
-				return 3;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			var ret=System.Math.DivRem(a1,a2,out a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a3);
+			return 3;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int DivRem__Int64__Int64__O_Int64_s(IntPtr l) {
+		try {
+			System.Int64 a1;
+			checkType(l,1,out a1);
+			System.Int64 a2;
+			checkType(l,2,out a2);
+			System.Int64 a3;
+			var ret=System.Math.DivRem(a1,a2,out a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a3);
+			return 3;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -914,28 +1162,72 @@ public class Lua_System_Math : LuaObject {
 		addMember(l,Asin_s);
 		addMember(l,Atan_s);
 		addMember(l,Atan2_s);
-		addMember(l,Ceiling_s);
+		addMember(l,Ceiling__Decimal_s);
+		addMember(l,Ceiling__Double_s);
 		addMember(l,Cos_s);
 		addMember(l,Cosh_s);
-		addMember(l,Floor_s);
+		addMember(l,Floor__Decimal_s);
+		addMember(l,Floor__Double_s);
 		addMember(l,Sin_s);
 		addMember(l,Tan_s);
 		addMember(l,Sinh_s);
 		addMember(l,Tanh_s);
-		addMember(l,Round_s);
-		addMember(l,Truncate_s);
+		addMember(l,Round__Decimal_s);
+		addMember(l,Round__Double_s);
+		addMember(l,Round__Decimal__Int32_s);
+		addMember(l,Round__Decimal__MidpointRounding_s);
+		addMember(l,Round__Double__Int32_s);
+		addMember(l,Round__Double__MidpointRounding_s);
+		addMember(l,Round__Decimal__Int32__MidpointRounding_s);
+		addMember(l,Round__Double__Int32__MidpointRounding_s);
+		addMember(l,Truncate__Decimal_s);
+		addMember(l,Truncate__Double_s);
 		addMember(l,Sqrt_s);
-		addMember(l,Log_s);
+		addMember(l,Log__Double_s);
+		addMember(l,Log__Double__Double_s);
 		addMember(l,Log10_s);
 		addMember(l,Exp_s);
 		addMember(l,Pow_s);
 		addMember(l,IEEERemainder_s);
-		addMember(l,Abs_s);
-		addMember(l,Max_s);
-		addMember(l,Min_s);
-		addMember(l,Sign_s);
+		addMember(l,Abs__SByte_s);
+		addMember(l,Abs__Int16_s);
+		addMember(l,Abs__Int32_s);
+		addMember(l,Abs__Int64_s);
+		addMember(l,Abs__Decimal_s);
+		addMember(l,Abs__Single_s);
+		addMember(l,Abs__Double_s);
+		addMember(l,Max__SByte__SByte_s);
+		addMember(l,Max__Byte__Byte_s);
+		addMember(l,Max__Int16__Int16_s);
+		addMember(l,Max__UInt16__UInt16_s);
+		addMember(l,Max__Int32__Int32_s);
+		addMember(l,Max__UInt32__UInt32_s);
+		addMember(l,Max__Int64__Int64_s);
+		addMember(l,Max__UInt64__UInt64_s);
+		addMember(l,Max__Decimal__Decimal_s);
+		addMember(l,Max__Single__Single_s);
+		addMember(l,Max__Double__Double_s);
+		addMember(l,Min__SByte__SByte_s);
+		addMember(l,Min__Byte__Byte_s);
+		addMember(l,Min__Int16__Int16_s);
+		addMember(l,Min__UInt16__UInt16_s);
+		addMember(l,Min__Int32__Int32_s);
+		addMember(l,Min__UInt32__UInt32_s);
+		addMember(l,Min__Int64__Int64_s);
+		addMember(l,Min__UInt64__UInt64_s);
+		addMember(l,Min__Decimal__Decimal_s);
+		addMember(l,Min__Single__Single_s);
+		addMember(l,Min__Double__Double_s);
+		addMember(l,Sign__SByte_s);
+		addMember(l,Sign__Int16_s);
+		addMember(l,Sign__Int32_s);
+		addMember(l,Sign__Int64_s);
+		addMember(l,Sign__Decimal_s);
+		addMember(l,Sign__Single_s);
+		addMember(l,Sign__Double_s);
 		addMember(l,BigMul_s);
-		addMember(l,DivRem_s);
+		addMember(l,DivRem__Int32__Int32__O_Int32_s);
+		addMember(l,DivRem__Int64__Int64__O_Int64_s);
 		addMember(l,"PI",get_PI,null,false);
 		addMember(l,"E",get_E,null,false);
 		createTypeMetatable(l,null, typeof(System.Math));

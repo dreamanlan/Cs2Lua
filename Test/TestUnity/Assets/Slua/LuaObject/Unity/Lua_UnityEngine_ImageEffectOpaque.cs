@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ImageEffectOpaque : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ImageEffectOpaque o;
 			o=new UnityEngine.ImageEffectOpaque();
@@ -20,6 +20,7 @@ public class Lua_UnityEngine_ImageEffectOpaque : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ImageEffectOpaque");
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ImageEffectOpaque),typeof(System.Attribute));
+		addMember(l,ctor_s);
+		createTypeMetatable(l,null, typeof(UnityEngine.ImageEffectOpaque),typeof(System.Attribute));
 	}
 }

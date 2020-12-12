@@ -5,12 +5,46 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_BoneWeight : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.BoneWeight o;
 			o=new UnityEngine.BoneWeight();
 			pushValue(l,true);
 			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			UnityEngine.BoneWeight self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__BoneWeight(IntPtr l) {
+		try {
+			UnityEngine.BoneWeight self;
+			checkValueType(l,1,out self);
+			UnityEngine.BoneWeight a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -302,6 +336,9 @@ public class Lua_UnityEngine_BoneWeight : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.BoneWeight");
+		addMember(l,ctor_s);
+		addMember(l,Equals__Object);
+		addMember(l,Equals__BoneWeight);
 		addMember(l,op_Equality_s);
 		addMember(l,op_Inequality_s);
 		addMember(l,"weight0",get_weight0,set_weight0,true);
@@ -312,6 +349,6 @@ public class Lua_UnityEngine_BoneWeight : LuaObject {
 		addMember(l,"boneIndex1",get_boneIndex1,set_boneIndex1,true);
 		addMember(l,"boneIndex2",get_boneIndex2,set_boneIndex2,true);
 		addMember(l,"boneIndex3",get_boneIndex3,set_boneIndex3,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.BoneWeight),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.BoneWeight),typeof(System.ValueType));
 	}
 }

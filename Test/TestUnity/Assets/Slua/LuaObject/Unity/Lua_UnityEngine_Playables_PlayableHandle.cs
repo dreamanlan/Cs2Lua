@@ -5,12 +5,46 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Playables_PlayableHandle : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Playables.PlayableHandle o;
 			o=new UnityEngine.Playables.PlayableHandle();
 			pushValue(l,true);
 			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			UnityEngine.Playables.PlayableHandle self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__PlayableHandle(IntPtr l) {
+		try {
+			UnityEngine.Playables.PlayableHandle self;
+			checkValueType(l,1,out self);
+			UnityEngine.Playables.PlayableHandle a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -66,9 +100,12 @@ public class Lua_UnityEngine_Playables_PlayableHandle : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Playables.PlayableHandle");
+		addMember(l,ctor_s);
+		addMember(l,Equals__Object);
+		addMember(l,Equals__PlayableHandle);
 		addMember(l,op_Equality_s);
 		addMember(l,op_Inequality_s);
 		addMember(l,"Null",get_Null,null,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Playables.PlayableHandle),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Playables.PlayableHandle),typeof(System.ValueType));
 	}
 }

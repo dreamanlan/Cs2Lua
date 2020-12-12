@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_Utility : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			Utility o;
 			o=new Utility();
@@ -952,6 +952,7 @@ public class Lua_Utility : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"Utility");
+		addMember(l,ctor_s);
 		addMember(l,QuaternionFromAngleAxis_s);
 		addMember(l,QuaternionFromLookRotation_s);
 		addMember(l,QuaternionRotateTowards_s);
@@ -994,6 +995,6 @@ public class Lua_Utility : LuaObject {
 		addMember(l,Debug_s);
 		addMember(l,Warn_s);
 		addMember(l,Error_s);
-		createTypeMetatable(l,constructor, typeof(Utility));
+		createTypeMetatable(l,null, typeof(Utility));
 	}
 }

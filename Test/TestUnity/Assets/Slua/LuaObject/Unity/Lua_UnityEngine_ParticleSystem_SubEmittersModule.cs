@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_SubEmittersModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.SubEmittersModule o;
 			o=new UnityEngine.ParticleSystem.SubEmittersModule();
@@ -19,42 +19,43 @@ public class Lua_UnityEngine_ParticleSystem_SubEmittersModule : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int AddSubEmitter(IntPtr l) {
+	static public int AddSubEmitter__ParticleSystem__ParticleSystemSubEmitterType__ParticleSystemSubEmitterProperties(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==6){
-				UnityEngine.ParticleSystem.SubEmittersModule self;
-				checkValueType(l,1,out self);
-				UnityEngine.ParticleSystem a1;
-				checkType(l,3,out a1);
-				UnityEngine.ParticleSystemSubEmitterType a2;
-				checkEnum(l,4,out a2);
-				UnityEngine.ParticleSystemSubEmitterProperties a3;
-				checkEnum(l,5,out a3);
-				System.Single a4;
-				checkType(l,6,out a4);
-				self.AddSubEmitter(a1,a2,a3,a4);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(argc==5){
-				UnityEngine.ParticleSystem.SubEmittersModule self;
-				checkValueType(l,1,out self);
-				UnityEngine.ParticleSystem a1;
-				checkType(l,3,out a1);
-				UnityEngine.ParticleSystemSubEmitterType a2;
-				checkEnum(l,4,out a2);
-				UnityEngine.ParticleSystemSubEmitterProperties a3;
-				checkEnum(l,5,out a3);
-				self.AddSubEmitter(a1,a2,a3);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.ParticleSystem.SubEmittersModule self;
+			checkValueType(l,1,out self);
+			UnityEngine.ParticleSystem a1;
+			checkType(l,2,out a1);
+			UnityEngine.ParticleSystemSubEmitterType a2;
+			checkEnum(l,3,out a2);
+			UnityEngine.ParticleSystemSubEmitterProperties a3;
+			checkEnum(l,4,out a3);
+			self.AddSubEmitter(a1,a2,a3);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AddSubEmitter__ParticleSystem__ParticleSystemSubEmitterType__ParticleSystemSubEmitterProperties__Single(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.SubEmittersModule self;
+			checkValueType(l,1,out self);
+			UnityEngine.ParticleSystem a1;
+			checkType(l,2,out a1);
+			UnityEngine.ParticleSystemSubEmitterType a2;
+			checkEnum(l,3,out a2);
+			UnityEngine.ParticleSystemSubEmitterProperties a3;
+			checkEnum(l,4,out a3);
+			System.Single a4;
+			checkType(l,5,out a4);
+			self.AddSubEmitter(a1,a2,a3,a4);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -269,7 +270,9 @@ public class Lua_UnityEngine_ParticleSystem_SubEmittersModule : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.SubEmittersModule");
-		addMember(l,AddSubEmitter);
+		addMember(l,ctor_s);
+		addMember(l,AddSubEmitter__ParticleSystem__ParticleSystemSubEmitterType__ParticleSystemSubEmitterProperties);
+		addMember(l,AddSubEmitter__ParticleSystem__ParticleSystemSubEmitterType__ParticleSystemSubEmitterProperties__Single);
 		addMember(l,RemoveSubEmitter);
 		addMember(l,SetSubEmitterSystem);
 		addMember(l,SetSubEmitterType);
@@ -281,6 +284,6 @@ public class Lua_UnityEngine_ParticleSystem_SubEmittersModule : LuaObject {
 		addMember(l,GetSubEmitterProperties);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
 		addMember(l,"subEmittersCount",get_subEmittersCount,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.SubEmittersModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.SubEmittersModule),typeof(System.ValueType));
 	}
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Random : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Random o;
 			o=new UnityEngine.Random();
@@ -33,31 +33,32 @@ public class Lua_UnityEngine_Random : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Range_s(IntPtr l) {
+	static public int Range__Int32__Int32_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Range__Int32__Int32__Int32", argc, 1,typeof(int),typeof(int))){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Int32 a2;
-				checkType(l,3,out a2);
-				var ret=UnityEngine.Random.Range(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "Range__Single__Single__Single", argc, 1,typeof(float),typeof(float))){
-				System.Single a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				var ret=UnityEngine.Random.Range(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			var ret=UnityEngine.Random.Range(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Range__Single__Single_s(IntPtr l) {
+		try {
+			System.Single a1;
+			checkType(l,1,out a1);
+			System.Single a2;
+			checkType(l,2,out a2);
+			var ret=UnityEngine.Random.Range(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -68,79 +69,101 @@ public class Lua_UnityEngine_Random : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int ColorHSV_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==9){
-				System.Single a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				System.Single a3;
-				checkType(l,4,out a3);
-				System.Single a4;
-				checkType(l,5,out a4);
-				System.Single a5;
-				checkType(l,6,out a5);
-				System.Single a6;
-				checkType(l,7,out a6);
-				System.Single a7;
-				checkType(l,8,out a7);
-				System.Single a8;
-				checkType(l,9,out a8);
-				var ret=UnityEngine.Random.ColorHSV(a1,a2,a3,a4,a5,a6,a7,a8);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==7){
-				System.Single a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				System.Single a3;
-				checkType(l,4,out a3);
-				System.Single a4;
-				checkType(l,5,out a4);
-				System.Single a5;
-				checkType(l,6,out a5);
-				System.Single a6;
-				checkType(l,7,out a6);
-				var ret=UnityEngine.Random.ColorHSV(a1,a2,a3,a4,a5,a6);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==5){
-				System.Single a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				System.Single a3;
-				checkType(l,4,out a3);
-				System.Single a4;
-				checkType(l,5,out a4);
-				var ret=UnityEngine.Random.ColorHSV(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.Single a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				var ret=UnityEngine.Random.ColorHSV(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==1){
-				var ret=UnityEngine.Random.ColorHSV();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			var ret=UnityEngine.Random.ColorHSV();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ColorHSV__Single__Single_s(IntPtr l) {
+		try {
+			System.Single a1;
+			checkType(l,1,out a1);
+			System.Single a2;
+			checkType(l,2,out a2);
+			var ret=UnityEngine.Random.ColorHSV(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ColorHSV__Single__Single__Single__Single_s(IntPtr l) {
+		try {
+			System.Single a1;
+			checkType(l,1,out a1);
+			System.Single a2;
+			checkType(l,2,out a2);
+			System.Single a3;
+			checkType(l,3,out a3);
+			System.Single a4;
+			checkType(l,4,out a4);
+			var ret=UnityEngine.Random.ColorHSV(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ColorHSV__Single__Single__Single__Single__Single__Single_s(IntPtr l) {
+		try {
+			System.Single a1;
+			checkType(l,1,out a1);
+			System.Single a2;
+			checkType(l,2,out a2);
+			System.Single a3;
+			checkType(l,3,out a3);
+			System.Single a4;
+			checkType(l,4,out a4);
+			System.Single a5;
+			checkType(l,5,out a5);
+			System.Single a6;
+			checkType(l,6,out a6);
+			var ret=UnityEngine.Random.ColorHSV(a1,a2,a3,a4,a5,a6);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ColorHSV__Single__Single__Single__Single__Single__Single__Single__Single_s(IntPtr l) {
+		try {
+			System.Single a1;
+			checkType(l,1,out a1);
+			System.Single a2;
+			checkType(l,2,out a2);
+			System.Single a3;
+			checkType(l,3,out a3);
+			System.Single a4;
+			checkType(l,4,out a4);
+			System.Single a5;
+			checkType(l,5,out a5);
+			System.Single a6;
+			checkType(l,6,out a6);
+			System.Single a7;
+			checkType(l,7,out a7);
+			System.Single a8;
+			checkType(l,8,out a8);
+			var ret=UnityEngine.Random.ColorHSV(a1,a2,a3,a4,a5,a6,a7,a8);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -248,9 +271,15 @@ public class Lua_UnityEngine_Random : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Random");
+		addMember(l,ctor_s);
 		addMember(l,InitState_s);
-		addMember(l,Range_s);
+		addMember(l,Range__Int32__Int32_s);
+		addMember(l,Range__Single__Single_s);
 		addMember(l,ColorHSV_s);
+		addMember(l,ColorHSV__Single__Single_s);
+		addMember(l,ColorHSV__Single__Single__Single__Single_s);
+		addMember(l,ColorHSV__Single__Single__Single__Single__Single__Single_s);
+		addMember(l,ColorHSV__Single__Single__Single__Single__Single__Single__Single__Single_s);
 		addMember(l,"state",get_state,set_state,false);
 		addMember(l,"value",get_value,null,false);
 		addMember(l,"insideUnitSphere",get_insideUnitSphere,null,false);
@@ -258,6 +287,6 @@ public class Lua_UnityEngine_Random : LuaObject {
 		addMember(l,"onUnitSphere",get_onUnitSphere,null,false);
 		addMember(l,"rotation",get_rotation,null,false);
 		addMember(l,"rotationUniform",get_rotationUniform,null,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Random));
+		createTypeMetatable(l,null, typeof(UnityEngine.Random));
 	}
 }

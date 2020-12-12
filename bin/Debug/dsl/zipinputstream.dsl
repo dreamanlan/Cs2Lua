@@ -32,16 +32,16 @@ class(ZipInputStream) {
 	instance_methods {
 		ctor = deffunc(0)args(this, ms){
 			callinstance(this, ZipInputStream, "__ctor");
-			local(os); os = newobject(ZipOutputStream, typeargs(), typekinds(), "ctor__System_IO_MemoryStream", null, newexternobject(System.IO.MemoryStream, typeargs(), typekinds(), null, dslstrtocsstr("System.IO.MemoryStream:ctor__Void")));
+			local(os); os = ;
 			local(os2); os2 = typeas(objecttodsl(callinstance(this, ZipInputStream, "Test", dsltoobject(SymbolKind.Method, false, "ZipInputStream:Test", os), dsltoobject(SymbolKind.Method, false, "ZipInputStream:Test", os), dsltoobject(SymbolKind.Method, false, "ZipInputStream:Test", os))), ZipOutputStream, TypeKind.Class);
 			local(intList); intList = newlist(IntList, typeargs(), typekinds(), "ctor", literallist(typeargs(), typekinds()));
-			local(a); a = newexternlist(System.Collections.Generic.List_T, typeargs(System.Int32), typekinds(TypeKind.Struct), literallist(typeargs(System.Int32), typekinds(TypeKind.Struct)), dslstrtocsstr("System.Collections.Generic.List_T:ctor__Void"));
-			local(aa); aa = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, typeargs(System.String, UnityEngine.Component), typekinds(TypeKind.Class, TypeKind.Class), literaldictionary(typeargs(System.String, UnityEngine.Component), typekinds(TypeKind.Class, TypeKind.Class)), dslstrtocsstr("System.Collections.Generic.Dictionary_TKey_TValue:ctor__Void"));
+			local(a); a = newexternlist(System.Collections.Generic.List_T, typeargs(System.Int32), typekinds(TypeKind.Struct), "ctor__Void", literallist(typeargs(System.Int32), typekinds(TypeKind.Struct)));
+			local(aa); aa = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, typeargs(System.String, UnityEngine.Component), typekinds(TypeKind.Class, TypeKind.Class), "ctor__Void", literaldictionary(typeargs(System.String, UnityEngine.Component), typekinds(TypeKind.Class, TypeKind.Class)));
 			callextension(TestExtension, "Test", intList, UnityEngine.ParticleSystem, null);
 			callexterninstance(intList, System.Collections.Generic.List_T, "AddRange", a);
 			local(gobj); gobj = null;
-			local(r); r = callexternstatic(UnityEngine.Object, "Instantiate", dslstrtocsstr("UnityEngine.Object:Instantiate__Object__Object"), gobj);
-			local(b); b = callinstance(this, ZipInputStream, "Test2", 124, newexternlist(System.Collections.Generic.List_T, typeargs(System.Int32), typekinds(TypeKind.Struct), literallist(typeargs(System.Int32), typekinds(TypeKind.Struct)), dslstrtocsstr("System.Collections.Generic.List_T:ctor__Void")));
+			local(r); r = callexternstatic(UnityEngine.Object, "Instantiate__Object__Object", gobj);
+			local(b); b = callinstance(this, ZipInputStream, "Test2", 124, newexternlist(System.Collections.Generic.List_T, typeargs(System.Int32), typekinds(TypeKind.Struct), "ctor__Void", literallist(typeargs(System.Int32), typekinds(TypeKind.Struct))));
 			local(o); o = dsltoobject(SymbolKind.Local, false, "o", literalarray(System.Int32, TypeKind.Struct, 1, 2));
 			local(arr); arr = typeas(objecttodsl(o), System.Array, TypeKind.Array);
 			local(aa); aa = "123";
@@ -65,7 +65,7 @@ class(ZipInputStream) {
 		Test = deffunc(1)args(this, o, ...){
 			local(__method_ret_62_4_66_5);
 			local(args); args = params(System.Object, TypeKind.Class);
-			local(v3); v3 = newexternstruct(UnityEngine.Vector3, typeargs(), typekinds(), null, dslstrtocsstr("UnityEngine.Vector3:ctor__Void__Single__Single__Single"), 1, 2, 3);
+			local(v3); v3 = newexternstruct(UnityEngine.Vector3, typeargs(), typekinds(), "ctor__Void__Single__Single__Single", null, 1, 2, 3);
 			__method_ret_62_4_66_5 = null;
 			return(__method_ret_62_4_66_5);
 		}options[needfuncinfo(true)];
@@ -79,7 +79,7 @@ class(ZipInputStream) {
 				};
 			};
 			if(__try_ret_69_8_77_9){
-				callexternstatic(UnityEngine.Debug, "Log", dslstrtocsstr("UnityEngine.Debug:Log__Void__Object"), dslstrtocsstr("finally"));
+				callexternstatic(UnityEngine.Debug, "Log__Void__Object", dslstrtocsstr("finally"));
 				if(__try_retval_69_8_77_9){
 				if(__try_retval_69_8_77_9==1){
 					return(__method_ret_67_4_79_5);
@@ -90,11 +90,11 @@ class(ZipInputStream) {
 			__catch_retval_69_8_77_9 = dslcatch(__catch_handled_69_8_77_9, __try_retval_69_8_77_9, __try_ret_69_8_77_9,
 				function(, e){
 					__catch_handled_69_8_77_9 = true;
-					callexternstatic(UnityEngine.Debug, "LogFormat", dslstrtocsstr("UnityEngine.Debug:LogFormat__Void__String__Arr_Object"), dslstrtocsstr("{0}\n{1}"), getexterninstance(SymbolKind.Property, e, System.Exception, "Message"), getexterninstance(SymbolKind.Property, e, System.Exception, "StackTrace"));
+					callexternstatic(UnityEngine.Debug, "LogFormat__Void__String__A_Object", dslstrtocsstr("{0}\n{1}"), getexterninstance(SymbolKind.Property, e, System.Exception, "Message"), getexterninstance(SymbolKind.Property, e, System.Exception, "StackTrace"));
 				}
 			);
 			if(! __try_ret_69_8_77_9){
-				callexternstatic(UnityEngine.Debug, "Log", dslstrtocsstr("UnityEngine.Debug:Log__Void__Object"), dslstrtocsstr("finally"));
+				callexternstatic(UnityEngine.Debug, "Log__Void__Object", dslstrtocsstr("finally"));
 			};
 			__method_ret_67_4_79_5 = null;
 			return(__method_ret_67_4_79_5);

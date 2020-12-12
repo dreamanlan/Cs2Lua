@@ -41,40 +41,31 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int TriggerSubEmitter(IntPtr l) {
+	static public int TriggerSubEmitter__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "TriggerSubEmitter__Void__Int32__Ref_Particle", argc, 2,typeof(int),typeof(UnityEngine.ParticleSystem.Particle))){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				UnityEngine.ParticleSystem.Particle a2;
-				checkValueType(l,4,out a2);
-				self.TriggerSubEmitter(a1,ref a2);
-				pushValue(l,true);
-				pushValue(l,a2);
-				return 2;
-			}
-			else if(matchType(l, "TriggerSubEmitter__Void__Int32__List`1_Particle", argc, 2,typeof(int),typeof(List<UnityEngine.ParticleSystem.Particle>))){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Collections.Generic.List<UnityEngine.ParticleSystem.Particle> a2;
-				checkType(l,4,out a2);
-				self.TriggerSubEmitter(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				self.TriggerSubEmitter(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			self.TriggerSubEmitter(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int TriggerSubEmitter__Int32__R_Particle(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			UnityEngine.ParticleSystem.Particle a2;
+			checkValueType(l,3,out a2);
+			self.TriggerSubEmitter(a1,ref a2);
+			pushValue(l,true);
+			pushValue(l,a2);
 			return 2;
 		}
 		catch(Exception e) {
@@ -83,41 +74,114 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetParticles(IntPtr l) {
+	static public int TriggerSubEmitter__Int32__List_1_Particle(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				UnityEngine.ParticleSystem.Particle[] a1;
-				checkArray(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				self.SetParticles(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==4){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				UnityEngine.ParticleSystem.Particle[] a1;
-				checkArray(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				self.SetParticles(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				UnityEngine.ParticleSystem.Particle[] a1;
-				checkArray(l,3,out a1);
-				self.SetParticles(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Collections.Generic.List<UnityEngine.ParticleSystem.Particle> a2;
+			checkType(l,3,out a2);
+			self.TriggerSubEmitter(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Emit__Int32(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			self.Emit(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Emit__EmitParams__Int32(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			UnityEngine.ParticleSystem.EmitParams a1;
+			checkValueType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			self.Emit(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetParticles__O_Particle(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			UnityEngine.ParticleSystem.Particle[] a1;
+			checkArray(l,2,out a1);
+			self.SetParticles(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetParticles__O_Particle__Int32(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			UnityEngine.ParticleSystem.Particle[] a1;
+			checkArray(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			self.SetParticles(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetParticles__O_Particle__Int32__Int32(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			UnityEngine.ParticleSystem.Particle[] a1;
+			checkArray(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			self.SetParticles(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetParticles__O_Particle(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			UnityEngine.ParticleSystem.Particle[] a1;
+			checkArray(l,2,out a1);
+			var ret=self.GetParticles(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -126,44 +190,16 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetParticles(IntPtr l) {
+	static public int GetParticles__O_Particle__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				UnityEngine.ParticleSystem.Particle[] a1;
-				checkArray(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				var ret=self.GetParticles(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==4){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				UnityEngine.ParticleSystem.Particle[] a1;
-				checkArray(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				var ret=self.GetParticles(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				UnityEngine.ParticleSystem.Particle[] a1;
-				checkArray(l,3,out a1);
-				var ret=self.GetParticles(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			UnityEngine.ParticleSystem.Particle[] a1;
+			checkArray(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			var ret=self.GetParticles(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -172,56 +208,91 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Simulate(IntPtr l) {
+	static public int GetParticles__O_Particle__Int32__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==6){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				System.Single a1;
-				checkType(l,3,out a1);
-				System.Boolean a2;
-				checkType(l,4,out a2);
-				System.Boolean a3;
-				checkType(l,5,out a3);
-				System.Boolean a4;
-				checkType(l,6,out a4);
-				self.Simulate(a1,a2,a3,a4);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==5){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				System.Single a1;
-				checkType(l,3,out a1);
-				System.Boolean a2;
-				checkType(l,4,out a2);
-				System.Boolean a3;
-				checkType(l,5,out a3);
-				self.Simulate(a1,a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==4){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				System.Single a1;
-				checkType(l,3,out a1);
-				System.Boolean a2;
-				checkType(l,4,out a2);
-				self.Simulate(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				System.Single a1;
-				checkType(l,3,out a1);
-				self.Simulate(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			UnityEngine.ParticleSystem.Particle[] a1;
+			checkArray(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			var ret=self.GetParticles(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Simulate__Single(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			System.Single a1;
+			checkType(l,2,out a1);
+			self.Simulate(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Simulate__Single__Boolean(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			System.Single a1;
+			checkType(l,2,out a1);
+			System.Boolean a2;
+			checkType(l,3,out a2);
+			self.Simulate(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Simulate__Single__Boolean__Boolean(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			System.Single a1;
+			checkType(l,2,out a1);
+			System.Boolean a2;
+			checkType(l,3,out a2);
+			System.Boolean a3;
+			checkType(l,4,out a3);
+			self.Simulate(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Simulate__Single__Boolean__Boolean__Boolean(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			System.Single a1;
+			checkType(l,2,out a1);
+			System.Boolean a2;
+			checkType(l,3,out a2);
+			System.Boolean a3;
+			checkType(l,4,out a3);
+			System.Boolean a4;
+			checkType(l,5,out a4);
+			self.Simulate(a1,a2,a3,a4);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -231,24 +302,25 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int Play(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				System.Boolean a1;
-				checkType(l,3,out a1);
-				self.Play(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				self.Play();
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			self.Play();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Play__Boolean(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			System.Boolean a1;
+			checkType(l,2,out a1);
+			self.Play(a1);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -258,24 +330,25 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int Pause(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				System.Boolean a1;
-				checkType(l,3,out a1);
-				self.Pause(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				self.Pause();
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			self.Pause();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Pause__Boolean(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			System.Boolean a1;
+			checkType(l,2,out a1);
+			self.Pause(a1);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -285,34 +358,42 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int Stop(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				System.Boolean a1;
-				checkType(l,3,out a1);
-				UnityEngine.ParticleSystemStopBehavior a2;
-				checkEnum(l,4,out a2);
-				self.Stop(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				System.Boolean a1;
-				checkType(l,3,out a1);
-				self.Stop(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				self.Stop();
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			self.Stop();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Stop__Boolean(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			System.Boolean a1;
+			checkType(l,2,out a1);
+			self.Stop(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Stop__Boolean__ParticleSystemStopBehavior(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			System.Boolean a1;
+			checkType(l,2,out a1);
+			UnityEngine.ParticleSystemStopBehavior a2;
+			checkEnum(l,3,out a2);
+			self.Stop(a1,a2);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -322,24 +403,25 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int Clear(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				System.Boolean a1;
-				checkType(l,3,out a1);
-				self.Clear(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				self.Clear();
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			self.Clear();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Clear__Boolean(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			System.Boolean a1;
+			checkType(l,2,out a1);
+			self.Clear(a1);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -349,25 +431,10 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int IsAlive(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				System.Boolean a1;
-				checkType(l,3,out a1);
-				var ret=self.IsAlive(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				var ret=self.IsAlive();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			var ret=self.IsAlive();
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -376,29 +443,14 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Emit(IntPtr l) {
+	static public int IsAlive__Boolean(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				UnityEngine.ParticleSystem.EmitParams a1;
-				checkValueType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				self.Emit(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				self.Emit(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			System.Boolean a1;
+			checkType(l,2,out a1);
+			var ret=self.IsAlive(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -473,36 +525,37 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetTriggerParticles(IntPtr l) {
+	static public int SetTriggerParticles__ParticleSystem__ParticleSystemTriggerEventType__List_1_Particle(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==6){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				UnityEngine.ParticleSystemTriggerEventType a2;
-				checkEnum(l,3,out a2);
-				System.Collections.Generic.List<UnityEngine.ParticleSystem.Particle> a3;
-				checkType(l,4,out a3);
-				System.Int32 a4;
-				checkType(l,5,out a4);
-				System.Int32 a5;
-				checkType(l,6,out a5);
-				self.SetTriggerParticles(a2,a3,a4,a5);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==4){
-				UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-				UnityEngine.ParticleSystemTriggerEventType a2;
-				checkEnum(l,3,out a2);
-				System.Collections.Generic.List<UnityEngine.ParticleSystem.Particle> a3;
-				checkType(l,4,out a3);
-				self.SetTriggerParticles(a2,a3);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			UnityEngine.ParticleSystemTriggerEventType a2;
+			checkEnum(l,2,out a2);
+			System.Collections.Generic.List<UnityEngine.ParticleSystem.Particle> a3;
+			checkType(l,3,out a3);
+			self.SetTriggerParticles(a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetTriggerParticles__ParticleSystem__ParticleSystemTriggerEventType__List_1_Particle__Int32__Int32(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			UnityEngine.ParticleSystemTriggerEventType a2;
+			checkEnum(l,2,out a2);
+			System.Collections.Generic.List<UnityEngine.ParticleSystem.Particle> a3;
+			checkType(l,3,out a3);
+			System.Int32 a4;
+			checkType(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
+			self.SetTriggerParticles(a2,a3,a4,a5);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -973,21 +1026,38 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 		getTypeTable(l,"UnityEngine.ParticleSystem");
 		addMember(l,SetCustomParticleData);
 		addMember(l,GetCustomParticleData);
-		addMember(l,TriggerSubEmitter);
-		addMember(l,SetParticles);
-		addMember(l,GetParticles);
-		addMember(l,Simulate);
+		addMember(l,TriggerSubEmitter__Int32);
+		addMember(l,TriggerSubEmitter__Int32__R_Particle);
+		addMember(l,TriggerSubEmitter__Int32__List_1_Particle);
+		addMember(l,Emit__Int32);
+		addMember(l,Emit__EmitParams__Int32);
+		addMember(l,SetParticles__O_Particle);
+		addMember(l,SetParticles__O_Particle__Int32);
+		addMember(l,SetParticles__O_Particle__Int32__Int32);
+		addMember(l,GetParticles__O_Particle);
+		addMember(l,GetParticles__O_Particle__Int32);
+		addMember(l,GetParticles__O_Particle__Int32__Int32);
+		addMember(l,Simulate__Single);
+		addMember(l,Simulate__Single__Boolean);
+		addMember(l,Simulate__Single__Boolean__Boolean);
+		addMember(l,Simulate__Single__Boolean__Boolean__Boolean);
 		addMember(l,Play);
+		addMember(l,Play__Boolean);
 		addMember(l,Pause);
+		addMember(l,Pause__Boolean);
 		addMember(l,Stop);
+		addMember(l,Stop__Boolean);
+		addMember(l,Stop__Boolean__ParticleSystemStopBehavior);
 		addMember(l,Clear);
+		addMember(l,Clear__Boolean);
 		addMember(l,IsAlive);
-		addMember(l,Emit);
+		addMember(l,IsAlive__Boolean);
 		addMember(l,GetSafeCollisionEventSize);
 		addMember(l,GetCollisionEvents);
 		addMember(l,GetSafeTriggerParticlesSize);
 		addMember(l,GetTriggerParticles);
-		addMember(l,SetTriggerParticles);
+		addMember(l,SetTriggerParticles__ParticleSystem__ParticleSystemTriggerEventType__List_1_Particle);
+		addMember(l,SetTriggerParticles__ParticleSystem__ParticleSystemTriggerEventType__List_1_Particle__Int32__Int32);
 		addMember(l,ResetPreMappedBufferMemory_s);
 		addMember(l,"isPlaying",get_isPlaying,null,true);
 		addMember(l,"isEmitting",get_isEmitting,null,true);

@@ -76,6 +76,9 @@ namespace RoslynTool.CsToDsl
                     Log(node, "Cs2Dsl class/struct can't inherit !");
                 }
             }
+            if(null != declSym.BaseType && declSym.BaseType.IsAbstract && !SymbolTable.Instance.IsCs2DslSymbol(declSym.BaseType)) {
+                Log(node, "Cs2Dsl class/struct can't inherit c# abstract class !");
+            }
 
             if (!string.IsNullOrEmpty(ci.BaseKey)) {
                 AddReferenceAndTryDeriveGenericTypeInstance(ci, declSym.BaseType);
@@ -984,7 +987,7 @@ namespace RoslynTool.CsToDsl
                             useOperator = true;
                             IMethodSymbol msym = opd.OperatorMethod;
                             InvocationInfo iop = new InvocationInfo(GetCurMethodSemanticInfo(), invocation);
-                            iop.Init(msym, (List<ExpressionSyntax>)null, m_Model);
+                            iop.Init(msym, m_Model);
                             CodeBuilder.AppendFormat("{0}local({1}); {2}", GetIndentString(), node.Identifier.Text, node.Identifier.Text);
                             CodeBuilder.AppendFormat(" {0} ", token.Text);
                             if (dslToObject) {

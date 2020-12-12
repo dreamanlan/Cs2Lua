@@ -5,11 +5,11 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_EventSystems_AxisEventData : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.AxisEventData o;
 			UnityEngine.EventSystems.EventSystem a1;
-			checkType(l,2,out a1);
+			checkType(l,1,out a1);
 			o=new UnityEngine.EventSystems.AxisEventData(a1);
 			pushValue(l,true);
 			pushValue(l,o);
@@ -78,8 +78,9 @@ public class Lua_UnityEngine_EventSystems_AxisEventData : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.EventSystems.AxisEventData");
+		addMember(l,ctor_s);
 		addMember(l,"moveVector",get_moveVector,set_moveVector,true);
 		addMember(l,"moveDir",get_moveDir,set_moveDir,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.EventSystems.AxisEventData),typeof(UnityEngine.EventSystems.BaseEventData));
+		createTypeMetatable(l,null, typeof(UnityEngine.EventSystems.AxisEventData),typeof(UnityEngine.EventSystems.BaseEventData));
 	}
 }

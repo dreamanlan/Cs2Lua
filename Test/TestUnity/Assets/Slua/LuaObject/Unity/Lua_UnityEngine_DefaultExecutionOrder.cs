@@ -5,11 +5,11 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_DefaultExecutionOrder : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.DefaultExecutionOrder o;
 			System.Int32 a1;
-			checkType(l,2,out a1);
+			checkType(l,1,out a1);
 			o=new UnityEngine.DefaultExecutionOrder(a1);
 			pushValue(l,true);
 			pushValue(l,o);
@@ -35,7 +35,8 @@ public class Lua_UnityEngine_DefaultExecutionOrder : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.DefaultExecutionOrder");
+		addMember(l,ctor_s);
 		addMember(l,"order",get_order,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.DefaultExecutionOrder),typeof(System.Attribute));
+		createTypeMetatable(l,null, typeof(UnityEngine.DefaultExecutionOrder),typeof(System.Attribute));
 	}
 }

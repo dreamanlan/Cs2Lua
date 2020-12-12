@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_HumanDescription : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.HumanDescription o;
 			o=new UnityEngine.HumanDescription();
@@ -330,6 +330,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.HumanDescription");
+		addMember(l,ctor_s);
 		addMember(l,"human",get_human,set_human,true);
 		addMember(l,"skeleton",get_skeleton,set_skeleton,true);
 		addMember(l,"upperArmTwist",get_upperArmTwist,set_upperArmTwist,true);
@@ -340,6 +341,6 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 		addMember(l,"legStretch",get_legStretch,set_legStretch,true);
 		addMember(l,"feetSpacing",get_feetSpacing,set_feetSpacing,true);
 		addMember(l,"hasTranslationDoF",get_hasTranslationDoF,set_hasTranslationDoF,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.HumanDescription),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.HumanDescription),typeof(System.ValueType));
 	}
 }

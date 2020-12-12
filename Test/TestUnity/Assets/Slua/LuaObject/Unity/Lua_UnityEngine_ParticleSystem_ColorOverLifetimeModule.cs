@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_ColorOverLifetimeModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.ColorOverLifetimeModule o;
 			o=new UnityEngine.ParticleSystem.ColorOverLifetimeModule();
@@ -82,8 +82,9 @@ public class Lua_UnityEngine_ParticleSystem_ColorOverLifetimeModule : LuaObject 
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.ColorOverLifetimeModule");
+		addMember(l,ctor_s);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
 		addMember(l,"color",get_color,set_color,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.ColorOverLifetimeModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.ColorOverLifetimeModule),typeof(System.ValueType));
 	}
 }

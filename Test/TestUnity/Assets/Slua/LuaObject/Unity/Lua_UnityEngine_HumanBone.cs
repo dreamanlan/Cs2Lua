@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_HumanBone : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.HumanBone o;
 			o=new UnityEngine.HumanBone();
@@ -113,9 +113,10 @@ public class Lua_UnityEngine_HumanBone : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.HumanBone");
+		addMember(l,ctor_s);
 		addMember(l,"limit",get_limit,set_limit,true);
 		addMember(l,"boneName",get_boneName,set_boneName,true);
 		addMember(l,"humanName",get_humanName,set_humanName,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.HumanBone),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.HumanBone),typeof(System.ValueType));
 	}
 }

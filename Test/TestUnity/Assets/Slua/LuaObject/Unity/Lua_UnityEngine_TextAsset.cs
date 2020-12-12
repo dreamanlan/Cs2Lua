@@ -5,25 +5,43 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_TextAsset : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.TextAsset o;
-			if(argc==3){
-				System.String a1;
-				checkType(l,3,out a1);
-				o=new UnityEngine.TextAsset(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==2){
-				o=new UnityEngine.TextAsset();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.TextAsset();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__String_s(IntPtr l) {
+		try {
+			UnityEngine.TextAsset o;
+			System.String a1;
+			checkType(l,1,out a1);
+			o=new UnityEngine.TextAsset(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static new public int ToString(IntPtr l) {
+		try {
+			UnityEngine.TextAsset self=(UnityEngine.TextAsset)checkSelf(l);
+			var ret=self.ToString();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -58,8 +76,11 @@ public class Lua_UnityEngine_TextAsset : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.TextAsset");
+		addMember(l,ctor_s);
+		addMember(l,ctor__String_s);
+		addMember(l,ToString);
 		addMember(l,"text",get_text,null,true);
 		addMember(l,"bytes",get_bytes,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.TextAsset),typeof(UnityEngine.Object));
+		createTypeMetatable(l,null, typeof(UnityEngine.TextAsset),typeof(UnityEngine.Object));
 	}
 }

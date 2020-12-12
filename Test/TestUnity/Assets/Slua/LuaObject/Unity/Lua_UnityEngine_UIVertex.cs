@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_UIVertex : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.UIVertex o;
 			o=new UnityEngine.UIVertex();
@@ -294,6 +294,7 @@ public class Lua_UnityEngine_UIVertex : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UIVertex");
+		addMember(l,ctor_s);
 		addMember(l,"position",get_position,set_position,true);
 		addMember(l,"normal",get_normal,set_normal,true);
 		addMember(l,"tangent",get_tangent,set_tangent,true);
@@ -303,6 +304,6 @@ public class Lua_UnityEngine_UIVertex : LuaObject {
 		addMember(l,"uv2",get_uv2,set_uv2,true);
 		addMember(l,"uv3",get_uv3,set_uv3,true);
 		addMember(l,"simpleVert",get_simpleVert,set_simpleVert,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.UIVertex),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.UIVertex),typeof(System.ValueType));
 	}
 }

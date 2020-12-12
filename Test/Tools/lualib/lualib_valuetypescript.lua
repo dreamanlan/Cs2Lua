@@ -158,9 +158,10 @@ do
   Vector3.op_UnaryNegation=function(v)
     return -v
   end
-  Vector3.op_Multiply=function(sig, v1, v2)
+  Vector3.op_Multiply__Vector3__Single=function(v1, v2)
     return v1*v2
   end
+  Vector3.op_Multiply__Single__Vector3 = Vector3.op_Multiply__Vector3__Vector3__Single
   Vector3.op_Division=function(v1, v2)
     return v1/v2
   end
@@ -184,7 +185,7 @@ do
 	  return v
 	end
 
-	Vector3.__call = function(sig,t,x,y,z)
+	Vector3.__call = function(t,x,y,z)
 		return Vector3.New(x,y,z)
 	end
 
@@ -643,7 +644,13 @@ do
   Color.op_Subtraction=function(v1,v2)
     return v1-v2
   end
-  Color.op_Multiply=function(sig,v1,v2)
+  Color.op_Multiply__Color__Color=function(v1,v2)
+    return v1*v2
+  end
+  Color.op_Multiply__Color__Single=function(v1,v2)
+    return v1*v2
+  end
+  Color.op_Multiply__Single__Color=function(v1,v2)
     return v1*v2
   end
   Color.op_Division=function(v1,v2)
@@ -655,15 +662,14 @@ do
   Color.op_Inequality=function(v1,v2)
     return v1~=v2
   end
-  Color.op_Implicit=function(sig,v)
-    if sig=="op_Implicit__Vector4__Color" then
-        return Vector4.New(v.r,v.g,v.b,v.a)
-    else
-        return Color.New(v.x,v.y,v.z,v.w)
-    end
+  Color.op_Implicit__Vector4__Color=function(v)
+    return Vector4.New(v.r,v.g,v.b,v.a)
+  end
+  Color.op_Implicit__Color__Vector4=function(v)
+    return Color.New(v.x,v.y,v.z,v.w)
   end
 
-	function Color.__call(sig,t,r,g,b,a)
+	function Color.__call(t,r,g,b,a)
 		return Color.New(r,g,b,a)
 	end
 
@@ -814,10 +820,15 @@ do
   Vector2.op_Subtraction=function(v1,v2)
     return v1-v2
   end
-  Vector2.op_Multiply=function(sig,v1,v2)
+  Vector2.op_Multiply__Vector2__Vector2=function(v1,v2)
     return v1*v2
   end
-  Vector2.op_Division=function(sig,v1,v2)
+  Vector2.op_Multiply__Vector2__Single=Vector2.op_Multiply__Vector2__Vector2__Vector2
+  Vector2.op_Multiply__Single__Vector2=Vector2.op_Multiply__Vector2__Vector2__Vector2
+  Vector2.op_Division__Vector2__Vector2=function(v1,v2)
+    return v1/v2
+  end
+  Vector2.op_Division__Vector2__Single=function(v1,v2)
     return v1/v2
   end
   Vector2.op_UnaryNegation=function(v)
@@ -829,12 +840,11 @@ do
   Vector2.op_Inequality=function(v1,v2)
     return v1~=v2
   end
-  Vector2.op_Implicit=function(sig,v)
-    if sig=="op_Implicit__Vector2__Vector3" then
-        return Vector2.New(v.x,v.y)
-    else
-        return Vector3.New(v.x,v.y,0)
-    end
+  Vector2.op_Implicit__Vector2__Vector3=function(v)
+    return Vector2.New(v.x,v.y)
+  end
+  Vector2.op_Implicit__Vector3__Vector2=function(v)
+    return Vector3.New(v.x,v.y,0)
   end
 
 	function Vector2.__call(t,x,y)
@@ -975,7 +985,10 @@ do
   Vector4.op_UnaryNegation=function(v)
     return -v
   end
-  Vector4.op_Multiply=function(sig,v1,v2)
+  Vector4.op_Multiply__Vector4__Single=function(v1,v2)
+    return v1*v2
+  end
+  Vector4.op_Multiply__Single__Vector4=function(v1,v2)
     return v1*v2
   end
   Vector4.op_Division=function(v1,v2)
@@ -987,19 +1000,20 @@ do
   Vector4.op_Inequality=function(v1,v2)
     return v1~=v2
   end
-  Vector4.op_Implicit=function(sig,v)
-    if sig=="op_Implicit__Vector4__Vector3" then
-        return Vector4.New(v.x,v.y,v.z,0)
-    elseif sig=="op_Implicit__Vector3__Vector4" then
-        return Vector3.New(v.x,v.y,v.z)
-    elseif sig=="op_Implicit__Vector4__Vector2" then
-        return Vector4.New(v.x,v.y,0,0)
-    else
-        return Vector2.New(v.x,v.y)
-    end
+  Vector4.op_Implicit__Vector4__Vector3=function(v)
+    return Vector4.New(v.x,v.y,v.z,0)
+  end
+  Vector4.op_Implicit__Vector3__Vector4=function(v)
+    return Vector3.New(v.x,v.y,v.z)
+  end
+  Vector4.op_Implicit__Vector4__Vector2=function(v)
+    return Vector4.New(v.x,v.y,0,0)
+  end
+  Vector4.op_Implicit__Vector2__Vector4=function(v)
+    return Vector2.New(v.x,v.y)
   end
 
-	function Vector4.__call(sig,t,x,y,z,w)
+	function Vector4.__call(t,x,y,z,w)
 		return Vector4.New(x,y,z,w)
 	end
 
@@ -1164,7 +1178,10 @@ do
 		return q
 	end
 	
-  Quaternion.op_Multiply=function(sig,v1,v2)
+  Quaternion.op_Multiply__Quaternion__Quaternion=function(v1,v2)
+    return v1*v2
+  end
+  Quaternion.op_Multiply__Quaternion__Vector3=function(v1,v2)
     return v1*v2
   end
   Quaternion.op_Equality=function(v1,v2)
@@ -1221,7 +1238,7 @@ do
 
 	inherite(Quaternion,Raw)
 
-	function Quaternion.Euler( sig,x,y,z )
+	function Quaternion.Euler__Single__Single__Single( x,y,z )
 		if type(x)=='table' then
 			x,y,z=x[1],x[2],x[3]
 		end

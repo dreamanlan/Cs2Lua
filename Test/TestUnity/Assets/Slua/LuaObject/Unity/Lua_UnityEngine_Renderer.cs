@@ -20,30 +20,14 @@ public class Lua_UnityEngine_Renderer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetPropertyBlock(IntPtr l) {
+	static public int SetPropertyBlock__MaterialPropertyBlock(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
-				UnityEngine.MaterialPropertyBlock a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				self.SetPropertyBlock(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
-				UnityEngine.MaterialPropertyBlock a1;
-				checkType(l,3,out a1);
-				self.SetPropertyBlock(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
+			UnityEngine.MaterialPropertyBlock a1;
+			checkType(l,2,out a1);
+			self.SetPropertyBlock(a1);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -51,30 +35,48 @@ public class Lua_UnityEngine_Renderer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetPropertyBlock(IntPtr l) {
+	static public int SetPropertyBlock__MaterialPropertyBlock__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
-				UnityEngine.MaterialPropertyBlock a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				self.GetPropertyBlock(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
-				UnityEngine.MaterialPropertyBlock a1;
-				checkType(l,3,out a1);
-				self.GetPropertyBlock(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
+			UnityEngine.MaterialPropertyBlock a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			self.SetPropertyBlock(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetPropertyBlock__MaterialPropertyBlock(IntPtr l) {
+		try {
+			UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
+			UnityEngine.MaterialPropertyBlock a1;
+			checkType(l,2,out a1);
+			self.GetPropertyBlock(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetPropertyBlock__MaterialPropertyBlock__Int32(IntPtr l) {
+		try {
+			UnityEngine.Renderer self=(UnityEngine.Renderer)checkSelf(l);
+			UnityEngine.MaterialPropertyBlock a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			self.GetPropertyBlock(a1,a2);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -823,8 +825,10 @@ public class Lua_UnityEngine_Renderer : LuaObject {
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Renderer");
 		addMember(l,HasPropertyBlock);
-		addMember(l,SetPropertyBlock);
-		addMember(l,GetPropertyBlock);
+		addMember(l,SetPropertyBlock__MaterialPropertyBlock);
+		addMember(l,SetPropertyBlock__MaterialPropertyBlock__Int32);
+		addMember(l,GetPropertyBlock__MaterialPropertyBlock);
+		addMember(l,GetPropertyBlock__MaterialPropertyBlock__Int32);
 		addMember(l,GetMaterials);
 		addMember(l,GetSharedMaterials);
 		addMember(l,GetClosestReflectionProbes);

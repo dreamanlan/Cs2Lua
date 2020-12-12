@@ -5,37 +5,49 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Jobs_TransformAccessArray : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Jobs.TransformAccessArray o;
-			if(matchType(l, "ctor__Void__Arr_Transform__Int32", argc, 2,typeof(UnityEngine.Transform[]),typeof(int))){
-				UnityEngine.Transform[] a1;
-				checkArray(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				o=new UnityEngine.Jobs.TransformAccessArray(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Int32__Int32", argc, 2,typeof(int),typeof(int))){
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				o=new UnityEngine.Jobs.TransformAccessArray(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc<=2){
-				o=new UnityEngine.Jobs.TransformAccessArray();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.Jobs.TransformAccessArray();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__A_Transform__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.Jobs.TransformAccessArray o;
+			UnityEngine.Transform[] a1;
+			checkArray(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.Jobs.TransformAccessArray(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.Jobs.TransformAccessArray o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.Jobs.TransformAccessArray(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -119,19 +131,6 @@ public class Lua_UnityEngine_Jobs_TransformAccessArray : LuaObject {
 			UnityEngine.Jobs.TransformAccessArray.Allocate(a1,a2,out a3);
 			pushValue(l,true);
 			pushValue(l,a3);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Dispose_s(IntPtr l) {
-		try {
-			int argc = LuaDLL.lua_gettop(l);
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
 			return 2;
 		}
 		catch(Exception e) {
@@ -235,17 +234,19 @@ public class Lua_UnityEngine_Jobs_TransformAccessArray : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Jobs.TransformAccessArray");
+		addMember(l,ctor_s);
+		addMember(l,ctor__A_Transform__Int32_s);
+		addMember(l,ctor__Int32__Int32_s);
 		addMember(l,Dispose);
 		addMember(l,Add);
 		addMember(l,RemoveAtSwapBack);
 		addMember(l,SetTransforms);
 		addMember(l,Allocate_s);
-		addMember(l,Dispose_s);
 		addMember(l,getItem);
 		addMember(l,setItem);
 		addMember(l,"isCreated",get_isCreated,null,true);
 		addMember(l,"capacity",get_capacity,set_capacity,true);
 		addMember(l,"length",get_length,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Jobs.TransformAccessArray),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Jobs.TransformAccessArray),typeof(System.ValueType));
 	}
 }

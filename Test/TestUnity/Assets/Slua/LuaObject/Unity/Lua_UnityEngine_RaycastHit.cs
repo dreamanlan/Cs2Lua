@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_RaycastHit : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.RaycastHit o;
 			o=new UnityEngine.RaycastHit();
@@ -242,6 +242,7 @@ public class Lua_UnityEngine_RaycastHit : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.RaycastHit");
+		addMember(l,ctor_s);
 		addMember(l,"collider",get_collider,null,true);
 		addMember(l,"point",get_point,set_point,true);
 		addMember(l,"normal",get_normal,set_normal,true);
@@ -253,6 +254,6 @@ public class Lua_UnityEngine_RaycastHit : LuaObject {
 		addMember(l,"transform",get_transform,null,true);
 		addMember(l,"rigidbody",get_rigidbody,null,true);
 		addMember(l,"lightmapCoord",get_lightmapCoord,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.RaycastHit),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.RaycastHit),typeof(System.ValueType));
 	}
 }

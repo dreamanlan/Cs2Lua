@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Animations_AnimationLayerMixerPlayable : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Animations.AnimationLayerMixerPlayable o;
 			o=new UnityEngine.Animations.AnimationLayerMixerPlayable();
@@ -24,6 +24,40 @@ public class Lua_UnityEngine_Animations_AnimationLayerMixerPlayable : LuaObject 
 			UnityEngine.Animations.AnimationLayerMixerPlayable self;
 			checkValueType(l,1,out self);
 			var ret=self.GetHandle();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__AnimationLayerMixerPlayable(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimationLayerMixerPlayable self;
+			checkValueType(l,1,out self);
+			UnityEngine.Animations.AnimationLayerMixerPlayable a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimationLayerMixerPlayable self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -149,7 +183,10 @@ public class Lua_UnityEngine_Animations_AnimationLayerMixerPlayable : LuaObject 
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Animations.AnimationLayerMixerPlayable");
+		addMember(l,ctor_s);
 		addMember(l,GetHandle);
+		addMember(l,Equals__AnimationLayerMixerPlayable);
+		addMember(l,Equals__Object);
 		addMember(l,IsLayerAdditive);
 		addMember(l,SetLayerAdditive);
 		addMember(l,SetLayerMaskFromAvatarMask);
@@ -157,6 +194,6 @@ public class Lua_UnityEngine_Animations_AnimationLayerMixerPlayable : LuaObject 
 		addMember(l,op_Implicit_s);
 		addMember(l,op_Explicit_s);
 		addMember(l,"Null",get_Null,null,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Animations.AnimationLayerMixerPlayable),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Animations.AnimationLayerMixerPlayable),typeof(System.ValueType));
 	}
 }

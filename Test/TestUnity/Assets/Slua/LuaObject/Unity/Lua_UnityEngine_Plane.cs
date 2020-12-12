@@ -5,49 +5,69 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Plane : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Plane o;
-			if(argc==5){
-				UnityEngine.Vector3 a1;
-				checkType(l,3,out a1);
-				UnityEngine.Vector3 a2;
-				checkType(l,4,out a2);
-				UnityEngine.Vector3 a3;
-				checkType(l,5,out a3);
-				o=new UnityEngine.Plane(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Vector3__Vector3", argc, 2,typeof(UnityEngine.Vector3),typeof(UnityEngine.Vector3))){
-				UnityEngine.Vector3 a1;
-				checkType(l,3,out a1);
-				UnityEngine.Vector3 a2;
-				checkType(l,4,out a2);
-				o=new UnityEngine.Plane(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Vector3__Single", argc, 2,typeof(UnityEngine.Vector3),typeof(float))){
-				UnityEngine.Vector3 a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				o=new UnityEngine.Plane(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc<=2){
-				o=new UnityEngine.Plane();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.Plane();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Vector3__Vector3_s(IntPtr l) {
+		try {
+			UnityEngine.Plane o;
+			UnityEngine.Vector3 a1;
+			checkType(l,1,out a1);
+			UnityEngine.Vector3 a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.Plane(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Vector3__Single_s(IntPtr l) {
+		try {
+			UnityEngine.Plane o;
+			UnityEngine.Vector3 a1;
+			checkType(l,1,out a1);
+			System.Single a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.Plane(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Vector3__Vector3__Vector3_s(IntPtr l) {
+		try {
+			UnityEngine.Plane o;
+			UnityEngine.Vector3 a1;
+			checkType(l,1,out a1);
+			UnityEngine.Vector3 a2;
+			checkType(l,2,out a2);
+			UnityEngine.Vector3 a3;
+			checkType(l,3,out a3);
+			o=new UnityEngine.Plane(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -216,6 +236,38 @@ public class Lua_UnityEngine_Plane : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static new public int ToString(IntPtr l) {
+		try {
+			UnityEngine.Plane self;
+			checkValueType(l,1,out self);
+			var ret=self.ToString();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ToString__String(IntPtr l) {
+		try {
+			UnityEngine.Plane self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.ToString(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Translate_s(IntPtr l) {
 		try {
 			UnityEngine.Plane a1;
@@ -310,6 +362,10 @@ public class Lua_UnityEngine_Plane : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Plane");
+		addMember(l,ctor_s);
+		addMember(l,ctor__Vector3__Vector3_s);
+		addMember(l,ctor__Vector3__Single_s);
+		addMember(l,ctor__Vector3__Vector3__Vector3_s);
 		addMember(l,SetNormalAndPosition);
 		addMember(l,Set3Points);
 		addMember(l,Flip);
@@ -319,10 +375,12 @@ public class Lua_UnityEngine_Plane : LuaObject {
 		addMember(l,GetSide);
 		addMember(l,SameSide);
 		addMember(l,Raycast);
+		addMember(l,ToString);
+		addMember(l,ToString__String);
 		addMember(l,Translate_s);
 		addMember(l,"normal",get_normal,set_normal,true);
 		addMember(l,"distance",get_distance,set_distance,true);
 		addMember(l,"flipped",get_flipped,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Plane),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Plane),typeof(System.ValueType));
 	}
 }

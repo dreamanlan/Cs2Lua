@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Input : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Input o;
 			o=new UnityEngine.Input();
@@ -194,27 +194,13 @@ public class Lua_UnityEngine_Input : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetKey_s(IntPtr l) {
+	static public int GetKey__KeyCode_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetKey__Boolean__KeyCode", argc, 1,typeof(UnityEngine.KeyCode))){
-				UnityEngine.KeyCode a1;
-				checkEnum(l,2,out a1);
-				var ret=UnityEngine.Input.GetKey(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetKey__Boolean__String", argc, 1,typeof(string))){
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=UnityEngine.Input.GetKey(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.KeyCode a1;
+			checkEnum(l,1,out a1);
+			var ret=UnityEngine.Input.GetKey(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -223,27 +209,13 @@ public class Lua_UnityEngine_Input : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetKeyUp_s(IntPtr l) {
+	static public int GetKey__String_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetKeyUp__Boolean__KeyCode", argc, 1,typeof(UnityEngine.KeyCode))){
-				UnityEngine.KeyCode a1;
-				checkEnum(l,2,out a1);
-				var ret=UnityEngine.Input.GetKeyUp(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetKeyUp__Boolean__String", argc, 1,typeof(string))){
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=UnityEngine.Input.GetKeyUp(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Input.GetKey(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -252,27 +224,58 @@ public class Lua_UnityEngine_Input : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetKeyDown_s(IntPtr l) {
+	static public int GetKeyUp__KeyCode_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetKeyDown__Boolean__KeyCode", argc, 1,typeof(UnityEngine.KeyCode))){
-				UnityEngine.KeyCode a1;
-				checkEnum(l,2,out a1);
-				var ret=UnityEngine.Input.GetKeyDown(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetKeyDown__Boolean__String", argc, 1,typeof(string))){
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=UnityEngine.Input.GetKeyDown(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.KeyCode a1;
+			checkEnum(l,1,out a1);
+			var ret=UnityEngine.Input.GetKeyUp(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetKeyUp__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Input.GetKeyUp(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetKeyDown__KeyCode_s(IntPtr l) {
+		try {
+			UnityEngine.KeyCode a1;
+			checkEnum(l,1,out a1);
+			var ret=UnityEngine.Input.GetKeyDown(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetKeyDown__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Input.GetKeyDown(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -678,6 +681,7 @@ public class Lua_UnityEngine_Input : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Input");
+		addMember(l,ctor_s);
 		addMember(l,GetAxis_s);
 		addMember(l,GetAxisRaw_s);
 		addMember(l,GetButton_s);
@@ -690,9 +694,12 @@ public class Lua_UnityEngine_Input : LuaObject {
 		addMember(l,GetJoystickNames_s);
 		addMember(l,GetTouch_s);
 		addMember(l,GetAccelerationEvent_s);
-		addMember(l,GetKey_s);
-		addMember(l,GetKeyUp_s);
-		addMember(l,GetKeyDown_s);
+		addMember(l,GetKey__KeyCode_s);
+		addMember(l,GetKey__String_s);
+		addMember(l,GetKeyUp__KeyCode_s);
+		addMember(l,GetKeyUp__String_s);
+		addMember(l,GetKeyDown__KeyCode_s);
+		addMember(l,GetKeyDown__String_s);
 		addMember(l,"simulateMouseWithTouches",get_simulateMouseWithTouches,set_simulateMouseWithTouches,false);
 		addMember(l,"anyKey",get_anyKey,null,false);
 		addMember(l,"anyKeyDown",get_anyKeyDown,null,false);
@@ -719,6 +726,6 @@ public class Lua_UnityEngine_Input : LuaObject {
 		addMember(l,"gyro",get_gyro,null,false);
 		addMember(l,"touches",get_touches,null,false);
 		addMember(l,"accelerationEvents",get_accelerationEvents,null,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Input));
+		createTypeMetatable(l,null, typeof(UnityEngine.Input));
 	}
 }

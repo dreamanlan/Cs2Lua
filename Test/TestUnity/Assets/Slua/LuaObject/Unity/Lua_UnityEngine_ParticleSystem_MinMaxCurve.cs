@@ -5,57 +5,13 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_MinMaxCurve : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.ParticleSystem.MinMaxCurve o;
-			if(argc==5){
-				System.Single a1;
-				checkType(l,3,out a1);
-				UnityEngine.AnimationCurve a2;
-				checkType(l,4,out a2);
-				UnityEngine.AnimationCurve a3;
-				checkType(l,5,out a3);
-				o=new UnityEngine.ParticleSystem.MinMaxCurve(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Single__AnimationCurve", argc, 2,typeof(float),typeof(UnityEngine.AnimationCurve))){
-				System.Single a1;
-				checkType(l,3,out a1);
-				UnityEngine.AnimationCurve a2;
-				checkType(l,4,out a2);
-				o=new UnityEngine.ParticleSystem.MinMaxCurve(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Single__Single", argc, 2,typeof(float),typeof(float))){
-				System.Single a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				o=new UnityEngine.ParticleSystem.MinMaxCurve(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==3){
-				System.Single a1;
-				checkType(l,3,out a1);
-				o=new UnityEngine.ParticleSystem.MinMaxCurve(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc<=2){
-				o=new UnityEngine.ParticleSystem.MinMaxCurve();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.ParticleSystem.MinMaxCurve();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -63,33 +19,106 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxCurve : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Evaluate(IntPtr l) {
+	static public int ctor__Single_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.ParticleSystem.MinMaxCurve self;
-				checkValueType(l,1,out self);
-				System.Single a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				var ret=self.Evaluate(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				UnityEngine.ParticleSystem.MinMaxCurve self;
-				checkValueType(l,1,out self);
-				System.Single a1;
-				checkType(l,3,out a1);
-				var ret=self.Evaluate(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.ParticleSystem.MinMaxCurve o;
+			System.Single a1;
+			checkType(l,1,out a1);
+			o=new UnityEngine.ParticleSystem.MinMaxCurve(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Single__AnimationCurve_s(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.MinMaxCurve o;
+			System.Single a1;
+			checkType(l,1,out a1);
+			UnityEngine.AnimationCurve a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.ParticleSystem.MinMaxCurve(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Single__Single_s(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.MinMaxCurve o;
+			System.Single a1;
+			checkType(l,1,out a1);
+			System.Single a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.ParticleSystem.MinMaxCurve(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Single__AnimationCurve__AnimationCurve_s(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.MinMaxCurve o;
+			System.Single a1;
+			checkType(l,1,out a1);
+			UnityEngine.AnimationCurve a2;
+			checkType(l,2,out a2);
+			UnityEngine.AnimationCurve a3;
+			checkType(l,3,out a3);
+			o=new UnityEngine.ParticleSystem.MinMaxCurve(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Evaluate__Single(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.MinMaxCurve self;
+			checkValueType(l,1,out self);
+			System.Single a1;
+			checkType(l,2,out a1);
+			var ret=self.Evaluate(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Evaluate__Single__Single(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.MinMaxCurve self;
+			checkValueType(l,1,out self);
+			System.Single a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			var ret=self.Evaluate(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -362,7 +391,13 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxCurve : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.MinMaxCurve");
-		addMember(l,Evaluate);
+		addMember(l,ctor_s);
+		addMember(l,ctor__Single_s);
+		addMember(l,ctor__Single__AnimationCurve_s);
+		addMember(l,ctor__Single__Single_s);
+		addMember(l,ctor__Single__AnimationCurve__AnimationCurve_s);
+		addMember(l,Evaluate__Single);
+		addMember(l,Evaluate__Single__Single);
 		addMember(l,op_Implicit_s);
 		addMember(l,"mode",get_mode,set_mode,true);
 		addMember(l,"curveMultiplier",get_curveMultiplier,set_curveMultiplier,true);
@@ -372,6 +407,6 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxCurve : LuaObject {
 		addMember(l,"constantMin",get_constantMin,set_constantMin,true);
 		addMember(l,"constant",get_constant,set_constant,true);
 		addMember(l,"curve",get_curve,set_curve,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.MinMaxCurve),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.MinMaxCurve),typeof(System.ValueType));
 	}
 }

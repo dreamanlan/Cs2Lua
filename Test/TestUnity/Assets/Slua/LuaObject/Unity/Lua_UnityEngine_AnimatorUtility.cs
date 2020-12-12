@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_AnimatorUtility : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.AnimatorUtility o;
 			o=new UnityEngine.AnimatorUtility();
@@ -50,8 +50,9 @@ public class Lua_UnityEngine_AnimatorUtility : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AnimatorUtility");
+		addMember(l,ctor_s);
 		addMember(l,OptimizeTransformHierarchy_s);
 		addMember(l,DeoptimizeTransformHierarchy_s);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.AnimatorUtility));
+		createTypeMetatable(l,null, typeof(UnityEngine.AnimatorUtility));
 	}
 }

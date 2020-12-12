@@ -5,27 +5,31 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_MatchTargetWeightMask : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.MatchTargetWeightMask o;
-			if(argc==3){
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				o=new UnityEngine.MatchTargetWeightMask(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc<=2){
-				o=new UnityEngine.MatchTargetWeightMask();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.MatchTargetWeightMask();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Vector3__Single_s(IntPtr l) {
+		try {
+			UnityEngine.MatchTargetWeightMask o;
+			UnityEngine.Vector3 a1;
+			checkType(l,1,out a1);
+			System.Single a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.MatchTargetWeightMask(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -96,8 +100,10 @@ public class Lua_UnityEngine_MatchTargetWeightMask : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.MatchTargetWeightMask");
+		addMember(l,ctor_s);
+		addMember(l,ctor__Vector3__Single_s);
 		addMember(l,"positionXYZWeight",get_positionXYZWeight,set_positionXYZWeight,true);
 		addMember(l,"rotationWeight",get_rotationWeight,set_rotationWeight,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.MatchTargetWeightMask),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.MatchTargetWeightMask),typeof(System.ValueType));
 	}
 }

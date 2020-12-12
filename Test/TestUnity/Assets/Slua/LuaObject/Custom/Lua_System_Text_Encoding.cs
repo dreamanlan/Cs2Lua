@@ -33,42 +33,14 @@ public class Lua_System_Text_Encoding : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetByteCount(IntPtr l) {
+	static public int GetByteCount__A_Char(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
-				System.Char[] a1;
-				checkArray(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				var ret=self.GetByteCount(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetByteCount__Int32__Arr_Char", argc, 2,typeof(System.Char[]))){
-				System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
-				System.Char[] a1;
-				checkArray(l,3,out a1);
-				var ret=self.GetByteCount(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetByteCount__Int32__String", argc, 2,typeof(string))){
-				System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetByteCount(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
+			System.Char[] a1;
+			checkArray(l,2,out a1);
+			var ret=self.GetByteCount(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -77,76 +49,14 @@ public class Lua_System_Text_Encoding : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetBytes(IntPtr l) {
+	static public int GetByteCount__String(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetBytes__Int32__Arr_Char__Int32__Int32__Arr_Byte__Int32", argc, 2,typeof(System.Char[]),typeof(int),typeof(int),typeof(System.Byte[]),typeof(int))){
-				System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
-				System.Char[] a1;
-				checkArray(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				System.Byte[] a4;
-				checkArray(l,6,out a4);
-				System.Int32 a5;
-				checkType(l,7,out a5);
-				var ret=self.GetBytes(a1,a2,a3,a4,a5);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetBytes__Int32__String__Int32__Int32__Arr_Byte__Int32", argc, 2,typeof(string),typeof(int),typeof(int),typeof(System.Byte[]),typeof(int))){
-				System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				System.Byte[] a4;
-				checkArray(l,6,out a4);
-				System.Int32 a5;
-				checkType(l,7,out a5);
-				var ret=self.GetBytes(a1,a2,a3,a4,a5);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==5){
-				System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
-				System.Char[] a1;
-				checkArray(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				var ret=self.GetBytes(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetBytes__Arr_Byte__Arr_Char", argc, 2,typeof(System.Char[]))){
-				System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
-				System.Char[] a1;
-				checkArray(l,3,out a1);
-				var ret=self.GetBytes(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetBytes__Arr_Byte__String", argc, 2,typeof(string))){
-				System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetBytes(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetByteCount(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -155,33 +65,18 @@ public class Lua_System_Text_Encoding : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetCharCount(IntPtr l) {
+	static public int GetByteCount__A_Char__Int32__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
-				System.Byte[] a1;
-				checkArray(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				var ret=self.GetCharCount(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
-				System.Byte[] a1;
-				checkArray(l,3,out a1);
-				var ret=self.GetCharCount(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
+			System.Char[] a1;
+			checkArray(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			var ret=self.GetByteCount(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -190,50 +85,230 @@ public class Lua_System_Text_Encoding : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetChars(IntPtr l) {
+	static public int GetBytes__A_Char(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==7){
-				System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
-				System.Byte[] a1;
-				checkArray(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				System.Char[] a4;
-				checkArray(l,6,out a4);
-				System.Int32 a5;
-				checkType(l,7,out a5);
-				var ret=self.GetChars(a1,a2,a3,a4,a5);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==5){
-				System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
-				System.Byte[] a1;
-				checkArray(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				var ret=self.GetChars(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
-				System.Byte[] a1;
-				checkArray(l,3,out a1);
-				var ret=self.GetChars(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
+			System.Char[] a1;
+			checkArray(l,2,out a1);
+			var ret=self.GetBytes(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetBytes__String(IntPtr l) {
+		try {
+			System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetBytes(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetBytes__A_Char__Int32__Int32(IntPtr l) {
+		try {
+			System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
+			System.Char[] a1;
+			checkArray(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			var ret=self.GetBytes(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetBytes__A_Char__Int32__Int32__A_Byte__Int32(IntPtr l) {
+		try {
+			System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
+			System.Char[] a1;
+			checkArray(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			System.Byte[] a4;
+			checkArray(l,5,out a4);
+			System.Int32 a5;
+			checkType(l,6,out a5);
+			var ret=self.GetBytes(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetBytes__String__Int32__Int32__A_Byte__Int32(IntPtr l) {
+		try {
+			System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			System.Byte[] a4;
+			checkArray(l,5,out a4);
+			System.Int32 a5;
+			checkType(l,6,out a5);
+			var ret=self.GetBytes(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetCharCount__A_Byte(IntPtr l) {
+		try {
+			System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
+			System.Byte[] a1;
+			checkArray(l,2,out a1);
+			var ret=self.GetCharCount(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetCharCount__A_Byte__Int32__Int32(IntPtr l) {
+		try {
+			System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
+			System.Byte[] a1;
+			checkArray(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			var ret=self.GetCharCount(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetChars__A_Byte(IntPtr l) {
+		try {
+			System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
+			System.Byte[] a1;
+			checkArray(l,2,out a1);
+			var ret=self.GetChars(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetChars__A_Byte__Int32__Int32(IntPtr l) {
+		try {
+			System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
+			System.Byte[] a1;
+			checkArray(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			var ret=self.GetChars(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetChars__A_Byte__Int32__Int32__A_Char__Int32(IntPtr l) {
+		try {
+			System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
+			System.Byte[] a1;
+			checkArray(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			System.Char[] a4;
+			checkArray(l,5,out a4);
+			System.Int32 a5;
+			checkType(l,6,out a5);
+			var ret=self.GetChars(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetString__A_Byte(IntPtr l) {
+		try {
+			System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
+			System.Byte[] a1;
+			checkArray(l,2,out a1);
+			var ret=self.GetString(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetString__A_Byte__Int32__Int32(IntPtr l) {
+		try {
+			System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
+			System.Byte[] a1;
+			checkArray(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			var ret=self.GetString(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -244,25 +319,26 @@ public class Lua_System_Text_Encoding : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int IsAlwaysNormalized(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
-				System.Text.NormalizationForm a1;
-				checkEnum(l,3,out a1);
-				var ret=self.IsAlwaysNormalized(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
-				var ret=self.IsAlwaysNormalized();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
+			var ret=self.IsAlwaysNormalized();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int IsAlwaysNormalized__NormalizationForm(IntPtr l) {
+		try {
+			System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
+			System.Text.NormalizationForm a1;
+			checkEnum(l,2,out a1);
+			var ret=self.IsAlwaysNormalized(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -331,33 +407,14 @@ public class Lua_System_Text_Encoding : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetString(IntPtr l) {
+	static new public int Equals(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==5){
-				System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
-				System.Byte[] a1;
-				checkArray(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				var ret=self.GetString(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
-				System.Byte[] a1;
-				checkArray(l,3,out a1);
-				var ret=self.GetString(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Text.Encoding self=(System.Text.Encoding)checkSelf(l);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -366,39 +423,40 @@ public class Lua_System_Text_Encoding : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Convert_s(IntPtr l) {
+	static public int Convert__Encoding__Encoding__A_Byte_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==6){
-				System.Text.Encoding a1;
-				checkType(l,2,out a1);
-				System.Text.Encoding a2;
-				checkType(l,3,out a2);
-				System.Byte[] a3;
-				checkArray(l,4,out a3);
-				System.Int32 a4;
-				checkType(l,5,out a4);
-				System.Int32 a5;
-				checkType(l,6,out a5);
-				var ret=System.Text.Encoding.Convert(a1,a2,a3,a4,a5);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==4){
-				System.Text.Encoding a1;
-				checkType(l,2,out a1);
-				System.Text.Encoding a2;
-				checkType(l,3,out a2);
-				System.Byte[] a3;
-				checkArray(l,4,out a3);
-				var ret=System.Text.Encoding.Convert(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Text.Encoding a1;
+			checkType(l,1,out a1);
+			System.Text.Encoding a2;
+			checkType(l,2,out a2);
+			System.Byte[] a3;
+			checkArray(l,3,out a3);
+			var ret=System.Text.Encoding.Convert(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Convert__Encoding__Encoding__A_Byte__Int32__Int32_s(IntPtr l) {
+		try {
+			System.Text.Encoding a1;
+			checkType(l,1,out a1);
+			System.Text.Encoding a2;
+			checkType(l,2,out a2);
+			System.Byte[] a3;
+			checkArray(l,3,out a3);
+			System.Int32 a4;
+			checkType(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
+			var ret=System.Text.Encoding.Convert(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -421,51 +479,66 @@ public class Lua_System_Text_Encoding : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetEncoding_s(IntPtr l) {
+	static public int GetEncoding__Int32_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetEncoding__Encoding__Int32__EncoderFallback__DecoderFallback", argc, 1,typeof(int),typeof(System.Text.EncoderFallback),typeof(System.Text.DecoderFallback))){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				System.Text.EncoderFallback a2;
-				checkType(l,3,out a2);
-				System.Text.DecoderFallback a3;
-				checkType(l,4,out a3);
-				var ret=System.Text.Encoding.GetEncoding(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetEncoding__Encoding__String__EncoderFallback__DecoderFallback", argc, 1,typeof(string),typeof(System.Text.EncoderFallback),typeof(System.Text.DecoderFallback))){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Text.EncoderFallback a2;
-				checkType(l,3,out a2);
-				System.Text.DecoderFallback a3;
-				checkType(l,4,out a3);
-				var ret=System.Text.Encoding.GetEncoding(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetEncoding__Encoding__Int32", argc, 1,typeof(int))){
-				System.Int32 a1;
-				checkType(l,2,out a1);
-				var ret=System.Text.Encoding.GetEncoding(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetEncoding__Encoding__String", argc, 1,typeof(string))){
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=System.Text.Encoding.GetEncoding(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			var ret=System.Text.Encoding.GetEncoding(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetEncoding__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=System.Text.Encoding.GetEncoding(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetEncoding__Int32__EncoderFallback__DecoderFallback_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Text.EncoderFallback a2;
+			checkType(l,2,out a2);
+			System.Text.DecoderFallback a3;
+			checkType(l,3,out a3);
+			var ret=System.Text.Encoding.GetEncoding(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetEncoding__String__EncoderFallback__DecoderFallback_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Text.EncoderFallback a2;
+			checkType(l,2,out a2);
+			System.Text.DecoderFallback a3;
+			checkType(l,3,out a3);
+			var ret=System.Text.Encoding.GetEncoding(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -786,19 +859,35 @@ public class Lua_System_Text_Encoding : LuaObject {
 		getTypeTable(l,"System.Text.Encoding");
 		addMember(l,GetPreamble);
 		addMember(l,Clone);
-		addMember(l,GetByteCount);
-		addMember(l,GetBytes);
-		addMember(l,GetCharCount);
-		addMember(l,GetChars);
+		addMember(l,GetByteCount__A_Char);
+		addMember(l,GetByteCount__String);
+		addMember(l,GetByteCount__A_Char__Int32__Int32);
+		addMember(l,GetBytes__A_Char);
+		addMember(l,GetBytes__String);
+		addMember(l,GetBytes__A_Char__Int32__Int32);
+		addMember(l,GetBytes__A_Char__Int32__Int32__A_Byte__Int32);
+		addMember(l,GetBytes__String__Int32__Int32__A_Byte__Int32);
+		addMember(l,GetCharCount__A_Byte);
+		addMember(l,GetCharCount__A_Byte__Int32__Int32);
+		addMember(l,GetChars__A_Byte);
+		addMember(l,GetChars__A_Byte__Int32__Int32);
+		addMember(l,GetChars__A_Byte__Int32__Int32__A_Char__Int32);
+		addMember(l,GetString__A_Byte);
+		addMember(l,GetString__A_Byte__Int32__Int32);
 		addMember(l,IsAlwaysNormalized);
+		addMember(l,IsAlwaysNormalized__NormalizationForm);
 		addMember(l,GetDecoder);
 		addMember(l,GetEncoder);
 		addMember(l,GetMaxByteCount);
 		addMember(l,GetMaxCharCount);
-		addMember(l,GetString);
-		addMember(l,Convert_s);
+		addMember(l,Equals);
+		addMember(l,Convert__Encoding__Encoding__A_Byte_s);
+		addMember(l,Convert__Encoding__Encoding__A_Byte__Int32__Int32_s);
 		addMember(l,RegisterProvider_s);
-		addMember(l,GetEncoding_s);
+		addMember(l,GetEncoding__Int32_s);
+		addMember(l,GetEncoding__String_s);
+		addMember(l,GetEncoding__Int32__EncoderFallback__DecoderFallback_s);
+		addMember(l,GetEncoding__String__EncoderFallback__DecoderFallback_s);
 		addMember(l,GetEncodings_s);
 		addMember(l,"BodyName",get_BodyName,null,true);
 		addMember(l,"EncodingName",get_EncodingName,null,true);

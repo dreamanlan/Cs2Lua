@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_AnimatorTransitionInfo : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.AnimatorTransitionInfo o;
 			o=new UnityEngine.AnimatorTransitionInfo();
@@ -152,6 +152,7 @@ public class Lua_UnityEngine_AnimatorTransitionInfo : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AnimatorTransitionInfo");
+		addMember(l,ctor_s);
 		addMember(l,IsName);
 		addMember(l,IsUserName);
 		addMember(l,"fullPathHash",get_fullPathHash,null,true);
@@ -161,6 +162,6 @@ public class Lua_UnityEngine_AnimatorTransitionInfo : LuaObject {
 		addMember(l,"duration",get_duration,null,true);
 		addMember(l,"normalizedTime",get_normalizedTime,null,true);
 		addMember(l,"anyState",get_anyState,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.AnimatorTransitionInfo),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.AnimatorTransitionInfo),typeof(System.ValueType));
 	}
 }

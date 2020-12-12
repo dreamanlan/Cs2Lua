@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_tvOS_Device : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.tvOS.Device o;
 			o=new UnityEngine.tvOS.Device();
@@ -108,6 +108,7 @@ public class Lua_UnityEngine_tvOS_Device : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.tvOS.Device");
+		addMember(l,ctor_s);
 		addMember(l,SetNoBackupFlag_s);
 		addMember(l,ResetNoBackupFlag_s);
 		addMember(l,"systemVersion",get_systemVersion,null,false);
@@ -115,6 +116,6 @@ public class Lua_UnityEngine_tvOS_Device : LuaObject {
 		addMember(l,"vendorIdentifier",get_vendorIdentifier,null,false);
 		addMember(l,"advertisingIdentifier",get_advertisingIdentifier,null,false);
 		addMember(l,"advertisingTrackingEnabled",get_advertisingTrackingEnabled,null,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.tvOS.Device));
+		createTypeMetatable(l,null, typeof(UnityEngine.tvOS.Device));
 	}
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Random_State : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Random.State o;
 			o=new UnityEngine.Random.State();
@@ -20,6 +20,7 @@ public class Lua_UnityEngine_Random_State : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Random.State");
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Random.State),typeof(System.ValueType));
+		addMember(l,ctor_s);
+		createTypeMetatable(l,null, typeof(UnityEngine.Random.State),typeof(System.ValueType));
 	}
 }

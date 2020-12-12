@@ -128,7 +128,7 @@ namespace RoslynTool.CsToDsl
                     if (null != opd && opd.UsesOperatorMethod) {
                         IMethodSymbol msym = opd.OperatorMethod;
                         InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), node);
-                        ii.Init(msym, (List<ExpressionSyntax>)null, m_Model);
+                        ii.Init(msym, m_Model);
                         CodeBuilder.AppendFormat("{0}{1}", GetIndentString(), mi.ReturnVarName);
                         CodeBuilder.AppendLine(" = ");
                         OutputConversionInvokePrefix(ii);

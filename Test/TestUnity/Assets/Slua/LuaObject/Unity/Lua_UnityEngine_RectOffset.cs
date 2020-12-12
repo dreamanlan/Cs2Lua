@@ -5,31 +5,35 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_RectOffset : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.RectOffset o;
-			if(argc==6){
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				System.Int32 a4;
-				checkType(l,6,out a4);
-				o=new UnityEngine.RectOffset(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==2){
-				o=new UnityEngine.RectOffset();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.RectOffset();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__Int32__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.RectOffset o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			System.Int32 a4;
+			checkType(l,4,out a4);
+			o=new UnityEngine.RectOffset(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -59,6 +63,20 @@ public class Lua_UnityEngine_RectOffset : LuaObject {
 			UnityEngine.Rect a1;
 			checkValueType(l,2,out a1);
 			var ret=self.Remove(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static new public int ToString(IntPtr l) {
+		try {
+			UnityEngine.RectOffset self=(UnityEngine.RectOffset)checkSelf(l);
+			var ret=self.ToString();
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -208,14 +226,17 @@ public class Lua_UnityEngine_RectOffset : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.RectOffset");
+		addMember(l,ctor_s);
+		addMember(l,ctor__Int32__Int32__Int32__Int32_s);
 		addMember(l,Add);
 		addMember(l,Remove);
+		addMember(l,ToString);
 		addMember(l,"left",get_left,set_left,true);
 		addMember(l,"right",get_right,set_right,true);
 		addMember(l,"top",get_top,set_top,true);
 		addMember(l,"bottom",get_bottom,set_bottom,true);
 		addMember(l,"horizontal",get_horizontal,null,true);
 		addMember(l,"vertical",get_vertical,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.RectOffset));
+		createTypeMetatable(l,null, typeof(UnityEngine.RectOffset));
 	}
 }

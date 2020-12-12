@@ -5,12 +5,28 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_AnimatorControllerParameter : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.AnimatorControllerParameter o;
 			o=new UnityEngine.AnimatorControllerParameter();
 			pushValue(l,true);
 			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static new public int Equals(IntPtr l) {
+		try {
+			UnityEngine.AnimatorControllerParameter self=(UnityEngine.AnimatorControllerParameter)checkSelf(l);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -145,11 +161,13 @@ public class Lua_UnityEngine_AnimatorControllerParameter : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AnimatorControllerParameter");
+		addMember(l,ctor_s);
+		addMember(l,Equals);
 		addMember(l,"nameHash",get_nameHash,null,true);
 		addMember(l,"type",get_type,set_type,true);
 		addMember(l,"defaultFloat",get_defaultFloat,set_defaultFloat,true);
 		addMember(l,"defaultInt",get_defaultInt,set_defaultInt,true);
 		addMember(l,"defaultBool",get_defaultBool,set_defaultBool,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.AnimatorControllerParameter));
+		createTypeMetatable(l,null, typeof(UnityEngine.AnimatorControllerParameter));
 	}
 }

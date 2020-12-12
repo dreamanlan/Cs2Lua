@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_UnityEventQueueSystem : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.UnityEventQueueSystem o;
 			o=new UnityEngine.UnityEventQueueSystem();
@@ -48,8 +48,9 @@ public class Lua_UnityEngine_UnityEventQueueSystem : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UnityEventQueueSystem");
+		addMember(l,ctor_s);
 		addMember(l,GenerateEventIdForPayload_s);
 		addMember(l,GetGlobalEventQueue_s);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.UnityEventQueueSystem));
+		createTypeMetatable(l,null, typeof(UnityEngine.UnityEventQueueSystem));
 	}
 }

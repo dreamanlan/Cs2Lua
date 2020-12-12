@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_PreferBinarySerialization : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.PreferBinarySerialization o;
 			o=new UnityEngine.PreferBinarySerialization();
@@ -20,6 +20,7 @@ public class Lua_UnityEngine_PreferBinarySerialization : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.PreferBinarySerialization");
-		createTypeMetatable(l,constructor, typeof(UnityEngine.PreferBinarySerialization),typeof(System.Attribute));
+		addMember(l,ctor_s);
+		createTypeMetatable(l,null, typeof(UnityEngine.PreferBinarySerialization),typeof(System.Attribute));
 	}
 }

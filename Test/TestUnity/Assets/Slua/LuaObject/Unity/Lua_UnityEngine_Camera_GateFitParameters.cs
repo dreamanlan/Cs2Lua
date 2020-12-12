@@ -5,27 +5,31 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Camera_GateFitParameters : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Camera.GateFitParameters o;
-			if(argc==3){
-				UnityEngine.Camera.GateFitMode a1;
-				checkEnum(l,2,out a1);
-				System.Single a2;
-				checkType(l,3,out a2);
-				o=new UnityEngine.Camera.GateFitParameters(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc<=2){
-				o=new UnityEngine.Camera.GateFitParameters();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.Camera.GateFitParameters();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__GateFitMode__Single_s(IntPtr l) {
+		try {
+			UnityEngine.Camera.GateFitParameters o;
+			UnityEngine.Camera.GateFitMode a1;
+			checkEnum(l,1,out a1);
+			System.Single a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.Camera.GateFitParameters(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -96,8 +100,10 @@ public class Lua_UnityEngine_Camera_GateFitParameters : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Camera.GateFitParameters");
+		addMember(l,ctor_s);
+		addMember(l,ctor__GateFitMode__Single_s);
 		addMember(l,"mode",get_mode,set_mode,true);
 		addMember(l,"aspect",get_aspect,set_aspect,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Camera.GateFitParameters),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Camera.GateFitParameters),typeof(System.ValueType));
 	}
 }

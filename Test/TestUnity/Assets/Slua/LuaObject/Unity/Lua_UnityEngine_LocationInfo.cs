@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_LocationInfo : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.LocationInfo o;
 			o=new UnityEngine.LocationInfo();
@@ -104,12 +104,13 @@ public class Lua_UnityEngine_LocationInfo : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.LocationInfo");
+		addMember(l,ctor_s);
 		addMember(l,"latitude",get_latitude,null,true);
 		addMember(l,"longitude",get_longitude,null,true);
 		addMember(l,"altitude",get_altitude,null,true);
 		addMember(l,"horizontalAccuracy",get_horizontalAccuracy,null,true);
 		addMember(l,"verticalAccuracy",get_verticalAccuracy,null,true);
 		addMember(l,"timestamp",get_timestamp,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.LocationInfo),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.LocationInfo),typeof(System.ValueType));
 	}
 }

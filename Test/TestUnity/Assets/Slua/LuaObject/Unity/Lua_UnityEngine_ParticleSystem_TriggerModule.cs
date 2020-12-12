@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_TriggerModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.TriggerModule o;
 			o=new UnityEngine.ParticleSystem.TriggerModule();
@@ -256,6 +256,7 @@ public class Lua_UnityEngine_ParticleSystem_TriggerModule : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.TriggerModule");
+		addMember(l,ctor_s);
 		addMember(l,SetCollider);
 		addMember(l,GetCollider);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
@@ -265,6 +266,6 @@ public class Lua_UnityEngine_ParticleSystem_TriggerModule : LuaObject {
 		addMember(l,"exit",get_exit,set_exit,true);
 		addMember(l,"radiusScale",get_radiusScale,set_radiusScale,true);
 		addMember(l,"maxColliderCount",get_maxColliderCount,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.TriggerModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.TriggerModule),typeof(System.ValueType));
 	}
 }

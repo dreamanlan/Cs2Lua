@@ -83,8 +83,15 @@ return Class
         static public int _iter(IntPtr l)
         {
             object obj = checkObj(l, LuaDLL.lua_upvalueindex(1));
+            bool resetV = false;
+            if(LuaDLL.lua_isboolean(l, 1)) {
+                resetV = LuaDLL.lua_toboolean(l, 1);
+            }
             IEnumerator it = (IEnumerator)obj;
-            if (it != null && it.MoveNext()) {
+            if (it != null && resetV) {
+                it.Reset();
+            }
+            else if (it != null && it.MoveNext()) {
                 pushVar(l, it.Current);
                 return 1;
             }

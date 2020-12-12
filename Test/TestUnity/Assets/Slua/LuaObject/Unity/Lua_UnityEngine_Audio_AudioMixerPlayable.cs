@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Audio_AudioMixerPlayable : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Audio.AudioMixerPlayable o;
 			o=new UnityEngine.Audio.AudioMixerPlayable();
@@ -24,6 +24,40 @@ public class Lua_UnityEngine_Audio_AudioMixerPlayable : LuaObject {
 			UnityEngine.Audio.AudioMixerPlayable self;
 			checkValueType(l,1,out self);
 			var ret=self.GetHandle();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__AudioMixerPlayable(IntPtr l) {
+		try {
+			UnityEngine.Audio.AudioMixerPlayable self;
+			checkValueType(l,1,out self);
+			UnityEngine.Audio.AudioMixerPlayable a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			UnityEngine.Audio.AudioMixerPlayable self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -84,10 +118,13 @@ public class Lua_UnityEngine_Audio_AudioMixerPlayable : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Audio.AudioMixerPlayable");
+		addMember(l,ctor_s);
 		addMember(l,GetHandle);
+		addMember(l,Equals__AudioMixerPlayable);
+		addMember(l,Equals__Object);
 		addMember(l,Create_s);
 		addMember(l,op_Implicit_s);
 		addMember(l,op_Explicit_s);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Audio.AudioMixerPlayable),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Audio.AudioMixerPlayable),typeof(System.ValueType));
 	}
 }

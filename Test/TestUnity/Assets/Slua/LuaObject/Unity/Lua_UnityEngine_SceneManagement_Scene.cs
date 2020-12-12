@@ -6,7 +6,7 @@ using UnityEngine;
 public class Lua_UnityEngine_SceneManagement_Scene : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.SceneManagement.Scene o;
 			o=new UnityEngine.SceneManagement.Scene();
@@ -37,27 +37,45 @@ public class Lua_UnityEngine_SceneManagement_Scene : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int GetRootGameObjects(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				UnityEngine.SceneManagement.Scene self;
-				checkValueType(l,1,out self);
-				System.Collections.Generic.List<UnityEngine.GameObject> a1;
-				checkType(l,3,out a1);
-				self.GetRootGameObjects(a1);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(argc==2){
-				UnityEngine.SceneManagement.Scene self;
-				checkValueType(l,1,out self);
-				var ret=self.GetRootGameObjects();
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.SceneManagement.Scene self;
+			checkValueType(l,1,out self);
+			var ret=self.GetRootGameObjects();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetRootGameObjects__List_1_GameObject(IntPtr l) {
+		try {
+			UnityEngine.SceneManagement.Scene self;
+			checkValueType(l,1,out self);
+			System.Collections.Generic.List<UnityEngine.GameObject> a1;
+			checkType(l,2,out a1);
+			self.GetRootGameObjects(a1);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static new public int Equals(IntPtr l) {
+		try {
+			UnityEngine.SceneManagement.Scene self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -231,8 +249,11 @@ public class Lua_UnityEngine_SceneManagement_Scene : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.SceneManagement.Scene");
+		addMember(l,ctor_s);
 		addMember(l,IsValid);
 		addMember(l,GetRootGameObjects);
+		addMember(l,GetRootGameObjects__List_1_GameObject);
+		addMember(l,Equals);
 		addMember(l,GetPhysicsScene);
 		addMember(l,op_Equality_s);
 		addMember(l,op_Inequality_s);
@@ -243,6 +264,6 @@ public class Lua_UnityEngine_SceneManagement_Scene : LuaObject {
 		addMember(l,"buildIndex",get_buildIndex,null,true);
 		addMember(l,"isDirty",get_isDirty,null,true);
 		addMember(l,"rootCount",get_rootCount,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.SceneManagement.Scene),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.SceneManagement.Scene),typeof(System.ValueType));
 	}
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_UI_FontData : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.UI.FontData o;
 			o=new UnityEngine.UI.FontData();
@@ -368,6 +368,7 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.FontData");
+		addMember(l,ctor_s);
 		addMember(l,"defaultFontData",get_defaultFontData,null,false);
 		addMember(l,"font",get_font,set_font,true);
 		addMember(l,"fontSize",get_fontSize,set_fontSize,true);
@@ -381,6 +382,6 @@ public class Lua_UnityEngine_UI_FontData : LuaObject {
 		addMember(l,"horizontalOverflow",get_horizontalOverflow,set_horizontalOverflow,true);
 		addMember(l,"verticalOverflow",get_verticalOverflow,set_verticalOverflow,true);
 		addMember(l,"lineSpacing",get_lineSpacing,set_lineSpacing,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.UI.FontData));
+		createTypeMetatable(l,null, typeof(UnityEngine.UI.FontData));
 	}
 }

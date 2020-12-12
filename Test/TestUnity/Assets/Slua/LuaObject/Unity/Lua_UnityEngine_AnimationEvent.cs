@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_AnimationEvent : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.AnimationEvent o;
 			o=new UnityEngine.AnimationEvent();
@@ -281,6 +281,7 @@ public class Lua_UnityEngine_AnimationEvent : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AnimationEvent");
+		addMember(l,ctor_s);
 		addMember(l,"stringParameter",get_stringParameter,set_stringParameter,true);
 		addMember(l,"floatParameter",get_floatParameter,set_floatParameter,true);
 		addMember(l,"intParameter",get_intParameter,set_intParameter,true);
@@ -293,6 +294,6 @@ public class Lua_UnityEngine_AnimationEvent : LuaObject {
 		addMember(l,"animationState",get_animationState,null,true);
 		addMember(l,"animatorStateInfo",get_animatorStateInfo,null,true);
 		addMember(l,"animatorClipInfo",get_animatorClipInfo,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.AnimationEvent));
+		createTypeMetatable(l,null, typeof(UnityEngine.AnimationEvent));
 	}
 }

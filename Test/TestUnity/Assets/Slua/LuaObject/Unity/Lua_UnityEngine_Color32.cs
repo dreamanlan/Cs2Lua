@@ -5,31 +5,13 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Color32 : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Color32 o;
-			if(argc==5){
-				System.Byte a1;
-				checkType(l,2,out a1);
-				System.Byte a2;
-				checkType(l,3,out a2);
-				System.Byte a3;
-				checkType(l,4,out a3);
-				System.Byte a4;
-				checkType(l,5,out a4);
-				o=new UnityEngine.Color32(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc<=2){
-				o=new UnityEngine.Color32();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.Color32();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -37,27 +19,82 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int op_Implicit_s(IntPtr l) {
+	static public int ctor__Byte__Byte__Byte__Byte_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "op_Implicit__Color32__Color", argc, 1,typeof(UnityEngine.Color))){
-				UnityEngine.Color a1;
-				checkType(l,2,out a1);
-				UnityEngine.Color32 ret=a1;
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "op_Implicit__Color__Color32", argc, 1,typeof(UnityEngine.Color32))){
-				UnityEngine.Color32 a1;
-				checkValueType(l,2,out a1);
-				UnityEngine.Color ret=a1;
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Color32 o;
+			System.Byte a1;
+			checkType(l,1,out a1);
+			System.Byte a2;
+			checkType(l,2,out a2);
+			System.Byte a3;
+			checkType(l,3,out a3);
+			System.Byte a4;
+			checkType(l,4,out a4);
+			o=new UnityEngine.Color32(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static new public int ToString(IntPtr l) {
+		try {
+			UnityEngine.Color32 self;
+			checkValueType(l,1,out self);
+			var ret=self.ToString();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ToString__String(IntPtr l) {
+		try {
+			UnityEngine.Color32 self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.ToString(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Implicit__Color32__Color_s(IntPtr l) {
+		try {
+			UnityEngine.Color a1;
+			checkType(l,1,out a1);
+			UnityEngine.Color32 ret=a1;
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Implicit__Color__Color32_s(IntPtr l) {
+		try {
+			UnityEngine.Color32 a1;
+			checkValueType(l,1,out a1);
+			UnityEngine.Color ret=a1;
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -229,13 +266,18 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Color32");
-		addMember(l,op_Implicit_s);
+		addMember(l,ctor_s);
+		addMember(l,ctor__Byte__Byte__Byte__Byte_s);
+		addMember(l,ToString);
+		addMember(l,ToString__String);
+		addMember(l,op_Implicit__Color32__Color_s);
+		addMember(l,op_Implicit__Color__Color32_s);
 		addMember(l,Lerp_s);
 		addMember(l,LerpUnclamped_s);
 		addMember(l,"r",get_r,set_r,true);
 		addMember(l,"g",get_g,set_g,true);
 		addMember(l,"b",get_b,set_b,true);
 		addMember(l,"a",get_a,set_a,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Color32),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Color32),typeof(System.ValueType));
 	}
 }

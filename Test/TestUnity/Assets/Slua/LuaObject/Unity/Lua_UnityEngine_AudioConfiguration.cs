@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_AudioConfiguration : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.AudioConfiguration o;
 			o=new UnityEngine.AudioConfiguration();
@@ -175,11 +175,12 @@ public class Lua_UnityEngine_AudioConfiguration : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AudioConfiguration");
+		addMember(l,ctor_s);
 		addMember(l,"speakerMode",get_speakerMode,set_speakerMode,true);
 		addMember(l,"dspBufferSize",get_dspBufferSize,set_dspBufferSize,true);
 		addMember(l,"sampleRate",get_sampleRate,set_sampleRate,true);
 		addMember(l,"numRealVoices",get_numRealVoices,set_numRealVoices,true);
 		addMember(l,"numVirtualVoices",get_numVirtualVoices,set_numVirtualVoices,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.AudioConfiguration),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.AudioConfiguration),typeof(System.ValueType));
 	}
 }

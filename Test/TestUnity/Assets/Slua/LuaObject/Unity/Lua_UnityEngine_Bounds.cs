@@ -5,27 +5,65 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Bounds : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Bounds o;
-			if(argc==3){
-				UnityEngine.Vector3 a1;
-				checkType(l,2,out a1);
-				UnityEngine.Vector3 a2;
-				checkType(l,3,out a2);
-				o=new UnityEngine.Bounds(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc<=2){
-				o=new UnityEngine.Bounds();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.Bounds();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Vector3__Vector3_s(IntPtr l) {
+		try {
+			UnityEngine.Bounds o;
+			UnityEngine.Vector3 a1;
+			checkType(l,1,out a1);
+			UnityEngine.Vector3 a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.Bounds(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			UnityEngine.Bounds self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Bounds(IntPtr l) {
+		try {
+			UnityEngine.Bounds self;
+			checkValueType(l,1,out self);
+			UnityEngine.Bounds a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -52,32 +90,16 @@ public class Lua_UnityEngine_Bounds : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Encapsulate(IntPtr l) {
+	static public int Encapsulate__Vector3(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Encapsulate__Void__Vector3", argc, 2,typeof(UnityEngine.Vector3))){
-				UnityEngine.Bounds self;
-				checkValueType(l,1,out self);
-				UnityEngine.Vector3 a1;
-				checkType(l,3,out a1);
-				self.Encapsulate(a1);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "Encapsulate__Void__Bounds", argc, 2,typeof(UnityEngine.Bounds))){
-				UnityEngine.Bounds self;
-				checkValueType(l,1,out self);
-				UnityEngine.Bounds a1;
-				checkValueType(l,3,out a1);
-				self.Encapsulate(a1);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.Bounds self;
+			checkValueType(l,1,out self);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			self.Encapsulate(a1);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -85,32 +107,50 @@ public class Lua_UnityEngine_Bounds : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Expand(IntPtr l) {
+	static public int Encapsulate__Bounds(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Expand__Void__Vector3", argc, 2,typeof(UnityEngine.Vector3))){
-				UnityEngine.Bounds self;
-				checkValueType(l,1,out self);
-				UnityEngine.Vector3 a1;
-				checkType(l,3,out a1);
-				self.Expand(a1);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "Expand__Void__Single", argc, 2,typeof(float))){
-				UnityEngine.Bounds self;
-				checkValueType(l,1,out self);
-				System.Single a1;
-				checkType(l,3,out a1);
-				self.Expand(a1);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.Bounds self;
+			checkValueType(l,1,out self);
+			UnityEngine.Bounds a1;
+			checkValueType(l,2,out a1);
+			self.Encapsulate(a1);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Expand__Vector3(IntPtr l) {
+		try {
+			UnityEngine.Bounds self;
+			checkValueType(l,1,out self);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			self.Expand(a1);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Expand__Single(IntPtr l) {
+		try {
+			UnityEngine.Bounds self;
+			checkValueType(l,1,out self);
+			System.Single a1;
+			checkType(l,2,out a1);
+			self.Expand(a1);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -135,33 +175,66 @@ public class Lua_UnityEngine_Bounds : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int IntersectRay(IntPtr l) {
+	static public int IntersectRay__Ray(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.Bounds self;
-				checkValueType(l,1,out self);
-				UnityEngine.Ray a1;
-				checkValueType(l,3,out a1);
-				System.Single a2;
-				var ret=self.IntersectRay(a1,out a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				pushValue(l,a2);
-				return 3;
-			}
-			else if(argc==3){
-				UnityEngine.Bounds self;
-				checkValueType(l,1,out self);
-				UnityEngine.Ray a1;
-				checkValueType(l,3,out a1);
-				var ret=self.IntersectRay(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Bounds self;
+			checkValueType(l,1,out self);
+			UnityEngine.Ray a1;
+			checkValueType(l,2,out a1);
+			var ret=self.IntersectRay(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int IntersectRay__Ray__O_Single(IntPtr l) {
+		try {
+			UnityEngine.Bounds self;
+			checkValueType(l,1,out self);
+			UnityEngine.Ray a1;
+			checkValueType(l,2,out a1);
+			System.Single a2;
+			var ret=self.IntersectRay(a1,out a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a2);
+			return 3;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static new public int ToString(IntPtr l) {
+		try {
+			UnityEngine.Bounds self;
+			checkValueType(l,1,out self);
+			var ret=self.ToString();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ToString__String(IntPtr l) {
+		try {
+			UnityEngine.Bounds self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.ToString(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -411,11 +484,20 @@ public class Lua_UnityEngine_Bounds : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Bounds");
+		addMember(l,ctor_s);
+		addMember(l,ctor__Vector3__Vector3_s);
+		addMember(l,Equals__Object);
+		addMember(l,Equals__Bounds);
 		addMember(l,SetMinMax);
-		addMember(l,Encapsulate);
-		addMember(l,Expand);
+		addMember(l,Encapsulate__Vector3);
+		addMember(l,Encapsulate__Bounds);
+		addMember(l,Expand__Vector3);
+		addMember(l,Expand__Single);
 		addMember(l,Intersects);
-		addMember(l,IntersectRay);
+		addMember(l,IntersectRay__Ray);
+		addMember(l,IntersectRay__Ray__O_Single);
+		addMember(l,ToString);
+		addMember(l,ToString__String);
 		addMember(l,Contains);
 		addMember(l,SqrDistance);
 		addMember(l,ClosestPoint);
@@ -426,6 +508,6 @@ public class Lua_UnityEngine_Bounds : LuaObject {
 		addMember(l,"extents",get_extents,set_extents,true);
 		addMember(l,"min",get_min,set_min,true);
 		addMember(l,"max",get_max,set_max,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Bounds),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Bounds),typeof(System.ValueType));
 	}
 }

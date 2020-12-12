@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_UI_Toggle_ToggleEvent : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.UI.Toggle.ToggleEvent o;
 			o=new UnityEngine.UI.Toggle.ToggleEvent();
@@ -138,10 +138,41 @@ public class Lua_UnityEngine_UI_Toggle_ToggleEvent : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static new public int ToString(IntPtr l) {
+		try {
+			UnityEngine.UI.Toggle.ToggleEvent self=(UnityEngine.UI.Toggle.ToggleEvent)checkSelf(l);
+			var ret=self.ToString();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static new public int Equals(IntPtr l) {
+		try {
+			UnityEngine.UI.Toggle.ToggleEvent self=(UnityEngine.UI.Toggle.ToggleEvent)checkSelf(l);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		LuaUnityEvent_bool.reg(l);
 		getTypeTable(l,"UnityEngine.UI.Toggle.ToggleEvent");
+		addMember(l,ctor_s);
 		addMember(l,AddListener);
 		addMember(l,RemoveListener);
 		addMember(l,Invoke);
@@ -150,6 +181,8 @@ public class Lua_UnityEngine_UI_Toggle_ToggleEvent : LuaObject {
 		addMember(l,GetPersistentMethodName);
 		addMember(l,SetPersistentListenerState);
 		addMember(l,RemoveAllListeners);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.UI.Toggle.ToggleEvent),typeof(LuaUnityEvent_bool));
+		addMember(l,ToString);
+		addMember(l,Equals);
+		createTypeMetatable(l,null, typeof(UnityEngine.UI.Toggle.ToggleEvent),typeof(LuaUnityEvent_bool));
 	}
 }

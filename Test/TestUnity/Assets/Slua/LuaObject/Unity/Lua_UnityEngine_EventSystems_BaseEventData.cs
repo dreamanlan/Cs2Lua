@@ -5,11 +5,11 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_EventSystems_BaseEventData : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.BaseEventData o;
 			UnityEngine.EventSystems.EventSystem a1;
-			checkType(l,2,out a1);
+			checkType(l,1,out a1);
 			o=new UnityEngine.EventSystems.BaseEventData(a1);
 			pushValue(l,true);
 			pushValue(l,o);
@@ -63,8 +63,9 @@ public class Lua_UnityEngine_EventSystems_BaseEventData : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.EventSystems.BaseEventData");
+		addMember(l,ctor_s);
 		addMember(l,"currentInputModule",get_currentInputModule,null,true);
 		addMember(l,"selectedObject",get_selectedObject,set_selectedObject,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.EventSystems.BaseEventData),typeof(UnityEngine.EventSystems.AbstractEventData));
+		createTypeMetatable(l,null, typeof(UnityEngine.EventSystems.BaseEventData),typeof(UnityEngine.EventSystems.AbstractEventData));
 	}
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.CollisionModule o;
 			o=new UnityEngine.ParticleSystem.CollisionModule();
@@ -752,6 +752,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.CollisionModule");
+		addMember(l,ctor_s);
 		addMember(l,SetPlane);
 		addMember(l,GetPlane);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
@@ -777,6 +778,6 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 		addMember(l,"multiplyColliderForceByParticleSpeed",get_multiplyColliderForceByParticleSpeed,set_multiplyColliderForceByParticleSpeed,true);
 		addMember(l,"multiplyColliderForceByParticleSize",get_multiplyColliderForceByParticleSize,set_multiplyColliderForceByParticleSize,true);
 		addMember(l,"maxPlaneCount",get_maxPlaneCount,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.CollisionModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.CollisionModule),typeof(System.ValueType));
 	}
 }

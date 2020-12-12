@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Touch : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Touch o;
 			o=new UnityEngine.Touch();
@@ -454,6 +454,7 @@ public class Lua_UnityEngine_Touch : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Touch");
+		addMember(l,ctor_s);
 		addMember(l,"fingerId",get_fingerId,set_fingerId,true);
 		addMember(l,"position",get_position,set_position,true);
 		addMember(l,"rawPosition",get_rawPosition,set_rawPosition,true);
@@ -468,6 +469,6 @@ public class Lua_UnityEngine_Touch : LuaObject {
 		addMember(l,"azimuthAngle",get_azimuthAngle,set_azimuthAngle,true);
 		addMember(l,"radius",get_radius,set_radius,true);
 		addMember(l,"radiusVariance",get_radiusVariance,set_radiusVariance,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Touch),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Touch),typeof(System.ValueType));
 	}
 }

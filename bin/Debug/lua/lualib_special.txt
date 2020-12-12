@@ -16,7 +16,7 @@ function get_unity_color_black(funcInfo, symKind, class, member)
 	return obj
 end
 
-function new_vector3(funcInfo, class, typeargs, typekinds, initializer, ...)
+function new_vector3(funcInfo, class, typeargs, typekinds, ctor, initializer, ...)
 	local _,x,y,z = ...
 	local obj = UnityEngine.Vector3.New(x,y,z)
 	table.insert(funcInfo.v3_list, obj)

@@ -5,41 +5,53 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_RectInt : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.RectInt o;
-			if(argc==6){
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				System.Int32 a4;
-				checkType(l,6,out a4);
-				o=new UnityEngine.RectInt(a1,a2,a3,a4);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==4){
-				UnityEngine.Vector2Int a1;
-				checkValueType(l,3,out a1);
-				UnityEngine.Vector2Int a2;
-				checkValueType(l,4,out a2);
-				o=new UnityEngine.RectInt(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc<=2){
-				o=new UnityEngine.RectInt();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.RectInt();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Vector2Int__Vector2Int_s(IntPtr l) {
+		try {
+			UnityEngine.RectInt o;
+			UnityEngine.Vector2Int a1;
+			checkValueType(l,1,out a1);
+			UnityEngine.Vector2Int a2;
+			checkValueType(l,2,out a2);
+			o=new UnityEngine.RectInt(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__Int32__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.RectInt o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			System.Int32 a4;
+			checkType(l,4,out a4);
+			o=new UnityEngine.RectInt(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -90,6 +102,55 @@ public class Lua_UnityEngine_RectInt : LuaObject {
 			UnityEngine.Vector2Int a1;
 			checkValueType(l,2,out a1);
 			var ret=self.Contains(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static new public int ToString(IntPtr l) {
+		try {
+			UnityEngine.RectInt self;
+			checkValueType(l,1,out self);
+			var ret=self.ToString();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__RectInt(IntPtr l) {
+		try {
+			UnityEngine.RectInt self;
+			checkValueType(l,1,out self);
+			UnityEngine.RectInt a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			UnityEngine.RectInt self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -501,9 +562,15 @@ public class Lua_UnityEngine_RectInt : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.RectInt");
+		addMember(l,ctor_s);
+		addMember(l,ctor__Vector2Int__Vector2Int_s);
+		addMember(l,ctor__Int32__Int32__Int32__Int32_s);
 		addMember(l,SetMinMax);
 		addMember(l,ClampToBounds);
 		addMember(l,Contains);
+		addMember(l,ToString);
+		addMember(l,Equals__RectInt);
+		addMember(l,Equals__Object);
 		addMember(l,"x",get_x,set_x,true);
 		addMember(l,"y",get_y,set_y,true);
 		addMember(l,"center",get_center,null,true);
@@ -518,6 +585,6 @@ public class Lua_UnityEngine_RectInt : LuaObject {
 		addMember(l,"position",get_position,set_position,true);
 		addMember(l,"size",get_size,set_size,true);
 		addMember(l,"allPositionsWithin",get_allPositionsWithin,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.RectInt),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.RectInt),typeof(System.ValueType));
 	}
 }

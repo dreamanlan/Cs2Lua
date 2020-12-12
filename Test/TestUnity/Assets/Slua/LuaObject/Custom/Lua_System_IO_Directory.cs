@@ -5,41 +5,13 @@ using System.Collections.Generic;
 public class Lua_System_IO_Directory : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetFiles_s(IntPtr l) {
+	static public int GetFiles__String_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.IO.SearchOption a3;
-				checkEnum(l,4,out a3);
-				var ret=System.IO.Directory.GetFiles(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				var ret=System.IO.Directory.GetFiles(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=System.IO.Directory.GetFiles(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=System.IO.Directory.GetFiles(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -48,41 +20,15 @@ public class Lua_System_IO_Directory : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetDirectories_s(IntPtr l) {
+	static public int GetFiles__String__String_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.IO.SearchOption a3;
-				checkEnum(l,4,out a3);
-				var ret=System.IO.Directory.GetDirectories(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				var ret=System.IO.Directory.GetDirectories(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=System.IO.Directory.GetDirectories(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			var ret=System.IO.Directory.GetFiles(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -91,41 +37,17 @@ public class Lua_System_IO_Directory : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetFileSystemEntries_s(IntPtr l) {
+	static public int GetFiles__String__String__SearchOption_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.IO.SearchOption a3;
-				checkEnum(l,4,out a3);
-				var ret=System.IO.Directory.GetFileSystemEntries(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				var ret=System.IO.Directory.GetFileSystemEntries(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=System.IO.Directory.GetFileSystemEntries(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.IO.SearchOption a3;
+			checkEnum(l,3,out a3);
+			var ret=System.IO.Directory.GetFiles(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -134,41 +56,13 @@ public class Lua_System_IO_Directory : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int EnumerateDirectories_s(IntPtr l) {
+	static public int GetDirectories__String_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.IO.SearchOption a3;
-				checkEnum(l,4,out a3);
-				var ret=System.IO.Directory.EnumerateDirectories(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				var ret=System.IO.Directory.EnumerateDirectories(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=System.IO.Directory.EnumerateDirectories(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=System.IO.Directory.GetDirectories(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -177,41 +71,15 @@ public class Lua_System_IO_Directory : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int EnumerateFiles_s(IntPtr l) {
+	static public int GetDirectories__String__String_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.IO.SearchOption a3;
-				checkEnum(l,4,out a3);
-				var ret=System.IO.Directory.EnumerateFiles(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				var ret=System.IO.Directory.EnumerateFiles(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=System.IO.Directory.EnumerateFiles(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			var ret=System.IO.Directory.GetDirectories(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -220,41 +88,221 @@ public class Lua_System_IO_Directory : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int EnumerateFileSystemEntries_s(IntPtr l) {
+	static public int GetDirectories__String__String__SearchOption_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				System.IO.SearchOption a3;
-				checkEnum(l,4,out a3);
-				var ret=System.IO.Directory.EnumerateFileSystemEntries(a1,a2,a3);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.String a2;
-				checkType(l,3,out a2);
-				var ret=System.IO.Directory.EnumerateFileSystemEntries(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=System.IO.Directory.EnumerateFileSystemEntries(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.IO.SearchOption a3;
+			checkEnum(l,3,out a3);
+			var ret=System.IO.Directory.GetDirectories(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetFileSystemEntries__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=System.IO.Directory.GetFileSystemEntries(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetFileSystemEntries__String__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			var ret=System.IO.Directory.GetFileSystemEntries(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetFileSystemEntries__String__String__SearchOption_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.IO.SearchOption a3;
+			checkEnum(l,3,out a3);
+			var ret=System.IO.Directory.GetFileSystemEntries(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int EnumerateDirectories__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=System.IO.Directory.EnumerateDirectories(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int EnumerateDirectories__String__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			var ret=System.IO.Directory.EnumerateDirectories(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int EnumerateDirectories__String__String__SearchOption_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.IO.SearchOption a3;
+			checkEnum(l,3,out a3);
+			var ret=System.IO.Directory.EnumerateDirectories(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int EnumerateFiles__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=System.IO.Directory.EnumerateFiles(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int EnumerateFiles__String__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			var ret=System.IO.Directory.EnumerateFiles(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int EnumerateFiles__String__String__SearchOption_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.IO.SearchOption a3;
+			checkEnum(l,3,out a3);
+			var ret=System.IO.Directory.EnumerateFiles(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int EnumerateFileSystemEntries__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=System.IO.Directory.EnumerateFileSystemEntries(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int EnumerateFileSystemEntries__String__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			var ret=System.IO.Directory.EnumerateFileSystemEntries(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int EnumerateFileSystemEntries__String__String__SearchOption_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.IO.SearchOption a3;
+			checkEnum(l,3,out a3);
+			var ret=System.IO.Directory.EnumerateFileSystemEntries(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -278,29 +326,13 @@ public class Lua_System_IO_Directory : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int CreateDirectory_s(IntPtr l) {
+	static public int CreateDirectory__String_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Security.AccessControl.DirectorySecurity a2;
-				checkType(l,3,out a2);
-				var ret=System.IO.Directory.CreateDirectory(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=System.IO.Directory.CreateDirectory(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=System.IO.Directory.CreateDirectory(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -309,28 +341,46 @@ public class Lua_System_IO_Directory : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Delete_s(IntPtr l) {
+	static public int CreateDirectory__String__DirectorySecurity_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Boolean a2;
-				checkType(l,3,out a2);
-				System.IO.Directory.Delete(a1,a2);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(argc==2){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.IO.Directory.Delete(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Security.AccessControl.DirectorySecurity a2;
+			checkType(l,2,out a2);
+			var ret=System.IO.Directory.CreateDirectory(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Delete__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.IO.Directory.Delete(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Delete__String__Boolean_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Boolean a2;
+			checkType(l,2,out a2);
+			System.IO.Directory.Delete(a1,a2);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -626,29 +676,30 @@ public class Lua_System_IO_Directory : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetAccessControl_s(IntPtr l) {
+	static public int GetAccessControl__String_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==3){
-				System.String a1;
-				checkType(l,2,out a1);
-				System.Security.AccessControl.AccessControlSections a2;
-				checkEnum(l,3,out a2);
-				var ret=System.IO.Directory.GetAccessControl(a1,a2);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(argc==2){
-				System.String a1;
-				checkType(l,2,out a1);
-				var ret=System.IO.Directory.GetAccessControl(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=System.IO.Directory.GetAccessControl(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetAccessControl__String__AccessControlSections_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Security.AccessControl.AccessControlSections a2;
+			checkEnum(l,2,out a2);
+			var ret=System.IO.Directory.GetAccessControl(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -658,15 +709,29 @@ public class Lua_System_IO_Directory : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"System.IO.Directory");
-		addMember(l,GetFiles_s);
-		addMember(l,GetDirectories_s);
-		addMember(l,GetFileSystemEntries_s);
-		addMember(l,EnumerateDirectories_s);
-		addMember(l,EnumerateFiles_s);
-		addMember(l,EnumerateFileSystemEntries_s);
+		addMember(l,GetFiles__String_s);
+		addMember(l,GetFiles__String__String_s);
+		addMember(l,GetFiles__String__String__SearchOption_s);
+		addMember(l,GetDirectories__String_s);
+		addMember(l,GetDirectories__String__String_s);
+		addMember(l,GetDirectories__String__String__SearchOption_s);
+		addMember(l,GetFileSystemEntries__String_s);
+		addMember(l,GetFileSystemEntries__String__String_s);
+		addMember(l,GetFileSystemEntries__String__String__SearchOption_s);
+		addMember(l,EnumerateDirectories__String_s);
+		addMember(l,EnumerateDirectories__String__String_s);
+		addMember(l,EnumerateDirectories__String__String__SearchOption_s);
+		addMember(l,EnumerateFiles__String_s);
+		addMember(l,EnumerateFiles__String__String_s);
+		addMember(l,EnumerateFiles__String__String__SearchOption_s);
+		addMember(l,EnumerateFileSystemEntries__String_s);
+		addMember(l,EnumerateFileSystemEntries__String__String_s);
+		addMember(l,EnumerateFileSystemEntries__String__String__SearchOption_s);
 		addMember(l,GetDirectoryRoot_s);
-		addMember(l,CreateDirectory_s);
-		addMember(l,Delete_s);
+		addMember(l,CreateDirectory__String_s);
+		addMember(l,CreateDirectory__String__DirectorySecurity_s);
+		addMember(l,Delete__String_s);
+		addMember(l,Delete__String__Boolean_s);
 		addMember(l,Exists_s);
 		addMember(l,GetLastAccessTime_s);
 		addMember(l,GetLastAccessTimeUtc_s);
@@ -686,7 +751,8 @@ public class Lua_System_IO_Directory : LuaObject {
 		addMember(l,SetLastAccessTimeUtc_s);
 		addMember(l,SetLastWriteTime_s);
 		addMember(l,SetLastWriteTimeUtc_s);
-		addMember(l,GetAccessControl_s);
+		addMember(l,GetAccessControl__String_s);
+		addMember(l,GetAccessControl__String__AccessControlSections_s);
 		createTypeMetatable(l,null, typeof(System.IO.Directory));
 	}
 }

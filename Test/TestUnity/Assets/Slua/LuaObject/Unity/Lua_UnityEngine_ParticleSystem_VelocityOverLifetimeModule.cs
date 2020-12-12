@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.VelocityOverLifetimeModule o;
 			o=new UnityEngine.ParticleSystem.VelocityOverLifetimeModule();
@@ -764,6 +764,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.VelocityOverLifetimeModule");
+		addMember(l,ctor_s);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
 		addMember(l,"x",get_x,set_x,true);
 		addMember(l,"y",get_y,set_y,true);
@@ -788,6 +789,6 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 		addMember(l,"speedModifier",get_speedModifier,set_speedModifier,true);
 		addMember(l,"speedModifierMultiplier",get_speedModifierMultiplier,set_speedModifierMultiplier,true);
 		addMember(l,"space",get_space,set_space,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.VelocityOverLifetimeModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.VelocityOverLifetimeModule),typeof(System.ValueType));
 	}
 }

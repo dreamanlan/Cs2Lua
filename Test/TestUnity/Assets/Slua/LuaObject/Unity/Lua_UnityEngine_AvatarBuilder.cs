@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_AvatarBuilder : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.AvatarBuilder o;
 			o=new UnityEngine.AvatarBuilder();
@@ -54,8 +54,9 @@ public class Lua_UnityEngine_AvatarBuilder : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AvatarBuilder");
+		addMember(l,ctor_s);
 		addMember(l,BuildHumanAvatar_s);
 		addMember(l,BuildGenericAvatar_s);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.AvatarBuilder));
+		createTypeMetatable(l,null, typeof(UnityEngine.AvatarBuilder));
 	}
 }

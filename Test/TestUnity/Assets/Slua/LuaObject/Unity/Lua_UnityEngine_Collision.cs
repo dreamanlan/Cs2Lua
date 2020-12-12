@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Collision : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Collision o;
 			o=new UnityEngine.Collision();
@@ -41,6 +41,20 @@ public class Lua_UnityEngine_Collision : LuaObject {
 			UnityEngine.ContactPoint[] a1;
 			checkArray(l,2,out a1);
 			var ret=self.GetContacts(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetEnumerator(IntPtr l) {
+		try {
+			UnityEngine.Collision self=(UnityEngine.Collision)checkSelf(l);
+			var ret=self.GetEnumerator();
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -156,8 +170,10 @@ public class Lua_UnityEngine_Collision : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Collision");
+		addMember(l,ctor_s);
 		addMember(l,GetContact);
 		addMember(l,GetContacts);
+		addMember(l,GetEnumerator);
 		addMember(l,"relativeVelocity",get_relativeVelocity,null,true);
 		addMember(l,"rigidbody",get_rigidbody,null,true);
 		addMember(l,"collider",get_collider,null,true);
@@ -166,6 +182,6 @@ public class Lua_UnityEngine_Collision : LuaObject {
 		addMember(l,"contactCount",get_contactCount,null,true);
 		addMember(l,"contacts",get_contacts,null,true);
 		addMember(l,"impulse",get_impulse,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Collision));
+		createTypeMetatable(l,null, typeof(UnityEngine.Collision));
 	}
 }

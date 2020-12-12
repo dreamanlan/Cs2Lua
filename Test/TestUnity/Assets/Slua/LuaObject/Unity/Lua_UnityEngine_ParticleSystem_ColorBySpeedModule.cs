@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_ColorBySpeedModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.ColorBySpeedModule o;
 			o=new UnityEngine.ParticleSystem.ColorBySpeedModule();
@@ -113,9 +113,10 @@ public class Lua_UnityEngine_ParticleSystem_ColorBySpeedModule : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.ColorBySpeedModule");
+		addMember(l,ctor_s);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
 		addMember(l,"color",get_color,set_color,true);
 		addMember(l,"range",get_range,set_range,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.ColorBySpeedModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.ColorBySpeedModule),typeof(System.ValueType));
 	}
 }

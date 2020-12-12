@@ -51,12 +51,197 @@ namespace RoslynTool.CsToDsl
         internal SyntaxNode CallerSyntaxNode = null;
         internal SemanticModel Model = null;
 
+        internal InvocationInfo()
+        {
+        }
         internal InvocationInfo(IMethodSymbol caller, SyntaxNode node)
         {
             CallerMethodSymbol = caller;
             CallerSyntaxNode = node;
         }
 
+        internal void Init(IMethodSymbol sym, SemanticModel model)
+        {
+            MethodSymbol = sym;
+            Model = model;
+
+            Args.Clear();
+            DslToObjectArgs.Clear();
+            ArgConversions.Clear();
+            DefaultValueArgs.Clear();
+            DslToObjectDefArgs.Clear();
+            ReturnArgs.Clear();
+            ReturnValueArgFlags.Clear();
+            ReturnArgOperations.Clear();
+            ReturnArgSymbols.Clear();
+            GenericTypeArgs.Clear();
+
+            ClassKey = ClassInfo.GetFullName(sym.ContainingType);
+            GenericClassKey = ClassInfo.GetFullNameWithTypeParameters(sym.ContainingType);
+            IsEnumClass = sym.ContainingType.TypeKind == TypeKind.Enum || ClassKey == "System.Enum";
+            IsExtensionMethod = sym.IsExtensionMethod;
+            IsBasicValueMethod = SymbolTable.IsBasicValueMethod(sym);
+            IsArrayStaticMethod = ClassKey == "System.Array" && sym.IsStatic;
+            IsExternMethod = !SymbolTable.Instance.IsCs2DslSymbol(sym);
+
+            if ((ClassKey == "UnityEngine.GameObject" || ClassKey == "UnityEngine.Component") && (sym.Name.StartsWith("GetComponent") || sym.Name.StartsWith("AddComponent"))) {
+                IsComponentGetOrAdd = true;
+            }
+
+            NonGenericMethodSymbol = null;
+            PostPositionGenericTypeArgs = false;
+            ExternOverloadedMethodSignature = string.Empty;
+            if (IsExternMethod) {
+                var syms = sym.ContainingType.GetMembers(sym.Name);
+                if (sym.IsGenericMethod) {
+                    bool existNonGenericVersion = false;
+                    if (null != syms) {
+                        //寻找匹配的非泛型版本
+                        foreach (var isym in syms) {
+                            var msym = isym as IMethodSymbol;
+                            if (null != msym && !msym.IsGenericMethod && msym.Parameters.Length == sym.Parameters.Length + sym.TypeParameters.Length) {
+                                existNonGenericVersion = true;
+                                for (int i = 0; i < sym.TypeParameters.Length; ++i) {
+                                    var psym = msym.Parameters[i];
+                                    if (psym.Type.Name != "Type") {
+                                        existNonGenericVersion = false;
+                                        break;
+                                    }
+                                }
+                                for (int i = 0; i < sym.Parameters.Length; ++i) {
+                                    var psym1 = msym.Parameters[i + sym.TypeParameters.Length];
+                                    var psym2 = sym.Parameters[i];
+                                    if (psym1.Type.Name != psym2.Type.Name && psym2.OriginalDefinition.Type.TypeKind != TypeKind.TypeParameter) {
+                                        existNonGenericVersion = false;
+                                        break;
+                                    }
+                                }
+                                if (existNonGenericVersion) {
+                                    NonGenericMethodSymbol = msym;
+                                    PostPositionGenericTypeArgs = false;
+                                }
+                                else {
+                                    existNonGenericVersion = true;
+                                    for (int i = 0; i < sym.Parameters.Length; ++i) {
+                                        var psym1 = msym.Parameters[i];
+                                        var psym2 = sym.Parameters[i];
+                                        if (psym1.Type.Name != psym2.Type.Name && psym2.OriginalDefinition.Type.TypeKind != TypeKind.TypeParameter) {
+                                            existNonGenericVersion = false;
+                                            break;
+                                        }
+                                    }
+                                    for (int i = 0; i < sym.TypeParameters.Length; ++i) {
+                                        var psym = msym.Parameters[i + sym.Parameters.Length];
+                                        if (psym.Type.Name != "Type") {
+                                            existNonGenericVersion = false;
+                                            break;
+                                        }
+                                    }
+                                    if (existNonGenericVersion) {
+                                        NonGenericMethodSymbol = msym;
+                                        PostPositionGenericTypeArgs = true;
+                                    }
+                                }
+                                if (existNonGenericVersion)
+                                    break;
+                            }
+                        }
+
+                        if (!existNonGenericVersion) {
+                            //寻找匹配的变参版本
+                            foreach (var isym in syms) {
+                                var msym = isym as IMethodSymbol;
+                                if (null != msym && !msym.IsGenericMethod && msym.Parameters.Length > 0 && msym.Parameters.Length <= sym.Parameters.Length) {
+                                    bool existParamsVersion = true;
+                                    var lastPsym = msym.Parameters[msym.Parameters.Length - 1];
+                                    if (lastPsym.IsParams) {
+                                        for (int i = 0; i < msym.Parameters.Length; ++i) {
+                                            var psym1 = msym.Parameters[i];
+                                            var psym2 = sym.Parameters[i];
+                                            if (i < msym.Parameters.Length - 1 && psym1.Type.Name != psym2.Type.Name) {
+                                                existParamsVersion = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    if (existParamsVersion) {
+                                        NonGenericMethodSymbol = msym;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (existNonGenericVersion) {
+                        foreach (var arg in sym.TypeArguments) {
+                            GenericTypeArgs.Add(arg);
+                        }
+                    }
+                    else {
+                        //没有找到参数匹配的非泛型版本，则不传递泛型参数类型
+                        //这样处理可以适应2类可能有效的情形：
+                        //1、如果有多个重载函数，其中有一个object类型变参，则其他泛型参数版本会适配到这个非泛型变参版本
+                        //2、有一些方法不需要明确传递泛型参数类型（比如普通实参可推导出泛型参数类型并且泛型参数类型在函数中不明确使用）
+                    }
+                }
+
+                if (null != syms) {
+                    int mcount = 0;
+                    if (sym.MethodKind == MethodKind.Constructor && sym.ContainingType.IsValueType) {
+                        //值类型构造总是按重载处理，默认构造总是会生成
+                        mcount = 2;
+                    }
+                    else {
+                        foreach (var isym in syms) {
+                            var msym = isym as IMethodSymbol;
+                            if (msym.Parameters.Length == 0) {
+                                if (msym.Name == "GetType")
+                                    continue;
+                                if (msym.Name == "GetHashCode")
+                                    continue;
+                            }
+                            var fn = ClassInfo.GetFullName(msym.ContainingType);
+                            if (null != msym && msym.IsStatic == sym.IsStatic && msym.DeclaredAccessibility == Accessibility.Public && !msym.IsImplicitlyDeclared && !msym.IsGenericMethod && !ClassInfo.HasAttribute(msym, "System.ObsoleteAttribute")) {
+                                bool existPointer = false;
+                                foreach (var partype in msym.Parameters) {
+                                    if (partype.Type.TypeKind == TypeKind.Pointer) {
+                                        existPointer = true;
+                                        break;
+                                    }
+                                }
+                                if (!existPointer) {
+                                    ++mcount;
+                                }
+                            }
+                        }
+                    }
+                    if (mcount > 1) {
+                        ExternOverloadedMethodSignature = SymbolTable.CalcExternOverloadedMethodSignature(sym, NonGenericMethodSymbol);
+                    }
+                }
+                SymbolTable.Instance.TryAddExternReference(sym);
+                if (!sym.ReturnsVoid) {
+                    SymbolTable.Instance.TryAddExternReference(sym.ReturnType);
+                }
+                foreach (var p in sym.Parameters) {
+                    if (p.Kind != SymbolKind.TypeParameter) {
+                        SymbolTable.Instance.TryAddExternReference(p.Type);
+                    }
+                }
+            }
+            else if (sym.IsGenericMethod) {
+                foreach (var arg in sym.TypeArguments) {
+                    GenericTypeArgs.Add(arg);
+                }
+            }
+            if (sym.IsGenericMethod) {
+                foreach (var t in sym.TypeArguments) {
+                    if (t.TypeKind != TypeKind.TypeParameter) {
+                        SymbolTable.Instance.TryAddExternReference(t);
+                    }
+                }
+            }
+        }
         internal void Init(IMethodSymbol sym, ArgumentListSyntax argList, SemanticModel model)
         {
             Init(sym, model);
@@ -179,7 +364,6 @@ namespace RoslynTool.CsToDsl
                 }
             }
         }
-
         internal void Init(IMethodSymbol sym, BracketedArgumentListSyntax argList, SemanticModel model)
         {
             Init(sym, model);
@@ -302,7 +486,6 @@ namespace RoslynTool.CsToDsl
                 }
             }
         }
-
         internal void Init(IMethodSymbol sym, List<ExpressionSyntax> argList, SemanticModel model, params IConversionExpression[] opds)
         {
             Init(sym, model);
@@ -324,6 +507,22 @@ namespace RoslynTool.CsToDsl
                     else
                         ArgConversions.Add(null);
                 }
+            }
+        }
+
+        internal string GetMethodName()
+        {
+            if (!string.IsNullOrEmpty(ExternOverloadedMethodSignature)) {
+                return ExternOverloadedMethodSignature;
+            }
+            else if (IsExternMethod) {
+                string ret = MethodSymbol.Name;
+                if (!string.IsNullOrEmpty(ret) && ret[0] == '.')
+                    ret = ret.Substring(1);
+                return ret;
+            }
+            else {
+                return SymbolTable.Instance.NameCs2DslMangling(IsExtensionMethod && null != MethodSymbol.ReducedFrom ? MethodSymbol.ReducedFrom : MethodSymbol);
             }
         }
 
@@ -405,7 +604,7 @@ namespace RoslynTool.CsToDsl
         internal void OutputInvocation(StringBuilder codeBuilder, CsDslTranslater cs2dsl, ExpressionSyntax exp, bool isMemberAccess, SemanticModel model, SyntaxNode node)
         {
             IMethodSymbol sym = MethodSymbol;
-            string mname = cs2dsl.NameMangling(IsExtensionMethod && !IsExternMethod && null != sym.ReducedFrom ? sym.ReducedFrom : sym);
+            string mname = GetMethodName();
             string prestr = string.Empty;
             bool externReturnStruct = IsExternMethod && !sym.ReturnsVoid && sym.ReturnType.IsValueType && !SymbolTable.IsBasicType(sym.ReturnType);
             if (externReturnStruct) {
@@ -558,7 +757,7 @@ namespace RoslynTool.CsToDsl
                     prestr = ", ";
                 }
             }
-            if (!string.IsNullOrEmpty(ExternOverloadedMethodSignature) || Args.Count + DefaultValueArgs.Count + GenericTypeArgs.Count > 0) {
+            if (Args.Count + DefaultValueArgs.Count + GenericTypeArgs.Count > 0) {
                 codeBuilder.Append(prestr);
             }
             bool useTypeNameString = false;
@@ -572,140 +771,7 @@ namespace RoslynTool.CsToDsl
             cs2dsl.OutputArgumentList(this, useTypeNameString, node);
             codeBuilder.Append(")");
         }
-
-        private void Init(IMethodSymbol sym, SemanticModel model)
-        {
-            MethodSymbol = sym;
-            Model = model;
-
-            Args.Clear();
-            DslToObjectArgs.Clear();
-            ArgConversions.Clear();
-            DefaultValueArgs.Clear();
-            DslToObjectDefArgs.Clear();
-            ReturnArgs.Clear();
-            ReturnValueArgFlags.Clear();
-            ReturnArgOperations.Clear();
-            ReturnArgSymbols.Clear();
-            GenericTypeArgs.Clear();
-
-            ClassKey = ClassInfo.GetFullName(sym.ContainingType);
-            GenericClassKey = ClassInfo.GetFullNameWithTypeParameters(sym.ContainingType);
-            IsEnumClass = sym.ContainingType.TypeKind == TypeKind.Enum || ClassKey == "System.Enum";
-            IsExtensionMethod = sym.IsExtensionMethod;
-            IsBasicValueMethod = SymbolTable.IsBasicValueMethod(sym);
-            IsArrayStaticMethod = ClassKey == "System.Array" && sym.IsStatic;
-            IsExternMethod = !SymbolTable.Instance.IsCs2DslSymbol(sym);
-
-            if ((ClassKey == "UnityEngine.GameObject" || ClassKey == "UnityEngine.Component") && (sym.Name.StartsWith("GetComponent") || sym.Name.StartsWith("AddComponent"))) {
-                IsComponentGetOrAdd = true;
-            }
-
-            NonGenericMethodSymbol = null;
-            PostPositionGenericTypeArgs = false;
-            if (sym.IsGenericMethod) {
-                bool existNonGenericVersion = !IsExternMethod;
-                var ctype = sym.ContainingType;
-                var syms = ctype.GetMembers(sym.Name);
-                if (null != syms) {
-                    foreach (var isym in syms) {
-                        var msym = isym as IMethodSymbol;
-                        if (null != msym && !msym.IsGenericMethod && msym.Parameters.Length == sym.Parameters.Length + sym.TypeParameters.Length) {
-                            existNonGenericVersion = true;
-                            for (int i = 0; i < sym.TypeParameters.Length; ++i) {
-                                var psym = msym.Parameters[i];
-                                if (psym.Type.Name != "Type") {
-                                    existNonGenericVersion = false;
-                                    break;
-                                }
-                            }
-                            for (int i = 0; i < sym.Parameters.Length; ++i) {
-                                var psym1 = msym.Parameters[i + sym.TypeParameters.Length];
-                                var psym2 = sym.Parameters[i];
-                                if (psym1.Type.Name != psym2.Type.Name && psym2.OriginalDefinition.Type.TypeKind != TypeKind.TypeParameter) {
-                                    existNonGenericVersion = false;
-                                    break;
-                                }
-                            }
-                            if (existNonGenericVersion) {
-                                NonGenericMethodSymbol = msym;
-                                PostPositionGenericTypeArgs = false;
-                            }
-                            else {
-                                existNonGenericVersion = true;
-                                for (int i = 0; i < sym.Parameters.Length; ++i) {
-                                    var psym1 = msym.Parameters[i];
-                                    var psym2 = sym.Parameters[i];
-                                    if (psym1.Type.Name != psym2.Type.Name && psym2.OriginalDefinition.Type.TypeKind != TypeKind.TypeParameter) {
-                                        existNonGenericVersion = false;
-                                        break;
-                                    }
-                                }
-                                for (int i = 0; i < sym.TypeParameters.Length; ++i) {
-                                    var psym = msym.Parameters[i + sym.Parameters.Length];
-                                    if (psym.Type.Name != "Type") {
-                                        existNonGenericVersion = false;
-                                        break;
-                                    }
-                                }
-                                if (existNonGenericVersion) {
-                                    NonGenericMethodSymbol = msym;
-                                    PostPositionGenericTypeArgs = true;
-                                }
-                            }
-                            if (existNonGenericVersion)
-                                break;
-                        }
-                    }
-                }
-                if (existNonGenericVersion) {                    
-                    foreach (var arg in sym.TypeArguments) {
-                        GenericTypeArgs.Add(arg);
-                    }
-                }
-                else {
-                    //没有找到参数匹配的非泛型版本，则不传递泛型参数类型
-                    //这样处理可以适应2类可能有效的情形：
-                    //1、如果有多个重载函数，其中有一个object类型变参，则其他泛型参数版本会适配到这个非泛型变参版本
-                    //2、有一些方法不需要明确传递泛型参数类型（比如普通实参可推导出泛型参数类型并且泛型参数类型在函数中不明确使用）
-                }
-            }
-
-            ExternOverloadedMethodSignature = string.Empty;
-            if (IsExternMethod) {
-                var syms = sym.ContainingType.GetMembers(sym.Name);
-                if (null != syms) {
-                    int mcount = 0;
-                    foreach (var isym in syms) {
-                        var msym = isym as IMethodSymbol;
-                        var fn = ClassInfo.GetFullName(msym.ContainingType);
-                        if (null != msym && msym.IsStatic == sym.IsStatic && msym.DeclaredAccessibility == Accessibility.Public && !msym.IsImplicitlyDeclared && !msym.IsGenericMethod) {
-                            ++mcount;
-                        }
-                    }
-                    if (mcount > 1) {
-                        ExternOverloadedMethodSignature = SymbolTable.CalcOverloadedMethodSignature(sym, NonGenericMethodSymbol);
-                    }
-                }
-                SymbolTable.Instance.TryAddExternReference(sym);
-                if (!sym.ReturnsVoid) {
-                    SymbolTable.Instance.TryAddExternReference(sym.ReturnType);
-                }
-                foreach(var p in sym.Parameters) {
-                    if (p.Kind != SymbolKind.TypeParameter) {
-                        SymbolTable.Instance.TryAddExternReference(p.Type);
-                    }
-                }
-            }
-            if (sym.IsGenericMethod) {
-                foreach (var t in sym.TypeArguments) {
-                    if (t.TypeKind != TypeKind.TypeParameter) {
-                        SymbolTable.Instance.TryAddExternReference(t);
-                    }
-                }
-            }            
-        }
-
+        
         private void RecordRefArray(ExpressionSyntax exp)
         {
             if (IsArrayStaticMethod) {

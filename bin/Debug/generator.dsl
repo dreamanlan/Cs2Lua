@@ -610,11 +610,11 @@ script(callexternstaticreturnstruct)args($funcData, $funcOpts, $sb, $indent)
         };
     }
     elseif($class=="UnityEngine.Quaternion"){
-        if($member=="Euler"){
+        if($member=="Euler__Single__Single__Single"){
             usefunc("call_quaternion_euler","(funcInfo, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
             {:
-                local sig , x, y,z = ...
-                local qua = UnityEngine.Quaternion.Euler(sig,x,y,z)
+                local x, y, z = ...
+                local qua = UnityEngine.Quaternion.Euler__Single__Single__Single(x,y,z)
                 table.insert(funcInfo.q_list , qua)
                 return qua
             :};
@@ -690,117 +690,318 @@ script(callexterninstancereturnstruct)args($funcData, $funcOpts, $sb, $indent)
     $member = getargument($funcData, 2);
         
     if($class=="UnityEngine.Transform"){
-        if($member=="TransformDirection"){
-            usefunc("call_transform_transformdirection","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+        if($member=="TransformDirection__Single__Single__Single"){
+            usefunc("call_transform_transformdirection_xyz","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
             {:
-                local argnum = select('#', ...)
-                local sig,x,y,z = ...
-                if argnum>3 then
-                    local _,ox,oy,oz = Utility.TransformDirectionXYZ(obj, x, y, z, Slua.out, Slua.out, Slua.out)
-                    local v = UnityEngine.Vector3.New(ox,oy,oz)
-                    table.insert(funcInfo.v3_list, v)
-                    return v
-                else
-                    local _,ox,oy,oz = Utility.TransformDirectionV3(obj, x, Slua.out, Slua.out, Slua.out)
-                    local v = UnityEngine.Vector3.New(ox,oy,oz)
-                    table.insert(funcInfo.v3_list, v)
-                    return v
-                end
+                local x,y,z = ...
+                local _,ox,oy,oz = Utility.TransformDirectionXYZ(obj, x, y, z, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="TransformDirection__Vector3"){
+            usefunc("call_transform_transformdirection_v3","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local pt = ...
+                local _,ox,oy,oz = Utility.TransformDirectionV3(obj, pt, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="TransformPoint__Single__Single__Single"){
+            usefunc("call_transform_transformpoint_xyz","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local x,y,z = ...
+                local _,ox,oy,oz = Utility.TransformPointXYZ(obj, x, y, z, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="TransformPoint__Vector3"){
+            usefunc("call_transform_transformpoint_v3","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local pt = ...                
+                local _,ox,oy,oz = Utility.TransformPointV3(obj, pt, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="TransformVector__Single__Single__Single"){
+            usefunc("call_transform_transformvector_xyz","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local x,y,z = ...
+                local _,ox,oy,oz = Utility.TransformVectorXYZ(obj, x, y, z, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="TransformVector__Vector3"){
+            usefunc("call_transform_transformvector_v3","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local pt = ...
+                local _,ox,oy,oz = Utility.TransformVectorV3(obj, pt, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="InverseTransformDirection__Single__Single__Single"){
+            usefunc("call_transform_inversetransformdirection_xyz","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local x,y,z = ...
+                local _,ox,oy,oz = Utility.InverseTransformDirectionXYZ(obj, x, y, z, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="InverseTransformDirection__Vector3"){
+            usefunc("call_transform_inversetransformdirection_v3","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local pt = ...
+                local _,ox,oy,oz = Utility.InverseTransformDirectionV3(obj, pt, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="InverseTransformPoint__Single__Single__Single"){
+            usefunc("call_transform_inversetransformpoint_xyz","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local x,y,z = ...
+                local _,ox,oy,oz = Utility.InverseTransformPointXYZ(obj, x, y, z, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="InverseTransformPoint__Vector3"){
+            usefunc("call_transform_inversetransformpoint_v3","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local pt = ...
+                local _,ox,oy,oz = Utility.InverseTransformPointV3(obj, pt, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="InverseTransformVector__Single__Single__Single"){
+            usefunc("call_transform_inversetransformvector_xyz","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local x,y,z = ...
+                local _,ox,oy,oz = Utility.InverseTransformVectorXYZ(obj, x, y, z, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="InverseTransformVector__Vector3"){
+            usefunc("call_transform_inversetransformvector_v3","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local pt = ...
+                local _,ox,oy,oz = Utility.InverseTransformVectorV3(obj, pt, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        };
+    }
+    elseif($class=="CsLibrary.EntityTransform"){
+        if($member=="TransformDirection"){ 
+            usefunc("call_entitytransform_transformdirection","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local x = ...           
+                local _,ox,oy,oz = obj:TransformDirectionV3(x, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="TransformPoint"){ 
+            usefunc("call_entitytransform_transformpoint","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local x = ...           
+                local _,ox,oy,oz = obj:TransformPointV3(x, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="TransformVector"){ 
+            usefunc("call_entitytransform_transformvector","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local x = ...           
+                local _,ox,oy,oz = obj:TransformVectorV3(x, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="InverseTransformDirection"){ 
+            usefunc("call_entitytransform_inversetransformdirection","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local x = ...           
+                local _,ox,oy,oz = obj:InverseTransformDirectionV3(x, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="InverseTransformPoint"){ 
+            usefunc("call_entitytransform_inversetransformpoint","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local x = ...           
+                local _,ox,oy,oz = obj:InverseTransformPointV3(x, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="InverseTransformVector"){ 
+            usefunc("call_entitytransform_inversetransformvector","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local x = ...           
+                local _,ox,oy,oz = obj:InverseTransformVectorV3(x, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        };
+    }
+    elseif($class=="FairyGUI.DisplayObject"){
+        if($member=="GlobalToLocal"){
+            usefunc("call_displayobject_globaltolocal","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local pt = ...
+                local _,x,y = Utility.DisplayObjectGlobalToLocal(obj, pt, Slua.out, Slua.out)
+                local v = UnityEngine.Vector2.New(x,y)
+                table.insert(funcInfo.v2_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="LocalToGlobal"){
+            usefunc("call_displayobject_localtoglobal","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local pt = ...
+                local _,x,y = Utility.DisplayObjectLocalToGlobal(obj, pt, Slua.out, Slua.out)
+                local v = UnityEngine.Vector2.New(x,y)
+                table.insert(funcInfo.v2_list, v)
+                return v
+            :};
+            return(true);
+        };
+    }
+    elseif($class=="FairyGUI.GObject"){
+        if($member=="GlobalToLocal__Rect"){
+            usefunc("call_gobject_globaltolocal_rt","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local ptOrRt = ...
+                local _,x,y,w,h = Utility.GObjectGlobalToLocalRect(obj, ptOrRt, Slua.out, Slua.out, Slua.out, Slua.out)
+                local v = RectPool.Alloc()
+                v.x=x
+                v.y=y
+                v.width=w
+                v.height=h
+                table.insert(funcInfo.rt_list,v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="GlobalToLocal__Vector2"){
+            usefunc("call_gobject_globaltolocal_v2","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local ptOrRt = ...
+                local _,x,y = Utility.GObjectGlobalToLocal(obj, ptOrRt, Slua.out, Slua.out)
+                local v = UnityEngine.Vector2.New(x,y)
+                table.insert(funcInfo.v2_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="LocalToGlobal__Rect"){
+            usefunc("call_gobject_localtoglobal_rt","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local ptOrRt = ...
+                local _,x,y,w,h = Utility.GObjectLocalToGlobalRect(obj, ptOrRt, Slua.out, Slua.out, Slua.out, Slua.out)
+                local v = RectPool.Alloc()
+                v.x=x
+                v.y=y
+                v.width=w
+                v.height=h
+                table.insert(funcInfo.rt_list,v)
+                return v
+            :};
+            return(true);
+        }        
+        elseif($member=="LocalToGlobal__Vector2"){
+            usefunc("call_gobject_localtoglobal_v2","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local ptOrRt = ...                
+                local _,x,y = Utility.GObjectLocalToGlobal(obj, ptOrRt, Slua.out, Slua.out)
+                local v = UnityEngine.Vector2.New(x,y)
+                table.insert(funcInfo.v2_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="LocalToRoot"){
+            usefunc("call_gobject_localtoroot","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            {:
+                local pt, root = ...
+                local _,x,y = Utility.GObjectLocalToRoot(obj, pt, root, Slua.out, Slua.out)
+                local v = UnityEngine.Vector2.New(x,y)
+                table.insert(funcInfo.v2_list, v)
+                return v
             :};
             return(true);
         }
         elseif($member=="TransformPoint"){
-            usefunc("call_transform_transformpoint","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+            usefunc("call_gobject_transformpoint","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
             {:
-                local argnum = select('#', ...)
-                local sig,x,y,z = ...
-                if argnum>3 then
-                    local _,ox,oy,oz = Utility.TransformPointXYZ(obj, x, y, z, Slua.out, Slua.out, Slua.out)
-                    local v = UnityEngine.Vector3.New(ox,oy,oz)
-                    table.insert(funcInfo.v3_list, v)
-                    return v
-                else
-                    local _,ox,oy,oz = Utility.TransformPointV3(obj, x, Slua.out, Slua.out, Slua.out)
-                    local v = UnityEngine.Vector3.New(ox,oy,oz)
-                    table.insert(funcInfo.v3_list, v)
-                    return v
-                end
+                local pt, targetSpace = ...
+                local _,x,y = Utility.GObjectLocalToGlobal(obj, pt, targetSpace, Slua.out, Slua.out)
+                local v = UnityEngine.Vector2.New(x,y)
+                table.insert(funcInfo.v2_list, v)
+                return v
             :};
             return(true);
         }
-        elseif($member=="TransformVector"){
-            usefunc("call_transform_transformvector","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+        elseif($memeber=="TransformRect"){
+            usefunc("call_gobject_transformrect","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
             {:
-                local argnum = select('#', ...)
-                local sig,x,y,z = ...
-                if argnum>3 then
-                    local _,ox,oy,oz = Utility.TransformVectorXYZ(obj, x, y, z, Slua.out, Slua.out, Slua.out)
-                    local v = UnityEngine.Vector3.New(ox,oy,oz)
-                    table.insert(funcInfo.v3_list, v)
-                    return v
-                else
-                    local _,ox,oy,oz = Utility.TransformVectorV3(obj, x, Slua.out, Slua.out, Slua.out)
-                    local v = UnityEngine.Vector3.New(ox,oy,oz)
-                    table.insert(funcInfo.v3_list, v)
-                    return v
-                end
-            :};
-            return(true);
-        }
-        elseif($member=="InverseTransformDirection"){
-            usefunc("call_transform_inversetransformdirection","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
-            {:
-                local argnum = select('#', ...)
-                local sig,x,y,z = ...
-                if argnum>3 then
-                    local _,ox,oy,oz = Utility.InverseTransformDirectionXYZ(obj, x, y, z, Slua.out, Slua.out, Slua.out)
-                    local v = UnityEngine.Vector3.New(ox,oy,oz)
-                    table.insert(funcInfo.v3_list, v)
-                    return v
-                else
-                    local _,ox,oy,oz = Utility.InverseTransformDirectionV3(obj, x, Slua.out, Slua.out, Slua.out)
-                    local v = UnityEngine.Vector3.New(ox,oy,oz)
-                    table.insert(funcInfo.v3_list, v)
-                    return v
-                end
-            :};
-            return(true);
-        }
-        elseif($member=="InverseTransformPoint"){
-            usefunc("call_transform_inversetransformpoint","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
-            {:
-                local argnum = select('#', ...)
-                local sig,x,y,z = ...
-                if argnum>3 then
-                    local _,ox,oy,oz = Utility.InverseTransformPointXYZ(obj, x, y, z, Slua.out, Slua.out, Slua.out)
-                    local v = UnityEngine.Vector3.New(ox,oy,oz)
-                    table.insert(funcInfo.v3_list, v)
-                    return v
-                else
-                    local _,ox,oy,oz = Utility.InverseTransformPointV3(obj, x, Slua.out, Slua.out, Slua.out)
-                    local v = UnityEngine.Vector3.New(ox,oy,oz)
-                    table.insert(funcInfo.v3_list, v)
-                    return v
-                end
-            :};
-            return(true);
-        }
-        elseif($member=="InverseTransformVector"){
-            usefunc("call_transform_inversetransformvector","(funcInfo, obj, class, member, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
-            {:
-                local argnum = select('#', ...)
-                local sig,x,y,z = ...
-                if argnum>3 then
-                    local _,ox,oy,oz = Utility.InverseTransformVectorXYZ(obj, x, y, z, Slua.out, Slua.out, Slua.out)
-                    local v = UnityEngine.Vector3.New(ox,oy,oz)
-                    table.insert(funcInfo.v3_list, v)
-                    return v
-                else
-                    local _,ox,oy,oz = Utility.InverseTransformVectorV3(obj, x, Slua.out, Slua.out, Slua.out)
-                    local v = UnityEngine.Vector3.New(ox,oy,oz)
-                    table.insert(funcInfo.v3_list, v)
-                    return v
-                end
+                local rt, targetSpace = ...
+                local _,x,y,w,h = Utility.GObjectLocalToGlobalRect(obj, rt, targetSpace, Slua.out, Slua.out, Slua.out, Slua.out)
+                local v = RectPool.Alloc()
+                v.x=x
+                v.y=y
+                v.width=w
+                v.height=h
+                table.insert(funcInfo.rt_list,v)
+                return v
             :};
             return(true);
         };
@@ -915,18 +1116,18 @@ script(newstruct)args($funcData, $funcOpts, $sb, $indent)
 
 script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
 {
-    //newexternstruct(funcInfo, class, typeargs, typekinds, initializer, ...)
+    //newexternstruct(funcInfo, class, typeargs, typekinds, ctor, initializer, ...)
     $class = getargument($funcData, 0);
     
     if($class=="System.Nullable_T"){
-        usefunc("new_nullable","(funcInfo, class, typeargs, typekinds, initializer, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+        usefunc("new_nullable","(funcInfo, class, typeargs, typekinds, ctor, initializer, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
         {:
             return nil
         :};
         return(true);
     }
     elseif($class=="System.Collections.Generic.KeyValuePair_TKey_TValue"){
-        usefunc("new_keyvaluepair","(funcInfo, class, typeargs, typekinds, initializer, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+        usefunc("new_keyvaluepair","(funcInfo, class, typeargs, typekinds, ctor, initializer, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
         {:
             local arg1,arg2 = ...
             return {Key = arg1, Value = arg2}
@@ -934,7 +1135,7 @@ script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Vector2"){
-        usefunc("new_vector2","(funcInfo, class, typeargs, typekinds, initializer, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+        usefunc("new_vector2","(funcInfo, class, typeargs, typekinds, ctor, initializer, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
         {:
             local x,y = ...
             local obj = UnityEngine.Vector2.New(x,y)
@@ -947,9 +1148,9 @@ script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Vector3"){
-        usefunc("new_vector3","(funcInfo, class, typeargs, typekinds, initializer, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+        usefunc("new_vector3","(funcInfo, class, typeargs, typekinds, ctor, initializer, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
         {:
-            local _,x,y,z = ...
+            local x,y,z = ...
             local obj = UnityEngine.Vector3.New(x,y,z)
             table.insert(funcInfo.v3_list, obj)
             if obj and initializer then
@@ -960,9 +1161,9 @@ script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Vector4"){
-        usefunc("new_vector4","(funcInfo, class, typeargs, typekinds, initializer, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+        usefunc("new_vector4","(funcInfo, class, typeargs, typekinds, ctor, initializer, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
         {:
-            local _,x,y,z,w = ...
+            local x,y,z,w = ...
             local obj = UnityEngine.Vector4.New(x,y,z,w)
             table.insert(funcInfo.v4_list, obj)
             if obj and initializer then
@@ -973,7 +1174,7 @@ script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Quaternion"){
-        usefunc("new_quaternion","(funcInfo, class, typeargs, typekinds, initializer, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+        usefunc("new_quaternion","(funcInfo, class, typeargs, typekinds, ctor, initializer, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
         {:
             local x,y,z,w = ...
             local obj = UnityEngine.Quaternion.New(x,y,z,w)
@@ -986,9 +1187,9 @@ script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Color"){
-        usefunc("new_color","(funcInfo, class, typeargs, typekinds, initializer, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+        usefunc("new_color","(funcInfo, class, typeargs, typekinds, ctor, initializer, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
         {:
-            local _,r,g,b,a = ...
+            local r,g,b,a = ...
             local obj = UnityEngine.Color.New(r,g,b,a)
             table.insert(funcInfo.c_list, obj)
             if obj and initializer then
@@ -999,7 +1200,7 @@ script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Color32"){
-        usefunc("new_color32","(funcInfo, class, typeargs, typekinds, initializer, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+        usefunc("new_color32","(funcInfo, class, typeargs, typekinds, ctor, initializer, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
         {:
             local r,g,b,a = ...
             local obj = Color32Pool.Alloc()
@@ -1016,9 +1217,9 @@ script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Rect"){
-        usefunc("new_rect","(funcInfo, class, typeargs, typekinds, initializer, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
+        usefunc("new_rect","(funcInfo, class, typeargs, typekinds, ctor, initializer, ...)", $funcData, $funcOpts, $sb, $indent, "__cs2lua_func_info")
         {:
-            local _,p1,p2,p3,p4 = ...
+            local p1,p2,p3,p4 = ...
             local obj = RectPool.Alloc()
             if p3~=nil and p4~=nil then
                 obj.x=p1

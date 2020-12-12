@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_UI_MaskUtilities : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.UI.MaskUtilities o;
 			o=new UnityEngine.UI.MaskUtilities();
@@ -128,6 +128,7 @@ public class Lua_UnityEngine_UI_MaskUtilities : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.MaskUtilities");
+		addMember(l,ctor_s);
 		addMember(l,Notify2DMaskStateChanged_s);
 		addMember(l,NotifyStencilStateChanged_s);
 		addMember(l,FindRootSortOverrideCanvas_s);
@@ -135,6 +136,6 @@ public class Lua_UnityEngine_UI_MaskUtilities : LuaObject {
 		addMember(l,IsDescendantOrSelf_s);
 		addMember(l,GetRectMaskForClippable_s);
 		addMember(l,GetRectMasksForClip_s);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.UI.MaskUtilities));
+		createTypeMetatable(l,null, typeof(UnityEngine.UI.MaskUtilities));
 	}
 }

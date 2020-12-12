@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_DrivenRectTransformTracker : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.DrivenRectTransformTracker o;
 			o=new UnityEngine.DrivenRectTransformTracker();
@@ -80,10 +80,11 @@ public class Lua_UnityEngine_DrivenRectTransformTracker : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.DrivenRectTransformTracker");
+		addMember(l,ctor_s);
 		addMember(l,Add);
 		addMember(l,Clear);
 		addMember(l,StopRecordingUndo_s);
 		addMember(l,StartRecordingUndo_s);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.DrivenRectTransformTracker),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.DrivenRectTransformTracker),typeof(System.ValueType));
 	}
 }

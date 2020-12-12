@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.UI.DefaultControls.Resources o;
 			o=new UnityEngine.UI.DefaultControls.Resources();
@@ -237,6 +237,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.DefaultControls.Resources");
+		addMember(l,ctor_s);
 		addMember(l,"standard",get_standard,set_standard,true);
 		addMember(l,"background",get_background,set_background,true);
 		addMember(l,"inputField",get_inputField,set_inputField,true);
@@ -244,6 +245,6 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 		addMember(l,"checkmark",get_checkmark,set_checkmark,true);
 		addMember(l,"dropdown",get_dropdown,set_dropdown,true);
 		addMember(l,"mask",get_mask,set_mask,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.UI.DefaultControls.Resources),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.UI.DefaultControls.Resources),typeof(System.ValueType));
 	}
 }

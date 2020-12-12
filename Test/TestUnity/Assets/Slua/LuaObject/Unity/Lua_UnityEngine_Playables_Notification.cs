@@ -5,11 +5,11 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Playables_Notification : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Playables.Notification o;
 			System.String a1;
-			checkType(l,2,out a1);
+			checkType(l,1,out a1);
 			o=new UnityEngine.Playables.Notification(a1);
 			pushValue(l,true);
 			pushValue(l,o);
@@ -35,7 +35,8 @@ public class Lua_UnityEngine_Playables_Notification : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Playables.Notification");
+		addMember(l,ctor_s);
 		addMember(l,"id",get_id,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Playables.Notification));
+		createTypeMetatable(l,null, typeof(UnityEngine.Playables.Notification));
 	}
 }

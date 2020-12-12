@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ImageEffectAfterScale : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ImageEffectAfterScale o;
 			o=new UnityEngine.ImageEffectAfterScale();
@@ -20,6 +20,7 @@ public class Lua_UnityEngine_ImageEffectAfterScale : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ImageEffectAfterScale");
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ImageEffectAfterScale),typeof(System.Attribute));
+		addMember(l,ctor_s);
+		createTypeMetatable(l,null, typeof(UnityEngine.ImageEffectAfterScale),typeof(System.Attribute));
 	}
 }

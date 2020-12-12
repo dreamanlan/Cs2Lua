@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.MainModule o;
 			o=new UnityEngine.ParticleSystem.MainModule();
@@ -1353,6 +1353,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.MainModule");
+		addMember(l,ctor_s);
 		addMember(l,"duration",get_duration,set_duration,true);
 		addMember(l,"loop",get_loop,set_loop,true);
 		addMember(l,"prewarm",get_prewarm,set_prewarm,true);
@@ -1396,6 +1397,6 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 		addMember(l,"cullingMode",get_cullingMode,set_cullingMode,true);
 		addMember(l,"ringBufferMode",get_ringBufferMode,set_ringBufferMode,true);
 		addMember(l,"ringBufferLoopRange",get_ringBufferLoopRange,set_ringBufferLoopRange,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.MainModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.MainModule),typeof(System.ValueType));
 	}
 }

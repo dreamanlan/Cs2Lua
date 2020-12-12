@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Gradient : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Gradient o;
 			o=new UnityEngine.Gradient();
@@ -45,6 +45,38 @@ public class Lua_UnityEngine_Gradient : LuaObject {
 			self.SetKeys(a1,a2);
 			pushValue(l,true);
 			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			UnityEngine.Gradient self=(UnityEngine.Gradient)checkSelf(l);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Gradient(IntPtr l) {
+		try {
+			UnityEngine.Gradient self=(UnityEngine.Gradient)checkSelf(l);
+			UnityEngine.Gradient a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -137,11 +169,14 @@ public class Lua_UnityEngine_Gradient : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Gradient");
+		addMember(l,ctor_s);
 		addMember(l,Evaluate);
 		addMember(l,SetKeys);
+		addMember(l,Equals__Object);
+		addMember(l,Equals__Gradient);
 		addMember(l,"colorKeys",get_colorKeys,set_colorKeys,true);
 		addMember(l,"alphaKeys",get_alphaKeys,set_alphaKeys,true);
 		addMember(l,"mode",get_mode,set_mode,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Gradient));
+		createTypeMetatable(l,null, typeof(UnityEngine.Gradient));
 	}
 }

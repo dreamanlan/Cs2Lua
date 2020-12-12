@@ -5,12 +5,46 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.TextGenerationSettings o;
 			o=new UnityEngine.TextGenerationSettings();
 			pushValue(l,true);
 			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__TextGenerationSettings(IntPtr l) {
+		try {
+			UnityEngine.TextGenerationSettings self;
+			checkValueType(l,1,out self);
+			UnityEngine.TextGenerationSettings a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			UnityEngine.TextGenerationSettings self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -578,6 +612,9 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.TextGenerationSettings");
+		addMember(l,ctor_s);
+		addMember(l,Equals__TextGenerationSettings);
+		addMember(l,Equals__Object);
 		addMember(l,"font",get_font,set_font,true);
 		addMember(l,"color",get_color,set_color,true);
 		addMember(l,"fontSize",get_fontSize,set_fontSize,true);
@@ -596,6 +633,6 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 		addMember(l,"generationExtents",get_generationExtents,set_generationExtents,true);
 		addMember(l,"pivot",get_pivot,set_pivot,true);
 		addMember(l,"generateOutOfBounds",get_generateOutOfBounds,set_generateOutOfBounds,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.TextGenerationSettings),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.TextGenerationSettings),typeof(System.ValueType));
 	}
 }

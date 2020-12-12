@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Animations.AnimatorControllerPlayable o;
 			o=new UnityEngine.Animations.AnimatorControllerPlayable();
@@ -51,31 +51,15 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetFloat(IntPtr l) {
+	static public int Equals__AnimatorControllerPlayable(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetFloat__Single__String", argc, 2,typeof(string))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetFloat(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetFloat__Single__Int32", argc, 2,typeof(int))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				var ret=self.GetFloat(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			UnityEngine.Animations.AnimatorControllerPlayable a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -84,35 +68,15 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetFloat(IntPtr l) {
+	static public int Equals__Object(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetFloat__Void__String__Single", argc, 2,typeof(string),typeof(float))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				self.SetFloat(a1,a2);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "SetFloat__Void__Int32__Single", argc, 2,typeof(int),typeof(float))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				self.SetFloat(a1,a2);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -121,31 +85,15 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetBool(IntPtr l) {
+	static public int GetFloat__String(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetBool__Boolean__String", argc, 2,typeof(string))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetBool(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetBool__Boolean__Int32", argc, 2,typeof(int))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				var ret=self.GetBool(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetFloat(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -154,35 +102,15 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetBool(IntPtr l) {
+	static public int GetFloat__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetBool__Void__String__Boolean", argc, 2,typeof(string),typeof(bool))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Boolean a2;
-				checkType(l,4,out a2);
-				self.SetBool(a1,a2);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "SetBool__Void__Int32__Boolean", argc, 2,typeof(int),typeof(bool))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Boolean a2;
-				checkType(l,4,out a2);
-				self.SetBool(a1,a2);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetFloat(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -191,31 +119,53 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetInteger(IntPtr l) {
+	static public int SetFloat__String__Single(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "GetInteger__Int32__String", argc, 2,typeof(string))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.GetInteger(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "GetInteger__Int32__Int32", argc, 2,typeof(int))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				var ret=self.GetInteger(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			self.SetFloat(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetFloat__Int32__Single(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			self.SetFloat(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetBool__String(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetBool(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -224,35 +174,15 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetInteger(IntPtr l) {
+	static public int GetBool__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetInteger__Void__String__Int32", argc, 2,typeof(string),typeof(int))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				self.SetInteger(a1,a2);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "SetInteger__Void__Int32__Int32", argc, 2,typeof(int),typeof(int))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				self.SetInteger(a1,a2);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetBool(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -261,31 +191,53 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetTrigger(IntPtr l) {
+	static public int SetBool__String__Boolean(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "SetTrigger__Void__String", argc, 2,typeof(string))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.String a1;
-				checkType(l,3,out a1);
-				self.SetTrigger(a1);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "SetTrigger__Void__Int32", argc, 2,typeof(int))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				self.SetTrigger(a1);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Boolean a2;
+			checkType(l,3,out a2);
+			self.SetBool(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetBool__Int32__Boolean(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Boolean a2;
+			checkType(l,3,out a2);
+			self.SetBool(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetInteger__String(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetInteger(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -294,31 +246,15 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int ResetTrigger(IntPtr l) {
+	static public int GetInteger__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "ResetTrigger__Void__String", argc, 2,typeof(string))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.String a1;
-				checkType(l,3,out a1);
-				self.ResetTrigger(a1);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "ResetTrigger__Void__Int32", argc, 2,typeof(int))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				self.ResetTrigger(a1);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetInteger(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -327,31 +263,138 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int IsParameterControlledByCurve(IntPtr l) {
+	static public int SetInteger__String__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "IsParameterControlledByCurve__Boolean__String", argc, 2,typeof(string))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.String a1;
-				checkType(l,3,out a1);
-				var ret=self.IsParameterControlledByCurve(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			else if(matchType(l, "IsParameterControlledByCurve__Boolean__Int32", argc, 2,typeof(int))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				var ret=self.IsParameterControlledByCurve(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			self.SetInteger(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetInteger__Int32__Int32(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			self.SetInteger(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetTrigger__String(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			self.SetTrigger(a1);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetTrigger__Int32(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			self.SetTrigger(a1);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ResetTrigger__String(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			self.ResetTrigger(a1);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ResetTrigger__Int32(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			self.ResetTrigger(a1);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int IsParameterControlledByCurve__String(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.IsParameterControlledByCurve(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int IsParameterControlledByCurve__Int32(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.IsParameterControlledByCurve(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -496,33 +539,15 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetCurrentAnimatorClipInfo(IntPtr l) {
+	static public int GetCurrentAnimatorClipInfo__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Collections.Generic.List<UnityEngine.AnimatorClipInfo> a2;
-				checkType(l,4,out a2);
-				self.GetCurrentAnimatorClipInfo(a1,a2);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				var ret=self.GetCurrentAnimatorClipInfo(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetCurrentAnimatorClipInfo(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -531,34 +556,54 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetNextAnimatorClipInfo(IntPtr l) {
+	static public int GetCurrentAnimatorClipInfo__Int32__List_1_AnimatorClipInfo(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Collections.Generic.List<UnityEngine.AnimatorClipInfo> a2;
-				checkType(l,4,out a2);
-				self.GetNextAnimatorClipInfo(a1,a2);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				var ret=self.GetNextAnimatorClipInfo(a1);
-				pushValue(l,true);
-				pushValue(l,ret);
-				return 2;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Collections.Generic.List<UnityEngine.AnimatorClipInfo> a2;
+			checkType(l,3,out a2);
+			self.GetCurrentAnimatorClipInfo(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetNextAnimatorClipInfo__Int32(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetNextAnimatorClipInfo(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetNextAnimatorClipInfo__Int32__List_1_AnimatorClipInfo(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Collections.Generic.List<UnityEngine.AnimatorClipInfo> a2;
+			checkType(l,3,out a2);
+			self.GetNextAnimatorClipInfo(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -649,96 +694,18 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int CrossFadeInFixedTime(IntPtr l) {
+	static public int CrossFadeInFixedTime__String__Single(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "CrossFadeInFixedTime__Void__String__Single__Int32__Single", argc, 2,typeof(string),typeof(float),typeof(int),typeof(float))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				System.Single a4;
-				checkType(l,6,out a4);
-				self.CrossFadeInFixedTime(a1,a2,a3,a4);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "CrossFadeInFixedTime__Void__Int32__Single__Int32__Single", argc, 2,typeof(int),typeof(float),typeof(int),typeof(float))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				System.Single a4;
-				checkType(l,6,out a4);
-				self.CrossFadeInFixedTime(a1,a2,a3,a4);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "CrossFadeInFixedTime__Void__String__Single__Int32", argc, 2,typeof(string),typeof(float),typeof(int))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				self.CrossFadeInFixedTime(a1,a2,a3);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "CrossFadeInFixedTime__Void__Int32__Single__Int32", argc, 2,typeof(int),typeof(float),typeof(int))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				self.CrossFadeInFixedTime(a1,a2,a3);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "CrossFadeInFixedTime__Void__String__Single", argc, 2,typeof(string),typeof(float))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				self.CrossFadeInFixedTime(a1,a2);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "CrossFadeInFixedTime__Void__Int32__Single", argc, 2,typeof(int),typeof(float))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				self.CrossFadeInFixedTime(a1,a2);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			self.CrossFadeInFixedTime(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -746,96 +713,18 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int CrossFade(IntPtr l) {
+	static public int CrossFadeInFixedTime__Int32__Single(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "CrossFade__Void__String__Single__Int32__Single", argc, 2,typeof(string),typeof(float),typeof(int),typeof(float))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				System.Single a4;
-				checkType(l,6,out a4);
-				self.CrossFade(a1,a2,a3,a4);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "CrossFade__Void__Int32__Single__Int32__Single", argc, 2,typeof(int),typeof(float),typeof(int),typeof(float))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				System.Single a4;
-				checkType(l,6,out a4);
-				self.CrossFade(a1,a2,a3,a4);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "CrossFade__Void__String__Single__Int32", argc, 2,typeof(string),typeof(float),typeof(int))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				self.CrossFade(a1,a2,a3);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "CrossFade__Void__Int32__Single__Int32", argc, 2,typeof(int),typeof(float),typeof(int))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				System.Int32 a3;
-				checkType(l,5,out a3);
-				self.CrossFade(a1,a2,a3);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "CrossFade__Void__String__Single", argc, 2,typeof(string),typeof(float))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				self.CrossFade(a1,a2);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "CrossFade__Void__Int32__Single", argc, 2,typeof(int),typeof(float))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Single a2;
-				checkType(l,4,out a2);
-				self.CrossFade(a1,a2);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			self.CrossFadeInFixedTime(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -843,84 +732,20 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int PlayInFixedTime(IntPtr l) {
+	static public int CrossFadeInFixedTime__String__Single__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "PlayInFixedTime__Void__String__Int32__Single", argc, 2,typeof(string),typeof(int),typeof(float))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Single a3;
-				checkType(l,5,out a3);
-				self.PlayInFixedTime(a1,a2,a3);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "PlayInFixedTime__Void__Int32__Int32__Single", argc, 2,typeof(int),typeof(int),typeof(float))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Single a3;
-				checkType(l,5,out a3);
-				self.PlayInFixedTime(a1,a2,a3);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "PlayInFixedTime__Void__String__Int32", argc, 2,typeof(string),typeof(int))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				self.PlayInFixedTime(a1,a2);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "PlayInFixedTime__Void__Int32__Int32", argc, 2,typeof(int),typeof(int))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				self.PlayInFixedTime(a1,a2);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "PlayInFixedTime__Void__String", argc, 2,typeof(string))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.String a1;
-				checkType(l,3,out a1);
-				self.PlayInFixedTime(a1);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "PlayInFixedTime__Void__Int32", argc, 2,typeof(int))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				self.PlayInFixedTime(a1);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			self.CrossFadeInFixedTime(a1,a2,a3);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -928,84 +753,420 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Play(IntPtr l) {
+	static public int CrossFadeInFixedTime__Int32__Single__Int32(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "Play__Void__String__Int32__Single", argc, 2,typeof(string),typeof(int),typeof(float))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Single a3;
-				checkType(l,5,out a3);
-				self.Play(a1,a2,a3);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "Play__Void__Int32__Int32__Single", argc, 2,typeof(int),typeof(int),typeof(float))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				System.Single a3;
-				checkType(l,5,out a3);
-				self.Play(a1,a2,a3);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "Play__Void__String__Int32", argc, 2,typeof(string),typeof(int))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.String a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				self.Play(a1,a2);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "Play__Void__Int32__Int32", argc, 2,typeof(int),typeof(int))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				self.Play(a1,a2);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "Play__Void__String", argc, 2,typeof(string))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.String a1;
-				checkType(l,3,out a1);
-				self.Play(a1);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(matchType(l, "Play__Void__Int32", argc, 2,typeof(int))){
-				UnityEngine.Animations.AnimatorControllerPlayable self;
-				checkValueType(l,1,out self);
-				System.Int32 a1;
-				checkType(l,3,out a1);
-				self.Play(a1);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			self.CrossFadeInFixedTime(a1,a2,a3);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CrossFadeInFixedTime__String__Single__Int32__Single(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			System.Single a4;
+			checkType(l,5,out a4);
+			self.CrossFadeInFixedTime(a1,a2,a3,a4);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CrossFadeInFixedTime__Int32__Single__Int32__Single(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			System.Single a4;
+			checkType(l,5,out a4);
+			self.CrossFadeInFixedTime(a1,a2,a3,a4);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CrossFade__String__Single(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			self.CrossFade(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CrossFade__Int32__Single(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			self.CrossFade(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CrossFade__String__Single__Int32(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			self.CrossFade(a1,a2,a3);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CrossFade__Int32__Single__Int32(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			self.CrossFade(a1,a2,a3);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CrossFade__String__Single__Int32__Single(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			System.Single a4;
+			checkType(l,5,out a4);
+			self.CrossFade(a1,a2,a3,a4);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CrossFade__Int32__Single__Int32__Single(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			System.Single a4;
+			checkType(l,5,out a4);
+			self.CrossFade(a1,a2,a3,a4);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int PlayInFixedTime__String(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			self.PlayInFixedTime(a1);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int PlayInFixedTime__Int32(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			self.PlayInFixedTime(a1);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int PlayInFixedTime__String__Int32(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			self.PlayInFixedTime(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int PlayInFixedTime__Int32__Int32(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			self.PlayInFixedTime(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int PlayInFixedTime__String__Int32__Single(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Single a3;
+			checkType(l,4,out a3);
+			self.PlayInFixedTime(a1,a2,a3);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int PlayInFixedTime__Int32__Int32__Single(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Single a3;
+			checkType(l,4,out a3);
+			self.PlayInFixedTime(a1,a2,a3);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Play__String(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			self.Play(a1);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Play__Int32(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			self.Play(a1);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Play__String__Int32(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			self.Play(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Play__Int32__Int32(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			self.Play(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Play__String__Int32__Single(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Single a3;
+			checkType(l,4,out a3);
+			self.Play(a1,a2,a3);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Play__Int32__Int32__Single(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Single a3;
+			checkType(l,4,out a3);
+			self.Play(a1,a2,a3);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -1092,17 +1253,29 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Animations.AnimatorControllerPlayable");
+		addMember(l,ctor_s);
 		addMember(l,GetHandle);
 		addMember(l,SetHandle);
-		addMember(l,GetFloat);
-		addMember(l,SetFloat);
-		addMember(l,GetBool);
-		addMember(l,SetBool);
-		addMember(l,GetInteger);
-		addMember(l,SetInteger);
-		addMember(l,SetTrigger);
-		addMember(l,ResetTrigger);
-		addMember(l,IsParameterControlledByCurve);
+		addMember(l,Equals__AnimatorControllerPlayable);
+		addMember(l,Equals__Object);
+		addMember(l,GetFloat__String);
+		addMember(l,GetFloat__Int32);
+		addMember(l,SetFloat__String__Single);
+		addMember(l,SetFloat__Int32__Single);
+		addMember(l,GetBool__String);
+		addMember(l,GetBool__Int32);
+		addMember(l,SetBool__String__Boolean);
+		addMember(l,SetBool__Int32__Boolean);
+		addMember(l,GetInteger__String);
+		addMember(l,GetInteger__Int32);
+		addMember(l,SetInteger__String__Int32);
+		addMember(l,SetInteger__Int32__Int32);
+		addMember(l,SetTrigger__String);
+		addMember(l,SetTrigger__Int32);
+		addMember(l,ResetTrigger__String);
+		addMember(l,ResetTrigger__Int32);
+		addMember(l,IsParameterControlledByCurve__String);
+		addMember(l,IsParameterControlledByCurve__Int32);
 		addMember(l,GetLayerCount);
 		addMember(l,GetLayerName);
 		addMember(l,GetLayerIndex);
@@ -1111,22 +1284,44 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 		addMember(l,GetCurrentAnimatorStateInfo);
 		addMember(l,GetNextAnimatorStateInfo);
 		addMember(l,GetAnimatorTransitionInfo);
-		addMember(l,GetCurrentAnimatorClipInfo);
-		addMember(l,GetNextAnimatorClipInfo);
+		addMember(l,GetCurrentAnimatorClipInfo__Int32);
+		addMember(l,GetCurrentAnimatorClipInfo__Int32__List_1_AnimatorClipInfo);
+		addMember(l,GetNextAnimatorClipInfo__Int32);
+		addMember(l,GetNextAnimatorClipInfo__Int32__List_1_AnimatorClipInfo);
 		addMember(l,GetCurrentAnimatorClipInfoCount);
 		addMember(l,GetNextAnimatorClipInfoCount);
 		addMember(l,IsInTransition);
 		addMember(l,GetParameterCount);
 		addMember(l,GetParameter);
-		addMember(l,CrossFadeInFixedTime);
-		addMember(l,CrossFade);
-		addMember(l,PlayInFixedTime);
-		addMember(l,Play);
+		addMember(l,CrossFadeInFixedTime__String__Single);
+		addMember(l,CrossFadeInFixedTime__Int32__Single);
+		addMember(l,CrossFadeInFixedTime__String__Single__Int32);
+		addMember(l,CrossFadeInFixedTime__Int32__Single__Int32);
+		addMember(l,CrossFadeInFixedTime__String__Single__Int32__Single);
+		addMember(l,CrossFadeInFixedTime__Int32__Single__Int32__Single);
+		addMember(l,CrossFade__String__Single);
+		addMember(l,CrossFade__Int32__Single);
+		addMember(l,CrossFade__String__Single__Int32);
+		addMember(l,CrossFade__Int32__Single__Int32);
+		addMember(l,CrossFade__String__Single__Int32__Single);
+		addMember(l,CrossFade__Int32__Single__Int32__Single);
+		addMember(l,PlayInFixedTime__String);
+		addMember(l,PlayInFixedTime__Int32);
+		addMember(l,PlayInFixedTime__String__Int32);
+		addMember(l,PlayInFixedTime__Int32__Int32);
+		addMember(l,PlayInFixedTime__String__Int32__Single);
+		addMember(l,PlayInFixedTime__Int32__Int32__Single);
+		addMember(l,Play__String);
+		addMember(l,Play__Int32);
+		addMember(l,Play__String__Int32);
+		addMember(l,Play__Int32__Int32);
+		addMember(l,Play__String__Int32__Single);
+		addMember(l,Play__Int32__Int32__Single);
 		addMember(l,HasState);
 		addMember(l,Create_s);
 		addMember(l,op_Implicit_s);
 		addMember(l,op_Explicit_s);
 		addMember(l,"Null",get_Null,null,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Animations.AnimatorControllerPlayable),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Animations.AnimatorControllerPlayable),typeof(System.ValueType));
 	}
 }

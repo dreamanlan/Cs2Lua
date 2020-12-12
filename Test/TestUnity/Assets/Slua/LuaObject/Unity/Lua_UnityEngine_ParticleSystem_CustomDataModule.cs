@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_CustomDataModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.CustomDataModule o;
 			o=new UnityEngine.ParticleSystem.CustomDataModule();
@@ -199,6 +199,7 @@ public class Lua_UnityEngine_ParticleSystem_CustomDataModule : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.CustomDataModule");
+		addMember(l,ctor_s);
 		addMember(l,SetMode);
 		addMember(l,GetMode);
 		addMember(l,SetVectorComponentCount);
@@ -208,6 +209,6 @@ public class Lua_UnityEngine_ParticleSystem_CustomDataModule : LuaObject {
 		addMember(l,SetColor);
 		addMember(l,GetColor);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.CustomDataModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.CustomDataModule),typeof(System.ValueType));
 	}
 }

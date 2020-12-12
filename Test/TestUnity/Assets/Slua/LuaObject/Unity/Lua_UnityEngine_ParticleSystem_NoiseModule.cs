@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.NoiseModule o;
 			o=new UnityEngine.ParticleSystem.NoiseModule();
@@ -950,6 +950,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.NoiseModule");
+		addMember(l,ctor_s);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
 		addMember(l,"separateAxes",get_separateAxes,set_separateAxes,true);
 		addMember(l,"strength",get_strength,set_strength,true);
@@ -980,6 +981,6 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 		addMember(l,"positionAmount",get_positionAmount,set_positionAmount,true);
 		addMember(l,"rotationAmount",get_rotationAmount,set_rotationAmount,true);
 		addMember(l,"sizeAmount",get_sizeAmount,set_sizeAmount,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.NoiseModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.NoiseModule),typeof(System.ValueType));
 	}
 }

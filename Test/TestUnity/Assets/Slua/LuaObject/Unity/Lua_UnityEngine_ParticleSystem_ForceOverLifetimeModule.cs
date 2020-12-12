@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_ForceOverLifetimeModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.ForceOverLifetimeModule o;
 			o=new UnityEngine.ParticleSystem.ForceOverLifetimeModule();
@@ -299,6 +299,7 @@ public class Lua_UnityEngine_ParticleSystem_ForceOverLifetimeModule : LuaObject 
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.ForceOverLifetimeModule");
+		addMember(l,ctor_s);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
 		addMember(l,"x",get_x,set_x,true);
 		addMember(l,"y",get_y,set_y,true);
@@ -308,6 +309,6 @@ public class Lua_UnityEngine_ParticleSystem_ForceOverLifetimeModule : LuaObject 
 		addMember(l,"zMultiplier",get_zMultiplier,set_zMultiplier,true);
 		addMember(l,"space",get_space,set_space,true);
 		addMember(l,"randomized",get_randomized,set_randomized,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.ForceOverLifetimeModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.ForceOverLifetimeModule),typeof(System.ValueType));
 	}
 }

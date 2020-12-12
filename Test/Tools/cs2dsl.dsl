@@ -2,8 +2,6 @@ dontrequire("cs2luanetworkmessagepools")except("program","messagedefine__cs2luam
 
 filemerge("messagedefine")match("messagedefine__.*");
 
-//nosignaturearg("Euler__.*");
-//replacesignaturearg("Instantiate__GameObject","Instantiate__Object");
 indexerbylualib("System.Collections.Generic.List_T", "FairyGUI\.TextField\.LineInfo", ".*", ".*", "System.Collections.Generic.List_T", "get_Item"){indexertype(2);};
 indexerbylualib("System.Collections.Generic.List_T", "FairyGUI\.TextField\.LineInfo", ".*", ".*", "System.Collections.Generic.List_T", "set_Item"){indexertype(2);};
 indexerbylualib("System.Collections.Generic.List_T", ".*", ".*", ".*", "System.Collections.Generic.List_T", "get_Item"){indexertype(1);};

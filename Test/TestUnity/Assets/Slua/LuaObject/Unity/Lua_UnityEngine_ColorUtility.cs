@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ColorUtility : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ColorUtility o;
 			o=new UnityEngine.ColorUtility();
@@ -67,9 +67,10 @@ public class Lua_UnityEngine_ColorUtility : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ColorUtility");
+		addMember(l,ctor_s);
 		addMember(l,TryParseHtmlString_s);
 		addMember(l,ToHtmlStringRGB_s);
 		addMember(l,ToHtmlStringRGBA_s);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ColorUtility));
+		createTypeMetatable(l,null, typeof(UnityEngine.ColorUtility));
 	}
 }

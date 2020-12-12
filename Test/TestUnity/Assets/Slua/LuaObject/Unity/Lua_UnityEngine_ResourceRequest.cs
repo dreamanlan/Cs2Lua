@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ResourceRequest : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ResourceRequest o;
 			o=new UnityEngine.ResourceRequest();
@@ -33,7 +33,8 @@ public class Lua_UnityEngine_ResourceRequest : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ResourceRequest");
+		addMember(l,ctor_s);
 		addMember(l,"asset",get_asset,null,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ResourceRequest),typeof(UnityEngine.AsyncOperation));
+		createTypeMetatable(l,null, typeof(UnityEngine.ResourceRequest),typeof(UnityEngine.AsyncOperation));
 	}
 }

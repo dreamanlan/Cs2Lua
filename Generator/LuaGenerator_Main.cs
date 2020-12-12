@@ -1391,7 +1391,7 @@ namespace Generator
                         else if (op == "+" && (type1 == "System.String" || type2 == "System.String")) {
                             bool tostr1 = type1 != "System.String";
                             bool tostr2 = type2 != "System.String";
-                            sb.Append("System.String.Concat(\"System.String:Concat__String__String__String\", ");
+                            sb.Append("strconcat(");
                             if (tostr1)
                                 sb.Append("tostring(");
                             GenerateSyntaxComponent(p1, sb, indent, false, funcOpts, calculator);
@@ -1560,25 +1560,7 @@ namespace Generator
                         sb.AppendFormat(".{0}", mid);
                         sb.Append("(");
                         int start = 2;
-                        string sig = string.Empty;
-                        if (data.Params.Count > start) {
-                            var sigParam = data.GetParam(start) as Dsl.ValueData;
-                            if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
-                                start = 3;
-                                sig = sigParam.GetId();
-                                string target;
-                                if (NoSignatureArg(sig)) {
-                                    sig = string.Empty;
-                                }
-                                else if (TryReplaceSignatureArg(sig, out target)) {
-                                    sig = target;
-                                }
-                            }
-                            else {
-                                sig = string.Empty;
-                            }
-                        }
-                        GenerateArguments(data, sb, indent, start, sig, funcOpts, calculator);
+                        GenerateArguments(data, sb, indent, start, funcOpts, calculator);
                         sb.Append(")");
                     }
                     else if (id == "callinstance" || id == "callexterninstance") {
@@ -1596,25 +1578,7 @@ namespace Generator
                         }
                         sb.Append("(");
                         int start = 3;
-                        string sig = string.Empty;
-                        if (data.Params.Count > start) {
-                            var sigParam = data.GetParam(start) as Dsl.ValueData;
-                            if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
-                                start = 4;
-                                sig = sigParam.GetId();
-                                string target;
-                                if (NoSignatureArg(sig)) {
-                                    sig = string.Empty;
-                                }
-                                else if (TryReplaceSignatureArg(sig, out target)) {
-                                    sig = target;
-                                }
-                            }
-                            else {
-                                sig = string.Empty;
-                            }
-                        }
-                        GenerateArguments(data, sb, indent, start, sig, funcOpts, calculator);
+                        GenerateArguments(data, sb, indent, start, funcOpts, calculator);
                         sb.Append(")");
                     }
                     else if (id == "calldelegation" || id == "callexterndelegation") {
@@ -1634,25 +1598,7 @@ namespace Generator
                         sb.AppendFormat(".{0}", mid);
                         sb.Append("(");
                         int start = 2;
-                        string sig = string.Empty;
-                        if (data.Params.Count > start) {
-                            var sigParam = data.GetParam(start) as Dsl.ValueData;
-                            if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
-                                start = 3;
-                                sig = sigParam.GetId();
-                                string target;
-                                if (NoSignatureArg(sig)) {
-                                    sig = string.Empty;
-                                }
-                                else if (TryReplaceSignatureArg(sig, out target)) {
-                                    sig = target;
-                                }
-                            }
-                            else {
-                                sig = string.Empty;
-                            }
-                        }
-                        GenerateArguments(data, sb, indent, start, sig, funcOpts, calculator);
+                        GenerateArguments(data, sb, indent, start, funcOpts, calculator);
                         sb.Append(")");
                     }
                     else if (id == "callexternextension") {
@@ -2108,6 +2054,27 @@ namespace Generator
                             GenerateSyntaxComponent(val, sb, indent, false, funcOpts, calculator);
                         }
                     }
+                    else if (id == "buildbaseobj") {
+                        sb.Append("buildbaseobj(");
+                        string prestr = string.Empty;
+                        for (int ix = 0; ix < 3; ++ix) {
+                            var param = data.Params[ix];
+                            sb.Append(prestr);
+                            GenerateSyntaxComponent(param, sb, indent, false, funcOpts, calculator);
+                            prestr = ", ";
+                        }
+                        sb.Append(prestr);
+                        var ctor = data.GetParamId(3);
+                        sb.Append('"');
+                        sb.Append("__self__");
+                        sb.Append(ctor);
+                        sb.Append('"');
+                        if (data.GetParamNum() > 4) {
+                            sb.Append(prestr);
+                            GenerateArguments(data, sb, indent, 4, funcOpts, calculator);
+                        }
+                        sb.Append(")");
+                    }
                     else if (id == "anonymousobject") {
                         sb.Append("wrapanonymousobject{");
                         GenerateArguments(data, sb, indent, 0, funcOpts, calculator);
@@ -2514,28 +2481,10 @@ namespace Generator
                                     GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
                                     sb.AppendFormat(".{0}", mid);
                                     int start = 2;
-                                    string sig = string.Empty;
-                                    if (bodyStatement.GetParamNum() > start) {
-                                        var sigParam = bodyStatement.GetParam(start) as Dsl.ValueData;
-                                        if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
-                                            start = 3;
-                                            sig = sigParam.GetId();
-                                            string target;
-                                            if (NoSignatureArg(sig)) {
-                                                sig = string.Empty;
-                                            }
-                                            else if (TryReplaceSignatureArg(sig, out target)) {
-                                                sig = target;
-                                            }
-                                        }
-                                        else {
-                                            sig = string.Empty;
-                                        }
-                                    }
                                     if (bodyStatement.GetParamNum() > start) {
                                         sb.Append(", ");
                                     }
-                                    GenerateArguments(bodyStatement, sb, indent, start, sig, funcOpts, calculator);
+                                    GenerateArguments(bodyStatement, sb, indent, start, funcOpts, calculator);
                                 }
                                 else if (name == "callinstance" || name == "callexterninstance") {
                                     var obj = bodyStatement.Params[0];
@@ -2553,28 +2502,10 @@ namespace Generator
                                     sb.Append(", ");
                                     GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
                                     int start = 3;
-                                    string sig = string.Empty;
-                                    if (bodyStatement.GetParamNum() > start) {
-                                        var sigParam = bodyStatement.GetParam(start) as Dsl.ValueData;
-                                        if (null != sigParam && sigParam.GetIdType() == Dsl.ValueData.STRING_TOKEN && IsSignature(sigParam.GetId(), mid)) {
-                                            start = 4;
-                                            sig = sigParam.GetId();
-                                            string target;
-                                            if (NoSignatureArg(sig)) {
-                                                sig = string.Empty;
-                                            }
-                                            else if (TryReplaceSignatureArg(sig, out target)) {
-                                                sig = target;
-                                            }
-                                        }
-                                        else {
-                                            sig = string.Empty;
-                                        }
-                                    }
                                     if (bodyStatement.GetParamNum() > start) {
                                         sb.Append(", ");
                                     }
-                                    GenerateArguments(bodyStatement, sb, indent, start, sig, funcOpts, calculator);
+                                    GenerateArguments(bodyStatement, sb, indent, start, funcOpts, calculator);
                                 }
                                 if (null == funcRetVar) {
                                     sb.Append(")");

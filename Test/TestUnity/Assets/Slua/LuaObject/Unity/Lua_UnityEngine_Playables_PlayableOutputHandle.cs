@@ -5,12 +5,46 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Playables_PlayableOutputHandle : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.Playables.PlayableOutputHandle o;
 			o=new UnityEngine.Playables.PlayableOutputHandle();
 			pushValue(l,true);
 			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			UnityEngine.Playables.PlayableOutputHandle self;
+			checkValueType(l,1,out self);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__PlayableOutputHandle(IntPtr l) {
+		try {
+			UnityEngine.Playables.PlayableOutputHandle self;
+			checkValueType(l,1,out self);
+			UnityEngine.Playables.PlayableOutputHandle a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
 			return 2;
 		}
 		catch(Exception e) {
@@ -66,9 +100,12 @@ public class Lua_UnityEngine_Playables_PlayableOutputHandle : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Playables.PlayableOutputHandle");
+		addMember(l,ctor_s);
+		addMember(l,Equals__Object);
+		addMember(l,Equals__PlayableOutputHandle);
 		addMember(l,op_Equality_s);
 		addMember(l,op_Inequality_s);
 		addMember(l,"Null",get_Null,null,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Playables.PlayableOutputHandle),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.Playables.PlayableOutputHandle),typeof(System.ValueType));
 	}
 }

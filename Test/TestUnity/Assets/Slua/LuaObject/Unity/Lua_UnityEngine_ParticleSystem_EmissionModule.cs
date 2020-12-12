@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.EmissionModule o;
 			o=new UnityEngine.ParticleSystem.EmissionModule();
@@ -19,34 +19,35 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetBursts(IntPtr l) {
+	static public int SetBursts__A_Burst(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(argc==4){
-				UnityEngine.ParticleSystem.EmissionModule self;
-				checkValueType(l,1,out self);
-				UnityEngine.ParticleSystem.Burst[] a1;
-				checkArray(l,3,out a1);
-				System.Int32 a2;
-				checkType(l,4,out a2);
-				self.SetBursts(a1,a2);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			else if(argc==3){
-				UnityEngine.ParticleSystem.EmissionModule self;
-				checkValueType(l,1,out self);
-				UnityEngine.ParticleSystem.Burst[] a1;
-				checkArray(l,3,out a1);
-				self.SetBursts(a1);
-				pushValue(l,true);
-				setBack(l,self);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.ParticleSystem.EmissionModule self;
+			checkValueType(l,1,out self);
+			UnityEngine.ParticleSystem.Burst[] a1;
+			checkArray(l,2,out a1);
+			self.SetBursts(a1);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetBursts__A_Burst__Int32(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.EmissionModule self;
+			checkValueType(l,1,out self);
+			UnityEngine.ParticleSystem.Burst[] a1;
+			checkArray(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			self.SetBursts(a1,a2);
+			pushValue(l,true);
+			setBack(l,self);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -294,7 +295,9 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.EmissionModule");
-		addMember(l,SetBursts);
+		addMember(l,ctor_s);
+		addMember(l,SetBursts__A_Burst);
+		addMember(l,SetBursts__A_Burst__Int32);
 		addMember(l,GetBursts);
 		addMember(l,SetBurst);
 		addMember(l,GetBurst);
@@ -304,6 +307,6 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 		addMember(l,"rateOverDistance",get_rateOverDistance,set_rateOverDistance,true);
 		addMember(l,"rateOverDistanceMultiplier",get_rateOverDistanceMultiplier,set_rateOverDistanceMultiplier,true);
 		addMember(l,"burstCount",get_burstCount,set_burstCount,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.EmissionModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.EmissionModule),typeof(System.ValueType));
 	}
 }

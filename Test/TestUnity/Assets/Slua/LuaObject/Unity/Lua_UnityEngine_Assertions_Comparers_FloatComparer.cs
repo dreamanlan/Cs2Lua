@@ -5,43 +5,113 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Assertions_Comparers_FloatComparer : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
 			UnityEngine.Assertions.Comparers.FloatComparer o;
-			if(argc==4){
-				System.Single a1;
-				checkType(l,3,out a1);
-				System.Boolean a2;
-				checkType(l,4,out a2);
-				o=new UnityEngine.Assertions.Comparers.FloatComparer(a1,a2);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Boolean", argc, 2,typeof(bool))){
-				System.Boolean a1;
-				checkType(l,3,out a1);
-				o=new UnityEngine.Assertions.Comparers.FloatComparer(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(matchType(l, "ctor__Void__Single", argc, 2,typeof(float))){
-				System.Single a1;
-				checkType(l,3,out a1);
-				o=new UnityEngine.Assertions.Comparers.FloatComparer(a1);
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			else if(argc==2){
-				o=new UnityEngine.Assertions.Comparers.FloatComparer();
-				pushValue(l,true);
-				pushValue(l,o);
-				return 2;
-			}
-			return error(l,"New object failed.");
+			o=new UnityEngine.Assertions.Comparers.FloatComparer();
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Boolean_s(IntPtr l) {
+		try {
+			UnityEngine.Assertions.Comparers.FloatComparer o;
+			System.Boolean a1;
+			checkType(l,1,out a1);
+			o=new UnityEngine.Assertions.Comparers.FloatComparer(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Single_s(IntPtr l) {
+		try {
+			UnityEngine.Assertions.Comparers.FloatComparer o;
+			System.Single a1;
+			checkType(l,1,out a1);
+			o=new UnityEngine.Assertions.Comparers.FloatComparer(a1);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Single__Boolean_s(IntPtr l) {
+		try {
+			UnityEngine.Assertions.Comparers.FloatComparer o;
+			System.Single a1;
+			checkType(l,1,out a1);
+			System.Boolean a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.Assertions.Comparers.FloatComparer(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Object(IntPtr l) {
+		try {
+			UnityEngine.Assertions.Comparers.FloatComparer self=(UnityEngine.Assertions.Comparers.FloatComparer)checkSelf(l);
+			System.Object a1;
+			checkType(l,2,out a1);
+			var ret=self.Equals(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Equals__Single__Single(IntPtr l) {
+		try {
+			UnityEngine.Assertions.Comparers.FloatComparer self=(UnityEngine.Assertions.Comparers.FloatComparer)checkSelf(l);
+			System.Single a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			var ret=self.Equals(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static new public int GetHashCode(IntPtr l) {
+		try {
+			UnityEngine.Assertions.Comparers.FloatComparer self=(UnityEngine.Assertions.Comparers.FloatComparer)checkSelf(l);
+			System.Single a1;
+			checkType(l,2,out a1);
+			var ret=self.GetHashCode(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -112,10 +182,17 @@ public class Lua_UnityEngine_Assertions_Comparers_FloatComparer : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Assertions.Comparers.FloatComparer");
+		addMember(l,ctor_s);
+		addMember(l,ctor__Boolean_s);
+		addMember(l,ctor__Single_s);
+		addMember(l,ctor__Single__Boolean_s);
+		addMember(l,Equals__Object);
+		addMember(l,Equals__Single__Single);
+		addMember(l,GetHashCode);
 		addMember(l,AreEqual_s);
 		addMember(l,AreEqualRelative_s);
 		addMember(l,"s_ComparerWithDefaultTolerance",get_s_ComparerWithDefaultTolerance,null,false);
 		addMember(l,"kEpsilon",get_kEpsilon,null,false);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.Assertions.Comparers.FloatComparer));
+		createTypeMetatable(l,null, typeof(UnityEngine.Assertions.Comparers.FloatComparer));
 	}
 }

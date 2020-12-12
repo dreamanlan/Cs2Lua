@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_SizeOverLifetimeModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.SizeOverLifetimeModule o;
 			o=new UnityEngine.ParticleSystem.SizeOverLifetimeModule();
@@ -330,6 +330,7 @@ public class Lua_UnityEngine_ParticleSystem_SizeOverLifetimeModule : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.SizeOverLifetimeModule");
+		addMember(l,ctor_s);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
 		addMember(l,"size",get_size,set_size,true);
 		addMember(l,"sizeMultiplier",get_sizeMultiplier,set_sizeMultiplier,true);
@@ -340,6 +341,6 @@ public class Lua_UnityEngine_ParticleSystem_SizeOverLifetimeModule : LuaObject {
 		addMember(l,"z",get_z,set_z,true);
 		addMember(l,"zMultiplier",get_zMultiplier,set_zMultiplier,true);
 		addMember(l,"separateAxes",get_separateAxes,set_separateAxes,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.SizeOverLifetimeModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.SizeOverLifetimeModule),typeof(System.ValueType));
 	}
 }

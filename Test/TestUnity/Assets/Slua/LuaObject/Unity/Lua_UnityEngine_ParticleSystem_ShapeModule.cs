@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int constructor(IntPtr l) {
+	static public int ctor_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.ShapeModule o;
 			o=new UnityEngine.ParticleSystem.ShapeModule();
@@ -1415,6 +1415,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.ShapeModule");
+		addMember(l,ctor_s);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
 		addMember(l,"shapeType",get_shapeType,set_shapeType,true);
 		addMember(l,"randomDirectionAmount",get_randomDirectionAmount,set_randomDirectionAmount,true);
@@ -1460,6 +1461,6 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 		addMember(l,"textureAlphaAffectsParticles",get_textureAlphaAffectsParticles,set_textureAlphaAffectsParticles,true);
 		addMember(l,"textureBilinearFiltering",get_textureBilinearFiltering,set_textureBilinearFiltering,true);
 		addMember(l,"textureUVChannel",get_textureUVChannel,set_textureUVChannel,true);
-		createTypeMetatable(l,constructor, typeof(UnityEngine.ParticleSystem.ShapeModule),typeof(System.ValueType));
+		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.ShapeModule),typeof(System.ValueType));
 	}
 }

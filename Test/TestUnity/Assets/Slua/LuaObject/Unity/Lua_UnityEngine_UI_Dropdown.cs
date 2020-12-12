@@ -18,36 +18,44 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int AddOptions(IntPtr l) {
+	static public int AddOptions__List_1_OptionData(IntPtr l) {
 		try {
-			int argc = LuaDLL.lua_gettop(l);
-			if(matchType(l, "AddOptions__Void__List`1_OptionData", argc, 2,typeof(List<UnityEngine.UI.Dropdown.OptionData>))){
-				UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
-				System.Collections.Generic.List<UnityEngine.UI.Dropdown.OptionData> a1;
-				checkType(l,3,out a1);
-				self.AddOptions(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "AddOptions__Void__List`1_String", argc, 2,typeof(List<System.String>))){
-				UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
-				System.Collections.Generic.List<System.String> a1;
-				checkType(l,3,out a1);
-				self.AddOptions(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			else if(matchType(l, "AddOptions__Void__List`1_Sprite", argc, 2,typeof(List<UnityEngine.Sprite>))){
-				UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
-				System.Collections.Generic.List<UnityEngine.Sprite> a1;
-				checkType(l,3,out a1);
-				self.AddOptions(a1);
-				pushValue(l,true);
-				return 1;
-			}
-			pushValue(l,false);
-			LuaDLL.lua_pushstring(l,"No matched override function to call");
-			return 2;
+			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
+			System.Collections.Generic.List<UnityEngine.UI.Dropdown.OptionData> a1;
+			checkType(l,2,out a1);
+			self.AddOptions(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AddOptions__List_1_String(IntPtr l) {
+		try {
+			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
+			System.Collections.Generic.List<System.String> a1;
+			checkType(l,2,out a1);
+			self.AddOptions(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AddOptions__List_1_Sprite(IntPtr l) {
+		try {
+			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
+			System.Collections.Generic.List<UnityEngine.Sprite> a1;
+			checkType(l,2,out a1);
+			self.AddOptions(a1);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -365,7 +373,9 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.Dropdown");
 		addMember(l,RefreshShownValue);
-		addMember(l,AddOptions);
+		addMember(l,AddOptions__List_1_OptionData);
+		addMember(l,AddOptions__List_1_String);
+		addMember(l,AddOptions__List_1_Sprite);
 		addMember(l,ClearOptions);
 		addMember(l,OnPointerClick);
 		addMember(l,OnSubmit);
