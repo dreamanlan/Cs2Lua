@@ -270,7 +270,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendLine(";");
             }
             --m_Indent;
-            CodeBuilder.AppendFormat("{0}}}options[needfuncinfo({1})],", GetIndentString(), mi.NeedFuncInfo ? "true" : "false");
+            CodeBuilder.AppendFormat("{0}}}options[{1}],", GetIndentString(), mi.CalcFunctionOptions());
             CodeBuilder.AppendLine();
             m_MethodInfoStack.Pop();
         }
@@ -353,7 +353,7 @@ namespace RoslynTool.CsToDsl
                     }
                     CodeBuilder.AppendLine(";");
                     --m_Indent;
-                    CodeBuilder.AppendFormat("{0}}}options[needfuncinfo({1})],", GetIndentString(), mi.NeedFuncInfo ? "true" : "false");
+                    CodeBuilder.AppendFormat("{0}}}options[{1}],", GetIndentString(), mi.CalcFunctionOptions());
                     CodeBuilder.AppendLine();
 
                     m_MethodInfoStack.Pop();
@@ -635,7 +635,7 @@ namespace RoslynTool.CsToDsl
                             }
                         }
                         --m_Indent;
-                        CodeBuilder.AppendFormat("{0}}}options[needfuncinfo({1})]{2};", GetIndentString(), mi.NeedFuncInfo ? "true" : "false", mi.ExistYield ? ")" : string.Empty);
+                        CodeBuilder.AppendFormat("{0}}}options[{1}]{2};", GetIndentString(), mi.CalcFunctionOptions(), mi.ExistYield ? ")" : string.Empty);
                         CodeBuilder.AppendLine();
 
                         m_MethodInfoStack.Pop();
@@ -729,7 +729,7 @@ namespace RoslynTool.CsToDsl
                         VisitBlock(accessor.Body);
                     }
                     --m_Indent;
-                    CodeBuilder.AppendFormat("{0}}}options[needfuncinfo({1})];", GetIndentString(), mi.NeedFuncInfo ? "true" : "false");
+                    CodeBuilder.AppendFormat("{0}}}options[{1}];", GetIndentString(), mi.CalcFunctionOptions());
                     CodeBuilder.AppendLine();
 
                     m_MethodInfoStack.Pop();
@@ -836,7 +836,7 @@ namespace RoslynTool.CsToDsl
                     }
                     CodeBuilder.AppendLine(";");
                     --m_Indent;
-                    CodeBuilder.AppendFormat("{0}}}options[needfuncinfo({1})];", GetIndentString(), mi.NeedFuncInfo ? "true" : "false");
+                    CodeBuilder.AppendFormat("{0}}}options[{1}];", GetIndentString(), mi.CalcFunctionOptions());
                     CodeBuilder.AppendLine();
 
                     m_MethodInfoStack.Pop();
@@ -1011,7 +1011,7 @@ namespace RoslynTool.CsToDsl
                         }
                     }
                     --m_Indent;
-                    CodeBuilder.AppendFormat("{0}}}options[needfuncinfo({1})]{2};", GetIndentString(), mi.NeedFuncInfo ? "true" : "false", mi.ExistYield ? ")" : string.Empty);
+                    CodeBuilder.AppendFormat("{0}}}options[{1}]{2};", GetIndentString(), mi.CalcFunctionOptions(), mi.ExistYield ? ")" : string.Empty);
                     CodeBuilder.AppendLine();
 
                     m_MethodInfoStack.Pop();
@@ -1040,7 +1040,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendLine();
                     }
                     --m_Indent;
-                    CodeBuilder.AppendFormat("{0}}}options[needfuncinfo({1})]", GetIndentString(), mi.NeedFuncInfo ? "true" : "false");
+                    CodeBuilder.AppendFormat("{0}}}options[{1}]", GetIndentString(), mi.CalcFunctionOptions());
                 }
                 else {
                     var param = sym.Parameters[0];
@@ -1061,7 +1061,7 @@ namespace RoslynTool.CsToDsl
                     else {
                         ReportIllegalSymbol(node, symInfo);
                     }
-                    CodeBuilder.AppendFormat("; return({0}); }}options[needfuncinfo({1})]", varName, mi.NeedFuncInfo ? "true" : "false");
+                    CodeBuilder.AppendFormat("; return({0}); }}options[{1}]", varName, mi.CalcFunctionOptions());
                 }
                 m_MethodInfoStack.Pop();
             }
@@ -1130,7 +1130,7 @@ namespace RoslynTool.CsToDsl
                         }
                     }
                     --m_Indent;
-                    CodeBuilder.AppendFormat("{0}}}options[needfuncinfo({1})]", GetIndentString(), mi.NeedFuncInfo ? "true" : "false");
+                    CodeBuilder.AppendFormat("{0}}}options[{1}]", GetIndentString(), mi.CalcFunctionOptions());
                 }
                 else {
                     string varName = string.Format("__lambda_{0}", GetSourcePosForVar(node));
@@ -1158,7 +1158,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendFormat("; return({0})", varName);
                     }
                     CodeBuilder.Append("; }");
-                    CodeBuilder.AppendFormat("options[needfuncinfo({0})]", mi.NeedFuncInfo ? "true" : "false");
+                    CodeBuilder.AppendFormat("options[{0}]", mi.CalcFunctionOptions());
                 }
                 m_MethodInfoStack.Pop();
             }
@@ -1230,7 +1230,7 @@ namespace RoslynTool.CsToDsl
                     }
                 }
                 --m_Indent;
-                CodeBuilder.AppendFormat("{0}}}options[needfuncinfo({1})]", GetIndentString(), mi.NeedFuncInfo ? "true" : "false");
+                CodeBuilder.AppendFormat("{0}}}options[{1}]", GetIndentString(), mi.CalcFunctionOptions());
 
                 m_MethodInfoStack.Pop();
             }

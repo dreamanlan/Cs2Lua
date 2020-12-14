@@ -17,3 +17,9 @@ addepilogue("{0}{1}::{2}{3}", "Utility.Warn(\"", $class, $member, " end\")")matc
 
 addprologue("{0}{1}::{2}{3}", "Utility.Warn(\"", $class, $member, " begin\")")match("__define_class");
 addepilogue("{0}{1}::{2}{3}", "Utility.Warn(\"", $class, $member, " end\")")match("__define_class");
+
+checkparamtype
+{
+    "NPCShopController.ShowShopMainView";
+    "NPCShopController.BagShowMainView";
+};

@@ -29,6 +29,7 @@ namespace RoslynTool.CsToDsl
         internal bool ExistTopLevelReturn = false;
         internal bool NeedFuncInfo = false;
         internal int ReturnValueCount = 0;
+        internal string FunctionOptions = string.Empty;
 
         internal bool ExistTry = false;
         internal bool ExistUsing = false;
@@ -63,7 +64,14 @@ namespace RoslynTool.CsToDsl
                 //不是扩展方法，泛型参数放在参数表最前面
                 foreach (var param in sym.TypeParameters) {
                     ParamNames.Add(param.Name);
-                    ParamTypes.Add("null");
+                    if (param.ConstraintTypes.Length > 0)
+                        ParamTypes.Add(ClassInfo.GetFullName(param.ConstraintTypes[0]));
+                    else if (param.HasReferenceTypeConstraint)
+                        ParamTypes.Add("System.Object");
+                    else if (param.HasValueTypeConstraint)
+                        ParamTypes.Add("System.ValueType");
+                    else
+                        ParamTypes.Add("null");
                     ParamTypeKinds.Add("TypeKind." + param.TypeKind.ToString());
                 }
             }
@@ -147,7 +155,14 @@ namespace RoslynTool.CsToDsl
                     //扩展方法的泛型参数放在第一个参数后
                     foreach (var tp in sym.TypeParameters) {
                         ParamNames.Add(tp.Name);
-                        ParamTypes.Add("null");
+                        if (tp.ConstraintTypes.Length > 0)
+                            ParamTypes.Add(ClassInfo.GetFullName(tp.ConstraintTypes[0]));
+                        else if (tp.HasReferenceTypeConstraint)
+                            ParamTypes.Add("System.Object");
+                        else if (tp.HasValueTypeConstraint)
+                            ParamTypes.Add("System.ValueType");
+                        else
+                            ParamTypes.Add("null");
                         ParamTypeKinds.Add("TypeKind." + tp.TypeKind.ToString());
                     }
                 }
@@ -155,7 +170,7 @@ namespace RoslynTool.CsToDsl
             }
 
             if (!sym.ReturnsVoid) {
-                var returnType = ClassInfo.GetFullName(sym.ReturnType);
+                string returnType = ClassInfo.GetFullName(sym.ReturnType);
                 if (returnType.StartsWith("System.Collections") && (sym.ReturnType.Name == "IEnumerable" || sym.ReturnType.Name == "IEnumerator")) {
                     var analysis = new YieldAnalysis();
                     analysis.Visit(node);
@@ -165,5 +180,33 @@ namespace RoslynTool.CsToDsl
 
             ReturnValueCount = ReturnParamNames.Count + (sym.ReturnsVoid ? 0 : 1);
         }
+
+        internal string CalcFunctionOptions()
+        {
+            if (string.IsNullOrEmpty(FunctionOptions)) {
+                string returnType;
+                string returnTypeKind;
+                if (SemanticInfo.ReturnsVoid) {
+                    returnType = "System.Void";
+                    returnTypeKind = "TypeKind.Unknown";
+                }
+                else {
+                    returnType = ClassInfo.GetFullName(SemanticInfo.ReturnType);
+                    returnTypeKind = "TypeKind." + SemanticInfo.ReturnType.TypeKind.ToString();
+                }
+
+                var sb = new StringBuilder();
+                sb.AppendFormat("needfuncinfo({0}), rettype({1}, {2})", NeedFuncInfo ? "true" : "false", returnType, returnTypeKind);
+                for (int ix = 0; ix < ParamNames.Count; ++ix) {
+                    var name = ParamNames[ix];
+                    var type = ParamTypes[ix];
+                    var typekind = ParamTypeKinds[ix];
+                    sb.Append(", ");
+                    sb.AppendFormat("paramtype({0}, {1}, {2})", name, type, typekind);
+                }
+                FunctionOptions = sb.ToString();
+            }
+            return FunctionOptions;
+        }        
     }
 }

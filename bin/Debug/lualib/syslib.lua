@@ -207,6 +207,10 @@ function stringconcat(str1, str2)
     return System.String.Concat__String__String(str1, str2)
 end
 
+function paramtypecheck(obj, class)
+    return obj
+end
+
 function getStack()
     return debug.traceback()
 end
@@ -792,7 +796,10 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
             if type(obj) == "string" then
                 csstr = System.String.ctor__A_Char(obj)
             end
-            if method == "Split" or 1 == string.find(method, "Split__") then
+            if method == "Split__A_Char__StringSplitOptions" then
+                local arg1, arg2 = ...
+                return csstr[method](csstr, arg1, arg2)
+            elseif method == "Split" or 1 == string.find(method, "Split__") then
                 local result1, result2 = _get_first_untable_from_pack_args(...)
                 if result2 then
                     return csstr[method](csstr, result1, result2)
@@ -894,7 +901,7 @@ function invokearraystaticmethod(firstArray, secondArray, method, ...)
         local meta = getmetatable(firstArray)
         if meta and rawget(meta, "__cs2lua_defined") then
             if method == "IndexOf" or 1 == string.find(method, "IndexOf__", 1, true) then
-                return firstArray:IndexOf(arg1, arg2)
+                return firstArray:IndexOf(arg2)
             elseif method == "Sort" or 1 == string.find(method, "Sort__", 1, true) then
                 return table.sort(
                     firstArray,

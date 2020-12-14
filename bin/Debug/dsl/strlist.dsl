@@ -31,17 +31,17 @@ class(StrList, System.Collections.Generic.List_T) {
 			buildexternbaseobj(this, StrList, System.Collections.Generic.List_T, "ctor");
 			callinstance(this, StrList, "__ctor");
 			return(this);
-		}options[needfuncinfo(false)],
+		}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown)],
 		ctor__Int32 = deffunc(0)args(this, c){
 			buildexternbaseobj(this, StrList, System.Collections.Generic.List_T, "ctor__Int32", c);
 			callinstance(this, StrList, "__ctor");
 			return(this);
-		}options[needfuncinfo(false)],
+		}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown), paramtype(c, System.Int32, TypeKind.Struct)],
 		ctor__ICollection_1_String = deffunc(0)args(this, coll){
 			buildexternbaseobj(this, StrList, System.Collections.Generic.List_T, "ctor__IEnumerable_1_T", coll);
 			callinstance(this, StrList, "__ctor");
 			return(this);
-		}options[needfuncinfo(false)],
+		}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown), paramtype(coll, System.Collections.Generic.ICollection_T, TypeKind.Interface)],
 		__ctor = deffunc(0)args(this){
 			if(getinstance(SymbolKind.Field, this, StrList, "__ctor_called")){
 				return();

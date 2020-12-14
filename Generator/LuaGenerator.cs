@@ -151,6 +151,28 @@ namespace Generator
                 }
             }
         }
+        internal static void ParseFunctionOptions(Dsl.FunctionData opts, FunctionOptions funcOpts)
+        {
+            foreach (var opt in opts.Params) {
+                var optFd = opt as Dsl.FunctionData;
+                if (null != optFd) {
+                    if (optFd.GetId() == "needfuncinfo") {
+                        funcOpts.NeedFuncInfo = optFd.GetParamId(0) == "true";
+                    }
+                    else if (optFd.GetId() == "rettype") {
+                        var t = CalcTypeString(optFd.GetParam(0));
+                        var tk = CalcTypeString(optFd.GetParam(1));
+                        funcOpts.RetType = new TypeInfo { Type = t, TypeKind = tk };
+                    }
+                    else if (optFd.GetId() == "paramtype") {
+                        var tn = optFd.GetParamId(0);
+                        var t = CalcTypeString(optFd.GetParam(1));
+                        var tk = CalcTypeString(optFd.GetParam(2));
+                        funcOpts.ParamTypes.Add(tn, new TypeInfo { Type = t, TypeKind = tk });
+                    }
+                }
+            }
+        }
         internal static string CalcTypesString(Dsl.FunctionData cd)
         {
             StringBuilder sb = new StringBuilder();
@@ -309,6 +331,13 @@ namespace Generator
         {
             get => s_FunctionsFromDslHook;
         }
+        private static bool IsParamTypeCheckMethod(string className, string methodName)
+        {
+            if (s_ParamTypeCheckMethods.Count <= 0)
+                return false;
+            string key = string.Format("{0}.{1}", className, methodName);
+            return s_ParamTypeCheckMethods.Contains(key);
+        }
         private static bool DontRequire(string file, string require)
         {
             foreach (var info in s_DontRequireInfos) {
@@ -432,6 +461,7 @@ namespace Generator
             s_GenEventInfo = false;
             s_GenFieldInfo = false;
 
+            s_ParamTypeCheckMethods.Clear();
             s_DontRequireInfos.Clear();
             s_FileMergeInfos.Clear();
             s_IndexerByLualibInfos.Clear();
@@ -458,7 +488,12 @@ namespace Generator
             if (null == f)
                 return;
             string id = cfgInfo.GetId();
-            if (id == "dontrequire") {
+            if(id == "checkparamtype") {
+                foreach (var s in f.Params) {
+                    s_ParamTypeCheckMethods.Add(s.GetId());
+                }
+            }
+            else if (id == "dontrequire") {
                 var cfg = new DontRequireInfo();
                 foreach (var s in f.Params) {
                     cfg.Requires.Add(s.GetId());
@@ -659,9 +694,16 @@ namespace Generator
             "System.Byte", "System.SByte", "System.Int16", "System.UInt16", "System.Int32", "System.UInt32", "System.Int64", "System.UInt64"
         };
 
+        internal class TypeInfo
+        {
+            internal string Type = string.Empty;
+            internal string TypeKind = string.Empty;
+        }
         internal class FunctionOptions
         {
             internal bool NeedFuncInfo = false;
+            internal TypeInfo RetType = null;
+            internal Dictionary<string, TypeInfo> ParamTypes = new Dictionary<string, TypeInfo>();
         }
 
         private class DontRequireInfo
@@ -732,6 +774,7 @@ namespace Generator
         private static bool s_GenEventInfo = false;
         private static bool s_GenFieldInfo = false;
 
+        private static HashSet<string> s_ParamTypeCheckMethods = new HashSet<string>();
         private static List<DontRequireInfo> s_DontRequireInfos = new List<DontRequireInfo>();
         private static Dictionary<string, FileMergeInfo> s_FileMergeInfos = new Dictionary<string, FileMergeInfo>();
         private static List<IndexerByLualibInfo> s_IndexerByLualibInfos = new List<IndexerByLualibInfo>();

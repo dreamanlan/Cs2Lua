@@ -71,13 +71,12 @@ namespace RoslynTool.CsToDsl
             }
 
             if (!m_EnableInherit && !ClassInfo.HasAttribute(declSym, "Cs2Dsl.EnableInheritAttribute") && !ClassInfo.HasAttribute(declSym.BaseType, "Cs2Dsl.EnableInheritAttribute")) {
-                string fullBaseClassName = null != declSym.BaseType ? ClassInfo.GetFullName(declSym.BaseType) : string.Empty;
-                if (!string.IsNullOrEmpty(fullBaseClassName) && fullBaseClassName != "System.Object" && fullBaseClassName != "System.ValueType") {
-                    Log(node, "Cs2Dsl class/struct can't inherit !");
+                if (!string.IsNullOrEmpty(ci.BaseKey)) {
+                    Log(node, "Cs2Dsl class/struct '{0}' can't inherit '{1}' !", ci.Key, ci.BaseKey);
                 }
             }
-            if(null != declSym.BaseType && declSym.BaseType.IsAbstract && !SymbolTable.Instance.IsCs2DslSymbol(declSym.BaseType)) {
-                Log(node, "Cs2Dsl class/struct can't inherit c# abstract class !");
+            if(null != declSym.BaseType && declSym.BaseType.IsAbstract && !string.IsNullOrEmpty(ci.BaseKey) && !SymbolTable.Instance.IsCs2DslSymbol(declSym.BaseType)) {
+                Log(node, "Cs2Dsl class/struct '{0}' can't inherit c# abstract class '{1}' !", ci.Key, ci.BaseKey);
             }
 
             if (!string.IsNullOrEmpty(ci.BaseKey)) {
@@ -358,7 +357,7 @@ namespace RoslynTool.CsToDsl
                 }
             }
             --m_Indent;
-            CodeBuilder.AppendFormat("{0}}}options[needfuncinfo({1})]{2};", GetIndentString(), mi.NeedFuncInfo ? "true" : "false", mi.ExistYield ? ")" : string.Empty);
+            CodeBuilder.AppendFormat("{0}}}options[{1}]{2};", GetIndentString(), mi.CalcFunctionOptions(), mi.ExistYield ? ")" : string.Empty);
             CodeBuilder.AppendLine();
             m_MethodInfoStack.Pop();
         }

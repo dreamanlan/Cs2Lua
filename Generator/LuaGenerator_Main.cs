@@ -235,14 +235,7 @@ namespace Generator
                                     var funcOpts = new FunctionOptions();
                                     if (fdef.GetFunctionNum() >= 3) {
                                         var opts = fdef.Third;
-                                        foreach (var opt in opts.Params) {
-                                            var optFd = opt as Dsl.FunctionData;
-                                            if (null != optFd) {
-                                                if (optFd.GetId() == "needfuncinfo") {
-                                                    funcOpts.NeedFuncInfo = optFd.GetParamId(0) == "true";
-                                                }
-                                            }
-                                        }
+                                        ParseFunctionOptions(opts, funcOpts);
                                     }
                                     int rct;
                                     int.TryParse(first.GetParamId(0), out rct);
@@ -290,6 +283,17 @@ namespace Generator
                                             GenerateFunctionParams(fcall, sb);
                                             sb.AppendLine(")");
                                             ++indent;
+                                        }
+                                        if(IsParamTypeCheckMethod(className, mname)) {
+                                            foreach(var p in fcall.Params) {
+                                                var pname = p.GetId();
+                                                TypeInfo ti;
+                                                if(funcOpts.ParamTypes.TryGetValue(pname, out ti)) {
+                                                    if (ti.TypeKind != "TypeKind.TypeParameter") {
+                                                        sb.AppendFormatLine("{0}{1} = paramtypecheck({2}, {3});", GetIndentString(indent), pname, pname, ti.Type);
+                                                    }
+                                                }
+                                            }
                                         }
                                         if (funcOpts.NeedFuncInfo) {
                                             sb.AppendFormatLine("{0}local __cs2lua_func_info = luainitialize();", GetIndentString(indent));
@@ -383,14 +387,7 @@ namespace Generator
                                     var funcOpts = new FunctionOptions();
                                     if (fdef.GetFunctionNum() >= 3) {
                                         var opts = fdef.Third;
-                                        foreach (var opt in opts.Params) {
-                                            var optFd = opt as Dsl.FunctionData;
-                                            if (null != optFd) {
-                                                if (optFd.GetId() == "needfuncinfo") {
-                                                    funcOpts.NeedFuncInfo = optFd.GetParamId(0) == "true";
-                                                }
-                                            }
-                                        }
+                                        ParseFunctionOptions(opts, funcOpts);
                                     }
                                     int rct;
                                     int.TryParse(first.GetParamId(0), out rct);
@@ -438,6 +435,17 @@ namespace Generator
                                             GenerateFunctionParams(fcall, sb);
                                             sb.AppendLine(")");
                                             ++indent;
+                                        }
+                                        if (IsParamTypeCheckMethod(className, mname)) {
+                                            foreach (var p in fcall.Params) {
+                                                var pname = p.GetId();
+                                                TypeInfo ti;
+                                                if (funcOpts.ParamTypes.TryGetValue(pname, out ti)) {
+                                                    if (ti.TypeKind != "TypeKind.TypeParameter") {
+                                                        sb.AppendFormatLine("{0}{1} = paramtypecheck({2}, {3});", GetIndentString(indent), pname, pname, ti.Type);
+                                                    }
+                                                }
+                                            }
                                         }
                                         if (funcOpts.NeedFuncInfo) {
                                             sb.AppendFormatLine("{0}local __cs2lua_func_info = luainitialize();", GetIndentString(indent));
@@ -2707,14 +2715,7 @@ namespace Generator
                     var newFuncOpts = new FunctionOptions();
                     if (fdef.GetFunctionNum() >= 3) {
                         var opts = fdef.Third;
-                        foreach(var opt in opts.Params) {
-                            var optFd = opt as Dsl.FunctionData;
-                            if (null != optFd) {
-                                if (optFd.GetId() == "needfuncinfo") {
-                                    newFuncOpts.NeedFuncInfo = optFd.GetParamId(0) == "true";
-                                }
-                            }
-                        }
+                        ParseFunctionOptions(opts, newFuncOpts);
                     }
                     int rct;
                     int.TryParse(first.GetParamId(0), out rct);

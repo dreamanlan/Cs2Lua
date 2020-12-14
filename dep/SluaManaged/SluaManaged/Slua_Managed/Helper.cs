@@ -28,7 +28,11 @@ namespace SLua
 
     public class Helper : LuaObject
     {
-
+        internal class EnumerableInfo
+        {
+            internal IEnumerable Enumerable;
+            internal IEnumerator Enumerator;
+        }
         static string classfunc = @"
 local getmetatable = getmetatable
 local function Class(base,static,instance)
@@ -87,13 +91,20 @@ return Class
             if(LuaDLL.lua_isboolean(l, 1)) {
                 resetV = LuaDLL.lua_toboolean(l, 1);
             }
-            IEnumerator it = (IEnumerator)obj;
-            if (it != null && resetV) {
-                it.Reset();
-            }
-            else if (it != null && it.MoveNext()) {
-                pushVar(l, it.Current);
-                return 1;
+            var einfo = (EnumerableInfo)obj;
+            if (null != einfo) {
+                var it = einfo.Enumerator;
+                if (resetV) {
+                    einfo.Enumerator = einfo.Enumerable.GetEnumerator();
+                }
+                else if (it != null && it.MoveNext()) {
+                    pushVar(l, it.Current);
+                    return 1;
+                }
+                else {
+                    if (obj is IDisposable)
+                        (obj as IDisposable).Dispose();
+                }
             }
             else {
                 if (obj is IDisposable)
@@ -109,8 +120,9 @@ return Class
             if (o is IEnumerable) {
                 IEnumerable e = o as IEnumerable;
                 IEnumerator iter = e.GetEnumerator();
+                var einfo = new EnumerableInfo { Enumerable = e, Enumerator = iter };
                 pushValue(l, true);
-                pushLightObject(l, iter);
+                pushLightObject(l, einfo);
                 LuaDLL.lua_pushcclosure(l, _iter, 1);
                 return 2;
             }

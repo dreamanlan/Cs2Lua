@@ -398,7 +398,17 @@ namespace SLua
                 // Get Member including all parent fields
                 CollectTypeMembers(type, ref cache);
             }
-            return cache[key];
+            List<MemberInfo> lmi;
+            if(cache.TryGetValue(key, out lmi)) {
+                return lmi;
+            }
+            int ix = key.IndexOf("__");
+            var orikey = key.Substring(ix);
+            if (cache.TryGetValue(orikey, out lmi)) {
+                cache.Add(key, lmi);
+                return lmi;
+            }
+            return null;
         }
 
         static int newindexString(IntPtr l, object self, string key)

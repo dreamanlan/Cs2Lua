@@ -55,7 +55,7 @@ Test = {
 					return __lambda_115_21_115_45;
 				end);
 				local aa;
-if (not isequal(nil, strlist)) then aa = strlist.Count else aa = intlist.Count end;
+				if (not isequal(nil, strlist)) then aa = strlist.Count else aa = intlist.Count end;
 			end,
 
 			ctor = function(this)
