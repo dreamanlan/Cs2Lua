@@ -246,15 +246,18 @@ end
 local rawrequire = require
 -- a chatty version of the actual import function above
 function require(x)
+    local ret = nil
     if package.loading[x] == nil then
         package.loading[x] = true
         --print('loading started for ' .. x)
-        rawrequire(x)
+        ret = rawrequire(x)
         --print('loading ended for ' .. x)
         package.loading[x] = nil
     else
+        ret = package.loaded[x]
         --print('already loading ' .. x)
     end
+    return ret
 end
 
 local function wrap_max(...)

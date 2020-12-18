@@ -2319,8 +2319,23 @@ namespace Generator
                 var param0 = fcall.GetParamId(0);
                 var param1 = fcall.GetParamId(1);
                 var param2 = fcall.GetParam(2);
-                sb.AppendFormat("local {0} = newiterator(", param0);
+                var param4 = fcall.GetParam(4) as Dsl.FunctionData;
+                int rank;
+                int.TryParse(fcall.GetParamId(3), out rank);
+                if (rank > 1) {
+                    sb.AppendFormat("local {0} = newmultiarrayiterator(", param0);
+                }
+                else {
+                    sb.AppendFormat("local {0} = newiterator(", param0);
+                }
                 GenerateSyntaxComponent(param2, sb, indent, false, funcOpts, calculator);
+                if (rank > 1) {
+                    sb.Append(", ");
+                    sb.Append(rank);
+                    sb.Append(", {");
+                    GenerateArguments(param4, sb, indent, 0, funcOpts, calculator);
+                    sb.Append("}");
+                }
                 sb.AppendLine(");");
                 sb.AppendFormat("{0}for ", GetIndentString(indent));
                 sb.Append(param1);

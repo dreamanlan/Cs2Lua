@@ -340,12 +340,28 @@ namespace RoslynTool.CsToDsl
             string varName = string.Format("__foreach_{0}", srcPos);
             CodeBuilder.AppendFormat("{0}foreach({1}, {2}, ", GetIndentString(), varName, node.Identifier.Text);
             IConversionExpression opd = null;
+            int rank = 0;
+            List<int> sizes = new List<int>();
             var oper = m_Model.GetOperationEx(node) as IForEachLoopStatement;
             if (null != oper) {
                 opd = oper.Collection as IConversionExpression;
+                var collType = oper.Collection.Type;
+                if (collType.TypeKind == TypeKind.Array) {
+                    var arrType = collType as IArrayTypeSymbol;
+                    rank = arrType.Rank;
+                    sizes.AddRange(arrType.Sizes);
+                }
             }
             OutputExpressionSyntax(node.Expression, opd);
-            CodeBuilder.AppendLine("){");
+            CodeBuilder.Append(", ");
+            CodeBuilder.Append(rank);
+            CodeBuilder.Append(", [");
+            for(int i = 0; i < sizes.Count; ++i) {
+                if (i > 0)
+                    CodeBuilder.Append(",");
+                CodeBuilder.Append(sizes[i]);
+            }
+            CodeBuilder.AppendLine("]){");
             if (ci.HaveContinue) {
                 if (ci.HaveBreak) {
                     CodeBuilder.AppendFormat("{0}local({1}); {1} = false;", GetIndentString(), ci.BreakFlagVarName);
