@@ -38,6 +38,7 @@ namespace SLua
         public bool exportExtensionMethod = true;
         public string UnityEngineGeneratePath = "../SluaExport/LuaObject/";
         public bool IsDebug = false;
+        public bool RecordObjectStackTrace = false;
 
         public static SLuaSetting Instance
         {

@@ -769,13 +769,20 @@ namespace SLua
             LuaState state = LuaState.get(l);
 
             LuaDLL.lua_pushvalue(l, p); // push function
+            IntPtr ptr = LuaDLL.lua_topointer(l, -1);
 
             int fref = LuaDLL.luaL_ref(l, LuaIndexes.LUA_REGISTRYINDEX); // new ref function
             LuaDelegate f = new LuaDelegate(l, fref);
             LuaDLL.lua_pushvalue(l, p);
             LuaDLL.lua_pushinteger(l, fref);
             LuaDLL.lua_settable(l, -3); // __LuaDelegate[func]= fref
-            state.delgateMap[fref] = f;
+            state.delegateMap[fref] = f;
+            string s1 = string.Empty, s2 = string.Empty;
+            if (SLuaSetting.Instance.RecordObjectStackTrace) {
+                s1 = Environment.StackTrace;
+                s2 = Logger.GetLuaStackTrack(l, "newdelegate");
+            }
+            state.delegateStackTraces[fref] = new string[] { ptr.ToInt64().ToString("x8"), s1, s2 };
             return f;
         }
 

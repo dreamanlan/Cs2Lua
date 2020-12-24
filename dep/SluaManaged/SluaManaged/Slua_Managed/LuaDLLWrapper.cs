@@ -29,20 +29,16 @@ namespace SLua
     using System.Text;
     using System.Security;
 
-
-
     /**     Modify Record:
      
     lua_xmove：        return void
-    //lua_gc：           LuaDLLWrapper： enum->int。 
       
     lua_objlen：　　   lua 5.1：  luaS_objlen　size_t->int
     lua_rawlen:        lua 5.3：  luaS_rawlen　size_t->int
      
     lua_setmetatable： lua 5.1 return int
                        lua 5.3 return void
-     
-    //lua_type：         LuaDLLWrapper：  return int->enum
+
     lua_isnumber：　   LuaDLLWrapper：　return bool->int  
     lua_isstring:      LuaDLLWrapper：　return bool->int
     lua_iscfunction:   LuaDLLWrapper：　return bool->int
@@ -61,13 +57,10 @@ namespace SLua
      
     lua_error:         return void->int
     lua_checkstack：　　LuaDLLWrapper　return bool->int
-
-
     **/
 
     public class LuaDLLWrapper
     {
-
 #if UNITY_IOS
 	const string LUADLL = "__Internal";
 #else
@@ -82,16 +75,8 @@ namespace SLua
         public static extern int luaS_objlen(IntPtr luaState, int stackPos);
 #endif
 
-
-        //[DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
-        //public static extern int lua_gc(IntPtr luaState, int what, int data);
-
-        //[DllImport(LUADLL,CallingConvention=CallingConvention.Cdecl)]
-        //public static extern int lua_type(IntPtr luaState, int index);
-
         [DllImport(LUADLL,CallingConvention=CallingConvention.Cdecl)]
 		public static extern int lua_isnumber(IntPtr luaState, int index);
-
 
         [DllImport(LUADLL,CallingConvention=CallingConvention.Cdecl)]
 		public static extern int lua_isstring(IntPtr luaState, int index);
@@ -102,13 +87,11 @@ namespace SLua
         [DllImport(LUADLL,CallingConvention=CallingConvention.Cdecl)]
 		public static extern int lua_toboolean(IntPtr luaState, int index);
 
-
         [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void lua_pushboolean(IntPtr luaState, int value);
 
         [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void luaS_pushlstring(IntPtr luaState, byte[] str, int size);
-
 
         [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern int luaL_getmetafield(IntPtr luaState, int stackPos, string field);
@@ -119,6 +102,4 @@ namespace SLua
         [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern int lua_checkstack(IntPtr luaState, int extra);
     }
-
-
 }

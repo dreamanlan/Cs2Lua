@@ -36,8 +36,6 @@ namespace SLua
         protected LuaState state = null;
         protected int valueref = 0;
 
-
-
         public IntPtr L
         {
             get {
@@ -211,7 +209,6 @@ namespace SLua
             return ret;
         }
 
-
         public object call()
         {
             int error = LuaObject.pushTry(state.L);
@@ -354,8 +351,6 @@ namespace SLua
 
     public class LuaTable : LuaVar, IEnumerable<LuaTable.TablePair>
     {
-
-
         public struct TablePair
         {
             public object key;
@@ -518,22 +513,30 @@ namespace SLua
         }
     }
 
-
-
-
-
     public class LuaState : IDisposable
     {
         IntPtr l_;
         int mainThread = 0;
-        internal WeakDictionary<int, LuaDelegate> delgateMap = new WeakDictionary<int, LuaDelegate>();
+        internal WeakDictionary<int, LuaDelegate> delegateMap = new WeakDictionary<int, LuaDelegate>();
+        internal Dictionary<int, string[]> delegateStackTraces = new Dictionary<int, string[]>();
         static Dictionary<string, string> debugStringMap = new Dictionary<string, string>();
 
         public int cachedDelegateCount
         {
             get {
-                return this.delgateMap.AliveCount;
+                return this.delegateMap.AliveCount;
             }
+        }
+        public List<string[]> GetCachedDelegateStackTraces()
+        {
+            List<string[]> list = new List<string[]>();
+            foreach(var pair in delegateStackTraces) {
+                LuaDelegate val;
+                if (delegateMap.TryGetValue(pair.Key, out val) && null != val) {
+                    list.Add(pair.Value);
+                }
+            }
+            return list;
         }
 
         public IntPtr L
@@ -574,7 +577,6 @@ namespace SLua
         public OutputDelegate logDelegate;
         public OutputDelegate errorDelegate;
         public OutputDelegate warnDelegate;
-
 
         public delegate void UnRefAction(IntPtr l, int r);
         struct UnrefPair
@@ -630,8 +632,6 @@ namespace SLua
                 return get(nl);
             return null;
         }
-
-
 
         public void openSluaLib()
         {
@@ -807,7 +807,6 @@ return index
         {
             checkRef();
         }
-
 
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int init(IntPtr L)
@@ -1047,8 +1046,6 @@ return dumpstack
             LuaDLL.lua_remove(l, err);
         }
 
-
-
         static public bool printTrace = true;
         private static StringBuilder s = new StringBuilder();
 
@@ -1081,7 +1078,6 @@ return dumpstack
 
             return s.ToString();
         }
-
 
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         internal static int print(IntPtr L)
@@ -1132,8 +1128,6 @@ return dumpstack
             LuaDLL.lua_settop(L, n);
             return 0;
         }
-
-
 
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         internal static int loadfile(IntPtr L)
@@ -1331,7 +1325,6 @@ return dumpstack
             }
         }
 
-
         internal object getObject(string key, bool wholekey = false, bool rawget = false)
         {
             LuaDLL.lua_pushglobaltable(L);
@@ -1369,7 +1362,6 @@ return dumpstack
             }
             return returnValue;
         }
-
 
         internal object getObject(int reference, string field, bool wholekey = false, bool rawget = false)
         {
@@ -1440,7 +1432,6 @@ return dumpstack
                 LuaDLL.lua_settable(L, -3);
             LuaDLL.lua_settop(L, top);
         }
-
 
         internal void setObject(int reference, string field, object o, bool wholekey = false, bool rawset = false)
         {
@@ -1528,7 +1519,6 @@ return dumpstack
         {
             return (LuaTable)this[key];
         }
-
 
         public object this[string path]
         {

@@ -39,28 +39,34 @@ namespace SLua
         static IntPtr oldl = IntPtr.Zero;
         static internal ObjectCache oldoc = null;
 
-		public static List<string> GetAllManagedObjectNames(){
-			List<string> names = new List<string>();
+		public static List<string[]> GetAllManagedObjectNames(IntPtr l){
+			List<string[]> names = new List<string[]>();
 			foreach(var cache in multiState.Values){
-				foreach(var o in cache.objMap.Keys){
-					names.Add(cache.objNameDebugs[o]);
+				foreach(var pair in cache.objMap){
+                    var infos = cache.objNameDebugs[pair.Key];
+                    if (infos.Length < 3)
+                        continue;
+                    names.Add(new string[] { infos[0] + " addr:" + GetLuaAddr(l, pair.Value, cache.udCacheRef), infos[1], infos[2] });
 				}
 			}
 			return names;
 		}
-
-		public static List<string> GetAlreadyDestroyedObjectNames(){
-			List<string> names = new List<string>();
+		public static List<string[]> GetAlreadyDestroyedObjectNames(IntPtr l){
+			List<string[]> names = new List<string[]>();
 			foreach(var cache in multiState.Values){
-				foreach(var o in cache.objMap.Keys){
-					if(o is Object &&(o as Object).Equals(null)){
-						names.Add(cache.objNameDebugs[o]);
-					}
+				foreach(var pair in cache.objMap){
+                    var o = pair.Key;
+					if(o is Object &&(o as Object).Equals(null)) {
+                        var infos = cache.objNameDebugs[o];
+                        if (infos.Length < 3)
+                            continue;
+                        names.Add(new string[] { infos[0] + " addr:" + GetLuaAddr(l, pair.Value, cache.udCacheRef), infos[1], infos[2] });
+                    }
 				}
 			}
 			return names;
 		}
-
+        
         public static ObjectCache get(IntPtr l)
         {
             if (oldl == l)
@@ -87,6 +93,16 @@ namespace SLua
         public static void AddAQName(Type t, string aqname)
         {
             aqnameMap[t] = aqname;
+        }
+        public static string GetLuaAddr(IntPtr l, int objIndex, int cref)
+        {
+            string luaAddr = string.Empty;
+            if (LuaDLL.luaS_getcacheud(l, objIndex, cref) == 1) {
+                IntPtr p = LuaDLL.lua_topointer(l, -1);
+                LuaDLL.lua_pop(l, 1);
+                luaAddr = string.Format("{0:x8}", p.ToInt64());
+            }
+            return luaAddr;
         }
 
         class FreeList : Dictionary<int, object>
@@ -140,25 +156,27 @@ namespace SLua
         Dictionary<object, int> objMap = new Dictionary<object, int>(new ObjEqualityComparer());
         public Dictionary<object, int>.KeyCollection Objs { get { return objMap.Keys; } }
 
-		Dictionary<object,string> objNameDebugs = new Dictionary<object, string>(new ObjEqualityComparer());
+		Dictionary<object, string[]> objNameDebugs = new Dictionary<object, string[]>(new ObjEqualityComparer());
 
 		private static string getDebugFullName(UnityEngine.Transform transform){
 			if (transform.parent == null) {
 				return transform.gameObject.ToString();
 			}
-			return getDebugName (transform.parent) + "/" + transform.name;
+			return getDebugFullName(transform.parent) + "/" + transform.name;
 		}
 
-		private static string getDebugName(object o ){
+		private static string getDebugName(int objIndex, object o ){
 			if (o is UnityEngine.GameObject) {
 				var go = o as UnityEngine.GameObject;
-				return getDebugFullName (go.transform);
+                int id = go.GetInstanceID();
+                return getDebugFullName(go.transform) + "["+ o.GetType().Name +"](" + id + ", index:" + objIndex + ")";
 			} else if (o is UnityEngine.Component) {
 				var comp = o as UnityEngine.Component;
-				return getDebugFullName (comp.transform);
+                int id = comp.GetInstanceID();
+                return getDebugFullName(comp.transform) + "["+ o.GetType().Name +"](" + comp.GetType().Name + "," + id + ", index:" + objIndex + ")";
 			}
-			return o.ToString ();
-
+            int hash = o.GetHashCode();
+            return o.ToString() + "["+ o.GetType().Name +"](" + hash + ", index:" + objIndex + ")";
 		}
 
         int udCacheRef = 0;
@@ -224,13 +242,19 @@ namespace SLua
             }
         }
 
-        internal int add(object o)
+        internal int add(IntPtr l, object o)
         {
             int objIndex = cache.add(o);
             if (isGcObject(o)) {
                 objMap[o] = objIndex;
-                if (SLuaSetting.IsEditor)
-                    objNameDebugs[o] = getDebugName(o);
+                if (SLuaSetting.IsEditor) {
+                    string s1 = string.Empty, s2 = string.Empty;
+                    if (SLuaSetting.Instance.RecordObjectStackTrace) {
+                        s1 = Environment.StackTrace;
+                        s2 = Logger.GetLuaStackTrack(l, "add");
+                    }
+                    objNameDebugs[o] = new string[] { getDebugName(objIndex, o), s1, s2 };
+                }
             }
             return objIndex;
         }
@@ -294,7 +318,7 @@ namespace SLua
                     return -1;
             }
 
-            index = add(o);
+            index = add(l, o);
             return index;
         }
 

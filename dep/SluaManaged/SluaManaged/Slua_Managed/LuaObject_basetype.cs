@@ -367,7 +367,7 @@ namespace SLua
 			{
 				int fref = LuaDLL.lua_tointeger(l, -1);
 				LuaDLL.lua_pop(l, 1); // pop ref value;
-				f = state.delgateMap[fref];
+				f = state.delegateMap[fref];
 				if (f == null)
 				{
 					f = newDelegate(l, p);

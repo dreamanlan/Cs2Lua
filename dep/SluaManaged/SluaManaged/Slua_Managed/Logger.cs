@@ -73,15 +73,20 @@ namespace SLua
         }
         public static void LogLuaStack(IntPtr L, string msg)
         {
+            string st = GetLuaStackTrack(L, msg);
+            LogWarning(st);
+        }
+        public static string GetLuaStackTrack(IntPtr L, string msg)
+        {
             LuaDLL.lua_getfield(L, LuaIndexes.LUA_GLOBALSINDEX, "debug");
             LuaDLL.lua_getfield(L, -1, "traceback");
             LuaDLL.lua_remove(L, -2);
             LuaDLL.lua_pushstring(L, msg);
             LuaDLL.lua_pushinteger(L, 2);
             LuaDLL.lua_call(L, 2, 1);
-            LogWarning(LuaDLL.lua_tostring(L, -1));
+            string s = LuaDLL.lua_tostring(L, -1);
+            LuaDLL.lua_pop(L, 1);
+            return s;
         }
     }
-
-
 }

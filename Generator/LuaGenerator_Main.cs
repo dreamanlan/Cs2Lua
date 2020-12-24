@@ -2345,6 +2345,9 @@ namespace Generator
                 if (data.HaveStatement()) {
                     sb.AppendLine();
                     ++indent;
+                    sb.AppendFormatLine("{0}if {1} == __cs2lua_nil then", GetIndentString(indent), param1);
+                    sb.AppendFormatLine("{0}{1} = nil;", GetIndentString(indent + 1), param1);
+                    sb.AppendFormatLine("{0}end;", GetIndentString(indent));
                     GenerateStatements(data, sb, indent, funcOpts, calculator);
                     --indent;
                 }

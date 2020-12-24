@@ -7,8 +7,9 @@ local function get_basic_type_func()
     end
 end
 
-Slua = Slua or {out = {}, nil_field_value = {}}
+Slua = Slua or {out = {}}
 __cs2lua_out = Slua.out
+__cs2lua_nil = {}
 
 System = System or {}
 System.Boolean = System.Boolean or get_basic_type_func()
@@ -2312,7 +2313,11 @@ function newiterator(exp)
             local enumer = exp:GetEnumerator()
             local f = function()
                 if enumer:MoveNext() then
-                    return enumer.Current
+                    local v = enumer.Current
+                    if v == nil then
+                        v = __cs2lua_nil
+                    end
+                    return v
                 else
                     return nil
                 end
@@ -2335,6 +2340,9 @@ function newiterator(exp)
                     curIx = curIx + 1
                     local v = arr[curIx]
                     --lualog("LuaArray iterator:{0} {1}", curIx, v)
+                    if v == nil then
+                        v = __cs2lua_nil
+                    end
                     return v
                 else
                     --lualog("LuaArray iterator:{0} nil", curIx)
