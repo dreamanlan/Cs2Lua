@@ -30,6 +30,11 @@ namespace RoslynTool
                 bool enableLinq = false;
                 bool outputResult = false;
                 bool parallel = false;
+				
+                var assems = AppDomain.CurrentDomain.GetAssemblies();
+                foreach (var assem in assems) {
+                    Console.WriteLine("Assembly:{0} CodeBase:{1} Location:{2} Version:{3} global cache:{4}", assem.FullName, assem.CodeBase, assem.Location, assem.ImageRuntimeVersion, assem.GlobalAssemblyCache);
+                }
                 if (args.Length > 0) {
                     for (int i = 0; i < args.Length; ++i) {
                         if (0 == string.Compare(args[i], "-ext", true)) {
@@ -213,6 +218,13 @@ namespace RoslynTool
                     }
                 }
                 else {
+                    Console.WriteLine("Continue? [y]");
+                    var keyInfo = Console.ReadKey();
+                    if (keyInfo.KeyChar != 'y' && keyInfo.KeyChar != 'Y' && keyInfo.Key != ConsoleKey.Enter) {
+                        Environment.Exit(0);
+                        return;
+                    }
+
                     Console.WriteLine("[Usage]:Cs2Lua [-out dir] [-ext fileext] [-enableinherit] [-enablelinq] [-outputresult] [-noautorequire] [-luacomponentbystring] [-usearraygetset] [-enabletranslationcheck] [-d macro] [-u macro] [-externpath path] [-ignorepath path] [-refbyname dllname alias] [-refbypath dllpath alias] [-systemdllpath dllpath] [-src] csfile|csprojfile");
                     Console.WriteLine("\twhere:");
                     Console.WriteLine("\t\tfileext = file externsion, default is txt for unity3d, maybe lua for other usage.");
@@ -227,7 +239,7 @@ namespace RoslynTool
                     if (File.Exists(file)) {
                         Console.WriteLine("now will process test csharp code test.cs in current directory ...");
                         Console.WriteLine();
-                    }
+                    }                    
                 }
                 if (File.Exists(file)) {
                     var stopwatch1 = Stopwatch.StartNew();

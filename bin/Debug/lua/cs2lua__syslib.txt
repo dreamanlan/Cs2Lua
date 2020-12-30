@@ -7,8 +7,9 @@ local function get_basic_type_func()
     end
 end
 
-Slua = Slua or {out = {}, nil_field_value = {}}
+Slua = Slua or {out = {}}
 __cs2lua_out = Slua.out
+__cs2lua_nil = {}
 
 System = System or {}
 System.Boolean = System.Boolean or get_basic_type_func()
@@ -207,6 +208,10 @@ function stringconcat(str1, str2)
     return System.String.Concat__String__String(str1, str2)
 end
 
+function paramtypecheck(obj, class)
+    return obj
+end
+
 function getStack()
     return debug.traceback()
 end
@@ -242,15 +247,18 @@ end
 local rawrequire = require
 -- a chatty version of the actual import function above
 function require(x)
+    local ret = nil
     if package.loading[x] == nil then
         package.loading[x] = true
         --print('loading started for ' .. x)
-        rawrequire(x)
+        ret = rawrequire(x)
         --print('loading ended for ' .. x)
         package.loading[x] = nil
     else
+        ret = package.loaded[x]
         --print('already loading ' .. x)
     end
+    return ret
 end
 
 local function wrap_max(...)
@@ -2305,7 +2313,11 @@ function newiterator(exp)
             local enumer = exp:GetEnumerator()
             local f = function()
                 if enumer:MoveNext() then
-                    return enumer.Current
+                    local v = enumer.Current
+                    if v == nil then
+                        v = __cs2lua_nil
+                    end
+                    return v
                 else
                     return nil
                 end
@@ -2328,6 +2340,9 @@ function newiterator(exp)
                     curIx = curIx + 1
                     local v = arr[curIx]
                     --lualog("LuaArray iterator:{0} {1}", curIx, v)
+                    if v == nil then
+                        v = __cs2lua_nil
+                    end
                     return v
                 else
                     --lualog("LuaArray iterator:{0} nil", curIx)

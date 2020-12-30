@@ -64,7 +64,7 @@ class(Cs2LuaObjectPoolEx_DataChangeCallBackInfo) {
 		}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown), paramtype(t, ICs2LuaPoolAllocatedObjectEx_DataChangeCallBackInfo, TypeKind.Interface)];
 		Clear = deffunc(0)args(this){
 			if( delegationcomparewithnil(false, this, "m_Destroyer", SymbolKind.Field, false) ){
-				foreach(__foreach_65_12_67_13, item, getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_UnusedObjects")){
+				foreach(__foreach_65_12_67_13, item, getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_UnusedObjects"), 0, []){
 					getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_Destroyer")(item);
 				};
 			};

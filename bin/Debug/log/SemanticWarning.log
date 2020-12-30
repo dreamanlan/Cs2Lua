@@ -1,5 +1,0 @@
-============<<<Semantic Warning:test>>>============
-test.cs(5,1): hidden CS8019: Unnecessary using directive.
-test.cs(4,1): hidden CS8019: Unnecessary using directive.
-test.cs(6,1): hidden CS8019: Unnecessary using directive.
-test.cs(2,1): hidden CS8019: Unnecessary using directive.

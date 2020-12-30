@@ -1261,7 +1261,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(", null");
                     }
                 }
-                if (ii.Args.Count + ii.DefaultValueArgs.Count + ii.GenericTypeArgs.Count > 0) {
+                if (ii.Args.Count + ii.NameOrDefaultValueArgs.Count + ii.GenericTypeArgs.Count > 0) {
                     CodeBuilder.Append(", ");
                 }
                 OutputArgumentList(ii, false, node);

@@ -396,7 +396,7 @@ namespace SLua
 
         static void checkMethodValid(LuaCSFunction f)
         {
-            if (SLuaSetting.IsEditor) {
+            if (SLuaSetting.IsEditor || SLuaSetting.Instance.IsDebug) {
                 if (f != null && !Attribute.IsDefined(f.Method, typeof(MonoPInvokeCallbackAttribute))) {
                     Logger.LogError(string.Format("MonoPInvokeCallbackAttribute not defined for LuaCSFunction {0}.", f.Method));
                 }
@@ -782,7 +782,7 @@ namespace SLua
                 s1 = Environment.StackTrace;
                 s2 = Logger.GetLuaStackTrack(l, "newdelegate");
             }
-            state.delegateStackTraces[fref] = new string[] { ptr.ToInt64().ToString("x8"), s1, s2 };
+            state.delegateStackTraces[fref] = new string[] { ptr.ToInt64().ToString("x8") + DateTime.Now.ToString(" (HH-mm-ss-fff)"), s1, s2 };
             return f;
         }
 

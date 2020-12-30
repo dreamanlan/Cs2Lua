@@ -98,7 +98,7 @@ namespace RoslynTool.CsToDsl
                 }
             }
         }
-        internal static void CheckInvocation(SemanticModel model, IMethodSymbol sym, IList<ExpressionSyntax> args, IList<ArgDefaultValueInfo> defValArgs, IList<IConversionExpression> argConversions, SyntaxNode node, IMethodSymbol callerSym)
+        internal static void CheckInvocation(SemanticModel model, IMethodSymbol sym, IList<ExpressionSyntax> args, IList<ArgDefaultValueInfo> nameOrDefValArgs, IList<IConversionExpression> argConversions, SyntaxNode node, IMethodSymbol callerSym)
         {
             if (!SymbolTable.EnableTranslationCheck) {
                 return;
@@ -152,8 +152,8 @@ namespace RoslynTool.CsToDsl
                         IOperation argOper = null;
                         if (ix < args.Count)
                             argOper = null != args[ix] ? model.GetOperationEx(args[ix]) : null;
-                        else if (ix < args.Count + defValArgs.Count)
-                            argOper = defValArgs[ix - args.Count].OperOrSym as IOperation;
+                        else if (ix < args.Count + nameOrDefValArgs.Count)
+                            argOper = nameOrDefValArgs[ix - args.Count].OperOrSym as IOperation;
                         IConversionExpression argConv = null;
                         if(ix< argConversions.Count)
                             argConv = argConversions[ix];

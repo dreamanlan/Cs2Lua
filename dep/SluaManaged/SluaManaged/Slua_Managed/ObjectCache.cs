@@ -39,14 +39,22 @@ namespace SLua
         static IntPtr oldl = IntPtr.Zero;
         static internal ObjectCache oldoc = null;
 
+        public static void ClearNameDebugs()
+        {
+            foreach (var cache in multiState.Values) {
+                cache.objNameDebugs.Clear();
+            }
+        }
 		public static List<string[]> GetAllManagedObjectNames(IntPtr l){
 			List<string[]> names = new List<string[]>();
 			foreach(var cache in multiState.Values){
 				foreach(var pair in cache.objMap){
-                    var infos = cache.objNameDebugs[pair.Key];
-                    if (infos.Length < 3)
-                        continue;
-                    names.Add(new string[] { infos[0] + " addr:" + GetLuaAddr(l, pair.Value, cache.udCacheRef), infos[1], infos[2] });
+                    string[] infos;
+                    if (cache.objNameDebugs.TryGetValue(pair.Key, out infos)) {
+                        if (infos.Length < 3)
+                            continue;
+                        names.Add(new string[] { infos[0] + " addr:" + GetLuaAddr(l, pair.Value, cache.udCacheRef), infos[1], infos[2] });
+                    }
 				}
 			}
 			return names;
@@ -57,10 +65,12 @@ namespace SLua
 				foreach(var pair in cache.objMap){
                     var o = pair.Key;
 					if(o is Object &&(o as Object).Equals(null)) {
-                        var infos = cache.objNameDebugs[o];
-                        if (infos.Length < 3)
-                            continue;
-                        names.Add(new string[] { infos[0] + " addr:" + GetLuaAddr(l, pair.Value, cache.udCacheRef), infos[1], infos[2] });
+                        string[] infos;
+                        if (cache.objNameDebugs.TryGetValue(o, out infos)) {
+                            if (infos.Length < 3)
+                                continue;
+                            names.Add(new string[] { infos[0] + " addr:" + GetLuaAddr(l, pair.Value, cache.udCacheRef), infos[1], infos[2] });
+                        }
                     }
 				}
 			}
@@ -225,7 +235,7 @@ namespace SLua
                 int oldindex;
                 if (isGcObject(o) && objMap.TryGetValue(o, out oldindex) && oldindex == index) {
                     objMap.Remove(o);
-                    if(SLuaSetting.IsEditor)
+                    if(SLuaSetting.IsEditor || SLuaSetting.Instance.IsDebug)
                         objNameDebugs.Remove(o);
                 }
                 cache.del(index);
@@ -237,7 +247,7 @@ namespace SLua
             if (objMap.TryGetValue(o, out index)) {
                 objMap.Remove(o);
                 cache.del(index);
-                if (SLuaSetting.IsEditor)
+                if (SLuaSetting.IsEditor || SLuaSetting.Instance.IsDebug)
                     objNameDebugs.Remove(o);
             }
         }
@@ -247,13 +257,13 @@ namespace SLua
             int objIndex = cache.add(o);
             if (isGcObject(o)) {
                 objMap[o] = objIndex;
-                if (SLuaSetting.IsEditor) {
+                if (SLuaSetting.IsEditor || SLuaSetting.Instance.IsDebug) {
                     string s1 = string.Empty, s2 = string.Empty;
                     if (SLuaSetting.Instance.RecordObjectStackTrace) {
                         s1 = Environment.StackTrace;
                         s2 = Logger.GetLuaStackTrack(l, "add");
                     }
-                    objNameDebugs[o] = new string[] { getDebugName(objIndex, o), s1, s2 };
+                    objNameDebugs[o] = new string[] { getDebugName(objIndex, o) + DateTime.Now.ToString(" (HH-mm-ss-fff)"), s1, s2 };
                 }
             }
             return objIndex;
@@ -484,6 +494,152 @@ namespace SLua
             return ds.ReturnType == target.ReturnType &&
                    parametersEqual;
         }
+    }
+
+    public static class LuaSnapshot
+    {
+        public static int CachedDelegateCount = 0;
+        public static List<string[]> DelegateStackTraces = null;
+        public static List<string[]> DestroyedObjectNames = null;
+        public static List<string[]> AddedObjectNames = null;
+
+        public static void Capture(Action captureLua)
+        {
+            Prepare();
+
+            System.GC.Collect();
+            LuaDLL.lua_gc(LuaState.main.L, LuaGCOptions.LUA_GCCOLLECT, 0);
+            if (null != captureLua) {
+                captureLua();
+            }
+            var destroyedObjectNames = ObjectCache.GetAlreadyDestroyedObjectNames(LuaState.main.L);
+            var allObjectNames = ObjectCache.GetAllManagedObjectNames(LuaState.main.L);
+            DestroyedObjectNames.Clear();
+            foreach (var names in destroyedObjectNames) {
+                var list = new List<string>();
+                for (int i = 0; i < names.Length; ++i) {
+                    if (i == 0) {
+                        list.Add(names[i]);
+                    }
+                    else {
+                        var stack = names[i];
+                        var lines = stack.Split(new char[] { '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var line in lines) {
+                            if (!line.Contains("SLua."))
+                                list.Add("\t" + line.Trim());
+                        }
+                    }
+                }
+                DestroyedObjectNames.Add(list.ToArray());
+            }
+            AddedObjectNames.Clear();
+            foreach (var names in allObjectNames) {
+                if (!m_LastAllObjectNames.Contains(names[0])) {
+                    var list = new List<string>();
+                    for (int i = 0; i < names.Length; ++i) {
+                        if (i == 0) {
+                            list.Add(names[i]);
+                        }
+                        else {
+                            var stack = names[i];
+                            var lines = stack.Split(new char[] { '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
+                            foreach (var line in lines) {
+                                if (!line.Contains("SLua."))
+                                    list.Add("\t" + line.Trim());
+                            }
+                        }
+                    }
+                    AddedObjectNames.Add(list.ToArray());
+                }
+            }
+            m_LastAllObjectNames.Clear();
+            if (null != allObjectNames) {
+                foreach (var names in allObjectNames) {
+                    m_LastAllObjectNames.Add(names[0]);
+                }
+            }
+            CachedDelegateCount = LuaState.main.cachedDelegateCount;
+            var delegateStackTraces = LuaState.main.GetCachedDelegateStackTraces();
+            DelegateStackTraces.Clear();
+            foreach (var st in delegateStackTraces) {
+                var list = new List<string>();
+                for (int i = 0; i < st.Length; ++i) {
+                    if (i == 0) {
+                        list.Add(st[i]);
+                    }
+                    else {
+                        var stack = st[i];
+                        var lines = stack.Split(new char[] { '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var line in lines) {
+                            if (!line.Contains("SLua."))
+                                list.Add("\t" + line.Trim());
+                        }
+                    }
+                }
+                DelegateStackTraces.Add(list.ToArray());
+            }
+        }
+        public static void Save(string file)
+        {
+            using (var sw = new System.IO.StreamWriter(file)) {
+                Export(line => { sw.WriteLine(line); }, (title, info, progress) => { });
+                sw.Close();
+            }
+        }
+        public static void Export(Action<string> outputLine, Action<string, string, float> onprogress)
+        {
+            Prepare();
+            outputLine("cached delegates:" + CachedDelegateCount);
+            int ct = 0;
+            int totalCt = DelegateStackTraces.Count;
+            int delta = totalCt / 100 + (totalCt % 100 > 0 ? 1 : 0);
+            foreach (var stacks in DelegateStackTraces) {
+                for (int i = 0; i < stacks.Length; ++i) {
+                    outputLine(stacks[i]);
+                }
+                ++ct;
+                if (ct % delta == 0)
+                    onprogress("cached delegates", string.Format("{0}/{1}", ct, totalCt), ct * 1.0f / totalCt);
+            }
+            outputLine("destroyed objects:" + DestroyedObjectNames.Count);
+            ct = 0;
+            totalCt = DestroyedObjectNames.Count;
+            delta = totalCt / 100 + (totalCt % 100 > 0 ? 1 : 0);
+            foreach (var names in DestroyedObjectNames) {
+                for (int i = 0; i < names.Length; ++i) {
+                    outputLine(names[i]);
+                }
+                ++ct;
+                if (ct % delta == 0)
+                    onprogress("destroyed objects", string.Format("{0}/{1}", ct, totalCt), ct * 1.0f / totalCt);
+            }
+            outputLine("added objects:" + AddedObjectNames.Count);
+            ct = 0;
+            totalCt = AddedObjectNames.Count;
+            delta = totalCt / 100 + (totalCt % 100 > 0 ? 1 : 0);
+            foreach (var names in AddedObjectNames) {
+                for (int i = 0; i < names.Length; ++i) {
+                    outputLine(names[i]);
+                }
+                ++ct;
+                if (ct % delta == 0)
+                    onprogress("added objects", string.Format("{0}/{1}", ct, totalCt), ct * 1.0f / totalCt);
+            }
+        }
+        public static void Prepare()
+        {
+            if (m_Inited)
+                return;
+            m_Inited = true;
+            CachedDelegateCount = 0;
+            DelegateStackTraces = new List<string[]>();
+            DestroyedObjectNames = new List<string[]>();
+            m_LastAllObjectNames = new HashSet<string>();
+            AddedObjectNames = new List<string[]>();
+        }
+
+        private static bool m_Inited = false;
+        private static HashSet<string> m_LastAllObjectNames = null;
     }
 }
 

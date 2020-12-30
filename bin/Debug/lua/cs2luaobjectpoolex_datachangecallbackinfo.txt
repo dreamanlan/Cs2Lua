@@ -82,6 +82,9 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 				if delegationcomparewithnil(false, this, "m_Destroyer", SymbolKind.Field, false) then 
 					local __foreach_65_12_67_13 = newiterator(this.m_UnusedObjects);
 					for item in getiterator(__foreach_65_12_67_13) do
+						if item == __cs2lua_nil then
+							item = nil;
+						end;
 						this.m_Destroyer						(item);
 					end;
 					recycleiterator(__foreach_65_12_67_13);

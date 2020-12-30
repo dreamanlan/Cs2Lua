@@ -1949,6 +1949,8 @@ __mt_index_of_dictionary_table = {
         end,
 }
 
+rawset(__mt_index_of_dictionary_table, "Remove__TKey", rawget(__mt_index_of_dictionary_table, "Remove"))
+
 __mt_index_of_dictionary = function(t, k)
     if k == "Count" then
         return __get_table_count(t)

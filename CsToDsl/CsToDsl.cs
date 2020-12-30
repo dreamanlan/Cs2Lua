@@ -164,7 +164,7 @@ namespace RoslynTool.CsToDsl
             if (!ii.PostPositionGenericTypeArgs && ii.GenericTypeArgs.Count > 0) {
                 OutputTypeArgumentList(ii.GenericTypeArgs, useTypeNameString, node);
             }
-            if (ii.Args.Count + ii.DefaultValueArgs.Count > 0) {
+            if (ii.Args.Count + ii.NameOrDefaultValueArgs.Count > 0) {
                 if (!ii.PostPositionGenericTypeArgs && ii.GenericTypeArgs.Count > 0)
                     CodeBuilder.Append(", ");
                 int ct = ii.Args.Count;
@@ -193,13 +193,13 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(", ");
                     }
                 }
-                if (null != ii.DefaultValueArgs) {
-                    int dvCt = ii.DefaultValueArgs.Count;
+                if (null != ii.NameOrDefaultValueArgs) {
+                    int dvCt = ii.NameOrDefaultValueArgs.Count;
                     if (ct > 0 && dvCt > 0) {
                         CodeBuilder.Append(", ");
                     }
                     for (int i = 0; i < dvCt; ++i) {
-                        var info = ii.DefaultValueArgs[i];
+                        var info = ii.NameOrDefaultValueArgs[i];
                         var opd = ii.ArgConversions.Count > ct + i ? ii.ArgConversions[ct + i] : null;
                         bool dslToObject = null != ii.DslToObjectDefArgs ? ii.DslToObjectDefArgs.Contains(i) : false;
                         if (null != info.Expression) {
@@ -219,7 +219,7 @@ namespace RoslynTool.CsToDsl
                 }
             }
             if (ii.PostPositionGenericTypeArgs && ii.GenericTypeArgs.Count > 0) {
-                if (ii.Args.Count + ii.DefaultValueArgs.Count > 0)
+                if (ii.Args.Count + ii.NameOrDefaultValueArgs.Count > 0)
                     CodeBuilder.Append(", ");
                 OutputTypeArgumentList(ii.GenericTypeArgs, useTypeNameString, node);
             }
