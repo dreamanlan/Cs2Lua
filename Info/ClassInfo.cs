@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
-using Microsoft.CodeAnalysis.Semantics;
+using Microsoft.CodeAnalysis.Operations;
 
 namespace RoslynTool.CsToDsl
 {
@@ -195,7 +195,7 @@ namespace RoslynTool.CsToDsl
             bool baseInitializerCalled = false;
             var init = node.Initializer;
             if (null != init) {
-                var oper = model.GetOperationEx(init) as IInvocationExpression;
+                var oper = model.GetOperationEx(init) as IInvocationOperation;
                 if (init.ThisOrBaseKeyword.Text == "this") {
                     var constructor = oper.TargetMethod;
                     if (null != constructor) {

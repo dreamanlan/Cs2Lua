@@ -37,25 +37,43 @@ Test = {
 
 		local obj_methods = {
 			Init = function(this)
+				local items;
+				items = wraparray({"ȫ��", "������", "�ɽ�ȡ", "�����", "δ��ȡ"}, nil, System.String, TypeKind.Class);
 				this.m_DataChangeCallBackInfoPool:Init__Func_1_T__Action_1_T(nil, nil);
 				local strlist;
 				strlist = newlist(StrList, nil, nil, "ctor", {});
 				strlist:Add(System.String.Empty);
 				strlist:Sort__Comparison_1_T(function(a, b)
-					local __lambda_112_21_112_45;
-					__lambda_112_21_112_45 = invokeforbasicvalue(a, false, System.String, "CompareTo__String", b);
-					return __lambda_112_21_112_45;
+					local __lambda_117_21_117_45;
+					__lambda_117_21_117_45 = invokeforbasicvalue(a, false, System.String, "CompareTo__String", b);
+					return __lambda_117_21_117_45;
 				end);
 				local intlist;
 				intlist = newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, "ctor", {});
 				intlist:Add(1);
+				local a;
+				a = strlist:get_Item__Int32__Int32(strlist, 0, 1);
 				intlist:Sort__Comparison_1_T(function(a, b)
-					local __lambda_115_21_115_45;
-					__lambda_115_21_115_45 = invokeforbasicvalue(a, false, System.Int32, "CompareTo__Int32", b);
-					return __lambda_115_21_115_45;
+					local __lambda_121_21_121_45;
+					__lambda_121_21_121_45 = invokeforbasicvalue(a, false, System.Int32, "CompareTo__Int32", b);
+					return __lambda_121_21_121_45;
 				end);
 				local aa;
 				if (not isequal(nil, strlist)) then aa = strlist.Count else aa = intlist.Count end;
+				local bb;
+				bb = wraparray({wraparray({1, 2}, nil, System.Int32, TypeKind.Struct), wraparray({3, 4}, nil, System.Int32, TypeKind.Struct), wraparray({5, 6}, nil, System.Int32, TypeKind.Struct)}, nil, System.Int32, TypeKind.Struct);
+				a = bb[1][2];
+				local act;
+				act = typecast((function()
+					System.Console.Write__Int32(a);
+				end), "System.Action", TypeKind.Delegate);
+			end,
+
+			test = function(this)
+				local a;
+				a = function()
+					System.Console.Write__String(luastrtocsstr("test"));
+				end;
 			end,
 
 			ctor = function(this)
@@ -100,6 +118,9 @@ Test = {
 	-------------------------------
 	__method_info = {
 		Init = {
+			Kind = MethodKind.Ordinary,
+		},
+		test = {
 			Kind = MethodKind.Ordinary,
 		},
 		ctor = {

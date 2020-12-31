@@ -13,17 +13,17 @@ class(LuaString) {
 			local(__method_ret_6_4_9_5);
 			__method_ret_6_4_9_5 = callexternstatic(System.String, "Format__String__Object", str, __dsl_arg);
 			return(__method_ret_6_4_9_5);
-		}options[needfuncinfo(false)];
+		}options[needfuncinfo(false), rettype(System.String, TypeKind.Class), paramtype(str, System.String, TypeKind.Class), paramtype(__dsl_arg, System.Object, TypeKind.Class)];
 		Format__String__Object__Object = deffunc(1)args(str, arg1, arg2){
 			local(__method_ret_10_4_13_5);
 			__method_ret_10_4_13_5 = callexternstatic(System.String, "Format__String__Object__Object", str, arg1, arg2);
 			return(__method_ret_10_4_13_5);
-		}options[needfuncinfo(false)];
+		}options[needfuncinfo(false), rettype(System.String, TypeKind.Class), paramtype(str, System.String, TypeKind.Class), paramtype(arg1, System.Object, TypeKind.Class), paramtype(arg2, System.Object, TypeKind.Class)];
 		Format__String__Object__Object__Object = deffunc(1)args(str, arg1, arg2, arg3){
 			local(__method_ret_14_4_17_5);
 			__method_ret_14_4_17_5 = callexternstatic(System.String, "Format__String__Object__Object__Object", str, arg1, arg2, arg3);
 			return(__method_ret_14_4_17_5);
-		}options[needfuncinfo(false)];
+		}options[needfuncinfo(false), rettype(System.String, TypeKind.Class), paramtype(str, System.String, TypeKind.Class), paramtype(arg1, System.Object, TypeKind.Class), paramtype(arg2, System.Object, TypeKind.Class), paramtype(arg3, System.Object, TypeKind.Class)];
 		cctor = deffunc(0)args(){
 			callstatic(LuaString, "__cctor");
 		};

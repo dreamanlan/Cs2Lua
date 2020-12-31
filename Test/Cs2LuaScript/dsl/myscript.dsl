@@ -41,9 +41,9 @@ class(MyScript) {
 				callinstance(this, MyScript, "Reset");
 				getexterninstance(SymbolKind.Property, counttxt, UnityEngine.UI.Text, "text") = callstatic(LuaString, "Format__String__Object", "cube:{0}", v);
 				setinstance(SymbolKind.Field, this, MyScript, "max", typecast(v, System.Int32, TypeKind.Struct));
-			}options[needfuncinfo(false)]);
+			}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown), paramtype(v, System.Single, TypeKind.Struct)]);
 			callinstance(this, MyScript, "Reset");
-		}options[needfuncinfo(false)];
+		}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown), paramtype(obj, UnityEngine.GameObject, TypeKind.Class), paramtype(mb, MonoBehaviourProxy, TypeKind.Class)];
 		Update = deffunc(0)args(this){
 			local(i); i = 0;
 			while( execbinary("<", i, getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, MyScript, "cubes"), System.Array, "Length"), System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
@@ -52,7 +52,7 @@ class(MyScript) {
 				local(angle); angle = condexp(execbinary("==", execbinary("%", i, 2, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), false, function(){ funcobjret(getexternstatic(SymbolKind.Property, UnityEngine.Time, "time")); }, true, -5);
 				local(b); b = newexternstruct(UnityEngine.Vector3, typeargs(), typekinds(), "ctor__Single__Single__Single", null, typecast(( execbinary("*", callexternstatic(UnityEngine.Mathf, "Cos", execbinary("+", execbinary("/", execbinary("*", execbinary("*", i, 3.14159300, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 2, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(SymbolKind.Field, this, MyScript, "max"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), angle, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct)), nr, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct) ), System.Single, TypeKind.Struct), typecast(( execbinary("*", callexternstatic(UnityEngine.Mathf, "Sin", execbinary("+", execbinary("/", execbinary("*", execbinary("*", i, 3.14159300, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 2, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(SymbolKind.Field, this, MyScript, "max"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), angle, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct)), nr, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct) ), System.Single, TypeKind.Struct), 0);
 				setexterninstance(SymbolKind.Property, getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, MyScript, "cubes")[i + 1], UnityEngine.GameObject, "transform"), UnityEngine.Transform, "position", b);
-			i = execbinary("+", i, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
+			i = execbinary("+", i, 1, null, null, null, null);
 			};
 			if( execbinary("||", execbinary("<=", getinstance(SymbolKind.Field, this, MyScript, "fogStart"), 0, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), execbinary(">", getinstance(SymbolKind.Field, this, MyScript, "t"), 1, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct) ){
 				setinstance(SymbolKind.Field, this, MyScript, "fogStart", getexternstatic(SymbolKind.Property, UnityEngine.Time, "time"));
@@ -68,10 +68,10 @@ class(MyScript) {
 			};
 			setinstance(SymbolKind.Field, this, MyScript, "t", execbinary("/", ( execbinary("-", getexternstatic(SymbolKind.Property, UnityEngine.Time, "time"), getinstance(SymbolKind.Field, this, MyScript, "fogStart"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct) ), 10, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct));
 			getexterninstancestructmember(SymbolKind.Property, getexternstatic(SymbolKind.Property, UnityEngine.Camera, "main"), UnityEngine.Camera, "backgroundColor") = callexternstaticreturnstruct(UnityEngine.Color, "Lerp", getinstance(SymbolKind.Field, this, MyScript, "bgCurrent"), getinstance(SymbolKind.Field, this, MyScript, "bgColor"), getinstance(SymbolKind.Field, this, MyScript, "t"));
-		}options[needfuncinfo(true)];
+		}options[needfuncinfo(true), rettype(System.Void, TypeKind.Unknown)];
 		Call = deffunc(0)args(this, name, ...){
 			local(args); args = params(System.Object, TypeKind.Class);
-		}options[needfuncinfo(false)];
+		}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown), paramtype(name, System.String, TypeKind.Class), paramtype(..., , TypeKind.Array)];
 		TestCoroutine = wrapenumerable(deffunc(1)args(this){
 			local(__method_ret_69_4_76_5);
 			wrapyield(newexternobject(UnityEngine.WaitForSeconds, typeargs(), typekinds(), "ctor", null, 10), false, true);
@@ -79,16 +79,16 @@ class(MyScript) {
 			while( execbinary("<", i, 60, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
 				wrapyield(newexternobject(UnityEngine.WaitForSeconds, typeargs(), typekinds(), "ctor", null, 1), false, true);
 				callexternstatic(UnityEngine.Debug, "Log__Object", callexternstatic(System.String, "Format__String__Object", dslstrtocsstr("{0} seconds"), i));
-			i = execbinary("+", i, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
+			i = execbinary("+", i, 1, null, null, null, null);
 			};
 			return(null);
-		}options[needfuncinfo(false)]);
+		}options[needfuncinfo(false), rettype(System.Collections.IEnumerator, TypeKind.Interface)]);
 		Reset = deffunc(0)args(this){
 			if( execbinary("!=", null, getinstance(SymbolKind.Field, this, MyScript, "cubes"), System.Object, System.Object, TypeKind.Class, TypeKind.Class) ){
 				local(i); i = 0;
 				while( execbinary("<", i, getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, MyScript, "cubes"), System.Array, "Length"), System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
 					callexternstatic(UnityEngine.Object, "Destroy__Object", getinstance(SymbolKind.Field, this, MyScript, "cubes")[i + 1]);
-				i = execbinary("+", i, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
+				i = execbinary("+", i, 1, null, null, null, null);
 				};
 			};
 			setinstance(SymbolKind.Field, this, MyScript, "cubes", newmultiarray(UnityEngine.GameObject, TypeKind.Class, null, 1, getinstance(SymbolKind.Field, this, MyScript, "max")));
@@ -106,9 +106,9 @@ class(MyScript) {
 				local(ix); ix = callexternstatic(UnityEngine.Random, "Range__Int32__Int32", 0, getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, MyScript, "colors"), System.Array, "Length"));
 				setexterninstance(SymbolKind.Property, mat, UnityEngine.Material, "color", getinstance(SymbolKind.Field, this, MyScript, "colors")[ix + 1]);
 				getinstance(SymbolKind.Field, this, MyScript, "cubes")[i + 1] = cube;
-			i = execbinary("+", i, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct);
+			i = execbinary("+", i, 1, null, null, null, null);
 			};
-		}options[needfuncinfo(true)];
+		}options[needfuncinfo(true), rettype(System.Void, TypeKind.Unknown)];
 		ctor = deffunc(0)args(this){
 			callinstance(this, MyScript, "__ctor");
 		};

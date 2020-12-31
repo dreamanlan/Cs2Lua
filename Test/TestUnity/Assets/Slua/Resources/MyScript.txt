@@ -61,11 +61,11 @@ MyScript = {
 				i = 0;
 				while (i < this.cubes.Length) do
 					local offset;
-					offset = ((((i % 2) == 1)) and (5) or (-5));
+					if ((i % 2) == 1) then offset = 5 else offset = -5 end;
 					local nr;
 					nr = (this.r + (UnityEngine.Mathf.Sin(UnityEngine.Time.time) * offset));
 					local angle;
-					angle = ((((i % 2) == 1)) and (UnityEngine.Time.time) or (-5));
+					if ((i % 2) == 1) then angle = UnityEngine.Time.time else angle = -5 end;
 					local b;
 					b = new_vector3(__cs2lua_func_info, UnityEngine.Vector3, nil, nil, "ctor__Single__Single__Single", nil, typecast(((UnityEngine.Mathf.Cos(((((i * 3.14159300) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Struct), typecast(((UnityEngine.Mathf.Sin(((((i * 3.14159300) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Struct), 0);
 					this.cubes[(i + 1)].transform.position = b;

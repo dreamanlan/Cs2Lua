@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
-using Microsoft.CodeAnalysis.Semantics;
+using Microsoft.CodeAnalysis.Operations;
 
 namespace RoslynTool.CsToDsl
 {
@@ -16,7 +16,7 @@ namespace RoslynTool.CsToDsl
     internal class ArgDefaultValueInfo
     {
         internal object Value;
-        internal object OperOrSym;
+        internal IOperation Operation;
         internal ExpressionSyntax Expression;
     }
     internal class InvocationInfo
@@ -25,7 +25,7 @@ namespace RoslynTool.CsToDsl
         internal string GenericClassKey = string.Empty;
         internal List<ExpressionSyntax> Args = new List<ExpressionSyntax>();
         internal HashSet<int> DslToObjectArgs = new HashSet<int>();
-        internal List<IConversionExpression> ArgConversions = new List<IConversionExpression>();
+        internal List<IConversionOperation> ArgConversions = new List<IConversionOperation>();
         internal List<ArgDefaultValueInfo> NameOrDefaultValueArgs = new List<ArgDefaultValueInfo>();
         internal HashSet<int> DslToObjectDefArgs = new HashSet<int>();
         internal List<ExpressionSyntax> ReturnArgs = new List<ExpressionSyntax>();
@@ -247,7 +247,7 @@ namespace RoslynTool.CsToDsl
             Init(sym, model);
 
             if (null != argList) {
-                var moper = model.GetOperationEx(argList) as IInvocationExpression;
+                var moper = model.GetOperationEx(argList) as IInvocationOperation;
                 var args = argList.Arguments;
 
                 Dictionary<string, ExpressionSyntax> namedArgs = new Dictionary<string, ExpressionSyntax>();
@@ -255,7 +255,7 @@ namespace RoslynTool.CsToDsl
                 for (int i = 0; i < args.Count; ++i) {
                     var arg = args[i];
                     var argOper = model.GetOperationEx(arg.Expression);
-                    TryAddExternEnum(IsEnumClass, argOper);
+                    TryAddExternEnum(IsEnumClass, null, argOper);
                     if (null != arg.NameColon) {
                         namedArgs.Add(arg.NameColon.Name.Identifier.Text, arg.Expression);
                         continue;
@@ -263,13 +263,14 @@ namespace RoslynTool.CsToDsl
                     if (null != argOper) {
                         TryAddDslToObjectArg(ct, argOper.Type, i);
                     }
-                    IConversionExpression lastConv = null;
+                    IConversionOperation lastConv = null;
                     if (ct < sym.Parameters.Length) {
                         var param = sym.Parameters[ct];
                         if (null != moper) {
-                            var iarg = moper.GetArgumentMatchingParameter(param);
+                            
+                            var iarg = GetArgumentMatchingParameter(moper, param);
                             if (null != iarg) {
-                                lastConv = iarg.Value as IConversionExpression;
+                                lastConv = iarg.Value as IConversionOperation;
                             }
                         }
                         if (!param.IsParams && param.Type.TypeKind == TypeKind.Array) {
@@ -320,11 +321,11 @@ namespace RoslynTool.CsToDsl
                 }
                 for (int i = ct; i < sym.Parameters.Length; ++i) {
                     var param = sym.Parameters[i];
-                    IConversionExpression lastConv = null;
+                    IConversionOperation lastConv = null;
                     if (null != moper) {
-                        var iarg = moper.GetArgumentMatchingParameter(param);
+                        var iarg = GetArgumentMatchingParameter(moper, param);
                         if (null != iarg) {
-                            lastConv = iarg.Value as IConversionExpression;
+                            lastConv = iarg.Value as IConversionOperation;
                         }
                     }
                     ArgConversions.Add(lastConv);
@@ -350,13 +351,13 @@ namespace RoslynTool.CsToDsl
                                     if (null != oper) {
                                         TryAddDslToObjectDefArg(i, oper.Type, i - ct);
                                     }
-                                    NameOrDefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, OperOrSym = oper });
+                                    NameOrDefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, Operation = oper });
                                     handled = true;
                                 }
                             }
                         }
                         if (!handled) {
-                            NameOrDefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, OperOrSym = null });
+                            NameOrDefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, Operation = null });
                         }
                     }
                 }
@@ -367,7 +368,7 @@ namespace RoslynTool.CsToDsl
             Init(sym, model);
 
             if (null != argList) {
-                var moper = model.GetOperationEx(argList) as IInvocationExpression;
+                var moper = model.GetOperationEx(argList) as IInvocationOperation;
                 var args = argList.Arguments;
 
                 Dictionary<string, ExpressionSyntax> namedArgs = new Dictionary<string, ExpressionSyntax>();
@@ -375,7 +376,7 @@ namespace RoslynTool.CsToDsl
                 for (int i = 0; i < args.Count; ++i) {
                     var arg = args[i];
                     var argOper = model.GetOperationEx(arg.Expression);
-                    TryAddExternEnum(IsEnumClass, argOper);
+                    TryAddExternEnum(IsEnumClass, null, argOper);
                     if (null != arg.NameColon) {
                         namedArgs.Add(arg.NameColon.Name.Identifier.Text, arg.Expression);
                         continue;
@@ -383,13 +384,13 @@ namespace RoslynTool.CsToDsl
                     if (null != argOper) {
                         TryAddDslToObjectArg(ct, argOper.Type, i);
                     }
-                    IConversionExpression lastConv = null;
+                    IConversionOperation lastConv = null;
                     if (ct < sym.Parameters.Length) {
                         var param = sym.Parameters[ct];
                         if (null != moper) {
-                            var iarg = moper.GetArgumentMatchingParameter(param);
+                            var iarg = GetArgumentMatchingParameter(moper, param);
                             if (null != iarg) {
-                                lastConv = iarg.Value as IConversionExpression;
+                                lastConv = iarg.Value as IConversionOperation;
                             }
                         }
                         if (!param.IsParams && param.Type.TypeKind == TypeKind.Array) {
@@ -441,11 +442,11 @@ namespace RoslynTool.CsToDsl
                 for (int i = ct; i < sym.Parameters.Length; ++i) {
                     var param = sym.Parameters[i];
                     if (param.HasExplicitDefaultValue) {
-                        IConversionExpression lastConv = null;
+                        IConversionOperation lastConv = null;
                         if (null != moper) {
-                            var iarg = moper.GetArgumentMatchingParameter(param);
+                            var iarg = GetArgumentMatchingParameter(moper, param);
                             if (null != iarg) {
-                                lastConv = iarg.Value as IConversionExpression;
+                                lastConv = iarg.Value as IConversionOperation;
                             }
                         }
                         ArgConversions.Add(lastConv);
@@ -471,20 +472,20 @@ namespace RoslynTool.CsToDsl
                                         if (null != oper) {
                                             TryAddDslToObjectDefArg(i, oper.Type, i - ct);
                                         }
-                                        NameOrDefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, OperOrSym = oper });
+                                        NameOrDefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, Operation = oper });
                                         handled = true;
                                     }
                                 }
                             }
                             if (!handled) {
-                                NameOrDefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, OperOrSym = null });
+                                NameOrDefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, Operation = null });
                             }
                         }
                     }
                 }
             }
         }
-        internal void Init(IMethodSymbol sym, List<ExpressionSyntax> argList, SemanticModel model, params IConversionExpression[] opds)
+        internal void Init(IMethodSymbol sym, List<ExpressionSyntax> argList, SemanticModel model, params IConversionOperation[] opds)
         {
             Init(sym, model);
 
@@ -495,7 +496,7 @@ namespace RoslynTool.CsToDsl
                     if (null != argOper && null != argOper.Type && argOper.Type.TypeKind == TypeKind.Array) {
                         RecordRefArray(arg);
                     }
-                    TryAddExternEnum(IsEnumClass, argOper);
+                    TryAddExternEnum(IsEnumClass, null, argOper);
                     if (null != argOper) {
                         TryAddDslToObjectArg(i, argOper.Type, i);
                     }
@@ -675,7 +676,8 @@ namespace RoslynTool.CsToDsl
                 }
                 else if (IsBasicValueMethod || expIsBasicType) {
                     //这里不区分是否外部符号了，委托到动态语言的脚本库实现，可根据对象运行时信息判断
-                    string ckey = CalcInvokeTarget(IsEnumClass, ClassKey, cs2dsl, expOper);
+                    var type = model.GetTypeInfoEx(exp).Type;
+                    string ckey = CalcInvokeTarget(IsEnumClass, ClassKey, cs2dsl, type);
                     codeBuilder.Append("invokeforbasicvalue(");
                     cs2dsl.OutputExpressionSyntax(exp);
                     codeBuilder.Append(", ");
@@ -770,6 +772,14 @@ namespace RoslynTool.CsToDsl
             codeBuilder.Append(")");
         }
         
+        private IArgumentOperation GetArgumentMatchingParameter(IInvocationOperation oper, IParameterSymbol param)
+        {
+            foreach(var arg in oper.Arguments) {
+                if (arg.Parameter == param)
+                    return arg;
+            }
+            return null;
+        }
         private void RecordRefArray(ExpressionSyntax exp)
         {
             if (IsArrayStaticMethod) {
@@ -869,15 +879,18 @@ namespace RoslynTool.CsToDsl
             return false;
         }
 
-        internal static void TryAddExternEnum(bool isEnumClass, IOperation oper)
+        internal static void TryAddExternEnum(bool isEnumClass, ITypeSymbol type, IOperation oper)
         {
             if (isEnumClass) {
-                if (!SymbolTable.Instance.IsCs2DslSymbol(oper.Type) && oper.Type.TypeKind == TypeKind.Enum) {
-                    string ckey = ClassInfo.GetFullName(oper.Type);
-                    SymbolTable.Instance.AddExternEnum(ckey, oper.Type);
+                if (null != oper) {
+                    type = oper.Type;
                 }
-                else {
-                    var typeOf = oper as ITypeOfExpression;
+                if (null != type && !SymbolTable.Instance.IsCs2DslSymbol(type) && type.TypeKind == TypeKind.Enum) {
+                    string ckey = ClassInfo.GetFullName(type);
+                    SymbolTable.Instance.AddExternEnum(ckey, type);
+                }
+                else if (null != oper) {
+                    var typeOf = oper as ITypeOfOperation;
                     if (null != typeOf && !SymbolTable.Instance.IsCs2DslSymbol(typeOf.TypeOperand) && typeOf.TypeOperand.TypeKind == TypeKind.Enum) {
                         string ckey = ClassInfo.GetFullName(typeOf.TypeOperand);
                         SymbolTable.Instance.AddExternEnum(ckey, typeOf.TypeOperand);
@@ -886,16 +899,16 @@ namespace RoslynTool.CsToDsl
             }
         }
 
-        internal static string CalcInvokeTarget(bool isEnumClass, string classKey, CsDslTranslater cs2dsl, IOperation oper)
+        internal static string CalcInvokeTarget(bool isEnumClass, string classKey, CsDslTranslater cs2dsl, ITypeSymbol type)
         {
-            TryAddExternEnum(isEnumClass, oper);
+            TryAddExternEnum(isEnumClass, type, null);
             string ckey = classKey;
-            if (isEnumClass) {
-                if (oper.Type.TypeKind == TypeKind.Enum) {
+            if (isEnumClass && null != type) {
+                if (type.TypeKind == TypeKind.Enum) {
                     var ci = cs2dsl.GetCurClassInfo();
-                    ci.AddReference(oper.Type);
+                    ci.AddReference(type);
 
-                    ckey = ClassInfo.GetFullName(oper.Type);
+                    ckey = ClassInfo.GetFullName(type);
                 }
             }
             return ckey;

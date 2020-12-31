@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
-using Microsoft.CodeAnalysis.Semantics;
+using Microsoft.CodeAnalysis.Operations;
 
 namespace RoslynTool.CsToDsl
 {
@@ -47,7 +47,7 @@ namespace RoslynTool.CsToDsl
             var psym = model.GetSymbolInfoEx(node).Symbol as IPropertySymbol;
             var fsym = model.GetSymbolInfoEx(node).Symbol as IFieldSymbol;
             var msym = model.GetSymbolInfoEx(node).Symbol as IMethodSymbol;
-            var oper = model.GetOperationEx(node);
+            var nodeType = model.GetTypeInfoEx(node).Type;
 
             bool isExtern = false;
             INamedTypeSymbol classType = null;
@@ -75,13 +75,13 @@ namespace RoslynTool.CsToDsl
                     Logger.Instance.Log(node, "unsupported extern event '{0}.{1}' !", ClassInfo.GetFullName(msym.ContainingType), msym.Name);
                 }
             }
-            if (isExtern && null != oper) {
+            if (isExtern && null != nodeType) {
                 SymbolTable.TryRemoveNullable(ref classType);
                 if (null != classType && (classType.TypeKind == TypeKind.Delegate || classType.IsGenericType && SymbolTable.Instance.IsLegalGenericType(classType, true))) {
                     //如果是标记为合法的泛型类或委托类型的成员，则不用再进行类型检查
                 }
                 else {
-                    var type = oper.Type as INamedTypeSymbol;
+                    var type = nodeType as INamedTypeSymbol;
                     SymbolTable.TryRemoveNullable(ref type);
                     if (null != type && !SymbolTable.Instance.IsCs2DslSymbol(type) && type.TypeKind != TypeKind.Delegate) {
                         if (type.IsGenericType) {
@@ -98,7 +98,7 @@ namespace RoslynTool.CsToDsl
                 }
             }
         }
-        internal static void CheckInvocation(SemanticModel model, IMethodSymbol sym, IList<ExpressionSyntax> args, IList<ArgDefaultValueInfo> nameOrDefValArgs, IList<IConversionExpression> argConversions, SyntaxNode node, IMethodSymbol callerSym)
+        internal static void CheckInvocation(SemanticModel model, IMethodSymbol sym, IList<ExpressionSyntax> args, IList<ArgDefaultValueInfo> nameOrDefValArgs, IList<IConversionOperation> argConversions, SyntaxNode node, IMethodSymbol callerSym)
         {
             if (!SymbolTable.EnableTranslationCheck) {
                 return;
@@ -115,7 +115,7 @@ namespace RoslynTool.CsToDsl
 
             if (!SymbolTable.Instance.IsCs2DslSymbol(sym)) {
                 var ckey = ClassInfo.GetFullName(sym.ContainingType);
-                var oper = null != node ? model.GetOperationEx(node) as IInvocationExpression : null;
+                var oper = null != node ? model.GetOperationEx(node) as IInvocationOperation : null;
                 var realType = null != oper && null != oper.Instance ? oper.Instance.Type : null;
 
                 bool isOverload = false;
@@ -153,13 +153,13 @@ namespace RoslynTool.CsToDsl
                         if (ix < args.Count)
                             argOper = null != args[ix] ? model.GetOperationEx(args[ix]) : null;
                         else if (ix < args.Count + nameOrDefValArgs.Count)
-                            argOper = nameOrDefValArgs[ix - args.Count].OperOrSym as IOperation;
-                        IConversionExpression argConv = null;
+                            argOper = nameOrDefValArgs[ix - args.Count].Operation;
+                        IConversionOperation argConv = null;
                         if(ix< argConversions.Count)
                             argConv = argConversions[ix];
                         ++ix;
                         INamedTypeSymbol argType = null;
-                        if (null != argOper && (null == argConv || !argConv.UsesOperatorMethod)) {
+                        if (null != argOper && (null == argConv || null == argConv.OperatorMethod)) {
                             argType = argOper.Type as INamedTypeSymbol;
                         }
                         var paramType = param.Type as INamedTypeSymbol;

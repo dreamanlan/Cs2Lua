@@ -42,6 +42,11 @@ class(StrList, System.Collections.Generic.List_T) {
 			callinstance(this, StrList, "__ctor");
 			return(this);
 		}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown), paramtype(coll, System.Collections.Generic.ICollection_T, TypeKind.Interface)],
+		get_Item__Int32__Int32 = deffunc(1)args(this, i, j){
+			local(__method_ret_20_4_23_5);
+			__method_ret_20_4_23_5 = 0;
+			return(__method_ret_20_4_23_5);
+		}options[needfuncinfo(false), rettype(System.Int32, TypeKind.Struct), paramtype(i, System.Int32, TypeKind.Struct), paramtype(j, System.Int32, TypeKind.Struct)];
 		__ctor = deffunc(0)args(this){
 			if(getinstance(SymbolKind.Field, this, StrList, "__ctor_called")){
 				return();
@@ -75,6 +80,8 @@ class(StrList, System.Collections.Generic.List_T) {
 		ctor__Int32(MethodKind.Constructor, Accessibility.Public){
 		};
 		ctor__ICollection_1_String(MethodKind.Constructor, Accessibility.Public){
+		};
+		get_Item__Int32__Int32(MethodKind.PropertyGet, Accessibility.Public){
 		};
 	};
 	property_info {};

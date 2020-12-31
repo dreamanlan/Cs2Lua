@@ -7,8 +7,9 @@ local function get_basic_type_func()
     end
 end
 
-Slua = Slua or {out = {}, nil_field_value = {}}
+Slua = Slua or {out = {}}
 __cs2lua_out = Slua.out
+__cs2lua_nil = {}
 
 System = System or {}
 System.Boolean = System.Boolean or get_basic_type_func()
@@ -203,8 +204,12 @@ function luastrtocsstr(str)
     end
 end
 
-function strconcat(str1, str2)
+function stringconcat(str1, str2)
     return System.String.Concat__String__String(str1, str2)
+end
+
+function paramtypecheck(obj, class)
+    return obj
 end
 
 function getStack()
@@ -242,15 +247,18 @@ end
 local rawrequire = require
 -- a chatty version of the actual import function above
 function require(x)
+    local ret = nil
     if package.loading[x] == nil then
         package.loading[x] = true
         --print('loading started for ' .. x)
-        rawrequire(x)
+        ret = rawrequire(x)
         --print('loading ended for ' .. x)
         package.loading[x] = nil
     else
+        ret = package.loaded[x]
         --print('already loading ' .. x)
     end
+    return ret
 end
 
 local function wrap_max(...)
@@ -792,7 +800,10 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
             if type(obj) == "string" then
                 csstr = System.String.ctor__A_Char(obj)
             end
-            if method == "Split" or 1 == string.find(method, "Split__") then
+            if method == "Split__A_Char__StringSplitOptions" then
+                local arg1, arg2 = ...
+                return csstr[method](csstr, arg1, arg2)
+            elseif method == "Split" or 1 == string.find(method, "Split__") then
                 local result1, result2 = _get_first_untable_from_pack_args(...)
                 if result2 then
                     return csstr[method](csstr, result1, result2)
@@ -811,12 +822,12 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
         elseif meta then
             return obj[method](obj, ...)
         elseif method == "CompareTo" or 1 == string.find(method, "CompareTo__") then            
-            if type(obj)=="boolean" and type(arg2)=="boolean" then
-                if obj and arg2 then
+            if type(obj)=="boolean" and type(arg1)=="boolean" then
+                if obj and arg1 then
                     return 0
-                elseif not obj and not arg2 then
+                elseif not obj and not arg1 then
                     return 0
-                elseif obj and not arg2 then
+                elseif obj and not arg1 then
                     return 1
                 else
                     return -1
@@ -894,7 +905,7 @@ function invokearraystaticmethod(firstArray, secondArray, method, ...)
         local meta = getmetatable(firstArray)
         if meta and rawget(meta, "__cs2lua_defined") then
             if method == "IndexOf" or 1 == string.find(method, "IndexOf__", 1, true) then
-                return firstArray:IndexOf(arg1, arg2)
+                return firstArray:IndexOf(arg2)
             elseif method == "Sort" or 1 == string.find(method, "Sort__", 1, true) then
                 return table.sort(
                     firstArray,
@@ -1938,6 +1949,8 @@ __mt_index_of_dictionary_table = {
         end,
 }
 
+rawset(__mt_index_of_dictionary_table, "Remove__TKey", rawget(__mt_index_of_dictionary_table, "Remove"))
+
 __mt_index_of_dictionary = function(t, k)
     if k == "Count" then
         return __get_table_count(t)
@@ -2302,7 +2315,11 @@ function newiterator(exp)
             local enumer = exp:GetEnumerator()
             local f = function()
                 if enumer:MoveNext() then
-                    return enumer.Current
+                    local v = enumer.Current
+                    if v == nil then
+                        v = __cs2lua_nil
+                    end
+                    return v
                 else
                     return nil
                 end
@@ -2325,6 +2342,9 @@ function newiterator(exp)
                     curIx = curIx + 1
                     local v = arr[curIx]
                     --lualog("LuaArray iterator:{0} {1}", curIx, v)
+                    if v == nil then
+                        v = __cs2lua_nil
+                    end
                     return v
                 else
                     --lualog("LuaArray iterator:{0} nil", curIx)
@@ -2603,19 +2623,12 @@ function rshift(v, n)
     end
 end
 
-function condexp(cv, tfIsSimple, tf, ffIsSimple, ff)
+--tv与fv都是常量时使用
+function simplecondexp(cv, tv, fv)
     if cv then
-        if tfIsSimple then
-            return tf
-        else
-            return tf()
-        end
+        return tv
     else
-        if ffIsSimple then
-            return ff
-        else
-            return ff()
-        end
+        return fv
     end
 end
 

@@ -54,6 +54,12 @@ StrList = {
 				return this;
 			end,
 
+			get_Item__Int32__Int32 = function(this, i, j)
+				local __method_ret_20_4_23_5;
+				__method_ret_20_4_23_5 = 0;
+				return __method_ret_20_4_23_5;
+			end,
+
 			__ctor = function(this)
 				if this.__ctor_called then 
 					return;
@@ -107,6 +113,9 @@ StrList = {
 		},
 		ctor__ICollection_1_String = {
 			Kind = MethodKind.Constructor,
+		},
+		get_Item__Int32__Int32 = {
+			Kind = MethodKind.PropertyGet,
 		},
 	},
 };

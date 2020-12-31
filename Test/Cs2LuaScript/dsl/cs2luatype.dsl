@@ -11,7 +11,7 @@ class(Cs2LuaType) {
 			local(__method_ret_7_4_11_5);
 			__method_ret_7_4_11_5 = Cs2LuaTypeImpl.GetFullName(type);
 			return(__method_ret_7_4_11_5);
-		}options[needfuncinfo(false)];
+		}options[needfuncinfo(false), rettype(System.String, TypeKind.Class), paramtype(type, System.Type, TypeKind.Class)];
 		cctor = deffunc(0)args(){
 			callstatic(Cs2LuaType, "__cctor");
 		};

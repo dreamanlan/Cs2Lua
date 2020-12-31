@@ -18,6 +18,10 @@ public class StrList : List<string>
     public StrList():base() { }
     public StrList(int c):base(c) { }
     public StrList(ICollection<string> coll) : base(coll) { }
+    public int this[int i, int j]
+    {
+        get { return 0; }
+    }
 }
 
 public interface ICs2LuaPoolAllocatedObjectEx<T> where T : ICs2LuaPoolAllocatedObjectEx<T>
@@ -107,14 +111,23 @@ class Test
 {
     public void Init()
     {
+        string[] items = { "全部", "进行中", "可接取", "已完成", "未获取" };
         m_DataChangeCallBackInfoPool.Init(null, null);
         StrList strlist = new StrList();
         strlist.Add(string.Empty);
         strlist.Sort((a, b) => a.CompareTo(b));
         List<int> intlist = new List<int>();
         intlist.Add(1);
+        int a = strlist[0, 1];
         intlist.Sort((a, b) => a.CompareTo(b));
         int aa = null != strlist ? strlist.Count : intlist.Count;
+        int[,] bb = new int[,] { { 1, 2 }, { 3, 4 }, { 5, 6 } };
+        a = bb[0,1];
+        var act = (Action)(()=> { Console.Write(a); });
+    }
+    public void test()
+    {
+        var a = new Action(()=> { Console.Write("test"); });
     }
     private Cs2LuaObjectPoolEx<DataChangeCallBackInfo> m_DataChangeCallBackInfoPool = new Cs2LuaObjectPoolEx<DataChangeCallBackInfo>();
 }

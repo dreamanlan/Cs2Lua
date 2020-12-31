@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Semantics;
+using Microsoft.CodeAnalysis.Operations;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
@@ -195,25 +195,20 @@ namespace RoslynTool.CsToDsl
         public override void VisitBracketedArgumentList(BracketedArgumentListSyntax node)
         {
             var oper = m_Model.GetOperationEx(node);
-            if (oper.Kind == OperationKind.IndexedPropertyReferenceExpression) {
-                OutputArgumentList(node.Arguments, ", ", oper);
-            }
-            else {
-                OutputArgumentList(node.Arguments, "][", oper);
-            }
+            OutputArgumentList(node.Arguments, ", ", oper);
         }
         public override void VisitArgument(ArgumentSyntax node)
         {
-            var oper = m_Model.GetOperationEx(node) as IArgument;
-            IConversionExpression opd = null;
+            var oper = m_Model.GetOperationEx(node) as IArgumentOperation;
+            IConversionOperation opd = null;
             if (null != oper) {
-                opd = oper.Value as IConversionExpression;
+                opd = oper.Value as IConversionOperation;
             }
             OutputExpressionSyntax(node.Expression, opd);
         }
         public override void VisitPredefinedType(PredefinedTypeSyntax node)
         {
-            TypeInfo typeInfo = m_Model.GetTypeInfo(node);
+            TypeInfo typeInfo = m_Model.GetTypeInfoEx(node);
             var type = typeInfo.Type;
 
             if (null != type) {

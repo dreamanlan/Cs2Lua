@@ -4,7 +4,7 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Text;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Semantics;
+using Microsoft.CodeAnalysis.Operations;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
@@ -208,7 +208,7 @@ namespace RoslynTool.CsToDsl
                         else {
                             if (dslToObject)
                                 OutputDslToObjectPrefix(ii.MethodSymbol);
-                            OutputArgumentDefaultValue(info.Value, info.OperOrSym, ii.IsExternMethod, opd, node);
+                            OutputArgumentDefaultValue(info.Value, info.Operation, ii.IsExternMethod, opd, node);
                             if (dslToObject)
                                 CodeBuilder.Append(")");
                         }
@@ -228,16 +228,16 @@ namespace RoslynTool.CsToDsl
         {
             OutputExpressionSyntax(node, null, false, false, null);
         }
-        internal void OutputExpressionSyntax(ExpressionSyntax node, IConversionExpression opd)
+        internal void OutputExpressionSyntax(ExpressionSyntax node, IConversionOperation opd)
         {
             OutputExpressionSyntax(node, opd, false, false, null);
         }
-        internal void OutputExpressionSyntax(ExpressionSyntax node, IConversionExpression opd, bool dslToObject, bool dslStrToCsStr, ISymbol sym)
+        internal void OutputExpressionSyntax(ExpressionSyntax node, IConversionOperation opd, bool dslToObject, bool dslStrToCsStr, ISymbol sym)
         {
             if (dslToObject) {
                 OutputDslToObjectPrefix(sym);
             }
-            if (null != opd && opd.UsesOperatorMethod && !(node is CastExpressionSyntax)) {
+            if (null != opd && null != opd.OperatorMethod && !(node is CastExpressionSyntax)) {
                 IMethodSymbol msym = opd.OperatorMethod;
                 InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), node);
                 var arglist = new List<ExpressionSyntax>() { node };
@@ -515,8 +515,7 @@ namespace RoslynTool.CsToDsl
         }
         private void OutputArgumentList(SeparatedSyntaxList<ArgumentSyntax> args, string split, IOperation oper)
         {
-            var arrOper = oper as IArrayElementReferenceExpression;
-            var indexerOper = oper as IIndexedPropertyReferenceExpression;
+            var arrOper = oper as IArrayElementReferenceOperation;
             int ct = args.Count;
             for (int i = 0; i < ct; ++i) {
                 var arg = args[i];
@@ -537,20 +536,6 @@ namespace RoslynTool.CsToDsl
                         if (SymbolTable.ArrayLowerBoundIsOne) {
                             CodeBuilder.Append(" + 1");
                         }
-                    }
-                }
-                else if (null != indexerOper) {
-                    bool isConst = false;
-                    if (i < indexerOper.ArgumentsInParameterOrder.Length) {
-                        var argSym = indexerOper.ArgumentsInParameterOrder[i];
-                        var constVal = argSym.Value.ConstantValue;
-                        if (constVal.HasValue && constVal.Value is int) {
-                            CodeBuilder.Append((int)constVal.Value);
-                            isConst = true;
-                        }
-                    }
-                    if (!isConst) {
-                        VisitArgument(arg);
                     }
                 }
                 else {
@@ -650,9 +635,9 @@ namespace RoslynTool.CsToDsl
         {
             OutputDefaultValue(CodeBuilder, type, setValueTypeToNull);
         }
-        private void OutputArgumentDefaultValue(object val, object operOrSym, bool dslStrToCsStr, IConversionExpression opd, SyntaxNode node)
+        private void OutputArgumentDefaultValue(object val, IOperation oper, bool dslStrToCsStr, IConversionOperation opd, SyntaxNode node)
         {
-            if (null != opd && opd.UsesOperatorMethod) {
+            if (null != opd && null != opd.OperatorMethod) {
                 IMethodSymbol msym = opd.OperatorMethod;
                 InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), node);
                 ii.Init(msym, m_Model);
@@ -660,7 +645,6 @@ namespace RoslynTool.CsToDsl
             }
             if (null == val) {
                 bool handled = false;
-                var oper = operOrSym as IOperation;
                 if (null != oper) {
                     var tree = oper.Syntax.SyntaxTree;
                     var newModel = m_Model.Compilation.GetSemanticModel(tree, true);
@@ -692,15 +676,15 @@ namespace RoslynTool.CsToDsl
                     }
                 }
                 if (!handled) {
-                    var objCreate = operOrSym as IObjectCreationExpression;
-                    var arrCreate = operOrSym as IArrayCreationExpression;
-                    var fieldRef = operOrSym as IFieldReferenceExpression;
-                    var propRef = operOrSym as IPropertyReferenceExpression;
+                    var objCreate = oper as IObjectCreationOperation;
+                    var arrCreate = oper as IArrayCreationOperation;
+                    var fieldRef = oper as IFieldReferenceOperation;
+                    var propRef = oper as IPropertyReferenceOperation;
                     if (null != objCreate) {
                         var namedTypeSym = objCreate.Type as INamedTypeSymbol;
                         var sym = objCreate.Constructor;
-                        var args = objCreate.ArgumentsInParameterOrder;
-                        var memberInit = objCreate.MemberInitializers;
+                        var args = objCreate.Arguments;
+                        var memberInit = objCreate.Initializer;
 
                         bool isCollection = IsImplementationOfSys(namedTypeSym, "ICollection");
                         bool isExternal = !SymbolTable.Instance.IsCs2DslSymbol(namedTypeSym);
@@ -745,7 +729,7 @@ namespace RoslynTool.CsToDsl
                         else {
                             CodeBuilder.AppendFormat(", \"{0}\"", ctor);
                         }
-                        if (null == memberInit || memberInit.Length <= 0) {
+                        if (null == memberInit || memberInit.Initializers.Length <= 0) {
                             if (isCollection) {
                                 bool isDictionary = IsImplementationOfSys(namedTypeSym, "IDictionary");
                                 bool isList = IsImplementationOfSys(namedTypeSym, "IList");
@@ -786,7 +770,8 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(" );}");
                     }
                     else if (null != arrCreate) {
-                        ITypeSymbol etype = SymbolTable.GetElementType(arrCreate.ElementType);
+                        var arrSym = arrCreate.Type as IArrayTypeSymbol;
+                        ITypeSymbol etype = SymbolTable.GetElementType(arrSym.ElementType);
                         if (etype.IsValueType && !SymbolTable.IsBasicType(etype)) {
                             MarkNeedFuncInfo();
                         }
@@ -868,14 +853,14 @@ namespace RoslynTool.CsToDsl
                         }
                     }
                     else {
-                        OutputConstValue(val, operOrSym, dslStrToCsStr);
+                        OutputConstValue(val, oper, dslStrToCsStr);
                     }
                 }
             }
             else {
-                OutputConstValue(val, operOrSym, dslStrToCsStr);
+                OutputConstValue(val, oper, dslStrToCsStr);
             }
-            if (null != opd && opd.UsesOperatorMethod) {
+            if (null != opd && null != opd.OperatorMethod) {
                 CodeBuilder.Append(")");
             }
         }
@@ -1018,7 +1003,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.Append(", ");
             }
         }
-        private bool ProcessEqualOrNotEqual(string op, ExpressionSyntax left, ExpressionSyntax right, IConversionExpression lopd, IConversionExpression ropd)
+        private bool ProcessEqualOrNotEqual(string op, ExpressionSyntax left, ExpressionSyntax right, IConversionOperation lopd, IConversionOperation ropd)
         {
             bool handled = false;
             var leftOper = m_Model.GetOperationEx(left);
@@ -1046,7 +1031,7 @@ namespace RoslynTool.CsToDsl
             }
             return handled;
         }
-        private void OutputDelegationCompareWithNull(ISymbol leftSym, IOperation leftOper, ExpressionSyntax left, bool isCs2LuaAssembly, bool isEqual, IConversionExpression opd)
+        private void OutputDelegationCompareWithNull(ISymbol leftSym, IOperation leftOper, ExpressionSyntax left, bool isCs2LuaAssembly, bool isEqual, IConversionOperation opd)
         {
             if (null == leftSym && null == leftOper) {
                 Log(left, "delegation compare with null, left symbol == null and left oper == null");
@@ -1525,18 +1510,24 @@ namespace RoslynTool.CsToDsl
                         sb.Append(val);
                 }
                 else {
-                    var oper = operOrSym as IFieldReferenceExpression;
+                    var oper = operOrSym as IFieldReferenceOperation;
                     if (null != oper) {
                         var fieldSym = oper.Field;
                         sb.AppendFormat("wrapconst({0}, \"{1}\")", ClassInfo.GetFullName(fieldSym.Type), fieldSym.Name);
                     }
                     else {
-                        if (val is float)
-                            sb.AppendFormat("{0:f8}", val);
-                        else if (val is double)
-                            sb.AppendFormat("{0:f16}", val);
-                        else
-                            sb.Append(val);
+                        var fs = operOrSym as IFieldSymbol;
+                        if (null != fs) {
+                            sb.AppendFormat("wrapconst({0}, \"{1}\")", ClassInfo.GetFullName(fs.Type), fs.Name);
+                        }
+                        else {
+                            if (val is float)
+                                sb.AppendFormat("{0:f8}", val);
+                            else if (val is double)
+                                sb.AppendFormat("{0:f16}", val);
+                            else
+                                sb.Append(val);
+                        }
                     }
                 }
             }

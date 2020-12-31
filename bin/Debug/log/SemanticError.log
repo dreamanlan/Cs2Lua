@@ -1,0 +1,3 @@
+============<<<Semantic Error:test>>>============
+test.cs(118,23): error CS0136: A local or parameter named 'a' cannot be declared in this scope because that name is used in an enclosing local scope to define a local or parameter
+test.cs(122,23): error CS0136: A local or parameter named 'a' cannot be declared in this scope because that name is used in an enclosing local scope to define a local or parameter

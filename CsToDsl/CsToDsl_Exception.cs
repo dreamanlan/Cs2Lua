@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Semantics;
+using Microsoft.CodeAnalysis.Operations;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
@@ -18,7 +18,7 @@ namespace RoslynTool.CsToDsl
         {
             CodeBuilder.AppendFormat("{0}dslthrow(", GetIndentString());
             if (null != node.Expression) {
-                IConversionExpression opd = m_Model.GetOperationEx(node.Expression) as IConversionExpression;
+                IConversionOperation opd = m_Model.GetOperationEx(node.Expression) as IConversionOperation;
                 OutputExpressionSyntax(node.Expression, opd);
             }
             CodeBuilder.AppendLine(");");
@@ -132,7 +132,7 @@ namespace RoslynTool.CsToDsl
             ++m_Indent;
             if (null != node.Filter) {
                 CodeBuilder.Append("if(");
-                IConversionExpression opd = m_Model.GetOperationEx(node.Filter.FilterExpression) as IConversionExpression;
+                IConversionOperation opd = m_Model.GetOperationEx(node.Filter.FilterExpression) as IConversionOperation;
                 OutputExpressionSyntax(node.Filter.FilterExpression, opd);
                 CodeBuilder.Append("){");
                 CodeBuilder.AppendLine();

@@ -1198,6 +1198,15 @@ namespace RoslynTool.CsToDsl
             }
             return info;
         }
+        internal static TypeInfo GetTypeInfoEx(this SemanticModel model, SyntaxNode node)
+        {
+            TypeInfo info;
+            if (!s_TypeInfoCache.TryGetValue(node, out info)) {
+                info = model.GetTypeInfo(node);
+                s_TypeInfoCache.TryAdd(node, info);
+            }
+            return info;
+        }
         internal static IOperation GetOperationEx(this SemanticModel model, SyntaxNode node)
         {
             IOperation info = null;
@@ -1207,8 +1216,19 @@ namespace RoslynTool.CsToDsl
             }
             return info;
         }
+        internal static Optional<object> GetConstantValueEx(this SemanticModel model, SyntaxNode node)
+        {
+            Optional<object> info = null;
+            if (!s_ConstCache.TryGetValue(node, out info)) {
+                info = model.GetConstantValue(node);
+                s_ConstCache.TryAdd(node, info);
+            }
+            return info;
+        }
 
         private static ConcurrentDictionary<SyntaxNode, SymbolInfo> s_SymbolInfoCache = new ConcurrentDictionary<SyntaxNode, SymbolInfo>();
+        private static ConcurrentDictionary<SyntaxNode, TypeInfo> s_TypeInfoCache = new ConcurrentDictionary<SyntaxNode, TypeInfo>();
         private static ConcurrentDictionary<SyntaxNode, IOperation> s_OperationCache = new ConcurrentDictionary<SyntaxNode, IOperation>();
+        private static ConcurrentDictionary<SyntaxNode, Optional<object>> s_ConstCache = new ConcurrentDictionary<SyntaxNode, Optional<object>>();
     }
 }

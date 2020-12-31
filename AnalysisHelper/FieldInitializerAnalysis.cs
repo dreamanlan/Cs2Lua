@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
-using Microsoft.CodeAnalysis.Semantics;
+using Microsoft.CodeAnalysis.Operations;
 
 namespace RoslynTool.CsToDsl
 {
@@ -26,7 +26,7 @@ namespace RoslynTool.CsToDsl
 
         public override void VisitTypeOfExpression(TypeOfExpressionSyntax node)
         {
-            var oper = m_Model.GetOperationEx(node) as ITypeOfExpression;
+            var oper = m_Model.GetOperationEx(node) as ITypeOfOperation;
             var type = oper.TypeOperand;
             if (null != type) {
                 if (type.TypeKind == TypeKind.TypeParameter) {
@@ -42,14 +42,14 @@ namespace RoslynTool.CsToDsl
         public override void VisitObjectCreationExpression(ObjectCreationExpressionSyntax node)
         {
             var oper = m_Model.GetOperationEx(node);
-            var objectCreate = oper as IObjectCreationExpression;
+            var objectCreate = oper as IObjectCreationOperation;
             if (null != objectCreate) {
                 var typeSymInfo = objectCreate.Type;
                 var sym = objectCreate.Constructor;
                 m_ObjectCreateType = typeSymInfo;
             }
             else {
-                var typeParamObjCreate = oper as ITypeParameterObjectCreationExpression;
+                var typeParamObjCreate = oper as ITypeParameterObjectCreationOperation;
                 if (null != typeParamObjCreate) {
                     var typeParam = typeParamObjCreate.Type as ITypeParameterSymbol;
                     if (typeParam.TypeParameterKind == TypeParameterKind.Type) {
@@ -62,7 +62,7 @@ namespace RoslynTool.CsToDsl
 
         public override void VisitCastExpression(CastExpressionSyntax node)
         {
-            var typeInfo = m_Model.GetTypeInfo(node.Type);
+            var typeInfo = m_Model.GetTypeInfoEx(node.Type);
             var type = typeInfo.Type as ITypeParameterSymbol;
             if (null != type && type.TypeParameterKind == TypeParameterKind.Type) {
                 m_UseExplicitTypeParam = true;
