@@ -1364,10 +1364,10 @@ namespace SLua
                     }
 
                     if (t.IsValueType && !fi.IsStatic) {
-                        if (t.Name == "BoxedValue")
-                            Write(file, "setBack(l,(object)self);");
-                        else
+                        if (t.FullName == "UnityEngine.Color" || t.FullName == "UnityEngine.Quaternion" || t.FullName == "UnityEngine.Vector2" || t.FullName == "UnityEngine.Vector3" || t.FullName == "UnityEngine.Vector4")
                             Write(file, "setBack(l,self);");
+                        else
+                            Write(file, "setBack(l,(object)self);");
                     }
                     WriteOk(file);
                     Write(file, "return 1;");
@@ -1451,10 +1451,10 @@ namespace SLua
                     }
 
                     if (t.IsValueType) {
-                        if (t.Name == "BoxedValue")
-                            Write(file, "setBack(l,(object)self);");
-                        else
+                        if (t.FullName == "UnityEngine.Color" || t.FullName == "UnityEngine.Quaternion" || t.FullName == "UnityEngine.Vector2" || t.FullName == "UnityEngine.Vector3" || t.FullName == "UnityEngine.Vector4")
                             Write(file, "setBack(l,self);");
+                        else
+                            Write(file, "setBack(l,(object)self);");
                     }
                     WriteOk(file);
                     Write(file, "return 1;");
@@ -1604,10 +1604,10 @@ namespace SLua
                             first_set = false;
                         }
                         if (t.IsValueType) {
-                            if (t.Name == "BoxedValue")
-                                Write(file, "setBack(l,(object)self);");
-                            else
+                            if (t.FullName == "UnityEngine.Color" || t.FullName == "UnityEngine.Quaternion" || t.FullName == "UnityEngine.Vector2" || t.FullName == "UnityEngine.Vector3" || t.FullName == "UnityEngine.Vector4")
                                 Write(file, "setBack(l,self);");
+                            else
+                                Write(file, "setBack(l,(object)self);");
                         }
                     }
                     Write(file, "LuaDLL.lua_pushstring(l,\"No matched override function to call\");");
@@ -2339,10 +2339,10 @@ namespace SLua
             }
 
             if (t.IsValueType && m.ReturnType == typeof(void) && !m.IsStatic) {
-                if (t.Name == "BoxedValue")
-                    Write(file, "setBack(l,(object)self);");
-                else
+                if (t.FullName == "UnityEngine.Color" || t.FullName == "UnityEngine.Quaternion" || t.FullName == "UnityEngine.Vector2" || t.FullName == "UnityEngine.Vector3" || t.FullName == "UnityEngine.Vector4")
                     Write(file, "setBack(l,self);");
+                else
+                    Write(file, "setBack(l,(object)self);");
             }
 
             Write(file, "return {0};", retcount);
