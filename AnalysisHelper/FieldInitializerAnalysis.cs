@@ -74,9 +74,9 @@ namespace RoslynTool.CsToDsl
         {
             string op = node.OperatorToken.Text;
             if (op == "is" || op == "as") {
-                var oper = m_Model.GetOperationEx(node.Right);
-                if (null != oper) {
-                    var type = oper.Type as ITypeParameterSymbol;
+                var _type = m_Model.GetTypeInfoEx(node.Right).Type;
+                if (null != _type) {
+                    var type = _type as ITypeParameterSymbol;
                     if (null != type && type.TypeParameterKind == TypeParameterKind.Type) {
                         m_UseExplicitTypeParam = true;
                     }

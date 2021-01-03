@@ -1305,8 +1305,7 @@ namespace RoslynTool.CsToDsl
                         }
                     }
                     else if (null != node.Expression) {
-                        var oper = m_Model.GetOperationEx(node.Expression);
-                        var type = oper.Type;
+                        var type = m_Model.GetTypeInfoEx(node.Expression).Type;
                         var msym = GetDisposeMethod(type);
                         if (null != msym) {
                             var fn = ClassInfo.GetFullName(msym.ContainingType);
@@ -1341,8 +1340,7 @@ namespace RoslynTool.CsToDsl
                 }
             }
             else if (null != node.Expression) {
-                var oper = m_Model.GetOperationEx(node.Expression);
-                var type = oper.Type;
+                var type = m_Model.GetTypeInfoEx(node.Expression).Type;
                 var msym = GetDisposeMethod(type);
                 if (null != msym) {
                     var fn = ClassInfo.GetFullName(msym.ContainingType);

@@ -235,7 +235,7 @@ namespace SLua
                 int oldindex;
                 if (isGcObject(o) && objMap.TryGetValue(o, out oldindex) && oldindex == index) {
                     objMap.Remove(o);
-                    if(SLuaSetting.IsEditor || SLuaSetting.Instance.IsDebug)
+                    if (objNameDebugs.Count > 0)
                         objNameDebugs.Remove(o);
                 }
                 cache.del(index);
@@ -247,7 +247,7 @@ namespace SLua
             if (objMap.TryGetValue(o, out index)) {
                 objMap.Remove(o);
                 cache.del(index);
-                if (SLuaSetting.IsEditor || SLuaSetting.Instance.IsDebug)
+                if (objNameDebugs.Count > 0)
                     objNameDebugs.Remove(o);
             }
         }
@@ -257,7 +257,7 @@ namespace SLua
             int objIndex = cache.add(o);
             if (isGcObject(o)) {
                 objMap[o] = objIndex;
-                if (SLuaSetting.IsEditor || SLuaSetting.Instance.IsDebug) {
+                if (SLuaSetting.Instance.IsDebug) {
                     string s1 = string.Empty, s2 = string.Empty;
                     if (SLuaSetting.Instance.RecordObjectStackTrace) {
                         s1 = Environment.StackTrace;

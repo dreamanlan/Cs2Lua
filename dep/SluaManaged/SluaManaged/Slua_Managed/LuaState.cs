@@ -1188,6 +1188,10 @@ return dumpstack
             return 1;
         }
 
+        static public Dictionary<string, string> DebugStringMap
+        {
+            get { return debugStringMap; }
+        }
         static public string getStringMD5(string str)
         {
             MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
@@ -1206,10 +1210,10 @@ return dumpstack
 
         public object doString(string str)
         {
-            if (SLuaSetting.Instance.IsDebug) {
+            if (SLuaSetting.IsEditor && SLuaSetting.Instance.IsDebug) {
                 //get str's md5 string
                 string stringMd5 = getStringMD5(str);
-                debugStringMap.Add(stringMd5, str);
+                debugStringMap[stringMd5] = str;
                 return doString(str, stringMd5);
             }
             else {

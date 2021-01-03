@@ -336,32 +336,69 @@ namespace RoslynTool.CsToDsl
             ci.Init(node.Statement);
             m_ContinueInfoStack.Push(ci);
 
-            var srcPos = GetSourcePosForVar(node);
-            string varName = string.Format("__foreach_{0}", srcPos);
-            CodeBuilder.AppendFormat("{0}foreach({1}, {2}, ", GetIndentString(), varName, node.Identifier.Text);
             IConversionOperation opd = null;
-            int rank = 0;
-            List<int> sizes = new List<int>();
+            bool isList = false;
+            bool isArray = false;
             var oper = m_Model.GetOperationEx(node) as IForEachLoopOperation;
             if (null != oper) {
                 opd = oper.Collection as IConversionOperation;
-                var collType = oper.Collection.Type;
-                if (collType.TypeKind == TypeKind.Array) {
-                    var arrType = collType as IArrayTypeSymbol;
-                    rank = arrType.Rank;
-                    sizes.AddRange(arrType.Sizes);
+            }
+            var expType = m_Model.GetTypeInfoEx(node.Expression).Type;
+            if (null != expType) {
+                isList = IsImplementationOfSys(expType, "IList");
+                isArray = expType.TypeKind == TypeKind.Array;
+            }
+
+            var srcPos = GetSourcePosForVar(node);
+            if (isArray) {
+                int rank = 0;
+                var arrType = expType as IArrayTypeSymbol;
+                rank = arrType.Rank;
+                bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(expType);
+                string varIndex = string.Format("__foreach_ix_{0}", srcPos);
+                string varExp = string.Format("__foreach_exp_{0}", srcPos);
+                CodeBuilder.AppendFormat("{0}foreacharray({1}, {2}, {3}, ", GetIndentString(), varIndex, varExp, node.Identifier.Text);
+                OutputExpressionSyntax(node.Expression, opd);
+                CodeBuilder.Append(", ");
+                CodeBuilder.Append(rank);
+                CodeBuilder.Append(", ");
+                CodeBuilder.Append(isCs2Dsl ? "false" : "true");
+                CodeBuilder.AppendLine("){");
+            }
+            else if (isList) {
+                string varIndex = string.Format("__foreach_ix_{0}", srcPos);
+                string varExp = string.Format("__foreach_exp_{0}", srcPos);
+                var objType = expType as INamedTypeSymbol;
+                INamedTypeSymbol listType = null;
+                var fobj = objType;
+                while (null != fobj) {
+                    if (fobj.GetMembers("get_Item").Length > 0) {
+                        listType = fobj;
+                        break;
+                    }
+                    fobj = fobj.BaseType;
                 }
+                bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(listType);
+                string objTypeName = ClassInfo.GetFullName(objType);
+                string listTypeName = ClassInfo.GetFullName(listType);
+                CodeBuilder.AppendFormat("{0}foreachlist({1}, {2}, {3}, ", GetIndentString(), varIndex, varExp, node.Identifier.Text);
+                OutputExpressionSyntax(node.Expression, opd);
+                CodeBuilder.Append(", ");
+                CodeBuilder.Append(objTypeName);
+                CodeBuilder.Append(", ");
+                OutputTypeArgsInfo(CodeBuilder, objType, this);
+                CodeBuilder.Append(", ");
+                CodeBuilder.Append(listTypeName);
+                CodeBuilder.Append(", ");
+                CodeBuilder.Append(isCs2Dsl ? "false" : "true");
+                CodeBuilder.AppendLine("){");
             }
-            OutputExpressionSyntax(node.Expression, opd);
-            CodeBuilder.Append(", ");
-            CodeBuilder.Append(rank);
-            CodeBuilder.Append(", [");
-            for(int i = 0; i < sizes.Count; ++i) {
-                if (i > 0)
-                    CodeBuilder.Append(",");
-                CodeBuilder.Append(sizes[i]);
+            else {
+                string varIter = string.Format("__foreach_{0}", srcPos);
+                CodeBuilder.AppendFormat("{0}foreach({1}, {2}, ", GetIndentString(), varIter, node.Identifier.Text);
+                OutputExpressionSyntax(node.Expression, opd);
+                CodeBuilder.AppendLine("){");
             }
-            CodeBuilder.AppendLine("]){");
             if (ci.HaveContinue) {
                 if (ci.HaveBreak) {
                     CodeBuilder.AppendFormat("{0}local({1}); {1} = false;", GetIndentString(), ci.BreakFlagVarName);
@@ -617,8 +654,7 @@ namespace RoslynTool.CsToDsl
             if (node.ReturnOrBreakKeyword.Text == "return") {
                 CodeBuilder.AppendFormat("{0}wrapyield(", GetIndentString());
                 if (null != node.Expression) {
-                    var oper = m_Model.GetOperationEx(node.Expression);
-                    var type = oper.Type;
+                    var type = m_Model.GetTypeInfoEx(node.Expression).Type;
                     OutputExpressionSyntax(node.Expression);
                     if (null != type && (IsImplementationOfSys(type, "IEnumerable") || IsImplementationOfSys(type, "IEnumerator"))) {
                         CodeBuilder.Append(", true");

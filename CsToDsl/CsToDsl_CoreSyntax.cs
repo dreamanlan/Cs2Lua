@@ -1365,11 +1365,11 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("set{0}{1}indexer(", isCs2Lua ? string.Empty : "extern", leftPsym.IsStatic ? "static" : "instance");
                 if (!isCs2Lua) {
                     INamedTypeSymbol namedTypeSym = null;
-                    var expOper = m_Model.GetOperationEx(leftElementAccess.Expression);
-                    if (null != expOper) {
-                        string fullName = ClassInfo.GetFullName(expOper.Type);
+                    var expType = m_Model.GetTypeInfoEx(leftElementAccess.Expression).Type;
+                    if (null != expType) {
+                        string fullName = ClassInfo.GetFullName(expType);
                         CodeBuilder.Append(fullName);
-                        namedTypeSym = expOper.Type as INamedTypeSymbol;
+                        namedTypeSym = expType as INamedTypeSymbol;
                     }
                     else {
                         CodeBuilder.Append("null");
@@ -1517,11 +1517,11 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendFormat("set{0}{1}indexer(", isCs2Lua ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
                     if (!isCs2Lua) {
                         INamedTypeSymbol namedTypeSym = null;
-                        var expOper = m_Model.GetOperationEx(leftCondAccess.Expression);
-                        if (null != expOper) {
-                            string fullName = ClassInfo.GetFullName(expOper.Type);
+                        var expType = m_Model.GetTypeInfoEx(leftCondAccess.Expression).Type;
+                        if (null != expType) {
+                            string fullName = ClassInfo.GetFullName(expType);
                             CodeBuilder.Append(fullName);
-                            namedTypeSym = expOper.Type as INamedTypeSymbol;
+                            namedTypeSym = expType as INamedTypeSymbol;
                         }
                         else {
                             CodeBuilder.Append("null");

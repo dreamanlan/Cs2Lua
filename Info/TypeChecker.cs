@@ -149,18 +149,18 @@ namespace RoslynTool.CsToDsl
                 else {
                     int ix = 0;
                     foreach (var param in sym.Parameters) {
-                        IOperation argOper = null;
+                        ITypeSymbol _argType = null;
                         if (ix < args.Count)
-                            argOper = null != args[ix] ? model.GetOperationEx(args[ix]) : null;
+                            _argType = null != args[ix] ? model.GetTypeInfoEx(args[ix]).Type : null;
                         else if (ix < args.Count + nameOrDefValArgs.Count)
-                            argOper = nameOrDefValArgs[ix - args.Count].Operation;
+                            _argType = nameOrDefValArgs[ix - args.Count].Type;
                         IConversionOperation argConv = null;
                         if(ix< argConversions.Count)
                             argConv = argConversions[ix];
                         ++ix;
                         INamedTypeSymbol argType = null;
-                        if (null != argOper && (null == argConv || null == argConv.OperatorMethod)) {
-                            argType = argOper.Type as INamedTypeSymbol;
+                        if (null != _argType && (null == argConv || null == argConv.OperatorMethod)) {
+                            argType = _argType as INamedTypeSymbol;
                         }
                         var paramType = param.Type as INamedTypeSymbol;
                         if (param.IsParams && isOverload) {

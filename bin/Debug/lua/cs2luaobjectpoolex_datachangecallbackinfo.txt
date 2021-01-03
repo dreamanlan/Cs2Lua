@@ -56,18 +56,18 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 			end,
 
 			Alloc = function(this)
-				local __method_ret_48_4_59_5;
+				local __method_ret_44_4_55_5;
 				if (this.m_UnusedObjects.Count > 0) then 
-					__method_ret_48_4_59_5 = this.m_UnusedObjects:Dequeue();
-					return __method_ret_48_4_59_5;
+					__method_ret_44_4_55_5 = this.m_UnusedObjects:Dequeue();
+					return __method_ret_44_4_55_5;
 				else
 					local t;
 					t = this.m_Creater();
 					if (not isequal(nil, t)) then 
 						t:InitPool(this);
 					end;
-					__method_ret_48_4_59_5 = t;
-					return __method_ret_48_4_59_5;
+					__method_ret_44_4_55_5 = t;
+					return __method_ret_44_4_55_5;
 				end;
 				return nil;
 			end,
@@ -80,22 +80,22 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 
 			Clear = function(this)
 				if delegationcomparewithnil(false, this, "m_Destroyer", SymbolKind.Field, false) then 
-					local __foreach_69_12_71_13 = newiterator(this.m_UnusedObjects);
-					for item in getiterator(__foreach_69_12_71_13) do
+					local __foreach_65_12_67_13 = newiterator(this.m_UnusedObjects);
+					for item in getiterator(__foreach_65_12_67_13) do
 						if item == __cs2lua_nil then
 							item = nil;
 						end;
 						this.m_Destroyer						(item);
 					end;
-					recycleiterator(__foreach_69_12_71_13);
+					recycleiterator(__foreach_65_12_67_13);
 				end;
 				this.m_UnusedObjects:Clear();
 			end,
 
 			get_Count = function(this)
-				local __method_ret_75_4_80_5;
-				__method_ret_75_4_80_5 = this.m_UnusedObjects.Count;
-				return __method_ret_75_4_80_5;
+				local __method_ret_71_4_76_5;
+				__method_ret_71_4_76_5 = this.m_UnusedObjects.Count;
+				return __method_ret_71_4_76_5;
 			end,
 
 			ctor = function(this)

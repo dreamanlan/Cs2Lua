@@ -36,9 +36,9 @@ class(DataChangeCallBackInfo) {
 			setinstance(SymbolKind.Field, this, DataChangeCallBackInfo, "m_ActorId", 0);
 		}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown)];
 		Downcast = deffunc(1)args(this){
-			local(__method_ret_99_4_102_5);
-			__method_ret_99_4_102_5 = this;
-			return(__method_ret_99_4_102_5);
+			local(__method_ret_95_4_98_5);
+			__method_ret_95_4_98_5 = this;
+			return(__method_ret_95_4_98_5);
 		}options[needfuncinfo(false), rettype(DataChangeCallBackInfo, TypeKind.Class)];
 		InitPool = deffunc(0)args(this, pool){
 		}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown), paramtype(pool, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, TypeKind.Class)];

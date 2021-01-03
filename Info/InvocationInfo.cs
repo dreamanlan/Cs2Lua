@@ -16,6 +16,7 @@ namespace RoslynTool.CsToDsl
     internal class ArgDefaultValueInfo
     {
         internal object Value;
+        internal ITypeSymbol Type;
         internal IOperation Operation;
         internal ExpressionSyntax Expression;
     }
@@ -30,7 +31,7 @@ namespace RoslynTool.CsToDsl
         internal HashSet<int> DslToObjectDefArgs = new HashSet<int>();
         internal List<ExpressionSyntax> ReturnArgs = new List<ExpressionSyntax>();
         internal List<bool> ReturnValueArgFlags = new List<bool>();
-        internal List<IOperation> ReturnArgOperations = new List<IOperation>();
+        internal List<ITypeSymbol> ReturnArgTypes = new List<ITypeSymbol>();
         internal List<ISymbol> ReturnArgSymbols = new List<ISymbol>();
         internal List<ITypeSymbol> GenericTypeArgs = new List<ITypeSymbol>();
         internal bool ArrayToParams = false;
@@ -72,7 +73,7 @@ namespace RoslynTool.CsToDsl
             DslToObjectDefArgs.Clear();
             ReturnArgs.Clear();
             ReturnValueArgFlags.Clear();
-            ReturnArgOperations.Clear();
+            ReturnArgTypes.Clear();
             ReturnArgSymbols.Clear();
             GenericTypeArgs.Clear();
 
@@ -255,13 +256,14 @@ namespace RoslynTool.CsToDsl
                 for (int i = 0; i < args.Count; ++i) {
                     var arg = args[i];
                     var argOper = model.GetOperationEx(arg.Expression);
-                    TryAddExternEnum(IsEnumClass, null, argOper);
+                    var argType = model.GetTypeInfoEx(arg.Expression).Type;
+                    TryAddExternEnum(IsEnumClass, argType, null);
                     if (null != arg.NameColon) {
                         namedArgs.Add(arg.NameColon.Name.Identifier.Text, arg.Expression);
                         continue;
                     }
-                    if (null != argOper) {
-                        TryAddDslToObjectArg(ct, argOper.Type, i);
+                    if (null != argType) {
+                        TryAddDslToObjectArg(ct, argType, i);
                     }
                     IConversionOperation lastConv = null;
                     if (ct < sym.Parameters.Length) {
@@ -280,9 +282,9 @@ namespace RoslynTool.CsToDsl
                             Args.Add(arg.Expression);
                             ReturnArgs.Add(arg.Expression);
                             var argSym = model.GetSymbolInfoEx(arg.Expression);
-                            ReturnArgOperations.Add(argOper);
+                            ReturnArgTypes.Add(argType);
                             ReturnArgSymbols.Add(argSym.Symbol);
-                            if (null != argOper && argOper.Type.IsValueType && !SymbolTable.IsBasicType(argOper.Type)) {
+                            if (null != argType && argType.IsValueType && !SymbolTable.IsBasicType(argType)) {
                                 ReturnValueArgFlags.Add(true);
                             }
                             else {
@@ -294,9 +296,9 @@ namespace RoslynTool.CsToDsl
                             Args.Add(null);
                             ReturnArgs.Add(arg.Expression);
                             var argSym = model.GetSymbolInfoEx(arg.Expression);
-                            ReturnArgOperations.Add(argOper);
+                            ReturnArgTypes.Add(argType);
                             ReturnArgSymbols.Add(argSym.Symbol);
-                            if (null != argOper && argOper.Type.IsValueType && !SymbolTable.IsBasicType(argOper.Type)) {
+                            if (null != argType && argType.IsValueType && !SymbolTable.IsBasicType(argType)) {
                                 ReturnValueArgFlags.Add(true);
                             }
                             else {
@@ -304,7 +306,7 @@ namespace RoslynTool.CsToDsl
                             }
                         }
                         else if (param.IsParams) {
-                            if (null != argOper && null != argOper.Type && argOper.Type.TypeKind == TypeKind.Array) {
+                            if (null != argType && argType.TypeKind == TypeKind.Array) {
                                 ArrayToParams = true;
                             }
                             Args.Add(arg.Expression);
@@ -331,9 +333,9 @@ namespace RoslynTool.CsToDsl
                     ArgConversions.Add(lastConv);
                     ExpressionSyntax expval;
                     if (namedArgs.TryGetValue(param.Name, out expval)) {
-                        var argOper = model.GetOperationEx(expval);
-                        if (null != argOper) {
-                            TryAddDslToObjectDefArg(i, argOper.Type, i - ct);
+                        var argType = model.GetTypeInfoEx(expval).Type;
+                        if (null != argType) {
+                            TryAddDslToObjectDefArg(i, argType, i - ct);
                         }
                         NameOrDefaultValueArgs.Add(new ArgDefaultValueInfo { Expression = expval });
                     }
@@ -348,16 +350,17 @@ namespace RoslynTool.CsToDsl
                                 var newModel = SymbolTable.Instance.Compilation.GetSemanticModel(tree, true);
                                 if (null != newModel) {
                                     var oper = newModel.GetOperationEx(exp);
-                                    if (null != oper) {
-                                        TryAddDslToObjectDefArg(i, oper.Type, i - ct);
+                                    var type = newModel.GetTypeInfoEx(exp).Type;
+                                    if (null != type) {
+                                        TryAddDslToObjectDefArg(i, type, i - ct);
                                     }
-                                    NameOrDefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, Operation = oper });
+                                    NameOrDefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, Type = type, Operation = oper });
                                     handled = true;
                                 }
                             }
                         }
                         if (!handled) {
-                            NameOrDefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, Operation = null });
+                            NameOrDefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, Type = null, Operation = null });
                         }
                     }
                 }
@@ -376,13 +379,14 @@ namespace RoslynTool.CsToDsl
                 for (int i = 0; i < args.Count; ++i) {
                     var arg = args[i];
                     var argOper = model.GetOperationEx(arg.Expression);
-                    TryAddExternEnum(IsEnumClass, null, argOper);
+                    var argType = model.GetTypeInfoEx(arg.Expression).Type;
+                    TryAddExternEnum(IsEnumClass, argType, argOper);
                     if (null != arg.NameColon) {
                         namedArgs.Add(arg.NameColon.Name.Identifier.Text, arg.Expression);
                         continue;
                     }
-                    if (null != argOper) {
-                        TryAddDslToObjectArg(ct, argOper.Type, i);
+                    if (null != argType) {
+                        TryAddDslToObjectArg(ct, argType, i);
                     }
                     IConversionOperation lastConv = null;
                     if (ct < sym.Parameters.Length) {
@@ -400,9 +404,9 @@ namespace RoslynTool.CsToDsl
                             Args.Add(arg.Expression);
                             ReturnArgs.Add(arg.Expression);
                             var argSym = model.GetSymbolInfoEx(arg.Expression);
-                            ReturnArgOperations.Add(argOper);
+                            ReturnArgTypes.Add(argType);
                             ReturnArgSymbols.Add(argSym.Symbol);
-                            if (null != argOper && argOper.Type.IsValueType && !SymbolTable.IsBasicType(argOper.Type)) {
+                            if (null != argType && argType.IsValueType && !SymbolTable.IsBasicType(argType)) {
                                 ReturnValueArgFlags.Add(true);
                             }
                             else {
@@ -414,9 +418,9 @@ namespace RoslynTool.CsToDsl
                             Args.Add(null);
                             ReturnArgs.Add(arg.Expression);
                             var argSym = model.GetSymbolInfoEx(arg.Expression);
-                            ReturnArgOperations.Add(argOper);
+                            ReturnArgTypes.Add(argType);
                             ReturnArgSymbols.Add(argSym.Symbol);
-                            if (null != argOper && argOper.Type.IsValueType && !SymbolTable.IsBasicType(argOper.Type)) {
+                            if (null != argType && argType.IsValueType && !SymbolTable.IsBasicType(argType)) {
                                 ReturnValueArgFlags.Add(true);
                             }
                             else {
@@ -424,7 +428,7 @@ namespace RoslynTool.CsToDsl
                             }
                         }
                         else if (param.IsParams) {
-                            if (null != argOper && null != argOper.Type && argOper.Type.TypeKind == TypeKind.Array) {
+                            if (null != argType && argType.TypeKind == TypeKind.Array) {
                                 ArrayToParams = true;
                             }
                             Args.Add(arg.Expression);
@@ -452,9 +456,9 @@ namespace RoslynTool.CsToDsl
                         ArgConversions.Add(lastConv);
                         ExpressionSyntax expval;
                         if (namedArgs.TryGetValue(param.Name, out expval)) {
-                            var argOper = model.GetOperationEx(expval);
-                            if (null != argOper) {
-                                TryAddDslToObjectDefArg(i, argOper.Type, i - ct);
+                            var argType = model.GetTypeInfoEx(expval).Type;
+                            if (null != argType) {
+                                TryAddDslToObjectDefArg(i, argType, i - ct);
                             }
                             NameOrDefaultValueArgs.Add(new ArgDefaultValueInfo { Expression = expval });
                         }
@@ -469,16 +473,17 @@ namespace RoslynTool.CsToDsl
                                     var newModel = SymbolTable.Instance.Compilation.GetSemanticModel(tree, true);
                                     if (null != newModel) {
                                         var oper = newModel.GetOperationEx(exp);
-                                        if (null != oper) {
-                                            TryAddDslToObjectDefArg(i, oper.Type, i - ct);
+                                        var type = newModel.GetTypeInfoEx(exp).Type;
+                                        if (null != type) {
+                                            TryAddDslToObjectDefArg(i, type, i - ct);
                                         }
-                                        NameOrDefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, Operation = oper });
+                                        NameOrDefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, Type = type, Operation = oper });
                                         handled = true;
                                     }
                                 }
                             }
                             if (!handled) {
-                                NameOrDefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, Operation = null });
+                                NameOrDefaultValueArgs.Add(new ArgDefaultValueInfo { Value = param.ExplicitDefaultValue, Type = null, Operation = null });
                             }
                         }
                     }
@@ -493,12 +498,13 @@ namespace RoslynTool.CsToDsl
                 for (int i = 0; i < argList.Count; ++i) {
                     var arg = argList[i];
                     var argOper = model.GetOperationEx(arg);
-                    if (null != argOper && null != argOper.Type && argOper.Type.TypeKind == TypeKind.Array) {
+                    var argType = model.GetTypeInfoEx(arg).Type;
+                    if (null != argType && argType.TypeKind == TypeKind.Array) {
                         RecordRefArray(arg);
                     }
-                    TryAddExternEnum(IsEnumClass, null, argOper);
-                    if (null != argOper) {
-                        TryAddDslToObjectArg(i, argOper.Type, i);
+                    TryAddExternEnum(IsEnumClass, argType, argOper);
+                    if (null != argType) {
+                        TryAddDslToObjectArg(i, argType, i);
                     }
                     Args.Add(arg);
                     if (i < opds.Length)
@@ -531,7 +537,7 @@ namespace RoslynTool.CsToDsl
                 bool flag = ReturnValueArgFlags[i];
                 if (flag) {
                     var exp = ReturnArgs[i];
-                    var oper = ReturnArgOperations[i];
+                    var type = ReturnArgTypes[i];
                     var leftSym = ReturnArgSymbols[i];
                     if (null != leftSym && SymbolTable.Instance.IsCs2DslSymbol(leftSym) && SymbolTable.Instance.IsFieldSymbolKind(leftSym)) {
                         codeBuilder.Append(CsDslTranslater.GetIndentString(indent));
@@ -549,27 +555,27 @@ namespace RoslynTool.CsToDsl
                 bool flag = ReturnValueArgFlags[i];
                 if (flag) {
                     var exp = ReturnArgs[i];
-                    var oper = ReturnArgOperations[i];
+                    var type = ReturnArgTypes[i];
                     var leftSym = ReturnArgSymbols[i];
                     if (null != leftSym && (leftSym.Kind == SymbolKind.Local || leftSym.Kind == SymbolKind.Parameter || SymbolTable.Instance.IsFieldSymbolKind(leftSym))) {
-                        if (SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
+                        if (SymbolTable.Instance.IsCs2DslSymbol(type)) {
                             cs2dsl.MarkNeedFuncInfo();
                             codeBuilder.Append(CsDslTranslater.GetIndentString(indent));
                             cs2dsl.OutputExpressionSyntax(exp);
                             codeBuilder.Append(" = wrapstruct(");
                             cs2dsl.OutputExpressionSyntax(exp);
-                            codeBuilder.AppendFormat(", {0});", ClassInfo.GetFullName(oper.Type));
+                            codeBuilder.AppendFormat(", {0});", ClassInfo.GetFullName(type));
                             codeBuilder.AppendLine();
                         }
                         else {
-                            string ns = ClassInfo.GetNamespaces(oper.Type);
+                            string ns = ClassInfo.GetNamespaces(type);
                             if (ns != "System") {
                                 cs2dsl.MarkNeedFuncInfo();
                                 codeBuilder.Append(CsDslTranslater.GetIndentString(indent));
                                 cs2dsl.OutputExpressionSyntax(exp);
                                 codeBuilder.Append(" = wrapexternstruct(");
                                 cs2dsl.OutputExpressionSyntax(exp);
-                                codeBuilder.AppendFormat(", {0});", ClassInfo.GetFullName(oper.Type));
+                                codeBuilder.AppendFormat(", {0});", ClassInfo.GetFullName(type));
                                 codeBuilder.AppendLine();
                             }
                         }
@@ -584,11 +590,11 @@ namespace RoslynTool.CsToDsl
                 bool flag = ReturnValueArgFlags[i];
                 if (flag) {
                     var exp = ReturnArgs[i];
-                    var oper = ReturnArgOperations[i];
+                    var type = ReturnArgTypes[i];
                     var leftSym = ReturnArgSymbols[i];
                     if (null != leftSym && SymbolTable.Instance.IsCs2DslSymbol(leftSym) && SymbolTable.Instance.IsFieldSymbolKind(leftSym)) {
                         cs2dsl.MarkNeedFuncInfo();
-                        string fieldType = fieldType = ClassInfo.GetFullName(oper.Type);
+                        string fieldType = fieldType = ClassInfo.GetFullName(type);
                         //回收旧值，保持新值
                         codeBuilder.Append(CsDslTranslater.GetIndentString(indent));
                         codeBuilder.Append("recycleandkeepstructvalue(");
@@ -611,10 +617,10 @@ namespace RoslynTool.CsToDsl
             }
             if (isMemberAccess) {
                 string fnOfIntf = string.Empty;
-                var expOper = model.GetOperationEx(exp);
+                var expType = model.GetTypeInfoEx(exp).Type;
                 bool isExplicitInterfaceInvoke = cs2dsl.CheckExplicitInterfaceAccess(sym, ref fnOfIntf);
                 bool expIsBasicType = false;
-                if (!sym.IsStatic && null != expOper && SymbolTable.IsBasicType(expOper.Type)) {
+                if (!sym.IsStatic && null != expType && SymbolTable.IsBasicType(expType)) {
                     expIsBasicType = true;
                 }
                 if (sym.MethodKind == MethodKind.DelegateInvoke) {

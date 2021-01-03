@@ -35,16 +35,26 @@ class(Test) {
 			callinstance(getinstance(SymbolKind.Field, this, Test, "m_DataChangeCallBackInfoPool"), Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "Init__Func_1_T__Action_1_T", null, null);
 			local(strlist); strlist = newlist(StrList, typeargs(), typekinds(), "ctor", literallist(typeargs(), typekinds()));
 			callexterninstance(strlist, System.Collections.Generic.List_T, "Add", getexternstatic(SymbolKind.Field, System.String, "Empty"));
-			callexterninstance(strlist, System.Collections.Generic.List_T, "Sort__Comparison_1_T", deffunc(1)args(a, b){ local(__lambda_117_21_117_45); __lambda_117_21_117_45 = invokeforbasicvalue(a, false, System.String, "CompareTo__String", b); return(__lambda_117_21_117_45); }options[needfuncinfo(false), rettype(System.Int32, TypeKind.Struct), paramtype(a, System.String, TypeKind.Class), paramtype(b, System.String, TypeKind.Class)]);
+			callexterninstance(strlist, System.Collections.Generic.List_T, "Sort__Comparison_1_T", deffunc(1)args(a, b){ local(__lambda_113_21_113_45); __lambda_113_21_113_45 = invokeforbasicvalue(a, false, System.String, "CompareTo__String", b); return(__lambda_113_21_113_45); }options[needfuncinfo(false), rettype(System.Int32, TypeKind.Struct), paramtype(a, System.String, TypeKind.Class), paramtype(b, System.String, TypeKind.Class)]);
 			local(intlist); intlist = newexternlist(System.Collections.Generic.List_T, typeargs(System.Int32), typekinds(TypeKind.Struct), "ctor", literallist(typeargs(System.Int32), typekinds(TypeKind.Struct)));
 			callexterninstance(intlist, System.Collections.Generic.List_T, "Add", 1);
-			local(a); a = getinstanceindexer(strlist, StrList, "get_Item__Int32__Int32", 2, 0, 1);
-			callexterninstance(intlist, System.Collections.Generic.List_T, "Sort__Comparison_1_T", deffunc(1)args(a, b){ local(__lambda_121_21_121_45); __lambda_121_21_121_45 = invokeforbasicvalue(a, false, System.Int32, "CompareTo__Int32", b); return(__lambda_121_21_121_45); }options[needfuncinfo(false), rettype(System.Int32, TypeKind.Struct), paramtype(a, System.Int32, TypeKind.Struct), paramtype(b, System.Int32, TypeKind.Struct)]);
-			local(aa); aa = condexp(execbinary("!=", null, strlist, System.Object, System.Object, TypeKind.Class, TypeKind.Class), false, function(){ funcobjret(getexterninstance(SymbolKind.Property, strlist, System.Collections.Generic.List_T, "Count")); }, false, function(){ funcobjret(getexterninstance(SymbolKind.Property, intlist, System.Collections.Generic.List_T, "Count")); });
+			local(sa); sa = getexterninstanceindexer(StrList, typeargs(), typekinds(), strlist, System.Collections.Generic.List_T, "get_Item", 1, 0);
+			callexterninstance(intlist, System.Collections.Generic.List_T, "Sort__Comparison_1_T", deffunc(1)args(a, b){ local(__lambda_117_21_117_45); __lambda_117_21_117_45 = invokeforbasicvalue(a, false, System.Int32, "CompareTo__Int32", b); return(__lambda_117_21_117_45); }options[needfuncinfo(false), rettype(System.Int32, TypeKind.Struct), paramtype(a, System.Int32, TypeKind.Struct), paramtype(b, System.Int32, TypeKind.Struct)]);
+			local(iaa); iaa = condexp(execbinary("!=", null, strlist, System.Object, System.Object, TypeKind.Class, TypeKind.Class), false, function(){ funcobjret(getexterninstance(SymbolKind.Property, strlist, System.Collections.Generic.List_T, "Count")); }, false, function(){ funcobjret(getexterninstance(SymbolKind.Property, intlist, System.Collections.Generic.List_T, "Count")); });
+			local(aa); aa = literalarray(System.Int32, TypeKind.Struct, 1, 2, 3, 4, 5);
 			local(bb); bb = literalarray(System.Int32, TypeKind.Struct, literalarray(System.Int32, TypeKind.Struct, 1, 2), literalarray(System.Int32, TypeKind.Struct, 3, 4), literalarray(System.Int32, TypeKind.Struct, 5, 6));
-			a = bb[1][2];
+			local(ia); ia = bb[1][2];
+			foreachlist(__foreach_ix_122_8_124_9, __foreach_exp_122_8_124_9, s, strlist, StrList, typeargs(), typekinds(), System.Collections.Generic.List_T){
+				callexternstatic(System.Console, "WriteLine__String", s);
+			};
+			foreacharray(__foreach_ix_125_8_127_9, __foreach_exp_125_8_127_9, v, aa, 1){
+				callexternstatic(System.Console, "WriteLine__Int32", v);
+			};
+			foreacharray(__foreach_ix_128_8_130_9, __foreach_exp_128_8_130_9, v, bb, 2){
+				callexternstatic(System.Console, "WriteLine__Int32", v);
+			};
 			local(act); act = typecast(( deffunc(0)args(){
-				callexternstatic(System.Console, "Write__Int32", a);
+				callexternstatic(System.Console, "Write__Int32", ia);
 			}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown)] ), "System.Action", TypeKind.Delegate);
 		}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown)];
 		test = deffunc(0)args(this){

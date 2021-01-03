@@ -81,13 +81,13 @@ namespace RoslynTool.CsToDsl
                             var typeInfo = m_Model.GetTypeInfoEx(node.Right);
                             if (op == "as") {
                                 var type = typeInfo.Type;
-                                var srcOper = m_Model.GetOperationEx(node.Left);
-                                if (null != type && null != srcOper && null != srcOper.Type) {
-                                    if (InvocationInfo.IsDslToObject(type, srcOper.Type)) {
+                                var srcType = m_Model.GetTypeInfoEx(node.Left).Type;
+                                if (null != type && null != srcType) {
+                                    if (InvocationInfo.IsDslToObject(type, srcType)) {
                                         isConvertDsl = true;
                                         OutputDslToObjectPrefix(type);
                                     }
-                                    else if (InvocationInfo.IsObjectToDsl(type, srcOper.Type)) {
+                                    else if (InvocationInfo.IsObjectToDsl(type, srcType)) {
                                         isConvertDsl = true;
                                         CodeBuilder.Append("objecttodsl(");
                                     }
@@ -474,8 +474,8 @@ namespace RoslynTool.CsToDsl
             if (null != leftMemberAccess && null != leftPsym) {
                 if (!leftPsym.IsStatic) {
                     bool expIsBasicType = false;
-                    var expOper = m_Model.GetOperationEx(leftMemberAccess.Expression);
-                    if (null != expOper && SymbolTable.IsBasicType(expOper.Type)) {
+                    var expType = m_Model.GetTypeInfoEx(leftMemberAccess.Expression).Type;
+                    if (null != expType && SymbolTable.IsBasicType(expType)) {
                         expIsBasicType = true;
                     }
                     if (CheckExplicitInterfaceAccess(leftPsym)) {
@@ -651,9 +651,9 @@ namespace RoslynTool.CsToDsl
                         if (null != psym) {
                             if (!psym.IsStatic) {
                                 propExplicitImplementInterface = CheckExplicitInterfaceAccess(psym, ref mname);
-                                var expOper = m_Model.GetOperationEx(node.Expression);
+                                var expType = m_Model.GetTypeInfoEx(node.Expression).Type;
                                 bool expIsBasicType = false;
-                                if (null != expOper && SymbolTable.IsBasicType(expOper.Type)) {
+                                if (null != expType && SymbolTable.IsBasicType(expType)) {
                                     expIsBasicType = true;
                                 }
                                 propForBasicValueType = SymbolTable.IsBasicValueProperty(psym) || expIsBasicType;
@@ -753,11 +753,11 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("get{0}{1}indexer(", isCs2Lua ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
                 if (!isCs2Lua) {
                     INamedTypeSymbol namedTypeSym = null;
-                    var expOper = m_Model.GetOperationEx(node.Expression);
-                    if (null != expOper) {
-                        string fullName = ClassInfo.GetFullName(expOper.Type);
+                    var expType = m_Model.GetTypeInfoEx(node.Expression).Type;
+                    if (null != expType) {
+                        string fullName = ClassInfo.GetFullName(expType);
                         CodeBuilder.Append(fullName);
-                        namedTypeSym = expOper.Type as INamedTypeSymbol;
+                        namedTypeSym = expType as INamedTypeSymbol;
                     }
                     else {
                         CodeBuilder.Append("null");
@@ -832,11 +832,11 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendFormat("get{0}{1}indexer(", isCs2Lua ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
                     if (!isCs2Lua) {
                         INamedTypeSymbol namedTypeSym = null;
-                        var expOper = m_Model.GetOperationEx(node.Expression);
-                        if (null != expOper) {
-                            string fullName = ClassInfo.GetFullName(expOper.Type);
+                        var expType = m_Model.GetTypeInfoEx(node.Expression).Type;
+                        if (null != expType) {
+                            string fullName = ClassInfo.GetFullName(expType);
                             CodeBuilder.Append(fullName);
-                            namedTypeSym = expOper.Type as INamedTypeSymbol;
+                            namedTypeSym = expType as INamedTypeSymbol;
                         }
                         else {
                             CodeBuilder.Append("null");

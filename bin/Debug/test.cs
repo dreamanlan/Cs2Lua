@@ -18,10 +18,6 @@ public class StrList : List<string>
     public StrList():base() { }
     public StrList(int c):base(c) { }
     public StrList(ICollection<string> coll) : base(coll) { }
-    public int this[int i, int j]
-    {
-        get { return 0; }
-    }
 }
 
 public interface ICs2LuaPoolAllocatedObjectEx<T> where T : ICs2LuaPoolAllocatedObjectEx<T>
@@ -118,12 +114,22 @@ class Test
         strlist.Sort((a, b) => a.CompareTo(b));
         List<int> intlist = new List<int>();
         intlist.Add(1);
-        int a = strlist[0, 1];
+        var sa = strlist[0];
         intlist.Sort((a, b) => a.CompareTo(b));
-        int aa = null != strlist ? strlist.Count : intlist.Count;
+        int iaa = null != strlist ? strlist.Count : intlist.Count;
+        int[] aa = new int[] { 1, 2, 3, 4, 5 };
         int[,] bb = new int[,] { { 1, 2 }, { 3, 4 }, { 5, 6 } };
-        a = bb[0,1];
-        var act = (Action)(()=> { Console.Write(a); });
+        var ia = bb[0,1];
+        foreach( var s in strlist) {
+            Console.WriteLine(s);
+        }
+        foreach(var v in aa) {
+            Console.WriteLine(v);
+        }
+        foreach(var v in bb) {
+            Console.WriteLine(v);
+        }
+        var act = (Action)(()=> { Console.Write(ia); });
     }
     public void test()
     {

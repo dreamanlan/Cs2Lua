@@ -158,28 +158,28 @@ namespace RoslynTool.CsToDsl
                 return;
             }
             bool dslToObject = false;
-            IOperation oper = null;
+            ITypeSymbol type = null;
             if (null != node.Initializer) {
-                oper = m_Model.GetOperationEx(node.Initializer.Value);
-                if (null != localSym && null != localSym.Type && null != oper && null != oper.Type) {
-                    dslToObject = InvocationInfo.IsDslToObject(localSym.Type, oper.Type);
+                type = m_Model.GetTypeInfoEx(node.Initializer.Value).Type;
+                if (null != localSym && null != localSym.Type && null != type) {
+                    dslToObject = InvocationInfo.IsDslToObject(localSym.Type, type);
                 }
             }
             VisitLocalVariableDeclarator(ci, node, dslToObject);
             if (null != node.Initializer) {
                 var rightSymbolInfo = m_Model.GetSymbolInfoEx(node.Initializer.Value);
                 var rightSym = rightSymbolInfo.Symbol;
-                if (null != oper && null != oper.Type && oper.Type.IsValueType && !dslToObject && !SymbolTable.IsBasicType(oper.Type) && !CsDslTranslater.IsImplementationOfSys(oper.Type, "IEnumerator")) {
+                if (null != type && type.IsValueType && !dslToObject && !SymbolTable.IsBasicType(type) && !CsDslTranslater.IsImplementationOfSys(type, "IEnumerator")) {
                     if (null != rightSym && (rightSym.Kind == SymbolKind.Method || rightSym.Kind == SymbolKind.Property || rightSym.Kind == SymbolKind.Field || rightSym.Kind == SymbolKind.Local) && SymbolTable.Instance.IsCs2DslSymbol(rightSym)) {
                         MarkNeedFuncInfo();
-                        if (SymbolTable.Instance.IsCs2DslSymbol(oper.Type)) {
-                            CodeBuilder.AppendFormat("{0}{1} = wrapstruct({2}, {3});", GetIndentString(), node.Identifier.Text, node.Identifier.Text, ClassInfo.GetFullName(oper.Type));
+                        if (SymbolTable.Instance.IsCs2DslSymbol(type)) {
+                            CodeBuilder.AppendFormat("{0}{1} = wrapstruct({2}, {3});", GetIndentString(), node.Identifier.Text, node.Identifier.Text, ClassInfo.GetFullName(type));
                             CodeBuilder.AppendLine();
                         }
                         else {
-                            string ns = ClassInfo.GetNamespaces(oper.Type);
+                            string ns = ClassInfo.GetNamespaces(type);
                             if (ns != "System") {
-                                CodeBuilder.AppendFormat("{0}{1} = wrapexternstruct({2}, {3});", GetIndentString(), node.Identifier.Text, node.Identifier.Text, ClassInfo.GetFullName(oper.Type));
+                                CodeBuilder.AppendFormat("{0}{1} = wrapexternstruct({2}, {3});", GetIndentString(), node.Identifier.Text, node.Identifier.Text, ClassInfo.GetFullName(type));
                                 CodeBuilder.AppendLine();
                             }
                         }
@@ -189,12 +189,12 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitArgumentList(ArgumentListSyntax node)
         {
-            var oper = m_Model.GetOperationEx(node);
+            var oper = m_Model.GetOperationEx(node.Parent);
             OutputArgumentList(node.Arguments, ", ", oper);
         }
         public override void VisitBracketedArgumentList(BracketedArgumentListSyntax node)
         {
-            var oper = m_Model.GetOperationEx(node);
+            var oper = m_Model.GetOperationEx(node.Parent);
             OutputArgumentList(node.Arguments, ", ", oper);
         }
         public override void VisitArgument(ArgumentSyntax node)

@@ -2315,44 +2315,147 @@ namespace Generator
             else if (id == "execclosure") {
                 GenerateClosure(data, sb, indent, false, funcOpts, calculator);
             }
-            else if (id == "foreach") {
-                var param0 = fcall.GetParamId(0);
-                var param1 = fcall.GetParamId(1);
-                var param2 = fcall.GetParam(2);
-                var param4 = fcall.GetParam(4) as Dsl.FunctionData;
+            else if (id == "foreacharray") {
+                var varIndex = fcall.GetParamId(0);
+                var varExp = fcall.GetParamId(1);
+                var varName = fcall.GetParamId(2);
+                var exp = fcall.GetParam(3);
                 int rank;
-                int.TryParse(fcall.GetParamId(3), out rank);
+                int.TryParse(fcall.GetParamId(4), out rank);
+                bool isExtern = fcall.GetParamId(5) == "true";
                 if (rank > 1) {
-                    sb.AppendFormat("local {0} = newmultiarrayiterator(", param0);
+                    sb.AppendFormat("local {0} = ", varExp);
+                    GenerateSyntaxComponent(exp, sb, indent, false, funcOpts, calculator);
+                    sb.AppendLine(";");
+                    for (int ix = 0; ix < rank; ++ix) {
+                        sb.AppendFormat("{0}for ", GetIndentString(indent));
+                        sb.Append(varIndex);
+                        sb.AppendFormat("_{0} = 1, ", ix);
+                        sb.Append(varExp);
+                        sb.AppendFormat(":GetLength({0}) do", ix);
+                        sb.AppendLine();
+                    }
+                    if (data.HaveStatement()) {
+                        ++indent;
+                        sb.AppendFormatLine("{0}{1} = {2}[{3}];", GetIndentString(indent), varName, varExp, varIndex);
+                        GenerateStatements(data, sb, indent, funcOpts, calculator);
+                        --indent;
+                    }
+                    for (int ix = 0; ix < rank; ++ix) {
+                        if (ix == rank - 1)
+                            sb.AppendFormat("{0}end", GetIndentString(indent));
+                        else
+                            sb.AppendFormatLine("{0}end;", GetIndentString(indent));
+                    }
                 }
                 else {
-                    sb.AppendFormat("local {0} = newiterator(", param0);
+                    sb.AppendFormat("local {0} = ", varExp);
+                    GenerateSyntaxComponent(exp, sb, indent, false, funcOpts, calculator);
+                    sb.AppendLine(";");
+                    sb.AppendFormat("{0}for ", GetIndentString(indent));
+                    sb.Append(varIndex);
+                    sb.Append(" = 1, ");
+                    sb.Append(varExp);
+                    if (isExtern)
+                        sb.Append(".Length do");
+                    else
+                        sb.Append(":get_Length() do");
+                    sb.AppendLine();
+                    if (data.HaveStatement()) {
+                        ++indent;
+                        sb.AppendFormatLine("{0}{1} = {2}[{3}];", GetIndentString(indent), varName, varExp, varIndex);
+                        GenerateStatements(data, sb, indent, funcOpts, calculator);
+                        --indent;
+                    }
+                    sb.AppendFormat("{0}end", GetIndentString(indent));
                 }
-                GenerateSyntaxComponent(param2, sb, indent, false, funcOpts, calculator);
-                if (rank > 1) {
-                    sb.Append(", ");
-                    sb.Append(rank);
-                    sb.Append(", {");
-                    GenerateArguments(param4, sb, indent, 0, funcOpts, calculator);
-                    sb.Append("}");
+            }
+            else if (id == "foreachlist") {
+                var varIndex = fcall.GetParamId(0);
+                var varExp = fcall.GetParamId(1);
+                var varName = fcall.GetParamId(2);
+                var exp = fcall.GetParam(3);
+                var _callerClass = fcall.GetParam(4);
+                var _typeargs = fcall.GetParam(5) as FunctionData;
+                var _typekinds = fcall.GetParam(6) as FunctionData;
+                var _class = fcall.GetParam(7);
+                var isExtern = fcall.GetParamId(8) == "true";
+                var strCallerClass = CalcTypeString(_callerClass);
+                var strTypeArgs = CalcTypesString(_typeargs);
+                var strTypeKinds = CalcTypesString(_typekinds);
+                var strObj = CalcExpressionString(exp, funcOpts, calculator);
+                var strClass = CalcTypeString(_class);
+                var strMember = "get_Item";
+                bool indexerByLuaLib = false;
+                int indexerType;
+                if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, strObj, strClass, strMember, out indexerType)) {
+                    indexerByLuaLib = true;
                 }
+                sb.AppendFormat("local {0} = ", varExp);
+                GenerateSyntaxComponent(exp, sb, indent, false, funcOpts, calculator);
+                sb.AppendLine(";");
+                sb.AppendFormat("{0}for ", GetIndentString(indent));
+                sb.Append(varIndex);
+                if (indexerType == (int)IndexerTypeEnum.LikeArray) {
+                    sb.Append(" = 1, ");
+                    sb.Append(varExp);
+                    if (isExtern)
+                        sb.Append(".Count do");
+                    else
+                        sb.Append(":get_Count() do");
+                }
+                else {
+                    sb.Append(" = 0, ");
+                    sb.Append(varExp);
+                    if (isExtern)
+                        sb.Append(".Count - 1 do");
+                    else
+                        sb.Append(":get_Count() - 1 do");
+                }
+                sb.AppendLine();
+                if (data.HaveStatement()) {
+                    ++indent;
+                    if (indexerByLuaLib) {
+                        sb.AppendFormatLine("{0}{1} = {2}[{3}];", GetIndentString(indent), varName, varExp, varIndex);
+                    }
+                    else if(isExtern) {
+                        sb.AppendFormat("{0}{1} = getexterninstanceindexer({2}, ", GetIndentString(indent), varName, strCallerClass);
+                        GenerateSyntaxComponent(_typeargs, sb, 0, false, funcOpts, calculator);
+                        sb.Append(", ");
+                        GenerateSyntaxComponent(_typekinds, sb, 0, false, funcOpts, calculator);
+                        sb.AppendFormatLine(", {0}, {1}, \"{2}\", 1, {3});", varExp, strClass, strMember, varIndex);
+                    }
+                    else {
+                        sb.AppendFormatLine("{0}{1} = {2}[{3}];", GetIndentString(indent), varName, varExp, varIndex);
+                    }
+                    GenerateStatements(data, sb, indent, funcOpts, calculator);
+                    --indent;
+                }
+                sb.AppendFormat("{0}end", GetIndentString(indent));
+            }
+            else if (id == "foreach") {
+                var expIter = fcall.GetParamId(0);
+                var varName = fcall.GetParamId(1);
+                var exp = fcall.GetParam(2);
+                sb.AppendFormat("local {0} = newiterator(", expIter);
+                GenerateSyntaxComponent(exp, sb, indent, false, funcOpts, calculator);
                 sb.AppendLine(");");
                 sb.AppendFormat("{0}for ", GetIndentString(indent));
-                sb.Append(param1);
+                sb.Append(varName);
                 sb.Append(" in getiterator(");
-                sb.Append(param0);
+                sb.Append(expIter);
                 sb.Append(") do");
                 if (data.HaveStatement()) {
                     sb.AppendLine();
                     ++indent;
-                    sb.AppendFormatLine("{0}if {1} == __cs2lua_nil then", GetIndentString(indent), param1);
-                    sb.AppendFormatLine("{0}{1} = nil;", GetIndentString(indent + 1), param1);
+                    sb.AppendFormatLine("{0}if {1} == __cs2lua_nil then", GetIndentString(indent), varName);
+                    sb.AppendFormatLine("{0}{1} = nil;", GetIndentString(indent + 1), varName);
                     sb.AppendFormatLine("{0}end;", GetIndentString(indent));
                     GenerateStatements(data, sb, indent, funcOpts, calculator);
                     --indent;
                 }
                 sb.AppendFormatLine("{0}end;", GetIndentString(indent));
-                sb.AppendFormat("{0}recycleiterator({1})", GetIndentString(indent), param0);
+                sb.AppendFormat("{0}recycleiterator({1})", GetIndentString(indent), expIter);
             }
             else if (id == "while") {
                 var condExp = fcall.GetParam(0);
