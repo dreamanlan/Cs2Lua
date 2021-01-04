@@ -1609,7 +1609,7 @@ namespace Generator
                             var strClass = CalcTypeString(_class);
                             var strMember = _member;
                             int indexerType;
-                            bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, string.Empty, strClass, strMember, out indexerType);
+                            bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, strClass, strMember, out indexerType);
 
                             var _index = data.Params[3];
                             GenerateSyntaxComponent(_class, sb, 0, false, funcOpts, calculator);
@@ -1642,7 +1642,7 @@ namespace Generator
                             var strClass = CalcTypeString(_class);
                             var strMember = _member;
                             int indexerType;
-                            bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, strObj, strClass, strMember, out indexerType);
+                            bool isIndexerByLua = IndexerByLualib("@@internal", strObj, strClass, strMember, out indexerType);
 
                             var _index = data.Params[4];
                             GenerateSyntaxComponent(_obj, sb, indent, false, funcOpts, calculator);
@@ -1676,7 +1676,7 @@ namespace Generator
                             var strClass = CalcTypeString(_class);
                             var strMember = _member;
                             int indexerType;
-                            bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, string.Empty, strClass, strMember, out indexerType);
+                            bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, strClass, strMember, out indexerType);
 
                             var _index = data.Params[4];
                             var _val = data.Params[5];
@@ -1713,7 +1713,7 @@ namespace Generator
                             var strClass = CalcTypeString(_class);
                             var strMember = _member;
                             int indexerType;
-                            bool isIndexerByLua = IndexerByLualib("@@internal", string.Empty, string.Empty, strObj, strClass, strMember, out indexerType);
+                            bool isIndexerByLua = IndexerByLualib("@@internal", strObj, strClass, strMember, out indexerType);
 
                             var _index = data.Params[5];
                             var _val = data.Params[6];
@@ -1741,22 +1741,18 @@ namespace Generator
                     }
                     else if (id == "getexternstaticindexer") {
                         var _callerClass = data.Params[0];
-                        var _typeargs = data.Params[1] as Dsl.FunctionData;
-                        var _typekinds = data.Params[2] as Dsl.FunctionData;
-                        var _class = data.Params[3];
-                        var _member = data.Params[4];
+                        var _class = data.Params[1];
+                        var _member = data.Params[2];
                         var strCallerClass = CalcTypeString(_callerClass);
-                        var strTypeArgs = CalcTypesString(_typeargs);
-                        var strTypeKinds = CalcTypesString(_typekinds);
                         var strClass = CalcTypeString(_class);
                         var strMember = CalcTypeString(_member);
                         int indexerType;
-                        if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, string.Empty, strClass, strMember, out indexerType)) {
-                            var _pct = data.Params[5].GetId();
+                        if (IndexerByLualib(strCallerClass, string.Empty, strClass, strMember, out indexerType)) {
+                            var _pct = data.Params[3].GetId();
                             int ct;
                             int.TryParse(_pct, out ct);
                             if (ct == 1) {
-                                var _index = data.Params[6];
+                                var _index = data.Params[4];
                                 sb.Append(strClass);
                                 sb.Append('[');
                                 GenerateSyntaxComponent(_index, sb, 0, false, funcOpts, calculator);
@@ -1766,7 +1762,7 @@ namespace Generator
                                 sb.Append(']');
                             }
                             else {
-                                int start = 6;
+                                int start = 4;
                                 sb.Append(strClass);
                                 sb.Append('[');
                                 sb.Append('"');
@@ -1787,24 +1783,20 @@ namespace Generator
                     }
                     else if (id == "getexterninstanceindexer") {
                         var _callerClass = data.Params[0];
-                        var _typeargs = data.Params[1] as Dsl.FunctionData;
-                        var _typekinds = data.Params[2] as Dsl.FunctionData;
-                        var _obj = data.Params[3];
-                        var _class = data.Params[4];
-                        var _member = data.Params[5];
+                        var _obj = data.Params[1];
+                        var _class = data.Params[2];
+                        var _member = data.Params[3];
                         var strCallerClass = CalcTypeString(_callerClass);
-                        var strTypeArgs = CalcTypesString(_typeargs);
-                        var strTypeKinds = CalcTypesString(_typekinds);
                         var strObj = CalcExpressionString(_obj, funcOpts, calculator);
                         var strClass = CalcTypeString(_class);
                         var strMember = CalcTypeString(_member);
                         int indexerType;
-                        if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, strObj, strClass, strMember, out indexerType)) {
-                            var _pct = data.Params[6].GetId();
+                        if (IndexerByLualib(strCallerClass, strObj, strClass, strMember, out indexerType)) {
+                            var _pct = data.Params[4].GetId();
                             int ct;
                             int.TryParse(_pct, out ct);
                             if (ct == 1) {
-                                var _index = data.Params[7];
+                                var _index = data.Params[5];
                                 sb.Append(strObj);
                                 sb.Append('[');
                                 GenerateSyntaxComponent(_index, sb, 0, false, funcOpts, calculator);
@@ -1814,7 +1806,7 @@ namespace Generator
                                 sb.Append(']');
                             }
                             else {
-                                int start = 7;
+                                int start = 5;
                                 GenerateSyntaxComponent(_obj, sb, indent, false, funcOpts, calculator);
                                 sb.Append('[');
                                 sb.Append('"');
@@ -1837,24 +1829,20 @@ namespace Generator
                     }
                     else if (id == "setexternstaticindexer") {
                         var _callerClass = data.Params[0];
-                        var _typeargs = data.Params[1] as Dsl.FunctionData;
-                        var _typekinds = data.Params[2] as Dsl.FunctionData;
-                        var _class = data.Params[3];
-                        var _member = data.Params[4];
+                        var _class = data.Params[1];
+                        var _member = data.Params[2];
                         var strCallerClass = CalcTypeString(_callerClass);
-                        var strTypeArgs = CalcTypesString(_typeargs);
-                        var strTypeKinds = CalcTypesString(_typekinds);
                         var strClass = CalcTypeString(_class);
                         var strMember = CalcTypeString(_member);
                         int indexerType;
-                        if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, string.Empty, strClass, strMember, out indexerType)) {
-                            var _pct = data.Params[5].GetId();
-                            var _toplevel = data.Params[6].GetId();
+                        if (IndexerByLualib(strCallerClass, string.Empty, strClass, strMember, out indexerType)) {
+                            var _pct = data.Params[3].GetId();
+                            var _toplevel = data.Params[4].GetId();
                             int ct;
                             int.TryParse(_pct, out ct);
                             if (ct == 2 && _toplevel == "true") {
-                                var _index = data.Params[7];
-                                var _val = data.Params[8];
+                                var _index = data.Params[5];
+                                var _val = data.Params[6];
                                 sb.Append(strClass);
                                 sb.Append('[');
                                 GenerateSyntaxComponent(_index, sb, 0, false, funcOpts, calculator);
@@ -1866,7 +1854,7 @@ namespace Generator
                                 GenerateSyntaxComponent(_val, sb, 0, false, funcOpts, calculator);
                             }
                             else {
-                                int start = 7;
+                                int start = 5;
                                 sb.Append(strClass);
                                 sb.Append('[');
                                 sb.Append('"');
@@ -1887,26 +1875,22 @@ namespace Generator
                     }
                     else if (id == "setexterninstanceindexer") {
                         var _callerClass = data.Params[0];
-                        var _typeargs = data.Params[1] as Dsl.FunctionData;
-                        var _typekinds = data.Params[2] as Dsl.FunctionData;
-                        var _obj = data.Params[3];
-                        var _class = data.Params[4];
-                        var _member = data.Params[5];
+                        var _obj = data.Params[1];
+                        var _class = data.Params[2];
+                        var _member = data.Params[3];
                         var strCallerClass = CalcTypeString(_callerClass);
-                        var strTypeArgs = CalcTypesString(_typeargs);
-                        var strTypeKinds = CalcTypesString(_typekinds);
                         var strObj = CalcExpressionString(_obj, funcOpts, calculator);
                         var strClass = CalcTypeString(_class);
                         var strMember = CalcTypeString(_member);
                         int indexerType;
-                        if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, strObj, strClass, strMember, out indexerType)) {
-                            var _pct = data.Params[6].GetId();
-                            var _toplevel = data.Params[7].GetId();
+                        if (IndexerByLualib(strCallerClass, strObj, strClass, strMember, out indexerType)) {
+                            var _pct = data.Params[4].GetId();
+                            var _toplevel = data.Params[5].GetId();
                             int ct;
                             int.TryParse(_pct, out ct);
                             if (ct == 2 && _toplevel == "true") {
-                                var _index = data.Params[8];
-                                var _val = data.Params[9];
+                                var _index = data.Params[6];
+                                var _val = data.Params[7];
                                 sb.Append(strObj);
                                 sb.Append('[');
                                 GenerateSyntaxComponent(_index, sb, 0, false, funcOpts, calculator);
@@ -1918,7 +1902,7 @@ namespace Generator
                                 GenerateSyntaxComponent(_val, sb, 0, false, funcOpts, calculator);
                             }
                             else {
-                                int start = 8;
+                                int start = 6;
                                 GenerateSyntaxComponent(_obj, sb, indent, false, funcOpts, calculator);
                                 sb.Append('[');
                                 sb.Append('"');
@@ -2376,19 +2360,15 @@ namespace Generator
                 var varName = fcall.GetParamId(2);
                 var exp = fcall.GetParam(3);
                 var _callerClass = fcall.GetParam(4);
-                var _typeargs = fcall.GetParam(5) as FunctionData;
-                var _typekinds = fcall.GetParam(6) as FunctionData;
-                var _class = fcall.GetParam(7);
-                var isExtern = fcall.GetParamId(8) == "true";
+                var _class = fcall.GetParam(5);
+                var isExtern = fcall.GetParamId(6) == "true";
                 var strCallerClass = CalcTypeString(_callerClass);
-                var strTypeArgs = CalcTypesString(_typeargs);
-                var strTypeKinds = CalcTypesString(_typekinds);
                 var strObj = CalcExpressionString(exp, funcOpts, calculator);
                 var strClass = CalcTypeString(_class);
                 var strMember = "get_Item";
                 bool indexerByLuaLib = false;
                 int indexerType;
-                if (IndexerByLualib(strCallerClass, strTypeArgs, strTypeKinds, strObj, strClass, strMember, out indexerType)) {
+                if (IndexerByLualib(strCallerClass, strObj, strClass, strMember, out indexerType)) {
                     indexerByLuaLib = true;
                 }
                 sb.AppendFormat("local {0} = ", varExp);
@@ -2419,11 +2399,7 @@ namespace Generator
                         sb.AppendFormatLine("{0}{1} = {2}[{3}];", GetIndentString(indent), varName, varExp, varIndex);
                     }
                     else if(isExtern) {
-                        sb.AppendFormat("{0}{1} = getexterninstanceindexer({2}, ", GetIndentString(indent), varName, strCallerClass);
-                        GenerateSyntaxComponent(_typeargs, sb, 0, false, funcOpts, calculator);
-                        sb.Append(", ");
-                        GenerateSyntaxComponent(_typekinds, sb, 0, false, funcOpts, calculator);
-                        sb.AppendFormatLine(", {0}, {1}, \"{2}\", 1, {3});", varExp, strClass, strMember, varIndex);
+                        sb.AppendFormat("{0}{1} = getexterninstanceindexer({2}, {3}, {4}, \"{5}\", 1, {6});", GetIndentString(indent), varName, strCallerClass, varExp, strClass, strMember, varIndex);
                     }
                     else {
                         sb.AppendFormatLine("{0}{1} = {2}[{3}];", GetIndentString(indent), varName, varExp, varIndex);
@@ -2437,8 +2413,11 @@ namespace Generator
                 var expIter = fcall.GetParamId(0);
                 var varName = fcall.GetParamId(1);
                 var exp = fcall.GetParam(2);
+                var _callerClass = fcall.GetParam(3);
+                var _class = fcall.GetParam(4);
+                var isExtern = fcall.GetParam(5);
                 sb.AppendFormat("local {0} = newiterator(", expIter);
-                GenerateSyntaxComponent(exp, sb, indent, false, funcOpts, calculator);
+                GenerateArguments(fcall, sb, indent, 2, funcOpts, calculator);
                 sb.AppendLine(");");
                 sb.AppendFormat("{0}for ", GetIndentString(indent));
                 sb.Append(varName);

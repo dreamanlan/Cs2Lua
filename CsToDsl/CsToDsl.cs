@@ -278,6 +278,57 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("dsltoobject(SymbolKind.ErrorType, false, \"\", ");
             }
         }
+        internal bool HasItemGetMethodDefined(INamedTypeSymbol obj)
+        {
+            var gis = obj.GetMembers("get_Item");
+            foreach (var gi in gis) {
+                var m = gi as IMethodSymbol;
+                if (null != m && m.Parameters.Length == 1 && m.Parameters[0].Type.Name == "Int32" && !m.ReturnsVoid) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        internal bool HasForeachDefined(INamedTypeSymbol obj)
+        {
+            var ges = obj.GetMembers("GetEnumerator");
+            foreach (var ge in ges) {
+                var m = ge as IMethodSymbol;
+                if (null != m && m.Parameters.Length == 0 && !m.ReturnsVoid) {
+                    var type = m.ReturnType;
+                    var cs = GetMembers(type, "Current");
+                    foreach (var c in cs) {
+                        if (c.Kind == SymbolKind.Property) {
+                            var mns = GetMembers(type, "MoveNext");
+                            foreach (var mn in mns) {
+                                var _m = mn as IMethodSymbol;
+                                if (null != _m && _m.Parameters.Length == 0 && !_m.ReturnsVoid && _m.ReturnType.Name == "Boolean") {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+        internal List<ISymbol> GetMembers(ITypeSymbol obj, string name)
+        {
+            List<ISymbol> members = new List<ISymbol>();
+            var ms = obj.GetMembers(name);
+            members.AddRange(ms);
+            var bobj = obj.BaseType;
+            while (null != bobj) {
+                ms = bobj.GetMembers(name);
+                members.AddRange(ms);
+                bobj = bobj.BaseType;
+            }
+            foreach(var intf in obj.AllInterfaces) {
+                ms = intf.GetMembers(name);
+                members.AddRange(ms);
+            }
+            return members;
+        }
         internal void MarkNeedFuncInfo()
         {
             var minfo = GetCurMethodInfo();

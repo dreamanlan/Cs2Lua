@@ -390,16 +390,14 @@ namespace Generator
             s_CachedFile2MergedFiles.TryAdd(file, null);
             return null;
         }
-        private static bool IndexerByLualib(string objClassName, string typeArgs, string typeKinds, string obj, string className, string member, out int val)
+        private static bool IndexerByLualib(string objClassName, string obj, string className, string member, out int val)
         {
-            string key = string.Format("{0}|{1}|{2}|{3}|{4}|{5}", objClassName, typeArgs, typeKinds, obj, className, member);
+            string key = string.Format("{0}|{1}|{2}|{3}", objClassName, obj, className, member);
             if (s_CachedIndexerByLualibInfos.TryGetValue(key, out val)) {
                 return val != 0;
             }
             foreach (var info in s_IndexerByLualibInfos) {
                 if ((null == info.ObjectClassMatch || info.ObjectClassMatch.IsMatch(objClassName)) &&
-                    (null == info.TypeArgsMatch || info.TypeArgsMatch.IsMatch(typeArgs)) &&
-                    (null == info.TypeKindsMatch || info.TypeKindsMatch.IsMatch(typeKinds)) &&
                     (null == info.ObjectMatch || info.ObjectMatch.IsMatch(obj)) &&
                     (null == info.ClassMatch || info.ClassMatch.IsMatch(className)) &&
                     (null == info.MemberMatch || info.MemberMatch.IsMatch(member))) {
@@ -558,23 +556,17 @@ namespace Generator
             else if (id == "indexerbylualib") {
                 var cfg = new IndexerByLualibInfo();
                 Dsl.FunctionData fcd = f.ThisOrLowerOrderCall;
-                if (fcd.IsValid() && fcd.GetParamNum() >= 6) {
+                if (fcd.IsValid() && fcd.GetParamNum() >= 4) {
                     var str = fcd.GetParamId(0);
                     var regex = new Regex(str, RegexOptions.Compiled);
                     cfg.ObjectClassMatch = regex;
                     str = fcd.GetParamId(1);
                     regex = new Regex(str, RegexOptions.Compiled);
-                    cfg.TypeArgsMatch = regex;
+                    cfg.ObjectMatch = regex;
                     str = fcd.GetParamId(2);
                     regex = new Regex(str, RegexOptions.Compiled);
-                    cfg.TypeKindsMatch = regex;
-                    str = fcd.GetParamId(3);
-                    regex = new Regex(str, RegexOptions.Compiled);
-                    cfg.ObjectMatch = regex;
-                    str = fcd.GetParamId(4);
-                    regex = new Regex(str, RegexOptions.Compiled);
                     cfg.ClassMatch = regex;
-                    str = fcd.GetParamId(5);
+                    str = fcd.GetParamId(3);
                     regex = new Regex(str, RegexOptions.Compiled);
                     cfg.MemberMatch = regex;
 
@@ -740,8 +732,6 @@ namespace Generator
         private class IndexerByLualibInfo
         {
             internal Regex ObjectClassMatch = null;
-            internal Regex TypeArgsMatch = null;
-            internal Regex TypeKindsMatch = null;
             internal Regex ObjectMatch = null;
             internal Regex ClassMatch = null;
             internal Regex MemberMatch = null;

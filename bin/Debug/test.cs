@@ -130,10 +130,19 @@ class Test
             Console.WriteLine(v);
         }
         var act = (Action)(()=> { Console.Write(ia); });
+        var cc = ToList(aa);
     }
     public void test()
     {
         var a = new Action(()=> { Console.Write("test"); });
+    }
+    internal static List<T> ToList<T>(IEnumerable<T> enumer)
+    {
+        var r = new List<T>();
+        foreach (var v in enumer) {
+            r.Add(v);
+        }
+        return r;
     }
     private Cs2LuaObjectPoolEx<DataChangeCallBackInfo> m_DataChangeCallBackInfoPool = new Cs2LuaObjectPoolEx<DataChangeCallBackInfo>();
 }

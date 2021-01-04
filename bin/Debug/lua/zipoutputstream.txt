@@ -48,7 +48,7 @@ ZipOutputStream = {
 				dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, "ctor__Void", {});
 				dict:Add(1, 1);
 				dict:Add(2, 2);
-				dict[1] = (dict[1] + dict[2]);
+				setexterninstanceindexer(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, dict, System.Collections.Generic.Dictionary_TKey_TValue, "set_Item", 2, true, 1, (getexterninstanceindexer(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, dict, System.Collections.Generic.Dictionary_TKey_TValue, "get_Item", 1, 1) + getexterninstanceindexer(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, dict, System.Collections.Generic.Dictionary_TKey_TValue, "get_Item", 1, 2)));
 			end,
 
 			ctor = function(this)

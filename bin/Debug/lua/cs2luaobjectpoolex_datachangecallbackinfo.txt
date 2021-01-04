@@ -80,7 +80,7 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 
 			Clear = function(this)
 				if delegationcomparewithnil(false, this, "m_Destroyer", SymbolKind.Field, false) then 
-					local __foreach_65_12_67_13 = newiterator(this.m_UnusedObjects);
+					local __foreach_65_12_67_13 = newiterator(this.m_UnusedObjects, System.Collections.Generic.Queue_T, System.Collections.Generic.Queue_T, true);
 					for item in getiterator(__foreach_65_12_67_13) do
 						if item == __cs2lua_nil then
 							item = nil;

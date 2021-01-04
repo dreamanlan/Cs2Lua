@@ -1364,18 +1364,14 @@ namespace RoslynTool.CsToDsl
                 bool isCs2Lua = SymbolTable.Instance.IsCs2DslSymbol(leftPsym);
                 CodeBuilder.AppendFormat("set{0}{1}indexer(", isCs2Lua ? string.Empty : "extern", leftPsym.IsStatic ? "static" : "instance");
                 if (!isCs2Lua) {
-                    INamedTypeSymbol namedTypeSym = null;
                     var expType = m_Model.GetTypeInfoEx(leftElementAccess.Expression).Type;
                     if (null != expType) {
                         string fullName = ClassInfo.GetFullName(expType);
                         CodeBuilder.Append(fullName);
-                        namedTypeSym = expType as INamedTypeSymbol;
                     }
                     else {
                         CodeBuilder.Append("null");
                     }
-                    CodeBuilder.Append(", ");
-                    OutputTypeArgsInfo(CodeBuilder, namedTypeSym, this);
                     CodeBuilder.Append(", ");
                 }
                 if (leftPsym.IsStatic) {
@@ -1516,18 +1512,14 @@ namespace RoslynTool.CsToDsl
                     bool isCs2Lua = SymbolTable.Instance.IsCs2DslSymbol(psym);
                     CodeBuilder.AppendFormat("set{0}{1}indexer(", isCs2Lua ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
                     if (!isCs2Lua) {
-                        INamedTypeSymbol namedTypeSym = null;
                         var expType = m_Model.GetTypeInfoEx(leftCondAccess.Expression).Type;
                         if (null != expType) {
                             string fullName = ClassInfo.GetFullName(expType);
                             CodeBuilder.Append(fullName);
-                            namedTypeSym = expType as INamedTypeSymbol;
                         }
                         else {
                             CodeBuilder.Append("null");
                         }
-                        CodeBuilder.Append(", ");
-                        OutputTypeArgsInfo(CodeBuilder, namedTypeSym, this);
                         CodeBuilder.Append(", ");
                     }
                     if (psym.IsStatic) {

@@ -10,6 +10,22 @@ Test = {
 		return __cs2dsl_newobj;
 	end,
 
+	ToList = function(T, enumer)
+		local __method_ret_138_4_145_5;
+		local r;
+		r = newexternlist(System.Collections.Generic.List_T, {T}, {TypeKind.TypeParameter}, "ctor", {});
+		local __foreach_141_8_143_9 = newiterator(enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true);
+		for v in getiterator(__foreach_141_8_143_9) do
+			if v == __cs2lua_nil then
+				v = nil;
+			end;
+			r:Add(v);
+		end;
+		recycleiterator(__foreach_141_8_143_9);
+		__method_ret_138_4_145_5 = r;
+		return __method_ret_138_4_145_5;
+	end,
+
 	cctor = function()
 		Test.__cctor();
 	end,
@@ -52,7 +68,7 @@ Test = {
 				intlist = newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, "ctor", {});
 				intlist:Add(1);
 				local sa;
-				sa = getexterninstanceindexer(StrList, nil, nil, strlist, System.Collections.Generic.List_T, "get_Item", 1, 0);
+				sa = getexterninstanceindexer(StrList, strlist, System.Collections.Generic.List_T, "get_Item", 1, 0);
 				intlist:Sort__Comparison_1_T(function(a, b)
 					local __lambda_117_21_117_45;
 					__lambda_117_21_117_45 = invokeforbasicvalue(a, false, System.Int32, "CompareTo__Int32", b);
@@ -67,18 +83,17 @@ Test = {
 				local ia;
 				ia = bb[1][2];
 				local __foreach_exp_122_8_124_9 = strlist;
-				for __foreach_ix_122_8_124_9 in 0, __foreach_exp_122_8_124_9.Count - 1 do
-					s = __foreach_exp_122_8_124_9[__foreach_ix_122_8_124_9];
-					System.Console.WriteLine__String(s);
+				for __foreach_ix_122_8_124_9 = 0, __foreach_exp_122_8_124_9.Count - 1 do
+					s = getexterninstanceindexer(StrList, __foreach_exp_122_8_124_9, System.Collections.Generic.List_T, "get_Item", 1, __foreach_ix_122_8_124_9);					System.Console.WriteLine__String(s);
 				end;
 				local __foreach_exp_125_8_127_9 = aa;
-				for __foreach_ix_125_8_127_9 in 1, __foreach_exp_125_8_127_9.Length do
+				for __foreach_ix_125_8_127_9 = 1, __foreach_exp_125_8_127_9.Length do
 					v = __foreach_exp_125_8_127_9[__foreach_ix_125_8_127_9];
 					System.Console.WriteLine__Int32(v);
 				end;
 				local __foreach_exp_128_8_130_9 = bb;
-				for __foreach_ix_128_8_130_9_0 in 1, __foreach_exp_128_8_130_9:GetLength(0) do
-				for __foreach_ix_128_8_130_9_1 in 1, __foreach_exp_128_8_130_9:GetLength(1) do
+				for __foreach_ix_128_8_130_9_0 = 1, __foreach_exp_128_8_130_9:GetLength(0) do
+				for __foreach_ix_128_8_130_9_1 = 1, __foreach_exp_128_8_130_9:GetLength(1) do
 					v = __foreach_exp_128_8_130_9[__foreach_ix_128_8_130_9];
 					System.Console.WriteLine__Int32(v);
 				end;
@@ -87,6 +102,8 @@ Test = {
 				act = typecast((function()
 					System.Console.Write__Int32(ia);
 				end), "System.Action", TypeKind.Delegate);
+				local cc;
+				cc = Test.ToList(System.Int32, aa);
 			end,
 
 			test = function(this)
@@ -142,6 +159,11 @@ Test = {
 		},
 		test = {
 			Kind = MethodKind.Ordinary,
+		},
+		ToList = {
+			Kind = MethodKind.Ordinary,
+			static = true,
+			generic = true,
 		},
 		ctor = {
 			Kind = MethodKind.Constructor,

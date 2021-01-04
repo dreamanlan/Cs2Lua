@@ -372,7 +372,7 @@ namespace RoslynTool.CsToDsl
                 INamedTypeSymbol listType = null;
                 var fobj = objType;
                 while (null != fobj) {
-                    if (fobj.GetMembers("get_Item").Length > 0) {
+                    if (HasItemGetMethodDefined(fobj)) {
                         listType = fobj;
                         break;
                     }
@@ -386,17 +386,34 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.Append(", ");
                 CodeBuilder.Append(objTypeName);
                 CodeBuilder.Append(", ");
-                OutputTypeArgsInfo(CodeBuilder, objType, this);
-                CodeBuilder.Append(", ");
                 CodeBuilder.Append(listTypeName);
                 CodeBuilder.Append(", ");
                 CodeBuilder.Append(isCs2Dsl ? "false" : "true");
                 CodeBuilder.AppendLine("){");
             }
             else {
+                var objType = expType as INamedTypeSymbol;
+                INamedTypeSymbol enumType = null;
+                var fobj = objType;
+                while (null != fobj) {
+                    if (HasForeachDefined(fobj)) {
+                        enumType = fobj;
+                        break;
+                    }
+                    fobj = fobj.BaseType;
+                }
+                bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(enumType);
+                string objTypeName = ClassInfo.GetFullName(objType);
+                string enumTypeName = ClassInfo.GetFullName(enumType);
                 string varIter = string.Format("__foreach_{0}", srcPos);
                 CodeBuilder.AppendFormat("{0}foreach({1}, {2}, ", GetIndentString(), varIter, node.Identifier.Text);
                 OutputExpressionSyntax(node.Expression, opd);
+                CodeBuilder.Append(", ");
+                CodeBuilder.Append(objTypeName);
+                CodeBuilder.Append(", ");
+                CodeBuilder.Append(enumTypeName);
+                CodeBuilder.Append(", ");
+                CodeBuilder.Append(isCs2Dsl ? "false" : "true");
                 CodeBuilder.AppendLine("){");
             }
             if (ci.HaveContinue) {
