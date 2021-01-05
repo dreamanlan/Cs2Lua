@@ -413,19 +413,19 @@ function callexternextension(callerClass, method, ...)
     end
 end
 
-function getexternstaticindexer(callerClass, typeargs, typekinds, class, name, argCount, ...)
+function getexternstaticindexer(callerClass, class, name, argCount, ...)
     return class[name](...)
 end
-function getexterninstanceindexer(callerClass, typeargs, typekinds, obj, class, name, argCount, ...)
+function getexterninstanceindexer(callerClass, obj, class, name, argCount, ...)
     local arg1,arg2 = ...
     local index
     local meta = getmetatable(obj)
     if meta then
-        local class = rawget(meta, "__class")
-        if class == System.Collections.Generic.List_T then
+        local _class = rawget(meta, "__class")
+        if _class == System.Collections.Generic.List_T then
             index = __unwrap_if_string(arg1)
             return obj[index + 1]
-        elseif class == System.Collections.Generic.Dictionary_TKey_TValue then
+        elseif _class == System.Collections.Generic.Dictionary_TKey_TValue then
             index = __unwrap_if_string(arg1)
             return obj[index]
         else
@@ -448,10 +448,10 @@ function getexterninstanceindexer(callerClass, typeargs, typekinds, obj, class, 
     end
 end
 
-function setexternstaticindexer(callerClass, typeargs, typekinds, class, name, argCount, toplevel, ...)
+function setexternstaticindexer(callerClass, class, name, argCount, toplevel, ...)
     return class[name](...)
 end
-function setexterninstanceindexer(callerClass, typeargs, typekinds, obj, class, name, argCount, toplevel, ...)
+function setexterninstanceindexer(callerClass, obj, class, name, argCount, toplevel, ...)
     local arg1,arg2,arg3 = ...
     local index,val
     index = __unwrap_if_string(arg1)
@@ -462,11 +462,11 @@ function setexterninstanceindexer(callerClass, typeargs, typekinds, obj, class, 
     end
     local meta = getmetatable(obj)
     if meta then
-        local class = rawget(meta, "__class")
+        local _class = rawget(meta, "__class")
         local typename = rawget(meta, "__typename")
-        if class == System.Collections.Generic.List_T then
+        if _class == System.Collections.Generic.List_T then
             obj[index + 1] = val
-        elseif class == System.Collections.Generic.Dictionary_TKey_TValue then
+        elseif _class == System.Collections.Generic.Dictionary_TKey_TValue then
             obj[index] = val
         elseif typename == "LuaArray" then
             obj[index + 1] = val
@@ -3493,6 +3493,17 @@ function defineentry(class)
     _G.main = function()
         return class
     end
+end
+
+function getglobalinfo(key)
+    return rawget(_G, key)
+end
+function buildglobalinfoonce(key, val)
+    local old = rawget(_G, key)
+    if old~=val then
+        rawset(_G, key, val)
+    end
+    return val
 end
 
 function newstruct(class, typeargs, typekinds, ctor, initializer, ...)

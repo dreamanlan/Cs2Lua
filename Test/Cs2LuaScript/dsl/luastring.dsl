@@ -6,7 +6,7 @@ require("cs2dsl__interfaces");
 class(LuaString) {
 	static_methods {
 		__new_object = deffunc(1)args(...){
-			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(LuaString, typeargs(), typekinds(), "ctor", null, ...);
+			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(LuaString, "g_LuaString", typeargs(), typekinds(), "ctor", null, ...);
 			return(__cs2dsl_newobj);
 		}options[needfuncinfo(false)];
 		Format__String__Object = deffunc(1)args(str, __dsl_arg){

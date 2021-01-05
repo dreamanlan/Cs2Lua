@@ -30,8 +30,62 @@ namespace SLua
     {
         internal class EnumerableInfo
         {
-            internal IEnumerable Enumerable;
-            internal IEnumerator Enumerator;
+            internal void Reset()
+            {
+                var enumer = Enumerable as IEnumerable;
+                if (null != enumer) {
+                    Enumerator = enumer.GetEnumerator();
+                }
+                else if (null != Enumerable) {
+                    try {
+                        var t = Enumerable.GetType();
+                        BindingFlags flags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.NonPublic;
+                        Enumerator = t.InvokeMember("GetEnumerator", flags, null, Enumerable, null);
+                    }
+                    catch {
+                    }
+                }
+            }
+            internal bool MoveNext()
+            {
+                var emt = Enumerator as IEnumerator;
+                if (null != emt) {
+                    return emt.MoveNext();
+                }
+                else if (null != Enumerator) {
+                    try {
+                        var t = Enumerator.GetType();
+                        BindingFlags flags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.NonPublic;
+                        var r = t.InvokeMember("MoveNext", flags, null, Enumerator, null);
+                        return (bool)Convert.ChangeType(r, typeof(bool));
+                    }
+                    catch {
+                    }
+                }
+                return false;
+            }
+            internal object Current
+            {
+                get {
+                    var emt = Enumerator as IEnumerator;
+                    if (null != emt) {
+                        return emt.Current;
+                    }
+                    else if (null != Enumerator) {
+                        try {
+                            var t = Enumerator.GetType();
+                            BindingFlags flags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.GetField | BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.NonPublic;
+                            var r = t.InvokeMember("Current", flags, null, Enumerator, null);
+                            return r;
+                        }
+                        catch {
+                        }
+                    }
+                    return null;
+                }
+            }
+            internal object Enumerable;
+            internal object Enumerator;
         }
         static string classfunc = @"
 local getmetatable = getmetatable
@@ -93,17 +147,12 @@ return Class
             }
             var einfo = (EnumerableInfo)obj;
             if (null != einfo) {
-                var it = einfo.Enumerator;
                 if (resetV) {
-                    einfo.Enumerator = einfo.Enumerable.GetEnumerator();
+                    einfo.Reset();
                 }
-                else if (it != null && it.MoveNext()) {
-                    pushVar(l, it.Current);
+                else if (einfo.MoveNext()) {
+                    pushVar(l, einfo.Current);
                     return 1;
-                }
-                else {
-                    if (obj is IDisposable)
-                        (obj as IDisposable).Dispose();
                 }
             }
             else {
@@ -119,14 +168,24 @@ return Class
             object o = checkObj(l, 1);
             if (o is IEnumerable) {
                 IEnumerable e = o as IEnumerable;
-                IEnumerator iter = e.GetEnumerator();
-                var einfo = new EnumerableInfo { Enumerable = e, Enumerator = iter };
+                var einfo = new EnumerableInfo { Enumerable = e };
+                einfo.Reset();
                 pushValue(l, true);
                 pushLightObject(l, einfo);
                 LuaDLL.lua_pushcclosure(l, _iter, 1);
                 return 2;
             }
-            return error(l, "passed in object isn't enumerable");
+            else {
+                var einfo = new EnumerableInfo { Enumerable = o };
+                einfo.Reset();
+                if (null == einfo.Enumerator) {
+                    return error(l, "passed in object isn't enumerable");
+                }
+                pushValue(l, true);
+                pushLightObject(l, einfo);
+                LuaDLL.lua_pushcclosure(l, _iter, 1);
+                return 2;
+            }
         }
 
         /// <summary>

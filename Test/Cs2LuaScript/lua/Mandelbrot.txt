@@ -100,7 +100,7 @@ Mandelbrot = {
 				local __cs2lua_func_info = luainitialize();
 				local cube;
 				cube = UnityEngine.GameObject.CreatePrimitive(3);
-				cube.transform.position = new_vector3(__cs2lua_func_info, UnityEngine.Vector3, nil, nil, "ctor__Single__Single__Single", nil, (((x * this.r) * this.scale) / w), ((((y * this.r) * this.scale) / h) - 12), 0);
+				cube.transform.position = new_vector3(__cs2lua_func_info, nil, (((x * this.r) * this.scale) / w), ((((y * this.r) * this.scale) / h) - 12), 0);
 				cube.transform:SetParent__Transform(this.root.transform);
 				local mat;
 				mat = cube:GetComponent__Type(UnityEngine.Renderer).material;
@@ -122,7 +122,7 @@ Mandelbrot = {
 				else
 					this.__ctor_called = true;
 				end;
-				this.colors = wraparray({get_unity_color_red(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "red"), get_unity_color_blue(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "blue"), get_unity_color_green(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "green"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "cyan"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "grey"), get_unity_color_white(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "white"), get_unity_color_yellow(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "yellow"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "magenta"), get_unity_color_black(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "black")}, nil, UnityEngine.Color, TypeKind.Struct);
+				this.colors = wraparray({get_unity_color_red(__cs2lua_func_info), get_unity_color_blue(__cs2lua_func_info), get_unity_color_green(__cs2lua_func_info), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "cyan"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "grey"), get_unity_color_white(__cs2lua_func_info), get_unity_color_yellow(__cs2lua_func_info), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "magenta"), get_unity_color_black(__cs2lua_func_info)}, nil, UnityEngine.Color, TypeKind.Struct);
 				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 		};

@@ -6,7 +6,7 @@ require("cs2dsl__interfaces");
 class(Mandelbrot) {
 	static_methods {
 		__new_object = deffunc(1)args(...){
-			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(Mandelbrot, typeargs(), typekinds(), "ctor", null, ...);
+			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(Mandelbrot, "g_Mandelbrot", typeargs(), typekinds(), "ctor", null, ...);
 			return(__cs2dsl_newobj);
 		}options[needfuncinfo(false)];
 		cctor = deffunc(0)args(){
@@ -28,7 +28,7 @@ class(Mandelbrot) {
 
 	instance_methods {
 		Init = deffunc(0)args(this, obj, mb){
-			setinstance(SymbolKind.Field, this, Mandelbrot, "root", newexternobject(UnityEngine.GameObject, typeargs(), typekinds(), "ctor__String", null, dslstrtocsstr("mandelbrot")));
+			setinstance(SymbolKind.Field, this, Mandelbrot, "root", newexternobject(UnityEngine.GameObject, "g_UnityEngine_GameObject", typeargs(), typekinds(), "ctor__String", null, dslstrtocsstr("mandelbrot")));
 			callinstance(this, Mandelbrot, "Exec");
 		}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown), paramtype(obj, UnityEngine.GameObject, TypeKind.Class), paramtype(mb, MonoBehaviourProxy, TypeKind.Class)];
 		Call = deffunc(0)args(this, name, ...){
@@ -70,7 +70,7 @@ class(Mandelbrot) {
 		}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown)];
 		DrawCube = deffunc(0)args(this, x, y, w, h){
 			local(cube); cube = callexternstatic(UnityEngine.GameObject, "CreatePrimitive", 3);
-			setexterninstance(SymbolKind.Property, getexterninstance(SymbolKind.Property, cube, UnityEngine.GameObject, "transform"), UnityEngine.Transform, "position", newexternstruct(UnityEngine.Vector3, typeargs(), typekinds(), "ctor__Single__Single__Single", null, execbinary("/", execbinary("*", execbinary("*", x, getinstance(SymbolKind.Field, this, Mandelbrot, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(SymbolKind.Field, this, Mandelbrot, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), w, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), execbinary("-", execbinary("/", execbinary("*", execbinary("*", y, getinstance(SymbolKind.Field, this, Mandelbrot, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(SymbolKind.Field, this, Mandelbrot, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), h, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 12, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 0));
+			setexterninstance(SymbolKind.Property, getexterninstance(SymbolKind.Property, cube, UnityEngine.GameObject, "transform"), UnityEngine.Transform, "position", newexternstruct(UnityEngine.Vector3, "g_UnityEngine_Vector3", typeargs(), typekinds(), "ctor__Single__Single__Single", null, execbinary("/", execbinary("*", execbinary("*", x, getinstance(SymbolKind.Field, this, Mandelbrot, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(SymbolKind.Field, this, Mandelbrot, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), w, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), execbinary("-", execbinary("/", execbinary("*", execbinary("*", y, getinstance(SymbolKind.Field, this, Mandelbrot, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(SymbolKind.Field, this, Mandelbrot, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), h, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 12, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 0));
 			callexterninstance(getexterninstance(SymbolKind.Property, cube, UnityEngine.GameObject, "transform"), UnityEngine.Transform, "SetParent__Transform", getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, Mandelbrot, "root"), UnityEngine.GameObject, "transform"));
 			local(mat); mat = getexterninstance(SymbolKind.Property, callexterninstance(cube, UnityEngine.GameObject, "GetComponent__Type", UnityEngine.Renderer), UnityEngine.Renderer, "material");
 			local(ix); ix = callexternstatic(UnityEngine.Random, "Range__Int32__Int32", 0, getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, Mandelbrot, "colors"), System.Array, "Length"));
