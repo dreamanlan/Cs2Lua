@@ -228,6 +228,10 @@ testho();
 
 (function() print(123) end)()
 
-a,b = c,d
+a,b = c,d;
 
-(1+3)
+testho(1+3);
+
+--error
+--function testparams(a, ..., v)
+--end

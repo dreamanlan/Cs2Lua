@@ -33,7 +33,7 @@ namespace Generator
             bool firstAttrs = true;
             foreach (var dslInfo in dslFile.DslInfos) {
                 s_CurSyntax = dslInfo;
-                string id = dslInfo.GetId();                
+                string id = dslInfo.GetId();
                 Dsl.FunctionData funcData = dslInfo as Dsl.FunctionData;
                 Dsl.FunctionData callData = funcData;
                 if (null != funcData && funcData.IsHighOrder) {
@@ -274,7 +274,7 @@ namespace Generator
                                                 sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
                                             }
                                             --indent;
-                                            if(null!=cdef)
+                                            if (null != cdef)
                                                 sb.AppendFormatLine("{0}end),", GetIndentString(indent));
                                             else
                                                 sb.AppendFormatLine("{0}end,", GetIndentString(indent));
@@ -284,11 +284,11 @@ namespace Generator
                                             sb.AppendLine(")");
                                             ++indent;
                                         }
-                                        if(IsParamTypeCheckMethod(className, mname)) {
-                                            foreach(var p in fcall.Params) {
+                                        if (IsParamTypeCheckMethod(className, mname)) {
+                                            foreach (var p in fcall.Params) {
                                                 var pname = p.GetId();
                                                 TypeInfo ti;
-                                                if(funcOpts.ParamTypes.TryGetValue(pname, out ti)) {
+                                                if (funcOpts.ParamTypes.TryGetValue(pname, out ti)) {
                                                     if (ti.TypeKind != "TypeKind.TypeParameter") {
                                                         sb.AppendFormatLine("{0}{1} = paramtypecheck({2}, {3});", GetIndentString(indent), pname, pname, ti.Type);
                                                     }
@@ -359,7 +359,7 @@ namespace Generator
                     sb.AppendLine();
 
                     sb.AppendFormatLine("{0}local class = {1};", GetIndentString(indent), className);
-                    
+
                     sb.AppendLine();
 
                     var instMethods = FindStatement(funcData, "instance_methods") as Dsl.FunctionData;
@@ -880,7 +880,7 @@ namespace Generator
         }
         private static void GenerateFunctionRetVars(Dsl.FunctionData fdef, StringBuilder sb, int ct, string prefix)
         {
-            for(int i = 0; i < ct; ++i) {
+            for (int i = 0; i < ct; ++i) {
                 if (i > 0)
                     sb.Append(", ");
                 sb.AppendFormat("{0}{1}", prefix, i + 1);
@@ -980,7 +980,8 @@ namespace Generator
             string id = string.Empty;
             if (data.IsHighOrder) {
                 GenerateConcreteSyntaxForCall(data.LowerOrderFunction, sb, indent, firstLineUseIndent, funcOpts, calculator);
-            } else {
+            }
+            else {
                 id = data.GetId();
             }
             if (data.GetParamClass() == (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_OPERATOR) {
@@ -2051,15 +2052,50 @@ namespace Generator
                         }
                         sb.Append(")");
                     }
+                    else if (id == "newobject" || id == "newexternobject" ||
+                        id == "newstruct" || id == "newexternstruct" ||
+                        id == "newdictionary" || id == "newexterndictionary" ||
+                        id == "newlist" || id == "newexternlist" ||
+                        id == "newcollection" || id == "newexterncollection") {
+                        var _classStr = CalcTypeString(data.GetParam(0));
+                        var keyStr = data.GetParamId(1);
+                        var typeArgs = data.GetParam(2) as Dsl.FunctionData;
+                        var typeKinds = data.GetParam(3) as Dsl.FunctionData;
+                        sb.Append(id);
+                        sb.Append('(');
+                        sb.Append(_classStr);
+                        sb.Append(", ");
+                        if (null != typeArgs && typeArgs.GetParamNum() > 0) {
+                            sb.AppendFormat("buildglobalinfoonce(\"{0}_TypeArgs\", getglobalinfo(\"{0}_TypeArgs\") or ", keyStr);
+                            GenerateSyntaxComponent(typeArgs, sb, indent, false, funcOpts, calculator);
+                            sb.Append("), ");
+                        }
+                        else {
+                            sb.Append("nil, ");
+                        }
+                        if (null != typeKinds && typeKinds.GetParamNum() > 0) {
+                            sb.AppendFormat("buildglobalinfoonce(\"{0}_TypeKinds\", getglobalinfo(\"{0}_TypeKinds\") or ", keyStr);
+                            GenerateSyntaxComponent(typeKinds, sb, indent, false, funcOpts, calculator);
+                            sb.Append("), ");
+                        }
+                        else {
+                            sb.Append("nil, ");
+                        }
+                        GenerateArguments(data, sb, indent, 4, funcOpts, calculator);
+                        sb.Append(')');
+                    }
                     else if (id == "anonymousobject") {
                         sb.Append("wrapanonymousobject{");
                         GenerateArguments(data, sb, indent, 0, funcOpts, calculator);
                         sb.Append("}");
                     }
                     else if (id == "literaldictionary") {
+                        var keyStr = data.GetParamId(0);
+                        var typeArgs = data.GetParam(1);
+                        var typeKinds = data.GetParam(2);
                         sb.Append("{");
                         string prestr = string.Empty;
-                        for (int ix = 2; ix < data.Params.Count; ++ix) {
+                        for (int ix = 3; ix < data.Params.Count; ++ix) {
                             var param = data.Params[ix] as Dsl.FunctionData;
                             sb.Append(prestr);
                             var k = param.GetParam(0);
@@ -2080,8 +2116,11 @@ namespace Generator
                         sb.Append("}");
                     }
                     else if (id == "literallist" || id == "literalcollection" || id == "literalcomplex") {
+                        var keyStr = data.GetParamId(0);
+                        var typeArgs = data.GetParam(1);
+                        var typeKinds = data.GetParam(2);
                         sb.Append("{");
-                        GenerateArguments(data, sb, indent, 2, funcOpts, calculator);
+                        GenerateArguments(data, sb, indent, 3, funcOpts, calculator);
                         sb.Append("}");
                     }
                     else if (id == "literalarray") {
@@ -2398,7 +2437,7 @@ namespace Generator
                     if (indexerByLuaLib) {
                         sb.AppendFormatLine("{0}{1} = {2}[{3}];", GetIndentString(indent), varName, varExp, varIndex);
                     }
-                    else if(isExtern) {
+                    else if (isExtern) {
                         sb.AppendFormat("{0}{1} = getexterninstanceindexer({2}, {3}, {4}, \"{5}\", 1, {6});", GetIndentString(indent), varName, strCallerClass, varExp, strClass, strMember, varIndex);
                     }
                     else {
@@ -3150,11 +3189,35 @@ namespace DslExpression
                 var sb = operands[0].As<StringBuilder>();
                 var funcData = operands[1].As<Dsl.FunctionData>();
                 var funcOpts = operands[2].As<Generator.LuaGenerator.FunctionOptions>();
+                int indent = 0;
                 int start = 0;
+                List<int> iargs = null;
                 if (operands.Count >= 4)
-                    start = operands[3].Get<int>();
+                    indent = operands[3].Get<int>();
+                if (operands.Count >= 5) {
+                    var opd = operands[4];
+                    if (opd.IsInteger) {
+                        start = opd.Get<int>();
+                    }
+                    else {
+                        var enumer = opd.As<System.Collections.IEnumerable>();
+                        if (null != enumer) {
+                            iargs = new List<int>();
+                            foreach (var e in enumer) {
+                                var v = CastTo<int>(e);
+                                iargs.Add(v);
+                            }
+                        }
+                        else {
+                            throw new Exception("illegel IEnumerable arg !");
+                        }
+                    }
+                }
                 if (null != sb && null != funcData) {
-                    Generator.LuaGenerator.GenerateArguments(funcData, sb, 0, start, funcOpts, Calculator);
+                    if (null == iargs)
+                        Generator.LuaGenerator.GenerateArguments(funcData, sb, indent, start, funcOpts, Calculator);
+                    else
+                        Generator.LuaGenerator.GenerateArguments(funcData, sb, indent, iargs, funcOpts, Calculator);
                 }
             }
             return r;
@@ -3176,15 +3239,34 @@ namespace DslExpression
                     Generator.LuaGenerator.GenerateCodeBlock(tsb, 1, code);
                     tsb.AppendLine("end");
                     Generator.LuaGenerator.FunctionsFromDslHook.TryAdd(name, tsb.ToString());
-                    if (null != m_FuncDataExp && null != m_FuncOptsExp && null != m_StringBuilderExp && null != m_IndentExp) {
+                    if (null != m_FuncDataExp && null != m_FuncOptsExp && null != m_StringBuilderExp && null != m_IndentExp && null != m_StartOrIgnoreArgs) {
                         var funcData = m_FuncDataExp.Calc().As<FunctionData>();
                         var funcOpts = m_FuncOptsExp.Calc().As<Generator.LuaGenerator.FunctionOptions>();
                         var sb = m_StringBuilderExp.Calc().As<StringBuilder>();
                         int indent = m_IndentExp.Calc().Get<int>();
+                        var opd = m_StartOrIgnoreArgs.Calc();
+                        int start = 0;
+                        List<int> iargs = null;
+                        if (opd.IsInteger) {
+                            start = opd.Get<int>();
+                        }
+                        else {
+                            var enumer = opd.As<System.Collections.IEnumerable>();
+                            if (null != enumer) {
+                                iargs = new List<int>();
+                                foreach (var e in enumer) {
+                                    int v = CastTo<int>(e);
+                                    iargs.Add(v);
+                                }
+                            }
+                            else {
+                                throw new Exception("illegel IEnumerable arg !");
+                            }
+                        }
                         sb.Append(name);
                         sb.Append("(");
                         string prestr = string.Empty;
-                        foreach(var fp in m_FirstArgs) {
+                        foreach (var fp in m_FirstArgs) {
                             sb.Append(prestr);
                             var str = fp.Calc().AsString;
                             if (!string.IsNullOrEmpty(str)) {
@@ -3195,8 +3277,18 @@ namespace DslExpression
                             }
                             prestr = ", ";
                         }
-                        sb.Append(prestr);
-                        Generator.LuaGenerator.GenerateArguments(funcData, sb, indent, 0, funcOpts, Calculator);
+                        if (null == iargs) {
+                            if(start < funcData.GetParamNum()) {
+                                sb.Append(prestr);
+                            }
+                            Generator.LuaGenerator.GenerateArguments(funcData, sb, indent, start, funcOpts, Calculator);
+                        }
+                        else {
+                            if (iargs.Count < funcData.GetParamNum()) {
+                                sb.Append(prestr);
+                            }
+                            Generator.LuaGenerator.GenerateArguments(funcData, sb, indent, iargs, funcOpts, Calculator);
+                        }
                         sb.Append(")");
                     }
                     r = true;
@@ -3214,7 +3306,7 @@ namespace DslExpression
                     m_NameExp = Calculator.Load(name);
                     var pstr = cd.GetParam(1);
                     m_ParamsStrExp = Calculator.Load(pstr);
-                    if (num >= 6) {
+                    if (num >= 7) {
                         var fd = cd.GetParam(2);
                         m_FuncDataExp = Calculator.Load(fd);
                         var funcOpts = cd.GetParam(3);
@@ -3223,7 +3315,9 @@ namespace DslExpression
                         m_StringBuilderExp = Calculator.Load(sb);
                         var indent = cd.GetParam(5);
                         m_IndentExp = Calculator.Load(indent);
-                        for(int ix = 6; ix < num; ++ix) {
+                        var siargs = cd.GetParam(6);
+                        m_StartOrIgnoreArgs = Calculator.Load(siargs);
+                        for (int ix = 7; ix < num; ++ix) {
                             var p = cd.GetParam(ix);
                             var exp = Calculator.Load(p);
                             m_FirstArgs.Add(exp);
@@ -3242,6 +3336,7 @@ namespace DslExpression
         private IExpression m_FuncOptsExp = null;
         private IExpression m_StringBuilderExp = null;
         private IExpression m_IndentExp = null;
+        private IExpression m_StartOrIgnoreArgs = null;
         private List<IExpression> m_FirstArgs = new List<IExpression>();
         private string m_CodeBlock = string.Empty;
     }

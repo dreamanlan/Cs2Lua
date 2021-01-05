@@ -11,19 +11,19 @@ Test = {
 	end,
 
 	ToList = function(T, enumer)
-		local __method_ret_138_4_145_5;
+		local __method_ret_143_4_150_5;
 		local r;
 		r = newexternlist(System.Collections.Generic.List_T, {T}, {TypeKind.TypeParameter}, "ctor", {});
-		local __foreach_141_8_143_9 = newiterator(enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true);
-		for v in getiterator(__foreach_141_8_143_9) do
+		local __foreach_146_8_148_9 = newiterator(enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true);
+		for v in getiterator(__foreach_146_8_148_9) do
 			if v == __cs2lua_nil then
 				v = nil;
 			end;
 			r:Add(v);
 		end;
-		recycleiterator(__foreach_141_8_143_9);
-		__method_ret_138_4_145_5 = r;
-		return __method_ret_138_4_145_5;
+		recycleiterator(__foreach_146_8_148_9);
+		__method_ret_143_4_150_5 = r;
+		return __method_ret_143_4_150_5;
 	end,
 
 	cctor = function()
@@ -52,6 +52,22 @@ Test = {
 		local class = Test;
 
 		local obj_methods = {
+			get_Item = function(this, ...)
+				local __method_ret_107_4_111_5;
+				local args;
+				args = wrapparams({...}, System.Nullable_T, TypeKind.Struct);
+				__method_ret_107_4_111_5 = args[1];
+				return __method_ret_107_4_111_5;
+			end,
+
+			set_Item = function(this, ...)
+				local args;
+				args = wrapparams({...}, System.Nullable_T, TypeKind.Struct);
+				local value;
+				value = table.remove(args);
+				args[1] = value;
+			end,
+
 			Init = function(this)
 				local items;
 				items = wraparray({"ȫ��", "������", "�ɽ�ȡ", "�����", "δ��ȡ"}, nil, System.String, TypeKind.Class);
@@ -60,9 +76,9 @@ Test = {
 				strlist = newlist(StrList, nil, nil, "ctor", {});
 				strlist:Add(System.String.Empty);
 				strlist:Sort__Comparison_1_T(function(a, b)
-					local __lambda_113_21_113_45;
-					__lambda_113_21_113_45 = invokeforbasicvalue(a, false, System.String, "CompareTo__String", b);
-					return __lambda_113_21_113_45;
+					local __lambda_118_21_118_45;
+					__lambda_118_21_118_45 = invokeforbasicvalue(a, false, System.String, "CompareTo__String", b);
+					return __lambda_118_21_118_45;
 				end);
 				local intlist;
 				intlist = newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, "ctor", {});
@@ -70,9 +86,9 @@ Test = {
 				local sa;
 				sa = getexterninstanceindexer(StrList, strlist, System.Collections.Generic.List_T, "get_Item", 1, 0);
 				intlist:Sort__Comparison_1_T(function(a, b)
-					local __lambda_117_21_117_45;
-					__lambda_117_21_117_45 = invokeforbasicvalue(a, false, System.Int32, "CompareTo__Int32", b);
-					return __lambda_117_21_117_45;
+					local __lambda_122_21_122_45;
+					__lambda_122_21_122_45 = invokeforbasicvalue(a, false, System.Int32, "CompareTo__Int32", b);
+					return __lambda_122_21_122_45;
 				end);
 				local iaa;
 				if (not isequal(nil, strlist)) then iaa = strlist.Count else iaa = intlist.Count end;
@@ -82,19 +98,19 @@ Test = {
 				bb = wraparray({wraparray({1, 2}, nil, System.Int32, TypeKind.Struct), wraparray({3, 4}, nil, System.Int32, TypeKind.Struct), wraparray({5, 6}, nil, System.Int32, TypeKind.Struct)}, nil, System.Int32, TypeKind.Struct);
 				local ia;
 				ia = bb[1][2];
-				local __foreach_exp_122_8_124_9 = strlist;
-				for __foreach_ix_122_8_124_9 = 0, __foreach_exp_122_8_124_9.Count - 1 do
-					s = getexterninstanceindexer(StrList, __foreach_exp_122_8_124_9, System.Collections.Generic.List_T, "get_Item", 1, __foreach_ix_122_8_124_9);					System.Console.WriteLine__String(s);
+				local __foreach_exp_127_8_129_9 = strlist;
+				for __foreach_ix_127_8_129_9 = 0, __foreach_exp_127_8_129_9.Count - 1 do
+					s = getexterninstanceindexer(StrList, __foreach_exp_127_8_129_9, System.Collections.Generic.List_T, "get_Item", 1, __foreach_ix_127_8_129_9);					System.Console.WriteLine__String(s);
 				end;
-				local __foreach_exp_125_8_127_9 = aa;
-				for __foreach_ix_125_8_127_9 = 1, __foreach_exp_125_8_127_9.Length do
-					v = __foreach_exp_125_8_127_9[__foreach_ix_125_8_127_9];
+				local __foreach_exp_130_8_132_9 = aa;
+				for __foreach_ix_130_8_132_9 = 1, __foreach_exp_130_8_132_9.Length do
+					v = __foreach_exp_130_8_132_9[__foreach_ix_130_8_132_9];
 					System.Console.WriteLine__Int32(v);
 				end;
-				local __foreach_exp_128_8_130_9 = bb;
-				for __foreach_ix_128_8_130_9_0 = 1, __foreach_exp_128_8_130_9:GetLength(0) do
-				for __foreach_ix_128_8_130_9_1 = 1, __foreach_exp_128_8_130_9:GetLength(1) do
-					v = __foreach_exp_128_8_130_9[__foreach_ix_128_8_130_9];
+				local __foreach_exp_133_8_135_9 = bb;
+				for __foreach_ix_133_8_135_9_0 = 1, __foreach_exp_133_8_135_9:GetLength(0) do
+				for __foreach_ix_133_8_135_9_1 = 1, __foreach_exp_133_8_135_9:GetLength(1) do
+					v = __foreach_exp_133_8_135_9[__foreach_ix_133_8_135_9];
 					System.Console.WriteLine__Int32(v);
 				end;
 				end;
@@ -154,6 +170,12 @@ Test = {
 	-------- metadata info --------
 	-------------------------------
 	__method_info = {
+		get_Item = {
+			Kind = MethodKind.PropertyGet,
+		},
+		set_Item = {
+			Kind = MethodKind.PropertySet,
+		},
 		Init = {
 			Kind = MethodKind.Ordinary,
 		},

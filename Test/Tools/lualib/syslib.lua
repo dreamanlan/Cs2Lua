@@ -3495,6 +3495,17 @@ function defineentry(class)
     end
 end
 
+function getglobalinfo(key)
+    return rawget(_G, key)
+end
+function buildglobalinfoonce(key, val)
+    local old = rawget(_G, key)
+    if old~=val then
+        rawset(_G, key, val)
+    end
+    return val
+end
+
 function newstruct(class, typeargs, typekinds, ctor, initializer, ...)
     local obj = class()
     if ctor then

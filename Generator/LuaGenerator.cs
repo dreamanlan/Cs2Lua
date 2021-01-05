@@ -111,6 +111,24 @@ namespace Generator
                 prestr = ", ";
             }
         }
+        internal static void GenerateArguments(Dsl.FunctionData data, StringBuilder sb, int indent, IList<int> skips, FunctionOptions funcOpts, DslExpression.DslCalculator calculator)
+        {
+            s_CurSyntax = data;
+            string prestr = string.Empty;
+            for (int ix = 0; ix < data.Params.Count; ++ix) {
+                if (skips.Contains(ix))
+                    continue;
+                var param = data.Params[ix];
+                sb.Append(prestr);
+                string paramId = param.GetId();
+                if (param.GetIdType() == (int)Dsl.ValueData.ID_TOKEN && paramId == "...") {
+                    sb.Append("...");
+                    continue;
+                }
+                GenerateSyntaxComponent(param, sb, indent, false, funcOpts, calculator);
+                prestr = ", ";
+            }
+        }
         internal static void GenerateCodeBlock(StringBuilder sb, int indent, string code)
         {
             GenerateCodeBlock(sb, indent, code, false);

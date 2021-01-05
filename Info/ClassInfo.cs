@@ -304,6 +304,13 @@ namespace RoslynTool.CsToDsl
                 return CalcFullNameWithTypeParameters(type, true);
             }
         }
+        //用于生成全局变量名
+        internal static string CalcFullNameKey(ISymbol type)
+        {
+            if (null == type)
+                return string.Empty;
+            return CalcFullName(type, true);
+        }
         //专门用于SymbolTable::IsCs2DslSymbol与分析外部文件的类定义时使用的函数(防止递归调用与数据构建过程中查询数据)
         internal static string SpecialGetFullTypeName(ITypeSymbol type, bool isExtern)
         {

@@ -105,6 +105,11 @@ internal sealed class DataChangeCallBackInfo : ICs2LuaPoolAllocatedObjectEx<Data
 
 class Test
 {
+    public int this[params int?[] args]
+    {
+        get { return args[0]; }
+        set { args[0] = value; }
+    }
     public void Init()
     {
         string[] items = { "全部", "进行中", "可接取", "已完成", "未获取" };

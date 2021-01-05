@@ -13,13 +13,13 @@ class(Test) {
 			return(__cs2dsl_newobj);
 		}options[needfuncinfo(false)];
 		ToList = deffunc(1)args(T, enumer){
-			local(__method_ret_138_4_145_5);
+			local(__method_ret_143_4_150_5);
 			local(r); r = newexternlist(System.Collections.Generic.List_T, typeargs(T), typekinds(TypeKind.TypeParameter), "ctor", literallist(typeargs(T), typekinds(TypeKind.TypeParameter)));
-			foreach(__foreach_141_8_143_9, v, enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true){
+			foreach(__foreach_146_8_148_9, v, enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true){
 				callexterninstance(r, System.Collections.Generic.List_T, "Add", v);
 			};
-			__method_ret_138_4_145_5 = r;
-			return(__method_ret_138_4_145_5);
+			__method_ret_143_4_150_5 = r;
+			return(__method_ret_143_4_150_5);
 		}options[needfuncinfo(false), rettype(System.Collections.Generic.List_T, TypeKind.Class), paramtype(T, null, TypeKind.TypeParameter), paramtype(enumer, System.Collections.Generic.IEnumerable_T, TypeKind.Interface)];
 		cctor = deffunc(0)args(){
 			callstatic(Test, "__cctor");
@@ -39,27 +39,38 @@ class(Test) {
 	static_events {};
 
 	instance_methods {
+		get_Item = deffunc(1)args(this, ...){
+			local(__method_ret_107_4_111_5);
+			local(args); args = params(System.Nullable_T, TypeKind.Struct);
+			__method_ret_107_4_111_5 = args[1];
+			return(__method_ret_107_4_111_5);
+		}options[needfuncinfo(false), rettype(System.Int32, TypeKind.Struct), paramtype(..., , TypeKind.Array)];
+		set_Item = deffunc(0)args(this, ...){
+			local(args); args = params(System.Nullable_T, TypeKind.Struct);
+			local(value); value = paramsremove(args);
+			args[1] = value;
+		}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown), paramtype(..., , TypeKind.Array)];
 		Init = deffunc(0)args(this){
 			local(items); items = literalarray(System.String, TypeKind.Class, "ȫ��", "������", "�ɽ�ȡ", "�����", "δ��ȡ");
 			callinstance(getinstance(SymbolKind.Field, this, Test, "m_DataChangeCallBackInfoPool"), Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "Init__Func_1_T__Action_1_T", null, null);
 			local(strlist); strlist = newlist(StrList, typeargs(), typekinds(), "ctor", literallist(typeargs(), typekinds()));
 			callexterninstance(strlist, System.Collections.Generic.List_T, "Add", getexternstatic(SymbolKind.Field, System.String, "Empty"));
-			callexterninstance(strlist, System.Collections.Generic.List_T, "Sort__Comparison_1_T", deffunc(1)args(a, b){ local(__lambda_113_21_113_45); __lambda_113_21_113_45 = invokeforbasicvalue(a, false, System.String, "CompareTo__String", b); return(__lambda_113_21_113_45); }options[needfuncinfo(false), rettype(System.Int32, TypeKind.Struct), paramtype(a, System.String, TypeKind.Class), paramtype(b, System.String, TypeKind.Class)]);
+			callexterninstance(strlist, System.Collections.Generic.List_T, "Sort__Comparison_1_T", deffunc(1)args(a, b){ local(__lambda_118_21_118_45); __lambda_118_21_118_45 = invokeforbasicvalue(a, false, System.String, "CompareTo__String", b); return(__lambda_118_21_118_45); }options[needfuncinfo(false), rettype(System.Int32, TypeKind.Struct), paramtype(a, System.String, TypeKind.Class), paramtype(b, System.String, TypeKind.Class)]);
 			local(intlist); intlist = newexternlist(System.Collections.Generic.List_T, typeargs(System.Int32), typekinds(TypeKind.Struct), "ctor", literallist(typeargs(System.Int32), typekinds(TypeKind.Struct)));
 			callexterninstance(intlist, System.Collections.Generic.List_T, "Add", 1);
 			local(sa); sa = getexterninstanceindexer(StrList, strlist, System.Collections.Generic.List_T, "get_Item", 1, 0);
-			callexterninstance(intlist, System.Collections.Generic.List_T, "Sort__Comparison_1_T", deffunc(1)args(a, b){ local(__lambda_117_21_117_45); __lambda_117_21_117_45 = invokeforbasicvalue(a, false, System.Int32, "CompareTo__Int32", b); return(__lambda_117_21_117_45); }options[needfuncinfo(false), rettype(System.Int32, TypeKind.Struct), paramtype(a, System.Int32, TypeKind.Struct), paramtype(b, System.Int32, TypeKind.Struct)]);
+			callexterninstance(intlist, System.Collections.Generic.List_T, "Sort__Comparison_1_T", deffunc(1)args(a, b){ local(__lambda_122_21_122_45); __lambda_122_21_122_45 = invokeforbasicvalue(a, false, System.Int32, "CompareTo__Int32", b); return(__lambda_122_21_122_45); }options[needfuncinfo(false), rettype(System.Int32, TypeKind.Struct), paramtype(a, System.Int32, TypeKind.Struct), paramtype(b, System.Int32, TypeKind.Struct)]);
 			local(iaa); iaa = condexp(execbinary("!=", null, strlist, System.Object, System.Object, TypeKind.Class, TypeKind.Class), false, function(){ funcobjret(getexterninstance(SymbolKind.Property, strlist, System.Collections.Generic.List_T, "Count")); }, false, function(){ funcobjret(getexterninstance(SymbolKind.Property, intlist, System.Collections.Generic.List_T, "Count")); });
 			local(aa); aa = literalarray(System.Int32, TypeKind.Struct, 1, 2, 3, 4, 5);
 			local(bb); bb = literalarray(System.Int32, TypeKind.Struct, literalarray(System.Int32, TypeKind.Struct, 1, 2), literalarray(System.Int32, TypeKind.Struct, 3, 4), literalarray(System.Int32, TypeKind.Struct, 5, 6));
 			local(ia); ia = bb[1][2];
-			foreachlist(__foreach_ix_122_8_124_9, __foreach_exp_122_8_124_9, s, strlist, StrList, System.Collections.Generic.List_T, true){
+			foreachlist(__foreach_ix_127_8_129_9, __foreach_exp_127_8_129_9, s, strlist, StrList, System.Collections.Generic.List_T, true){
 				callexternstatic(System.Console, "WriteLine__String", s);
 			};
-			foreacharray(__foreach_ix_125_8_127_9, __foreach_exp_125_8_127_9, v, aa, 1, true){
+			foreacharray(__foreach_ix_130_8_132_9, __foreach_exp_130_8_132_9, v, aa, 1, true){
 				callexternstatic(System.Console, "WriteLine__Int32", v);
 			};
-			foreacharray(__foreach_ix_128_8_130_9, __foreach_exp_128_8_130_9, v, bb, 2, true){
+			foreacharray(__foreach_ix_133_8_135_9, __foreach_exp_133_8_135_9, v, bb, 2, true){
 				callexternstatic(System.Console, "WriteLine__Int32", v);
 			};
 			local(act); act = typecast(( deffunc(0)args(){
@@ -96,6 +107,10 @@ class(Test) {
 	class_info(TypeKind.Class, Accessibility.Internal) {
 	};
 	method_info {
+		get_Item(MethodKind.PropertyGet, Accessibility.Public){
+		};
+		set_Item(MethodKind.PropertySet, Accessibility.Public){
+		};
 		Init(MethodKind.Ordinary, Accessibility.Public){
 		};
 		test(MethodKind.Ordinary, Accessibility.Public){

@@ -1463,7 +1463,12 @@ namespace RoslynTool.CsToDsl
         internal static void OutputTypeArgsInfo(StringBuilder sb, INamedTypeSymbol namedTypeSym, CsDslTranslater cs2dsl)
         {
             if (null != namedTypeSym) {
-                sb.Append("typeargs(");
+                sb.Append('"');
+                sb.Append("g_");
+                var fullNameKey = ClassInfo.CalcFullNameKey(namedTypeSym);
+                sb.Append(fullNameKey.Replace('.', '_'));
+                sb.Append('"');
+                sb.Append(", typeargs(");
                 string prestr = string.Empty;
                 foreach (var ta in namedTypeSym.TypeArguments) {
                     if (null != cs2dsl && ta.IsValueType && !SymbolTable.IsBasicType(ta)) {
@@ -1495,7 +1500,7 @@ namespace RoslynTool.CsToDsl
                 sb.Append(")");
             }
             else {
-                sb.Append("typeargs(), typekinds()");
+                sb.Append("null, typeargs(), typekinds()");
             }
         }
         internal static void OutputDefaultValue(StringBuilder sb, ITypeSymbol type, bool setValueTypeToNull)
