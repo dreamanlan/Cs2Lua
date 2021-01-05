@@ -789,11 +789,11 @@ end
 function invokeforbasicvalue(obj, isEnum, class, method, ...)
     local arg1,arg2 = ...
     local meta = getmetatable(obj)
-    if isEnum and obj and method == "ToString" then
+    if isEnum and obj and (method == "ToString" or 1 == string.find(method, "ToString__")) then
         return class.Value2String[obj]
     end
     if method then
-        if class == System.Char and method == "ToString" then
+        if class == System.Char and (method == "ToString" or 1 == string.find(method, "ToString__")) then
             return Utility.CharToString(obj)
         elseif class == System.String then
             local csstr = obj
@@ -819,6 +819,14 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
             else
                 return csstr[method](csstr, ...)
             end
+        elseif class == System.Single and method == "ToString__String" then
+            return Utility.SingleToString(obj, arg1)
+        elseif class == System.Double and method == "ToString__String" then
+            return Utility.DoubleToString(obj, arg1)
+        elseif class == System.Int32 and method == "ToString__String" then
+            return Utility.IntToString(obj, arg1)
+        elseif class == System.UInt32 and method == "ToString__String" then
+            return Utility.UintToString(obj, arg1)
         elseif meta then
             return obj[method](obj, ...)
         elseif method == "CompareTo" or 1 == string.find(method, "CompareTo__") then            
@@ -841,7 +849,7 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
                     return 0
                 end
             end
-        elseif method == "ToString" then
+        elseif method == "ToString" or 1 == string.find(method, "ToString__") then
             return tostring(obj)
         elseif method == "Split" or 1 == string.find(method, "Split__") then
             local result1, result2 = _get_first_untable_from_pack_args(...)
