@@ -2407,7 +2407,7 @@ namespace Generator
                 var strMember = "get_Item";
                 bool indexerByLuaLib = false;
                 int indexerType;
-                if (IndexerByLualib(strCallerClass, strObj, strClass, strMember, out indexerType)) {
+                if (IndexerByLualib(isExtern ? strCallerClass : "@@internal", strObj, strClass, strMember, out indexerType)) {
                     indexerByLuaLib = true;
                 }
                 sb.AppendFormat("local {0} = ", varExp);
