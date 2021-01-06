@@ -573,6 +573,9 @@ namespace SLua
                 file.NewLine = NewLine;
                 Write(file, "using System;");
                 Write(file, "using System.Collections.Generic;");
+                if (name == "BindUnity") {
+                    Write(file, "[assembly: UnityEngine.Scripting.Preserve]");
+                }
                 Write(file, "namespace SLua {");
                 Write(file, "[LuaBinder({0})]", order);
                 Write(file, "public class {0} {{", name);

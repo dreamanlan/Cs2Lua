@@ -23,6 +23,7 @@
 // uncomment this will use static binder(class BindCustom/BindUnity), 
 // init will not use reflection to speed up the speed
 //#define USE_STATIC_BINDER  
+[assembly: UnityEngine.Scripting.Preserve]
 
 namespace SLua
 {

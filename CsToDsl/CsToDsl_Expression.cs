@@ -612,7 +612,6 @@ namespace RoslynTool.CsToDsl
                         OutputExpressionSyntax(node.Expression);
                         CodeBuilder.Append(", ");
                         CodeBuilder.Append(className);
-                        CodeBuilder.Append(", \"");
                     }
                     else {
                         if (isExtern)
@@ -622,8 +621,8 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(SymbolTable.Instance.GetSymbolKind(sym));
                         CodeBuilder.Append(", ");
                         CodeBuilder.Append(className);
-                        CodeBuilder.Append(", \"");
                     }
+                    CodeBuilder.Append(", \"");
                     CodeBuilder.Append(manglingName);
                     CodeBuilder.Append("\")");
                 }
