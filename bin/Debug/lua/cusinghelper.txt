@@ -6,7 +6,7 @@ CUsingHelper = {
 	-------------------------------
 	__new_object = function(...)
 		local __cs2dsl_newobj;
-		__cs2dsl_newobj = newobject(CUsingHelper, nil, nil, "ctor", nil, ...);
+		__cs2dsl_newobj = newobject(CUsingHelper, nil, nil, nil, ...);
 		return __cs2dsl_newobj;
 	end,
 
@@ -23,7 +23,7 @@ CUsingHelper = {
 		local v;
 		v = 0;
 		local dict;
-		dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.Int32, System.Int32}, {TypeKind.Struct, TypeKind.Struct}, "ctor__Void", {});
+		dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, buildglobalinfoonce("typeargs_TypeArgs", getglobalinfo("typeargs_TypeArgs") or {TypeKind.Struct, TypeKind.Struct}), nil, {});
 		--
 		v = (v + 1);
 		if (v > 0) then

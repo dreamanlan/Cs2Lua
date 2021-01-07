@@ -178,15 +178,22 @@ namespace Generator
                         funcOpts.NeedFuncInfo = optFd.GetParamId(0) == "true";
                     }
                     else if (optFd.GetId() == "rettype") {
-                        var t = CalcTypeString(optFd.GetParam(0));
-                        var tk = CalcTypeString(optFd.GetParam(1));
-                        funcOpts.RetType = new TypeInfo { Type = t, TypeKind = tk };
+                        var tn = optFd.GetParamId(0);
+                        var orit = optFd.GetParam(1);
+                        var oritk = optFd.GetParam(2);
+                        var t = CalcTypeString(orit);
+                        var tk = CalcTypeString(oritk);
+                        var ro = int.Parse(optFd.GetParamId(3));
+                        funcOpts.RetTypes.Add(new TypeInfo { Name = tn, Type = t, TypeKind = tk, RefOrOut = ro, OriType = orit, OriTypeKind = oritk });
                     }
                     else if (optFd.GetId() == "paramtype") {
                         var tn = optFd.GetParamId(0);
-                        var t = CalcTypeString(optFd.GetParam(1));
-                        var tk = CalcTypeString(optFd.GetParam(2));
-                        funcOpts.ParamTypes.Add(tn, new TypeInfo { Type = t, TypeKind = tk });
+                        var orit = optFd.GetParam(1);
+                        var oritk = optFd.GetParam(2);
+                        var t = CalcTypeString(orit);
+                        var tk = CalcTypeString(oritk);
+                        var ro = int.Parse(optFd.GetParamId(3));
+                        funcOpts.ParamTypes.Add(new TypeInfo { Name = tn, Type = t, TypeKind = tk, RefOrOut = ro, OriType = orit, OriTypeKind = oritk });
                     }
                 }
             }
@@ -678,6 +685,7 @@ namespace Generator
 
         [ThreadStatic]
         private static Dsl.ISyntaxComponent s_CurSyntax = null;
+
         private static string s_ExePath = string.Empty;
         private static string s_SrcPath = string.Empty;
         private static string s_LogPath = string.Empty;
@@ -706,14 +714,45 @@ namespace Generator
 
         internal class TypeInfo
         {
+            internal string Name = string.Empty;
             internal string Type = string.Empty;
             internal string TypeKind = string.Empty;
+            internal int RefOrOut = 0;
+            internal Dsl.ISyntaxComponent OriType = null;
+            internal Dsl.ISyntaxComponent OriTypeKind = null;
         }
         internal class FunctionOptions
         {
             internal bool NeedFuncInfo = false;
-            internal TypeInfo RetType = null;
-            internal Dictionary<string, TypeInfo> ParamTypes = new Dictionary<string, TypeInfo>();
+            internal List<TypeInfo> RetTypes = new List<TypeInfo>();
+            internal List<TypeInfo> ParamTypes = new List<TypeInfo>();
+
+            internal bool TryGetRetTypeInfo(string name, out TypeInfo ti)
+            {
+                bool ret = false;
+                ti = null;
+                foreach (var t in RetTypes) {
+                    if (t.Name == name) {
+                        ti = t;
+                        ret = true;
+                        break;
+                    }
+                }
+                return ret;
+            }
+            internal bool TryGetParamTypeInfo(string name, out TypeInfo ti)
+            {
+                bool ret = false;
+                ti = null;
+                foreach(var t in ParamTypes) {
+                    if (t.Name == name) {
+                        ti = t;
+                        ret = true;
+                        break;
+                    }
+                }
+                return ret;
+            }
         }
 
         private class DontRequireInfo

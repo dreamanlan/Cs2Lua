@@ -795,6 +795,22 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
     if method then
         if class == System.Char and (method == "ToString" or 1 == string.find(method, "ToString__")) then
             return Utility.CharToString(obj)
+        elseif class == System.String and (method == "CompareTo" or 1 == string.find(method, "CompareTo__")) then
+            local a = obj
+            local b = arg1
+            if type(a) ~= "string" then
+                a = tostring(a)
+            end
+            if type(b) ~= "string" then
+                b = tostring(b)
+            end
+            if a<b then
+                return -1
+            elseif a>b then
+                return 1
+            else
+                return 0
+            end
         elseif class == System.String then
             local csstr = obj
             if type(obj) == "string" then
@@ -1017,9 +1033,12 @@ function createpool(tag, newFunc)
     return pool
 end
 
-FuncInfoPool = createpool("FuncInfo",
+g_FuncInfoStack = {}
+
+g_FuncInfoPool = createpool("FuncInfo",
     function()
         return {
+            iter_list = {},
             v2_list = {},
             v3_list = {},
             v4_list = {},
@@ -1173,12 +1192,34 @@ function recycleandkeepcheck(fieldType, oldVal, newVal)
     end
 end
 
+function movetocallerfuncinfo(funcInfo, class, val)
+    translationlog("need add handler for movetocaller {0}", getclasstypename(class))
+end
+
+function luagetcallerfuncinfo()
+    local ct = #g_FuncInfoStack
+    if ct > 1 then
+        return g_FuncInfoStack[ct-1]
+    else
+        return nil
+    end
+end
+
 function luainitialize()
-    return FuncInfoPool.Alloc()
+    local info = g_FuncInfoPool.Alloc()
+    table.insert(g_FuncInfoStack, info)
+    return info
 end
 
 function luafinalize(funcInfo)
+    local last = table.remove(g_FuncInfoStack)
+    while last and last ~= funcInfo do
+        last = table.remove(g_FuncInfoStack)
+    end
     if funcInfo then
+        for i,v in ipairs(funcInfo.iter_list) do
+            recycleiterator(nil, v)
+        end
         for i,v in ipairs(funcInfo.v2_list) do
             Vector2Pool.Recycle(v)
         end
@@ -1201,6 +1242,10 @@ function luafinalize(funcInfo)
             RectPool.Recycle(v)
         end
         local ct
+        ct = #(funcInfo.iter_list)
+        for i=1,ct do
+            funcInfo.iter_list[i]=nil
+        end
         ct = #(funcInfo.v2_list)
         for i=1,ct do
             funcInfo.v2_list[i]=nil
@@ -1229,7 +1274,7 @@ function luafinalize(funcInfo)
         for i=1,ct do
             funcInfo.rt_list[i]=nil
         end
-        FuncInfoPool.Recycle(funcInfo)
+        g_FuncInfoPool.Recycle(funcInfo)
     end
     return nil
 end
@@ -1673,11 +1718,12 @@ __mt_index_of_array_table = {
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
         end,
     AddRange = function(obj, coll)
-            local iter = newiterator(coll)
+            local iter = newiterator(nil, coll)
             for v in getiterator(iter) do
                 table.insert(obj, v)
                 __inc_array_count(obj)
             end
+            recycleiterator(nil, iter)
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
         end,
     Insert = function(obj, ix, p)
@@ -2312,12 +2358,15 @@ function GetHashsetEnumerator(tb)
     )
 end
 
-function newiterator(exp)
+function newiterator(funcInfo, exp)
     local meta = getmetatable(exp)
     if meta and rawget(meta, "__cs2lua_defined") then
         if meta.cachedIters and meta.cachedIters[exp] and #(meta.cachedIters[exp])>0 then
             local iterInfo = table.remove(meta.cachedIters[exp], 1)
             iterInfo[2]:Reset()
+            if funcInfo then
+                table.insert(funcInfo.iter_list, iterInfo)
+            end
             return iterInfo
         else
             local enumer = exp:GetEnumerator()
@@ -2332,14 +2381,21 @@ function newiterator(exp)
                     return nil
                 end
             end
-            return {f, enumer, exp}
+            local iterInfo = {f, enumer, exp}            
+            if funcInfo then
+                table.insert(funcInfo.iter_list, iterInfo)
+            end
+            return iterInfo
         end
     elseif meta and rawget(meta, "__typename")=="LuaArray" then
         --lualog("LuaArray newiterator:{0} {1}", exp, exp.Length)
         --printStack()
         if meta.cachedIters and meta.cachedIters[exp] and #(meta.cachedIters[exp])>0 then
             local iterInfo = table.remove(meta.cachedIters[exp], 1)
-            iterInfo[2]()
+            iterInfo[2]()  
+            if funcInfo then
+                table.insert(funcInfo.iter_list, iterInfo)
+            end
             return iterInfo
         else
             local arr = exp
@@ -2362,15 +2418,26 @@ function newiterator(exp)
             local reset = function()
                 curIx = 0
             end
-            return {f, reset, exp}
+            local iterInfo = {f, reset, exp}      
+            if funcInfo then
+                table.insert(funcInfo.iter_list, iterInfo)
+            end
+            return iterInfo
         end
     else
         if meta and meta.cachedIters and meta.cachedIters[exp] and #(meta.cachedIters[exp])>0 then
             local iterInfo = table.remove(meta.cachedIters[exp], 1)
-            iterInfo[1](true)
+            iterInfo[1](true) 
+            if funcInfo then
+                table.insert(funcInfo.iter_list, iterInfo)
+            end
             return iterInfo
         else
-            return {Slua.iter(exp), true, exp}
+            local iterInfo = {Slua.iter(exp), true, exp} 
+            if funcInfo then
+                table.insert(funcInfo.iter_list, iterInfo)
+            end
+            return iterInfo
         end   
     end
 end
@@ -2379,7 +2446,10 @@ function getiterator(iterInfo)
     return iterInfo[1]
 end
 
-function recycleiterator(iterInfo)
+function recycleiterator(funcInfo, iterInfo)
+    if funcInfo then
+        luatableremove(funcInfo.iter_list, iterInfo)
+    end
     local exp = iterInfo[3]
     if exp then
         local meta = getmetatable(exp)

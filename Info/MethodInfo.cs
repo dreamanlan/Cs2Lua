@@ -18,7 +18,11 @@ namespace RoslynTool.CsToDsl
         internal List<string> ParamNames = new List<string>();
         internal List<string> ParamTypes = new List<string>();
         internal List<string> ParamTypeKinds = new List<string>();
+        internal List<int> ParamRefOrOuts = new List<int>();
         internal List<string> ReturnParamNames = new List<string>();
+        internal List<string> ReturnParamTypes = new List<string>();
+        internal List<string> ReturnParamTypeKinds = new List<string>();
+        internal List<int> ReturnParamRefOrOuts = new List<int>();
         internal HashSet<int> ValueParams = new HashSet<int>();
         internal HashSet<int> ExternValueParams = new HashSet<int>();
         internal HashSet<int> OutValueParams = new HashSet<int>();
@@ -73,6 +77,7 @@ namespace RoslynTool.CsToDsl
                     else
                         ParamTypes.Add("null");
                     ParamTypeKinds.Add("TypeKind." + param.TypeKind.ToString());
+                    ParamRefOrOuts.Add(0);
                 }
             }
 
@@ -95,6 +100,7 @@ namespace RoslynTool.CsToDsl
                     ParamNames.Add("...");
                     ParamTypes.Add(ClassInfo.GetFullName(param.Type));
                     ParamTypeKinds.Add("TypeKind." + param.Type.TypeKind.ToString());
+                    ParamRefOrOuts.Add(0);
                     OriginalParamsName = param.Name;
                     //遇到变参直接结束（变参set_Item会出现后面带一个value参数的情形，在函数实现里处理）
                     break;
@@ -112,10 +118,15 @@ namespace RoslynTool.CsToDsl
                         }
                     }
                     //ref参数与out参数在形参处理时机制相同，实参时out参数传入__cs2dsl_out（适应脚本引擎与dotnet反射的调用规则）
+                    var fn = ClassInfo.GetFullName(param.Type);
                     ParamNames.Add(param.Name);
-                    ParamTypes.Add(ClassInfo.GetFullName(param.Type));
+                    ParamTypes.Add(fn);
                     ParamTypeKinds.Add("TypeKind." + param.Type.TypeKind.ToString());
+                    ParamRefOrOuts.Add(1);
                     ReturnParamNames.Add(param.Name);
+                    ReturnParamTypes.Add(fn);
+                    ReturnParamTypeKinds.Add("TypeKind." + param.Type.TypeKind.ToString());
+                    ReturnParamRefOrOuts.Add(1);
                 }
                 else if (param.RefKind == RefKind.Out) {
                     if (param.Type.IsValueType && !SymbolTable.IsBasicType(param.Type) && !CsDslTranslater.IsImplementationOfSys(param.Type, "IEnumerator")) {
@@ -130,10 +141,15 @@ namespace RoslynTool.CsToDsl
                         }
                     }
                     //ref参数与out参数在形参处理时机制相同，实参时out参数传入__cs2dsl_out（适应脚本引擎与dotnet反射的调用规则）
+                    var fn = ClassInfo.GetFullName(param.Type);
                     ParamNames.Add(param.Name);
-                    ParamTypes.Add(ClassInfo.GetFullName(param.Type));
+                    ParamTypes.Add(fn);
                     ParamTypeKinds.Add("TypeKind." + param.Type.TypeKind.ToString());
+                    ParamRefOrOuts.Add(2);
                     ReturnParamNames.Add(param.Name);
+                    ReturnParamTypes.Add(fn);
+                    ReturnParamTypeKinds.Add("TypeKind." + param.Type.TypeKind.ToString());
+                    ReturnParamRefOrOuts.Add(2);
                 }
                 else {
                     if (param.Type.IsValueType && !SymbolTable.IsBasicType(param.Type) && !CsDslTranslater.IsImplementationOfSys(param.Type, "IEnumerator")) {
@@ -150,6 +166,7 @@ namespace RoslynTool.CsToDsl
                     ParamNames.Add(param.Name);
                     ParamTypes.Add(ClassInfo.GetFullName(param.Type));
                     ParamTypeKinds.Add("TypeKind." + param.Type.TypeKind.ToString());
+                    ParamRefOrOuts.Add(0);
                 }
                 if (first && sym.IsExtensionMethod && sym.IsGenericMethod) {
                     //扩展方法的泛型参数放在第一个参数后
@@ -164,6 +181,7 @@ namespace RoslynTool.CsToDsl
                         else
                             ParamTypes.Add("null");
                         ParamTypeKinds.Add("TypeKind." + tp.TypeKind.ToString());
+                        ParamRefOrOuts.Add(0);
                     }
                 }
                 first = false;
@@ -192,17 +210,32 @@ namespace RoslynTool.CsToDsl
                 }
                 else {
                     returnType = ClassInfo.GetFullName(SemanticInfo.ReturnType);
+                    if (string.IsNullOrEmpty(returnType))
+                        returnType = "null";
                     returnTypeKind = "TypeKind." + SemanticInfo.ReturnType.TypeKind.ToString();
                 }
 
                 var sb = new StringBuilder();
-                sb.AppendFormat("needfuncinfo({0}), rettype({1}, {2})", NeedFuncInfo ? "true" : "false", returnType, returnTypeKind);
+                sb.AppendFormat("needfuncinfo({0}), rettype(return, {1}, {2}, 0)", NeedFuncInfo ? "true" : "false", returnType, returnTypeKind);
+                for(int ix = 0; ix < ReturnParamNames.Count; ++ix) {
+                    var name = ReturnParamNames[ix];
+                    var type = ReturnParamTypes[ix];
+                    if (string.IsNullOrEmpty(type))
+                        type = "null";
+                    var typekind = ReturnParamTypeKinds[ix];
+                    var refOrOut = ReturnParamRefOrOuts[ix];
+                    sb.Append(", ");
+                    sb.AppendFormat("rettype({0}, {1}, {2}, {3})", name, type, typekind, refOrOut);
+                }
                 for (int ix = 0; ix < ParamNames.Count; ++ix) {
                     var name = ParamNames[ix];
                     var type = ParamTypes[ix];
+                    if (string.IsNullOrEmpty(type))
+                        type = "null";
                     var typekind = ParamTypeKinds[ix];
+                    var refOrOut = ParamRefOrOuts[ix];
                     sb.Append(", ");
-                    sb.AppendFormat("paramtype({0}, {1}, {2})", name, type, typekind);
+                    sb.AppendFormat("paramtype({0}, {1}, {2}, {3})", name, type, typekind, refOrOut);
                 }
                 FunctionOptions = sb.ToString();
             }

@@ -288,7 +288,7 @@ namespace Generator
                                             foreach (var p in fcall.Params) {
                                                 var pname = p.GetId();
                                                 TypeInfo ti;
-                                                if (funcOpts.ParamTypes.TryGetValue(pname, out ti)) {
+                                                if (funcOpts.TryGetParamTypeInfo(pname, out ti)) {
                                                     if (ti.TypeKind != "TypeKind.TypeParameter") {
                                                         sb.AppendFormatLine("{0}{1} = paramtypecheck({2}, {3});", GetIndentString(indent), pname, pname, ti.Type);
                                                     }
@@ -440,7 +440,7 @@ namespace Generator
                                             foreach (var p in fcall.Params) {
                                                 var pname = p.GetId();
                                                 TypeInfo ti;
-                                                if (funcOpts.ParamTypes.TryGetValue(pname, out ti)) {
+                                                if (funcOpts.TryGetParamTypeInfo(pname, out ti)) {
                                                     if (ti.TypeKind != "TypeKind.TypeParameter") {
                                                         sb.AppendFormatLine("{0}{1} = paramtypecheck({2}, {3});", GetIndentString(indent), pname, pname, ti.Type);
                                                     }
@@ -1287,6 +1287,41 @@ namespace Generator
                     }
                     else if (id == "return") {
                         if (funcOpts.NeedFuncInfo) {
+                            bool first = true;
+                            int firstRetInfo = 0;
+                            if (funcOpts.RetTypes.Count > 0 && funcOpts.RetTypes[0].Type == "System.Void") {
+                                firstRetInfo = 1;
+                            }
+                            for (int ix = 0; ix < data.GetParamNum(); ++ix) {
+                                var param = data.GetParam(ix);
+                                int rtiIx = ix + firstRetInfo;
+                                if (rtiIx < funcOpts.RetTypes.Count) {
+                                    var rti = funcOpts.RetTypes[rtiIx];
+                                    if (rti.TypeKind == "TypeKind.Struct" && !IsBasicType(rti.Type, rti.TypeKind, true)) {
+                                        if (first)
+                                            first = false;
+                                        else
+                                            sb.Append(GetIndentString(indent));
+                                        var tempFunc = new Dsl.FunctionData();
+                                        tempFunc.Name = new Dsl.ValueData("movetocallerfuncinfo");
+                                        tempFunc.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
+                                        tempFunc.AddParam(rti.OriType);
+                                        tempFunc.AddParam(param);
+                                        if (!CallDslHook(calculator, tempFunc.GetId(), tempFunc, funcOpts, sb, indent)) {
+                                            sb.Append("movetocallerfuncinfo(__cs2lua_func_info, ");
+                                            sb.Append(rti.Type);
+                                            sb.Append(", ");
+                                            GenerateSyntaxComponent(param, sb, indent, false, funcOpts, calculator);
+                                            sb.Append(")");
+                                        }
+                                        sb.AppendLine(";");
+                                    }
+                                }
+                            }
+                            if (first)
+                                first = false;
+                            else
+                                sb.Append(GetIndentString(indent));
                             sb.AppendLine("__cs2lua_func_info = luafinalize(__cs2lua_func_info);");
                             sb.AppendFormat("{0}return", GetIndentString(indent));
                         }
@@ -2455,7 +2490,7 @@ namespace Generator
                 var _callerClass = fcall.GetParam(3);
                 var _class = fcall.GetParam(4);
                 var isExtern = fcall.GetParam(5);
-                sb.AppendFormat("local {0} = newiterator(", expIter);
+                sb.AppendFormat("local {0} = newiterator(__cs2lua_func_info, ", expIter);
                 GenerateArguments(fcall, sb, indent, 2, funcOpts, calculator);
                 sb.AppendLine(");");
                 sb.AppendFormat("{0}for ", GetIndentString(indent));
@@ -2473,7 +2508,7 @@ namespace Generator
                     --indent;
                 }
                 sb.AppendFormatLine("{0}end;", GetIndentString(indent));
-                sb.AppendFormat("{0}recycleiterator({1})", GetIndentString(indent), expIter);
+                sb.AppendFormat("{0}recycleiterator(__cs2lua_func_info, {1})", GetIndentString(indent), expIter);
             }
             else if (id == "while") {
                 var condExp = fcall.GetParam(0);

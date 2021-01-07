@@ -11,18 +11,20 @@ Test = {
 	end,
 
 	ToList = function(T, enumer)
+		local __cs2lua_func_info = luainitialize();
 		local __method_ret_143_4_150_5;
 		local r;
-		r = newexternlist(System.Collections.Generic.List_T, {T}, {TypeKind.TypeParameter}, "ctor", {});
-		local __foreach_146_8_148_9 = newiterator(enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true);
+		r = newexternlist(System.Collections.Generic.List_T, buildglobalinfoonce("g_System_Collections_Generic_List_T_TypeArgs", getglobalinfo("g_System_Collections_Generic_List_T_TypeArgs") or {T}), buildglobalinfoonce("g_System_Collections_Generic_List_T_TypeKinds", getglobalinfo("g_System_Collections_Generic_List_T_TypeKinds") or {TypeKind.TypeParameter}), "ctor", {});
+		local __foreach_146_8_148_9 = newiterator(__cs2lua_func_info, enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true);
 		for v in getiterator(__foreach_146_8_148_9) do
 			if v == __cs2lua_nil then
 				v = nil;
 			end;
 			r:Add(v);
 		end;
-		recycleiterator(__foreach_146_8_148_9);
+		recycleiterator(__cs2lua_func_info, __foreach_146_8_148_9);
 		__method_ret_143_4_150_5 = r;
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 		return __method_ret_143_4_150_5;
 	end,
 
@@ -81,7 +83,7 @@ Test = {
 					return __lambda_118_21_118_45;
 				end);
 				local intlist;
-				intlist = newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, "ctor", {});
+				intlist = newexternlist(System.Collections.Generic.List_T, buildglobalinfoonce("g_System_Collections_Generic_List_System_Int32_TypeArgs", getglobalinfo("g_System_Collections_Generic_List_System_Int32_TypeArgs") or {System.Int32}), buildglobalinfoonce("g_System_Collections_Generic_List_System_Int32_TypeKinds", getglobalinfo("g_System_Collections_Generic_List_System_Int32_TypeKinds") or {TypeKind.Struct}), "ctor", {});
 				intlist:Add(1);
 				local sa;
 				sa = getexterninstanceindexer(StrList, strlist, System.Collections.Generic.List_T, "get_Item", 1, 0);
@@ -139,7 +141,7 @@ Test = {
 				else
 					this.__ctor_called = true;
 				end;
-				this.m_DataChangeCallBackInfoPool = newobject(Cs2LuaObjectPoolEx_DataChangeCallBackInfo, {DataChangeCallBackInfo}, {TypeKind.Class}, "ctor", nil);
+				this.m_DataChangeCallBackInfoPool = newobject(Cs2LuaObjectPoolEx_DataChangeCallBackInfo, buildglobalinfoonce("g_Cs2LuaObjectPoolEx_DataChangeCallBackInfo_TypeArgs", getglobalinfo("g_Cs2LuaObjectPoolEx_DataChangeCallBackInfo_TypeArgs") or {DataChangeCallBackInfo}), buildglobalinfoonce("g_Cs2LuaObjectPoolEx_DataChangeCallBackInfo_TypeKinds", getglobalinfo("g_Cs2LuaObjectPoolEx_DataChangeCallBackInfo_TypeKinds") or {TypeKind.Class}), "ctor", nil);
 			end,
 		};
 

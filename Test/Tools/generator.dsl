@@ -1079,7 +1079,7 @@ script(recycleandkeepstructvalue)args($funcData, $funcOpts, $sb, $indent)
         :};
         return(true);
     }
-    elseif($fieldType=="nityEngine.Color32"){
+    elseif($fieldType=="UnityEngine.Color32"){
         usefunc("recycle_and_keep_color32","(funcInfo, fieldType, oldVal, newVal)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
         {:
             recycleandkeepcheck(funcInfo, fieldType, oldVal, newVal)
@@ -1104,6 +1104,103 @@ script(recycleandkeepstructvalue)args($funcData, $funcOpts, $sb, $indent)
             end
         :};
         return(true);
+    }
+    elseif($fieldType=="CsLibrary.DateTime"){
+        usefunc("recycle_and_keep_datetime","(funcInfo, fieldType, oldVal, newVal)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            recycleandkeepcheck(funcInfo, fieldType, oldVal, newVal)
+            if not rawequal(oldVal,newVal) and oldVal~=nil then
+                DateTimePool.Recycle(oldVal)
+            end
+            if newVal~=nil then
+                luatableremove(funcInfo.dt_list, newVal)
+            end
+        :};
+        return(true);
+    }
+    elseif($fieldType=="CsLibrary.TimeSpan"){
+        usefunc("recycle_and_keep_timespan","(funcInfo, fieldType, oldVal, newVal)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            recycleandkeepcheck(funcInfo, fieldType, oldVal, newVal)
+            if not rawequal(oldVal,newVal) and oldVal~=nil then
+                TimeSpanPool.Recycle(oldVal)
+            end
+            if newVal~=nil then
+                luatableremove(funcInfo.ts_list, newVal)
+            end
+        :};
+        return(true);
+    }
+    elseif($fieldType=="CsLibrary.PathInfoPoint"){
+        usefunc("recycle_and_keep_PathInfoPoint","(funcInfo, fieldType, oldVal, newVal)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            recycleandkeepcheck(funcInfo, fieldType, oldVal, newVal)
+            if not rawequal(oldVal,newVal) and oldVal~=nil then
+                PathInfoPointPool.Recycle(oldVal)
+            end
+            if newVal~=nil then
+                luatableremove(funcInfo.pip_list, newVal)
+            end
+        :};
+        return(true);
+    };
+    return(false);
+};
+
+script(movetocallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
+{
+    //movetocaller(class, val)
+    $class = getargument($funcData, 0);
+    
+    if($class=="UnityEngine.Vector2"){
+        usefunc("move_to_caller_vector2","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            if val~=nil then
+                local cfi = luagetcallerfuncinfo()
+                if cfi then
+                    luatableremove(funcInfo.v2_list, val)
+                    table.insert(cfi.v2_list, val)
+                end
+            end
+        :};
+        return(true);
+    }
+    elseif($class=="UnityEngine.Vector3"){
+        usefunc("move_to_caller_vector3","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            if val~=nil then
+                local cfi = luagetcallerfuncinfo()
+                if cfi then
+                    luatableremove(funcInfo.v3_list, val)
+                    table.insert(cfi.v3_list, val)
+                end
+            end
+        :};
+        return(true);
+    }
+    elseif($class=="UnityEngine.Vector4"){
+        return(false);
+    }
+    elseif($class=="UnityEngine.Quaternion"){
+        return(false);
+    }
+    elseif($class=="UnityEngine.Color"){
+        return(false);
+    }
+    elseif($class=="nityEngine.Color32"){
+        return(false);
+    }
+    elseif($class=="UnityEngine.Rect"){
+        return(false);
+    }
+    elseif($class=="CsLibrary.DateTime"){
+        return(false);
+    }
+    elseif($class=="CsLibrary.TimeSpan"){
+        return(false);
+    }
+    elseif($class=="CsLibrary.PathInfoPoint"){
+        return(false);
     };
     return(false);
 };

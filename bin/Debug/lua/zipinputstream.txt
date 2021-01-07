@@ -6,7 +6,7 @@ ZipInputStream = {
 	-------------------------------
 	__new_object = function(...)
 		local __cs2dsl_newobj;
-		__cs2dsl_newobj = newobject(ZipInputStream, nil, nil, "ctor", nil, ...);
+		__cs2dsl_newobj = newobject(ZipInputStream, nil, nil, nil, ...);
 		return __cs2dsl_newobj;
 	end,
 
@@ -44,11 +44,11 @@ ZipInputStream = {
 				local os2;
 				os2 = typeas(objecttolua(this:Test(luatoobject(SymbolKind.Method, false, "ZipInputStream:Test", os), luatoobject(SymbolKind.Method, false, "ZipInputStream:Test", os), luatoobject(SymbolKind.Method, false, "ZipInputStream:Test", os))), ZipOutputStream, TypeKind.Class);
 				local intList;
-				intList = newlist(IntList, nil, nil, "ctor", {});
+				intList = newlist(IntList, nil, nil, {});
 				local a;
-				a = newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, "ctor__Void", {});
+				a = newexternlist(System.Collections.Generic.List_T, buildglobalinfoonce("typeargs_TypeArgs", getglobalinfo("typeargs_TypeArgs") or {TypeKind.Struct}), nil, {});
 				local aa;
-				aa = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, {System.String, UnityEngine.Component}, {TypeKind.Class, TypeKind.Class}, "ctor__Void", {});
+				aa = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, buildglobalinfoonce("typeargs_TypeArgs", getglobalinfo("typeargs_TypeArgs") or {TypeKind.Class, TypeKind.Class}), nil, {});
 				TestExtension.Test(intList, UnityEngine.ParticleSystem, nil);
 				intList:AddRange(a);
 				local gobj;
@@ -56,7 +56,7 @@ ZipInputStream = {
 				local r;
 				r = UnityEngine.Object.Instantiate__Object__Object(gobj);
 				local b;
-				b = this:Test2(124, newexternlist(System.Collections.Generic.List_T, {System.Int32}, {TypeKind.Struct}, "ctor__Void", {}));
+				b = this:Test2(124, newexternlist(System.Collections.Generic.List_T, buildglobalinfoonce("typeargs_TypeArgs", getglobalinfo("typeargs_TypeArgs") or {TypeKind.Struct}), nil, {}));
 				local o;
 				o = luatoobject(SymbolKind.Local, false, "o", wraparray({1, 2}, nil, System.Int32, TypeKind.Struct));
 				local arr;
@@ -73,15 +73,15 @@ ZipInputStream = {
 				r = isequal(aa, bb);
 				r = (da == db);
 				local ca;
-				ca = get_unity_color_white(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "white");
+				ca = get_unity_color_white(__cs2lua_func_info);
 				local cb;
-				cb = get_unity_color_black(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Color, "black");
+				cb = get_unity_color_black(__cs2lua_func_info);
 				r = invokeexternoperator(System.Boolean, UnityEngine.Color, "op_Equality", ca, cb);
 				local va;
 				local vb;
 				va,vb = this:Test3(__cs2lua_out, __cs2lua_out);
-				va = wrap_vector3(__cs2lua_func_info, va, UnityEngine.Vector3);
-				vb = wrap_vector3(__cs2lua_func_info, vb, UnityEngine.Vector3);
+				va = wrap_vector3(__cs2lua_func_info, va);
+				vb = wrap_vector3(__cs2lua_func_info, vb);
 				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 				return this;
 			end,
@@ -92,7 +92,7 @@ ZipInputStream = {
 				local args;
 				args = wrapparams({...}, System.Object, TypeKind.Class);
 				local v3;
-				v3 = new_vector3(__cs2lua_func_info, UnityEngine.Vector3, nil, nil, "ctor__Void__Single__Single__Single", nil, 1, 2, 3);
+				v3 = new_vector3(__cs2lua_func_info, 1, 2, 3);
 				__method_ret_62_4_66_5 = nil;
 				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 				return __method_ret_62_4_66_5;
@@ -132,10 +132,10 @@ ZipInputStream = {
 
 			Test3 = function(this, v1, v2)
 				local __cs2lua_func_info = luainitialize();
-				v1 = wrap_out_vector3(__cs2lua_func_info, v1, UnityEngine.Vector3);
-				v2 = wrap_out_vector3(__cs2lua_func_info, v2, UnityEngine.Vector3);
-				v1 = get_vector3_zero(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Vector3, "zero");
-				v2 = get_vector3_zero(__cs2lua_func_info, SymbolKind.Property, UnityEngine.Vector3, "zero");
+				v1 = wrap_out_vector3(__cs2lua_func_info);
+				v2 = wrap_out_vector3(__cs2lua_func_info);
+				v1 = get_vector3_zero(__cs2lua_func_info);
+				v2 = get_vector3_zero(__cs2lua_func_info);
 				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 				return v1, v2;
 			end,

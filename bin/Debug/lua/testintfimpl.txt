@@ -6,7 +6,7 @@ TestIntfImpl = {
 	-------------------------------
 	__new_object = function(...)
 		local __cs2dsl_newobj;
-		__cs2dsl_newobj = newobject(TestIntfImpl, nil, nil, "ctor", nil, ...);
+		__cs2dsl_newobj = newobject(TestIntfImpl, nil, nil, nil, ...);
 		return __cs2dsl_newobj;
 	end,
 

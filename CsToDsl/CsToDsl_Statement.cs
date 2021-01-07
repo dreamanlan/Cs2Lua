@@ -392,6 +392,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendLine("){");
             }
             else {
+                MarkNeedFuncInfo();
                 var objType = expType as INamedTypeSymbol;
                 INamedTypeSymbol enumType = null;
                 var fobj = objType;

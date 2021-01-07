@@ -1,22 +1,22 @@
-function wrap_out_vector3(funcInfo, v, classObj)
+function wrap_out_vector3(funcInfo)
 	local obj = UnityEngine.Vector3.New(0,0,0)
 	table.insert(funcInfo.v3_list, obj)
 	return obj
 end
 
-function get_unity_color_white(funcInfo, symKind, class, member)
+function get_unity_color_white(funcInfo)
 	local obj = UnityEngine.Color.white
 	table.insert(funcInfo.c_list , obj)
 	return obj
 end
 
-function get_unity_color_black(funcInfo, symKind, class, member)
+function get_unity_color_black(funcInfo)
 	local obj = UnityEngine.Color.black
 	table.insert(funcInfo.c_list , obj)
 	return obj
 end
 
-function new_vector3(funcInfo, class, typeargs, typekinds, ctor, initializer, ...)
+function new_vector3(funcInfo, initializer, ...)
 	local x,y,z = ...
 	local obj = UnityEngine.Vector3.New(x,y,z)
 	table.insert(funcInfo.v3_list, obj)
@@ -26,13 +26,13 @@ function new_vector3(funcInfo, class, typeargs, typekinds, ctor, initializer, ..
 	return obj
 end
 
-function get_vector3_zero(funcInfo, symKind, class, member)
+function get_vector3_zero(funcInfo)
 	local obj = UnityEngine.Vector3.New(0,0,0)
 	table.insert(funcInfo.v3_list, obj)
 	return obj
 end
 
-function wrap_vector3(funcInfo, v, classObj)
+function wrap_vector3(funcInfo, v)
 	local obj = UnityEngine.Vector3.New(v.x,v.y,v.z)
 	table.insert(funcInfo.v3_list, obj)
 	return obj

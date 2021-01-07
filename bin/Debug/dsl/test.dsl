@@ -9,18 +9,18 @@ require("cs2luaobjectpoolex_datachangecallbackinfo");
 class(Test) {
 	static_methods {
 		__new_object = deffunc(1)args(...){
-			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(Test, typeargs(), typekinds(), "ctor", null, ...);
+			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(Test, "g_Test", typeargs(), typekinds(), "ctor", null, ...);
 			return(__cs2dsl_newobj);
 		}options[needfuncinfo(false)];
 		ToList = deffunc(1)args(T, enumer){
 			local(__method_ret_143_4_150_5);
-			local(r); r = newexternlist(System.Collections.Generic.List_T, typeargs(T), typekinds(TypeKind.TypeParameter), "ctor", literallist(typeargs(T), typekinds(TypeKind.TypeParameter)));
+			local(r); r = newexternlist(System.Collections.Generic.List_T, "g_System_Collections_Generic_List_T", typeargs(T), typekinds(TypeKind.TypeParameter), "ctor", literallist("g_System_Collections_Generic_List_T", typeargs(T), typekinds(TypeKind.TypeParameter)));
 			foreach(__foreach_146_8_148_9, v, enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true){
 				callexterninstance(r, System.Collections.Generic.List_T, "Add", v);
 			};
 			__method_ret_143_4_150_5 = r;
 			return(__method_ret_143_4_150_5);
-		}options[needfuncinfo(false), rettype(System.Collections.Generic.List_T, TypeKind.Class), paramtype(T, null, TypeKind.TypeParameter), paramtype(enumer, System.Collections.Generic.IEnumerable_T, TypeKind.Interface)];
+		}options[needfuncinfo(true), rettype(return, System.Collections.Generic.List_T, TypeKind.Class, 0), paramtype(T, null, TypeKind.TypeParameter, 0), paramtype(enumer, System.Collections.Generic.IEnumerable_T, TypeKind.Interface, 0)];
 		cctor = deffunc(0)args(){
 			callstatic(Test, "__cctor");
 		};
@@ -44,22 +44,22 @@ class(Test) {
 			local(args); args = params(System.Nullable_T, TypeKind.Struct);
 			__method_ret_107_4_111_5 = args[1];
 			return(__method_ret_107_4_111_5);
-		}options[needfuncinfo(false), rettype(System.Int32, TypeKind.Struct), paramtype(..., , TypeKind.Array)];
+		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0), paramtype(..., null, TypeKind.Array, 0)];
 		set_Item = deffunc(0)args(this, ...){
 			local(args); args = params(System.Nullable_T, TypeKind.Struct);
 			local(value); value = paramsremove(args);
 			args[1] = value;
-		}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown), paramtype(..., , TypeKind.Array)];
+		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0), paramtype(..., null, TypeKind.Array, 0)];
 		Init = deffunc(0)args(this){
 			local(items); items = literalarray(System.String, TypeKind.Class, "ȫ��", "������", "�ɽ�ȡ", "�����", "δ��ȡ");
 			callinstance(getinstance(SymbolKind.Field, this, Test, "m_DataChangeCallBackInfoPool"), Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "Init__Func_1_T__Action_1_T", null, null);
-			local(strlist); strlist = newlist(StrList, typeargs(), typekinds(), "ctor", literallist(typeargs(), typekinds()));
+			local(strlist); strlist = newlist(StrList, "g_StrList", typeargs(), typekinds(), "ctor", literallist("g_StrList", typeargs(), typekinds()));
 			callexterninstance(strlist, System.Collections.Generic.List_T, "Add", getexternstatic(SymbolKind.Field, System.String, "Empty"));
-			callexterninstance(strlist, System.Collections.Generic.List_T, "Sort__Comparison_1_T", deffunc(1)args(a, b){ local(__lambda_118_21_118_45); __lambda_118_21_118_45 = invokeforbasicvalue(a, false, System.String, "CompareTo__String", b); return(__lambda_118_21_118_45); }options[needfuncinfo(false), rettype(System.Int32, TypeKind.Struct), paramtype(a, System.String, TypeKind.Class), paramtype(b, System.String, TypeKind.Class)]);
-			local(intlist); intlist = newexternlist(System.Collections.Generic.List_T, typeargs(System.Int32), typekinds(TypeKind.Struct), "ctor", literallist(typeargs(System.Int32), typekinds(TypeKind.Struct)));
+			callexterninstance(strlist, System.Collections.Generic.List_T, "Sort__Comparison_1_T", deffunc(1)args(a, b){ local(__lambda_118_21_118_45); __lambda_118_21_118_45 = invokeforbasicvalue(a, false, System.String, "CompareTo__String", b); return(__lambda_118_21_118_45); }options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0), paramtype(a, System.String, TypeKind.Class, 0), paramtype(b, System.String, TypeKind.Class, 0)]);
+			local(intlist); intlist = newexternlist(System.Collections.Generic.List_T, "g_System_Collections_Generic_List_System_Int32", typeargs(System.Int32), typekinds(TypeKind.Struct), "ctor", literallist("g_System_Collections_Generic_List_System_Int32", typeargs(System.Int32), typekinds(TypeKind.Struct)));
 			callexterninstance(intlist, System.Collections.Generic.List_T, "Add", 1);
 			local(sa); sa = getexterninstanceindexer(StrList, strlist, System.Collections.Generic.List_T, "get_Item", 1, 0);
-			callexterninstance(intlist, System.Collections.Generic.List_T, "Sort__Comparison_1_T", deffunc(1)args(a, b){ local(__lambda_122_21_122_45); __lambda_122_21_122_45 = invokeforbasicvalue(a, false, System.Int32, "CompareTo__Int32", b); return(__lambda_122_21_122_45); }options[needfuncinfo(false), rettype(System.Int32, TypeKind.Struct), paramtype(a, System.Int32, TypeKind.Struct), paramtype(b, System.Int32, TypeKind.Struct)]);
+			callexterninstance(intlist, System.Collections.Generic.List_T, "Sort__Comparison_1_T", deffunc(1)args(a, b){ local(__lambda_122_21_122_45); __lambda_122_21_122_45 = invokeforbasicvalue(a, false, System.Int32, "CompareTo__Int32", b); return(__lambda_122_21_122_45); }options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0), paramtype(a, System.Int32, TypeKind.Struct, 0), paramtype(b, System.Int32, TypeKind.Struct, 0)]);
 			local(iaa); iaa = condexp(execbinary("!=", null, strlist, System.Object, System.Object, TypeKind.Class, TypeKind.Class), false, function(){ funcobjret(getexterninstance(SymbolKind.Property, strlist, System.Collections.Generic.List_T, "Count")); }, false, function(){ funcobjret(getexterninstance(SymbolKind.Property, intlist, System.Collections.Generic.List_T, "Count")); });
 			local(aa); aa = literalarray(System.Int32, TypeKind.Struct, 1, 2, 3, 4, 5);
 			local(bb); bb = literalarray(System.Int32, TypeKind.Struct, literalarray(System.Int32, TypeKind.Struct, 1, 2), literalarray(System.Int32, TypeKind.Struct, 3, 4), literalarray(System.Int32, TypeKind.Struct, 5, 6));
@@ -75,14 +75,14 @@ class(Test) {
 			};
 			local(act); act = typecast(( deffunc(0)args(){
 				callexternstatic(System.Console, "Write__Int32", ia);
-			}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown)] ), "System.Action", TypeKind.Delegate);
+			}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0)] ), "System.Action", TypeKind.Delegate);
 			local(cc); cc = callstatic(Test, "ToList", System.Int32, aa);
-		}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown)];
+		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0)];
 		test = deffunc(0)args(this){
 			local(a); a = deffunc(0)args(){
 				callexternstatic(System.Console, "Write__String", dslstrtocsstr("test"));
-			}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown)];
-		}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown)];
+			}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0)];
+		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0)];
 		ctor = deffunc(0)args(this){
 			callinstance(this, Test, "__ctor");
 		};
@@ -92,7 +92,7 @@ class(Test) {
 			}else{
 				setinstance(SymbolKind.Field, this, Test, "__ctor_called", true);
 			};
-			setinstance(SymbolKind.Field, this, Test, "m_DataChangeCallBackInfoPool", newobject(Cs2LuaObjectPoolEx_DataChangeCallBackInfo, typeargs(DataChangeCallBackInfo), typekinds(TypeKind.Class), "ctor", null));
+			setinstance(SymbolKind.Field, this, Test, "m_DataChangeCallBackInfoPool", newobject(Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "g_Cs2LuaObjectPoolEx_DataChangeCallBackInfo", typeargs(DataChangeCallBackInfo), typekinds(TypeKind.Class), "ctor", null));
 		}options[needfuncinfo(false)];
 	};
 	instance_fields {
