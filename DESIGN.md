@@ -253,15 +253,17 @@ GetComponent<T>() => GetCompoent(Type)
 
 (function()
   local delegate_key = calcdelegationkey(obj_member_key, obj);
-  return builddelegationonce(delegate_key, getdelegation(delegate_key) and function(...) return obj:member(...); end)
+  return builddelegationonce(delegate_key, getdelegation(delegate_key) or function(...) return obj:member(...); end)
 end)()
 
 这里有2个关键点，一个是为每个函数名代表的delegation定义一个delegate_key，由三部分构成：对象名、方法名、对象实例ID，然后在一个全局表里以弱表方式记录key对应的lua函数对象。另一个是作为参数传递
-时，利用表达式短路的机制，getdelegation(delegate_key) and 函数对象定义，这样保证如果能取到已经定义的函数对象，就不会定义新的（避免函数对象开销）。builddelegationonce所做的工作是，根据delegate_key取回已经定义的函数对象（与getdelegation函数一样，从全局表里读取，可以是nil，表明不存在），然后与第二个参数比较，如果相同就直接返回取到的对象，否则记录第二个参数到全局表里，并返回第二个参数对象。
+时，利用表达式短路的机制，getdelegation(delegate_key) or 函数对象定义，这样保证如果能取到已经定义的函数对象，就不会定义新的（避免函数对象开销）。builddelegationonce所做的工作是，根据delegate_key取回已经定义的函数对象（与getdelegation函数一样，从全局表里读取，可以是nil，表明不存在），然后与第二个参数比较，如果相同就直接返回取到的对象，否则记录第二个参数到全局表里，并返回第二个参数对象。
 
 7、lua里用table作类时，数据成员如果为nil，则表示这个成员在table里不存在。在继承情形需要在当前类未找到字段时访问父类字段，如果按table查找的话，这种nil值字段就会被认为是不存在。cs2lua之前采用一个单独的字段表来记录，并把字段值nil用一个lightuserdata表示，然后在元方法里读写这个字段，并进行lightuserdata到nil的来回转换，这在性能与直观方面都不太好，现在cs2lua翻译时数据字段直接放到类或实例表里，然后在类上另外提供2张表（静态与实例字段表），用来记录当前类存在哪些字段。
 
+8、定制转换器，cs2lua使用一个dsl脚本generator.dsl来定制部分函数的翻译，对于委托到lualib的函数，这个脚本可以根据函数参数的值来选择是否要采用特殊的翻译。除脚本定制外，还通过cs2dsl.dsl配置来指明特定类的indexer方法是否可以翻译为数组操作并指明是否需要对索引+1，这里也可以配置为特定函数做代码插桩。此外，还有一个配置rewriter.dsl，可以配置允许的泛型或不允许类、方法等。
 
+9、在被翻译的C#代码里，通过引用Cs2DslUtility.dll，可以添加属性标记，用来指明忽略指定类或者指定某个方法翻译到手写的某个lua模块的方法，也可以指明require指定的lua模块等。
 
 ## 【lualib.lua】
 
@@ -344,7 +346,7 @@ public class IntList : List<int>
 ## 【cs2lua实现上的两大部分】
 cs2lua从一开始就是为unity3d翻译lua的，所以从一开始就是把lua作为一种嵌入语言使用。以嵌入语言来说，必须要分清的是语言与环境（也就是提供给脚本的API）。类似的，对翻译到lua来说，首先必须要分清的就是哪些是翻译到lua的代码，哪些是作为API提供给lua的代码。这两部分在使用上是有差异的，比如，作为API提供给lua的代码，就会有许多限制，不能使用泛型，重载的多个函数可能要用一个API提供，那重载的解决策略就是一个问题。再比如重载函数里同时有带params参数的函数与不带params参数的函数等。
 
-1、作为API提供给lua的C#代码，在翻译出的lua代码里使用时，此时函数名就是原来c#的函数名，但cs2lua会额外传一个签名字符串参数，然后通过修改slua的代码根据这个参数来准确匹配具体的重载（原版本的slua的重载机制有很多无法正确区分重载函数的限制）。但如果调用的是翻译出的lua函数，翻译时我们采用函数换名来区分重载（就和C++的机制类似），此时函数名是作为table的key去查找对应函数实现的。
+1、作为API提供给lua的C#代码，在翻译出的lua代码里使用时，对每一个重载版本会生成一个换过名的导出函数，这样可以精确匹配调用的方法版本（原版本的slua的重载机制有很多无法正确区分重载函数的限制）。如果调用的是翻译出的lua函数，翻译时我们也采用函数换名来区分重载版本（换名规则与API略有不同）。换名机制与C++里函数重载的换名类似。
 
 2、作为API提供给lua的c#代码，不能暴露Generic类，我们需要将Generic类继承成类型参数实例化后的普通类版本。但在翻译出lua的代码里，我们是可以定义与使用Generic类的，此时每个泛型实例类都会单独生成一份代码，这也与C++的模板机制一致（我尝试过用一个类来模拟C#的运行时泛型类，但发觉有不少情形处理不了，而C++的模板类实例化的实现是C#机制的超集，可以保证正确性）。当然因此也引入了一个限制，就是泛型类的函数重载，换名时为了保证各实例化的类是一致的，我采用了泛型类型参数名来构造函数签名，这会导致基于泛型参数的C#重载翻译出来是同名的函数（这种情形实际使用中很少，所以约定修改C#代码来保证这样的函数名称不冲突）。
 
