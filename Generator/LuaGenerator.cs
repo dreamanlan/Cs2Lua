@@ -41,6 +41,7 @@ namespace Generator
             var files = Directory.GetFiles(s_SrcPath, "*.dsl", SearchOption.TopDirectoryOnly);
             Action<string> handler = (file) => {
                 try {
+                    s_CurFile = file;
                     string fileName = Path.GetFileNameWithoutExtension(file);
 
                     Dsl.DslFile dslFile = new Dsl.DslFile();
@@ -683,6 +684,8 @@ namespace Generator
             }
         }
 
+        [ThreadStatic]
+        private static string s_CurFile = string.Empty;
         [ThreadStatic]
         private static Dsl.ISyntaxComponent s_CurSyntax = null;
 

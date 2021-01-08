@@ -1179,28 +1179,108 @@ script(movetocallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Vector4"){
-        return(false);
+        usefunc("move_to_caller_vector4","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            if val~=nil then
+                local cfi = luagetcallerfuncinfo()
+                if cfi then
+                    luatableremove(funcInfo.v4_list, val)
+                    table.insert(cfi.v4_list, val)
+                end
+            end
+        :};
+        return(true);
     }
     elseif($class=="UnityEngine.Quaternion"){
-        return(false);
+        usefunc("move_to_caller_quaternion","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            if val~=nil then
+                local cfi = luagetcallerfuncinfo()
+                if cfi then
+                    luatableremove(funcInfo.q_list, val)
+                    table.insert(cfi.q_list, val)
+                end
+            end
+        :};
+        return(true);
     }
     elseif($class=="UnityEngine.Color"){
-        return(false);
+        usefunc("move_to_caller_color","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            if val~=nil then
+                local cfi = luagetcallerfuncinfo()
+                if cfi then
+                    luatableremove(funcInfo.c_list, val)
+                    table.insert(cfi.c_list, val)
+                end
+            end
+        :};
+        return(true);
     }
     elseif($class=="nityEngine.Color32"){
-        return(false);
+        usefunc("move_to_caller_color32","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            if val~=nil then
+                local cfi = luagetcallerfuncinfo()
+                if cfi then
+                    luatableremove(funcInfo.c32_list, val)
+                    table.insert(cfi.c32_list, val)
+                end
+            end
+        :};
+        return(true);
     }
     elseif($class=="UnityEngine.Rect"){
-        return(false);
+        usefunc("move_to_caller_rect","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            if val~=nil then
+                local cfi = luagetcallerfuncinfo()
+                if cfi then
+                    luatableremove(funcInfo.rt_list, val)
+                    table.insert(cfi.rt_list, val)
+                end
+            end
+        :};
+        return(true);
     }
     elseif($class=="CsLibrary.DateTime"){
-        return(false);
+        usefunc("move_to_caller_datetime","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            if val~=nil then
+                local cfi = luagetcallerfuncinfo()
+                if cfi then
+                    luatableremove(funcInfo.dt_list, val)
+                    table.insert(cfi.dt_list, val)
+                end
+            end
+        :};
+        return(true);
     }
     elseif($class=="CsLibrary.TimeSpan"){
-        return(false);
+        usefunc("move_to_caller_timespan","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            if val~=nil then
+                local cfi = luagetcallerfuncinfo()
+                if cfi then
+                    luatableremove(funcInfo.ts_list, val)
+                    table.insert(cfi.ts_list, val)
+                end
+            end
+        :};
+        return(true);
     }
     elseif($class=="CsLibrary.PathInfoPoint"){
-        return(false);
+        usefunc("move_to_caller_pathinfopoint","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            if val~=nil then
+                local cfi = luagetcallerfuncinfo()
+                if cfi then
+                    luatableremove(funcInfo.pip_list, val)
+                    table.insert(cfi.pip_list, val)
+                end
+            end
+        :};
+        return(true);
     };
     return(false);
 };
