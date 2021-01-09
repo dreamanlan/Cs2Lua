@@ -121,32 +121,36 @@ Cs2Lua的输出主要包括：
 
 ## 【支持在C#里用属性标记的额外特性】
 
-1、Cs2Lua.Ignore属性
+1、Cs2Dsl.Ignore属性
 
 用于在c#代码里标记类或方法不进行转换处理，使用它们的代码就像它们已经存在一样转换。（这一属性主要用于手动用lua实现一些c#代码的功能）
 
-2、Cs2Lua.Require(string luaModuleName)属性
+2、Cs2Dsl.Require(string luaModuleName)属性
 
 用于指出c#代码在转换后需要require某个lua模块，与1同时用于不自动转换的c#代码用以支持手动实现c#代码对应的lua。单独使用就是简单在生成的lua代码里添加require语句。
 
-3、Cs2Lua.Entry属性
+3、Cs2Dsl.Entry属性
 
 用于指明某个c#类的对应lua文件要生成一个入口方法，具体实现在lualib.lua里的defineentry函数，生成代码会调用defineentry。
 
-4、Cs2Lua.Export属性
+4、Cs2Dsl.Export属性
 
 用于指明某个c#类的构造在转换为lua后生成的供c#端调用的__new_object方法里用于对象构造。
 
-5、Cs2Lua.EnableInherit属性
+5、Cs2Dsl.EnableInherit属性
  
 用于指明某个c#类可能使用继承（此时转换到lua时不会报错），Cs2Lua会采用一种继承实现机制来实现继承，但与c#的继承语义不太一样，此属性用于使用都能确保使用一致继承的情形（就是说语义与c#是一致的），一般继承层次只有2层并且只涉及复用代码与纯虚函数重载的情形是可以的，子类隐藏父类非虚函数的情形要避免使用。
 
-6、Cs2Lua.TranslateTo(string luaModuleName, string targetMethodName)属性
+6、Cs2Dsl.TranslateTo(string luaModuleName, string targetMethodName)属性
  
 用于指定某个方法翻译为调用指定lua模块的指定lua函数（要求目标lua函数签名与方法一致）。
  
- 
-  
+7、Cs2Dsl.NeedFuncInfo属性
+
+使用c#值类型的方法，因lua里没有值类型语义的实现，我们通过构造新对象来模拟值类型赋值的拷贝语义，此时为减少GC，采用对象池，这些对象需要记录在函数信息上，然后在方法结束时统一回收，这一属性用于标记某个方法应该生成函数信息（只用在翻译时认为方法不需要函数信息但人工需要的场合，比如作为入口函数，即便没有使用值类型，但为了配合其它方法对值类型的处理，也需要生成一个根函数信息）。
+
+
+
 ## 【用法】
 
 1、建立一个C#工程，引用Cs2Lualualib.dll。
