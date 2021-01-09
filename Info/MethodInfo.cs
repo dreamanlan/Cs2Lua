@@ -197,6 +197,9 @@ namespace RoslynTool.CsToDsl
             }
 
             ReturnValueCount = ReturnParamNames.Count + (sym.ReturnsVoid ? 0 : 1);
+            if(!NeedFuncInfo && ClassInfo.HasAttribute(sym, "Cs2Dsl.NeedFuncInfoAttribute")) {
+                NeedFuncInfo = true;
+            }
         }
 
         internal string CalcFunctionOptions()

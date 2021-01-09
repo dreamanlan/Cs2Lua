@@ -34,6 +34,10 @@ namespace Cs2Dsl
         private string m_TargetMethodName = string.Empty;
     }
 
+    [System.AttributeUsage(System.AttributeTargets.Method)]
+    public sealed class NeedFuncInfoAttribute : System.Attribute
+    { }
+
     [System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Struct)]
     public sealed class EntryAttribute : System.Attribute
     { }

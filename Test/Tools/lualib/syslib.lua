@@ -353,6 +353,25 @@ function luausing(func, ...)
     end
 end
 
+function luapcall_geterror(e)
+    local err = tostring(e)
+    local trace = debug.traceback(err)
+    UnityEngine.Debug.LogError__Object(err .. ", " .. trace)
+    return err
+end
+
+function luapcall(func, ...)
+    if nil==func then
+        return false, "nil luapcall function"
+    else
+        return xpcall(
+            func,
+            luapcall_geterror,
+            ...
+        )
+    end
+end
+
 function luatry_geterror(e)
     local err = tostring(e)
     local trace = debug.traceback(err)

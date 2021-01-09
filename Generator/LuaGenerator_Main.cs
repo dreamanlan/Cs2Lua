@@ -139,10 +139,6 @@ namespace Generator
                     --indent;
                     sb.AppendFormatLine("{0}}};", GetIndentString(indent));
                 }
-                else if (id == "defineentry") {
-                    string className = CalcTypeString(callData.GetParam(0));
-                    sb.AppendFormatLine("{0}defineentry({1});", GetIndentString(indent), className);
-                }
                 else if (id == "enum") {
                     string fullName = CalcTypeString(callData.GetParam(0));
                     var baseClass = callData.GetParam(1);
@@ -248,39 +244,62 @@ namespace Generator
                                             sb.Append("wrapenumerable(");
                                         }
                                         sb.Append("function(");
-                                        bool haveParams = GenerateFunctionParams(fcall, sb);
+                                        bool haveParams = GenerateFunctionParams(fcall, sb, 0);
                                         sb.AppendLine(")");
                                         ++indent;
+                                        if (funcOpts.NeedFuncInfo) {
+                                            sb.AppendFormatLine("{0}local __cs2lua_func_info = luainitialize();", GetIndentString(indent));
+                                        }
                                         var logInfo = GetPrologueAndEpilogue(className, mname);
                                         if (null != logInfo.PrologueInfo) {
                                             sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.PrologueInfo, className, mname));
                                         }
-                                        if (null != logInfo.EpilogueInfo) {
+                                        if (null != logInfo.EpilogueInfo || funcOpts.NeedFuncInfo) {
                                             if (rct > 0) {
-                                                sb.AppendFormat("{0}local ", GetIndentString(indent));
+                                                sb.AppendFormat("{0}local __retval_0, ", GetIndentString(indent));
                                                 GenerateFunctionRetVars(second, sb, rct, "__retval_");
-                                                sb.AppendFormat(" = {0}.__real_{1}(", className, mname);
-                                                GenerateFunctionParams(fcall, sb);
+                                                sb.AppendFormat(" = luapcall({0}.__ori_{1}, __cs2lua_func_info", className, mname);
+                                                if (fcall.GetParamNum() > 0)
+                                                    sb.Append(", ");
+                                                GenerateFunctionParams(fcall, sb, 0);
                                                 sb.AppendLine(");");
-                                                sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
+                                                if (null != logInfo.EpilogueInfo) {
+                                                    sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
+                                                }
+                                                if (funcOpts.NeedFuncInfo) {
+                                                    sb.AppendFormatLine("{0}__cs2lua_func_info = luafinalize(__cs2lua_func_info);", GetIndentString(indent));
+                                                }
+                                                sb.AppendFormatLine("{0}if not __retval_0 then", GetIndentString(indent));
+                                                sb.AppendFormatLine("{0}error(__retval_1);", GetIndentString(indent + 1));
+                                                sb.AppendFormatLine("{0}__retval_1 = nil;", GetIndentString(indent + 1));
+                                                sb.AppendFormatLine("{0}end;", GetIndentString(indent));
                                                 sb.AppendFormat("{0}return ", GetIndentString(indent));
                                                 GenerateFunctionRetVars(second, sb, rct, "__retval_");
                                                 sb.AppendLine(";");
                                             }
                                             else {
-                                                sb.AppendFormat("{0}{1}.__real_{2}(", GetIndentString(indent), className, mname);
-                                                GenerateFunctionParams(fcall, sb);
+                                                sb.AppendFormat("{0}luapcall({1}.__ori_{2}, __cs2lua_func_info", GetIndentString(indent), className, mname);
+                                                if (fcall.GetParamNum() > 0)
+                                                    sb.Append(", ");
+                                                GenerateFunctionParams(fcall, sb, 0);
                                                 sb.AppendLine(");");
-                                                sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
+                                                if (null != logInfo.EpilogueInfo) {
+                                                    sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
+                                                }
+                                                if (funcOpts.NeedFuncInfo) {
+                                                    sb.AppendFormatLine("{0}__cs2lua_func_info = luafinalize(__cs2lua_func_info);", GetIndentString(indent));
+                                                }
                                             }
                                             --indent;
                                             if (null != cdef)
                                                 sb.AppendFormatLine("{0}end),", GetIndentString(indent));
                                             else
                                                 sb.AppendFormatLine("{0}end,", GetIndentString(indent));
-                                            sb.AppendFormat("{0}__real_{1} = ", GetIndentString(indent), mname);
-                                            sb.Append("function(");
-                                            GenerateFunctionParams(fcall, sb);
+                                            sb.AppendFormat("{0}__ori_{1} = ", GetIndentString(indent), mname);
+                                            sb.Append("function(__cs2lua_func_info");
+                                            if (fcall.GetParamNum() > 0)
+                                                sb.Append(", ");
+                                            GenerateFunctionParams(fcall, sb, 0);
                                             sb.AppendLine(")");
                                             ++indent;
                                         }
@@ -295,27 +314,9 @@ namespace Generator
                                                 }
                                             }
                                         }
-                                        if (funcOpts.NeedFuncInfo) {
-                                            sb.AppendFormatLine("{0}local __cs2lua_func_info = luainitialize();", GetIndentString(indent));
-                                        }
                                         GenerateStatements(second, sb, indent, funcOpts, calculator);
-                                        bool lastIsNotReturn = true;
-                                        int snum = second.GetParamNum();
-                                        for (; snum > 0; --snum) {
-                                            var cid = second.GetParamId(snum - 1);
-                                            if (cid != "comment" && cid != "comments")
-                                                break;
-                                        }
-                                        if (snum > 0) {
-                                            lastIsNotReturn = second.GetParamId(snum - 1) != "return";
-                                        }
-                                        if (rct <= 0 && lastIsNotReturn) {
-                                            if (funcOpts.NeedFuncInfo) {
-                                                sb.AppendFormatLine("{0}__cs2lua_func_info = luafinalize(__cs2lua_func_info);", GetIndentString(indent));
-                                            }
-                                        }
                                         --indent;
-                                        if (null != cdef && null == logInfo.EpilogueInfo)
+                                        if (null != cdef && null == logInfo.EpilogueInfo && !funcOpts.NeedFuncInfo)
                                             sb.AppendFormatLine("{0}end),", GetIndentString(indent));
                                         else
                                             sb.AppendFormatLine("{0}end,", GetIndentString(indent));
@@ -400,39 +401,62 @@ namespace Generator
                                             sb.Append("wrapenumerable(");
                                         }
                                         sb.Append("function(");
-                                        bool haveParams = GenerateFunctionParams(fcall, sb);
+                                        bool haveParams = GenerateFunctionParams(fcall, sb, 0);
                                         sb.AppendLine(")");
                                         ++indent;
+                                        if (funcOpts.NeedFuncInfo) {
+                                            sb.AppendFormatLine("{0}local __cs2lua_func_info = luainitialize();", GetIndentString(indent));
+                                        }
                                         var logInfo = GetPrologueAndEpilogue(className, mname);
                                         if (null != logInfo.PrologueInfo) {
                                             sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.PrologueInfo, className, mname));
                                         }
-                                        if (null != logInfo.EpilogueInfo) {
+                                        if (null != logInfo.EpilogueInfo || funcOpts.NeedFuncInfo) {
                                             if (rct > 0) {
-                                                sb.AppendFormat("{0}local ", GetIndentString(indent));
+                                                sb.AppendFormat("{0}local __retval_0, ", GetIndentString(indent));
                                                 GenerateFunctionRetVars(second, sb, rct, "__retval_");
-                                                sb.AppendFormat(" = {0}.__real_{1}(", "this", mname);
-                                                GenerateFunctionParams(fcall, sb);
+                                                sb.AppendFormat(" = luapcall({0}.__ori_{1}, this, __cs2lua_func_info", "this", mname);
+                                                if (fcall.GetParamNum() > 1)
+                                                    sb.Append(", ");
+                                                GenerateFunctionParams(fcall, sb, 1);
                                                 sb.AppendLine(");");
-                                                sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
+                                                if (null != logInfo.EpilogueInfo) {
+                                                    sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
+                                                }
+                                                if (funcOpts.NeedFuncInfo) {
+                                                    sb.AppendFormatLine("{0}__cs2lua_func_info = luafinalize(__cs2lua_func_info);", GetIndentString(indent));
+                                                }
+                                                sb.AppendFormatLine("{0}if not __retval_0 then", GetIndentString(indent));
+                                                sb.AppendFormatLine("{0}error(__retval_1);", GetIndentString(indent + 1));
+                                                sb.AppendFormatLine("{0}__retval_1 = nil;", GetIndentString(indent + 1));
+                                                sb.AppendFormatLine("{0}end;", GetIndentString(indent));
                                                 sb.AppendFormat("{0}return ", GetIndentString(indent));
                                                 GenerateFunctionRetVars(second, sb, rct, "__retval_");
                                                 sb.AppendLine(";");
                                             }
                                             else {
-                                                sb.AppendFormat("{0}{1}.__real_{2}(", GetIndentString(indent), "this", mname);
-                                                GenerateFunctionParams(fcall, sb);
+                                                sb.AppendFormat("{0}luapcall({1}.__ori_{2}, this, __cs2lua_func_info", GetIndentString(indent), "this", mname);
+                                                if (fcall.GetParamNum() > 1)
+                                                    sb.Append(", ");
+                                                GenerateFunctionParams(fcall, sb, 1);
                                                 sb.AppendLine(");");
-                                                sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
+                                                if (null != logInfo.EpilogueInfo) {
+                                                    sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfo.EpilogueInfo, className, mname));
+                                                }
+                                                if (funcOpts.NeedFuncInfo) {
+                                                    sb.AppendFormatLine("{0}__cs2lua_func_info = luafinalize(__cs2lua_func_info);", GetIndentString(indent));
+                                                }
                                             }
                                             --indent;
                                             if (null != cdef)
                                                 sb.AppendFormatLine("{0}end),", GetIndentString(indent));
                                             else
                                                 sb.AppendFormatLine("{0}end,", GetIndentString(indent));
-                                            sb.AppendFormat("{0}__real_{1} = ", GetIndentString(indent), mname);
-                                            sb.Append("function(");
-                                            GenerateFunctionParams(fcall, sb);
+                                            sb.AppendFormat("{0}__ori_{1} = ", GetIndentString(indent), mname);
+                                            sb.Append("function(this, __cs2lua_func_info");
+                                            if (fcall.GetParamNum() > 1)
+                                                sb.Append(", ");
+                                            GenerateFunctionParams(fcall, sb, 1);
                                             sb.AppendLine(")");
                                             ++indent;
                                         }
@@ -447,27 +471,9 @@ namespace Generator
                                                 }
                                             }
                                         }
-                                        if (funcOpts.NeedFuncInfo) {
-                                            sb.AppendFormatLine("{0}local __cs2lua_func_info = luainitialize();", GetIndentString(indent));
-                                        }
                                         GenerateStatements(second, sb, indent, funcOpts, calculator);
-                                        bool lastIsNotReturn = true;
-                                        int snum = second.GetParamNum();
-                                        for (; snum > 0; --snum) {
-                                            var cid = second.GetParamId(snum - 1);
-                                            if (cid != "comment" && cid != "comments")
-                                                break;
-                                        }
-                                        if (snum > 0) {
-                                            lastIsNotReturn = second.GetParamId(snum - 1) != "return";
-                                        }
-                                        if (rct <= 0 && lastIsNotReturn) {
-                                            if (funcOpts.NeedFuncInfo) {
-                                                sb.AppendFormatLine("{0}__cs2lua_func_info = luafinalize(__cs2lua_func_info);", GetIndentString(indent));
-                                            }
-                                        }
                                         --indent;
-                                        if (null != cdef && null == logInfo.EpilogueInfo)
+                                        if (null != cdef && null == logInfo.EpilogueInfo && !funcOpts.NeedFuncInfo)
                                             sb.AppendFormatLine("{0}end),", GetIndentString(indent));
                                         else
                                             sb.AppendFormatLine("{0}end,", GetIndentString(indent));
@@ -851,11 +857,11 @@ namespace Generator
             }
             return ret;
         }
-        private static bool GenerateFunctionParams(Dsl.FunctionData fcall, StringBuilder sb)
+        private static bool GenerateFunctionParams(Dsl.FunctionData fcall, StringBuilder sb, int start)
         {
             bool haveParams = false;
             string prestr = string.Empty;
-            for (int ix = 0; ix < fcall.Params.Count; ++ix) {
+            for (int ix = start; ix < fcall.Params.Count; ++ix) {
                 var param = fcall.Params[ix];
                 sb.Append(prestr);
                 prestr = ", ";
@@ -1318,12 +1324,18 @@ namespace Generator
                                     }
                                 }
                             }
+                            if (s_NestedFunctionCount > 0) {
+                                if (first)
+                                    first = false;
+                                else
+                                    sb.Append(GetIndentString(indent));
+                                sb.AppendLine("__cs2lua_func_info = luafinalize(__cs2lua_func_info);");
+                            }
                             if (first)
                                 first = false;
                             else
                                 sb.Append(GetIndentString(indent));
-                            sb.AppendLine("__cs2lua_func_info = luafinalize(__cs2lua_func_info);");
-                            sb.AppendFormat("{0}return", GetIndentString(indent));
+                            sb.AppendFormat("return", GetIndentString(indent));
                         }
                         else {
                             sb.Append("return");
@@ -2882,6 +2894,7 @@ namespace Generator
                 }
             }
             else if (id == "deffunc") {
+                ++s_NestedFunctionCount;
                 var fdef = data;
                 if (null != fdef && fdef.GetFunctionNum() >= 2) {
                     var first = fdef.First;
@@ -2898,23 +2911,14 @@ namespace Generator
                         if (second.IsHighOrder)
                             fcall = second.LowerOrderFunction;
                         sb.Append("function(");
-                        bool haveParams = GenerateFunctionParams(fcall, sb);
+                        bool haveParams = GenerateFunctionParams(fcall, sb, 0);
                         sb.AppendLine(")");
                         ++indent;
                         if (newFuncOpts.NeedFuncInfo) {
                             sb.AppendFormatLine("{0}local __cs2lua_func_info = luainitialize();", GetIndentString(indent));
                         }
                         GenerateStatements(second, sb, indent, newFuncOpts, calculator);
-                        bool lastIsNotReturn = true;
-                        int snum = second.GetParamNum();
-                        for (; snum > 0; --snum) {
-                            var cid = second.GetParamId(snum - 1);
-                            if (cid != "comment" && cid != "comments")
-                                break;
-                        }
-                        if (snum > 0) {
-                            lastIsNotReturn = second.GetParamId(snum - 1) != "return";
-                        }
+                        bool lastIsNotReturn = !LastIsReturn(second);
                         if (rct <= 0 && lastIsNotReturn) {
                             if (newFuncOpts.NeedFuncInfo) {
                                 sb.AppendFormatLine("{0}__cs2lua_func_info = luafinalize(__cs2lua_func_info);", GetIndentString(indent));
@@ -2924,6 +2928,7 @@ namespace Generator
                         sb.AppendFormat("{0}end", GetIndentString(indent));
                     }
                 }
+                --s_NestedFunctionCount;
             }
             else {
                 foreach (var funcData in data.Functions) {

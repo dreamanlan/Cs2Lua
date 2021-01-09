@@ -42,6 +42,7 @@ namespace Generator
             Action<string> handler = (file) => {
                 try {
                     s_CurFile = file;
+                    s_NestedFunctionCount = 0;
                     string fileName = Path.GetFileNameWithoutExtension(file);
 
                     Dsl.DslFile dslFile = new Dsl.DslFile();
@@ -198,6 +199,20 @@ namespace Generator
                     }
                 }
             }
+        }
+        internal static bool LastIsReturn(Dsl.FunctionData funcData)
+        {
+            bool lastIsNotReturn = true;
+            int snum = funcData.GetParamNum();
+            for (; snum > 0; --snum) {
+                var cid = funcData.GetParamId(snum - 1);
+                if (cid != "comment" && cid != "comments")
+                    break;
+            }
+            if (snum > 0) {
+                lastIsNotReturn = funcData.GetParamId(snum - 1) == "return";
+            }
+            return lastIsNotReturn;
         }
         internal static string CalcTypesString(Dsl.FunctionData cd)
         {
@@ -686,6 +701,8 @@ namespace Generator
 
         [ThreadStatic]
         private static string s_CurFile = string.Empty;
+        [ThreadStatic]
+        private static int s_NestedFunctionCount = 0;
         [ThreadStatic]
         private static Dsl.ISyntaxComponent s_CurSyntax = null;
 
