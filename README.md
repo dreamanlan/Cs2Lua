@@ -1,6 +1,8 @@
 # Cs2Lua
 CSharp代码转lua，适用于使用lua实现热更新而又想有一个强类型检查的语言的场合
 
+
+
 ## 【示例链接】
 
 https://github.com/dreamanlan/Cs2Lua/tree/master/Test
@@ -14,6 +16,19 @@ https://github.com/dreamanlan/Cs2Lua/blob/master/USAGE.md
 
 ## 【设计与实现原理】
 https://github.com/dreamanlan/Cs2Lua/blob/master/DESIGN.md
+
+
+
+## 【最新进展】
+【2021-01-10】 对涉及值类型处理的方法拆分为2个，将函数信息放到外层方法，然后通过xpcall调用内层方法，以保证在异常时函数信息处理的进入/退出也是配对的。这个版本应该是比较完善与正确的版本了。
+
+【2021-01-08】 值类型返回值的内存池处理完善，返回值在返回前从当前函数信息移动到调用方的函数信息记录里，以保证返回值在使用后再回收重用。
+
+【2021-01-07】 Slua迭代器函数支持未明确实现IEnumerable接口但提供了功能的对象的迭代。
+
+【2021-01-04】 Array与List的foreach语句翻译为普通for循环，减少迭代器GC。
+
+【2020-12-31】 Roslyn升级到15.9，支持到C#7.3的最后一个版本。
 
 
 
