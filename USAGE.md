@@ -29,11 +29,17 @@ Cs2Lua的输出主要包括：
 
     1、对应c#代码的转换出的lua代码，每个c#顶层类对应一个lua文件。
 
-    2、所有名字空间的定义lua文件，此文件被1中文件引用，输出文件为cs2lua_namespaces.lua/txt。
+    2、所有名字空间的定义lua文件，此文件被1中文件引用，输出文件为cs2lua__namespaces.lua/txt。
+    
+    3、所有接口的定义lua文件，输出文件为cs2lua__interfaces.lua/txt。
+    
+    4、所有外部枚举的名称/值对应关系lua文件，输出文件为cs2lua__externenums.lua/txt。
+    
+    5、所有类的attribute信息文件，输出文件为cs2lua__attributes.lua/txt。
 
-    3、Cs2Lua依赖的lualib文件lualib.lua，输出文件名为cs2lua_lualib.lua/txt。
+    6、Cs2Lua依赖的lualib文件syslib.lua，输出文件名为cs2lua__syslib.lua/txt。
 
-    4、在c#代码里使用Cs2Lua.Require明确指明要依赖的lualib文件，这些文件需要自己放到Cs2Lua.exe所在目录的子目录lualib里，之后自动拷到输出目录。
+    7、在c#代码里使用Cs2Lua.Require明确指明要依赖的lualib文件，这些文件需要自己放到Cs2Lua.exe所在目录的子目录lualib里，之后自动拷到输出目录。
 
 
 
@@ -45,7 +51,7 @@ Cs2Lua的输出主要包括：
 
 3、近年来在web前端语言javascript领域出现了一些添加编译器类型检查的需求，2个例子是CoffeeScript与微软的TypeScript，这2种语言都给javascript添加了强类型与推导，但他们不是直接编译或解释执行自身，而是编译到javascript，这样保证与web的兼容。这个工程尝试类似的工作，不过我们不设计新的语言，而是直接基于C#语法，自动编译为lua。
 
-4、vs2015的c#编译器开源工程Rosyln在编译器语法与语义信息方面提供了非常完善的API，这帮我们完成了从c#->lua编译的主要工作。
+4、vs2017的c#编译器开源工程Rosyln在编译器语法与语义信息方面提供了非常完善的API，这帮我们完成了从c#->lua编译的主要工作。
 
 5、c#->lua实现后，可以考虑两种用法：
 
@@ -59,7 +65,7 @@ Cs2Lua的输出主要包括：
 
 1、不完全支持类的继承与泛型（可以实现接口），主要原因是lua的元表机制很难完美实现c#对象继承的详细语义同时还保持良好的效率与可理解性。并且支持接口与partial类后，继承的很多特性可以很优雅的实现。
 
-2、忽略异常相关语句（try/catch/finally/filter），简单支持只捕获Exception异常的try/catch/finally。
+2、忽略异常相关语句（try/catch/finally/filter），可以支持只捕获Exception异常的try/catch/finally（默认未开启），仅当try块只有一条函数调用语句时没有性能影响（使用xpcall调用try块代码，所以有多条语句或非函数调用语句时需要包装成function对象）。
 
 3、不支持指针与内存相关操作fixed/*/&/stackalloc。
 
@@ -71,9 +77,9 @@ Cs2Lua的输出主要包括：
 
 7、不支持linq语法糖（直接调用方法就可以，而且c#的linq支持本来也不如visual basic全，这语法风格与c#有点不搭，放弃了）。
 
-8、自定义struct未完全实现拷贝语义（需要在lualib.lua里完善）。
+8、自定义struct未完全实现拷贝语义（lua语言没有自定义值类型，cs2lua翻译时对值类型赋值委托到lualib的函数，需要在lualib.lua里针对具体类型复制新实例，一般来说需要使用对象池来减少GC，cs2lua通过自定义转换脚本generator.dsl允许定制值类型的各类处理，另外说明）。
 
-9、不支持C# 7.0及以后版本引入的模式相关语法与本地方法。
+9、不支持C# 7.0及以后版本引入的模式相关语法与本地方法，使用的roslyn库更新到15.9，支持c# 7.3及以下版本的工程的翻译。c# 8.0/9.0暂不考虑支持（语言变化过大，各类语法糖可能会导致比较多性能问题，同时对lualib的需求也会比较多，可能导致翻译后的定制工作量加大）。
 
 *** CsToLuaUnimplemented.cs是目前明确不支持与不需要处理的语法特性（Visit开头的方法）.
 
@@ -113,7 +119,7 @@ Cs2Lua的输出主要包括：
 
 16、部分支持Attribute（目前会生成cs2lua_attributes.lua/txt文件，包含了所有自定义代码里用到的attribute，但lualib.lua里未实现自定义属性的访问机制）
 
-17、部分支持自定义struct，语法层面基本完成，拷贝语义需要在lualib.lua里实现。
+17、部分支持自定义struct，语法层面基本完成，拷贝语义需要在lualib.lua里与generator.dsl里实现。
 
 *** CsToLua.cs是目前支持的语法（Visit开头的方法）.
 
@@ -143,7 +149,7 @@ Cs2Lua的输出主要包括：
 
 6、Cs2Dsl.TranslateTo(string luaModuleName, string targetMethodName)属性
  
-用于指定某个方法翻译为调用指定lua模块的指定lua函数（要求目标lua函数签名与方法一致）。
+用于指定某个方法翻译为调用指定lua模块的指定lua函数（要求目标lua函数签名与方法一致），这是1与2之外另一种人工翻译到lua的办法。
  
 7、Cs2Dsl.NeedFuncInfo属性
 
@@ -153,17 +159,19 @@ Cs2Lua的输出主要包括：
 
 ## 【用法】
 
-1、建立一个C#工程，引用Cs2Lualualib.dll。
+1、建立供lua调用的C# api工程，可以使用C#的所有语法特性，但public类及其方法需要符合slua导出API的要求（主要是不能使用generic类型，避免使用params参数与值类型）。
 
-2、用vs开发功能，只使用Cs2Lua支持的语法构造。
+2、建立一个准备翻译到lua的C#工程，此工程添加Cs2DslUtility.dll（从而允许使用上面提到的7种属性标记）与1中api.dll的引用（如果希望lua直接访问unity3d API，可以添加UnityEngine.dll引用，注意只能依赖供lua使用的API的DLL与mscorlib.dll和System.dll，并且要只使用系统dll里的会导出成lua API的类型或lualib里会人工实现lua版本的功能），用vs开发功能，需要只使用Cs2Lua支持的语法构造。
 
 3、运行Cs2Lua C#.csproj，生成该工程各C#类对应的lua代码，输出按类组织，每个类一个文件，输出时的类已经合并过（支持c# partial）
 
-4、用slua封装供前面C#工程使用的其它DLL里的类。
+4、用slua封装供前面C#工程使用的api DLL（三类：api工程dll、UnityEngine.dll和mscorlib/System.dll）里的类（通过修改CustomExport.cs配置要导出的dll与unity api等，然后使用slua菜单生成API包装代码），包装类代码建议放到SluaExport.csproj里，编译为SluaExport.dll。
 
-5、将生成的lua文件放到unity3d工程里，按slua的规则启动其入口类。
+5、装SluaExport.dll与SluaManaged.dll放到unity3d工程的plugins目录下。
 
-理论上按此顺序即可。
+6、在unity3d启动脚本里调用Slua的启动代码，加载并运行入口lua脚本。
+
+理论上按此顺序即可（细节可参考[示例工程 https://github.com/dreamanlan/Cs2Lua/tree/master/Test]）。
 
 *** 注意第3步的输出lua在工程文件所在目录下的lua目录里，日志在log目录里，必须检查日志文件确定没有错误才能继续！！！
 
@@ -171,11 +179,25 @@ Cs2Lua的输出主要包括：
 
 ## 【如何增加可以在c#里使用的API】
 
-1、第一种方式就是在独立的C# dll里实现，然后用slua导出。
+1、第一种方式就是在独立的C# API dll里实现，然后用slua生成包装代码，编译到SluaExport.dll中。
 
-2、另一种方式其实可以在上面提到的lualib.lua里实现，就像我们提到的generic集合类一样（这种在dotnet系统dll里定义，所以c#代码可以直接使用，但由于slua并不导出，所以转化后的lua里要使用的话必须有额外的lua来实现）。这其实表明了两种情形：
+2、另一种方式是C#的实现可能想在lua里人工实现，不使用c#版本，这种情况一般可以在上面提到的syslib.lua里实现，就像我们提到的generic集合类一样（这种在dotnet系统dll里定义，所以c#代码可以直接使用，但由于slua并不导出，所以转化后的lua里要使用的话必须有额外的lua来实现）。这其实表明了两种情形：
 
-a、所用的api在某个c# dll里已经定义了，但slua没有导出（上面说的就是这种情形），实现方式一种是在lualib.lua里实现，另外还有一个办法是单独加一个lua模块实现，并在c#代码里使用Cs2Lua.Require属性在使用它的类里标明一下依赖关系。
+a、所用的api在某个c# API dll里已经定义了，但slua没有导出（上面说的就是这种情形），实现方式一种是在lualib.lua里实现，另外还有一个办法是单独加一个lua模块实现，并在c#代码里使用Cs2Lua.Require属性在使用它的类里标明一下依赖关系。
 
-b、所用的api没有在c# dll里定义，所以也不会在slua里导出。这时需要在C#与lua里各实现一套，然后c#的实现标记为Cs2Lua.Ignore并同时使用Cs2Lua.Require标明对lua实现代码的依赖关系（当然也可将lua实现放在lualib.lua里，这样就不用标明依赖了，lualib.lua是默认要依赖的）。
+b、所用的api没有在c# API dll里定义，所以也不会在slua里导出。这时需要在翻译到C#的工程与lua里各实现一套，然后c#的实现标记为Cs2Lua.Ignore并同时使用Cs2Lua.Require标明对lua实现代码的依赖关系（当然也可将lua实现放在syslib.lua里，这样就不用标明依赖了，syslib.lua是默认要依赖的）。
+
+
+
+## 【开发注意事项】
+
+
+
+## 【自定义翻译】
+
+
+
+## 【性能优化参考】
+
+
 
