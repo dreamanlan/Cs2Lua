@@ -171,7 +171,7 @@ Cs2Lua的输出主要包括：
 
 6、在unity3d启动脚本里调用Slua的启动代码，加载并运行入口lua脚本。
 
-理论上按此顺序即可（细节可参考[示例工程 https://github.com/dreamanlan/Cs2Lua/tree/master/Test]）。
+理论上按此顺序即可（细节可参考示例工程[ https://github.com/dreamanlan/Cs2Lua/tree/master/Test ]）。
 
 *** 注意第3步的输出lua在工程文件所在目录下的lua目录里，日志在log目录里，必须检查日志文件确定没有错误才能继续！！！
 
