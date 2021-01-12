@@ -191,6 +191,47 @@ b、所用的api没有在c# API dll里定义，所以也不会在slua里导出�
 
 ## 【开发注意事项】
 
+--【基本规则】
+1、三个工程的依赖关系：CSharp-Assembly依赖CustomApi，Cs2LuaScript依赖CustomApi，CSharp-Assembly通过代理依赖Cs2LuaScript的public类（一般是逻辑入口类，用以初始化或驱动心跳）。
+2、逻辑代码默认都添加到Cs2LuaScript工程里。
+3、Cs2LuaScript里的类默认都使用internal访问修饰，这样可以避免在Assembly-CSharp工程里直接调用Cs2LuaScript的代码（直接调用的都需要修改，否则将来翻译为lua后无法运行）。
+4、Cs2LuaScript工程里尽量只采用基于对象的方式开发，避免使用继承，不要使用vs2015以后的新语法，不要使用LINQ。
+5、CustomApi工程里的类，不需要被Cs2LuaScript工程使用与CSharp-Assembly工程使用的，加上internal修饰，这可以减少slua生成的封装代码的数量
+6、异常处理在lua里有比较大的GC，所以翻译时只对try块部是是单一函数调用的try-catch采用异常处理，多语句try块的异常处理会忽略，确实需要异常处理的需要将try块的语句单独写一个函数，然后保证try块里只有一个函数调用。
+7、lua函数对象与upvalue都有比较大的GC，++/--运算符尽量单独写一个表达式，在if语句条件里使用TryGetValue的调用时，尽量保证条件表达式只是TryGetValue的调用或者，单独写TryGetValue并把结果记到变量里，然后在if语句条件里使用该变量。（while/do-while语句里使用时与此类似）。
+8、lua语言没有值类型，值类型的lua对应类实际是普通类，cs2lua在翻译赋值语句时通过构造新的类实例来模拟值类型的语义行为，并通过对象池来避免构造实例的GC开销。但slua导出的API里，值类型作为property或方法返回值的，slua都会构造一个新的lua userdata。所以应尽量避免使用这些property与方法，我们会在CustomApi提供相应的替代方法。
+
+--【CustomApi工程注意事项：】
+0、这个模块不支持线上热更新，所以这里实现的功能都是偏底层与性能敏感的，原则上这里的功能都应该考虑如何支持Cs2LuaScript工程里进行扩展。从长远来看，这个工程里的代码应该是趋于稳定的，上线前应该尽量减少接口的添加与修改，上线后应该尽量不修改。
+1、CustomApi相关的各dll，public方法都会由slua导出API，slua有一个限制是它不会导出generic类与方法。所以public方法需要避免使用generic类做参数或返回值（确实需要的可以使用继承来明确绑定generic的类型参数到具体类型，CustomApi工程里已经有一些这样的实现如IntList,StrList,IntIntDict,StrStrDict等）
+2、目前没有太好的办法实现c#的struct的值拷贝语义，避免导出CustomApi里的struct给lua（实在有必要的需要手写lua代码与修改slua来实现）。
+3、slua不能正常导出多个重载都带有params参数的方法(另外考虑到GC问题，应该不要使用params参数)。
+
+--【Cs2LuaScript工程注意事项：】
+0、其他工程不应直接引用Cs2LuaScript工程，Cs2LuaScript里所有的类都应该是internal的，不应有public的类（除入口类外，public的类在其它工程里也应通过C#代理类访问）。
+1、Cs2LuaScript工程在ios上将翻译为lua运行，因此编写时要注意不要使用特别花哨的语法。
+2、Cs2LuaScript工程里不要使用64位整数，应该自己封装一个64位整数类（这是因为使用luajit的原因，lua 5.1里数只有double）。
+3、Cs2LuaScript工程里的类，没有被继承的，都加上sealed修饰，这会指导cs2lua翻译时减少方法信息
+4、delegate的调用直接像函数那样调，不要写成.Invoke。因为翻译成lua时delegate对应到lua function，是没有Invoke方法的。
+5、generic方法在翻译时会将类型参数作为普通参数放在实际调用参数前，比如GetComponent<T>()实际翻译后调用的是GetComponent(Type)方法，如果确实需要用到Type类型的参数，在定义generic方法后，需要定义一个同名的非generic方法，并将generic参数变为普通Type类型的参数。
+6、目前没有太好的办法实现c#的struct的值拷贝语义，所以struct现在翻译后也是引用的方式，在Cs2LuaScript工程里尽量避免使用struct。
+7、继承只能支持最简单的实现继承与不涉及基类子对象的虚函数，所以在Cs2LuaScript工程里尽量不要用继承。
+8、Cs2LuaScript里允许使用接口，但Cs2LuaScript翻译为lua后这些实现接口的类都是lua table，所以其实并不能真的实现c#的接口，所有Cs2LuaScript工程里继承或实现CustomApi里的接口（或抽象类）的对象，都需要在c#端添加一个代理类来实现c#的接口实现或继承语义，然后各个方法的实现委托到相应的lua方法。（实际用起来会比较麻烦，所以能避免也尽量避免）
+9、lua里的数都是double类型，对于采用格式化参数的接口会有问题，比较典型的是string::Format与StringBuilder::AppendFormat，我们提供了2个替代方法Utility::Format与Utility::AppendFormat，使用时注意使用替代方法
+10、类的静态成员的初始化不要直接在定义成员时初始化，提供一个Property，在get里判断是否为空并初始化。
+11、枚举翻译时直接按整数常量处理，在lua端没有对应的枚举类型，因此在Cs2LuaScript工程定义的generic类的类型参数不能是枚举。
+12、这个工程里不要继承List、Dictionary、HashSet等泛型容器，确实需要的使用组合方式，自己暴露一下接口。（这几个容器类被视作语言内建的机制，与自定义类的机制不太一样）
+13、Cs2LuaScript工程里的generic类翻译为lua时是按模板实例化的方式处理的，这与c#的语义并不完全一致，不能使用依赖运行时实例化的generic样式。
+14、Cs2LuaScript里定义的数组会翻译为lua里的table，这个数组可以值传递给c#端，但不能按引用传递，也就是说暴露的api不应该接收一个数组，然后修改数组的元素。
+15、尽量不要使用多维数组，代之以使用jagged数组，多维数组翻译为lua时实际上是按jagged数组处理的。
+16、cs2lua采用类似C++模板实例化的方式来翻译泛型类，为了保证不同实例的方法使用一样的签名，方法参数是泛型类时，签名使用泛型类的泛型形参而不使用实参。这意味着不能支持2个重载函数仅依靠泛型参数的实参类型来区分。
+17、目前的lua端对象模型有个缺陷，在继承的时候，子类和基类的变量名不能重名，重名会导致lua调用基类的方法访问基类变量时，改为访问子类同名变量，导致出错。（这个可以修改lua对象模型来解决，但比较麻烦，暂未考虑）
+
+--【CSharp-Assembly（即Unity3d生成的工程）注意事项：】
+0、这个模块不支持线上热更新，这里主要实现游戏启动相关逻辑及与引擎功能直接相关的表现逻辑（辅助shader挂脚本的方式）。长远看，这个模块应该避免频繁的修改。引擎表现相关的脚本需要研究如何不修改c#代码的情况下支持新的shader。
+1、这里的脚本可以使用CustomApi里的公共类与方法，但不能直接引用Cs2LuaScript里的类与方法（作为检查机制，Cs2LuaScript里的所有的类都应该是internal的）。
+2、必须要访问Cs2LuaScript工程里的类时，需要在CustomApi里定义对应的接口，然后针对c# dll与lua两种情形分别处理，lua情形时需要添加代理c#类。
+
 
 
 ## 【自定义翻译】
