@@ -434,32 +434,32 @@ cs2lua在第3步提供了一个扩展机制，对每个支持函数的翻译，�
 
 自定义处理脚本generator.dsl里可以使用的API如下（$开头的参数引用generator.dsl里支持函数处理脚本的参数，一般不需要修改为其它，$funcData是DSL元语言里的Dsl.FunctionData，是加载到内存的中间语言的函数调用；$funcOpts是当前翻译语句所属类方法的选项，包含方法参数与返回值类型信息，通常用不着；$sb是输出代码的StringBuilder实例，$indent是当前语句的缩进值）：
 
-    1、getargument($funcData, index);
+1、getargument($funcData, index);
     
-    从$funcData里读取index参数的值，只有参数是类型或字符串时返回值，一般这些值用于判断是否需要进行自定义翻译处理。
+从$funcData里读取index参数的值，只有参数是类型或字符串时返回值，一般这些值用于判断是否需要进行自定义翻译处理。
     
-    2、writeindent($sb, indent);
+2、writeindent($sb, indent);
     
-    往StringBuilder输出流$sb里输出indent数量的缩进。
+往StringBuilder输出流$sb里输出indent数量的缩进。
     
-    3、writesymbol($sb, "code");
+3、writesymbol($sb, "code");
     
-    往StringBuilder输出流$sb里输出一个符号，可以是标识符或者分隔符、括号等。
+往StringBuilder输出流$sb里输出一个符号，可以是标识符或者分隔符、括号等。
     
-    4、writestring($sb, "string");
+4、writestring($sb, "string");
     
-    往StringBuilder输出流$sb里输出一个字符串，与输出标识符的差别是会在输出首尾加上引号。
+往StringBuilder输出流$sb里输出一个字符串，与输出标识符的差别是会在输出首尾加上引号。
     
-    5、writearguments($sb, $funcData, $funcOpts, $indent, start_arg_index_or_ignore_args);
+5、writearguments($sb, $funcData, $funcOpts, $indent, start_arg_index_or_ignore_args);
     
-    往StringBuilder输出流$sb里输出函数参数，最后一个参数可以是一个整数，指明起始参数索引，或者是一个数组（方括号括起来的数字列表），数组指明要忽略的参数，忽略参数一般是在generator.dsl里已经用于判断是否自定义翻译的参数，这些参数在运行时可能用不上了，可以忽略（需要与lualib或lualib_special里的实现一致）。
+往StringBuilder输出流$sb里输出函数参数，最后一个参数可以是一个整数，指明起始参数索引，或者是一个数组（方括号括起来的数字列表），数组指明要忽略的参数，忽略参数一般是在generator.dsl里已经用于判断是否自定义翻译的参数，这些参数在运行时可能用不上了，可以忽略（需要与lualib或lualib_special里的实现一致）。
     
-    6、usefunc(lua_func_name, lua_func_params_string, $funcData, $funcOpts, $sb, $indent, start_arg_index_or_ignore_args, [addargs, ...])
-    {:
-        lua_func_code
-    :};
+6、usefunc(lua_func_name, lua_func_params_string, $funcData, $funcOpts, $sb, $indent, start_arg_index_or_ignore_args, [addargs, ...])
+{:
+    lua_func_code
+:};
 
-    定义一个自定义lua函数，并将当前支持函数翻译为调用此lua函数。lua_func_name是自定义lua函数的名字，cs2lua用来唯一标识这段代码（也就是只输出一份函数定义），lua_func_params_string是自定义lua函数的参数列字符串（包括起止括号），start_arg_index_or_ignore_args参数与5中同名参数作用相同，addargs是可变参数列表，指出相对中间语言，自定义lua函数要额外添加的参数，这些参数都加在自定义函数普通参数的前面，目前一般只有一个额外参数是"__cs2lua_func_info"，用来引用当前方法的函数信息（函数信息的名字是cs2lua约定的，不能更改）（注意，这些额外参数需要与lua_func_params_string的参数表数量一致）。lua_func_code是自定义lua函数的实现代码（不包括函数头与结尾的end）,这段代码用{:和:}括起来，这是用作中间语言的DSL元语言里包含外部脚本的语法。
+定义一个自定义lua函数，并将当前支持函数翻译为调用此lua函数。lua_func_name是自定义lua函数的名字，cs2lua用来唯一标识这段代码（也就是只输出一份函数定义），lua_func_params_string是自定义lua函数的参数列字符串（包括起止括号），start_arg_index_or_ignore_args参数与5中同名参数作用相同，addargs是可变参数列表，指出相对中间语言，自定义lua函数要额外添加的参数，这些参数都加在自定义函数普通参数的前面，目前一般只有一个额外参数是"__cs2lua_func_info"，用来引用当前方法的函数信息（函数信息的名字是cs2lua约定的，不能更改）（注意，这些额外参数需要与lua_func_params_string的参数表数量一致）。lua_func_code是自定义lua函数的实现代码（不包括函数头与结尾的end）,这段代码用{:和:}括起来，这是用作中间语言的DSL元语言里包含外部脚本的语法。
 
 
 ## 【性能优化参考】
