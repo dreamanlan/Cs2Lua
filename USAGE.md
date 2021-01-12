@@ -455,9 +455,13 @@ cs2lua在第3步提供了一个扩展机制，对每个支持函数的翻译，�
 往StringBuilder输出流$sb里输出函数参数，最后一个参数可以是一个整数，指明起始参数索引，或者是一个数组（方括号括起来的数字列表），数组指明要忽略的参数，忽略参数一般是在generator.dsl里已经用于判断是否自定义翻译的参数，这些参数在运行时可能用不上了，可以忽略（需要与lualib或lualib_special里的实现一致）。
     
 6、usefunc(lua_func_name, lua_func_params_string, $funcData, $funcOpts, $sb, $indent, start_arg_index_or_ignore_args, [addargs, ...])
+
 {:
+
     lua_func_code
+    
 :};
+
 
 定义一个自定义lua函数，并将当前支持函数翻译为调用此lua函数。lua_func_name是自定义lua函数的名字，cs2lua用来唯一标识这段代码（也就是只输出一份函数定义），lua_func_params_string是自定义lua函数的参数列字符串（包括起止括号），start_arg_index_or_ignore_args参数与5中同名参数作用相同，addargs是可变参数列表，指出相对中间语言，自定义lua函数要额外添加的参数，这些参数都加在自定义函数普通参数的前面，目前一般只有一个额外参数是"__cs2lua_func_info"，用来引用当前方法的函数信息（函数信息的名字是cs2lua约定的，不能更改）（注意，这些额外参数需要与lua_func_params_string的参数表数量一致）。lua_func_code是自定义lua函数的实现代码（不包括函数头与结尾的end）,这段代码用{:和:}括起来，这是用作中间语言的DSL元语言里包含外部脚本的语法。
 
