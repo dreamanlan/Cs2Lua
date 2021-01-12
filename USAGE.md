@@ -284,73 +284,74 @@ cs2lua从c#到lua的翻译分为两步进行：
 cs2lua在第3步提供了一个扩展机制，对每个支持函数的翻译，会先调用generator.dsl，如果dsl已经处理了此翻译，cs2lua就不再处理。这样提供了通过generator.dsl对特定支持函数的翻译定制。具体的支持函数可以查看LuaGenerator_Main.cs代码里的GenerateConcreteSyntaxForCall方法的各if分支，我们一般需要定制处理的是最后转换到lua后调用lualib里支持函数的这些。
 
 从我们实际项目的情况看，主要是对各种值类型的处理需要定制，这包括如下这些支持函数：
-### invokeexternoperatorreturnstruct(rettype, class, method, ...)
-### wrapoutstruct(v, classObj)
-### wrapoutexternstruct(v, classObj)
-### wrapstruct(v, classObj)
-### wrapexternstruct(v, classObj)
-### getexterninstancestructmember(symKind, obj, class, member)
-### callexterndelegationreturnstruct(funcobj, funcobjname, ...)
-### callexternextensionreturnstruct(class, member, ...)
-### callexternstaticreturnstruct(class, member, ...)
-### callexterninstancereturnstruct(obj, class, member, ...)
-### recycleandkeepstructvalue(fieldType, oldVal, newVal)
+
+* invokeexternoperatorreturnstruct(rettype, class, method, ...)
+* wrapoutstruct(v, classObj)
+* wrapoutexternstruct(v, classObj)
+* wrapstruct(v, classObj)
+* wrapexternstruct(v, classObj)
+* getexterninstancestructmember(symKind, obj, class, member)
+* callexterndelegationreturnstruct(funcobj, funcobjname, ...)
+* callexternextensionreturnstruct(class, member, ...)
+* callexternstaticreturnstruct(class, member, ...)
+* callexterninstancereturnstruct(obj, class, member, ...)
+* recycleandkeepstructvalue(fieldType, oldVal, newVal)
 
 这些支持函数主要是为了给值类型添加对象池的，因为lua里没有值类型，c#里使用的值类型翻译到lua时，对值类型的赋值语义，需要产生一个新的值相同的实例，如果只是创建新实例，这样会导致非常多的lua GC，这时我们一般需要采用对象池来减少GC，这样在整体上通过反复使用几个实例能比较好的模拟值类型处理。为了配合对象池的操作，cs2lua对涉及值类型操作的方法，会在函数入口调用luainitialize生成一个函数信息，然后值类型操作的各个支持函数会将对象池里分配出的实例记录到函数信息上，最后在函数返回前调用luafinalize将函数信息里记录的值类型实例进行回收。
 
 我们来看一个实例，下面的RefreshTargetPosition方法就是一个包含值类型处理的方法，cs2lua翻译时会在入口调luainitialize，返回前调用luafinalize，单独把方法体包装成一个函数__ori_RefreshTargetPosition是为了在异常时保证luainitialize/luafinalize的调用是成对的。
 
-
-			RefreshTargetPosition = function(this, leader, npc)
-				local __cs2lua_func_info = luainitialize();
-				local __retval_0, __retval_1 = luapcall(this.__ori_RefreshTargetPosition, this, __cs2lua_func_info, leader, npc);
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
-				if not __retval_0 then
-					error(__retval_1);
-					__retval_1 = nil;
-				end;
-				return __retval_1;
-			end,
-			__ori_RefreshTargetPosition = function(this, __cs2lua_func_info, leader, npc)
-				local __method_ret_53_4_69_5;
-				if (((isequal(leader, nil) or isequal(leader.View, nil)) or isequal(npc, nil)) or isequal(npc.View, nil)) then 
-					__method_ret_53_4_69_5 = false;
-					return __method_ret_53_4_69_5;
-				end;
-				local target_pos;
-				target_pos = get_entityviewmodel_position(__cs2lua_func_info, leader.View);
-				local origin_pos;
-				origin_pos = get_entityviewmodel_position(__cs2lua_func_info, npc.View);
-				--距离超过3m进行跟随
-				local t;
-				t = this:CalculateTargetPos(target_pos, get_tranform_forward(__cs2lua_func_info, leader.View:GetGameObject().transform));
-				t = wrap_vector3(__cs2lua_func_info, t);
-				local sqrdis;
-				sqrdis = UnityEngine.Vector3.SqrMagnitude(invokeexternoperatorreturnstructimpl(__cs2lua_func_info, UnityEngine.Vector3, UnityEngine.Vector3, "op_Subtraction", t, origin_pos));
-				if (((((sqrdis > 0.25000000) or leader.movementInfo.controllerManager:IsMove())) and (not leader.movementInfo.controllerManager:IsSwim())) and (not leader.movementInfo.controllerManager:IsJumping())) then 
-					AiCommand.AiPursue(npc, t, false);
-				else
-					npc.View:GetGameObject().transform.forward = get_tranform_forward(__cs2lua_func_info, leader.View:GetGameObject().transform);
-				end;
-				__method_ret_53_4_69_5 = true;
-				return __method_ret_53_4_69_5;
-			end,
-
+(```)
+    RefreshTargetPosition = function(this, leader, npc)
+        local __cs2lua_func_info = luainitialize();
+        local __retval_0, __retval_1 = luapcall(this.__ori_RefreshTargetPosition, this, __cs2lua_func_info, leader, npc);
+        __cs2lua_func_info = luafinalize(__cs2lua_func_info);
+        if not __retval_0 then
+        	error(__retval_1);
+        	__retval_1 = nil;
+        end;
+        return __retval_1;
+    end,
+    __ori_RefreshTargetPosition = function(this, __cs2lua_func_info, leader, npc)
+        local __method_ret_53_4_69_5;
+        if (((isequal(leader, nil) or isequal(leader.View, nil)) or isequal(npc, nil)) or isequal(npc.View, nil)) then 
+        	__method_ret_53_4_69_5 = false;
+        	return __method_ret_53_4_69_5;
+        end;
+        local target_pos;
+        target_pos = get_entityviewmodel_position(__cs2lua_func_info, leader.View);
+        local origin_pos;
+        origin_pos = get_entityviewmodel_position(__cs2lua_func_info, npc.View);
+        --距离超过3m进行跟随
+        local t;
+        t = this:CalculateTargetPos(target_pos, get_tranform_forward(__cs2lua_func_info, leader.View:GetGameObject().transform));
+        t = wrap_vector3(__cs2lua_func_info, t);
+        local sqrdis;
+        sqrdis = UnityEngine.Vector3.SqrMagnitude(invokeexternoperatorreturnstructimpl(__cs2lua_func_info, UnityEngine.Vector3, UnityEngine.Vector3, "op_Subtraction", t, origin_pos));
+        if (((((sqrdis > 0.25000000) or leader.movementInfo.controllerManager:IsMove())) and (not leader.movementInfo.controllerManager:IsSwim())) and (not leader.movementInfo.controllerManager:IsJumping())) then 
+        	AiCommand.AiPursue(npc, t, false);
+        else
+        	npc.View:GetGameObject().transform.forward = get_tranform_forward(__cs2lua_func_info, leader.View:GetGameObject().transform);
+        end;
+        __method_ret_53_4_69_5 = true;
+        return __method_ret_53_4_69_5;
+   end,
+(```)
 
 这个方法里的get_entityviewmodel_position、get_tranform_forward、wrap_vector3、invokeexternoperatorreturnstructimpl都是自定义翻译的结果，在中间语言dsl里，这几个支持函数是这样的：
 
-
-			local(target_pos); target_pos = getexterninstancestructmember(SymbolKind.Property, getexterninstance(SymbolKind.Property, leader, CsLibrary.EntityInfo, "View"), CsLibrary.EntityViewModel, "position");
-			local(origin_pos); origin_pos = getexterninstancestructmember(SymbolKind.Property, getexterninstance(SymbolKind.Property, npc, CsLibrary.EntityInfo, "View"), CsLibrary.EntityViewModel, "position");
-			comment("距离超过3m进行跟随");
-			local(t); t = callinstance(this, AiFollow, "CalculateTargetPos", target_pos, getexterninstancestructmember(SymbolKind.Property, getexterninstance(SymbolKind.Property, callexterninstance(getexterninstance(SymbolKind.Property, leader, CsLibrary.EntityInfo, "View"), CsLibrary.EntityViewModel, "GetGameObject"), UnityEngine.GameObject, "transform"), UnityEngine.Transform, "forward"));
-			t = wrapexternstruct(t, UnityEngine.Vector3);
-			local(sqrdis); sqrdis = callexternstatic(UnityEngine.Vector3, "SqrMagnitude", invokeexternoperatorreturnstruct(UnityEngine.Vector3, UnityEngine.Vector3, "op_Subtraction", t, origin_pos));
-            
+(```)
+    local(target_pos); target_pos = getexterninstancestructmember(SymbolKind.Property, getexterninstance(SymbolKind.Property, leader, CsLibrary.EntityInfo, "View"), CsLibrary.EntityViewModel, "position");
+    local(origin_pos); origin_pos = getexterninstancestructmember(SymbolKind.Property, getexterninstance(SymbolKind.Property, npc, CsLibrary.EntityInfo, "View"), CsLibrary.EntityViewModel, "position");
+    comment("距离超过3m进行跟随");
+    local(t); t = callinstance(this, AiFollow, "CalculateTargetPos", target_pos, getexterninstancestructmember(SymbolKind.Property, getexterninstance(SymbolKind.Property, callexterninstance(getexterninstance(SymbolKind.Property, leader, CsLibrary.EntityInfo, "View"), CsLibrary.EntityViewModel, "GetGameObject"), UnityEngine.GameObject, "transform"), UnityEngine.Transform, "forward"));
+    t = wrapexternstruct(t, UnityEngine.Vector3);
+    local(sqrdis); sqrdis = callexternstatic(UnityEngine.Vector3, "SqrMagnitude", invokeexternoperatorreturnstruct(UnityEngine.Vector3, UnityEngine.Vector3, "op_Subtraction", t, origin_pos));
+(```)            
 
 然后在generator.dsl里有这样的处理代码：
 
-
+(```)
     script(wrapexternstruct)args($funcData, $funcOpts, $sb, $indent)
     {
         //wrapexternstruct(v, classObj)
@@ -427,7 +428,7 @@ cs2lua在第3步提供了一个扩展机制，对每个支持函数的翻译，�
         writesymbol($sb, ")");
         return(true);
     };
-
+(```)
 
 可以看到，自定义翻译是对支持函数按参数值识别并进行处理（注意最后自己输出的函数调用结尾是不需要加分号的），处理不了的情形返回false，则走cs2lua的默认翻译流程。一般来说都是根据class或member名字来进行自定义处理。
 
