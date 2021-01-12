@@ -301,7 +301,7 @@ cs2lua在第3步提供了一个扩展机制，对每个支持函数的翻译，�
 
 我们来看一个实例，下面的RefreshTargetPosition方法就是一个包含值类型处理的方法，cs2lua翻译时会在入口调luainitialize，返回前调用luafinalize，单独把方法体包装成一个函数__ori_RefreshTargetPosition是为了在异常时保证luainitialize/luafinalize的调用是成对的。
 
-(```)
+```
     RefreshTargetPosition = function(this, leader, npc)
         local __cs2lua_func_info = luainitialize();
         local __retval_0, __retval_1 = luapcall(this.__ori_RefreshTargetPosition, this, __cs2lua_func_info, leader, npc);
@@ -336,22 +336,22 @@ cs2lua在第3步提供了一个扩展机制，对每个支持函数的翻译，�
         __method_ret_53_4_69_5 = true;
         return __method_ret_53_4_69_5;
    end,
-(```)
+```
 
 这个方法里的get_entityviewmodel_position、get_tranform_forward、wrap_vector3、invokeexternoperatorreturnstructimpl都是自定义翻译的结果，在中间语言dsl里，这几个支持函数是这样的：
 
-(```)
+```
     local(target_pos); target_pos = getexterninstancestructmember(SymbolKind.Property, getexterninstance(SymbolKind.Property, leader, CsLibrary.EntityInfo, "View"), CsLibrary.EntityViewModel, "position");
     local(origin_pos); origin_pos = getexterninstancestructmember(SymbolKind.Property, getexterninstance(SymbolKind.Property, npc, CsLibrary.EntityInfo, "View"), CsLibrary.EntityViewModel, "position");
     comment("距离超过3m进行跟随");
     local(t); t = callinstance(this, AiFollow, "CalculateTargetPos", target_pos, getexterninstancestructmember(SymbolKind.Property, getexterninstance(SymbolKind.Property, callexterninstance(getexterninstance(SymbolKind.Property, leader, CsLibrary.EntityInfo, "View"), CsLibrary.EntityViewModel, "GetGameObject"), UnityEngine.GameObject, "transform"), UnityEngine.Transform, "forward"));
     t = wrapexternstruct(t, UnityEngine.Vector3);
     local(sqrdis); sqrdis = callexternstatic(UnityEngine.Vector3, "SqrMagnitude", invokeexternoperatorreturnstruct(UnityEngine.Vector3, UnityEngine.Vector3, "op_Subtraction", t, origin_pos));
-(```)            
+```          
 
 然后在generator.dsl里有这样的处理代码：
 
-(```)
+```
     script(wrapexternstruct)args($funcData, $funcOpts, $sb, $indent)
     {
         //wrapexternstruct(v, classObj)
@@ -428,7 +428,7 @@ cs2lua在第3步提供了一个扩展机制，对每个支持函数的翻译，�
         writesymbol($sb, ")");
         return(true);
     };
-(```)
+```
 
 可以看到，自定义翻译是对支持函数按参数值识别并进行处理（注意最后自己输出的函数调用结尾是不需要加分号的），处理不了的情形返回false，则走cs2lua的默认翻译流程。一般来说都是根据class或member名字来进行自定义处理。
 
