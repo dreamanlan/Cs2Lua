@@ -737,8 +737,16 @@ namespace RoslynTool.CsToDsl
             }
             else {
                 if (sym.MethodKind == MethodKind.DelegateInvoke) {
+                    string dt = ClassInfo.GetFullName(sym);
+                    if (externReturnStruct) {
+                        codeBuilder.Append("callexterndelegationreturnstruct(");
+                    }
+                    else {
+                        codeBuilder.AppendFormat("call{0}delegation(", IsExternMethod ? "extern" : string.Empty);
+                    }
                     cs2dsl.OutputExpressionSyntax(exp);
-                    codeBuilder.Append("(");
+                    codeBuilder.AppendFormat(", \"{0}\"", dt);
+                    prestr = ", ";
                 }
                 else if (sym.IsStatic) {
                     if (externReturnStruct)

@@ -44,6 +44,10 @@ namespace RoslynTool.CsToDsl
         public override void VisitLocalFunctionStatement(LocalFunctionStatementSyntax node)
         {
             Log(node, "Unsupported Syntax !");
+        }        
+        public override void VisitImplicitStackAllocArrayCreationExpression(ImplicitStackAllocArrayCreationExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
         }
         public override void VisitParenthesizedVariableDesignation(ParenthesizedVariableDesignationSyntax node)
         {

@@ -80,18 +80,21 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 
 			Clear = function(this)
 				local __cs2lua_func_info = luainitialize();
+				luapcall(this.__ori_Clear, this, __cs2lua_func_info);
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+			end,
+			__ori_Clear = function(this, __cs2lua_func_info)
 				if delegationcomparewithnil(false, this, "m_Destroyer", SymbolKind.Field, false) then 
 					local __foreach_65_12_67_13 = newiterator(__cs2lua_func_info, this.m_UnusedObjects, System.Collections.Generic.Queue_T, System.Collections.Generic.Queue_T, true);
 					for item in getiterator(__foreach_65_12_67_13) do
 						if item == __cs2lua_nil then
 							item = nil;
 						end;
-						this.m_Destroyer						(item);
+						this.m_Destroyer(item);
 					end;
 					recycleiterator(__cs2lua_func_info, __foreach_65_12_67_13);
 				end;
 				this.m_UnusedObjects:Clear();
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 			end,
 
 			get_Count = function(this)

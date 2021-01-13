@@ -43,6 +43,8 @@ namespace Generator
                 try {
                     s_CurFile = file;
                     s_NestedFunctionCount = 0;
+                    s_TryUsingFuncs = new Queue<Dsl.StatementData>();
+
                     string fileName = Path.GetFileNameWithoutExtension(file);
 
                     Dsl.DslFile dslFile = new Dsl.DslFile();
@@ -703,6 +705,8 @@ namespace Generator
         private static string s_CurFile = string.Empty;
         [ThreadStatic]
         private static int s_NestedFunctionCount = 0;
+        [ThreadStatic]
+        private static Queue<Dsl.StatementData> s_TryUsingFuncs = null;
         [ThreadStatic]
         private static Dsl.ISyntaxComponent s_CurSyntax = null;
 

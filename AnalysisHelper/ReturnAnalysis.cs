@@ -15,6 +15,11 @@ namespace RoslynTool.CsToDsl
     /// </summary>
     internal class ReturnContinueBreakAnalysis : CSharpSyntaxWalker
     {
+        public string OutParamsStr
+        {
+            get { return m_OutParamsStr; }
+            set { m_OutParamsStr = value; }
+        }
         public string RetValVar
         {
             get { return m_RetValVar; }
@@ -40,6 +45,12 @@ namespace RoslynTool.CsToDsl
         {
             get { return m_ExistBreak; }
         }
+        public override void VisitSimpleLambdaExpression(SimpleLambdaExpressionSyntax node)
+        { }
+        public override void VisitParenthesizedLambdaExpression(ParenthesizedLambdaExpressionSyntax node)
+        { }
+        public override void VisitAnonymousMethodExpression(AnonymousMethodExpressionSyntax node)
+        { }
         public override void VisitReturnStatement(ReturnStatementSyntax node)
         {
             m_ExistReturn = true;
@@ -90,6 +101,7 @@ namespace RoslynTool.CsToDsl
             --m_InSwitch;
         }
 
+        private string m_OutParamsStr = string.Empty;
         private string m_RetValVar = string.Empty;
         private bool m_ExistReturn = false;
         private bool m_ExistReturnInLoopOrSwitch = false;

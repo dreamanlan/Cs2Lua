@@ -1255,6 +1255,7 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitUsingStatement(UsingStatementSyntax node)
         {
+            ClassInfo ci = m_ClassInfoStack.Peek();
             MethodInfo mi = m_MethodInfoStack.Peek();
 
             string srcPos = GetSourcePosForVar(node);
@@ -1277,9 +1278,10 @@ namespace RoslynTool.CsToDsl
                 ReturnContinueBreakAnalysis returnAnalysis = new ReturnContinueBreakAnalysis();
                 returnAnalysis.RetValVar = retValVar;
                 returnAnalysis.Visit(node.Statement);
-                if (returnAnalysis.Exist) {
-                    mi.TempReturnAnalysisStack.Push(returnAnalysis);
 
+                mi.TempReturnAnalysisStack.Push(returnAnalysis);
+
+                if (mi.IsAnonymousOrLambdaMethod) {
                     CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}) = dslusing({3}, {1}){{", GetIndentString(), retVar, retValVar, returnAnalysis.ExistReturnInLoopOrSwitch ? "true" : "false");
                     CodeBuilder.AppendLine();
                     ++m_Indent;
@@ -1289,40 +1291,79 @@ namespace RoslynTool.CsToDsl
                     --m_Indent;
                     CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                     CodeBuilder.AppendLine();
+                }
+                else {
+                    //普通函数里的using块拆分成方法
+                    var dataFlow = m_Model.AnalyzeDataFlow(node.Statement);
+                    var ctrlFlow = m_Model.AnalyzeControlFlow(node.Statement);
+                    List<string> inputs, outputs;
+                    string paramsStr;
+                    string outParamsStr = mi.CalcTryUsingFuncInfo(dataFlow, ctrlFlow, out inputs, out outputs, out paramsStr);
 
-                    mi.TempReturnAnalysisStack.Pop();
+                    returnAnalysis.OutParamsStr = outParamsStr;
 
-                    if (null != node.Declaration && null != node.Declaration.Variables) {
-                        foreach (var decl in node.Declaration.Variables) {
-                            var declSym = m_Model.GetDeclaredSymbol(decl) as ILocalSymbol;
-                            var type = declSym.Type;
-                            var msym = GetDisposeMethod(type);
-                            if (null != msym) {
-                                var fn = ClassInfo.GetFullName(msym.ContainingType);
-                                CodeBuilder.AppendFormat("{0}callexterninstance({1}, {2}, \"Dispose\");", GetIndentString(), decl.Identifier.Text, fn);
-                                CodeBuilder.AppendLine();
-                            }
-                        }
+                    string prestr = ", ";
+                    string usingFunc = string.Format("__using_func_{0}", srcPos);
+                    bool isStatic = mi.SemanticInfo.IsStatic;
+
+                    CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}", GetIndentString(), retVar, retValVar);
+                    if (!string.IsNullOrEmpty(outParamsStr)) {
+                        CodeBuilder.Append(prestr);
+                        CodeBuilder.Append(outParamsStr);
                     }
-                    else if (null != node.Expression) {
-                        var type = m_Model.GetTypeInfoEx(node.Expression).Type;
+                    CodeBuilder.AppendFormat(") = dslusingfunc({0}, {1}, {2}, {3}", retValVar, usingFunc, isStatic ? ci.Key : "this", dataFlow.DataFlowsOut.Length + (string.IsNullOrEmpty(mi.ReturnVarName) ? 1 : 2));
+                    if (!string.IsNullOrEmpty(paramsStr)) {
+                        CodeBuilder.Append(prestr);
+                        CodeBuilder.Append(paramsStr);
+                    }
+                    CodeBuilder.AppendLine("){");
+                    ++m_Indent;
+                    ++mi.TryUsingLayer;
+                    node.Statement.Accept(this);
+                    if (outputs.Count > 0 && ctrlFlow.ReturnStatements.Length <= 0) {
+                        //return(0)代表非try块里的返回语句
+                        CodeBuilder.AppendFormat("{0}return(0", GetIndentString());
+                        if (!string.IsNullOrEmpty(outParamsStr)) {
+                            CodeBuilder.Append(prestr);
+                            CodeBuilder.Append(outParamsStr);
+                        }
+                        CodeBuilder.AppendLine(");");
+                    }
+                    --mi.TryUsingLayer;
+                    --m_Indent;
+                    CodeBuilder.AppendFormat("{0}}}options[{1}];", GetIndentString(), mi.CalcTryUsingFuncOptions(dataFlow, ctrlFlow, inputs, outputs));
+                    CodeBuilder.AppendLine();
+                }
+
+                mi.TempReturnAnalysisStack.Pop();
+
+                if (null != node.Declaration && null != node.Declaration.Variables) {
+                    foreach (var decl in node.Declaration.Variables) {
+                        var declSym = m_Model.GetDeclaredSymbol(decl) as ILocalSymbol;
+                        var type = declSym.Type;
                         var msym = GetDisposeMethod(type);
                         if (null != msym) {
                             var fn = ClassInfo.GetFullName(msym.ContainingType);
-                            CodeBuilder.AppendFormat("{0}callexterninstance({1}, {2}, \"Dispose\");", GetIndentString(), varName, fn);
+                            CodeBuilder.AppendFormat("{0}callexterninstance({1}, {2}, \"Dispose\");", GetIndentString(), decl.Identifier.Text, fn);
                             CodeBuilder.AppendLine();
                         }
                     }
-                    else {
-                        Log(node, "node.Declaration is null or node.Declaration.Variables is null, and node.Expression is null.");
+                }
+                else if (null != node.Expression) {
+                    var type = m_Model.GetTypeInfoEx(node.Expression).Type;
+                    var msym = GetDisposeMethod(type);
+                    if (null != msym) {
+                        var fn = ClassInfo.GetFullName(msym.ContainingType);
+                        CodeBuilder.AppendFormat("{0}callexterninstance({1}, {2}, \"Dispose\");", GetIndentString(), varName, fn);
+                        CodeBuilder.AppendLine();
                     }
-
-                    OutputTryCatchUsingReturn(returnAnalysis, mi, retValVar);
-                    return;
                 }
                 else {
-                    node.Statement.Accept(this);
+                    Log(node, "node.Declaration is null or node.Declaration.Variables is null, and node.Expression is null.");
                 }
+
+                OutputTryCatchUsingReturn(returnAnalysis, mi, retValVar);
+                return;
             }
             else {
                 Log(node, "node.Statement is null.");

@@ -13,13 +13,13 @@ class(Test) {
 			return(__cs2dsl_newobj);
 		}options[needfuncinfo(false)];
 		ToList = deffunc(1)args(T, enumer){
-			local(__method_ret_143_4_150_5);
+			local(__method_ret_180_4_187_5);
 			local(r); r = newexternlist(System.Collections.Generic.List_T, "g_System_Collections_Generic_List_T", typeargs(T), typekinds(TypeKind.TypeParameter), "ctor", literallist("g_System_Collections_Generic_List_T", typeargs(T), typekinds(TypeKind.TypeParameter)));
-			foreach(__foreach_146_8_148_9, v, enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true){
+			foreach(__foreach_183_8_185_9, v, enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true){
 				callexterninstance(r, System.Collections.Generic.List_T, "Add", v);
 			};
-			__method_ret_143_4_150_5 = r;
-			return(__method_ret_143_4_150_5);
+			__method_ret_180_4_187_5 = r;
+			return(__method_ret_180_4_187_5);
 		}options[needfuncinfo(true), rettype(return, System.Collections.Generic.List_T, TypeKind.Class, 0), paramtype(T, null, TypeKind.TypeParameter, 0), paramtype(enumer, System.Collections.Generic.IEnumerable_T, TypeKind.Interface, 0)];
 		cctor = deffunc(0)args(){
 			callstatic(Test, "__cctor");
@@ -44,12 +44,12 @@ class(Test) {
 			local(args); args = params(System.Nullable_T, TypeKind.Struct);
 			__method_ret_107_4_111_5 = args[1];
 			return(__method_ret_107_4_111_5);
-		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0), paramtype(..., null, TypeKind.Array, 0)];
+		}options[needfuncinfo(false), rettype(return, System.Nullable_T, TypeKind.Struct, 0), paramtype(..., System.Nullable_T, TypeKind.Array, 0)];
 		set_Item = deffunc(0)args(this, ...){
 			local(args); args = params(System.Nullable_T, TypeKind.Struct);
 			local(value); value = paramsremove(args);
 			args[1] = value;
-		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0), paramtype(..., null, TypeKind.Array, 0)];
+		}options[needfuncinfo(true), rettype(return, System.Void, TypeKind.Unknown, 0), paramtype(..., System.Nullable_T, TypeKind.Array, 0)];
 		Init = deffunc(0)args(this){
 			local(items); items = literalarray(System.String, TypeKind.Class, "ȫ��", "������", "�ɽ�ȡ", "�����", "δ��ȡ");
 			callinstance(getinstance(SymbolKind.Field, this, Test, "m_DataChangeCallBackInfoPool"), Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "Init__Func_1_T__Action_1_T", null, null);
@@ -78,11 +78,104 @@ class(Test) {
 			}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0)] ), "System.Action", TypeKind.Delegate);
 			local(cc); cc = callstatic(Test, "ToList", System.Int32, aa);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0)];
-		test = deffunc(0)args(this){
-			local(a); a = deffunc(0)args(){
+		testcall = deffunc(1)args(this){
+			local(__method_ret_139_4_142_5);
+			__method_ret_139_4_142_5 = 1;
+			return(__method_ret_139_4_142_5);
+		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0)];
+		test = deffunc(1)args(this){
+			local(__method_ret_143_4_179_5);
+			local(a); a = 2;
+			local(b); b = 0;
+			local(c); c = 1;
+			local(aa); aa = deffunc(1)args(){
+				local(__method_ret_146_31_159_9);
+				local(__try_ret_147_12_152_13, __try_retval_147_12_152_13); multiassign(__try_ret_147_12_152_13, __try_retval_147_12_152_13) = dsltry(false, __try_ret_147_12_152_13){
+					callexternstatic(System.Console, "Write__String", dslstrtocsstr("test"));
+				};
+				local(__catch_handled_147_12_152_13, __catch_retval_147_12_152_13); __catch_handled_147_12_152_13 = false;
+				__catch_retval_147_12_152_13 = dslcatch(__catch_handled_147_12_152_13, __try_retval_147_12_152_13, __try_ret_147_12_152_13,
+					function(ex){
+						__catch_handled_147_12_152_13 = true;
+					}
+				);
+				local(__try_ret_153_12_158_13, __try_retval_153_12_158_13); multiassign(__try_ret_153_12_158_13, __try_retval_153_12_158_13) = dsltry(false, __try_ret_153_12_158_13){
+					block{
+					__method_ret_146_31_159_9 = callinstance(this, Test, "testcall");
+					__try_retval_153_12_158_13 = 1;
+					break;
+					};
+				};
+				if(__try_ret_153_12_158_13){
+					if(__try_retval_153_12_158_13){
+					if(__try_retval_153_12_158_13==1){
+						return(__method_ret_146_31_159_9);
+					};
+					};
+				};
+				local(__catch_handled_153_12_158_13, __catch_retval_153_12_158_13); __catch_handled_153_12_158_13 = false;
+				__catch_retval_153_12_158_13 = dslcatch(__catch_handled_153_12_158_13, __try_retval_153_12_158_13, __try_ret_153_12_158_13,
+					function(ex){
+						__catch_handled_153_12_158_13 = true;
+						block{
+						__method_ret_146_31_159_9 = 0;
+						return(1);
+						};
+					}
+				);
+				if(__catch_retval_153_12_158_13){
+				if(__catch_retval_153_12_158_13==1){
+					return(__method_ret_146_31_159_9);
+				};
+				};
+				return(null);
+			}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0)];
+			local(__try_ret_161_8_166_9, __try_retval_161_8_166_9); multiassign(__try_ret_161_8_166_9, __try_retval_161_8_166_9) = dsltryfunc(__try_retval_161_8_166_9, __try_func_161_8_166_9, this, 2){
 				callexternstatic(System.Console, "Write__String", dslstrtocsstr("test"));
-			}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0)];
-		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0)];
+			}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0)];
+			local(__catch_handled_161_8_166_9, __catch_retval_161_8_166_9); __catch_handled_161_8_166_9 = false;
+			__catch_retval_161_8_166_9 = dslcatch(__catch_handled_161_8_166_9, __try_retval_161_8_166_9, __try_ret_161_8_166_9,
+				function(ex){
+					__catch_handled_161_8_166_9 = true;
+				}
+			);
+			local(__try_ret_167_8_176_9, __try_retval_167_8_176_9); multiassign(__try_ret_167_8_176_9, __try_retval_167_8_176_9, __method_ret_143_4_179_5) = dsltryfunc(__try_retval_167_8_176_9, __try_func_167_8_176_9, this, 2, __method_ret_143_4_179_5, aa){
+				block{
+				__method_ret_143_4_179_5 = callexterndelegation(aa, "System.Func_TResult.Invoke");
+				return(1, __method_ret_143_4_179_5);
+				};
+			}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0), rettype(__method_ret_143_4_179_5, System.Int32, TypeKind.Struct, 1), paramtype(__method_ret_143_4_179_5, System.Int32, TypeKind.Struct, 1), paramtype(aa, System.Func_TResult, Delegate, 0)];
+			if(__try_ret_167_8_176_9){
+				callexternstatic(System.Console, "WriteLine__String__Object__Object__Object", dslstrtocsstr("{0} {1} {2}"), a, b, c);
+				if(__try_retval_167_8_176_9){
+				if(__try_retval_167_8_176_9==1){
+					return(__method_ret_143_4_179_5);
+				};
+				};
+			};
+			local(__catch_handled_167_8_176_9, __catch_retval_167_8_176_9); __catch_handled_167_8_176_9 = false;
+			__catch_retval_167_8_176_9 = dslcatch(__catch_handled_167_8_176_9, __try_retval_167_8_176_9, __try_ret_167_8_176_9,
+				function(e){
+					__catch_handled_167_8_176_9 = true;
+					callexternstatic(System.Console, "WriteLine__String__Object__Object__Object", dslstrtocsstr("ex:{0} {1} {2}"), a, b, c);
+					block{
+					__method_ret_143_4_179_5 = 0;
+					return(1);
+					};
+				}
+			);
+			callexternstatic(System.Console, "WriteLine__String__Object__Object__Object", dslstrtocsstr("{0} {1} {2}"), a, b, c);
+			if(__catch_retval_167_8_176_9){
+			if(__catch_retval_167_8_176_9==1){
+				return(__method_ret_143_4_179_5);
+			};
+			};
+			if(! __try_ret_167_8_176_9){
+				callexternstatic(System.Console, "WriteLine__String__Object__Object__Object", dslstrtocsstr("{0} {1} {2}"), a, b, c);
+			};
+			setinstance(SymbolKind.Field, this, Test, "m_IntVal", condexp(execbinary(">", a, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), false, function(){ funcobjret(callexterndelegation(aa, "System.Func_TResult.Invoke")); }, false, function(){ funcobjret(c); }));
+			return(__method_ret_143_4_179_5);
+		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0)];
 		ctor = deffunc(0)args(this){
 			callinstance(this, Test, "__ctor");
 		};
@@ -97,6 +190,7 @@ class(Test) {
 	};
 	instance_fields {
 		m_DataChangeCallBackInfoPool = null;
+		m_IntVal = 0;
 		__ctor_called = false;
 	};
 	instance_props {};
@@ -113,6 +207,8 @@ class(Test) {
 		};
 		Init(MethodKind.Ordinary, Accessibility.Public){
 		};
+		testcall(MethodKind.Ordinary, Accessibility.Public){
+		};
 		test(MethodKind.Ordinary, Accessibility.Public){
 		};
 		ToList(MethodKind.Ordinary, Accessibility.Internal){
@@ -126,6 +222,8 @@ class(Test) {
 	event_info {};
 	field_info {
 		m_DataChangeCallBackInfoPool(Accessibility.Private){
+		};
+		m_IntVal(Accessibility.Private){
 		};
 	};
 };

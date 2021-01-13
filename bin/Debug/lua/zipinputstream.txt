@@ -38,6 +38,10 @@ ZipInputStream = {
 		local obj_methods = {
 			ctor = function(this, ms)
 				local __cs2lua_func_info = luainitialize();
+				luapcall(this.__ori_ctor, this, __cs2lua_func_info, ms);
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+			end,
+			__ori_ctor = function(this, __cs2lua_func_info, ms)
 				this:__ctor();
 				local os;
 				(= os);
@@ -82,19 +86,26 @@ ZipInputStream = {
 				va,vb = this:Test3(__cs2lua_out, __cs2lua_out);
 				va = wrap_vector3(__cs2lua_func_info, va);
 				vb = wrap_vector3(__cs2lua_func_info, vb);
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 				return this;
 			end,
 
 			Test = function(this, o, ...)
 				local __cs2lua_func_info = luainitialize();
+				local __retval_0, __retval_1 = luapcall(this.__ori_Test, this, __cs2lua_func_info, o, ...);
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+				if not __retval_0 then
+					error(__retval_1);
+					__retval_1 = nil;
+				end;
+				return __retval_1;
+			end,
+			__ori_Test = function(this, __cs2lua_func_info, o, ...)
 				local __method_ret_62_4_66_5;
 				local args;
 				args = wrapparams({...}, System.Object, TypeKind.Class);
 				local v3;
 				v3 = new_vector3(__cs2lua_func_info, 1, 2, 3);
 				__method_ret_62_4_66_5 = nil;
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 				return __method_ret_62_4_66_5;
 			end,
 
@@ -132,11 +143,19 @@ ZipInputStream = {
 
 			Test3 = function(this, v1, v2)
 				local __cs2lua_func_info = luainitialize();
+				local __retval_0, __retval_1, __retval_2 = luapcall(this.__ori_Test3, this, __cs2lua_func_info, v1, v2);
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+				if not __retval_0 then
+					error(__retval_1);
+					__retval_1 = nil;
+				end;
+				return __retval_1, __retval_2;
+			end,
+			__ori_Test3 = function(this, __cs2lua_func_info, v1, v2)
 				v1 = wrap_out_vector3(__cs2lua_func_info);
 				v2 = wrap_out_vector3(__cs2lua_func_info);
 				v1 = get_vector3_zero(__cs2lua_func_info);
 				v2 = get_vector3_zero(__cs2lua_func_info);
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 				return v1, v2;
 			end,
 

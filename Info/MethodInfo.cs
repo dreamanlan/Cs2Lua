@@ -35,6 +35,7 @@ namespace RoslynTool.CsToDsl
         internal int ReturnValueCount = 0;
         internal string FunctionOptions = string.Empty;
 
+        internal bool IsAnonymousOrLambdaMethod = false;
         internal bool ExistTry = false;
         internal bool ExistUsing = false;
         internal int TryUsingLayer = 0;
@@ -48,6 +49,7 @@ namespace RoslynTool.CsToDsl
 
         internal void Init(IMethodSymbol sym, SyntaxNode node)
         {
+            IsAnonymousOrLambdaMethod = node is SimpleLambdaExpressionSyntax || node is ParenthesizedLambdaExpressionSyntax || node is AnonymousMethodExpressionSyntax;
             TryCatchUsingOrLoopSwitchStack.Clear();
             TempReturnAnalysisStack.Clear();
 
@@ -243,6 +245,136 @@ namespace RoslynTool.CsToDsl
                 FunctionOptions = sb.ToString();
             }
             return FunctionOptions;
-        }        
+        }
+
+        internal string CalcTryUsingFuncInfo(DataFlowAnalysis dataFlow, ControlFlowAnalysis ctrlFlow, out List<string> inputs, out List<string> outputs, out string paramsStr)
+        {
+            var sbIn = new StringBuilder();
+            var sbOut = new StringBuilder();
+            inputs = new List<string>();
+            outputs = new List<string>();
+            string prestrIn = string.Empty;
+            string prestrOut = string.Empty;
+            if (ctrlFlow.ReturnStatements.Length > 0 && !string.IsNullOrEmpty(ReturnVarName)) {
+                sbIn.Append(ReturnVarName);
+                prestrIn = ", ";
+                sbOut.Append(ReturnVarName);
+                prestrOut = ", ";
+            }
+            foreach(var v in dataFlow.DataFlowsIn) {
+                if (v.Name == "this")
+                    continue;
+                inputs.Add(v.Name);
+                sbIn.Append(prestrIn);
+                sbIn.Append(v.Name);
+                prestrIn = ", ";
+            }
+            foreach(var v in dataFlow.DataFlowsOut) {
+                outputs.Add(v.Name);
+                if (!inputs.Contains(v.Name)) {
+                    sbIn.Append(prestrIn);
+                    sbIn.Append(v.Name);
+                    prestrIn = ", ";
+                }
+                sbOut.Append(prestrOut);
+                sbOut.Append(v.Name);
+                prestrOut = ", ";
+            }
+            paramsStr = sbIn.ToString();
+            return sbOut.ToString();
+        }
+
+        internal string CalcTryUsingFuncOptions(DataFlowAnalysis dataFlow, ControlFlowAnalysis ctrlFlow, List<string> inputs, List<string> outputs)
+        {            
+            string returnType = "System.Int32";
+            string returnTypeKind = "TypeKind.Struct";
+
+            var sb = new StringBuilder();
+            sb.AppendFormat("needfuncinfo({0}), rettype(return, {1}, {2}, 0)", NeedFuncInfo ? "true" : "false", returnType, returnTypeKind);
+            if (ctrlFlow.ReturnStatements.Length > 0 && !string.IsNullOrEmpty(ReturnVarName)) {
+                returnType = ClassInfo.GetFullName(SemanticInfo.ReturnType);
+                if (string.IsNullOrEmpty(returnType))
+                    returnType = "null";
+                returnTypeKind = "TypeKind." + SemanticInfo.ReturnType.TypeKind.ToString();
+                sb.Append(", ");
+                sb.AppendFormat("rettype({0}, {1}, {2}, 1)", ReturnVarName, returnType, returnTypeKind);
+            }
+            foreach (var v in dataFlow.DataFlowsOut) {
+                sb.Append(", ");
+                int refOrOut = 2;
+                if (inputs.Contains(v.Name)) {
+                    refOrOut = 1;
+                }
+                var psym = v as IParameterSymbol;
+                var lsym = v as ILocalSymbol;
+                if (null != psym) {
+                    var type = ClassInfo.GetFullName(psym.Type);
+                    var typeKind = psym.Type.TypeKind.ToString();
+                    if (string.IsNullOrEmpty(type))
+                        type = "null";
+                    sb.AppendFormat("rettype({0}, {1}, {2}, {3})", v.Name, type, typeKind, refOrOut);
+                }
+                else if (null != lsym) {
+                    var type = ClassInfo.GetFullName(lsym.Type);
+                    var typeKind = lsym.Type.TypeKind.ToString();
+                    if (string.IsNullOrEmpty(type))
+                        type = "null";
+                    sb.AppendFormat("rettype({0}, {1}, {2}, {3})", v.Name, type, typeKind, refOrOut);
+                }
+            }
+            if (ctrlFlow.ReturnStatements.Length > 0 && !string.IsNullOrEmpty(ReturnVarName)) {
+                sb.Append(", ");
+                sb.AppendFormat("paramtype({0}, {1}, {2}, 1)", ReturnVarName, returnType, returnTypeKind);
+            }
+            foreach (var v in dataFlow.DataFlowsIn) {
+                if (v.Name == "this")
+                    continue;
+                sb.Append(", ");
+                int refOrOut = 0;
+                if (outputs.Contains(v.Name)) {
+                    refOrOut = 1;
+                }
+                var psym = v as IParameterSymbol;
+                var lsym = v as ILocalSymbol;
+                if (null != psym) {
+                    var type = ClassInfo.GetFullName(psym.Type);
+                    var typeKind = psym.Type.TypeKind.ToString();
+                    if (string.IsNullOrEmpty(type))
+                        type = "null";
+                    sb.AppendFormat("paramtype({0}, {1}, {2}, {3})", v.Name, type, typeKind, refOrOut);
+                }
+                else if (null != lsym) {
+                    var type = ClassInfo.GetFullName(lsym.Type);
+                    var typeKind = lsym.Type.TypeKind.ToString();
+                    if (string.IsNullOrEmpty(type))
+                        type = "null";
+                    sb.AppendFormat("paramtype({0}, {1}, {2}, {3})", v.Name, type, typeKind, refOrOut);
+                }
+            }
+            foreach (var v in dataFlow.DataFlowsOut) {
+                sb.Append(", ");
+                int refOrOut = 2;
+                if (inputs.Contains(v.Name)) {
+                    refOrOut = 1;
+                }
+                var psym = v as IParameterSymbol;
+                var lsym = v as ILocalSymbol;
+                if (null != psym) {
+                    var type = ClassInfo.GetFullName(psym.Type);
+                    var typeKind = psym.Type.TypeKind.ToString();
+                    if (string.IsNullOrEmpty(type))
+                        type = "null";
+                    sb.AppendFormat("paramtype({0}, {1}, {2}, {3})", v.Name, type, typeKind, refOrOut);
+                }
+                else if (null != lsym) {
+                    var type = ClassInfo.GetFullName(lsym.Type);
+                    var typeKind = lsym.Type.TypeKind.ToString();
+                    if (string.IsNullOrEmpty(type))
+                        type = "null";
+                    sb.AppendFormat("paramtype({0}, {1}, {2}, {3})", v.Name, type, typeKind, refOrOut);
+                }
+            }
+            return sb.ToString();
+        }
     }
 }

@@ -23,6 +23,12 @@ namespace RoslynTool.CsToDsl
         {
             get { return m_ExistUsing; }
         }
+        public override void VisitSimpleLambdaExpression(SimpleLambdaExpressionSyntax node)
+        { }
+        public override void VisitParenthesizedLambdaExpression(ParenthesizedLambdaExpressionSyntax node)
+        { }
+        public override void VisitAnonymousMethodExpression(AnonymousMethodExpressionSyntax node)
+        { }
         public override void VisitTryStatement(TryStatementSyntax node)
         {
             m_ExistTry = true;

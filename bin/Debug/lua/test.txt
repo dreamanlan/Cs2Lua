@@ -12,20 +12,28 @@ Test = {
 
 	ToList = function(T, enumer)
 		local __cs2lua_func_info = luainitialize();
-		local __method_ret_143_4_150_5;
+		local __retval_0, __retval_1 = luapcall(Test.__ori_ToList, __cs2lua_func_info, T, enumer);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		if not __retval_0 then
+			error(__retval_1);
+			__retval_1 = nil;
+		end;
+		return __retval_1;
+	end,
+	__ori_ToList = function(__cs2lua_func_info, T, enumer)
+		local __method_ret_180_4_187_5;
 		local r;
 		r = newexternlist(System.Collections.Generic.List_T, buildglobalinfoonce("g_System_Collections_Generic_List_T_TypeArgs", getglobalinfo("g_System_Collections_Generic_List_T_TypeArgs") or {T}), buildglobalinfoonce("g_System_Collections_Generic_List_T_TypeKinds", getglobalinfo("g_System_Collections_Generic_List_T_TypeKinds") or {TypeKind.TypeParameter}), "ctor", {});
-		local __foreach_146_8_148_9 = newiterator(__cs2lua_func_info, enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true);
-		for v in getiterator(__foreach_146_8_148_9) do
+		local __foreach_183_8_185_9 = newiterator(__cs2lua_func_info, enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true);
+		for v in getiterator(__foreach_183_8_185_9) do
 			if v == __cs2lua_nil then
 				v = nil;
 			end;
 			r:Add(v);
 		end;
-		recycleiterator(__cs2lua_func_info, __foreach_146_8_148_9);
-		__method_ret_143_4_150_5 = r;
-		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
-		return __method_ret_143_4_150_5;
+		recycleiterator(__cs2lua_func_info, __foreach_183_8_185_9);
+		__method_ret_180_4_187_5 = r;
+		return __method_ret_180_4_187_5;
 	end,
 
 	cctor = function()
@@ -63,6 +71,11 @@ Test = {
 			end,
 
 			set_Item = function(this, ...)
+				local __cs2lua_func_info = luainitialize();
+				luapcall(this.__ori_set_Item, this, __cs2lua_func_info, ...);
+				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+			end,
+			__ori_set_Item = function(this, __cs2lua_func_info, ...)
 				local args;
 				args = wrapparams({...}, System.Nullable_T, TypeKind.Struct);
 				local value;
@@ -124,11 +137,101 @@ Test = {
 				cc = Test.ToList(System.Int32, aa);
 			end,
 
+			testcall = function(this)
+				local __method_ret_139_4_142_5;
+				__method_ret_139_4_142_5 = 1;
+				return __method_ret_139_4_142_5;
+			end,
+
 			test = function(this)
+				local __method_ret_143_4_179_5;
 				local a;
-				a = function()
-					System.Console.Write__String(luastrtocsstr("test"));
+				a = 2;
+				local b;
+				b = 0;
+				local c;
+				c = 1;
+				local aa;
+				aa = function()
+					local __method_ret_146_31_159_9;
+					local __try_ret_147_12_152_13, __try_retval_147_12_152_13;
+					__try_ret_147_12_152_13,__try_retval_147_12_152_13 = luatry(System.Console.Write__String, luastrtocsstr("test"));
+					local __catch_handled_147_12_152_13, __catch_retval_147_12_152_13;
+					__catch_handled_147_12_152_13 = false;
+					__catch_retval_147_12_152_13 = luacatch(__catch_handled_147_12_152_13, __try_retval_147_12_152_13, (not __try_ret_147_12_152_13) and function(ex)
+						__catch_handled_147_12_152_13 = true;
+					end);
+					local __try_ret_153_12_158_13, __try_retval_153_12_158_13;
+					__try_ret_153_12_158_13,__try_retval_153_12_158_13 = luatry(this.testcall, this);
+					if __try_ret_153_12_158_13 then
+						__method_ret_146_31_159_9 = __try_retval_153_12_158_13;
+						__try_retval_153_12_158_13 = 1;
+					end;
+					if __try_ret_153_12_158_13 then 
+						if __try_retval_153_12_158_13 then 
+							if (__try_retval_153_12_158_13 == 1) then 
+								return __method_ret_146_31_159_9;
+							end;
+						end;
+					end;
+					local __catch_handled_153_12_158_13, __catch_retval_153_12_158_13;
+					__catch_handled_153_12_158_13 = false;
+					__catch_retval_153_12_158_13 = luacatch(__catch_handled_153_12_158_13, __try_retval_153_12_158_13, (not __try_ret_153_12_158_13) and function(ex)
+						__catch_handled_153_12_158_13 = true;
+						do
+							__method_ret_146_31_159_9 = 0;
+							return 1;
+						end;
+					end);
+					if __catch_retval_153_12_158_13 then 
+						if (__catch_retval_153_12_158_13 == 1) then 
+							return __method_ret_146_31_159_9;
+						end;
+					end;
+					return nil;
 				end;
+				local __try_ret_161_8_166_9, __try_retval_161_8_166_9;
+				__try_ret_161_8_166_9,__try_retval_161_8_166_9 = luatry(System.Console.Write__String, luastrtocsstr("test"));
+				local __catch_handled_161_8_166_9, __catch_retval_161_8_166_9;
+				__catch_handled_161_8_166_9 = false;
+				__catch_retval_161_8_166_9 = luacatch(__catch_handled_161_8_166_9, __try_retval_161_8_166_9, (not __try_ret_161_8_166_9) and function(ex)
+					__catch_handled_161_8_166_9 = true;
+				end);
+				local __try_ret_167_8_176_9, __try_retval_167_8_176_9;
+				__try_ret_167_8_176_9,__try_retval_167_8_176_9,__method_ret_143_4_179_5 = luatry(aa);
+				if __try_retval_167_8_176_9 then
+					__method_ret_143_4_179_5 = __try_retval_167_8_176_9;
+					__try_retval_167_8_176_9 = 1;
+				end;
+				if __try_ret_167_8_176_9 then 
+					System.Console.WriteLine__String__Object__Object__Object(luastrtocsstr("{0} {1} {2}"), a, b, c);
+					if __try_retval_167_8_176_9 then 
+						if (__try_retval_167_8_176_9 == 1) then 
+							return __method_ret_143_4_179_5;
+						end;
+					end;
+				end;
+				local __catch_handled_167_8_176_9, __catch_retval_167_8_176_9;
+				__catch_handled_167_8_176_9 = false;
+				__catch_retval_167_8_176_9 = luacatch(__catch_handled_167_8_176_9, __try_retval_167_8_176_9, (not __try_ret_167_8_176_9) and function(e)
+					__catch_handled_167_8_176_9 = true;
+					System.Console.WriteLine__String__Object__Object__Object(luastrtocsstr("ex:{0} {1} {2}"), a, b, c);
+					do
+						__method_ret_143_4_179_5 = 0;
+						return 1;
+					end;
+				end);
+				System.Console.WriteLine__String__Object__Object__Object(luastrtocsstr("{0} {1} {2}"), a, b, c);
+				if __catch_retval_167_8_176_9 then 
+					if (__catch_retval_167_8_176_9 == 1) then 
+						return __method_ret_143_4_179_5;
+					end;
+				end;
+				if (not __try_ret_167_8_176_9) then 
+					System.Console.WriteLine__String__Object__Object__Object(luastrtocsstr("{0} {1} {2}"), a, b, c);
+				end;
+				if (a > 1) then this.m_IntVal = aa() else this.m_IntVal = c end;
+				return __method_ret_143_4_179_5;
 			end,
 
 			ctor = function(this)
@@ -147,6 +250,7 @@ Test = {
 
 		local obj_build = function()
 			return {
+				m_IntVal = 0,
 				__ctor_called = false,
 			};
 		end;
@@ -165,6 +269,7 @@ Test = {
 
 	__obj_fields = {
 		m_DataChangeCallBackInfoPool = true,
+		m_IntVal = true,
 		__ctor_called = true,
 	},
 
@@ -179,6 +284,9 @@ Test = {
 			Kind = MethodKind.PropertySet,
 		},
 		Init = {
+			Kind = MethodKind.Ordinary,
+		},
+		testcall = {
 			Kind = MethodKind.Ordinary,
 		},
 		test = {

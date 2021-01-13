@@ -1,2 +1,0 @@
-============<<<Semantic Error:test>>>============
-test.cs(110,22): error CS0266: Cannot implicitly convert type 'int?' to 'int'. An explicit conversion exists (are you missing a cast?)

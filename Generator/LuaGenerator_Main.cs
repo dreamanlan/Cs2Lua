@@ -323,6 +323,39 @@ namespace Generator
                                     }
                                 }
                             }
+                            //检查是否有拆分出来的函数
+                            while (s_TryUsingFuncs.Count > 0) {
+                                var fdef = s_TryUsingFuncs.Dequeue();
+                                if (null != fdef && fdef.GetFunctionNum() >= 2) {
+                                    var first = fdef.First;
+                                    var second = fdef.Second;
+                                    var funcOpts = new FunctionOptions();
+                                    ParseFunctionOptions(second, funcOpts);
+                                    if (first.HaveStatement()) {
+                                        var fcall = first;
+                                        if (first.IsHighOrder)
+                                            fcall = first.LowerOrderFunction;
+                                        var mname = fcall.GetParamId(1);
+                                        bool isStatic = fcall.GetParamId(2) != "this";
+                                        System.Diagnostics.Debug.Assert(isStatic);
+                                        int rct;
+                                        int.TryParse(first.GetParamId(3), out rct);
+                                        sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
+                                        sb.Append("function(");
+                                        if (funcOpts.NeedFuncInfo) {
+                                            sb.Append("__cs2lua_func_info");
+                                            if (fcall.GetParamNum() > 4)
+                                                sb.Append(", ");
+                                        }
+                                        GenerateFunctionParams(fcall, sb, 4);
+                                        sb.AppendLine(")");
+                                        ++indent;
+                                        GenerateStatements(first, sb, indent, funcOpts, calculator);
+                                        --indent;
+                                        sb.AppendFormatLine("{0}end,", GetIndentString(indent));
+                                    }
+                                }
+                            }
                         }
                         sb.AppendLine();
                     }
@@ -477,6 +510,40 @@ namespace Generator
                                             sb.AppendFormatLine("{0}end),", GetIndentString(indent));
                                         else
                                             sb.AppendFormatLine("{0}end,", GetIndentString(indent));
+                                    }
+                                }
+                            }
+                            //检查是否有拆分出来的函数
+                            while (s_TryUsingFuncs.Count > 0) {
+                                var fdef = s_TryUsingFuncs.Dequeue();
+                                if (null != fdef && fdef.GetFunctionNum() >= 2) {
+                                    var first = fdef.First;
+                                    var second = fdef.Second;
+                                    var funcOpts = new FunctionOptions();
+                                    ParseFunctionOptions(second, funcOpts);
+                                    if (first.HaveStatement()) {
+                                        var fcall = first;
+                                        if (first.IsHighOrder)
+                                            fcall = first.LowerOrderFunction;
+                                        var mname = fcall.GetParamId(1);
+                                        bool isInstance = fcall.GetParamId(2) == "this";
+                                        System.Diagnostics.Debug.Assert(isInstance);
+                                        int rct;
+                                        int.TryParse(first.GetParamId(3), out rct);
+                                        sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
+                                        sb.Append("function(this");
+                                        if (funcOpts.NeedFuncInfo) {
+                                            sb.Append(", ");
+                                            sb.Append("__cs2lua_func_info");
+                                        }
+                                        if (fcall.GetParamNum() > 4)
+                                            sb.Append(", ");
+                                        bool haveParams = GenerateFunctionParams(fcall, sb, 4);
+                                        sb.AppendLine(")");
+                                        ++indent;
+                                        GenerateStatements(first, sb, indent, funcOpts, calculator);
+                                        --indent;
+                                        sb.AppendFormatLine("{0}end,", GetIndentString(indent));
                                     }
                                 }
                             }
@@ -1195,6 +1262,16 @@ namespace Generator
                             sb.Append(")");
                     }
                 }
+            }
+            else if ((id == "setstatic" || id == "setexternstatic") && data.GetParamNum() > 3 && data.GetParamId(3) == "condexp") {
+                int condIx = 3;
+                Dsl.FunctionData condExp = data.GetParam(3) as Dsl.FunctionData;
+                GenerateMemberAssignmentCondExp(data, condIx, condExp, sb, indent, firstLineUseIndent, funcOpts, calculator);
+            }
+            else if ((id == "setinstance" || id == "setexterninstance") && data.GetParamNum() > 4 && data.GetParamId(4) == "condexp") {
+                int condIx = 4;
+                Dsl.FunctionData condExp = data.GetParam(4) as Dsl.FunctionData;
+                GenerateMemberAssignmentCondExp(data, condIx, condExp, sb, indent, firstLineUseIndent, funcOpts, calculator);
             }
             else {
                 if (firstLineUseIndent) {
@@ -2612,37 +2689,49 @@ namespace Generator
                     //函数体部分
                     if (data.HaveStatement()) {
                         sb.AppendLine();
-                        //赋值操作会++indent
-                        //++indent;
+                        ++indent;
                         GenerateStatements(data, sb, indent, funcOpts, calculator);
                         --indent;
                     }
                     sb.AppendFormat("{0}end)", GetIndentString(indent));
                 }
                 else {
-                    //赋值操作会++indent，所以这里输出语句时会缩进一次，这样恰好能看出原来的try块的范围，先保持此格式
                     bool canSimplify = false;
                     if (data.GetParamNum() == 1) {
                         var bodyStatement = data.GetParam(0) as Dsl.FunctionData;
                         if (null != bodyStatement) {
                             var name = bodyStatement.GetId();
+                            Dsl.FunctionData callPart = bodyStatement;
                             string funcRetVar = null;
                             string tryRetVar = null;
                             string tryRetVal = null;
-                            if (!bodyStatement.IsHighOrder && (name == "callstatic" || name == "callexternstatic" || name == "callinstance" || name == "callexterninstance")) {
+                            if (!bodyStatement.IsHighOrder && (name == "callstatic" || name == "callexternstatic" || name == "callinstance" || name == "callexterninstance" || name == "calldelegation" || name == "callexterndelegation")) {
+                                //不带返回值的函数调用可以简化
+                                /**
+                                 *  callexternstatic(System.Console, "Write__String", dslstrtocsstr("test"));
+                                 */
                                 canSimplify = true;
                             }
                             else if (name == "block" && bodyStatement.GetParamNum() == 3) {
+                                //带一个返回值的函数调用可以简化，需要调整方法返回值与xpcall返回值
+                                /**
+                                 *  block{
+					             *      __method_ret_146_31_159_9 = callinstance(this, Test, "testcall");
+					             *      __try_retval_153_12_158_13 = 1;
+					             *      break;
+					             *  };
+                                 */
                                 var funcCall = bodyStatement.GetParam(0) as Dsl.FunctionData;
                                 var retValVar = bodyStatement.GetParam(1) as Dsl.FunctionData;
                                 var breakStatement = bodyStatement.GetParam(2) as Dsl.ValueData;
                                 if (null != funcCall && null != retValVar && null != breakStatement && funcCall.GetId() == "=" && retValVar.GetId() == "=" && breakStatement.GetId() == "break") {
-                                    bodyStatement = funcCall.GetParam(1) as Dsl.FunctionData;
-                                    if (null != bodyStatement && !bodyStatement.IsHighOrder) {
-                                        name = bodyStatement.GetId();
-                                        if (name == "callstatic" || name == "callexternstatic" || name == "callinstance" || name == "callexterninstance") {
+                                    var retPart = funcCall.GetParam(0) as Dsl.ValueData;
+                                    callPart = funcCall.GetParam(1) as Dsl.FunctionData;
+                                    if (null != retPart && null != callPart && !callPart.IsHighOrder) {
+                                        name = callPart.GetId();
+                                        if (name == "callstatic" || name == "callexternstatic" || name == "callinstance" || name == "callexterninstance" || name == "calldelegation" || name == "callexterndelegation") {
                                             canSimplify = true;
-                                            funcRetVar = funcCall.GetParamId(0);
+                                            funcRetVar = retPart.GetId();
                                             tryRetVar = retValVar.GetParamId(0);
                                             tryRetVal = retValVar.GetParamId(1);
                                         }
@@ -2653,21 +2742,21 @@ namespace Generator
                                 sb.Append("(");
                                 //只有一个函数调用的，正常模拟
                                 if (name == "callstatic" || name == "callexternstatic") {
-                                    var obj = bodyStatement.Params[0];
-                                    var member = bodyStatement.Params[1];
+                                    var obj = callPart.Params[0];
+                                    var member = callPart.Params[1];
                                     var mid = member.GetId();
                                     GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
                                     sb.AppendFormat(".{0}", mid);
                                     int start = 2;
-                                    if (bodyStatement.GetParamNum() > start) {
+                                    if (callPart.GetParamNum() > start) {
                                         sb.Append(", ");
                                     }
-                                    GenerateArguments(bodyStatement, sb, indent, start, funcOpts, calculator);
+                                    GenerateArguments(callPart, sb, indent, start, funcOpts, calculator);
                                 }
                                 else if (name == "callinstance" || name == "callexterninstance") {
-                                    var obj = bodyStatement.Params[0];
-                                    var className = CalcTypeString(data.GetParam(1));
-                                    var member = bodyStatement.Params[2];
+                                    var obj = callPart.Params[0];
+                                    var className = CalcTypeString(callPart.GetParam(1));
+                                    var member = callPart.Params[2];
                                     var mid = member.GetId();
                                     var objCd = obj as Dsl.FunctionData;
                                     GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
@@ -2680,17 +2769,28 @@ namespace Generator
                                     sb.Append(", ");
                                     GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
                                     int start = 3;
-                                    if (bodyStatement.GetParamNum() > start) {
+                                    if (callPart.GetParamNum() > start) {
                                         sb.Append(", ");
                                     }
-                                    GenerateArguments(bodyStatement, sb, indent, start, funcOpts, calculator);
+                                    GenerateArguments(callPart, sb, indent, start, funcOpts, calculator);
+                                }
+                                else if (name == "calldelegation" || name == "callexterndelegation") {
+                                    var obj = callPart.Params[0];
+                                    GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
+                                    int start = 2;
+                                    if (callPart.GetParamNum() > start) {
+                                        sb.Append(", ");
+                                    }
+                                    GenerateArguments(callPart, sb, indent, start, funcOpts, calculator);
                                 }
                                 if (null == funcRetVar) {
                                     sb.Append(")");
                                 }
                                 else {
                                     sb.AppendLine(");");
-                                    --indent;
+                                    //xpcall直接调用函数时，需要对返回结果进行调整
+                                    //__try_ret_153_12_158_13,__try_retval_153_12_158_13 = luatry(this.testcall, this);
+                                    //其中__try_retval实际上是__method_ret的值，然后__try_retval的值实际保存在tryRetVal变量里
                                     sb.AppendFormatLine("{0}if {1} then", GetIndentString(indent), retVar);
                                     ++indent;
                                     sb.AppendFormatLine("{0}{1} = {2};", GetIndentString(indent), funcRetVar, tryRetVar);
@@ -2930,6 +3030,147 @@ namespace Generator
                 }
                 --s_NestedFunctionCount;
             }
+            else if (id == "dsltryfunc" || id == "dslusingfunc") {
+                if (id == "dslusingfunc")
+                    sb.Append("luausing");
+                else
+                    sb.Append("luatry");
+                var first = data.First;
+                var fcall = first;
+                var fbody = first;
+                if (first.IsHighOrder) {
+                    fcall = first.LowerOrderFunction;
+                }
+                var retVar = fcall.GetParamId(0);
+                bool canSimplify = false;
+                //检查是否可以不用拆分函数，典型情形是try块里只有一个函数调用或return+函数调用的情形
+                if (fbody.GetParamNum() == 1) {
+                    var bodyStatement = fbody.GetParam(0) as Dsl.FunctionData;
+                    if (null != bodyStatement) {
+                        var name = bodyStatement.GetId();
+                        Dsl.FunctionData callPart = bodyStatement;
+                        string funcRetVar = null;
+                        string tryRetVar = null;
+                        string tryRetVal = null;
+                        if (!bodyStatement.IsHighOrder && (name == "callstatic" || name == "callexternstatic" || name == "callinstance" || name == "callexterninstance" || name == "calldelegation" || name == "callexterndelegation")) {
+                            //不带返回值的函数调用可以简化
+                            /**
+                             *  callexternstatic(System.Console, "Write__String", dslstrtocsstr("test"));
+                             */
+                            canSimplify = true;
+                        }
+                        else if (name == "block" && bodyStatement.GetParamNum() == 2) {
+                            //带一个返回值的函数调用可以简化，需要调整方法返回值与xpcall返回值
+                            /**
+                             *  block{
+				             *      __method_ret_143_4_177_5 = callexterndelegation(aa, "System.Func_TResult.Invoke");
+				             *      return(1, __method_ret_143_4_177_5);
+				             *  };
+                             */
+                            var funcCall = bodyStatement.GetParam(0) as Dsl.FunctionData;
+                            var returnStatement = bodyStatement.GetParam(1) as Dsl.FunctionData;
+                            if (null != funcCall && null != returnStatement && funcCall.GetId() == "=" && returnStatement.GetId() == "return") {
+                                var retPart = funcCall.GetParam(0) as Dsl.ValueData;
+                                callPart = funcCall.GetParam(1) as Dsl.FunctionData;
+                                if (null != retPart && null != callPart && !callPart.IsHighOrder) {
+                                    name = callPart.GetId();
+                                    if (name == "callstatic" || name == "callexternstatic" || name == "callinstance" || name == "callexterninstance" || name == "calldelegation" || name == "callexterndelegation") {
+                                        canSimplify = true;
+                                        funcRetVar = retPart.GetId();
+                                        tryRetVar = retVar;
+                                        tryRetVal = returnStatement.GetParamId(0);
+                                    }
+                                }
+                            }
+                        }
+                        if (canSimplify) {
+                            sb.Append("(");
+                            //只有一个函数调用的，正常模拟
+                            if (name == "callstatic" || name == "callexternstatic") {
+                                var obj = callPart.Params[0];
+                                var member = callPart.Params[1];
+                                var mid = member.GetId();
+                                GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
+                                sb.AppendFormat(".{0}", mid);
+                                int start = 2;
+                                if (callPart.GetParamNum() > start) {
+                                    sb.Append(", ");
+                                }
+                                GenerateArguments((FunctionData)callPart, sb, indent, start, funcOpts, calculator);
+                            }
+                            else if (name == "callinstance" || name == "callexterninstance") {
+                                var obj = callPart.Params[0];
+                                var className = CalcTypeString(callPart.GetParam(1));
+                                var member = callPart.Params[2];
+                                var mid = member.GetId();
+                                var objCd = obj as Dsl.FunctionData;
+                                GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
+                                if (null != objCd && objCd.GetId() == "getinstance" && objCd.GetParamNum() == 4 && objCd.GetParamId(3) == "base") {
+                                    sb.AppendFormat(".__self__{0}", mid);
+                                }
+                                else {
+                                    sb.AppendFormat(".{0}", mid);
+                                }
+                                sb.Append(", ");
+                                GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
+                                int start = 3;
+                                if (callPart.GetParamNum() > start) {
+                                    sb.Append(", ");
+                                }
+                                GenerateArguments((FunctionData)callPart, sb, indent, start, funcOpts, calculator);
+                            }
+                            else if (name == "calldelegation" || name == "callexterndelegation") {
+                                var obj = callPart.Params[0];
+                                GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
+                                int start = 2;
+                                if (callPart.GetParamNum() > start) {
+                                    sb.Append(", ");
+                                }
+                                GenerateArguments((FunctionData)callPart, sb, indent, start, funcOpts, calculator);
+                            }
+                            if (null == funcRetVar) {
+                                sb.Append(")");
+                            }
+                            else {
+                                sb.AppendLine(");");
+                                //xpcall直接调用函数时，需要对返回结果进行调整
+                                //__try_ret_167_8_176_9,__try_retval_167_8_176_9,__method_ret_143_4_177_5 = luatry(aa);
+                                //其中__try_retval实际上是__method_ret的值，然后__try_retval的值实际保存在tryRetVal变量里
+                                sb.AppendFormatLine("{0}if {1} then", GetIndentString(indent), retVar);
+                                ++indent;
+                                sb.AppendFormatLine("{0}{1} = {2};", GetIndentString(indent), funcRetVar, tryRetVar);
+                                sb.AppendFormatLine("{0}{1} = {2};", GetIndentString(indent), tryRetVar, tryRetVal);
+                                --indent;
+                                sb.AppendFormat("{0}end", GetIndentString(indent));
+                            }
+                        }
+                    }
+                }
+                if (!canSimplify) {
+                    //将要生成的__try/using_func的信息放到队列，等当前函数生成完毕后生成
+                    s_TryUsingFuncs.Enqueue(data);
+                    //生成调用__try/using_func的代码
+                    var mname = fcall.GetParamId(1);
+                    string classOrThis = CalcTypeString(fcall.GetParam(2));
+                    int rct;
+                    int.TryParse(first.GetParamId(3), out rct);
+                    string prestr = ", ";
+                    sb.Append("(");
+                    sb.AppendFormat("{0}.{1}", classOrThis, mname);
+                    if (classOrThis == "this") {
+                        sb.Append(prestr);
+                        sb.Append("this");
+                    }
+                    if (funcOpts.NeedFuncInfo) {
+                        sb.Append(prestr);
+                        sb.Append("__cs2lua_func_info");
+                    }
+                    if (fcall.GetParamNum() > 4)
+                        sb.Append(prestr);
+                    bool haveParams = GenerateFunctionParams(fcall, sb, 4);
+                    sb.Append(")");
+                }
+            }
             else {
                 foreach (var funcData in data.Functions) {
                     var fcall = funcData;
@@ -3027,6 +3268,91 @@ namespace Generator
                 sb.Append(" = (");
                 GenerateSyntaxComponent(p5, sb, indent, false, funcOpts, calculator);
                 sb.Append(")()");
+            }
+            sb.Append(" end");
+        }
+        private static void GenerateMemberAssignmentCondExp(Dsl.FunctionData data, int condIx, Dsl.FunctionData condExp, StringBuilder sb, int indent, bool firstLineUseIndent, FunctionOptions funcOpts, DslExpression.DslCalculator calculator)
+        {
+            var p1 = condExp.GetParam(0);
+            var p2 = condExp.GetParamId(1);
+            var p3 = condExp.GetParam(2);
+            var p3Func = p3 as Dsl.FunctionData;
+            var p4 = condExp.GetParamId(3);
+            var p5 = condExp.GetParam(4);
+            var p5Func = p5 as Dsl.FunctionData;
+            string p2n = p2;
+            var p3n = p3;
+            string p4n = p4;
+            var p5n = p5;
+            bool p3IsCondExp = false;
+            bool p5IsCondExp = false;
+            if (p2 == "false" && null != p3Func && p3Func.GetId() == "condexp") {
+                p3IsCondExp = true;
+            }
+            else if (p2 == "false" && null != p3Func && !ExistEmbedFunctionObject(p3Func)) {
+                var func = p3Func.GetParam(0) as Dsl.FunctionData;
+                if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
+                    func = func.GetParam(0) as Dsl.FunctionData;
+                }
+                if (null != func && func.GetId() == "funcobjret") {
+                    p2n = "true";
+                    p3n = func.GetParam(0);
+                }
+            }
+            if (p4 == "false" && null != p5Func && p5Func.GetId() == "condexp") {
+                p5IsCondExp = true;
+            }
+            else if (p4 == "false" && null != p5Func && !ExistEmbedFunctionObject(p5Func)) {
+                var func = p5Func.GetParam(0) as Dsl.FunctionData;
+                if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
+                    func = func.GetParam(0) as Dsl.FunctionData;
+                }
+                if (null != func && func.GetId() == "funcobjret") {
+                    p4n = "true";
+                    p5n = func.GetParam(0);
+                }
+            }
+
+            if (firstLineUseIndent) {
+                sb.AppendFormat("{0}", GetIndentString(indent));
+            }
+            sb.Append("if ");
+            GenerateSyntaxComponent(p1, sb, indent, false, funcOpts, calculator);
+            sb.Append(" then ");
+            if (p3IsCondExp) {
+                GenerateMemberAssignmentCondExp(data, condIx, p3Func, sb, indent, false, funcOpts, calculator);
+            }
+            else if (p2n == "true") {
+                data.SetParam(condIx, p3n);
+                GenerateSyntaxComponent(data, sb, indent, false, funcOpts, calculator);
+            }
+            else {
+                var p3f = new Dsl.FunctionData();
+                p3f.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
+                var p3fl = new Dsl.FunctionData();
+                p3fl.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
+                p3fl.AddParam(p3);
+                p3f.LowerOrderFunction = p3fl;
+                data.SetParam(condIx, p3f);
+                GenerateSyntaxComponent(data, sb, indent, false, funcOpts, calculator);
+            }
+            sb.Append(" else ");
+            if (p5IsCondExp) {
+                GenerateMemberAssignmentCondExp(data, condIx, p5Func, sb, indent, false, funcOpts, calculator);
+            }
+            else if (p4n == "true") {
+                data.SetParam(condIx, p5n);
+                GenerateSyntaxComponent(data, sb, indent, false, funcOpts, calculator);
+            }
+            else {
+                var p5f = new Dsl.FunctionData();
+                p5f.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
+                var p5fl = new Dsl.FunctionData();
+                p5fl.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
+                p5fl.AddParam(p5);
+                p5f.LowerOrderFunction = p5fl;
+                data.SetParam(condIx, p5f);
+                GenerateSyntaxComponent(data, sb, indent, false, funcOpts, calculator);
             }
             sb.Append(" end");
         }
@@ -3318,7 +3644,7 @@ namespace DslExpression
                             prestr = ", ";
                         }
                         if (null == iargs) {
-                            if(start < funcData.GetParamNum()) {
+                            if (start < funcData.GetParamNum()) {
                                 sb.Append(prestr);
                             }
                             Generator.LuaGenerator.GenerateArguments(funcData, sb, indent, start, funcOpts, Calculator);

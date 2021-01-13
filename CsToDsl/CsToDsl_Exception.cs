@@ -26,6 +26,7 @@ namespace RoslynTool.CsToDsl
         public override void VisitTryStatement(TryStatementSyntax node)
         {
             if (null != node.Block) {
+                ClassInfo ci = m_ClassInfoStack.Peek();
                 MethodInfo mi = m_MethodInfoStack.Peek();
 
                 string srcPos = GetSourcePosForVar(node);
@@ -41,15 +42,60 @@ namespace RoslynTool.CsToDsl
                 returnAnalysis0.Visit(node.Block);
                 mi.TempReturnAnalysisStack.Push(returnAnalysis0);
 
-                CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}) = dsltry({3}, {1}){{", GetIndentString(), retVar, retValVar, returnAnalysis0.ExistReturnInLoopOrSwitch ? "true" : "false");
-                CodeBuilder.AppendLine();
-                ++m_Indent;
-                ++mi.TryUsingLayer;
-                VisitBlock(node.Block);
-                --mi.TryUsingLayer;
-                --m_Indent;
-                CodeBuilder.AppendFormat("{0}}};", GetIndentString());
-                CodeBuilder.AppendLine();
+                if (mi.IsAnonymousOrLambdaMethod) {
+                    //嵌入函数里的try块不能拆分成方法
+                    CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}) = dsltry({3}, {1}){{", GetIndentString(), retVar, retValVar, returnAnalysis0.ExistReturnInLoopOrSwitch ? "true" : "false");
+                    CodeBuilder.AppendLine();
+                    ++m_Indent;
+                    ++mi.TryUsingLayer;
+                    VisitBlock(node.Block);
+                    --mi.TryUsingLayer;
+                    --m_Indent;
+                    CodeBuilder.AppendFormat("{0}}};", GetIndentString());
+                    CodeBuilder.AppendLine();
+                }
+                else {
+                    //普通函数里的try块拆分成方法
+                    var dataFlow = m_Model.AnalyzeDataFlow(node.Block);
+                    var ctrlFlow = m_Model.AnalyzeControlFlow(node.Block);
+                    List<string> inputs, outputs;
+                    string paramsStr;
+                    string outParamsStr = mi.CalcTryUsingFuncInfo(dataFlow, ctrlFlow, out inputs, out outputs, out paramsStr);
+
+                    returnAnalysis0.OutParamsStr = outParamsStr;
+
+                    string prestr = ", ";
+                    string tryFunc = string.Format("__try_func_{0}", srcPos);
+                    bool isStatic = mi.SemanticInfo.IsStatic;
+
+                    CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}", GetIndentString(), retVar, retValVar);
+                    if (!string.IsNullOrEmpty(outParamsStr)) {
+                        CodeBuilder.Append(prestr);
+                        CodeBuilder.Append(outParamsStr);
+                    }
+                    CodeBuilder.AppendFormat(") = dsltryfunc({0}, {1}, {2}, {3}", retValVar, tryFunc, isStatic ? ci.Key : "this", dataFlow.DataFlowsOut.Length + (string.IsNullOrEmpty(mi.ReturnVarName) ? 1 : 2));
+                    if (!string.IsNullOrEmpty(paramsStr)) {
+                        CodeBuilder.Append(prestr);
+                        CodeBuilder.Append(paramsStr);
+                    }
+                    CodeBuilder.AppendLine("){");
+                    ++m_Indent;
+                    ++mi.TryUsingLayer;
+                    VisitBlock(node.Block);
+                    if (outputs.Count > 0 && ctrlFlow.ReturnStatements.Length <= 0) {
+                        //return(0)代表非try块里的返回语句
+                        CodeBuilder.AppendFormat("{0}return(0", GetIndentString());
+                        if (!string.IsNullOrEmpty(outParamsStr)) {
+                            CodeBuilder.Append(prestr);
+                            CodeBuilder.Append(outParamsStr);
+                        }
+                        CodeBuilder.AppendLine(");");
+                    }
+                    --mi.TryUsingLayer;
+                    --m_Indent;
+                    CodeBuilder.AppendFormat("{0}}}options[{1}];", GetIndentString(), mi.CalcTryUsingFuncOptions(dataFlow, ctrlFlow, inputs, outputs));
+                    CodeBuilder.AppendLine();
+                }
 
                 mi.TempReturnAnalysisStack.Pop();
                 mi.TryCatchUsingOrLoopSwitchStack.Pop();
@@ -124,7 +170,6 @@ namespace RoslynTool.CsToDsl
 
             CodeBuilder.AppendFormat("{0}function(", GetIndentString());
             if (null != node.Declaration) {
-                CodeBuilder.Append(", ");
                 CodeBuilder.Append(node.Declaration.Identifier.Text);
             }
             CodeBuilder.Append("){");

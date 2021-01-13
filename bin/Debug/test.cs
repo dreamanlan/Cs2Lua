@@ -105,7 +105,7 @@ internal sealed class DataChangeCallBackInfo : ICs2LuaPoolAllocatedObjectEx<Data
 
 class Test
 {
-    public int this[params int?[] args]
+    public int? this[params int?[] args]
     {
         get { return args[0]; }
         set { args[0] = value; }
@@ -137,9 +137,46 @@ class Test
         var act = (Action)(()=> { Console.Write(ia); });
         var cc = ToList(aa);
     }
-    public void test()
+    public int testcall()
     {
-        var a = new Action(()=> { Console.Write("test"); });
+        return 1;
+    }
+    public int test()
+    {
+        int a = 2, b = 0, c = 1;
+        var aa = new Func<int>(()=> {
+            try {
+                Console.Write("test");
+            }
+            catch(Exception ex) {
+
+            }
+            try {
+                return testcall();
+            }
+            catch (Exception ex) {
+                return 0;
+            }
+        });
+
+        try {
+            Console.Write("test");
+        }
+        catch (Exception ex) {
+
+        }
+        try {
+            return aa();
+        }
+        catch(Exception e) {
+            Console.WriteLine("ex:{0} {1} {2}", a, b, c);
+            return 0;
+        }
+        finally {
+            Console.WriteLine("{0} {1} {2}", a, b, c);
+        }
+
+        this.m_IntVal = a > 1 ? aa() : c;
     }
     internal static List<T> ToList<T>(IEnumerable<T> enumer)
     {
@@ -150,4 +187,5 @@ class Test
         return r;
     }
     private Cs2LuaObjectPoolEx<DataChangeCallBackInfo> m_DataChangeCallBackInfoPool = new Cs2LuaObjectPoolEx<DataChangeCallBackInfo>();
+    private int m_IntVal = 0;
 }

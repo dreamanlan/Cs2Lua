@@ -36,7 +36,7 @@ class(Cs2LuaObjectPoolEx_DataChangeCallBackInfo) {
 			setinstancedelegation(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_Destroyer", delegationset(false, this, "m_Destroyer", SymbolKind.Field, destroyer));
 			local(i); i = 0;
 			while( execbinary("<", i, initPoolSize, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
-				local(t); t = creater();
+				local(t); t = callexterndelegation(creater, "System.Func_TResult.Invoke");
 				callinstance(t, ICs2LuaPoolAllocatedObjectEx_DataChangeCallBackInfo, "InitPool", this);
 				callexterninstance(getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_UnusedObjects"), System.Collections.Generic.Queue_T, "Enqueue", t);
 			i = execbinary("+", i, 1, null, null, null, null);
@@ -48,7 +48,7 @@ class(Cs2LuaObjectPoolEx_DataChangeCallBackInfo) {
 				__method_ret_44_4_55_5 = callexterninstance(getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_UnusedObjects"), System.Collections.Generic.Queue_T, "Dequeue");
 				return(__method_ret_44_4_55_5);
 			}else{
-				local(t); t = getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_Creater")();
+				local(t); t = callexterndelegation(getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_Creater"), "System.Func_TResult.Invoke");
 				if( execbinary("!=", null, t, System.Object, System.Object, TypeKind.Class, TypeKind.Class) ){
 					callinstance(t, ICs2LuaPoolAllocatedObjectEx_DataChangeCallBackInfo, "InitPool", this);
 				};
@@ -65,7 +65,7 @@ class(Cs2LuaObjectPoolEx_DataChangeCallBackInfo) {
 		Clear = deffunc(0)args(this){
 			if( delegationcomparewithnil(false, this, "m_Destroyer", SymbolKind.Field, false) ){
 				foreach(__foreach_65_12_67_13, item, getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_UnusedObjects"), System.Collections.Generic.Queue_T, System.Collections.Generic.Queue_T, true){
-					getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_Destroyer")(item);
+					callexterndelegation(getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_Destroyer"), "System.Action_T.Invoke", item);
 				};
 			};
 			callexterninstance(getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_UnusedObjects"), System.Collections.Generic.Queue_T, "Clear");

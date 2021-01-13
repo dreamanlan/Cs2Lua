@@ -18,6 +18,12 @@ namespace RoslynTool.CsToDsl
         {
             get { return m_YieldCount; }
         }
+        public override void VisitSimpleLambdaExpression(SimpleLambdaExpressionSyntax node)
+        { }
+        public override void VisitParenthesizedLambdaExpression(ParenthesizedLambdaExpressionSyntax node)
+        { }
+        public override void VisitAnonymousMethodExpression(AnonymousMethodExpressionSyntax node)
+        { }
         public override void VisitYieldStatement(YieldStatementSyntax node)
         {
             ++m_YieldCount;

@@ -35,17 +35,30 @@ namespace RoslynTool.CsToDsl
 
                 if (mi.TryUsingLayer > 0 && mi.TryCatchUsingOrLoopSwitchStack.Peek()) {
                     var returnAnalysis = mi.TempReturnAnalysisStack.Peek();
-                    if (returnAnalysis.ExistReturnInLoopOrSwitch || null == returnAnalysis.RetValVar) {
-                        //return(3)代表是tryusing块里的break语句
-                        CodeBuilder.AppendFormat("{0}return(3);", GetIndentString());
-                        CodeBuilder.AppendLine();
+                    if (mi.IsAnonymousOrLambdaMethod) {
+                        if (returnAnalysis.ExistReturnInLoopOrSwitch || null == returnAnalysis.RetValVar) {
+                            //return(3)代表是tryusing块里的break语句
+                            CodeBuilder.AppendFormat("{0}return(3);", GetIndentString());
+                            CodeBuilder.AppendLine();
+                        }
+                        else {
+                            //可以不使用函数对象实现的try块，不能使用return语句，换成变量赋值与break
+                            CodeBuilder.AppendFormat("{0}{1} = 3;", GetIndentString(), returnAnalysis.RetValVar);
+                            CodeBuilder.AppendLine();
+                            CodeBuilder.AppendFormat("{0}break;", GetIndentString());
+                            CodeBuilder.AppendLine();
+                        }
                     }
                     else {
-                        //可以不使用函数对象实现的try块，不能使用return语句，换成变量赋值与break
-                        CodeBuilder.AppendFormat("{0}{1} = 3;", GetIndentString(), returnAnalysis.RetValVar);
-                        CodeBuilder.AppendLine();
-                        CodeBuilder.AppendFormat("{0}break;", GetIndentString());
-                        CodeBuilder.AppendLine();
+                        var outParamsStr = returnAnalysis.OutParamsStr;
+                        string prestr = ", ";
+                        //return(3)代表是tryusing块里的break语句
+                        CodeBuilder.AppendFormat("{0}return(3", GetIndentString());
+                        if (!string.IsNullOrEmpty(outParamsStr)) {
+                            CodeBuilder.Append(prestr);
+                            CodeBuilder.Append(outParamsStr);
+                        }
+                        CodeBuilder.AppendLine(");");
                     }
                 }
                 else {
@@ -79,17 +92,30 @@ namespace RoslynTool.CsToDsl
 
                 if (mi.TryUsingLayer > 0 && mi.TryCatchUsingOrLoopSwitchStack.Peek()) {
                     var returnAnalysis = mi.TempReturnAnalysisStack.Peek();
-                    if (returnAnalysis.ExistReturnInLoopOrSwitch || null == returnAnalysis.RetValVar) {
-                        //return(2)代表是tryusing块里的continue语句
-                        CodeBuilder.AppendFormat("{0}return(2);", GetIndentString());
-                        CodeBuilder.AppendLine();
+                    if (mi.IsAnonymousOrLambdaMethod) {
+                        if (returnAnalysis.ExistReturnInLoopOrSwitch || null == returnAnalysis.RetValVar) {
+                            //return(2)代表是tryusing块里的continue语句
+                            CodeBuilder.AppendFormat("{0}return(2);", GetIndentString());
+                            CodeBuilder.AppendLine();
+                        }
+                        else {
+                            //可以不使用函数对象实现的try块，不能使用return语句，换成变量赋值与break
+                            CodeBuilder.AppendFormat("{0}{1} = 2;", GetIndentString(), returnAnalysis.RetValVar);
+                            CodeBuilder.AppendLine();
+                            CodeBuilder.AppendFormat("{0}break;", GetIndentString());
+                            CodeBuilder.AppendLine();
+                        }
                     }
                     else {
-                        //可以不使用函数对象实现的try块，不能使用return语句，换成变量赋值与break
-                        CodeBuilder.AppendFormat("{0}{1} = 2;", GetIndentString(), returnAnalysis.RetValVar);
-                        CodeBuilder.AppendLine();
-                        CodeBuilder.AppendFormat("{0}break;", GetIndentString());
-                        CodeBuilder.AppendLine();
+                        var outParamsStr = returnAnalysis.OutParamsStr;
+                        string prestr = ", ";
+                        //return(2)代表是tryusing块里的continue语句
+                        CodeBuilder.AppendFormat("{0}return(2", GetIndentString());
+                        if (!string.IsNullOrEmpty(outParamsStr)) {
+                            CodeBuilder.Append(prestr);
+                            CodeBuilder.Append(outParamsStr);
+                        }
+                        CodeBuilder.AppendLine(");");
                     }
                 }
                 else {
@@ -145,17 +171,30 @@ namespace RoslynTool.CsToDsl
 
             if (mi.TryUsingLayer > 0) {
                 var returnAnalysis = mi.TempReturnAnalysisStack.Peek();
-                if (returnAnalysis.ExistReturnInLoopOrSwitch || null == returnAnalysis.RetValVar) {
-                    //return(1)代表是tryusing块里的return语句
-                    CodeBuilder.AppendFormat("{0}return(1);", GetIndentString());
-                    CodeBuilder.AppendLine();
+                if (mi.IsAnonymousOrLambdaMethod) {
+                    if (returnAnalysis.ExistReturnInLoopOrSwitch || null == returnAnalysis.RetValVar) {
+                        //return(1)代表是tryusing块里的return语句
+                        CodeBuilder.AppendFormat("{0}return(1);", GetIndentString());
+                        CodeBuilder.AppendLine();
+                    }
+                    else {
+                        //可以不使用函数对象实现的try块，不能使用return语句，换成变量赋值与break
+                        CodeBuilder.AppendFormat("{0}{1} = 1;", GetIndentString(), returnAnalysis.RetValVar);
+                        CodeBuilder.AppendLine();
+                        CodeBuilder.AppendFormat("{0}break;", GetIndentString());
+                        CodeBuilder.AppendLine();
+                    }
                 }
                 else {
-                    //可以不使用函数对象实现的try块，不能使用return语句，换成变量赋值与break
-                    CodeBuilder.AppendFormat("{0}{1} = 1;", GetIndentString(), returnAnalysis.RetValVar);
-                    CodeBuilder.AppendLine();
-                    CodeBuilder.AppendFormat("{0}break;", GetIndentString());
-                    CodeBuilder.AppendLine();
+                    var outParamsStr = returnAnalysis.OutParamsStr;
+                    string prestr = ", ";
+                    //return(1)代表是tryusing块里的return语句
+                    CodeBuilder.AppendFormat("{0}return(1", GetIndentString());
+                    if (!string.IsNullOrEmpty(outParamsStr)) {
+                        CodeBuilder.Append(prestr);
+                        CodeBuilder.Append(outParamsStr);
+                    }
+                    CodeBuilder.AppendLine(");");
                 }
             }
             else {
