@@ -191,10 +191,279 @@ b、所用的api没有在c# API dll里定义，所以也不会在slua里导出�
 
 ## 【开发注意事项】
 
+***【基本规则】
+
+1、三个工程的依赖关系：CSharp-Assembly依赖CustomApi，Cs2LuaScript依赖CustomApi，CSharp-Assembly通过代理依赖Cs2LuaScript的public类（一般是逻辑入口类，用以初始化或驱动心跳）。
+
+2、逻辑代码默认都添加到Cs2LuaScript工程里。
+
+3、Cs2LuaScript里的类默认都使用internal访问修饰，这样可以避免在Assembly-CSharp工程里直接调用Cs2LuaScript的代码（直接调用的都需要修改，否则将来翻译为lua后无法运行）。
+
+4、Cs2LuaScript工程里尽量只采用基于对象的方式开发，避免使用继承，不要使用vs2015以后的新语法，不要使用LINQ。
+
+5、CustomApi工程里的类，不需要被Cs2LuaScript工程使用与CSharp-Assembly工程使用的，加上internal修饰，这可以减少slua生成的封装代码的数量
+
+6、异常处理在lua里有比较大的GC，所以翻译时只对try块部是是单一函数调用的try-catch采用异常处理，多语句try块的异常处理会忽略，确实需要异常处理的需要将try块的语句单独写一个函数，然后保证try块里只有一个函数调用。
+
+7、lua函数对象与upvalue都有比较大的GC，++/--运算符尽量单独写一个表达式，在if语句条件里使用TryGetValue的调用时，尽量保证条件表达式只是TryGetValue的调用或者，单独写TryGetValue并把结果记到变量里，然后在if语句条件里使用该变量。（while/do-while语句里使用时与此类似）。
+
+8、lua语言没有值类型，值类型的lua对应类实际是普通类，cs2lua在翻译赋值语句时通过构造新的类实例来模拟值类型的语义行为，并通过对象池来避免构造实例的GC开销。但slua导出的API里，值类型作为property或方法返回值的，slua都会构造一个新的lua userdata。所以应尽量避免使用这些property与方法，我们会在CustomApi提供相应的替代方法。
+
+***【CustomApi工程注意事项：】
+
+0、这个模块不支持线上热更新，所以这里实现的功能都是偏底层与性能敏感的，原则上这里的功能都应该考虑如何支持Cs2LuaScript工程里进行扩展。从长远来看，这个工程里的代码应该是趋于稳定的，上线前应该尽量减少接口的添加与修改，上线后应该尽量不修改。
+
+1、CustomApi相关的各dll，public方法都会由slua导出API，slua有一个限制是它不会导出generic类与方法。所以public方法需要避免使用generic类做参数或返回值（确实需要的可以使用继承来明确绑定generic的类型参数到具体类型，CustomApi工程里已经有一些这样的实现如IntList,StrList,IntIntDict,StrStrDict等）
+
+2、目前没有太好的办法实现c#的struct的值拷贝语义，避免导出CustomApi里的struct给lua（实在有必要的需要手写lua代码与修改slua来实现）。
+
+3、slua不能正常导出多个重载都带有params参数的方法(另外考虑到GC问题，应该不要使用params参数)。
+
+***【Cs2LuaScript工程注意事项：】
+
+0、其他工程不应直接引用Cs2LuaScript工程，Cs2LuaScript里所有的类都应该是internal的，不应有public的类（除入口类外，public的类在其它工程里也应通过C#代理类访问）。
+
+1、Cs2LuaScript工程在ios上将翻译为lua运行，因此编写时要注意不要使用特别花哨的语法。
+
+2、Cs2LuaScript工程里不要使用64位整数，应该自己封装一个64位整数类（这是因为使用luajit的原因，lua 5.1里数只有double）。
+
+3、Cs2LuaScript工程里的类，没有被继承的，都加上sealed修饰，这会指导cs2lua翻译时减少方法信息
+
+4、delegate的调用直接像函数那样调，不要写成.Invoke。因为翻译成lua时delegate对应到lua function，是没有Invoke方法的。
+
+5、generic方法在翻译时会将类型参数作为普通参数放在实际调用参数前，比如GetComponent<T>()实际翻译后调用的是GetComponent(Type)方法，如果确实需要用到Type类型的参数，在定义generic方法后，需要定义一个同名的非generic方法，并将generic参数变为普通Type类型的参数。
+
+6、目前没有太好的办法实现c#的struct的值拷贝语义，所以struct现在翻译后也是引用的方式，在Cs2LuaScript工程里尽量避免使用struct。
+
+7、继承只能支持最简单的实现继承与不涉及基类子对象的虚函数，所以在Cs2LuaScript工程里尽量不要用继承。
+
+8、Cs2LuaScript里允许使用接口，但Cs2LuaScript翻译为lua后这些实现接口的类都是lua table，所以其实并不能真的实现c#的接口，所有Cs2LuaScript工程里继承或实现CustomApi里的接口（或抽象类）的对象，都需要在c#端添加一个代理类来实现c#的接口实现或继承语义，然后各个方法的实现委托到相应的lua方法。（实际用起来会比较麻烦，所以能避免也尽量避免）
+
+9、lua里的数都是double类型，对于采用格式化参数的接口会有问题，比较典型的是string::Format与StringBuilder::AppendFormat，我们提供了2个替代方法Utility::Format与Utility::AppendFormat，使用时注意使用替代方法
+
+10、类的静态成员的初始化不要直接在定义成员时初始化，提供一个Property，在get里判断是否为空并初始化。
+
+11、枚举翻译时直接按整数常量处理，在lua端没有对应的枚举类型，因此在Cs2LuaScript工程定义的generic类的类型参数不能是枚举。
+
+12、这个工程里不要继承List、Dictionary、HashSet等泛型容器，确实需要的使用组合方式，自己暴露一下接口。（这几个容器类被视作语言内建的机制，与自定义类的机制不太一样）
+
+13、Cs2LuaScript工程里的generic类翻译为lua时是按模板实例化的方式处理的，这与c#的语义并不完全一致，不能使用依赖运行时实例化的generic样式。
+
+14、Cs2LuaScript里定义的数组会翻译为lua里的table，这个数组可以值传递给c#端，但不能按引用传递，也就是说暴露的api不应该接收一个数组，然后修改数组的元素。
+
+15、尽量不要使用多维数组，代之以使用jagged数组，多维数组翻译为lua时实际上是按jagged数组处理的。
+
+16、cs2lua采用类似C++模板实例化的方式来翻译泛型类，为了保证不同实例的方法使用一样的签名，方法参数是泛型类时，签名使用泛型类的泛型形参而不使用实参。这意味着不能支持2个重载函数仅依靠泛型参数的实参类型来区分。
+
+17、目前的lua端对象模型有个缺陷，在继承的时候，子类和基类的变量名不能重名，重名会导致lua调用基类的方法访问基类变量时，改为访问子类同名变量，导致出错。（这个可以修改lua对象模型来解决，但比较麻烦，暂未考虑）
+
+**【CSharp-Assembly（即Unity3d生成的工程）注意事项：】
+
+0、这个模块不支持线上热更新，这里主要实现游戏启动相关逻辑及与引擎功能直接相关的表现逻辑（辅助shader挂脚本的方式）。长远看，这个模块应该避免频繁的修改。引擎表现相关的脚本需要研究如何不修改c#代码的情况下支持新的shader。
+
+1、这里的脚本可以使用CustomApi里的公共类与方法，但不能直接引用Cs2LuaScript里的类与方法（作为检查机制，Cs2LuaScript里的所有的类都应该是internal的）。
+
+2、必须要访问Cs2LuaScript工程里的类时，需要在CustomApi里定义对应的接口，然后针对c# dll与lua两种情形分别处理，lua情形时需要添加代理c#类。
+
 
 
 ## 【自定义翻译】
 
+cs2lua从c#到lua的翻译分为两步进行：
+
+第一步是去语法糖，就是将c#语法进行简化，翻译到一个基于DSL的中间语言，这个中间语言是弱类型、支持函数、匿名函数对象与面向对象的C风格脚本语言。C#的很多特有的语言特性会翻译为一个函数调用（可以理解为是对翻译时/运行时支持函数的调用）。
+
+第二步是从中间语言转换到lua，这一步主要包括：
+
+1、将类结构翻译为lua语言的table加元表处理的样式。
+
+2、将语句翻译为lua语言对应的语句，如if/else，while，do/while，for，foreach，try/catch/finally，using等。
+
+3、按lua语言的特点转换中间语言里对各个支持函数的调用到lua语言语法或lualib的支持函数调用。
+
+cs2lua在第3步提供了一个扩展机制，对每个支持函数的翻译，会先调用generator.dsl，如果dsl已经处理了此翻译，cs2lua就不再处理。这样提供了通过generator.dsl对特定支持函数的翻译定制。具体的支持函数可以查看LuaGenerator_Main.cs代码里的GenerateConcreteSyntaxForCall方法的各if分支，我们一般需要定制处理的是最后转换到lua后调用lualib里支持函数的这些。
+
+从我们实际项目的情况看，主要是对各种值类型的处理需要定制，这包括如下这些支持函数：
+
+* invokeexternoperatorreturnstruct(rettype, class, method, ...)
+* wrapoutstruct(v, classObj)
+* wrapoutexternstruct(v, classObj)
+* wrapstruct(v, classObj)
+* wrapexternstruct(v, classObj)
+* getexterninstancestructmember(symKind, obj, class, member)
+* callexterndelegationreturnstruct(funcobj, funcobjname, ...)
+* callexternextensionreturnstruct(class, member, ...)
+* callexternstaticreturnstruct(class, member, ...)
+* callexterninstancereturnstruct(obj, class, member, ...)
+* recycleandkeepstructvalue(fieldType, oldVal, newVal)
+
+这些支持函数主要是为了给值类型添加对象池的，因为lua里没有值类型，c#里使用的值类型翻译到lua时，对值类型的赋值语义，需要产生一个新的值相同的实例，如果只是创建新实例，这样会导致非常多的lua GC，这时我们一般需要采用对象池来减少GC，这样在整体上通过反复使用几个实例能比较好的模拟值类型处理。为了配合对象池的操作，cs2lua对涉及值类型操作的方法，会在函数入口调用luainitialize生成一个函数信息，然后值类型操作的各个支持函数会将对象池里分配出的实例记录到函数信息上，最后在函数返回前调用luafinalize将函数信息里记录的值类型实例进行回收。
+
+我们来看一个实例，下面的RefreshTargetPosition方法就是一个包含值类型处理的方法，cs2lua翻译时会在入口调luainitialize，返回前调用luafinalize，单独把方法体包装成一个函数__ori_RefreshTargetPosition是为了在异常时保证luainitialize/luafinalize的调用是成对的。
+
+```
+    RefreshTargetPosition = function(this, leader, npc)
+        local __cs2lua_func_info = luainitialize();
+        local __retval_0, __retval_1 = luapcall(this.__ori_RefreshTargetPosition, this, __cs2lua_func_info, leader, npc);
+        __cs2lua_func_info = luafinalize(__cs2lua_func_info);
+        if not __retval_0 then
+        	error(__retval_1);
+        	__retval_1 = nil;
+        end;
+        return __retval_1;
+    end,
+    __ori_RefreshTargetPosition = function(this, __cs2lua_func_info, leader, npc)
+        local __method_ret_53_4_69_5;
+        if (((isequal(leader, nil) or isequal(leader.View, nil)) or isequal(npc, nil)) or isequal(npc.View, nil)) then 
+        	__method_ret_53_4_69_5 = false;
+        	return __method_ret_53_4_69_5;
+        end;
+        local target_pos;
+        target_pos = get_entityviewmodel_position(__cs2lua_func_info, leader.View);
+        local origin_pos;
+        origin_pos = get_entityviewmodel_position(__cs2lua_func_info, npc.View);
+        --距离超过3m进行跟随
+        local t;
+        t = this:CalculateTargetPos(target_pos, get_tranform_forward(__cs2lua_func_info, leader.View:GetGameObject().transform));
+        t = wrap_vector3(__cs2lua_func_info, t);
+        local sqrdis;
+        sqrdis = UnityEngine.Vector3.SqrMagnitude(invokeexternoperatorreturnstructimpl(__cs2lua_func_info, UnityEngine.Vector3, UnityEngine.Vector3, "op_Subtraction", t, origin_pos));
+        if (((((sqrdis > 0.25000000) or leader.movementInfo.controllerManager:IsMove())) and (not leader.movementInfo.controllerManager:IsSwim())) and (not leader.movementInfo.controllerManager:IsJumping())) then 
+        	AiCommand.AiPursue(npc, t, false);
+        else
+        	npc.View:GetGameObject().transform.forward = get_tranform_forward(__cs2lua_func_info, leader.View:GetGameObject().transform);
+        end;
+        __method_ret_53_4_69_5 = true;
+        return __method_ret_53_4_69_5;
+   end,
+```
+
+这个方法里的get_entityviewmodel_position、get_tranform_forward、wrap_vector3、invokeexternoperatorreturnstructimpl都是自定义翻译的结果，在中间语言dsl里，这几个支持函数是这样的：
+
+```
+    local(target_pos); target_pos = getexterninstancestructmember(SymbolKind.Property, getexterninstance(SymbolKind.Property, leader, CsLibrary.EntityInfo, "View"), CsLibrary.EntityViewModel, "position");
+    local(origin_pos); origin_pos = getexterninstancestructmember(SymbolKind.Property, getexterninstance(SymbolKind.Property, npc, CsLibrary.EntityInfo, "View"), CsLibrary.EntityViewModel, "position");
+    comment("距离超过3m进行跟随");
+    local(t); t = callinstance(this, AiFollow, "CalculateTargetPos", target_pos, getexterninstancestructmember(SymbolKind.Property, getexterninstance(SymbolKind.Property, callexterninstance(getexterninstance(SymbolKind.Property, leader, CsLibrary.EntityInfo, "View"), CsLibrary.EntityViewModel, "GetGameObject"), UnityEngine.GameObject, "transform"), UnityEngine.Transform, "forward"));
+    t = wrapexternstruct(t, UnityEngine.Vector3);
+    local(sqrdis); sqrdis = callexternstatic(UnityEngine.Vector3, "SqrMagnitude", invokeexternoperatorreturnstruct(UnityEngine.Vector3, UnityEngine.Vector3, "op_Subtraction", t, origin_pos));
+```          
+
+然后在generator.dsl里有这样的处理代码：
+
+```
+    script(wrapexternstruct)args($funcData, $funcOpts, $sb, $indent)
+    {
+        //wrapexternstruct(v, classObj)
+        $classObj = getargument($funcData, 1);
+
+        if($classObj=="UnityEngine.Vector3"){
+            usefunc("wrap_vector3","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1], "__cs2lua_func_info")
+            {:
+                local obj = UnityEngine.Vector3.New(v.x,v.y,v.z)
+                table.insert(funcInfo.v3_list, obj)
+                return obj
+            :};
+            return(true);
+        };
+        return(false);
+    };
+
+    script(getexterninstancestructmember)args($funcData, $funcOpts, $sb, $indent)
+    {
+        //getexterninstancestructmember(symKind, obj, class, member)
+        $symKind = getargument($funcData, 0);
+        $class = getargument($funcData, 2);
+        $member = getargument($funcData, 3);
+            
+        if($class=="UnityEngine.Transform"){
+            if($member=="forward"){
+                usefunc("get_tranform_forward","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+                {:
+                    local _,x,y,z = Utility.GetForward(obj, Slua.out, Slua.out, Slua.out)
+                    local v = UnityEngine.Vector3.New(x,y,z)
+                    table.insert(funcInfo.v3_list, v)
+                    return v
+                :};
+                return(true);
+            };
+        }
+        elseif($class=="CsLibrary.EntityViewModel"){
+            if($member=="position"){
+                usefunc("get_entityviewmodel_position","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+                {:
+                    local _,x,y,z = obj:GetPosition(Slua.out, Slua.out, Slua.out)
+                    local v = UnityEngine.Vector3.New(x,y,z)
+                    table.insert(funcInfo.v3_list, v)
+                    return v
+                :};
+                return(true);
+            }
+            elseif($member=="SyncOffset"){
+                usefunc("get_entityviewmodel_syncoffset","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+                {:
+                    local _,x,y,z = obj:GetSyncOffset(Slua.out, Slua.out, Slua.out)
+                    local v = UnityEngine.Vector3.New(x,y,z)
+                    table.insert(funcInfo.v3_list, v)
+                    return v
+                :};
+                return(true);
+            };
+        };
+        return(false);
+    };
+
+    script(invokeexternoperatorreturnstruct)args($funcData, $funcOpts, $sb, $indent)
+    {
+        //invokeexternoperatorreturnstruct(rettype, class, method, ...)
+        $rettype = getargument($funcData, 0);
+        $class = getargument($funcData, 1);
+        $method = getargument($funcData, 2);
+        
+        //首行的缩进cs2lua已经处理，新行需要自己添加缩进
+        //writeindent($sb, $indent);
+        writesymbol($sb, "invokeexternoperatorreturnstructimpl");
+        writesymbol($sb, "(__cs2lua_func_info, ");
+        writearguments($sb, $funcData, $funcOpts, $indent, 0);
+        writesymbol($sb, ")");
+        return(true);
+    };
+```
+
+可以看到，自定义翻译是对支持函数按参数值识别并进行处理（注意最后自己输出的函数调用结尾是不需要加分号的），处理不了的情形返回false，则走cs2lua的默认翻译流程。一般来说都是根据class或member名字来进行自定义处理。
+
+自定义处理脚本generator.dsl里可以使用的API如下（$开头的参数引用generator.dsl里支持函数处理脚本的参数，一般不需要修改为其它，$funcData是DSL元语言里的Dsl.FunctionData，是加载到内存的中间语言的函数调用；$funcOpts是当前翻译语句所属类方法的选项，包含方法参数与返回值类型信息，通常用不着；$sb是输出代码的StringBuilder实例，$indent是当前语句的缩进值）：
+
+1、getargument($funcData, index);
+    
+从$funcData里读取index参数的值，只有参数是类型或字符串时返回值，一般这些值用于判断是否需要进行自定义翻译处理。
+    
+2、writeindent($sb, indent);
+    
+往StringBuilder输出流$sb里输出indent数量的缩进。
+    
+3、writesymbol($sb, "code");
+    
+往StringBuilder输出流$sb里输出一个符号，可以是标识符或者分隔符、括号等。
+    
+4、writestring($sb, "string");
+    
+往StringBuilder输出流$sb里输出一个字符串，与输出标识符的差别是会在输出首尾加上引号。
+    
+5、writearguments($sb, $funcData, $funcOpts, $indent, start_arg_index_or_ignore_args);
+    
+往StringBuilder输出流$sb里输出函数参数，最后一个参数可以是一个整数，指明起始参数索引，或者是一个数组（方括号括起来的数字列表），数组指明要忽略的参数，忽略参数一般是在generator.dsl里已经用于判断是否自定义翻译的参数，这些参数在运行时可能用不上了，可以忽略（需要与lualib或lualib_special里的实现一致）。
+    
+6、usefunc(lua_func_name, lua_func_params_string, $funcData, $funcOpts, $sb, $indent, start_arg_index_or_ignore_args, [addargs, ...])
+
+{:
+
+    lua_func_code
+    
+:};
+
+
+定义一个自定义lua函数，并将当前支持函数翻译为调用此lua函数。lua_func_name是自定义lua函数的名字，cs2lua用来唯一标识这段代码（也就是只输出一份函数定义），lua_func_params_string是自定义lua函数的参数列字符串（包括起止括号），start_arg_index_or_ignore_args参数与5中同名参数作用相同，addargs是可变参数列表，指出相对中间语言，自定义lua函数要额外添加的参数，这些参数都加在自定义函数普通参数的前面，目前一般只有一个额外参数是"__cs2lua_func_info"，用来引用当前方法的函数信息（函数信息的名字是cs2lua约定的，不能更改）（注意，这些额外参数需要与lua_func_params_string的参数表数量一致）。lua_func_code是自定义lua函数的实现代码（不包括函数头与结尾的end）,这段代码用{:和:}括起来，这是用作中间语言的DSL元语言里包含外部脚本的语法。
 
 
 ## 【性能优化参考】
