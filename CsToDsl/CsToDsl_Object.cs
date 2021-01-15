@@ -188,7 +188,7 @@ namespace RoslynTool.CsToDsl
             CodeBuilder.Append("){");
             CodeBuilder.AppendLine();
             ++m_Indent;
-            TryWrapValueParams(CodeBuilder, mi);
+            TryWrapParams(CodeBuilder, mi);
             if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
                 CodeBuilder.AppendFormat("{0}local({1}); {1} = params({2});", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
                 CodeBuilder.AppendLine();
@@ -333,7 +333,7 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendFormat("{0}{1} = deffunc({2})args({3}){{", GetIndentString(), manglingName, mi.ReturnValueCount, paramStr);
                     CodeBuilder.AppendLine();
                     ++m_Indent;
-                    TryWrapValueParams(CodeBuilder, mi);
+                    TryWrapParams(CodeBuilder, mi);
                     string varName = string.Format("__expbody_{0}", GetSourcePosForVar(node));
                     CodeBuilder.AppendFormat("{0}local({1}); {1} = ", GetIndentString(), varName);
                     IConversionOperation opd = null;
@@ -512,7 +512,7 @@ namespace RoslynTool.CsToDsl
                             }
                         }
                         else if (null != accessor.Body) {
-                            TryWrapValueParams(CodeBuilder, mi);
+                            TryWrapParams(CodeBuilder, mi);
                             VisitBlock(accessor.Body);
                             if (!mi.ExistTopLevelReturn) {
                                 if (!sym.ReturnsVoid) {
@@ -528,7 +528,7 @@ namespace RoslynTool.CsToDsl
                             }
                         }
                         else if (null != accessor.ExpressionBody) {
-                            TryWrapValueParams(CodeBuilder, mi);
+                            TryWrapParams(CodeBuilder, mi);
                             if (!sym.ReturnsVoid) {
                                 CodeBuilder.AppendFormat("{0}{1} = ", GetIndentString(), mi.ReturnVarName);
                             }
@@ -565,7 +565,7 @@ namespace RoslynTool.CsToDsl
                             }
                         }
                         else if (noimplAndIntfImpl) {
-                            TryWrapValueParams(CodeBuilder, mi);
+                            TryWrapParams(CodeBuilder, mi);
                             if (!sym.ReturnsVoid) {
                                 CodeBuilder.AppendFormat("{0}{1} = ", GetIndentString(), mi.ReturnVarName);
                                 if (declSym.IsStatic) {
@@ -725,7 +725,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendLine(");");
                     }
                     else if (null != accessor.Body) {
-                        TryWrapValueParams(CodeBuilder, mi);
+                        TryWrapParams(CodeBuilder, mi);
                         VisitBlock(accessor.Body);
                     }
                     --m_Indent;
@@ -812,7 +812,7 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendFormat("{0}{1} = deffunc({2})args(this, {3}){{", GetIndentString(), manglingName, mi.ReturnValueCount, string.Join(", ", mi.ParamNames.ToArray()));
                     CodeBuilder.AppendLine();
                     ++m_Indent;
-                    TryWrapValueParams(CodeBuilder, mi);
+                    TryWrapParams(CodeBuilder, mi);
                     if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
                         CodeBuilder.AppendFormat("{0}local({1}); {1} = params({2});", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
                         CodeBuilder.AppendLine();
@@ -928,7 +928,7 @@ namespace RoslynTool.CsToDsl
                         }
                     }
                     else {
-                        TryWrapValueParams(CodeBuilder, mi);
+                        TryWrapParams(CodeBuilder, mi);
                         if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
                             if (keyword == "get") {
                                 CodeBuilder.AppendFormat("{0}local({1}); {1} = params({2});", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
@@ -1095,7 +1095,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendFormat("{0}local({1});", GetIndentString(), retVar);
                         CodeBuilder.AppendLine();
                     }
-                    TryWrapValueParams(CodeBuilder, mi);
+                    TryWrapParams(CodeBuilder, mi);
                     if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
                         CodeBuilder.AppendFormat("{0}local({1}); {1} = params({2});", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
                         CodeBuilder.AppendLine();

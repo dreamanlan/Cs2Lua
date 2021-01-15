@@ -20,6 +20,13 @@ public class StrList : List<string>
     public StrList(ICollection<string> coll) : base(coll) { }
 }
 
+public class Vector3List : List<Vector3>
+{
+    public Vector3List() : base() { }
+    public Vector3List(int c) : base(c) { }
+    public Vector3List(ICollection<Vector3> coll) : base(coll) { }
+}
+
 public interface ICs2LuaPoolAllocatedObjectEx<T> where T : ICs2LuaPoolAllocatedObjectEx<T>
 {
     void InitPool(Cs2LuaObjectPoolEx<T> pool);
@@ -136,9 +143,15 @@ class Test
         }
         var act = (Action)(()=> { Console.Write(ia); });
         var cc = ToList(aa);
+        List<Vector3> v3list = new List<Vector3>();
+        v3list.Add(Vector3.zero);
+        Vector3List nv3list = new Vector3List();
+        nv3list.Add(Vector3.zero);
     }
     public int testcall()
     {
+        m_Vs[0] = UnityEngine.Vector3.zero;
+        var v = m_Vs[0];
         return 1;
     }
     public int test()
@@ -188,4 +201,5 @@ class Test
     }
     private Cs2LuaObjectPoolEx<DataChangeCallBackInfo> m_DataChangeCallBackInfoPool = new Cs2LuaObjectPoolEx<DataChangeCallBackInfo>();
     private int m_IntVal = 0;
+    private Vector3[] m_Vs = new Vector3[10];
 }

@@ -1,0 +1,118 @@
+require "cs2lua__namespaces"; 
+
+Vector3List = {
+	-------------------------------
+	-------- class methods --------
+	-------------------------------
+	__new_object = function(...)
+		local __cs2dsl_newobj;
+		__cs2dsl_newobj = newobject(Vector3List, nil, nil, "ctor", nil, ...);
+		return __cs2dsl_newobj;
+	end,
+
+	cctor = function()
+		Vector3List.__cctor();
+	end,
+
+	__cctor = function()
+		if Vector3List.__cctor_called then 
+			return;
+		else
+			Vector3List.__cctor_called = true;
+		end;
+	end,
+
+	-------------------------------
+	-------- class fields --------
+	-------------------------------
+	__cctor_called = false,
+
+	-------------------------------
+	--- define class and object ---
+	-------------------------------
+	__define_class = function()
+		Utility.Warn("Vector3List::__define_class begin");
+
+		local class = Vector3List;
+
+		local obj_methods = {
+			ctor = function(this)
+				buildexternbaseobj(this, Vector3List, System.Collections.Generic.List_T, "ctor");
+				this:__ctor();
+				return this;
+			end,
+
+			ctor__Int32 = function(this, c)
+				buildexternbaseobj(this, Vector3List, System.Collections.Generic.List_T, "ctor__Int32", c);
+				this:__ctor();
+				return this;
+			end,
+
+			ctor__ICollection_1_Vector3 = function(this, coll)
+				buildexternbaseobj(this, Vector3List, System.Collections.Generic.List_T, "ctor__IEnumerable_1_T", coll);
+				this:__ctor();
+				return this;
+			end,
+
+			__ctor = function(this)
+				if this.__ctor_called then 
+					return;
+				else
+					this.__ctor_called = true;
+				end;
+			end,
+		};
+
+		local obj_build = function()
+			return {
+				__ctor_called = false,
+			};
+		end;
+
+		local __defineclass_return = defineclass(System.Collections.Generic.List_T, "Vector3List", "Vector3List", class, obj_methods, obj_build, false);
+		Utility.Warn("Vector3List::__define_class end");
+		return __defineclass_return;
+	end,
+
+	-------------------------------
+	--------- fields info ---------
+	-------------------------------
+	__class_fields = {
+		__cctor_called = true,
+	},
+
+	__obj_fields = {
+		__ctor_called = true,
+	},
+
+	-------------------------------
+	-------- metadata info --------
+	-------------------------------
+	__interfaces = {
+		"System.Collections.Generic.IList_T",
+		"System.Collections.Generic.ICollection_T",
+		"System.Collections.IList",
+		"System.Collections.ICollection",
+		"System.Collections.Generic.IReadOnlyList_T",
+		"System.Collections.Generic.IReadOnlyCollection_T",
+		"System.Collections.Generic.IEnumerable_T",
+		"System.Collections.IEnumerable",
+	},
+	__method_info = {
+		ctor = {
+			Kind = MethodKind.Constructor,
+		},
+		ctor__Int32 = {
+			Kind = MethodKind.Constructor,
+		},
+		ctor__ICollection_1_Vector3 = {
+			Kind = MethodKind.Constructor,
+		},
+	},
+};
+
+
+require "cs2lua__syslib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+settempmetatable(Vector3List);

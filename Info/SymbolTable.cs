@@ -1093,11 +1093,6 @@ namespace RoslynTool.CsToDsl
             get { return s_DslComponentByString; }
             set { s_DslComponentByString = value; }
         }
-        internal static bool UseArrayGetSet
-        {
-            get { return s_UseArrayGetSet; }
-            set { s_UseArrayGetSet = value; }
-        }
         internal static bool ArrayLowerBoundIsOne
         {
             get { return s_ArrayLowerBoundIsOne; }
@@ -1171,7 +1166,6 @@ namespace RoslynTool.CsToDsl
 
         private static bool s_NoAutoRequire = false;
         private static bool s_DslComponentByString = false;
-        private static bool s_UseArrayGetSet = false;
         private static bool s_ArrayLowerBoundIsOne = true;
         private static bool s_EnableTranslationCheck = false;
         private static string s_SystemDllPath = string.Empty;

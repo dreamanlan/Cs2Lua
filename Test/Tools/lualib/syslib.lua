@@ -1052,8 +1052,6 @@ function createpool(tag, newFunc)
     return pool
 end
 
-g_FuncInfoStack = {}
-
 g_FuncInfoPool = createpool("FuncInfo",
     function()
         return {
@@ -1162,6 +1160,15 @@ function wrapexternstruct(v, classObj)
     return v
 end
 
+function wrapstructarray(arr, classObj)
+    return arr
+end
+
+function wrapexternstructarray(arr, classObj)
+    translationlog("need add handler for wrapexternstructarray {0}", getclasstypename(classObj))
+    return arr
+end
+
 function getexternstaticstructmember(symKind, class, member)
     translationlog("need add handler for getexternstaticstructmember {0}.{1}", getclasstypename(class), member)
     return class[member]
@@ -1192,6 +1199,85 @@ function callexterninstancereturnstruct(obj, class, member, ...)
     return obj[member](obj, ...)
 end
 
+function getexternstaticindexerstruct(callerClass, class, name, argCount, ...)
+    translationlog("need add handler for getexternstaticindexerstruct {0}.{1}", getclasstypename(class), name)
+    return class[name](...)
+end
+function getexterninstanceindexerstruct(callerClass, obj, class, name, argCount, ...)
+    translationlog("need add handler for getexterninstanceindexerstruct {0}.{1}", getclasstypename(class), name)
+    local arg1,arg2 = ...
+    local index
+    local meta = getmetatable(obj)
+    if meta then
+        local _class = rawget(meta, "__class")
+        if _class == System.Collections.Generic.List_T then
+            index = __unwrap_if_string(arg1)
+            return obj[index + 1]
+        elseif _class == System.Collections.Generic.Dictionary_TKey_TValue then
+            index = __unwrap_if_string(arg1)
+            return obj[index]
+        else
+            index = __unwrap_if_string(arg1)
+            if nil == index then
+                UnityEngine.Debug.LogError__Object("[cs2lua] table index is nil")
+                return nil
+            end
+            local typename = rawget(meta, "__typename")
+            if typename == "LuaArray" then
+                return obj[index + 1]
+            elseif typename == "LuaVarObject" then
+                return obj[index]
+            elseif name == "get_Chars" then
+                return Utility.StringGetChar(obj, index)
+            else
+                return obj:getItem(index)
+            end
+        end
+    end
+end
+
+function arraygetstruct(isExtern, elementType, typeKind, arr, ...)
+    translationlog("need add handler for arraygetstruct {0}[]", getclasstypename(elementType))
+    local num = select("#", ...)
+    if num == 1 then
+        local v1 = select(1, ...)
+        return arr[v1]
+    elseif num == 2 then
+        local v1 = select(1, ...)
+        local v2 = select(2, ...)
+        return arr[v1][v2]
+    elseif num == 3 then
+        local v1 = select(1, ...)
+        local v2 = select(2, ...)
+        local v3 = select(3, ...)
+        return arr[v1][v2][v3]
+    else
+        error("too many dimensions !")
+    end
+end
+function arraysetstruct(isToplevel, isExtern, elementType, typeKind, arr, ...)
+    translationlog("need add handler for arraysetstruct {0}[]", getclasstypename(elementType))
+    local num = select("#", ...)
+    if num == 2 then
+        local v1 = select(1, ...)
+        local val = select(2, ...)
+        arr[v1] = val
+    elseif num == 3 then
+        local v1 = select(1, ...)
+        local v2 = select(2, ...)
+        local val = select(3, ...)
+        arr[v1][v2] = val
+    elseif num == 4 then
+        local v1 = select(1, ...)
+        local v2 = select(2, ...)
+        local v3 = select(3, ...)
+        local val = select(4, ...)
+        arr[v1][v2][v3] = val
+    else
+        error("too many dimensions !")
+    end
+end
+
 function recycleandkeepstructvalue(fieldType, oldVal, newVal)
     translationlog("need add handler for recycleandkeepstructvalue {0}", getclasstypename(fieldType))
 end
@@ -1211,30 +1297,12 @@ function recycleandkeepcheck(fieldType, oldVal, newVal)
     end
 end
 
-function movetocallerfuncinfo(funcInfo, class, val)
-    translationlog("need add handler for movetocaller {0}", getclasstypename(class))
-end
-
-function luagetcallerfuncinfo()
-    local ct = #g_FuncInfoStack
-    if ct > 1 then
-        return g_FuncInfoStack[ct-1]
-    else
-        return nil
-    end
-end
-
 function luainitialize()
     local info = g_FuncInfoPool.Alloc()
-    table.insert(g_FuncInfoStack, info)
     return info
 end
 
 function luafinalize(funcInfo)
-    local last = table.remove(g_FuncInfoStack)
-    while last and last ~= funcInfo do
-        last = table.remove(g_FuncInfoStack)
-    end
     if funcInfo then
         for i,v in ipairs(funcInfo.iter_list) do
             recycleiterator(nil, v)

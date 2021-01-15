@@ -1,10 +1,9 @@
 ============<<<Semantic Warning:test>>>============
-test.cs(179,9): warning CS0162: Unreachable code detected
-test.cs(151,29): warning CS0168: The variable 'ex' is declared but never used
-test.cs(157,30): warning CS0168: The variable 'ex' is declared but never used
-test.cs(165,26): warning CS0168: The variable 'ex' is declared but never used
-test.cs(171,25): warning CS0168: The variable 'e' is declared but never used
+test.cs(192,9): warning CS0162: Unreachable code detected
+test.cs(164,29): warning CS0168: The variable 'ex' is declared but never used
+test.cs(170,30): warning CS0168: The variable 'ex' is declared but never used
+test.cs(178,26): warning CS0168: The variable 'ex' is declared but never used
+test.cs(184,25): warning CS0168: The variable 'e' is declared but never used
+test.cs(2,1): hidden CS8019: Unnecessary using directive.
 test.cs(5,1): hidden CS8019: Unnecessary using directive.
 test.cs(4,1): hidden CS8019: Unnecessary using directive.
-test.cs(6,1): hidden CS8019: Unnecessary using directive.
-test.cs(2,1): hidden CS8019: Unnecessary using directive.

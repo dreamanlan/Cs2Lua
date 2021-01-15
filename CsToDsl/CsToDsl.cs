@@ -159,7 +159,7 @@ namespace RoslynTool.CsToDsl
             }
             return ret;
         }
-        internal void OutputArgumentList(InvocationInfo ii, bool useTypeNameString, SyntaxNode node)
+        internal void OutputArgumentList(InvocationInfo ii, ITypeSymbol callerType, bool useTypeNameString, SyntaxNode node)
         {
             if (!ii.PostPositionGenericTypeArgs && ii.GenericTypeArgs.Count > 0) {
                 OutputTypeArgumentList(ii.GenericTypeArgs, useTypeNameString, node);
@@ -170,6 +170,20 @@ namespace RoslynTool.CsToDsl
                 int ct = ii.Args.Count;
                 for (int i = 0; i < ct; ++i) {
                     var exp = ii.Args[i];
+                    var argType = ii.ArgTypes[i];
+                    var arrType = argType as IArrayTypeSymbol;
+                    if (null != arrType && i == ct - 1 && ii.ArrayToParams) {
+                        argType = arrType.ElementType;
+                    }
+                    bool isValueArg = null != argType ? argType.IsValueType && !SymbolTable.IsBasicType(argType) : false;
+                    string externFlag = string.Empty;
+                    string argTypeName = null;
+                    if (isValueArg) {
+                        if (!SymbolTable.Instance.IsCs2DslSymbol(argType)) {
+                            externFlag = "extern";
+                        }
+                        argTypeName = ClassInfo.GetFullName(argType);
+                    }
                     var opd = ii.ArgConversions.Count > i ? ii.ArgConversions[i] : null;
                     bool dslToObject = null != ii.DslToObjectArgs ? ii.DslToObjectArgs.Contains(i) : false;
                     //表达式对象为空表明这个是一个out实参，替换为__cs2dsl_out
@@ -177,16 +191,43 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append("__cs2dsl_out");
                     }
                     else if (i < ct - 1) {
-                        OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
-                    }
-                    else {
-                        if (ii.ArrayToParams) {
-                            CodeBuilder.Append("dslunpack(");
+                        if (isValueArg) {
+                            CodeBuilder.AppendFormat("wrap{0}struct(", externFlag);
                             OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
+                            CodeBuilder.Append(", ");
+                            CodeBuilder.Append(argType);
                             CodeBuilder.Append(")");
                         }
                         else {
                             OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
+                        }
+                    }
+                    else {
+                        if (ii.ArrayToParams) {
+                            CodeBuilder.Append("dslunpack(");
+                            if (isValueArg) {
+                                CodeBuilder.AppendFormat("wrap{0}structarray(", externFlag);
+                                OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
+                                CodeBuilder.Append(", ");
+                                CodeBuilder.Append(argType);
+                                CodeBuilder.Append(")");
+                            }
+                            else {
+                                OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
+                            }
+                            CodeBuilder.Append(")");
+                        }
+                        else {
+                            if (isValueArg) {
+                                CodeBuilder.AppendFormat("wrap{0}struct(", externFlag);
+                                OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
+                                CodeBuilder.Append(", ");
+                                CodeBuilder.Append(argType);
+                                CodeBuilder.Append(")");
+                            }
+                            else {
+                                OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
+                            }
                         }
                     }
                     if (i < ct - 1) {
@@ -200,17 +241,49 @@ namespace RoslynTool.CsToDsl
                     }
                     for (int i = 0; i < dvCt; ++i) {
                         var info = ii.NameOrDefaultValueArgs[i];
+                        var argType = info.Type;
+                        bool isValueArg = null != argType ? argType.IsValueType && !SymbolTable.IsBasicType(argType) : false;
+                        string externFlag = string.Empty;
+                        string argTypeName = null;
+                        if (isValueArg) {
+                            if (!SymbolTable.Instance.IsCs2DslSymbol(argType)) {
+                                externFlag = "extern";
+                            }
+                            argTypeName = ClassInfo.GetFullName(argType);
+                        }
                         var opd = ii.ArgConversions.Count > ct + i ? ii.ArgConversions[ct + i] : null;
                         bool dslToObject = null != ii.DslToObjectDefArgs ? ii.DslToObjectDefArgs.Contains(i) : false;
                         if (null != info.Expression) {
-                            OutputExpressionSyntax(info.Expression, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
+                            if (isValueArg) {
+                                CodeBuilder.AppendFormat("wrap{0}struct(", externFlag);
+                                OutputExpressionSyntax(info.Expression, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
+                                CodeBuilder.Append(", ");
+                                CodeBuilder.Append(argType);
+                                CodeBuilder.Append(")");
+                            }
+                            else {
+                                OutputExpressionSyntax(info.Expression, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
+                            }
                         }
                         else {
-                            if (dslToObject)
-                                OutputDslToObjectPrefix(ii.MethodSymbol);
-                            OutputArgumentDefaultValue(info.Value, info.Operation, ii.IsExternMethod, opd, node);
-                            if (dslToObject)
+                            if (isValueArg) {
+                                CodeBuilder.AppendFormat("wrap{0}struct(", externFlag);
+                                if (dslToObject)
+                                    OutputDslToObjectPrefix(ii.MethodSymbol);
+                                OutputArgumentDefaultValue(info.Value, info.Operation, ii.IsExternMethod, opd, node);
+                                if (dslToObject)
+                                    CodeBuilder.Append(")");
+                                CodeBuilder.Append(", ");
+                                CodeBuilder.Append(argType);
                                 CodeBuilder.Append(")");
+                            }
+                            else {
+                                if (dslToObject)
+                                    OutputDslToObjectPrefix(ii.MethodSymbol);
+                                OutputArgumentDefaultValue(info.Value, info.Operation, ii.IsExternMethod, opd, node);
+                                if (dslToObject)
+                                    CodeBuilder.Append(")");
+                            }
                         }
                         if (i < dvCt - 1) {
                             CodeBuilder.Append(", ");
@@ -242,7 +315,7 @@ namespace RoslynTool.CsToDsl
                 InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), node);
                 var arglist = new List<ExpressionSyntax>() { node };
                 ii.Init(msym, arglist, m_Model);
-                OutputOperatorInvoke(ii, node);
+                OutputOperatorInvoke(ii, opd.Operand.Type, node);
             }
             else {
                 VisitExpressionSyntax(node, dslStrToCsStr);
@@ -485,43 +558,11 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.Append(", ");
             }
         }
-        private void TryWrapValueParams(StringBuilder codeBuilder, MethodInfo mi)
+        private void TryWrapParams(StringBuilder codeBuilder, MethodInfo mi)
         {
-            if (mi.OutValueParams.Count > 0 || mi.OutExternValueParams.Count > 0) {
-                OutputWrapOutValueParams(CodeBuilder, mi);
-            }
-            if (mi.ValueParams.Count > 0 || mi.ExternValueParams.Count > 0) {
-                OutputWrapValueParams(CodeBuilder, mi);
-            }
-        }
-        private void OutputWrapOutValueParams(StringBuilder codeBuilder, MethodInfo mi)
-        {
-            for (int i = 0; i < mi.ParamNames.Count; ++i) {
-                var name = mi.ParamNames[i];
-                var type = mi.ParamTypes[i];
-                if (mi.OutValueParams.Contains(i)) {
-                    codeBuilder.AppendFormat("{0}{1} = wrapoutstruct({2}, {3});", GetIndentString(), name, name, type);
-                    codeBuilder.AppendLine();
-                }
-                else if (mi.OutExternValueParams.Contains(i)) {
-                    codeBuilder.AppendFormat("{0}{1} = wrapoutexternstruct({2}, {3});", GetIndentString(), name, name, type);
-                    codeBuilder.AppendLine();
-                }
-            }
-        }
-        private void OutputWrapValueParams(StringBuilder codeBuilder, MethodInfo mi)
-        {
-            for (int i = 0; i < mi.ParamNames.Count; ++i) {
-                var name = mi.ParamNames[i];
-                var type = mi.ParamTypes[i];
-                if (mi.ValueParams.Contains(i)) {
-                    codeBuilder.AppendFormat("{0}{1} = wrapstruct({2}, {3});", GetIndentString(), name, name, type);
-                    codeBuilder.AppendLine();
-                }
-                else if (mi.ExternValueParams.Contains(i)) {
-                    codeBuilder.AppendFormat("{0}{1} = wrapexternstruct({2}, {3});", GetIndentString(), name, name, type);
-                    codeBuilder.AppendLine();
-                }
+            if (!string.IsNullOrEmpty(mi.OriginalParamsName)) {
+                CodeBuilder.AppendFormat("{0}local({1}); {1} = params({2});", GetIndentString(), mi.OriginalParamsName, mi.ParamsElementInfo);
+                CodeBuilder.AppendLine();
             }
         }
         private void OutputExpressionList(IList<ExpressionSyntax> args, SyntaxNode node)
@@ -1012,14 +1053,14 @@ namespace RoslynTool.CsToDsl
                 }
             }
         }
-        private void OutputOperatorInvoke(InvocationInfo ii, SyntaxNode node)
+        private void OutputOperatorInvoke(InvocationInfo ii, ITypeSymbol opdType, SyntaxNode node)
         {
             if (!ii.IsExternMethod) {
                 CodeBuilder.AppendFormat("invokeoperator({0}, {1}, ", ClassInfo.GetFullName(ii.MethodSymbol.ReturnType), ii.ClassKey);
                 string manglingName = ii.GetMethodName();
                 CodeBuilder.AppendFormat("\"{0}\"", manglingName);
                 CodeBuilder.Append(", ");
-                OutputArgumentList(ii, false, node);
+                OutputArgumentList(ii, opdType, false, node);
                 CodeBuilder.Append(")");
             }
             else {
@@ -1031,7 +1072,7 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("{0}({1}, {2}, ", externReturnStruct ? "invokeexternoperatorreturnstruct" : "invokeexternoperator", ClassInfo.GetFullName(ii.MethodSymbol.ReturnType), ii.GenericClassKey);
                 CodeBuilder.AppendFormat("\"{0}\"", method);
                 CodeBuilder.Append(", ");
-                OutputArgumentList(ii, false, node);
+                OutputArgumentList(ii, opdType, false, node);
                 CodeBuilder.Append(")");
             }
         }

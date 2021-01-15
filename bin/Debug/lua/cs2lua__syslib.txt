@@ -1192,6 +1192,85 @@ function callexterninstancereturnstruct(obj, class, member, ...)
     return obj[member](obj, ...)
 end
 
+function getexternstaticindexerstruct(callerClass, class, name, argCount, ...)
+    translationlog("need add handler for getexternstaticindexerstruct {0}.{1}", getclasstypename(class), name)
+    return class[name](...)
+end
+function getexterninstanceindexerstruct(callerClass, obj, class, name, argCount, ...)
+    translationlog("need add handler for getexterninstanceindexerstruct {0}.{1}", getclasstypename(class), name)
+    local arg1,arg2 = ...
+    local index
+    local meta = getmetatable(obj)
+    if meta then
+        local _class = rawget(meta, "__class")
+        if _class == System.Collections.Generic.List_T then
+            index = __unwrap_if_string(arg1)
+            return obj[index + 1]
+        elseif _class == System.Collections.Generic.Dictionary_TKey_TValue then
+            index = __unwrap_if_string(arg1)
+            return obj[index]
+        else
+            index = __unwrap_if_string(arg1)
+            if nil == index then
+                UnityEngine.Debug.LogError__Object("[cs2lua] table index is nil")
+                return nil
+            end
+            local typename = rawget(meta, "__typename")
+            if typename == "LuaArray" then
+                return obj[index + 1]
+            elseif typename == "LuaVarObject" then
+                return obj[index]
+            elseif name == "get_Chars" then
+                return Utility.StringGetChar(obj, index)
+            else
+                return obj:getItem(index)
+            end
+        end
+    end
+end
+
+function arraygetstuct(isExtern, elementType, typeKind, arr, ...)
+    translationlog("need add handler for arraygetstuct {0}[]", getclasstypename(elementType))
+    local num = select("#", ...)
+    if num == 1 then
+        local v1 = select(1, ...)
+        return arr[v1]
+    elseif num == 2 then
+        local v1 = select(1, ...)
+        local v2 = select(2, ...)
+        return arr[v1][v2]
+    elseif num == 3 then
+        local v1 = select(1, ...)
+        local v2 = select(2, ...)
+        local v3 = select(3, ...)
+        return arr[v1][v2][v3]
+    else
+        error("too many dimensions !")
+    end
+end
+function arraysetstruct(isToplevel, isExtern, elementType, typeKind, arr, ...)
+    translationlog("need add handler for arraysetstruct {0}[]", getclasstypename(elementType))
+    local num = select("#", ...)
+    if num == 2 then
+        local v1 = select(1, ...)
+        local val = select(2, ...)
+        arr[v1] = val
+    elseif num == 3 then
+        local v1 = select(1, ...)
+        local v2 = select(2, ...)
+        local val = select(3, ...)
+        arr[v1][v2] = val
+    elseif num == 4 then
+        local v1 = select(1, ...)
+        local v2 = select(2, ...)
+        local v3 = select(3, ...)
+        local val = select(4, ...)
+        arr[v1][v2][v3] = val
+    else
+        error("too many dimensions !")
+    end
+end
+
 function recycleandkeepstructvalue(fieldType, oldVal, newVal)
     translationlog("need add handler for recycleandkeepstructvalue {0}", getclasstypename(fieldType))
 end

@@ -2,3 +2,4 @@ System.Console
 System.Int32
 System.Object
 System.String
+UnityEngine.Vector3

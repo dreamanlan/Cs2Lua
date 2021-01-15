@@ -1371,36 +1371,6 @@ namespace Generator
                     else if (id == "return") {
                         if (funcOpts.NeedFuncInfo) {
                             bool first = true;
-                            int firstRetInfo = 0;
-                            if (funcOpts.RetTypes.Count > 0 && funcOpts.RetTypes[0].Type == "System.Void") {
-                                firstRetInfo = 1;
-                            }
-                            for (int ix = 0; ix < data.GetParamNum(); ++ix) {
-                                var param = data.GetParam(ix);
-                                int rtiIx = ix + firstRetInfo;
-                                if (rtiIx < funcOpts.RetTypes.Count) {
-                                    var rti = funcOpts.RetTypes[rtiIx];
-                                    if (rti.TypeKind == "TypeKind.Struct" && !IsBasicType(rti.Type, rti.TypeKind, true)) {
-                                        if (first)
-                                            first = false;
-                                        else
-                                            sb.Append(GetIndentString(indent));
-                                        var tempFunc = new Dsl.FunctionData();
-                                        tempFunc.Name = new Dsl.ValueData("movetocallerfuncinfo");
-                                        tempFunc.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
-                                        tempFunc.AddParam(rti.OriType);
-                                        tempFunc.AddParam(param);
-                                        if (!CallDslHook(calculator, tempFunc.GetId(), tempFunc, funcOpts, sb, indent)) {
-                                            sb.Append("movetocallerfuncinfo(__cs2lua_func_info, ");
-                                            sb.Append(rti.Type);
-                                            sb.Append(", ");
-                                            GenerateSyntaxComponent(param, sb, indent, false, funcOpts, calculator);
-                                            sb.Append(")");
-                                        }
-                                        sb.AppendLine(";");
-                                    }
-                                }
-                            }
                             if (s_NestedFunctionCount > 0) {
                                 if (first)
                                     first = false;
