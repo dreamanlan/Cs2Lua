@@ -20,6 +20,8 @@ https://github.com/dreamanlan/Cs2Lua/blob/master/DESIGN.md
 
 
 ## 【最新进展】
+【2021-01-16】 值类型参数转换从函数入口处处理改为在调用时处理；补全值类型数组的读写处理arraygetstruct/arraysetstruct与外部indexer的元素值读取getexternstaticindexerstruct/getexterninstanceindexerstruct处理。
+
 【2021-01-13】 基于数据流与控制流分析结果对try与using代码块部分拆分独立函数，减少GC；条件表达式给对象成员赋值改写为if-else语句形式，避免使用函数对象产生GC。
 
 【2021-01-10】 对涉及值类型处理的方法拆分为2个，将函数信息放到外层方法，然后通过xpcall调用内层方法，以保证在异常时函数信息处理的进入/退出也是配对的。这个版本应该是比较完善与正确的版本了。
