@@ -1139,18 +1139,6 @@ function wrapchar(char, intVal)
     end
 end
 
-function wrapoutstruct(v, classObj)
-    return classObj()
-end
-
-function wrapoutexternstruct(v, classObj)
-    if classObj == System.Collections.Generic.KeyValuePair_TKey_TValue then
-        return nil
-    end
-    translationlog("need add handler for wrapoutexternstruct {0}", getclasstypename(classObj))
-    return classObj.ctor()
-end
-
 function wrapstruct(v, classObj)
     return v
 end

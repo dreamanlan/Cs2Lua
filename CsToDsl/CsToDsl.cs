@@ -183,6 +183,7 @@ namespace RoslynTool.CsToDsl
                             externFlag = "extern";
                         }
                         argTypeName = ClassInfo.GetFullName(argType);
+                        MarkNeedFuncInfo();
                     }
                     var opd = ii.ArgConversions.Count > i ? ii.ArgConversions[i] : null;
                     bool dslToObject = null != ii.DslToObjectArgs ? ii.DslToObjectArgs.Contains(i) : false;
@@ -250,6 +251,7 @@ namespace RoslynTool.CsToDsl
                                 externFlag = "extern";
                             }
                             argTypeName = ClassInfo.GetFullName(argType);
+                            MarkNeedFuncInfo();
                         }
                         var opd = ii.ArgConversions.Count > ct + i ? ii.ArgConversions[ct + i] : null;
                         bool dslToObject = null != ii.DslToObjectDefArgs ? ii.DslToObjectDefArgs.Contains(i) : false;
