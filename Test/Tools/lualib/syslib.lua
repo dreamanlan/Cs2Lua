@@ -1199,12 +1199,10 @@ function callexterninstancereturnstruct(obj, class, member, ...)
     return obj[member](obj, ...)
 end
 
-function getexternstaticindexerstruct(callerClass, class, name, argCount, ...)
-    translationlog("need add handler for getexternstaticindexerstruct {0}.{1}", getclasstypename(class), name)
+function getexternstaticindexerstructimpl(callerClass, class, name, argCount, ...)
     return class[name](...)
 end
-function getexterninstanceindexerstruct(callerClass, obj, class, name, argCount, ...)
-    translationlog("need add handler for getexterninstanceindexerstruct {0}.{1}", getclasstypename(class), name)
+function getexterninstanceindexerstructimpl(callerClass, obj, class, name, argCount, ...)
     local arg1,arg2 = ...
     local index
     local meta = getmetatable(obj)
@@ -1236,8 +1234,16 @@ function getexterninstanceindexerstruct(callerClass, obj, class, name, argCount,
     end
 end
 
-function arraygetstruct(isExtern, elementType, typeKind, arr, ...)
-    translationlog("need add handler for arraygetstruct {0}[]", getclasstypename(elementType))
+function getexternstaticindexerstruct(callerClass, class, name, argCount, ...)
+    translationlog("need add handler for getexternstaticindexerstruct {0}.{1}", getclasstypename(class), name)
+    return getexternstaticindexerstructimpl(callerClass, class, name, argCount, ...)
+end
+function getexterninstanceindexerstruct(callerClass, obj, class, name, argCount, ...)
+    translationlog("need add handler for getexterninstanceindexerstruct {0}.{1}", getclasstypename(class), name)
+    return getexterninstanceindexerstructimpl(callerClass, obj, class, name, argCount, ...)
+end
+
+function arraygetstructimpl(isExtern, elementType, typeKind, arr, ...)
     local num = select("#", ...)
     if num == 1 then
         local v1 = select(1, ...)
@@ -1255,8 +1261,7 @@ function arraygetstruct(isExtern, elementType, typeKind, arr, ...)
         error("too many dimensions !")
     end
 end
-function arraysetstruct(isToplevel, isExtern, elementType, typeKind, arr, ...)
-    translationlog("need add handler for arraysetstruct {0}[]", getclasstypename(elementType))
+function arraysetstructimpl(isToplevel, isExtern, elementType, typeKind, arr, ...)
     local num = select("#", ...)
     if num == 2 then
         local v1 = select(1, ...)
@@ -1276,6 +1281,15 @@ function arraysetstruct(isToplevel, isExtern, elementType, typeKind, arr, ...)
     else
         error("too many dimensions !")
     end
+end
+
+function arraygetstruct(isExtern, elementType, typeKind, arr, ...)
+    translationlog("need add handler for arraygetstruct {0}[]", getclasstypename(elementType))
+    return arraygetstructimpl(isExtern, elementType, typeKind, arr, ...)
+end
+function arraysetstruct(isToplevel, isExtern, elementType, typeKind, arr, ...)
+    translationlog("need add handler for arraysetstruct {0}[]", getclasstypename(elementType))
+    arraysetstructimpl(isToplevel, isExtern, elementType, typeKind, arr, ...)
 end
 
 function recycleandkeepstructvalue(fieldType, oldVal, newVal)
