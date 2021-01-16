@@ -1,3 +1,71 @@
+script(wrapoutstruct)args($funcData, $funcOpts, $sb, $indent)
+{
+    //wrapoutstruct(v, classObj)
+    return(false);
+};
+
+script(wrapoutexternstruct)args($funcData, $funcOpts, $sb, $indent)
+{
+    //wrapoutexternstruct(v, classObj)
+    $classObj = getargument($funcData, 1);
+    
+    if($classObj=="UnityEngine.Vector2"){
+        usefunc("wrap_out_vector2", "(funcInfo)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+        {:
+            local obj = UnityEngine.Vector2.New(0,0)
+            table.insert(funcInfo.v2_list, obj)
+            return obj
+        :};
+        return(true);
+    }
+    elseif($classObj=="UnityEngine.Vector3"){
+        usefunc("wrap_out_vector3", "(funcInfo)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+        {:    
+            local obj = UnityEngine.Vector3.New(0,0,0)
+            table.insert(funcInfo.v3_list, obj)
+            return obj
+        :};
+        return(true);
+    }
+    elseif($classObj=="UnityEngine.Vector4"){
+        usefunc("wrap_out_vector4", "(funcInfo)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+        {:    
+            local obj = UnityEngine.Vector4.New(0,0,0,1)
+            table.insert(funcInfo.v4_list, obj)
+            return obj
+        :};
+        return(true);
+    }
+    elseif($classObj=="UnityEngine.Quaternion"){
+        usefunc("wrap_out_quaternion", "(funcInfo)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+        {:   
+            local obj = UnityEngine.Quaternion.New(0,0,0,1)
+            table.insert(funcInfo.q_list, obj)
+            return obj
+        :};
+        return(true);
+    }
+    elseif($classObj=="UnityEngine.Color"){
+        usefunc("wrap_out_color", "(funcInfo)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+        {:   
+            local obj = UnityEngine.Color.New(0,0,0,1)
+            table.insert(funcInfo.c_list, obj)
+            return obj
+        :};
+        return(true);
+    }
+    elseif($classObj=="UnityEngine.Color32"){
+        usefunc("wrap_out_color32", "(funcInfo)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+        {:   
+            local obj = Color32Pool.Alloc()
+            table.insert(funcInfo.c32_list, obj)
+            return obj
+        :};
+        return(true);
+    };
+    return(false);
+};
+
 script(wrapstruct)args($funcData, $funcOpts, $sb, $indent)
 {
     //wrapstruct(v, classObj)
@@ -64,6 +132,243 @@ script(wrapexternstruct)args($funcData, $funcOpts, $sb, $indent)
             obj.a = v.a or 0
             table.insert(funcInfo.c32_list, obj)
             return obj
+        :};
+        return(true);
+    }
+    elseif($classObj=="UnityEngine.Rect"){
+        usefunc("wrap_Rect","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1], "__cs2lua_func_info")
+        {:
+            local obj = RectPool.Alloc();
+            obj.x=v.x
+            obj.y=v.y
+            obj.width=v.width
+            obj.height=v.height
+            table.insert(funcInfo.rt_list,obj)
+            return obj
+        :};
+        return(true);
+    }elseif($classObj=="CsLibrary.DateTime"){
+        usefunc("wrap_DateTime","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1], "__cs2lua_func_info")
+        {:
+            local y,m,d,hh,mm,ss,ms =  CsLibrary.DateTime.GetDateTimeValue(v,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out)
+            local obj = DateTimePool.Alloc();
+            obj:SetDateTime(y,m,d,hh,mm,ss,ms)
+            table.insert(funcInfo.dt_list, obj)
+            return obj
+        :};
+        return(true);
+    };
+    return(false);
+};
+
+script(wrapstructargument)args($funcData, $funcOpts, $sb, $indent)
+{
+    //wrapstructargument(v, argType, argOperKind, argSymKind, class, callerClass)
+    return(false);
+};
+
+script(wrapexternstructargument)args($funcData, $funcOpts, $sb, $indent)
+{
+    //wrapexternstructargument(v, argType, argOperKind, argSymKind, class, callerClass)
+    $argType = getargument($funcData, 1);
+
+    if($argType=="UnityEngine.Vector2"){
+        usefunc("wrap_vector2","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        {:
+            local obj = UnityEngine.Vector2.New(v.x,v.y)
+            table.insert(funcInfo.v2_list, obj)
+            return obj
+        :};
+        return(true);
+    }
+    elseif($argType=="UnityEngine.Vector3"){
+        usefunc("wrap_vector3","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        {:
+            local obj = UnityEngine.Vector3.New(v.x,v.y,v.z)
+            table.insert(funcInfo.v3_list, obj)
+            return obj
+        :};
+        return(true);
+    }
+    elseif($argType=="UnityEngine.Vector4"){
+        usefunc("wrap_vector4","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        {:
+            local obj = UnityEngine.Vector4.New(v.x,v.y,v.z,v.w)
+            table.insert(funcInfo.v4_list, obj)
+            return obj
+        :};
+        return(true);
+    }
+    elseif($argType=="UnityEngine.Quaternion"){
+        usefunc("wrap_quaternion","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        {:
+            local obj = UnityEngine.Quaternion.New(v.x,v.y,v.z,v.w)
+            table.insert(funcInfo.q_list, obj)
+            return obj
+        :};
+        return(true);
+    }
+    elseif($argType=="UnityEngine.Color"){
+        usefunc("wrap_color","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        {:
+            local obj = UnityEngine.Color.New(v.r,v.g,v.b,v.a)
+            table.insert(funcInfo.c_list, obj)
+            return obj
+        :};
+        return(true);
+    }
+    elseif($argType=="UnityEngine.Color32"){
+        usefunc("wrap_color32","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        {:
+            local obj = Color32Pool.Alloc()
+            obj.r = v.r or 0
+            obj.g = v.g or 0
+            obj.b = v.b or 0
+            obj.a = v.a or 0
+            table.insert(funcInfo.c32_list, obj)
+            return obj
+        :};
+        return(true);
+    }
+    elseif($argType=="UnityEngine.Rect"){
+        usefunc("wrap_Rect","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        {:
+            local obj = RectPool.Alloc();
+            obj.x=v.x
+            obj.y=v.y
+            obj.width=v.width
+            obj.height=v.height
+            table.insert(funcInfo.rt_list,obj)
+            return obj
+        :};
+        return(true);
+    }elseif($argType=="CsLibrary.DateTime"){
+        usefunc("wrap_DateTime","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        {:
+            local y,m,d,hh,mm,ss,ms =  CsLibrary.DateTime.GetDateTimeValue(v,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out)
+            local obj = DateTimePool.Alloc();
+            obj:SetDateTime(y,m,d,hh,mm,ss,ms)
+            table.insert(funcInfo.dt_list, obj)
+            return obj
+        :};
+        return(true);
+    };
+    return(false);
+};
+
+script(wrapstructarguments)args($funcData, $funcOpts, $sb, $indent)
+{
+    //wrapstructarguments(arr, argType, argOperKind, argSymKind, class, callerClass)
+    return(false);
+};
+
+script(wrapexternstructarguments)args($funcData, $funcOpts, $sb, $indent)
+{
+    //wrapexternstructarguments(arr, argType, argOperKind, argSymKind, class, callerClass)
+    $argType = getargument($funcData, 1);
+
+    if($argType=="UnityEngine.Vector2"){
+        usefunc("wrap_vector2_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        {:
+            for i,v in ipairs(arr) do
+                local obj = UnityEngine.Vector2.New(v.x,v.y)
+                table.insert(funcInfo.v2_list, obj)
+                arr[i] = obj
+            end
+            return arr
+        :};
+        return(true);
+    }
+    elseif($argType=="UnityEngine.Vector3"){
+        usefunc("wrap_vector3_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        {:
+            for i,v in ipairs(arr) do
+                local obj = UnityEngine.Vector3.New(v.x,v.y,v.z)
+                table.insert(funcInfo.v3_list, obj)
+                arr[i] = obj
+            end
+            return arr
+        :};
+        return(true);
+    }
+    elseif($argType=="UnityEngine.Vector4"){
+        usefunc("wrap_vector4_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        {:
+            for i,v in ipairs(arr) do
+                local obj = UnityEngine.Vector4.New(v.x,v.y,v.z,v.w)
+                table.insert(funcInfo.v4_list, obj)
+                arr[i] = obj
+            end
+            return arr
+        :};
+        return(true);
+    }
+    elseif($argType=="UnityEngine.Quaternion"){
+        usefunc("wrap_quaternion_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        {:
+            for i,v in ipairs(arr) do
+                local obj = UnityEngine.Quaternion.New(v.x,v.y,v.z,v.w)
+                table.insert(funcInfo.q_list, obj)
+                arr[i] = obj
+            end
+            return arr
+        :};
+        return(true);
+    }
+    elseif($argType=="UnityEngine.Color"){
+        usefunc("wrap_color_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        {:
+            for i,v in ipairs(arr) do
+                local obj = UnityEngine.Color.New(v.r,v.g,v.b,v.a)
+                table.insert(funcInfo.c_list, obj)
+                arr[i] = obj
+            end
+            return arr
+        :};
+        return(true);
+    }
+    elseif($argType=="UnityEngine.Color32"){
+        usefunc("wrap_color32_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        {:
+            for i,v in ipairs(arr) do
+                local obj = Color32Pool.Alloc()
+                obj.r = v.r or 0
+                obj.g = v.g or 0
+                obj.b = v.b or 0
+                obj.a = v.a or 0
+                table.insert(funcInfo.c32_list, obj)
+                arr[i] = obj
+            end
+            return arr
+        :};
+        return(true);
+    }
+    elseif($argType=="UnityEngine.Rect"){
+        usefunc("wrap_Rect_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        {:
+            for i,v in ipairs(arr) do
+                local obj = RectPool.Alloc();
+                obj.x=v.x
+                obj.y=v.y
+                obj.width=v.width
+                obj.height=v.height
+                table.insert(funcInfo.rt_list,obj)
+                arr[i] = obj
+            end
+            return arr
+        :};
+        return(true);
+    }elseif($argType=="CsLibrary.DateTime"){
+        usefunc("wrap_DateTime_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        {:
+            for i,v in ipairs(arr) do
+                local y,m,d,hh,mm,ss,ms =  CsLibrary.DateTime.GetDateTimeValue(v,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out)
+                local obj = DateTimePool.Alloc();
+                obj:SetDateTime(y,m,d,hh,mm,ss,ms)
+                table.insert(funcInfo.dt_list, obj)
+                arr[i] = obj
+            end
+            return arr
         :};
         return(true);
     };
@@ -274,6 +579,67 @@ script(getexternstaticstructmember)args($funcData, $funcOpts, $sb, $indent)
             return obj
         :};
         return(true);
+    }
+    elseif($class=="CsLibrary.DateTime" && $member=="Now"){
+        usefunc("get_datetime_now", "(funcInfo)", $funcData, $funcOpts, $sb, $indent, 3, "__cs2lua_func_info")
+        {:
+            local y,m,d,hh,mm,ss,ms = CsLibrary.DateTime.GetNow(Slua.out, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out)
+            local obj = DateTimePool.Alloc()
+            obj:SetDateTime(y,m,d,hh,mm,ss,ms)
+            table.insert(funcInfo.dt_list, obj)
+            return obj
+        :};
+        return(true);
+    }
+    elseif($class=="CsLibrary.AudioManager" && $member=="Listener_Pos"){
+        usefunc("get_audiomanager_listener_pos", "(funcInfo)", $funcData, $funcOpts, $sb, $indent, 3, "__cs2lua_func_info")
+        {:
+            local _,x,y,z = CsLibrary.AudioManager.GetListenerPos(Slua.out, Slua.out, Slua.out)        
+            local obj = UnityEngine.Vector3.New(x,y,z)
+            table.insert(funcInfo.v3_list,obj)
+            return obj
+        :};
+        return(true);
+    }
+    elseif($class=="CsLibrary.UnityGeometry" && $member=="InvalidPos"){
+        usefunc("get_unitygeometry_invalidpos", "(funcInfo)", $funcData, $funcOpts, $sb, $indent, 3, "__cs2lua_func_info")
+        {:
+            local x,y,z = CsLibrary.UnityGeometry.GetInvalidPos(Slua.out, Slua.out, Slua.out)        
+            local obj = UnityEngine.Vector3.New(x,y,z)
+            table.insert(funcInfo.v3_list,obj)
+            return obj
+        :};
+        return(true);
+    }
+    elseif($class=="CsLibrary.UnityGeometry" && $member=="InvalidDir2D"){
+        usefunc("get_unitygeometry_invaliddir2d", "(funcInfo)", $funcData, $funcOpts, $sb, $indent, 3, "__cs2lua_func_info")
+        {:
+            local x,y = CsLibrary.UnityGeometry.GetInvalidDir2D(Slua.out, Slua.out, Slua.out)        
+            local obj = UnityEngine.Vector2.New(x,y)
+            table.insert(funcInfo.v2_list,obj)
+            return obj
+        :};
+        return(true);
+    }elseif($class=="UnityEngine.Screen" && $member=="safeArea"){
+        usefunc("get_Screen_safearea" ,  "(funcInfo)", $funcData, $funcOpts, $sb, $indent, 3, "__cs2lua_func_info")
+        {:
+            local obj = UnityEngine.Screen.safeArea
+            table.insert(funcInfo.rt_list,obj)
+            return obj
+        :};
+        return(true);
+    }elseif($class=="UnityEngine.Rect" && $member=="zero"){
+         usefunc("get_Rect_zero" ,  "(funcInfo)", $funcData, $funcOpts, $sb, $indent, 3, "__cs2lua_func_info")
+        {:
+            local rt = RectPool.Alloc();
+            rt.x=0
+            rt.y=0
+            rt.width=0
+            rt.height=0
+            table.insert(funcInfo.rt_list,rt)
+            return rt
+        :};
+        return(true);
     };
     return(false);
 };
@@ -285,7 +651,19 @@ script(getexterninstancestructmember)args($funcData, $funcOpts, $sb, $indent)
     $class = getargument($funcData, 2);
     $member = getargument($funcData, 3);
         
-    if($class=="UnityEngine.Transform"){
+    if($class=="UnityEngine.CapsuleCollider"){
+        if($member=="center"){
+            usefunc("get_capsulecollider_center","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z = Utility.GetCapsuleColliderCenter(obj, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        };
+    }
+    elseif($class=="UnityEngine.Transform"){
         if($member=="position"){
             usefunc("get_tranform_position","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
             {:
@@ -397,6 +775,312 @@ script(getexterninstancestructmember)args($funcData, $funcOpts, $sb, $indent)
             return(true);
         };
     }
+    elseif($class=="UnityEngine.Rect"){
+        if($member=="size"){
+            usefunc("get_rect_size","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y = Utility.RectGetSize(obj, Slua.out, Slua.out)
+                local v = UnityEngine.Vector2.New(x,y)
+                table.insert(funcInfo.v2_list, v)
+                return v
+            :};
+            return(true);
+        }elseif($member=="position"){
+            usefunc("get_rect_position","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y = Utility.RectGetPosition(obj, Slua.out, Slua.out)
+                local v = UnityEngine.Vector2.New(x,y)
+                table.insert(funcInfo.v2_list, v)
+                return v
+            :};
+            return(true);
+        };
+    }
+    elseif($class=="CsLibrary.EntityTransform"){
+        if($member=="position"){
+            usefunc("get_entitytranform_position","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z = obj:GetPosition(Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="localPosition"){
+            usefunc("get_entitytranform_localposition","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z = obj:GetLocalPosition(Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="rotation"){
+            usefunc("get_entitytranform_rotation","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z,w = obj:GetRotation(Slua.out, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Quaternion.New(x,y,z,w)
+                table.insert(funcInfo.q_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="localRotation"){
+            usefunc("get_entitytranform_localrotation","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z,w = obj:GetLocalRotation(Slua.out, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Quaternion.New(x,y,z,w)
+                table.insert(funcInfo.q_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="eulerAngles"){
+            usefunc("get_entitytranform_eulerangles","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z = obj:GetEulerAngles(Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="localEulerAngles"){
+            usefunc("get_entitytranform_localeulerangles","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z = obj:GetLocalEulerAngles(Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="localScale"){
+            usefunc("get_entitytranform_localscale","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z = obj:GetLocalScale(Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        };
+    }
+    elseif($class=="CsLibrary.MovementInfo"){
+        if($member=="position"){
+            usefunc("get_movementinfo_position","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z = obj:GetPosition(Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        };
+    }
+    elseif($class=="CsLibrary.PathInfoPoint"){
+        if($member=="m_Point"){
+            usefunc("get_pathinfopoint_point","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z = obj:GetPoint(Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        };
+    }
+    elseif($class=="CsLibrary.EntityInfo"){
+        if($member=="LastMoveDir"){
+            usefunc("get_entityinfo_lastmovedir","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y = obj:GetLastMoveDir(Slua.out, Slua.out)
+                local v = UnityEngine.Vector2.New(x,y)
+                table.insert(funcInfo.v2_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="swordHangPosOffset"){
+            usefunc("get_entityinfo_swordhangposoffset","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z = obj:GetSwordHangPosOffset(Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="swordHangRotOffset"){
+            usefunc("get_entityinfo_swordhangrotoffset","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z,w = obj:GetSwordHangPosOffset(Slua.out, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Quaternion.New(x,y,z,w)
+                table.insert(funcInfo.q_list, v)
+                return v
+            :};
+            return(true);
+        };
+    }
+    elseif($class=="CsLibrary.EntityViewModel"){
+        if($member=="position"){
+            usefunc("get_entityviewmodel_position","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z = obj:GetPosition(Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="SyncOffset"){
+            usefunc("get_entityviewmodel_syncoffset","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z = obj:GetSyncOffset(Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        };
+    }
+    elseif($class=="CsLibrary.AiStateInfo"){
+        if($member=="HomePos"){
+            usefunc("get_aistateinfo_homepos","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z = obj:GetHomePos(Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="TargetPosition"){
+            usefunc("get_aistateinfo_targetposition","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z = obj:GetTargetPosition(Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        };
+    }
+    elseif($class=="FairyGUI.GObject"){
+        if($member=="position"){
+            usefunc("get_gobject_position","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z = Utility.GObjectGetPosition(obj, Slua.out, Slua.out, Slua.out)
+                local v = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="scale"){
+            usefunc("get_gobject_scale","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y = Utility.GObjectGetScale(obj, Slua.out, Slua.out)
+                local v = UnityEngine.Vector2.New(x,y)
+                table.insert(funcInfo.v2_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="size"){
+            usefunc("get_gobject_size","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y = Utility.GObjectGetSize(obj, Slua.out, Slua.out)
+                local v = UnityEngine.Vector2.New(x,y)
+                table.insert(funcInfo.v2_list, v)
+                return v
+            :};
+            return(true);
+        }
+        elseif($member=="xy"){
+            usefunc("get_gobject_xy","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y = Utility.GObjectGetXY(obj, Slua.out, Slua.out)
+                local v = UnityEngine.Vector2.New(x,y)
+                table.insert(funcInfo.v2_list, v)
+                return v
+            :};
+            return(true);
+        }elseif($member=="pivot"){
+            usefunc("get_gobject_pivot","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y = Utility.GObjectGetPivot(obj, Slua.out, Slua.out)
+                local v = UnityEngine.Vector2.New(x,y)
+                table.insert(funcInfo.v2_list, v)
+                return v
+            :};
+            return(true);
+        };
+    }
+    elseif($class=="FairyGUI.GTextField"){
+        if($member=="color"){
+            usefunc("get_gtextfield_color","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,r,g,b,a = Utility.GTextFieldGetColor(obj, Slua.out, Slua.out, Slua.out, Slua.out)
+                local c = UnityEngine.Color.New(r,g,b,a)
+                table.insert(funcInfo.c_list,c)
+                return c
+            :};
+            return(true);
+        }
+        elseif($member=="strokeColor"){
+            usefunc("get_gtextfield_strokeColor","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,r,g,b,a = Utility.GTextFieldGetStrokeColor(obj, Slua.out, Slua.out, Slua.out, Slua.out)
+                local c = UnityEngine.Color.New(r,g,b,a)
+                table.insert(funcInfo.c_list,c)
+                return c
+            :};
+            return(true);
+        };
+    }
+    elseif($class=="FairyGUI.InputEvent"){
+        if($member=="position"){
+            usefunc("get_inputevent_position","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y = Utility.InputEventGetPosition(obj, Slua.out, Slua.out)
+                local v = UnityEngine.Vector2.New(x,y)
+                table.insert(funcInfo.v2_list, v)
+                return v
+            :};
+            return(true);
+        };
+    }
+    elseif($class=="FairyGUI.Stage"){
+        if($member=="touchPosition"){
+            usefunc("get_stage_touchposition","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y = Utility.StageTouchPositionXY(obj, Slua.out, Slua.out)
+                local v = UnityEngine.Vector2.New(x,y)
+                table.insert(funcInfo.v2_list, v)
+                return v
+            :};
+            return(true);
+        };
+    }
+    elseif($class=="FairyGUI.NTexture"){
+        if($member=="uvRect"){
+            usefunc("get_ntexture_uvrect","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,w,h = Utility.NTextureGetUvRect(obj, Slua.out, Slua.out, Slua.out, Slua.out)
+                local rt = RectPool.Alloc();
+                rt.x=x
+                rt.y=y
+                rt.width=w
+                rt.height=h
+                table.insert(funcInfo.rt_list,rt)
+                return rt
+            :};
+            return(true);
+        };
+    }
     elseif($class=="UnityEngine.Vector2"){
         if($member=="normalized"){
             usefunc("get_vector2_normalized","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
@@ -415,6 +1099,52 @@ script(getexterninstancestructmember)args($funcData, $funcOpts, $sb, $indent)
                 local v3 = obj.normalized
                 table.insert(funcInfo.v3_list , v3)
                 return v3
+            :};
+            return(true);
+        };
+    }
+    elseif($class=="CsLibrary.AudioManager"){
+        if($member=="Listener_Pos"){
+            usefunc("get_audiomanager_listener_pos","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z = obj:GetListenerPos(Slua.out, Slua.out, Slua.out)
+                local v3 = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list , v3)
+                return v3
+            :};
+            return(true);
+        };
+    }
+    elseif($class=="CsLibrary.GlobalVariables"){
+        if($member=="m_CygEndCamRot"){
+            usefunc("get_GlobalVariables_m_CygEndCamRot","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z,w = CsLibrary.GlobalVariables.GetCygEndCamRot(Slua.out, Slua.out, Slua.out, Slua.out)
+                local q = UnityEngine.Quaternion.New(x,y,z,w)
+                table.insert(funcInfo.q_list , q)
+                return q
+            :};
+            return(true);
+        };
+    }
+    elseif($class=="CsLibrary.AvatarReferOtherParams"){
+        if($member=="mingjian_hang_pos_offset"){
+            usefunc("get_AvatarReferOtherParams_mingjian_hang_pos_offset","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z = obj:GetHangPosOffset(Slua.out,Slua.out,Slua.out)
+                local v3 = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list , v3)
+                return v3
+            :};
+            return(true);
+        }
+        elseif($member=="mingjian_hang_rot_offset"){
+            usefunc("get_AvatarReferOtherParams_mingjian_hang_rot_offset","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z,w = obj:GetHangRotOffset(Slua.out,Slua.out,Slua.out,Slua.out)
+                local q = UnityEngine.Quaternion.New(x,y,z,w)
+                table.insert(funcInfo.q_list , q)
+                return q
             :};
             return(true);
         };
@@ -440,7 +1170,18 @@ script(callexternstaticreturnstruct)args($funcData, $funcOpts, $sb, $indent)
     $class = getargument($funcData, 0);
     $member = getargument($funcData, 1);    
     
-    if($class=="UnityEngine.Vector2"){
+    if($class=="Vector3Extension" && $member=="XZ"){
+        usefunc("call_vector3_xz","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+        {:
+            local v3 = ...
+            local _,x,z = Vector3Extension.GetXZ(v3, Slua.out, Slua.out)
+            local v2 = UnityEngine.Vector2.New(x,z)
+            table.insert(funcInfo.v2_list, v2)
+            return v2
+        :};
+        return(true);
+    }
+    elseif($class=="UnityEngine.Vector2"){
         if($member=="Lerp"){
             usefunc("call_vector2_lerp","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
             {:
@@ -598,16 +1339,222 @@ script(callexternstaticreturnstruct)args($funcData, $funcOpts, $sb, $indent)
                 return q
             :};
             return(true);
+        }
+	elseif($member=="Lerp"){
+            usefunc("call_quaternion_lerp","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local fromQ, toQ, t = ...
+                local targetQ = UnityEngine.Quaternion.Lerp(fromQ,toQ,t)
+                table.insert(funcInfo.q_list , targetQ)
+                return targetQ
+            :};
+            return(true);
         };
     }
-    elseif($class=="UnityEngine.Color"){
-        if($member=="Lerp"){
-            usefunc("call_color_lerp","(funcInfo, class, member, ...)", $funcData, $funcOpts, $sb, $indent,"__cs2lua_func_info")
+    elseif($class=="CsLibrary.AvatarSystem" && $member=="ConvertHsvToRgb"){
+        usefunc("call_avatarsystem_converthsvtorgb","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+        {:
+            local h,s,v,a = ...
+            local x,y,z,w = CsLibrary.AvatarSystem.ConvertHsvToRgbXYZW(h,s,v,a,Slua.out,Slua.out,Slua.out,Slua.out)
+            local v4 = UnityEngine.Vector4.New(x,y,z,w)
+            table.insert(funcInfo.v4_list, v4)
+            return v4
+        :};
+        return(true);
+    }
+    elseif($class=="CsLibrary.MovementUtility"){
+        if($member=="ReCalcPosition__WORLD_POS__Boolean"){
+            usefunc("call_movementutility_recalcposition_wpos","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
             {:
-                local c1,c2,t = ...
-                local c = UnityEngine.Color.Lerp(c1,c2,t)
-                table.insert(funcInfo.c_list, c)
-                return c
+                local pos,isFly = ...
+                local _,x,y,z = CsLibrary.MovementUtility.ReCalcPositionMsgPosForCs2Lua(pos,isFly,Slua.out,Slua.out,Slua.out)
+                local obj = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list, obj)
+                return obj
+            :};
+            return(true);
+        }
+        elseif($member=="ReCalcPosition__Vector3__Boolean"){
+            usefunc("call_movementutility_recalcposition_v3","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local pos,isFly = ...
+                local _,x,y,z = CsLibrary.MovementUtility.ReCalcPositionV3ForCs2Lua(pos,isFly,Slua.out,Slua.out,Slua.out)
+                local obj = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list, obj)
+                return obj
+            :};
+            return(true);
+        }
+        elseif($member=="GetPositionOnGround__Vector2"){
+            usefunc("call_movementutility_getpositiononground_v2","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local x = ...
+                local ox,oy,oz = CsLibrary.MovementUtility.GetPositionOnGroundV2ToXYZ(x,Slua.out,Slua.out,Slua.out)
+                local obj = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, obj)
+                return obj
+            :};
+            return(true);
+        }        
+        elseif($member=="GetPositionOnGround__Vector3"){
+            usefunc("call_movementutility_getpositiononground_v3","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local x = ...
+                local ox,oy,oz = CsLibrary.MovementUtility.GetPositionOnGroundV3ToXYZ(x,Slua.out,Slua.out,Slua.out)
+                local obj = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, obj)
+                return obj
+            :};
+            return(true);
+        }
+        elseif($member=="GetPositionOnGround__Single__Single"){
+            usefunc("call_movementutility_getpositiononground_xy","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local x,y = ...
+                local ox,oy,oz = CsLibrary.MovementUtility.GetPositionOnGroundXYToXYZ(x,y,Slua.out,Slua.out,Slua.out)
+                local obj = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, obj)
+                return obj
+            :};
+            return(true);
+        }
+        elseif($member=="GetPositionOnGround__Single__Single__Single"){
+            usefunc("call_movementutility_getpositiononground_xyz","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local x,y,z = ...
+                local ox,oy,oz = CsLibrary.MovementUtility.GetPositionOnGroundXYZToXYZ(x,y,z,Slua.out,Slua.out,Slua.out)
+                local obj = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, obj)
+                return obj
+            :};
+            return(true);
+        }        
+        elseif($member=="GetPositionOnNavMesh"){
+            usefunc("call_movementutility_getpositiononnavmesh","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local pos,dist = ...
+                local ox,oy,oz = CsLibrary.MovementUtility.GetPositionOnNavMeshXYZ(pos,dist,Slua.out,Slua.out,Slua.out)
+                local obj = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, obj)
+                return obj
+            :};
+            return(true);
+        }
+        elseif($member=="TrySamplePosOnNavMesh"){
+            usefunc("call_movementutility_trysampleposonnavmesh","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local pos,_,dist = ...
+                local r,ox,oy,oz = CsLibrary.MovementUtility.TrySamplePosOnNavMeshXYZ(pos,dist,Slua.out,Slua.out,Slua.out)
+                local obj = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, obj)
+                return r,obj
+            :};
+            return(true);
+        }
+        elseif($member=="CheckPosBeyondNavMesh"){
+            usefunc("call_movementutility_checkposbeyondnavmesh","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local pos,needDown,dist = ...
+                local r,needDown,ox,oy,oz = CsLibrary.MovementUtility.CheckPosBeyondNavMeshXYZ(pos,needDown,dist,Slua.out,Slua.out,Slua.out)
+                local obj = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, obj)
+                return r,needDown,obj
+            :};
+            return(true);
+        }
+        elseif($member=="WalkOnNavMesh"){
+            usefunc("call_movementutility_walkonnavmesh","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local from,to = ...
+                local ox,oy,oz = CsLibrary.MovementUtility.WalkOnNavMeshXYZ(from,to,Slua.out,Slua.out,Slua.out)
+                local obj = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, obj)
+                return obj
+            :};
+            return(true);
+        }
+        elseif($member=="GetRayCastPosInNavMesh3"){
+            usefunc("call_movementutility_getraycastposinnavmesh3","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local pos = ...
+                local r,ox,oy,oz = CsLibrary.MovementUtility.GetRayCastPosInNavMesh3XYZ(pos,Slua.out,Slua.out,Slua.out)
+                local obj = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, obj)
+                return r,obj
+            :};
+            return(true);
+        }
+        elseif($member=="SceneColliderTryMove"){
+            usefunc("call_movementutility_scenecollidertrymove","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local oldPos,newPos,radius = ...
+                local ox,oy,oz = CsLibrary.MovementUtility.SceneColliderTryMoveXYZ(oldPos,newPos,radius,Slua.out,Slua.out,Slua.out)
+                local obj = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, obj)
+                return obj
+            :};
+            return(true);
+        };
+    }
+    elseif($class=="PluginFramework.Skill.SkillUtils"){
+        if($member=="FromWorldDir"){
+            usefunc("call_skillutils_fromworlddir","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local worldDir = ...
+                local ox,oy,oz = PluginFramework.Skill.SkillUtils.WorldDirToXYZ(worldDir,Slua.out,Slua.out,Slua.out)
+                local obj = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, obj)
+                return obj
+            :};
+            return(true);
+        }
+        elseif($member=="WorldPos2Vector3"){
+            usefunc("call_skillutils_worldpos2vector3","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local worldPos = ...
+                local ox,oy,oz = PluginFramework.Skill.SkillUtils.WorldPosToV3(worldPos,Slua.out,Slua.out,Slua.out)
+                local obj = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, obj)
+                return obj
+            :};
+            return(true);
+        }
+        elseif($member=="CalcDefaultTargetPos"){
+            usefunc("call_skillutils_calcdefaulttargetpos","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local casterEntity, skillId = ...
+                local ox,oy,oz = PluginFramework.Skill.SkillUtils.CalcDefaultTargetPosXYZ(casterEntity,skillId,Slua.out,Slua.out,Slua.out)
+                local obj = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, obj)
+                return obj
+            :};
+            return(true);
+        };
+    }elseif($class=="CsLibrary.TimeUtility"){
+        if($member=="GetDateTimeBySecond"){
+            usefunc("call_TimeUtility_GetDateTimeBySecond","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local timeVal = ...
+                local y,m,d,hh,mm,ss,ms = CsLibrary.TimeUtility.GetDateTimeBySecondToLua(timeVal,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out)
+                local obj = DateTimePool.Alloc()
+                obj:SetDateTime(y,m,d,hh,mm,ss,ms)
+                table.insert(funcInfo.dt_list, obj)
+                return obj
+            :};
+            return(true);
+        };
+    }elseif($class=="UnityEngine.Rect"){
+        if($member=="MinMaxRect"){
+            usefunc("call_Rect_MinMaxRect","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local xmin,ymin,xmax,ymax = ...
+                local rt = RectPool.Alloc()
+                rt.x = xmin
+                rt.y = ymin
+                rt.width = xmax - xmin
+                rt.height = ymax - ymin
+                table.insert(funcInfo.rt_list, rt)
+                return rt
             :};
             return(true);
         };
@@ -620,8 +1567,89 @@ script(callexterninstancereturnstruct)args($funcData, $funcOpts, $sb, $indent)
     //callexterninstancereturnstruct(obj, class, member, ...)
     $class = getargument($funcData, 1);
     $member = getargument($funcData, 2);
-        
-    if($class=="UnityEngine.Transform"){
+    
+    if($class=="UnityEngine.Camera"){
+        if($member=="ViewportPointToRay__Vector3"){
+            usefunc("call_camera_viewportpointtoray_ray_v3","(funcInfo, obj, ...)", $funcData, $funcOpts, $sb, $indent, [1,2], "__cs2lua_func_info")
+            {:
+                local pt,eye = ...
+                local _,ox,oy,oz,dx,dy,dz = Utility.ViewportPointToRayV3(obj, pt, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out)
+                local ori = UnityEngine.Vector3.New(ox,oy,oz)
+                local dir = UnityEngine.Vector3.New(dx,dy,dz)
+                table.insert(funcInfo.v3_list, ori)
+                table.insert(funcInfo.v3_list, dir)
+                return UnityEngine.Ray.ctor__Vector3__Vector3(ori,dir)
+            :};
+            return(true);
+        }
+        elseif($member=="ViewportPointToRay__Vector3__MonoOrStereoscopicEye"){
+            usefunc("call_camera_viewportpointtoray_ray_v3_eye","(funcInfo, obj, ...)", $funcData, $funcOpts, $sb, $indent, [1,2], "__cs2lua_func_info")
+            {:
+                local pt,eye = ...
+                if getobjtypename(pt)=="Vector3" then
+                    local _,ox,oy,oz,dx,dy,dz = Utility.ViewportPointToRayV3Eye(obj, pt, eye, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out)
+                    local ori = UnityEngine.Vector3.New(ox,oy,oz)
+                    local dir = UnityEngine.Vector3.New(dx,dy,dz)
+                    table.insert(funcInfo.v3_list, ori)
+                    table.insert(funcInfo.v3_list, dir)
+                    return UnityEngine.Ray.ctor__Vector3__Vector3(ori,dir)
+                else
+                    local _,ox,oy,oz,dx,dy,dz = Utility.ViewportPointToRayV2Eye(obj, pt, eye, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out)
+                    local ori = UnityEngine.Vector3.New(ox,oy,oz)
+                    local dir = UnityEngine.Vector3.New(dx,dy,dz)
+                    table.insert(funcInfo.v3_list, ori)
+                    table.insert(funcInfo.v3_list, dir)
+                    return UnityEngine.Ray.ctor__Vector3__Vector3(ori,dir)
+                end
+            :};
+            return(true);
+        }
+        elseif($member=="WorldToScreenPoint__Vector3"){
+            usefunc("call_camera_worldtoscreenpoint_v3","(funcInfo, obj, ...)", $funcData, $funcOpts, $sb, $indent, [1,2], "__cs2lua_func_info")
+            {:
+                local pt,eye = ...
+                local _,ox,oy,oz = Utility.WorldToScreenPointV3(obj, pt, Slua.out, Slua.out, Slua.out)
+                local ori = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, ori)
+                return ori
+            :};
+            return(true);
+        }
+        elseif($member=="WorldToScreenPoint__Vector3__MonoOrStereoscopicEye"){
+            usefunc("call_camera_worldtoscreenpoint_v3_eye","(funcInfo, obj, ...)", $funcData, $funcOpts, $sb, $indent, [1,2], "__cs2lua_func_info")
+            {:
+                local pt,eye = ...
+                local _,ox,oy,oz = Utility.WorldToScreenPointV3Eye(obj, pt, eye, Slua.out, Slua.out, Slua.out)
+                local ori = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, ori)
+                return ori
+            :};
+            return(true);
+        }
+        elseif($member=="WorldToViewportPoint__Vector3"){
+            usefunc("call_camera_worldtoviewportpoint_v3","(funcInfo, obj, ...)", $funcData, $funcOpts, $sb, $indent, [1,2], "__cs2lua_func_info")
+            {:
+                local pt,eye = ...
+                local _,ox,oy,oz = Utility.WorldToViewportPointV3(obj, pt, Slua.out, Slua.out, Slua.out)
+                local ori = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, ori)
+                return ori
+            :};
+            return(true);            
+        }
+        elseif($member=="WorldToViewportPoint__Vector3__MonoOrStereoscopicEye"){
+            usefunc("call_camera_worldtoviewportpoint_v3_eye","(funcInfo, obj, ...)", $funcData, $funcOpts, $sb, $indent, [1,2], "__cs2lua_func_info")
+            {:
+                local pt,eye = ...
+                local _,ox,oy,oz = Utility.WorldToViewportPointV3Eye(obj, pt, eye, Slua.out, Slua.out, Slua.out)
+                local ori = UnityEngine.Vector3.New(ox,oy,oz)
+                table.insert(funcInfo.v3_list, ori)
+                return ori
+            :};
+            return(true);            
+        };
+    }
+    elseif($class=="UnityEngine.Transform"){
         if($member=="TransformDirection__Single__Single__Single"){
             usefunc("call_transform_transformdirection_xyz","(funcInfo, obj, ...)", $funcData, $funcOpts, $sb, $indent, [1,2], "__cs2lua_func_info")
             {:
@@ -915,7 +1943,7 @@ script(callexterninstancereturnstruct)args($funcData, $funcOpts, $sb, $indent)
             usefunc("call_gobject_transformpoint","(funcInfo, obj, ...)", $funcData, $funcOpts, $sb, $indent, [1,2], "__cs2lua_func_info")
             {:
                 local pt, targetSpace = ...
-                local _,x,y = Utility.GObjectLocalToGlobal(obj, pt, targetSpace, Slua.out, Slua.out)
+                local _,x,y = Utility.GObjectTransformPoint(obj, pt, targetSpace, Slua.out, Slua.out)
                 local v = UnityEngine.Vector2.New(x,y)
                 table.insert(funcInfo.v2_list, v)
                 return v
@@ -934,6 +1962,44 @@ script(callexterninstancereturnstruct)args($funcData, $funcOpts, $sb, $indent)
                 v.height=h
                 table.insert(funcInfo.rt_list,v)
                 return v
+            :};
+            return(true);
+        };
+    }
+    elseif($class=="FairyGUI.Stage"){
+        if($member=="GetTouchPosition"){
+            usefunc("call_stage_gettouchposition","(funcInfo, obj, ...)", $funcData, $funcOpts, $sb, $indent, [1,2], "__cs2lua_func_info")
+            {:
+                local touchId = ...
+                local _,x,y = Utility.StageGetTouchPosition(obj, touchId, Slua.out, Slua.out)
+                local v = UnityEngine.Vector2.New(x,y)
+                table.insert(funcInfo.v2_list, v)
+                return v
+            :};
+            return(true);
+        };
+    }
+    elseif($class=="CsLibrary.DateTime"){
+        if($member=="ToLocalTime"){
+            usefunc("call_DateTime_ToLocalTime","(funcInfo, obj, ...)", $funcData, $funcOpts, $sb, $indent, [1,2], "__cs2lua_func_info")
+            {:
+                local y,m,d,hh,mm,ss,ms = CsLibrary.DateTime.DateTimeToLocalTime(obj,Slua.out, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out)
+                local dt = DateTimePool.Alloc()
+                dt:SetDateTimeAndMillisecond(y,m,d,hh,mm,ss,ms)
+                table.insert(funcInfo.dt_list, dt)
+                return dt
+            :};
+            return(true);
+        }
+        elseif($member=="AddSeconds"){
+            usefunc("call_DateTime_AddSeconds","(funcInfo, obj, ...)", $funcData, $funcOpts, $sb, $indent, [1,2], "__cs2lua_func_info")
+            {:
+                local seconds = ...
+                local y,m,d,hh,mm,ss,ms = CsLibrary.DateTime.DateTimeAddSeconds(obj,seconds,Slua.out, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out)
+                local dt = DateTimePool.Alloc()
+                dt:SetDateTimeAndMillisecond(y,m,d,hh,mm,ss,ms)
+                table.insert(funcInfo.dt_list, dt)
+                return dt
             :};
             return(true);
         };
@@ -1079,6 +2145,144 @@ script(recycleandkeepstructvalue)args($funcData, $funcOpts, $sb, $indent)
     return(false);
 };
 
+script(movetocallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
+{
+    //movetocaller(class, val)
+    $class = getargument($funcData, 0);
+    
+    if($class=="UnityEngine.Vector2"){
+        usefunc("move_to_caller_vector2","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            if val~=nil then
+                local cfi = luagetcallerfuncinfo()
+                if cfi then
+                    luatableremove(funcInfo.v2_list, val)
+                    table.insert(cfi.v2_list, val)
+                end
+            end
+        :};
+        return(true);
+    }
+    elseif($class=="UnityEngine.Vector3"){
+        usefunc("move_to_caller_vector3","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            if val~=nil then
+                local cfi = luagetcallerfuncinfo()
+                if cfi then
+                    luatableremove(funcInfo.v3_list, val)
+                    table.insert(cfi.v3_list, val)
+                end
+            end
+        :};
+        return(true);
+    }
+    elseif($class=="UnityEngine.Vector4"){
+        usefunc("move_to_caller_vector4","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            if val~=nil then
+                local cfi = luagetcallerfuncinfo()
+                if cfi then
+                    luatableremove(funcInfo.v4_list, val)
+                    table.insert(cfi.v4_list, val)
+                end
+            end
+        :};
+        return(true);
+    }
+    elseif($class=="UnityEngine.Quaternion"){
+        usefunc("move_to_caller_quaternion","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            if val~=nil then
+                local cfi = luagetcallerfuncinfo()
+                if cfi then
+                    luatableremove(funcInfo.q_list, val)
+                    table.insert(cfi.q_list, val)
+                end
+            end
+        :};
+        return(true);
+    }
+    elseif($class=="UnityEngine.Color"){
+        usefunc("move_to_caller_color","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            if val~=nil then
+                local cfi = luagetcallerfuncinfo()
+                if cfi then
+                    luatableremove(funcInfo.c_list, val)
+                    table.insert(cfi.c_list, val)
+                end
+            end
+        :};
+        return(true);
+    }
+    elseif($class=="nityEngine.Color32"){
+        usefunc("move_to_caller_color32","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            if val~=nil then
+                local cfi = luagetcallerfuncinfo()
+                if cfi then
+                    luatableremove(funcInfo.c32_list, val)
+                    table.insert(cfi.c32_list, val)
+                end
+            end
+        :};
+        return(true);
+    }
+    elseif($class=="UnityEngine.Rect"){
+        usefunc("move_to_caller_rect","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            if val~=nil then
+                local cfi = luagetcallerfuncinfo()
+                if cfi then
+                    luatableremove(funcInfo.rt_list, val)
+                    table.insert(cfi.rt_list, val)
+                end
+            end
+        :};
+        return(true);
+    }
+    elseif($class=="CsLibrary.DateTime"){
+        usefunc("move_to_caller_datetime","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            if val~=nil then
+                local cfi = luagetcallerfuncinfo()
+                if cfi then
+                    luatableremove(funcInfo.dt_list, val)
+                    table.insert(cfi.dt_list, val)
+                end
+            end
+        :};
+        return(true);
+    }
+    elseif($class=="CsLibrary.TimeSpan"){
+        usefunc("move_to_caller_timespan","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            if val~=nil then
+                local cfi = luagetcallerfuncinfo()
+                if cfi then
+                    luatableremove(funcInfo.ts_list, val)
+                    table.insert(cfi.ts_list, val)
+                end
+            end
+        :};
+        return(true);
+    }
+    elseif($class=="CsLibrary.PathInfoPoint"){
+        usefunc("move_to_caller_pathinfopoint","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            if val~=nil then
+                local cfi = luagetcallerfuncinfo()
+                if cfi then
+                    luatableremove(funcInfo.pip_list, val)
+                    table.insert(cfi.pip_list, val)
+                end
+            end
+        :};
+        return(true);
+    };
+    return(false);
+};
+
 script(newstruct)args($funcData, $funcOpts, $sb, $indent)
 {
     //newstruct(class, keystr, typeargs, typekinds, ctor, initializer, ...)
@@ -1215,6 +2419,236 @@ script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
             return obj
         :};
         return(true);
+    }
+    elseif($class=="CsLibrary.PathInfoPoint"){
+        usefunc("new_pathinfopoint","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 5, "__cs2lua_func_info")
+        {:
+            local point,fly,stoppoint,movetype,distance = ...
+            local obj =  PathInfoPointPool.Alloc()
+            obj.m_Point = point;
+            obj.m_Fly = fly or false;
+            obj.m_MoveType = movetype or 0;
+            obj.m_JumpIndex = -1;
+            obj.speedScale = 1;
+            obj.m_distance = distance;
+            obj.lookTargetObjID = -1;
+            table.insert(funcInfo.pip_list, obj)
+            if obj and initializer then
+                initializer(obj)
+            end
+            return obj
+        :};
+        return(true);
+    }
+    elseif($class=="CsLibrary.DateTime"){
+        usefunc("new_DateTime","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 5, "__cs2lua_func_info")
+        {:
+            local argnum = select('#', ...)
+            local obj =  DateTimePool.Alloc()
+            if argnum == 3 then
+                local p1,p2,p3 = ...
+                obj:SetDate(p1,p2,p3)
+                table.insert(funcInfo.dt_list, obj)
+                return obj
+            elseif argnum == 6 then
+                local p1,p2,p3,p4,p5,p6 = ...
+                obj:SetDateTime(p1,p2,p3,p4,p5,p6)
+                table.insert(funcInfo.dt_list, obj)
+                return obj
+            elseif  argnum == 7 then
+                local p1,p2,p3,p4,p5,p6,p7 = ...
+                obj:SetDateTimeAndMillisecond(p1,p2,p3,p4,p5,p6,p7)
+                table.insert(funcInfo.dt_list, obj)
+                return obj
+            end
+        :};
+        return(true);
+    }
+    elseif($class=="CsLibrary.TimeSpan"){
+        usefunc("new_TimeSpan","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 5, "__cs2lua_func_info")
+        {:
+            local argnum = select('#', ...)
+            local obj =  TimeSpanPool.Alloc()
+            if argnum == 3 then
+                local p1,p2,p3 = ...
+                obj:SetTimeHMS(p1,p2,p3)
+                table.insert(funcInfo.ts_list, obj)
+                return obj
+            end
+        :};
+        return(true);
     };
+    return(false);
+};
+
+script(invokeexternoperatorreturnstruct)args($funcData, $funcOpts, $sb, $indent)
+{
+    //invokeexternoperatorreturnstruct(rettype, class, method, ...)
+    $rettype = getargument($funcData, 0);
+    $class = getargument($funcData, 1);
+    $method = getargument($funcData, 2);
+    
+    //首行的缩进cs2lua已经处理，新行需要自己添加缩进
+    //writeindent($sb, $indent);
+    writesymbol($sb, "invokeexternoperatorreturnstructimpl");
+    writesymbol($sb, "(__cs2lua_func_info, ");
+    writearguments($sb, $funcData, $funcOpts, $indent, 0);
+    writesymbol($sb, ")");
+    return(true);
+};
+
+script(literalarray)args($funcData, $funcOpts, $sb, $indent)
+{
+    //literalarray(classObj, typeKind, ...)
+    $class = getargument($funcData, 0);
+    $typeKind = getargument($funcData, 1);
+    
+    if($typeKind == "TypeKind.Struct"){            
+        if($class=="UnityEngine.Vector2"){
+            usefunc("wrap_vector2_array","(funcInfo, classObj, typeKind, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+            {:
+                local newarr = wraparray({...}, nil, classObj, typeKind)
+                for i,v in ipairs(newarr) do
+                    if v~=nil then
+                        luatableremove(funcInfo.v2_list, v)
+                    end
+                end
+                return newarr;
+            :};
+            return(true);
+        }
+        elseif($class=="UnityEngine.Vector3"){
+            usefunc("wrap_vector3_array","(funcInfo, classObj, typeKind, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+            {:
+                local newarr = wraparray({...}, nil, classObj, typeKind)
+                for i,v in ipairs(newarr) do
+                    if v~=nil then
+                        luatableremove(funcInfo.v3_list, v)
+                    end
+                end
+                return newarr;
+            :};
+            return(true);
+        }
+        elseif($class=="UnityEngine.Vector4"){
+            usefunc("wrap_vector4_array","(funcInfo, classObj, typeKind, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+            {:
+                local newarr = wraparray({...}, nil, classObj, typeKind)
+                for i,v in ipairs(newarr) do
+                    if v~=nil then
+                        luatableremove(funcInfo.v4_list, v)
+                    end
+                end
+                return newarr;
+            :};
+            return(true);
+        }
+        elseif($class=="UnityEngine.Quaternion"){
+            usefunc("wrap_quaternion_array","(funcInfo, classObj, typeKind, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+            {:
+                local newarr = wraparray({...}, nil, classObj, typeKind)
+                for i,v in ipairs(newarr) do
+                    if v~=nil then
+                        luatableremove(funcInfo.q_list, v)
+                    end
+                end
+                return newarr;
+            :};
+            return(true);
+        }
+        elseif($class=="UnityEngine.Color"){
+            usefunc("wrap_color_array","(funcInfo, classObj, typeKind, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+            {:
+                local newarr = wraparray({...}, nil, classObj, typeKind)
+                for i,v in ipairs(newarr) do
+                    if v~=nil then
+                        luatableremove(funcInfo.c_list, v)
+                    end
+                end
+                return newarr;
+            :};
+            return(true);
+        }
+        elseif($class=="nityEngine.Color32"){
+            usefunc("wrap_color32_array","(funcInfo, classObj, typeKind, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+            {:
+                local newarr = wraparray({...}, nil, classObj, typeKind)
+                for i,v in ipairs(newarr) do
+                    if v~=nil then
+                        luatableremove(funcInfo.c32_list, v)
+                    end
+                end
+                return newarr;
+            :};
+            return(true);
+        }
+        elseif($class=="UnityEngine.Rect"){
+            usefunc("wrap_rect_array","(funcInfo, classObj, typeKind, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+            {:
+                local newarr = wraparray({...}, nil, classObj, typeKind)
+                for i,v in ipairs(newarr) do
+                    if v~=nil then
+                        luatableremove(funcInfo.rt_list, v)
+                    end
+                end
+                return newarr;
+            :};
+            return(true);
+        }
+        elseif($class=="sLibrary.DateTime"){
+            usefunc("wrap_datetime_array","(funcInfo, classObj, typeKind, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+            {:
+                local newarr = wraparray({...}, nil, classObj, typeKind)
+                for i,v in ipairs(newarr) do
+                    if v~=nil then
+                        luatableremove(funcInfo.dt_list, v)
+                    end
+                end
+                return newarr;
+            :};
+            return(true);
+        }
+        elseif($class=="CsLibrary.TimeSpan"){
+            usefunc("wrap_timespan_array","(funcInfo, classObj, typeKind, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+            {:
+                local newarr = wraparray({...}, nil, classObj, typeKind)
+                for i,v in ipairs(newarr) do
+                    if v~=nil then
+                        luatableremove(funcInfo.ts_list, v)
+                    end
+                end
+                return newarr;
+            :};
+            return(true);
+        };    
+    };
+    return(false);
+};
+
+script(getexternstaticindexerstruct)args($funcData, $funcOpts, $sb, $indent)
+{
+    //getexternstaticindexerstruct(callerClass, class, name, argCount, ...)
+    
+    return(false);
+};
+
+script(getexterninstanceindexerstruct)args($funcData, $funcOpts, $sb, $indent)
+{
+    //getexterninstanceindexerstruct(callerClass, obj, class, name, argCount, ...)
+    
+    return(false);
+};
+
+script(arraygetstruct)args($funcData, $funcOpts, $sb, $indent)
+{
+    //arraygetstruct(arrIsExtern, arrSymKind, elementType, arr, ...)
+    
+    return(false);
+};
+
+script(arraysetstruct)args($funcData, $funcOpts, $sb, $indent)
+{
+    //arraysetstruct(isToplevel, arrIsExtern, arrSymKind, elementType, arr, ...)
+    
     return(false);
 };

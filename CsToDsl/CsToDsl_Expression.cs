@@ -792,17 +792,21 @@ namespace RoslynTool.CsToDsl
                 if(oper.Type.IsValueType && !SymbolTable.IsBasicType(oper.Type)) {
                     MarkNeedFuncInfo();
                     CodeBuilder.Append("arraygetstruct(");
-                    bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(oper.Type);
-                    CodeBuilder.Append(isCs2Dsl ? "false" : "true");
-                    CodeBuilder.Append(", ");
+                    var arrSym = m_Model.GetSymbolInfoEx(node.Expression).Symbol;
+                    var arrOper = oper as IArrayElementReferenceOperation;
+                    if (null != arrSym) {
+                        bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(arrSym);
+                        CodeBuilder.Append(isCs2Dsl ? "false" : "true");
+                        CodeBuilder.AppendFormat(", SymbolKind.{0}, ", arrSym.Kind.ToString());
+                    }
+                    else {
+                        bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(arrOper.ArrayReference.Type);
+                        CodeBuilder.Append(isCs2Dsl ? "false" : "true");
+                        CodeBuilder.AppendFormat(", OperationKind.{0}, ", arrOper.ArrayReference.Kind);
+                    }
                     var fn = ClassInfo.GetFullName(oper.Type);
                     CodeBuilder.Append(fn);
                     CodeBuilder.Append(", ");
-                    var arrSym = m_Model.GetSymbolInfoEx(node.Expression).Symbol;
-                    if (null != arrSym)
-                        CodeBuilder.AppendFormat("SymbolKind.{0}, ", arrSym.Kind.ToString());
-                    else
-                        CodeBuilder.Append("null, ");
                     OutputExpressionSyntax(node.Expression);
                     CodeBuilder.Append(", ");
                     OutputArgumentList(node.ArgumentList.Arguments, ", ", oper);
@@ -885,17 +889,21 @@ namespace RoslynTool.CsToDsl
                     if (oper.Type.IsValueType && !SymbolTable.IsBasicType(oper.Type)) {
                         MarkNeedFuncInfo();
                         CodeBuilder.Append("arraygetstruct(");
-                        bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(oper.Type);
-                        CodeBuilder.Append(isCs2Dsl ? "false" : "true");
-                        CodeBuilder.Append(", ");
+                        var arrSym = m_Model.GetSymbolInfoEx(node.Expression).Symbol;
+                        var arrOper = oper as IArrayElementReferenceOperation;
+                        if (null != arrSym) {
+                            bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(arrSym);
+                            CodeBuilder.Append(isCs2Dsl ? "false" : "true");
+                            CodeBuilder.AppendFormat(", SymbolKind.{0}, ", arrSym.Kind.ToString());
+                        }
+                        else {
+                            bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(arrOper.ArrayReference.Type);
+                            CodeBuilder.Append(isCs2Dsl ? "false" : "true");
+                            CodeBuilder.AppendFormat(", OperationKind.{0}, ", arrOper.ArrayReference.Kind);
+                        }
                         var fn = ClassInfo.GetFullName(oper.Type);
                         CodeBuilder.Append(fn);
                         CodeBuilder.Append(", ");
-                        var arrSym = m_Model.GetSymbolInfoEx(node.Expression).Symbol;
-                        if (null != arrSym)
-                            CodeBuilder.AppendFormat("SymbolKind.{0}, ", arrSym.Kind.ToString());
-                        else
-                            CodeBuilder.Append("null, ");
                         OutputExpressionSyntax(node.Expression);
                         CodeBuilder.Append(", ");
                         OutputExpressionSyntax(node.WhenNotNull);
@@ -935,12 +943,14 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitElementBindingExpression(ElementBindingExpressionSyntax node)
         {
-            VisitBracketedArgumentList(node.ArgumentList);
+            var oper = m_Model.GetOperationEx(node);
+            OutputArgumentList(node.ArgumentList.Arguments, ", ", oper);
         }
         public override void VisitImplicitElementAccess(ImplicitElementAccessSyntax node)
         {
             CodeBuilder.Append("[");
-            VisitBracketedArgumentList(node.ArgumentList);
+            var oper = m_Model.GetOperationEx(node);
+            OutputArgumentList(node.ArgumentList.Arguments, ", ", oper);
             CodeBuilder.Append("]");
         }
         /// <summary>

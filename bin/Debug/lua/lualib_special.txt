@@ -26,14 +26,14 @@ function new_vector3(funcInfo, initializer, ...)
 	return obj
 end
 
-function wrap_vector3(funcInfo, v)
-	local obj = UnityEngine.Vector3.New(v.x,v.y,v.z)
+function get_vector3_zero(funcInfo)
+	local obj = UnityEngine.Vector3.New(0,0,0)
 	table.insert(funcInfo.v3_list, obj)
 	return obj
 end
 
-function get_vector3_zero(funcInfo)
-	local obj = UnityEngine.Vector3.New(0,0,0)
+function wrap_vector3(funcInfo, v)
+	local obj = UnityEngine.Vector3.New(v.x,v.y,v.z)
 	table.insert(funcInfo.v3_list, obj)
 	return obj
 end

@@ -187,16 +187,6 @@ namespace RoslynTool.CsToDsl
                 }
             }
         }
-        public override void VisitArgumentList(ArgumentListSyntax node)
-        {
-            var oper = m_Model.GetOperationEx(node.Parent);
-            OutputArgumentList(node.Arguments, ", ", oper);
-        }
-        public override void VisitBracketedArgumentList(BracketedArgumentListSyntax node)
-        {
-            var oper = m_Model.GetOperationEx(node.Parent);
-            OutputArgumentList(node.Arguments, ", ", oper);
-        }
         public override void VisitArgument(ArgumentSyntax node)
         {
             var oper = m_Model.GetOperationEx(node) as IArgumentOperation;

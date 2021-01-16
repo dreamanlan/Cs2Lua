@@ -163,6 +163,105 @@ MethodKind = {
     LocalFunction = 17
 }
 
+OperationKind = {
+	None = 0,
+	Invalid = 1,
+	Block = 2,
+	VariableDeclarationGroup = 3,
+	Switch = 4,
+	Loop = 5,
+	Labeled = 6,
+	Branch = 7,
+	Empty = 8,
+	Return = 9,
+	YieldBreak = 10,
+	Lock = 11,
+	Try = 12,
+	Using = 13,
+	YieldReturn = 14,
+	ExpressionStatement = 0xF,
+	LocalFunction = 0x10,
+	Stop = 17,
+	End = 18,
+	RaiseEvent = 19,
+	Literal = 20,
+	Conversion = 21,
+	Invocation = 22,
+	ArrayElementReference = 23,
+	LocalReference = 24,
+	ParameterReference = 25,
+	FieldReference = 26,
+	MethodReference = 27,
+	PropertyReference = 28,
+	EventReference = 30,
+	UnaryOperator = 0x1F,
+	BinaryOperator = 0x20,
+	Conditional = 33,
+	Coalesce = 34,
+	AnonymousFunction = 35,
+	ObjectCreation = 36,
+	TypeParameterObjectCreation = 37,
+	ArrayCreation = 38,
+	InstanceReference = 39,
+	IsType = 40,
+	Await = 41,
+	SimpleAssignment = 42,
+	CompoundAssignment = 43,
+	Parenthesized = 44,
+	EventAssignment = 45,
+	ConditionalAccess = 46,
+	ConditionalAccessInstance = 47,
+	InterpolatedString = 48,
+	AnonymousObjectCreation = 49,
+	ObjectOrCollectionInitializer = 50,
+	MemberInitializer = 51,
+	CollectionElementInitializer = 52,
+	NameOf = 53,
+	Tuple = 54,
+	DynamicObjectCreation = 55,
+	DynamicMemberReference = 56,
+	DynamicInvocation = 57,
+	DynamicIndexerAccess = 58,
+	TranslatedQuery = 59,
+	DelegateCreation = 60,
+	DefaultValue = 61,
+	TypeOf = 62,
+	SizeOf = 0x3F,
+	AddressOf = 0x40,
+	IsPattern = 65,
+	Increment = 66,
+	Throw = 67,
+	Decrement = 68,
+	DeconstructionAssignment = 69,
+	DeclarationExpression = 70,
+	OmittedArgument = 71,
+	FieldInitializer = 72,
+	VariableInitializer = 73,
+	PropertyInitializer = 74,
+	ParameterInitializer = 75,
+	ArrayInitializer = 76,
+	VariableDeclarator = 77,
+	VariableDeclaration = 78,
+	Argument = 79,
+	CatchClause = 80,
+	SwitchCase = 81,
+	CaseClause = 82,
+	InterpolatedStringText = 83,
+	Interpolation = 84,
+	ConstantPattern = 85,
+	DeclarationPattern = 86,
+	TupleBinaryOperator = 87,
+	MethodBodyOperation = 88,
+	ConstructorBodyOperation = 89,
+	Discard = 90,
+	FlowCapture = 91,
+	FlowCaptureReference = 92,
+	IsNull = 93,
+	CaughtException = 94,
+	StaticLocalInitializationSemaphore = 95,
+	FlowAnonymousFunction = 96
+}
+
 g_LuaStr2CsStrCaches = {}
 g_CsStr2LuaStrCaches = {}
 
@@ -1142,15 +1241,12 @@ function wrapchar(char, intVal)
 end
 
 function wrapoutstruct(v, classObj)
-    return classObj()
+    return v
 end
 
 function wrapoutexternstruct(v, classObj)
-    if classObj == System.Collections.Generic.KeyValuePair_TKey_TValue then
-        return nil
-    end
     translationlog("need add handler for wrapoutexternstruct {0}", getclasstypename(classObj))
-    return classObj.ctor()
+    return v
 end
 
 function wrapstruct(v, classObj)
@@ -1160,6 +1256,24 @@ end
 function wrapexternstruct(v, classObj)
     translationlog("need add handler for wrapexternstruct {0}", getclasstypename(classObj))
     return v
+end
+
+function wrapstructargument(v, argType, argOperKind, argSymKind, class, callerClass)
+    return v
+end
+
+function wrapexternstructargument(v, argType, argOperKind, argSymKind, class, callerClass)
+    translationlog("need add handler for wrapexternstructargument {0}", getclasstypename(argType))
+    return v
+end
+
+function wrapstructarguments(arr, argType, argOperKind, argSymKind, class, callerClass)
+    return arr
+end
+
+function wrapexternstructarguments(arr, argType, argOperKind, argSymKind, class, callerClass)
+    translationlog("need add handler for wrapexternstructarguments {0}", getclasstypename(argType))
+    return arr
 end
 
 function getexternstaticstructmember(symKind, class, member)
@@ -1192,12 +1306,10 @@ function callexterninstancereturnstruct(obj, class, member, ...)
     return obj[member](obj, ...)
 end
 
-function getexternstaticindexerstruct(callerClass, class, name, argCount, ...)
-    translationlog("need add handler for getexternstaticindexerstruct {0}.{1}", getclasstypename(class), name)
+function getexternstaticindexerstructimpl(callerClass, class, name, argCount, ...)
     return class[name](...)
 end
-function getexterninstanceindexerstruct(callerClass, obj, class, name, argCount, ...)
-    translationlog("need add handler for getexterninstanceindexerstruct {0}.{1}", getclasstypename(class), name)
+function getexterninstanceindexerstructimpl(callerClass, obj, class, name, argCount, ...)
     local arg1,arg2 = ...
     local index
     local meta = getmetatable(obj)
@@ -1229,8 +1341,16 @@ function getexterninstanceindexerstruct(callerClass, obj, class, name, argCount,
     end
 end
 
-function arraygetstuct(isExtern, elementType, typeKind, arr, ...)
-    translationlog("need add handler for arraygetstuct {0}[]", getclasstypename(elementType))
+function getexternstaticindexerstruct(callerClass, class, name, argCount, ...)
+    translationlog("need add handler for getexternstaticindexerstruct {0}.{1}", getclasstypename(class), name)
+    return getexternstaticindexerstructimpl(callerClass, class, name, argCount, ...)
+end
+function getexterninstanceindexerstruct(callerClass, obj, class, name, argCount, ...)
+    translationlog("need add handler for getexterninstanceindexerstruct {0}.{1}", getclasstypename(class), name)
+    return getexterninstanceindexerstructimpl(callerClass, obj, class, name, argCount, ...)
+end
+
+function arraygetstructimpl(isExtern, arrSymKind, elementType, arr, ...)
     local num = select("#", ...)
     if num == 1 then
         local v1 = select(1, ...)
@@ -1248,8 +1368,7 @@ function arraygetstuct(isExtern, elementType, typeKind, arr, ...)
         error("too many dimensions !")
     end
 end
-function arraysetstruct(isToplevel, isExtern, elementType, typeKind, arr, ...)
-    translationlog("need add handler for arraysetstruct {0}[]", getclasstypename(elementType))
+function arraysetstructimpl(isToplevel, isExtern, arrSymKind, elementType, arr, ...)
     local num = select("#", ...)
     if num == 2 then
         local v1 = select(1, ...)
@@ -1269,6 +1388,15 @@ function arraysetstruct(isToplevel, isExtern, elementType, typeKind, arr, ...)
     else
         error("too many dimensions !")
     end
+end
+
+function arraygetstruct(isExtern, arrSymKind, elementType, arr, ...)
+    translationlog("need add handler for arraygetstruct {0}[]", getclasstypename(elementType))
+    return arraygetstructimpl(isExtern, arrSymKind, elementType, arr, ...)
+end
+function arraysetstruct(isToplevel, isExtern, arrSymKind, elementType, arr, ...)
+    translationlog("need add handler for arraysetstruct {0}[]", getclasstypename(elementType))
+    arraysetstructimpl(isToplevel, isExtern, arrSymKind, elementType, arr, ...)
 end
 
 function recycleandkeepstructvalue(fieldType, oldVal, newVal)

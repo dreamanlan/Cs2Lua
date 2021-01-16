@@ -1,2 +1,8 @@
+__cs2lua__AllAttrs = {};
+__cs2lua__AllAttrs["Cs2LuaObjectPoolEx_DataChangeCallBackInfo"] = {
+	Init__Int32__Func_1_T__Action_1_T = {
+		{"Cs2Dsl.InvokeToLuaLibAttribute", {luaLibFuncName = "TestLuaLib", addTypeInfo = "True"}, {}};
+	};
+};
 
 

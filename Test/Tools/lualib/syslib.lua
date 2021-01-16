@@ -163,6 +163,105 @@ MethodKind = {
     LocalFunction = 17
 }
 
+OperationKind = {
+	None = 0,
+	Invalid = 1,
+	Block = 2,
+	VariableDeclarationGroup = 3,
+	Switch = 4,
+	Loop = 5,
+	Labeled = 6,
+	Branch = 7,
+	Empty = 8,
+	Return = 9,
+	YieldBreak = 10,
+	Lock = 11,
+	Try = 12,
+	Using = 13,
+	YieldReturn = 14,
+	ExpressionStatement = 0xF,
+	LocalFunction = 0x10,
+	Stop = 17,
+	End = 18,
+	RaiseEvent = 19,
+	Literal = 20,
+	Conversion = 21,
+	Invocation = 22,
+	ArrayElementReference = 23,
+	LocalReference = 24,
+	ParameterReference = 25,
+	FieldReference = 26,
+	MethodReference = 27,
+	PropertyReference = 28,
+	EventReference = 30,
+	UnaryOperator = 0x1F,
+	BinaryOperator = 0x20,
+	Conditional = 33,
+	Coalesce = 34,
+	AnonymousFunction = 35,
+	ObjectCreation = 36,
+	TypeParameterObjectCreation = 37,
+	ArrayCreation = 38,
+	InstanceReference = 39,
+	IsType = 40,
+	Await = 41,
+	SimpleAssignment = 42,
+	CompoundAssignment = 43,
+	Parenthesized = 44,
+	EventAssignment = 45,
+	ConditionalAccess = 46,
+	ConditionalAccessInstance = 47,
+	InterpolatedString = 48,
+	AnonymousObjectCreation = 49,
+	ObjectOrCollectionInitializer = 50,
+	MemberInitializer = 51,
+	CollectionElementInitializer = 52,
+	NameOf = 53,
+	Tuple = 54,
+	DynamicObjectCreation = 55,
+	DynamicMemberReference = 56,
+	DynamicInvocation = 57,
+	DynamicIndexerAccess = 58,
+	TranslatedQuery = 59,
+	DelegateCreation = 60,
+	DefaultValue = 61,
+	TypeOf = 62,
+	SizeOf = 0x3F,
+	AddressOf = 0x40,
+	IsPattern = 65,
+	Increment = 66,
+	Throw = 67,
+	Decrement = 68,
+	DeconstructionAssignment = 69,
+	DeclarationExpression = 70,
+	OmittedArgument = 71,
+	FieldInitializer = 72,
+	VariableInitializer = 73,
+	PropertyInitializer = 74,
+	ParameterInitializer = 75,
+	ArrayInitializer = 76,
+	VariableDeclarator = 77,
+	VariableDeclaration = 78,
+	Argument = 79,
+	CatchClause = 80,
+	SwitchCase = 81,
+	CaseClause = 82,
+	InterpolatedStringText = 83,
+	Interpolation = 84,
+	ConstantPattern = 85,
+	DeclarationPattern = 86,
+	TupleBinaryOperator = 87,
+	MethodBodyOperation = 88,
+	ConstructorBodyOperation = 89,
+	Discard = 90,
+	FlowCapture = 91,
+	FlowCaptureReference = 92,
+	IsNull = 93,
+	CaughtException = 94,
+	StaticLocalInitializationSemaphore = 95,
+	FlowAnonymousFunction = 96
+}
+
 g_LuaStr2CsStrCaches = {}
 g_CsStr2LuaStrCaches = {}
 
@@ -1052,6 +1151,8 @@ function createpool(tag, newFunc)
     return pool
 end
 
+g_FuncInfoStack = {}
+
 g_FuncInfoPool = createpool("FuncInfo",
     function()
         return {
@@ -1139,6 +1240,15 @@ function wrapchar(char, intVal)
     end
 end
 
+function wrapoutstruct(v, classObj)
+    return v
+end
+
+function wrapoutexternstruct(v, classObj)
+    translationlog("need add handler for wrapoutexternstruct {0}", getclasstypename(classObj))
+    return v
+end
+
 function wrapstruct(v, classObj)
     return v
 end
@@ -1148,12 +1258,21 @@ function wrapexternstruct(v, classObj)
     return v
 end
 
-function wrapstructarray(arr, classObj)
+function wrapstructargument(v, argType, argOperKind, argSymKind, class, callerClass)
+    return v
+end
+
+function wrapexternstructargument(v, argType, argOperKind, argSymKind, class, callerClass)
+    translationlog("need add handler for wrapexternstructargument {0}", getclasstypename(argType))
+    return v
+end
+
+function wrapstructarguments(arr, argType, argOperKind, argSymKind, class, callerClass)
     return arr
 end
 
-function wrapexternstructarray(arr, classObj)
-    translationlog("need add handler for wrapexternstructarray {0}", getclasstypename(classObj))
+function wrapexternstructarguments(arr, argType, argOperKind, argSymKind, class, callerClass)
+    translationlog("need add handler for wrapexternstructarguments {0}", getclasstypename(argType))
     return arr
 end
 
@@ -1231,7 +1350,7 @@ function getexterninstanceindexerstruct(callerClass, obj, class, name, argCount,
     return getexterninstanceindexerstructimpl(callerClass, obj, class, name, argCount, ...)
 end
 
-function arraygetstructimpl(isExtern, elementType, typeKind, arr, ...)
+function arraygetstructimpl(isExtern, arrSymKind, elementType, arr, ...)
     local num = select("#", ...)
     if num == 1 then
         local v1 = select(1, ...)
@@ -1249,7 +1368,7 @@ function arraygetstructimpl(isExtern, elementType, typeKind, arr, ...)
         error("too many dimensions !")
     end
 end
-function arraysetstructimpl(isToplevel, isExtern, elementType, typeKind, arr, ...)
+function arraysetstructimpl(isToplevel, isExtern, arrSymKind, elementType, arr, ...)
     local num = select("#", ...)
     if num == 2 then
         local v1 = select(1, ...)
@@ -1271,13 +1390,13 @@ function arraysetstructimpl(isToplevel, isExtern, elementType, typeKind, arr, ..
     end
 end
 
-function arraygetstruct(isExtern, elementType, typeKind, arr, ...)
+function arraygetstruct(isExtern, arrSymKind, elementType, arr, ...)
     translationlog("need add handler for arraygetstruct {0}[]", getclasstypename(elementType))
-    return arraygetstructimpl(isExtern, elementType, typeKind, arr, ...)
+    return arraygetstructimpl(isExtern, arrSymKind, elementType, arr, ...)
 end
-function arraysetstruct(isToplevel, isExtern, elementType, typeKind, arr, ...)
+function arraysetstruct(isToplevel, isExtern, arrSymKind, elementType, arr, ...)
     translationlog("need add handler for arraysetstruct {0}[]", getclasstypename(elementType))
-    arraysetstructimpl(isToplevel, isExtern, elementType, typeKind, arr, ...)
+    arraysetstructimpl(isToplevel, isExtern, arrSymKind, elementType, arr, ...)
 end
 
 function recycleandkeepstructvalue(fieldType, oldVal, newVal)
@@ -1299,12 +1418,30 @@ function recycleandkeepcheck(fieldType, oldVal, newVal)
     end
 end
 
+function movetocallerfuncinfo(funcInfo, class, val)
+    translationlog("need add handler for movetocaller {0}", getclasstypename(class))
+end
+
+function luagetcallerfuncinfo()
+    local ct = #g_FuncInfoStack
+    if ct > 1 then
+        return g_FuncInfoStack[ct-1]
+    else
+        return nil
+    end
+end
+
 function luainitialize()
     local info = g_FuncInfoPool.Alloc()
+    table.insert(g_FuncInfoStack, info)
     return info
 end
 
 function luafinalize(funcInfo)
+    local last = table.remove(g_FuncInfoStack)
+    while last and last ~= funcInfo do
+        last = table.remove(g_FuncInfoStack)
+    end
     if funcInfo then
         for i,v in ipairs(funcInfo.iter_list) do
             recycleiterator(nil, v)

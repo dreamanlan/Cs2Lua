@@ -403,10 +403,12 @@ namespace SLua
                 return lmi;
             }
             int ix = key.IndexOf("__");
-            var orikey = key.Substring(ix);
-            if (cache.TryGetValue(orikey, out lmi)) {
-                cache.Add(key, lmi);
-                return lmi;
+            if (ix > 0) {
+                var orikey = key.Substring(ix);
+                if (cache.TryGetValue(orikey, out lmi)) {
+                    cache.Add(key, lmi);
+                    return lmi;
+                }
             }
             return null;
         }

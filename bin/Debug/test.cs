@@ -13,6 +13,18 @@ class LuaConsole
     }
 }
 
+enum ViewGroup
+{
+    View = 0,
+}
+
+class Constant
+{
+    internal const string One = "";
+    internal const string Two = "";
+    internal const string Three = "";
+}
+
 public class StrList : List<string>
 {
     public StrList():base() { }
@@ -39,6 +51,7 @@ public sealed class Cs2LuaObjectPoolEx<T> where T : ICs2LuaPoolAllocatedObjectEx
         m_Creater = creater;
         m_Destroyer = destroyer;
     }
+    [Cs2Dsl.InvokeToLuaLib("TestLuaLib", true)]
     public void Init(int initPoolSize, Func<T> creater, Action<T> destroyer)
     {
         m_Creater = creater;
@@ -120,7 +133,7 @@ class Test
     public void Init()
     {
         string[] items = { "全部", "进行中", "可接取", "已完成", "未获取" };
-        m_DataChangeCallBackInfoPool.Init(null, null);
+        m_DataChangeCallBackInfoPool.Init(32, () => { return new DataChangeCallBackInfo(); }, v => { });
         StrList strlist = new StrList();
         strlist.Add(string.Empty);
         strlist.Sort((a, b) => a.CompareTo(b));
@@ -147,6 +160,7 @@ class Test
         v3list.Add(Vector3.zero);
         Vector3List nv3list = new Vector3List();
         nv3list.Add(Vector3.zero);
+        var v3 = ToArray(nv3list)[0];
     }
     public int testcall()
     {
@@ -191,13 +205,23 @@ class Test
 
         this.m_IntVal = a > 1 ? aa() : c;
     }
+    internal static void LoadStartupView_FGUI(string className, string comName, string packageName, ViewGroup grp = ViewGroup.View, bool ForceShow = false)
+    {
+    }
     internal static List<T> ToList<T>(IEnumerable<T> enumer)
     {
+        LoadStartupView_FGUI(Constant.One, Constant.Two, Constant.Three);
         var r = new List<T>();
         foreach (var v in enumer) {
             r.Add(v);
         }
         return r;
+    }
+    internal static T[] ToArray<T>(IList<T> list)
+    {
+        var arr = new T[list.Count];
+        list.CopyTo(arr, 0);
+        return arr;
     }
     private Cs2LuaObjectPoolEx<DataChangeCallBackInfo> m_DataChangeCallBackInfoPool = new Cs2LuaObjectPoolEx<DataChangeCallBackInfo>();
     private int m_IntVal = 0;

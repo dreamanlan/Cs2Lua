@@ -25,6 +25,7 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 	-------------------------------
 	-------- class fields --------
 	-------------------------------
+	__attributes = Cs2LuaObjectPoolEx_DataChangeCallBackInfo__Attrs,
 	__cctor_called = false,
 
 	-------------------------------
@@ -56,18 +57,18 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 			end,
 
 			Alloc = function(this)
-				local __method_ret_51_4_62_5;
+				local __method_ret_64_4_75_5;
 				if (this.m_UnusedObjects.Count > 0) then 
-					__method_ret_51_4_62_5 = this.m_UnusedObjects:Dequeue();
-					return __method_ret_51_4_62_5;
+					__method_ret_64_4_75_5 = this.m_UnusedObjects:Dequeue();
+					return __method_ret_64_4_75_5;
 				else
 					local t;
 					t = this.m_Creater();
 					if (not isequal(nil, t)) then 
 						t:InitPool(this);
 					end;
-					__method_ret_51_4_62_5 = t;
-					return __method_ret_51_4_62_5;
+					__method_ret_64_4_75_5 = t;
+					return __method_ret_64_4_75_5;
 				end;
 				return nil;
 			end,
@@ -85,22 +86,22 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 			end,
 			__ori_Clear = function(this, __cs2lua_func_info)
 				if delegationcomparewithnil(false, this, "m_Destroyer", SymbolKind.Field, false) then 
-					local __foreach_72_12_74_13 = newiterator(__cs2lua_func_info, this.m_UnusedObjects, System.Collections.Generic.Queue_T, System.Collections.Generic.Queue_T, true);
-					for item in getiterator(__foreach_72_12_74_13) do
+					local __foreach_85_12_87_13 = newiterator(__cs2lua_func_info, this.m_UnusedObjects, System.Collections.Generic.Queue_T, System.Collections.Generic.Queue_T, true);
+					for item in getiterator(__foreach_85_12_87_13) do
 						if item == __cs2lua_nil then
 							item = nil;
 						end;
 						this.m_Destroyer(item);
 					end;
-					recycleiterator(__cs2lua_func_info, __foreach_72_12_74_13);
+					recycleiterator(__cs2lua_func_info, __foreach_85_12_87_13);
 				end;
 				this.m_UnusedObjects:Clear();
 			end,
 
 			get_Count = function(this)
-				local __method_ret_78_4_83_5;
-				__method_ret_78_4_83_5 = this.m_UnusedObjects.Count;
-				return __method_ret_78_4_83_5;
+				local __method_ret_91_4_96_5;
+				__method_ret_91_4_96_5 = this.m_UnusedObjects.Count;
+				return __method_ret_91_4_96_5;
 			end,
 
 			ctor = function(this)
@@ -119,6 +120,7 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 
 		local obj_build = function()
 			return {
+				__attributes = Cs2LuaObjectPoolEx_DataChangeCallBackInfo__Attrs,
 				__ctor_called = false,
 			};
 		end;
@@ -132,6 +134,7 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 	--------- fields info ---------
 	-------------------------------
 	__class_fields = {
+		__attributes = true,
 		__cctor_called = true,
 	},
 
@@ -139,6 +142,7 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 		m_UnusedObjects = true,
 		m_Creater = true,
 		m_Destroyer = true,
+		__attributes = true,
 		__ctor_called = true,
 	},
 
@@ -149,6 +153,7 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 
 
 require "cs2lua__syslib";
+require "cs2lua__attributes";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
 settempmetatable(Cs2LuaObjectPoolEx_DataChangeCallBackInfo);

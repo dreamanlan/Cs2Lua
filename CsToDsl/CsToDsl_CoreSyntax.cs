@@ -1405,17 +1405,21 @@ namespace RoslynTool.CsToDsl
                 if (leftOper.Type.IsValueType && !SymbolTable.IsBasicType(leftOper.Type)) {
                     MarkNeedFuncInfo();
                     CodeBuilder.AppendFormat("arraysetstruct({0}, ", toplevel ? "true" : "false");
-                    bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(leftOper.Type);
-                    CodeBuilder.Append(isCs2Dsl ? "false" : "true");
-                    CodeBuilder.Append(", ");
+                    var arrSym = m_Model.GetSymbolInfoEx(leftElementAccess.Expression).Symbol;
+                    var arrOper = leftOper as IArrayElementReferenceOperation;
+                    if (null != arrSym) {
+                        bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(arrSym);
+                        CodeBuilder.Append(isCs2Dsl ? "false" : "true");
+                        CodeBuilder.AppendFormat(", SymbolKind.{0}, ", arrSym.Kind.ToString());
+                    }
+                    else {
+                        bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(arrOper.ArrayReference.Type);
+                        CodeBuilder.Append(isCs2Dsl ? "false" : "true");
+                        CodeBuilder.AppendFormat(", OperationKind.{0}, ", arrOper.ArrayReference.Kind);
+                    }
                     var fn = ClassInfo.GetFullName(leftOper.Type);
                     CodeBuilder.Append(fn);
                     CodeBuilder.Append(", ");
-                    var arrSym = m_Model.GetSymbolInfoEx(leftElementAccess.Expression).Symbol;
-                    if (null != arrSym)
-                        CodeBuilder.AppendFormat("SymbolKind.{0}, ", arrSym.Kind.ToString());
-                    else
-                        CodeBuilder.Append("null, ");
                     OutputExpressionSyntax(leftElementAccess.Expression);
                     CodeBuilder.Append(", ");
                     OutputArgumentList(leftElementAccess.ArgumentList.Arguments, ", ", leftOper);
@@ -1565,17 +1569,21 @@ namespace RoslynTool.CsToDsl
                     if (bindingOper.Type.IsValueType && !SymbolTable.IsBasicType(bindingOper.Type)) {
                         MarkNeedFuncInfo();
                         CodeBuilder.AppendFormat("arraysetstruct({0}, ", toplevel ? "true" : "false");
-                        bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(bindingOper.Type);
-                        CodeBuilder.Append(isCs2Dsl ? "false" : "true");
-                        CodeBuilder.Append(", ");
+                        var arrSym = m_Model.GetSymbolInfoEx(leftCondAccess.Expression).Symbol;
+                        var arrOper = bindingOper as IArrayElementReferenceOperation;
+                        if (null != arrSym) {
+                            bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(arrSym);
+                            CodeBuilder.Append(isCs2Dsl ? "false" : "true");
+                            CodeBuilder.AppendFormat(", SymbolKind.{0}, ", arrSym.Kind.ToString());
+                        }
+                        else {
+                            bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(arrOper.ArrayReference.Type);
+                            CodeBuilder.Append(isCs2Dsl ? "false" : "true");
+                            CodeBuilder.AppendFormat(", OperationKind.{0}, ", arrOper.ArrayReference.Kind);
+                        }
                         var fn = ClassInfo.GetFullName(bindingOper.Type);
                         CodeBuilder.Append(fn);
                         CodeBuilder.Append(", ");
-                        var arrSym = m_Model.GetSymbolInfoEx(leftCondAccess.Expression).Symbol;
-                        if (null != arrSym)
-                            CodeBuilder.AppendFormat("SymbolKind.{0}, ", arrSym.Kind.ToString());
-                        else
-                            CodeBuilder.Append("null, ");
                         OutputExpressionSyntax(leftCondAccess.Expression);
                         CodeBuilder.Append(", ");
                         OutputExpressionSyntax(leftCondAccess.WhenNotNull);

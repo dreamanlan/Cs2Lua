@@ -900,7 +900,21 @@ namespace Generator
                 Log(scpfile, s);
             };
             calculator.Init();
+            calculator.Register("statementgetfunctionnum", new DslExpression.ExpressionFactoryHelper<DslExpression.StatementGetFunctionNumExp>());
+            calculator.Register("statementgetfunction", new DslExpression.ExpressionFactoryHelper<DslExpression.StatementGetFunctionExp>());
+            calculator.Register("functionishighorder", new DslExpression.ExpressionFactoryHelper<DslExpression.FunctionIsHighOrderExp>());
+            calculator.Register("functionhaveparam", new DslExpression.ExpressionFactoryHelper<DslExpression.FunctionHaveParamExp>());
+            calculator.Register("functionhavastatement", new DslExpression.ExpressionFactoryHelper<DslExpression.FunctionHaveStatementExp>());
+            calculator.Register("functionhavescript", new DslExpression.ExpressionFactoryHelper<DslExpression.FunctionHaveScriptExp>());
+            calculator.Register("functiongetlowerorder", new DslExpression.ExpressionFactoryHelper<DslExpression.FunctionGetLowerOrderExp>());
+            calculator.Register("functiongetname", new DslExpression.ExpressionFactoryHelper<DslExpression.FunctionGetNameExp>());
+            calculator.Register("functiongetparamclass", new DslExpression.ExpressionFactoryHelper<DslExpression.FunctionGetParamClassExp>());
+            calculator.Register("functiongetparamnum", new DslExpression.ExpressionFactoryHelper<DslExpression.FunctionGetParamNumExp>());
+            calculator.Register("functiongetparam", new DslExpression.ExpressionFactoryHelper<DslExpression.FunctionGetParamExp>());
+            calculator.Register("syntaxgetid", new DslExpression.ExpressionFactoryHelper<DslExpression.SyntaxGetIdExp>());
+            calculator.Register("syntaxgetidtype", new DslExpression.ExpressionFactoryHelper<DslExpression.SyntaxGetIdTypeExp>());
             calculator.Register("getargument", new DslExpression.ExpressionFactoryHelper<DslExpression.GetArgmentExp>());
+            calculator.Register("getsubargument", new DslExpression.ExpressionFactoryHelper<DslExpression.GetSubArgmentExp>());
             calculator.Register("writeindent", new DslExpression.ExpressionFactoryHelper<DslExpression.WriteIndentExp>());
             calculator.Register("writesymbol", new DslExpression.ExpressionFactoryHelper<DslExpression.WriteSymbolExp>());
             calculator.Register("writestring", new DslExpression.ExpressionFactoryHelper<DslExpression.WriteStringExp>());
@@ -1371,6 +1385,36 @@ namespace Generator
                     else if (id == "return") {
                         if (funcOpts.NeedFuncInfo) {
                             bool first = true;
+                            int firstRetInfo = 0;
+                            if (funcOpts.RetTypes.Count > 0 && funcOpts.RetTypes[0].Type == "System.Void") {
+                                firstRetInfo = 1;
+                            }
+                            for (int ix = 0; ix < data.GetParamNum(); ++ix) {
+                                var param = data.GetParam(ix);
+                                int rtiIx = ix + firstRetInfo;
+                                if (rtiIx < funcOpts.RetTypes.Count) {
+                                    var rti = funcOpts.RetTypes[rtiIx];
+                                    if (rti.TypeKind == "TypeKind.Struct" && !IsBasicType(rti.Type, rti.TypeKind, true)) {
+                                        if (first)
+                                            first = false;
+                                        else
+                                            sb.Append(GetIndentString(indent));
+                                        var tempFunc = new Dsl.FunctionData();
+                                        tempFunc.Name = new Dsl.ValueData("movetocallerfuncinfo");
+                                        tempFunc.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
+                                        tempFunc.AddParam(rti.OriType);
+                                        tempFunc.AddParam(param);
+                                        if (!CallDslHook(calculator, tempFunc.GetId(), tempFunc, funcOpts, sb, indent)) {
+                                            sb.Append("movetocallerfuncinfo(__cs2lua_func_info, ");
+                                            sb.Append(rti.Type);
+                                            sb.Append(", ");
+                                            GenerateSyntaxComponent(param, sb, indent, false, funcOpts, calculator);
+                                            sb.Append(")");
+                                        }
+                                        sb.AppendLine(";");
+                                    }
+                                }
+                            }
                             if (s_NestedFunctionCount > 0) {
                                 if (first)
                                     first = false;
@@ -3453,6 +3497,190 @@ namespace Generator
 }
 namespace DslExpression
 {
+    internal sealed class StatementGetFunctionNumExp : SimpleExpressionBase
+    {
+        protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
+        {
+            int r = 0;
+            if (operands.Count >= 1) {
+                var data = operands[0].As<Dsl.StatementData>();
+                if (null != data) {
+                    r = data.GetFunctionNum();
+                }
+            }
+            return r;
+        }
+    }
+    internal sealed class StatementGetFunctionExp : SimpleExpressionBase
+    {
+        protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
+        {
+            FunctionData r = null;
+            if (operands.Count >= 2) {
+                var data = operands[0].As<Dsl.StatementData>();
+                var index = operands[1].Get<int>();
+                if (null != data && index >= 0 && index < data.GetFunctionNum()) {
+                    r = data.GetFunction(index);
+                }
+            }
+            return CalculatorValue.FromObject(r);
+        }
+    }
+    internal sealed class FunctionIsHighOrderExp : SimpleExpressionBase
+    {
+        protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
+        {
+            bool r = false;
+            if (operands.Count >= 1) {
+                var data = operands[0].As<Dsl.FunctionData>();
+                if (null != data) {
+                    r = data.IsHighOrder;
+                }
+            }
+            return CalculatorValue.FromBool(r);
+        }
+    }
+    internal sealed class FunctionHaveParamExp : SimpleExpressionBase
+    {
+        protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
+        {
+            bool r = false;
+            if (operands.Count >= 1) {
+                var data = operands[0].As<Dsl.FunctionData>();
+                if (null != data) {
+                    r = data.HaveParam();
+                }
+            }
+            return CalculatorValue.FromBool(r);
+        }
+    }
+    internal sealed class FunctionHaveStatementExp : SimpleExpressionBase
+    {
+        protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
+        {
+            bool r = false;
+            if (operands.Count >= 1) {
+                var data = operands[0].As<Dsl.FunctionData>();
+                if (null != data) {
+                    r = data.HaveStatement();
+                }
+            }
+            return CalculatorValue.FromBool(r);
+        }
+    }
+    internal sealed class FunctionHaveScriptExp : SimpleExpressionBase
+    {
+        protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
+        {
+            bool r = false;
+            if (operands.Count >= 1) {
+                var data = operands[0].As<Dsl.FunctionData>();
+                if (null != data) {
+                    r = data.HaveExternScript();
+                }
+            }
+            return CalculatorValue.FromBool(r);
+        }
+    }
+    internal sealed class FunctionGetLowerOrderExp : SimpleExpressionBase
+    {
+        protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
+        {
+            FunctionData r = null;
+            if (operands.Count >= 1) {
+                var data = operands[0].As<Dsl.FunctionData>();
+                if (null != data && data.IsHighOrder) {
+                    r = data.LowerOrderFunction;
+                }
+            }
+            return CalculatorValue.FromObject(r);
+        }
+    }
+    internal sealed class FunctionGetNameExp : SimpleExpressionBase
+    {
+        protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
+        {
+            ValueData r = null;
+            if (operands.Count >= 1) {
+                var data = operands[0].As<Dsl.FunctionData>();
+                if (null != data && !data.IsHighOrder) {
+                    r = data.Name;
+                }
+            }
+            return CalculatorValue.FromObject(r);
+        }
+    }
+    internal sealed class FunctionGetParamClassExp : SimpleExpressionBase
+    {
+        protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
+        {
+            int r = 0;
+            if (operands.Count >= 1) {
+                var data = operands[0].As<Dsl.FunctionData>();
+                if (null != data) {
+                    r = data.GetParamClass();
+                }
+            }
+            return r;
+        }
+    }
+    internal sealed class FunctionGetParamNumExp : SimpleExpressionBase
+    {
+        protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
+        {
+            int r = 0;
+            if (operands.Count >= 1) {
+                var data = operands[0].As<Dsl.FunctionData>();
+                if (null != data) {
+                    r = data.GetParamNum();
+                }
+            }
+            return r;
+        }
+    }
+    internal sealed class FunctionGetParamExp : SimpleExpressionBase
+    {
+        protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
+        {
+            ISyntaxComponent r = null;
+            if (operands.Count >= 2) {
+                var data = operands[0].As<Dsl.FunctionData>();
+                var index = operands[1].Get<int>();
+                if (null != data && index >= 0 && index < data.GetParamNum()) {
+                    r = data.GetParam(index);
+                }
+            }
+            return CalculatorValue.FromObject(r);
+        }
+    }
+    internal sealed class SyntaxGetIdExp : SimpleExpressionBase
+    {
+        protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
+        {
+            string r = string.Empty;
+            if (operands.Count >= 1) {
+                var data = operands[0].As<Dsl.ISyntaxComponent>();
+                if (null != data) {
+                    r = data.GetId();
+                }
+            }
+            return r;
+        }
+    }
+    internal sealed class SyntaxGetIdTypeExp : SimpleExpressionBase
+    {
+        protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
+        {
+            int r = 0;
+            if (operands.Count >= 1) {
+                var data = operands[0].As<Dsl.ISyntaxComponent>();
+                if (null != data) {
+                    r = data.GetIdType();
+                }
+            }
+            return r;
+        }
+    }
     internal sealed class GetArgmentExp : SimpleExpressionBase
     {
         protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
@@ -3464,6 +3692,26 @@ namespace DslExpression
                 if (null != data && index >= 0 && index < data.GetParamNum()) {
                     var arg = data.GetParam(index);
                     r = Generator.LuaGenerator.CalcTypeString(arg);
+                }
+            }
+            return r;
+        }
+    }
+    internal sealed class GetSubArgmentExp : SimpleExpressionBase
+    {
+        protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
+        {
+            string r = string.Empty;
+            if (operands.Count >= 3) {
+                var data = operands[0].As<Dsl.FunctionData>();
+                var index = operands[1].Get<int>();
+                var subindex = operands[2].Get<int>();
+                if (null != data && index >= 0 && index < data.GetParamNum()) {
+                    var arg = data.GetParam(index) as Dsl.FunctionData;
+                    if (null != arg && subindex >= 0 && subindex < arg.GetParamNum()) {
+                        var subarg = arg.GetParam(subindex);
+                        r = Generator.LuaGenerator.CalcTypeString(arg);
+                    }
                 }
             }
             return r;

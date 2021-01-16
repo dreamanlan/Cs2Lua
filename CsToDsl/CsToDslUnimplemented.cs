@@ -248,6 +248,10 @@ namespace RoslynTool.CsToDsl
         { }
         public override void VisitParameter(ParameterSyntax node)
         { }
+        public override void VisitBracketedArgumentList(BracketedArgumentListSyntax node)
+        { }
+        public override void VisitArgumentList(ArgumentListSyntax node)
+        { }
         public override void VisitAttributeList(AttributeListSyntax node)
         { }
         public override void VisitAttributeTargetSpecifier(AttributeTargetSpecifierSyntax node)

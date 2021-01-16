@@ -1,0 +1,94 @@
+require "cs2lua__namespaces"; 
+
+Constant = {
+	-------------------------------
+	-------- class methods --------
+	-------------------------------
+	__new_object = function(...)
+		local __cs2dsl_newobj;
+		__cs2dsl_newobj = newobject(Constant, nil, nil, "ctor", nil, ...);
+		return __cs2dsl_newobj;
+	end,
+
+	cctor = function()
+		Constant.__cctor();
+	end,
+
+	__cctor = function()
+		if Constant.__cctor_called then 
+			return;
+		else
+			Constant.__cctor_called = true;
+		end;
+	end,
+
+	-------------------------------
+	-------- class fields --------
+	-------------------------------
+	One = "",
+	Two = "",
+	Three = "",
+	__cctor_called = false,
+
+	-------------------------------
+	--- define class and object ---
+	-------------------------------
+	__define_class = function()
+		Utility.Warn("Constant::__define_class begin");
+
+		local class = Constant;
+
+		local obj_methods = {
+			ctor = function(this)
+				this:__ctor();
+			end,
+
+			__ctor = function(this)
+				if this.__ctor_called then 
+					return;
+				else
+					this.__ctor_called = true;
+				end;
+			end,
+		};
+
+		local obj_build = function()
+			return {
+				__ctor_called = false,
+			};
+		end;
+
+		local __defineclass_return = defineclass(nil, "Constant", "Constant", class, obj_methods, obj_build, false);
+		Utility.Warn("Constant::__define_class end");
+		return __defineclass_return;
+	end,
+
+	-------------------------------
+	--------- fields info ---------
+	-------------------------------
+	__class_fields = {
+		One = true,
+		Two = true,
+		Three = true,
+		__cctor_called = true,
+	},
+
+	__obj_fields = {
+		__ctor_called = true,
+	},
+
+	-------------------------------
+	-------- metadata info --------
+	-------------------------------
+	__method_info = {
+		ctor = {
+			Kind = MethodKind.Constructor,
+		},
+	},
+};
+
+
+require "cs2lua__syslib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+settempmetatable(Constant);
