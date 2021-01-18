@@ -677,9 +677,42 @@ namespace RoslynTool.CsToDsl
             string prestr = ", ";
             codeBuilder.Append(luaLibFunc);
             codeBuilder.Append("(");
-            codeBuilder.Append(ct + 1);
+            codeBuilder.Append(ct + 2);
             codeBuilder.Append(prestr);
+            codeBuilder.Append("[");
             codeBuilder.Append(callerClassName);
+            var namedCallerType = callerType as INamedTypeSymbol;
+            if (null != namedCallerType) {
+                ITypeSymbol firstTypeArg = null;
+                ITypeSymbol secondTypeArg = null;
+                if (namedCallerType.TypeArguments.Length > 0) {
+                    firstTypeArg = namedCallerType.TypeArguments[0];
+                }
+                if (namedCallerType.TypeArguments.Length > 1) {
+                    secondTypeArg = namedCallerType.TypeArguments[1];
+                }
+                string firstTypeName = "null";
+                string firstTypeKind = "null";
+                if (null != firstTypeArg) {
+                    firstTypeName = ClassInfo.GetFullName(firstTypeArg);
+                    firstTypeKind = "TypeKind." + firstTypeArg.TypeKind.ToString();
+                }
+                string secondTypeName = "null";
+                string secondTypeKind = "null";
+                if (null != secondTypeArg) {
+                    secondTypeName = ClassInfo.GetFullName(secondTypeArg);
+                    secondTypeKind = "TypeKind." + secondTypeArg.TypeKind.ToString();
+                }
+                codeBuilder.Append(prestr);
+                codeBuilder.Append(firstTypeName);
+                codeBuilder.Append(prestr);
+                codeBuilder.Append(firstTypeKind);
+                codeBuilder.Append(prestr);
+                codeBuilder.Append(secondTypeName);
+                codeBuilder.Append(prestr);
+                codeBuilder.Append(secondTypeKind);
+            }
+            codeBuilder.Append("]");
             for (int i = 0; i < Args.Count; ++i) {
                 var argType = ArgTypes[i];
                 if (null == argType && MethodSymbol.Parameters.Length > 0) {
@@ -831,9 +864,33 @@ namespace RoslynTool.CsToDsl
                 if (null != expOper)
                     expType = expOper.Type;
             }
+            var namedExpType = expType as INamedTypeSymbol;
 
             string luaLibFunc = ClassInfo.GetAttributeArgument<string>(sym, "Cs2Dsl.InvokeToLuaLibAttribute", 0);
             bool addTypeInfo = ClassInfo.GetAttributeArgument<bool>(sym, "Cs2Dsl.InvokeToLuaLibAttribute", 1);
+            if (null != namedExpType && namedExpType.TypeArguments.Length > 0 && string.IsNullOrEmpty(luaLibFunc)) {
+                bool isCollection = CsDslTranslater.IsImplementationOfSys(expType, "ICollection");
+                if (isCollection) {
+                    bool haveValueTypeArg = false;
+                    foreach(var tp in namedExpType.TypeArguments) {
+                        if (tp.IsValueType && !SymbolTable.IsBasicType(tp)) {
+                            haveValueTypeArg = true;
+                            break;
+                        }
+                    }
+                    if (haveValueTypeArg) {
+                        bool isDictionary = CsDslTranslater.IsImplementationOfSys(expType, "IDictionary");
+                        bool isList = CsDslTranslater.IsImplementationOfSys(expType, "IList");
+                        if (isDictionary)
+                            luaLibFunc = string.Format("call{0}structdictionary{1}", IsExternMethod ? "extern" : string.Empty, !sym.IsStatic ? "instance" : (IsExtensionMethod ? "extension" : "static"));
+                        else if (isList)
+                            luaLibFunc = string.Format("call{0}structlist{1}", IsExternMethod ? "extern" : string.Empty, !sym.IsStatic ? "instance" : (IsExtensionMethod ? "extension" : "static"));
+                        else
+                            luaLibFunc = string.Format("call{0}structcollection{1}", IsExternMethod ? "extern" : string.Empty, !sym.IsStatic ? "instance" : (IsExtensionMethod ? "extension" : "static"));
+                        addTypeInfo = true;
+                    }
+                }
+            }
             if (isMemberAccess) {
                 string fnOfIntf = string.Empty;
                 bool isExplicitInterfaceInvoke = cs2dsl.CheckExplicitInterfaceAccess(sym, ref fnOfIntf);
@@ -847,14 +904,14 @@ namespace RoslynTool.CsToDsl
                         var symInfo = model.GetSymbolInfoEx(node);
                         var masym = symInfo.Symbol as ISymbol;
                         if (null != masym) {
-                            bool isCs2Lua = SymbolTable.Instance.IsCs2DslSymbol(masym);
+                            bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(masym);
                             string kind = SymbolTable.Instance.GetSymbolKind(masym);
                             string fn = ClassInfo.GetFullName(masym.ContainingType);
                             string dt = ClassInfo.GetFullName(sym);
                             if (isExternMethodReturnStruct) {
                                 codeBuilder.Append("callexterndelegationreturnstruct(getinstance(SymbolKind.");
                             }
-                            else if (isCs2Lua) {
+                            else if (isCs2Dsl) {
                                 codeBuilder.AppendFormat("call{0}delegation(getinstance(SymbolKind.", IsExternMethod ? "extern" : string.Empty);
                             }
                             else {
@@ -889,7 +946,9 @@ namespace RoslynTool.CsToDsl
                     prestr = ", ";
                 }
                 else if (IsExtensionMethod) {
-                    if (isExternMethodReturnStruct)
+                    if (!string.IsNullOrEmpty(luaLibFunc))
+                        OutputInvokeToLuaLibPrefix(codeBuilder, luaLibFunc, expType);
+                    else if (isExternMethodReturnStruct)
                         codeBuilder.Append("callexternextensionreturnstruct(");
                     else if (IsExternMethod)
                         codeBuilder.Append("callexternextension(");

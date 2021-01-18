@@ -6,7 +6,7 @@ Vector3List = {
 	-------------------------------
 	__new_object = function(...)
 		local __cs2dsl_newobj;
-		__cs2dsl_newobj = newobject(Vector3List, nil, nil, "ctor", nil, ...);
+		__cs2dsl_newobj = newobject(Vector3List, nil, nil, "ctor", 0, nil, ...);
 		return __cs2dsl_newobj;
 	end,
 
@@ -37,24 +37,25 @@ Vector3List = {
 
 		local obj_methods = {
 			ctor = function(this)
-				buildexternbaseobj(this, Vector3List, System.Collections.Generic.List_T, "ctor");
+				this = __get_this_for_class(this, Vector3List);
+				buildexternbaseobj(this, Vector3List, System.Collections.Generic.List_T, "ctor", 0);
 				this:__ctor();
-				return this;
 			end,
 
 			ctor__Int32 = function(this, c)
-				buildexternbaseobj(this, Vector3List, System.Collections.Generic.List_T, "ctor__Int32", c);
+				this = __get_this_for_class(this, Vector3List);
+				buildexternbaseobj(this, Vector3List, System.Collections.Generic.List_T, "ctor__Int32", 0, c);
 				this:__ctor();
-				return this;
 			end,
 
 			ctor__ICollection_1_Vector3 = function(this, coll)
-				buildexternbaseobj(this, Vector3List, System.Collections.Generic.List_T, "ctor__IEnumerable_1_T", coll);
+				this = __get_this_for_class(this, Vector3List);
+				buildexternbaseobj(this, Vector3List, System.Collections.Generic.List_T, "ctor__IEnumerable_1_T", 0, coll);
 				this:__ctor();
-				return this;
 			end,
 
 			__ctor = function(this)
+				this = __get_this_for_class(this, Vector3List);
 				if this.__ctor_called then 
 					return;
 				else
@@ -97,6 +98,9 @@ Vector3List = {
 		"System.Collections.Generic.IReadOnlyCollection_T",
 		"System.Collections.Generic.IEnumerable_T",
 		"System.Collections.IEnumerable",
+	},
+	__class_info = {
+		Kind = TypeKind.Class,
 	},
 	__method_info = {
 		ctor = {

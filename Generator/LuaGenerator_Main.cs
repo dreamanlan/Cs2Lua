@@ -202,6 +202,28 @@ namespace Generator
 
                     sb.AppendLine();
 
+                    bool sealedClass = false;
+                    bool staticClass = false;
+                    HashSet<string> privateMethods = new HashSet<string>();
+                    var classInfo = FindStatement(funcData, "class_info") as Dsl.FunctionData;
+                    if (null != classInfo) {
+                        foreach (var def in classInfo.Params) {
+                            var mdef = def as Dsl.FunctionData;
+                            string key = mdef.GetId();
+                            string val = mdef.GetParamId(0);
+                            bool bv;
+                            bool.TryParse(val, out bv);
+                            if (key == "sealed") {
+                                sealedClass = true;
+                                break;
+                            }
+                            else if (key == "static") {
+                                staticClass = true;
+                                break;
+                            }
+                        }
+                    }
+
                     sb.AppendFormatLine("{0}{1} = {{", GetIndentString(indent), className);
                     ++indent;
 
@@ -270,7 +292,7 @@ namespace Generator
                                                     sb.AppendFormatLine("{0}__cs2lua_func_info = luafinalize(__cs2lua_func_info);", GetIndentString(indent));
                                                 }
                                                 sb.AppendFormatLine("{0}if not __retval_0 then", GetIndentString(indent));
-                                                sb.AppendFormatLine("{0}error(__retval_1);", GetIndentString(indent + 1));
+                                                sb.AppendFormatLine("{0}lualog(\"{{0}}\", __retval_1);", GetIndentString(indent + 1));
                                                 sb.AppendFormatLine("{0}__retval_1 = nil;", GetIndentString(indent + 1));
                                                 sb.AppendFormatLine("{0}end;", GetIndentString(indent));
                                                 sb.AppendFormat("{0}return ", GetIndentString(indent));
@@ -437,6 +459,9 @@ namespace Generator
                                         bool haveParams = GenerateFunctionParams(fcall, sb, 0);
                                         sb.AppendLine(")");
                                         ++indent;
+                                        if (!sealedClass) {
+                                            sb.AppendFormatLine("{0}this = __get_this_for_class(this, {1});", GetIndentString(indent), className);
+                                        }
                                         if (funcOpts.NeedFuncInfo) {
                                             sb.AppendFormatLine("{0}local __cs2lua_func_info = luainitialize();", GetIndentString(indent));
                                         }
@@ -460,7 +485,7 @@ namespace Generator
                                                     sb.AppendFormatLine("{0}__cs2lua_func_info = luafinalize(__cs2lua_func_info);", GetIndentString(indent));
                                                 }
                                                 sb.AppendFormatLine("{0}if not __retval_0 then", GetIndentString(indent));
-                                                sb.AppendFormatLine("{0}error(__retval_1);", GetIndentString(indent + 1));
+                                                sb.AppendFormatLine("{0}lualog(\"{{0}}\", __retval_1);", GetIndentString(indent + 1));
                                                 sb.AppendFormatLine("{0}__retval_1 = nil;", GetIndentString(indent + 1));
                                                 sb.AppendFormatLine("{0}end;", GetIndentString(indent));
                                                 sb.AppendFormat("{0}return ", GetIndentString(indent));
@@ -660,26 +685,6 @@ namespace Generator
                         sb.AppendFormatLine("{0}}},", GetIndentString(indent));
                     }
 
-                    bool sealedClass = false;
-                    bool staticClass = false;
-                    var classInfo = FindStatement(funcData, "class_info") as Dsl.FunctionData;
-                    if (null != classInfo) {
-                        foreach (var def in classInfo.Params) {
-                            var mdef = def as Dsl.FunctionData;
-                            string key = mdef.GetId();
-                            string val = mdef.GetParamId(0);
-                            bool bv;
-                            bool.TryParse(val, out bv);
-                            if (key == "sealed") {
-                                sealedClass = true;
-                                break;
-                            }
-                            else if (key == "static") {
-                                staticClass = true;
-                                break;
-                            }
-                        }
-                    }
                     if (s_GenClassInfo && null != classInfo) {
                         var fcall = classInfo;
                         if (classInfo.IsHighOrder)
@@ -1738,6 +1743,72 @@ namespace Generator
                         GenerateArguments(data, sb, indent, 0, funcOpts, calculator);
                         sb.Append(')');
                     }
+                    else if(id=="callstructdictionarystatic" || id == "callexternstructdictionarystatic" ||
+                        id == "callstructliststatic" || id == "callexternstructliststatic" ||
+                        id == "callstructcollectionstatic" || id == "callexternstructcollectionstatic") {
+                        string ignoreCtStr = data.GetParamId(0);
+                        int ignoreCt;
+                        int.TryParse(ignoreCtStr, out ignoreCt);
+                        var obj = data.Params[ignoreCt];
+                        var member = data.Params[ignoreCt + 1];
+                        var mid = member.GetId();
+                        GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
+                        sb.AppendFormat(".{0}", mid);
+                        sb.Append("(");
+                        int start = ignoreCt + 2;
+                        GenerateArguments(data, sb, indent, start, funcOpts, calculator);
+                        sb.Append(")");
+                    }
+                    else if (id == "callstructdictionaryinstance" || id == "callexternstructdictionaryinstance" ||
+                        id == "callstructlistinstance" || id == "callexternstructlistinstance" ||
+                        id == "callstructcollectioninstance" || id == "callexternstructcollectioninstance") {
+                        string ignoreCtStr = data.GetParamId(0);
+                        int ignoreCt;
+                        int.TryParse(ignoreCtStr, out ignoreCt);
+                        var obj = data.Params[ignoreCt];
+                        var className = CalcTypeString(data.GetParam(ignoreCt + 1));
+                        var member = data.Params[ignoreCt + 2];
+                        var mid = member.GetId();
+                        var objCd = obj as Dsl.FunctionData;
+                        GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
+                        if (null != objCd && objCd.GetId() == "getinstance" && objCd.GetParamNum() == 4 && objCd.GetParamId(3) == "base") {
+                            sb.AppendFormat(":__self__{0}", mid);
+                        }
+                        else {
+                            sb.AppendFormat(":{0}", mid);
+                        }
+                        sb.Append("(");
+                        int start = ignoreCt + 3;
+                        GenerateArguments(data, sb, indent, start, funcOpts, calculator);
+                        sb.Append(")");
+                    }
+                    else if (id == "callstructdictionaryextension" ||
+                        id == "callstructlistextension" ||
+                        id == "callstructcollectionextension") {
+                        string ignoreCtStr = data.GetParamId(0);
+                        int ignoreCt;
+                        int.TryParse(ignoreCtStr, out ignoreCt);
+                        var obj = data.Params[ignoreCt];
+                        var member = data.Params[ignoreCt + 1];
+                        var mid = member.GetId();
+                        GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
+                        sb.AppendFormat(".{0}", mid);
+                        sb.Append("(");
+                        int start = ignoreCt + 2;
+                        GenerateArguments(data, sb, indent, start, funcOpts, calculator);
+                        sb.Append(")");
+                    }
+                    else if (id == "callexternstructdictionaryextension" ||
+                        id == "callexternstructlistextension" ||
+                        id == "callexternstructcollectionextension") {
+                        string ignoreCtStr = data.GetParamId(0);
+                        int ignoreCt;
+                        int.TryParse(ignoreCtStr, out ignoreCt);
+                        sb.Append(id);
+                        sb.Append('(');
+                        GenerateArguments(data, sb, indent, ignoreCt, funcOpts, calculator);
+                        sb.Append(')');
+                    }
                     else if (id == "getstaticindexer") {
                         var _class = data.Params[0];
                         var _member = data.Params[1].GetId();
@@ -2414,7 +2485,10 @@ namespace Generator
                                         sb.Append("(");
                                         break;
                                     case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_BRACKET:
-                                        sb.Append("[");
+                                        if (data.HaveId())
+                                            sb.Append("[");
+                                        else
+                                            sb.Append("{");
                                         break;
                                     case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PERIOD:
                                         sb.AppendFormat(".{0}", data.GetParamId(0));
@@ -2432,7 +2506,10 @@ namespace Generator
                                         sb.Append(")");
                                         break;
                                     case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_BRACKET:
-                                        sb.Append("]");
+                                        if (data.HaveId())
+                                            sb.Append("]");
+                                        else
+                                            sb.Append("}");
                                         break;
                                     case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PERIOD:
                                         break;

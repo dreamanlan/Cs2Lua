@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.Operations;
 namespace RoslynTool.CsToDsl
 {
     /// <summary>
-    /// 一些C#层面合法但cs2lua需要限制的相关用法的类型检查。
+    /// 一些C#层面合法但cs2dsl需要限制的相关用法的类型检查。
     /// </summary>
     internal static class TypeChecker
     {

@@ -6,7 +6,7 @@ require("cs2dsl__interfaces");
 class(Vector3List, System.Collections.Generic.List_T) {
 	static_methods {
 		__new_object = deffunc(1)args(...){
-			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(Vector3List, "g_Vector3List", typeargs(), typekinds(), "ctor", null, ...);
+			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(Vector3List, "g_Vector3List", typeargs(), typekinds(), "ctor", 0, null, ...);
 			return(__cs2dsl_newobj);
 		}options[needfuncinfo(false)];
 		cctor = deffunc(0)args(){
@@ -28,19 +28,16 @@ class(Vector3List, System.Collections.Generic.List_T) {
 
 	instance_methods {
 		ctor = deffunc(0)args(this){
-			buildexternbaseobj(this, Vector3List, System.Collections.Generic.List_T, "ctor");
+			buildexternbaseobj(this, Vector3List, System.Collections.Generic.List_T, "ctor", 0);
 			callinstance(this, Vector3List, "__ctor");
-			return(this);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0)],
 		ctor__Int32 = deffunc(0)args(this, c){
-			buildexternbaseobj(this, Vector3List, System.Collections.Generic.List_T, "ctor__Int32", c);
+			buildexternbaseobj(this, Vector3List, System.Collections.Generic.List_T, "ctor__Int32", 0, c);
 			callinstance(this, Vector3List, "__ctor");
-			return(this);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0), paramtype(c, System.Int32, TypeKind.Struct, 0)],
 		ctor__ICollection_1_Vector3 = deffunc(0)args(this, coll){
-			buildexternbaseobj(this, Vector3List, System.Collections.Generic.List_T, "ctor__IEnumerable_1_T", coll);
+			buildexternbaseobj(this, Vector3List, System.Collections.Generic.List_T, "ctor__IEnumerable_1_T", 0, coll);
 			callinstance(this, Vector3List, "__ctor");
-			return(this);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0), paramtype(coll, System.Collections.Generic.ICollection_T, TypeKind.Interface, 0)],
 		__ctor = deffunc(0)args(this){
 			if(getinstance(SymbolKind.Field, this, Vector3List, "__ctor_called")){

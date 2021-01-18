@@ -37,20 +37,24 @@ TestIntfImpl = {
 
 		local obj_methods = {
 			get_prop = function(this)
+				this = __get_this_for_class(this, TestIntfImpl);
 				local __method_ret_25_4_25_33;
 				__method_ret_25_4_25_33 = this.prop;
 				return __method_ret_25_4_25_33;
 			end,
 
 			set_prop = function(this, value)
+				this = __get_this_for_class(this, TestIntfImpl);
 				this.prop = value;
 			end,
 
 			ctor = function(this)
+				this = __get_this_for_class(this, TestIntfImpl);
 				this:__ctor();
 			end,
 
 			__ctor = function(this)
+				this = __get_this_for_class(this, TestIntfImpl);
 				if this.__ctor_called then 
 					return;
 				else
@@ -88,6 +92,9 @@ TestIntfImpl = {
 	-------------------------------
 	__interfaces = {
 		"ITestIntf",
+	},
+	__class_info = {
+		Kind = TypeKind.Class,
 	},
 	__method_info = {
 		get_prop = {

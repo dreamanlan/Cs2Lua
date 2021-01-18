@@ -496,7 +496,7 @@ namespace Generator
         }
         private static void ReadConfig()
         {
-            s_GenClassInfo = false;
+            s_GenClassInfo = true;
             s_GenMethodInfo = false;
             s_GenPropertyInfo = false;
             s_GenEventInfo = false;
@@ -839,7 +839,7 @@ namespace Generator
             internal List<Regex> Matches = new List<Regex>();
         }
 
-        private static bool s_GenClassInfo = false;
+        private static bool s_GenClassInfo = true;
         private static bool s_GenMethodInfo = false;
         private static bool s_GenPropertyInfo = false;
         private static bool s_GenEventInfo = false;

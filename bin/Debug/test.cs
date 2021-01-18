@@ -160,7 +160,10 @@ class Test
         v3list.Add(Vector3.zero);
         Vector3List nv3list = new Vector3List();
         nv3list.Add(Vector3.zero);
-        var v3 = ToArray(nv3list)[0];
+        var v3 = nv3list[0];
+        nv3list[0] = v3;
+        var vv3 = ToArray(nv3list)[0];
+        ToArray(nv3list)[0] = vv3;
     }
     public int testcall()
     {

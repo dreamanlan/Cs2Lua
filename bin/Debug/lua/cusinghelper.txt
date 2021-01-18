@@ -117,14 +117,17 @@ CUsingHelper = {
 
 		local obj_methods = {
 			ctor = function(this, a1, a2)
+				this = __get_this_for_class(this, CUsingHelper);
 				this:__ctor();
 				return this;
 			end,
 
 			Dispose = function(this)
+				this = __get_this_for_class(this, CUsingHelper);
 			end,
 
 			__ctor = function(this)
+				this = __get_this_for_class(this, CUsingHelper);
 				if this.__ctor_called then 
 					return;
 				else
@@ -163,6 +166,9 @@ CUsingHelper = {
 	-------------------------------
 	__interfaces = {
 		"System.IDisposable",
+	},
+	__class_info = {
+		Kind = TypeKind.Class,
 	},
 	__method_info = {
 		ctor = {

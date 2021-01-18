@@ -453,13 +453,15 @@ namespace RoslynTool.CsToDsl
             var leftEsym = leftSym as IEventSymbol;
             var leftFsym = leftSym as IFieldSymbol;
             
-            var rightOper = m_Model.GetOperationEx(node.Right);
-            var rightSymbolInfo = m_Model.GetSymbolInfoEx(node.Right);
-            var rightSym = rightSymbolInfo.Symbol;
-
             var leftType = m_Model.GetTypeInfoEx(node.Left).Type;
             var rightType = m_Model.GetTypeInfoEx(node.Right).Type;
-
+            var rightOper = m_Model.GetOperationEx(node.Right);
+            if (null == leftType && null != leftOper) {
+                leftType = leftOper.Type;
+            }
+            if (null == rightType && null != rightOper) {
+                rightType = rightOper.Type;
+            };
             var rightConstValue = m_Model.GetConstantValueEx(node.Right);
 
             var curMethod = GetCurMethodSemanticInfo();
@@ -487,12 +489,12 @@ namespace RoslynTool.CsToDsl
                 }
             }
             bool dslToObject = false;
-            if (null != leftOper && null != leftOper.Type && null != rightOper && null != rightOper.Type) {
-                dslToObject = InvocationInfo.IsDslToObject(leftOper.Type, rightOper.Type);
+            if (null != leftType && null != rightType) {
+                dslToObject = InvocationInfo.IsDslToObject(leftType, rightType);
             }
             if (specialType == SpecialAssignmentType.PropExplicitImplementInterface || specialType == SpecialAssignmentType.PropForBasicValueType
                 || null != leftElementAccess || null != leftCondAccess
-                || leftOper.Type.TypeKind == TypeKind.Delegate && (leftSym.Kind != SymbolKind.Local || op != "=")) {
+                || leftType.TypeKind == TypeKind.Delegate && (leftSym.Kind != SymbolKind.Local || op != "=")) {
                 needWrapFunction = false;
             }
             string assignVar = null;
@@ -501,7 +503,9 @@ namespace RoslynTool.CsToDsl
                 //顶层的赋值语句已经处理，这里的赋值都需要包装成lambda函数的样式
                 CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ ", assignVar);
             }
-            bool needWrapStruct = null != rightOper && null != rightOper.Type && rightOper.Type.IsValueType && !dslToObject && !SymbolTable.IsBasicType(rightOper.Type) && !CsDslTranslater.IsImplementationOfSys(rightOper.Type, "IEnumerator");
+
+            bool rightNeededIfWrap;
+            bool needWrapStruct = NeedWrapStruct(node.Right, rightType, rightOper, dslToObject, out rightNeededIfWrap);
             string postfix = GetSourcePosForVar(node);
             string oldValVar = string.Format("__old_val_{0}", postfix);
             string newValVar = string.Format("__new_val_{0}", postfix);
@@ -517,24 +521,24 @@ namespace RoslynTool.CsToDsl
             VisitAssignment(ci, op, baseOp, node, string.Empty, false, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType, dslToObject);
             if (needWrapStruct) {
                 //只有变量赋值与字段赋值需要处理，其它的都在相应的函数调用里处理了
-                if (null != rightSym && (rightSym.Kind == SymbolKind.Method || rightSym.Kind == SymbolKind.Property || rightSym.Kind == SymbolKind.Field || rightSym.Kind == SymbolKind.Local || rightSym.Kind == SymbolKind.Parameter) && SymbolTable.Instance.IsCs2DslSymbol(rightSym)) {
+                if (rightNeededIfWrap) {
                     if (null != leftSym && (leftSym.Kind == SymbolKind.Local || leftSym.Kind == SymbolKind.Parameter || SymbolTable.Instance.IsFieldSymbolKind(leftSym)) && SymbolTable.Instance.IsCs2DslSymbol(leftSym)) {
-                        if (SymbolTable.Instance.IsCs2DslSymbol(rightOper.Type)) {
+                        if (SymbolTable.Instance.IsCs2DslSymbol(rightType)) {
                             CodeBuilder.Append(GetIndentString());
                             OutputExpressionSyntax(node.Left);
                             CodeBuilder.Append(" = wrapstruct(");
                             OutputExpressionSyntax(node.Left);
-                            CodeBuilder.AppendFormat(", {0});", ClassInfo.GetFullName(rightOper.Type));
+                            CodeBuilder.AppendFormat(", {0});", ClassInfo.GetFullName(rightType));
                             CodeBuilder.AppendLine();
                         }
                         else {
-                            string ns = ClassInfo.GetNamespaces(rightOper.Type);
+                            string ns = ClassInfo.GetNamespaces(rightType);
                             if (ns != "System") {
                                 CodeBuilder.Append(GetIndentString());
                                 OutputExpressionSyntax(node.Left);
                                 CodeBuilder.Append(" = wrapexternstruct(");
                                 OutputExpressionSyntax(node.Left);
-                                CodeBuilder.AppendFormat(", {0});", ClassInfo.GetFullName(rightOper.Type));
+                                CodeBuilder.AppendFormat(", {0});", ClassInfo.GetFullName(rightType));
                                 CodeBuilder.AppendLine();
                             }
                         }
@@ -748,16 +752,16 @@ namespace RoslynTool.CsToDsl
                 }
             }
             if (null != psym && psym.IsIndexer) {
-                bool isCs2Lua = SymbolTable.Instance.IsCs2DslSymbol(psym);
-                if (!isCs2Lua && psym.Type.IsValueType && !SymbolTable.IsBasicType(psym.Type)) {
+                bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(psym);
+                if (psym.Type.IsValueType && !SymbolTable.IsBasicType(psym.Type)) {
                     MarkNeedFuncInfo();
-                    CodeBuilder.AppendFormat("get{0}{1}indexerstruct(", isCs2Lua ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
+                    CodeBuilder.AppendFormat("get{0}indexerstruct({1}, ", psym.IsStatic ? "static" : "instance", isCs2Dsl ? "false" : "true");
                 }
                 else {
-                    CodeBuilder.AppendFormat("get{0}{1}indexer(", isCs2Lua ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
+                    CodeBuilder.AppendFormat("get{0}{1}indexer(", isCs2Dsl ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
                 }
                 var expType = m_Model.GetTypeInfoEx(node.Expression).Type;
-                if (!isCs2Lua) {
+                if (!isCs2Dsl) {
                     if (null != expType) {
                         string fullName = ClassInfo.GetFullName(expType);
                         CodeBuilder.Append(fullName);
@@ -844,16 +848,16 @@ namespace RoslynTool.CsToDsl
                     }
                 }
                 if (null != psym && psym.IsIndexer) {
-                    bool isCs2Lua = SymbolTable.Instance.IsCs2DslSymbol(psym);
-                    if (!isCs2Lua && psym.Type.IsValueType && !SymbolTable.IsBasicType(psym.Type)) {
+                    bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(psym);
+                    if (psym.Type.IsValueType && !SymbolTable.IsBasicType(psym.Type)) {
                         MarkNeedFuncInfo();
-                        CodeBuilder.AppendFormat("get{0}{1}indexerstruct(", isCs2Lua ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
+                        CodeBuilder.AppendFormat("get{0}indexerstruct({1}, ", psym.IsStatic ? "static" : "instance", isCs2Dsl ? "false" : "true");
                     }
                     else {
-                        CodeBuilder.AppendFormat("get{0}{1}indexer(", isCs2Lua ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
+                        CodeBuilder.AppendFormat("get{0}{1}indexer(", isCs2Dsl ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
                     }
                     var expType = m_Model.GetTypeInfoEx(node.Expression).Type;
-                    if (!isCs2Lua) {
+                    if (!isCs2Dsl) {
                         if (null != expType) {
                             string fullName = ClassInfo.GetFullName(expType);
                             CodeBuilder.Append(fullName);
@@ -1275,6 +1279,7 @@ namespace RoslynTool.CsToDsl
                 else {
                     CodeBuilder.AppendFormat(", \"{0}\"", ctor);
                 }
+                CodeBuilder.AppendFormat(", {0}", ii.ReturnArgs.Count);
                 if (null != node.Initializer) {
                     CodeBuilder.Append(", ");
                     VisitInitializerExpression(node.Initializer);

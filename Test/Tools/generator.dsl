@@ -2285,24 +2285,24 @@ script(movetocallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
 
 script(newstruct)args($funcData, $funcOpts, $sb, $indent)
 {
-    //newstruct(class, keystr, typeargs, typekinds, ctor, initializer, ...)
+    //newstruct(class, keystr, typeargs, typekinds, ctor, ctorRetCt, initializer, ...)
     return(false);
 };
 
 script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
 {
-    //newexternstruct(class, keystr, typeargs, typekinds, ctor, initializer, ...)
+    //newexternstruct(class, keystr, typeargs, typekinds, ctor, ctorRetCt, initializer, ...)
     $class = getargument($funcData, 0);
     
     if($class=="System.Nullable_T"){
-        usefunc("new_nullable","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 5, "__cs2lua_func_info")
+        usefunc("new_nullable","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 6, "__cs2lua_func_info")
         {:
             return nil
         :};
         return(true);
     }
     elseif($class=="System.Collections.Generic.KeyValuePair_TKey_TValue"){
-        usefunc("new_keyvaluepair","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 5, "__cs2lua_func_info")
+        usefunc("new_keyvaluepair","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 6, "__cs2lua_func_info")
         {:
             local arg1,arg2 = ...
             return {Key = arg1, Value = arg2}
@@ -2310,7 +2310,7 @@ script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Vector2"){
-        usefunc("new_vector2","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 5, "__cs2lua_func_info")
+        usefunc("new_vector2","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 6, "__cs2lua_func_info")
         {:
             local x,y = ...
             local obj = UnityEngine.Vector2.New(x,y)
@@ -2323,7 +2323,7 @@ script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Vector3"){
-        usefunc("new_vector3","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 5, "__cs2lua_func_info")
+        usefunc("new_vector3","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 6, "__cs2lua_func_info")
         {:
             local x,y,z = ...
             local obj = UnityEngine.Vector3.New(x,y,z)
@@ -2336,7 +2336,7 @@ script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Vector4"){
-        usefunc("new_vector4","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 5, "__cs2lua_func_info")
+        usefunc("new_vector4","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 6, "__cs2lua_func_info")
         {:
             local x,y,z,w = ...
             local obj = UnityEngine.Vector4.New(x,y,z,w)
@@ -2349,7 +2349,7 @@ script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Quaternion"){
-        usefunc("new_quaternion","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 5, "__cs2lua_func_info")
+        usefunc("new_quaternion","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 6, "__cs2lua_func_info")
         {:
             local x,y,z,w = ...
             local obj = UnityEngine.Quaternion.New(x,y,z,w)
@@ -2362,7 +2362,7 @@ script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Color"){
-        usefunc("new_color","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 5, "__cs2lua_func_info")
+        usefunc("new_color","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 6, "__cs2lua_func_info")
         {:
             local r,g,b,a = ...
             local obj = UnityEngine.Color.New(r,g,b,a)
@@ -2375,7 +2375,7 @@ script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Color32"){
-        usefunc("new_color32","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 5, "__cs2lua_func_info")
+        usefunc("new_color32","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 6, "__cs2lua_func_info")
         {:
             local r,g,b,a = ...
             local obj = Color32Pool.Alloc()
@@ -2392,7 +2392,7 @@ script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Rect"){
-        usefunc("new_rect","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 5, "__cs2lua_func_info")
+        usefunc("new_rect","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 6, "__cs2lua_func_info")
         {:
             local p1,p2,p3,p4 = ...
             local obj = RectPool.Alloc()
@@ -2421,7 +2421,7 @@ script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="CsLibrary.PathInfoPoint"){
-        usefunc("new_pathinfopoint","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 5, "__cs2lua_func_info")
+        usefunc("new_pathinfopoint","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 6, "__cs2lua_func_info")
         {:
             local point,fly,stoppoint,movetype,distance = ...
             local obj =  PathInfoPointPool.Alloc()
@@ -2441,7 +2441,7 @@ script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="CsLibrary.DateTime"){
-        usefunc("new_DateTime","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 5, "__cs2lua_func_info")
+        usefunc("new_DateTime","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 6, "__cs2lua_func_info")
         {:
             local argnum = select('#', ...)
             local obj =  DateTimePool.Alloc()
@@ -2465,7 +2465,7 @@ script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="CsLibrary.TimeSpan"){
-        usefunc("new_TimeSpan","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 5, "__cs2lua_func_info")
+        usefunc("new_TimeSpan","(funcInfo, initializer, ...)", $funcData, $funcOpts, $sb, $indent, 6, "__cs2lua_func_info")
         {:
             local argnum = select('#', ...)
             local obj =  TimeSpanPool.Alloc()
@@ -2625,16 +2625,30 @@ script(literalarray)args($funcData, $funcOpts, $sb, $indent)
     return(false);
 };
 
-script(getexternstaticindexerstruct)args($funcData, $funcOpts, $sb, $indent)
+script(getstaticindexerstruct)args($funcData, $funcOpts, $sb, $indent)
 {
-    //getexternstaticindexerstruct(callerClass, class, name, argCount, ...)
+    //getstaticindexerstruct(isExtern, callerClass, class, name, argCount, ...)
     
     return(false);
 };
 
-script(getexterninstanceindexerstruct)args($funcData, $funcOpts, $sb, $indent)
+script(getinstanceindexerstruct)args($funcData, $funcOpts, $sb, $indent)
 {
-    //getexterninstanceindexerstruct(callerClass, obj, class, name, argCount, ...)
+    //getinstanceindexerstruct(isExtern, callerClass, obj, class, name, argCount, ...)
+    
+    return(false);
+};
+
+script(setstaticindexerstruct)args($funcData, $funcOpts, $sb, $indent)
+{
+    //setstaticindexerstruct(isExtern, callerClass, class, name, argCount, toplevel, ...)
+    
+    return(false);
+};
+
+script(setinstanceindexerstruct)args($funcData, $funcOpts, $sb, $indent)
+{
+    //setinstanceindexerstruct(isExtern, callerClass, obj, class, name, argCount, toplevel, ...)
     
     return(false);
 };
@@ -2648,7 +2662,7 @@ script(arraygetstruct)args($funcData, $funcOpts, $sb, $indent)
 
 script(arraysetstruct)args($funcData, $funcOpts, $sb, $indent)
 {
-    //arraysetstruct(isToplevel, arrIsExtern, arrSymKind, elementType, arr, ...)
+    //arraysetstruct(arrIsExtern, arrSymKind, elementType, arr, toplevel, ...)
     
     return(false);
 };

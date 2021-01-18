@@ -30,9 +30,9 @@ config(LegalExtensionList)
     type("UnityEngine.Playables.PlayableExtensions");
     type("UniGifExtension");
 };
-config(LegalConvertionList)
+config(LegalConversionList)
 {
-    convertion("","");
+    conversion("","");
 };
 config(IllegalTypeList)
 {

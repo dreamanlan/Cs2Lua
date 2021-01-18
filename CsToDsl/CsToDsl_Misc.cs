@@ -167,21 +167,24 @@ namespace RoslynTool.CsToDsl
             }
             VisitLocalVariableDeclarator(ci, node, dslToObject);
             if (null != node.Initializer) {
-                var rightSymbolInfo = m_Model.GetSymbolInfoEx(node.Initializer.Value);
-                var rightSym = rightSymbolInfo.Symbol;
-                if (null != type && type.IsValueType && !dslToObject && !SymbolTable.IsBasicType(type) && !CsDslTranslater.IsImplementationOfSys(type, "IEnumerator")) {
-                    if (null != rightSym && (rightSym.Kind == SymbolKind.Method || rightSym.Kind == SymbolKind.Property || rightSym.Kind == SymbolKind.Field || rightSym.Kind == SymbolKind.Local) && SymbolTable.Instance.IsCs2DslSymbol(rightSym)) {
-                        MarkNeedFuncInfo();
-                        if (SymbolTable.Instance.IsCs2DslSymbol(type)) {
-                            CodeBuilder.AppendFormat("{0}{1} = wrapstruct({2}, {3});", GetIndentString(), node.Identifier.Text, node.Identifier.Text, ClassInfo.GetFullName(type));
+                var valSyntax = node.Initializer.Value;
+                var rightType = m_Model.GetTypeInfoEx(valSyntax).Type;
+                var rightOper = m_Model.GetOperationEx(valSyntax);
+                if (null == rightType && null != rightOper) {
+                    rightType = rightOper.Type;
+                };
+                bool needWrapStruct = NeedWrapStruct(valSyntax, rightType, rightOper, dslToObject);
+                if (needWrapStruct) {
+                    MarkNeedFuncInfo();
+                    if (SymbolTable.Instance.IsCs2DslSymbol(type)) {
+                        CodeBuilder.AppendFormat("{0}{1} = wrapstruct({2}, {3});", GetIndentString(), node.Identifier.Text, node.Identifier.Text, ClassInfo.GetFullName(type));
+                        CodeBuilder.AppendLine();
+                    }
+                    else {
+                        string ns = ClassInfo.GetNamespaces(type);
+                        if (ns != "System") {
+                            CodeBuilder.AppendFormat("{0}{1} = wrapexternstruct({2}, {3});", GetIndentString(), node.Identifier.Text, node.Identifier.Text, ClassInfo.GetFullName(type));
                             CodeBuilder.AppendLine();
-                        }
-                        else {
-                            string ns = ClassInfo.GetNamespaces(type);
-                            if (ns != "System") {
-                                CodeBuilder.AppendFormat("{0}{1} = wrapexternstruct({2}, {3});", GetIndentString(), node.Identifier.Text, node.Identifier.Text, ClassInfo.GetFullName(type));
-                                CodeBuilder.AppendLine();
-                            }
                         }
                     }
                 }

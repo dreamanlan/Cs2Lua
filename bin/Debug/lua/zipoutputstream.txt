@@ -44,6 +44,7 @@ ZipOutputStream = {
 
 		local obj_methods = {
 			Test = function(this)
+				this = __get_this_for_class(this, ZipOutputStream);
 				local dict;
 				dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, buildglobalinfoonce("typeargs_TypeArgs", getglobalinfo("typeargs_TypeArgs") or {TypeKind.Struct, TypeKind.Struct}), nil, {});
 				dict:Add(1, 1);
@@ -52,11 +53,13 @@ ZipOutputStream = {
 			end,
 
 			ctor = function(this)
+				this = __get_this_for_class(this, ZipOutputStream);
 				this:__ctor();
 				return this;
 			end,
 
 			__ctor = function(this)
+				this = __get_this_for_class(this, ZipOutputStream);
 				if this.__ctor_called then 
 					return;
 				else
@@ -95,6 +98,9 @@ ZipOutputStream = {
 	-------------------------------
 	-------- metadata info --------
 	-------------------------------
+	__class_info = {
+		Kind = TypeKind.Class,
+	},
 	__method_info = {
 		get_V = {
 			Kind = MethodKind.PropertyGet,
@@ -152,14 +158,17 @@ ZipOutputStream.EmbedClass = {
 
 		local obj_methods = {
 			Test = function(this)
+				this = __get_this_for_class(this, ZipOutputStream.EmbedClass);
 				ZipOutputStream.get_Instance():Test();
 			end,
 
 			ctor = function(this)
+				this = __get_this_for_class(this, ZipOutputStream.EmbedClass);
 				this:__ctor();
 			end,
 
 			__ctor = function(this)
+				this = __get_this_for_class(this, ZipOutputStream.EmbedClass);
 				if this.__ctor_called then 
 					return;
 				else
@@ -193,6 +202,10 @@ ZipOutputStream.EmbedClass = {
 	-------------------------------
 	-------- metadata info --------
 	-------------------------------
+	__class_info = {
+		Kind = TypeKind.Class,
+		private = true,
+	},
 	__method_info = {
 		Test = {
 			Kind = MethodKind.Ordinary,

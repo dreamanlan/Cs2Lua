@@ -6,7 +6,7 @@ Constant = {
 	-------------------------------
 	__new_object = function(...)
 		local __cs2dsl_newobj;
-		__cs2dsl_newobj = newobject(Constant, nil, nil, "ctor", nil, ...);
+		__cs2dsl_newobj = newobject(Constant, nil, nil, "ctor", 0, nil, ...);
 		return __cs2dsl_newobj;
 	end,
 
@@ -40,10 +40,12 @@ Constant = {
 
 		local obj_methods = {
 			ctor = function(this)
+				this = __get_this_for_class(this, Constant);
 				this:__ctor();
 			end,
 
 			__ctor = function(this)
+				this = __get_this_for_class(this, Constant);
 				if this.__ctor_called then 
 					return;
 				else
@@ -80,6 +82,9 @@ Constant = {
 	-------------------------------
 	-------- metadata info --------
 	-------------------------------
+	__class_info = {
+		Kind = TypeKind.Class,
+	},
 	__method_info = {
 		ctor = {
 			Kind = MethodKind.Constructor,

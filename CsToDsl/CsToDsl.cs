@@ -159,6 +159,59 @@ namespace RoslynTool.CsToDsl
             }
             return ret;
         }
+        internal bool NeedWrapStruct(ExpressionSyntax exp, ITypeSymbol expType, IOperation expOper, bool dslToObject)
+        {
+            bool rightNeededIfWrap;
+            bool needWrap = NeedWrapStruct(exp, expType, expOper, dslToObject, out rightNeededIfWrap);
+            return needWrap && rightNeededIfWrap;
+        }
+        internal bool NeedWrapStruct(ExpressionSyntax exp, ITypeSymbol expType, IOperation expOper, bool dslToObject, out bool rightNeededIfWrap)
+        {
+            return NeedWrapStruct(exp, expType, expOper, null, dslToObject, out rightNeededIfWrap);
+        }
+        internal bool NeedWrapStruct(ExpressionSyntax exp, ITypeSymbol expType, IOperation expOper, ISymbol expSym, bool dslToObject)
+        {
+            bool rightNeededIfWrap;
+            bool needWrap = NeedWrapStruct(exp, expType, expOper, expSym, dslToObject, out rightNeededIfWrap);
+            return needWrap && rightNeededIfWrap;
+        }
+        internal bool NeedWrapStruct(ExpressionSyntax exp, ITypeSymbol expType, IOperation expOper, ISymbol expSym, bool dslToObject, out bool rightNeededIfWrap)
+        {
+            if (null != exp) {
+                if (null == expType) {
+                    expType = m_Model.GetTypeInfoEx(exp).Type;
+                }
+                if (null == expOper) {
+                    expOper = m_Model.GetOperationEx(exp);
+                }
+                if (null == expSym) {
+                    expSym = m_Model.GetSymbolInfoEx(exp).Symbol;
+                }
+                if (null == expType && null != expOper) {
+                    expType = expOper.Type;
+                }
+            }
+            bool needWrap = null != expType && expType.IsValueType && !dslToObject && !SymbolTable.IsBasicType(expType) && !CsDslTranslater.IsImplementationOfSys(expType, "IEnumerator");
+            INamedTypeSymbol rightPropType = null;
+            var propOper = expOper as IPropertyReferenceOperation;
+            if (null != propOper) {
+                var elementAccessNode = propOper.Syntax as ElementAccessExpressionSyntax;
+                var condAccessNode = propOper.Syntax as ConditionalAccessExpressionSyntax;
+                if (null != elementAccessNode) {
+                    rightPropType = m_Model.GetTypeInfoEx(elementAccessNode.Expression).Type as INamedTypeSymbol;
+                }
+                else if (null != condAccessNode) {
+                    rightPropType = m_Model.GetTypeInfoEx(condAccessNode.Expression).Type as INamedTypeSymbol;
+                }
+            }
+            var arrElementOper = expOper as IArrayElementReferenceOperation;
+            ISymbol rightArrSym = null;
+            if (null != arrElementOper) {
+                rightArrSym = m_Model.GetSymbolInfoEx(arrElementOper.ArrayReference.Syntax).Symbol;
+            }
+            rightNeededIfWrap =  null != expSym && (expSym.Kind == SymbolKind.Method || expSym.Kind == SymbolKind.Property || expSym.Kind == SymbolKind.Field || expSym.Kind == SymbolKind.Local) && SymbolTable.Instance.IsCs2DslSymbol((ISymbol)expSym) || null != rightPropType && (rightPropType.IsGenericType || SymbolTable.Instance.IsCs2DslSymbol(rightPropType)) || null != rightArrSym && SymbolTable.Instance.IsCs2DslSymbol(rightArrSym);
+            return needWrap;
+        }
         internal void OutputArgumentList(InvocationInfo ii, ITypeSymbol callerType, bool useTypeNameString, SyntaxNode node)
         {
             var namedCallerType = callerType as INamedTypeSymbol;
@@ -185,12 +238,12 @@ namespace RoslynTool.CsToDsl
                     if (null != arrType && i == ct - 1 && ii.ArrayToParams) {
                         argType = arrType.ElementType;
                     }
-                    bool isValueArg = null != argType ? argType.IsValueType && !SymbolTable.IsBasicType(argType) : false;
+                    bool needWrapStruct = NeedWrapStruct(exp, argType, argOper, argSym, false);
                     string externFlag = string.Empty;
                     string argTypeName = null;
                     string argOperKind = null;
                     string argSymKind = null;
-                    if (isValueArg && isCs2DslType) {
+                    if (needWrapStruct) {
                         if (!SymbolTable.Instance.IsCs2DslSymbol(argType)) {
                             externFlag = "extern";
                         }
@@ -208,7 +261,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append("__cs2dsl_out");
                     }
                     else if (i < ct - 1) {
-                        if (isValueArg && isCs2DslType) {
+                        if (needWrapStruct) {
                             CodeBuilder.AppendFormat("wrap{0}structargument(", externFlag);
                             OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
                             CodeBuilder.Append(", ");
@@ -230,7 +283,7 @@ namespace RoslynTool.CsToDsl
                     else {
                         if (ii.ArrayToParams) {
                             CodeBuilder.Append("dslunpack(");
-                            if (isValueArg && isCs2DslType) {
+                            if (needWrapStruct) {
                                 CodeBuilder.AppendFormat("wrap{0}structarguments(", externFlag);
                                 OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
                                 CodeBuilder.Append(", ");
@@ -251,7 +304,7 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.Append(")");
                         }
                         else {
-                            if (isValueArg && isCs2DslType) {
+                            if (needWrapStruct) {
                                 CodeBuilder.AppendFormat("wrap{0}structargument(", externFlag);
                                 OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
                                 CodeBuilder.Append(", ");
@@ -285,12 +338,11 @@ namespace RoslynTool.CsToDsl
                         var argType = info.Type;
                         var argOper = info.Operation;
                         var argSym = info.Symbol;
-                        bool isValueArg = null != argType ? argType.IsValueType && !SymbolTable.IsBasicType(argType) : false;
-                        string externFlag = string.Empty;
+                        bool needWrapStruct = NeedWrapStruct(info.Expression, argType, argOper, argSym, false); string externFlag = string.Empty;
                         string argTypeName = null;
                         string argOperKind = null;
                         string argSymKind = null;
-                        if (isValueArg && isCs2DslType) {
+                        if (needWrapStruct) {
                             if (!SymbolTable.Instance.IsCs2DslSymbol(argType)) {
                                 externFlag = "extern";
                             }
@@ -304,7 +356,7 @@ namespace RoslynTool.CsToDsl
                         var opd = ii.ArgConversions.Count > ct + i ? ii.ArgConversions[ct + i] : null;
                         bool dslToObject = null != ii.DslToObjectDefArgs ? ii.DslToObjectDefArgs.Contains(i) : false;
                         if (null != info.Expression) {
-                            if (isValueArg && isCs2DslType) {
+                            if (needWrapStruct) {
                                 CodeBuilder.AppendFormat("wrap{0}structargument(", externFlag);
                                 OutputExpressionSyntax(info.Expression, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
                                 CodeBuilder.Append(", ");
@@ -324,7 +376,7 @@ namespace RoslynTool.CsToDsl
                             }
                         }
                         else {
-                            if (isValueArg && isCs2DslType) {
+                            if (needWrapStruct) {
                                 CodeBuilder.AppendFormat("wrap{0}structargument(", externFlag);
                                 if (dslToObject)
                                     OutputDslToObjectPrefix(ii.MethodSymbol);
@@ -773,6 +825,7 @@ namespace RoslynTool.CsToDsl
             else {
                 CodeBuilder.AppendFormat(", \"{0}\"", ctor);
             }
+            CodeBuilder.AppendFormat(", 0");
             if (isCollection) {
                 bool isDictionary = IsImplementationOfSys(namedTypeSym, "IDictionary");
                 bool isList = IsImplementationOfSys(namedTypeSym, "IList");
@@ -861,8 +914,13 @@ namespace RoslynTool.CsToDsl
                         string fullTypeName = ClassInfo.GetFullName(namedTypeSym);
 
                         string ctor = null;
+                        int retArgCt = 0;
                         if (null != sym) {
                             ctor = NameMangling(sym);
+                            foreach (var p in sym.Parameters) {
+                                if (p.RefKind == RefKind.Ref || p.RefKind == RefKind.Out)
+                                    ++retArgCt;
+                            }
                         }
 
                         if (isCollection) {
@@ -899,6 +957,7 @@ namespace RoslynTool.CsToDsl
                         else {
                             CodeBuilder.AppendFormat(", \"{0}\"", ctor);
                         }
+                        CodeBuilder.AppendFormat(", {0}", retArgCt);
                         if (null == memberInit || memberInit.Initializers.Length <= 0) {
                             if (isCollection) {
                                 bool isDictionary = IsImplementationOfSys(namedTypeSym, "IDictionary");
@@ -1182,26 +1241,26 @@ namespace RoslynTool.CsToDsl
             if (null != leftOper && null != rightOper && null != leftOper.Type && leftOper.Type.TypeKind == TypeKind.Delegate && (!leftOper.ConstantValue.HasValue || null != leftOper.ConstantValue.Value) && rightOper.ConstantValue.HasValue && rightOper.ConstantValue.Value == null) {
                 var sym = m_Model.GetSymbolInfoEx(left);
                 var leftSym = sym.Symbol;
-                bool isCs2Lua = true;
+                bool isCs2Dsl = true;
                 if (null != leftSym && (leftSym.Kind == SymbolKind.Field || leftSym.Kind == SymbolKind.Property || leftSym.Kind == SymbolKind.Event) && !SymbolTable.Instance.IsCs2DslSymbol(leftSym.ContainingType)) {
-                    isCs2Lua = false;
+                    isCs2Dsl = false;
                 }
-                OutputDelegationCompareWithNull(leftSym, leftOper, left, isCs2Lua, op == "==", lopd);
+                OutputDelegationCompareWithNull(leftSym, leftOper, left, isCs2Dsl, op == "==", lopd);
                 handled = true;
             }
             else if (null != leftOper && null != rightOper && null != rightOper.Type && rightOper.Type.TypeKind == TypeKind.Delegate && (!rightOper.ConstantValue.HasValue || null != rightOper.ConstantValue.Value) && leftOper.ConstantValue.HasValue && leftOper.ConstantValue.Value == null) {
                 var sym = m_Model.GetSymbolInfoEx(right);
                 var rightSym = sym.Symbol;
-                bool isCs2Lua = true;
+                bool isCs2Dsl = true;
                 if (null != rightSym && (rightSym.Kind == SymbolKind.Field || rightSym.Kind == SymbolKind.Property || rightSym.Kind == SymbolKind.Event) && !SymbolTable.Instance.IsCs2DslSymbol(rightSym.ContainingType)) {
-                    isCs2Lua = false;
+                    isCs2Dsl = false;
                 }
-                OutputDelegationCompareWithNull(rightSym, rightOper, right, isCs2Lua, op == "==", ropd);
+                OutputDelegationCompareWithNull(rightSym, rightOper, right, isCs2Dsl, op == "==", ropd);
                 handled = true;
             }
             return handled;
         }
-        private void OutputDelegationCompareWithNull(ISymbol leftSym, IOperation leftOper, ExpressionSyntax left, bool isCs2LuaAssembly, bool isEqual, IConversionOperation opd)
+        private void OutputDelegationCompareWithNull(ISymbol leftSym, IOperation leftOper, ExpressionSyntax left, bool isCs2DslAssembly, bool isEqual, IConversionOperation opd)
         {
             if (null == leftSym && null == leftOper) {
                 Log(left, "delegation compare with null, left symbol == null and left oper == null");
@@ -1212,9 +1271,9 @@ namespace RoslynTool.CsToDsl
             bool isWriteOnly = null != leftPsym && leftPsym.IsWriteOnly;
             bool isStatic = null != leftSym ? leftSym.IsStatic : false;
             string kind = null != leftSym ? SymbolTable.Instance.GetSymbolKind(leftSym) : null;
-            string namePrefix = isCs2LuaAssembly && !isWriteOnly && kind == "Property" ? "get_" : string.Empty;
+            string namePrefix = isCs2DslAssembly && !isWriteOnly && kind == "Property" ? "get_" : string.Empty;
             var ci = m_ClassInfoStack.Peek();
-            CodeBuilder.AppendFormat("{0}delegationcomparewithnil({1}, ", isCs2LuaAssembly ? string.Empty : "extern", isStatic ? "true" : "false");
+            CodeBuilder.AppendFormat("{0}delegationcomparewithnil({1}, ", isCs2DslAssembly ? string.Empty : "extern", isStatic ? "true" : "false");
             if (null != leftSym){
                 string containingName = ClassInfo.GetFullName(leftSym.ContainingType);
                 if (isWriteOnly) {
@@ -1275,14 +1334,8 @@ namespace RoslynTool.CsToDsl
                     ++m_Indent;
 
                     string prestr;
-                    if (mi.SemanticInfo.MethodKind == MethodKind.Constructor) {
-                        CodeBuilder.AppendFormat("{0}return(this", GetIndentString());
-                        prestr = ", ";
-                    }
-                    else {
-                        CodeBuilder.AppendFormat("{0}return(", GetIndentString());
-                        prestr = string.Empty;
-                    }
+                    CodeBuilder.AppendFormat("{0}return(", GetIndentString());
+                    prestr = string.Empty;
                     CodeBuilder.Append(prestr);
                     CodeBuilder.Append(mi.ReturnVarName);
                     prestr = ", ";

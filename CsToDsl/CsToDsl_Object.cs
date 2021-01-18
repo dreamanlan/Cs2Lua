@@ -207,6 +207,15 @@ namespace RoslynTool.CsToDsl
                     else
                         CodeBuilder.AppendFormat("{0}buildexternbaseobj(this, {1}, {2}, \"{3}\"", GetIndentString(), ci.Key, ci.BaseKey, manglingName2);
                 }
+                int retCt = 0;
+                if (null != oper.TargetMethod) {
+                    foreach (var p in oper.TargetMethod.Parameters) {
+                        if (p.RefKind == RefKind.Ref || p.RefKind == RefKind.Out)
+                            ++retCt;
+                    }
+                }
+                CodeBuilder.Append(", ");
+                CodeBuilder.Append(retCt);
                 if (init.ArgumentList.Arguments.Count > 0) {
                     CodeBuilder.Append(", ");
                 }
@@ -225,7 +234,7 @@ namespace RoslynTool.CsToDsl
             else {
                 if (!string.IsNullOrEmpty(ci.BaseKey) && !ClassInfo.IsBaseInitializerCalled(node, m_Model) && myselfDefinedBaseClass) {
                     //如果当前构造没有调父类构造并且委托的其它构造也没有调父类构造，则调用默认构造。
-                    CodeBuilder.AppendFormat("{0}buildbaseobj(this, {1}, {2}, \"ctor\");", GetIndentString(), ci.Key, ci.BaseKey);
+                    CodeBuilder.AppendFormat("{0}buildbaseobj(this, {1}, {2}, \"ctor\", 0);", GetIndentString(), ci.Key, ci.BaseKey);
                     CodeBuilder.AppendLine();
                 }
                 CodeBuilder.AppendFormat("{0}callinstance(this, {1}, \"__ctor\");", GetIndentString(), ci.Key);
@@ -236,11 +245,7 @@ namespace RoslynTool.CsToDsl
                 VisitBlock(node.Body);
                 if (!mi.ExistTopLevelReturn) {
                     if (mi.ReturnParamNames.Count > 0) {
-                        CodeBuilder.AppendFormat("{0}return(this, {1});", GetIndentString(), string.Join(", ", mi.ReturnParamNames));
-                        CodeBuilder.AppendLine();
-                    }
-                    else if (!isStatic) {
-                        CodeBuilder.AppendFormat("{0}return(this);", GetIndentString());
+                        CodeBuilder.AppendFormat("{0}return({1});", GetIndentString(), string.Join(", ", mi.ReturnParamNames));
                         CodeBuilder.AppendLine();
                     }
                 }
@@ -262,10 +267,7 @@ namespace RoslynTool.CsToDsl
                     OutputExpressionSyntax(node.ExpressionBody.Expression, opd);
                 }
                 if (mi.ReturnParamNames.Count > 0) {
-                    CodeBuilder.AppendFormat("; return(this, {0})", string.Join(", ", mi.ReturnParamNames));
-                }
-                else {
-                    CodeBuilder.AppendFormat("; return(this)");
+                    CodeBuilder.AppendFormat("; return({0})", string.Join(", ", mi.ReturnParamNames));
                 }
                 CodeBuilder.AppendLine(";");
             }

@@ -279,18 +279,18 @@ namespace RoslynTool.CsToDsl
                             }
                         }
                     }
-                    else if (cid == "LegalConvertionList") {
+                    else if (cid == "LegalConversionList") {
                         foreach (var comp in func.Params) {
                             var cd = comp as Dsl.FunctionData;
                             if (null != cd) {
                                 var mid = cd.GetId();
-                                if (mid == "convertion") {
+                                if (mid == "conversion") {
                                     var v1 = cd.GetParamId(0);
                                     var v2 = cd.GetParamId(1);
                                     HashSet<string> targets;
-                                    if(!m_LegalConvertions.TryGetValue(v1, out targets)) {
+                                    if(!m_LegalConversions.TryGetValue(v1, out targets)) {
                                         targets = new HashSet<string>();
-                                        m_LegalConvertions.Add(v1, targets);
+                                        m_LegalConversions.Add(v1, targets);
                                     }
                                     if (!targets.Contains(v2)) {
                                         targets.Add(v2);
@@ -406,7 +406,7 @@ namespace RoslynTool.CsToDsl
             var targetName = ClassInfo.GetFullName(targetSym);
             bool ret = false;
             HashSet<string> targets;
-            if(m_LegalConvertions.TryGetValue(srcName, out targets)) {
+            if(m_LegalConversions.TryGetValue(srcName, out targets)) {
                 ret = targets.Contains(targetName);
             }
             string newTargetName = null;
@@ -417,7 +417,7 @@ namespace RoslynTool.CsToDsl
             string newSrcName = null;
             if (!ret && srcSym.IsGenericType) {
                 newSrcName = CalcFullNameAndTypeArguments(srcName, srcSym);
-                if (m_LegalConvertions.TryGetValue(newSrcName, out targets)) {
+                if (m_LegalConversions.TryGetValue(newSrcName, out targets)) {
                     ret = targets.Contains(targetName);
                     if(!ret && targetSym.IsGenericType) {
                         if (null == newTargetName)
@@ -806,7 +806,7 @@ namespace RoslynTool.CsToDsl
         private HashSet<string> m_LegalGenericMethods = new HashSet<string>();
         private HashSet<string> m_LegalParameterGenericTypes = new HashSet<string>();
         private HashSet<string> m_LegalExtensions = new HashSet<string>();
-        private Dictionary<string, HashSet<string>> m_LegalConvertions = new Dictionary<string, HashSet<string>>();
+        private Dictionary<string, HashSet<string>> m_LegalConversions = new Dictionary<string, HashSet<string>>();
 
         private HashSet<string> m_IllegalTypes = new HashSet<string>();
         private HashSet<string> m_IllegalMethods = new HashSet<string>();

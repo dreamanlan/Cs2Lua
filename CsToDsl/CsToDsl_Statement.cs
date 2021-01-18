@@ -199,14 +199,8 @@ namespace RoslynTool.CsToDsl
             }
             else {
                 string prestr;
-                if (mi.SemanticInfo.MethodKind == MethodKind.Constructor) {
-                    CodeBuilder.AppendFormat("{0}return(this", GetIndentString());
-                    prestr = ", ";
-                }
-                else {
-                    CodeBuilder.AppendFormat("{0}return({1}", GetIndentString(), mi.ReturnVarName);
-                    prestr = ", ";
-                }
+                CodeBuilder.AppendFormat("{0}return({1}", GetIndentString(), mi.ReturnVarName);
+                prestr = ", ";
                 var names = mi.ReturnParamNames;
                 if (names.Count > 0) {
                     for (int i = 0; i < names.Count; ++i) {

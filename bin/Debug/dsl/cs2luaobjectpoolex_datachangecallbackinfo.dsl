@@ -7,7 +7,7 @@ require("cs2dsl__interfaces");
 class(Cs2LuaObjectPoolEx_DataChangeCallBackInfo) {
 	static_methods {
 		__new_object = deffunc(1)args(...){
-			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "g_Cs2LuaObjectPoolEx_DataChangeCallBackInfo", typeargs(T), typekinds(TypeKind.TypeParameter), "ctor", null, ...);
+			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "g_Cs2LuaObjectPoolEx_DataChangeCallBackInfo", typeargs(T), typekinds(TypeKind.TypeParameter), "ctor", 0, null, ...);
 			return(__cs2dsl_newobj);
 		}options[needfuncinfo(false)];
 		cctor = deffunc(0)args(){
@@ -86,7 +86,7 @@ class(Cs2LuaObjectPoolEx_DataChangeCallBackInfo) {
 			}else{
 				setinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "__ctor_called", true);
 			};
-			setinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_UnusedObjects", newexterncollection(System.Collections.Generic.Queue_T, "g_System_Collections_Generic_Queue_DataChangeCallBackInfo", typeargs(T), typekinds(TypeKind.TypeParameter), "ctor", literalcollection("g_System_Collections_Generic_Queue_DataChangeCallBackInfo", typeargs(T), typekinds(TypeKind.TypeParameter))));
+			setinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_UnusedObjects", newexterncollection(System.Collections.Generic.Queue_T, "g_System_Collections_Generic_Queue_DataChangeCallBackInfo", typeargs(T), typekinds(TypeKind.TypeParameter), "ctor", 0, literalcollection("g_System_Collections_Generic_Queue_DataChangeCallBackInfo", typeargs(T), typekinds(TypeKind.TypeParameter))));
 		}options[needfuncinfo(false)];
 	};
 	instance_fields {

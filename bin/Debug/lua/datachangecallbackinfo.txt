@@ -6,7 +6,7 @@ DataChangeCallBackInfo = {
 	-------------------------------
 	__new_object = function(...)
 		local __cs2dsl_newobj;
-		__cs2dsl_newobj = newobject(DataChangeCallBackInfo, nil, nil, "ctor", nil, ...);
+		__cs2dsl_newobj = newobject(DataChangeCallBackInfo, nil, nil, "ctor", 0, nil, ...);
 		return __cs2dsl_newobj;
 	end,
 
@@ -39,7 +39,6 @@ DataChangeCallBackInfo = {
 			ctor = function(this)
 				this:__ctor();
 				this:reset();
-				return this;
 			end,
 
 			reset = function(this)
@@ -93,6 +92,10 @@ DataChangeCallBackInfo = {
 	-------------------------------
 	__interfaces = {
 		"ICs2LuaPoolAllocatedObjectEx_DataChangeCallBackInfo",
+	},
+	__class_info = {
+		Kind = TypeKind.Class,
+		sealed = true,
 	},
 };
 
