@@ -498,8 +498,6 @@ namespace Generator
         {
             s_GenClassInfo = true;
             s_GenMethodInfo = false;
-            s_GenPropertyInfo = false;
-            s_GenEventInfo = false;
             s_GenFieldInfo = false;
 
             s_ParamTypeCheckMethods.Clear();
@@ -678,20 +676,6 @@ namespace Generator
                     bool.TryParse(val, out s_GenMethodInfo);
                 }
             }
-            else if (id == "genpropertyinfo") {
-                int pnum = f.GetParamNum();
-                if (pnum > 0) {
-                    var val = f.GetParamId(0);
-                    bool.TryParse(val, out s_GenPropertyInfo);
-                }
-            }
-            else if (id == "geneventinfo") {
-                int pnum = f.GetParamNum();
-                if (pnum > 0) {
-                    var val = f.GetParamId(0);
-                    bool.TryParse(val, out s_GenEventInfo);
-                }
-            }
             else if (id == "genfieldinfo") {
                 int pnum = f.GetParamNum();
                 if (pnum > 0) {
@@ -779,6 +763,23 @@ namespace Generator
             }
         }
 
+        private class Cs2LuaMethodInfo
+        {
+            internal bool IsCtor = false;
+            internal bool IsPrivate = false;
+            internal bool IsSealed = false;
+            internal bool IsAbstract = false;
+            internal bool IsVirtual = false;
+            internal bool IsOverride = false;
+
+            internal bool IsNothing
+            {
+                get {
+                    return !IsCtor && !IsPrivate && !IsSealed && !IsAbstract && !IsVirtual && !IsOverride;
+                }
+            }
+        }
+
         private class DontRequireInfo
         {
             internal HashSet<string> Requires = new HashSet<string>();
@@ -841,8 +842,6 @@ namespace Generator
 
         private static bool s_GenClassInfo = true;
         private static bool s_GenMethodInfo = false;
-        private static bool s_GenPropertyInfo = false;
-        private static bool s_GenEventInfo = false;
         private static bool s_GenFieldInfo = false;
 
         private static HashSet<string> s_ParamTypeCheckMethods = new HashSet<string>();

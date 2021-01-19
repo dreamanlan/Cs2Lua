@@ -202,9 +202,10 @@ namespace Generator
 
                     sb.AppendLine();
 
+                    bool abstractClass = false;
                     bool sealedClass = false;
                     bool staticClass = false;
-                    HashSet<string> privateMethods = new HashSet<string>();
+                    Dictionary<string, Cs2LuaMethodInfo> methodInfos = new Dictionary<string, Cs2LuaMethodInfo>();
                     var classInfo = FindStatement(funcData, "class_info") as Dsl.FunctionData;
                     if (null != classInfo) {
                         foreach (var def in classInfo.Params) {
@@ -214,12 +215,61 @@ namespace Generator
                             bool bv;
                             bool.TryParse(val, out bv);
                             if (key == "sealed") {
-                                sealedClass = true;
-                                break;
+                                sealedClass = bv;
                             }
                             else if (key == "static") {
-                                staticClass = true;
-                                break;
+                                staticClass = bv;
+                            }
+                            else if (key == "abstract") {
+                                abstractClass = bv;
+                            }
+                        }
+                    }
+                    var methodInfo = FindStatement(funcData, "method_info") as Dsl.FunctionData;
+                    if (null != methodInfo && methodInfo.GetParamNum() > 0) {
+                        foreach (var def in methodInfo.Params) {
+                            var mfunc = def as Dsl.FunctionData;
+                            if (null != mfunc) {
+                                var fcall = mfunc;
+                                if (mfunc.IsHighOrder)
+                                    fcall = mfunc.LowerOrderFunction;
+                                string funcId = fcall.GetId();
+                                bool isStatic = false;
+                                var cmi = new Cs2LuaMethodInfo();
+                                if (funcId.StartsWith("ctor")) {
+                                    cmi.IsCtor = true;
+                                }
+                                else {
+                                    var accessibility = CalcTypeString(fcall.GetParam(1));
+                                    if (accessibility == "Accessibility.Private") {
+                                        cmi.IsPrivate = true;
+                                    }
+                                    foreach (var minfo in mfunc.Params) {
+                                        var mdef = minfo as Dsl.FunctionData;
+                                        string key = mdef.GetId();
+                                        if (key == "static") {
+                                            isStatic = true;
+                                            break;
+                                        }
+                                        string val = mdef.GetParamId(0);
+                                        bool bv;
+                                        bool.TryParse(val, out bv);
+                                        if (key == "sealed") {
+                                            cmi.IsSealed = bv;
+                                        }
+                                        else if (key == "abstract") {
+                                            cmi.IsAbstract = bv;
+                                        }
+                                        else if (key == "virtual") {
+                                            cmi.IsVirtual = bv;
+                                        }
+                                        else if (key == "override") {
+                                            cmi.IsOverride = bv;
+                                        }
+                                    }
+                                }
+                                if(!isStatic)
+                                    methodInfos.Add(funcId, cmi);
                             }
                         }
                     }
@@ -420,7 +470,8 @@ namespace Generator
 
                     var instMethods = FindStatement(funcData, "instance_methods") as Dsl.FunctionData;
                     if (null != instMethods && instMethods.GetParamNum() > 0) {
-                        sb.AppendFormatLine("{0}local obj_methods = {{", GetIndentString(indent));
+                        List<string> instMethodNames = new List<string>();
+                        sb.AppendFormatLine("{0}local raw_obj_methods = {{", GetIndentString(indent));
                         ++indent;
                         bool firstMethod = true;
                         foreach (var def in instMethods.Params) {
@@ -451,6 +502,7 @@ namespace Generator
                                         var fcall = second;
                                         if (second.IsHighOrder)
                                             fcall = second.LowerOrderFunction;
+                                        instMethodNames.Add(mname);
                                         sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
                                         if (null != cdef) {
                                             sb.Append("wrapenumerable(");
@@ -459,9 +511,6 @@ namespace Generator
                                         bool haveParams = GenerateFunctionParams(fcall, sb, 0);
                                         sb.AppendLine(")");
                                         ++indent;
-                                        if (!sealedClass) {
-                                            sb.AppendFormatLine("{0}this = __get_this_for_class(this, {1});", GetIndentString(indent), className);
-                                        }
                                         if (funcOpts.NeedFuncInfo) {
                                             sb.AppendFormatLine("{0}local __cs2lua_func_info = luainitialize();", GetIndentString(indent));
                                         }
@@ -506,10 +555,13 @@ namespace Generator
                                                 }
                                             }
                                             --indent;
-                                            if (null != cdef)
-                                                sb.AppendFormatLine("{0}end),", GetIndentString(indent));
-                                            else
-                                                sb.AppendFormatLine("{0}end,", GetIndentString(indent));
+                                            sb.AppendFormat("{0}end", GetIndentString(indent));
+                                            if (null != cdef) {
+                                                sb.Append(")");
+                                            }
+                                            sb.AppendLine(",");
+
+                                            instMethodNames.Add(string.Format("__ori_{0}", mname));
                                             sb.AppendFormat("{0}__ori_{1} = ", GetIndentString(indent), mname);
                                             sb.Append("function(this, __cs2lua_func_info");
                                             if (fcall.GetParamNum() > 1)
@@ -531,10 +583,16 @@ namespace Generator
                                         }
                                         GenerateStatements(second, sb, indent, funcOpts, calculator);
                                         --indent;
-                                        if (null != cdef && null == logInfo.EpilogueInfo && !funcOpts.NeedFuncInfo)
-                                            sb.AppendFormatLine("{0}end),", GetIndentString(indent));
-                                        else
+                                        if (null != logInfo.EpilogueInfo || funcOpts.NeedFuncInfo) {
                                             sb.AppendFormatLine("{0}end,", GetIndentString(indent));
+                                        }
+                                        else {
+                                            sb.AppendFormat("{0}end", GetIndentString(indent));
+                                            if (null != cdef) {
+                                                sb.Append(")");
+                                            }
+                                            sb.AppendLine(",");
+                                        }
                                     }
                                 }
                             }
@@ -555,6 +613,7 @@ namespace Generator
                                         System.Diagnostics.Debug.Assert(isInstance);
                                         int rct;
                                         int.TryParse(first.GetParamId(3), out rct);
+                                        instMethodNames.Add(mname);
                                         sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
                                         sb.Append("function(this");
                                         if (funcOpts.NeedFuncInfo) {
@@ -575,6 +634,30 @@ namespace Generator
                         }
                         --indent;
                         sb.AppendFormatLine("{0}}};", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}local obj_methods = {{", GetIndentString(indent));
+                        ++indent;
+                        foreach (var mname in instMethodNames) {
+                            bool handled = false;
+                            Cs2LuaMethodInfo cmi;
+                            if(methodInfos.TryGetValue(mname, out cmi)) {
+                                if (!sealedClass) {
+                                    if (cmi.IsAbstract || cmi.IsVirtual || cmi.IsOverride) {
+                                        sb.AppendFormatLine("{0}{1} = wrapvirtual(\"{1}\", raw_obj_methods.{1}, {2}),", GetIndentString(indent), mname, className);
+                                        sb.AppendFormatLine("{0}__self__{1} = wrapinheritable(\"__self__{1}\", raw_obj_methods.{1}, {2}),", GetIndentString(indent), mname, className);
+                                    }
+                                    else if (cmi.IsCtor || !cmi.IsPrivate && !cmi.IsSealed) {
+                                        sb.AppendFormatLine("{0}{1} = wrapinheritable(\"{1}\", raw_obj_methods.{1}, {2}),", GetIndentString(indent), mname, className);
+                                        sb.AppendFormatLine("{0}__self__{1} = wrapinheritable(\"__self__{1}\", raw_obj_methods.{1}, {2}),", GetIndentString(indent), mname, className);
+                                    }
+                                }
+                            }
+                            if(!handled) {
+                                sb.AppendFormatLine("{0}{1} = raw_obj_methods.{1},", GetIndentString(indent), mname);
+                            }
+                        }
+                        --indent;
+                        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}raw_obj_methods = nil;", GetIndentString(indent));
                     }
                     else {
                         sb.AppendFormatLine("{0}local obj_methods = nil;", GetIndentString(indent));
@@ -685,74 +768,58 @@ namespace Generator
                         sb.AppendFormatLine("{0}}},", GetIndentString(indent));
                     }
 
-                    if (s_GenClassInfo && null != classInfo) {
-                        var fcall = classInfo;
-                        if (classInfo.IsHighOrder)
-                            fcall = classInfo.LowerOrderFunction;
-                        sb.AppendFormatLine("{0}__class_info = {{", GetIndentString(indent));
+                    if (s_GenClassInfo) {
+                        if(sealedClass)
+                            sb.AppendFormatLine("{0}__is_sealed_class = true;", GetIndentString(indent));
+                        if(staticClass)
+                            sb.AppendFormatLine("{0}__is_static_class = true;", GetIndentString(indent));
+                        if(abstractClass)
+                            sb.AppendFormatLine("{0}__is_abstract_class = true;", GetIndentString(indent));
+                    }
+
+                    if ((!sealedClass && !staticClass || s_GenMethodInfo) && methodInfos.Count > 0) {
+                        sb.AppendFormatLine("{0}__method_info = {{", GetIndentString(indent));
                         ++indent;
-                        var kind = CalcTypeString(fcall.GetParam(0));
-                        var accessibility = CalcTypeString(fcall.GetParam(1));
-                        sb.AppendFormatLine("{0}Kind = {1},", GetIndentString(indent), kind);
-                        if (accessibility == "Accessibility.Private") {
-                            sb.AppendFormatLine("{0}private = true,", GetIndentString(indent));
-                        }
-                        foreach (var def in classInfo.Params) {
-                            var mdef = def as Dsl.FunctionData;
-                            string key = mdef.GetId();
-                            string val = mdef.GetParamId(0);
-                            sb.AppendFormatLine("{0}{1} = {2},", GetIndentString(indent), key, val);
+                        foreach (var pair in methodInfos) {
+                            var funcId = pair.Key;
+                            var cmi = pair.Value;
+                            if (cmi.IsNothing)
+                                continue;
+                            sb.AppendFormatLine("{0}{1} = {{", GetIndentString(indent), funcId);
+                            ++indent;
+                            if(cmi.IsCtor)
+                                sb.AppendFormatLine("{0}ctor = true,", GetIndentString(indent));
+                            if (cmi.IsPrivate)
+                                sb.AppendFormatLine("{0}private = true,", GetIndentString(indent));
+                            if (cmi.IsSealed)
+                                sb.AppendFormatLine("{0}sealed = true,", GetIndentString(indent));
+                            if (cmi.IsAbstract)
+                                sb.AppendFormatLine("{0}abstract = true,", GetIndentString(indent));
+                            if (cmi.IsVirtual)
+                                sb.AppendFormatLine("{0}virtual = true,", GetIndentString(indent));
+                            if (cmi.IsOverride)
+                                sb.AppendFormatLine("{0}override = true,", GetIndentString(indent));
+                            --indent;
+                            sb.AppendFormatLine("{0}}},", GetIndentString(indent));                            
                         }
                         --indent;
                         sb.AppendFormatLine("{0}}},", GetIndentString(indent));
                     }
 
-                    var methodInfo = FindStatement(funcData, "method_info") as Dsl.FunctionData;
-                    if ((!sealedClass && !staticClass || s_GenMethodInfo) && null != methodInfo && methodInfo.GetParamNum() > 0) {
-                        sb.AppendFormatLine("{0}__method_info = {{", GetIndentString(indent));
-                        ++indent;
-                        foreach (var def in methodInfo.Params) {
-                            var mfunc = def as Dsl.FunctionData;
-                            if (null != mfunc) {
-                                var fcall = mfunc;
-                                if (mfunc.IsHighOrder)
-                                    fcall = mfunc.LowerOrderFunction;
-                                bool gen = s_GenMethodInfo;
-                                if (!gen) {
-                                    if (mfunc.GetId().StartsWith("ctor")) {
-                                        gen = true;
-                                    }
-                                    else {
-                                        var accessibility = CalcTypeString(fcall.GetParam(1));
-                                        if (accessibility != "Accessibility.Private") {
-                                            gen = true;
-                                        }
-                                        foreach (var minfo in mfunc.Params) {
-                                            var mdef = minfo as Dsl.FunctionData;
-                                            string key = mdef.GetId();
-                                            string val = mdef.GetParamId(0);
-                                            bool bv;
-                                            bool.TryParse(val, out bv);
-                                            if (key == "sealed") {
-                                                gen = false;
-                                                break;
-                                            }
-                                            else if (key == "abstract" || key == "virtual" || key == "override") {
-                                                gen = true;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                                if (gen) {
+                    if (s_GenFieldInfo) {
+                        var fieldInfo = FindStatement(funcData, "field_info") as Dsl.FunctionData;
+                        if (null != fieldInfo && fieldInfo.GetParamNum() > 0) {
+                            sb.AppendFormatLine("{0}__field_info = {{", GetIndentString(indent));
+                            ++indent;
+                            foreach (var def in fieldInfo.Params) {
+                                var mfunc = def as Dsl.FunctionData;
+                                if (null != mfunc) {
+                                    var fcall = mfunc;
+                                    if (mfunc.IsHighOrder)
+                                        fcall = mfunc.LowerOrderFunction;
                                     sb.AppendFormatLine("{0}{1} = {{", GetIndentString(indent), mfunc.GetId());
                                     ++indent;
-                                    var kind = CalcTypeString(fcall.GetParam(0));
-                                    var accessibility = CalcTypeString(fcall.GetParam(1));
-                                    sb.AppendFormatLine("{0}Kind = {1},", GetIndentString(indent), kind);
-                                    if (accessibility == "Accessibility.Private") {
-                                        sb.AppendFormatLine("{0}private = true,", GetIndentString(indent));
-                                    }
+                                    var accessibility = CalcTypeString(fcall.GetParam(0));
                                     foreach (var minfo in mfunc.Params) {
                                         var mdef = minfo as Dsl.FunctionData;
                                         string key = mdef.GetId();
@@ -763,96 +830,9 @@ namespace Generator
                                     sb.AppendFormatLine("{0}}},", GetIndentString(indent));
                                 }
                             }
+                            --indent;
+                            sb.AppendFormatLine("{0}}},", GetIndentString(indent));
                         }
-                        --indent;
-                        sb.AppendFormatLine("{0}}},", GetIndentString(indent));
-                    }
-
-                    var propertyInfo = FindStatement(funcData, "property_info") as Dsl.FunctionData;
-                    if (s_GenPropertyInfo && null != propertyInfo && propertyInfo.GetParamNum() > 0) {
-                        sb.AppendFormatLine("{0}__property_info = {{", GetIndentString(indent));
-                        ++indent;
-                        foreach (var def in propertyInfo.Params) {
-                            var mfunc = def as Dsl.FunctionData;
-                            if (null != mfunc) {
-                                var fcall = mfunc;
-                                if (mfunc.IsHighOrder)
-                                    fcall = mfunc.LowerOrderFunction;
-                                sb.AppendFormatLine("{0}{1} = {{", GetIndentString(indent), mfunc.GetId());
-                                ++indent;
-                                var accessibility = CalcTypeString(fcall.GetParam(0));
-                                if (accessibility == "Accessibility.Private") {
-                                    sb.AppendFormatLine("{0}private = true,", GetIndentString(indent));
-                                }
-                                foreach (var minfo in mfunc.Params) {
-                                    var mdef = minfo as Dsl.FunctionData;
-                                    string key = mdef.GetId();
-                                    string val = mdef.GetParamId(0);
-                                    sb.AppendFormatLine("{0}{1} = {2},", GetIndentString(indent), key, val);
-                                }
-                                --indent;
-                                sb.AppendFormatLine("{0}}},", GetIndentString(indent));
-                            }
-                        }
-                        --indent;
-                        sb.AppendFormatLine("{0}}},", GetIndentString(indent));
-                    }
-
-                    var eventInfo = FindStatement(funcData, "event_info") as Dsl.FunctionData;
-                    if (s_GenEventInfo && null != eventInfo && eventInfo.GetParamNum() > 0) {
-                        sb.AppendFormatLine("{0}__event_info = {{", GetIndentString(indent));
-                        ++indent;
-                        foreach (var def in eventInfo.Params) {
-                            var mfunc = def as Dsl.FunctionData;
-                            if (null != mfunc) {
-                                var fcall = mfunc;
-                                if (mfunc.IsHighOrder)
-                                    fcall = mfunc.LowerOrderFunction;
-                                sb.AppendFormatLine("{0}{1} = {{", GetIndentString(indent), mfunc.GetId());
-                                ++indent;
-                                var accessibility = CalcTypeString(fcall.GetParam(0));
-                                if (accessibility == "Accessibility.Private") {
-                                    sb.AppendFormatLine("{0}private = true,", GetIndentString(indent));
-                                }
-                                foreach (var minfo in mfunc.Params) {
-                                    var mdef = minfo as Dsl.FunctionData;
-                                    string key = mdef.GetId();
-                                    string val = mdef.GetParamId(0);
-                                    sb.AppendFormatLine("{0}{1} = {2},", GetIndentString(indent), key, val);
-                                }
-                                --indent;
-                                sb.AppendFormatLine("{0}}},", GetIndentString(indent));
-                            }
-                        }
-                        --indent;
-                        sb.AppendFormatLine("{0}}},", GetIndentString(indent));
-                    }
-
-                    var fieldInfo = FindStatement(funcData, "field_info") as Dsl.FunctionData;
-                    if (s_GenFieldInfo && null != fieldInfo && fieldInfo.GetParamNum() > 0) {
-                        sb.AppendFormatLine("{0}__field_info = {{", GetIndentString(indent));
-                        ++indent;
-                        foreach (var def in fieldInfo.Params) {
-                            var mfunc = def as Dsl.FunctionData;
-                            if (null != mfunc) {
-                                var fcall = mfunc;
-                                if (mfunc.IsHighOrder)
-                                    fcall = mfunc.LowerOrderFunction;
-                                sb.AppendFormatLine("{0}{1} = {{", GetIndentString(indent), mfunc.GetId());
-                                ++indent;
-                                var accessibility = CalcTypeString(fcall.GetParam(0));
-                                foreach (var minfo in mfunc.Params) {
-                                    var mdef = minfo as Dsl.FunctionData;
-                                    string key = mdef.GetId();
-                                    string val = mdef.GetParamId(0);
-                                    sb.AppendFormatLine("{0}{1} = {2},", GetIndentString(indent), key, val);
-                                }
-                                --indent;
-                                sb.AppendFormatLine("{0}}},", GetIndentString(indent));
-                            }
-                        }
-                        --indent;
-                        sb.AppendFormatLine("{0}}},", GetIndentString(indent));
                     }
 
                     --indent;
@@ -920,6 +900,7 @@ namespace Generator
             calculator.Register("syntaxgetidtype", new DslExpression.ExpressionFactoryHelper<DslExpression.SyntaxGetIdTypeExp>());
             calculator.Register("getargument", new DslExpression.ExpressionFactoryHelper<DslExpression.GetArgmentExp>());
             calculator.Register("getsubargument", new DslExpression.ExpressionFactoryHelper<DslExpression.GetSubArgmentExp>());
+            calculator.Register("writelog", new DslExpression.ExpressionFactoryHelper<DslExpression.WriteLogExp>());
             calculator.Register("writeindent", new DslExpression.ExpressionFactoryHelper<DslExpression.WriteIndentExp>());
             calculator.Register("writesymbol", new DslExpression.ExpressionFactoryHelper<DslExpression.WriteSymbolExp>());
             calculator.Register("writestring", new DslExpression.ExpressionFactoryHelper<DslExpression.WriteStringExp>());
@@ -3787,9 +3768,44 @@ namespace DslExpression
                     var arg = data.GetParam(index) as Dsl.FunctionData;
                     if (null != arg && subindex >= 0 && subindex < arg.GetParamNum()) {
                         var subarg = arg.GetParam(subindex);
-                        r = Generator.LuaGenerator.CalcTypeString(arg);
+                        r = Generator.LuaGenerator.CalcTypeString(subarg);
                     }
                 }
+            }
+            return r;
+        }
+    }
+    internal sealed class WriteLogExp : SimpleExpressionBase
+    {
+        protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
+        {
+            CalculatorValue r = CalculatorValue.NullObject;
+            if (operands.Count >= 1) {
+                var obj = operands[0];
+                if (obj.IsString) {
+                    var fmt = obj.StringVal;
+                    if (operands.Count > 1 && null != fmt) {
+                        var arrayList = new System.Collections.ArrayList();
+                        for (int i = 1; i < operands.Count; ++i) {
+                            arrayList.Add(operands[i].Get<object>());
+                        }
+                        Generator.LuaGenerator.Log("generator.dsl", string.Format(fmt, arrayList.ToArray()));
+                        Console.WriteLine(fmt, arrayList.ToArray());
+                    }
+                    else {
+                        Generator.LuaGenerator.Log("generator.dsl", fmt);
+                        Console.WriteLine(fmt);
+                    }
+                }
+                else {
+                    var o = obj.GetObject();
+                    Generator.LuaGenerator.Log("generator.dsl", null != o ? o.ToString() : string.Empty);
+                    Console.WriteLine(o);
+                }
+            }
+            else {
+                Generator.LuaGenerator.Log("generator.dsl", string.Empty);
+                Console.WriteLine();
             }
             return r;
         }

@@ -2663,6 +2663,66 @@ script(arraygetstruct)args($funcData, $funcOpts, $sb, $indent)
 script(arraysetstruct)args($funcData, $funcOpts, $sb, $indent)
 {
     //arraysetstruct(arrIsExtern, arrSymKind, elementType, arr, toplevel, ...)
+    $elementtype = getargument($funcData, 2);
     
+    if($elementtype=="UnityEngine.Vector2"){
+        usefunc("set_array_vector2","(funcInfo, arr, toplevel, ...)", $funcData, $funcOpts, $sb, $indent, 3, "__cs2lua_func_info")
+        {:
+            local ix, v2 = ...
+            if v~=nil then
+                luatableremove(funcInfo.v2_list, v2)
+            end
+            arr[ix] = v2
+        :};
+        return(true);
+    }
+    elseif($elementtype=="UnityEngine.Vector3"){
+        usefunc("set_array_vector3","(funcInfo, arr, toplevel, ...)", $funcData, $funcOpts, $sb, $indent, 3, "__cs2lua_func_info")
+        {:
+            local ix, v3 = ...
+            if v~=nil then
+                luatableremove(funcInfo.v3_list, v3)
+            end
+            arr[ix] = v3
+        :};
+        return(true);
+    };
+    
+    return(false);
+};
+
+script(callexternstructlistinstance)args($funcData, $funcOpts, $sb, $indent)
+{
+    //callexternstructlistinstance(3, [callerClass, firstTypeArg, firstTypeArgKind, secondTypeArg, secondTypeArgKind], [firstTypeArg, firstTypeArgKind, secondTypeArg, secondTypeArgKind, argType, argTypeKind, argOper, argSym], obj, class, method, ...)
+    $class = getargument($funcData, 4);
+    $method = getargument($funcData, 5);
+    $argtype = getsubargument($funcData, 2, 4);
+    
+    echo("callexternstructlistinstance: {0}, {1}, {2}.", $class, $method, $argtype);
+    
+    if($method=="Add"){
+        if($argtype=="UnityEngine.Vector2"){
+            usefunc("call_ilist_add_vector2","(funcInfo, obj, class, method, ...)", $funcData, $funcOpts, $sb, $indent, 3, "__cs2lua_func_info")
+            {:
+                local v2 = ...
+                if v~=nil then
+                    luatableremove(funcInfo.v2_list, v2)
+                end
+                obj[method](obj, ...)
+            :};
+            return(true);
+        }
+        elseif($argtype=="UnityEngine.Vector3"){
+            usefunc("call_ilist_add_vector3","(funcInfo, obj, class, method, ...)", $funcData, $funcOpts, $sb, $indent, 3, "__cs2lua_func_info")
+            {:
+                local v3 = ...
+                if v~=nil then
+                    luatableremove(funcInfo.v3_list, v3)
+                end
+                obj[method](obj, ...)
+            :};
+            return(true);
+        };
+    };
     return(false);
 };

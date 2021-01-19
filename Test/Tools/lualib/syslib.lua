@@ -3509,62 +3509,6 @@ function __unwrap_if_string(val)
     end
 end
 
-function __find_base_class_key(k, base_class)
-    if nil == k then
-        UnityEngine.Debug.LogError__Object("[cs2lua] table index is nil")
-        return false
-    end
-    if base_class then
-        if rawget(base_class, "__cs2lua_defined") then
-            if rawget(base_class, k) then
-                return true
-            else
-                return base_class.__exist(k)
-            end
-        else
-            return find_extern_class_or_obj_key(k,base_class)
-        end
-    end
-    return false
-end
-function __find_class_key(k, class, class_fields, base_class)
-    if nil == k then
-        UnityEngine.Debug.LogError__Object("[cs2lua] table index is nil")
-        return false
-    end
-    local ret
-    ret = rawget(class, k)
-    if nil ~= ret then
-        return true
-    end
-    if class_fields then
-        ret = class_fields[k]
-        if nil ~= ret then
-            return true
-        end
-    end
-    return __find_base_class_key(k, base_class)
-end
-function __wrap_virtual_method(k, f, class)
-    return function(this, ...)
-        this = __get_this_for_class(this, class)
-        local child = rawget(this, "__child")
-        local final_nf = nil
-        local final_child = nil
-        while child do
-            local nf = child:__findthis(k)
-            if nf then
-                final_nf = nf
-                final_child = child
-            end
-            child = rawget(child, "__child")
-        end
-        if final_nf then
-            return final_nf(final_child, ...)
-        end
-        return f(this, ...)
-    end
-end
 function __get_this_for_class(this, class)
     local obj = this
     while obj ~= nil do
@@ -3581,8 +3525,7 @@ function __get_this_for_class(this, class)
     end
     return this
 end
-
-function find_extern_class_or_obj_key(k, obj)
+function __find_extern_class_or_obj_key(k, obj)
     local t=getmetatable(obj)
     repeat
         local fun=rawget(t,k)
@@ -3599,7 +3542,35 @@ function find_extern_class_or_obj_key(k, obj)
     until t==nil
     return false
 end
-
+function __find_base_class_key(k, base_class)
+    if nil == k then
+        UnityEngine.Debug.LogError__Object("[cs2lua] table index is nil")
+        return false
+    end
+    if base_class then
+        if rawget(base_class, "__cs2lua_defined") then
+            return base_class.__exist(k)
+        else
+            return __find_extern_class_or_obj_key(k,base_class)
+        end
+    end
+    return false
+end
+function __find_class_key(k, class, class_fields, base_class)
+    if nil == k then
+        UnityEngine.Debug.LogError__Object("[cs2lua] table index is nil")
+        return false
+    end
+    local ret
+    if class_fields and class_fields[k] then
+        return true
+    end
+    ret = rawget(class, k)
+    if nil ~= ret then
+        return true
+    end
+    return __find_base_class_key(k, base_class)
+end
 function __find_base_obj_key(k, baseObj)
     if nil == k then
         UnityEngine.Debug.LogError__Object("[cs2lua] table index is nil")
@@ -3608,13 +3579,9 @@ function __find_base_obj_key(k, baseObj)
     if baseObj then
         local meta = getmetatable(baseObj)
         if meta and rawget(meta, "__cs2lua_defined") then
-            if rawget(baseObj, k) then
-                return true
-            else
-                return baseObj:__exist(k)
-            end
+            return baseObj:__exist(k)
         else
-            return find_extern_class_or_obj_key(k,baseObj)
+            return __find_extern_class_or_obj_key(k,baseObj)
         end
     end
     return false
@@ -3625,39 +3592,74 @@ function __find_obj_key(k, obj, obj_fields, obj_methods, baseObj)
         return false
     end
     local ret
-    ret = rawget(obj, k)
-    if nil ~= ret then
+    if obj_fields and obj_fields[k] then
         return true
     end
-    if obj_fields then
-        ret = obj_fields[k]
-        if nil ~= ret then
-            return true
+    if obj_methods and obj_methods[k] then
+        return true
+    end
+    return __find_base_obj_key(k, baseObj)
+end
+
+function __find_extern_obj_member(k, obj)
+    local t=getmetatable(obj)
+    repeat
+        local fun=rawget(t,k)
+        local tp=type(fun)        
+        if tp=='function' then 
+            return tp() 
+        elseif tp=='table' then
+            local f=fun[1]
+            if f then
+                return f()
+            end
         end
+        t = rawget(t,'__parent')
+    until t==nil
+    return false
+end
+function __find_base_obj_member(k, baseObj)
+    if nil == k then
+        UnityEngine.Debug.LogError__Object("[cs2lua] table index is nil")
+        return nil
+    end
+    if baseObj then
+        local meta = getmetatable(baseObj)
+        if meta and rawget(meta, "__cs2lua_defined") then
+            return baseObj:__findobj(k)
+        else
+            return __find_extern_obj_member(k,baseObj)
+        end
+    end
+    return nil
+end
+function __find_obj_member(k, obj, obj_fields, obj_methods, baseObj)
+    if nil == k then
+        UnityEngine.Debug.LogError__Object("[cs2lua] table index is nil")
+        return nil
+    end
+    local ret
+    if obj_fields and obj_fields[k] then
+        ret = rawget(obj, k)
+        return ret
     end
     if obj_methods then
         ret = obj_methods[k]
         if nil ~= ret then
-            return true
+            return ret
         end
     end
-    return __find_base_obj_key(k, baseObj)
+    return __find_base_obj_member(k, baseObj)
 end
-function __find_obj_member(k, obj, obj_fields, obj_methods)
+function __find_this_member(k, obj, obj_fields, obj_methods)
     if nil == k then
         UnityEngine.Debug.LogError__Object("[cs2lua] table index is nil")
         return false
     end
     local ret
-    ret = rawget(obj, k)
-    if nil ~= ret then
+    if obj_fields and obj_fields[k] then
+        ret = rawget(obj, k)
         return ret
-    end
-    if obj_fields then
-        ret = obj_fields[k]
-        if nil ~= ret then
-            return ret
-        end
     end
     if obj_methods then
         ret = obj_methods[k]
@@ -3666,6 +3668,46 @@ function __find_obj_member(k, obj, obj_fields, obj_methods)
         end
     end
     return nil
+end
+
+function __find_override(k, obj)
+    local child = rawget(obj, "__child")
+    local final_f = nil
+    local final_obj = nil
+    while child do
+        local f = child:__findthis(k)
+        if f then
+            final_f = f
+            final_obj = child
+        end
+        child = rawget(child, "__child")
+    end
+    return final_f, final_obj
+end
+function wrapvirtual(k, f, class)
+    return function(this, ...)
+        local obj = this
+        this = __get_this_for_class(this, class)
+        local final_f, final_obj = __find_override(k, this)
+        if not final_f then
+            final_f = f
+            final_obj = this
+        end
+        --安装到原始调用对象上，以后就直接调用相应方法了
+        --rawset(obj, k, function(self, ...) return final_f(final_obj, ...) end)
+        return final_f(final_obj, ...)
+    end
+end
+function wrapinheritable(k, f, class)
+    return function(this, ...)
+        local obj = this
+        this = __get_this_for_class(this, class)
+        local final_f = f
+        local final_obj = this
+        --安装到原始调用对象上，以后就直接调用相应方法了
+        --rawset(obj, k, function(self, ...) return final_f(final_obj, ...) end)
+        return final_f(final_obj, ...)
+    end
 end
  
 function defineclass(
@@ -3683,8 +3725,9 @@ function defineclass(
     local obj_fields = class.__obj_fields
 
     local interfaces = class.__interfaces
-    local class_info = class.__class_info
     local method_info = class.__method_info
+    local is_sealed_class = class.__is_sealed_class
+    local is_static_class = class.__is_static_class
     
     rawset(class, "__cs2lua_defined", true)
     rawset(class, "__cs2lua_fullname", fullName)
@@ -3693,39 +3736,17 @@ function defineclass(
     rawset(class, "__is_value_type", is_value_type)
     rawset(class, "__interfaces", interfaces)
     
-    --为继承与重载构建辅助函数
-    if obj_methods then        
-        local temp_methods = {}
-        local is_sealed_class = false
-        if class_info and class_info["sealed"] then
-            is_sealed_class = true
-        end
-        for k, v in pairs(obj_methods) do
-            temp_methods[k] = v
-            if method_info then
-                local minfo = method_info[k]
-                if minfo then
-                    if minfo["abstract"] or minfo["virtual"] or minfo["override"] then
-                        temp_methods[k] = __wrap_virtual_method(k, v, class)
-                    end
-                    local result = string.find(k,"ctor",1,true)
-                    if (result==1) or ((not is_sealed_class) and (not minfo["private"]) and (not minfo["sealed"])) then
-                        temp_methods["__self__" .. k] = v
-                    end
-                end
-            end
-        end
-        obj_methods = temp_methods
-    end
-
     local function __exist(fk)
         return __find_class_key(fk, class, class_fields, base_class)
     end
     local function __obj_exist(tb, fk)
         return __find_obj_key(fk, tb, obj_fields, obj_methods, rawget(tb, "base"))
     end
+    local function __obj_findobj(tb, fk)
+        return __find_obj_member(fk, tb, obj_fields, obj_methods, rawget(tb, "base"))
+    end
     local function __obj_findthis(tb, fk)
-        return __find_obj_member(fk, tb, obj_fields, obj_methods)
+        return __find_this_member(fk, tb, obj_fields, obj_methods)
     end
     local function __obj_GetType(tb)
         return class
@@ -3749,6 +3770,8 @@ function defineclass(
             end
             if k == "__exist" then
                 return __obj_exist
+            elseif k == "__findobj" then
+                return __obj_findobj
             elseif k == "__findthis" then
                 return __obj_findthis
             elseif k == "GetType" then
@@ -3766,7 +3789,7 @@ function defineclass(
             end
             local baseObj = rawget(t, "base")
             if __find_base_obj_key(k, baseObj) then
-                return baseObj[k]
+                return __find_base_obj_member(k, baseObj)
             end
             lualog("lookup meta for {0}.{1} base_class {2} baseObj {3}", t:GetType().FullName, k, base_class and base_class.FullName, baseObj)
             printStack()
@@ -3790,9 +3813,6 @@ function defineclass(
                 return
             end
             rawset(t, k, v)
-        end,
-        __setbase = function(self, base)
-            rawset(self, "base", base)
         end,
     }
     
