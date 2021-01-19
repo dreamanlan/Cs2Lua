@@ -20,6 +20,8 @@ https://github.com/dreamanlan/Cs2Lua/blob/master/DESIGN.md
 
 
 ## 【最新进展】
+【2021-01-20】 调整lua对象模型，虚函数与继承方法增加类似JIT绑定机制；添加值类型集合方法的自定义翻译支持，添加属性InvokeToLuaLib用于在C#里指定某个方法调用支持自定义翻译。
+
 【2021-01-16】 值类型参数转换从函数入口处处理改为在调用时处理；补全值类型数组的读写处理arraygetstruct/arraysetstruct与外部indexer的元素值读取getexternstaticindexerstruct/getexterninstanceindexerstruct处理。
 
 【2021-01-13】 基于数据流与控制流分析结果对try与using代码块部分拆分独立函数，减少GC；条件表达式给对象成员赋值改写为if-else语句形式，避免使用函数对象产生GC。
