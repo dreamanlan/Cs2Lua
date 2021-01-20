@@ -209,7 +209,7 @@ namespace RoslynTool.CsToDsl
             if (null != arrElementOper) {
                 rightArrSym = m_Model.GetSymbolInfoEx(arrElementOper.ArrayReference.Syntax).Symbol;
             }
-            rightNeededIfWrap =  null != expSym && (expSym.Kind == SymbolKind.Method || expSym.Kind == SymbolKind.Property || expSym.Kind == SymbolKind.Field || expSym.Kind == SymbolKind.Local) && SymbolTable.Instance.IsCs2DslSymbol((ISymbol)expSym) || null != rightPropType && (rightPropType.IsGenericType || SymbolTable.Instance.IsCs2DslSymbol(rightPropType)) || null != rightArrSym && SymbolTable.Instance.IsCs2DslSymbol(rightArrSym);
+            rightNeededIfWrap =  null != expSym && (expSym.Kind == SymbolKind.Method || expSym.Kind == SymbolKind.Property || expSym.Kind == SymbolKind.Field || expSym.Kind == SymbolKind.Local || expSym.Kind == SymbolKind.Parameter) && SymbolTable.Instance.IsCs2DslSymbol((ISymbol)expSym) || null != rightPropType && (rightPropType.IsGenericType || SymbolTable.Instance.IsCs2DslSymbol(rightPropType)) || null != rightArrSym && SymbolTable.Instance.IsCs2DslSymbol(rightArrSym);
             return needWrap;
         }
         internal void OutputArgumentList(InvocationInfo ii, ITypeSymbol callerType, bool useTypeNameString, SyntaxNode node)
@@ -469,12 +469,13 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("dsltoobject(SymbolKind.ErrorType, false, \"\", ");
             }
         }
-        internal bool HasItemGetMethodDefined(INamedTypeSymbol obj)
+        internal bool HasItemGetMethodDefined(INamedTypeSymbol obj, ref IMethodSymbol msym)
         {
             var gis = obj.GetMembers("get_Item");
             foreach (var gi in gis) {
                 var m = gi as IMethodSymbol;
                 if (null != m && m.Parameters.Length == 1 && m.Parameters[0].Type.Name == "Int32" && !m.ReturnsVoid) {
+                    msym = m;
                     return true;
                 }
             }

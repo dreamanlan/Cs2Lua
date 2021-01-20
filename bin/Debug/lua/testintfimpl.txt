@@ -35,26 +35,22 @@ TestIntfImpl = {
 
 		local class = TestIntfImpl;
 
-		local obj_methods = {
+		local raw_obj_methods = {
 			get_prop = function(this)
-				this = __get_this_for_class(this, TestIntfImpl);
 				local __method_ret_25_4_25_33;
 				__method_ret_25_4_25_33 = this.prop;
 				return __method_ret_25_4_25_33;
 			end,
 
 			set_prop = function(this, value)
-				this = __get_this_for_class(this, TestIntfImpl);
 				this.prop = value;
 			end,
 
 			ctor = function(this)
-				this = __get_this_for_class(this, TestIntfImpl);
 				this:__ctor();
 			end,
 
 			__ctor = function(this)
-				this = __get_this_for_class(this, TestIntfImpl);
 				if this.__ctor_called then 
 					return;
 				else
@@ -62,6 +58,19 @@ TestIntfImpl = {
 				end;
 			end,
 		};
+		local obj_methods = {
+			get_prop = wrapinheritable("get_prop", raw_obj_methods.get_prop, TestIntfImpl),
+			__self__get_prop = wrapinheritable("__self__get_prop", raw_obj_methods.get_prop, TestIntfImpl),
+			get_prop = raw_obj_methods.get_prop,
+			set_prop = wrapinheritable("set_prop", raw_obj_methods.set_prop, TestIntfImpl),
+			__self__set_prop = wrapinheritable("__self__set_prop", raw_obj_methods.set_prop, TestIntfImpl),
+			set_prop = raw_obj_methods.set_prop,
+			ctor = wrapinheritable("ctor", raw_obj_methods.ctor, TestIntfImpl),
+			__self__ctor = wrapinheritable("__self__ctor", raw_obj_methods.ctor, TestIntfImpl),
+			ctor = raw_obj_methods.ctor,
+			__ctor = raw_obj_methods.__ctor,
+		};
+		raw_obj_methods = nil;
 
 		local obj_build = function()
 			return {
@@ -93,18 +102,9 @@ TestIntfImpl = {
 	__interfaces = {
 		"ITestIntf",
 	},
-	__class_info = {
-		Kind = TypeKind.Class,
-	},
 	__method_info = {
-		get_prop = {
-			Kind = MethodKind.PropertyGet,
-		},
-		set_prop = {
-			Kind = MethodKind.PropertySet,
-		},
 		ctor = {
-			Kind = MethodKind.Constructor,
+			ctor = true,
 		},
 	},
 };

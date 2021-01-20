@@ -531,10 +531,10 @@ function callexternextension(callerClass, method, ...)
     end
 end
 
-function getexternstaticindexer(callerClass, class, name, argCount, ...)
+function getexternstaticindexer(elementType, elementTypeKind, callerClass, class, name, argCount, ...)
     return class[name](...)
 end
-function getexterninstanceindexer(callerClass, obj, class, name, argCount, ...)
+function getexterninstanceindexer(elementType, elementTypeKind, callerClass, obj, class, name, argCount, ...)
     local arg1,arg2 = ...
     local index
     local meta = getmetatable(obj)
@@ -566,10 +566,10 @@ function getexterninstanceindexer(callerClass, obj, class, name, argCount, ...)
     end
 end
 
-function setexternstaticindexer(callerClass, class, name, argCount, toplevel, ...)
+function setexternstaticindexer(elementType, elementTypeKind, callerClass, class, name, argCount, ...)
     return class[name](...)
 end
-function setexterninstanceindexer(callerClass, obj, class, name, argCount, toplevel, ...)
+function setexterninstanceindexer(elementType, elementTypeKind, callerClass, obj, class, name, argCount, ...)
     local arg1,arg2,arg3 = ...
     local index,val
     index = __unwrap_if_string(arg1)
@@ -1306,10 +1306,10 @@ function callexterninstancereturnstruct(obj, class, member, ...)
     return obj[member](obj, ...)
 end
 
-function getstaticindexerstructimpl(isExtern, callerClass, class, name, argCount, ...)
+function getstaticindexerstructimpl(isExtern, elementType, callerClass, class, name, argCount, ...)
     return class[name](...)
 end
-function getinstanceindexerstructimpl(isExtern, callerClass, obj, class, name, argCount, ...)
+function getinstanceindexerstructimpl(isExtern, elementType, callerClass, obj, class, name, argCount, ...)
     local arg1,arg2 = ...
     local index
     local meta = getmetatable(obj)
@@ -1341,19 +1341,23 @@ function getinstanceindexerstructimpl(isExtern, callerClass, obj, class, name, a
     end
 end
 
-function getstaticindexerstruct(isExtern, callerClass, class, name, argCount, ...)
-    translationlog("need add handler for getstaticindexerstruct {0}.{1}", getclasstypename(class), name)
-    return getstaticindexerstructimpl(isExtern, callerClass, class, name, argCount, ...)
+function getstaticindexerstruct(isExtern, elementType, callerClass, class, name, argCount, ...)
+    if isExtern and callerClass ~= class then
+        translationlog("need add handler for getstaticindexerstruct {0}[{1}] {2}.{3}", getclasstypename(callerClass), getclasstypename(elementType), getclasstypename(class), name)
+    end
+    return getstaticindexerstructimpl(isExtern, elementType, callerClass, class, name, argCount, ...)
 end
-function getinstanceindexerstruct(isExtern, callerClass, obj, class, name, argCount, ...)
-    translationlog("need add handler for getinstanceindexerstruct {0}.{1}", getclasstypename(class), name)
-    return getinstanceindexerstructimpl(isExtern, callerClass, obj, class, name, argCount, ...)
+function getinstanceindexerstruct(isExtern, elementType, callerClass, obj, class, name, argCount, ...)
+    if isExtern and callerClass ~= class then
+        translationlog("need add handler for getinstanceindexerstruct {0}[{1}] {2}.{3}", getclasstypename(callerClass), getclasstypename(elementType), getclasstypename(class), name)
+    end
+    return getinstanceindexerstructimpl(isExtern, elementType, callerClass, obj, class, name, argCount, ...)
 end
 
-function setstaticindexerstructimpl(isExtern, callerClass, class, name, argCount, toplevel, ...)
+function setstaticindexerstructimpl(isExtern, elementType, callerClass, class, name, argCount, ...)
     return class[name](...)
 end
-function setinstanceindexerstructimpl(isExtern, callerClass, obj, class, name, argCount, toplevel, ...)
+function setinstanceindexerstructimpl(isExtern, elementType, callerClass, obj, class, name, argCount, ...)
     local arg1,arg2,arg3 = ...
     local index,val
     index = __unwrap_if_string(arg1)
@@ -1381,16 +1385,16 @@ function setinstanceindexerstructimpl(isExtern, callerClass, obj, class, name, a
     return nil
 end
 
-function setstaticindexerstruct(isExtern, callerClass, class, name, argCount, toplevel, ...)
-    translationlog("need add handler for setstaticindexerstruct {0}.{1}", getclasstypename(class), name)
-    return setstaticindexerstructimpl(isExtern, callerClass, class, name, argCount, toplevel, ...)
+function setstaticindexerstruct(isExtern, elementType, callerClass, class, name, argCount, ...)
+    translationlog("need add handler for setstaticindexerstruct {0}[{1}] {2}.{3}", getclasstypename(callerClass), getclasstypename(elementType), getclasstypename(class), name)
+    return setstaticindexerstructimpl(isExtern, elementType, callerClass, class, name, argCount, ...)
 end
-function setinstanceindexerstruct(isExtern, callerClass, obj, class, name, argCount, toplevel, ...)
-    translationlog("need add handler for setinstanceindexerstruct {0}.{1}", getclasstypename(class), name)
-    return setinstanceindexerstructimpl(isExtern, callerClass, obj, class, name, argCount, toplevel, ...)
+function setinstanceindexerstruct(isExtern, elementType, callerClass, obj, class, name, argCount, ...)
+    translationlog("need add handler for setinstanceindexerstruct {0}[{1}] {2}.{3}", getclasstypename(callerClass), getclasstypename(elementType), getclasstypename(class), name)
+    return setinstanceindexerstructimpl(isExtern, elementType, callerClass, obj, class, name, argCount, ...)
 end
 
-function arraygetstructimpl(isExtern, arrSymKind, elementType, arr, ...)
+function arraygetstructimpl(isExtern, arrSymKind, elementType, arr, argCount, ...)
     local num = select("#", ...)
     if num == 1 then
         local v1 = select(1, ...)
@@ -1408,7 +1412,7 @@ function arraygetstructimpl(isExtern, arrSymKind, elementType, arr, ...)
         error("too many dimensions !")
     end
 end
-function arraysetstructimpl(isExtern, arrSymKind, elementType, arr, toplevel, ...)
+function arraysetstructimpl(isExtern, arrSymKind, elementType, arr, argCount, ...)
     local num = select("#", ...)
     if num == 2 then
         local v1 = select(1, ...)
@@ -1430,13 +1434,13 @@ function arraysetstructimpl(isExtern, arrSymKind, elementType, arr, toplevel, ..
     end
 end
 
-function arraygetstruct(isExtern, arrSymKind, elementType, arr, ...)
+function arraygetstruct(isExtern, arrSymKind, elementType, arr, argCount, ...)
     translationlog("need add handler for arraygetstruct {0}[]", getclasstypename(elementType))
-    return arraygetstructimpl(isExtern, arrSymKind, elementType, arr, ...)
+    return arraygetstructimpl(isExtern, arrSymKind, elementType, arr, argCount, ...)
 end
-function arraysetstruct(isExtern, arrSymKind, elementType, arr, toplevel, ...)
+function arraysetstruct(isExtern, arrSymKind, elementType, arr, argCount, ...)
     translationlog("need add handler for arraysetstruct {0}[]", getclasstypename(elementType))
-    arraysetstructimpl(isExtern, arrSymKind, elementType, arr, toplevel, ...)
+    arraysetstructimpl(isExtern, arrSymKind, elementType, arr, argCount, ...)
 end
 
 function recycleandkeepstructvalue(fieldType, oldVal, newVal)
@@ -3694,7 +3698,7 @@ function wrapvirtual(k, f, class)
             final_obj = this
         end
         --安装到原始调用对象上，以后就直接调用相应方法了
-        --rawset(obj, k, function(self, ...) return final_f(final_obj, ...) end)
+        rawset(obj, k, function(self, ...) return final_f(final_obj, ...) end)
         return final_f(final_obj, ...)
     end
 end
@@ -3705,7 +3709,7 @@ function wrapinheritable(k, f, class)
         local final_f = f
         local final_obj = this
         --安装到原始调用对象上，以后就直接调用相应方法了
-        --rawset(obj, k, function(self, ...) return final_f(final_obj, ...) end)
+        rawset(obj, k, function(self, ...) return final_f(final_obj, ...) end)
         return final_f(final_obj, ...)
     end
 end

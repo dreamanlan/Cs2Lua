@@ -35,27 +35,23 @@ Vector3List = {
 
 		local class = Vector3List;
 
-		local obj_methods = {
+		local raw_obj_methods = {
 			ctor = function(this)
-				this = __get_this_for_class(this, Vector3List);
 				buildexternbaseobj(this, Vector3List, System.Collections.Generic.List_T, "ctor", 0);
 				this:__ctor();
 			end,
 
 			ctor__Int32 = function(this, c)
-				this = __get_this_for_class(this, Vector3List);
 				buildexternbaseobj(this, Vector3List, System.Collections.Generic.List_T, "ctor__Int32", 0, c);
 				this:__ctor();
 			end,
 
 			ctor__ICollection_1_Vector3 = function(this, coll)
-				this = __get_this_for_class(this, Vector3List);
 				buildexternbaseobj(this, Vector3List, System.Collections.Generic.List_T, "ctor__IEnumerable_1_T", 0, coll);
 				this:__ctor();
 			end,
 
 			__ctor = function(this)
-				this = __get_this_for_class(this, Vector3List);
 				if this.__ctor_called then 
 					return;
 				else
@@ -63,6 +59,19 @@ Vector3List = {
 				end;
 			end,
 		};
+		local obj_methods = {
+			ctor = wrapinheritable("ctor", raw_obj_methods.ctor, Vector3List),
+			__self__ctor = wrapinheritable("__self__ctor", raw_obj_methods.ctor, Vector3List),
+			ctor = raw_obj_methods.ctor,
+			ctor__Int32 = wrapinheritable("ctor__Int32", raw_obj_methods.ctor__Int32, Vector3List),
+			__self__ctor__Int32 = wrapinheritable("__self__ctor__Int32", raw_obj_methods.ctor__Int32, Vector3List),
+			ctor__Int32 = raw_obj_methods.ctor__Int32,
+			ctor__ICollection_1_Vector3 = wrapinheritable("ctor__ICollection_1_Vector3", raw_obj_methods.ctor__ICollection_1_Vector3, Vector3List),
+			__self__ctor__ICollection_1_Vector3 = wrapinheritable("__self__ctor__ICollection_1_Vector3", raw_obj_methods.ctor__ICollection_1_Vector3, Vector3List),
+			ctor__ICollection_1_Vector3 = raw_obj_methods.ctor__ICollection_1_Vector3,
+			__ctor = raw_obj_methods.__ctor,
+		};
+		raw_obj_methods = nil;
 
 		local obj_build = function()
 			return {
@@ -99,18 +108,15 @@ Vector3List = {
 		"System.Collections.Generic.IEnumerable_T",
 		"System.Collections.IEnumerable",
 	},
-	__class_info = {
-		Kind = TypeKind.Class,
-	},
 	__method_info = {
 		ctor = {
-			Kind = MethodKind.Constructor,
+			ctor = true,
 		},
 		ctor__Int32 = {
-			Kind = MethodKind.Constructor,
+			ctor = true,
 		},
 		ctor__ICollection_1_Vector3 = {
-			Kind = MethodKind.Constructor,
+			ctor = true,
 		},
 	},
 };

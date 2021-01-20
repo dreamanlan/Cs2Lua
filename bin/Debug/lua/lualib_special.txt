@@ -4,10 +4,26 @@ function wrap_out_vector3(funcInfo)
 	return obj
 end
 
+function set_array_vector3(funcInfo, arr, ...)
+	local ix, v3 = ...
+	if v~=nil then
+	    luatableremove(funcInfo.v3_list, v3)
+	end
+	arr[ix] = v3
+end
+
 function get_unity_color_white(funcInfo)
 	local obj = UnityEngine.Color.white
 	table.insert(funcInfo.c_list , obj)
 	return obj
+end
+
+function call_ilist_add_vector3(funcInfo, obj, class, method, ...)
+	local v3 = ...
+	if v~=nil then
+	    luatableremove(funcInfo.v3_list, v3)
+	end
+	obj[method](obj, ...)
 end
 
 function get_unity_color_black(funcInfo)
@@ -36,5 +52,13 @@ function get_vector3_zero(funcInfo)
 	local obj = UnityEngine.Vector3.New(0,0,0)
 	table.insert(funcInfo.v3_list, obj)
 	return obj
+end
+
+function set_instance_indexer_vector3(funcInfo, isExtern, elementType, callerClass, obj, class, name, argCount, ...)
+	local ix, v3 = ...
+	if v~=nil then
+	    luatableremove(funcInfo.v3_list, v3)
+	end
+	setinstanceindexerstruct(isExtern, elementType, callerClass, obj, class, name, argCount, ix, v3)
 end
 

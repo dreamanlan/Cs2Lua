@@ -62,6 +62,42 @@ script(wrapoutexternstruct)args($funcData, $funcOpts, $sb, $indent)
             return obj
         :};
         return(true);
+    }
+    elseif($classObj=="UnityEngine.Rect"){
+        usefunc("wrap_out_rect", "(funcInfo)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+        {:   
+            local obj = RectPool.Alloc()
+            table.insert(funcInfo.rt_list, obj)
+            return obj
+        :};
+        return(true);
+    }
+    elseif($classObj=="CsLibrary.DateTime"){
+        usefunc("wrap_out_datetime", "(funcInfo)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+        {:   
+            local obj = DateTimePool.Alloc()
+            table.insert(funcInfo.dt_list, obj)
+            return obj
+        :};
+        return(true);
+    }
+    elseif($classObj=="CsLibrary.TimeSpan"){
+        usefunc("wrap_out_timespan", "(funcInfo)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+        {:   
+            local obj = TimeSpanPool.Alloc()
+            table.insert(funcInfo.ts_list, obj)
+            return obj
+        :};
+        return(true);
+    }
+    elseif($classObj=="CsLibrary.PathInfoPoint"){
+        usefunc("wrap_out_pathinfopoint", "(funcInfo)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+        {:   
+            local obj = PathInfoPointPool.Alloc()
+            table.insert(funcInfo.pip_list, obj)
+            return obj
+        :};
+        return(true);
     };
     return(false);
 };
@@ -136,7 +172,7 @@ script(wrapexternstruct)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($classObj=="UnityEngine.Rect"){
-        usefunc("wrap_Rect","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1], "__cs2lua_func_info")
+        usefunc("wrap_rect","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1], "__cs2lua_func_info")
         {:
             local obj = RectPool.Alloc();
             obj.x=v.x
@@ -147,13 +183,42 @@ script(wrapexternstruct)args($funcData, $funcOpts, $sb, $indent)
             return obj
         :};
         return(true);
-    }elseif($classObj=="CsLibrary.DateTime"){
-        usefunc("wrap_DateTime","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1], "__cs2lua_func_info")
+    }
+    elseif($classObj=="CsLibrary.DateTime"){
+        usefunc("wrap_datetime","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1], "__cs2lua_func_info")
         {:
             local y,m,d,hh,mm,ss,ms =  CsLibrary.DateTime.GetDateTimeValue(v,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out)
             local obj = DateTimePool.Alloc();
             obj:SetDateTime(y,m,d,hh,mm,ss,ms)
             table.insert(funcInfo.dt_list, obj)
+            return obj
+        :};
+        return(true);
+    }
+    elseif($classObj=="CsLibrary.TimeSpan"){
+        usefunc("wrap_timespan","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1], "__cs2lua_func_info")
+        {:
+            local obj = TimeSpanPool.Alloc()
+            obj:SetTimeDHMSM(v.Days, v.Hours, v.Minutes, v.Seconds, v.Milliseconds)
+            table.insert(funcInfo.ts_list, obj)
+            return obj
+        :};
+        return(true);
+    }
+    elseif($classObj=="CsLibrary.PathInfoPoint"){
+        usefunc("wrap_pathinfopoint","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1], "__cs2lua_func_info")
+        {:
+            local obj = PathInfoPointPool.Alloc();
+            local _,x,y,z = v:GetPoint(Slua.out, Slua.out, Slua.out)
+            obj:SetPoint(x,y,z)
+            obj.m_Fly = v.m_Fly
+            obj.m_StopPoint = v.m_StopPoint
+            obj.m_MoveType = v.m_MoveType
+            obj.m_JumpIndex = v.m_JumpIndex
+            obj.m_SpeedScale = v.m_SpeedScale
+            obj.m_Distance = v.m_Distance
+            obj.m_LookTargetObjID = v.m_LookTargetObjID
+            table.insert(funcInfo.pip_list, obj)
             return obj
         :};
         return(true);
@@ -231,7 +296,7 @@ script(wrapexternstructargument)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($argType=="UnityEngine.Rect"){
-        usefunc("wrap_Rect","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        usefunc("wrap_rect","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
         {:
             local obj = RectPool.Alloc();
             obj.x=v.x
@@ -242,13 +307,42 @@ script(wrapexternstructargument)args($funcData, $funcOpts, $sb, $indent)
             return obj
         :};
         return(true);
-    }elseif($argType=="CsLibrary.DateTime"){
-        usefunc("wrap_DateTime","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+    }
+    elseif($argType=="CsLibrary.DateTime"){
+        usefunc("wrap_datetime","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
         {:
             local y,m,d,hh,mm,ss,ms =  CsLibrary.DateTime.GetDateTimeValue(v,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out)
             local obj = DateTimePool.Alloc();
             obj:SetDateTime(y,m,d,hh,mm,ss,ms)
             table.insert(funcInfo.dt_list, obj)
+            return obj
+        :};
+        return(true);
+    }
+    elseif($classObj=="CsLibrary.TimeSpan"){
+        usefunc("wrap_timespan","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1], "__cs2lua_func_info")
+        {:
+            local obj = TimeSpanPool.Alloc()
+            obj:SetTimeDHMSM(v.Days, v.Hours, v.Minutes, v.Seconds, v.Milliseconds)
+            table.insert(funcInfo.ts_list, obj)
+            return obj
+        :};
+        return(true);
+    }
+    elseif($classObj=="CsLibrary.PathInfoPoint"){
+        usefunc("wrap_pathinfopoint","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1], "__cs2lua_func_info")
+        {:
+            local obj = PathInfoPointPool.Alloc();
+            local _,x,y,z = v:GetPoint(Slua.out, Slua.out, Slua.out)
+            obj:SetPoint(x,y,z)
+            obj.m_Fly = v.m_Fly
+            obj.m_StopPoint = v.m_StopPoint
+            obj.m_MoveType = v.m_MoveType
+            obj.m_JumpIndex = v.m_JumpIndex
+            obj.m_SpeedScale = v.m_SpeedScale
+            obj.m_Distance = v.m_Distance
+            obj.m_LookTargetObjID = v.m_LookTargetObjID
+            table.insert(funcInfo.pip_list, obj)
             return obj
         :};
         return(true);
@@ -2429,9 +2523,9 @@ script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
             obj.m_Fly = fly or false;
             obj.m_MoveType = movetype or 0;
             obj.m_JumpIndex = -1;
-            obj.speedScale = 1;
-            obj.m_distance = distance;
-            obj.lookTargetObjID = -1;
+            obj.m_SpeedScale = 1;
+            obj.m_Distance = distance;
+            obj.m_LookTargetObjID = -1;
             table.insert(funcInfo.pip_list, obj)
             if obj and initializer then
                 initializer(obj)
@@ -2627,46 +2721,271 @@ script(literalarray)args($funcData, $funcOpts, $sb, $indent)
 
 script(getstaticindexerstruct)args($funcData, $funcOpts, $sb, $indent)
 {
-    //getstaticindexerstruct(isExtern, callerClass, class, name, argCount, ...)
+    //getstaticindexerstruct(isExtern, elementType, callerClass, class, name, argCount, ...)
+    $elementtype = getargument($funcData, 1);
     
     return(false);
 };
 
 script(getinstanceindexerstruct)args($funcData, $funcOpts, $sb, $indent)
 {
-    //getinstanceindexerstruct(isExtern, callerClass, obj, class, name, argCount, ...)
+    //getinstanceindexerstruct(isExtern, elementType, callerClass, obj, class, name, argCount, ...)
+    $elementtype = getargument($funcData, 1);
     
     return(false);
 };
 
 script(setstaticindexerstruct)args($funcData, $funcOpts, $sb, $indent)
 {
-    //setstaticindexerstruct(isExtern, callerClass, class, name, argCount, toplevel, ...)
+    //setstaticindexerstruct(isExtern, elementType, callerClass, class, name, argCount, ...)
+    $elementtype = getargument($funcData, 1);
     
+    if($elementtype=="UnityEngine.Vector2"){
+        usefunc("set_static_indexer_vector2","(funcInfo, isExtern, elementType, callerClass, class, name, argCount, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            local ix, v2 = ...
+            if v~=nil then
+                luatableremove(funcInfo.v2_list, v2)
+            end
+            setstaticindexerstruct(isExtern, elementType, callerClass, class, name, argCount, ix, v2)
+        :};
+        return(true);
+    }
+    elseif($elementtype=="UnityEngine.Vector3"){
+        usefunc("set_static_indexer_vector3","(funcInfo, isExtern, elementType, callerClass, class, name, argCount, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            local ix, v3 = ...
+            if v~=nil then
+                luatableremove(funcInfo.v3_list, v3)
+            end
+            setstaticindexerstruct(isExtern, elementType, callerClass, class, name, argCount, ix, v3)
+        :};
+        return(true);
+    }
+    elseif($elementtype=="UnityEngine.Vector4"){
+        usefunc("set_static_indexer_vector4","(funcInfo, isExtern, elementType, callerClass, class, name, argCount, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            local ix, v4 = ...
+            if v~=nil then
+                luatableremove(funcInfo.v4_list, v4)
+            end
+            setstaticindexerstruct(isExtern, elementType, callerClass, class, name, argCount, ix, v4)
+        :};
+        return(true);
+    }
+    elseif($elementtype=="UnityEngine.Quaternion"){
+        usefunc("set_static_indexer_quaternion","(funcInfo, isExtern, elementType, callerClass, class, name, argCount, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            local ix, q = ...
+            if v~=nil then
+                luatableremove(funcInfo.q_list, q)
+            end
+            setstaticindexerstruct(isExtern, elementType, callerClass, class, name, argCount, ix, q)
+        :};
+        return(true);
+    }
+    elseif($elementtype=="UnityEngine.Color"){
+        usefunc("set_static_indexer_color","(funcInfo, isExtern, elementType, callerClass, class, name, argCount, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            local ix, c = ...
+            if v~=nil then
+                luatableremove(funcInfo.c_list, c)
+            end
+            setstaticindexerstruct(isExtern, elementType, callerClass, class, name, argCount, ix, c)
+        :};
+        return(true);
+    }
+    elseif($elementtype=="UnityEngine.Color32"){
+        usefunc("set_static_indexer_color32","(funcInfo, isExtern, elementType, callerClass, class, name, argCount, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            local ix, c32 = ...
+            if v~=nil then
+                luatableremove(funcInfo.c32_list, c32)
+            end
+            setstaticindexerstruct(isExtern, elementType, callerClass, class, name, argCount, ix, c32)
+        :};
+        return(true);
+    }
+    elseif($elementtype=="UnityEngine.Rect"){
+        usefunc("set_static_indexer_rect","(funcInfo, isExtern, elementType, callerClass, class, name, argCount, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            local ix, rt = ...
+            if v~=nil then
+                luatableremove(funcInfo.rt_list, rt)
+            end
+            setstaticindexerstruct(isExtern, elementType, callerClass, class, name, argCount, ix, rt)
+        :};
+        return(true);
+    }
+    elseif($elementtype=="CsLibrary.DateTime"){
+        usefunc("set_static_indexer_datetime","(funcInfo, isExtern, elementType, callerClass, class, name, argCount, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            local ix, dt = ...
+            if v~=nil then
+                luatableremove(funcInfo.dt_list, dt)
+            end
+            setstaticindexerstruct(isExtern, elementType, callerClass, class, name, argCount, ix, dt)
+        :};
+        return(true);
+    }
+    elseif($elementtype=="CsLibrary.TimeSpan"){
+        usefunc("set_static_indexer_timespan","(funcInfo, isExtern, elementType, callerClass, class, name, argCount, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            local ix, ts = ...
+            if v~=nil then
+                luatableremove(funcInfo.ts_list, ts)
+            end
+            setstaticindexerstruct(isExtern, elementType, callerClass, class, name, argCount, ix, ts)
+        :};
+        return(true);
+    }
+    elseif($elementtype=="CsLibrary.PathInfoPoint"){
+        usefunc("set_static_indexer_pathinfopoint","(funcInfo, isExtern, elementType, callerClass, class, name, argCount, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            local ix, pip = ...
+            if v~=nil then
+                luatableremove(funcInfo.pip_list, pip)
+            end
+            setstaticindexerstruct(isExtern, elementType, callerClass, class, name, argCount, ix, pip)
+        :};
+        return(true);
+    };
     return(false);
 };
 
 script(setinstanceindexerstruct)args($funcData, $funcOpts, $sb, $indent)
 {
-    //setinstanceindexerstruct(isExtern, callerClass, obj, class, name, argCount, toplevel, ...)
+    //setinstanceindexerstruct(isExtern, elementType, callerClass, obj, class, name, argCount, ...)
+    $elementtype = getargument($funcData, 1);
     
+    if($elementtype=="UnityEngine.Vector2"){
+        usefunc("set_instance_indexer_vector2","(funcInfo, isExtern, elementType, callerClass, obj, class, name, argCount, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            local ix, v2 = ...
+            if v~=nil then
+                luatableremove(funcInfo.v2_list, v2)
+            end
+            setinstanceindexerstruct(isExtern, elementType, callerClass, obj, class, name, argCount, ix, v2)
+        :};
+        return(true);
+    }
+    elseif($elementtype=="UnityEngine.Vector3"){
+        usefunc("set_instance_indexer_vector3","(funcInfo, isExtern, elementType, callerClass, obj, class, name, argCount, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            local ix, v3 = ...
+            if v~=nil then
+                luatableremove(funcInfo.v3_list, v3)
+            end
+            setinstanceindexerstruct(isExtern, elementType, callerClass, obj, class, name, argCount, ix, v3)
+        :};
+        return(true);
+    }
+    elseif($elementtype=="UnityEngine.Vector4"){
+        usefunc("set_instance_indexer_vector4","(funcInfo, isExtern, elementType, callerClass, obj, class, name, argCount, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            local ix, v4 = ...
+            if v~=nil then
+                luatableremove(funcInfo.v4_list, v4)
+            end
+            setinstanceindexerstruct(isExtern, elementType, callerClass, obj, class, name, argCount, ix, v4)
+        :};
+        return(true);
+    }
+    elseif($elementtype=="UnityEngine.Quaternion"){
+        usefunc("set_instance_indexer_quaternion","(funcInfo, isExtern, elementType, callerClass, obj, class, name, argCount, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            local ix, q = ...
+            if v~=nil then
+                luatableremove(funcInfo.q_list, q)
+            end
+            setinstanceindexerstruct(isExtern, elementType, callerClass, obj, class, name, argCount, ix, q)
+        :};
+        return(true);
+    }
+    elseif($elementtype=="UnityEngine.Color"){
+        usefunc("set_instance_indexer_color","(funcInfo, isExtern, elementType, callerClass, obj, class, name, argCount, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            local ix, c = ...
+            if v~=nil then
+                luatableremove(funcInfo.c_list, c)
+            end
+            setinstanceindexerstruct(isExtern, elementType, callerClass, obj, class, name, argCount, ix, c)
+        :};
+        return(true);
+    }
+    elseif($elementtype=="UnityEngine.Color32"){
+        usefunc("set_instance_indexer_color32","(funcInfo, isExtern, elementType, callerClass, obj, class, name, argCount, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            local ix, c32 = ...
+            if v~=nil then
+                luatableremove(funcInfo.c32_list, c32)
+            end
+            setinstanceindexerstruct(isExtern, elementType, callerClass, obj, class, name, argCount, ix, c32)
+        :};
+        return(true);
+    }
+    elseif($elementtype=="UnityEngine.Rect"){
+        usefunc("set_instance_indexer_rect","(funcInfo, isExtern, elementType, callerClass, obj, class, name, argCount, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            local ix, rt = ...
+            if v~=nil then
+                luatableremove(funcInfo.rt_list, rt)
+            end
+            setinstanceindexerstruct(isExtern, elementType, callerClass, obj, class, name, argCount, ix, rt)
+        :};
+        return(true);
+    }
+    elseif($elementtype=="CsLibrary.DateTime"){
+        usefunc("set_instance_indexer_datetime","(funcInfo, isExtern, elementType, callerClass, obj, class, name, argCount, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            local ix, dt = ...
+            if v~=nil then
+                luatableremove(funcInfo.dt_list, dt)
+            end
+            setinstanceindexerstruct(isExtern, elementType, callerClass, obj, class, name, argCount, ix, dt)
+        :};
+        return(true);
+    }
+    elseif($elementtype=="CsLibrary.TimeSpan"){
+        usefunc("set_instance_indexer_timespan","(funcInfo, isExtern, elementType, callerClass, obj, class, name, argCount, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            local ix, ts = ...
+            if v~=nil then
+                luatableremove(funcInfo.ts_list, ts)
+            end
+            setinstanceindexerstruct(isExtern, elementType, callerClass, obj, class, name, argCount, ix, ts)
+        :};
+        return(true);
+    }
+    elseif($elementtype=="CsLibrary.PathInfoPoint"){
+        usefunc("set_instance_indexer_pathinfopoint","(funcInfo, isExtern, elementType, callerClass, obj, class, name, argCount, ...)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        {:
+            local ix, pip = ...
+            if v~=nil then
+                luatableremove(funcInfo.pip_list, pip)
+            end
+            setinstanceindexerstruct(isExtern, elementType, callerClass, obj, class, name, argCount, ix, pip)
+        :};
+        return(true);
+    };
     return(false);
 };
 
 script(arraygetstruct)args($funcData, $funcOpts, $sb, $indent)
 {
-    //arraygetstruct(arrIsExtern, arrSymKind, elementType, arr, ...)
+    //arraygetstruct(arrIsExtern, arrSymKind, elementType, arr, argCount, ...)
+    $elementtype = getargument($funcData, 2);
     
     return(false);
 };
 
 script(arraysetstruct)args($funcData, $funcOpts, $sb, $indent)
 {
-    //arraysetstruct(arrIsExtern, arrSymKind, elementType, arr, toplevel, ...)
+    //arraysetstruct(arrIsExtern, arrSymKind, elementType, arr, argCount, ...)
     $elementtype = getargument($funcData, 2);
     
     if($elementtype=="UnityEngine.Vector2"){
-        usefunc("set_array_vector2","(funcInfo, arr, toplevel, ...)", $funcData, $funcOpts, $sb, $indent, 3, "__cs2lua_func_info")
+        usefunc("set_array_vector2","(funcInfo, arr, ...)", $funcData, $funcOpts, $sb, $indent, [0,1,2,4], "__cs2lua_func_info")
         {:
             local ix, v2 = ...
             if v~=nil then
@@ -2677,13 +2996,101 @@ script(arraysetstruct)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($elementtype=="UnityEngine.Vector3"){
-        usefunc("set_array_vector3","(funcInfo, arr, toplevel, ...)", $funcData, $funcOpts, $sb, $indent, 3, "__cs2lua_func_info")
+        usefunc("set_array_vector3","(funcInfo, arr, ...)", $funcData, $funcOpts, $sb, $indent, [0,1,2,4], "__cs2lua_func_info")
         {:
             local ix, v3 = ...
             if v~=nil then
                 luatableremove(funcInfo.v3_list, v3)
             end
             arr[ix] = v3
+        :};
+        return(true);
+    }
+    elseif($elementtype=="UnityEngine.Vector4"){
+        usefunc("set_array_vector4","(funcInfo, arr, ...)", $funcData, $funcOpts, $sb, $indent, [0,1,2,4], "__cs2lua_func_info")
+        {:
+            local ix, v4 = ...
+            if v~=nil then
+                luatableremove(funcInfo.v4_list, v4)
+            end
+            arr[ix] = v4
+        :};
+        return(true);
+    }
+    elseif($elementtype=="UnityEngine.Quaternion"){
+        usefunc("set_array_quaternion","(funcInfo, arr, ...)", $funcData, $funcOpts, $sb, $indent, [0,1,2,4], "__cs2lua_func_info")
+        {:
+            local ix, q = ...
+            if v~=nil then
+                luatableremove(funcInfo.q_list, q)
+            end
+            arr[ix] = q
+        :};
+        return(true);
+    }
+    elseif($elementtype=="UnityEngine.Color"){
+        usefunc("set_array_color","(funcInfo, arr, ...)", $funcData, $funcOpts, $sb, $indent, [0,1,2,4], "__cs2lua_func_info")
+        {:
+            local ix, c = ...
+            if v~=nil then
+                luatableremove(funcInfo.c_list, c)
+            end
+            arr[ix] = c
+        :};
+        return(true);
+    }
+    elseif($elementtype=="UnityEngine.Color32"){
+        usefunc("set_array_color32","(funcInfo, arr, ...)", $funcData, $funcOpts, $sb, $indent, [0,1,2,4], "__cs2lua_func_info")
+        {:
+            local ix, c32 = ...
+            if v~=nil then
+                luatableremove(funcInfo.c32_list, c32)
+            end
+            arr[ix] = c32
+        :};
+        return(true);
+    }
+    elseif($elementtype=="UnityEngine.Rect"){
+        usefunc("set_array_rect","(funcInfo, arr, ...)", $funcData, $funcOpts, $sb, $indent, [0,1,2,4], "__cs2lua_func_info")
+        {:
+            local ix, rt = ...
+            if v~=nil then
+                luatableremove(funcInfo.rt_list, rt)
+            end
+            arr[ix] = rt
+        :};
+        return(true);
+    }
+    elseif($elementtype=="CsLibrary.DateTime"){
+        usefunc("set_array_datetime","(funcInfo, arr, ...)", $funcData, $funcOpts, $sb, $indent, [0,1,2,4], "__cs2lua_func_info")
+        {:
+            local ix, dt = ...
+            if v~=nil then
+                luatableremove(funcInfo.dt_list, dt)
+            end
+            arr[ix] = dt
+        :};
+        return(true);
+    }
+    elseif($elementtype=="CsLibrary.TimeSpan"){
+        usefunc("set_array_timespan","(funcInfo, arr, ...)", $funcData, $funcOpts, $sb, $indent, [0,1,2,4], "__cs2lua_func_info")
+        {:
+            local ix, ts = ...
+            if v~=nil then
+                luatableremove(funcInfo.ts_list, ts)
+            end
+            arr[ix] = ts
+        :};
+        return(true);
+    }
+    elseif($elementtype=="CsLibrary.PathInfoPoint"){
+        usefunc("set_array_pathinfopoint","(funcInfo, arr, ...)", $funcData, $funcOpts, $sb, $indent, [0,1,2,4], "__cs2lua_func_info")
+        {:
+            local ix, pip = ...
+            if v~=nil then
+                luatableremove(funcInfo.pip_list, pip)
+            end
+            arr[ix] = pip
         :};
         return(true);
     };

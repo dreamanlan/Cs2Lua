@@ -404,18 +404,33 @@ namespace RoslynTool.CsToDsl
                 var objType = expType as INamedTypeSymbol;
                 INamedTypeSymbol listType = null;
                 var fobj = objType;
+                IMethodSymbol msym = null;
                 while (null != fobj) {
-                    if (HasItemGetMethodDefined(fobj)) {
+                    if (HasItemGetMethodDefined(fobj, ref msym)) {
                         listType = fobj;
                         break;
                     }
                     fobj = fobj.BaseType;
                 }
+                string elemTypeName = null;
+                string elemTypeKind = null;
+                if (null != msym) {
+                    elemTypeName = ClassInfo.GetFullName(msym.ReturnType);
+                    elemTypeKind = "TypeKind." + msym.ReturnType.TypeKind;
+                }
+                if (string.IsNullOrEmpty(elemTypeName))
+                    elemTypeName = "null";
+                if (string.IsNullOrEmpty(elemTypeKind))
+                    elemTypeKind = "null";
                 bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(listType);
                 string objTypeName = ClassInfo.GetFullName(objType);
                 string listTypeName = ClassInfo.GetFullName(listType);
                 CodeBuilder.AppendFormat("{0}foreachlist({1}, {2}, {3}, ", GetIndentString(), varIndex, varExp, node.Identifier.Text);
                 OutputExpressionSyntax(node.Expression, opd);
+                CodeBuilder.Append(", ");
+                CodeBuilder.Append(elemTypeName);
+                CodeBuilder.Append(", ");
+                CodeBuilder.Append(elemTypeKind);
                 CodeBuilder.Append(", ");
                 CodeBuilder.Append(objTypeName);
                 CodeBuilder.Append(", ");

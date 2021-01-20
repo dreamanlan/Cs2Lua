@@ -115,19 +115,16 @@ CUsingHelper = {
 
 		local class = CUsingHelper;
 
-		local obj_methods = {
+		local raw_obj_methods = {
 			ctor = function(this, a1, a2)
-				this = __get_this_for_class(this, CUsingHelper);
 				this:__ctor();
 				return this;
 			end,
 
 			Dispose = function(this)
-				this = __get_this_for_class(this, CUsingHelper);
 			end,
 
 			__ctor = function(this)
-				this = __get_this_for_class(this, CUsingHelper);
 				if this.__ctor_called then 
 					return;
 				else
@@ -135,6 +132,16 @@ CUsingHelper = {
 				end;
 			end,
 		};
+		local obj_methods = {
+			ctor = wrapinheritable("ctor", raw_obj_methods.ctor, CUsingHelper),
+			__self__ctor = wrapinheritable("__self__ctor", raw_obj_methods.ctor, CUsingHelper),
+			ctor = raw_obj_methods.ctor,
+			Dispose = wrapinheritable("Dispose", raw_obj_methods.Dispose, CUsingHelper),
+			__self__Dispose = wrapinheritable("__self__Dispose", raw_obj_methods.Dispose, CUsingHelper),
+			Dispose = raw_obj_methods.Dispose,
+			__ctor = raw_obj_methods.__ctor,
+		};
+		raw_obj_methods = nil;
 
 		local obj_build = function()
 			return {
@@ -167,23 +174,9 @@ CUsingHelper = {
 	__interfaces = {
 		"System.IDisposable",
 	},
-	__class_info = {
-		Kind = TypeKind.Class,
-	},
 	__method_info = {
 		ctor = {
-			Kind = MethodKind.Constructor,
-		},
-		Dispose = {
-			Kind = MethodKind.Ordinary,
-		},
-		Test = {
-			Kind = MethodKind.Ordinary,
-			static = true,
-		},
-		ReadZip = {
-			Kind = MethodKind.Ordinary,
-			static = true,
+			ctor = true,
 		},
 	},
 };

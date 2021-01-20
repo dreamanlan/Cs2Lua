@@ -54,18 +54,19 @@ class(Test) {
 			local(__method_ret_127_4_131_5);
 			local(args); args = params(System.Nullable_T, TypeKind.Struct);
 			local(args); args = params(System.Nullable_T, TypeKind.Struct);
-			__method_ret_127_4_131_5 = arraygetstruct(false, SymbolKind.Parameter, System.Nullable_T, args, 1);
+			__method_ret_127_4_131_5 = arraygetstruct(false, SymbolKind.Parameter, System.Nullable_T, args, 1, 1);
 			return(__method_ret_127_4_131_5);
 		}options[needfuncinfo(true), rettype(return, System.Nullable_T, TypeKind.Struct, 0), paramtype(..., System.Nullable_T, TypeKind.Array, 0)];
 		set_Item = deffunc(0)args(this, ...){
 			local(args); args = params(System.Nullable_T, TypeKind.Struct);
 			local(args); args = params(System.Nullable_T, TypeKind.Struct);
 			local(value); value = paramsremove(args);
-			arraysetstruct(false, SymbolKind.Parameter, System.Nullable_T, args, true, 1, value);
+			arraysetstruct(false, SymbolKind.Parameter, System.Nullable_T, args, 2, 1, wrapstruct(value, System.Nullable_T)
+);
 		}options[needfuncinfo(true), rettype(return, System.Void, TypeKind.Unknown, 0), paramtype(..., System.Nullable_T, TypeKind.Array, 0)];
 		Init = deffunc(0)args(this){
 			local(items); items = literalarray(System.String, TypeKind.Class, "ȫ��", "������", "�ɽ�ȡ", "�����", "δ��ȡ");
-			TestLuaLib(4, [Cs2LuaObjectPoolEx_DataChangeCallBackInfo, DataChangeCallBackInfo, TypeKind.Class, null, null], [null, null, null, null, System.Int32, TypeKind.Struct, OperationKind.Literal, null], [DataChangeCallBackInfo, TypeKind.Class, null, null, System.Func_TResult, TypeKind.Delegate, OperationKind.AnonymousFunction, SymbolKind.Method], [DataChangeCallBackInfo, TypeKind.Class, null, null, System.Action_T, TypeKind.Delegate, OperationKind.AnonymousFunction, SymbolKind.Method], getinstance(SymbolKind.Field, this, Test, "m_DataChangeCallBackInfoPool"), Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "Init__Int32__Func_1_T__Action_1_T", 32, deffunc(1)args(){
+			TestLuaLib(5, [Cs2LuaObjectPoolEx_DataChangeCallBackInfo, DataChangeCallBackInfo, TypeKind.Class, null, null], [null, null, null, null, System.Int32, TypeKind.Struct, OperationKind.Literal, null], [DataChangeCallBackInfo, TypeKind.Class, null, null, System.Func_TResult, TypeKind.Delegate, OperationKind.AnonymousFunction, SymbolKind.Method], [DataChangeCallBackInfo, TypeKind.Class, null, null, System.Action_T, TypeKind.Delegate, OperationKind.AnonymousFunction, SymbolKind.Method], getinstance(SymbolKind.Field, this, Test, "m_DataChangeCallBackInfoPool"), Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "Init__Int32__Func_1_T__Action_1_T", 32, deffunc(1)args(){
 				local(__method_ret_135_46_135_92);
 				__method_ret_135_46_135_92 = newobject(DataChangeCallBackInfo, "g_DataChangeCallBackInfo", typeargs(), typekinds(), "ctor", 0, null);
 				return(__method_ret_135_46_135_92);
@@ -76,13 +77,13 @@ class(Test) {
 			callexterninstance(strlist, System.Collections.Generic.List_T, "Sort__Comparison_1_T", deffunc(1)args(a, b){ local(__lambda_138_21_138_45); __lambda_138_21_138_45 = invokeforbasicvalue(a, false, System.String, "CompareTo__String", b); return(__lambda_138_21_138_45); }options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0), paramtype(a, System.String, TypeKind.Class, 0), paramtype(b, System.String, TypeKind.Class, 0)]);
 			local(intlist); intlist = newexternlist(System.Collections.Generic.List_T, "g_System_Collections_Generic_List_System_Int32", typeargs(System.Int32), typekinds(TypeKind.Struct), "ctor", 0, literallist("g_System_Collections_Generic_List_System_Int32", typeargs(System.Int32), typekinds(TypeKind.Struct)));
 			callexterninstance(intlist, System.Collections.Generic.List_T, "Add", 1);
-			local(sa); sa = getexterninstanceindexer(StrList, strlist, System.Collections.Generic.List_T, "get_Item", 1, 0);
+			local(sa); sa = getexterninstanceindexer(System.String, TypeKind.Class, StrList, strlist, System.Collections.Generic.List_T, "get_Item", 1, 0);
 			callexterninstance(intlist, System.Collections.Generic.List_T, "Sort__Comparison_1_T", deffunc(1)args(a, b){ local(__lambda_142_21_142_45); __lambda_142_21_142_45 = invokeforbasicvalue(a, false, System.Int32, "CompareTo__Int32", b); return(__lambda_142_21_142_45); }options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0), paramtype(a, System.Int32, TypeKind.Struct, 0), paramtype(b, System.Int32, TypeKind.Struct, 0)]);
 			local(iaa); iaa = condexp(execbinary("!=", null, strlist, System.Object, System.Object, TypeKind.Class, TypeKind.Class), false, function(){ funcobjret(getexterninstance(SymbolKind.Property, strlist, System.Collections.Generic.List_T, "Count")); }, false, function(){ funcobjret(getexterninstance(SymbolKind.Property, intlist, System.Collections.Generic.List_T, "Count")); });
 			local(aa); aa = literalarray(System.Int32, TypeKind.Struct, 1, 2, 3, 4, 5);
 			local(bb); bb = literalarray(System.Int32, TypeKind.Struct, literalarray(System.Int32, TypeKind.Struct, 1, 2), literalarray(System.Int32, TypeKind.Struct, 3, 4), literalarray(System.Int32, TypeKind.Struct, 5, 6));
 			local(ia); ia = bb[1][2];
-			foreachlist(__foreach_ix_147_8_149_9, __foreach_exp_147_8_149_9, s, strlist, StrList, System.Collections.Generic.List_T, true){
+			foreachlist(__foreach_ix_147_8_149_9, __foreach_exp_147_8_149_9, s, strlist, System.String, TypeKind.Class, StrList, System.Collections.Generic.List_T, true){
 				callexternstatic(System.Console, "WriteLine__String", s);
 			};
 			foreacharray(__foreach_ix_150_8_152_9, __foreach_exp_150_8_152_9, v, aa, 1, true){
@@ -96,21 +97,21 @@ class(Test) {
 			}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0)] ), "System.Action", TypeKind.Delegate);
 			local(cc); cc = callstatic(Test, "ToList", System.Int32, aa);
 			local(v3list); v3list = newexternlist(System.Collections.Generic.List_T, "g_System_Collections_Generic_List_UnityEngine_Vector3", typeargs(UnityEngine.Vector3), typekinds(TypeKind.Struct), "ctor", 0, literallist("g_System_Collections_Generic_List_UnityEngine_Vector3", typeargs(UnityEngine.Vector3), typekinds(TypeKind.Struct)));
-			callexternstructlistinstance(2, [System.Collections.Generic.List_T, UnityEngine.Vector3, TypeKind.Struct, null, null], [null, null, null, null, UnityEngine.Vector3, TypeKind.Struct, OperationKind.PropertyReference, SymbolKind.Property], v3list, System.Collections.Generic.List_T, "Add", getexternstaticstructmember(SymbolKind.Property, UnityEngine.Vector3, "zero"));
+			callexternstructlistinstance(3, [System.Collections.Generic.List_T, UnityEngine.Vector3, TypeKind.Struct, null, null], [null, null, null, null, UnityEngine.Vector3, TypeKind.Struct, OperationKind.PropertyReference, SymbolKind.Property], v3list, System.Collections.Generic.List_T, "Add", getexternstaticstructmember(SymbolKind.Property, UnityEngine.Vector3, "zero"));
 			local(nv3list); nv3list = newlist(Vector3List, "g_Vector3List", typeargs(), typekinds(), "ctor", 0, literallist("g_Vector3List", typeargs(), typekinds()));
 			callexterninstance(nv3list, System.Collections.Generic.List_T, "Add", getexternstaticstructmember(SymbolKind.Property, UnityEngine.Vector3, "zero"));
-			local(v3); v3 = getinstanceindexerstruct(true, Vector3List, nv3list, System.Collections.Generic.List_T, "get_Item", 1, 0);
+			local(v3); v3 = getinstanceindexerstruct(true, UnityEngine.Vector3, Vector3List, nv3list, System.Collections.Generic.List_T, "get_Item", 1, 0);
 			v3 = wrapexternstruct(v3, UnityEngine.Vector3);
-			setinstanceindexerstruct(true, Vector3List, nv3list, System.Collections.Generic.List_T, "set_Item", 2, true, 0, v3);
-			local(vv3); vv3 = arraygetstruct(false, SymbolKind.Method, UnityEngine.Vector3, callstatic(Test, "ToArray", UnityEngine.Vector3, nv3list), 1);
+			setinstanceindexerstruct(true, UnityEngine.Vector3, Vector3List, nv3list, System.Collections.Generic.List_T, "set_Item", 2, 0, v3);
+			local(vv3); vv3 = arraygetstruct(false, SymbolKind.Method, UnityEngine.Vector3, callstatic(Test, "ToArray", UnityEngine.Vector3, nv3list), 1, 1);
 			vv3 = wrapexternstruct(vv3, UnityEngine.Vector3);
-			arraysetstruct(false, SymbolKind.Method, UnityEngine.Vector3, callstatic(Test, "ToArray", UnityEngine.Vector3, nv3list), true, 1, wrapstruct(vv3, UnityEngine.Vector3)
+			arraysetstruct(false, SymbolKind.Method, UnityEngine.Vector3, callstatic(Test, "ToArray", UnityEngine.Vector3, nv3list), 2, 1, wrapstruct(vv3, UnityEngine.Vector3)
 );
 		}options[needfuncinfo(true), rettype(return, System.Void, TypeKind.Unknown, 0)];
 		testcall = deffunc(1)args(this){
 			local(__method_ret_167_4_172_5);
-			arraysetstruct(false, SymbolKind.Field, UnityEngine.Vector3, getinstance(SymbolKind.Field, this, Test, "m_Vs"), true, 1, getexternstaticstructmember(SymbolKind.Property, UnityEngine.Vector3, "zero"));
-			local(v); v = arraygetstruct(false, SymbolKind.Field, UnityEngine.Vector3, getinstance(SymbolKind.Field, this, Test, "m_Vs"), 1);
+			arraysetstruct(false, SymbolKind.Field, UnityEngine.Vector3, getinstance(SymbolKind.Field, this, Test, "m_Vs"), 2, 1, getexternstaticstructmember(SymbolKind.Property, UnityEngine.Vector3, "zero"));
+			local(v); v = arraygetstruct(false, SymbolKind.Field, UnityEngine.Vector3, getinstance(SymbolKind.Field, this, Test, "m_Vs"), 1, 1);
 			v = wrapexternstruct(v, UnityEngine.Vector3);
 			__method_ret_167_4_172_5 = 1;
 			return(__method_ret_167_4_172_5);

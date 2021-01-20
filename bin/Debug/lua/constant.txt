@@ -38,14 +38,12 @@ Constant = {
 
 		local class = Constant;
 
-		local obj_methods = {
+		local raw_obj_methods = {
 			ctor = function(this)
-				this = __get_this_for_class(this, Constant);
 				this:__ctor();
 			end,
 
 			__ctor = function(this)
-				this = __get_this_for_class(this, Constant);
 				if this.__ctor_called then 
 					return;
 				else
@@ -53,6 +51,13 @@ Constant = {
 				end;
 			end,
 		};
+		local obj_methods = {
+			ctor = wrapinheritable("ctor", raw_obj_methods.ctor, Constant),
+			__self__ctor = wrapinheritable("__self__ctor", raw_obj_methods.ctor, Constant),
+			ctor = raw_obj_methods.ctor,
+			__ctor = raw_obj_methods.__ctor,
+		};
+		raw_obj_methods = nil;
 
 		local obj_build = function()
 			return {
@@ -82,12 +87,9 @@ Constant = {
 	-------------------------------
 	-------- metadata info --------
 	-------------------------------
-	__class_info = {
-		Kind = TypeKind.Class,
-	},
 	__method_info = {
 		ctor = {
-			Kind = MethodKind.Constructor,
+			ctor = true,
 		},
 	},
 };

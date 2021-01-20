@@ -74,9 +74,8 @@ Test = {
 
 		local class = Test;
 
-		local obj_methods = {
+		local raw_obj_methods = {
 			get_Item = function(this, ...)
-				this = __get_this_for_class(this, Test);
 				local __cs2lua_func_info = luainitialize();
 				local __retval_0, __retval_1 = luapcall(this.__ori_get_Item, this, __cs2lua_func_info, ...);
 				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
@@ -92,13 +91,12 @@ Test = {
 				args = wrapparams({...}, System.Nullable_T, TypeKind.Struct);
 				local args;
 				args = wrapparams({...}, System.Nullable_T, TypeKind.Struct);
-				__method_ret_127_4_131_5 = arraygetstruct(false, SymbolKind.Parameter, System.Nullable_T, args, 1);
+				__method_ret_127_4_131_5 = arraygetstruct(false, SymbolKind.Parameter, System.Nullable_T, args, 1, 1);
 				movetocallerfuncinfo(__cs2lua_func_info, System.Nullable_T, __method_ret_127_4_131_5);
 				return __method_ret_127_4_131_5;
 			end,
 
 			set_Item = function(this, ...)
-				this = __get_this_for_class(this, Test);
 				local __cs2lua_func_info = luainitialize();
 				luapcall(this.__ori_set_Item, this, __cs2lua_func_info, ...);
 				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
@@ -110,11 +108,10 @@ Test = {
 				args = wrapparams({...}, System.Nullable_T, TypeKind.Struct);
 				local value;
 				value = table.remove(args);
-				arraysetstruct(false, SymbolKind.Parameter, System.Nullable_T, args, true, 1, value);
+				arraysetstruct(false, SymbolKind.Parameter, System.Nullable_T, args, 2, 1, wrapstruct(value, System.Nullable_T));
 			end,
 
 			Init = function(this)
-				this = __get_this_for_class(this, Test);
 				local __cs2lua_func_info = luainitialize();
 				luapcall(this.__ori_Init, this, __cs2lua_func_info);
 				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
@@ -122,7 +119,7 @@ Test = {
 			__ori_Init = function(this, __cs2lua_func_info)
 				local items;
 				items = wraparray({"ȫ��", "������", "�ɽ�ȡ", "�����", "δ��ȡ"}, nil, System.String, TypeKind.Class);
-				TestLuaLib(4, {Cs2LuaObjectPoolEx_DataChangeCallBackInfo, DataChangeCallBackInfo, TypeKind.Class, nil, nil}, {nil, nil, nil, nil, System.Int32, TypeKind.Struct, OperationKind.Literal, nil}, {DataChangeCallBackInfo, TypeKind.Class, nil, nil, System.Func_TResult, TypeKind.Delegate, OperationKind.AnonymousFunction, SymbolKind.Method}, {DataChangeCallBackInfo, TypeKind.Class, nil, nil, System.Action_T, TypeKind.Delegate, OperationKind.AnonymousFunction, SymbolKind.Method}, this.m_DataChangeCallBackInfoPool, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "Init__Int32__Func_1_T__Action_1_T", 32, function()
+				TestLuaLib(5, {Cs2LuaObjectPoolEx_DataChangeCallBackInfo, DataChangeCallBackInfo, TypeKind.Class, nil, nil}, {nil, nil, nil, nil, System.Int32, TypeKind.Struct, OperationKind.Literal, nil}, {DataChangeCallBackInfo, TypeKind.Class, nil, nil, System.Func_TResult, TypeKind.Delegate, OperationKind.AnonymousFunction, SymbolKind.Method}, {DataChangeCallBackInfo, TypeKind.Class, nil, nil, System.Action_T, TypeKind.Delegate, OperationKind.AnonymousFunction, SymbolKind.Method}, this.m_DataChangeCallBackInfoPool, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "Init__Int32__Func_1_T__Action_1_T", 32, function()
 					local __method_ret_135_46_135_92;
 					__method_ret_135_46_135_92 = newobject(DataChangeCallBackInfo, nil, nil, "ctor", 0, nil);
 					return __method_ret_135_46_135_92;
@@ -140,7 +137,7 @@ Test = {
 				intlist = newexternlist(System.Collections.Generic.List_T, buildglobalinfoonce("g_System_Collections_Generic_List_System_Int32_TypeArgs", getglobalinfo("g_System_Collections_Generic_List_System_Int32_TypeArgs") or {System.Int32}), buildglobalinfoonce("g_System_Collections_Generic_List_System_Int32_TypeKinds", getglobalinfo("g_System_Collections_Generic_List_System_Int32_TypeKinds") or {TypeKind.Struct}), "ctor", 0, {});
 				intlist:Add(1);
 				local sa;
-				sa = getexterninstanceindexer(StrList, strlist, System.Collections.Generic.List_T, "get_Item", 1, 0);
+				sa = getexterninstanceindexer(System.String, TypeKind.Class, StrList, strlist, System.Collections.Generic.List_T, "get_Item", 1, 0);
 				intlist:Sort__Comparison_1_T(function(a, b)
 					local __lambda_142_21_142_45;
 					__lambda_142_21_142_45 = invokeforbasicvalue(a, false, System.Int32, "CompareTo__Int32", b);
@@ -153,10 +150,10 @@ Test = {
 				local bb;
 				bb = wraparray({wraparray({1, 2}, nil, System.Int32, TypeKind.Struct), wraparray({3, 4}, nil, System.Int32, TypeKind.Struct), wraparray({5, 6}, nil, System.Int32, TypeKind.Struct)}, nil, System.Int32, TypeKind.Struct);
 				local ia;
-				ia = bb[1]{2};
+				ia = bb[1][2];
 				local __foreach_exp_147_8_149_9 = strlist;
 				for __foreach_ix_147_8_149_9 = 0, __foreach_exp_147_8_149_9.Count - 1 do
-					s = getexterninstanceindexer(StrList, __foreach_exp_147_8_149_9, System.Collections.Generic.List_T, "get_Item", 1, __foreach_ix_147_8_149_9);					System.Console.WriteLine__String(s);
+					s = getexterninstanceindexer(System.String, TypeKind.Class, StrList, __foreach_exp_147_8_149_9, System.Collections.Generic.List_T, "get_Item", 1, __foreach_ix_147_8_149_9);					System.Console.WriteLine__String(s);
 				end;
 				local __foreach_exp_150_8_152_9 = aa;
 				for __foreach_ix_150_8_152_9 = 1, __foreach_exp_150_8_152_9.Length do
@@ -178,22 +175,21 @@ Test = {
 				cc = Test.ToList(System.Int32, aa);
 				local v3list;
 				v3list = newexternlist(System.Collections.Generic.List_T, buildglobalinfoonce("g_System_Collections_Generic_List_UnityEngine_Vector3_TypeArgs", getglobalinfo("g_System_Collections_Generic_List_UnityEngine_Vector3_TypeArgs") or {UnityEngine.Vector3}), buildglobalinfoonce("g_System_Collections_Generic_List_UnityEngine_Vector3_TypeKinds", getglobalinfo("g_System_Collections_Generic_List_UnityEngine_Vector3_TypeKinds") or {TypeKind.Struct}), "ctor", 0, {});
-				{nil, nil, nil, nil, UnityEngine.Vector3, TypeKind.Struct, OperationKind.PropertyReference, SymbolKind.Property}:System("Add", get_vector3_zero(__cs2lua_func_info));
+				call_ilist_add_vector3(__cs2lua_func_info, v3list, System.Collections.Generic.List_T, "Add", get_vector3_zero(__cs2lua_func_info));
 				local nv3list;
 				nv3list = newlist(Vector3List, nil, nil, "ctor", 0, {});
 				nv3list:Add(get_vector3_zero(__cs2lua_func_info));
 				local v3;
-				v3 = getinstanceindexerstruct(true, Vector3List, nv3list, System.Collections.Generic.List_T, "get_Item", 1, 0);
+				v3 = getinstanceindexerstruct(true, UnityEngine.Vector3, Vector3List, nv3list, System.Collections.Generic.List_T, "get_Item", 1, 0);
 				v3 = wrap_vector3(__cs2lua_func_info, v3);
-				setinstanceindexerstruct(true, Vector3List, nv3list, System.Collections.Generic.List_T, "set_Item", 2, true, 0, v3);
+				set_instance_indexer_vector3(__cs2lua_func_info, true, UnityEngine.Vector3, Vector3List, nv3list, System.Collections.Generic.List_T, "set_Item", 2, 0, v3);
 				local vv3;
-				vv3 = arraygetstruct(false, SymbolKind.Method, UnityEngine.Vector3, Test.ToArray(UnityEngine.Vector3, nv3list), 1);
+				vv3 = arraygetstruct(false, SymbolKind.Method, UnityEngine.Vector3, Test.ToArray(UnityEngine.Vector3, nv3list), 1, 1);
 				vv3 = wrap_vector3(__cs2lua_func_info, vv3);
-				arraysetstruct(false, SymbolKind.Method, UnityEngine.Vector3, Test.ToArray(UnityEngine.Vector3, nv3list), true, 1, wrapstruct(vv3, UnityEngine.Vector3));
+				set_array_vector3(__cs2lua_func_info, Test.ToArray(UnityEngine.Vector3, nv3list), 1, wrapstruct(vv3, UnityEngine.Vector3));
 			end,
 
 			testcall = function(this)
-				this = __get_this_for_class(this, Test);
 				local __cs2lua_func_info = luainitialize();
 				local __retval_0, __retval_1 = luapcall(this.__ori_testcall, this, __cs2lua_func_info);
 				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
@@ -205,16 +201,15 @@ Test = {
 			end,
 			__ori_testcall = function(this, __cs2lua_func_info)
 				local __method_ret_167_4_172_5;
-				arraysetstruct(false, SymbolKind.Field, UnityEngine.Vector3, this.m_Vs, true, 1, get_vector3_zero(__cs2lua_func_info));
+				set_array_vector3(__cs2lua_func_info, this.m_Vs, 1, get_vector3_zero(__cs2lua_func_info));
 				local v;
-				v = arraygetstruct(false, SymbolKind.Field, UnityEngine.Vector3, this.m_Vs, 1);
+				v = arraygetstruct(false, SymbolKind.Field, UnityEngine.Vector3, this.m_Vs, 1, 1);
 				v = wrap_vector3(__cs2lua_func_info, v);
 				__method_ret_167_4_172_5 = 1;
 				return __method_ret_167_4_172_5;
 			end,
 
 			test = function(this)
-				this = __get_this_for_class(this, Test);
 				local __method_ret_173_4_209_5;
 				local a;
 				a = 2;
@@ -306,12 +301,10 @@ Test = {
 			end,
 
 			ctor = function(this)
-				this = __get_this_for_class(this, Test);
 				this:__ctor();
 			end,
 
 			__ctor = function(this)
-				this = __get_this_for_class(this, Test);
 				local __cs2lua_func_info = luainitialize();
 				luapcall(this.__ori___ctor, this, __cs2lua_func_info);
 				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
@@ -326,6 +319,33 @@ Test = {
 				this.m_Vs = newarraydim1(UnityEngine.Vector3, TypeKind.Struct, defaultvalue(UnityEngine.Vector3, "UnityEngine.Vector3", true), 10);
 			end,
 		};
+		local obj_methods = {
+			get_Item = wrapinheritable("get_Item", raw_obj_methods.get_Item, Test),
+			__self__get_Item = wrapinheritable("__self__get_Item", raw_obj_methods.get_Item, Test),
+			get_Item = raw_obj_methods.get_Item,
+			__ori_get_Item = raw_obj_methods.__ori_get_Item,
+			set_Item = wrapinheritable("set_Item", raw_obj_methods.set_Item, Test),
+			__self__set_Item = wrapinheritable("__self__set_Item", raw_obj_methods.set_Item, Test),
+			set_Item = raw_obj_methods.set_Item,
+			__ori_set_Item = raw_obj_methods.__ori_set_Item,
+			Init = wrapinheritable("Init", raw_obj_methods.Init, Test),
+			__self__Init = wrapinheritable("__self__Init", raw_obj_methods.Init, Test),
+			Init = raw_obj_methods.Init,
+			__ori_Init = raw_obj_methods.__ori_Init,
+			testcall = wrapinheritable("testcall", raw_obj_methods.testcall, Test),
+			__self__testcall = wrapinheritable("__self__testcall", raw_obj_methods.testcall, Test),
+			testcall = raw_obj_methods.testcall,
+			__ori_testcall = raw_obj_methods.__ori_testcall,
+			test = wrapinheritable("test", raw_obj_methods.test, Test),
+			__self__test = wrapinheritable("__self__test", raw_obj_methods.test, Test),
+			test = raw_obj_methods.test,
+			ctor = wrapinheritable("ctor", raw_obj_methods.ctor, Test),
+			__self__ctor = wrapinheritable("__self__ctor", raw_obj_methods.ctor, Test),
+			ctor = raw_obj_methods.ctor,
+			__ctor = raw_obj_methods.__ctor,
+			__ori___ctor = raw_obj_methods.__ori___ctor,
+		};
+		raw_obj_methods = nil;
 
 		local obj_build = function()
 			return {
@@ -356,41 +376,9 @@ Test = {
 	-------------------------------
 	-------- metadata info --------
 	-------------------------------
-	__class_info = {
-		Kind = TypeKind.Class,
-	},
 	__method_info = {
-		get_Item = {
-			Kind = MethodKind.PropertyGet,
-		},
-		set_Item = {
-			Kind = MethodKind.PropertySet,
-		},
-		Init = {
-			Kind = MethodKind.Ordinary,
-		},
-		testcall = {
-			Kind = MethodKind.Ordinary,
-		},
-		test = {
-			Kind = MethodKind.Ordinary,
-		},
-		LoadStartupView_FGUI = {
-			Kind = MethodKind.Ordinary,
-			static = true,
-		},
-		ToList = {
-			Kind = MethodKind.Ordinary,
-			static = true,
-			generic = true,
-		},
-		ToArray = {
-			Kind = MethodKind.Ordinary,
-			static = true,
-			generic = true,
-		},
 		ctor = {
-			Kind = MethodKind.Constructor,
+			ctor = true,
 		},
 	},
 };

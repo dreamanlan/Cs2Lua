@@ -35,9 +35,8 @@ ZipInputStream = {
 
 		local class = ZipInputStream;
 
-		local obj_methods = {
+		local raw_obj_methods = {
 			ctor = function(this, ms)
-				this = __get_this_for_class(this, ZipInputStream);
 				local __cs2lua_func_info = luainitialize();
 				luapcall(this.__ori_ctor, this, __cs2lua_func_info, ms);
 				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
@@ -91,7 +90,6 @@ ZipInputStream = {
 			end,
 
 			Test = function(this, o, ...)
-				this = __get_this_for_class(this, ZipInputStream);
 				local __cs2lua_func_info = luainitialize();
 				local __retval_0, __retval_1 = luapcall(this.__ori_Test, this, __cs2lua_func_info, o, ...);
 				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
@@ -112,7 +110,6 @@ ZipInputStream = {
 			end,
 
 			Test2 = function(this, v, enumer)
-				this = __get_this_for_class(this, ZipInputStream);
 				local __method_ret_67_4_79_5;
 				local __try_ret_69_8_77_9, __try_retval_69_8_77_9;
 				__try_ret_69_8_77_9,__try_retval_69_8_77_9 = luatry(nil);
@@ -145,7 +142,6 @@ ZipInputStream = {
 			end,
 
 			Test3 = function(this, v1, v2)
-				this = __get_this_for_class(this, ZipInputStream);
 				local __cs2lua_func_info = luainitialize();
 				local __retval_0, __retval_1, __retval_2 = luapcall(this.__ori_Test3, this, __cs2lua_func_info, v1, v2);
 				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
@@ -164,7 +160,6 @@ ZipInputStream = {
 			end,
 
 			__ctor = function(this)
-				this = __get_this_for_class(this, ZipInputStream);
 				if this.__ctor_called then 
 					return;
 				else
@@ -172,6 +167,19 @@ ZipInputStream = {
 				end;
 			end,
 		};
+		local obj_methods = {
+			ctor = wrapinheritable("ctor", raw_obj_methods.ctor, ZipInputStream),
+			__self__ctor = wrapinheritable("__self__ctor", raw_obj_methods.ctor, ZipInputStream),
+			ctor = raw_obj_methods.ctor,
+			__ori_ctor = raw_obj_methods.__ori_ctor,
+			Test = raw_obj_methods.Test,
+			__ori_Test = raw_obj_methods.__ori_Test,
+			Test2 = raw_obj_methods.Test2,
+			Test3 = raw_obj_methods.Test3,
+			__ori_Test3 = raw_obj_methods.__ori_Test3,
+			__ctor = raw_obj_methods.__ctor,
+		};
+		raw_obj_methods = nil;
 
 		local obj_build = function()
 			return {
@@ -198,12 +206,18 @@ ZipInputStream = {
 	-------------------------------
 	-------- metadata info --------
 	-------------------------------
-	__class_info = {
-		Kind = TypeKind.Class,
-	},
 	__method_info = {
 		ctor = {
-			Kind = MethodKind.Constructor,
+			ctor = true,
+		},
+		Test = {
+			private = true,
+		},
+		Test2 = {
+			private = true,
+		},
+		Test3 = {
+			private = true,
 		},
 	},
 };

@@ -725,7 +725,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(GetIndentString());
                     }
                 }
-                VisitAssignment(ci, op, baseOp, assign, expTerminater, true, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType, dslToObject);
+                VisitAssignment(ci, op, baseOp, true, assign, expTerminater, leftOper, leftSym, leftPsym, leftEsym, leftFsym, leftMemberAccess, leftElementAccess, leftCondAccess, specialType, dslToObject);
                 if (needWrapStruct) {
                     //只有变量赋值与字段赋值需要处理，其它的都在相应的函数调用里处理了
                     if (rightNeededIfWrap) {
@@ -1088,7 +1088,6 @@ namespace RoslynTool.CsToDsl
         /// <param name="baseOp"></param>
         /// <param name="assign"></param>
         /// <param name="expTerminater"></param>
-        /// <param name="toplevel"></param>
         /// <param name="leftOper"></param>
         /// <param name="leftSym"></param>
         /// <param name="leftPsym"></param>
@@ -1099,7 +1098,7 @@ namespace RoslynTool.CsToDsl
         /// <param name="leftCondAccess"></param>
         /// <param name="specialType"></param>
         /// <param name="convertType"></param>
-        private void VisitAssignment(ClassInfo ci, string op, string baseOp, AssignmentExpressionSyntax assign, string expTerminater, bool toplevel, IOperation leftOper, ISymbol leftSym, IPropertySymbol leftPsym, IEventSymbol leftEsym, IFieldSymbol leftFsym, MemberAccessExpressionSyntax leftMemberAccess, ElementAccessExpressionSyntax leftElementAccess, ConditionalAccessExpressionSyntax leftCondAccess, SpecialAssignmentType specialType, bool dslToObject)
+        private void VisitAssignment(ClassInfo ci, string op, string baseOp, bool toplevel, AssignmentExpressionSyntax assign, string expTerminater, IOperation leftOper, ISymbol leftSym, IPropertySymbol leftPsym, IEventSymbol leftEsym, IFieldSymbol leftFsym, MemberAccessExpressionSyntax leftMemberAccess, ElementAccessExpressionSyntax leftElementAccess, ConditionalAccessExpressionSyntax leftCondAccess, SpecialAssignmentType specialType, bool dslToObject)
         {
             var assignOper = m_Model.GetOperationEx(assign);
             IConversionOperation opd = null, lopd = null, ropd = null;
@@ -1145,10 +1144,10 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.Append(")");
             }
             else if (null != leftElementAccess) {
-                VisitAssignmentLeftElementAccess(ci, op, baseOp, assign, toplevel, leftOper, leftSym, leftPsym, leftElementAccess, opd, lopd, ropd, compAssignInfo, dslToObject);
+                VisitAssignmentLeftElementAccess(ci, op, baseOp, toplevel, assign, leftOper, leftSym, leftPsym, leftElementAccess, opd, lopd, ropd, compAssignInfo, dslToObject);
             }
             else if (null != leftCondAccess) {
-                VisitAssignmentLeftCondAccess(ci, op, baseOp, assign, toplevel, leftSym, leftCondAccess, opd, lopd, ropd, compAssignInfo, dslToObject);
+                VisitAssignmentLeftCondAccess(ci, op, baseOp, toplevel, assign, leftSym, leftCondAccess, opd, lopd, ropd, compAssignInfo, dslToObject);
             }
             else if (leftOper.Type.TypeKind == TypeKind.Delegate) {
                 bool isMemberAccess = null != leftPsym || null != leftEsym || null != leftFsym;
@@ -1325,7 +1324,7 @@ namespace RoslynTool.CsToDsl
             if (expTerminater.Length > 0)
                 CodeBuilder.AppendLine();
         }
-        private void VisitAssignmentLeftElementAccess(ClassInfo ci, string op, string baseOp, AssignmentExpressionSyntax assign, bool toplevel, IOperation leftOper, ISymbol leftSym, IPropertySymbol leftPsym, ElementAccessExpressionSyntax leftElementAccess, IConversionOperation opd, IConversionOperation lopd, IConversionOperation ropd, ICompoundAssignmentOperation compAssignInfo, bool dslToObject)
+        private void VisitAssignmentLeftElementAccess(ClassInfo ci, string op, string baseOp, bool toplevel, AssignmentExpressionSyntax assign, IOperation leftOper, ISymbol leftSym, IPropertySymbol leftPsym, ElementAccessExpressionSyntax leftElementAccess, IConversionOperation opd, IConversionOperation lopd, IConversionOperation ropd, ICompoundAssignmentOperation compAssignInfo, bool dslToObject)
         {
             ProcessBinaryOperator(assign, ref baseOp);
             if (op != "=" && (null == compAssignInfo || null == compAssignInfo.Target || null == compAssignInfo.Value)) {
@@ -1361,12 +1360,21 @@ namespace RoslynTool.CsToDsl
             }
             if (null != leftPsym && leftPsym.IsIndexer) {
                 bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(leftPsym);
+                var elemType = leftPsym.Type;
+                string elemTypeName = ClassInfo.GetFullName(elemType);
+                if (elemType.TypeKind == TypeKind.Array) {
+                    var arrType = elemType as IArrayTypeSymbol;
+                    elemTypeName = ClassInfo.GetFullName(arrType.ElementType);
+                }
+                if (string.IsNullOrEmpty(elemTypeName))
+                    elemTypeName = "null";
+                string elemTypeKind = "TypeKind." + elemType.TypeKind;
                 if (leftPsym.Type.IsValueType && !SymbolTable.IsBasicType(leftPsym.Type)) {
                     MarkNeedFuncInfo();
-                    CodeBuilder.AppendFormat("set{0}indexerstruct({1}, ", leftPsym.IsStatic ? "static" : "instance", isCs2Dsl ? "false" : "true");
+                    CodeBuilder.AppendFormat("set{0}indexerstruct({1}, {2}, ", leftPsym.IsStatic ? "static" : "instance", isCs2Dsl ? "false" : "true", elemTypeName);
                 }
                 else {
-                    CodeBuilder.AppendFormat("set{0}{1}indexer(", isCs2Dsl ? string.Empty : "extern", leftPsym.IsStatic ? "static" : "instance");
+                    CodeBuilder.AppendFormat("set{0}{1}indexer({2}, {3}, ", isCs2Dsl ? string.Empty : "extern", leftPsym.IsStatic ? "static" : "instance", elemTypeName, elemTypeKind);
                 }
                 var expType = m_Model.GetTypeInfoEx(leftElementAccess.Expression).Type;
                 if (!isCs2Dsl) {
@@ -1394,7 +1402,7 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.Append(fullName);
                     CodeBuilder.Append(", ");
                 }
-                CodeBuilder.AppendFormat("\"{0}\", {1}, {2}, ", manglingName, leftPsym.SetMethod.Parameters.Length, toplevel ? "true" : "false");
+                CodeBuilder.AppendFormat("\"{0}\", {1}, ", manglingName, leftPsym.SetMethod.Parameters.Length);
                 InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), leftElementAccess);
                 ii.Init(leftPsym.SetMethod, leftElementAccess.ArgumentList, m_Model);
                 OutputArgumentList(ii, expType, false, leftElementAccess);
@@ -1425,20 +1433,23 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendFormat("arraysetstruct(");
                     var arrSym = m_Model.GetSymbolInfoEx(leftElementAccess.Expression).Symbol;
                     var arrOper = leftOper as IArrayElementReferenceOperation;
+                    var arrType = arrOper.ArrayReference.Type as IArrayTypeSymbol;
                     if (null != arrSym) {
                         isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(arrSym);
                         CodeBuilder.Append(isCs2Dsl ? "false" : "true");
                         CodeBuilder.AppendFormat(", SymbolKind.{0}, ", arrSym.Kind.ToString());
                     }
                     else {
-                        isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(arrOper.ArrayReference.Type);
+                        isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(arrType);
                         CodeBuilder.Append(isCs2Dsl ? "false" : "true");
                         CodeBuilder.AppendFormat(", OperationKind.{0}, ", arrOper.ArrayReference.Kind);
                     }
                     CodeBuilder.Append(fn);
                     CodeBuilder.Append(", ");
                     OutputExpressionSyntax(leftElementAccess.Expression);
-                    CodeBuilder.AppendFormat(", {0}, ", toplevel ? "true" : "false");
+                    CodeBuilder.Append(", ");
+                    CodeBuilder.Append(arrType.Rank + 1);
+                    CodeBuilder.Append(", ");
                     OutputArgumentList(leftElementAccess.ArgumentList.Arguments, ", ", leftOper);
                     CodeBuilder.Append(", ");
                     if (needWrapStruct) {
@@ -1515,7 +1526,7 @@ namespace RoslynTool.CsToDsl
                 Log(assign, "unknown set element symbol !");
             }
         }
-        private void VisitAssignmentLeftCondAccess(ClassInfo ci, string op, string baseOp, AssignmentExpressionSyntax assign, bool toplevel, ISymbol leftSym, ConditionalAccessExpressionSyntax leftCondAccess, IConversionOperation opd, IConversionOperation lopd, IConversionOperation ropd, ICompoundAssignmentOperation compAssignInfo, bool dslToObject)
+        private void VisitAssignmentLeftCondAccess(ClassInfo ci, string op, string baseOp, bool toplevel, AssignmentExpressionSyntax assign, ISymbol leftSym, ConditionalAccessExpressionSyntax leftCondAccess, IConversionOperation opd, IConversionOperation lopd, IConversionOperation ropd, ICompoundAssignmentOperation compAssignInfo, bool dslToObject)
         {
             ProcessBinaryOperator(assign, ref baseOp);
             if (op != "=" && (null == compAssignInfo || null == compAssignInfo.Target || null == compAssignInfo.Value)) {
@@ -1560,12 +1571,21 @@ namespace RoslynTool.CsToDsl
                 }
                 if (null != psym && psym.IsIndexer) {
                     bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(psym);
+                    var elemType = psym.Type;
+                    string elemTypeName = ClassInfo.GetFullName(elemType);
+                    if (elemType.TypeKind == TypeKind.Array) {
+                        var arrType = elemType as IArrayTypeSymbol;
+                        elemTypeName = ClassInfo.GetFullName(arrType.ElementType);
+                    }
+                    if (string.IsNullOrEmpty(elemTypeName))
+                        elemTypeName = "null";
+                    string elemTypeKind = "TypeKind." + elemType.TypeKind;
                     if (psym.Type.IsValueType && !SymbolTable.IsBasicType(psym.Type)) {
                         MarkNeedFuncInfo();
-                        CodeBuilder.AppendFormat("set{0}indexerstruct({1}, ", psym.IsStatic ? "static" : "instance", isCs2Dsl ? "false" : "true");
+                        CodeBuilder.AppendFormat("set{0}indexerstruct({1}, {2}, ", psym.IsStatic ? "static" : "instance", isCs2Dsl ? "false" : "true", elemTypeName);
                     }
                     else {
-                        CodeBuilder.AppendFormat("set{0}{1}indexer(", isCs2Dsl ? string.Empty : "extern", psym.IsStatic ? "static" : "instance");
+                        CodeBuilder.AppendFormat("set{0}{1}indexer({2}, {3}, ", isCs2Dsl ? string.Empty : "extern", psym.IsStatic ? "static" : "instance", elemTypeName, elemTypeKind);
                     }
                     var expType = m_Model.GetTypeInfoEx(leftCondAccess.Expression).Type;
                     if (!isCs2Dsl) {                        
@@ -1593,7 +1613,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(fullName);
                         CodeBuilder.Append(", ");
                     }
-                    CodeBuilder.AppendFormat("\"{0}\", {1}, {2}, ", manglingName, psym.SetMethod.Parameters.Length, toplevel);
+                    CodeBuilder.AppendFormat("\"{0}\", {1}, ", manglingName, psym.SetMethod.Parameters.Length);
                     InvocationInfo ii = new InvocationInfo(GetCurMethodSemanticInfo(), leftCondAccess);
                     List<ExpressionSyntax> args = new List<ExpressionSyntax> { leftCondAccess.WhenNotNull };
                     ii.Init(psym.SetMethod, args, m_Model);
@@ -1625,6 +1645,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendFormat("arraysetstruct(");
                         var arrSym = m_Model.GetSymbolInfoEx(leftCondAccess.Expression).Symbol;
                         var arrOper = bindingOper as IArrayElementReferenceOperation;
+                        var arrType = arrOper.ArrayReference.Type as IArrayTypeSymbol;
                         if (null != arrSym) {
                             isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(arrSym);
                             CodeBuilder.Append(isCs2Dsl ? "false" : "true");
@@ -1636,8 +1657,10 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.AppendFormat(", OperationKind.{0}, ", arrOper.ArrayReference.Kind);
                         }
                         CodeBuilder.Append(fn);
-                        CodeBuilder.AppendFormat(", {0}, ", toplevel ? "true" : "false");
+                        CodeBuilder.Append(", ");
                         OutputExpressionSyntax(leftCondAccess.Expression);
+                        CodeBuilder.Append(", ");
+                        CodeBuilder.Append(arrType.Rank + 1);
                         CodeBuilder.Append(", ");
                         OutputExpressionSyntax(leftCondAccess.WhenNotNull);
                         CodeBuilder.Append(", ");

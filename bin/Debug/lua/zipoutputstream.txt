@@ -42,9 +42,8 @@ ZipOutputStream = {
 
 		local class = ZipOutputStream;
 
-		local obj_methods = {
+		local raw_obj_methods = {
 			Test = function(this)
-				this = __get_this_for_class(this, ZipOutputStream);
 				local dict;
 				dict = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, buildglobalinfoonce("typeargs_TypeArgs", getglobalinfo("typeargs_TypeArgs") or {TypeKind.Struct, TypeKind.Struct}), nil, {});
 				dict:Add(1, 1);
@@ -53,13 +52,11 @@ ZipOutputStream = {
 			end,
 
 			ctor = function(this)
-				this = __get_this_for_class(this, ZipOutputStream);
 				this:__ctor();
 				return this;
 			end,
 
 			__ctor = function(this)
-				this = __get_this_for_class(this, ZipOutputStream);
 				if this.__ctor_called then 
 					return;
 				else
@@ -67,6 +64,16 @@ ZipOutputStream = {
 				end;
 			end,
 		};
+		local obj_methods = {
+			Test = wrapinheritable("Test", raw_obj_methods.Test, ZipOutputStream),
+			__self__Test = wrapinheritable("__self__Test", raw_obj_methods.Test, ZipOutputStream),
+			Test = raw_obj_methods.Test,
+			ctor = wrapinheritable("ctor", raw_obj_methods.ctor, ZipOutputStream),
+			__self__ctor = wrapinheritable("__self__ctor", raw_obj_methods.ctor, ZipOutputStream),
+			ctor = raw_obj_methods.ctor,
+			__ctor = raw_obj_methods.__ctor,
+		};
+		raw_obj_methods = nil;
 
 		local obj_build = function()
 			return {
@@ -98,25 +105,9 @@ ZipOutputStream = {
 	-------------------------------
 	-------- metadata info --------
 	-------------------------------
-	__class_info = {
-		Kind = TypeKind.Class,
-	},
 	__method_info = {
-		get_V = {
-			Kind = MethodKind.PropertyGet,
-		},
-		set_V = {
-			Kind = MethodKind.PropertySet,
-		},
-		Test = {
-			Kind = MethodKind.Ordinary,
-		},
 		ctor = {
-			Kind = MethodKind.Constructor,
-		},
-		get_Instance = {
-			Kind = MethodKind.PropertyGet,
-			static = true,
+			ctor = true,
 		},
 	},
 };
@@ -156,19 +147,16 @@ ZipOutputStream.EmbedClass = {
 
 		local class = ZipOutputStream.EmbedClass;
 
-		local obj_methods = {
+		local raw_obj_methods = {
 			Test = function(this)
-				this = __get_this_for_class(this, ZipOutputStream.EmbedClass);
 				ZipOutputStream.get_Instance():Test();
 			end,
 
 			ctor = function(this)
-				this = __get_this_for_class(this, ZipOutputStream.EmbedClass);
 				this:__ctor();
 			end,
 
 			__ctor = function(this)
-				this = __get_this_for_class(this, ZipOutputStream.EmbedClass);
 				if this.__ctor_called then 
 					return;
 				else
@@ -176,6 +164,16 @@ ZipOutputStream.EmbedClass = {
 				end;
 			end,
 		};
+		local obj_methods = {
+			Test = wrapinheritable("Test", raw_obj_methods.Test, ZipOutputStream.EmbedClass),
+			__self__Test = wrapinheritable("__self__Test", raw_obj_methods.Test, ZipOutputStream.EmbedClass),
+			Test = raw_obj_methods.Test,
+			ctor = wrapinheritable("ctor", raw_obj_methods.ctor, ZipOutputStream.EmbedClass),
+			__self__ctor = wrapinheritable("__self__ctor", raw_obj_methods.ctor, ZipOutputStream.EmbedClass),
+			ctor = raw_obj_methods.ctor,
+			__ctor = raw_obj_methods.__ctor,
+		};
+		raw_obj_methods = nil;
 
 		local obj_build = function()
 			return {
@@ -202,16 +200,9 @@ ZipOutputStream.EmbedClass = {
 	-------------------------------
 	-------- metadata info --------
 	-------------------------------
-	__class_info = {
-		Kind = TypeKind.Class,
-		private = true,
-	},
 	__method_info = {
-		Test = {
-			Kind = MethodKind.Ordinary,
-		},
 		ctor = {
-			Kind = MethodKind.Constructor,
+			ctor = true,
 		},
 	},
 };
