@@ -1,0 +1,3 @@
+============<<<Semantic Error:test>>>============
+test.cs(213,13): error CS0120: An object reference is required for the non-static field, method, or property 'Test.m_IntVal'
+test.cs(216,15): error CS0120: An object reference is required for the non-static field, method, or property 'Test.m_IntVal'

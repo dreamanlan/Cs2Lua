@@ -11,6 +11,16 @@ Test = {
 	end,
 
 	LoadStartupView_FGUI = function(className, comName, packageName, grp, ForceShow)
+		--
+		local __unary_212_12_212_22 = this.m_IntVal; this.m_IntVal = (this.m_IntVal + 1);
+		if (__unary_212_12_212_22 > 0) then
+
+		end;
+		--
+		this.m_IntVal = (this.m_IntVal + 1);
+		if (this.m_IntVal > 0) then
+
+		end;
 	end,
 
 	ToList = function(T, enumer)
@@ -24,29 +34,29 @@ Test = {
 		return __retval_1;
 	end,
 	__ori_ToList = function(__cs2lua_func_info, T, enumer)
-		local __method_ret_213_4_221_5;
+		local __method_ret_219_4_227_5;
 		Test.LoadStartupView_FGUI("", "", "", 0, false);
 		local r;
 		r = newexternlist(System.Collections.Generic.List_T, buildglobalinfoonce("g_System_Collections_Generic_List_T_TypeArgs", getglobalinfo("g_System_Collections_Generic_List_T_TypeArgs") or {T}), buildglobalinfoonce("g_System_Collections_Generic_List_T_TypeKinds", getglobalinfo("g_System_Collections_Generic_List_T_TypeKinds") or {TypeKind.TypeParameter}), "ctor", 0, {});
-		local __foreach_217_8_219_9 = newiterator(__cs2lua_func_info, enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true);
-		for v in getiterator(__foreach_217_8_219_9) do
+		local __foreach_223_8_225_9 = newiterator(__cs2lua_func_info, enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true);
+		for v in getiterator(__foreach_223_8_225_9) do
 			if v == __cs2lua_nil then
 				v = nil;
 			end;
 			r:Add(v);
 		end;
-		recycleiterator(__cs2lua_func_info, __foreach_217_8_219_9);
-		__method_ret_213_4_221_5 = r;
-		return __method_ret_213_4_221_5;
+		recycleiterator(__cs2lua_func_info, __foreach_223_8_225_9);
+		__method_ret_219_4_227_5 = r;
+		return __method_ret_219_4_227_5;
 	end,
 
 	ToArray = function(T, list)
-		local __method_ret_222_4_227_5;
+		local __method_ret_228_4_233_5;
 		local arr;
 		arr = newarraydim1(Test.T, TypeKind.TypeParameter, nil, list.Count);
 		list:CopyTo(arr, 0);
-		__method_ret_222_4_227_5 = arr;
-		return __method_ret_222_4_227_5;
+		__method_ret_228_4_233_5 = arr;
+		return __method_ret_228_4_233_5;
 	end,
 
 	cctor = function()

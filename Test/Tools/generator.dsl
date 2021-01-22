@@ -215,9 +215,9 @@ script(wrapexternstruct)args($funcData, $funcOpts, $sb, $indent)
             obj.m_StopPoint = v.m_StopPoint
             obj.m_MoveType = v.m_MoveType
             obj.m_JumpIndex = v.m_JumpIndex
-            obj.speedScale = v.speedScale
-            obj.m_distance = v.m_distance
-            obj.lookTargetObjID = v.lookTargetObjID
+            obj.m_SpeedScale = v.m_SpeedScale
+            obj.m_Distance = v.m_Distance
+            obj.m_LookTargetObjID = v.m_LookTargetObjID
             table.insert(funcInfo.pip_list, obj)
             return obj
         :};
@@ -319,8 +319,8 @@ script(wrapexternstructargument)args($funcData, $funcOpts, $sb, $indent)
         :};
         return(true);
     }
-    elseif($classObj=="CsLibrary.TimeSpan"){
-        usefunc("wrap_timespan","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1], "__cs2lua_func_info")
+    elseif($argType=="CsLibrary.TimeSpan"){
+        usefunc("wrap_timespan","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
         {:
             local obj = TimeSpanPool.Alloc()
             obj:SetTimeDHMSM(v.Days, v.Hours, v.Minutes, v.Seconds, v.Milliseconds)
@@ -329,8 +329,10 @@ script(wrapexternstructargument)args($funcData, $funcOpts, $sb, $indent)
         :};
         return(true);
     }
-    elseif($classObj=="CsLibrary.PathInfoPoint"){
-        usefunc("wrap_pathinfopoint","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1], "__cs2lua_func_info")
+    elseif($argType=="CsLibrary.PathInfoPoint"){    
+        echo("wrapexternstructargument {0}", $argType);
+        
+        usefunc("wrap_pathinfopoint","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
         {:
             local obj = PathInfoPointPool.Alloc();
             local _,x,y,z = v:GetPoint(Slua.out, Slua.out, Slua.out)
@@ -339,9 +341,9 @@ script(wrapexternstructargument)args($funcData, $funcOpts, $sb, $indent)
             obj.m_StopPoint = v.m_StopPoint
             obj.m_MoveType = v.m_MoveType
             obj.m_JumpIndex = v.m_JumpIndex
-            obj.speedScale = v.speedScale
-            obj.m_distance = v.m_distance
-            obj.lookTargetObjID = v.lookTargetObjID
+            obj.m_SpeedScale = v.m_SpeedScale
+            obj.m_Distance = v.m_Distance
+            obj.m_LookTargetObjID = v.m_LookTargetObjID
             table.insert(funcInfo.pip_list, obj)
             return obj
         :};
@@ -2523,9 +2525,9 @@ script(newexternstruct)args($funcData, $funcOpts, $sb, $indent)
             obj.m_Fly = fly or false;
             obj.m_MoveType = movetype or 0;
             obj.m_JumpIndex = -1;
-            obj.speedScale = 1;
-            obj.m_distance = distance;
-            obj.lookTargetObjID = -1;
+            obj.m_SpeedScale = 1;
+            obj.m_Distance = distance;
+            obj.m_LookTargetObjID = -1;
             table.insert(funcInfo.pip_list, obj)
             if obj and initializer then
                 initializer(obj)

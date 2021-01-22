@@ -379,34 +379,36 @@ namespace Generator
             if (s_ParamTypeCheckMethods.Count <= 0)
                 return false;
             string key = string.Format("{0}.{1}", className, methodName);
-            return s_ParamTypeCheckMethods.Contains(key);
+            return s_ParamTypeCheckMethods.ContainsKey(key);
         }
         private static bool DontRequire(string file, string require)
         {
-            foreach (var info in s_DontRequireInfos) {
-                if (!info.CachedNotExcepts.Contains(file)) {
-                    if (info.Excepts.Contains(file)) {
-                        continue;
-                    }
-                    foreach (var regex in info.ExceptMatches) {
-                        if (regex.IsMatch(file)) {
-                            info.Excepts.Add(file);
+            lock (s_DontRequireInfos) {
+                foreach (var info in s_DontRequireInfos) {
+                    if (!info.CachedNotExcepts.Contains(file)) {
+                        if (info.Excepts.Contains(file)) {
                             continue;
                         }
+                        foreach (var regex in info.ExceptMatches) {
+                            if (regex.IsMatch(file)) {
+                                info.Excepts.Add(file);
+                                continue;
+                            }
+                        }
+                        info.CachedNotExcepts.Add(file);
                     }
-                    info.CachedNotExcepts.Add(file);
-                }
-                if (!info.CachedNotRequires.Contains(require)) {
-                    if (info.Requires.Contains(require)) {
-                        return true;
-                    }
-                    foreach (var regex in info.Matches) {
-                        if (regex.IsMatch(require)) {
-                            info.Requires.Add(require);
+                    if (!info.CachedNotRequires.Contains(require)) {
+                        if (info.Requires.Contains(require)) {
                             return true;
                         }
+                        foreach (var regex in info.Matches) {
+                            if (regex.IsMatch(require)) {
+                                info.Requires.Add(require);
+                                return true;
+                            }
+                        }
+                        info.CachedNotRequires.Add(require);
                     }
-                    info.CachedNotRequires.Add(require);
                 }
             }
             return false;
@@ -439,14 +441,16 @@ namespace Generator
             if (s_CachedIndexerByLualibInfos.TryGetValue(key, out val)) {
                 return val != 0;
             }
-            foreach (var info in s_IndexerByLualibInfos) {
-                if ((null == info.ObjectClassMatch || info.ObjectClassMatch.IsMatch(objClassName)) &&
-                    (null == info.ObjectMatch || info.ObjectMatch.IsMatch(obj)) &&
-                    (null == info.ClassMatch || info.ClassMatch.IsMatch(className)) &&
-                    (null == info.MemberMatch || info.MemberMatch.IsMatch(member))) {
-                    s_CachedIndexerByLualibInfos.TryAdd(key, info.IndexerType);
-                    val = info.IndexerType;
-                    return true;
+            lock (s_IndexerByLualibInfos) {
+                foreach (var info in s_IndexerByLualibInfos) {
+                    if ((null == info.ObjectClassMatch || info.ObjectClassMatch.IsMatch(objClassName)) &&
+                        (null == info.ObjectMatch || info.ObjectMatch.IsMatch(obj)) &&
+                        (null == info.ClassMatch || info.ClassMatch.IsMatch(className)) &&
+                        (null == info.MemberMatch || info.MemberMatch.IsMatch(member))) {
+                        s_CachedIndexerByLualibInfos.TryAdd(key, info.IndexerType);
+                        val = info.IndexerType;
+                        return true;
+                    }
                 }
             }
             s_CachedIndexerByLualibInfos.TryAdd(key, 0);
@@ -475,19 +479,21 @@ namespace Generator
                 return info;
             }
             info = new PrologueAndEpilogueInfo();
-            foreach (var cfg in s_AddPrologueOrEpilogueInfos) {
-                if (cfg.Lists.Contains(key)) {
-                    if (cfg.IsPrologue)
-                        info.PrologueInfo = cfg.LogInfo;
-                    else
-                        info.EpilogueInfo = cfg.LogInfo;
-                }
-                foreach (var regex in cfg.Matches) {
-                    if (regex.IsMatch(key)) {
+            lock (s_AddPrologueOrEpilogueInfos) {
+                foreach (var cfg in s_AddPrologueOrEpilogueInfos) {
+                    if (cfg.Lists.Contains(key)) {
                         if (cfg.IsPrologue)
                             info.PrologueInfo = cfg.LogInfo;
                         else
                             info.EpilogueInfo = cfg.LogInfo;
+                    }
+                    foreach (var regex in cfg.Matches) {
+                        if (regex.IsMatch(key)) {
+                            if (cfg.IsPrologue)
+                                info.PrologueInfo = cfg.LogInfo;
+                            else
+                                info.EpilogueInfo = cfg.LogInfo;
+                        }
                     }
                 }
             }
@@ -529,7 +535,7 @@ namespace Generator
             string id = cfgInfo.GetId();
             if(id == "checkparamtype") {
                 foreach (var s in f.Params) {
-                    s_ParamTypeCheckMethods.Add(s.GetId());
+                    s_ParamTypeCheckMethods.TryAdd(s.GetId(), true);
                 }
             }
             else if (id == "dontrequire") {
@@ -592,7 +598,7 @@ namespace Generator
                         }
                     }
                 }
-                s_FileMergeInfos.Add(cfg.MergedFileName, cfg);
+                s_FileMergeInfos.TryAdd(cfg.MergedFileName, cfg);
             }
             else if (id == "indexerbylualib") {
                 var cfg = new IndexerByLualibInfo();
@@ -844,11 +850,11 @@ namespace Generator
         private static bool s_GenMethodInfo = false;
         private static bool s_GenFieldInfo = false;
 
-        private static HashSet<string> s_ParamTypeCheckMethods = new HashSet<string>();
-        private static List<DontRequireInfo> s_DontRequireInfos = new List<DontRequireInfo>();
-        private static Dictionary<string, FileMergeInfo> s_FileMergeInfos = new Dictionary<string, FileMergeInfo>();
-        private static List<IndexerByLualibInfo> s_IndexerByLualibInfos = new List<IndexerByLualibInfo>();
-        private static List<AddPrologueOrEpilogueInfo> s_AddPrologueOrEpilogueInfos = new List<AddPrologueOrEpilogueInfo>();
+        private static ConcurrentDictionary<string, bool> s_ParamTypeCheckMethods = new ConcurrentDictionary<string, bool>();
+        private static List<DontRequireInfo> s_DontRequireInfos = new List<DontRequireInfo>();//已加锁
+        private static List<IndexerByLualibInfo> s_IndexerByLualibInfos = new List<IndexerByLualibInfo>();//已加锁
+        private static List<AddPrologueOrEpilogueInfo> s_AddPrologueOrEpilogueInfos = new List<AddPrologueOrEpilogueInfo>();//已加锁
+        private static ConcurrentDictionary<string, FileMergeInfo> s_FileMergeInfos = new ConcurrentDictionary<string, FileMergeInfo>();
         private static ConcurrentDictionary<string, string> s_CachedFile2MergedFiles = new ConcurrentDictionary<string, string>();
         private static ConcurrentDictionary<string, int> s_CachedIndexerByLualibInfos = new ConcurrentDictionary<string, int>();
         private static ConcurrentDictionary<string, PrologueAndEpilogueInfo> s_CachedPrologueAndEpilogueInfos = new ConcurrentDictionary<string, PrologueAndEpilogueInfo>();

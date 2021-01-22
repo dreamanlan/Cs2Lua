@@ -3698,7 +3698,7 @@ function wrapvirtual(k, f, class)
             final_obj = this
         end
         --安装到原始调用对象上，以后就直接调用相应方法了
-        --rawset(obj, k, function(self, ...) return final_f(final_obj, ...) end)
+        rawset(obj, k, function(self, ...) return final_f(final_obj, ...) end)
         return final_f(final_obj, ...)
     end
 end
@@ -3709,7 +3709,7 @@ function wrapinheritable(k, f, class)
         local final_f = f
         local final_obj = this
         --安装到原始调用对象上，以后就直接调用相应方法了
-        --rawset(obj, k, function(self, ...) return final_f(final_obj, ...) end)
+        rawset(obj, k, function(self, ...) return final_f(final_obj, ...) end)
         return final_f(final_obj, ...)
     end
 end

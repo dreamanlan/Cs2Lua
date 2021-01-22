@@ -54,8 +54,8 @@ namespace Generator
             if (!data.IsHighOrder && data.GetId() == "function")
                 return true;
             else {
-                foreach(var p in data.Params) {
-                    if(ExistFunctionObject(p))
+                foreach (var p in data.Params) {
+                    if (ExistFunctionObject(p))
                         return true;
                 }
                 if (data.IsHighOrder) {
@@ -67,7 +67,7 @@ namespace Generator
         }
         private static bool ExistFunctionObject(Dsl.StatementData data)
         {
-            foreach(var func in data.Functions) {
+            foreach (var func in data.Functions) {
                 if (ExistFunctionObject(func))
                     return true;
             }
@@ -132,7 +132,7 @@ namespace Generator
         {
             if (param.IsHighOrder) {
                 var fcall = param.LowerOrderFunction;
-                if(!fcall.IsHighOrder && fcall.GetId() == "execclosure") {
+                if (!fcall.IsHighOrder && fcall.GetId() == "execclosure") {
                     closure = param;
                     return first;
                 }
@@ -184,10 +184,24 @@ namespace Generator
         {
             oper = null;
             prefix = false;
-            Dsl.ValueData var = null;
-            if(DetectPrefixPostfixOperator(data, ref oper, ref var, ref prefix) 
-                && !DetectVariable(data, oper, var)) {
-                return true;
+            Dsl.ISyntaxComponent var = null;
+            if (DetectPrefixPostfixOperator(data, ref oper, ref var, ref prefix) && !DetectVariable(data, oper, var)) {
+                if (var is Dsl.ValueData) {
+                    return true;
+                }
+                else {
+                    var fd = var as Dsl.FunctionData;
+                    if (fd.GetId() == "getinstance") {
+                        var p1 = fd.GetParam(1);
+                        if(p1 is Dsl.ValueData && !DetectVariable(data, oper, p1))
+                            return true;
+                    }
+                    else if(fd.GetId() == "getstatic") {
+                        var p1 = fd.GetParam(1);
+                        if (p1 is Dsl.ValueData)
+                            return true;
+                    }
+                }
             }
             return false;
         }
@@ -249,7 +263,7 @@ namespace Generator
                 }
             }
         }
-        private static bool DetectPrefixPostfixOperator(Dsl.ISyntaxComponent data, ref Dsl.FunctionData oper, ref Dsl.ValueData var, ref bool prefix)
+        private static bool DetectPrefixPostfixOperator(Dsl.ISyntaxComponent data, ref Dsl.FunctionData oper, ref Dsl.ISyntaxComponent var, ref bool prefix)
         {
             var funcData = data as Dsl.FunctionData;
             if (null != funcData) {
@@ -265,7 +279,7 @@ namespace Generator
                 }
             }
         }
-        private static bool DetectPrefixPostfixOperator(Dsl.FunctionData data, ref Dsl.FunctionData oper, ref Dsl.ValueData var, ref bool prefix)
+        private static bool DetectPrefixPostfixOperator(Dsl.FunctionData data, ref Dsl.FunctionData oper, ref Dsl.ISyntaxComponent var, ref bool prefix)
         {
             if (data.IsHighOrder) {
                 foreach (var p in data.Params) {
@@ -278,7 +292,7 @@ namespace Generator
             }
             else {
                 if (data.GetId() == "prefixoperator") {
-                    var varExp = data.GetParam(1) as Dsl.ValueData;
+                    var varExp = data.GetParam(1);
                     if (null != varExp) {
                         oper = data;
                         var = varExp;
@@ -286,8 +300,8 @@ namespace Generator
                         return true;
                     }
                 }
-                else if(data.GetId() == "postfixoperator") {
-                    var varExp = data.GetParam(2) as Dsl.ValueData;
+                else if (data.GetId() == "postfixoperator") {
+                    var varExp = data.GetParam(2);
                     if (null != varExp) {
                         oper = data;
                         var = varExp;
@@ -304,7 +318,7 @@ namespace Generator
                 return false;
             }
         }
-        private static bool DetectPrefixPostfixOperator(Dsl.StatementData data, ref Dsl.FunctionData oper, ref Dsl.ValueData var, ref bool prefix)
+        private static bool DetectPrefixPostfixOperator(Dsl.StatementData data, ref Dsl.FunctionData oper, ref Dsl.ISyntaxComponent var, ref bool prefix)
         {
             foreach (var func in data.Functions) {
                 if (DetectPrefixPostfixOperator(func, ref oper, ref var, ref prefix))
@@ -312,7 +326,7 @@ namespace Generator
             }
             return false;
         }
-        private static bool DetectVariable(Dsl.ISyntaxComponent data, Dsl.FunctionData oper, Dsl.ValueData var)
+        private static bool DetectVariable(Dsl.ISyntaxComponent data, Dsl.FunctionData oper, Dsl.ISyntaxComponent var)
         {
             var funcData = data as Dsl.FunctionData;
             if (null != funcData) {
@@ -334,16 +348,16 @@ namespace Generator
                 }
             }
         }
-        private static bool DetectVariable(Dsl.ValueData data, Dsl.FunctionData oper, Dsl.ValueData var)
+        private static bool DetectVariable(Dsl.ValueData data, Dsl.FunctionData oper, Dsl.ISyntaxComponent var)
         {
             return CompareVariable(data, var);
         }
-        private static bool DetectVariable(Dsl.FunctionData data, Dsl.FunctionData oper, Dsl.ValueData var)
+        private static bool DetectVariable(Dsl.FunctionData data, Dsl.FunctionData oper, Dsl.ISyntaxComponent var)
         {
             if (data == oper)
                 return false;
             if (data.HaveParamOrStatement()) {
-                foreach(var p in data.Params) {
+                foreach (var p in data.Params) {
                     if (DetectVariable(p, oper, var))
                         return true;
                 }
@@ -353,17 +367,86 @@ namespace Generator
             }
             return false;
         }
-        private static bool DetectVariable(Dsl.StatementData data, Dsl.FunctionData oper, Dsl.ValueData var)
+        private static bool DetectVariable(Dsl.StatementData data, Dsl.FunctionData oper, Dsl.ISyntaxComponent var)
         {
-            foreach(var func in data.Functions) {
+            foreach (var func in data.Functions) {
                 if (DetectVariable(func, oper, var))
                     return true;
+            }
+            return false;
+        }
+        private static bool CompareVariable(Dsl.ISyntaxComponent data, Dsl.ISyntaxComponent var)
+        {
+            var sl = data as Dsl.StatementData;
+            var sr = var as Dsl.StatementData;
+            if (null != sl && null != sr) {
+                return CompareVariable(sl, sr);
+            }
+            else {
+                var fl = data as Dsl.FunctionData;
+                var fr = var as Dsl.FunctionData;
+                if (null != fl && null != fr) {
+                    return CompareVariable(fl, fr);
+                }
+                else {
+                    var vl = data as Dsl.ValueData;
+                    var vr = var as Dsl.ValueData;
+                    if (null != vl && null != vr) {
+                        return CompareVariable(vl, vr);
+                    }
+                }
             }
             return false;
         }
         private static bool CompareVariable(Dsl.ValueData data, Dsl.ValueData var)
         {
             return data.GetId() == var.GetId();
+        }
+        private static bool CompareVariable(Dsl.FunctionData data, Dsl.FunctionData var)
+        {
+            bool ret = false;
+            if (data.IsHighOrder && data.IsHighOrder) {
+                ret = CompareVariable(data.LowerOrderFunction, data.LowerOrderFunction) && data.GetParamClass() == data.GetParamClass() && data.GetParamNum() == data.GetParamNum();
+                if (ret) {
+                    int ct = data.GetParamNum();
+                    for (int i = 0; i < ct; ++i) {
+                        var l = data.GetParam(i);
+                        var r = var.GetParam(i);
+                        ret = CompareVariable(l, r);
+                        if (!ret)
+                            break;
+                    }
+                }
+            }
+            else if (!data.IsHighOrder && !var.IsHighOrder) {
+                ret = data.GetId() == var.GetId() && data.GetParamClass() == data.GetParamClass() && data.GetParamNum() == data.GetParamNum();
+                if (ret) {
+                    int ct = data.GetParamNum();
+                    for (int i = 0; i < ct; ++i) {
+                        var l = data.GetParam(i);
+                        var r = var.GetParam(i);
+                        ret = CompareVariable(l, r);
+                        if (!ret)
+                            break;
+                    }
+                }
+            }
+            return ret;
+        }
+        private static bool CompareVariable(Dsl.StatementData data, Dsl.StatementData var)
+        {
+            bool ret = data.GetFunctionNum() == var.GetFunctionNum();
+            if (ret) {
+                int ct = data.GetFunctionNum();
+                for (int i = 0; i < ct; ++i) {
+                    var fl = data.GetFunction(i);
+                    var fr = var.GetFunction(i);
+                    ret = CompareVariable(fl, fr);
+                    if (!ret)
+                        break;
+                }
+            }
+            return ret;
         }
     }
 }

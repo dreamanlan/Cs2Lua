@@ -14,23 +14,27 @@ class(Test) {
 			return(__cs2dsl_newobj);
 		}options[needfuncinfo(false)];
 		LoadStartupView_FGUI = deffunc(0)args(className, comName, packageName, grp, ForceShow){
+			if( execbinary(">", postfixoperator(true, __unary_212_12_212_22, getinstance(SymbolKind.Field, this, Test, "m_IntVal"), execbinary("+", getinstance(SymbolKind.Field, this, Test, "m_IntVal"), 1, null, null, null, null)), 0, , System.Int32, TypeKind.Error, TypeKind.Struct) ){
+			};
+			if( execbinary(">", prefixoperator(true, getinstance(SymbolKind.Field, this, Test, "m_IntVal"), execbinary("+", getinstance(SymbolKind.Field, this, Test, "m_IntVal"), 1, null, null, null, null)), 0, , System.Int32, TypeKind.Error, TypeKind.Struct) ){
+			};
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0), paramtype(className, System.String, TypeKind.Class, 0), paramtype(comName, System.String, TypeKind.Class, 0), paramtype(packageName, System.String, TypeKind.Class, 0), paramtype(grp, ViewGroup, TypeKind.Enum, 0), paramtype(ForceShow, System.Boolean, TypeKind.Struct, 0)];
 		ToList = deffunc(1)args(T, enumer){
-			local(__method_ret_213_4_221_5);
+			local(__method_ret_219_4_227_5);
 			callstatic(Test, "LoadStartupView_FGUI", "", "", "", 0, false);
 			local(r); r = newexternlist(System.Collections.Generic.List_T, "g_System_Collections_Generic_List_T", typeargs(T), typekinds(TypeKind.TypeParameter), "ctor", 0, literallist("g_System_Collections_Generic_List_T", typeargs(T), typekinds(TypeKind.TypeParameter)));
-			foreach(__foreach_217_8_219_9, v, enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true){
+			foreach(__foreach_223_8_225_9, v, enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true){
 				callexterninstance(r, System.Collections.Generic.List_T, "Add", v);
 			};
-			__method_ret_213_4_221_5 = r;
-			return(__method_ret_213_4_221_5);
+			__method_ret_219_4_227_5 = r;
+			return(__method_ret_219_4_227_5);
 		}options[needfuncinfo(true), rettype(return, System.Collections.Generic.List_T, TypeKind.Class, 0), paramtype(T, null, TypeKind.TypeParameter, 0), paramtype(enumer, System.Collections.Generic.IEnumerable_T, TypeKind.Interface, 0)];
 		ToArray = deffunc(1)args(T, list){
-			local(__method_ret_222_4_227_5);
+			local(__method_ret_228_4_233_5);
 			local(arr); arr = newmultiarray(Test.T, TypeKind.TypeParameter, null, 1, getexterninstance(SymbolKind.Property, list, System.Collections.Generic.ICollection_T, "Count"));
 			callexterninstance(list, System.Collections.Generic.ICollection_T, "CopyTo", arr, 0);
-			__method_ret_222_4_227_5 = arr;
-			return(__method_ret_222_4_227_5);
+			__method_ret_228_4_233_5 = arr;
+			return(__method_ret_228_4_233_5);
 		}options[needfuncinfo(false), rettype(return, Test.T, TypeKind.Array, 0), paramtype(T, null, TypeKind.TypeParameter, 0), paramtype(list, System.Collections.Generic.IList_T, TypeKind.Interface, 0)];
 		cctor = deffunc(0)args(){
 			callstatic(Test, "__cctor");

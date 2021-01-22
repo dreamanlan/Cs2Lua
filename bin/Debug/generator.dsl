@@ -319,8 +319,8 @@ script(wrapexternstructargument)args($funcData, $funcOpts, $sb, $indent)
         :};
         return(true);
     }
-    elseif($classObj=="CsLibrary.TimeSpan"){
-        usefunc("wrap_timespan","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1], "__cs2lua_func_info")
+    elseif($argType=="CsLibrary.TimeSpan"){
+        usefunc("wrap_timespan","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
         {:
             local obj = TimeSpanPool.Alloc()
             obj:SetTimeDHMSM(v.Days, v.Hours, v.Minutes, v.Seconds, v.Milliseconds)
@@ -329,8 +329,10 @@ script(wrapexternstructargument)args($funcData, $funcOpts, $sb, $indent)
         :};
         return(true);
     }
-    elseif($classObj=="CsLibrary.PathInfoPoint"){
-        usefunc("wrap_pathinfopoint","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1], "__cs2lua_func_info")
+    elseif($argType=="CsLibrary.PathInfoPoint"){    
+        echo("wrapexternstructargument {0}", $argType);
+        
+        usefunc("wrap_pathinfopoint","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
         {:
             local obj = PathInfoPointPool.Alloc();
             local _,x,y,z = v:GetPoint(Slua.out, Slua.out, Slua.out)

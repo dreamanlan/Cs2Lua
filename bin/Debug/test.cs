@@ -210,6 +210,12 @@ class Test
     }
     internal static void LoadStartupView_FGUI(string className, string comName, string packageName, ViewGroup grp = ViewGroup.View, bool ForceShow = false)
     {
+        if (m_IntVal++ > 0) {
+
+        }
+        if (++m_IntVal > 0) {
+
+        }
     }
     internal static List<T> ToList<T>(IEnumerable<T> enumer)
     {
