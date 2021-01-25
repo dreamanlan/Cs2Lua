@@ -111,6 +111,7 @@ script(wrapstruct)args($funcData, $funcOpts, $sb, $indent)
 script(wrapexternstruct)args($funcData, $funcOpts, $sb, $indent)
 {
     //wrapexternstruct(v, classObj)
+    $varName = getargument($funcData, 0);
     $classObj = getargument($funcData, 1);
 
     if($classObj=="UnityEngine.Vector2"){
@@ -1244,6 +1245,18 @@ script(getexterninstancestructmember)args($funcData, $funcOpts, $sb, $indent)
             :};
             return(true);
         };
+    }
+    elseif($class=="CsLibrary.DecalInfo"){
+        if($member=="hsv"){
+            usefunc("get_DecalInfo_hsv","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z = Utility.GetDecalInfoHSV(obj ,Slua.out,Slua.out,Slua.out)
+                local v = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list , v)
+                return v
+            :};
+            return(true);
+        }
     };
     return(false);
 };
@@ -1374,6 +1387,28 @@ script(callexternstaticreturnstruct)args($funcData, $funcOpts, $sb, $indent)
                 local targetV3 = UnityEngine.Vector3.RotateTowards(curV3,tarV3,maxRad,maxMag)
                 table.insert(funcInfo.v3_list, targetV3)
                 return targetV3
+            :};
+            return(true);
+        }
+        elseif($member=="ProjectOnPlane"){
+            usefunc("call_vector3_projectonplane","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local a , b  = ...
+                local _,x,y,z = Utility.GetVector3ProjectOnPlane(a,b,Slua.out ,Slua.out ,Slua.out)
+                local v3 = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list, v3)
+                return v3
+            :};
+            return(true);
+        }
+        elseif($member=="Slerp"){
+            usefunc("call_vector3_slerp","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local a , b , t = ...
+                local _,x,y,z = Utility.GetVector3Slerp(a,b,t,Slua.out ,Slua.out ,Slua.out)
+                local v3 = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list, v3)
+                return v3
             :};
             return(true);
         };
@@ -2252,8 +2287,10 @@ script(movetocallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
             if val~=nil then
                 local cfi = luagetcallerfuncinfo()
                 if cfi then
-                    luatableremove(funcInfo.v2_list, val)
-                    table.insert(cfi.v2_list, val)
+                    local result = luatableremove(funcInfo.v2_list, val)
+                    if result then
+                        table.insert(cfi.v2_list, val)
+                    end
                 end
             end
         :};
@@ -2265,8 +2302,10 @@ script(movetocallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
             if val~=nil then
                 local cfi = luagetcallerfuncinfo()
                 if cfi then
-                    luatableremove(funcInfo.v3_list, val)
-                    table.insert(cfi.v3_list, val)
+                    local result = luatableremove(funcInfo.v3_list, val)
+                    if result then
+                        table.insert(cfi.v3_list, val)
+                    end
                 end
             end
         :};
@@ -2278,8 +2317,10 @@ script(movetocallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
             if val~=nil then
                 local cfi = luagetcallerfuncinfo()
                 if cfi then
-                    luatableremove(funcInfo.v4_list, val)
-                    table.insert(cfi.v4_list, val)
+                    local result = luatableremove(funcInfo.v4_list, val)
+                    if result then
+                        table.insert(cfi.v4_list, val)
+                    end
                 end
             end
         :};
@@ -2291,8 +2332,10 @@ script(movetocallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
             if val~=nil then
                 local cfi = luagetcallerfuncinfo()
                 if cfi then
-                    luatableremove(funcInfo.q_list, val)
-                    table.insert(cfi.q_list, val)
+                    local result = luatableremove(funcInfo.q_list, val)
+                    if result then
+                        table.insert(cfi.q_list, val)
+                    end
                 end
             end
         :};
@@ -2304,8 +2347,10 @@ script(movetocallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
             if val~=nil then
                 local cfi = luagetcallerfuncinfo()
                 if cfi then
-                    luatableremove(funcInfo.c_list, val)
-                    table.insert(cfi.c_list, val)
+                    local result = luatableremove(funcInfo.c_list, val)
+                    if result then
+                        table.insert(cfi.c_list, val)
+                    end
                 end
             end
         :};
@@ -2317,8 +2362,10 @@ script(movetocallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
             if val~=nil then
                 local cfi = luagetcallerfuncinfo()
                 if cfi then
-                    luatableremove(funcInfo.c32_list, val)
-                    table.insert(cfi.c32_list, val)
+                    local result = luatableremove(funcInfo.c32_list, val)
+                    if result then
+                        table.insert(cfi.c32_list, val)
+                    end
                 end
             end
         :};
@@ -2330,8 +2377,10 @@ script(movetocallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
             if val~=nil then
                 local cfi = luagetcallerfuncinfo()
                 if cfi then
-                    luatableremove(funcInfo.rt_list, val)
-                    table.insert(cfi.rt_list, val)
+                    local result = luatableremove(funcInfo.rt_list, val)
+                    if result then
+                        table.insert(cfi.rt_list, val)
+                    end
                 end
             end
         :};
@@ -2343,8 +2392,10 @@ script(movetocallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
             if val~=nil then
                 local cfi = luagetcallerfuncinfo()
                 if cfi then
-                    luatableremove(funcInfo.dt_list, val)
-                    table.insert(cfi.dt_list, val)
+                    local result = luatableremove(funcInfo.dt_list, val)
+                    if result then
+                        table.insert(cfi.dt_list, val)
+                    end
                 end
             end
         :};
@@ -2356,8 +2407,10 @@ script(movetocallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
             if val~=nil then
                 local cfi = luagetcallerfuncinfo()
                 if cfi then
-                    luatableremove(funcInfo.ts_list, val)
-                    table.insert(cfi.ts_list, val)
+                    local result = luatableremove(funcInfo.ts_list, val)
+                    if result then
+                        table.insert(cfi.ts_list, val)
+                    end
                 end
             end
         :};
@@ -2369,8 +2422,10 @@ script(movetocallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
             if val~=nil then
                 local cfi = luagetcallerfuncinfo()
                 if cfi then
-                    luatableremove(funcInfo.pip_list, val)
-                    table.insert(cfi.pip_list, val)
+                    local result = luatableremove(funcInfo.pip_list, val)
+                    if result then 
+                        table.insert(cfi.pip_list, val)
+                    end
                 end
             end
         :};
@@ -3114,7 +3169,7 @@ script(callexternstructlistinstance)args($funcData, $funcOpts, $sb, $indent)
             usefunc("call_ilist_add_vector2","(funcInfo, obj, class, method, ...)", $funcData, $funcOpts, $sb, $indent, 3, "__cs2lua_func_info")
             {:
                 local v2 = ...
-                if v~=nil then
+                if v2~=nil then
                     luatableremove(funcInfo.v2_list, v2)
                 end
                 obj[method](obj, ...)
@@ -3125,7 +3180,7 @@ script(callexternstructlistinstance)args($funcData, $funcOpts, $sb, $indent)
             usefunc("call_ilist_add_vector3","(funcInfo, obj, class, method, ...)", $funcData, $funcOpts, $sb, $indent, 3, "__cs2lua_func_info")
             {:
                 local v3 = ...
-                if v~=nil then
+                if v3~=nil then
                     luatableremove(funcInfo.v3_list, v3)
                 end
                 obj[method](obj, ...)

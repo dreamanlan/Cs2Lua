@@ -1,0 +1,8 @@
+============<<<Translation Error:test>>>============
+<<<[Log for ObjectCreationExpressionSyntax]>>> [code:[ new StringBuilder() ] location: test.cs: (158,38)-(158,57)] Unknown ObjectCreationExpressionSyntax !
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ stringBuilder.Append('[') ] location: test.cs: (159,8)-(159,33)
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ stringBuilder.Append(this.Key.ToString()) ] location: test.cs: (161,12)-(161,53)
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ stringBuilder.Append(", ") ] location: test.cs: (162,8)-(162,34)
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ stringBuilder.Append(this.Value.ToString()) ] location: test.cs: (164,12)-(164,55)
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ stringBuilder.Append(']') ] location: test.cs: (165,8)-(165,33)
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ stringBuilder.ToString() ] location: test.cs: (166,15)-(166,39)

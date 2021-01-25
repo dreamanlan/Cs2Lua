@@ -1451,8 +1451,10 @@ function luatableremove(tb, val)
     for i,v in ipairs(tb) do
         if rawequal(v,val) then
             table.remove(tb, i)
+            return true
         end
     end
+    return false
 end
 
 function recycleandkeepcheck(fieldType, oldVal, newVal)   

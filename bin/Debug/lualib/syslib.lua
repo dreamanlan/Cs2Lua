@@ -1451,8 +1451,10 @@ function luatableremove(tb, val)
     for i,v in ipairs(tb) do
         if rawequal(v,val) then
             table.remove(tb, i)
+            return true
         end
     end
+    return false
 end
 
 function recycleandkeepcheck(fieldType, oldVal, newVal)   
@@ -3982,11 +3984,17 @@ function newexternobject(class, typeargs, typekinds, ctor, ctorRetCt, initialize
 end
 
 function newtypeparamobject(t)
-    local obj = t()
+    local obj = nil
+    warmup(t)
     if rawget(t, "__cs2lua_defined") then
+        obj = t()
         if obj.ctor then
             obj:ctor()
         end
+    elseif t.ctor then
+        obj = t.ctor()
+    else
+        obj = t()
     end
     return obj
 end
@@ -4004,10 +4012,12 @@ function defaultvalue(t, typename, isExtern)
         return UnityEngine.Color.black
     elseif t == UnityEngine.Color32 then
         return UnityEngine.Color32.ctor()
-    elseif isExtern then
+    elseif isExtern and t then
         return t.ctor()
-    else
+    elseif t and t.__is_value_type then
         return t.__new_object()
+    else
+        return nil
     end
 end
 

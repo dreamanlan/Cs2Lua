@@ -188,7 +188,8 @@ namespace Generator
                         var t = CalcTypeString(orit);
                         var tk = CalcTypeString(oritk);
                         var ro = int.Parse(optFd.GetParamId(3));
-                        funcOpts.RetTypes.Add(new TypeInfo { Name = tn, Type = t, TypeKind = tk, RefOrOut = ro, OriType = orit, OriTypeKind = oritk });
+                        var isExtern = optFd.GetParamId(4) == "true";
+                        funcOpts.RetTypes.Add(new TypeInfo { Name = tn, Type = t, TypeKind = tk, RefOrOut = ro, IsExtern = isExtern, OriType = orit, OriTypeKind = oritk });
                     }
                     else if (optFd.GetId() == "paramtype") {
                         var tn = optFd.GetParamId(0);
@@ -197,7 +198,8 @@ namespace Generator
                         var t = CalcTypeString(orit);
                         var tk = CalcTypeString(oritk);
                         var ro = int.Parse(optFd.GetParamId(3));
-                        funcOpts.ParamTypes.Add(new TypeInfo { Name = tn, Type = t, TypeKind = tk, RefOrOut = ro, OriType = orit, OriTypeKind = oritk });
+                        var isExtern = optFd.GetParamId(4) == "true";
+                        funcOpts.ParamTypes.Add(new TypeInfo { Name = tn, Type = t, TypeKind = tk, RefOrOut = ro, IsExtern = isExtern, OriType = orit, OriTypeKind = oritk });
                     }
                 }
             }
@@ -732,6 +734,7 @@ namespace Generator
             internal string Type = string.Empty;
             internal string TypeKind = string.Empty;
             internal int RefOrOut = 0;
+            internal bool IsExtern = false;
             internal Dsl.ISyntaxComponent OriType = null;
             internal Dsl.ISyntaxComponent OriTypeKind = null;
         }

@@ -97,9 +97,11 @@ namespace RoslynTool.CsToDsl
             ITypeSymbol ret = sym;
             var refType = sym as ITypeParameterSymbol;
             if (null != refType) {
-                int ix = IndexOfTypeParameter(m_TypeParameters, refType);
-                if (ix >= 0) {
-                    ret = m_TypeArguments[ix];
+                lock (m_TypeArguments) {
+                    int ix = IndexOfTypeParameter(m_TypeParameters, refType);
+                    if (ix >= 0) {
+                        ret = m_TypeArguments[ix];
+                    }
                 }
             }
             return ret;

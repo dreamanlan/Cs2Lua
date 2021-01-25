@@ -123,6 +123,51 @@ internal sealed class DataChangeCallBackInfo : ICs2LuaPoolAllocatedObjectEx<Data
     }
 }
 
+
+public sealed class Cs2LuaKeyValuePair<TKey, TValue>
+{
+    private TKey key;
+    private TValue value;
+
+    public Cs2LuaKeyValuePair(TKey key, TValue value)
+    {
+        this.key = key;
+        this.value = value;
+    }
+
+    public Cs2LuaKeyValuePair()
+    {
+        var t1 = typeof(TKey);
+        var t2 = typeof(TValue);
+        t2 = (TValue)t1;
+        this.key = default(TKey);
+        this.value = default(TValue);
+    }
+
+    public TKey Key
+    {
+        get { return key; }
+    }
+
+    public TValue Value
+    {
+        get { return value; }
+    }
+
+    public override string ToString()
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.Append('[');
+        if ((object)this.Key != null)
+            stringBuilder.Append(this.Key.ToString());
+        stringBuilder.Append(", ");
+        if ((object)this.Value != null)
+            stringBuilder.Append(this.Value.ToString());
+        stringBuilder.Append(']');
+        return stringBuilder.ToString();
+    }
+}
+
 class Test
 {
     public int? this[params int?[] args]
@@ -208,7 +253,7 @@ class Test
 
         this.m_IntVal = a > 1 ? aa() : c;
     }
-    internal static void LoadStartupView_FGUI(string className, string comName, string packageName, ViewGroup grp = ViewGroup.View, bool ForceShow = false)
+    internal void LoadStartupView_FGUI(string className, string comName, string packageName, ViewGroup grp = ViewGroup.View, bool ForceShow = false)
     {
         if (m_IntVal++ > 0) {
 
@@ -216,6 +261,7 @@ class Test
         if (++m_IntVal > 0) {
 
         }
+        string a = m_IntIntKeyValue.ToString();
     }
     internal static List<T> ToList<T>(IEnumerable<T> enumer)
     {
@@ -235,4 +281,5 @@ class Test
     private Cs2LuaObjectPoolEx<DataChangeCallBackInfo> m_DataChangeCallBackInfoPool = new Cs2LuaObjectPoolEx<DataChangeCallBackInfo>();
     private int m_IntVal = 0;
     private Vector3[] m_Vs = new Vector3[10];
+    private Cs2LuaKeyValuePair<int, int> m_IntIntKeyValue = new Cs2LuaKeyValuePair<int, int>();
 }

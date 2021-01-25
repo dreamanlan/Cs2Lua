@@ -288,6 +288,10 @@ namespace RoslynTool.CsToDsl
         {
             if (null == type)
                 return string.Empty;
+            var typeParam = type as ITypeParameterSymbol;
+            if (null != typeParam) {
+                return typeParam.Name;
+            }
             var arrType = type as IArrayTypeSymbol;
             while (null != arrType) {
                 type = arrType.ElementType;

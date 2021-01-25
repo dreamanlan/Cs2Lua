@@ -20,7 +20,7 @@ end
 
 function call_ilist_add_vector3(funcInfo, obj, class, method, ...)
 	local v3 = ...
-	if v~=nil then
+	if v3~=nil then
 	    luatableremove(funcInfo.v3_list, v3)
 	end
 	obj[method](obj, ...)

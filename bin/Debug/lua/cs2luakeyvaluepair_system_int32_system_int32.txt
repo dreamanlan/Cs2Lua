@@ -1,0 +1,133 @@
+require "cs2lua__namespaces"; 
+
+Cs2LuaKeyValuePair_System_Int32_System_Int32 = {
+	-------------------------------
+	-------- class methods --------
+	-------------------------------
+	__new_object = function(...)
+		local __cs2dsl_newobj;
+		__cs2dsl_newobj = newobject(Cs2LuaKeyValuePair_System_Int32_System_Int32, buildglobalinfoonce("g_Cs2LuaKeyValuePair_System_Int32_System_Int32_TypeArgs", getglobalinfo("g_Cs2LuaKeyValuePair_System_Int32_System_Int32_TypeArgs") or {TKey, TValue}), buildglobalinfoonce("g_Cs2LuaKeyValuePair_System_Int32_System_Int32_TypeKinds", getglobalinfo("g_Cs2LuaKeyValuePair_System_Int32_System_Int32_TypeKinds") or {TypeKind.TypeParameter, TypeKind.TypeParameter}), "ctor__TKey__TValue", 0, nil, ...);
+		return __cs2dsl_newobj;
+	end,
+
+	cctor = function()
+		Cs2LuaKeyValuePair_System_Int32_System_Int32.__cctor();
+	end,
+
+	__cctor = function()
+		if Cs2LuaKeyValuePair_System_Int32_System_Int32.__cctor_called then 
+			return;
+		else
+			Cs2LuaKeyValuePair_System_Int32_System_Int32.__cctor_called = true;
+		end;
+	end,
+
+	-------------------------------
+	-------- class fields --------
+	-------------------------------
+	__cctor_called = false,
+
+	-------------------------------
+	--- define class and object ---
+	-------------------------------
+	__define_class = function()
+		Utility.Warn("Cs2LuaKeyValuePair_System_Int32_System_Int32::__define_class begin");
+
+		local class = Cs2LuaKeyValuePair_System_Int32_System_Int32;
+
+		local raw_obj_methods = {
+			ctor__TKey__TValue = function(this, key, value)
+				this:__ctor();
+				this.key = key;
+				this.value = value;
+			end,
+
+			ctor = function(this)
+				this:__ctor();
+				local t1;
+				t1 = System.Int32;
+				local t2;
+				t2 = System.Int32;
+				t2 = typecast(t1, System.Int32, TypeKind.TypeParameter);
+				this.key = 0;
+				this.value = 0;
+			end,
+
+			get_Key = function(this)
+				local __method_ret_146_4_149_5;
+				__method_ret_146_4_149_5 = this.key;
+				return __method_ret_146_4_149_5;
+			end,
+
+			get_Value = function(this)
+				local __method_ret_151_4_154_5;
+				__method_ret_151_4_154_5 = this.value;
+				return __method_ret_151_4_154_5;
+			end,
+
+			ToString = function(this)
+				local __method_ret_156_4_167_5;
+				local stringBuilder;
+				(= stringBuilder);
+				if (not isequal(typecast(luatoobject(SymbolKind.NamedType, false, "System.Object", this:get_Key()), System.Object, TypeKind.Class), nil)) then 
+				end;
+				if (not isequal(typecast(luatoobject(SymbolKind.NamedType, false, "System.Object", this:get_Value()), System.Object, TypeKind.Class), nil)) then 
+				end;
+				return __method_ret_156_4_167_5;
+			end,
+
+			__ctor = function(this)
+				if this.__ctor_called then 
+					return;
+				else
+					this.__ctor_called = true;
+				end;
+			end,
+		};
+		local obj_methods = {
+			ctor__TKey__TValue = raw_obj_methods.ctor__TKey__TValue,
+			ctor = raw_obj_methods.ctor,
+			get_Key = raw_obj_methods.get_Key,
+			get_Value = raw_obj_methods.get_Value,
+			ToString = raw_obj_methods.ToString,
+			__ctor = raw_obj_methods.__ctor,
+		};
+		raw_obj_methods = nil;
+
+		local obj_build = function()
+			return {
+				key = 0,
+				value = 0,
+				__ctor_called = false,
+			};
+		end;
+
+		local __defineclass_return = defineclass(nil, "Cs2LuaKeyValuePair_System_Int32_System_Int32", "Cs2LuaKeyValuePair_System_Int32_System_Int32", class, obj_methods, obj_build, false);
+		Utility.Warn("Cs2LuaKeyValuePair_System_Int32_System_Int32::__define_class end");
+		return __defineclass_return;
+	end,
+
+	-------------------------------
+	--------- fields info ---------
+	-------------------------------
+	__class_fields = {
+		__cctor_called = true,
+	},
+
+	__obj_fields = {
+		key = true,
+		value = true,
+		__ctor_called = true,
+	},
+
+	-------------------------------
+	-------- metadata info --------
+	-------------------------------
+	__is_sealed_class = true;
+};
+
+
+require "cs2lua__syslib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+settempmetatable(Cs2LuaKeyValuePair_System_Int32_System_Int32);

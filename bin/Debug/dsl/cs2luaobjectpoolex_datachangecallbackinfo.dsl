@@ -7,7 +7,7 @@ require("cs2dsl__interfaces");
 class(Cs2LuaObjectPoolEx_DataChangeCallBackInfo) {
 	static_methods {
 		__new_object = deffunc(1)args(...){
-			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "g_Cs2LuaObjectPoolEx_DataChangeCallBackInfo", typeargs(T), typekinds(TypeKind.TypeParameter), "ctor", 0, null, ...);
+			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "g_Cs2LuaObjectPoolEx_T", typeargs(T), typekinds(TypeKind.TypeParameter), "ctor", 0, null, ...);
 			return(__cs2dsl_newobj);
 		}options[needfuncinfo(false)];
 		cctor = deffunc(0)args(){

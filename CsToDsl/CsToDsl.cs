@@ -857,6 +857,7 @@ namespace RoslynTool.CsToDsl
         }
         private void OutputDefaultValue(ITypeSymbol type, bool setValueTypeToNull)
         {
+            TryReplaceGenericTypeParameter(ref type);
             OutputDefaultValue(CodeBuilder, type, setValueTypeToNull);
         }
         private void OutputArgumentDefaultValue(object val, IOperation oper, bool dslStrToCsStr, IConversionOperation opd, SyntaxNode node)
@@ -1166,6 +1167,30 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.Append("null");
                 Log(node, "Unknown {0} Type !", errorTag);
             }
+        }
+        private bool TryReplaceGenericTypeParameter(ref ITypeSymbol type)
+        {
+            bool ret = false;
+            if (type.TypeKind == TypeKind.TypeParameter && !m_SkipGenericTypeDefine && null != m_GenericTypeInstance) {
+                for (int i = 0; i < m_GenericTypeInstance.TypeParameters.Length; ++i) {
+                    var t = m_GenericTypeInstance.TypeParameters[i];
+                    var rt = m_GenericTypeInstance.TypeArguments[i];
+                    string name1 = ClassInfo.SpecialGetFullTypeNameWithTypeParameters(t);
+                    string name2 = ClassInfo.SpecialGetFullTypeNameWithTypeParameters(type);
+                    if (name1 == name2) {
+                        type = rt;
+                        ret = true;
+                        break;
+                    }
+                }
+                if (!ret) {
+                    var ta = SymbolTable.Instance.FindTypeArgument(type);
+                    if (null != ta) {
+                        type = ta;
+                    }
+                }
+            }
+            return ret;
         }
         private void ProcessUnaryOperator(CSharpSyntaxNode node, ref string op)
         {

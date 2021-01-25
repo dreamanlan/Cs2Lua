@@ -19,10 +19,12 @@ namespace RoslynTool.CsToDsl
         internal List<string> ParamTypes = new List<string>();
         internal List<string> ParamTypeKinds = new List<string>();
         internal List<int> ParamRefOrOuts = new List<int>();
+        internal List<bool> ParamIsExterns = new List<bool>();
         internal List<string> ReturnParamNames = new List<string>();
         internal List<string> ReturnParamTypes = new List<string>();
         internal List<string> ReturnParamTypeKinds = new List<string>();
         internal List<int> ReturnParamRefOrOuts = new List<int>();
+        internal List<bool> ReturnParamIsExterns = new List<bool>();
         internal HashSet<int> OutValueParams = new HashSet<int>();
         internal HashSet<int> OutExternValueParams = new HashSet<int>();
         internal string OriginalParamsName = string.Empty;
@@ -78,6 +80,7 @@ namespace RoslynTool.CsToDsl
                         ParamTypes.Add("null");
                     ParamTypeKinds.Add("TypeKind." + param.TypeKind.ToString());
                     ParamRefOrOuts.Add(0);
+                    ParamIsExterns.Add(false);
                 }
             }
 
@@ -94,6 +97,7 @@ namespace RoslynTool.CsToDsl
                     ParamTypes.Add(ClassInfo.GetFullName(param.Type));
                     ParamTypeKinds.Add("TypeKind." + param.Type.TypeKind.ToString());
                     ParamRefOrOuts.Add(0);
+                    ParamIsExterns.Add(!SymbolTable.Instance.IsCs2DslSymbol(param.Type));
                     OriginalParamsName = param.Name;
                     //遇到变参直接结束（变参set_Item会出现后面带一个value参数的情形，在函数实现里处理）
                     break;
@@ -105,10 +109,12 @@ namespace RoslynTool.CsToDsl
                     ParamTypes.Add(fn);
                     ParamTypeKinds.Add("TypeKind." + param.Type.TypeKind.ToString());
                     ParamRefOrOuts.Add(1);
+                    ParamIsExterns.Add(!SymbolTable.Instance.IsCs2DslSymbol(param.Type));
                     ReturnParamNames.Add(param.Name);
                     ReturnParamTypes.Add(fn);
                     ReturnParamTypeKinds.Add("TypeKind." + param.Type.TypeKind.ToString());
                     ReturnParamRefOrOuts.Add(1);
+                    ReturnParamIsExterns.Add(!SymbolTable.Instance.IsCs2DslSymbol(param.Type));
                 }
                 else if (param.RefKind == RefKind.Out) {
                     if (param.Type.IsValueType && !SymbolTable.IsBasicType(param.Type) && !CsDslTranslater.IsImplementationOfSys(param.Type, "IEnumerator")) {
@@ -128,16 +134,19 @@ namespace RoslynTool.CsToDsl
                     ParamTypes.Add(fn);
                     ParamTypeKinds.Add("TypeKind." + param.Type.TypeKind.ToString());
                     ParamRefOrOuts.Add(2);
+                    ParamIsExterns.Add(!SymbolTable.Instance.IsCs2DslSymbol(param.Type));
                     ReturnParamNames.Add(param.Name);
                     ReturnParamTypes.Add(fn);
                     ReturnParamTypeKinds.Add("TypeKind." + param.Type.TypeKind.ToString());
                     ReturnParamRefOrOuts.Add(2);
+                    ReturnParamIsExterns.Add(!SymbolTable.Instance.IsCs2DslSymbol(param.Type));
                 }
                 else {
                     ParamNames.Add(param.Name);
                     ParamTypes.Add(ClassInfo.GetFullName(param.Type));
                     ParamTypeKinds.Add("TypeKind." + param.Type.TypeKind.ToString());
                     ParamRefOrOuts.Add(0);
+                    ParamIsExterns.Add(!SymbolTable.Instance.IsCs2DslSymbol(param.Type));
                 }
                 if (first && sym.IsExtensionMethod && sym.IsGenericMethod) {
                     //扩展方法的泛型参数放在第一个参数后
@@ -153,6 +162,7 @@ namespace RoslynTool.CsToDsl
                             ParamTypes.Add("null");
                         ParamTypeKinds.Add("TypeKind." + tp.TypeKind.ToString());
                         ParamRefOrOuts.Add(0);
+                        ParamIsExterns.Add(!SymbolTable.Instance.IsCs2DslSymbol(param.Type));
                     }
                 }
                 first = false;
@@ -168,7 +178,7 @@ namespace RoslynTool.CsToDsl
             }
 
             ReturnValueCount = ReturnParamNames.Count + (sym.ReturnsVoid ? 0 : 1);
-            if(!NeedFuncInfo && ClassInfo.HasAttribute(sym, "Cs2Dsl.NeedFuncInfoAttribute")) {
+            if (!NeedFuncInfo && ClassInfo.HasAttribute(sym, "Cs2Dsl.NeedFuncInfoAttribute")) {
                 NeedFuncInfo = true;
             }
         }
@@ -176,30 +186,41 @@ namespace RoslynTool.CsToDsl
         internal string CalcFunctionOptions()
         {
             if (string.IsNullOrEmpty(FunctionOptions)) {
+                string returnName = "return";
                 string returnType;
                 string returnTypeKind;
+                bool returnTypeIsExtern = false;
                 if (SemanticInfo.ReturnsVoid) {
                     returnType = "System.Void";
                     returnTypeKind = "TypeKind.Unknown";
                 }
                 else {
                     returnType = ClassInfo.GetFullName(SemanticInfo.ReturnType);
+                    if (SemanticInfo.ReturnType.TypeKind == TypeKind.TypeParameter) {
+                        var retTypeParam = SemanticInfo.ReturnType as ITypeParameterSymbol;
+                        if (null != retTypeParam && retTypeParam.ConstraintTypes.Length > 0) {
+                            returnName = returnType;
+                            returnType = ClassInfo.GetFullName(retTypeParam.ConstraintTypes[0]);
+                        }
+                    }
                     if (string.IsNullOrEmpty(returnType))
                         returnType = "null";
                     returnTypeKind = "TypeKind." + SemanticInfo.ReturnType.TypeKind.ToString();
+                    returnTypeIsExtern = !SymbolTable.Instance.IsCs2DslSymbol(SemanticInfo.ReturnType);
                 }
 
                 var sb = new StringBuilder();
-                sb.AppendFormat("needfuncinfo({0}), rettype(return, {1}, {2}, 0)", NeedFuncInfo ? "true" : "false", returnType, returnTypeKind);
-                for(int ix = 0; ix < ReturnParamNames.Count; ++ix) {
+                sb.AppendFormat("needfuncinfo({0}), rettype({1}, {2}, {3}, 0, {4})", NeedFuncInfo ? "true" : "false", returnName, returnType, returnTypeKind, returnTypeIsExtern ? "true" : "false");
+                for (int ix = 0; ix < ReturnParamNames.Count; ++ix) {
                     var name = ReturnParamNames[ix];
                     var type = ReturnParamTypes[ix];
                     if (string.IsNullOrEmpty(type))
                         type = "null";
                     var typekind = ReturnParamTypeKinds[ix];
                     var refOrOut = ReturnParamRefOrOuts[ix];
+                    var isExtern = ReturnParamIsExterns[ix];
                     sb.Append(", ");
-                    sb.AppendFormat("rettype({0}, {1}, {2}, {3})", name, type, typekind, refOrOut);
+                    sb.AppendFormat("rettype({0}, {1}, {2}, {3}, {4})", name, type, typekind, refOrOut, isExtern ? "true" : "false");
                 }
                 for (int ix = 0; ix < ParamNames.Count; ++ix) {
                     var name = ParamNames[ix];
@@ -208,8 +229,9 @@ namespace RoslynTool.CsToDsl
                         type = "null";
                     var typekind = ParamTypeKinds[ix];
                     var refOrOut = ParamRefOrOuts[ix];
+                    var isExtern = ParamIsExterns[ix];
                     sb.Append(", ");
-                    sb.AppendFormat("paramtype({0}, {1}, {2}, {3})", name, type, typekind, refOrOut);
+                    sb.AppendFormat("paramtype({0}, {1}, {2}, {3}, {4})", name, type, typekind, refOrOut, isExtern ? "true" : "false");
                 }
                 FunctionOptions = sb.ToString();
             }
@@ -230,7 +252,7 @@ namespace RoslynTool.CsToDsl
                 sbOut.Append(ReturnVarName);
                 prestrOut = ", ";
             }
-            foreach(var v in dataFlow.DataFlowsIn) {
+            foreach (var v in dataFlow.DataFlowsIn) {
                 if (v.Name == "this")
                     continue;
                 inputs.Add(v.Name);
@@ -238,7 +260,7 @@ namespace RoslynTool.CsToDsl
                 sbIn.Append(v.Name);
                 prestrIn = ", ";
             }
-            foreach(var v in dataFlow.DataFlowsOut) {
+            foreach (var v in dataFlow.DataFlowsOut) {
                 outputs.Add(v.Name);
                 if (!inputs.Contains(v.Name)) {
                     sbIn.Append(prestrIn);
@@ -254,19 +276,21 @@ namespace RoslynTool.CsToDsl
         }
 
         internal string CalcTryUsingFuncOptions(DataFlowAnalysis dataFlow, ControlFlowAnalysis ctrlFlow, List<string> inputs, List<string> outputs)
-        {            
+        {
             string returnType = "System.Int32";
             string returnTypeKind = "TypeKind.Struct";
+            bool returnTypeIsExtern = false;
 
             var sb = new StringBuilder();
-            sb.AppendFormat("needfuncinfo({0}), rettype(return, {1}, {2}, 0)", NeedFuncInfo ? "true" : "false", returnType, returnTypeKind);
+            sb.AppendFormat("needfuncinfo({0}), rettype(return, {1}, {2}, 0, true)", NeedFuncInfo ? "true" : "false", returnType, returnTypeKind);
             if (ctrlFlow.ReturnStatements.Length > 0 && !string.IsNullOrEmpty(ReturnVarName)) {
                 returnType = ClassInfo.GetFullName(SemanticInfo.ReturnType);
                 if (string.IsNullOrEmpty(returnType))
                     returnType = "null";
                 returnTypeKind = "TypeKind." + SemanticInfo.ReturnType.TypeKind.ToString();
+                returnTypeIsExtern = !SymbolTable.Instance.IsCs2DslSymbol(SemanticInfo.ReturnType);
                 sb.Append(", ");
-                sb.AppendFormat("rettype({0}, {1}, {2}, 1)", ReturnVarName, returnType, returnTypeKind);
+                sb.AppendFormat("rettype({0}, {1}, {2}, 1, {3})", ReturnVarName, returnType, returnTypeKind, returnTypeIsExtern ? "true" : "false");
             }
             foreach (var v in dataFlow.DataFlowsOut) {
                 sb.Append(", ");
@@ -279,21 +303,23 @@ namespace RoslynTool.CsToDsl
                 if (null != psym) {
                     var type = ClassInfo.GetFullName(psym.Type);
                     var typeKind = psym.Type.TypeKind.ToString();
+                    bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(psym.Type);
                     if (string.IsNullOrEmpty(type))
                         type = "null";
-                    sb.AppendFormat("rettype({0}, {1}, {2}, {3})", v.Name, type, typeKind, refOrOut);
+                    sb.AppendFormat("rettype({0}, {1}, {2}, {3}, {4})", v.Name, type, typeKind, refOrOut, isExtern ? "true" : "false");
                 }
                 else if (null != lsym) {
                     var type = ClassInfo.GetFullName(lsym.Type);
                     var typeKind = lsym.Type.TypeKind.ToString();
+                    bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(lsym.Type);
                     if (string.IsNullOrEmpty(type))
                         type = "null";
-                    sb.AppendFormat("rettype({0}, {1}, {2}, {3})", v.Name, type, typeKind, refOrOut);
+                    sb.AppendFormat("rettype({0}, {1}, {2}, {3}, {4})", v.Name, type, typeKind, refOrOut, isExtern ? "true" : "false");
                 }
             }
             if (ctrlFlow.ReturnStatements.Length > 0 && !string.IsNullOrEmpty(ReturnVarName)) {
                 sb.Append(", ");
-                sb.AppendFormat("paramtype({0}, {1}, {2}, 1)", ReturnVarName, returnType, returnTypeKind);
+                sb.AppendFormat("paramtype({0}, {1}, {2}, 1, {3})", ReturnVarName, returnType, returnTypeKind, returnTypeIsExtern ? "true" : "false");
             }
             foreach (var v in dataFlow.DataFlowsIn) {
                 if (v.Name == "this")
@@ -308,16 +334,18 @@ namespace RoslynTool.CsToDsl
                 if (null != psym) {
                     var type = ClassInfo.GetFullName(psym.Type);
                     var typeKind = psym.Type.TypeKind.ToString();
+                    bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(psym.Type);
                     if (string.IsNullOrEmpty(type))
                         type = "null";
-                    sb.AppendFormat("paramtype({0}, {1}, {2}, {3})", v.Name, type, typeKind, refOrOut);
+                    sb.AppendFormat("paramtype({0}, {1}, {2}, {3}, {4})", v.Name, type, typeKind, refOrOut, isExtern ? "true" : "false");
                 }
                 else if (null != lsym) {
                     var type = ClassInfo.GetFullName(lsym.Type);
                     var typeKind = lsym.Type.TypeKind.ToString();
+                    bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(lsym.Type);
                     if (string.IsNullOrEmpty(type))
                         type = "null";
-                    sb.AppendFormat("paramtype({0}, {1}, {2}, {3})", v.Name, type, typeKind, refOrOut);
+                    sb.AppendFormat("paramtype({0}, {1}, {2}, {3}, {4})", v.Name, type, typeKind, refOrOut, isExtern ? "true" : "false");
                 }
             }
             foreach (var v in dataFlow.DataFlowsOut) {
@@ -331,16 +359,18 @@ namespace RoslynTool.CsToDsl
                 if (null != psym) {
                     var type = ClassInfo.GetFullName(psym.Type);
                     var typeKind = psym.Type.TypeKind.ToString();
+                    bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(psym.Type);
                     if (string.IsNullOrEmpty(type))
                         type = "null";
-                    sb.AppendFormat("paramtype({0}, {1}, {2}, {3})", v.Name, type, typeKind, refOrOut);
+                    sb.AppendFormat("paramtype({0}, {1}, {2}, {3}, {4})", v.Name, type, typeKind, refOrOut, isExtern ? "true" : "false");
                 }
                 else if (null != lsym) {
                     var type = ClassInfo.GetFullName(lsym.Type);
                     var typeKind = lsym.Type.TypeKind.ToString();
+                    bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(lsym.Type);
                     if (string.IsNullOrEmpty(type))
                         type = "null";
-                    sb.AppendFormat("paramtype({0}, {1}, {2}, {3})", v.Name, type, typeKind, refOrOut);
+                    sb.AppendFormat("paramtype({0}, {1}, {2}, {3}, {4})", v.Name, type, typeKind, refOrOut, isExtern ? "true" : "false");
                 }
             }
             return sb.ToString();

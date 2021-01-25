@@ -379,17 +379,7 @@ namespace RoslynTool.CsToDsl
                 var fieldSym = baseSym as IFieldSymbol;
                 if (isStatic && fieldSym.IsStatic || !isStatic && !fieldSym.IsStatic) {
                     var type = fieldSym.Type;
-                    if (type.TypeKind == TypeKind.TypeParameter && !m_SkipGenericTypeDefine && null != m_GenericTypeInstance) {
-                        for (int i = 0; i < m_GenericTypeInstance.TypeParameters.Length; ++i) {
-                            var t = m_GenericTypeInstance.TypeParameters[i];
-                            var rt = m_GenericTypeInstance.TypeArguments[i];
-                            string name1 = ClassInfo.SpecialGetFullTypeNameWithTypeParameters(t);
-                            string name2 = ClassInfo.SpecialGetFullTypeNameWithTypeParameters(type);
-                            if (name1 == name2) {
-                                type = rt;
-                            }
-                        }
-                    }
+                    TryReplaceGenericTypeParameter(ref type);
 
                     string name = v.Identifier.Text;
                     if (null != v.Initializer) {

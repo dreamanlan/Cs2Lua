@@ -343,7 +343,28 @@ namespace Generator
                                                 }
                                                 sb.AppendFormatLine("{0}if not __retval_0 then", GetIndentString(indent));
                                                 sb.AppendFormatLine("{0}lualog(\"{{0}}\", __retval_1);", GetIndentString(indent + 1));
-                                                sb.AppendFormatLine("{0}__retval_1 = nil;", GetIndentString(indent + 1));
+                                                if (funcOpts.RetTypes.Count > 0) {
+                                                    var retTypeInfo = funcOpts.RetTypes[0];
+                                                    var retName = retTypeInfo.Name;
+                                                    var retType = retTypeInfo.Type;
+                                                    var retTypeKind = retTypeInfo.TypeKind;
+                                                    var isExtern = retTypeInfo.IsExtern;
+                                                    if (retTypeKind == "TypeKind.Struct" && !IsBasicType(retType, retTypeKind, false) || retTypeKind=="TypeKind.TypeParameter") {
+                                                        sb.AppendFormatLine("{0}__retval_1 = defaultvalue({1}, \"{2}\", {3});", GetIndentString(indent + 1), retTypeKind == "TypeKind.TypeParameter" ? retName : retType, retType, isExtern ? "true" : "false");
+                                                    }
+                                                    else if(IsIntegerType(retType, retTypeKind)) {
+                                                        sb.AppendFormatLine("{0}__retval_1 = 0;", GetIndentString(indent + 1));
+                                                    }
+                                                    else if (retType == "System.Boolean") {
+                                                        sb.AppendFormatLine("{0}__retval_1 = false;", GetIndentString(indent + 1));
+                                                    }
+                                                    else {
+                                                        sb.AppendFormatLine("{0}__retval_1 = nil;", GetIndentString(indent + 1));
+                                                    }
+                                                }
+                                                else {
+                                                    sb.AppendFormatLine("{0}__retval_1 = nil;", GetIndentString(indent + 1));
+                                                }
                                                 sb.AppendFormatLine("{0}end;", GetIndentString(indent));
                                                 sb.AppendFormat("{0}return ", GetIndentString(indent));
                                                 GenerateFunctionRetVars(second, sb, rct, "__retval_");
@@ -535,7 +556,28 @@ namespace Generator
                                                 }
                                                 sb.AppendFormatLine("{0}if not __retval_0 then", GetIndentString(indent));
                                                 sb.AppendFormatLine("{0}lualog(\"{{0}}\", __retval_1);", GetIndentString(indent + 1));
-                                                sb.AppendFormatLine("{0}__retval_1 = nil;", GetIndentString(indent + 1));
+                                                if (funcOpts.RetTypes.Count > 0) {
+                                                    var retTypeInfo = funcOpts.RetTypes[0];
+                                                    var retName = retTypeInfo.Name;
+                                                    var retType = retTypeInfo.Type;
+                                                    var retTypeKind = retTypeInfo.TypeKind;
+                                                    var isExtern = retTypeInfo.IsExtern;
+                                                    if (retTypeKind == "TypeKind.Struct" && !IsBasicType(retType, retTypeKind, false) || retTypeKind == "TypeKind.TypeParameter") {
+                                                        sb.AppendFormatLine("{0}__retval_1 = defaultvalue({1}, \"{2}\", {3});", GetIndentString(indent + 1), retTypeKind == "TypeKind.TypeParameter" ? retName : retType, retType, isExtern ? "true" : "false");
+                                                    }
+                                                    else if (IsIntegerType(retType, retTypeKind)) {
+                                                        sb.AppendFormatLine("{0}__retval_1 = 0;", GetIndentString(indent + 1));
+                                                    }
+                                                    else if (retType == "System.Boolean") {
+                                                        sb.AppendFormatLine("{0}__retval_1 = false;", GetIndentString(indent + 1));
+                                                    }
+                                                    else {
+                                                        sb.AppendFormatLine("{0}__retval_1 = nil;", GetIndentString(indent + 1));
+                                                    }
+                                                }
+                                                else {
+                                                    sb.AppendFormatLine("{0}__retval_1 = nil;", GetIndentString(indent + 1));
+                                                }
                                                 sb.AppendFormatLine("{0}end;", GetIndentString(indent));
                                                 sb.AppendFormat("{0}return ", GetIndentString(indent));
                                                 GenerateFunctionRetVars(second, sb, rct, "__retval_");
