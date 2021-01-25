@@ -1245,6 +1245,18 @@ script(getexterninstancestructmember)args($funcData, $funcOpts, $sb, $indent)
             :};
             return(true);
         };
+    }
+    elseif($class=="CsLibrary.DecalInfo"){
+        if($member=="hsv"){
+            usefunc("get_DecalInfo_hsv","(funcInfo, obj)", $funcData, $funcOpts, $sb, $indent, [0,2,3], "__cs2lua_func_info")
+            {:
+                local _,x,y,z = Utility.GetDecalInfoHSV(obj ,Slua.out,Slua.out,Slua.out)
+                local v = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list , v)
+                return v
+            :};
+            return(true);
+        }
     };
     return(false);
 };
@@ -1375,6 +1387,28 @@ script(callexternstaticreturnstruct)args($funcData, $funcOpts, $sb, $indent)
                 local targetV3 = UnityEngine.Vector3.RotateTowards(curV3,tarV3,maxRad,maxMag)
                 table.insert(funcInfo.v3_list, targetV3)
                 return targetV3
+            :};
+            return(true);
+        }
+        elseif($member=="ProjectOnPlane"){
+            usefunc("call_vector3_projectonplane","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local a , b  = ...
+                local _,x,y,z = Utility.GetVector3ProjectOnPlane(a,b,Slua.out ,Slua.out ,Slua.out)
+                local v3 = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list, v3)
+                return v3
+            :};
+            return(true);
+        }
+        elseif($member=="Slerp"){
+            usefunc("call_vector3_slerp","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local a , b , t = ...
+                local _,x,y,z = Utility.GetVector3Slerp(a,b,t,Slua.out ,Slua.out ,Slua.out)
+                local v3 = UnityEngine.Vector3.New(x,y,z)
+                table.insert(funcInfo.v3_list, v3)
+                return v3
             :};
             return(true);
         };
