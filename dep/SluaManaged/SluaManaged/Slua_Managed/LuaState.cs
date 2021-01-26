@@ -1570,6 +1570,9 @@ return dumpstack
             typePushMap[typeof(float)] = (IntPtr L, object o) => {
                 LuaDLL.lua_pushnumber(L, (float)o);
             };
+            typePushMap[typeof(decimal)] = (IntPtr L, object o) => {
+                LuaDLL.lua_pushnumber(L, (double)(decimal)o);
+            };
             typePushMap[typeof(double)] = (IntPtr L, object o) => {
                 LuaDLL.lua_pushnumber(L, (double)o);
             };
@@ -1592,6 +1595,11 @@ return dumpstack
             typePushMap[typeof(ushort)] =
                (IntPtr L, object o) => {
                    LuaDLL.lua_pushinteger(L, (ushort)o);
+               };
+
+            typePushMap[typeof(char)] =
+               (IntPtr L, object o) => {
+                   LuaDLL.lua_pushinteger(L, (char)o);
                };
 
             typePushMap[typeof(sbyte)] =
