@@ -1434,8 +1434,10 @@ function arraysetstructimpl(isExtern, arrSymKind, elementType, arr, argCount, ..
     end
 end
 
-function arraygetstruct(isExtern, arrSymKind, elementType, arr, argCount, ...)
-    translationlog("need add handler for arraygetstruct {0}[]", getclasstypename(elementType))
+function arraygetstruct(isExtern, arrSymKind, elementType, arr, argCount, ...)   
+    if isExtern then 
+        translationlog("need add handler for arraygetstruct {0}[]", getclasstypename(elementType))
+    end
     return arraygetstructimpl(isExtern, arrSymKind, elementType, arr, argCount, ...)
 end
 function arraysetstruct(isExtern, arrSymKind, elementType, arr, argCount, ...)

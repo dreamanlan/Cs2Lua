@@ -210,6 +210,12 @@ namespace RoslynTool.CsToDsl
                 rightArrSym = m_Model.GetSymbolInfoEx(arrElementOper.ArrayReference.Syntax).Symbol;
             }
             rightNeededIfWrap =  null != expSym && (expSym.Kind == SymbolKind.Method || expSym.Kind == SymbolKind.Property || expSym.Kind == SymbolKind.Field || expSym.Kind == SymbolKind.Local || expSym.Kind == SymbolKind.Parameter) && SymbolTable.Instance.IsCs2DslSymbol((ISymbol)expSym) || null != rightPropType && (rightPropType.IsGenericType || SymbolTable.Instance.IsCs2DslSymbol(rightPropType)) || null != rightArrSym && SymbolTable.Instance.IsCs2DslSymbol(rightArrSym);
+            if (null != expSym && expSym.Kind == SymbolKind.Method) {
+                var msym = expSym as IMethodSymbol;
+                if (null != msym && msym.MethodKind == MethodKind.Constructor) {
+                    rightNeededIfWrap = false;
+                }
+            }
             return needWrap;
         }
         internal void OutputArgumentList(InvocationInfo ii, ITypeSymbol callerType, bool useTypeNameString, SyntaxNode node)

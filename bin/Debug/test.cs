@@ -18,6 +18,13 @@ enum ViewGroup
     View = 0,
 }
 
+struct TestStruct
+{
+    internal int m_A;
+    internal int m_B;
+    internal int m_C;
+}
+
 class Constant
 {
     internal const string One = "";
@@ -262,6 +269,7 @@ class Test
 
         }
         string a = m_IntIntKeyValue.ToString();
+        var abc = new TestStruct();
     }
     internal static List<T> ToList<T>(IEnumerable<T> enumer)
     {

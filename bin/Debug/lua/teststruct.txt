@@ -1,0 +1,105 @@
+require "cs2lua__namespaces"; 
+
+TestStruct = {
+	-------------------------------
+	-------- class methods --------
+	-------------------------------
+	__new_object = function(...)
+		local __cs2lua_func_info = luainitialize();
+		local __retval_0, __retval_1 = luapcall(TestStruct.__ori___new_object, __cs2lua_func_info, ...);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		if not __retval_0 then
+			lualog("{0}", __retval_1);
+			__retval_1 = nil;
+		end;
+		return __retval_1;
+	end,
+	__ori___new_object = function(__cs2lua_func_info, ...)
+		local __cs2dsl_newobj;
+		__cs2dsl_newobj = newstruct(TestStruct, nil, nil, "ctor", 0, nil, ...);
+		return __cs2dsl_newobj;
+	end,
+
+	cctor = function()
+		TestStruct.__cctor();
+	end,
+
+	__cctor = function()
+		if TestStruct.__cctor_called then 
+			return;
+		else
+			TestStruct.__cctor_called = true;
+		end;
+	end,
+
+	-------------------------------
+	-------- class fields --------
+	-------------------------------
+	__cctor_called = false,
+
+	-------------------------------
+	--- define class and object ---
+	-------------------------------
+	__define_class = function()
+		Utility.Warn("TestStruct::__define_class begin");
+
+		local class = TestStruct;
+
+		local raw_obj_methods = {
+			ctor = function(this)
+				this:__ctor();
+			end,
+
+			__ctor = function(this)
+				if this.__ctor_called then 
+					return;
+				else
+					this.__ctor_called = true;
+				end;
+			end,
+		};
+		local obj_methods = {
+			ctor = raw_obj_methods.ctor,
+			__ctor = raw_obj_methods.__ctor,
+		};
+		raw_obj_methods = nil;
+
+		local obj_build = function()
+			return {
+				m_A = 0,
+				m_B = 0,
+				m_C = 0,
+				__ctor_called = false,
+			};
+		end;
+
+		local __defineclass_return = defineclass(nil, "TestStruct", "TestStruct", class, obj_methods, obj_build, true);
+		Utility.Warn("TestStruct::__define_class end");
+		return __defineclass_return;
+	end,
+
+	-------------------------------
+	--------- fields info ---------
+	-------------------------------
+	__class_fields = {
+		__cctor_called = true,
+	},
+
+	__obj_fields = {
+		m_A = true,
+		m_B = true,
+		m_C = true,
+		__ctor_called = true,
+	},
+
+	-------------------------------
+	-------- metadata info --------
+	-------------------------------
+	__is_sealed_class = true;
+};
+
+
+require "cs2lua__syslib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+settempmetatable(TestStruct);
