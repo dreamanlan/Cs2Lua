@@ -1424,6 +1424,16 @@ script(callexternstaticreturnstruct)args($funcData, $funcOpts, $sb, $indent)
             :};
             return(true);
         }
+        elseif($member=="Euler__Vector3"){
+            usefunc("call_quaternion_euler_v3","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
+            {:
+                local v3 = ...
+                local qua = UnityEngine.Quaternion.Euler__Single__Single__Single(v3.x, v3.y, v3.z)
+                table.insert(funcInfo.q_list , qua)
+                return qua
+            :};
+            return(true);
+        }
         elseif($member=="Inverse"){
             usefunc("call_quaternion_inverse","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
             {:
@@ -1445,10 +1455,10 @@ script(callexternstaticreturnstruct)args($funcData, $funcOpts, $sb, $indent)
             :};
             return(true);
         }
-        elseif($member=="LookRotation"){
+        elseif($member=="LookRotation__Vector3" || $member=="LookRotation__Vector3__Vector3"){
             usefunc("call_quaternion_lookrotation","(funcInfo, ...)", $funcData, $funcOpts, $sb, $indent, 2, "__cs2lua_func_info")
             {:
-                local _, forward, upwards = ...
+                local forward, upwards = ...
                 if upwards==nil then
                     upwards = UnityEngine.Vector3.New(0,1,0)
                     table.insert(funcInfo.v3_list, upwards)
@@ -2787,8 +2797,91 @@ script(getstaticindexerstruct)args($funcData, $funcOpts, $sb, $indent)
 script(getinstanceindexerstruct)args($funcData, $funcOpts, $sb, $indent)
 {
     //getinstanceindexerstruct(isExtern, elementType, callerClass, obj, class, name, argCount, ...)
-    $elementtype = getargument($funcData, 1);
+    $elementType = getargument($funcData, 1);
+    $callerClass = getargument($funcData, 2);
     
+    echo("getinstanceindexerstruct {0} {1}", $elementType, $callerClass);
+    
+    if($elementType=="CsLibrary.PathInfoPoint" && $callerClass=="CsLibrary.PathInfoPointList"){
+        usefunc("pathinfopoint_list_get","(funcInfo, obj, argCount, ...)", $funcData, $funcOpts, $sb, $indent, [0,1,2,4,5], "__cs2lua_func_info")
+        {:
+            local index = ...
+            local _, x, y, z, fly, stopPoint, moveType, jumpIndex, speedScale, distance, lookTargetObjID = Utility.PathInfoPointListGet(obj, index, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out, Slua.out)
+            local retObj = PathInfoPointPool.Alloc()
+            table.insert(funcInfo.pip_list, retObj)
+            retObj:SetPoint(x,y,z)
+            retObj.m_Fly = fly
+            retObj.m_StopPoint = stopPoint
+            retObj.m_MoveType = moveType
+            retObj.m_JumpIndex = jumpIndex
+            retObj.m_SpeedScale = speedScale
+            retObj.m_Distance = distance
+            retObj.m_LookTargetObjID = lookTargetObjID
+            return retObj
+        :};
+        return(true);
+    }
+    elseif($elementType=="BoxedValue" && $callerClass=="BoxedValueList"){
+        /*
+        public const int c_ObjectType = 0;
+        public const int c_StringType = 1;
+        public const int c_BoolType = 2;
+        public const int c_CharType = 3;
+        public const int c_SByteType = 4;
+        public const int c_ShortType = 5;
+        public const int c_IntType = 6;
+        public const int c_LongType = 7;
+        public const int c_ByteType = 8;
+        public const int c_UShortType = 9;
+        public const int c_UIntType = 10;
+        public const int c_ULongType = 11;
+        public const int c_FloatType = 12;
+        public const int c_DoubleType = 13;
+        public const int c_DecimalType = 14;
+        public const int c_Vector2Type = 15;
+        public const int c_Vector3Type = 16;
+        public const int c_Vector4Type = 17;
+        public const int c_QuaternionType = 18;
+        public const int c_ColorType = 19;
+        public const int c_Color32Type = 20;
+        */
+        usefunc("boxedvalue_list_get","(funcInfo, obj, argCount, ...)", $funcData, $funcOpts, $sb, $indent, [0,1,2,4,5], "__cs2lua_func_info")
+        {:
+            local index = ...
+            local _, type, objVal, numVal, boolVal = Utility.BoxedValueListGet(obj, index, Slua.out, Slua.out, Slua.out, Slua.out)
+            local retObj = BoxedValuePool.Alloc()
+            table.insert(funcInfo.bv_list, retObj)
+            if type==15 then --vector2
+                local _,x,y = Utility.BoxedValueListGetV2(obj, index, Slua.out, Slua.out)
+                retObj:SetVector2(x,y)
+            elseif type==16 then --vector3
+                local _,x,y,z = Utility.BoxedValueListGetV3(obj, index, Slua.out, Slua.out, Slua.out)
+                retObj:SetVector3(x,y,z)
+            elseif type==17 then --vector4
+                local _,x,y,z,w = Utility.BoxedValueListGetV4(obj, index, Slua.out, Slua.out, Slua.out, Slua.out)
+                retObj:SetVector4(x,y,z,w)
+            elseif type==18 then --quaternion
+                local _,x,y,z,w = Utility.BoxedValueListGetQuaternion(obj, index, Slua.out, Slua.out, Slua.out, Slua.out)
+                retObj:SetQuaternion(x,y,z,w)
+            elseif type==19 then --color
+                local _,r,g,b,a = Utility.BoxedValueListGetColor(obj, index, Slua.out, Slua.out, Slua.out, Slua.out)
+                retObj:SetColor(r,g,b,a)
+            elseif type==20 then --color32
+                local _,r,g,b,a = Utility.BoxedValueListGetColor32(obj, index, Slua.out, Slua.out, Slua.out, Slua.out)
+                retObj:SetColor32(r,g,b,a)
+            elseif type==0 then --object
+                retObj:SetObject(objVal)
+            elseif type==1 then --string
+                retObj:SetString(objVal)
+            elseif type==2 then --bool
+                retObj:SetBool(boolVal)
+            else --number
+                retObj:SetNumber(numVal)
+            end
+            return retObj
+        :};
+        return(true);
+    };
     return(false);
 };
 

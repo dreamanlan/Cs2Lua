@@ -87,6 +87,7 @@ namespace SLua
             add(typeof(System.Math), "System.Math");
             add(typeof(System.Random), "System.Random");
             add(typeof(System.Delegate), "System.Delegate");
+            add(typeof(System.Globalization.CultureInfo), "System.Globalization.CultureInfo");
             add(typeof(System.Text.StringBuilder), "System.Text.StringBuilder");
             add(typeof(System.Text.Encoding), "System.Text.Encoding");
             add(typeof(System.Text.ASCIIEncoding), "System.Text.ASCIIEncoding");

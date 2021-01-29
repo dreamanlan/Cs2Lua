@@ -2746,7 +2746,7 @@ namespace Generator
                         sb.AppendFormatLine("{0}{1} = {2}[{3}];", GetIndentString(indent), varName, varExp, varIndex);
                     }
                     else if (isExtern) {
-                        sb.AppendFormat("{0}{1} = getexterninstanceindexer({2}, {3}, {4}, {5}, {6}, \"{7}\", 1, {8});", GetIndentString(indent), varName, strElemTypeName, strElemTypeKind, strCallerClass, varExp, strClass, strMember, varIndex);
+                        sb.AppendFormatLine("{0}{1} = getexterninstanceindexer({2}, {3}, {4}, {5}, {6}, \"{7}\", 1, {8});", GetIndentString(indent), varName, strElemTypeName, strElemTypeKind, strCallerClass, varExp, strClass, strMember, varIndex);
                     }
                     else {
                         sb.AppendFormatLine("{0}{1} = {2}[{3}];", GetIndentString(indent), varName, varExp, varIndex);

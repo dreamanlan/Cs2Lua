@@ -18,11 +18,13 @@ namespace SLua
             return window;
         }
 
+        private Vector2 _scrollPos;
         private Vector2 _scrollPos0;
         private Vector2 _scrollPos1;
         private Vector2 _scrollPos2;
 
         private bool _includeLuaSnapshot = false;
+        private bool _showDebugStringMaps = false;
         private bool _showDelegateStacks = false;
         private bool _showDestroyedObject = false;
         private bool _showAllObject = false;
@@ -59,7 +61,19 @@ namespace SLua
                     }
                 }
             }
-
+            
+            _showDebugStringMaps = EditorGUILayout.Foldout(_showDebugStringMaps, "Lua Script Count:" + LuaState.DebugStringMap.Count);
+            if (_showDebugStringMaps) {
+                _scrollPos = GUILayout.BeginScrollView(_scrollPos, GUILayout.Width(w), GUILayout.Height(240));
+                int ct = 0;
+                foreach (var pair in LuaState.DebugStringMap) {
+                    GUILayout.Label(pair.Key + " => " + pair.Value);
+                    ++ct;
+                    if (ct > 2000)
+                        break;
+                }
+                GUILayout.EndScrollView();
+            }
             GUILayout.Label("LuaDelegate count:" + LuaSnapshot.CachedDelegateCount);
             _showDelegateStacks = EditorGUILayout.Foldout(_showDelegateStacks, "Cached Delegate:" + LuaSnapshot.DelegateStackTraces.Count);
             if (_showDelegateStacks) {

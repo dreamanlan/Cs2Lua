@@ -507,8 +507,8 @@ namespace SLua
         {
             Prepare();
 
-            System.GC.Collect();
             LuaDLL.lua_gc(LuaState.main.L, LuaGCOptions.LUA_GCCOLLECT, 0);
+            System.GC.Collect();
             if (null != captureLua) {
                 captureLua();
             }
