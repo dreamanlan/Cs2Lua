@@ -1203,7 +1203,12 @@ namespace RoslynTool.CsToDsl
                         string className = ClassInfo.GetFullName(leftSym.ContainingType);
                         string memberName = leftSym.Name;
                         if (leftSym.IsStatic) {
-                            if(isExtern)
+                            string luaLibFunc;
+                            if (null != leftFsym && SymbolTable.Instance.IsInvokeToLuaLibField(leftFsym, out luaLibFunc))
+                                OutputInvokeToLuaLib(false, luaLibFunc, leftFsym.Type, "SymbolKind.");
+                            else if (null != leftPsym && SymbolTable.Instance.IsInvokeToLuaLibProperty(leftPsym, out luaLibFunc))
+                                OutputInvokeToLuaLib(false, luaLibFunc, leftPsym.Type, "SymbolKind.");
+                            else if (isExtern)
                                 CodeBuilder.Append("setexternstatic(SymbolKind.");
                             else
                                 CodeBuilder.Append("setstatic(SymbolKind.");
@@ -1213,7 +1218,12 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.AppendFormat(", \"{0}\", ", memberName);
                         }
                         else {
-                            if (isExtern)
+                            string luaLibFunc;
+                            if (null != leftFsym && SymbolTable.Instance.IsInvokeToLuaLibField(leftFsym, out luaLibFunc))
+                                OutputInvokeToLuaLib(false, luaLibFunc, leftFsym.Type, "SymbolKind.");
+                            else if (null != leftPsym && SymbolTable.Instance.IsInvokeToLuaLibProperty(leftPsym, out luaLibFunc))
+                                OutputInvokeToLuaLib(false, luaLibFunc, leftPsym.Type, "SymbolKind.");
+                            else if (isExtern)
                                 CodeBuilder.Append("setexterninstance(SymbolKind.");
                             else
                                 CodeBuilder.Append("setinstance(SymbolKind.");
@@ -1239,7 +1249,12 @@ namespace RoslynTool.CsToDsl
                         string className = ClassInfo.GetFullName(leftSym.ContainingType);
                         string memberName = leftSym.Name;
                         if (leftSym.IsStatic) {
-                            if (isExtern)
+                            string luaLibFunc;
+                            if (null != leftFsym && SymbolTable.Instance.IsInvokeToLuaLibField(leftFsym, out luaLibFunc))
+                                OutputInvokeToLuaLib(false, luaLibFunc, leftFsym.Type, "SymbolKind.");
+                            else if (null != leftPsym && SymbolTable.Instance.IsInvokeToLuaLibProperty(leftPsym, out luaLibFunc))
+                                OutputInvokeToLuaLib(false, luaLibFunc, leftPsym.Type, "SymbolKind.");
+                            else if (isExtern)
                                 CodeBuilder.Append("setexternstatic(SymbolKind.");
                             else
                                 CodeBuilder.Append("setstatic(SymbolKind.");
@@ -1249,7 +1264,12 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.AppendFormat(", \"{0}\", ", memberName);
                         }
                         else {
-                            if (isExtern)
+                            string luaLibFunc;
+                            if (null != leftFsym && SymbolTable.Instance.IsInvokeToLuaLibField(leftFsym, out luaLibFunc))
+                                OutputInvokeToLuaLib(false, luaLibFunc, leftFsym.Type, "SymbolKind.");
+                            else if (null != leftPsym && SymbolTable.Instance.IsInvokeToLuaLibProperty(leftPsym, out luaLibFunc))
+                                OutputInvokeToLuaLib(false, luaLibFunc, leftPsym.Type, "SymbolKind.");
+                            else if (isExtern)
                                 CodeBuilder.Append("setexterninstance(SymbolKind.");
                             else
                                 CodeBuilder.Append("setinstance(SymbolKind.");
@@ -1364,7 +1384,11 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.AppendFormat("set{0}indexerstruct({1}, {2}, ", leftPsym.IsStatic ? "static" : "instance", isCs2Dsl ? "false" : "true", elemTypeName);
                 }
                 else {
-                    CodeBuilder.AppendFormat("set{0}{1}indexer({2}, {3}, ", isCs2Dsl ? string.Empty : "extern", leftPsym.IsStatic ? "static" : "instance", elemTypeName, elemTypeKind);
+                    string luaLibFunc;
+                    if (SymbolTable.Instance.IsInvokeToLuaLibProperty(leftPsym, out luaLibFunc))
+                        OutputInvokeToLuaLib(false, luaLibFunc, elemType, string.Empty);
+                    else
+                        CodeBuilder.AppendFormat("set{0}{1}indexer({2}, {3}, ", isCs2Dsl ? string.Empty : "extern", leftPsym.IsStatic ? "static" : "instance", elemTypeName, elemTypeKind);
                 }
                 var expType = m_Model.GetTypeInfoEx(leftElementAccess.Expression).Type;
                 if (!isCs2Dsl) {
@@ -1409,6 +1433,8 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.Append(")");
             }
             else if (leftOper.Kind == OperationKind.ArrayElementReference) {
+                var arrOper = leftOper as IArrayElementReferenceOperation;
+                var arrType = arrOper.ArrayReference.Type as IArrayTypeSymbol;
                 if (leftOper.Type.IsValueType && !SymbolTable.IsBasicType(leftOper.Type)) {
                     MarkNeedFuncInfo();
                     var rightTypeSym = m_Model.GetTypeInfoEx(assign.Right).Type;
@@ -1422,8 +1448,6 @@ namespace RoslynTool.CsToDsl
                     string fn = ClassInfo.GetFullName(leftOper.Type);
                     CodeBuilder.AppendFormat("arraysetstruct(");
                     var arrSym = m_Model.GetSymbolInfoEx(leftElementAccess.Expression).Symbol;
-                    var arrOper = leftOper as IArrayElementReferenceOperation;
-                    var arrType = arrOper.ArrayReference.Type as IArrayTypeSymbol;
                     if (null != arrSym) {
                         isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(arrSym);
                         CodeBuilder.Append(isCs2Dsl ? "false" : "true");
@@ -1475,7 +1499,49 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.Append(")");
                 }
                 else {
-                    if (!toplevel) {
+                    string luaLibFunc;
+                    if(SymbolTable.Instance.IsInvokeToLuaLibArray(arrType, out luaLibFunc)) {
+                        if (!toplevel) {
+                            string localName = string.Format("__ret_{0}", GetSourcePosForVar(assign));
+                            CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ ", localName);
+                            OutputInvokeToLuaLib(false, luaLibFunc, arrType.ElementType, string.Empty);
+                            OutputExpressionSyntax(leftElementAccess.Expression);
+                            CodeBuilder.Append(", ");
+                            OutputArgumentList(leftElementAccess.ArgumentList.Arguments, ", ", leftOper);
+                            CodeBuilder.Append(", ");
+
+                            if (op != "=") {
+                                CompoundAssignBegin(baseOp, assign, lopd);
+                                OutputExpressionSyntax(assign.Right, ropd, dslToObject, false, leftSym);
+                                CompoundAssignEnd(leftType, rightType, leftTypeKind, rightTypeKind);
+                            }
+                            else {
+                                CodeBuilder.AppendFormat("execclosure(true, {0}, false){{ {1} = ", localName, localName);
+                                OutputExpressionSyntax(assign.Right, opd, dslToObject, false, leftSym);
+                                CodeBuilder.Append("; }");
+                            }
+                            CodeBuilder.Append(")");
+                            CodeBuilder.Append("; }");
+                        }
+                        else {
+                            OutputInvokeToLuaLib(false, luaLibFunc, arrType.ElementType, string.Empty);
+                            OutputExpressionSyntax(leftElementAccess.Expression);
+                            CodeBuilder.Append(", ");
+                            OutputArgumentList(leftElementAccess.ArgumentList.Arguments, ", ", leftOper);
+                            CodeBuilder.Append(", ");
+
+                            if (op != "=") {
+                                CompoundAssignBegin(baseOp, assign, lopd);
+                                OutputExpressionSyntax(assign.Right, ropd, dslToObject, false, leftSym);
+                                CompoundAssignEnd(leftType, rightType, leftTypeKind, rightTypeKind);
+                            }
+                            else {
+                                OutputExpressionSyntax(assign.Right, opd, dslToObject, false, leftSym);
+                            }
+                            CodeBuilder.Append(")");
+                        }
+                    }
+                    else if (!toplevel) {
                         string localName = string.Format("__ret_{0}", GetSourcePosForVar(assign));
                         CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ ", localName);
                         OutputExpressionSyntax(leftElementAccess.Expression);
@@ -1575,7 +1641,11 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendFormat("set{0}indexerstruct({1}, {2}, ", psym.IsStatic ? "static" : "instance", isCs2Dsl ? "false" : "true", elemTypeName);
                     }
                     else {
-                        CodeBuilder.AppendFormat("set{0}{1}indexer({2}, {3}, ", isCs2Dsl ? string.Empty : "extern", psym.IsStatic ? "static" : "instance", elemTypeName, elemTypeKind);
+                        string luaLibFunc;
+                        if (SymbolTable.Instance.IsInvokeToLuaLibProperty(psym, out luaLibFunc))
+                            OutputInvokeToLuaLib(false, luaLibFunc, elemType, string.Empty);
+                        else
+                            CodeBuilder.AppendFormat("set{0}{1}indexer({2}, {3}, ", isCs2Dsl ? string.Empty : "extern", psym.IsStatic ? "static" : "instance", elemTypeName, elemTypeKind);
                     }
                     var expType = m_Model.GetTypeInfoEx(leftCondAccess.Expression).Type;
                     if (!isCs2Dsl) {                        
@@ -1621,6 +1691,8 @@ namespace RoslynTool.CsToDsl
                     CodeBuilder.Append(")");
                 }
                 else if (bindingOper.Kind == OperationKind.ArrayElementReference) {
+                    var arrOper = bindingOper as IArrayElementReferenceOperation;
+                    var arrType = arrOper.ArrayReference.Type as IArrayTypeSymbol;
                     if (bindingOper.Type.IsValueType && !SymbolTable.IsBasicType(bindingOper.Type)) {
                         MarkNeedFuncInfo();
                         var rightTypeSym = m_Model.GetTypeInfoEx(assign.Right).Type;
@@ -1634,8 +1706,6 @@ namespace RoslynTool.CsToDsl
                         string fn = ClassInfo.GetFullName(bindingOper.Type);
                         CodeBuilder.AppendFormat("arraysetstruct(");
                         var arrSym = m_Model.GetSymbolInfoEx(leftCondAccess.Expression).Symbol;
-                        var arrOper = bindingOper as IArrayElementReferenceOperation;
-                        var arrType = arrOper.ArrayReference.Type as IArrayTypeSymbol;
                         if (null != arrSym) {
                             isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(arrSym);
                             CodeBuilder.Append(isCs2Dsl ? "false" : "true");
@@ -1687,7 +1757,51 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(")");
                     }
                     else {
-                        if (!toplevel) {
+                        string luaLibFunc;
+                        if (SymbolTable.Instance.IsInvokeToLuaLibArray(arrType, out luaLibFunc)) {
+                            if (!toplevel) {
+                                string localName = string.Format("__ret_{0}", GetSourcePosForVar(assign));
+                                CodeBuilder.AppendFormat("function(){{ local({0}); ", localName);
+                                OutputInvokeToLuaLib(false, luaLibFunc, arrType.ElementType, string.Empty);
+                                OutputExpressionSyntax(leftCondAccess.Expression);
+                                CodeBuilder.Append(", ");
+                                OutputExpressionSyntax(leftCondAccess.WhenNotNull);
+                                CodeBuilder.Append(", ");
+
+                                if (op != "=") {
+                                    CompoundAssignBegin(baseOp, assign, lopd);
+                                    OutputExpressionSyntax(assign.Right, ropd, dslToObject, false, leftSym);
+                                    CompoundAssignEnd(leftType, rightType, leftTypeKind, rightTypeKind);
+                                }
+                                else {
+                                    CodeBuilder.AppendFormat("execclosure(true, {0}, false){{ {1} = ", localName, localName);
+                                    OutputExpressionSyntax(assign.Right, opd, dslToObject, false, leftSym);
+                                    CodeBuilder.Append("; }");
+                                }
+                                CodeBuilder.Append(")");
+                                CodeBuilder.Append("; funcobjret(");
+                                CodeBuilder.Append(localName);
+                                CodeBuilder.Append("); }");
+                            }
+                            else {
+                                OutputInvokeToLuaLib(false, luaLibFunc, arrType.ElementType, string.Empty);
+                                OutputExpressionSyntax(leftCondAccess.Expression);
+                                CodeBuilder.Append(", ");
+                                OutputExpressionSyntax(leftCondAccess.WhenNotNull);
+                                CodeBuilder.Append(", ");
+
+                                if (op != "=") {
+                                    CompoundAssignBegin(baseOp, assign, lopd);
+                                    OutputExpressionSyntax(assign.Right, ropd, dslToObject, false, leftSym);
+                                    CompoundAssignEnd(leftType, rightType, leftTypeKind, rightTypeKind);
+                                }
+                                else {
+                                    OutputExpressionSyntax(assign.Right, opd, dslToObject, false, leftSym);
+                                }
+                                CodeBuilder.Append(")");
+                            }
+                        }
+                        else if (!toplevel) {
                             string localName = string.Format("__ret_{0}", GetSourcePosForVar(assign));
                             CodeBuilder.AppendFormat("function(){{ local({0}); ", localName);
                             OutputExpressionSyntax(leftCondAccess.Expression);
@@ -1703,9 +1817,9 @@ namespace RoslynTool.CsToDsl
                             else {
                                 CodeBuilder.AppendFormat("execclosure(true, {0}, false){{ {1} = ", localName, localName);
                                 OutputExpressionSyntax(assign.Right, opd, dslToObject, false, leftSym);
-                                CodeBuilder.Append("; };");
+                                CodeBuilder.Append("; }");
                             }
-                            CodeBuilder.Append(" funcobjret(");
+                            CodeBuilder.Append("; funcobjret(");
                             CodeBuilder.Append(localName);
                             CodeBuilder.Append("); }");
                         }

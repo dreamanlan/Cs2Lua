@@ -852,6 +852,11 @@ namespace RoslynTool.CsToDsl
         internal void OutputInvocation(StringBuilder codeBuilder, CsDslTranslater cs2dsl, ExpressionSyntax exp, bool isMemberAccess, SemanticModel model, SyntaxNode node)
         {
             IMethodSymbol sym = MethodSymbol;
+            string conditionCompile = ClassInfo.GetAttributeArgument<string>(sym, "System.Diagnostics.ConditionalAttribute", 0);
+            if (!string.IsNullOrEmpty(conditionCompile) && !SymbolTable.Instance.IsPreprocessorDefined(conditionCompile)) {
+                codeBuilder.Append("dummycall()");
+                return;
+            }
             string mname = GetMethodName();
             string prestr = string.Empty;
             bool isExternMethodReturnStruct = IsExternMethod && !sym.ReturnsVoid && sym.ReturnType.IsValueType && !SymbolTable.IsBasicType(sym.ReturnType);
@@ -866,8 +871,10 @@ namespace RoslynTool.CsToDsl
             }
             var namedExpType = expType as INamedTypeSymbol;
 
-            string luaLibFunc = ClassInfo.GetAttributeArgument<string>(sym, "Cs2Dsl.InvokeToLuaLibAttribute", 0);
-            bool addTypeInfo = ClassInfo.GetAttributeArgument<bool>(sym, "Cs2Dsl.InvokeToLuaLibAttribute", 1);
+            string luaLibFunc;
+            if(!SymbolTable.Instance.IsInvokeToLuaLibMethod(sym, out luaLibFunc)) {
+                luaLibFunc = string.Empty;
+            }
             if (null != namedExpType && namedExpType.TypeArguments.Length > 0 && string.IsNullOrEmpty(luaLibFunc)) {
                 bool isCollection = CsDslTranslater.IsImplementationOfSys(expType, "ICollection");
                 if (isCollection) {
@@ -887,7 +894,6 @@ namespace RoslynTool.CsToDsl
                             luaLibFunc = string.Format("call{0}structlist{1}", IsExternMethod ? "extern" : string.Empty, !sym.IsStatic ? "instance" : (IsExtensionMethod ? "extension" : "static"));
                         else
                             luaLibFunc = string.Format("call{0}structcollection{1}", IsExternMethod ? "extern" : string.Empty, !sym.IsStatic ? "instance" : (IsExtensionMethod ? "extension" : "static"));
-                        addTypeInfo = true;
                     }
                 }
             }
@@ -946,10 +952,10 @@ namespace RoslynTool.CsToDsl
                     prestr = ", ";
                 }
                 else if (IsExtensionMethod) {
-                    if (!string.IsNullOrEmpty(luaLibFunc))
-                        OutputInvokeToLuaLibPrefix(codeBuilder, luaLibFunc, expType);
-                    else if (isExternMethodReturnStruct)
+                    if (isExternMethodReturnStruct)
                         codeBuilder.Append("callexternextensionreturnstruct(");
+                    else if (!string.IsNullOrEmpty(luaLibFunc))
+                        OutputInvokeToLuaLibPrefix(codeBuilder, luaLibFunc, expType);
                     else if (IsExternMethod)
                         codeBuilder.Append("callexternextension(");
                     else
@@ -989,10 +995,10 @@ namespace RoslynTool.CsToDsl
                 }
                 else {
                     if (sym.IsStatic) {
-                        if (!string.IsNullOrEmpty(luaLibFunc))
-                            OutputInvokeToLuaLibPrefix(codeBuilder, luaLibFunc, expType);
-                        else if (isExternMethodReturnStruct)
+                        if (isExternMethodReturnStruct)
                             codeBuilder.Append("callexternstaticreturnstruct(");
+                        else if (!string.IsNullOrEmpty(luaLibFunc))
+                            OutputInvokeToLuaLibPrefix(codeBuilder, luaLibFunc, expType);
                         else if (IsExternMethod)
                             codeBuilder.Append("callexternstatic(");
                         else
@@ -1000,10 +1006,10 @@ namespace RoslynTool.CsToDsl
                         codeBuilder.Append(ClassKey);
                     }
                     else {
-                        if (!string.IsNullOrEmpty(luaLibFunc))
-                            OutputInvokeToLuaLibPrefix(codeBuilder, luaLibFunc, expType);
-                        else if (isExternMethodReturnStruct)
+                        if (isExternMethodReturnStruct)
                             codeBuilder.Append("callexterninstancereturnstruct(");
+                        else if (!string.IsNullOrEmpty(luaLibFunc))
+                            OutputInvokeToLuaLibPrefix(codeBuilder, luaLibFunc, expType);
                         else if (IsExternMethod)
                             codeBuilder.Append("callexterninstance(");
                         else
@@ -1031,10 +1037,10 @@ namespace RoslynTool.CsToDsl
                 }
                 else {
                     if (sym.IsStatic) {
-                        if (!string.IsNullOrEmpty(luaLibFunc))
-                            OutputInvokeToLuaLibPrefix(codeBuilder, luaLibFunc, expType);
-                        else if (isExternMethodReturnStruct)
+                        if (isExternMethodReturnStruct)
                             codeBuilder.Append("callexternstaticreturnstruct(");
+                        else if (!string.IsNullOrEmpty(luaLibFunc))
+                            OutputInvokeToLuaLibPrefix(codeBuilder, luaLibFunc, expType);
                         else if (IsExternMethod)
                             codeBuilder.Append("callexternstatic(");
                         else
@@ -1044,10 +1050,10 @@ namespace RoslynTool.CsToDsl
                         prestr = ", ";
                     }
                     else {
-                        if (!string.IsNullOrEmpty(luaLibFunc))
-                            OutputInvokeToLuaLibPrefix(codeBuilder, luaLibFunc, expType);
-                        else if (isExternMethodReturnStruct)
+                        if (isExternMethodReturnStruct)
                             codeBuilder.Append("callexterninstancereturnstruct(");
+                        else if (!string.IsNullOrEmpty(luaLibFunc))
+                            OutputInvokeToLuaLibPrefix(codeBuilder, luaLibFunc, expType);
                         else if (IsExternMethod)
                             codeBuilder.Append("callexterninstance(");
                         else

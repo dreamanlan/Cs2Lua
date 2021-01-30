@@ -32,6 +32,10 @@ namespace RoslynTool.CsToDsl
         {
             get { return m_ClassSymbols; }
         }
+        internal ConcurrentDictionary<string, bool> PreprocessorNames
+        {
+            get { return m_PreprocessorNames; }
+        }
         internal ConcurrentDictionary<IMethodSymbol, InvocationInfo> ExternMethodInfos
         {
             get { return m_ExternMethodInfos; }
@@ -207,10 +211,21 @@ namespace RoslynTool.CsToDsl
             }
             return sym.ContainingAssembly == m_AssemblySymbol && !m_ExternTypes.ContainsKey(name);
         }
-        internal void Init(CSharpCompilation compilation, string cfgPath)
+        internal bool IsPreprocessorDefined(string name)
+        {
+            bool ret;
+            m_PreprocessorNames.TryGetValue(name, out ret);
+            return ret;
+        }
+        internal void Init(CSharpCompilation compilation, string cfgPath, List<string> preprocessors)
         {
             m_Compilation = compilation;
             m_AssemblySymbol = compilation.Assembly;
+
+            foreach (var name in preprocessors) {
+                m_PreprocessorNames.TryAdd(name, true);
+            }
+
             INamespaceSymbol nssym = m_AssemblySymbol.GlobalNamespace;
             BuildInheritTypeTreeRecursively(nssym);
             InitRecursively(nssym);
@@ -359,6 +374,89 @@ namespace RoslynTool.CsToDsl
                             }
                         }
                     }
+                    else if (cid == "InvokeToLuaLibMethodList") {
+                        foreach (var comp in func.Params) {
+                            var cd = comp as Dsl.FunctionData;
+                            if (null != cd) {
+                                var mid = cd.GetId();
+                                if (mid == "method") {
+                                    var v1 = cd.GetParamId(0);
+                                    var v2 = cd.GetParamId(1);
+                                    var v3 = cd.GetParamId(2);
+                                    var v = string.Format("{0}.{1}", v1, v2);
+                                    if (!m_InvokeToLuaLibMethods.ContainsKey(v)) {
+                                        m_InvokeToLuaLibMethods.Add(v, v3);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (cid == "InvokeToLuaLibPropertyList") {
+                        foreach (var comp in func.Params) {
+                            var cd = comp as Dsl.FunctionData;
+                            if (null != cd) {
+                                var mid = cd.GetId();
+                                if (mid == "property") {
+                                    var v1 = cd.GetParamId(0);
+                                    var v2 = cd.GetParamId(1);
+                                    var v3 = cd.GetParamId(2);
+                                    var v = string.Format("{0}.{1}", v1, v2);
+                                    if (!m_InvokeToLuaLibProperties.ContainsKey(v)) {
+                                        m_InvokeToLuaLibProperties.Add(v, v3);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (cid == "InvokeToLuaLibFieldList") {
+                        foreach (var comp in func.Params) {
+                            var cd = comp as Dsl.FunctionData;
+                            if (null != cd) {
+                                var mid = cd.GetId();
+                                if (mid == "field") {
+                                    var v1 = cd.GetParamId(0);
+                                    var v2 = cd.GetParamId(1);
+                                    var v3 = cd.GetParamId(2);
+                                    var v = string.Format("{0}.{1}", v1, v2);
+                                    if (!m_InvokeToLuaLibFields.ContainsKey(v)) {
+                                        m_InvokeToLuaLibFields.Add(v, v3);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (cid == "InvokeToLuaLibIndexerPropertyList") {
+                        foreach (var comp in func.Params) {
+                            var cd = comp as Dsl.FunctionData;
+                            if (null != cd) {
+                                var mid = cd.GetId();
+                                if (mid == "property") {
+                                    var v1 = cd.GetParamId(0);
+                                    var v2 = cd.GetParamId(1);
+                                    var v3 = cd.GetParamId(2);
+                                    var v = string.Format("{0}.{1}", v1, v2);
+                                    if (!m_InvokeToLuaLibIndexerProperties.ContainsKey(v)) {
+                                        m_InvokeToLuaLibIndexerProperties.Add(v, v3);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (cid == "InvokeToLuaLibArrayList") {
+                        foreach (var comp in func.Params) {
+                            var cd = comp as Dsl.FunctionData;
+                            if (null != cd) {
+                                var mid = cd.GetId();
+                                if (mid == "array") {
+                                    var v1 = cd.GetParamId(0);
+                                    var v2 = cd.GetParamId(1);
+                                    if (!m_InvokeToLuaLibArrays.ContainsKey(v1)) {
+                                        m_InvokeToLuaLibArrays.Add(v1, v2);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }            
 
@@ -470,6 +568,66 @@ namespace RoslynTool.CsToDsl
             var name = sym.Name;
             var fullName = string.Format("{0}.{1}", type, name);
             bool ret = m_IllegalFields.Contains(fullName);
+            return ret;
+        }
+        internal bool IsInvokeToLuaLibMethod(IMethodSymbol sym, out string luaLibFunc)
+        {
+            luaLibFunc = null;
+            if (sym.MethodKind == MethodKind.DelegateInvoke)
+                return false;
+            if (sym.ContainingType.TypeKind == TypeKind.Delegate)
+                return false;
+            var type = ClassInfo.GetFullName(sym.ContainingType);
+            var name = sym.Name;
+            var fullName = string.Format("{0}.{1}", type, name);
+            bool ret = m_InvokeToLuaLibMethods.TryGetValue(fullName, out luaLibFunc);
+            return ret;
+        }
+        internal bool IsInvokeToLuaLibProperty(IPropertySymbol sym, out string luaLibFunc)
+        {
+            luaLibFunc = null;
+            if (sym.IsIndexer)
+                return false;
+            if (sym.ContainingType.TypeKind == TypeKind.Delegate)
+                return false;
+            var type = ClassInfo.GetFullName(sym.ContainingType);
+            var name = sym.Name;
+            var fullName = string.Format("{0}.{1}", type, name);
+            bool ret = m_InvokeToLuaLibProperties.TryGetValue(fullName, out luaLibFunc);
+            return ret;
+        }
+        internal bool IsInvokeToLuaLibField(IFieldSymbol sym, out string luaLibFunc)
+        {
+            luaLibFunc = null;
+            if (sym.ContainingType.TypeKind == TypeKind.Delegate)
+                return false;
+            var type = ClassInfo.GetFullName(sym.ContainingType);
+            var name = sym.Name;
+            var fullName = string.Format("{0}.{1}", type, name);
+            bool ret = m_InvokeToLuaLibFields.TryGetValue(fullName, out luaLibFunc);
+            return ret;
+        }
+        internal bool IsInvokeToLuaLibIndexerProperty(IPropertySymbol sym, out string luaLibFunc)
+        {
+            luaLibFunc = null;
+            if (!sym.IsIndexer)
+                return false;
+            if (sym.ContainingType.TypeKind == TypeKind.Delegate)
+                return false;
+            var type = ClassInfo.GetFullName(sym.ContainingType);
+            var name = sym.Name;
+            var fullName = string.Format("{0}.{1}", type, name);
+            bool ret = m_InvokeToLuaLibIndexerProperties.TryGetValue(fullName, out luaLibFunc);
+            return ret;
+        }
+        internal bool IsInvokeToLuaLibArray(IArrayTypeSymbol sym, out string luaLibFunc)
+        {
+            luaLibFunc = null;
+            var elemType = sym.ElementType;
+            if (elemType.TypeKind == TypeKind.Delegate)
+                return false;
+            var type = ClassInfo.GetFullName(elemType);
+            bool ret = m_InvokeToLuaLibArrays.TryGetValue(type, out luaLibFunc);
             return ret;
         }
         internal string CalcFullNameAndTypeArguments(INamedTypeSymbol sym)
@@ -779,6 +937,7 @@ namespace RoslynTool.CsToDsl
         private Dictionary<string, ClassSymbolInfo> m_ClassSymbols = new Dictionary<string, ClassSymbolInfo>();
 
         //多线程访问部分，注意加锁
+        private ConcurrentDictionary<string, bool> m_PreprocessorNames = new ConcurrentDictionary<string, bool>();
         private ConcurrentDictionary<IMethodSymbol, InvocationInfo> m_ExternMethodInfos = new ConcurrentDictionary<IMethodSymbol, InvocationInfo>();
         private ConcurrentDictionary<string, INamedTypeSymbol> m_ExternTypes = new ConcurrentDictionary<string, INamedTypeSymbol>();
         private ConcurrentDictionary<string, INamedTypeSymbol> m_InternTypes = new ConcurrentDictionary<string, INamedTypeSymbol>();
@@ -814,6 +973,12 @@ namespace RoslynTool.CsToDsl
         private HashSet<string> m_IllegalMethods = new HashSet<string>();
         private HashSet<string> m_IllegalProperties = new HashSet<string>();
         private HashSet<string> m_IllegalFields = new HashSet<string>();
+
+        private Dictionary<string, string> m_InvokeToLuaLibMethods = new Dictionary<string, string>();
+        private Dictionary<string, string> m_InvokeToLuaLibProperties = new Dictionary<string, string>();
+        private Dictionary<string, string> m_InvokeToLuaLibFields = new Dictionary<string, string>();
+        private Dictionary<string, string> m_InvokeToLuaLibIndexerProperties = new Dictionary<string, string>();
+        private Dictionary<string, string> m_InvokeToLuaLibArrays = new Dictionary<string, string>();
 
         internal static SymbolTable Instance
         {

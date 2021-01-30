@@ -1,5 +1,5 @@
 ============<<<Semantic Error:test>>>============
-test.cs(149,14): error CS0030: Cannot convert type 'System.Type' to 'TValue'
-test.cs(166,9): error CS0246: The type or namespace name 'StringBuilder' could not be found (are you missing a using directive or an assembly reference?)
-test.cs(166,43): error CS0246: The type or namespace name 'StringBuilder' could not be found (are you missing a using directive or an assembly reference?)
-test.cs(276,9): error CS0120: An object reference is required for the non-static field, method, or property 'Test.LoadStartupView_FGUI(string, string, string, ViewGroup, bool)'
+test.cs(148,14): error CS0030: Cannot convert type 'System.Type' to 'TValue'
+test.cs(165,9): error CS0246: The type or namespace name 'StringBuilder' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(165,43): error CS0246: The type or namespace name 'StringBuilder' could not be found (are you missing a using directive or an assembly reference?)
+test.cs(275,9): error CS0120: An object reference is required for the non-static field, method, or property 'Test.LoadStartupView_FGUI(string, string, string, ViewGroup, bool)'

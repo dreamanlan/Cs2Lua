@@ -21,29 +21,29 @@ Test = {
 		return __retval_1;
 	end,
 	__ori_ToList = function(__cs2lua_func_info, T, enumer)
-		local __method_ret_273_4_281_5;
+		local __method_ret_272_4_280_5;
 		this:LoadStartupView_FGUI("", "", "", 0, false);
 		local r;
 		r = newexternlist(System.Collections.Generic.List_T, buildglobalinfoonce("g_System_Collections_Generic_List_T_TypeArgs", getglobalinfo("g_System_Collections_Generic_List_T_TypeArgs") or {T}), buildglobalinfoonce("g_System_Collections_Generic_List_T_TypeKinds", getglobalinfo("g_System_Collections_Generic_List_T_TypeKinds") or {TypeKind.TypeParameter}), "ctor", 0, {});
-		local __foreach_277_8_279_9 = newiterator(__cs2lua_func_info, enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true);
-		for v in getiterator(__foreach_277_8_279_9) do
+		local __foreach_276_8_278_9 = newiterator(__cs2lua_func_info, enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true);
+		for v in getiterator(__foreach_276_8_278_9) do
 			if v == __cs2lua_nil then
 				v = nil;
 			end;
 			r:Add(v);
 		end;
-		recycleiterator(__cs2lua_func_info, __foreach_277_8_279_9);
-		__method_ret_273_4_281_5 = r;
-		return __method_ret_273_4_281_5;
+		recycleiterator(__cs2lua_func_info, __foreach_276_8_278_9);
+		__method_ret_272_4_280_5 = r;
+		return __method_ret_272_4_280_5;
 	end,
 
 	ToArray = function(T, list)
-		local __method_ret_282_4_287_5;
+		local __method_ret_281_4_286_5;
 		local arr;
 		arr = newarraydim1(T, TypeKind.TypeParameter, nil, list.Count);
 		list:CopyTo(arr, 0);
-		__method_ret_282_4_287_5 = arr;
-		return __method_ret_282_4_287_5;
+		__method_ret_281_4_286_5 = arr;
+		return __method_ret_281_4_286_5;
 	end,
 
 	cctor = function()
@@ -83,14 +83,14 @@ Test = {
 				return __retval_1;
 			end,
 			__ori_get_Item = function(this, __cs2lua_func_info, ...)
-				local __method_ret_179_4_183_5;
+				local __method_ret_178_4_182_5;
 				local args;
 				args = wrapparams({...}, System.Nullable_T, TypeKind.Struct);
 				local args;
 				args = wrapparams({...}, System.Nullable_T, TypeKind.Struct);
-				__method_ret_179_4_183_5 = arraygetstruct(false, SymbolKind.Parameter, System.Nullable_T, args, 1, 1);
-				movetocallerfuncinfo(__cs2lua_func_info, System.Nullable_T, __method_ret_179_4_183_5);
-				return __method_ret_179_4_183_5;
+				__method_ret_178_4_182_5 = arraygetstruct(false, SymbolKind.Parameter, System.Nullable_T, args, 1, 1);
+				movetocallerfuncinfo(__cs2lua_func_info, System.Nullable_T, __method_ret_178_4_182_5);
+				return __method_ret_178_4_182_5;
 			end,
 
 			set_Item = function(this, ...)
@@ -116,19 +116,19 @@ Test = {
 			__ori_Init = function(this, __cs2lua_func_info)
 				local items;
 				items = wraparray({"ȫ��", "������", "�ɽ�ȡ", "�����", "δ��ȡ"}, nil, System.String, TypeKind.Class);
-				TestLuaLib(5, {Cs2LuaObjectPoolEx_DataChangeCallBackInfo, DataChangeCallBackInfo, TypeKind.Class, nil, nil}, {nil, nil, nil, nil, System.Int32, TypeKind.Struct, OperationKind.Literal, nil}, {DataChangeCallBackInfo, TypeKind.Class, nil, nil, System.Func_TResult, TypeKind.Delegate, OperationKind.AnonymousFunction, SymbolKind.Method}, {DataChangeCallBackInfo, TypeKind.Class, nil, nil, System.Action_T, TypeKind.Delegate, OperationKind.AnonymousFunction, SymbolKind.Method}, this.m_DataChangeCallBackInfoPool, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "Init__Int32__Func_1_T__Action_1_T", 32, function()
-					local __method_ret_187_46_187_92;
-					__method_ret_187_46_187_92 = newobject(DataChangeCallBackInfo, nil, nil, "ctor", 0, nil);
-					return __method_ret_187_46_187_92;
+				this.m_DataChangeCallBackInfoPool:Init__Int32__Func_1_T__Action_1_T(32, function()
+					local __method_ret_186_46_186_92;
+					__method_ret_186_46_186_92 = newobject(DataChangeCallBackInfo, nil, nil, "ctor", 0, nil);
+					return __method_ret_186_46_186_92;
 				end, function(v)
 				end);
 				local strlist;
 				strlist = newlist(StrList, nil, nil, "ctor", 0, {});
 				strlist:Add(System.String.Empty);
 				strlist:Sort__Comparison_1_T(function(a, b)
-					local __lambda_190_21_190_45;
-					__lambda_190_21_190_45 = invokeforbasicvalue(a, false, System.String, "CompareTo__String", b);
-					return __lambda_190_21_190_45;
+					local __lambda_189_21_189_45;
+					__lambda_189_21_189_45 = invokeforbasicvalue(a, false, System.String, "CompareTo__String", b);
+					return __lambda_189_21_189_45;
 				end);
 				local intlist;
 				intlist = newexternlist(System.Collections.Generic.List_T, buildglobalinfoonce("g_System_Collections_Generic_List_System_Int32_TypeArgs", getglobalinfo("g_System_Collections_Generic_List_System_Int32_TypeArgs") or {System.Int32}), buildglobalinfoonce("g_System_Collections_Generic_List_System_Int32_TypeKinds", getglobalinfo("g_System_Collections_Generic_List_System_Int32_TypeKinds") or {TypeKind.Struct}), "ctor", 0, {});
@@ -136,9 +136,9 @@ Test = {
 				local sa;
 				sa = getexterninstanceindexer(System.String, TypeKind.Class, StrList, strlist, System.Collections.Generic.List_T, "get_Item", 1, 0);
 				intlist:Sort__Comparison_1_T(function(a, b)
-					local __lambda_194_21_194_45;
-					__lambda_194_21_194_45 = invokeforbasicvalue(a, false, System.Int32, "CompareTo__Int32", b);
-					return __lambda_194_21_194_45;
+					local __lambda_193_21_193_45;
+					__lambda_193_21_193_45 = invokeforbasicvalue(a, false, System.Int32, "CompareTo__Int32", b);
+					return __lambda_193_21_193_45;
 				end);
 				local iaa;
 				if (not isequal(nil, strlist)) then iaa = strlist.Count else iaa = intlist.Count end;
@@ -148,19 +148,20 @@ Test = {
 				bb = wraparray({wraparray({1, 2}, nil, System.Int32, TypeKind.Struct), wraparray({3, 4}, nil, System.Int32, TypeKind.Struct), wraparray({5, 6}, nil, System.Int32, TypeKind.Struct)}, nil, System.Int32, TypeKind.Struct);
 				local ia;
 				ia = bb[1][2];
-				local __foreach_exp_199_8_201_9 = strlist;
-				for __foreach_ix_199_8_201_9 = 0, __foreach_exp_199_8_201_9.Count - 1 do
-					s = getexterninstanceindexer(System.String, TypeKind.Class, StrList, __foreach_exp_199_8_201_9, System.Collections.Generic.List_T, "get_Item", 1, __foreach_ix_199_8_201_9);					System.Console.WriteLine__String(s);
+				local __foreach_exp_198_8_200_9 = strlist;
+				for __foreach_ix_198_8_200_9 = 0, __foreach_exp_198_8_200_9.Count - 1 do
+					s = getexterninstanceindexer(System.String, TypeKind.Class, StrList, __foreach_exp_198_8_200_9, System.Collections.Generic.List_T, "get_Item", 1, __foreach_ix_198_8_200_9);
+					System.Console.WriteLine__String(s);
 				end;
-				local __foreach_exp_202_8_204_9 = aa;
-				for __foreach_ix_202_8_204_9 = 1, __foreach_exp_202_8_204_9.Length do
-					v = __foreach_exp_202_8_204_9[__foreach_ix_202_8_204_9];
+				local __foreach_exp_201_8_203_9 = aa;
+				for __foreach_ix_201_8_203_9 = 1, __foreach_exp_201_8_203_9.Length do
+					v = __foreach_exp_201_8_203_9[__foreach_ix_201_8_203_9];
 					System.Console.WriteLine__Int32(v);
 				end;
-				local __foreach_exp_205_8_207_9 = bb;
-				for __foreach_ix_205_8_207_9_0 = 1, __foreach_exp_205_8_207_9:GetLength(0) do
-				for __foreach_ix_205_8_207_9_1 = 1, __foreach_exp_205_8_207_9:GetLength(1) do
-					v = __foreach_exp_205_8_207_9[__foreach_ix_205_8_207_9];
+				local __foreach_exp_204_8_206_9 = bb;
+				for __foreach_ix_204_8_206_9_0 = 1, __foreach_exp_204_8_206_9:GetLength(0) do
+				for __foreach_ix_204_8_206_9_1 = 1, __foreach_exp_204_8_206_9:GetLength(1) do
+					v = __foreach_exp_204_8_206_9[__foreach_ix_204_8_206_9];
 					System.Console.WriteLine__Int32(v);
 				end;
 				end;
@@ -197,17 +198,17 @@ Test = {
 				return __retval_1;
 			end,
 			__ori_testcall = function(this, __cs2lua_func_info)
-				local __method_ret_219_4_224_5;
+				local __method_ret_218_4_223_5;
 				set_array_vector3(__cs2lua_func_info, this.m_Vs, 1, get_vector3_zero(__cs2lua_func_info));
 				local v;
 				v = arraygetstruct(false, SymbolKind.Field, UnityEngine.Vector3, this.m_Vs, 1, 1);
 				v = wrap_vector3(__cs2lua_func_info, v);
-				__method_ret_219_4_224_5 = 1;
-				return __method_ret_219_4_224_5;
+				__method_ret_218_4_223_5 = 1;
+				return __method_ret_218_4_223_5;
 			end,
 
 			test = function(this)
-				local __method_ret_225_4_261_5;
+				local __method_ret_224_4_260_5;
 				local a;
 				a = 2;
 				local b;
@@ -216,85 +217,88 @@ Test = {
 				c = 1;
 				local aa;
 				aa = function()
-					local __method_ret_228_31_241_9;
-					local __try_ret_229_12_234_13, __try_retval_229_12_234_13;
-					__try_ret_229_12_234_13,__try_retval_229_12_234_13 = luatry(System.Console.Write__String, luastrtocsstr("test"));
-					local __catch_handled_229_12_234_13, __catch_retval_229_12_234_13;
-					__catch_handled_229_12_234_13 = false;
-					__catch_retval_229_12_234_13 = luacatch(__catch_handled_229_12_234_13, __try_retval_229_12_234_13, (not __try_ret_229_12_234_13) and function(ex)
-						__catch_handled_229_12_234_13 = true;
+					local __method_ret_227_31_240_9;
+					local __try_ret_228_12_233_13, __try_retval_228_12_233_13;
+					__try_ret_228_12_233_13,__try_retval_228_12_233_13 = luatry(System.Console.Write__String, luastrtocsstr("test"));
+					local __catch_handled_228_12_233_13, __catch_retval_228_12_233_13;
+					__catch_handled_228_12_233_13 = false;
+					__catch_retval_228_12_233_13 = luacatch(__catch_handled_228_12_233_13, __try_retval_228_12_233_13, (not __try_ret_228_12_233_13) and function(ex)
+						__catch_handled_228_12_233_13 = true;
 					end);
-					local __try_ret_235_12_240_13, __try_retval_235_12_240_13;
-					__try_ret_235_12_240_13,__try_retval_235_12_240_13 = luatry(this.testcall, this);
-					if __try_ret_235_12_240_13 then
-						__method_ret_228_31_241_9 = __try_retval_235_12_240_13;
-						__try_retval_235_12_240_13 = 1;
+					local __try_ret_234_12_239_13, __try_retval_234_12_239_13;
+					__try_ret_234_12_239_13,__try_retval_234_12_239_13 = luatry(nil);
+				repeat
+					do
+						__method_ret_227_31_240_9 = lualib_call(2, {nil}, this, Test, "testcall");
+						__try_retval_234_12_239_13 = 1;
+						break;
 					end;
-					if __try_ret_235_12_240_13 then 
-						if __try_retval_235_12_240_13 then 
-							if (__try_retval_235_12_240_13 == 1) then 
-								return __method_ret_228_31_241_9;
+				until true;
+					if __try_ret_234_12_239_13 then 
+						if __try_retval_234_12_239_13 then 
+							if (__try_retval_234_12_239_13 == 1) then 
+								return __method_ret_227_31_240_9;
 							end;
 						end;
 					end;
-					local __catch_handled_235_12_240_13, __catch_retval_235_12_240_13;
-					__catch_handled_235_12_240_13 = false;
-					__catch_retval_235_12_240_13 = luacatch(__catch_handled_235_12_240_13, __try_retval_235_12_240_13, (not __try_ret_235_12_240_13) and function(ex)
-						__catch_handled_235_12_240_13 = true;
+					local __catch_handled_234_12_239_13, __catch_retval_234_12_239_13;
+					__catch_handled_234_12_239_13 = false;
+					__catch_retval_234_12_239_13 = luacatch(__catch_handled_234_12_239_13, __try_retval_234_12_239_13, (not __try_ret_234_12_239_13) and function(ex)
+						__catch_handled_234_12_239_13 = true;
 						do
-							__method_ret_228_31_241_9 = 0;
+							__method_ret_227_31_240_9 = 0;
 							return 1;
 						end;
 					end);
-					if __catch_retval_235_12_240_13 then 
-						if (__catch_retval_235_12_240_13 == 1) then 
-							return __method_ret_228_31_241_9;
+					if __catch_retval_234_12_239_13 then 
+						if (__catch_retval_234_12_239_13 == 1) then 
+							return __method_ret_227_31_240_9;
 						end;
 					end;
 					return nil;
 				end;
-				local __try_ret_243_8_248_9, __try_retval_243_8_248_9;
-				__try_ret_243_8_248_9,__try_retval_243_8_248_9 = luatry(System.Console.Write__String, luastrtocsstr("test"));
-				local __catch_handled_243_8_248_9, __catch_retval_243_8_248_9;
-				__catch_handled_243_8_248_9 = false;
-				__catch_retval_243_8_248_9 = luacatch(__catch_handled_243_8_248_9, __try_retval_243_8_248_9, (not __try_ret_243_8_248_9) and function(ex)
-					__catch_handled_243_8_248_9 = true;
+				local __try_ret_242_8_247_9, __try_retval_242_8_247_9;
+				__try_ret_242_8_247_9,__try_retval_242_8_247_9 = luatry(System.Console.Write__String, luastrtocsstr("test"));
+				local __catch_handled_242_8_247_9, __catch_retval_242_8_247_9;
+				__catch_handled_242_8_247_9 = false;
+				__catch_retval_242_8_247_9 = luacatch(__catch_handled_242_8_247_9, __try_retval_242_8_247_9, (not __try_ret_242_8_247_9) and function(ex)
+					__catch_handled_242_8_247_9 = true;
 				end);
-				local __try_ret_249_8_258_9, __try_retval_249_8_258_9;
-				__try_ret_249_8_258_9,__try_retval_249_8_258_9,__method_ret_225_4_261_5 = luatry(aa);
-				if __try_retval_249_8_258_9 then
-					__method_ret_225_4_261_5 = __try_retval_249_8_258_9;
-					__try_retval_249_8_258_9 = 1;
+				local __try_ret_248_8_257_9, __try_retval_248_8_257_9;
+				__try_ret_248_8_257_9,__try_retval_248_8_257_9,__method_ret_224_4_260_5 = luatry(aa);
+				if __try_retval_248_8_257_9 then
+					__method_ret_224_4_260_5 = __try_retval_248_8_257_9;
+					__try_retval_248_8_257_9 = 1;
 				end;
-				if __try_ret_249_8_258_9 then 
+				if __try_ret_248_8_257_9 then 
 					System.Console.WriteLine__String__Object__Object__Object(luastrtocsstr("{0} {1} {2}"), a, b, c);
-					if __try_retval_249_8_258_9 then 
-						if (__try_retval_249_8_258_9 == 1) then 
-							return __method_ret_225_4_261_5;
+					if __try_retval_248_8_257_9 then 
+						if (__try_retval_248_8_257_9 == 1) then 
+							return __method_ret_224_4_260_5;
 						end;
 					end;
 				end;
-				local __catch_handled_249_8_258_9, __catch_retval_249_8_258_9;
-				__catch_handled_249_8_258_9 = false;
-				__catch_retval_249_8_258_9 = luacatch(__catch_handled_249_8_258_9, __try_retval_249_8_258_9, (not __try_ret_249_8_258_9) and function(e)
-					__catch_handled_249_8_258_9 = true;
+				local __catch_handled_248_8_257_9, __catch_retval_248_8_257_9;
+				__catch_handled_248_8_257_9 = false;
+				__catch_retval_248_8_257_9 = luacatch(__catch_handled_248_8_257_9, __try_retval_248_8_257_9, (not __try_ret_248_8_257_9) and function(e)
+					__catch_handled_248_8_257_9 = true;
 					System.Console.WriteLine__String__Object__Object__Object(luastrtocsstr("ex:{0} {1} {2}"), a, b, c);
 					do
-						__method_ret_225_4_261_5 = 0;
+						__method_ret_224_4_260_5 = 0;
 						return 1;
 					end;
 				end);
 				System.Console.WriteLine__String__Object__Object__Object(luastrtocsstr("{0} {1} {2}"), a, b, c);
-				if __catch_retval_249_8_258_9 then 
-					if (__catch_retval_249_8_258_9 == 1) then 
-						return __method_ret_225_4_261_5;
+				if __catch_retval_248_8_257_9 then 
+					if (__catch_retval_248_8_257_9 == 1) then 
+						return __method_ret_224_4_260_5;
 					end;
 				end;
-				if (not __try_ret_249_8_258_9) then 
+				if (not __try_ret_248_8_257_9) then 
 					System.Console.WriteLine__String__Object__Object__Object(luastrtocsstr("{0} {1} {2}"), a, b, c);
 				end;
 				if (a > 1) then this.m_IntVal = aa() else this.m_IntVal = c end;
-				return __method_ret_225_4_261_5;
+				return __method_ret_224_4_260_5;
 			end,
 
 			LoadStartupView_FGUI = function(this, className, comName, packageName, grp, ForceShow)
@@ -304,8 +308,8 @@ Test = {
 			end,
 			__ori_LoadStartupView_FGUI = function(this, __cs2lua_func_info, className, comName, packageName, grp, ForceShow)
 				--
-				local __unary_264_12_264_22 = this.m_IntVal; this.m_IntVal = (this.m_IntVal + 1);
-				if (__unary_264_12_264_22 > 0) then
+				local __unary_263_12_263_22 = this.m_IntVal; this.m_IntVal = (this.m_IntVal + 1);
+				if (__unary_263_12_263_22 > 0) then
 
 				end;
 				--

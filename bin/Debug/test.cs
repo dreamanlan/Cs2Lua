@@ -58,7 +58,6 @@ public sealed class Cs2LuaObjectPoolEx<T> where T : ICs2LuaPoolAllocatedObjectEx
         m_Creater = creater;
         m_Destroyer = destroyer;
     }
-    [Cs2Dsl.InvokeToLuaLib("TestLuaLib", true)]
     public void Init(int initPoolSize, Func<T> creater, Action<T> destroyer)
     {
         m_Creater = creater;

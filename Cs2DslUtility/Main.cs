@@ -35,19 +35,6 @@ namespace Cs2Dsl
     }
 
     [System.AttributeUsage(System.AttributeTargets.Method)]
-    public sealed class InvokeToLuaLibAttribute : System.Attribute
-    {
-        public InvokeToLuaLibAttribute(string luaLibFuncName, bool addTypeInfo)
-        {
-            m_LuaLibFunctionName = luaLibFuncName;
-            m_AddTypeInfo = addTypeInfo;
-        }
-
-        private string m_LuaLibFunctionName = string.Empty;
-        private bool m_AddTypeInfo = false;
-    }
-
-    [System.AttributeUsage(System.AttributeTargets.Method)]
     public sealed class NeedFuncInfoAttribute : System.Attribute
     { }
 

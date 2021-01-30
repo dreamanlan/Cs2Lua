@@ -1373,6 +1373,10 @@ namespace Generator
                 if (firstLineUseIndent) {
                     sb.AppendFormat("{0}", GetIndentString(indent));
                 }
+                if (id == "dummycall") {
+                    sb.Append("dummycall()");
+                    return;
+                }
                 //这里对委托到syslib的翻译提供一个基于dsl脚本翻译的机会，理论上可以提升运行效率                
                 if (!CallDslHook(calculator, id, data, funcOpts, sb, indent)) {
                     if (id == "condexp") {
@@ -3013,10 +3017,10 @@ namespace Generator
         private static void GenerateConcreteSyntax(Dsl.StatementData data, StringBuilder sb, int indent, bool firstLineUseIndent, FunctionOptions funcOpts, DslExpression.DslCalculator calculator)
         {
             s_CurSyntax = data;
+            string id = data.GetId();
             if (firstLineUseIndent) {
                 sb.AppendFormat("{0}", GetIndentString(indent));
             }
-            string id = data.GetId();
             if (id == "linq") {
                 string prestr = string.Empty;
                 foreach (var funcData in data.Functions) {

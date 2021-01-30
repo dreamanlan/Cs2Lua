@@ -3283,3 +3283,25 @@ script(callexternstructlistinstance)args($funcData, $funcOpts, $sb, $indent)
     };
     return(false);
 };
+
+script(get_clientmodule_instance)args($funcData, $funcOpts, $sb, $indent)
+{
+    //get_clientmodule_instance(typeName, typeKind, symKind, class, name)
+    
+    usefunc("get_clientmodule_instance","()", $funcData, $funcOpts, $sb, $indent, [0,1,2,3,4])
+    {:
+        return CsLibrary.ClientModule.Instance
+    :};
+    return(true);
+};
+
+script(get_globalvariables_instance)args($funcData, $funcOpts, $sb, $indent)
+{
+    //get_globalvariables_instance(typeName, typeKind, symKind, class, name)
+    
+    usefunc("get_globalvariables_instance","()", $funcData, $funcOpts, $sb, $indent, [0,1,2,3,4])
+    {:
+        return CsLibrary.GlobalVariables.Instance
+    :};
+    return(true);
+};

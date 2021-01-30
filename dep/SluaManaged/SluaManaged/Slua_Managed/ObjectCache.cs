@@ -39,32 +39,50 @@ namespace SLua
         static IntPtr oldl = IntPtr.Zero;
         static internal ObjectCache oldoc = null;
 
+        public static List<Dictionary<object, int>> GetAllManagedObject2Ints(IntPtr l)
+        {
+            List<Dictionary<object, int>> list = new List<Dictionary<object, int>>();
+            foreach (var cache in multiState.Values) {
+                list.Add(cache.objMap);
+            }
+            return list;
+        }
+        public static List<Dictionary<int, object>> GetAllManagedInt2Objects(IntPtr l)
+        {
+            List<Dictionary<int, object>> list = new List<Dictionary<int, object>>();
+            foreach (var cache in multiState.Values) {
+                list.Add(cache.cache);
+            }
+            return list;
+        }
         public static void ClearNameDebugs()
         {
             foreach (var cache in multiState.Values) {
                 cache.objNameDebugs.Clear();
             }
         }
-		public static List<string[]> GetAllManagedObjectNames(IntPtr l){
-			List<string[]> names = new List<string[]>();
-			foreach(var cache in multiState.Values){
-				foreach(var pair in cache.objMap){
+        public static List<string[]> GetAllManagedObjectNames(IntPtr l)
+        {
+            List<string[]> names = new List<string[]>();
+            foreach (var cache in multiState.Values) {
+                foreach (var pair in cache.objMap) {
                     string[] infos;
                     if (cache.objNameDebugs.TryGetValue(pair.Key, out infos)) {
                         if (infos.Length < 3)
                             continue;
                         names.Add(new string[] { infos[0] + " addr:" + GetLuaAddr(l, pair.Value, cache.udCacheRef), infos[1], infos[2] });
                     }
-				}
-			}
-			return names;
-		}
-		public static List<string[]> GetAlreadyDestroyedObjectNames(IntPtr l){
-			List<string[]> names = new List<string[]>();
-			foreach(var cache in multiState.Values){
-				foreach(var pair in cache.objMap){
+                }
+            }
+            return names;
+        }
+        public static List<string[]> GetAlreadyDestroyedObjectNames(IntPtr l)
+        {
+            List<string[]> names = new List<string[]>();
+            foreach (var cache in multiState.Values) {
+                foreach (var pair in cache.objMap) {
                     var o = pair.Key;
-					if(o is Object &&(o as Object).Equals(null)) {
+                    if (o is Object && (o as Object).Equals(null)) {
                         string[] infos;
                         if (cache.objNameDebugs.TryGetValue(o, out infos)) {
                             if (infos.Length < 3)
@@ -72,11 +90,11 @@ namespace SLua
                             names.Add(new string[] { infos[0] + " addr:" + GetLuaAddr(l, pair.Value, cache.udCacheRef), infos[1], infos[2] });
                         }
                     }
-				}
-			}
-			return names;
-		}
-        
+                }
+            }
+            return names;
+        }
+
         public static ObjectCache get(IntPtr l)
         {
             if (oldl == l)
@@ -166,28 +184,31 @@ namespace SLua
         Dictionary<object, int> objMap = new Dictionary<object, int>(new ObjEqualityComparer());
         public Dictionary<object, int>.KeyCollection Objs { get { return objMap.Keys; } }
 
-		Dictionary<object, string[]> objNameDebugs = new Dictionary<object, string[]>(new ObjEqualityComparer());
+        Dictionary<object, string[]> objNameDebugs = new Dictionary<object, string[]>(new ObjEqualityComparer());
 
-		private static string getDebugFullName(UnityEngine.Transform transform){
-			if (transform.parent == null) {
-				return transform.gameObject.ToString();
-			}
-			return getDebugFullName(transform.parent) + "/" + transform.name;
-		}
+        private static string getDebugFullName(UnityEngine.Transform transform)
+        {
+            if (transform.parent == null) {
+                return transform.gameObject.ToString();
+            }
+            return getDebugFullName(transform.parent) + "/" + transform.name;
+        }
 
-		private static string getDebugName(int objIndex, object o ){
-			if (o is UnityEngine.GameObject) {
-				var go = o as UnityEngine.GameObject;
+        private static string getDebugName(int objIndex, object o)
+        {
+            if (o is UnityEngine.GameObject) {
+                var go = o as UnityEngine.GameObject;
                 int id = go.GetInstanceID();
-                return getDebugFullName(go.transform) + "["+ o.GetType().Name +"](" + id + ", index:" + objIndex + ")";
-			} else if (o is UnityEngine.Component) {
-				var comp = o as UnityEngine.Component;
+                return getDebugFullName(go.transform) + "[" + o.GetType().Name + "](" + id + ", index:" + objIndex + ")";
+            }
+            else if (o is UnityEngine.Component) {
+                var comp = o as UnityEngine.Component;
                 int id = comp.GetInstanceID();
-                return getDebugFullName(comp.transform) + "["+ o.GetType().Name +"](" + comp.GetType().Name + "," + id + ", index:" + objIndex + ")";
-			}
+                return getDebugFullName(comp.transform) + "[" + o.GetType().Name + "](" + comp.GetType().Name + "," + id + ", index:" + objIndex + ")";
+            }
             int hash = o.GetHashCode();
-            return o.ToString() + "["+ o.GetType().Name +"](" + hash + ", index:" + objIndex + ")";
-		}
+            return o.ToString() + "[" + o.GetType().Name + "](" + hash + ", index:" + objIndex + ")";
+        }
 
         int udCacheRef = 0;
 
@@ -359,7 +380,7 @@ namespace SLua
 				Logger.LogWarning(string.Format("{0} not exported, using reflection instead", o.ToString()));
 			}
 #else
-			LuaDLL.luaS_pushobject(l, index, getAQName(o, l), gco, udCacheRef);
+            LuaDLL.luaS_pushobject(l, index, getAQName(o, l), gco, udCacheRef);
 #endif
 
         }
@@ -502,16 +523,22 @@ namespace SLua
         public static List<string[]> DelegateStackTraces = null;
         public static List<string[]> DestroyedObjectNames = null;
         public static List<string[]> AddedObjectNames = null;
+        public static List<Dictionary<object, int>> Obj2Ints = null;
+        public static List<Dictionary<int, object>> Int2Objs = null;
 
-        public static void Capture(Action captureLua)
+        public static void Capture(bool gcBeforeCapture, Action captureLua)
         {
             Prepare();
 
-            LuaDLL.lua_gc(LuaState.main.L, LuaGCOptions.LUA_GCCOLLECT, 0);
-            System.GC.Collect();
+            if (gcBeforeCapture) {
+                LuaDLL.lua_gc(LuaState.main.L, LuaGCOptions.LUA_GCCOLLECT, 0);
+                System.GC.Collect();
+            }
             if (null != captureLua) {
                 captureLua();
             }
+            Obj2Ints = ObjectCache.GetAllManagedObject2Ints(LuaState.main.L);
+            Int2Objs = ObjectCache.GetAllManagedInt2Objects(LuaState.main.L);
             var destroyedObjectNames = ObjectCache.GetAlreadyDestroyedObjectNames(LuaState.main.L);
             var allObjectNames = ObjectCache.GetAllManagedObjectNames(LuaState.main.L);
             DestroyedObjectNames.Clear();
@@ -589,6 +616,46 @@ namespace SLua
         public static void Export(Action<string> outputLine, Action<string, string, float> onprogress)
         {
             Prepare();
+            if (null != Obj2Ints) {
+                int ct0 = 0;
+                foreach(var dict in Obj2Ints) {
+                    ct0 += dict.Count;
+                }
+                outputLine("object2ints:" + ct0);
+                foreach(var dict in Obj2Ints) {
+                    outputLine("----------------");
+                    foreach(var pair in dict) {
+                        var obj = pair.Key;
+                        int index = pair.Value;
+                        if (obj is Object && (obj as Object).Equals(null)) {
+                            outputLine("(null) <=> " + index);
+                        }
+                        else {
+                            outputLine(obj.GetType().FullName + " <=> " + index);
+                        }
+                    }
+                }
+            }
+            if (null != Int2Objs) {
+                int ct0 = 0;
+                foreach (var dict in Int2Objs) {
+                    ct0 += dict.Count;
+                }
+                outputLine("int2objects:" + ct0);
+                foreach (var dict in Int2Objs) {
+                    outputLine("----------------");
+                    foreach (var pair in dict) {
+                        int index = pair.Key;
+                        var obj = pair.Value;
+                        if (obj is Object && (obj as Object).Equals(null)) {
+                            outputLine(index + " <=> (null)");
+                        }
+                        else {
+                            outputLine(index + " <=> " + obj.GetType().FullName);
+                        }
+                    }
+                }
+            }
             outputLine("cached delegates:" + CachedDelegateCount);
             int ct = 0;
             int totalCt = DelegateStackTraces.Count;

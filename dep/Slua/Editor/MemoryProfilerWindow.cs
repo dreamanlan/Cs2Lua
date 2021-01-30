@@ -23,6 +23,7 @@ namespace SLua
         private Vector2 _scrollPos1;
         private Vector2 _scrollPos2;
 
+        private bool _gcBeforeCapture = false;
         private bool _includeLuaSnapshot = false;
         private bool _showDebugStringMaps = false;
         private bool _showDelegateStacks = false;
@@ -40,9 +41,10 @@ namespace SLua
             }
 
             LuaSnapshot.Prepare();
+            _gcBeforeCapture = GUILayout.Toggle(_gcBeforeCapture, new GUIContent("gc before capture"));
             _includeLuaSnapshot = GUILayout.Toggle(_includeLuaSnapshot, new GUIContent("include lua snapshot"));
             if (GUILayout.Button("Capture")) {
-                LuaSnapshot.Capture(_includeLuaSnapshot ? ()=> { /*EvalLua("takesnapshot()");*/ } : (System.Action)null);
+                LuaSnapshot.Capture(_gcBeforeCapture, _includeLuaSnapshot ? ()=> { CsLibrary.LogicModuleProxy.ScriptProxy.EvalLua("takesnapshot()"); } : (System.Action)null);
             }
 
             if (GUILayout.Button("Copy")) {
@@ -61,7 +63,22 @@ namespace SLua
                     }
                 }
             }
-            
+
+            if (null != LuaSnapshot.Obj2Ints) {
+                int ct0 = 0;
+                foreach (var dict in LuaSnapshot.Obj2Ints) {
+                    ct0 += dict.Count;
+                }
+                GUILayout.Label("Object2Int count:" + ct0);
+            }
+            if (null != LuaSnapshot.Int2Objs) {
+                int ct0 = 0;
+                foreach (var dict in LuaSnapshot.Int2Objs) {
+                    ct0 += dict.Count;
+                }
+                GUILayout.Label("Int2Object count:" + ct0);
+            }
+
             _showDebugStringMaps = EditorGUILayout.Foldout(_showDebugStringMaps, "Lua Script Count:" + LuaState.DebugStringMap.Count);
             if (_showDebugStringMaps) {
                 _scrollPos = GUILayout.BeginScrollView(_scrollPos, GUILayout.Width(w), GUILayout.Height(240));

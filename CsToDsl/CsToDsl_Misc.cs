@@ -245,7 +245,18 @@ namespace RoslynTool.CsToDsl
                                 CodeBuilder.AppendFormat("getexternstaticstructmember(SymbolKind.{0}, {1}, \"{2}\")", SymbolTable.Instance.GetSymbolKind(sym), fullName, sym.Name);
                             }
                             else {
-                                CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, {2}, \"{3}\")", isExtern ? "getexternstatic" : "getstatic", SymbolTable.Instance.GetSymbolKind(sym), fullName, sym.Name);
+                                string luaLibFunc;
+                                if (null != fsym && SymbolTable.Instance.IsInvokeToLuaLibField(fsym, out luaLibFunc)) {
+                                    OutputInvokeToLuaLib(true, luaLibFunc, fsym.Type, "SymbolKind.");
+                                    CodeBuilder.AppendFormat("{0}, {1}, \"{2}\")", SymbolTable.Instance.GetSymbolKind(sym), fullName, sym.Name);
+                                }
+                                else if (null != psym && SymbolTable.Instance.IsInvokeToLuaLibProperty(psym, out luaLibFunc)) {
+                                    OutputInvokeToLuaLib(true, luaLibFunc, psym.Type, "SymbolKind.");
+                                    CodeBuilder.AppendFormat("{0}, {1}, \"{2}\")", SymbolTable.Instance.GetSymbolKind(sym), fullName, sym.Name);
+                                }
+                                else {
+                                    CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, {2}, \"{3}\")", isExtern ? "getexternstatic" : "getstatic", SymbolTable.Instance.GetSymbolKind(sym), fullName, sym.Name);
+                                }
                             }
                             return;
                         }
@@ -259,7 +270,18 @@ namespace RoslynTool.CsToDsl
                                 CodeBuilder.AppendFormat("getexterninstancestructmember(SymbolKind.{0}, newobj, {1}, \"{2}\")", SymbolTable.Instance.GetSymbolKind(sym), fullName, name);
                             }
                             else {
-                                CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, newobj, {2}, \"{3}\")", isExtern ? "getexterninstance" : "getinstance", SymbolTable.Instance.GetSymbolKind(sym), fullName, name);
+                                string luaLibFunc;
+                                if (null != fsym && SymbolTable.Instance.IsInvokeToLuaLibField(fsym, out luaLibFunc)) {
+                                    OutputInvokeToLuaLib(true, luaLibFunc, fsym.Type, "SymbolKind.");
+                                    CodeBuilder.AppendFormat("{0}, {1}, newobj, \"{2}\")", SymbolTable.Instance.GetSymbolKind(sym), fullName, sym.Name);
+                                }
+                                else if (null != psym && SymbolTable.Instance.IsInvokeToLuaLibProperty(psym, out luaLibFunc)) {
+                                    OutputInvokeToLuaLib(true, luaLibFunc, psym.Type, "SymbolKind.");
+                                    CodeBuilder.AppendFormat("{0}, {1}, newobj, \"{2}\")", SymbolTable.Instance.GetSymbolKind(sym), fullName, sym.Name);
+                                }
+                                else {
+                                    CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, newobj, {2}, \"{3}\")", isExtern ? "getexterninstance" : "getinstance", SymbolTable.Instance.GetSymbolKind(sym), fullName, name);
+                                }
                             }
                             return;
                         }
@@ -273,7 +295,18 @@ namespace RoslynTool.CsToDsl
                                 CodeBuilder.AppendFormat("getexterninstancestructmember(SymbolKind.{0}, this, {1}, \"{2}\")", SymbolTable.Instance.GetSymbolKind(sym), fullName, sym.Name);
                             }
                             else {
-                                CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, this, {2}, \"{3}\")", isExtern ? "getexterninstance" : "getinstance", SymbolTable.Instance.GetSymbolKind(sym), fullName, sym.Name);
+                                string luaLibFunc;
+                                if (null != fsym && SymbolTable.Instance.IsInvokeToLuaLibField(fsym, out luaLibFunc)) {
+                                    OutputInvokeToLuaLib(true, luaLibFunc, fsym.Type, "SymbolKind.");
+                                    CodeBuilder.AppendFormat("{0}, this, {1}, \"{2}\")", SymbolTable.Instance.GetSymbolKind(sym), fullName, sym.Name);
+                                }
+                                else if (null != psym && SymbolTable.Instance.IsInvokeToLuaLibProperty(psym, out luaLibFunc)) {
+                                    OutputInvokeToLuaLib(true, luaLibFunc, psym.Type, "SymbolKind.");
+                                    CodeBuilder.AppendFormat("{0}, this, {1}, \"{2}\")", SymbolTable.Instance.GetSymbolKind(sym), fullName, sym.Name);
+                                }
+                                else {
+                                    CodeBuilder.AppendFormat("{0}(SymbolKind.{1}, this, {2}, \"{3}\")", isExtern ? "getexterninstance" : "getinstance", SymbolTable.Instance.GetSymbolKind(sym), fullName, sym.Name);
+                                }
                             }
                             return;
                         }

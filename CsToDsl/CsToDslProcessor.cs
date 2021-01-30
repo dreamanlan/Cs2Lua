@@ -254,7 +254,7 @@ namespace RoslynTool.CsToDsl
 
             bool haveSemanticError = false;
             bool haveTranslationError = false;
-            SymbolTable.Instance.Init(compilation, exepath);
+            SymbolTable.Instance.Init(compilation, exepath, preprocessors);
             SymbolTable.Instance.AddRequire("cs2dsl__custom", "cs2dsl__custom");
             Dictionary<string, INamedTypeSymbol> ignoredClasses = new Dictionary<string, INamedTypeSymbol>();
             Dictionary<string, MergedClassInfo> toplevelClasses = new Dictionary<string, MergedClassInfo>();

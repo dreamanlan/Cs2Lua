@@ -1051,7 +1051,10 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.Append("\")");
                         }
                         else {
-                            if (isExtern)
+                            string luaLibFunc;
+                            if (SymbolTable.Instance.IsInvokeToLuaLibField(field, out luaLibFunc))
+                                OutputInvokeToLuaLib(true, luaLibFunc, field.Type, "SymbolKind.");
+                            else if (isExtern)
                                 CodeBuilder.Append("getexternstatic(SymbolKind.");
                             else
                                 CodeBuilder.Append("getstatic(SymbolKind.");
@@ -1077,7 +1080,10 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.Append("\")");
                         }
                         else {
-                            if (isExtern)
+                            string luaLibFunc;
+                            if (SymbolTable.Instance.IsInvokeToLuaLibProperty(property, out luaLibFunc))
+                                OutputInvokeToLuaLib(true, luaLibFunc, property.Type, "SymbolKind.");
+                            else if (isExtern)
                                 CodeBuilder.Append("getexternstatic(SymbolKind.");
                             else
                                 CodeBuilder.Append("getstatic(SymbolKind.");
@@ -1418,6 +1424,24 @@ namespace RoslynTool.CsToDsl
                 CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                 CodeBuilder.AppendLine();
             }
+        }
+        private void OutputInvokeToLuaLib(bool isGet, string luaLibFunc, ITypeSymbol typeSym, string addStr)
+        {
+            if (isGet)
+                CodeBuilder.Append("get_");
+            else
+                CodeBuilder.Append("set_");
+            CodeBuilder.Append(luaLibFunc);
+            CodeBuilder.Append("(");
+            string typeName = ClassInfo.GetFullName(typeSym);
+            if (string.IsNullOrEmpty(typeName))
+                typeName = "null";
+            string typeKind = null != typeSym ? "TypeKind." + typeSym.TypeKind : "null";
+            CodeBuilder.Append(typeName);
+            CodeBuilder.Append(", ");
+            CodeBuilder.Append(typeKind);
+            CodeBuilder.Append(", ");
+            CodeBuilder.Append(addStr);
         }
         private void AddToplevelClass(string key, ClassInfo ci)
         {

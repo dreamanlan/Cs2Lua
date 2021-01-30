@@ -41,23 +41,23 @@ class(Cs2LuaKeyValuePair_System_Int32_System_Int32) {
 			setinstance(SymbolKind.Field, this, Cs2LuaKeyValuePair_System_Int32_System_Int32, "value", 0);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)],
 		get_Key = deffunc(1)args(this){
-			local(__method_ret_153_4_156_5);
-			__method_ret_153_4_156_5 = getinstance(SymbolKind.Field, this, Cs2LuaKeyValuePair_System_Int32_System_Int32, "key");
-			return(__method_ret_153_4_156_5);
+			local(__method_ret_152_4_155_5);
+			__method_ret_152_4_155_5 = getinstance(SymbolKind.Field, this, Cs2LuaKeyValuePair_System_Int32_System_Int32, "key");
+			return(__method_ret_152_4_155_5);
 		}options[needfuncinfo(false), rettype(return, TKey, TypeKind.TypeParameter, 0, false)];
 		get_Value = deffunc(1)args(this){
-			local(__method_ret_158_4_161_5);
-			__method_ret_158_4_161_5 = getinstance(SymbolKind.Field, this, Cs2LuaKeyValuePair_System_Int32_System_Int32, "value");
-			return(__method_ret_158_4_161_5);
+			local(__method_ret_157_4_160_5);
+			__method_ret_157_4_160_5 = getinstance(SymbolKind.Field, this, Cs2LuaKeyValuePair_System_Int32_System_Int32, "value");
+			return(__method_ret_157_4_160_5);
 		}options[needfuncinfo(false), rettype(return, TValue, TypeKind.TypeParameter, 0, false)];
 		ToString = deffunc(1)args(this){
-			local(__method_ret_163_4_174_5);
+			local(__method_ret_162_4_173_5);
 			local(stringBuilder); stringBuilder = ;
 						if( execbinary("!=", typecast(dsltoobject(SymbolKind.NamedType, false, "System.Object", getinstance(SymbolKind.Property, this, Cs2LuaKeyValuePair_System_Int32_System_Int32, "Key")), System.Object, TypeKind.Class), null, System.Object, System.Object, TypeKind.Class, TypeKind.Class) ){
 							};
 						if( execbinary("!=", typecast(dsltoobject(SymbolKind.NamedType, false, "System.Object", getinstance(SymbolKind.Property, this, Cs2LuaKeyValuePair_System_Int32_System_Int32, "Value")), System.Object, TypeKind.Class), null, System.Object, System.Object, TypeKind.Class, TypeKind.Class) ){
 							};
-									return(__method_ret_163_4_174_5);
+									return(__method_ret_162_4_173_5);
 		}options[needfuncinfo(false), rettype(return, System.String, TypeKind.Class, 0, true)];
 		__ctor = deffunc(0)args(this){
 			if(getinstance(SymbolKind.Field, this, Cs2LuaKeyValuePair_System_Int32_System_Int32, "__ctor_called")){
