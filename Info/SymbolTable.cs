@@ -457,9 +457,28 @@ namespace RoslynTool.CsToDsl
                             }
                         }
                     }
-                }
-            }            
+                    else if (cid == "ExternClassMethodMap") {
+                        foreach (var comp in func.Params) {
+                            var cd = comp as Dsl.FunctionData;
+                            if (null != cd) {
+                                var mid = cd.GetId();
+                                if (mid == "map") {
+                                    var v1 = cd.GetParamId(0);
+                                    var v2 = cd.GetParamId(1);
+                                    var v3 = cd.GetParamId(2);
 
+                                    Dictionary<string, string> dict;
+                                    if (!m_ExternClassMethodMap.TryGetValue(v1, out dict)) {
+                                        dict = new Dictionary<string, string>();
+                                        m_ExternClassMethodMap.Add(v1, dict);
+                                    }
+                                    dict[v2] = v3;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 		
         internal bool IsLegalGenericType(INamedTypeSymbol sym)
@@ -628,6 +647,18 @@ namespace RoslynTool.CsToDsl
                 return false;
             var type = ClassInfo.GetFullName(elemType);
             bool ret = m_InvokeToLuaLibArrays.TryGetValue(type, out luaLibFunc);
+            return ret;
+        }
+        internal bool TryMapExternMethod(string manglingName, IMethodSymbol msym, out string mapName)
+        {
+            bool ret = false;
+            mapName = string.Empty;
+            Dictionary<string, string> dict;
+            if (m_ExternClassMethodMap.TryGetValue(manglingName, out dict)) {
+                var typeSym = msym.OriginalDefinition.ContainingType;
+                string fullName = ClassInfo.GetFullName(typeSym);
+                ret = dict.TryGetValue(fullName, out mapName);
+            }
             return ret;
         }
         internal string CalcFullNameAndTypeArguments(INamedTypeSymbol sym)
@@ -980,6 +1011,8 @@ namespace RoslynTool.CsToDsl
         private Dictionary<string, string> m_InvokeToLuaLibIndexerProperties = new Dictionary<string, string>();
         private Dictionary<string, string> m_InvokeToLuaLibArrays = new Dictionary<string, string>();
 
+        private Dictionary<string, Dictionary<string, string>> m_ExternClassMethodMap = new Dictionary<string, Dictionary<string, string>>();
+
         internal static SymbolTable Instance
         {
             get {
@@ -1054,10 +1087,10 @@ namespace RoslynTool.CsToDsl
         {
             if (null == methodSym)
                 return string.Empty;
-            StringBuilder sb = new StringBuilder();
             string name = methodSym.Name;
             if (!string.IsNullOrEmpty(name) && name[0] == '.')
                 name = name.Substring(1);
+            StringBuilder sb = new StringBuilder();
             sb.Append(name);
             IMethodSymbol msym;
             if (null != nonGenericMethodSym) {
@@ -1083,7 +1116,12 @@ namespace RoslynTool.CsToDsl
                 sb.Append("__");
                 CalcMethodParameter(sb, param);
             }
-            return sb.ToString();
+            string finalName = sb.ToString();
+            string mapName;
+            if (SymbolTable.Instance.TryMapExternMethod(finalName, msym, out mapName))
+                return mapName;
+            else
+                return finalName;
         }
         internal static string CalcCs2DslMethodMangling(IMethodSymbol methodSym)
         {

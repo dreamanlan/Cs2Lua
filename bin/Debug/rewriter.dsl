@@ -75,3 +75,8 @@ config(InvokeToLuaLibArrayList)
 {
     array("","");
 };
+
+config(ExternClassMethodMap)
+{
+    map("Remove", "System.Collections.Generic.Dictionary_TKey_TValue", "Remove");  
+};

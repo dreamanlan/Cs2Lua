@@ -46,6 +46,13 @@ public class Vector3List : List<Vector3>
     public Vector3List(ICollection<Vector3> coll) : base(coll) { }
 }
 
+public class StrStrDict : Dictionary<string, string>
+{
+    public StrStrDict() { }
+    public StrStrDict(int capacity) : base(capacity) { }
+    public StrStrDict(IDictionary<string, string> dict) : base(dict) { }
+}
+
 public interface ICs2LuaPoolAllocatedObjectEx<T> where T : ICs2LuaPoolAllocatedObjectEx<T>
 {
     void InitPool(Cs2LuaObjectPoolEx<T> pool);
@@ -220,6 +227,9 @@ class Test
     {
         m_Vs[0] = UnityEngine.Vector3.zero;
         var v = m_Vs[0];
+        StrStrDict dict = new StrStrDict();
+        dict.Add("1", "2");
+        dict.Remove("1");
         return 1;
     }
     public int test()
