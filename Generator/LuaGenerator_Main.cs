@@ -686,10 +686,12 @@ namespace Generator
                                     if (cmi.IsAbstract || cmi.IsVirtual || cmi.IsOverride) {
                                         sb.AppendFormatLine("{0}{1} = wrapvirtual(\"{1}\", raw_obj_methods.{1}, {2}),", GetIndentString(indent), mname, className);
                                         sb.AppendFormatLine("{0}__self__{1} = wrapinheritable(\"__self__{1}\", raw_obj_methods.{1}, {2}),", GetIndentString(indent), mname, className);
+                                        handled = true;
                                     }
                                     else if (cmi.IsCtor || !cmi.IsPrivate && !cmi.IsSealed) {
                                         sb.AppendFormatLine("{0}{1} = wrapinheritable(\"{1}\", raw_obj_methods.{1}, {2}),", GetIndentString(indent), mname, className);
                                         sb.AppendFormatLine("{0}__self__{1} = wrapinheritable(\"__self__{1}\", raw_obj_methods.{1}, {2}),", GetIndentString(indent), mname, className);
+                                        handled = true;
                                     }
                                 }
                             }
