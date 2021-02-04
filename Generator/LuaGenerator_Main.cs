@@ -2668,7 +2668,7 @@ namespace Generator
                     }
                     if (data.HaveStatement()) {
                         ++indent;
-                        sb.AppendFormatLine("{0}{1} = {2}[{3}];", GetIndentString(indent), varName, varExp, varIndex);
+                        sb.AppendFormatLine("{0}local {1} = {2}[{3}];", GetIndentString(indent), varName, varExp, varIndex);
                         GenerateStatements(data, sb, indent, funcOpts, calculator);
                         --indent;
                     }
@@ -2694,7 +2694,7 @@ namespace Generator
                     sb.AppendLine();
                     if (data.HaveStatement()) {
                         ++indent;
-                        sb.AppendFormatLine("{0}{1} = {2}[{3}];", GetIndentString(indent), varName, varExp, varIndex);
+                        sb.AppendFormatLine("{0}local {1} = {2}[{3}];", GetIndentString(indent), varName, varExp, varIndex);
                         GenerateStatements(data, sb, indent, funcOpts, calculator);
                         --indent;
                     }
@@ -2747,13 +2747,13 @@ namespace Generator
                 if (data.HaveStatement()) {
                     ++indent;
                     if (indexerByLuaLib) {
-                        sb.AppendFormatLine("{0}{1} = {2}[{3}];", GetIndentString(indent), varName, varExp, varIndex);
+                        sb.AppendFormatLine("{0}local {1} = {2}[{3}];", GetIndentString(indent), varName, varExp, varIndex);
                     }
                     else if (isExtern) {
-                        sb.AppendFormatLine("{0}{1} = getexterninstanceindexer({2}, {3}, {4}, {5}, {6}, \"{7}\", 1, {8});", GetIndentString(indent), varName, strElemTypeName, strElemTypeKind, strCallerClass, varExp, strClass, strMember, varIndex);
+                        sb.AppendFormatLine("{0}local {1} = getexterninstanceindexer({2}, {3}, {4}, {5}, {6}, \"{7}\", 1, {8});", GetIndentString(indent), varName, strElemTypeName, strElemTypeKind, strCallerClass, varExp, strClass, strMember, varIndex);
                     }
                     else {
-                        sb.AppendFormatLine("{0}{1} = {2}[{3}];", GetIndentString(indent), varName, varExp, varIndex);
+                        sb.AppendFormatLine("{0}local {1} = {2}[{3}];", GetIndentString(indent), varName, varExp, varIndex);
                     }
                     GenerateStatements(data, sb, indent, funcOpts, calculator);
                     --indent;
