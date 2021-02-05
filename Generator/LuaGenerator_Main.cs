@@ -492,7 +492,10 @@ namespace Generator
                     var instMethods = FindStatement(funcData, "instance_methods") as Dsl.FunctionData;
                     if (null != instMethods && instMethods.GetParamNum() > 0) {
                         List<string> instMethodNames = new List<string>();
-                        sb.AppendFormatLine("{0}local raw_obj_methods = {{", GetIndentString(indent));
+                        if(sealedClass)
+                            sb.AppendFormatLine("{0}local obj_methods = {{", GetIndentString(indent));
+                        else
+                            sb.AppendFormatLine("{0}local raw_obj_methods = {{", GetIndentString(indent));
                         ++indent;
                         bool firstMethod = true;
                         foreach (var def in instMethods.Params) {
@@ -676,32 +679,32 @@ namespace Generator
                         }
                         --indent;
                         sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                        sb.AppendFormatLine("{0}local obj_methods = {{", GetIndentString(indent));
-                        ++indent;
-                        foreach (var mname in instMethodNames) {
-                            bool handled = false;
-                            Cs2LuaMethodInfo cmi;
-                            if(methodInfos.TryGetValue(mname, out cmi)) {
-                                if (!sealedClass) {
+                        if (!sealedClass) {
+                            sb.AppendFormatLine("{0}local obj_methods = {{", GetIndentString(indent));
+                            ++indent;
+                            foreach (var mname in instMethodNames) {
+                                bool handled = false;
+                                Cs2LuaMethodInfo cmi;
+                                if (methodInfos.TryGetValue(mname, out cmi)) {
                                     if (cmi.IsAbstract || cmi.IsVirtual || cmi.IsOverride) {
                                         sb.AppendFormatLine("{0}{1} = wrapvirtual(\"{1}\", raw_obj_methods.{1}, {2}),", GetIndentString(indent), mname, className);
-                                        sb.AppendFormatLine("{0}__self__{1} = wrapinheritable(\"__self__{1}\", raw_obj_methods.{1}, {2}),", GetIndentString(indent), mname, className);
+                                        sb.AppendFormatLine("{0}__self__{1} = raw_obj_methods.{1},", GetIndentString(indent), mname);
                                         handled = true;
                                     }
                                     else if (cmi.IsCtor || !cmi.IsPrivate && !cmi.IsSealed) {
-                                        sb.AppendFormatLine("{0}{1} = wrapinheritable(\"{1}\", raw_obj_methods.{1}, {2}),", GetIndentString(indent), mname, className);
-                                        sb.AppendFormatLine("{0}__self__{1} = wrapinheritable(\"__self__{1}\", raw_obj_methods.{1}, {2}),", GetIndentString(indent), mname, className);
+                                        sb.AppendFormatLine("{0}{1} = raw_obj_methods.{1},", GetIndentString(indent), mname);
+                                        sb.AppendFormatLine("{0}__self__{1} = raw_obj_methods.{1},", GetIndentString(indent), mname);
                                         handled = true;
                                     }
                                 }
+                                if (!handled) {
+                                    sb.AppendFormatLine("{0}{1} = raw_obj_methods.{1},", GetIndentString(indent), mname);
+                                }
                             }
-                            if(!handled) {
-                                sb.AppendFormatLine("{0}{1} = raw_obj_methods.{1},", GetIndentString(indent), mname);
-                            }
+                            --indent;
+                            sb.AppendFormatLine("{0}}};", GetIndentString(indent));
+                            sb.AppendFormatLine("{0}raw_obj_methods = nil;", GetIndentString(indent));
                         }
-                        --indent;
-                        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                        sb.AppendFormatLine("{0}raw_obj_methods = nil;", GetIndentString(indent));
                     }
                     else {
                         sb.AppendFormatLine("{0}local obj_methods = nil;", GetIndentString(indent));
@@ -1675,6 +1678,9 @@ namespace Generator
                             }
                         }
                     }
+                    else if (id == "getbase") {
+                        sb.Append("this.base");
+                    }
                     else if (id == "getstatic") {
                         var kind = CalcTypeString(data.GetParam(0));
                         var obj = data.Params[1];
@@ -1787,9 +1793,9 @@ namespace Generator
                         var className = CalcTypeString(data.GetParam(1));
                         var member = data.Params[2];
                         var mid = member.GetId();
-                        var objCd = obj as Dsl.FunctionData;
                         GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
-                        if (null != objCd && objCd.GetId() == "getinstance" && objCd.GetParamNum() == 4 && objCd.GetParamId(3) == "base") {
+                        var objCd = obj as Dsl.FunctionData;
+                        if (null != objCd && objCd.GetId() == "getbase") {
                             sb.AppendFormat(":__self__{0}", mid);
                         }
                         else {
@@ -1852,9 +1858,9 @@ namespace Generator
                         var className = CalcTypeString(data.GetParam(ignoreCt + 1));
                         var member = data.Params[ignoreCt + 2];
                         var mid = member.GetId();
-                        var objCd = obj as Dsl.FunctionData;
                         GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
-                        if (null != objCd && objCd.GetId() == "getinstance" && objCd.GetParamNum() == 4 && objCd.GetParamId(3) == "base") {
+                        var objCd = obj as Dsl.FunctionData;
+                        if (null != objCd && objCd.GetId() == "getbase") {
                             sb.AppendFormat(":__self__{0}", mid);
                         }
                         else {
@@ -2949,15 +2955,14 @@ namespace Generator
                                     var member = callPart.Params[2];
                                     var mid = member.GetId();
                                     var objCd = obj as Dsl.FunctionData;
-                                    GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
-                                    if (null != objCd && objCd.GetId() == "getinstance" && objCd.GetParamNum() == 4 && objCd.GetParamId(3) == "base") {
-                                        sb.AppendFormat(".__self__{0}", mid);
+                                    if (null != objCd && objCd.GetId() == "getbase") {
+                                        sb.AppendFormat("this.base.__self__{0}, this.base", mid);
                                     }
                                     else {
-                                        sb.AppendFormat(".{0}", mid);
+                                        GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
+                                        sb.AppendFormat(".{0}, ", mid);
+                                        GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
                                     }
-                                    sb.Append(", ");
-                                    GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
                                     int start = 3;
                                     if (callPart.GetParamNum() > start) {
                                         sb.Append(", ");
@@ -3294,15 +3299,14 @@ namespace Generator
                                 var member = callPart.Params[2];
                                 var mid = member.GetId();
                                 var objCd = obj as Dsl.FunctionData;
-                                GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
-                                if (null != objCd && objCd.GetId() == "getinstance" && objCd.GetParamNum() == 4 && objCd.GetParamId(3) == "base") {
-                                    sb.AppendFormat(".__self__{0}", mid);
+                                if (null != objCd && objCd.GetId() == "getbase") {
+                                    sb.AppendFormat("this.base.__self__{0}, this.base", mid);
                                 }
                                 else {
-                                    sb.AppendFormat(".{0}", mid);
+                                    GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
+                                    sb.AppendFormat(".{0}, ", mid);
+                                    GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
                                 }
-                                sb.Append(", ");
-                                GenerateSyntaxComponent(obj, sb, indent, false, funcOpts, calculator);
                                 int start = 3;
                                 if (callPart.GetParamNum() > start) {
                                     sb.Append(", ");

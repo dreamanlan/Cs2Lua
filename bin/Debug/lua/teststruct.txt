@@ -45,7 +45,7 @@ TestStruct = {
 
 		local class = TestStruct;
 
-		local raw_obj_methods = {
+		local obj_methods = {
 			ctor = function(this)
 				this:__ctor();
 			end,
@@ -58,11 +58,6 @@ TestStruct = {
 				end;
 			end,
 		};
-		local obj_methods = {
-			ctor = raw_obj_methods.ctor,
-			__ctor = raw_obj_methods.__ctor,
-		};
-		raw_obj_methods = nil;
 
 		local obj_build = function()
 			return {

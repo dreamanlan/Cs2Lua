@@ -35,7 +35,7 @@ Cs2LuaKeyValuePair_System_Int32_System_Int32 = {
 
 		local class = Cs2LuaKeyValuePair_System_Int32_System_Int32;
 
-		local raw_obj_methods = {
+		local obj_methods = {
 			ctor__TKey__TValue = function(this, key, value)
 				this:__ctor();
 				this.key = key;
@@ -84,15 +84,6 @@ Cs2LuaKeyValuePair_System_Int32_System_Int32 = {
 				end;
 			end,
 		};
-		local obj_methods = {
-			ctor__TKey__TValue = raw_obj_methods.ctor__TKey__TValue,
-			ctor = raw_obj_methods.ctor,
-			get_Key = raw_obj_methods.get_Key,
-			get_Value = raw_obj_methods.get_Value,
-			ToString = raw_obj_methods.ToString,
-			__ctor = raw_obj_methods.__ctor,
-		};
-		raw_obj_methods = nil;
 
 		local obj_build = function()
 			return {

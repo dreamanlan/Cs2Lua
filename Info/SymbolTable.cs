@@ -217,19 +217,8 @@ namespace RoslynTool.CsToDsl
             m_PreprocessorNames.TryGetValue(name, out ret);
             return ret;
         }
-        internal void Init(CSharpCompilation compilation, string cfgPath, List<string> preprocessors)
+        internal string Init(CSharpCompilation compilation, string cfgPath, List<string> preprocessors)
         {
-            m_Compilation = compilation;
-            m_AssemblySymbol = compilation.Assembly;
-
-            foreach (var name in preprocessors) {
-                m_PreprocessorNames.TryAdd(name, true);
-            }
-
-            INamespaceSymbol nssym = m_AssemblySymbol.GlobalNamespace;
-            BuildInheritTypeTreeRecursively(nssym);
-            InitRecursively(nssym);
-
             Dsl.DslFile dslFile = new Dsl.DslFile();
             if (dslFile.Load(Path.Combine(cfgPath, "rewriter.dsl"), (msg) => { Console.WriteLine(msg); })) {
                 foreach (var info in dslFile.DslInfos) {
@@ -254,7 +243,8 @@ namespace RoslynTool.CsToDsl
                                 }
                             }
                         }
-                    } else if (cid == "LegalGenericMethodList") {
+                    }
+                    else if (cid == "LegalGenericMethodList") {
                         foreach (var comp in func.Params) {
                             var cd = comp as Dsl.FunctionData;
                             if (null != cd) {
@@ -269,7 +259,8 @@ namespace RoslynTool.CsToDsl
                                 }
                             }
                         }
-                    } else if (cid == "LegalParameterGenericTypeList") {
+                    }
+                    else if (cid == "LegalParameterGenericTypeList") {
                         foreach (var comp in func.Params) {
                             var cd = comp as Dsl.FunctionData;
                             if (null != cd) {
@@ -282,7 +273,8 @@ namespace RoslynTool.CsToDsl
                                 }
                             }
                         }
-                    } else if (cid == "LegalExtensionList") {
+                    }
+                    else if (cid == "LegalExtensionList") {
                         foreach (var comp in func.Params) {
                             var cd = comp as Dsl.FunctionData;
                             if (null != cd) {
@@ -305,7 +297,7 @@ namespace RoslynTool.CsToDsl
                                     var v1 = cd.GetParamId(0);
                                     var v2 = cd.GetParamId(1);
                                     HashSet<string> targets;
-                                    if(!m_LegalConversions.TryGetValue(v1, out targets)) {
+                                    if (!m_LegalConversions.TryGetValue(v1, out targets)) {
                                         targets = new HashSet<string>();
                                         m_LegalConversions.Add(v1, targets);
                                     }
@@ -315,7 +307,8 @@ namespace RoslynTool.CsToDsl
                                 }
                             }
                         }
-                    } else if (cid == "IllegalTypeList") {
+                    }
+                    else if (cid == "IllegalTypeList") {
                         foreach (var comp in func.Params) {
                             var cd = comp as Dsl.FunctionData;
                             if (null != cd) {
@@ -328,7 +321,8 @@ namespace RoslynTool.CsToDsl
                                 }
                             }
                         }
-                    } else if (cid == "IllegalMethodList") {
+                    }
+                    else if (cid == "IllegalMethodList") {
                         foreach (var comp in func.Params) {
                             var cd = comp as Dsl.FunctionData;
                             if (null != cd) {
@@ -343,7 +337,8 @@ namespace RoslynTool.CsToDsl
                                 }
                             }
                         }
-                    } else if (cid == "IllegalPropertyList") {
+                    }
+                    else if (cid == "IllegalPropertyList") {
                         foreach (var comp in func.Params) {
                             var cd = comp as Dsl.FunctionData;
                             if (null != cd) {
@@ -358,7 +353,8 @@ namespace RoslynTool.CsToDsl
                                 }
                             }
                         }
-                    } else if (cid == "IllegalFieldList") {
+                    }
+                    else if (cid == "IllegalFieldList") {
                         foreach (var comp in func.Params) {
                             var cd = comp as Dsl.FunctionData;
                             if (null != cd) {
@@ -479,6 +475,20 @@ namespace RoslynTool.CsToDsl
                     }
                 }
             }
+
+            m_LogBuilder.Length = 0;
+            m_Compilation = compilation;
+            m_AssemblySymbol = compilation.Assembly;
+
+            foreach (var name in preprocessors) {
+                m_PreprocessorNames.TryAdd(name, true);
+            }
+
+            INamespaceSymbol nssym = m_AssemblySymbol.GlobalNamespace;
+            BuildInheritTypeTreeRecursively(nssym);
+            InitRecursively(nssym);
+
+            return m_LogBuilder.ToString();
         }
 		
         internal bool IsLegalGenericType(INamedTypeSymbol sym)
@@ -811,60 +821,102 @@ namespace RoslynTool.CsToDsl
             }
         }
 
-        internal void CalcMemberCount(string key, Dictionary<string, int> memberCounts)
+        internal void CalcMemberCount(string key, Dictionary<string, int> methodCounts, Dictionary<string, int> fieldCounts)
         {
             TypeTreeNode typeTreeNode;
             if (m_TypeTreeNodes.TryGetValue(key, out typeTreeNode)) {
+                var members0 = typeTreeNode.Type.GetMembers();
+                foreach (var sym in members0) {
+                    var msym = sym as IMethodSymbol;
+                    var fsym = sym as IFieldSymbol;
+                    if (null != msym && !msym.IsImplicitlyDeclared) {
+                        string name = msym.Name;
+                        if (name[0] == '.') {
+                            name = name.Substring(1);
+                        }
+                        if (methodCounts.ContainsKey(name)) {
+                            if (!msym.IsOverride) {
+                                ++methodCounts[name];
+                            }
+                        }
+                        else {
+                            methodCounts.Add(name, 1);
+                        }
+                    }
+                    else if (null != fsym && !fsym.IsImplicitlyDeclared) {
+                        string name = fsym.Name;
+                        if (fieldCounts.ContainsKey(name)) {
+                            ++fieldCounts[name];
+                            m_LogBuilder.AppendFormat("[error] {0}'s field {1} duplicate !", key, name);
+                            m_LogBuilder.AppendLine();
+                        }
+                        else {
+                            fieldCounts.Add(name, 1);
+                        }
+                    }
+                }
+
                 var baseTypeNode = typeTreeNode.BaseTypeNode;
                 while (null != baseTypeNode) {
                     var members = baseTypeNode.Type.GetMembers();
                     foreach (var sym in members) {
                         var msym = sym as IMethodSymbol;
+                        var fsym = sym as IFieldSymbol;
                         if (null != msym && !msym.IsImplicitlyDeclared) {
                             string name = msym.Name;
                             if (name[0] == '.' || name.StartsWith("op_"))
                                 continue;
-                            if (memberCounts.ContainsKey(name)) {
+                            if (methodCounts.ContainsKey(name)) {
                                 if (!msym.IsOverride) {
-                                    ++memberCounts[name];
+                                    ++methodCounts[name];
                                 }
                             }
-                            else {
-                                memberCounts.Add(name, 1);
+                        }
+                        else if (null != fsym && !fsym.IsImplicitlyDeclared) {
+                            string name = fsym.Name;
+                            if (fieldCounts.ContainsKey(name)) {
+                                ++fieldCounts[name];
+                                m_LogBuilder.AppendFormat("[error] {0}'s field {1} duplicate to {2} !", key, name, baseTypeNode.Type.Name);
+                                m_LogBuilder.AppendLine();
                             }
                         }
                     }
                     baseTypeNode = baseTypeNode.BaseTypeNode;
                 }
-                CalcMemberCountRecursively(typeTreeNode, true, memberCounts);
+
+                foreach (var cnode in typeTreeNode.ChildTypeNodes) {
+                    CalcMemberCountRecursively(key, cnode, methodCounts, fieldCounts);
+                }
             }
         }
-        private void CalcMemberCountRecursively(TypeTreeNode typeTreeNode, bool isMyself, Dictionary<string, int> memberCounts)
+        private void CalcMemberCountRecursively(string key, TypeTreeNode typeTreeNode, Dictionary<string, int> methodCounts, Dictionary<string, int> fieldCounts)
         {
             var members = typeTreeNode.Type.GetMembers();
             foreach (var sym in members) {
                 var msym = sym as IMethodSymbol;
+                var fsym = sym as IFieldSymbol;
                 if (null != msym && !msym.IsImplicitlyDeclared) {
                     string name = msym.Name;
-                    if (!isMyself && name.StartsWith("op_"))
+                    if (name[0] == '.' || name.StartsWith("op_"))
                         continue;
-                    if (name[0] == '.') {
-                        if (!isMyself)
-                            continue;
-                        name = name.Substring(1);
-                    }
-                    if (memberCounts.ContainsKey(name)) {
+                    if (methodCounts.ContainsKey(name)) {
                         if (!msym.IsOverride) {
-                            ++memberCounts[name];
+                            ++methodCounts[name];
                         }
                     }
-                    else {
-                        memberCounts.Add(name, 1);
+                }
+                else if (null != fsym && !fsym.IsImplicitlyDeclared) {
+                    string name = fsym.Name;
+                    if (fieldCounts.ContainsKey(name)) {
+                        ++fieldCounts[name];
+                        m_LogBuilder.AppendFormat("[error] {0}'s field {1} duplicate to {2} !", key, name, typeTreeNode.Type.Name);
+                        m_LogBuilder.AppendLine();
                     }
                 }
             }
+
             foreach (var cnode in typeTreeNode.ChildTypeNodes) {
-                CalcMemberCountRecursively(cnode, false, memberCounts);
+                CalcMemberCountRecursively(key, cnode, methodCounts, fieldCounts);
             }
         }
         private string CalcFullNameAndTypeArguments(string name, INamedTypeSymbol sym)
@@ -962,6 +1014,7 @@ namespace RoslynTool.CsToDsl
         private SymbolTable() { }
 
         //这部分在初始构建，不会多线程修改
+        private StringBuilder m_LogBuilder = new StringBuilder();
         private CSharpCompilation m_Compilation = null;
         private IAssemblySymbol m_AssemblySymbol = null;
         private Dictionary<string, INamespaceSymbol> m_NamespaceSymbols = new Dictionary<string, INamespaceSymbol>();

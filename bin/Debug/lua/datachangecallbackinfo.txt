@@ -35,7 +35,7 @@ DataChangeCallBackInfo = {
 
 		local class = DataChangeCallBackInfo;
 
-		local raw_obj_methods = {
+		local obj_methods = {
 			ctor = function(this)
 				this:__ctor();
 				this:reset();
@@ -62,14 +62,6 @@ DataChangeCallBackInfo = {
 				end;
 			end,
 		};
-		local obj_methods = {
-			ctor = raw_obj_methods.ctor,
-			reset = raw_obj_methods.reset,
-			Downcast = raw_obj_methods.Downcast,
-			InitPool = raw_obj_methods.InitPool,
-			__ctor = raw_obj_methods.__ctor,
-		};
-		raw_obj_methods = nil;
 
 		local obj_build = function()
 			return {

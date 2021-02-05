@@ -59,15 +59,12 @@ TestIntfImpl = {
 			end,
 		};
 		local obj_methods = {
-			get_prop = wrapinheritable("get_prop", raw_obj_methods.get_prop, TestIntfImpl),
-			__self__get_prop = wrapinheritable("__self__get_prop", raw_obj_methods.get_prop, TestIntfImpl),
 			get_prop = raw_obj_methods.get_prop,
-			set_prop = wrapinheritable("set_prop", raw_obj_methods.set_prop, TestIntfImpl),
-			__self__set_prop = wrapinheritable("__self__set_prop", raw_obj_methods.set_prop, TestIntfImpl),
+			__self__get_prop = raw_obj_methods.get_prop,
 			set_prop = raw_obj_methods.set_prop,
-			ctor = wrapinheritable("ctor", raw_obj_methods.ctor, TestIntfImpl),
-			__self__ctor = wrapinheritable("__self__ctor", raw_obj_methods.ctor, TestIntfImpl),
+			__self__set_prop = raw_obj_methods.set_prop,
 			ctor = raw_obj_methods.ctor,
+			__self__ctor = raw_obj_methods.ctor,
 			__ctor = raw_obj_methods.__ctor,
 		};
 		raw_obj_methods = nil;

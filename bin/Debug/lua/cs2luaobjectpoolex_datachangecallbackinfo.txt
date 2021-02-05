@@ -35,7 +35,7 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 
 		local class = Cs2LuaObjectPoolEx_DataChangeCallBackInfo;
 
-		local raw_obj_methods = {
+		local obj_methods = {
 			Init__Func_1_T__Action_1_T = function(this, creater, destroyer)
 				this.m_Creater = delegationset(false, this, "m_Creater", SymbolKind.Field, creater);
 				this.m_Destroyer = delegationset(false, this, "m_Destroyer", SymbolKind.Field, destroyer);
@@ -116,18 +116,6 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 				this.m_UnusedObjects = newexterncollection(System.Collections.Generic.Queue_T, buildglobalinfoonce("g_System_Collections_Generic_Queue_DataChangeCallBackInfo_TypeArgs", getglobalinfo("g_System_Collections_Generic_Queue_DataChangeCallBackInfo_TypeArgs") or {T}), buildglobalinfoonce("g_System_Collections_Generic_Queue_DataChangeCallBackInfo_TypeKinds", getglobalinfo("g_System_Collections_Generic_Queue_DataChangeCallBackInfo_TypeKinds") or {TypeKind.TypeParameter}), "ctor", 0, {});
 			end,
 		};
-		local obj_methods = {
-			Init__Func_1_T__Action_1_T = raw_obj_methods.Init__Func_1_T__Action_1_T,
-			Init__Int32__Func_1_T__Action_1_T = raw_obj_methods.Init__Int32__Func_1_T__Action_1_T,
-			Alloc = raw_obj_methods.Alloc,
-			Recycle = raw_obj_methods.Recycle,
-			Clear = raw_obj_methods.Clear,
-			__ori_Clear = raw_obj_methods.__ori_Clear,
-			get_Count = raw_obj_methods.get_Count,
-			ctor = raw_obj_methods.ctor,
-			__ctor = raw_obj_methods.__ctor,
-		};
-		raw_obj_methods = nil;
 
 		local obj_build = function()
 			return {

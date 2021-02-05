@@ -230,6 +230,8 @@ class Test
         StrStrDict dict = new StrStrDict();
         dict.Add("1", "2");
         dict.Remove("1");
+        int[] arr = new int[] { 1,2,3,4,5 };
+        Array.Clear(arr, 0, arr.Length);
         return 1;
     }
     public int test()

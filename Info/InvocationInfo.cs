@@ -283,7 +283,7 @@ namespace RoslynTool.CsToDsl
                                 lastConv = iarg.Value as IConversionOperation;
                             }
                         }
-                        if (!param.IsParams && param.Type.TypeKind == TypeKind.Array) {
+                        if (!param.IsParams && (param.Type.TypeKind == TypeKind.Array || ClassInfo.GetFullName(param.Type) == "System.Array")) {
                             RecordRefArray(arg.Expression);
                         }
                         if (param.RefKind == RefKind.Ref) {
@@ -430,7 +430,7 @@ namespace RoslynTool.CsToDsl
                                 lastConv = iarg.Value as IConversionOperation;
                             }
                         }
-                        if (!param.IsParams && param.Type.TypeKind == TypeKind.Array) {
+                        if (!param.IsParams && (param.Type.TypeKind == TypeKind.Array || ClassInfo.GetFullName(param.Type) == "System.Array")) {
                             RecordRefArray(arg.Expression);
                         }
                         if (param.RefKind == RefKind.Ref) {
@@ -557,7 +557,7 @@ namespace RoslynTool.CsToDsl
                     var argType = model.GetTypeInfoEx(arg).Type;
                     if (null == argType && null != argOper)
                         argType = argOper.Type;
-                    if (null != argType && argType.TypeKind == TypeKind.Array) {
+                    if (null != argType && (argType.TypeKind == TypeKind.Array || ClassInfo.GetFullName(argType) == "System.Array")) {
                         RecordRefArray(arg);
                     }
                     TryAddExternEnum(IsEnumClass, argType, argOper);

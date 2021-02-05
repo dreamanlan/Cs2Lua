@@ -60,15 +60,12 @@ Vector3List = {
 			end,
 		};
 		local obj_methods = {
-			ctor = wrapinheritable("ctor", raw_obj_methods.ctor, Vector3List),
-			__self__ctor = wrapinheritable("__self__ctor", raw_obj_methods.ctor, Vector3List),
 			ctor = raw_obj_methods.ctor,
-			ctor__Int32 = wrapinheritable("ctor__Int32", raw_obj_methods.ctor__Int32, Vector3List),
-			__self__ctor__Int32 = wrapinheritable("__self__ctor__Int32", raw_obj_methods.ctor__Int32, Vector3List),
+			__self__ctor = raw_obj_methods.ctor,
 			ctor__Int32 = raw_obj_methods.ctor__Int32,
-			ctor__ICollection_1_Vector3 = wrapinheritable("ctor__ICollection_1_Vector3", raw_obj_methods.ctor__ICollection_1_Vector3, Vector3List),
-			__self__ctor__ICollection_1_Vector3 = wrapinheritable("__self__ctor__ICollection_1_Vector3", raw_obj_methods.ctor__ICollection_1_Vector3, Vector3List),
+			__self__ctor__Int32 = raw_obj_methods.ctor__Int32,
 			ctor__ICollection_1_Vector3 = raw_obj_methods.ctor__ICollection_1_Vector3,
+			__self__ctor__ICollection_1_Vector3 = raw_obj_methods.ctor__ICollection_1_Vector3,
 			__ctor = raw_obj_methods.__ctor,
 		};
 		raw_obj_methods = nil;

@@ -65,12 +65,10 @@ ZipOutputStream = {
 			end,
 		};
 		local obj_methods = {
-			Test = wrapinheritable("Test", raw_obj_methods.Test, ZipOutputStream),
-			__self__Test = wrapinheritable("__self__Test", raw_obj_methods.Test, ZipOutputStream),
 			Test = raw_obj_methods.Test,
-			ctor = wrapinheritable("ctor", raw_obj_methods.ctor, ZipOutputStream),
-			__self__ctor = wrapinheritable("__self__ctor", raw_obj_methods.ctor, ZipOutputStream),
+			__self__Test = raw_obj_methods.Test,
 			ctor = raw_obj_methods.ctor,
+			__self__ctor = raw_obj_methods.ctor,
 			__ctor = raw_obj_methods.__ctor,
 		};
 		raw_obj_methods = nil;
@@ -165,12 +163,10 @@ ZipOutputStream.EmbedClass = {
 			end,
 		};
 		local obj_methods = {
-			Test = wrapinheritable("Test", raw_obj_methods.Test, ZipOutputStream.EmbedClass),
-			__self__Test = wrapinheritable("__self__Test", raw_obj_methods.Test, ZipOutputStream.EmbedClass),
 			Test = raw_obj_methods.Test,
-			ctor = wrapinheritable("ctor", raw_obj_methods.ctor, ZipOutputStream.EmbedClass),
-			__self__ctor = wrapinheritable("__self__ctor", raw_obj_methods.ctor, ZipOutputStream.EmbedClass),
+			__self__Test = raw_obj_methods.Test,
 			ctor = raw_obj_methods.ctor,
+			__self__ctor = raw_obj_methods.ctor,
 			__ctor = raw_obj_methods.__ctor,
 		};
 		raw_obj_methods = nil;

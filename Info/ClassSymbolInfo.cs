@@ -65,8 +65,9 @@ namespace RoslynTool.CsToDsl
                 ExistAttributes = true;
             }
 
-            Dictionary<string, int> memberCounts = new Dictionary<string, int>();
-            SymbolTable.Instance.CalcMemberCount(ClassKey, memberCounts);
+            Dictionary<string, int> fieldCounts = new Dictionary<string, int>();
+            Dictionary<string, int> methodCounts = new Dictionary<string, int>();
+            SymbolTable.Instance.CalcMemberCount(ClassKey, methodCounts, fieldCounts);
 
             bool fieldUseExplicitTypeParams = false;
             bool staticUseExplicitTypeParams = false;
@@ -107,7 +108,7 @@ namespace RoslynTool.CsToDsl
                         //值类型构造都按重载处理，总是会生成一个默认构造
                         isOverloaded = true;
                     }
-                    else if (memberCounts.TryGetValue(name, out count)) {
+                    else if (methodCounts.TryGetValue(name, out count)) {
                         isOverloaded = count > 1;
                     }
                     else {

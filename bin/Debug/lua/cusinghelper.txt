@@ -133,12 +133,10 @@ CUsingHelper = {
 			end,
 		};
 		local obj_methods = {
-			ctor = wrapinheritable("ctor", raw_obj_methods.ctor, CUsingHelper),
-			__self__ctor = wrapinheritable("__self__ctor", raw_obj_methods.ctor, CUsingHelper),
 			ctor = raw_obj_methods.ctor,
-			Dispose = wrapinheritable("Dispose", raw_obj_methods.Dispose, CUsingHelper),
-			__self__Dispose = wrapinheritable("__self__Dispose", raw_obj_methods.Dispose, CUsingHelper),
+			__self__ctor = raw_obj_methods.ctor,
 			Dispose = raw_obj_methods.Dispose,
+			__self__Dispose = raw_obj_methods.Dispose,
 			__ctor = raw_obj_methods.__ctor,
 		};
 		raw_obj_methods = nil;

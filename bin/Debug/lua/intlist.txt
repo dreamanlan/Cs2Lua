@@ -49,9 +49,8 @@ IntList = {
 			end,
 		};
 		local obj_methods = {
-			ctor = wrapinheritable("ctor", raw_obj_methods.ctor, IntList),
-			__self__ctor = wrapinheritable("__self__ctor", raw_obj_methods.ctor, IntList),
 			ctor = raw_obj_methods.ctor,
+			__self__ctor = raw_obj_methods.ctor,
 			__ctor = raw_obj_methods.__ctor,
 		};
 		raw_obj_methods = nil;

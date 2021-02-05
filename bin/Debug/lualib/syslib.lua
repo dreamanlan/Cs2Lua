@@ -3695,7 +3695,7 @@ end
 function wrapvirtual(k, f, class)
     return function(this, ...)
         local obj = this
-        this = __get_this_for_class(this, class)
+        --this = __get_this_for_class(this, class)
         local final_f, final_obj = __find_override(k, this)
         if not final_f then
             final_f = f
@@ -3707,15 +3707,7 @@ function wrapvirtual(k, f, class)
     end
 end
 function wrapinheritable(k, f, class)
-    return function(this, ...)
-        local obj = this
-        this = __get_this_for_class(this, class)
-        local final_f = f
-        local final_obj = this
-        --安装到原始调用对象上，以后就直接调用相应方法了
-        rawset(obj, k, function(self, ...) return final_f(final_obj, ...) end)
-        return final_f(final_obj, ...)
-    end
+    return f
 end
  
 function defineclass(

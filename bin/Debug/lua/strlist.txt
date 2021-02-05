@@ -60,15 +60,12 @@ StrList = {
 			end,
 		};
 		local obj_methods = {
-			ctor = wrapinheritable("ctor", raw_obj_methods.ctor, StrList),
-			__self__ctor = wrapinheritable("__self__ctor", raw_obj_methods.ctor, StrList),
 			ctor = raw_obj_methods.ctor,
-			ctor__Int32 = wrapinheritable("ctor__Int32", raw_obj_methods.ctor__Int32, StrList),
-			__self__ctor__Int32 = wrapinheritable("__self__ctor__Int32", raw_obj_methods.ctor__Int32, StrList),
+			__self__ctor = raw_obj_methods.ctor,
 			ctor__Int32 = raw_obj_methods.ctor__Int32,
-			ctor__ICollection_1_String = wrapinheritable("ctor__ICollection_1_String", raw_obj_methods.ctor__ICollection_1_String, StrList),
-			__self__ctor__ICollection_1_String = wrapinheritable("__self__ctor__ICollection_1_String", raw_obj_methods.ctor__ICollection_1_String, StrList),
+			__self__ctor__Int32 = raw_obj_methods.ctor__Int32,
 			ctor__ICollection_1_String = raw_obj_methods.ctor__ICollection_1_String,
+			__self__ctor__ICollection_1_String = raw_obj_methods.ctor__ICollection_1_String,
 			__ctor = raw_obj_methods.__ctor,
 		};
 		raw_obj_methods = nil;

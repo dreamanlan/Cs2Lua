@@ -59,15 +59,12 @@ StrStrDict = {
 			end,
 		};
 		local obj_methods = {
-			ctor = wrapinheritable("ctor", raw_obj_methods.ctor, StrStrDict),
-			__self__ctor = wrapinheritable("__self__ctor", raw_obj_methods.ctor, StrStrDict),
 			ctor = raw_obj_methods.ctor,
-			ctor__Int32 = wrapinheritable("ctor__Int32", raw_obj_methods.ctor__Int32, StrStrDict),
-			__self__ctor__Int32 = wrapinheritable("__self__ctor__Int32", raw_obj_methods.ctor__Int32, StrStrDict),
+			__self__ctor = raw_obj_methods.ctor,
 			ctor__Int32 = raw_obj_methods.ctor__Int32,
-			ctor__IDictionary_2_String_String = wrapinheritable("ctor__IDictionary_2_String_String", raw_obj_methods.ctor__IDictionary_2_String_String, StrStrDict),
-			__self__ctor__IDictionary_2_String_String = wrapinheritable("__self__ctor__IDictionary_2_String_String", raw_obj_methods.ctor__IDictionary_2_String_String, StrStrDict),
+			__self__ctor__Int32 = raw_obj_methods.ctor__Int32,
 			ctor__IDictionary_2_String_String = raw_obj_methods.ctor__IDictionary_2_String_String,
+			__self__ctor__IDictionary_2_String_String = raw_obj_methods.ctor__IDictionary_2_String_String,
 			__ctor = raw_obj_methods.__ctor,
 		};
 		raw_obj_methods = nil;

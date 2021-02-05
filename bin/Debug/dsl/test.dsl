@@ -17,21 +17,21 @@ class(Test) {
 			return(__cs2dsl_newobj);
 		}options[needfuncinfo(false)];
 		ToList = deffunc(1)args(T, enumer){
-			local(__method_ret_282_4_290_5);
+			local(__method_ret_284_4_292_5);
 			callinstance(this, Test, "LoadStartupView_FGUI", "", "", "", 0, false);
 			local(r); r = newexternlist(System.Collections.Generic.List_T, "g_System_Collections_Generic_List_T", typeargs(T), typekinds(TypeKind.TypeParameter), "ctor", 0, literallist("g_System_Collections_Generic_List_T", typeargs(T), typekinds(TypeKind.TypeParameter)));
-			foreach(__foreach_286_8_288_9, v, enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true){
+			foreach(__foreach_288_8_290_9, v, enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true){
 				callexterninstance(r, System.Collections.Generic.List_T, "Add", v);
 			};
-			__method_ret_282_4_290_5 = r;
-			return(__method_ret_282_4_290_5);
+			__method_ret_284_4_292_5 = r;
+			return(__method_ret_284_4_292_5);
 		}options[needfuncinfo(true), rettype(return, System.Collections.Generic.List_T, TypeKind.Class, 0, true), paramtype(T, null, TypeKind.TypeParameter, 0, false), paramtype(enumer, System.Collections.Generic.IEnumerable_T, TypeKind.Interface, 0, true)];
 		ToArray = deffunc(1)args(T, list){
-			local(__method_ret_291_4_296_5);
+			local(__method_ret_293_4_298_5);
 			local(arr); arr = newmultiarray(T, TypeKind.TypeParameter, null, 1, getexterninstance(SymbolKind.Property, list, System.Collections.Generic.ICollection_T, "Count"));
 			callexterninstance(list, System.Collections.Generic.ICollection_T, "CopyTo", arr, 0);
-			__method_ret_291_4_296_5 = arr;
-			return(__method_ret_291_4_296_5);
+			__method_ret_293_4_298_5 = arr;
+			return(__method_ret_293_4_298_5);
 		}options[needfuncinfo(false), rettype(return, Test.T, TypeKind.Array, 0, true), paramtype(T, null, TypeKind.TypeParameter, 0, false), paramtype(list, System.Collections.Generic.IList_T, TypeKind.Interface, 0, true)];
 		cctor = deffunc(0)args(){
 			callstatic(Test, "__cctor");
@@ -110,111 +110,113 @@ class(Test) {
 );
 		}options[needfuncinfo(true), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		testcall = deffunc(1)args(this){
-			local(__method_ret_225_4_233_5);
+			local(__method_ret_225_4_235_5);
 			arraysetstruct(false, SymbolKind.Field, UnityEngine.Vector3, getinstance(SymbolKind.Field, this, Test, "m_Vs"), 2, 1, getexternstaticstructmember(SymbolKind.Property, UnityEngine.Vector3, "zero"));
 			local(v); v = arraygetstruct(false, SymbolKind.Field, UnityEngine.Vector3, getinstance(SymbolKind.Field, this, Test, "m_Vs"), 1, 1);
 			v = wrapexternstruct(v, UnityEngine.Vector3);
 			local(dict); dict = newdictionary(StrStrDict, "g_StrStrDict", typeargs(), typekinds(), "ctor", 0, literaldictionary("g_StrStrDict", typeargs(), typekinds()));
 			callexterninstance(dict, System.Collections.Generic.Dictionary_TKey_TValue, "Add", dslstrtocsstr("1"), dslstrtocsstr("2"));
 			callexterninstance(dict, System.Collections.Generic.Dictionary_TKey_TValue, "Remove", dslstrtocsstr("1"));
-			__method_ret_225_4_233_5 = 1;
-			return(__method_ret_225_4_233_5);
+			local(arr); arr = literalarray(System.Int32, TypeKind.Struct, 1, 2, 3, 4, 5);
+			invokearraystaticmethod(arr, null, "Clear", arr, 0, getforbasicvalue(arr, false, System.Array, "Length"));
+			__method_ret_225_4_235_5 = 1;
+			return(__method_ret_225_4_235_5);
 		}options[needfuncinfo(true), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
 		test = deffunc(1)args(this){
-			local(__method_ret_234_4_270_5);
+			local(__method_ret_236_4_272_5);
 			local(a); a = 2;
 			local(b); b = 0;
 			local(c); c = 1;
 			local(aa); aa = deffunc(1)args(){
-				local(__method_ret_237_31_250_9);
-				local(__try_ret_238_12_243_13, __try_retval_238_12_243_13); multiassign(__try_ret_238_12_243_13, __try_retval_238_12_243_13) = dsltry(false, __try_ret_238_12_243_13){
+				local(__method_ret_239_31_252_9);
+				local(__try_ret_240_12_245_13, __try_retval_240_12_245_13); multiassign(__try_ret_240_12_245_13, __try_retval_240_12_245_13) = dsltry(false, __try_ret_240_12_245_13){
 					callexternstatic(System.Console, "Write__String", dslstrtocsstr("test"));
 				};
-				local(__catch_handled_238_12_243_13, __catch_retval_238_12_243_13); __catch_handled_238_12_243_13 = false;
-				__catch_retval_238_12_243_13 = dslcatch(__catch_handled_238_12_243_13, __try_retval_238_12_243_13, __try_ret_238_12_243_13,
+				local(__catch_handled_240_12_245_13, __catch_retval_240_12_245_13); __catch_handled_240_12_245_13 = false;
+				__catch_retval_240_12_245_13 = dslcatch(__catch_handled_240_12_245_13, __try_retval_240_12_245_13, __try_ret_240_12_245_13,
 					function(ex){
-						__catch_handled_238_12_243_13 = true;
+						__catch_handled_240_12_245_13 = true;
 					}
 				);
-				local(__try_ret_244_12_249_13, __try_retval_244_12_249_13); multiassign(__try_ret_244_12_249_13, __try_retval_244_12_249_13) = dsltry(false, __try_ret_244_12_249_13){
+				local(__try_ret_246_12_251_13, __try_retval_246_12_251_13); multiassign(__try_ret_246_12_251_13, __try_retval_246_12_251_13) = dsltry(false, __try_ret_246_12_251_13){
 					block{
-					__method_ret_237_31_250_9 = lualib_call(2, [null], this, Test, "testcall");
-					__try_retval_244_12_249_13 = 1;
+					__method_ret_239_31_252_9 = lualib_call(2, [null], this, Test, "testcall");
+					__try_retval_246_12_251_13 = 1;
 					break;
 					};
 				};
-				if(__try_ret_244_12_249_13){
-					if(__try_retval_244_12_249_13){
-					if(__try_retval_244_12_249_13==1){
-						return(__method_ret_237_31_250_9);
+				if(__try_ret_246_12_251_13){
+					if(__try_retval_246_12_251_13){
+					if(__try_retval_246_12_251_13==1){
+						return(__method_ret_239_31_252_9);
 					};
 					};
 				};
-				local(__catch_handled_244_12_249_13, __catch_retval_244_12_249_13); __catch_handled_244_12_249_13 = false;
-				__catch_retval_244_12_249_13 = dslcatch(__catch_handled_244_12_249_13, __try_retval_244_12_249_13, __try_ret_244_12_249_13,
+				local(__catch_handled_246_12_251_13, __catch_retval_246_12_251_13); __catch_handled_246_12_251_13 = false;
+				__catch_retval_246_12_251_13 = dslcatch(__catch_handled_246_12_251_13, __try_retval_246_12_251_13, __try_ret_246_12_251_13,
 					function(ex){
-						__catch_handled_244_12_249_13 = true;
+						__catch_handled_246_12_251_13 = true;
 						block{
-						__method_ret_237_31_250_9 = 0;
+						__method_ret_239_31_252_9 = 0;
 						return(1);
 						};
 					}
 				);
-				if(__catch_retval_244_12_249_13){
-				if(__catch_retval_244_12_249_13==1){
-					return(__method_ret_237_31_250_9);
+				if(__catch_retval_246_12_251_13){
+				if(__catch_retval_246_12_251_13==1){
+					return(__method_ret_239_31_252_9);
 				};
 				};
 				return(null);
 			}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
-			local(__try_ret_252_8_257_9, __try_retval_252_8_257_9); multiassign(__try_ret_252_8_257_9, __try_retval_252_8_257_9) = dsltryfunc(__try_retval_252_8_257_9, __try_func_252_8_257_9, this, 2){
+			local(__try_ret_254_8_259_9, __try_retval_254_8_259_9); multiassign(__try_ret_254_8_259_9, __try_retval_254_8_259_9) = dsltryfunc(__try_retval_254_8_259_9, __try_func_254_8_259_9, this, 2){
 				callexternstatic(System.Console, "Write__String", dslstrtocsstr("test"));
 			}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
-			local(__catch_handled_252_8_257_9, __catch_retval_252_8_257_9); __catch_handled_252_8_257_9 = false;
-			__catch_retval_252_8_257_9 = dslcatch(__catch_handled_252_8_257_9, __try_retval_252_8_257_9, __try_ret_252_8_257_9,
+			local(__catch_handled_254_8_259_9, __catch_retval_254_8_259_9); __catch_handled_254_8_259_9 = false;
+			__catch_retval_254_8_259_9 = dslcatch(__catch_handled_254_8_259_9, __try_retval_254_8_259_9, __try_ret_254_8_259_9,
 				function(ex){
-					__catch_handled_252_8_257_9 = true;
+					__catch_handled_254_8_259_9 = true;
 				}
 			);
-			local(__try_ret_258_8_267_9, __try_retval_258_8_267_9); multiassign(__try_ret_258_8_267_9, __try_retval_258_8_267_9, __method_ret_234_4_270_5) = dsltryfunc(__try_retval_258_8_267_9, __try_func_258_8_267_9, this, 2, __method_ret_234_4_270_5, aa){
+			local(__try_ret_260_8_269_9, __try_retval_260_8_269_9); multiassign(__try_ret_260_8_269_9, __try_retval_260_8_269_9, __method_ret_236_4_272_5) = dsltryfunc(__try_retval_260_8_269_9, __try_func_260_8_269_9, this, 2, __method_ret_236_4_272_5, aa){
 				block{
-				__method_ret_234_4_270_5 = callexterndelegation(aa, "System.Func_TResult.Invoke");
-				return(1, __method_ret_234_4_270_5);
+				__method_ret_236_4_272_5 = callexterndelegation(aa, "System.Func_TResult.Invoke");
+				return(1, __method_ret_236_4_272_5);
 				};
-			}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true), rettype(__method_ret_234_4_270_5, System.Int32, TypeKind.Struct, 1, true), paramtype(__method_ret_234_4_270_5, System.Int32, TypeKind.Struct, 1, true), paramtype(aa, System.Func_TResult, Delegate, 0, true)];
-			if(__try_ret_258_8_267_9){
+			}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true), rettype(__method_ret_236_4_272_5, System.Int32, TypeKind.Struct, 1, true), paramtype(__method_ret_236_4_272_5, System.Int32, TypeKind.Struct, 1, true), paramtype(aa, System.Func_TResult, Delegate, 0, true)];
+			if(__try_ret_260_8_269_9){
 				callexternstatic(System.Console, "WriteLine__String__Object__Object__Object", dslstrtocsstr("{0} {1} {2}"), a, b, c);
-				if(__try_retval_258_8_267_9){
-				if(__try_retval_258_8_267_9==1){
-					return(__method_ret_234_4_270_5);
+				if(__try_retval_260_8_269_9){
+				if(__try_retval_260_8_269_9==1){
+					return(__method_ret_236_4_272_5);
 				};
 				};
 			};
-			local(__catch_handled_258_8_267_9, __catch_retval_258_8_267_9); __catch_handled_258_8_267_9 = false;
-			__catch_retval_258_8_267_9 = dslcatch(__catch_handled_258_8_267_9, __try_retval_258_8_267_9, __try_ret_258_8_267_9,
+			local(__catch_handled_260_8_269_9, __catch_retval_260_8_269_9); __catch_handled_260_8_269_9 = false;
+			__catch_retval_260_8_269_9 = dslcatch(__catch_handled_260_8_269_9, __try_retval_260_8_269_9, __try_ret_260_8_269_9,
 				function(e){
-					__catch_handled_258_8_267_9 = true;
+					__catch_handled_260_8_269_9 = true;
 					callexternstatic(System.Console, "WriteLine__String__Object__Object__Object", dslstrtocsstr("ex:{0} {1} {2}"), a, b, c);
 					block{
-					__method_ret_234_4_270_5 = 0;
+					__method_ret_236_4_272_5 = 0;
 					return(1);
 					};
 				}
 			);
 			callexternstatic(System.Console, "WriteLine__String__Object__Object__Object", dslstrtocsstr("{0} {1} {2}"), a, b, c);
-			if(__catch_retval_258_8_267_9){
-			if(__catch_retval_258_8_267_9==1){
-				return(__method_ret_234_4_270_5);
+			if(__catch_retval_260_8_269_9){
+			if(__catch_retval_260_8_269_9==1){
+				return(__method_ret_236_4_272_5);
 			};
 			};
-			if(! __try_ret_258_8_267_9){
+			if(! __try_ret_260_8_269_9){
 				callexternstatic(System.Console, "WriteLine__String__Object__Object__Object", dslstrtocsstr("{0} {1} {2}"), a, b, c);
 			};
 			setinstance(SymbolKind.Field, this, Test, "m_IntVal", condexp(execbinary(">", a, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), false, function(){ funcobjret(callexterndelegation(aa, "System.Func_TResult.Invoke")); }, false, function(){ funcobjret(c); }));
-			return(__method_ret_234_4_270_5);
+			return(__method_ret_236_4_272_5);
 		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
 		LoadStartupView_FGUI = deffunc(0)args(this, className, comName, packageName, grp, ForceShow){
-			if( execbinary(">", postfixoperator(true, __unary_273_12_273_22, getinstance(SymbolKind.Field, this, Test, "m_IntVal"), execbinary("+", getinstance(SymbolKind.Field, this, Test, "m_IntVal"), 1, null, null, null, null)), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
+			if( execbinary(">", postfixoperator(true, __unary_275_12_275_22, getinstance(SymbolKind.Field, this, Test, "m_IntVal"), execbinary("+", getinstance(SymbolKind.Field, this, Test, "m_IntVal"), 1, null, null, null, null)), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
 			};
 			if( execbinary(">", prefixoperator(true, getinstance(SymbolKind.Field, this, Test, "m_IntVal"), execbinary("+", getinstance(SymbolKind.Field, this, Test, "m_IntVal"), 1, null, null, null, null)), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
 			};

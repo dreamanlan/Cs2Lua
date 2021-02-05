@@ -187,8 +187,7 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitBaseExpression(BaseExpressionSyntax node)
         {
-            var ci = m_ClassInfoStack.Peek();
-            CodeBuilder.AppendFormat("getinstance(SymbolKind.Field, this, {0}, \"base\")", ci.Key);
+            CodeBuilder.AppendFormat("getbase()");
         }
         public override void VisitParenthesizedExpression(ParenthesizedExpressionSyntax node)
         {

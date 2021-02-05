@@ -168,9 +168,8 @@ ZipInputStream = {
 			end,
 		};
 		local obj_methods = {
-			ctor = wrapinheritable("ctor", raw_obj_methods.ctor, ZipInputStream),
-			__self__ctor = wrapinheritable("__self__ctor", raw_obj_methods.ctor, ZipInputStream),
 			ctor = raw_obj_methods.ctor,
+			__self__ctor = raw_obj_methods.ctor,
 			__ori_ctor = raw_obj_methods.__ori_ctor,
 			Test = raw_obj_methods.Test,
 			__ori_Test = raw_obj_methods.__ori_Test,
