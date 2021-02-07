@@ -670,6 +670,13 @@ namespace Generator
                 }
                 s_AddPrologueOrEpilogueInfos.Add(cfg);
             }
+            else if (id == "objuseclassmethod") {
+                int pnum = f.GetParamNum();
+                if (pnum > 0) {
+                    var val = f.GetParamId(0);
+                    bool.TryParse(val, out s_ObjUseClassMethod);
+                }
+            }
             else if (id == "genclassinfo") {
                 int pnum = f.GetParamNum();
                 if (pnum > 0) {
@@ -849,6 +856,7 @@ namespace Generator
             internal List<Regex> Matches = new List<Regex>();
         }
 
+        private static bool s_ObjUseClassMethod = false;
         private static bool s_GenClassInfo = true;
         private static bool s_GenMethodInfo = false;
         private static bool s_GenFieldInfo = false;

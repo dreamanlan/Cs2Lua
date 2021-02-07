@@ -842,6 +842,10 @@ namespace RoslynTool.CsToDsl
                         else {
                             methodCounts.Add(name, 1);
                         }
+                        if (msym.HidesBaseMethodsByName) {
+                            m_LogBuilder.AppendFormat("[error] {0}'s method {1} Hide Base Method !", key, name);
+                            m_LogBuilder.AppendLine();
+                        }
                     }
                     else if (null != fsym && !fsym.IsImplicitlyDeclared) {
                         string name = fsym.Name;

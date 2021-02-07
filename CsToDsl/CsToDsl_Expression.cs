@@ -485,13 +485,16 @@ namespace RoslynTool.CsToDsl
                     else if (SymbolTable.IsBasicValueProperty(leftPsym) || expIsBasicType) {
                         specialType = SpecialAssignmentType.PropForBasicValueType;
                     }
+                    else if (leftPsym.ContainingType.TypeKind == TypeKind.Interface) {
+                        specialType = SpecialAssignmentType.PropForInterface;
+                    }
                 }
             }
             bool dslToObject = false;
             if (null != leftType && null != rightType) {
                 dslToObject = InvocationInfo.IsDslToObject(leftType, rightType);
             }
-            if (specialType == SpecialAssignmentType.PropExplicitImplementInterface || specialType == SpecialAssignmentType.PropForBasicValueType
+            if (specialType == SpecialAssignmentType.PropExplicitImplementInterface || specialType == SpecialAssignmentType.PropForBasicValueType || specialType == SpecialAssignmentType.PropForInterface
                 || null != leftElementAccess || null != leftCondAccess
                 || leftType.TypeKind == TypeKind.Delegate && (leftSym.Kind != SymbolKind.Local || op != "=")) {
                 needWrapFunction = false;
@@ -650,6 +653,7 @@ namespace RoslynTool.CsToDsl
                         string mname = string.Empty;
                         bool propExplicitImplementInterface = false;
                         bool propForBasicValueType = false;
+                        bool propForInterface = false;
                         if (null != psym) {
                             if (!psym.IsStatic) {
                                 propExplicitImplementInterface = CheckExplicitInterfaceAccess(psym, ref mname);
@@ -659,6 +663,7 @@ namespace RoslynTool.CsToDsl
                                     expIsBasicType = true;
                                 }
                                 propForBasicValueType = SymbolTable.IsBasicValueProperty(psym) || expIsBasicType;
+                                propForInterface = psym.ContainingType.TypeKind == TypeKind.Interface;
                             }
                         }
                         if (propExplicitImplementInterface) {
@@ -674,9 +679,19 @@ namespace RoslynTool.CsToDsl
                             bool isEnumClass = psym.ContainingType.TypeKind == TypeKind.Enum || cname == "System.Enum";
                             var type = m_Model.GetTypeInfoEx(node.Expression).Type;
                             string ckey = InvocationInfo.CalcInvokeTarget(isEnumClass, cname, this, type);
-                            CodeBuilder.AppendFormat("getforbasicvalue(");
+                            CodeBuilder.AppendFormat("getbasicvalue(");
                             OutputExpressionSyntax(node.Expression);
                             CodeBuilder.AppendFormat(", {0}, {1}, \"{2}\")", isEnumClass ? "true" : "false", ckey, pname);
+                        }
+                        else if (propForInterface) {
+                            //不区分是否外部接口，委托到动态语言的脚本库实现
+                            bool isExternStructMember = isExtern && psym.Type.IsValueType && !SymbolTable.IsBasicType(psym.Type);
+                            if (isExternStructMember)
+                                CodeBuilder.Append("getexterninterfacestructmember(");
+                            else
+                                CodeBuilder.Append("getinterface(");
+                            OutputExpressionSyntax(node.Expression);
+                            CodeBuilder.AppendFormat(", {0}, \"{1}\", \"get_{1}\")", className, psym.Name);
                         }
                         else {
                             bool isExternStructMember = isExtern && (null != psym && psym.Type.IsValueType && !SymbolTable.IsBasicType(psym.Type) ||

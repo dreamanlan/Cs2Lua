@@ -372,6 +372,7 @@ namespace RoslynTool.CsToDsl
             IConversionOperation opd = null;
             bool isList = false;
             bool isArray = false;
+            bool isArrayClass = false;
             var oper = m_Model.GetOperationEx(node) as IForEachLoopOperation;
             if (null != oper) {
                 opd = oper.Collection as IConversionOperation;
@@ -380,112 +381,115 @@ namespace RoslynTool.CsToDsl
             if (null != expType) {
                 isList = IsImplementationOfSys(expType, "IList");
                 isArray = expType.TypeKind == TypeKind.Array;
-            }
+                isArrayClass = ClassInfo.GetFullName(expType) == "System.Array";
 
-            var srcPos = GetSourcePosForVar(node);
-            if (isArray) {
-                int rank = 0;
-                var arrType = expType as IArrayTypeSymbol;
-                rank = arrType.Rank;
-                bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(expType);
-                string varIndex = string.Format("__foreach_ix_{0}", srcPos);
-                string varExp = string.Format("__foreach_exp_{0}", srcPos);
-                CodeBuilder.AppendFormat("{0}foreacharray({1}, {2}, {3}, ", GetIndentString(), varIndex, varExp, node.Identifier.Text);
-                OutputExpressionSyntax(node.Expression, opd);
-                CodeBuilder.Append(", ");
-                CodeBuilder.Append(rank);
-                CodeBuilder.Append(", ");
-                CodeBuilder.Append(isCs2Dsl ? "false" : "true");
-                CodeBuilder.AppendLine("){");
-            }
-            else if (isList) {
-                string varIndex = string.Format("__foreach_ix_{0}", srcPos);
-                string varExp = string.Format("__foreach_exp_{0}", srcPos);
-                var objType = expType as INamedTypeSymbol;
-                INamedTypeSymbol listType = null;
-                var fobj = objType;
-                IMethodSymbol msym = null;
-                while (null != fobj) {
-                    if (HasItemGetMethodDefined(fobj, ref msym)) {
-                        listType = fobj;
-                        break;
+                var srcPos = GetSourcePosForVar(node);
+                if (isArray || isArrayClass) {
+                    int rank = 0;
+                    if (isArray) {
+                        var arrType = expType as IArrayTypeSymbol;
+                        rank = arrType.Rank;
                     }
-                    fobj = fobj.BaseType;
+                    bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(expType);
+                    string varIndex = string.Format("__foreach_ix_{0}", srcPos);
+                    string varExp = string.Format("__foreach_exp_{0}", srcPos);
+                    CodeBuilder.AppendFormat("{0}foreacharray({1}, {2}, {3}, ", GetIndentString(), varIndex, varExp, node.Identifier.Text);
+                    OutputExpressionSyntax(node.Expression, opd);
+                    CodeBuilder.Append(", ");
+                    CodeBuilder.Append(rank);
+                    CodeBuilder.Append(", ");
+                    CodeBuilder.Append(isCs2Dsl ? "false" : "true");
+                    CodeBuilder.AppendLine("){");
                 }
-                string elemTypeName = null;
-                string elemTypeKind = null;
-                if (null != msym) {
-                    elemTypeName = ClassInfo.GetFullName(msym.ReturnType);
-                    elemTypeKind = "TypeKind." + msym.ReturnType.TypeKind;
-                }
-                if (string.IsNullOrEmpty(elemTypeName))
-                    elemTypeName = "null";
-                if (string.IsNullOrEmpty(elemTypeKind))
-                    elemTypeKind = "null";
-                bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(listType);
-                string objTypeName = ClassInfo.GetFullName(objType);
-                string listTypeName = ClassInfo.GetFullName(listType);
-                CodeBuilder.AppendFormat("{0}foreachlist({1}, {2}, {3}, ", GetIndentString(), varIndex, varExp, node.Identifier.Text);
-                OutputExpressionSyntax(node.Expression, opd);
-                CodeBuilder.Append(", ");
-                CodeBuilder.Append(elemTypeName);
-                CodeBuilder.Append(", ");
-                CodeBuilder.Append(elemTypeKind);
-                CodeBuilder.Append(", ");
-                CodeBuilder.Append(objTypeName);
-                CodeBuilder.Append(", ");
-                CodeBuilder.Append(listTypeName);
-                CodeBuilder.Append(", ");
-                CodeBuilder.Append(isCs2Dsl ? "false" : "true");
-                CodeBuilder.AppendLine("){");
-            }
-            else {
-                MarkNeedFuncInfo();
-                var objType = expType as INamedTypeSymbol;
-                INamedTypeSymbol enumType = null;
-                var fobj = objType;
-                while (null != fobj) {
-                    if (HasForeachDefined(fobj)) {
-                        enumType = fobj;
-                        break;
+                else if (isList) {
+                    string varIndex = string.Format("__foreach_ix_{0}", srcPos);
+                    string varExp = string.Format("__foreach_exp_{0}", srcPos);
+                    var objType = expType as INamedTypeSymbol;
+                    INamedTypeSymbol listType = null;
+                    var fobj = objType;
+                    IMethodSymbol msym = null;
+                    while (null != fobj) {
+                        if (HasItemGetMethodDefined(fobj, ref msym)) {
+                            listType = fobj;
+                            break;
+                        }
+                        fobj = fobj.BaseType;
                     }
-                    fobj = fobj.BaseType;
+                    string elemTypeName = null;
+                    string elemTypeKind = null;
+                    if (null != msym) {
+                        elemTypeName = ClassInfo.GetFullName(msym.ReturnType);
+                        elemTypeKind = "TypeKind." + msym.ReturnType.TypeKind;
+                    }
+                    if (string.IsNullOrEmpty(elemTypeName))
+                        elemTypeName = "null";
+                    if (string.IsNullOrEmpty(elemTypeKind))
+                        elemTypeKind = "null";
+                    bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(listType);
+                    string objTypeName = ClassInfo.GetFullName(objType);
+                    string listTypeName = ClassInfo.GetFullName(listType);
+                    CodeBuilder.AppendFormat("{0}foreachlist({1}, {2}, {3}, ", GetIndentString(), varIndex, varExp, node.Identifier.Text);
+                    OutputExpressionSyntax(node.Expression, opd);
+                    CodeBuilder.Append(", ");
+                    CodeBuilder.Append(elemTypeName);
+                    CodeBuilder.Append(", ");
+                    CodeBuilder.Append(elemTypeKind);
+                    CodeBuilder.Append(", ");
+                    CodeBuilder.Append(objTypeName);
+                    CodeBuilder.Append(", ");
+                    CodeBuilder.Append(listTypeName);
+                    CodeBuilder.Append(", ");
+                    CodeBuilder.Append(isCs2Dsl ? "false" : "true");
+                    CodeBuilder.AppendLine("){");
                 }
-                bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(enumType);
-                string objTypeName = ClassInfo.GetFullName(objType);
-                string enumTypeName = ClassInfo.GetFullName(enumType);
-                string varIter = string.Format("__foreach_{0}", srcPos);
-                CodeBuilder.AppendFormat("{0}foreach({1}, {2}, ", GetIndentString(), varIter, node.Identifier.Text);
-                OutputExpressionSyntax(node.Expression, opd);
-                CodeBuilder.Append(", ");
-                CodeBuilder.Append(objTypeName);
-                CodeBuilder.Append(", ");
-                CodeBuilder.Append(enumTypeName);
-                CodeBuilder.Append(", ");
-                CodeBuilder.Append(isCs2Dsl ? "false" : "true");
-                CodeBuilder.AppendLine("){");
-            }
-            if (ci.HaveContinue) {
-                if (ci.HaveBreak) {
-                    CodeBuilder.AppendFormat("{0}local({1}); {1} = false;", GetIndentString(), ci.BreakFlagVarName);
+                else {
+                    MarkNeedFuncInfo();
+                    var objType = expType as INamedTypeSymbol;
+                    INamedTypeSymbol enumType = null;
+                    var fobj = objType;
+                    while (null != fobj) {
+                        if (HasForeachDefined(fobj)) {
+                            enumType = fobj;
+                            break;
+                        }
+                        fobj = fobj.BaseType;
+                    }
+                    bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(enumType);
+                    string objTypeName = ClassInfo.GetFullName(objType);
+                    string enumTypeName = ClassInfo.GetFullName(enumType);
+                    string varIter = string.Format("__foreach_{0}", srcPos);
+                    CodeBuilder.AppendFormat("{0}foreach({1}, {2}, ", GetIndentString(), varIter, node.Identifier.Text);
+                    OutputExpressionSyntax(node.Expression, opd);
+                    CodeBuilder.Append(", ");
+                    CodeBuilder.Append(objTypeName);
+                    CodeBuilder.Append(", ");
+                    CodeBuilder.Append(enumTypeName);
+                    CodeBuilder.Append(", ");
+                    CodeBuilder.Append(isCs2Dsl ? "false" : "true");
+                    CodeBuilder.AppendLine("){");
+                }
+                if (ci.HaveContinue) {
+                    if (ci.HaveBreak) {
+                        CodeBuilder.AppendFormat("{0}local({1}); {1} = false;", GetIndentString(), ci.BreakFlagVarName);
+                        CodeBuilder.AppendLine();
+                    }
+                    CodeBuilder.AppendFormat("{0}do{{", GetIndentString());
                     CodeBuilder.AppendLine();
                 }
-                CodeBuilder.AppendFormat("{0}do{{", GetIndentString());
-                CodeBuilder.AppendLine();
-            }
-            ++m_Indent;
-            node.Statement.Accept(this);
-            --m_Indent;
-            if (ci.HaveContinue) {
-                CodeBuilder.AppendFormat("{0}}}while(false);", GetIndentString());
-                CodeBuilder.AppendLine();
-                if (ci.HaveBreak) {
-                    CodeBuilder.AppendFormat("{0}if({1}){{break;}};", GetIndentString(), ci.BreakFlagVarName);
+                ++m_Indent;
+                node.Statement.Accept(this);
+                --m_Indent;
+                if (ci.HaveContinue) {
+                    CodeBuilder.AppendFormat("{0}}}while(false);", GetIndentString());
                     CodeBuilder.AppendLine();
+                    if (ci.HaveBreak) {
+                        CodeBuilder.AppendFormat("{0}if({1}){{break;}};", GetIndentString(), ci.BreakFlagVarName);
+                        CodeBuilder.AppendLine();
+                    }
                 }
+                CodeBuilder.AppendFormat("{0}}};", GetIndentString());
+                CodeBuilder.AppendLine();
             }
-            CodeBuilder.AppendFormat("{0}}};", GetIndentString());
-            CodeBuilder.AppendLine();
             m_ContinueInfoStack.Pop();
             mi.TryCatchUsingOrLoopSwitchStack.Pop();
         }

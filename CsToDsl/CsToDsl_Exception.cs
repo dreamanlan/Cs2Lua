@@ -73,7 +73,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(prestr);
                         CodeBuilder.Append(outParamsStr);
                     }
-                    CodeBuilder.AppendFormat(") = dsltryfunc({0}, {1}, {2}, {3}", retValVar, tryFunc, isStatic ? ci.Key : "this", dataFlow.DataFlowsOut.Length + (string.IsNullOrEmpty(mi.ReturnVarName) ? 1 : 2));
+                    CodeBuilder.AppendFormat(") = dsltryfunc({0}, {1}, {2}, {3}, {4}", retValVar, tryFunc, ci.Key, isStatic ? "true" : "false", dataFlow.DataFlowsOut.Length + (string.IsNullOrEmpty(mi.ReturnVarName) ? 1 : 2));
                     if (!string.IsNullOrEmpty(paramsStr)) {
                         CodeBuilder.Append(prestr);
                         CodeBuilder.Append(paramsStr);

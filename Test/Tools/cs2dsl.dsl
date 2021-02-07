@@ -21,3 +21,5 @@ checkparamtype
     "NPCShopController.ShowShopMainView";
     "NPCShopController.BagShowMainView";
 };
+
+objuseclassmethod(true);

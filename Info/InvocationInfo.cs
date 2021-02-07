@@ -42,6 +42,7 @@ namespace RoslynTool.CsToDsl
         internal bool ArrayToParams = false;
         internal bool PostPositionGenericTypeArgs = false;
         internal bool IsEnumClass = false;
+        internal bool IsInterface = false;
         internal bool IsExtensionMethod = false;
         internal bool IsComponentGetOrAdd = false;
         internal bool IsBasicValueMethod = false;
@@ -86,6 +87,7 @@ namespace RoslynTool.CsToDsl
             ClassKey = ClassInfo.GetFullName(sym.ContainingType);
             GenericClassKey = ClassInfo.GetFullNameWithTypeParameters(sym.ContainingType);
             IsEnumClass = sym.ContainingType.TypeKind == TypeKind.Enum || ClassKey == "System.Enum";
+            IsInterface = sym.ContainingType.TypeKind == TypeKind.Interface;
             IsExtensionMethod = sym.IsExtensionMethod;
             IsBasicValueMethod = SymbolTable.IsBasicValueMethod(sym);
             IsArrayStaticMethod = ClassKey == "System.Array" && sym.IsStatic;
@@ -951,23 +953,10 @@ namespace RoslynTool.CsToDsl
                     codeBuilder.AppendFormat("\"{0}\"", fnOfIntf);
                     prestr = ", ";
                 }
-                else if (IsExtensionMethod) {
-                    if (isExternMethodReturnStruct)
-                        codeBuilder.Append("callexternextensionreturnstruct(");
-                    else if (!string.IsNullOrEmpty(luaLibFunc))
-                        OutputInvokeToLuaLibPrefix(codeBuilder, luaLibFunc, expType);
-                    else if (IsExternMethod)
-                        codeBuilder.Append("callexternextension(");
-                    else
-                        codeBuilder.Append("callextension(");
-                    codeBuilder.AppendFormat("{0}, \"{1}\", ", ClassKey, mname);
-                    cs2dsl.OutputExpressionSyntax(exp);
-                    prestr = ", ";
-                }
                 else if (IsBasicValueMethod || expIsBasicType) {
                     //这里不区分是否外部符号了，委托到动态语言的脚本库实现，可根据对象运行时信息判断
                     string ckey = CalcInvokeTarget(IsEnumClass, ClassKey, cs2dsl, expType);
-                    codeBuilder.Append("invokeforbasicvalue(");
+                    codeBuilder.Append("callbasicvalue(");
                     cs2dsl.OutputExpressionSyntax(exp);
                     codeBuilder.Append(", ");
                     codeBuilder.AppendFormat("{0}, {1}, \"{2}\"", IsEnumClass ? "true" : "false", ckey, mname);
@@ -975,7 +964,7 @@ namespace RoslynTool.CsToDsl
                 }
                 else if (IsArrayStaticMethod) {
                     //这里不区分是否外部符号了，委托到动态语言的脚本库实现，可根据对象运行时信息判断
-                    codeBuilder.Append("invokearraystaticmethod(");
+                    codeBuilder.Append("callarraystaticmethod(");
                     if (null == FirstRefArray) {
                         codeBuilder.Append("null, ");
                     }
@@ -990,6 +979,31 @@ namespace RoslynTool.CsToDsl
                         cs2dsl.OutputExpressionSyntax(SecondRefArray);
                         codeBuilder.Append(", ");
                     }
+                    codeBuilder.AppendFormat("\"{0}\"", mname);
+                    prestr = ", ";
+                }
+                else if (IsExtensionMethod) {
+                    if (isExternMethodReturnStruct)
+                        codeBuilder.Append("callexternextensionreturnstruct(");
+                    else if (!string.IsNullOrEmpty(luaLibFunc))
+                        OutputInvokeToLuaLibPrefix(codeBuilder, luaLibFunc, expType);
+                    else if (IsExternMethod)
+                        codeBuilder.Append("callexternextension(");
+                    else
+                        codeBuilder.Append("callextension(");
+                    codeBuilder.AppendFormat("{0}, \"{1}\", ", ClassKey, mname);
+                    cs2dsl.OutputExpressionSyntax(exp);
+                    prestr = ", ";
+                }
+                else if (IsInterface) {
+                    if(isExternMethodReturnStruct)
+                        codeBuilder.Append("callexterninterfacereturnstruct(");
+                    else
+                        codeBuilder.Append("callinterface(");
+                    cs2dsl.OutputExpressionSyntax(exp);
+                    codeBuilder.Append(", ");
+                    codeBuilder.Append(ClassKey);
+                    codeBuilder.Append(", ");
                     codeBuilder.AppendFormat("\"{0}\"", mname);
                     prestr = ", ";
                 }

@@ -145,7 +145,7 @@ namespace RoslynTool.CsToDsl
                 if (ClassInfo.HasAttribute(declSym, "Cs2Dsl.IgnoreAttribute"))
                     return;
                 if (declSym.IsAbstract)
-                    return;
+                    return;//构造函数不会是抽象的，应该不会走到这里
                 isExportConstructor = ClassInfo.HasAttribute(declSym, "Cs2Dsl.ExportAttribute");
             }
 
@@ -295,7 +295,7 @@ namespace RoslynTool.CsToDsl
                 if (ClassInfo.HasAttribute(declSym, "Cs2Dsl.IgnoreAttribute"))
                     return;
                 if (declSym.IsAbstract)
-                    return;
+                    return;//抽象特性不翻译，生成最终代码时补上
             }
             else {
                 return;
@@ -676,7 +676,7 @@ namespace RoslynTool.CsToDsl
                 if (ClassInfo.HasAttribute(declSym, "Cs2Dsl.IgnoreAttribute"))
                     return;
                 if (declSym.IsAbstract)
-                    return;
+                    return;//应该不会走到这里
             }
 
             StringBuilder curBuilder = ci.CurrentCodeBuilder;
@@ -779,7 +779,7 @@ namespace RoslynTool.CsToDsl
                 if (ClassInfo.HasAttribute(declSym, "Cs2Dsl.IgnoreAttribute"))
                     return;
                 if (declSym.IsAbstract)
-                    return;
+                    return;//抽象indexer不翻译，运行时处理
             }
 
             if (null != node.ExpressionBody) {
@@ -1313,7 +1313,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append(prestr);
                         CodeBuilder.Append(outParamsStr);
                     }
-                    CodeBuilder.AppendFormat(") = dslusingfunc({0}, {1}, {2}, {3}", retValVar, usingFunc, isStatic ? ci.Key : "this", dataFlow.DataFlowsOut.Length + (string.IsNullOrEmpty(mi.ReturnVarName) ? 1 : 2));
+                    CodeBuilder.AppendFormat(") = dslusingfunc({0}, {1}, {2}, {3}, {4}", retValVar, usingFunc, ci.Key, isStatic ? "true" : "false", dataFlow.DataFlowsOut.Length + (string.IsNullOrEmpty(mi.ReturnVarName) ? 1 : 2));
                     if (!string.IsNullOrEmpty(paramsStr)) {
                         CodeBuilder.Append(prestr);
                         CodeBuilder.Append(paramsStr);

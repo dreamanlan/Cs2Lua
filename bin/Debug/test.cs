@@ -136,7 +136,6 @@ internal sealed class DataChangeCallBackInfo : ICs2LuaPoolAllocatedObjectEx<Data
     }
 }
 
-
 public sealed class Cs2LuaKeyValuePair<TKey, TValue>
 {
     private TKey key;
@@ -178,6 +177,25 @@ public sealed class Cs2LuaKeyValuePair<TKey, TValue>
             stringBuilder.Append(this.Value.ToString());
         stringBuilder.Append(']');
         return stringBuilder.ToString();
+    }
+}
+
+public interface IDict
+{
+    void Add(object val);
+}
+public abstract class AbstractDictClass : IDict
+{
+    public void Add(object val)
+    {
+        AddImpl(val);
+    }
+    protected abstract void AddImpl(object val);
+}
+public sealed class DictClass : AbstractDictClass
+{
+    protected override void AddImpl(object val)
+    {
     }
 }
 
@@ -232,6 +250,11 @@ class Test
         dict.Remove("1");
         int[] arr = new int[] { 1,2,3,4,5 };
         Array.Clear(arr, 0, arr.Length);
+        var dc = new DictClass();
+        IDict d = dc;
+        AbstractDictClass adc = dc;
+        d.Add(1);
+        adc.Add(2);
         return 1;
     }
     public int test()
@@ -281,6 +304,9 @@ class Test
         }
         string a = m_IntIntKeyValue.ToString();
         var abc = new TestStruct();
+        foreach(var v in System.Enum.GetValues(typeof(ConsoleKey))) {
+
+        }
     }
     internal static List<T> ToList<T>(IEnumerable<T> enumer)
     {

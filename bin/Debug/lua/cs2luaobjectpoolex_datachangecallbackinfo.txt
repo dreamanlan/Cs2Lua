@@ -28,6 +28,89 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 	__cctor_called = false,
 
 	-------------------------------
+	------ instance methods -------
+	-------------------------------
+	Init__Func_1_T__Action_1_T = function(this, creater, destroyer)
+		this.m_Creater = delegationset(false, this, "m_Creater", SymbolKind.Field, creater);
+		this.m_Destroyer = delegationset(false, this, "m_Destroyer", SymbolKind.Field, destroyer);
+	end,
+
+	Init__Int32__Func_1_T__Action_1_T = function(this, initPoolSize, creater, destroyer)
+		this.m_Creater = delegationset(false, this, "m_Creater", SymbolKind.Field, creater);
+		this.m_Destroyer = delegationset(false, this, "m_Destroyer", SymbolKind.Field, destroyer);
+		local i;
+		i = 0;
+		while (i < initPoolSize) do
+			local t;
+			t = creater();
+			callinterface(t, ICs2LuaPoolAllocatedObjectEx_DataChangeCallBackInfo, "InitPool", this);
+			this.m_UnusedObjects:Enqueue(t);
+			i = (i + 1);
+		end;
+	end,
+
+	Alloc = function(this)
+		local __method_ret_77_4_88_5;
+		if (this.m_UnusedObjects.Count > 0) then 
+			__method_ret_77_4_88_5 = this.m_UnusedObjects:Dequeue();
+			return __method_ret_77_4_88_5;
+		else
+			local t;
+			t = this.m_Creater();
+			if (not isequal(nil, t)) then 
+				callinterface(t, ICs2LuaPoolAllocatedObjectEx_DataChangeCallBackInfo, "InitPool", this);
+			end;
+			__method_ret_77_4_88_5 = t;
+			return __method_ret_77_4_88_5;
+		end;
+		return nil;
+	end,
+
+	Recycle = function(this, t)
+		if (not isequal(nil, t)) then 
+			this.m_UnusedObjects:Enqueue(callinterface(t, ICs2LuaPoolAllocatedObjectEx_DataChangeCallBackInfo, "Downcast"));
+		end;
+	end,
+
+	Clear = function(this)
+		local __cs2lua_func_info = luainitialize();
+		luapcall(Cs2LuaObjectPoolEx_DataChangeCallBackInfo.__ori_Clear, this, __cs2lua_func_info);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+	end,
+	__ori_Clear = function(this, __cs2lua_func_info)
+		if delegationcomparewithnil(false, this, "m_Destroyer", SymbolKind.Field, false) then 
+			local __foreach_98_12_100_13 = newiterator(__cs2lua_func_info, this.m_UnusedObjects, System.Collections.Generic.Queue_T, System.Collections.Generic.Queue_T, true);
+			for item in getiterator(__foreach_98_12_100_13) do
+				if item == __cs2lua_nil then
+					item = nil;
+				end;
+				this.m_Destroyer(item);
+			end;
+			recycleiterator(__cs2lua_func_info, __foreach_98_12_100_13);
+		end;
+		this.m_UnusedObjects:Clear();
+	end,
+
+	get_Count = function(this)
+		local __method_ret_104_4_109_5;
+		__method_ret_104_4_109_5 = this.m_UnusedObjects.Count;
+		return __method_ret_104_4_109_5;
+	end,
+
+	ctor = function(this)
+		Cs2LuaObjectPoolEx_DataChangeCallBackInfo.__ctor(this);
+	end,
+
+	__ctor = function(this)
+		if this.__ctor_called then 
+			return;
+		else
+			this.__ctor_called = true;
+		end;
+		this.m_UnusedObjects = newexterncollection(System.Collections.Generic.Queue_T, buildglobalinfoonce("g_System_Collections_Generic_Queue_DataChangeCallBackInfo_TypeArgs", getglobalinfo("g_System_Collections_Generic_Queue_DataChangeCallBackInfo_TypeArgs") or {T}), buildglobalinfoonce("g_System_Collections_Generic_Queue_DataChangeCallBackInfo_TypeKinds", getglobalinfo("g_System_Collections_Generic_Queue_DataChangeCallBackInfo_TypeKinds") or {TypeKind.TypeParameter}), "ctor", 0, {});
+	end,
+
+	-------------------------------
 	--- define class and object ---
 	-------------------------------
 	__define_class = function()
@@ -36,85 +119,15 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 		local class = Cs2LuaObjectPoolEx_DataChangeCallBackInfo;
 
 		local obj_methods = {
-			Init__Func_1_T__Action_1_T = function(this, creater, destroyer)
-				this.m_Creater = delegationset(false, this, "m_Creater", SymbolKind.Field, creater);
-				this.m_Destroyer = delegationset(false, this, "m_Destroyer", SymbolKind.Field, destroyer);
-			end,
-
-			Init__Int32__Func_1_T__Action_1_T = function(this, initPoolSize, creater, destroyer)
-				this.m_Creater = delegationset(false, this, "m_Creater", SymbolKind.Field, creater);
-				this.m_Destroyer = delegationset(false, this, "m_Destroyer", SymbolKind.Field, destroyer);
-				local i;
-				i = 0;
-				while (i < initPoolSize) do
-					local t;
-					t = creater();
-					t:InitPool(this);
-					this.m_UnusedObjects:Enqueue(t);
-					i = (i + 1);
-				end;
-			end,
-
-			Alloc = function(this)
-				local __method_ret_77_4_88_5;
-				if (this.m_UnusedObjects.Count > 0) then 
-					__method_ret_77_4_88_5 = this.m_UnusedObjects:Dequeue();
-					return __method_ret_77_4_88_5;
-				else
-					local t;
-					t = this.m_Creater();
-					if (not isequal(nil, t)) then 
-						t:InitPool(this);
-					end;
-					__method_ret_77_4_88_5 = t;
-					return __method_ret_77_4_88_5;
-				end;
-				return nil;
-			end,
-
-			Recycle = function(this, t)
-				if (not isequal(nil, t)) then 
-					this.m_UnusedObjects:Enqueue(t:Downcast());
-				end;
-			end,
-
-			Clear = function(this)
-				local __cs2lua_func_info = luainitialize();
-				luapcall(this.__ori_Clear, this, __cs2lua_func_info);
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
-			end,
-			__ori_Clear = function(this, __cs2lua_func_info)
-				if delegationcomparewithnil(false, this, "m_Destroyer", SymbolKind.Field, false) then 
-					local __foreach_98_12_100_13 = newiterator(__cs2lua_func_info, this.m_UnusedObjects, System.Collections.Generic.Queue_T, System.Collections.Generic.Queue_T, true);
-					for item in getiterator(__foreach_98_12_100_13) do
-						if item == __cs2lua_nil then
-							item = nil;
-						end;
-						this.m_Destroyer(item);
-					end;
-					recycleiterator(__cs2lua_func_info, __foreach_98_12_100_13);
-				end;
-				this.m_UnusedObjects:Clear();
-			end,
-
-			get_Count = function(this)
-				local __method_ret_104_4_109_5;
-				__method_ret_104_4_109_5 = this.m_UnusedObjects.Count;
-				return __method_ret_104_4_109_5;
-			end,
-
-			ctor = function(this)
-				this:__ctor();
-			end,
-
-			__ctor = function(this)
-				if this.__ctor_called then 
-					return;
-				else
-					this.__ctor_called = true;
-				end;
-				this.m_UnusedObjects = newexterncollection(System.Collections.Generic.Queue_T, buildglobalinfoonce("g_System_Collections_Generic_Queue_DataChangeCallBackInfo_TypeArgs", getglobalinfo("g_System_Collections_Generic_Queue_DataChangeCallBackInfo_TypeArgs") or {T}), buildglobalinfoonce("g_System_Collections_Generic_Queue_DataChangeCallBackInfo_TypeKinds", getglobalinfo("g_System_Collections_Generic_Queue_DataChangeCallBackInfo_TypeKinds") or {TypeKind.TypeParameter}), "ctor", 0, {});
-			end,
+			Init__Func_1_T__Action_1_T = rawget(class, "Init__Func_1_T__Action_1_T"),
+			Init__Int32__Func_1_T__Action_1_T = rawget(class, "Init__Int32__Func_1_T__Action_1_T"),
+			Alloc = rawget(class, "Alloc"),
+			Recycle = rawget(class, "Recycle"),
+			Clear = rawget(class, "Clear"),
+			__ori_Clear = rawget(class, "__ori_Clear"),
+			get_Count = rawget(class, "get_Count"),
+			ctor = rawget(class, "ctor"),
+			__ctor = rawget(class, "__ctor"),
 		};
 
 		local obj_build = function()

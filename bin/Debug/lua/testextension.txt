@@ -24,6 +24,7 @@ TestExtension = {
 	-------------------------------
 	__cctor_called = false,
 
+
 	-------------------------------
 	--- define class and object ---
 	-------------------------------
@@ -31,6 +32,7 @@ TestExtension = {
 		Utility.Warn("TestExtension::__define_class begin");
 
 		local class = TestExtension;
+		local tmp_obj_method = nil;
 
 		local obj_methods = nil;
 

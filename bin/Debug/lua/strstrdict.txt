@@ -28,46 +28,54 @@ StrStrDict = {
 	__cctor_called = false,
 
 	-------------------------------
+	------ instance methods -------
+	-------------------------------
+	ctor = function(this)
+		StrStrDict.__ctor(this);
+	end,
+
+	ctor__Int32 = function(this, capacity)
+		buildexternbaseobj(this, StrStrDict, System.Collections.Generic.Dictionary_TKey_TValue, "ctor__Int32", 0, capacity);
+		StrStrDict.__ctor(this);
+	end,
+
+	ctor__IDictionary_2_String_String = function(this, dict)
+		buildexternbaseobj(this, StrStrDict, System.Collections.Generic.Dictionary_TKey_TValue, "ctor__IDictionary_2_TKey_TValue", 0, dict);
+		StrStrDict.__ctor(this);
+	end,
+
+	__ctor = function(this)
+		if this.__ctor_called then 
+			return;
+		else
+			this.__ctor_called = true;
+		end;
+	end,
+
+	-------------------------------
 	--- define class and object ---
 	-------------------------------
 	__define_class = function()
 		Utility.Warn("StrStrDict::__define_class begin");
 
 		local class = StrStrDict;
+		local tmp_obj_method = nil;
+		tmp_obj_method = rawget(class, "ctor");
+		rawset(class, "__self__ctor", tmp_obj_method);
+		tmp_obj_method = rawget(class, "ctor__Int32");
+		rawset(class, "__self__ctor__Int32", tmp_obj_method);
+		tmp_obj_method = rawget(class, "ctor__IDictionary_2_String_String");
+		rawset(class, "__self__ctor__IDictionary_2_String_String", tmp_obj_method);
 
-		local raw_obj_methods = {
-			ctor = function(this)
-				this:__ctor();
-			end,
-
-			ctor__Int32 = function(this, capacity)
-				buildexternbaseobj(this, StrStrDict, System.Collections.Generic.Dictionary_TKey_TValue, "ctor__Int32", 0, capacity);
-				this:__ctor();
-			end,
-
-			ctor__IDictionary_2_String_String = function(this, dict)
-				buildexternbaseobj(this, StrStrDict, System.Collections.Generic.Dictionary_TKey_TValue, "ctor__IDictionary_2_TKey_TValue", 0, dict);
-				this:__ctor();
-			end,
-
-			__ctor = function(this)
-				if this.__ctor_called then 
-					return;
-				else
-					this.__ctor_called = true;
-				end;
-			end,
-		};
 		local obj_methods = {
-			ctor = raw_obj_methods.ctor,
-			__self__ctor = raw_obj_methods.ctor,
-			ctor__Int32 = raw_obj_methods.ctor__Int32,
-			__self__ctor__Int32 = raw_obj_methods.ctor__Int32,
-			ctor__IDictionary_2_String_String = raw_obj_methods.ctor__IDictionary_2_String_String,
-			__self__ctor__IDictionary_2_String_String = raw_obj_methods.ctor__IDictionary_2_String_String,
-			__ctor = raw_obj_methods.__ctor,
+			__self__ctor = rawget(class, "__self__ctor");
+			ctor = rawget(class, "ctor"),
+			__self__ctor__Int32 = rawget(class, "__self__ctor__Int32");
+			ctor__Int32 = rawget(class, "ctor__Int32"),
+			__self__ctor__IDictionary_2_String_String = rawget(class, "__self__ctor__IDictionary_2_String_String");
+			ctor__IDictionary_2_String_String = rawget(class, "ctor__IDictionary_2_String_String"),
+			__ctor = rawget(class, "__ctor"),
 		};
-		raw_obj_methods = nil;
 
 		local obj_build = function()
 			return {

@@ -38,6 +38,21 @@ TestStruct = {
 	__cctor_called = false,
 
 	-------------------------------
+	------ instance methods -------
+	-------------------------------
+	ctor = function(this)
+		TestStruct.__ctor(this);
+	end,
+
+	__ctor = function(this)
+		if this.__ctor_called then 
+			return;
+		else
+			this.__ctor_called = true;
+		end;
+	end,
+
+	-------------------------------
 	--- define class and object ---
 	-------------------------------
 	__define_class = function()
@@ -46,17 +61,8 @@ TestStruct = {
 		local class = TestStruct;
 
 		local obj_methods = {
-			ctor = function(this)
-				this:__ctor();
-			end,
-
-			__ctor = function(this)
-				if this.__ctor_called then 
-					return;
-				else
-					this.__ctor_called = true;
-				end;
-			end,
+			ctor = rawget(class, "ctor"),
+			__ctor = rawget(class, "__ctor"),
 		};
 
 		local obj_build = function()

@@ -1,5 +1,8 @@
-collectgarbage("setpause", 100)
+collectgarbage("setpause", 50)
 collectgarbage("setstepmul", 200)
+
+function dummycall()
+end
 
 local function get_basic_type_func()
     return function(v)
@@ -904,7 +907,7 @@ local function _get_first_untable_from_pack_args(...)
     end
 end
 
-function invokeforbasicvalue(obj, isEnum, class, method, ...)
+function callbasicvalue(obj, isEnum, class, method, ...)
     local arg1,arg2 = ...
     local meta = getmetatable(obj)
     if isEnum and obj and (method == "ToString" or 1 == string.find(method, "ToString__")) then
@@ -1003,7 +1006,7 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
     end
     return nil
 end
-function getforbasicvalue(obj, isEnum, class, property)
+function getbasicvalue(obj, isEnum, class, property)
     local meta = getmetatable(obj)
     if property then
         if type(obj) == "string" then
@@ -1024,7 +1027,7 @@ function getforbasicvalue(obj, isEnum, class, property)
     end
     return nil
 end
-function setforbasicvalue(obj, isEnum, class, property, value)
+function setbasicvalue(obj, isEnum, class, property, value)
     local meta = getmetatable(obj)
     if property then
         if type(obj) == "string" then
@@ -1040,8 +1043,7 @@ function setforbasicvalue(obj, isEnum, class, property, value)
     end
     return nil
 end
-
-function invokearraystaticmethod(firstArray, secondArray, method, ...)
+function callarraystaticmethod(firstArray, secondArray, method, ...)
     if nil ~= firstArray and nil ~= method then
         local arg1,arg2 = ...
         local meta = getmetatable(firstArray)
@@ -1064,6 +1066,35 @@ function invokearraystaticmethod(firstArray, secondArray, method, ...)
         end
     else
         return nil
+    end
+end
+
+function callexterninterfacereturnstruct(obj, intf, method, ...)
+    translationlog("need add handler for callexterninterfacereturnstruct {0}.{1}", getclasstypename(intf), method)
+    return callinterface(obj, intf, method, ...)
+end
+function getexterninterfacestructmember(obj, intf, name, getmethodname)
+    translationlog("need add handler for getexterninterfacestructmember {0}.{1}", getclasstypename(intf), name)
+    return getinterface(obj, intf, name, getmethodname)
+end
+
+function callinterface(obj, intf, method, ...)
+    return obj[method](obj, ...)
+end
+function getinterface(obj, intf, name, getmethodname)
+    local meta = getmetatable(obj)
+    if meta and rawget(meta, "__cs2lua_defined") then
+        return obj[getmethodname](obj)
+    else
+        return obj[name]
+    end
+end
+function setinterface(obj, intf, name, setmethodname, val)
+    local meta = getmetatable(obj)
+    if meta and rawget(meta, "__cs2lua_defined") then
+        obj[setmethodname](obj, val)
+    else
+        obj[name] = val
     end
 end
 
@@ -3679,14 +3710,21 @@ function __find_this_member(k, obj, obj_fields, obj_methods)
 end
 
 function __find_override(k, obj)
+    local selfK = "__self__"..k
     local child = rawget(obj, "__child")
     local final_f = nil
     local final_obj = nil
     while child do
-        local f = child:__findthis(k)
+        local f = child:__findthis(selfK)
         if f then
             final_f = f
             final_obj = child
+        else
+            local of = child:__findthis(k)
+            if of then
+                final_f = of
+                final_obj = child
+            end
         end
         child = rawget(child, "__child")
     end
@@ -3694,20 +3732,38 @@ function __find_override(k, obj)
 end
 function wrapvirtual(k, f, class)
     return function(this, ...)
+        local ff = rawget(this, k)
+        if ff then
+            return ff(this, ...)
+        end
         local obj = this
-        --this = __get_this_for_class(this, class)
-        local final_f, final_obj = __find_override(k, this)
+        local newThis = __get_this_for_class(this, class)
+        local final_f, final_obj = __find_override(k, newThis)
         if not final_f then
             final_f = f
-            final_obj = this
+            final_obj = newThis
         end
         --安装到原始调用对象上，以后就直接调用相应方法了
         rawset(obj, k, function(self, ...) return final_f(final_obj, ...) end)
         return final_f(final_obj, ...)
     end
 end
-function wrapinheritable(k, f, class)
-    return f
+function wrapabstract(k, class)
+    return function(this, ...)
+        local ff = rawget(this, k)
+        if ff then
+            return ff(this, ...)
+        end
+        local obj = this
+        local newThis = __get_this_for_class(this, class)
+        local final_f, final_obj = __find_override(k, newThis)
+        if not final_f then
+            return
+        end
+        --安装到原始调用对象上，以后就直接调用相应方法了
+        rawset(obj, k, function(self, ...) return final_f(final_obj, ...) end)
+        return final_f(final_obj, ...)
+    end
 end
  
 function defineclass(
@@ -3888,7 +3944,7 @@ function buildbaseobj(obj, class, baseClass, baseCtor, baseCtorRetCt, ...)
     if baseObj then
         rawset(baseObj, "__child", obj)
 
-        baseObj[baseCtor](baseObj, ...)
+        baseClass[baseCtor](baseObj, ...)
     end
 end
 
@@ -3926,7 +3982,7 @@ end
 function newstruct(class, typeargs, typekinds, ctor, ctorRetCt, initializer, ...)
     local obj = class()
     if ctor then
-        obj[ctor](obj, ...)
+        class[ctor](obj, ...)
     end
     translationlog("need add handler for newstruct {0}", getclasstypename(class))
     if obj and initializer then
@@ -3954,7 +4010,7 @@ end
 function newobject(class, typeargs, typekinds, ctor, ctorRetCt, initializer, ...)
     local obj = class()
     if ctor then
-        obj[ctor](obj, ...)
+        class[ctor](obj, ...)
     end
     if obj and initializer then
         initializer(obj)
@@ -3982,8 +4038,8 @@ function newtypeparamobject(t)
     warmup(t)
     if rawget(t, "__cs2lua_defined") then
         obj = t()
-        if obj.ctor then
-            obj:ctor()
+        if t.ctor then
+            t.ctor(obj)
         end
     elseif t.ctor then
         obj = t.ctor()

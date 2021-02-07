@@ -191,10 +191,10 @@ namespace RoslynTool.CsToDsl
                 }
                 if (ClassInfo.HasAttribute(declSym, "Cs2Dsl.IgnoreAttribute"))
                     return;
-                if (declSym.IsAbstract)
-                    return;
                 if (null == body && null == expressionBody) //partial method declaration
                     return;
+                if (declSym.IsAbstract)
+                    return;//抽象方法不翻译代码，在生成最终代码时补上
             }
 
             var mi = new MethodInfo();
@@ -695,6 +695,9 @@ namespace RoslynTool.CsToDsl
                         else if (SymbolTable.IsBasicValueProperty(leftPsym) || expIsBasicType) {
                             specialType = SpecialAssignmentType.PropForBasicValueType;
                         }
+                        else if (leftPsym.ContainingType.TypeKind == TypeKind.Interface) {
+                            specialType = SpecialAssignmentType.PropForInterface;
+                        }
                     }
                 }
                 bool dslToObject = false;
@@ -1127,9 +1130,18 @@ namespace RoslynTool.CsToDsl
                 bool isEnumClass = leftPsym.ContainingType.TypeKind == TypeKind.Enum || className == "System.Enum";
                 string pname = leftPsym.Name;
                 string ckey = InvocationInfo.CalcInvokeTarget(isEnumClass, className, this, leftOper.Type);
-                CodeBuilder.AppendFormat("setforbasicvalue(");
+                CodeBuilder.AppendFormat("setbasicvalue(");
                 OutputExpressionSyntax(leftMemberAccess.Expression);
                 CodeBuilder.AppendFormat(", {0}, {1}, \"{2}\", ", isEnumClass ? "true" : "false", ckey, pname);
+                OutputExpressionSyntax(assign.Right, opd, dslToObject, false, leftSym);
+                CodeBuilder.Append(")");
+            }
+            else if (specialType == SpecialAssignmentType.PropForInterface) {
+                //这里不区分是否外部符号了，委托到动态语言的脚本库实现，可根据对象运行时信息判断
+                CodeBuilder.AppendFormat("setinterface(");
+                OutputExpressionSyntax(leftMemberAccess.Expression);
+                string fn = ClassInfo.GetFullName(leftSym.ContainingType);
+                CodeBuilder.AppendFormat(", {0}, \"{1}\", \"set_{1}\", ", fn, leftPsym.Name);
                 OutputExpressionSyntax(assign.Right, opd, dslToObject, false, leftSym);
                 CodeBuilder.Append(")");
             }

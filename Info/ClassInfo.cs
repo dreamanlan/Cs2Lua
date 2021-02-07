@@ -298,15 +298,7 @@ namespace RoslynTool.CsToDsl
                 arrType = type as IArrayTypeSymbol;
             }
             if (SymbolTable.Instance.IsCs2DslSymbol(type)) {
-                //如果一个类标记为忽略，如果它是泛型类，则创建对象的名字使用泛型参数构建而不是实际类型参数构建
-                //这种类因为需要在脚本里手动实现，假定都是可以一个类实现泛型类的功能的。
-                bool ignore = ClassInfo.HasAttribute(type, "Cs2Dsl.IgnoreAttribute");
-                if (ignore) {
-                    return CalcFullNameWithTypeParameters(type, true);
-                }
-                else {
-                    return CalcFullName(type, true);
-                }
+                return CalcFullName(type, true);
             }
             else {
                 //外部类型不会基于泛型样式导入，只有使用脚本语言实现的集合类会出现这种情况，这里需要用泛型类型名以与lualib.dsl里的名称一致
@@ -389,20 +381,41 @@ namespace RoslynTool.CsToDsl
                 return string.Empty;
             List<string> list = new List<string>();
             if (includeSelfName) {
-                list.Add(CalcNameWithTypeArguments(type));
+                //如果一个类标记为忽略，如果它是泛型类，则创建对象的名字使用泛型参数构建而不是实际类型参数构建
+                //这种类因为需要在脚本里手动实现，假定都是可以一个类实现泛型类的功能的。
+                //注意：由于这里是计算类型名称，使用命令行参数标记的忽略是没有效果（它使用名称来标记），此时仍然需要使用属性标记忽略的泛型类
+                bool ignore = ClassInfo.HasAttribute(type, "Cs2Dsl.IgnoreAttribute");
+                if (ignore) {
+                    list.Add(CalcNameWithTypeParameters(type));
+                }
+                else {
+                    list.Add(CalcNameWithTypeArguments(type));
+                }
             }
             INamespaceSymbol ns = type.ContainingNamespace;
             var ct = type.ContainingType;
             string name = string.Empty;
             if (null != ct) {
-                name = CalcNameWithTypeArguments(ct);
+                bool ignore = ClassInfo.HasAttribute(ct, "Cs2Dsl.IgnoreAttribute");
+                if (ignore) {
+                    name = CalcNameWithTypeParameters(ct);
+                }
+                else {
+                    name = CalcNameWithTypeArguments(ct);
+                }
             }
             while (null != ct && name.Length > 0) {
                 list.Insert(0, name);
                 ns = ct.ContainingNamespace;
                 ct = ct.ContainingType;
                 if (null != ct) {
-                    name = CalcNameWithTypeArguments(ct);
+                    bool ignore = ClassInfo.HasAttribute(ct, "Cs2Dsl.IgnoreAttribute");
+                    if (ignore) {
+                        name = CalcNameWithTypeParameters(ct);
+                    }
+                    else {
+                        name = CalcNameWithTypeArguments(ct);
+                    }
                 }
                 else {
                     name = string.Empty;

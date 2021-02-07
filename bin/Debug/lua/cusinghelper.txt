@@ -108,38 +108,44 @@ CUsingHelper = {
 	__cctor_called = false,
 
 	-------------------------------
+	------ instance methods -------
+	-------------------------------
+	ctor = function(this, a1, a2)
+		CUsingHelper.__ctor(this);
+		return this;
+	end,
+
+	Dispose = function(this)
+	end,
+
+	__ctor = function(this)
+		if this.__ctor_called then 
+			return;
+		else
+			this.__ctor_called = true;
+		end;
+	end,
+
+	-------------------------------
 	--- define class and object ---
 	-------------------------------
 	__define_class = function()
 		Utility.Warn("CUsingHelper::__define_class begin");
 
 		local class = CUsingHelper;
+		local tmp_obj_method = nil;
+		tmp_obj_method = rawget(class, "ctor");
+		rawset(class, "__self__ctor", tmp_obj_method);
+		tmp_obj_method = rawget(class, "Dispose");
+		rawset(class, "__self__Dispose", tmp_obj_method);
 
-		local raw_obj_methods = {
-			ctor = function(this, a1, a2)
-				this:__ctor();
-				return this;
-			end,
-
-			Dispose = function(this)
-			end,
-
-			__ctor = function(this)
-				if this.__ctor_called then 
-					return;
-				else
-					this.__ctor_called = true;
-				end;
-			end,
-		};
 		local obj_methods = {
-			ctor = raw_obj_methods.ctor,
-			__self__ctor = raw_obj_methods.ctor,
-			Dispose = raw_obj_methods.Dispose,
-			__self__Dispose = raw_obj_methods.Dispose,
-			__ctor = raw_obj_methods.__ctor,
+			__self__ctor = rawget(class, "__self__ctor");
+			ctor = rawget(class, "ctor"),
+			__self__Dispose = rawget(class, "__self__Dispose");
+			Dispose = rawget(class, "Dispose"),
+			__ctor = rawget(class, "__ctor"),
 		};
-		raw_obj_methods = nil;
 
 		local obj_build = function()
 			return {

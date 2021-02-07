@@ -196,6 +196,11 @@ namespace Generator
                         if(p1 is Dsl.ValueData && !DetectVariable(data, oper, p1))
                             return true;
                     }
+                    else if(fd.GetId() == "getinterface") {
+                        var p1 = fd.GetParam(0);
+                        if (p1 is Dsl.ValueData && !DetectVariable(data, oper, p1))
+                            return true;
+                    }
                     else if(fd.GetId() == "getstatic") {
                         var p1 = fd.GetParam(1);
                         if (p1 is Dsl.ValueData)

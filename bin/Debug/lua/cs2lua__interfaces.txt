@@ -6,5 +6,13 @@ ICs2LuaPoolAllocatedObjectEx_T = {
 	}, 
 	__exist = function(k) return false; end
 };
+IDict = {
+	__cs2lua_defined = true, 
+	__cs2lua_fullname = "IDict", 
+	__cs2lua_typename = "IDict", 
+	__interfaces = {
+	}, 
+	__exist = function(k) return false; end
+};
 
 

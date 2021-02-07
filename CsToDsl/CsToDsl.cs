@@ -32,6 +32,7 @@ namespace RoslynTool.CsToDsl
             None = 0,
             PropExplicitImplementInterface,
             PropForBasicValueType,
+            PropForInterface,
         }
         internal bool IsSkipGenericTypeDefine
         {

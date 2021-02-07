@@ -28,46 +28,54 @@ TestIntfImpl = {
 	__cctor_called = false,
 
 	-------------------------------
+	------ instance methods -------
+	-------------------------------
+	get_prop = function(this)
+		local __method_ret_25_4_25_33;
+		__method_ret_25_4_25_33 = this.prop;
+		return __method_ret_25_4_25_33;
+	end,
+
+	set_prop = function(this, value)
+		this.prop = value;
+	end,
+
+	ctor = function(this)
+		TestIntfImpl.__ctor(this);
+	end,
+
+	__ctor = function(this)
+		if this.__ctor_called then 
+			return;
+		else
+			this.__ctor_called = true;
+		end;
+	end,
+
+	-------------------------------
 	--- define class and object ---
 	-------------------------------
 	__define_class = function()
 		Utility.Warn("TestIntfImpl::__define_class begin");
 
 		local class = TestIntfImpl;
+		local tmp_obj_method = nil;
+		tmp_obj_method = rawget(class, "get_prop");
+		rawset(class, "__self__get_prop", tmp_obj_method);
+		tmp_obj_method = rawget(class, "set_prop");
+		rawset(class, "__self__set_prop", tmp_obj_method);
+		tmp_obj_method = rawget(class, "ctor");
+		rawset(class, "__self__ctor", tmp_obj_method);
 
-		local raw_obj_methods = {
-			get_prop = function(this)
-				local __method_ret_25_4_25_33;
-				__method_ret_25_4_25_33 = this.prop;
-				return __method_ret_25_4_25_33;
-			end,
-
-			set_prop = function(this, value)
-				this.prop = value;
-			end,
-
-			ctor = function(this)
-				this:__ctor();
-			end,
-
-			__ctor = function(this)
-				if this.__ctor_called then 
-					return;
-				else
-					this.__ctor_called = true;
-				end;
-			end,
-		};
 		local obj_methods = {
-			get_prop = raw_obj_methods.get_prop,
-			__self__get_prop = raw_obj_methods.get_prop,
-			set_prop = raw_obj_methods.set_prop,
-			__self__set_prop = raw_obj_methods.set_prop,
-			ctor = raw_obj_methods.ctor,
-			__self__ctor = raw_obj_methods.ctor,
-			__ctor = raw_obj_methods.__ctor,
+			__self__get_prop = rawget(class, "__self__get_prop");
+			get_prop = rawget(class, "get_prop"),
+			__self__set_prop = rawget(class, "__self__set_prop");
+			set_prop = rawget(class, "set_prop"),
+			__self__ctor = rawget(class, "__self__ctor");
+			ctor = rawget(class, "ctor"),
+			__ctor = rawget(class, "__ctor"),
 		};
-		raw_obj_methods = nil;
 
 		local obj_build = function()
 			return {

@@ -28,6 +28,35 @@ DataChangeCallBackInfo = {
 	__cctor_called = false,
 
 	-------------------------------
+	------ instance methods -------
+	-------------------------------
+	ctor = function(this)
+		DataChangeCallBackInfo.__ctor(this);
+		DataChangeCallBackInfo.reset(this);
+	end,
+
+	reset = function(this)
+		this.m_ActorId = 0;
+	end,
+
+	Downcast = function(this)
+		local __method_ret_128_4_131_5;
+		__method_ret_128_4_131_5 = this;
+		return __method_ret_128_4_131_5;
+	end,
+
+	InitPool = function(this, pool)
+	end,
+
+	__ctor = function(this)
+		if this.__ctor_called then 
+			return;
+		else
+			this.__ctor_called = true;
+		end;
+	end,
+
+	-------------------------------
 	--- define class and object ---
 	-------------------------------
 	__define_class = function()
@@ -36,31 +65,11 @@ DataChangeCallBackInfo = {
 		local class = DataChangeCallBackInfo;
 
 		local obj_methods = {
-			ctor = function(this)
-				this:__ctor();
-				this:reset();
-			end,
-
-			reset = function(this)
-				this.m_ActorId = 0;
-			end,
-
-			Downcast = function(this)
-				local __method_ret_128_4_131_5;
-				__method_ret_128_4_131_5 = this;
-				return __method_ret_128_4_131_5;
-			end,
-
-			InitPool = function(this, pool)
-			end,
-
-			__ctor = function(this)
-				if this.__ctor_called then 
-					return;
-				else
-					this.__ctor_called = true;
-				end;
-			end,
+			ctor = rawget(class, "ctor"),
+			reset = rawget(class, "reset"),
+			Downcast = rawget(class, "Downcast"),
+			InitPool = rawget(class, "InitPool"),
+			__ctor = rawget(class, "__ctor"),
 		};
 
 		local obj_build = function()

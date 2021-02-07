@@ -122,7 +122,7 @@ end
                 int r = LuaDLL.lua_status(l);
                 if (r == 0) {
                     if (LuaDLL.lua_gettop(l) == 0)
-                        break;
+                        yield break;
                     else
                         yield return null;
                 }
@@ -130,7 +130,7 @@ end
                     yield return null;
                 }
                 else {
-                    break;
+                    yield break;
                 }
             }
         }

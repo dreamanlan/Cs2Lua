@@ -1,8 +1,8 @@
 ============<<<Translation Error:test>>>============
-<<<[Log for ObjectCreationExpressionSyntax]>>> [code:[ new StringBuilder() ] location: test.cs: (171,38)-(171,57)] Unknown ObjectCreationExpressionSyntax !
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ stringBuilder.Append('[') ] location: test.cs: (172,8)-(172,33)
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ stringBuilder.Append(this.Key.ToString()) ] location: test.cs: (174,12)-(174,53)
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ stringBuilder.Append(", ") ] location: test.cs: (175,8)-(175,34)
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ stringBuilder.Append(this.Value.ToString()) ] location: test.cs: (177,12)-(177,55)
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ stringBuilder.Append(']') ] location: test.cs: (178,8)-(178,33)
-<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ stringBuilder.ToString() ] location: test.cs: (179,15)-(179,39)
+<<<[Log for ObjectCreationExpressionSyntax]>>> [code:[ new StringBuilder() ] location: test.cs: (170,38)-(170,57)] Unknown ObjectCreationExpressionSyntax !
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ stringBuilder.Append('[') ] location: test.cs: (171,8)-(171,33)
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ stringBuilder.Append(this.Key.ToString()) ] location: test.cs: (173,12)-(173,53)
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ stringBuilder.Append(", ") ] location: test.cs: (174,8)-(174,34)
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ stringBuilder.Append(this.Value.ToString()) ] location: test.cs: (176,12)-(176,55)
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ stringBuilder.Append(']') ] location: test.cs: (177,8)-(177,33)
+<<<[Log for InvocationExpressionSyntax]>>> Can't determine symbol: None, code:[ stringBuilder.ToString() ] location: test.cs: (178,15)-(178,39)

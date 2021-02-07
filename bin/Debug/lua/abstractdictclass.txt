@@ -1,0 +1,117 @@
+require "cs2lua__namespaces"; 
+
+AbstractDictClass = {
+	-------------------------------
+	-------- class methods --------
+	-------------------------------
+	__new_object = function(...)
+		local __cs2dsl_newobj;
+		__cs2dsl_newobj = newobject(AbstractDictClass, nil, nil, "ctor", 0, nil, ...);
+		return __cs2dsl_newobj;
+	end,
+
+	cctor = function()
+		AbstractDictClass.__cctor();
+	end,
+
+	__cctor = function()
+		if AbstractDictClass.__cctor_called then 
+			return;
+		else
+			AbstractDictClass.__cctor_called = true;
+		end;
+	end,
+
+	-------------------------------
+	-------- class fields --------
+	-------------------------------
+	__cctor_called = false,
+
+	-------------------------------
+	------ instance methods -------
+	-------------------------------
+	AddImpl = wrapabstract("AddImpl", AbstractDictClass),
+	Add = function(this, val)
+		AbstractDictClass.AddImpl(this, val);
+	end,
+
+	ctor = function(this)
+		AbstractDictClass.__ctor(this);
+	end,
+
+	__ctor = function(this)
+		if this.__ctor_called then 
+			return;
+		else
+			this.__ctor_called = true;
+		end;
+	end,
+
+	-------------------------------
+	--- define class and object ---
+	-------------------------------
+	__define_class = function()
+		Utility.Warn("AbstractDictClass::__define_class begin");
+
+		local class = AbstractDictClass;
+		local tmp_obj_method = nil;
+		rawset(class, "__self__AddImpl", dummycall);
+		tmp_obj_method = rawget(class, "Add");
+		rawset(class, "__self__Add", tmp_obj_method);
+		tmp_obj_method = rawget(class, "ctor");
+		rawset(class, "__self__ctor", tmp_obj_method);
+
+		local obj_methods = {
+			__self__AddImpl = rawget(class, "__self__AddImpl");
+			AddImpl = rawget(class, "AddImpl"),
+			__self__Add = rawget(class, "__self__Add");
+			Add = rawget(class, "Add"),
+			__self__ctor = rawget(class, "__self__ctor");
+			ctor = rawget(class, "ctor"),
+			__ctor = rawget(class, "__ctor"),
+		};
+
+		local obj_build = function()
+			return {
+				__ctor_called = false,
+			};
+		end;
+
+		local __defineclass_return = defineclass(nil, "AbstractDictClass", "AbstractDictClass", class, obj_methods, obj_build, false);
+		Utility.Warn("AbstractDictClass::__define_class end");
+		return __defineclass_return;
+	end,
+
+	-------------------------------
+	--------- fields info ---------
+	-------------------------------
+	__class_fields = {
+		__cctor_called = true,
+	},
+
+	__obj_fields = {
+		__ctor_called = true,
+	},
+
+	-------------------------------
+	-------- metadata info --------
+	-------------------------------
+	__interfaces = {
+		"IDict",
+	},
+	__is_abstract_class = true;
+	__method_info = {
+		AddImpl = {
+			abstract = true,
+		},
+		ctor = {
+			ctor = true,
+		},
+	},
+};
+
+
+require "cs2lua__syslib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+settempmetatable(AbstractDictClass);

@@ -1,7 +1,10 @@
 System.Array
 System.Boolean
 System.Console
+System.ConsoleKey
+System.Enum
 System.Int32
 System.Object
 System.String
+System.Type
 UnityEngine.Vector3

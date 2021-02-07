@@ -1,0 +1,100 @@
+require "cs2lua__namespaces"; 
+
+DictClass = {
+	-------------------------------
+	-------- class methods --------
+	-------------------------------
+	__new_object = function(...)
+		local __cs2dsl_newobj;
+		__cs2dsl_newobj = newobject(DictClass, nil, nil, "ctor", 0, nil, ...);
+		return __cs2dsl_newobj;
+	end,
+
+	cctor = function()
+		AbstractDictClass.cctor();
+		DictClass.__cctor();
+	end,
+
+	__cctor = function()
+		if DictClass.__cctor_called then 
+			return;
+		else
+			DictClass.__cctor_called = true;
+		end;
+	end,
+
+	-------------------------------
+	-------- class fields --------
+	-------------------------------
+	__cctor_called = false,
+
+	-------------------------------
+	------ instance methods -------
+	-------------------------------
+	AddImpl__Object = function(this, val)
+	end,
+
+	ctor = function(this)
+		buildbaseobj(this, DictClass, AbstractDictClass, "__self__ctor", 0);
+		DictClass.__ctor(this);
+	end,
+
+	__ctor = function(this)
+		if this.__ctor_called then 
+			return;
+		else
+			this.__ctor_called = true;
+		end;
+	end,
+
+	-------------------------------
+	--- define class and object ---
+	-------------------------------
+	__define_class = function()
+		Utility.Warn("DictClass::__define_class begin");
+
+		local class = DictClass;
+
+		local obj_methods = {
+			AddImpl__Object = rawget(class, "AddImpl__Object"),
+			ctor = rawget(class, "ctor"),
+			__ctor = rawget(class, "__ctor"),
+		};
+
+		local obj_build = function()
+			return {
+				__ctor_called = false,
+			};
+		end;
+
+		local __defineclass_return = defineclass(AbstractDictClass, "DictClass", "DictClass", class, obj_methods, obj_build, false);
+		Utility.Warn("DictClass::__define_class end");
+		return __defineclass_return;
+	end,
+
+	-------------------------------
+	--------- fields info ---------
+	-------------------------------
+	__class_fields = {
+		__cctor_called = true,
+	},
+
+	__obj_fields = {
+		__ctor_called = true,
+	},
+
+	-------------------------------
+	-------- metadata info --------
+	-------------------------------
+	__interfaces = {
+		"IDict",
+	},
+	__is_sealed_class = true;
+};
+
+
+require "cs2lua__syslib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+require "abstractdictclass";
+settempmetatable(DictClass);
