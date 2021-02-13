@@ -121,15 +121,19 @@ end
             for (; ; ) {
                 int r = LuaDLL.lua_status(l);
                 if (r == 0) {
-                    if (LuaDLL.lua_gettop(l) == 0)
+                    if (LuaDLL.lua_gettop(l) == 0) {
+                        //Logger.Log("buildEnumerator loop exit because stack empty");
                         yield break;
-                    else
+                    }
+                    else {
                         yield return null;
+                    }
                 }
                 else if (r == (int)SLua.LuaThreadStatus.LUA_YIELD) {
                     yield return null;
                 }
                 else {
+                    Logger.LogLuaStack(l, "buildEnumerator loop exit: " + r);
                     yield break;
                 }
             }

@@ -30,7 +30,6 @@ AbstractDictClass = {
 	-------------------------------
 	------ instance methods -------
 	-------------------------------
-	AddImpl = wrapabstract("AddImpl", AbstractDictClass),
 	Add = function(this, val)
 		AbstractDictClass.AddImpl(this, val);
 	end,
@@ -54,16 +53,15 @@ AbstractDictClass = {
 		Utility.Warn("AbstractDictClass::__define_class begin");
 
 		local class = AbstractDictClass;
-		local tmp_obj_method = nil;
+		rawset(class, "AddImpl", wrapabstract("AddImpl", AbstractDictClass));
 		rawset(class, "__self__AddImpl", dummycall);
+		local tmp_obj_method = nil;
 		tmp_obj_method = rawget(class, "Add");
 		rawset(class, "__self__Add", tmp_obj_method);
 		tmp_obj_method = rawget(class, "ctor");
 		rawset(class, "__self__ctor", tmp_obj_method);
 
 		local obj_methods = {
-			__self__AddImpl = rawget(class, "__self__AddImpl");
-			AddImpl = rawget(class, "AddImpl"),
 			__self__Add = rawget(class, "__self__Add");
 			Add = rawget(class, "Add"),
 			__self__ctor = rawget(class, "__self__ctor");

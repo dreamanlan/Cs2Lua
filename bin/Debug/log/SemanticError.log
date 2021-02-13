@@ -2,4 +2,4 @@
 test.cs(154,14): error CS0030: Cannot convert type 'System.Type' to 'TValue'
 test.cs(171,9): error CS0246: The type or namespace name 'StringBuilder' could not be found (are you missing a using directive or an assembly reference?)
 test.cs(171,43): error CS0246: The type or namespace name 'StringBuilder' could not be found (are you missing a using directive or an assembly reference?)
-test.cs(313,9): error CS0120: An object reference is required for the non-static field, method, or property 'Test.LoadStartupView_FGUI(string, string, string, ViewGroup, bool)'
+test.cs(342,9): error CS0120: An object reference is required for the non-static field, method, or property 'Test.LoadStartupView_FGUI(string, string, string, ViewGroup, bool)'

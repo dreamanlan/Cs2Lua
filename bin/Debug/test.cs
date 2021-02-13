@@ -180,6 +180,33 @@ public sealed class Cs2LuaKeyValuePair<TKey, TValue>
     }
 }
 
+
+internal class SettingInfoWrapper
+{
+    public virtual void OnInit() { }
+    public virtual int OnGet() { return -1; }
+    public virtual int OnSet(int _value) { return -1; }
+    public virtual int OnSave() { return -1; }
+    public virtual int OnLoad() { return -1; }
+    public virtual int OnCache() { return -1; }
+    public virtual int OnRestore() { return -1; }
+}
+
+sealed class SIW_DeviceFirstUse : SettingInfoWrapper
+{
+    public override void OnInit()
+    {
+    }
+    public override int OnLoad()
+    {
+        return -1;
+    }
+    public override int OnSet(int _value)
+    {
+        return base.OnSet(_value);
+    }
+}
+
 public interface IDict
 {
     void Add(object val);
@@ -307,6 +334,8 @@ class Test
         foreach(var v in System.Enum.GetValues(typeof(ConsoleKey))) {
 
         }
+        SIW_DeviceFirstUse dfu = new SIW_DeviceFirstUse();
+        dfu.OnSet(0);
     }
     internal static List<T> ToList<T>(IEnumerable<T> enumer)
     {

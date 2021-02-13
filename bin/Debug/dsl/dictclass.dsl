@@ -29,7 +29,7 @@ class(DictClass, AbstractDictClass) {
 	static_events {};
 
 	instance_methods {
-		AddImpl__Object = deffunc(0)args(this, val){
+		AddImpl = deffunc(0)args(this, val){
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(val, System.Object, TypeKind.Class, 0, true)];
 		ctor = deffunc(0)args(this){
 			buildbaseobj(this, DictClass, AbstractDictClass, "ctor", 0);
@@ -57,7 +57,7 @@ class(DictClass, AbstractDictClass) {
 		sealed(true);
 	};
 	method_info {
-		AddImpl__Object(MethodKind.Ordinary, Accessibility.Protected){
+		AddImpl(MethodKind.Ordinary, Accessibility.Protected){
 			override(true);
 		};
 		ctor(MethodKind.Constructor, Accessibility.Public){

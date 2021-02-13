@@ -31,7 +31,7 @@ DictClass = {
 	-------------------------------
 	------ instance methods -------
 	-------------------------------
-	AddImpl__Object = function(this, val)
+	AddImpl = function(this, val)
 	end,
 
 	ctor = function(this)
@@ -56,7 +56,7 @@ DictClass = {
 		local class = DictClass;
 
 		local obj_methods = {
-			AddImpl__Object = rawget(class, "AddImpl__Object"),
+			AddImpl = rawget(class, "AddImpl"),
 			ctor = rawget(class, "ctor"),
 			__ctor = rawget(class, "__ctor"),
 		};

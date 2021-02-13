@@ -834,13 +834,13 @@ namespace RoslynTool.CsToDsl
                         if (name[0] == '.') {
                             name = name.Substring(1);
                         }
-                        if (methodCounts.ContainsKey(name)) {
-                            if (!msym.IsOverride) {
+                        if (!msym.IsOverride) {
+                            if (methodCounts.ContainsKey(name)) {
                                 ++methodCounts[name];
                             }
-                        }
-                        else {
-                            methodCounts.Add(name, 1);
+                            else {
+                                methodCounts.Add(name, 1);
+                            }
                         }
                         if (msym.HidesBaseMethodsByName) {
                             m_LogBuilder.AppendFormat("[error] {0}'s method {1} Hide Base Method !", key, name);
@@ -870,9 +870,12 @@ namespace RoslynTool.CsToDsl
                             string name = msym.Name;
                             if (name[0] == '.' || name.StartsWith("op_"))
                                 continue;
-                            if (methodCounts.ContainsKey(name)) {
-                                if (!msym.IsOverride) {
+                            if (!msym.IsOverride) {
+                                if (methodCounts.ContainsKey(name)) {
                                     ++methodCounts[name];
+                                }
+                                else {
+                                    methodCounts.Add(name, 1);
                                 }
                             }
                         }
@@ -903,9 +906,12 @@ namespace RoslynTool.CsToDsl
                     string name = msym.Name;
                     if (name[0] == '.' || name.StartsWith("op_"))
                         continue;
-                    if (methodCounts.ContainsKey(name)) {
-                        if (!msym.IsOverride) {
+                    if (!msym.IsOverride) {
+                        if (methodCounts.ContainsKey(name)) {
                             ++methodCounts[name];
+                        }
+                        else {
+                            methodCounts.Add(name, 1);
                         }
                     }
                 }
