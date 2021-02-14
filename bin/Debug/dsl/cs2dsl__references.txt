@@ -1,10 +1,7 @@
-System.Array
-System.Boolean
+System.ArgumentException
 System.Console
-System.ConsoleKey
-System.Enum
+System.Exception
 System.Int32
 System.Object
 System.String
-System.Type
 UnityEngine.Vector3

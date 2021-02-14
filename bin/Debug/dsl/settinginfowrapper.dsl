@@ -30,34 +30,34 @@ class(SettingInfoWrapper) {
 		OnInit = deffunc(0)args(this){
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		OnGet = deffunc(1)args(this){
-			local(__method_ret_186_4_186_45);
-			__method_ret_186_4_186_45 = -1;
-			return(__method_ret_186_4_186_45);
+			local(__method_ret_191_4_191_45);
+			__method_ret_191_4_191_45 = -1;
+			return(__method_ret_191_4_191_45);
 		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
 		OnSet = deffunc(1)args(this, _value){
-			local(__method_ret_187_4_187_55);
-			__method_ret_187_4_187_55 = -1;
-			return(__method_ret_187_4_187_55);
+			local(__method_ret_192_4_192_55);
+			__method_ret_192_4_192_55 = -1;
+			return(__method_ret_192_4_192_55);
 		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true), paramtype(_value, System.Int32, TypeKind.Struct, 0, true)];
 		OnSave = deffunc(1)args(this){
-			local(__method_ret_188_4_188_46);
-			__method_ret_188_4_188_46 = -1;
-			return(__method_ret_188_4_188_46);
+			local(__method_ret_193_4_193_46);
+			__method_ret_193_4_193_46 = -1;
+			return(__method_ret_193_4_193_46);
 		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
 		OnLoad = deffunc(1)args(this){
-			local(__method_ret_189_4_189_46);
-			__method_ret_189_4_189_46 = -1;
-			return(__method_ret_189_4_189_46);
+			local(__method_ret_194_4_194_46);
+			__method_ret_194_4_194_46 = -1;
+			return(__method_ret_194_4_194_46);
 		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
 		OnCache = deffunc(1)args(this){
-			local(__method_ret_190_4_190_47);
-			__method_ret_190_4_190_47 = -1;
-			return(__method_ret_190_4_190_47);
+			local(__method_ret_195_4_195_47);
+			__method_ret_195_4_195_47 = -1;
+			return(__method_ret_195_4_195_47);
 		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
 		OnRestore = deffunc(1)args(this){
-			local(__method_ret_191_4_191_49);
-			__method_ret_191_4_191_49 = -1;
-			return(__method_ret_191_4_191_49);
+			local(__method_ret_196_4_196_49);
+			__method_ret_196_4_196_49 = -1;
+			return(__method_ret_196_4_196_49);
 		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
 		ctor = deffunc(0)args(this){
 			callinstance(this, SettingInfoWrapper, "__ctor");

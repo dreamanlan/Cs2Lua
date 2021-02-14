@@ -32,14 +32,14 @@ class(SIW_DeviceFirstUse, SettingInfoWrapper) {
 		OnInit = deffunc(0)args(this){
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		OnLoad = deffunc(1)args(this){
-			local(__method_ret_199_4_202_5);
-			__method_ret_199_4_202_5 = -1;
-			return(__method_ret_199_4_202_5);
+			local(__method_ret_204_4_207_5);
+			__method_ret_204_4_207_5 = -1;
+			return(__method_ret_204_4_207_5);
 		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
 		OnSet = deffunc(1)args(this, _value){
-			local(__method_ret_203_4_206_5);
-			__method_ret_203_4_206_5 = callinstance(getbase(), SettingInfoWrapper, "OnSet", _value);
-			return(__method_ret_203_4_206_5);
+			local(__method_ret_208_4_211_5);
+			__method_ret_208_4_211_5 = callinstance(getbase(), SettingInfoWrapper, "OnSet", _value);
+			return(__method_ret_208_4_211_5);
 		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true), paramtype(_value, System.Int32, TypeKind.Struct, 0, true)];
 		ctor = deffunc(0)args(this){
 			buildbaseobj(this, SIW_DeviceFirstUse, SettingInfoWrapper, "ctor", 0);

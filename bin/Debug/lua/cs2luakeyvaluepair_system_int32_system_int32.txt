@@ -48,26 +48,26 @@ Cs2LuaKeyValuePair_System_Int32_System_Int32 = {
 	end,
 
 	get_Key = function(this)
-		local __method_ret_158_4_161_5;
-		__method_ret_158_4_161_5 = this.key;
-		return __method_ret_158_4_161_5;
-	end,
-
-	get_Value = function(this)
 		local __method_ret_163_4_166_5;
-		__method_ret_163_4_166_5 = this.value;
+		__method_ret_163_4_166_5 = this.key;
 		return __method_ret_163_4_166_5;
 	end,
 
+	get_Value = function(this)
+		local __method_ret_168_4_171_5;
+		__method_ret_168_4_171_5 = this.value;
+		return __method_ret_168_4_171_5;
+	end,
+
 	ToString = function(this)
-		local __method_ret_168_4_179_5;
+		local __method_ret_173_4_184_5;
 		local stringBuilder;
 		(= stringBuilder);
 		if (not isequal(typecast(luatoobject(SymbolKind.NamedType, false, "System.Object", Cs2LuaKeyValuePair_System_Int32_System_Int32.get_Key(this)), System.Object, TypeKind.Class), nil)) then 
 		end;
 		if (not isequal(typecast(luatoobject(SymbolKind.NamedType, false, "System.Object", Cs2LuaKeyValuePair_System_Int32_System_Int32.get_Value(this)), System.Object, TypeKind.Class), nil)) then 
 		end;
-		return __method_ret_168_4_179_5;
+		return __method_ret_173_4_184_5;
 	end,
 
 	__ctor = function(this)

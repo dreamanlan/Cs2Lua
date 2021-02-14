@@ -19,10 +19,15 @@ enum ViewGroup
 }
 
 struct TestStruct
-{
+{    
     internal int m_A;
     internal int m_B;
     internal int m_C;
+
+    public static implicit operator int(TestStruct ts)
+    {
+        return ts.m_A;
+    }
 }
 
 class Constant
@@ -228,6 +233,10 @@ public sealed class DictClass : AbstractDictClass
 
 class Test
 {
+    public static implicit operator Exception(int v)
+    {
+        return new Exception(v.ToString());
+    }
     public int? this[params int?[] args]
     {
         get { return args[0]; }
@@ -235,53 +244,17 @@ class Test
     }
     public void Init()
     {
-        string[] items = { "全部", "进行中", "可接取", "已完成", "未获取" };
-        m_DataChangeCallBackInfoPool.Init(32, () => { return new DataChangeCallBackInfo(); }, v => { });
-        StrList strlist = new StrList();
-        strlist.Add(string.Empty);
-        strlist.Sort((a, b) => a.CompareTo(b));
+        int a = 2;
         List<int> intlist = new List<int>();
         intlist.Add(1);
-        var sa = strlist[0];
-        intlist.Sort((a, b) => a.CompareTo(b));
-        int iaa = null != strlist ? strlist.Count : intlist.Count;
-        int[] aa = new int[] { 1, 2, 3, 4, 5 };
-        int[,] bb = new int[,] { { 1, 2 }, { 3, 4 }, { 5, 6 } };
-        var ia = bb[0,1];
-        foreach( var s in strlist) {
-            Console.WriteLine(s);
-        }
-        foreach(var v in aa) {
-            Console.WriteLine(v);
-        }
-        foreach(var v in bb) {
-            Console.WriteLine(v);
-        }
-        var act = (Action)(()=> { Console.Write(ia); });
-        var cc = ToList(aa);
-        List<Vector3> v3list = new List<Vector3>();
-        v3list.Add(Vector3.zero);
-        Vector3List nv3list = new Vector3List();
-        nv3list.Add(Vector3.zero);
-        var v3 = nv3list[0];
-        nv3list[0] = v3;
-        var vv3 = ToArray(nv3list)[0];
-        ToArray(nv3list)[0] = vv3;
+        var ts = new TestStruct();
+        intlist.Add(ts);
+        var rs = from score in a
+                 where score > 80
+                 select score;
     }
     public int testcall()
     {
-        m_Vs[0] = UnityEngine.Vector3.zero;
-        var v = m_Vs[0];
-        StrStrDict dict = new StrStrDict();
-        dict.Add("1", "2");
-        dict.Remove("1");
-        int[] arr = new int[] { 1,2,3,4,5 };
-        Array.Clear(arr, 0, arr.Length);
-        var dc = new DictClass();
-        IDict d = dc;
-        AbstractDictClass adc = dc;
-        d.Add(1);
-        adc.Add(2);
         return 1;
     }
     public int test()
@@ -308,13 +281,15 @@ class Test
         catch (Exception ex) {
 
         }
+        List<int> intlist = new List<int>();
         try {
             return aa();
         }
-        catch(Exception e) {
+        catch(Exception e) when(e is System.ArgumentException) {
             Console.WriteLine("ex:{0} {1} {2}", a, b, c);
+            throw a;
             return 0;
-        }
+        }       
         finally {
             Console.WriteLine("{0} {1} {2}", a, b, c);
         }
@@ -323,17 +298,6 @@ class Test
     }
     internal void LoadStartupView_FGUI(string className, string comName, string packageName, ViewGroup grp = ViewGroup.View, bool ForceShow = false)
     {
-        if (m_IntVal++ > 0) {
-
-        }
-        if (++m_IntVal > 0) {
-
-        }
-        string a = m_IntIntKeyValue.ToString();
-        var abc = new TestStruct();
-        foreach(var v in System.Enum.GetValues(typeof(ConsoleKey))) {
-
-        }
         SIW_DeviceFirstUse dfu = new SIW_DeviceFirstUse();
         dfu.OnSet(0);
     }

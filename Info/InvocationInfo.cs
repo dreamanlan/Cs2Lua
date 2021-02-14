@@ -256,13 +256,13 @@ namespace RoslynTool.CsToDsl
             Init(sym, model);
 
             if (null != argList) {
-                var moper = model.GetOperationEx(argList) as IInvocationOperation;
                 var args = argList.Arguments;
 
                 Dictionary<string, ExpressionSyntax> namedArgs = new Dictionary<string, ExpressionSyntax>();
                 int ct = 0;
                 for (int i = 0; i < args.Count; ++i) {
                     var arg = args[i];
+                    var iarg = model.GetOperationEx(arg) as IArgumentOperation;
                     var argSym = model.GetSymbolInfoEx(arg.Expression).Symbol;
                     var argOper = model.GetOperationEx(arg.Expression);
                     var argType = model.GetTypeInfoEx(arg.Expression).Type;
@@ -279,11 +279,8 @@ namespace RoslynTool.CsToDsl
                     IConversionOperation lastConv = null;
                     if (ct < sym.Parameters.Length) {
                         var param = sym.Parameters[ct];
-                        if (null != moper) {
-                            var iarg = GetArgumentMatchingParameter(moper, param);
-                            if (null != iarg) {
-                                lastConv = iarg.Value as IConversionOperation;
-                            }
+                        if (null != iarg) {
+                            lastConv = iarg.Value as IConversionOperation;
                         }
                         if (!param.IsParams && (param.Type.TypeKind == TypeKind.Array || ClassInfo.GetFullName(param.Type) == "System.Array")) {
                             RecordRefArray(arg.Expression);
@@ -349,12 +346,6 @@ namespace RoslynTool.CsToDsl
                 for (int i = ct; i < sym.Parameters.Length; ++i) {
                     var param = sym.Parameters[i];
                     IConversionOperation lastConv = null;
-                    if (null != moper) {
-                        var iarg = GetArgumentMatchingParameter(moper, param);
-                        if (null != iarg) {
-                            lastConv = iarg.Value as IConversionOperation;
-                        }
-                    }
                     ArgConversions.Add(lastConv);
                     ExpressionSyntax expval;
                     if (namedArgs.TryGetValue(param.Name, out expval)) {
@@ -403,13 +394,13 @@ namespace RoslynTool.CsToDsl
             Init(sym, model);
 
             if (null != argList) {
-                var moper = model.GetOperationEx(argList) as IInvocationOperation;
                 var args = argList.Arguments;
 
                 Dictionary<string, ExpressionSyntax> namedArgs = new Dictionary<string, ExpressionSyntax>();
                 int ct = 0;
                 for (int i = 0; i < args.Count; ++i) {
                     var arg = args[i];
+                    var iarg = model.GetOperationEx(arg) as IArgumentOperation;
                     var argSym = model.GetSymbolInfoEx(arg.Expression).Symbol;
                     var argOper = model.GetOperationEx(arg.Expression);
                     var argType = model.GetTypeInfoEx(arg.Expression).Type;
@@ -425,12 +416,9 @@ namespace RoslynTool.CsToDsl
                     }
                     IConversionOperation lastConv = null;
                     if (ct < sym.Parameters.Length) {
-                        var param = sym.Parameters[ct];
-                        if (null != moper) {
-                            var iarg = GetArgumentMatchingParameter(moper, param);
-                            if (null != iarg) {
-                                lastConv = iarg.Value as IConversionOperation;
-                            }
+                        var param = sym.Parameters[ct];                        
+                        if (null != iarg) {
+                            lastConv = iarg.Value as IConversionOperation;
                         }
                         if (!param.IsParams && (param.Type.TypeKind == TypeKind.Array || ClassInfo.GetFullName(param.Type) == "System.Array")) {
                             RecordRefArray(arg.Expression);
@@ -497,12 +485,6 @@ namespace RoslynTool.CsToDsl
                     var param = sym.Parameters[i];
                     if (param.HasExplicitDefaultValue) {
                         IConversionOperation lastConv = null;
-                        if (null != moper) {
-                            var iarg = GetArgumentMatchingParameter(moper, param);
-                            if (null != iarg) {
-                                lastConv = iarg.Value as IConversionOperation;
-                            }
-                        }
                         ArgConversions.Add(lastConv);
                         ExpressionSyntax expval;
                         if (namedArgs.TryGetValue(param.Name, out expval)) {

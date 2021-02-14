@@ -34,39 +34,39 @@ SettingInfoWrapper = {
 	end,
 
 	OnGet = function(this)
-		local __method_ret_186_4_186_45;
-		__method_ret_186_4_186_45 = -1;
-		return __method_ret_186_4_186_45;
+		local __method_ret_191_4_191_45;
+		__method_ret_191_4_191_45 = -1;
+		return __method_ret_191_4_191_45;
 	end,
 
 	OnSet = function(this, _value)
-		local __method_ret_187_4_187_55;
-		__method_ret_187_4_187_55 = -1;
-		return __method_ret_187_4_187_55;
+		local __method_ret_192_4_192_55;
+		__method_ret_192_4_192_55 = -1;
+		return __method_ret_192_4_192_55;
 	end,
 
 	OnSave = function(this)
-		local __method_ret_188_4_188_46;
-		__method_ret_188_4_188_46 = -1;
-		return __method_ret_188_4_188_46;
+		local __method_ret_193_4_193_46;
+		__method_ret_193_4_193_46 = -1;
+		return __method_ret_193_4_193_46;
 	end,
 
 	OnLoad = function(this)
-		local __method_ret_189_4_189_46;
-		__method_ret_189_4_189_46 = -1;
-		return __method_ret_189_4_189_46;
+		local __method_ret_194_4_194_46;
+		__method_ret_194_4_194_46 = -1;
+		return __method_ret_194_4_194_46;
 	end,
 
 	OnCache = function(this)
-		local __method_ret_190_4_190_47;
-		__method_ret_190_4_190_47 = -1;
-		return __method_ret_190_4_190_47;
+		local __method_ret_195_4_195_47;
+		__method_ret_195_4_195_47 = -1;
+		return __method_ret_195_4_195_47;
 	end,
 
 	OnRestore = function(this)
-		local __method_ret_191_4_191_49;
-		__method_ret_191_4_191_49 = -1;
-		return __method_ret_191_4_191_49;
+		local __method_ret_196_4_196_49;
+		__method_ret_196_4_196_49 = -1;
+		return __method_ret_196_4_196_49;
 	end,
 
 	ctor = function(this)
