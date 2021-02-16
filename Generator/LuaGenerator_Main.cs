@@ -662,7 +662,31 @@ namespace Generator
                             }
                         }
                     }
+                    var instFields = FindStatement(funcData, "instance_fields") as Dsl.FunctionData;
+                    if (null != instFields && instFields.GetParamNum() > 0) {
+                        sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}------ instance fields -------", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}__obj_field_values = {{", GetIndentString(indent));
+                        ++indent;
 
+                        var funcOpts = new FunctionOptions();
+                        foreach (var def in instFields.Params) {
+                            var mdef = def as Dsl.FunctionData;
+                            if (mdef.GetId() == "=") {
+                                string mname = mdef.GetParamId(0);
+                                var comp = mdef.GetParam(1);
+                                if (comp.GetId() != "null") {
+                                    sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
+                                    GenerateFieldValueComponent(comp, sb, indent, false, funcOpts, calculator);
+                                    sb.AppendLine(",");
+                                }
+                            }
+                        }
+
+                        --indent;
+                        sb.AppendFormatLine("{0}}},", GetIndentString(indent));
+                    }
                     sb.AppendLine();
 
                     sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
@@ -677,6 +701,33 @@ namespace Generator
                     sb.AppendLine();
 
                     sb.AppendFormatLine("{0}local class = {1};", GetIndentString(indent), className);
+                    if (instMethodNames.Count > 0) {
+                        sb.AppendFormatLine("{0}local obj_methods = {{", GetIndentString(indent));
+                        ++indent;
+                        foreach (var mname in instMethodNames) {
+                            if (!sealedClass) {
+                                Cs2LuaMethodInfo cmi;
+                                if (methodInfos.TryGetValue(mname, out cmi)) {
+                                    if (cmi.IsAbstract) {
+                                        sb.AppendFormatLine("{0}__self__{1} = rawget(class, \"__self__{1}\");", GetIndentString(indent), mname);
+                                    }
+                                    else if (cmi.IsVirtual || cmi.IsOverride) {
+                                        sb.AppendFormatLine("{0}__self__{1} = rawget(class, \"__self__{1}\");", GetIndentString(indent), mname);
+                                    }
+                                    else if (cmi.IsCtor || !cmi.IsPrivate && !cmi.IsSealed) {
+                                        sb.AppendFormatLine("{0}__self__{1} = rawget(class, \"__self__{1}\");", GetIndentString(indent), mname);
+                                    }
+                                }
+                            }
+                            sb.AppendFormatLine("{0}{1} = rawget(class, \"{1}\"),", GetIndentString(indent), mname);
+                        }
+                        --indent;
+                        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
+                    }
+                    else {
+                        sb.AppendFormatLine("{0}local obj_methods = nil;", GetIndentString(indent));
+                    }
+
                     if (abstractClass) {
                         foreach (var pair in methodInfos) {
                             string mname = pair.Key;
@@ -706,84 +757,22 @@ namespace Generator
                     }
                     sb.AppendLine();
 
-                    if (instMethodNames.Count > 0) {
-                        sb.AppendFormatLine("{0}local obj_methods = {{", GetIndentString(indent));
-                        ++indent;
-                        foreach (var mname in instMethodNames) {
-                            if (!sealedClass) {
-                                Cs2LuaMethodInfo cmi;
-                                if (methodInfos.TryGetValue(mname, out cmi)) {
-                                    if (cmi.IsAbstract) {
-                                        sb.AppendFormatLine("{0}__self__{1} = rawget(class, \"__self__{1}\");", GetIndentString(indent), mname);
-                                    }
-                                    else if (cmi.IsVirtual || cmi.IsOverride) {
-                                        sb.AppendFormatLine("{0}__self__{1} = rawget(class, \"__self__{1}\");", GetIndentString(indent), mname);
-                                    }
-                                    else if (cmi.IsCtor || !cmi.IsPrivate && !cmi.IsSealed) {
-                                        sb.AppendFormatLine("{0}__self__{1} = rawget(class, \"__self__{1}\");", GetIndentString(indent), mname);
-                                    }
-                                }
-                            }
-                            sb.AppendFormatLine("{0}{1} = rawget(class, \"{1}\"),", GetIndentString(indent), mname);
-                        }
-                        --indent;
-                        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    }
-                    else {
-                        sb.AppendFormatLine("{0}local obj_methods = nil;", GetIndentString(indent));
-                    }
-
-                    sb.AppendLine();
-
-                    sb.AppendFormatLine("{0}local obj_build = function()", GetIndentString(indent));
-                    ++indent;
-                    var instFields = FindStatement(funcData, "instance_fields") as Dsl.FunctionData;
-                    if (null != instFields && instFields.GetParamNum() > 0) {
-                        sb.AppendFormatLine("{0}return {{", GetIndentString(indent));
-                        ++indent;
-
-                        var funcOpts = new FunctionOptions();
-                        foreach (var def in instFields.Params) {
-                            var mdef = def as Dsl.FunctionData;
-                            if (mdef.GetId() == "=") {
-                                string mname = mdef.GetParamId(0);
-                                var comp = mdef.GetParam(1);
-                                if (comp.GetId() != "null") {
-                                    sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
-                                    GenerateFieldValueComponent(comp, sb, indent, false, funcOpts, calculator);
-                                    sb.AppendLine(",");
-                                }
-                            }
-                        }
-
-                        --indent;
-                        sb.AppendFormatLine("{0}}};", GetIndentString(indent));
-                    }
-                    else {
-                        sb.AppendFormatLine("{0}return nil;", GetIndentString(indent));
-                    }
-                    --indent;
-                    sb.AppendFormatLine("{0}end;", GetIndentString(indent));
-
-                    sb.AppendLine();
                     ///备忘：
-                    ///这个对象模型分为class、obj_methods, obj_build三块
-                    ///1、class表包含了静态方法与静态字段。
+                    ///这个对象模型分为class、obj_methods
+                    ///1、class表包含了静态方法、静态字段、实例方法与实例字段的信息。
                     ///2、obj_methods表独立有2个作用，一个方法放到obj上可能占内存会比较多，另外为了支持方法换名以支持虚函数机制
                     ///，参见lualib的defineclass实现。
-                    ///3、obj_build是个函数，用来生成每个对象实例，已经包含了对应的字段表与初始值（因为每个实例都需要一份不同的数
-                    ///据，所以是一个返回字段表的函数）。
-                    ///4、考虑继承机制需要在当前类不存在成员时往父类查找，而字段值可能是nil，此时相当于类实例里删除了这个字段，为
-                    ///了仍然能正确查到当前类是否存在字段，在类信息里额外保存了2个字段信息表，一个静态的，一个实例的。
-                    ///5、由lua对面向对象的模拟是基于元表的，应支持obj:method()的访问方式（元表与对象方法的开销是必要的，方便互操作）。
-                    ///6、为了利用c#编译时进行的方法选择，对象方法记录到类上（翻译调用使用），obj_methods同时记录一份入口，以支持5。
+                    ///3、lua对象模型实际上不使用基类子对象（仅用于访问基类方法），构造对象时将基类实例字段合并到当前实例字段里（cs2lua
+                    ///不支持基类与子类字段同名）。
+                    ///4、由lua对面向对象的模拟是基于元表的，应支持obj:method()的访问方式（元表与对象方法的开销是必要的，方便互操作）。
+                    ///5、为了利用c#编译时进行的方法选择，对象方法记录到类上（翻译调用使用），obj_methods同时记录一份入口，以支持5。
                     if (null != logInfoForDefineClass.EpilogueInfo) {
-                        sb.AppendFormatLine("{0}local __defineclass_return = defineclass({1}, \"{2}\", \"{3}\", class, obj_methods, obj_build, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
+                        sb.AppendFormatLine("{0}local __defineclass_return = defineclass({1}, \"{2}\", \"{3}\", class, obj_methods, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
                         sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfoForDefineClass.EpilogueInfo, className, "__define_class"));
                         sb.AppendFormatLine("{0}return __defineclass_return;", GetIndentString(indent));
                     }
                     else {
-                        sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", \"{3}\", class, obj_methods, obj_build, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
+                        sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", \"{3}\", class, obj_methods, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
                     }
                     --indent;
                     sb.AppendFormatLine("{0}end,", GetIndentString(indent));
@@ -876,35 +865,6 @@ namespace Generator
                         }
                         --indent;
                         sb.AppendFormatLine("{0}}},", GetIndentString(indent));
-                    }
-
-                    if (s_GenFieldInfo) {
-                        var fieldInfo = FindStatement(funcData, "field_info") as Dsl.FunctionData;
-                        if (null != fieldInfo && fieldInfo.GetParamNum() > 0) {
-                            sb.AppendFormatLine("{0}__field_info = {{", GetIndentString(indent));
-                            ++indent;
-                            foreach (var def in fieldInfo.Params) {
-                                var mfunc = def as Dsl.FunctionData;
-                                if (null != mfunc) {
-                                    var fcall = mfunc;
-                                    if (mfunc.IsHighOrder)
-                                        fcall = mfunc.LowerOrderFunction;
-                                    sb.AppendFormatLine("{0}{1} = {{", GetIndentString(indent), mfunc.GetId());
-                                    ++indent;
-                                    var accessibility = CalcTypeString(fcall.GetParam(0));
-                                    foreach (var minfo in mfunc.Params) {
-                                        var mdef = minfo as Dsl.FunctionData;
-                                        string key = mdef.GetId();
-                                        string val = mdef.GetParamId(0);
-                                        sb.AppendFormatLine("{0}{1} = {2},", GetIndentString(indent), key, val);
-                                    }
-                                    --indent;
-                                    sb.AppendFormatLine("{0}}},", GetIndentString(indent));
-                                }
-                            }
-                            --indent;
-                            sb.AppendFormatLine("{0}}},", GetIndentString(indent));
-                        }
                     }
 
                     --indent;
@@ -1705,7 +1665,7 @@ namespace Generator
                         }
                     }
                     else if (id == "getbase") {
-                        sb.Append("this.base");
+                        sb.Append("this.__base");
                     }
                     else if (id == "getstatic") {
                         var kind = CalcTypeString(data.GetParam(0));

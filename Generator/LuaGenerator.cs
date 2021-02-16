@@ -506,7 +506,6 @@ namespace Generator
         {
             s_GenClassInfo = true;
             s_GenMethodInfo = false;
-            s_GenFieldInfo = false;
 
             s_ParamTypeCheckMethods.Clear();
             s_DontRequireInfos.Clear();
@@ -691,13 +690,6 @@ namespace Generator
                     bool.TryParse(val, out s_GenMethodInfo);
                 }
             }
-            else if (id == "genfieldinfo") {
-                int pnum = f.GetParamNum();
-                if (pnum > 0) {
-                    var val = f.GetParamId(0);
-                    bool.TryParse(val, out s_GenFieldInfo);
-                }
-            }
         }
 
         [ThreadStatic]
@@ -859,7 +851,6 @@ namespace Generator
         private static bool s_ObjUseClassMethod = false;
         private static bool s_GenClassInfo = true;
         private static bool s_GenMethodInfo = false;
-        private static bool s_GenFieldInfo = false;
 
         private static ConcurrentDictionary<string, bool> s_ParamTypeCheckMethods = new ConcurrentDictionary<string, bool>();
         private static List<DontRequireInfo> s_DontRequireInfos = new List<DontRequireInfo>();//已加锁

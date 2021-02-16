@@ -3284,6 +3284,42 @@ script(callexternstructlistinstance)args($funcData, $funcOpts, $sb, $indent)
     return(false);
 };
 
+script(callexternstructcollectioninstance)args($funcData, $funcOpts, $sb, $indent)
+{
+    //callexternstructcollectioninstance(3, [callerClass, firstTypeArg, firstTypeArgKind, secondTypeArg, secondTypeArgKind], [firstTypeArg, firstTypeArgKind, secondTypeArg, secondTypeArgKind, argType, argTypeKind, argOper, argSym], obj, class, method, ...)
+    $class = getargument($funcData, 4);
+    $method = getargument($funcData, 5);
+    $argtype = getsubargument($funcData, 2, 4);
+    
+    echo("callexternstructcollectioninstance: {0}, {1}, {2}.", $class, $method, $argtype);
+    
+    if($method=="Enqueue"){
+        if($argtype=="UnityEngine.Vector2"){
+            usefunc("call_queue_add_vector2","(funcInfo, obj, class, method, ...)", $funcData, $funcOpts, $sb, $indent, 3, "__cs2lua_func_info")
+            {:
+                local v2 = ...
+                if v2~=nil then
+                    luatableremove(funcInfo.v2_list, v2)
+                end
+                obj[method](obj, ...)
+            :};
+            return(true);
+        }
+        elseif($argtype=="UnityEngine.Vector3"){
+            usefunc("call_queue_add_vector3","(funcInfo, obj, class, method, ...)", $funcData, $funcOpts, $sb, $indent, 3, "__cs2lua_func_info")
+            {:
+                local v3 = ...
+                if v3~=nil then
+                    luatableremove(funcInfo.v3_list, v3)
+                end
+                obj[method](obj, ...)
+            :};
+            return(true);
+        };
+    };
+    return(false);
+};
+
 script(get_clientmodule_instance)args($funcData, $funcOpts, $sb, $indent)
 {
     //get_clientmodule_instance(typeName, typeKind, symKind, class, name)

@@ -34,6 +34,7 @@ config(LegalConversionList)
 {
     conversion("","");
 };
+
 config(IllegalTypeList)
 {
     type("");

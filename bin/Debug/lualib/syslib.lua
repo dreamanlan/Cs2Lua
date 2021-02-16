@@ -1058,6 +1058,7 @@ function callarraystaticmethod(firstArray, secondArray, method, ...)
                     end
                 )
             else
+                translationlog("need add handler for callarraystaticmethod Array.{0}", method)
                 return nil
             end
         else
@@ -1065,6 +1066,7 @@ function callarraystaticmethod(firstArray, secondArray, method, ...)
             return System.Array[method](...)
         end
     else
+        translationlog("need add handler for callarraystaticmethod Array.{0}", method)
         return nil
     end
 end
@@ -3556,7 +3558,7 @@ function __get_this_for_class(this, class)
             if rawget(meta, "__class") == class then
                 return obj
             else
-                obj = rawget(obj, "base")
+                obj = rawget(obj, "__base")
             end
         else
             break
@@ -3709,81 +3711,35 @@ function __find_this_member(k, obj, obj_fields, obj_methods)
     return nil
 end
 
-function __find_override(k, obj)
-    local selfK = "__self__"..k
-    local child = rawget(obj, "__child")
-    local final_f = nil
-    local final_obj = nil
-    while child do
-        local f = child:__findthis(selfK)
-        if f then
-            final_f = f
-            final_obj = child
-        else
-            local of = child:__findthis(k)
-            if of then
-                final_f = of
-                final_obj = child
-            end
-        end
-        child = rawget(child, "__child")
-    end
-    return final_f, final_obj
-end
 function wrapvirtual(k, f, class)
     return function(this, ...)
-        local ff = rawget(this, k)
-        if ff then
-            return ff(this, ...)
-        end
-        local obj = this
-        local newThis = __get_this_for_class(this, class)
-        local final_f, final_obj = __find_override(k, newThis)
-        if not final_f then
-            final_f = f
-            final_obj = newThis
-        end
-        --安装到原始调用对象上，以后就直接调用相应方法了
-        rawset(obj, k, function(self, ...) return final_f(final_obj, ...) end)
-        return final_f(final_obj, ...)
+        return this[k](this, ...)
     end
 end
 function wrapabstract(k, class)
     return function(this, ...)
-        local ff = rawget(this, k)
-        if ff then
-            return ff(this, ...)
-        end
-        local obj = this
-        local newThis = __get_this_for_class(this, class)
-        local final_f, final_obj = __find_override(k, newThis)
-        if not final_f then
-            return
-        end
-        --安装到原始调用对象上，以后就直接调用相应方法了
-        rawset(obj, k, function(self, ...) return final_f(final_obj, ...) end)
-        return final_f(final_obj, ...)
+        return this[k](this, ...)
     end
 end
- 
+
 function defineclass(
     base,
     fullName,
     typeName,
     class,    
     obj_methods,
-    obj_build,
     is_value_type)
         
     local base_class = base
     
-    local class_fields = class.__class_fields
-    local obj_fields = class.__obj_fields
+    local class_fields = rawget(class, "__class_fields")
+    local obj_fields = {}
+    local obj_field_values = {}
 
-    local interfaces = class.__interfaces
-    local method_info = class.__method_info
-    local is_sealed_class = class.__is_sealed_class
-    local is_static_class = class.__is_static_class
+    local interfaces = rawget(class, "__interfaces")
+    local method_info = rawget(class, "__method_info")
+    local is_sealed_class = rawget(class, "__is_sealed_class")
+    local is_static_class = rawget(class, "__is_static_class")
     
     rawset(class, "__cs2lua_defined", true)
     rawset(class, "__cs2lua_fullname", fullName)
@@ -3792,14 +3748,41 @@ function defineclass(
     rawset(class, "__is_value_type", is_value_type)
     rawset(class, "__interfaces", interfaces)
     
+    --合并基类字段信息
+    local curClass = class
+    while nil~=curClass do
+        if warmup(curClass) then
+            if rawget(curClass, "__obj_fields") then
+                for k,v in pairs(curClass.__obj_fields) do
+                    rawset(obj_fields, k, v)
+                end
+            end
+            if rawget(curClass, "__obj_field_values") then
+                for k,v in pairs(curClass.__obj_field_values) do
+                    rawset(obj_field_values, k, v)
+                end
+            end
+        else
+            break
+        end
+        curClass = rawget(curClass, "__cs2lua_parent")
+    end
+    
+    local function obj_build()
+        local obj = {}
+        for k,v in pairs(obj_field_values) do
+            rawset(obj, k, v)
+        end
+        return obj
+    end    
     local function __exist(fk)
         return __find_class_key(fk, class, class_fields, base_class)
     end
     local function __obj_exist(tb, fk)
-        return __find_obj_key(fk, tb, obj_fields, obj_methods, rawget(tb, "base"))
+        return __find_obj_key(fk, tb, obj_fields, obj_methods, rawget(tb, "__base"))
     end
     local function __obj_findobj(tb, fk)
-        return __find_obj_member(fk, tb, obj_fields, obj_methods, rawget(tb, "base"))
+        return __find_obj_member(fk, tb, obj_fields, obj_methods, rawget(tb, "__base"))
     end
     local function __obj_findthis(tb, fk)
         return __find_this_member(fk, tb, obj_fields, obj_methods)
@@ -3843,7 +3826,7 @@ function defineclass(
                     return nil
                 end
             end
-            local baseObj = rawget(t, "base")
+            local baseObj = rawget(t, "__base")
             if __find_base_obj_key(k, baseObj) then
                 return __find_base_obj_member(k, baseObj)
             end
@@ -3863,7 +3846,7 @@ function defineclass(
                     return
                 end
             end
-            local baseObj = rawget(t, "base")
+            local baseObj = rawget(t, "__base")
             if __find_base_obj_key(k, baseObj) then
                 baseObj[k] = v
                 return
@@ -3914,8 +3897,11 @@ function defineclass(
             end
             rawset(t, k, v)
         end,
-        __call = function()
-            local obj = obj_build()
+        __call = function(tb, asBase)
+            local obj = nil
+            if not asBase then
+                obj = obj_build()
+            end
             if not obj then
                 obj = {}
             end
@@ -3934,17 +3920,12 @@ function defineclass(
 end
 
 function buildbaseobj(obj, class, baseClass, baseCtor, baseCtorRetCt, ...)
-    local mt = getmetatable(baseClass)
-    local baseObj = nil
-    if mt then
-        baseObj = mt.__call()
-    end
-    
-    rawset(obj, "base", baseObj)
+    local baseObj = baseClass(true)
+    rawset(obj, "__base", baseObj)
     if baseObj then
         rawset(baseObj, "__child", obj)
-
-        baseClass[baseCtor](baseObj, ...)
+        baseClass[baseCtor](obj, ...)
+        rawset(obj, "__ctor_called", false)
     end
 end
 
@@ -3956,7 +3937,7 @@ function buildexternbaseobj(obj, class, baseClass, baseCtor, baseCtorRetCt, ...)
         baseObj = baseClass[baseCtor](...)
     end
             
-    rawset(obj, "base", baseObj)
+    rawset(obj, "__base", baseObj)
     if baseObj then
         rawset(baseObj, "__child", obj)
     end

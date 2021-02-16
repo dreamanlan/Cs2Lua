@@ -20,6 +20,7 @@ checkparamtype
 {
     "NPCShopController.ShowShopMainView";
     "NPCShopController.BagShowMainView";
+    "StoryMingpianView.ShowMingpian";
 };
 
 objuseclassmethod(true);
