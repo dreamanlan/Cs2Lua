@@ -51,6 +51,13 @@ TestIntfImpl = {
 			this.__ctor_called = true;
 		end;
 	end,
+	-------------------------------
+	------ instance fields -------
+	-------------------------------
+	__obj_field_values = {
+		prop = 0,
+		__ctor_called = false,
+	},
 
 	-------------------------------
 	--- define class and object ---
@@ -59,14 +66,6 @@ TestIntfImpl = {
 		Utility.Warn("TestIntfImpl::__define_class begin");
 
 		local class = TestIntfImpl;
-		local tmp_obj_method = nil;
-		tmp_obj_method = rawget(class, "get_prop");
-		rawset(class, "__self__get_prop", tmp_obj_method);
-		tmp_obj_method = rawget(class, "set_prop");
-		rawset(class, "__self__set_prop", tmp_obj_method);
-		tmp_obj_method = rawget(class, "ctor");
-		rawset(class, "__self__ctor", tmp_obj_method);
-
 		local obj_methods = {
 			__self__get_prop = rawget(class, "__self__get_prop");
 			get_prop = rawget(class, "get_prop"),
@@ -76,15 +75,15 @@ TestIntfImpl = {
 			ctor = rawget(class, "ctor"),
 			__ctor = rawget(class, "__ctor"),
 		};
+		local tmp_obj_method = nil;
+		tmp_obj_method = rawget(class, "get_prop");
+		rawset(class, "__self__get_prop", tmp_obj_method);
+		tmp_obj_method = rawget(class, "set_prop");
+		rawset(class, "__self__set_prop", tmp_obj_method);
+		tmp_obj_method = rawget(class, "ctor");
+		rawset(class, "__self__ctor", tmp_obj_method);
 
-		local obj_build = function()
-			return {
-				prop = 0,
-				__ctor_called = false,
-			};
-		end;
-
-		local __defineclass_return = defineclass(nil, "TestIntfImpl", "TestIntfImpl", class, obj_methods, obj_build, false);
+		local __defineclass_return = defineclass(nil, "TestIntfImpl", "TestIntfImpl", class, obj_methods, false);
 		Utility.Warn("TestIntfImpl::__define_class end");
 		return __defineclass_return;
 	end,

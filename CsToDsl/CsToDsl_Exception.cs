@@ -72,12 +72,26 @@ namespace RoslynTool.CsToDsl
                     string tryFunc = string.Format("__try_func_{0}", srcPos);
                     bool isStatic = mi.SemanticInfo.IsStatic;
 
-                    CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}", GetIndentString(), retVar, retValVar);
-                    if (!string.IsNullOrEmpty(outParamsStr)) {
-                        CodeBuilder.Append(prestr);
-                        CodeBuilder.Append(outParamsStr);
+                    if (ctrlFlow.ReturnStatements.Length > 0 && !string.IsNullOrEmpty(mi.ReturnVarName)) {
+                        CodeBuilder.AppendFormat("{0}local({1}_0); {1}_0 = {2}", GetIndentString(), retValVar, mi.ReturnVarName);
+                        CodeBuilder.AppendLine(";");
                     }
-                    CodeBuilder.AppendFormat(") = dsltryfunc({0}, {1}, {2}, {3}, {4}", retValVar, tryFunc, ci.Key, isStatic ? "true" : "false", dataFlow.DataFlowsOut.Length + (string.IsNullOrEmpty(mi.ReturnVarName) ? 1 : 2));
+                    if (outputs.Count > 0) {
+                        for(int i = 0; i < outputs.Count; ++i) {
+                            CodeBuilder.AppendFormat("{0}local({1}_{2}); {1}_{2} = {3}", GetIndentString(), retValVar, i + 1, outputs[i]);
+                            CodeBuilder.AppendLine(";");
+                        }
+                    }
+                    CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}", GetIndentString(), retVar, retValVar);
+                    if (ctrlFlow.ReturnStatements.Length > 0 && !string.IsNullOrEmpty(mi.ReturnVarName)) {
+                        CodeBuilder.AppendFormat(", {0}_0", retValVar);
+                    }
+                    if (outputs.Count > 0) {
+                        for (int i = 0; i < outputs.Count; ++i) {
+                            CodeBuilder.AppendFormat(", {0}_{1}", retValVar, i + 1);
+                        }
+                    }
+                    CodeBuilder.AppendFormat(") = dsltryfunc({0}, {1}, {2}, {3}, {4}, {5}", retVar, retValVar, tryFunc, ci.Key, isStatic ? "true" : "false", dataFlow.DataFlowsOut.Length + (string.IsNullOrEmpty(mi.ReturnVarName) ? 1 : 2));
                     if (!string.IsNullOrEmpty(paramsStr)) {
                         CodeBuilder.Append(prestr);
                         CodeBuilder.Append(paramsStr);
@@ -86,19 +100,49 @@ namespace RoslynTool.CsToDsl
                     ++m_Indent;
                     ++mi.TryUsingLayer;
                     VisitBlock(node.Block);
-                    if (outputs.Count > 0 && ctrlFlow.ReturnStatements.Length <= 0) {
-                        //return(0)代表非try块里的返回语句
-                        CodeBuilder.AppendFormat("{0}return(0", GetIndentString());
-                        if (!string.IsNullOrEmpty(outParamsStr)) {
-                            CodeBuilder.Append(prestr);
-                            CodeBuilder.Append(outParamsStr);
+                    if (outputs.Count > 0) {
+                        bool needReturn = true;
+                        if (ctrlFlow.ReturnStatements.Length > 0) {
+                            var returnNode = ctrlFlow.ReturnStatements[ctrlFlow.ReturnStatements.Length - 1];
+                            var retSyntax = returnNode as ReturnStatementSyntax;
+                            if (null != retSyntax) {
+                                if (IsLastNodeOfTryCatch(returnNode))
+                                    needReturn = false;
+                            }
                         }
-                        CodeBuilder.AppendLine(");");
+                        if (needReturn) {
+                            //return(0)代表非try块里的返回语句
+                            CodeBuilder.AppendFormat("{0}return(0", GetIndentString());
+                            if (!string.IsNullOrEmpty(outParamsStr)) {
+                                CodeBuilder.Append(prestr);
+                                CodeBuilder.Append(outParamsStr);
+                            }
+                            CodeBuilder.AppendLine(");");
+                        }
                     }
                     --mi.TryUsingLayer;
                     --m_Indent;
                     CodeBuilder.AppendFormat("{0}}}options[{1}];", GetIndentString(), mi.CalcTryUsingFuncOptions(dataFlow, ctrlFlow, inputs, outputs));
                     CodeBuilder.AppendLine();
+
+                    if (!string.IsNullOrEmpty(outParamsStr)) {
+                        CodeBuilder.AppendFormat("{0}if({1}){{", GetIndentString(), retVar);
+                        CodeBuilder.AppendLine();
+                        ++m_Indent;
+                        if (ctrlFlow.ReturnStatements.Length > 0 && !string.IsNullOrEmpty(mi.ReturnVarName)) {
+                            CodeBuilder.AppendFormat("{0}{1} = {2}_0", GetIndentString(), mi.ReturnVarName, retValVar);
+                            CodeBuilder.AppendLine(";");
+                        }
+                        if (outputs.Count > 0) {
+                            for (int i = 0; i < outputs.Count; ++i) {
+                                CodeBuilder.AppendFormat("{0}{1} = {2}_{3}", GetIndentString(), outputs[i], retValVar, i + 1);
+                                CodeBuilder.AppendLine(";");
+                            }
+                        }
+                        --m_Indent;
+                        CodeBuilder.AppendFormat("{0}}};", GetIndentString());
+                        CodeBuilder.AppendLine();
+                    }
                 }
 
                 mi.TempReturnAnalysisStack.Pop();

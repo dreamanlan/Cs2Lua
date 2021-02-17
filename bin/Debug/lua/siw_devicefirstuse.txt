@@ -58,6 +58,12 @@ SIW_DeviceFirstUse = {
 			this.__ctor_called = true;
 		end;
 	end,
+	-------------------------------
+	------ instance fields -------
+	-------------------------------
+	__obj_field_values = {
+		__ctor_called = false,
+	},
 
 	-------------------------------
 	--- define class and object ---
@@ -66,7 +72,6 @@ SIW_DeviceFirstUse = {
 		Utility.Warn("SIW_DeviceFirstUse::__define_class begin");
 
 		local class = SIW_DeviceFirstUse;
-
 		local obj_methods = {
 			OnInit = rawget(class, "OnInit"),
 			OnLoad = rawget(class, "OnLoad"),
@@ -75,13 +80,7 @@ SIW_DeviceFirstUse = {
 			__ctor = rawget(class, "__ctor"),
 		};
 
-		local obj_build = function()
-			return {
-				__ctor_called = false,
-			};
-		end;
-
-		local __defineclass_return = defineclass(SettingInfoWrapper, "SIW_DeviceFirstUse", "SIW_DeviceFirstUse", class, obj_methods, obj_build, false);
+		local __defineclass_return = defineclass(SettingInfoWrapper, "SIW_DeviceFirstUse", "SIW_DeviceFirstUse", class, obj_methods, false);
 		Utility.Warn("SIW_DeviceFirstUse::__define_class end");
 		return __defineclass_return;
 	end,

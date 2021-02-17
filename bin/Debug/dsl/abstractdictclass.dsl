@@ -63,9 +63,6 @@ class(AbstractDictClass) {
 		ctor(MethodKind.Constructor, Accessibility.Protected){
 		};
 	};
-	property_info {};
-	event_info {};
-	field_info {};
 };
 
 

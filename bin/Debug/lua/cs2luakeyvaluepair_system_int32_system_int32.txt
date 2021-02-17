@@ -77,6 +77,14 @@ Cs2LuaKeyValuePair_System_Int32_System_Int32 = {
 			this.__ctor_called = true;
 		end;
 	end,
+	-------------------------------
+	------ instance fields -------
+	-------------------------------
+	__obj_field_values = {
+		key = 0,
+		value = 0,
+		__ctor_called = false,
+	},
 
 	-------------------------------
 	--- define class and object ---
@@ -85,7 +93,6 @@ Cs2LuaKeyValuePair_System_Int32_System_Int32 = {
 		Utility.Warn("Cs2LuaKeyValuePair_System_Int32_System_Int32::__define_class begin");
 
 		local class = Cs2LuaKeyValuePair_System_Int32_System_Int32;
-
 		local obj_methods = {
 			ctor__TKey__TValue = rawget(class, "ctor__TKey__TValue"),
 			ctor = rawget(class, "ctor"),
@@ -95,15 +102,7 @@ Cs2LuaKeyValuePair_System_Int32_System_Int32 = {
 			__ctor = rawget(class, "__ctor"),
 		};
 
-		local obj_build = function()
-			return {
-				key = 0,
-				value = 0,
-				__ctor_called = false,
-			};
-		end;
-
-		local __defineclass_return = defineclass(nil, "Cs2LuaKeyValuePair_System_Int32_System_Int32", "Cs2LuaKeyValuePair_System_Int32_System_Int32", class, obj_methods, obj_build, false);
+		local __defineclass_return = defineclass(nil, "Cs2LuaKeyValuePair_System_Int32_System_Int32", "Cs2LuaKeyValuePair_System_Int32_System_Int32", class, obj_methods, false);
 		Utility.Warn("Cs2LuaKeyValuePair_System_Int32_System_Int32::__define_class end");
 		return __defineclass_return;
 	end,

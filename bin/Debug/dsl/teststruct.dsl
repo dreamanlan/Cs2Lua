@@ -65,16 +65,6 @@ struct(TestStruct) {
 		ctor(MethodKind.Constructor, Accessibility.Public){
 		};
 	};
-	property_info {};
-	event_info {};
-	field_info {
-		m_A(Accessibility.Internal){
-		};
-		m_B(Accessibility.Internal){
-		};
-		m_C(Accessibility.Internal){
-		};
-	};
 };
 
 

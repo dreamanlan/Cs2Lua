@@ -73,12 +73,6 @@ class(DataChangeCallBackInfo) {
 		InitPool(MethodKind.Ordinary, Accessibility.Public){
 		};
 	};
-	property_info {};
-	event_info {};
-	field_info {
-		m_ActorId(Accessibility.Public){
-		};
-	};
 };
 
 

@@ -121,20 +121,6 @@ class(Cs2LuaObjectPoolEx_DataChangeCallBackInfo) {
 		ctor(MethodKind.Constructor, Accessibility.Public){
 		};
 	};
-	property_info {
-		Count(Accessibility.Public){
-			readonly(true);
-		};
-	};
-	event_info {};
-	field_info {
-		m_UnusedObjects(Accessibility.Private){
-		};
-		m_Creater(Accessibility.Private){
-		};
-		m_Destroyer(Accessibility.Private){
-		};
-	};
 };
 
 

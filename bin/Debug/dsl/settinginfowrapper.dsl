@@ -105,9 +105,6 @@ class(SettingInfoWrapper) {
 		ctor(MethodKind.Constructor, Accessibility.Public){
 		};
 	};
-	property_info {};
-	event_info {};
-	field_info {};
 };
 
 

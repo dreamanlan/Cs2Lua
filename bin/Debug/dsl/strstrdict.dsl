@@ -75,9 +75,6 @@ class(StrStrDict, System.Collections.Generic.Dictionary_TKey_TValue) {
 		ctor__IDictionary_2_String_String(MethodKind.Constructor, Accessibility.Public){
 		};
 	};
-	property_info {};
-	event_info {};
-	field_info {};
 };
 
 

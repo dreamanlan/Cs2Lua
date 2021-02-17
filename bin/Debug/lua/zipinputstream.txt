@@ -160,6 +160,12 @@ ZipInputStream = {
 			this.__ctor_called = true;
 		end;
 	end,
+	-------------------------------
+	------ instance fields -------
+	-------------------------------
+	__obj_field_values = {
+		__ctor_called = false,
+	},
 
 	-------------------------------
 	--- define class and object ---
@@ -168,10 +174,6 @@ ZipInputStream = {
 		Utility.Warn("ZipInputStream::__define_class begin");
 
 		local class = ZipInputStream;
-		local tmp_obj_method = nil;
-		tmp_obj_method = rawget(class, "ctor");
-		rawset(class, "__self__ctor", tmp_obj_method);
-
 		local obj_methods = {
 			__self__ctor = rawget(class, "__self__ctor");
 			ctor = rawget(class, "ctor"),
@@ -183,14 +185,11 @@ ZipInputStream = {
 			__ori_Test3 = rawget(class, "__ori_Test3"),
 			__ctor = rawget(class, "__ctor"),
 		};
+		local tmp_obj_method = nil;
+		tmp_obj_method = rawget(class, "ctor");
+		rawset(class, "__self__ctor", tmp_obj_method);
 
-		local obj_build = function()
-			return {
-				__ctor_called = false,
-			};
-		end;
-
-		local __defineclass_return = defineclass(nil, "ZipInputStream", "ZipInputStream", class, obj_methods, obj_build, false);
+		local __defineclass_return = defineclass(nil, "ZipInputStream", "ZipInputStream", class, obj_methods, false);
 		Utility.Warn("ZipInputStream::__define_class end");
 		return __defineclass_return;
 	end,

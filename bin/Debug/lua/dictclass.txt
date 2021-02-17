@@ -46,6 +46,12 @@ DictClass = {
 			this.__ctor_called = true;
 		end;
 	end,
+	-------------------------------
+	------ instance fields -------
+	-------------------------------
+	__obj_field_values = {
+		__ctor_called = false,
+	},
 
 	-------------------------------
 	--- define class and object ---
@@ -54,20 +60,13 @@ DictClass = {
 		Utility.Warn("DictClass::__define_class begin");
 
 		local class = DictClass;
-
 		local obj_methods = {
 			AddImpl = rawget(class, "AddImpl"),
 			ctor = rawget(class, "ctor"),
 			__ctor = rawget(class, "__ctor"),
 		};
 
-		local obj_build = function()
-			return {
-				__ctor_called = false,
-			};
-		end;
-
-		local __defineclass_return = defineclass(AbstractDictClass, "DictClass", "DictClass", class, obj_methods, obj_build, false);
+		local __defineclass_return = defineclass(AbstractDictClass, "DictClass", "DictClass", class, obj_methods, false);
 		Utility.Warn("DictClass::__define_class end");
 		return __defineclass_return;
 	end,

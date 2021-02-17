@@ -255,6 +255,8 @@ class Test
     }
     public int testcall()
     {
+        object data = 1;
+        int v = (int)data;
         return 1;
     }
     public int test()

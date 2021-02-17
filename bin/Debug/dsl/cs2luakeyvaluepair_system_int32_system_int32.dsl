@@ -100,21 +100,6 @@ class(Cs2LuaKeyValuePair_System_Int32_System_Int32) {
 			override(true);
 		};
 	};
-	property_info {
-		Key(Accessibility.Public){
-			readonly(true);
-		};
-		Value(Accessibility.Public){
-			readonly(true);
-		};
-	};
-	event_info {};
-	field_info {
-		key(Accessibility.Private){
-		};
-		value(Accessibility.Private){
-		};
-	};
 };
 
 

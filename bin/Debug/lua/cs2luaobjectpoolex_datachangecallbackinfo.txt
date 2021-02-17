@@ -109,6 +109,12 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 		end;
 		this.m_UnusedObjects = newexterncollection(System.Collections.Generic.Queue_T, buildglobalinfoonce("g_System_Collections_Generic_Queue_DataChangeCallBackInfo_TypeArgs", getglobalinfo("g_System_Collections_Generic_Queue_DataChangeCallBackInfo_TypeArgs") or {T}), buildglobalinfoonce("g_System_Collections_Generic_Queue_DataChangeCallBackInfo_TypeKinds", getglobalinfo("g_System_Collections_Generic_Queue_DataChangeCallBackInfo_TypeKinds") or {TypeKind.TypeParameter}), "ctor", 0, {});
 	end,
+	-------------------------------
+	------ instance fields -------
+	-------------------------------
+	__obj_field_values = {
+		__ctor_called = false,
+	},
 
 	-------------------------------
 	--- define class and object ---
@@ -117,7 +123,6 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 		Utility.Warn("Cs2LuaObjectPoolEx_DataChangeCallBackInfo::__define_class begin");
 
 		local class = Cs2LuaObjectPoolEx_DataChangeCallBackInfo;
-
 		local obj_methods = {
 			Init__Func_1_T__Action_1_T = rawget(class, "Init__Func_1_T__Action_1_T"),
 			Init__Int32__Func_1_T__Action_1_T = rawget(class, "Init__Int32__Func_1_T__Action_1_T"),
@@ -130,13 +135,7 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 			__ctor = rawget(class, "__ctor"),
 		};
 
-		local obj_build = function()
-			return {
-				__ctor_called = false,
-			};
-		end;
-
-		local __defineclass_return = defineclass(nil, "Cs2LuaObjectPoolEx_DataChangeCallBackInfo", "Cs2LuaObjectPoolEx_DataChangeCallBackInfo", class, obj_methods, obj_build, false);
+		local __defineclass_return = defineclass(nil, "Cs2LuaObjectPoolEx_DataChangeCallBackInfo", "Cs2LuaObjectPoolEx_DataChangeCallBackInfo", class, obj_methods, false);
 		Utility.Warn("Cs2LuaObjectPoolEx_DataChangeCallBackInfo::__define_class end");
 		return __defineclass_return;
 	end,

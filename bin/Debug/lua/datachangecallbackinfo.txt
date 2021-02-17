@@ -55,6 +55,13 @@ DataChangeCallBackInfo = {
 			this.__ctor_called = true;
 		end;
 	end,
+	-------------------------------
+	------ instance fields -------
+	-------------------------------
+	__obj_field_values = {
+		m_ActorId = 0,
+		__ctor_called = false,
+	},
 
 	-------------------------------
 	--- define class and object ---
@@ -63,7 +70,6 @@ DataChangeCallBackInfo = {
 		Utility.Warn("DataChangeCallBackInfo::__define_class begin");
 
 		local class = DataChangeCallBackInfo;
-
 		local obj_methods = {
 			ctor = rawget(class, "ctor"),
 			reset = rawget(class, "reset"),
@@ -72,14 +78,7 @@ DataChangeCallBackInfo = {
 			__ctor = rawget(class, "__ctor"),
 		};
 
-		local obj_build = function()
-			return {
-				m_ActorId = 0,
-				__ctor_called = false,
-			};
-		end;
-
-		local __defineclass_return = defineclass(nil, "DataChangeCallBackInfo", "DataChangeCallBackInfo", class, obj_methods, obj_build, false);
+		local __defineclass_return = defineclass(nil, "DataChangeCallBackInfo", "DataChangeCallBackInfo", class, obj_methods, false);
 		Utility.Warn("DataChangeCallBackInfo::__define_class end");
 		return __defineclass_return;
 	end,

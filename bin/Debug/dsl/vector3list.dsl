@@ -74,9 +74,6 @@ class(Vector3List, System.Collections.Generic.List_T) {
 		ctor__ICollection_1_Vector3(MethodKind.Constructor, Accessibility.Public){
 		};
 	};
-	property_info {};
-	event_info {};
-	field_info {};
 };
 
 

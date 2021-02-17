@@ -1352,18 +1352,18 @@ namespace RoslynTool.CsToDsl
         }
         private void OutputTryCatchUsingReturn(ReturnContinueBreakAnalysis returnAnalysis, MethodInfo mi, string retValVar)
         {
-            if (mi.TryUsingLayer > 0) {
+            if (mi.TryUsingLayer > 0 && mi.IsAnonymousOrLambdaMethod) {
                 CodeBuilder.AppendFormat("{0}if({1} && {1}>=1 && {1}<=3){{", GetIndentString(), retValVar);
                 CodeBuilder.AppendLine();
                 ++m_Indent;
-                //嵌入的try/using，返回给外层try/using。此情形只能使用函数对象，所以是return(1/2/3)
+                //嵌入的try/using，返回给外层try/using。总是使用函数对象包装，return(1/2/3)
                 CodeBuilder.AppendFormat("{0}return({1});", GetIndentString(), retValVar);
                 CodeBuilder.AppendLine();
                 --m_Indent;
                 CodeBuilder.AppendFormat("{0}}};", GetIndentString());
                 CodeBuilder.AppendLine();
             }
-            else {
+            else if(returnAnalysis.ExistReturn || returnAnalysis.ExistContinue || returnAnalysis.ExistBreak) {
                 CodeBuilder.AppendFormat("{0}if({1}){{", GetIndentString(), retValVar);
                 CodeBuilder.AppendLine();
                 bool existIf = false;

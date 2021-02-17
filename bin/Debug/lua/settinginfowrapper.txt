@@ -80,6 +80,12 @@ SettingInfoWrapper = {
 			this.__ctor_called = true;
 		end;
 	end,
+	-------------------------------
+	------ instance fields -------
+	-------------------------------
+	__obj_field_values = {
+		__ctor_called = false,
+	},
 
 	-------------------------------
 	--- define class and object ---
@@ -88,6 +94,25 @@ SettingInfoWrapper = {
 		Utility.Warn("SettingInfoWrapper::__define_class begin");
 
 		local class = SettingInfoWrapper;
+		local obj_methods = {
+			__self__OnInit = rawget(class, "__self__OnInit");
+			OnInit = rawget(class, "OnInit"),
+			__self__OnGet = rawget(class, "__self__OnGet");
+			OnGet = rawget(class, "OnGet"),
+			__self__OnSet = rawget(class, "__self__OnSet");
+			OnSet = rawget(class, "OnSet"),
+			__self__OnSave = rawget(class, "__self__OnSave");
+			OnSave = rawget(class, "OnSave"),
+			__self__OnLoad = rawget(class, "__self__OnLoad");
+			OnLoad = rawget(class, "OnLoad"),
+			__self__OnCache = rawget(class, "__self__OnCache");
+			OnCache = rawget(class, "OnCache"),
+			__self__OnRestore = rawget(class, "__self__OnRestore");
+			OnRestore = rawget(class, "OnRestore"),
+			__self__ctor = rawget(class, "__self__ctor");
+			ctor = rawget(class, "ctor"),
+			__ctor = rawget(class, "__ctor"),
+		};
 		local tmp_obj_method = nil;
 		tmp_obj_method = rawget(class, "OnInit");
 		rawset(class, "OnInit", wrapvirtual("OnInit", tmp_obj_method, SettingInfoWrapper));
@@ -113,33 +138,7 @@ SettingInfoWrapper = {
 		tmp_obj_method = rawget(class, "ctor");
 		rawset(class, "__self__ctor", tmp_obj_method);
 
-		local obj_methods = {
-			__self__OnInit = rawget(class, "__self__OnInit");
-			OnInit = rawget(class, "OnInit"),
-			__self__OnGet = rawget(class, "__self__OnGet");
-			OnGet = rawget(class, "OnGet"),
-			__self__OnSet = rawget(class, "__self__OnSet");
-			OnSet = rawget(class, "OnSet"),
-			__self__OnSave = rawget(class, "__self__OnSave");
-			OnSave = rawget(class, "OnSave"),
-			__self__OnLoad = rawget(class, "__self__OnLoad");
-			OnLoad = rawget(class, "OnLoad"),
-			__self__OnCache = rawget(class, "__self__OnCache");
-			OnCache = rawget(class, "OnCache"),
-			__self__OnRestore = rawget(class, "__self__OnRestore");
-			OnRestore = rawget(class, "OnRestore"),
-			__self__ctor = rawget(class, "__self__ctor");
-			ctor = rawget(class, "ctor"),
-			__ctor = rawget(class, "__ctor"),
-		};
-
-		local obj_build = function()
-			return {
-				__ctor_called = false,
-			};
-		end;
-
-		local __defineclass_return = defineclass(nil, "SettingInfoWrapper", "SettingInfoWrapper", class, obj_methods, obj_build, false);
+		local __defineclass_return = defineclass(nil, "SettingInfoWrapper", "SettingInfoWrapper", class, obj_methods, false);
 		Utility.Warn("SettingInfoWrapper::__define_class end");
 		return __defineclass_return;
 	end,

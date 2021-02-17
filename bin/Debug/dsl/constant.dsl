@@ -55,22 +55,6 @@ class(Constant) {
 		ctor(MethodKind.Constructor, Accessibility.Public){
 		};
 	};
-	property_info {};
-	event_info {};
-	field_info {
-		One(Accessibility.Internal){
-			static(true);
-			const(true);
-		};
-		Two(Accessibility.Internal){
-			static(true);
-			const(true);
-		};
-		Three(Accessibility.Internal){
-			static(true);
-			const(true);
-		};
-	};
 };
 
 

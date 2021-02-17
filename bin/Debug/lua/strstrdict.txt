@@ -51,6 +51,12 @@ StrStrDict = {
 			this.__ctor_called = true;
 		end;
 	end,
+	-------------------------------
+	------ instance fields -------
+	-------------------------------
+	__obj_field_values = {
+		__ctor_called = false,
+	},
 
 	-------------------------------
 	--- define class and object ---
@@ -59,14 +65,6 @@ StrStrDict = {
 		Utility.Warn("StrStrDict::__define_class begin");
 
 		local class = StrStrDict;
-		local tmp_obj_method = nil;
-		tmp_obj_method = rawget(class, "ctor");
-		rawset(class, "__self__ctor", tmp_obj_method);
-		tmp_obj_method = rawget(class, "ctor__Int32");
-		rawset(class, "__self__ctor__Int32", tmp_obj_method);
-		tmp_obj_method = rawget(class, "ctor__IDictionary_2_String_String");
-		rawset(class, "__self__ctor__IDictionary_2_String_String", tmp_obj_method);
-
 		local obj_methods = {
 			__self__ctor = rawget(class, "__self__ctor");
 			ctor = rawget(class, "ctor"),
@@ -76,14 +74,15 @@ StrStrDict = {
 			ctor__IDictionary_2_String_String = rawget(class, "ctor__IDictionary_2_String_String"),
 			__ctor = rawget(class, "__ctor"),
 		};
+		local tmp_obj_method = nil;
+		tmp_obj_method = rawget(class, "ctor");
+		rawset(class, "__self__ctor", tmp_obj_method);
+		tmp_obj_method = rawget(class, "ctor__Int32");
+		rawset(class, "__self__ctor__Int32", tmp_obj_method);
+		tmp_obj_method = rawget(class, "ctor__IDictionary_2_String_String");
+		rawset(class, "__self__ctor__IDictionary_2_String_String", tmp_obj_method);
 
-		local obj_build = function()
-			return {
-				__ctor_called = false,
-			};
-		end;
-
-		local __defineclass_return = defineclass(System.Collections.Generic.Dictionary_TKey_TValue, "StrStrDict", "StrStrDict", class, obj_methods, obj_build, false);
+		local __defineclass_return = defineclass(System.Collections.Generic.Dictionary_TKey_TValue, "StrStrDict", "StrStrDict", class, obj_methods, false);
 		Utility.Warn("StrStrDict::__define_class end");
 		return __defineclass_return;
 	end,

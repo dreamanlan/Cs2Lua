@@ -125,6 +125,13 @@ CUsingHelper = {
 			this.__ctor_called = true;
 		end;
 	end,
+	-------------------------------
+	------ instance fields -------
+	-------------------------------
+	__obj_field_values = {
+		__attributes = CUsingHelper__Attrs,
+		__ctor_called = false,
+	},
 
 	-------------------------------
 	--- define class and object ---
@@ -133,12 +140,6 @@ CUsingHelper = {
 		Utility.Warn("CUsingHelper::__define_class begin");
 
 		local class = CUsingHelper;
-		local tmp_obj_method = nil;
-		tmp_obj_method = rawget(class, "ctor");
-		rawset(class, "__self__ctor", tmp_obj_method);
-		tmp_obj_method = rawget(class, "Dispose");
-		rawset(class, "__self__Dispose", tmp_obj_method);
-
 		local obj_methods = {
 			__self__ctor = rawget(class, "__self__ctor");
 			ctor = rawget(class, "ctor"),
@@ -146,15 +147,13 @@ CUsingHelper = {
 			Dispose = rawget(class, "Dispose"),
 			__ctor = rawget(class, "__ctor"),
 		};
+		local tmp_obj_method = nil;
+		tmp_obj_method = rawget(class, "ctor");
+		rawset(class, "__self__ctor", tmp_obj_method);
+		tmp_obj_method = rawget(class, "Dispose");
+		rawset(class, "__self__Dispose", tmp_obj_method);
 
-		local obj_build = function()
-			return {
-				__attributes = CUsingHelper__Attrs,
-				__ctor_called = false,
-			};
-		end;
-
-		local __defineclass_return = defineclass(nil, "CUsingHelper", "CUsingHelper", class, obj_methods, obj_build, false);
+		local __defineclass_return = defineclass(nil, "CUsingHelper", "CUsingHelper", class, obj_methods, false);
 		Utility.Warn("CUsingHelper::__define_class end");
 		return __defineclass_return;
 	end,

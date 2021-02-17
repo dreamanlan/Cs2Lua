@@ -58,6 +58,15 @@ TestStruct = {
 			this.__ctor_called = true;
 		end;
 	end,
+	-------------------------------
+	------ instance fields -------
+	-------------------------------
+	__obj_field_values = {
+		m_A = 0,
+		m_B = 0,
+		m_C = 0,
+		__ctor_called = false,
+	},
 
 	-------------------------------
 	--- define class and object ---
@@ -66,22 +75,12 @@ TestStruct = {
 		Utility.Warn("TestStruct::__define_class begin");
 
 		local class = TestStruct;
-
 		local obj_methods = {
 			ctor = rawget(class, "ctor"),
 			__ctor = rawget(class, "__ctor"),
 		};
 
-		local obj_build = function()
-			return {
-				m_A = 0,
-				m_B = 0,
-				m_C = 0,
-				__ctor_called = false,
-			};
-		end;
-
-		local __defineclass_return = defineclass(nil, "TestStruct", "TestStruct", class, obj_methods, obj_build, true);
+		local __defineclass_return = defineclass(nil, "TestStruct", "TestStruct", class, obj_methods, true);
 		Utility.Warn("TestStruct::__define_class end");
 		return __defineclass_return;
 	end,

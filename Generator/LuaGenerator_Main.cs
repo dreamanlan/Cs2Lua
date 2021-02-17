@@ -428,19 +428,19 @@ namespace Generator
                                         var fcall = first;
                                         if (first.IsHighOrder)
                                             fcall = first.LowerOrderFunction;
-                                        var mname = fcall.GetParamId(1);
-                                        bool isStatic = fcall.GetParamId(3) == "true";
+                                        var mname = fcall.GetParamId(2);
+                                        bool isStatic = fcall.GetParamId(4) == "true";
                                         System.Diagnostics.Debug.Assert(isStatic);
                                         int rct;
-                                        int.TryParse(first.GetParamId(3), out rct);
+                                        int.TryParse(fcall.GetParamId(5), out rct);
                                         sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
                                         sb.Append("function(");
                                         if (funcOpts.NeedFuncInfo) {
                                             sb.Append("__cs2lua_func_info");
-                                            if (fcall.GetParamNum() > 5)
+                                            if (fcall.GetParamNum() > 6)
                                                 sb.Append(", ");
                                         }
-                                        GenerateFunctionParams(fcall, sb, 5);
+                                        GenerateFunctionParams(fcall, sb, 6);
                                         sb.AppendLine(")");
                                         ++indent;
                                         GenerateStatements(first, sb, indent, funcOpts, calculator);
@@ -637,11 +637,11 @@ namespace Generator
                                         var fcall = first;
                                         if (first.IsHighOrder)
                                             fcall = first.LowerOrderFunction;
-                                        var mname = fcall.GetParamId(1);
-                                        bool isInstance = fcall.GetParamId(3) == "false";
+                                        var mname = fcall.GetParamId(2);
+                                        bool isInstance = fcall.GetParamId(4) == "false";
                                         System.Diagnostics.Debug.Assert(isInstance);
                                         int rct;
-                                        int.TryParse(first.GetParamId(3), out rct);
+                                        int.TryParse(fcall.GetParamId(5), out rct);
                                         instMethodNames.Add(mname);
                                         sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
                                         sb.Append("function(this");
@@ -649,9 +649,9 @@ namespace Generator
                                             sb.Append(", ");
                                             sb.Append("__cs2lua_func_info");
                                         }
-                                        if (fcall.GetParamNum() > 5)
+                                        if (fcall.GetParamNum() > 6)
                                             sb.Append(", ");
-                                        bool haveParams = GenerateFunctionParams(fcall, sb, 5);
+                                        bool haveParams = GenerateFunctionParams(fcall, sb, 6);
                                         sb.AppendLine(")");
                                         ++indent;
                                         GenerateStatements(first, sb, indent, funcOpts, calculator);
@@ -1665,7 +1665,7 @@ namespace Generator
                         }
                     }
                     else if (id == "getbase") {
-                        sb.Append("this.__base");
+                        sb.Append("getbaseobj(this)");
                     }
                     else if (id == "getstatic") {
                         var kind = CalcTypeString(data.GetParam(0));
@@ -3380,6 +3380,7 @@ namespace Generator
                     fcall = first.LowerOrderFunction;
                 }
                 var retVar = fcall.GetParamId(0);
+                var retValVar = fcall.GetParamId(1);
                 bool canSimplify = false;
                 //检查是否可以不用拆分函数，典型情形是try块里只有一个函数调用或return+函数调用的情形
                 if (fbody.GetParamNum() == 1) {
@@ -3415,7 +3416,7 @@ namespace Generator
                                     if (name == "callstatic" || name == "callexternstatic" || name == "callinstance" || name == "callexterninstance" || name == "calldelegation" || name == "callexterndelegation") {
                                         canSimplify = true;
                                         funcRetVar = retPart.GetId();
-                                        tryRetVar = retVar;
+                                        tryRetVar = retValVar;
                                         tryRetVal = returnStatement.GetParamId(0);
                                     }
                                 }
@@ -3512,11 +3513,11 @@ namespace Generator
                     //将要生成的__try/using_func的信息放到队列，等当前函数生成完毕后生成
                     s_TryUsingFuncs.Enqueue(data);
                     //生成调用__try/using_func的代码
-                    var mname = fcall.GetParamId(1);
-                    string className = CalcTypeString(fcall.GetParam(2));
-                    bool isStatic = fcall.GetParamId(3) == "true";
+                    var mname = fcall.GetParamId(2);
+                    string className = CalcTypeString(fcall.GetParam(3));
+                    bool isStatic = fcall.GetParamId(4) == "true";
                     int rct;
-                    int.TryParse(first.GetParamId(4), out rct);
+                    int.TryParse(fcall.GetParamId(5), out rct);
                     string prestr = ", ";
                     sb.Append("(");
                     sb.AppendFormat("{0}.{1}", className, mname);
@@ -3528,9 +3529,9 @@ namespace Generator
                         sb.Append(prestr);
                         sb.Append("__cs2lua_func_info");
                     }
-                    if (fcall.GetParamNum() > 5)
+                    if (fcall.GetParamNum() > 6)
                         sb.Append(prestr);
-                    bool haveParams = GenerateFunctionParams(fcall, sb, 5);
+                    bool haveParams = GenerateFunctionParams(fcall, sb, 6);
                     sb.Append(")");
                 }
             }

@@ -74,9 +74,6 @@ class(StrList, System.Collections.Generic.List_T) {
 		ctor__ICollection_1_String(MethodKind.Constructor, Accessibility.Public){
 		};
 	};
-	property_info {};
-	event_info {};
-	field_info {};
 };
 
 
