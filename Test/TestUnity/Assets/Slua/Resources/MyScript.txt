@@ -6,7 +6,7 @@ MyScript = {
 	-------------------------------
 	__new_object = function(...)
 		local __cs2dsl_newobj;
-		__cs2dsl_newobj = newobject(MyScript, nil, nil, "ctor", nil, ...);
+		__cs2dsl_newobj = newobject(MyScript, nil, nil, "ctor", 0, nil, ...);
 		return __cs2dsl_newobj;
 	end,
 
@@ -29,158 +29,193 @@ MyScript = {
 	__cctor_called = false,
 
 	-------------------------------
+	------ instance methods -------
+	-------------------------------
+	Init = function(this, obj, mb)
+		local s;
+		s = "test test test from cs2lua !";
+		UnityEngine.Debug.Log__Object(s);
+		mb:StartCoroutine(MyScript.TestCoroutine(this));
+		this.root = newexternobject(UnityEngine.GameObject, nil, nil, "ctor__String", 0, nil, luastrtocsstr("root"));
+		local slider;
+		slider = typeas(UnityEngine.GameObject.Find(luastrtocsstr("Canvas/Slider")):GetComponent__Type(UnityEngine.UI.Slider), UnityEngine.UI.Slider, TypeKind.Class);
+		local counttxt;
+		counttxt = typeas(UnityEngine.GameObject.Find(luastrtocsstr("Canvas/Count")):GetComponent__Type(UnityEngine.UI.Text), UnityEngine.UI.Text, TypeKind.Class);
+		slider.onValueChanged:AddListener(function(v)
+			MyScript.Reset(this);
+			counttxt.text = LuaString.Format__String__Object("cube:{0}", v);
+			this.max = typecast(v, System.Int32, TypeKind.Struct);
+		end);
+		MyScript.Reset(this);
+	end,
+
+	Update = function(this)
+		local __cs2lua_func_info = luainitialize();
+		luapcall(MyScript.__ori_Update, this, __cs2lua_func_info);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+	end,
+	__ori_Update = function(this, __cs2lua_func_info)
+		local i;
+		i = 0;
+		while (i < this.cubes.Length) do
+			local offset;
+			if ((i % 2) == 1) then offset = 5 else offset = -5 end;
+			local nr;
+			nr = (this.r + (UnityEngine.Mathf.Sin(UnityEngine.Time.time) * offset));
+			local angle;
+			if ((i % 2) == 1) then angle = UnityEngine.Time.time else angle = -5 end;
+			local b;
+			b = new_vector3(__cs2lua_func_info, nil, typecast(((UnityEngine.Mathf.Cos(((((i * 3.14159300) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Struct), typecast(((UnityEngine.Mathf.Sin(((((i * 3.14159300) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Struct), 0);
+			this.cubes[(i + 1)].transform.position = b;
+			i = (i + 1);
+		end;
+		if ((this.fogStart <= 0) or (this.t > 1)) then 
+			this.fogStart = UnityEngine.Time.time;
+			local __old_val_52_12_52_51;
+			__old_val_52_12_52_51 = this.bgCurrent;
+			this.bgCurrent = getexterninstancestructmember(SymbolKind.Property, UnityEngine.Camera.main, UnityEngine.Camera, "backgroundColor");
+			local __new_val_52_12_52_51;
+			__new_val_52_12_52_51 = this.bgCurrent;
+			recycle_and_keep_color(__cs2lua_func_info, UnityEngine.Color, __old_val_52_12_52_51, __new_val_52_12_52_51);
+			local ix;
+			ix = UnityEngine.Random.Range__Int32__Int32(0, this.colors.Length);
+			local __old_val_54_12_54_32;
+			__old_val_54_12_54_32 = this.bgColor;
+			this.bgColor = arraygetstruct(false, SymbolKind.Field, UnityEngine.Color, this.colors, 1, (ix + 1));
+			this.bgColor = wrap_color(__cs2lua_func_info, this.bgColor);
+			local __new_val_54_12_54_32;
+			__new_val_54_12_54_32 = this.bgColor;
+			recycle_and_keep_color(__cs2lua_func_info, UnityEngine.Color, __old_val_54_12_54_32, __new_val_54_12_54_32);
+		end;
+		this.t = (((UnityEngine.Time.time - this.fogStart)) / 10);
+		UnityEngine.Camera.main.backgroundColor = callexternstaticreturnstruct(UnityEngine.Color, "Lerp", wrap_color(__cs2lua_func_info, this.bgCurrent), wrap_color(__cs2lua_func_info, this.bgColor), this.t);
+	end,
+
+	Call = function(this, name, ...)
+		local args;
+		args = wrapparams({...}, System.Object, TypeKind.Class);
+	end,
+
+	TestCoroutine = wrapenumerable(function(this)
+		local __method_ret_69_4_76_5;
+		wrapyield(newexternobject(UnityEngine.WaitForSeconds, nil, nil, "ctor", 0, nil, 10), false, true);
+		local i;
+		i = 0;
+		while (i < 60) do
+			wrapyield(newexternobject(UnityEngine.WaitForSeconds, nil, nil, "ctor", 0, nil, 1), false, true);
+			UnityEngine.Debug.Log__Object(System.String.Format__String__Object(luastrtocsstr("{0} seconds"), i));
+			i = (i + 1);
+		end;
+		return nil;
+	end),
+
+	Reset = function(this)
+		local __cs2lua_func_info = luainitialize();
+		luapcall(MyScript.__ori_Reset, this, __cs2lua_func_info);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+	end,
+	__ori_Reset = function(this, __cs2lua_func_info)
+		if (not isequal(nil, this.cubes)) then 
+			local i;
+			i = 0;
+			while (i < this.cubes.Length) do
+				UnityEngine.Object.Destroy__Object(this.cubes[(i + 1)]);
+				i = (i + 1);
+			end;
+		end;
+		this.cubes = newarraydim1(UnityEngine.GameObject, TypeKind.Class, nil, this.max);
+		local P;
+		P = UnityEngine.Resources.Load__String(luastrtocsstr("Particle System"));
+		local i;
+		i = 0;
+		while (i < this.max) do
+			local cube;
+			cube = UnityEngine.GameObject.CreatePrimitive(3);
+			cube.transform.position = new_vector3(__cs2lua_func_info, nil, (typecast(UnityEngine.Mathf.Cos((((i * 3.14159300) * 2) / this.max)), System.Single, TypeKind.Struct) * this.r), (typecast(UnityEngine.Mathf.Sin((((i * 3.14159300) * 2) / this.max)), System.Single, TypeKind.Struct) * this.r), 0);
+			cube.transform:SetParent__Transform(this.root.transform);
+			local mat;
+			mat = cube:GetComponent__Type(UnityEngine.Renderer).material;
+			local box;
+			box = cube:GetComponent__Type(UnityEngine.BoxCollider);
+			UnityEngine.Object.Destroy__Object(box);
+			local p;
+			p = typeas(UnityEngine.Object.Instantiate__Object__Vector3__Quaternion(P, get_vector3_zero(__cs2lua_func_info), get_quaternion_identity(__cs2lua_func_info)), UnityEngine.GameObject, TypeKind.Class);
+			p.transform:SetParent__Transform(cube.transform);
+			local ix;
+			ix = UnityEngine.Random.Range__Int32__Int32(0, this.colors.Length);
+			mat.color = arraygetstruct(false, SymbolKind.Field, UnityEngine.Color, this.colors, 1, (ix + 1));
+			this.cubes[(i + 1)] = cube;
+			i = (i + 1);
+		end;
+	end,
+
+	ctor = function(this)
+		MyScript.__ctor(this);
+	end,
+
+	__ctor = function(this)
+		local __cs2lua_func_info = luainitialize();
+		luapcall(MyScript.__ori___ctor, this, __cs2lua_func_info);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+	end,
+	__ori___ctor = function(this, __cs2lua_func_info)
+		if this.__ctor_called then 
+			return;
+		else
+			this.__ctor_called = true;
+		end;
+		this.bgCurrent = new_color(__cs2lua_func_info, nil);
+		recycle_and_keep_color(__cs2lua_func_info, UnityEngine.Color, nil, this.bgCurrent);
+		this.bgColor = new_color(__cs2lua_func_info, nil);
+		recycle_and_keep_color(__cs2lua_func_info, UnityEngine.Color, nil, this.bgColor);
+		this.colors = wrap_color_array(__cs2lua_func_info, UnityEngine.Color, TypeKind.Struct, get_unity_color_red(__cs2lua_func_info), get_unity_color_blue(__cs2lua_func_info), get_unity_color_green(__cs2lua_func_info), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "cyan"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "grey"), get_unity_color_white(__cs2lua_func_info), get_unity_color_yellow(__cs2lua_func_info), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "magenta"), get_unity_color_black(__cs2lua_func_info));
+	end,
+	-------------------------------
+	------ instance fields -------
+	-------------------------------
+	__obj_field_values = {
+		r = 10,
+		max = 400,
+		t = 0,
+		fogStart = 0,
+		__attributes = MyScript__Attrs,
+		__ctor_called = false,
+	},
+
+	-------------------------------
 	--- define class and object ---
 	-------------------------------
 	__define_class = function()
 		Utility.Warn("MyScript::__define_class begin");
 
 		local class = MyScript;
-
 		local obj_methods = {
-			Init = function(this, obj, mb)
-				local s;
-				s = "test test test from cs2lua !";
-				UnityEngine.Debug.Log__Object(s);
-				mb:StartCoroutine(this:TestCoroutine());
-				this.root = newexternobject(UnityEngine.GameObject, nil, nil, "ctor__String", nil, luastrtocsstr("root"));
-				local slider;
-				slider = typeas(UnityEngine.GameObject.Find(luastrtocsstr("Canvas/Slider")):GetComponent__Type(UnityEngine.UI.Slider), UnityEngine.UI.Slider, TypeKind.Class);
-				local counttxt;
-				counttxt = typeas(UnityEngine.GameObject.Find(luastrtocsstr("Canvas/Count")):GetComponent__Type(UnityEngine.UI.Text), UnityEngine.UI.Text, TypeKind.Class);
-				slider.onValueChanged:AddListener(function(v)
-					this:Reset();
-					counttxt.text = LuaString.Format__String__Object("cube:{0}", v);
-					this.max = typecast(v, System.Int32, TypeKind.Struct);
-				end);
-				this:Reset();
-			end,
-
-			Update = function(this)
-				local __cs2lua_func_info = luainitialize();
-				local i;
-				i = 0;
-				while (i < this.cubes.Length) do
-					local offset;
-					if ((i % 2) == 1) then offset = 5 else offset = -5 end;
-					local nr;
-					nr = (this.r + (UnityEngine.Mathf.Sin(UnityEngine.Time.time) * offset));
-					local angle;
-					if ((i % 2) == 1) then angle = UnityEngine.Time.time else angle = -5 end;
-					local b;
-					b = new_vector3(__cs2lua_func_info, nil, typecast(((UnityEngine.Mathf.Cos(((((i * 3.14159300) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Struct), typecast(((UnityEngine.Mathf.Sin(((((i * 3.14159300) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Struct), 0);
-					this.cubes[(i + 1)].transform.position = b;
-					i = (i + 1);
-				end;
-				if ((this.fogStart <= 0) or (this.t > 1)) then 
-					this.fogStart = UnityEngine.Time.time;
-					local __old_val_52_12_52_51;
-					__old_val_52_12_52_51 = this.bgCurrent;
-					this.bgCurrent = getexterninstancestructmember(SymbolKind.Property, UnityEngine.Camera.main, UnityEngine.Camera, "backgroundColor");
-					local __new_val_52_12_52_51;
-					__new_val_52_12_52_51 = this.bgCurrent;
-					recycle_and_keep_color(__cs2lua_func_info, UnityEngine.Color, __old_val_52_12_52_51, __new_val_52_12_52_51);
-					local ix;
-					ix = UnityEngine.Random.Range__Int32__Int32(0, this.colors.Length);
-					local __old_val_54_12_54_32;
-					__old_val_54_12_54_32 = this.bgColor;
-					this.bgColor = this.colors[(ix + 1)];
-					local __new_val_54_12_54_32;
-					__new_val_54_12_54_32 = this.bgColor;
-					recycle_and_keep_color(__cs2lua_func_info, UnityEngine.Color, __old_val_54_12_54_32, __new_val_54_12_54_32);
-				end;
-				this.t = (((UnityEngine.Time.time - this.fogStart)) / 10);
-				UnityEngine.Camera.main.backgroundColor = call_color_lerp(UnityEngine.Color, "Lerp", this.bgCurrent, this.bgColor, this.t);
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
-			end,
-
-			Call = function(this, name, ...)
-				local args;
-				args = wrapparams({...}, System.Object, TypeKind.Class);
-			end,
-
-			TestCoroutine = wrapenumerable(function(this)
-				local __method_ret_69_4_76_5;
-				wrapyield(newexternobject(UnityEngine.WaitForSeconds, nil, nil, "ctor", nil, 10), false, true);
-				local i;
-				i = 0;
-				while (i < 60) do
-					wrapyield(newexternobject(UnityEngine.WaitForSeconds, nil, nil, "ctor", nil, 1), false, true);
-					UnityEngine.Debug.Log__Object(System.String.Format__String__Object(luastrtocsstr("{0} seconds"), i));
-					i = (i + 1);
-				end;
-				return nil;
-			end),
-
-			Reset = function(this)
-				local __cs2lua_func_info = luainitialize();
-				if (not isequal(nil, this.cubes)) then 
-					local i;
-					i = 0;
-					while (i < this.cubes.Length) do
-						UnityEngine.Object.Destroy__Object(this.cubes[(i + 1)]);
-						i = (i + 1);
-					end;
-				end;
-				this.cubes = newarraydim1(UnityEngine.GameObject, TypeKind.Class, nil, this.max);
-				local P;
-				P = UnityEngine.Resources.Load__String(luastrtocsstr("Particle System"));
-				local i;
-				i = 0;
-				while (i < this.max) do
-					local cube;
-					cube = UnityEngine.GameObject.CreatePrimitive(3);
-					cube.transform.position = new_vector3(__cs2lua_func_info, nil, (typecast(UnityEngine.Mathf.Cos((((i * 3.14159300) * 2) / this.max)), System.Single, TypeKind.Struct) * this.r), (typecast(UnityEngine.Mathf.Sin((((i * 3.14159300) * 2) / this.max)), System.Single, TypeKind.Struct) * this.r), 0);
-					cube.transform:SetParent__Transform(this.root.transform);
-					local mat;
-					mat = cube:GetComponent__Type(UnityEngine.Renderer).material;
-					local box;
-					box = cube:GetComponent__Type(UnityEngine.BoxCollider);
-					UnityEngine.Object.Destroy__Object(box);
-					local p;
-					p = typeas(UnityEngine.Object.Instantiate__Object__Vector3__Quaternion(P, get_vector3_zero(__cs2lua_func_info), get_quaternion_identity(__cs2lua_func_info)), UnityEngine.GameObject, TypeKind.Class);
-					p.transform:SetParent__Transform(cube.transform);
-					local ix;
-					ix = UnityEngine.Random.Range__Int32__Int32(0, this.colors.Length);
-					mat.color = this.colors[(ix + 1)];
-					this.cubes[(i + 1)] = cube;
-					i = (i + 1);
-				end;
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
-			end,
-
-			ctor = function(this)
-				this:__ctor();
-			end,
-
-			__ctor = function(this)
-				local __cs2lua_func_info = luainitialize();
-				if this.__ctor_called then 
-					__cs2lua_func_info = luafinalize(__cs2lua_func_info);
-					return;
-				else
-					this.__ctor_called = true;
-				end;
-				this.bgCurrent = new_color(__cs2lua_func_info, nil);
-				recycle_and_keep_color(__cs2lua_func_info, UnityEngine.Color, nil, this.bgCurrent);
-				this.bgColor = new_color(__cs2lua_func_info, nil);
-				recycle_and_keep_color(__cs2lua_func_info, UnityEngine.Color, nil, this.bgColor);
-				this.colors = wraparray({get_unity_color_red(__cs2lua_func_info), get_unity_color_blue(__cs2lua_func_info), get_unity_color_green(__cs2lua_func_info), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "cyan"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "grey"), get_unity_color_white(__cs2lua_func_info), get_unity_color_yellow(__cs2lua_func_info), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "magenta"), get_unity_color_black(__cs2lua_func_info)}, nil, UnityEngine.Color, TypeKind.Struct);
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
-			end,
+			__self__Init = rawget(class, "__self__Init");
+			Init = rawget(class, "Init"),
+			__self__Update = rawget(class, "__self__Update");
+			Update = rawget(class, "Update"),
+			__ori_Update = rawget(class, "__ori_Update"),
+			__self__Call = rawget(class, "__self__Call");
+			Call = rawget(class, "Call"),
+			TestCoroutine = rawget(class, "TestCoroutine"),
+			Reset = rawget(class, "Reset"),
+			__ori_Reset = rawget(class, "__ori_Reset"),
+			__self__ctor = rawget(class, "__self__ctor");
+			ctor = rawget(class, "ctor"),
+			__ctor = rawget(class, "__ctor"),
+			__ori___ctor = rawget(class, "__ori___ctor"),
 		};
+		local tmp_obj_method = nil;
+		tmp_obj_method = rawget(class, "Init");
+		rawset(class, "__self__Init", tmp_obj_method);
+		tmp_obj_method = rawget(class, "Update");
+		rawset(class, "__self__Update", tmp_obj_method);
+		tmp_obj_method = rawget(class, "Call");
+		rawset(class, "__self__Call", tmp_obj_method);
+		tmp_obj_method = rawget(class, "ctor");
+		rawset(class, "__self__ctor", tmp_obj_method);
 
-		local obj_build = function()
-			return {
-				r = 10,
-				max = 400,
-				t = 0,
-				fogStart = 0,
-				__attributes = MyScript__Attrs,
-				__ctor_called = false,
-			};
-		end;
-
-		local __defineclass_return = defineclass(nil, "MyScript", "MyScript", class, obj_methods, obj_build, false);
+		local __defineclass_return = defineclass(nil, "MyScript", "MyScript", class, obj_methods, false, false);
 		Utility.Warn("MyScript::__define_class end");
 		return __defineclass_return;
 	end,
@@ -214,23 +249,14 @@ MyScript = {
 		"ITickPlugin",
 	},
 	__method_info = {
-		Init = {
-			Kind = MethodKind.Ordinary,
+		TestCoroutine = {
+			private = true,
 		},
-		Update = {
-			Kind = MethodKind.Ordinary,
-		},
-		FixedUpdate = {
-			Kind = MethodKind.Ordinary,
-		},
-		LateUpdate = {
-			Kind = MethodKind.Ordinary,
-		},
-		Call = {
-			Kind = MethodKind.Ordinary,
+		Reset = {
+			private = true,
 		},
 		ctor = {
-			Kind = MethodKind.Constructor,
+			ctor = true,
 		},
 	},
 };

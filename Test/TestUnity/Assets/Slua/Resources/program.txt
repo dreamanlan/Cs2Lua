@@ -31,6 +31,7 @@ Program = {
 	__attributes = Program__Attrs,
 	__cctor_called = false,
 
+
 	-------------------------------
 	--- define class and object ---
 	-------------------------------
@@ -38,14 +39,10 @@ Program = {
 		Utility.Warn("Program::__define_class begin");
 
 		local class = Program;
-
 		local obj_methods = nil;
+		local tmp_obj_method = nil;
 
-		local obj_build = function()
-			return nil;
-		end;
-
-		local __defineclass_return = defineclass(nil, "Program", "Program", class, obj_methods, obj_build, false);
+		local __defineclass_return = defineclass(nil, "Program", "Program", class, obj_methods, false, false);
 		Utility.Warn("Program::__define_class end");
 		return __defineclass_return;
 	end,

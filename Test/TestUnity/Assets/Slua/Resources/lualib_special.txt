@@ -20,6 +20,16 @@ function get_unity_color_white(funcInfo)
 	return obj
 end
 
+function wrap_color_array(funcInfo, classObj, typeKind, ...)
+	local newarr = wraparray({...}, nil, classObj, typeKind)
+	for i,v in ipairs(newarr) do
+	    if v~=nil then
+	        luatableremove(funcInfo.c_list, v)
+	    end
+	end
+	return newarr;
+end
+
 function recycle_and_keep_color(funcInfo, fieldType, oldVal, newVal)
 	recycleandkeepcheck(funcInfo, fieldType, oldVal, newVal)
 	if not rawequal(oldVal,newVal) and oldVal~=nil then
@@ -52,17 +62,16 @@ function new_vector3(funcInfo, initializer, ...)
 	return obj
 end
 
+function wrap_color(funcInfo, v)
+	local obj = UnityEngine.Color.New(v.r,v.g,v.b,v.a)
+	table.insert(funcInfo.c_list, obj)
+	return obj
+end
+
 function get_unity_color_yellow(funcInfo)
 	local obj = UnityEngine.Color.yellow
 	table.insert(funcInfo.c_list , obj)
 	return obj
-end
-
-function call_color_lerp(funcInfo, class, member, ...)
-	local c1,c2,t = ...
-	local c = UnityEngine.Color.Lerp(c1,c2,t)
-	table.insert(funcInfo.c_list, c)
-	return c
 end
 
 function get_vector3_zero(funcInfo)

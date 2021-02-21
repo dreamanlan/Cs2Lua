@@ -1,0 +1,2 @@
+[E:\OpenSource\Cs2Lua\Test\Cs2LuaScript\dsl\myscript.dsl:TestCoroutine]:coroutinehook callexternstatic(UnityEngine.Debug,Log__Object,callexternstatic,)
+[E:\OpenSource\Cs2Lua\Test\Cs2LuaScript\dsl\myscript.dsl:TestCoroutine]:coroutinehook callexternstatic(System.String,Format__String__Object,dslstrtocsstr,i)

@@ -28,6 +28,7 @@ Cs2LuaType = {
 	__attributes = Cs2LuaType__Attrs,
 	__cctor_called = false,
 
+
 	-------------------------------
 	--- define class and object ---
 	-------------------------------
@@ -35,14 +36,10 @@ Cs2LuaType = {
 		Utility.Warn("Cs2LuaType::__define_class begin");
 
 		local class = Cs2LuaType;
-
 		local obj_methods = nil;
+		local tmp_obj_method = nil;
 
-		local obj_build = function()
-			return nil;
-		end;
-
-		local __defineclass_return = defineclass(nil, "Cs2LuaType", "Cs2LuaType", class, obj_methods, obj_build, false);
+		local __defineclass_return = defineclass(nil, "Cs2LuaType", "Cs2LuaType", class, obj_methods, false, false);
 		Utility.Warn("Cs2LuaType::__define_class end");
 		return __defineclass_return;
 	end,

@@ -1,5 +1,8 @@
-collectgarbage("setpause", 125)
+collectgarbage("setpause", 50)
 collectgarbage("setstepmul", 200)
+
+function dummycall()
+end
 
 local function get_basic_type_func()
     return function(v)
@@ -30,50 +33,32 @@ System.Collections.Generic = System.Collections.Generic or {}
 System.Collections.Generic.List_T = {
     __cs2lua_defined = true,
     __cs2lua_fullname = "System.Collections.Generic.List_T",
-    __cs2lua_typename = "List",
-    __exist = function(k)
-        return false
-    end
+    __cs2lua_typename = "List"
 }
 System.Collections.Generic.Queue_T = {
     __cs2lua_defined = true,
     __cs2lua_fullname = "System.Collections.Generic.Queue_T",
-    __cs2lua_typename = "Queue",
-    __exist = function(k)
-        return false
-    end
+    __cs2lua_typename = "Queue"
 }
 System.Collections.Generic.Stack_T = {
     __cs2lua_defined = true,
     __cs2lua_fullname = "System.Collections.Generic.Stack_T",
-    __cs2lua_typename = "Stack",
-    __exist = function(k)
-        return false
-    end
+    __cs2lua_typename = "Stack"
 }
 System.Collections.Generic.Dictionary_TKey_TValue = {
     __cs2lua_defined = true,
     __cs2lua_fullname = "System.Collections.Generic.Dictionary_TKey_TValue",
-    __cs2lua_typename = "Dictionary",
-    __exist = function(k)
-        return false
-    end
+    __cs2lua_typename = "Dictionary"
 }
 System.Collections.Generic.HashSet_T = {
     __cs2lua_defined = true,
     __cs2lua_fullname = "System.Collections.Generic.HashSet_T",
-    __cs2lua_typename = "HashSet",
-    __exist = function(k)
-        return false
-    end
+    __cs2lua_typename = "HashSet"
 }
 System.Collections.Generic.KeyValuePair_TKey_TValue = {
     __cs2lua_defined = true,
     __cs2lua_fullname = "System.Collections.Generic.KeyValuePair_TKey_TValue",
-    __cs2lua_typename = "KeyValuePair",
-    __exist = function(k)
-        return false
-    end
+    __cs2lua_typename = "KeyValuePair"
 }
 System.Array = System.Array or {}
 System.Nullable_T = System.Nullable_T or {}
@@ -161,6 +146,105 @@ MethodKind = {
     BuiltinOperator = 15,
     DeclareMethod = 16,
     LocalFunction = 17
+}
+
+OperationKind = {
+	None = 0,
+	Invalid = 1,
+	Block = 2,
+	VariableDeclarationGroup = 3,
+	Switch = 4,
+	Loop = 5,
+	Labeled = 6,
+	Branch = 7,
+	Empty = 8,
+	Return = 9,
+	YieldBreak = 10,
+	Lock = 11,
+	Try = 12,
+	Using = 13,
+	YieldReturn = 14,
+	ExpressionStatement = 0xF,
+	LocalFunction = 0x10,
+	Stop = 17,
+	End = 18,
+	RaiseEvent = 19,
+	Literal = 20,
+	Conversion = 21,
+	Invocation = 22,
+	ArrayElementReference = 23,
+	LocalReference = 24,
+	ParameterReference = 25,
+	FieldReference = 26,
+	MethodReference = 27,
+	PropertyReference = 28,
+	EventReference = 30,
+	UnaryOperator = 0x1F,
+	BinaryOperator = 0x20,
+	Conditional = 33,
+	Coalesce = 34,
+	AnonymousFunction = 35,
+	ObjectCreation = 36,
+	TypeParameterObjectCreation = 37,
+	ArrayCreation = 38,
+	InstanceReference = 39,
+	IsType = 40,
+	Await = 41,
+	SimpleAssignment = 42,
+	CompoundAssignment = 43,
+	Parenthesized = 44,
+	EventAssignment = 45,
+	ConditionalAccess = 46,
+	ConditionalAccessInstance = 47,
+	InterpolatedString = 48,
+	AnonymousObjectCreation = 49,
+	ObjectOrCollectionInitializer = 50,
+	MemberInitializer = 51,
+	CollectionElementInitializer = 52,
+	NameOf = 53,
+	Tuple = 54,
+	DynamicObjectCreation = 55,
+	DynamicMemberReference = 56,
+	DynamicInvocation = 57,
+	DynamicIndexerAccess = 58,
+	TranslatedQuery = 59,
+	DelegateCreation = 60,
+	DefaultValue = 61,
+	TypeOf = 62,
+	SizeOf = 0x3F,
+	AddressOf = 0x40,
+	IsPattern = 65,
+	Increment = 66,
+	Throw = 67,
+	Decrement = 68,
+	DeconstructionAssignment = 69,
+	DeclarationExpression = 70,
+	OmittedArgument = 71,
+	FieldInitializer = 72,
+	VariableInitializer = 73,
+	PropertyInitializer = 74,
+	ParameterInitializer = 75,
+	ArrayInitializer = 76,
+	VariableDeclarator = 77,
+	VariableDeclaration = 78,
+	Argument = 79,
+	CatchClause = 80,
+	SwitchCase = 81,
+	CaseClause = 82,
+	InterpolatedStringText = 83,
+	Interpolation = 84,
+	ConstantPattern = 85,
+	DeclarationPattern = 86,
+	TupleBinaryOperator = 87,
+	MethodBodyOperation = 88,
+	ConstructorBodyOperation = 89,
+	Discard = 90,
+	FlowCapture = 91,
+	FlowCaptureReference = 92,
+	IsNull = 93,
+	CaughtException = 94,
+	StaticLocalInitializationSemaphore = 95,
+	FlowAnonymousFunction = 96
 }
 
 g_LuaStr2CsStrCaches = {}
@@ -353,6 +437,25 @@ function luausing(func, ...)
     end
 end
 
+function luapcall_geterror(e)
+    local err = tostring(e)
+    local trace = debug.traceback(err)
+    UnityEngine.Debug.LogError__Object(err .. ", " .. trace)
+    return err
+end
+
+function luapcall(func, ...)
+    if nil==func then
+        return false, "nil luapcall function"
+    else
+        return xpcall(
+            func,
+            luapcall_geterror,
+            ...
+        )
+    end
+end
+
 function luatry_geterror(e)
     local err = tostring(e)
     local trace = debug.traceback(err)
@@ -413,10 +516,10 @@ function callexternextension(callerClass, method, ...)
     end
 end
 
-function getexternstaticindexer(callerClass, class, name, argCount, ...)
+function getexternstaticindexer(elementType, elementTypeKind, callerClass, class, name, argCount, ...)
     return class[name](...)
 end
-function getexterninstanceindexer(callerClass, obj, class, name, argCount, ...)
+function getexterninstanceindexer(elementType, elementTypeKind, callerClass, obj, class, name, argCount, ...)
     local arg1,arg2 = ...
     local index
     local meta = getmetatable(obj)
@@ -448,10 +551,10 @@ function getexterninstanceindexer(callerClass, obj, class, name, argCount, ...)
     end
 end
 
-function setexternstaticindexer(callerClass, class, name, argCount, toplevel, ...)
+function setexternstaticindexer(elementType, elementTypeKind, callerClass, class, name, argCount, ...)
     return class[name](...)
 end
-function setexterninstanceindexer(callerClass, obj, class, name, argCount, toplevel, ...)
+function setexterninstanceindexer(elementType, elementTypeKind, callerClass, obj, class, name, argCount, ...)
     local arg1,arg2,arg3 = ...
     local index,val
     index = __unwrap_if_string(arg1)
@@ -786,15 +889,31 @@ local function _get_first_untable_from_pack_args(...)
     end
 end
 
-function invokeforbasicvalue(obj, isEnum, class, method, ...)
+function callbasicvalue(obj, isEnum, class, method, ...)
     local arg1,arg2 = ...
     local meta = getmetatable(obj)
-    if isEnum and obj and method == "ToString" then
+    if isEnum and obj and (method == "ToString" or 1 == string.find(method, "ToString__")) then
         return class.Value2String[obj]
     end
     if method then
-        if class == System.Char and method == "ToString" then
+        if class == System.Char and (method == "ToString" or 1 == string.find(method, "ToString__")) then
             return Utility.CharToString(obj)
+        elseif class == System.String and (method == "CompareTo" or 1 == string.find(method, "CompareTo__")) then
+            local a = obj
+            local b = arg1
+            if type(a) ~= "string" then
+                a = tostring(a)
+            end
+            if type(b) ~= "string" then
+                b = tostring(b)
+            end
+            if a<b then
+                return -1
+            elseif a>b then
+                return 1
+            else
+                return 0
+            end
         elseif class == System.String then
             local csstr = obj
             if type(obj) == "string" then
@@ -819,6 +938,14 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
             else
                 return csstr[method](csstr, ...)
             end
+        elseif class == System.Single and method == "ToString__String" then
+            return Utility.SingleToString(obj, arg1)
+        elseif class == System.Double and method == "ToString__String" then
+            return Utility.DoubleToString(obj, arg1)
+        elseif class == System.Int32 and method == "ToString__String" then
+            return Utility.IntToString(obj, arg1)
+        elseif class == System.UInt32 and method == "ToString__String" then
+            return Utility.UintToString(obj, arg1)
         elseif meta then
             return obj[method](obj, ...)
         elseif method == "CompareTo" or 1 == string.find(method, "CompareTo__") then            
@@ -841,7 +968,7 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
                     return 0
                 end
             end
-        elseif method == "ToString" then
+        elseif method == "ToString" or 1 == string.find(method, "ToString__") then
             return tostring(obj)
         elseif method == "Split" or 1 == string.find(method, "Split__") then
             local result1, result2 = _get_first_untable_from_pack_args(...)
@@ -861,7 +988,7 @@ function invokeforbasicvalue(obj, isEnum, class, method, ...)
     end
     return nil
 end
-function getforbasicvalue(obj, isEnum, class, property)
+function getbasicvalue(obj, isEnum, class, property)
     local meta = getmetatable(obj)
     if property then
         if type(obj) == "string" then
@@ -882,7 +1009,7 @@ function getforbasicvalue(obj, isEnum, class, property)
     end
     return nil
 end
-function setforbasicvalue(obj, isEnum, class, property, value)
+function setbasicvalue(obj, isEnum, class, property, value)
     local meta = getmetatable(obj)
     if property then
         if type(obj) == "string" then
@@ -898,8 +1025,7 @@ function setforbasicvalue(obj, isEnum, class, property, value)
     end
     return nil
 end
-
-function invokearraystaticmethod(firstArray, secondArray, method, ...)
+function callarraystaticmethod(firstArray, secondArray, method, ...)
     if nil ~= firstArray and nil ~= method then
         local arg1,arg2 = ...
         local meta = getmetatable(firstArray)
@@ -914,14 +1040,59 @@ function invokearraystaticmethod(firstArray, secondArray, method, ...)
                     end
                 )
             else
+                translationlog("need add handler for callarraystaticmethod Array.{0}", method)
                 return nil
             end
+        elseif method == "IndexOf" or 1 == string.find(method, "IndexOf__", 1, true) then
+            local arr,val,start,count = ...
+            if not start then
+                start = 0
+            end
+            if not count then
+                count = arr.Length
+            end
+            for i = start+1,start+count do
+                if arr[i]==val then
+                    return i-1
+                end
+            end
+            return -1
         else
             --这种情形认为是外部导出的数组调用，直接调导出接口了（由于System.Array有generic成员，这些方法的调用估计会出错）
             return System.Array[method](...)
         end
     else
+        translationlog("need add handler for callarraystaticmethod Array.{0}", method)
         return nil
+    end
+end
+
+function callexterninterfacereturnstruct(obj, intf, method, ...)
+    translationlog("need add handler for callexterninterfacereturnstruct {0}.{1}", getclasstypename(intf), method)
+    return callinterface(obj, intf, method, ...)
+end
+function getexterninterfacestructmember(obj, intf, name, getmethodname)
+    translationlog("need add handler for getexterninterfacestructmember {0}.{1}", getclasstypename(intf), name)
+    return getinterface(obj, intf, name, getmethodname)
+end
+
+function callinterface(obj, intf, method, ...)
+    return obj[method](obj, ...)
+end
+function getinterface(obj, intf, name, getmethodname)
+    local meta = getmetatable(obj)
+    if meta and rawget(meta, "__cs2lua_defined") then
+        return obj[getmethodname](obj)
+    else
+        return obj[name]
+    end
+end
+function setinterface(obj, intf, name, setmethodname, val)
+    local meta = getmetatable(obj)
+    if meta and rawget(meta, "__cs2lua_defined") then
+        obj[setmethodname](obj, val)
+    else
+        obj[name] = val
     end
 end
 
@@ -1009,9 +1180,12 @@ function createpool(tag, newFunc)
     return pool
 end
 
-FuncInfoPool = createpool("FuncInfo",
+g_FuncInfoStack = {}
+
+g_FuncInfoPool = createpool("FuncInfo",
     function()
         return {
+            iter_list = {},
             v2_list = {},
             v3_list = {},
             v4_list = {},
@@ -1096,15 +1270,12 @@ function wrapchar(char, intVal)
 end
 
 function wrapoutstruct(v, classObj)
-    return classObj()
+    return v
 end
 
 function wrapoutexternstruct(v, classObj)
-    if classObj == System.Collections.Generic.KeyValuePair_TKey_TValue then
-        return nil
-    end
     translationlog("need add handler for wrapoutexternstruct {0}", getclasstypename(classObj))
-    return classObj.ctor()
+    return v
 end
 
 function wrapstruct(v, classObj)
@@ -1116,12 +1287,37 @@ function wrapexternstruct(v, classObj)
     return v
 end
 
+function wrapstructargument(v, argType, argOperKind, argSymKind, class, callerClass)
+    return v
+end
+
+function wrapexternstructargument(v, argType, argOperKind, argSymKind, class, callerClass)
+    translationlog("need add handler for wrapexternstructargument {0}", getclasstypename(argType))
+    return v
+end
+
+function wrapstructarguments(arr, argType, argOperKind, argSymKind, class, callerClass)
+    return arr
+end
+
+function wrapexternstructarguments(arr, argType, argOperKind, argSymKind, class, callerClass)
+    translationlog("need add handler for wrapexternstructarguments {0}", getclasstypename(argType))
+    return arr
+end
+
 function getexternstaticstructmember(symKind, class, member)
     translationlog("need add handler for getexternstaticstructmember {0}.{1}", getclasstypename(class), member)
     return class[member]
 end
 
 function getexterninstancestructmember(symKind, obj, class, member)
+    if class==System.Nullable_T then
+        if member=="Value" then
+            return obj
+        elseif member=="HasValue" then
+            return nil~=obj
+        end
+    end
     translationlog("need add handler for getexterninstancestructmember {0}.{1}", getclasstypename(class), member)
     return obj[member]
 end
@@ -1146,6 +1342,145 @@ function callexterninstancereturnstruct(obj, class, member, ...)
     return obj[member](obj, ...)
 end
 
+function getstaticindexerstructimpl(isExtern, elementType, callerClass, class, name, argCount, ...)
+    return class[name](...)
+end
+function getinstanceindexerstructimpl(isExtern, elementType, callerClass, obj, class, name, argCount, ...)
+    local arg1,arg2 = ...
+    local index
+    local meta = getmetatable(obj)
+    if meta then
+        local _class = rawget(meta, "__class")
+        if _class == System.Collections.Generic.List_T then
+            index = __unwrap_if_string(arg1)
+            return obj[index + 1]
+        elseif _class == System.Collections.Generic.Dictionary_TKey_TValue then
+            index = __unwrap_if_string(arg1)
+            return obj[index]
+        else
+            index = __unwrap_if_string(arg1)
+            if nil == index then
+                UnityEngine.Debug.LogError__Object("[cs2lua] table index is nil")
+                return nil
+            end
+            local typename = rawget(meta, "__typename")
+            if typename == "LuaArray" then
+                return obj[index + 1]
+            elseif typename == "LuaVarObject" then
+                return obj[index]
+            elseif name == "get_Chars" then
+                return Utility.StringGetChar(obj, index)
+            else
+                return obj:getItem(index)
+            end
+        end
+    end
+end
+
+function getstaticindexerstruct(isExtern, elementType, callerClass, class, name, argCount, ...)
+    if isExtern and callerClass ~= class then
+        translationlog("need add handler for getstaticindexerstruct {0}[{1}] {2}.{3}", getclasstypename(callerClass), getclasstypename(elementType), getclasstypename(class), name)
+    end
+    return getstaticindexerstructimpl(isExtern, elementType, callerClass, class, name, argCount, ...)
+end
+function getinstanceindexerstruct(isExtern, elementType, callerClass, obj, class, name, argCount, ...)
+    if isExtern and callerClass ~= class then
+        translationlog("need add handler for getinstanceindexerstruct {0}[{1}] {2}.{3}", getclasstypename(callerClass), getclasstypename(elementType), getclasstypename(class), name)
+    end
+    return getinstanceindexerstructimpl(isExtern, elementType, callerClass, obj, class, name, argCount, ...)
+end
+
+function setstaticindexerstructimpl(isExtern, elementType, callerClass, class, name, argCount, ...)
+    return class[name](...)
+end
+function setinstanceindexerstructimpl(isExtern, elementType, callerClass, obj, class, name, argCount, ...)
+    local arg1,arg2,arg3 = ...
+    local index,val
+    index = __unwrap_if_string(arg1)
+    val = arg2
+    if nil == index then
+        UnityEngine.Debug.LogError__Object("[cs2lua] table index is nil")
+        return
+    end
+    local meta = getmetatable(obj)
+    if meta then
+        local _class = rawget(meta, "__class")
+        local typename = rawget(meta, "__typename")
+        if _class == System.Collections.Generic.List_T then
+            obj[index + 1] = val
+        elseif _class == System.Collections.Generic.Dictionary_TKey_TValue then
+            obj[index] = val
+        elseif typename == "LuaArray" then
+            obj[index + 1] = val
+        elseif typename == "LuaVarObject" then
+            obj[index] = val
+        else
+            obj:setItem(index, val)
+        end
+    end
+    return nil
+end
+
+function setstaticindexerstruct(isExtern, elementType, callerClass, class, name, argCount, ...)
+    translationlog("need add handler for setstaticindexerstruct {0}[{1}] {2}.{3}", getclasstypename(callerClass), getclasstypename(elementType), getclasstypename(class), name)
+    return setstaticindexerstructimpl(isExtern, elementType, callerClass, class, name, argCount, ...)
+end
+function setinstanceindexerstruct(isExtern, elementType, callerClass, obj, class, name, argCount, ...)
+    translationlog("need add handler for setinstanceindexerstruct {0}[{1}] {2}.{3}", getclasstypename(callerClass), getclasstypename(elementType), getclasstypename(class), name)
+    return setinstanceindexerstructimpl(isExtern, elementType, callerClass, obj, class, name, argCount, ...)
+end
+
+function arraygetstructimpl(isExtern, arrSymKind, elementType, arr, argCount, ...)
+    local num = select("#", ...)
+    if num == 1 then
+        local v1 = select(1, ...)
+        return arr[v1]
+    elseif num == 2 then
+        local v1 = select(1, ...)
+        local v2 = select(2, ...)
+        return arr[v1][v2]
+    elseif num == 3 then
+        local v1 = select(1, ...)
+        local v2 = select(2, ...)
+        local v3 = select(3, ...)
+        return arr[v1][v2][v3]
+    else
+        error("too many dimensions !")
+    end
+end
+function arraysetstructimpl(isExtern, arrSymKind, elementType, arr, argCount, ...)
+    local num = select("#", ...)
+    if num == 2 then
+        local v1 = select(1, ...)
+        local val = select(2, ...)
+        arr[v1] = val
+    elseif num == 3 then
+        local v1 = select(1, ...)
+        local v2 = select(2, ...)
+        local val = select(3, ...)
+        arr[v1][v2] = val
+    elseif num == 4 then
+        local v1 = select(1, ...)
+        local v2 = select(2, ...)
+        local v3 = select(3, ...)
+        local val = select(4, ...)
+        arr[v1][v2][v3] = val
+    else
+        error("too many dimensions !")
+    end
+end
+
+function arraygetstruct(isExtern, arrSymKind, elementType, arr, argCount, ...)   
+    if isExtern then 
+        translationlog("need add handler for arraygetstruct {0}[]", getclasstypename(elementType))
+    end
+    return arraygetstructimpl(isExtern, arrSymKind, elementType, arr, argCount, ...)
+end
+function arraysetstruct(isExtern, arrSymKind, elementType, arr, argCount, ...)
+    translationlog("need add handler for arraysetstruct {0}[]", getclasstypename(elementType))
+    arraysetstructimpl(isExtern, arrSymKind, elementType, arr, argCount, ...)
+end
+
 function recycleandkeepstructvalue(fieldType, oldVal, newVal)
     translationlog("need add handler for recycleandkeepstructvalue {0}", getclasstypename(fieldType))
 end
@@ -1154,8 +1489,10 @@ function luatableremove(tb, val)
     for i,v in ipairs(tb) do
         if rawequal(v,val) then
             table.remove(tb, i)
+            return true
         end
     end
+    return false
 end
 
 function recycleandkeepcheck(fieldType, oldVal, newVal)   
@@ -1165,12 +1502,42 @@ function recycleandkeepcheck(fieldType, oldVal, newVal)
     end
 end
 
+function removefromcallerfuncinfo(funcinfo, class, val)
+    translationlog("need add handler for removefromcallerfuncinfo {0}", getclasstypename(class))
+end
+
+function removefromfuncinfo(funcinfo, class, val)
+    translationlog("need add handler for removefromfuncinfo {0}", getclasstypename(class))
+end
+
+function movetocallerfuncinfo(funcInfo, class, val)
+    translationlog("need add handler for movetocaller {0}", getclasstypename(class))
+end
+
+function luagetcallerfuncinfo()
+    local ct = #g_FuncInfoStack
+    if ct > 1 then
+        return g_FuncInfoStack[ct-1]
+    else
+        return nil
+    end
+end
+
 function luainitialize()
-    return FuncInfoPool.Alloc()
+    local info = g_FuncInfoPool.Alloc()
+    table.insert(g_FuncInfoStack, info)
+    return info
 end
 
 function luafinalize(funcInfo)
+    local last = table.remove(g_FuncInfoStack)
+    while last and last ~= funcInfo do
+        last = table.remove(g_FuncInfoStack)
+    end
     if funcInfo then
+        for i,v in ipairs(funcInfo.iter_list) do
+            recycleiterator(nil, v)
+        end
         for i,v in ipairs(funcInfo.v2_list) do
             Vector2Pool.Recycle(v)
         end
@@ -1193,6 +1560,10 @@ function luafinalize(funcInfo)
             RectPool.Recycle(v)
         end
         local ct
+        ct = #(funcInfo.iter_list)
+        for i=1,ct do
+            funcInfo.iter_list[i]=nil
+        end
         ct = #(funcInfo.v2_list)
         for i=1,ct do
             funcInfo.v2_list[i]=nil
@@ -1221,29 +1592,23 @@ function luafinalize(funcInfo)
         for i=1,ct do
             funcInfo.rt_list[i]=nil
         end
-        FuncInfoPool.Recycle(funcInfo)
+        g_FuncInfoPool.Recycle(funcInfo)
     end
     return nil
 end
 
 Cs2LuaCustomData = {
 	__new_object = function(...)
-		local __cs2lua_newobj = newobject(Cs2LuaCustomData, nil, nil, nil, nil, ...);
+		local __cs2lua_newobj = newobject(Cs2LuaCustomData, nil, nil, nil, 0, nil, ...);
 		return __cs2lua_newobj;
 	end,
 	__define_class = function()
 		printMemDiff("Cs2LuaCustomData::__define_class begin");
 
 		local class = Cs2LuaCustomData;
-
 		local obj_methods = nil;
-		local obj_build = function()
-			return {
-				CustomData = nil,
-			};
-		end;
 
-		local __defineclass_return = defineclass(UnityEngine.Object, "Cs2LuaCustomData", "Cs2LuaCustomData", class, obj_methods, obj_build, false);
+		local __defineclass_return = defineclass(UnityEngine.Object, "Cs2LuaCustomData", "Cs2LuaCustomData", class, obj_methods, false, true);
 		printMemDiff("Cs2LuaCustomData::__define_class end");
 		return __defineclass_return;
 	end,
@@ -1603,9 +1968,6 @@ function __dec_array_count(tb)
 end
 
 __mt_index_of_array_table = {
-    __exist = function(tb, fk) --禁用继承
-            return false
-        end,
     get_Length = function(obj) 
     		    return __get_table_count(obj) 
     		end,
@@ -1665,11 +2027,12 @@ __mt_index_of_array_table = {
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
         end,
     AddRange = function(obj, coll)
-            local iter = newiterator(coll)
+            local iter = newiterator(nil, coll)
             for v in getiterator(iter) do
                 table.insert(obj, v)
                 __inc_array_count(obj)
             end
+            recycleiterator(nil, iter)
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
         end,
     Insert = function(obj, ix, p)
@@ -1867,9 +2230,6 @@ __mt_index_of_array = function(t, k)
 end
 
 __mt_index_of_dictionary_table = {
-    __exist = function(tb, fk)    --禁用继承
-            return false
-        end,
     get_Count = function(obj)
             return __get_table_count(obj)
         end,
@@ -1995,9 +2355,6 @@ __mt_newindex_of_dictionary = function(t, k, val)
 end
 
 __mt_index_of_hashset_table = {
-    __exist = function(tb, fk)  --禁用继承
-            return false
-        end,
     get_Count = function(obj)
              return __get_table_count(obj) 
         end,
@@ -2304,12 +2661,15 @@ function GetHashsetEnumerator(tb)
     )
 end
 
-function newiterator(exp)
+function newiterator(funcInfo, exp)
     local meta = getmetatable(exp)
     if meta and rawget(meta, "__cs2lua_defined") then
         if meta.cachedIters and meta.cachedIters[exp] and #(meta.cachedIters[exp])>0 then
             local iterInfo = table.remove(meta.cachedIters[exp], 1)
             iterInfo[2]:Reset()
+            if funcInfo then
+                table.insert(funcInfo.iter_list, iterInfo)
+            end
             return iterInfo
         else
             local enumer = exp:GetEnumerator()
@@ -2324,14 +2684,21 @@ function newiterator(exp)
                     return nil
                 end
             end
-            return {f, enumer, exp}
+            local iterInfo = {f, enumer, exp}            
+            if funcInfo then
+                table.insert(funcInfo.iter_list, iterInfo)
+            end
+            return iterInfo
         end
     elseif meta and rawget(meta, "__typename")=="LuaArray" then
         --lualog("LuaArray newiterator:{0} {1}", exp, exp.Length)
         --printStack()
         if meta.cachedIters and meta.cachedIters[exp] and #(meta.cachedIters[exp])>0 then
             local iterInfo = table.remove(meta.cachedIters[exp], 1)
-            iterInfo[2]()
+            iterInfo[2]()  
+            if funcInfo then
+                table.insert(funcInfo.iter_list, iterInfo)
+            end
             return iterInfo
         else
             local arr = exp
@@ -2354,15 +2721,26 @@ function newiterator(exp)
             local reset = function()
                 curIx = 0
             end
-            return {f, reset, exp}
+            local iterInfo = {f, reset, exp}      
+            if funcInfo then
+                table.insert(funcInfo.iter_list, iterInfo)
+            end
+            return iterInfo
         end
     else
         if meta and meta.cachedIters and meta.cachedIters[exp] and #(meta.cachedIters[exp])>0 then
             local iterInfo = table.remove(meta.cachedIters[exp], 1)
-            iterInfo[1](true)
+            iterInfo[1](true) 
+            if funcInfo then
+                table.insert(funcInfo.iter_list, iterInfo)
+            end
             return iterInfo
         else
-            return {Slua.iter(exp), true, exp}
+            local iterInfo = {Slua.iter(exp), true, exp} 
+            if funcInfo then
+                table.insert(funcInfo.iter_list, iterInfo)
+            end
+            return iterInfo
         end   
     end
 end
@@ -2371,7 +2749,10 @@ function getiterator(iterInfo)
     return iterInfo[1]
 end
 
-function recycleiterator(iterInfo)
+function recycleiterator(funcInfo, iterInfo)
+    if funcInfo then
+        luatableremove(funcInfo.iter_list, iterInfo)
+    end
     local exp = iterInfo[3]
     if exp then
         local meta = getmetatable(exp)
@@ -2463,7 +2844,7 @@ function wrapparams(arr, elementType, elementTypeKind)
     return wraparray(arr, nil, elementType, elementTypeKind)
 end
 
-function newdictionary(t, typeargs, typekinds, ctor, dict, ...)
+function newdictionary(t, typeargs, typekinds, ctor, ctorRetCt, dict, ...)
     if dict then
         local obj = {}
         setmetatable(
@@ -2492,7 +2873,7 @@ function newdictionary(t, typeargs, typekinds, ctor, dict, ...)
     end
 end
 
-function newlist(t, typeargs, typekinds, ctor, list, ...)
+function newlist(t, typeargs, typekinds, ctor, ctorRetCt, list, ...)
     if list then
         local obj = setmetatable(list, {__index = __mt_index_of_array, __count = #list, __cs2lua_defined = true, __class = t})
         local arg1 = ...
@@ -2515,11 +2896,11 @@ function newlist(t, typeargs, typekinds, ctor, list, ...)
     end
 end
 
-function newcollection(t, typeargs, typekinds, ctor, coll, ...)
+function newcollection(t, typeargs, typekinds, ctor, ctorRetCt, coll, ...)
     if t == Cs2LuaList_T then
-        return newlist(t, typeargs, typekinds, ctor, coll, ...)
+        return newlist(t, typeargs, typekinds, ctor, ctorRetCt, coll, ...)
     elseif t == Cs2LuaIntDictionary_TValue or t == Cs2LuaStringDictionary_TValue then
-        return newdictionary(t, typeargs, typekinds, ctor, coll, ...)
+        return newdictionary(t, typeargs, typekinds, ctor, ctorRetCt, coll, ...)
     elseif coll then
         local obj = setmetatable({}, {__index = __mt_index_of_hashset, __cs2lua_defined = true, __class = t, __cs2lua_data = {}})
         for i, v in ipairs(coll) do
@@ -2545,9 +2926,9 @@ function newcollection(t, typeargs, typekinds, ctor, coll, ...)
     end
 end
 
-function newexterndictionary(t, typeargs, typekinds, ctor, dict, ...)
+function newexterndictionary(t, typeargs, typekinds, ctor, ctorRetCt, dict, ...)
     if dict and t == System.Collections.Generic.Dictionary_TKey_TValue then
-        return newdictionary(t, typeargs, typekinds, "ctor", dict, ...)
+        return newdictionary(t, typeargs, typekinds, ctor, ctorRetCt, dict, ...)
     else
         local obj = t[ctor](...)
         if obj then
@@ -2563,9 +2944,9 @@ function newexterndictionary(t, typeargs, typekinds, ctor, dict, ...)
     end
 end
 
-function newexternlist(t, typeargs, typekinds, ctor, list, ...)
+function newexternlist(t, typeargs, typekinds, ctor, ctorRetCt, list, ...)
     if list and t == System.Collections.Generic.List_T then
-        return newlist(t, typeargs, typekinds, "ctor", list, ...)
+        return newlist(t, typeargs, typekinds, ctor, ctorRetCt, list, ...)
     else
         local obj = t[ctor](...)
         if obj then
@@ -2581,11 +2962,11 @@ function newexternlist(t, typeargs, typekinds, ctor, list, ...)
     end
 end
 
-function newexterncollection(t, typeargs, typekinds, ctor, coll, ...)
+function newexterncollection(t, typeargs, typekinds, ctor, ctorRetCt, coll, ...)
     if coll and (t == System.Collections.Generic.Queue_T or t == System.Collections.Generic.Stack_T) then
-        return newlist(t, typeargs, typekinds, "ctor", coll, ...)
+        return newlist(t, typeargs, typekinds, ctor, ctorRetCt, coll, ...)
     elseif coll and t == System.Collections.Generic.HashSet_T then
-        return newcollection(t, typeargs, typekinds, "ctor", coll, ...)
+        return newcollection(t, typeargs, typekinds, ctor, ctorRetCt, coll, ...)
     else
         local obj = t[ctor](...)
         if obj then
@@ -3050,6 +3431,9 @@ function typeis(obj, t, tk)
     local tn1 = getobjfullname(obj)
     local tn2 = getclassfullname(t)
     if meta then
+        if meta.__class == System.Collections.Generic.List_T and t == System.Array then
+            return true
+        end
         if type(obj) == "userdata" then
             if tn1 and tn1 == tn2 then
                 return true
@@ -3147,7 +3531,7 @@ end
 
 function __wrap_if_string(val)
     if type(val) == "string" then
-        return System.String("String_Arr_Char", val)
+        return luastrtocsstr(val)
     else
         return val
     end
@@ -3156,69 +3540,13 @@ end
 function __unwrap_if_string(val)
     local meta = getmetatable(val)
     if type(val) == "userdata" and rawget(meta, "__typename") == "String" then
-        return tostring(val)
+        return csstrtoluastr(val)
     else
         return val
     end
 end
 
-function __find_base_class_key(k, base_class)
-    if nil == k then
-        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-        return false
-    end
-    if base_class then
-        if rawget(base_class, "__cs2lua_defined") then
-            if rawget(base_class, k) then
-                return true
-            else
-                return base_class.__exist(k)
-            end
-        else
-            return find_extern_class_or_obj_key(k,base_class)
-        end
-    end
-    return false
-end
-function __find_class_key(k, class, class_fields, base_class)
-    if nil == k then
-        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-        return false
-    end
-    local ret
-    ret = rawget(class, k)
-    if nil ~= ret then
-        return true
-    end
-    if class_fields then
-        ret = class_fields[k]
-        if nil ~= ret then
-            return true
-        end
-    end
-    return __find_base_class_key(k, base_class)
-end
-function __wrap_virtual_method(k, f)
-    return function(this, ...)
-        local child = rawget(this, "__child__")
-        local final_nf = nil
-        local final_child = nil
-        while child do
-            local nf = rawget(child, k)
-            if nf then
-                final_nf = nf
-                final_child = child
-            end
-            child = rawget(child, "__child__")
-        end
-        if final_nf then
-            return final_nf(final_child, ...)
-        end
-        return f(this, ...)
-    end
-end
-
-function find_extern_class_or_obj_key(k, obj)
+function __find_extern_class_or_obj_key(k, obj)
     local t=getmetatable(obj)
     repeat
         local fun=rawget(t,k)
@@ -3235,67 +3563,61 @@ function find_extern_class_or_obj_key(k, obj)
     until t==nil
     return false
 end
-
-function __find_base_obj_key(k, baseObj)
-    if nil == k then
-        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-        return false
-    end
-    if baseObj then
-        local meta = getmetatable(baseObj)
-        if meta and rawget(meta, "__cs2lua_defined") then
-            if rawget(baseObj, k) then
-                return true
-            else
-                return baseObj:__exist(k)
+function __find_extern_obj_member(k, obj)
+    local t=getmetatable(obj)
+    repeat
+        local fun=rawget(t,k)
+        local tp=type(fun)        
+        if tp=='function' then 
+            return tp() 
+        elseif tp=='table' then
+            local f=fun[1]
+            if f then
+                return f()
             end
-        else
-            return find_extern_class_or_obj_key(k,baseObj)
         end
-    end
+        t = rawget(t,'__parent')
+    until t==nil
     return false
 end
-function __find_obj_key(k, obj, obj_fields, obj_methods, baseObj)
-    if nil == k then
-        UnityEngine.Debug.LogError("LogError_String", "[cs2lua] table index is nil")
-        return false
+
+function wrapvirtual(k, f, class)
+    return function(this, ...)
+        return this[k](this, ...)
     end
-    local ret
-    ret = rawget(obj, k)
-    if nil ~= ret then
-        return true
-    end
-    if obj_fields then
-        ret = obj_fields[k]
-        if nil ~= ret then
-            return true
-        end
-    end
-    if obj_methods then
-        ret = obj_methods[k]
-        if nil ~= ret then
-            return true
-        end
-    end
-    return __find_base_obj_key(k, baseObj)
 end
- 
+function wrapabstract(k, class)
+    return function(this, ...)
+        return this[k](this, ...)
+    end
+end
+
 function defineclass(
     base,
     fullName,
     typeName,
     class,    
     obj_methods,
-    obj_build,
-    is_value_type)
+    is_value_type,
+    is_inherit_csharp)
         
     local base_class = base
     
-    local class_fields = class.__class_fields
-    local obj_fields = class.__obj_fields
+    local class_fields = rawget(class, "__class_fields")
+    local obj_fields = nil
+    local obj_field_values = nil
 
-    local interfaces = class.__interfaces
-    local method_info = class.__method_info
+    local interfaces = rawget(class, "__interfaces")
+    local method_info = rawget(class, "__method_info")
+    local is_sealed_class = rawget(class, "__is_sealed_class")
+    local is_static_class = rawget(class, "__is_static_class")
+
+    local function __get_obj_methods(fk)
+        return obj_methods
+    end
+    local function __obj_GetType(tb)
+        return class
+    end
     
     rawset(class, "__cs2lua_defined", true)
     rawset(class, "__cs2lua_fullname", fullName)
@@ -3304,36 +3626,53 @@ function defineclass(
     rawset(class, "__is_value_type", is_value_type)
     rawset(class, "__interfaces", interfaces)
     
-    --为继承与重载构建辅助函数
-    if obj_methods then
-        local temp_methods = {}
-        for k, v in pairs(obj_methods) do
-            temp_methods[k] = v
-            if method_info then
-                local minfo = method_info[k]
-                if minfo then
-                    if minfo["abstract"] or minfo["virtual"] or minfo["override"] then
-                        temp_methods[k] = __wrap_virtual_method(k, v)
-                    end
-                    local result = string.find(k,"ctor",1,true)
-                    if (result==1) or ((not minfo["private"]) and (not minfo["sealed"])) then
-                        temp_methods["__self__" .. k] = v
+    rawset(class, "FullName", fullName)
+    rawset(class, "Name", typeName)
+    rawset(class, "__get_obj_methods", __get_obj_methods)
+    if not obj_methods then
+        obj_methods = {}
+    end
+    rawset(obj_methods, "GetType", __obj_GetType)
+    
+    --合并基类字段信息
+    if base_class then
+        obj_fields = {}
+        obj_field_values = {}
+        local curClass = class
+        while nil~=curClass do
+            if warmup(curClass) then
+                if rawget(curClass, "__obj_fields") then
+                    for k,v in pairs(curClass.__obj_fields) do
+                        rawset(obj_fields, k, v)
                     end
                 end
+                if rawget(curClass, "__obj_field_values") then
+                    for k,v in pairs(curClass.__obj_field_values) do
+                        rawset(obj_field_values, k, v)
+                    end
+                end
+            else
+                break
+            end
+            curClass = rawget(curClass, "__cs2lua_parent")
+        end
+        if rawget(base_class, "__get_obj_methods") then
+            rawset(obj_methods, "__index", base_class.__get_obj_methods())
+            setmetatable(obj_methods, obj_methods)
+        end
+    else
+        obj_fields = rawget(class, "__obj_fields")
+        obj_field_values = rawget(class, "__obj_field_values")
+    end
+    
+    local function obj_build()
+        local obj = {}
+        if obj_field_values then
+            for k,v in pairs(obj_field_values) do
+                rawset(obj, k, v)
             end
         end
-        obj_methods = temp_methods
-    end
-
-    local function __exist(fk)
-        return __find_class_key(fk, class, class_fields, base_class)
-    end
-    local function __obj_exist(tb, fk)
-        return __find_obj_key(fk, tb, obj_fields, obj_methods, rawget(tb, "base"))
-    end
-
-    local function obj_GetType(tb)
-        return class
+        return obj
     end
     
     local obj_meta = {
@@ -3345,137 +3684,79 @@ function defineclass(
         __is_value_type = is_value_type,
         __interfaces = interfaces,
         
-        __index = function(t, k)
-            if obj_methods then
+        __index = obj_methods,
+    }
+
+    if is_inherit_csharp then
+        rawset(obj_meta, "__index", function(t, k)
+                if obj_fields then
+                    local ret = obj_fields[k]
+                    if nil ~= ret then
+                        --是当前类字段但仍走到元方法里了，则表明当前字段值为空
+                        return nil
+                    end
+                end
                 local f = obj_methods[k]
                 if f then
                     return f
                 end
-            end
-            if k == "__exist" then
-                return __obj_exist
-            elseif k == "GetType" then
-                return obj_GetType
-            elseif nil == k then
-                UnityEngine.Debug.LogError__Object("[cs2lua] table index is nil")
-                return nil
-            end
-            if obj_fields then
-                local ret = obj_fields[k]
-                if nil ~= ret then
-                    --是当前类字段但仍走到元方法里了，则表明当前字段值为空
-                    return nil
+                local baseObj = rawget(t, "__base")
+                if baseObj and __find_extern_class_or_obj_key(k, baseObj) then
+                    return __find_extern_obj_member(k, baseObj)
                 end
-            end
-            local baseObj = rawget(t, "base")
-            if __find_base_obj_key(k, baseObj) then
-                return baseObj[k]
-            end
-            lualog("lookup meta for {0}.{1} base_class {2} baseObj {3}", t:GetType().FullName, k, base_class and base_class.FullName, baseObj)
-            printStack()
-            return nil
-        end,
-        __newindex = function(t, k, v)
-            if nil == k then
-                UnityEngine.Debug.LogError__Object("[cs2lua] table index is nil")
-                return
-            end
-            if obj_fields then
-                local ret = obj_fields[k]
-                if nil ~= ret then
-                    rawset(t, k, v)
+                lualog("lookup meta for {0}.{1} base_class {2} baseObj {3}", t:GetType().FullName, k, base_class and base_class.FullName, baseObj)
+                printStack()
+                return nil
+            end)
+        rawset(obj_meta, "__newindex", function(t, k, v)
+                if obj_fields then
+                    local ret = obj_fields[k]
+                    if nil ~= ret then
+                        rawset(t, k, v)
+                        return
+                    end
+                end
+                local baseObj = rawget(t, "__base")
+                if baseObj and __find_extern_class_or_obj_key(k, baseObj) then
+                    baseObj[k] = v
                     return
                 end
-            end
-            local baseObj = rawget(t, "base")
-            if __find_base_obj_key(k, baseObj) then
-                baseObj[k] = v
-                return
-            end
-            rawset(t, k, v)
-        end,
-        __setbase = function(self, base)
-            rawset(self, "base", base)
-        end,
-    }
-    
-    local class_meta = {
-        __index = function(t, k)
-            if k == "__exist" then
-                return __exist
-            elseif k == "Name" then
-                return typeName
-            elseif k == "FullName" then
-                return fullName
-            elseif nil == k then
-                UnityEngine.Debug.LogError__Object("[cs2lua] table index is nil")
-                return nil
-            end
-            if class_fields then
-                local ret = class_fields[k]
-                if nil ~= ret then
-                    --字段存在仍然调到元方法，表明值为空
-                    return nil
-                end
-            end
-            if __find_base_class_key(k, base_class) then
-                return base_class[k]
-            end
-            return nil
-        end,
-        __newindex = function(t, k, v)
-            if nil == k then
-                UnityEngine.Debug.LogError__Object("[cs2lua] table index is nil")
-                return
-            end
-            if class_fields then
-                local ret = class_fields[k]
-                if nil ~= ret then
-                    rawset(t, k, v)
-                    return
-                end
-            end
-            if __find_base_class_key(k, base_class) then
-                base_class[k] = v
-                return
-            end
-            rawset(t, k, v)
-        end,
-        __call = function()
-            local obj = obj_build()
-            if not obj then
-                obj = {}
-            end
-
-            setmetatable(obj, obj_meta)
-            return obj
-        end
-    }
-
-    setmetatable(class, class_meta)
-    if class.cctor then
-        class.cctor()
+            end)
     end
     
+    if base_class then
+        rawset(class, "__index", base_class)
+        rawset(class, "__newindex", function(t, k, v)
+                if class_fields then
+                    local ret = class_fields[k]
+                    if nil ~= ret then
+                        rawset(t, k, v)
+                        return
+                    end
+                end
+                base_class[k] = v
+            end)
+    end
+    rawset(class, "__call", function(t)
+            local obj = obj_build()
+            setmetatable(obj, obj_meta)
+            return obj
+        end)
+    setmetatable(class, class)
+    if rawget(class, "cctor") then
+        class.cctor()
+    end
+        
     return class
 end
 
-function buildbaseobj(obj, class, baseClass, baseCtor, ...)
-    local mt = getmetatable(baseClass)
-    local baseObj = nil
-    if mt then
-        baseObj = mt.__call()
-    end
-    
-    rawset(obj, "base", baseObj)
-    if baseObj then
-        rawset(baseObj, "__child__", obj)
-
-        baseObj[baseCtor](baseObj, ...)
-    end
+function buildbaseobj(obj, class, baseClass, baseCtor, baseCtorRetCt, ...)
+    rawset(obj, "__base", nil)
+    baseClass[baseCtor](obj, ...)
+    rawset(obj, "__ctor_called", false)
 end
 
-function buildexternbaseobj(obj, class, baseClass, baseCtor, ...)
+function buildexternbaseobj(obj, class, baseClass, baseCtor, baseCtorRetCt, ...)
     local baseObj = nil
     if base_class == UnityEngine.MonoBehaviour then
         baseObj = nil
@@ -3483,9 +3764,16 @@ function buildexternbaseobj(obj, class, baseClass, baseCtor, ...)
         baseObj = baseClass[baseCtor](...)
     end
             
-    rawset(obj, "base", baseObj)
-    if baseObj then
-        rawset(baseObj, "__child__", obj)
+    rawset(obj, "__base", baseObj)
+end
+
+--这个函数仅用于翻译的lua代码，用于处理base.field的语法
+function getbaseobj(obj)
+    local base = rawget(obj, "__base") 
+    if base then
+        return base
+    else
+        return obj
     end
 end
 
@@ -3506,10 +3794,10 @@ function buildglobalinfoonce(key, val)
     return val
 end
 
-function newstruct(class, typeargs, typekinds, ctor, initializer, ...)
+function newstruct(class, typeargs, typekinds, ctor, ctorRetCt, initializer, ...)
     local obj = class()
     if ctor then
-        obj[ctor](obj, ...)
+        class[ctor](obj, ...)
     end
     translationlog("need add handler for newstruct {0}", getclasstypename(class))
     if obj and initializer then
@@ -3518,7 +3806,7 @@ function newstruct(class, typeargs, typekinds, ctor, initializer, ...)
     return obj
 end
 
-function newexternstruct(class, typeargs, typekinds, ctor, initializer, ...)
+function newexternstruct(class, typeargs, typekinds, ctor, ctorRetCt, initializer, ...)
     local obj = nil
     local arg1,arg2 = ...
     if class == System.Nullable_T then
@@ -3534,10 +3822,10 @@ function newexternstruct(class, typeargs, typekinds, ctor, initializer, ...)
     return obj
 end
 
-function newobject(class, typeargs, typekinds, ctor, initializer, ...)
+function newobject(class, typeargs, typekinds, ctor, ctorRetCt, initializer, ...)
     local obj = class()
     if ctor then
-        obj[ctor](obj, ...)
+        class[ctor](obj, ...)
     end
     if obj and initializer then
         initializer(obj)
@@ -3545,7 +3833,7 @@ function newobject(class, typeargs, typekinds, ctor, initializer, ...)
     return obj
 end
 
-function newexternobject(class, typeargs, typekinds, ctor, initializer, ...)
+function newexternobject(class, typeargs, typekinds, ctor, ctorRetCt, initializer, ...)
     local obj = nil
     local arg1,arg2 = ...
     if class == System.Nullable_T then
@@ -3561,11 +3849,17 @@ function newexternobject(class, typeargs, typekinds, ctor, initializer, ...)
 end
 
 function newtypeparamobject(t)
-    local obj = t()
+    local obj = nil
+    warmup(t)
     if rawget(t, "__cs2lua_defined") then
-        if obj.ctor then
-            obj:ctor()
+        obj = t()
+        if t.ctor then
+            t.ctor(obj)
         end
+    elseif t.ctor then
+        obj = t.ctor()
+    else
+        obj = t()
     end
     return obj
 end
@@ -3583,10 +3877,12 @@ function defaultvalue(t, typename, isExtern)
         return UnityEngine.Color.black
     elseif t == UnityEngine.Color32 then
         return UnityEngine.Color32.ctor()
-    elseif isExtern then
+    elseif isExtern and t then
         return t.ctor()
-    else
+    elseif t and t.__is_value_type then
         return t.__new_object()
+    else
+        return nil
     end
 end
 

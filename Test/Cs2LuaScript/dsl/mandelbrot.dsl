@@ -6,7 +6,7 @@ require("cs2dsl__interfaces");
 class(Mandelbrot) {
 	static_methods {
 		__new_object = deffunc(1)args(...){
-			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(Mandelbrot, "g_Mandelbrot", typeargs(), typekinds(), "ctor", null, ...);
+			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(Mandelbrot, "g_Mandelbrot", typeargs(), typekinds(), "ctor", 0, null, ...);
 			return(__cs2dsl_newobj);
 		}options[needfuncinfo(false)];
 		cctor = deffunc(0)args(){
@@ -28,12 +28,12 @@ class(Mandelbrot) {
 
 	instance_methods {
 		Init = deffunc(0)args(this, obj, mb){
-			setinstance(SymbolKind.Field, this, Mandelbrot, "root", newexternobject(UnityEngine.GameObject, "g_UnityEngine_GameObject", typeargs(), typekinds(), "ctor__String", null, dslstrtocsstr("mandelbrot")));
+			setinstance(SymbolKind.Field, this, Mandelbrot, "root", newexternobject(UnityEngine.GameObject, "g_UnityEngine_GameObject", typeargs(), typekinds(), "ctor__String", 0, null, dslstrtocsstr("mandelbrot")));
 			callinstance(this, Mandelbrot, "Exec");
-		}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown), paramtype(obj, UnityEngine.GameObject, TypeKind.Class), paramtype(mb, MonoBehaviourProxy, TypeKind.Class)];
+		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(obj, UnityEngine.GameObject, TypeKind.Class, 0, true), paramtype(mb, MonoBehaviourProxy, TypeKind.Class, 0, true)];
 		Call = deffunc(0)args(this, name, ...){
 			local(args); args = params(System.Object, TypeKind.Class);
-		}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown), paramtype(name, System.String, TypeKind.Class), paramtype(..., , TypeKind.Array)];
+		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(name, System.String, TypeKind.Class, 0, true), paramtype(..., System.Object, TypeKind.Array, 0, true)];
 		Exec = deffunc(0)args(this){
 			local(width); width = 50;
 			local(height); height = width;
@@ -67,15 +67,15 @@ class(Mandelbrot) {
 				};
 			y = execbinary("+", y, 1, null, null, null, null);
 			};
-		}options[needfuncinfo(false), rettype(System.Void, TypeKind.Unknown)];
+		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		DrawCube = deffunc(0)args(this, x, y, w, h){
 			local(cube); cube = callexternstatic(UnityEngine.GameObject, "CreatePrimitive", 3);
-			setexterninstance(SymbolKind.Property, getexterninstance(SymbolKind.Property, cube, UnityEngine.GameObject, "transform"), UnityEngine.Transform, "position", newexternstruct(UnityEngine.Vector3, "g_UnityEngine_Vector3", typeargs(), typekinds(), "ctor__Single__Single__Single", null, execbinary("/", execbinary("*", execbinary("*", x, getinstance(SymbolKind.Field, this, Mandelbrot, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(SymbolKind.Field, this, Mandelbrot, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), w, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), execbinary("-", execbinary("/", execbinary("*", execbinary("*", y, getinstance(SymbolKind.Field, this, Mandelbrot, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(SymbolKind.Field, this, Mandelbrot, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), h, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 12, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 0));
+			setexterninstance(SymbolKind.Property, getexterninstance(SymbolKind.Property, cube, UnityEngine.GameObject, "transform"), UnityEngine.Transform, "position", newexternstruct(UnityEngine.Vector3, "g_UnityEngine_Vector3", typeargs(), typekinds(), "ctor__Single__Single__Single", 0, null, execbinary("/", execbinary("*", execbinary("*", x, getinstance(SymbolKind.Field, this, Mandelbrot, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(SymbolKind.Field, this, Mandelbrot, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), w, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), execbinary("-", execbinary("/", execbinary("*", execbinary("*", y, getinstance(SymbolKind.Field, this, Mandelbrot, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(SymbolKind.Field, this, Mandelbrot, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), h, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 12, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 0));
 			callexterninstance(getexterninstance(SymbolKind.Property, cube, UnityEngine.GameObject, "transform"), UnityEngine.Transform, "SetParent__Transform", getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, Mandelbrot, "root"), UnityEngine.GameObject, "transform"));
 			local(mat); mat = getexterninstance(SymbolKind.Property, callexterninstance(cube, UnityEngine.GameObject, "GetComponent__Type", UnityEngine.Renderer), UnityEngine.Renderer, "material");
 			local(ix); ix = callexternstatic(UnityEngine.Random, "Range__Int32__Int32", 0, getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, Mandelbrot, "colors"), System.Array, "Length"));
-			setexterninstance(SymbolKind.Property, mat, UnityEngine.Material, "color", getinstance(SymbolKind.Field, this, Mandelbrot, "colors")[ix + 1]);
-		}options[needfuncinfo(true), rettype(System.Void, TypeKind.Unknown), paramtype(x, System.Int32, TypeKind.Struct), paramtype(y, System.Int32, TypeKind.Struct), paramtype(w, System.Int32, TypeKind.Struct), paramtype(h, System.Int32, TypeKind.Struct)];
+			setexterninstance(SymbolKind.Property, mat, UnityEngine.Material, "color", arraygetstruct(false, SymbolKind.Field, UnityEngine.Color, getinstance(SymbolKind.Field, this, Mandelbrot, "colors"), 1, ix + 1));
+		}options[needfuncinfo(true), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(x, System.Int32, TypeKind.Struct, 0, true), paramtype(y, System.Int32, TypeKind.Struct, 0, true), paramtype(w, System.Int32, TypeKind.Struct, 0, true), paramtype(h, System.Int32, TypeKind.Struct, 0, true)];
 		ctor = deffunc(0)args(this){
 			callinstance(this, Mandelbrot, "__ctor");
 		};
@@ -114,18 +114,6 @@ class(Mandelbrot) {
 		DrawCube(MethodKind.Ordinary, Accessibility.Private){
 		};
 		ctor(MethodKind.Constructor, Accessibility.Public){
-		};
-	};
-	property_info {};
-	event_info {};
-	field_info {
-		root(Accessibility.Private){
-		};
-		colors(Accessibility.Private){
-		};
-		r(Accessibility.Private){
-		};
-		scale(Accessibility.Private){
 		};
 	};
 };

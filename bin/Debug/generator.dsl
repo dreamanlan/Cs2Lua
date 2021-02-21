@@ -2308,7 +2308,7 @@ script(removefromcallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
     $class = getargument($funcData, 0);
     
     if($class=="UnityEngine.Vector2"){
-        usefunc("remove_from_caller_vector2","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        usefunc("remove_from_caller_func_info_vector2","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
         {:
             if val~=nil then
                 local cfi = luagetcallerfuncinfo()
@@ -2320,7 +2320,7 @@ script(removefromcallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Vector3"){
-        usefunc("remove_from_caller_vector3","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        usefunc("remove_from_caller_func_info_vector3","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
         {:
             if val~=nil then
                 local cfi = luagetcallerfuncinfo()
@@ -2332,7 +2332,7 @@ script(removefromcallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Vector4"){
-        usefunc("remove_from_caller_vector4","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        usefunc("remove_from_caller_func_info_vector4","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
         {:
             if val~=nil then
                 local cfi = luagetcallerfuncinfo()
@@ -2344,7 +2344,7 @@ script(removefromcallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Quaternion"){
-        usefunc("remove_from_caller_quaternion","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        usefunc("remove_from_caller_func_info_quaternion","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
         {:
             if val~=nil then
                 local cfi = luagetcallerfuncinfo()
@@ -2356,7 +2356,7 @@ script(removefromcallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Color"){
-        usefunc("remove_from_caller_color","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        usefunc("remove_from_caller_func_info_color","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
         {:
             if val~=nil then
                 local cfi = luagetcallerfuncinfo()
@@ -2368,7 +2368,7 @@ script(removefromcallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="nityEngine.Color32"){
-        usefunc("remove_from_caller_color32","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        usefunc("remove_from_caller_func_info_color32","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
         {:
             if val~=nil then
                 local cfi = luagetcallerfuncinfo()
@@ -2380,7 +2380,7 @@ script(removefromcallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Rect"){
-        usefunc("remove_from_caller_rect","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        usefunc("remove_from_caller_func_info_rect","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
         {:
             if val~=nil then
                 local cfi = luagetcallerfuncinfo()
@@ -2392,7 +2392,7 @@ script(removefromcallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="CsLibrary.DateTime"){
-        usefunc("remove_from_caller_datetime","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        usefunc("remove_from_caller_func_info_datetime","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
         {:
             if val~=nil then
                 local cfi = luagetcallerfuncinfo()
@@ -2404,7 +2404,7 @@ script(removefromcallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="CsLibrary.TimeSpan"){
-        usefunc("remove_from_caller_timespan","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        usefunc("remove_from_caller_func_info_timespan","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
         {:
             if val~=nil then
                 local cfi = luagetcallerfuncinfo()
@@ -2416,7 +2416,7 @@ script(removefromcallerfuncinfo)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="CsLibrary.PathInfoPoint"){
-        usefunc("remove_from_caller_pathinfopoint","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        usefunc("remove_from_caller_func_info_pathinfopoint","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
         {:
             if val~=nil then
                 local cfi = luagetcallerfuncinfo()
@@ -2436,7 +2436,7 @@ script(removefromfuncinfo)args($funcData, $funcOpts, $sb, $indent)
     $class = getargument($funcData, 0);
     
     if($class=="UnityEngine.Vector2"){
-        usefunc("remove_from_caller_vector2","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        usefunc("remove_from_func_info_vector2","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
         {:
             if val~=nil then
                 local result = luatableremove(funcInfo.v2_list, val)
@@ -2445,7 +2445,7 @@ script(removefromfuncinfo)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Vector3"){
-        usefunc("remove_from_caller_vector3","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        usefunc("remove_from_func_info_vector3","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
         {:
             if val~=nil then
                 local result = luatableremove(funcInfo.v3_list, val)
@@ -2454,7 +2454,7 @@ script(removefromfuncinfo)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Vector4"){
-        usefunc("remove_from_caller_vector4","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        usefunc("remove_from_func_info_vector4","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
         {:
             if val~=nil then
                 local result = luatableremove(funcInfo.v4_list, val)
@@ -2463,7 +2463,7 @@ script(removefromfuncinfo)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Quaternion"){
-        usefunc("remove_from_caller_quaternion","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        usefunc("remove_from_func_info_quaternion","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
         {:
             if val~=nil then
                 local result = luatableremove(funcInfo.q_list, val)
@@ -2472,7 +2472,7 @@ script(removefromfuncinfo)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Color"){
-        usefunc("remove_from_caller_color","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        usefunc("remove_from_func_info_color","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
         {:
             if val~=nil then
                 local result = luatableremove(funcInfo.c_list, val)
@@ -2481,7 +2481,7 @@ script(removefromfuncinfo)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="nityEngine.Color32"){
-        usefunc("remove_from_caller_color32","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        usefunc("remove_from_func_info_color32","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
         {:
             if val~=nil then
                 local result = luatableremove(funcInfo.c32_list, val)
@@ -2490,7 +2490,7 @@ script(removefromfuncinfo)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="UnityEngine.Rect"){
-        usefunc("remove_from_caller_rect","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        usefunc("remove_from_func_info_rect","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
         {:
             if val~=nil then
                 local result = luatableremove(funcInfo.rt_list, val)
@@ -2499,7 +2499,7 @@ script(removefromfuncinfo)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="CsLibrary.DateTime"){
-        usefunc("remove_from_caller_datetime","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        usefunc("remove_from_func_info_datetime","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
         {:
             if val~=nil then
                 local result = luatableremove(funcInfo.dt_list, val)
@@ -2508,7 +2508,7 @@ script(removefromfuncinfo)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="CsLibrary.TimeSpan"){
-        usefunc("remove_from_caller_timespan","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        usefunc("remove_from_func_info_timespan","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
         {:
             if val~=nil then
                 local result = luatableremove(funcInfo.ts_list, val)
@@ -2517,7 +2517,7 @@ script(removefromfuncinfo)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($class=="CsLibrary.PathInfoPoint"){
-        usefunc("remove_from_caller_pathinfopoint","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
+        usefunc("remove_from_func_info_pathinfopoint","(funcInfo, class, val)", $funcData, $funcOpts, $sb, $indent, 0, "__cs2lua_func_info")
         {:
             if val~=nil then
                 local result = luatableremove(funcInfo.pip_list, val)

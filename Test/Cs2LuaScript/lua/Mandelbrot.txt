@@ -6,7 +6,7 @@ Mandelbrot = {
 	-------------------------------
 	__new_object = function(...)
 		local __cs2dsl_newobj;
-		__cs2dsl_newobj = newobject(Mandelbrot, nil, nil, "ctor", nil, ...);
+		__cs2dsl_newobj = newobject(Mandelbrot, nil, nil, "ctor", 0, nil, ...);
 		return __cs2dsl_newobj;
 	end,
 
@@ -28,114 +28,140 @@ Mandelbrot = {
 	__cctor_called = false,
 
 	-------------------------------
+	------ instance methods -------
+	-------------------------------
+	Init = function(this, obj, mb)
+		this.root = newexternobject(UnityEngine.GameObject, nil, nil, "ctor__String", 0, nil, luastrtocsstr("mandelbrot"));
+		Mandelbrot.Exec(this);
+	end,
+
+	Call = function(this, name, ...)
+		local args;
+		args = wrapparams({...}, System.Object, TypeKind.Class);
+	end,
+
+	Exec = function(this)
+		local width;
+		width = 50;
+		local height;
+		height = width;
+		local maxiter;
+		maxiter = 50;
+		local limit;
+		limit = 4.0000000000000000;
+		local y;
+		y = 0;
+		while (y < height) do
+			local Ci;
+			Ci = (((2.0000000000000000 * y) / height) - 1.0000000000000000);
+			local x;
+			x = 0;
+			while (x < width) do
+				local Zr;
+				Zr = 0.0000000000000000;
+				local Zi;
+				Zi = 0.0000000000000000;
+				local Cr;
+				Cr = (((2.0000000000000000 * x) / width) - 1.5000000000000000);
+				local i;
+				i = maxiter;
+				local isInside;
+				isInside = true;
+				repeat
+
+					local Tr;
+					Tr = (((Zr * Zr) - (Zi * Zi)) + Cr);
+					Zi = (((2.0000000000000000 * Zr) * Zi) + Ci);
+					Zr = Tr;
+					if (((Zr * Zr) + (Zi * Zi)) > limit) then 
+						isInside = false;
+						do
+							break;
+						end;
+					end;
+					i = (i - 1);
+				until not (i > 0) ;
+				if isInside then 
+					Mandelbrot.DrawCube(this, x, y, width, height);
+				end;
+				x = (x + 1);
+			end;
+			y = (y + 1);
+		end;
+	end,
+
+	DrawCube = function(this, x, y, w, h)
+		local __cs2lua_func_info = luainitialize();
+		luapcall(Mandelbrot.__ori_DrawCube, this, __cs2lua_func_info, x, y, w, h);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+	end,
+	__ori_DrawCube = function(this, __cs2lua_func_info, x, y, w, h)
+		local cube;
+		cube = UnityEngine.GameObject.CreatePrimitive(3);
+		cube.transform.position = new_vector3(__cs2lua_func_info, nil, (((x * this.r) * this.scale) / w), ((((y * this.r) * this.scale) / h) - 12), 0);
+		cube.transform:SetParent__Transform(this.root.transform);
+		local mat;
+		mat = cube:GetComponent__Type(UnityEngine.Renderer).material;
+		local ix;
+		ix = UnityEngine.Random.Range__Int32__Int32(0, this.colors.Length);
+		mat.color = arraygetstruct(false, SymbolKind.Field, UnityEngine.Color, this.colors, 1, (ix + 1));
+	end,
+
+	ctor = function(this)
+		Mandelbrot.__ctor(this);
+	end,
+
+	__ctor = function(this)
+		local __cs2lua_func_info = luainitialize();
+		luapcall(Mandelbrot.__ori___ctor, this, __cs2lua_func_info);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+	end,
+	__ori___ctor = function(this, __cs2lua_func_info)
+		if this.__ctor_called then 
+			return;
+		else
+			this.__ctor_called = true;
+		end;
+		this.colors = wrap_color_array(__cs2lua_func_info, UnityEngine.Color, TypeKind.Struct, get_unity_color_red(__cs2lua_func_info), get_unity_color_blue(__cs2lua_func_info), get_unity_color_green(__cs2lua_func_info), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "cyan"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "grey"), get_unity_color_white(__cs2lua_func_info), get_unity_color_yellow(__cs2lua_func_info), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "magenta"), get_unity_color_black(__cs2lua_func_info));
+	end,
+	-------------------------------
+	------ instance fields -------
+	-------------------------------
+	__obj_field_values = {
+		r = 10,
+		scale = 3.00000000,
+		__ctor_called = false,
+	},
+
+	-------------------------------
 	--- define class and object ---
 	-------------------------------
 	__define_class = function()
 		Utility.Warn("Mandelbrot::__define_class begin");
 
 		local class = Mandelbrot;
-
 		local obj_methods = {
-			Init = function(this, obj, mb)
-				this.root = newexternobject(UnityEngine.GameObject, nil, nil, "ctor__String", nil, luastrtocsstr("mandelbrot"));
-				this:Exec();
-			end,
-
-			Call = function(this, name, ...)
-				local args;
-				args = wrapparams({...}, System.Object, TypeKind.Class);
-			end,
-
-			Exec = function(this)
-				local width;
-				width = 50;
-				local height;
-				height = width;
-				local maxiter;
-				maxiter = 50;
-				local limit;
-				limit = 4.0000000000000000;
-				local y;
-				y = 0;
-				while (y < height) do
-					local Ci;
-					Ci = (((2.0000000000000000 * y) / height) - 1.0000000000000000);
-					local x;
-					x = 0;
-					while (x < width) do
-						local Zr;
-						Zr = 0.0000000000000000;
-						local Zi;
-						Zi = 0.0000000000000000;
-						local Cr;
-						Cr = (((2.0000000000000000 * x) / width) - 1.5000000000000000);
-						local i;
-						i = maxiter;
-						local isInside;
-						isInside = true;
-						repeat
-
-							local Tr;
-							Tr = (((Zr * Zr) - (Zi * Zi)) + Cr);
-							Zi = (((2.0000000000000000 * Zr) * Zi) + Ci);
-							Zr = Tr;
-							if (((Zr * Zr) + (Zi * Zi)) > limit) then 
-								isInside = false;
-								do
-									break;
-								end;
-							end;
-							i = (i - 1);
-						until not (i > 0) ;
-						if isInside then 
-							this:DrawCube(x, y, width, height);
-						end;
-						x = (x + 1);
-					end;
-					y = (y + 1);
-				end;
-			end,
-
-			DrawCube = function(this, x, y, w, h)
-				local __cs2lua_func_info = luainitialize();
-				local cube;
-				cube = UnityEngine.GameObject.CreatePrimitive(3);
-				cube.transform.position = new_vector3(__cs2lua_func_info, nil, (((x * this.r) * this.scale) / w), ((((y * this.r) * this.scale) / h) - 12), 0);
-				cube.transform:SetParent__Transform(this.root.transform);
-				local mat;
-				mat = cube:GetComponent__Type(UnityEngine.Renderer).material;
-				local ix;
-				ix = UnityEngine.Random.Range__Int32__Int32(0, this.colors.Length);
-				mat.color = this.colors[(ix + 1)];
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
-			end,
-
-			ctor = function(this)
-				this:__ctor();
-			end,
-
-			__ctor = function(this)
-				local __cs2lua_func_info = luainitialize();
-				if this.__ctor_called then 
-					__cs2lua_func_info = luafinalize(__cs2lua_func_info);
-					return;
-				else
-					this.__ctor_called = true;
-				end;
-				this.colors = wraparray({get_unity_color_red(__cs2lua_func_info), get_unity_color_blue(__cs2lua_func_info), get_unity_color_green(__cs2lua_func_info), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "cyan"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "grey"), get_unity_color_white(__cs2lua_func_info), get_unity_color_yellow(__cs2lua_func_info), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "magenta"), get_unity_color_black(__cs2lua_func_info)}, nil, UnityEngine.Color, TypeKind.Struct);
-				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
-			end,
+			__self__Init = rawget(class, "__self__Init");
+			Init = rawget(class, "Init"),
+			__self__Call = rawget(class, "__self__Call");
+			Call = rawget(class, "Call"),
+			Exec = rawget(class, "Exec"),
+			DrawCube = rawget(class, "DrawCube"),
+			__ori_DrawCube = rawget(class, "__ori_DrawCube"),
+			__self__ctor = rawget(class, "__self__ctor");
+			ctor = rawget(class, "ctor"),
+			__ctor = rawget(class, "__ctor"),
+			__ori___ctor = rawget(class, "__ori___ctor"),
 		};
+		local tmp_obj_method = nil;
+		tmp_obj_method = rawget(class, "Init");
+		rawset(class, "__self__Init", tmp_obj_method);
+		tmp_obj_method = rawget(class, "Call");
+		rawset(class, "__self__Call", tmp_obj_method);
+		tmp_obj_method = rawget(class, "ctor");
+		rawset(class, "__self__ctor", tmp_obj_method);
 
-		local obj_build = function()
-			return {
-				r = 10,
-				scale = 3.00000000,
-				__ctor_called = false,
-			};
-		end;
-
-		local __defineclass_return = defineclass(nil, "Mandelbrot", "Mandelbrot", class, obj_methods, obj_build, false);
+		local __defineclass_return = defineclass(nil, "Mandelbrot", "Mandelbrot", class, obj_methods, false, false);
 		Utility.Warn("Mandelbrot::__define_class end");
 		return __defineclass_return;
 	end,
@@ -162,14 +188,14 @@ Mandelbrot = {
 		"IStartupPlugin",
 	},
 	__method_info = {
-		Init = {
-			Kind = MethodKind.Ordinary,
+		Exec = {
+			private = true,
 		},
-		Call = {
-			Kind = MethodKind.Ordinary,
+		DrawCube = {
+			private = true,
 		},
 		ctor = {
-			Kind = MethodKind.Constructor,
+			ctor = true,
 		},
 	},
 };

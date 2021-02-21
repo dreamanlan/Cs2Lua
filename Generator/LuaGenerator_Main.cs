@@ -3858,6 +3858,7 @@ namespace Generator
                     tempFunc.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
                     tempFunc.AddParam(v.OriType);
                     tempFunc.AddParam(v.Name);
+                    sb.Append(GetIndentString(indent));
                     if (!CallDslHook(calculator, tempFunc.GetId(), tempFunc, funcOpts, sb, indent)) {
                         sb.Append("removefromcallerfuncinfo(__cs2lua_func_info, ");
                         sb.Append(v.Type);
@@ -3879,7 +3880,7 @@ namespace Generator
                         tempFunc.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
                         tempFunc.AddParam(v.OriType);
                         tempFunc.AddParam(v.Name);
-                        sb.AppendLine("; ");
+                        sb.Append("; ");
                         if (!CallDslHook(calculator, tempFunc.GetId(), tempFunc, funcOpts, sb, 0)) {
                             sb.Append("removefromfuncinfo(__cs2lua_func_info, ");
                             sb.Append(v.Type);
@@ -3897,7 +3898,7 @@ namespace Generator
                         tempFunc.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
                         tempFunc.AddParam(v.OriType);
                         tempFunc.AddParam(v.Name);
-                        sb.AppendLine("; ");
+                        sb.Append("; ");
                         if (!CallDslHook(calculator, tempFunc.GetId(), tempFunc, funcOpts, sb, 0)) {
                             sb.Append("removefromfuncinfo(__cs2lua_func_info, ");
                             sb.Append(v.Type);
