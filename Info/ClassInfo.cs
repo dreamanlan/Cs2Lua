@@ -22,6 +22,7 @@ namespace RoslynTool.CsToDsl
         internal bool IsEntryClass = false;
         internal bool IsValueType = false;
         internal bool IsInnerOfGenericType = false;
+        internal bool IsInheritCsharp = false;
 
         internal string Key = string.Empty;
         internal string BaseKey = string.Empty;
@@ -69,6 +70,7 @@ namespace RoslynTool.CsToDsl
             IsValueType = sym.IsValueType;
 
             IsInnerOfGenericType = IsInnerClassOfGenericType(sym);
+            IsInheritCsharp = IsInheritFromCsharp(sym);
 
             ExistConstructor = false;
             ExistStaticConstructor = false;
@@ -169,6 +171,23 @@ namespace RoslynTool.CsToDsl
                     ret = true;
                     break;
                 }
+            }
+            return ret;
+        }
+        internal static bool IsInheritFromCsharp(INamedTypeSymbol type)
+        {
+            bool ret = false;
+            var baseType = type.BaseType;
+            while (null != baseType) {
+                bool isCs2Dsl = SymbolTable.Instance.IsCs2DslSymbol(baseType);
+                if (!isCs2Dsl) {
+                    string fn = ClassInfo.GetFullName(baseType);
+                    if (fn != "System.Object" && fn != "System.ValueType") {
+                        ret = true;
+                    }
+                    break;
+                }
+                baseType = baseType.BaseType;
             }
             return ret;
         }

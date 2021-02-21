@@ -4,7 +4,7 @@ require("cs2dsl__externenums");
 require("cs2dsl__interfaces");
 require("abstractdictclass");
 
-class(DictClass, AbstractDictClass) {
+class(DictClass, AbstractDictClass, false) {
 	static_methods {
 		__new_object = deffunc(1)args(...){
 			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(DictClass, "g_DictClass", typeargs(), typekinds(), "ctor", 0, null, ...);

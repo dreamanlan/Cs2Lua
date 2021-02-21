@@ -829,6 +829,23 @@ namespace SLua
                 if (null != obj && null == array)
                     throw new ArgumentException("expect array");
                 ta = array as T[];
+                if (null == ta && null != array) {
+                    if (array.Length > 0) {
+                        object first = null;
+                        for (int i = 0; i < array.Length; ++i) {
+                            first = array.GetValue(i);
+                            if (null != first)
+                                break;
+                        }
+                        if (null != first && first.GetType() == typeof(T)) {
+                            T[] arr = new T[array.Length];
+                            for (int i = 0; i < array.Length; ++i) {
+                                arr[i] = (T)array.GetValue(i);
+                            }
+                            ta = arr;
+                        }
+                    }
+                }
                 return ta != null;
             }
         }

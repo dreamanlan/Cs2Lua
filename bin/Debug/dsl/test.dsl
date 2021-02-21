@@ -21,21 +21,21 @@ class(Test) {
 			return(null);
 		}options[needfuncinfo(false), rettype(return, System.Exception, TypeKind.Class, 0, true), paramtype(v, System.Int32, TypeKind.Struct, 0, true)];
 		ToList = deffunc(1)args(T, enumer){
-			local(__method_ret_305_4_313_5);
+			local(__method_ret_309_4_317_5);
 			callinstance(this, Test, "LoadStartupView_FGUI", "", "", "", 0, false);
 			local(r); r = newexternlist(System.Collections.Generic.List_T, "g_System_Collections_Generic_List_T", typeargs(T), typekinds(TypeKind.TypeParameter), "ctor", 0, literallist("g_System_Collections_Generic_List_T", typeargs(T), typekinds(TypeKind.TypeParameter)));
-			foreach(__foreach_309_8_311_9, v, enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true){
+			foreach(__foreach_313_8_315_9, v, enumer, System.Collections.Generic.IEnumerable_T, System.Collections.Generic.IEnumerable_T, true){
 				callexterninstance(r, System.Collections.Generic.List_T, "Add", v);
 			};
-			__method_ret_305_4_313_5 = r;
-			return(__method_ret_305_4_313_5);
+			__method_ret_309_4_317_5 = r;
+			return(__method_ret_309_4_317_5);
 		}options[needfuncinfo(true), rettype(return, System.Collections.Generic.List_T, TypeKind.Class, 0, true), paramtype(T, null, TypeKind.TypeParameter, 0, false), paramtype(enumer, System.Collections.Generic.IEnumerable_T, TypeKind.Interface, 0, true)];
 		ToArray = deffunc(1)args(T, list){
-			local(__method_ret_314_4_319_5);
+			local(__method_ret_318_4_323_5);
 			local(arr); arr = newmultiarray(T, TypeKind.TypeParameter, null, 1, getinterface(list, System.Collections.Generic.ICollection_T, "Count", "get_Count"));
 			callinterface(list, System.Collections.Generic.ICollection_T, "CopyTo", arr, 0);
-			__method_ret_314_4_319_5 = arr;
-			return(__method_ret_314_4_319_5);
+			__method_ret_318_4_323_5 = arr;
+			return(__method_ret_318_4_323_5);
 		}options[needfuncinfo(false), rettype(return, Test.T, TypeKind.Array, 0, true), paramtype(T, null, TypeKind.TypeParameter, 0, false), paramtype(list, System.Collections.Generic.IList_T, TypeKind.Interface, 0, true)];
 		cctor = deffunc(0)args(){
 			callstatic(Test, "__cctor");
@@ -76,114 +76,117 @@ class(Test) {
 			local(ts); ts = newstruct(TestStruct, "g_TestStruct", typeargs(), typekinds(), "ctor", 0, null);
 			callexterninstance(intlist, System.Collections.Generic.List_T, "Add", wrapstructargument(invokeoperator(System.Int32, TestStruct, "op_Implicit", wrapstructargument(ts, TestStruct, OperationKind.LocalReference, SymbolKind.Local, TestStruct, TestStruct)), TestStruct, OperationKind.LocalReference, SymbolKind.Local, System.Collections.Generic.List_T, System.Collections.Generic.List_T));
 			local(rs); rs = linq()from(function(){ funcobjret(a); })where(function(score){ funcobjret(execbinary(">", score, 80, , System.Int32, TypeKind.Error, TypeKind.Struct)); })select(function(score){ funcobjret(score); })end();
-		}options[needfuncinfo(true), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
+			local(a); a = deffunc(0)args(){
+				callexternstatic(System.Console, "WriteLine__String__Object", dslstrtocsstr("{0}"), getinstance(SymbolKind.Field, ts, TestStruct, "m_A"));
+			}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
+		}options[needfuncinfo(true), rettype(return, System.Void, TypeKind.Unknown, 0, false), localbecaptured(ts, TestStruct, false)];
 		testcall = deffunc(1)args(this){
-			local(__method_ret_255_4_260_5);
+			local(__method_ret_259_4_264_5);
 			local(data); data = 1;
 			local(v); v = typecast(data, System.Int32, TypeKind.Struct);
-			__method_ret_255_4_260_5 = 1;
-			return(__method_ret_255_4_260_5);
+			__method_ret_259_4_264_5 = 1;
+			return(__method_ret_259_4_264_5);
 		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
 		test = deffunc(1)args(this){
-			local(__method_ret_261_4_299_5);
+			local(__method_ret_265_4_303_5);
 			local(a); a = 2;
 			local(b); b = 0;
 			local(c); c = 1;
 			local(aa); aa = deffunc(1)args(){
-				local(__method_ret_264_31_277_9);
-				local(__try_ret_265_12_270_13, __try_retval_265_12_270_13); multiassign(__try_ret_265_12_270_13, __try_retval_265_12_270_13) = dsltry(false, __try_ret_265_12_270_13){
+				local(__method_ret_268_31_281_9);
+				local(__try_ret_269_12_274_13, __try_retval_269_12_274_13); multiassign(__try_ret_269_12_274_13, __try_retval_269_12_274_13) = dsltry(false, __try_ret_269_12_274_13){
 					callexternstatic(System.Console, "Write__String", dslstrtocsstr("test"));
 				};
-				local(__catch_handled_265_12_270_13, __catch_retval_265_12_270_13); __catch_handled_265_12_270_13 = false;
-				__catch_retval_265_12_270_13 = dslcatch(__catch_handled_265_12_270_13, __try_retval_265_12_270_13, __try_ret_265_12_270_13,
+				local(__catch_handled_269_12_274_13, __catch_retval_269_12_274_13); __catch_handled_269_12_274_13 = false;
+				__catch_retval_269_12_274_13 = dslcatch(__catch_handled_269_12_274_13, __try_retval_269_12_274_13, __try_ret_269_12_274_13,
 					function(ex){
-						__catch_handled_265_12_270_13 = true;
+						__catch_handled_269_12_274_13 = true;
 					}
 				);
-				local(__try_ret_271_12_276_13, __try_retval_271_12_276_13); multiassign(__try_ret_271_12_276_13, __try_retval_271_12_276_13) = dsltry(false, __try_ret_271_12_276_13){
+				local(__try_ret_275_12_280_13, __try_retval_275_12_280_13); multiassign(__try_ret_275_12_280_13, __try_retval_275_12_280_13) = dsltry(false, __try_ret_275_12_280_13){
 					block{
-					__method_ret_264_31_277_9 = lualib_call(2, [null], this, Test, "testcall");
-					__try_retval_271_12_276_13 = 1;
+					__method_ret_268_31_281_9 = lualib_call(2, [null], this, Test, "testcall");
+					__try_retval_275_12_280_13 = 1;
 					break;
 					};
 				};
-				if(__try_ret_271_12_276_13){
-					if(__try_retval_271_12_276_13){
-					if(__try_retval_271_12_276_13==1){
-						return(__method_ret_264_31_277_9);
+				if(__try_ret_275_12_280_13){
+					if(__try_retval_275_12_280_13){
+					if(__try_retval_275_12_280_13==1){
+						return(__method_ret_268_31_281_9);
 					};
 					};
 				};
-				local(__catch_handled_271_12_276_13, __catch_retval_271_12_276_13); __catch_handled_271_12_276_13 = false;
-				__catch_retval_271_12_276_13 = dslcatch(__catch_handled_271_12_276_13, __try_retval_271_12_276_13, __try_ret_271_12_276_13,
+				local(__catch_handled_275_12_280_13, __catch_retval_275_12_280_13); __catch_handled_275_12_280_13 = false;
+				__catch_retval_275_12_280_13 = dslcatch(__catch_handled_275_12_280_13, __try_retval_275_12_280_13, __try_ret_275_12_280_13,
 					function(ex){
-						__catch_handled_271_12_276_13 = true;
+						__catch_handled_275_12_280_13 = true;
 						block{
-						__method_ret_264_31_277_9 = 0;
+						__method_ret_268_31_281_9 = 0;
 						return(1);
 						};
 					}
 				);
-				if(__catch_retval_271_12_276_13){
-				if(__catch_retval_271_12_276_13==1){
-					return(__method_ret_264_31_277_9);
+				if(__catch_retval_275_12_280_13){
+				if(__catch_retval_275_12_280_13==1){
+					return(__method_ret_268_31_281_9);
 				};
 				};
 				return(null);
 			}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
-			local(__try_ret_279_8_284_9, __try_retval_279_8_284_9); multiassign(__try_ret_279_8_284_9, __try_retval_279_8_284_9) = dsltryfunc(__try_ret_279_8_284_9, __try_retval_279_8_284_9, __try_func_279_8_284_9, Test, false, 2){
+			local(__try_ret_283_8_288_9, __try_retval_283_8_288_9); multiassign(__try_ret_283_8_288_9, __try_retval_283_8_288_9) = dsltryfunc(__try_ret_283_8_288_9, __try_retval_283_8_288_9, __try_func_283_8_288_9, Test, false, 2){
 				callexternstatic(System.Console, "Write__String", dslstrtocsstr("test"));
 			}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
-			local(__catch_handled_279_8_284_9, __catch_retval_279_8_284_9); __catch_handled_279_8_284_9 = false;
-			__catch_retval_279_8_284_9 = dslcatch(__catch_handled_279_8_284_9, __try_retval_279_8_284_9, __try_ret_279_8_284_9,
+			local(__catch_handled_283_8_288_9, __catch_retval_283_8_288_9); __catch_handled_283_8_288_9 = false;
+			__catch_retval_283_8_288_9 = dslcatch(__catch_handled_283_8_288_9, __try_retval_283_8_288_9, __try_ret_283_8_288_9,
 				function(ex){
-					__catch_handled_279_8_284_9 = true;
+					__catch_handled_283_8_288_9 = true;
 				}
 			);
 			local(intlist); intlist = newexternlist(System.Collections.Generic.List_T, "g_System_Collections_Generic_List_System_Int32", typeargs(System.Int32), typekinds(TypeKind.Struct), "ctor", 0, literallist("g_System_Collections_Generic_List_System_Int32", typeargs(System.Int32), typekinds(TypeKind.Struct)));
-			local(__try_retval_286_8_296_9_0); __try_retval_286_8_296_9_0 = __method_ret_261_4_299_5;
-			local(__try_ret_286_8_296_9, __try_retval_286_8_296_9); multiassign(__try_ret_286_8_296_9, __try_retval_286_8_296_9, __try_retval_286_8_296_9_0) = dsltryfunc(__try_ret_286_8_296_9, __try_retval_286_8_296_9, __try_func_286_8_296_9, Test, false, 2, __method_ret_261_4_299_5, aa){
+			local(__try_retval_290_8_300_9_0); __try_retval_290_8_300_9_0 = __method_ret_265_4_303_5;
+			local(__try_ret_290_8_300_9, __try_retval_290_8_300_9); multiassign(__try_ret_290_8_300_9, __try_retval_290_8_300_9, __try_retval_290_8_300_9_0) = dsltryfunc(__try_ret_290_8_300_9, __try_retval_290_8_300_9, __try_func_290_8_300_9, Test, false, 2, __method_ret_265_4_303_5, aa){
 				block{
-				__method_ret_261_4_299_5 = callexterndelegation(aa, "System.Func_TResult.Invoke");
-				return(1, __method_ret_261_4_299_5);
+				__method_ret_265_4_303_5 = callexterndelegation(aa, "System.Func_TResult.Invoke");
+				return(1, __method_ret_265_4_303_5);
 				};
-			}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true), rettype(__method_ret_261_4_299_5, System.Int32, TypeKind.Struct, 1, true), paramtype(__method_ret_261_4_299_5, System.Int32, TypeKind.Struct, 1, true), paramtype(aa, System.Func_TResult, Delegate, 0, true)];
-			if(__try_ret_286_8_296_9){
-				__method_ret_261_4_299_5 = __try_retval_286_8_296_9_0;
+			}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true), rettype(__method_ret_265_4_303_5, System.Int32, TypeKind.Struct, 1, true), paramtype(__method_ret_265_4_303_5, System.Int32, TypeKind.Struct, 1, true), paramtype(aa, System.Func_TResult, Delegate, 0, true)];
+			if(__try_ret_290_8_300_9){
+				__method_ret_265_4_303_5 = __try_retval_290_8_300_9_0;
 			};
-			if(__try_ret_286_8_296_9){
+			if(__try_ret_290_8_300_9){
 				callexternstatic(System.Console, "WriteLine__String__Object__Object__Object", dslstrtocsstr("{0} {1} {2}"), a, b, c);
-				if(__try_retval_286_8_296_9){
-				if(__try_retval_286_8_296_9==1){
-					return(__method_ret_261_4_299_5);
+				if(__try_retval_290_8_300_9){
+				if(__try_retval_290_8_300_9==1){
+					return(__method_ret_265_4_303_5);
 				};
 				};
 			};
-			local(__catch_handled_286_8_296_9, __catch_retval_286_8_296_9); __catch_handled_286_8_296_9 = false;
-			__catch_retval_286_8_296_9 = dslcatch(__catch_handled_286_8_296_9, __try_retval_286_8_296_9, __try_ret_286_8_296_9,
+			local(__catch_handled_290_8_300_9, __catch_retval_290_8_300_9); __catch_handled_290_8_300_9 = false;
+			__catch_retval_290_8_300_9 = dslcatch(__catch_handled_290_8_300_9, __try_retval_290_8_300_9, __try_ret_290_8_300_9,
 				function(e){
 if(typeis(e, System.ArgumentException, TypeKind.Class)){
-						__catch_handled_286_8_296_9 = true;
+						__catch_handled_290_8_300_9 = true;
 						callexternstatic(System.Console, "WriteLine__String__Object__Object__Object", dslstrtocsstr("ex:{0} {1} {2}"), a, b, c);
 						dslthrow(a);
 						block{
-						__method_ret_261_4_299_5 = 0;
+						__method_ret_265_4_303_5 = 0;
 						return(1);
 						};
 					};
 				}
 			);
 			callexternstatic(System.Console, "WriteLine__String__Object__Object__Object", dslstrtocsstr("{0} {1} {2}"), a, b, c);
-			if(__catch_retval_286_8_296_9){
-			if(__catch_retval_286_8_296_9==1){
-				return(__method_ret_261_4_299_5);
+			if(__catch_retval_290_8_300_9){
+			if(__catch_retval_290_8_300_9==1){
+				return(__method_ret_265_4_303_5);
 			};
 			};
-			if(! __try_ret_286_8_296_9){
+			if(! __try_ret_290_8_300_9){
 				callexternstatic(System.Console, "WriteLine__String__Object__Object__Object", dslstrtocsstr("{0} {1} {2}"), a, b, c);
 			};
 			setinstance(SymbolKind.Field, this, Test, "m_IntVal", condexp(execbinary(">", a, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), false, function(){ funcobjret(callexterndelegation(aa, "System.Func_TResult.Invoke")); }, false, function(){ funcobjret(c); }));
-			return(__method_ret_261_4_299_5);
+			return(__method_ret_265_4_303_5);
 		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
 		LoadStartupView_FGUI = deffunc(0)args(this, className, comName, packageName, grp, ForceShow){
 			local(dfu); dfu = newobject(SIW_DeviceFirstUse, "g_SIW_DeviceFirstUse", typeargs(), typekinds(), "ctor", 0, null);

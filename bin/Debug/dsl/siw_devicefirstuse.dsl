@@ -4,7 +4,7 @@ require("cs2dsl__externenums");
 require("cs2dsl__interfaces");
 require("settinginfowrapper");
 
-class(SIW_DeviceFirstUse, SettingInfoWrapper) {
+class(SIW_DeviceFirstUse, SettingInfoWrapper, false) {
 	static_methods {
 		__new_object = deffunc(1)args(...){
 			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(SIW_DeviceFirstUse, "g_SIW_DeviceFirstUse", typeargs(), typekinds(), "ctor", 0, null, ...);

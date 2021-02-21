@@ -33,50 +33,32 @@ System.Collections.Generic = System.Collections.Generic or {}
 System.Collections.Generic.List_T = {
     __cs2lua_defined = true,
     __cs2lua_fullname = "System.Collections.Generic.List_T",
-    __cs2lua_typename = "List",
-    __exist = function(k)
-        return false
-    end
+    __cs2lua_typename = "List"
 }
 System.Collections.Generic.Queue_T = {
     __cs2lua_defined = true,
     __cs2lua_fullname = "System.Collections.Generic.Queue_T",
-    __cs2lua_typename = "Queue",
-    __exist = function(k)
-        return false
-    end
+    __cs2lua_typename = "Queue"
 }
 System.Collections.Generic.Stack_T = {
     __cs2lua_defined = true,
     __cs2lua_fullname = "System.Collections.Generic.Stack_T",
-    __cs2lua_typename = "Stack",
-    __exist = function(k)
-        return false
-    end
+    __cs2lua_typename = "Stack"
 }
 System.Collections.Generic.Dictionary_TKey_TValue = {
     __cs2lua_defined = true,
     __cs2lua_fullname = "System.Collections.Generic.Dictionary_TKey_TValue",
-    __cs2lua_typename = "Dictionary",
-    __exist = function(k)
-        return false
-    end
+    __cs2lua_typename = "Dictionary"
 }
 System.Collections.Generic.HashSet_T = {
     __cs2lua_defined = true,
     __cs2lua_fullname = "System.Collections.Generic.HashSet_T",
-    __cs2lua_typename = "HashSet",
-    __exist = function(k)
-        return false
-    end
+    __cs2lua_typename = "HashSet"
 }
 System.Collections.Generic.KeyValuePair_TKey_TValue = {
     __cs2lua_defined = true,
     __cs2lua_fullname = "System.Collections.Generic.KeyValuePair_TKey_TValue",
-    __cs2lua_typename = "KeyValuePair",
-    __exist = function(k)
-        return false
-    end
+    __cs2lua_typename = "KeyValuePair"
 }
 System.Array = System.Array or {}
 System.Nullable_T = System.Nullable_T or {}
@@ -1061,6 +1043,20 @@ function callarraystaticmethod(firstArray, secondArray, method, ...)
                 translationlog("need add handler for callarraystaticmethod Array.{0}", method)
                 return nil
             end
+        elseif method == "IndexOf" or 1 == string.find(method, "IndexOf__", 1, true) then
+            local arr,val,start,count = ...
+            if not start then
+                start = 0
+            end
+            if not count then
+                count = arr.Length
+            end
+            for i = start+1,start+count do
+                if arr[i]==val then
+                    return i-1
+                end
+            end
+            return -1
         else
             --这种情形认为是外部导出的数组调用，直接调导出接口了（由于System.Array有generic成员，这些方法的调用估计会出错）
             return System.Array[method](...)
@@ -1604,7 +1600,7 @@ Cs2LuaCustomData = {
 		local class = Cs2LuaCustomData;
 		local obj_methods = nil;
 
-		local __defineclass_return = defineclass(UnityEngine.Object, "Cs2LuaCustomData", "Cs2LuaCustomData", class, obj_methods, false);
+		local __defineclass_return = defineclass(UnityEngine.Object, "Cs2LuaCustomData", "Cs2LuaCustomData", class, obj_methods, false, true);
 		printMemDiff("Cs2LuaCustomData::__define_class end");
 		return __defineclass_return;
 	end,
@@ -1964,9 +1960,6 @@ function __dec_array_count(tb)
 end
 
 __mt_index_of_array_table = {
-    __exist = function(tb, fk) --禁用继承
-            return false
-        end,
     get_Length = function(obj) 
     		    return __get_table_count(obj) 
     		end,
@@ -2229,9 +2222,6 @@ __mt_index_of_array = function(t, k)
 end
 
 __mt_index_of_dictionary_table = {
-    __exist = function(tb, fk)    --禁用继承
-            return false
-        end,
     get_Count = function(obj)
             return __get_table_count(obj)
         end,
@@ -2357,9 +2347,6 @@ __mt_newindex_of_dictionary = function(t, k, val)
 end
 
 __mt_index_of_hashset_table = {
-    __exist = function(tb, fk)  --禁用继承
-            return false
-        end,
     get_Count = function(obj)
              return __get_table_count(obj) 
         end,
@@ -3568,27 +3555,6 @@ function __find_extern_class_or_obj_key(k, obj)
     until t==nil
     return false
 end
-function __find_base_class_key(k, base_class)
-    if base_class then
-        if rawget(base_class, "__cs2lua_defined") then
-            return base_class.__exist(k)
-        else
-            return __find_extern_class_or_obj_key(k,base_class)
-        end
-    end
-    return false
-end
-function __find_class_key(k, class, class_fields, base_class)
-    local ret
-    if class_fields and class_fields[k] then
-        return true
-    end
-    ret = rawget(class, k)
-    if ret then
-        return true
-    end
-    return __find_base_class_key(k, base_class)
-end
 function __find_extern_obj_member(k, obj)
     local t=getmetatable(obj)
     repeat
@@ -3605,22 +3571,6 @@ function __find_extern_obj_member(k, obj)
         t = rawget(t,'__parent')
     until t==nil
     return false
-end
-function __find_obj_method(k, obj_methods, base_class)
-    local ret
-    if obj_methods then
-        ret = obj_methods[k]
-        if ret then
-            return ret
-        end
-    end
-    if base_class then
-        ret = base_class.__get_obj_method(k)
-        if nil ~= ret then
-            return ret
-        end
-    end
-    return nil
 end
 
 function wrapvirtual(k, f, class)
@@ -3640,7 +3590,8 @@ function defineclass(
     typeName,
     class,    
     obj_methods,
-    is_value_type)
+    is_value_type,
+    is_inherit_csharp)
         
     local base_class = base
     
@@ -3652,6 +3603,13 @@ function defineclass(
     local method_info = rawget(class, "__method_info")
     local is_sealed_class = rawget(class, "__is_sealed_class")
     local is_static_class = rawget(class, "__is_static_class")
+
+    local function __get_obj_methods(fk)
+        return obj_methods
+    end
+    local function __obj_GetType(tb)
+        return class
+    end
     
     rawset(class, "__cs2lua_defined", true)
     rawset(class, "__cs2lua_fullname", fullName)
@@ -3659,6 +3617,14 @@ function defineclass(
     rawset(class, "__cs2lua_parent", base_class)
     rawset(class, "__is_value_type", is_value_type)
     rawset(class, "__interfaces", interfaces)
+    
+    rawset(class, "FullName", fullName)
+    rawset(class, "Name", typeName)
+    rawset(class, "__get_obj_methods", __get_obj_methods)
+    if not obj_methods then
+        obj_methods = {}
+    end
+    rawset(obj_methods, "GetType", __obj_GetType)
     
     --合并基类字段信息
     if base_class then
@@ -3682,6 +3648,10 @@ function defineclass(
             end
             curClass = rawget(curClass, "__cs2lua_parent")
         end
+        if rawget(base_class, "__get_obj_methods") then
+            rawset(obj_methods, "__index", base_class.__get_obj_methods())
+            setmetatable(obj_methods, obj_methods)
+        end
     else
         obj_fields = rawget(class, "__obj_fields")
         obj_field_values = rawget(class, "__obj_field_values")
@@ -3695,21 +3665,7 @@ function defineclass(
             end
         end
         return obj
-    end    
-    local function __exist(fk)
-        return __find_class_key(fk, class, class_fields, base_class)
     end
-    local function __get_obj_method(fk)
-        return __find_obj_method(fk, obj_methods, base_class)
-    end
-    local function __obj_GetType(tb)
-        return class
-    end
-    
-    rawset(class, "FullName", fullName)
-    rawset(class, "Name", typeName)
-    rawset(class, "__exist", __exist)
-    rawset(class, "__get_obj_method", __get_obj_method)
     
     local obj_meta = {
         __class = class,
@@ -3720,29 +3676,7 @@ function defineclass(
         __is_value_type = is_value_type,
         __interfaces = interfaces,
         
-        __index = function(t, k)
-            if obj_fields then
-                local ret = obj_fields[k]
-                if nil ~= ret then
-                    --是当前类字段但仍走到元方法里了，则表明当前字段值为空
-                    return nil
-                end
-            end
-            local f = __find_obj_method(k, obj_methods, base_class)
-            if f then
-                return f
-            end
-            if k == "GetType" then
-                return __obj_GetType
-            end
-            local baseObj = rawget(t, "__base")
-            if baseObj and __find_extern_class_or_obj_key(k, baseObj) then
-                return __find_extern_obj_member(k, baseObj)
-            end
-            lualog("lookup meta for {0}.{1} base_class {2} baseObj {3}", t:GetType().FullName, k, base_class and base_class.FullName, baseObj)
-            printStack()
-            return nil
-        end,
+        __index = obj_methods,
         __newindex = function(t, k, v)
             if obj_fields then
                 local ret = obj_fields[k]
@@ -3756,25 +3690,34 @@ function defineclass(
                 baseObj[k] = v
                 return
             end
-            rawset(t, k, v)
         end,
     }
-    
-    local class_meta = {
-        __index = function(t, k)
-            if class_fields then
-                local ret = class_fields[k]
-                if nil ~= ret then
-                    --字段存在仍然调到元方法，表明值为空
-                    return nil
+
+    if is_inherit_csharp then
+        rawset(obj_meta, "__index", function(t, k)
+                if obj_fields then
+                    local ret = obj_fields[k]
+                    if nil ~= ret then
+                        --是当前类字段但仍走到元方法里了，则表明当前字段值为空
+                        return nil
+                    end
                 end
-            end
-            if __find_base_class_key(k, base_class) then
-                return base_class[k]
-            end
-            return nil
-        end,
-        __newindex = function(t, k, v)
+                local f = obj_methods[k]
+                if f then
+                    return f
+                end
+                local baseObj = rawget(t, "__base")
+                if baseObj and __find_extern_class_or_obj_key(k, baseObj) then
+                    return __find_extern_obj_member(k, baseObj)
+                end
+                lualog("lookup meta for {0}.{1} base_class {2} baseObj {3}", t:GetType().FullName, k, base_class and base_class.FullName, baseObj)
+                printStack()
+                return nil
+            end)
+    end
+    
+    rawset(class, "__index", base_class)
+    rawset(class, "__newindex", function(t, k, v)
             if class_fields then
                 local ret = class_fields[k]
                 if nil ~= ret then
@@ -3782,24 +3725,18 @@ function defineclass(
                     return
                 end
             end
-            if __find_base_class_key(k, base_class) then
-                base_class[k] = v
-                return
-            end
-            rawset(t, k, v)
-        end,
-        __call = function(t)
+            base_class[k] = v
+        end)
+    rawset(class, "__call", function(t)
             local obj = obj_build()
             setmetatable(obj, obj_meta)
             return obj
-        end
-    }
-
-    setmetatable(class, class_meta)
-    if class.cctor then
+        end)
+    setmetatable(class, class)
+    if rawget(class, "cctor") then
         class.cctor()
     end
-    
+        
     return class
 end
 
@@ -3818,9 +3755,6 @@ function buildexternbaseobj(obj, class, baseClass, baseCtor, baseCtorRetCt, ...)
     end
             
     rawset(obj, "__base", baseObj)
-    if baseObj then
-        rawset(baseObj, "__child", obj)
-    end
 end
 
 --这个函数仅用于翻译的lua代码，用于处理base.field的语法

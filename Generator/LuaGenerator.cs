@@ -42,6 +42,8 @@ namespace Generator
             Action<string> handler = (file) => {
                 try {
                     s_CurFile = file;
+                    s_CurMember = string.Empty;
+                    s_IsInCoroutine = false;
                     s_NestedFunctionCount = 0;
                     s_TryUsingFuncs = new Queue<Dsl.StatementData>();
 
@@ -201,6 +203,20 @@ namespace Generator
                         var isExtern = optFd.GetParamId(4) == "true";
                         funcOpts.ParamTypes.Add(new TypeInfo { Name = tn, Type = t, TypeKind = tk, RefOrOut = ro, IsExtern = isExtern, OriType = orit, OriTypeKind = oritk });
                     }
+                    else if (optFd.GetId() == "parambecaptured") {
+                        var tn = optFd.GetParamId(0);
+                        var orit = optFd.GetParam(1);
+                        var t = CalcTypeString(orit);
+                        var isExtern = optFd.GetParamId(2) == "true";
+                        funcOpts.ParamBeCaptureds.Add(new CapturedInfo { Name = tn, Type = t, IsExtern = isExtern, OriType = orit });
+                    }
+                    else if (optFd.GetId() == "localbecaptured") {
+                        var tn = optFd.GetParamId(0);
+                        var orit = optFd.GetParam(1);
+                        var t = CalcTypeString(orit);
+                        var isExtern = optFd.GetParamId(2) == "true";
+                        funcOpts.LocalBeCaptureds.Add(new CapturedInfo { Name = tn, Type = t, IsExtern = isExtern, OriType = orit });
+                    }
                 }
             }
         }
@@ -296,6 +312,10 @@ namespace Generator
                 id = "not";
             }
             return id;
+        }
+        internal static void Log(string msg)
+        {
+            Log(s_CurFile + ":" + s_CurMember, msg);
         }
         internal static void Log(string file, string msg)
         {
@@ -695,11 +715,17 @@ namespace Generator
         [ThreadStatic]
         private static string s_CurFile = string.Empty;
         [ThreadStatic]
+        private static string s_CurMember = string.Empty;
+        [ThreadStatic]
+        private static bool s_IsInCoroutine = false;
+        [ThreadStatic]
         private static int s_NestedFunctionCount = 0;
         [ThreadStatic]
         private static Queue<Dsl.StatementData> s_TryUsingFuncs = null;
         [ThreadStatic]
         private static Dsl.ISyntaxComponent s_CurSyntax = null;
+
+        private static object s_Lock = new object();
 
         private static string s_ExePath = string.Empty;
         private static string s_SrcPath = string.Empty;
@@ -737,12 +763,51 @@ namespace Generator
             internal Dsl.ISyntaxComponent OriType = null;
             internal Dsl.ISyntaxComponent OriTypeKind = null;
         }
+        internal class CapturedInfo
+        {
+            internal string Name = string.Empty;
+            internal string Type = string.Empty;
+            internal bool IsExtern = false;
+            internal Dsl.ISyntaxComponent OriType = null;
+        }
         internal class FunctionOptions
         {
             internal bool NeedFuncInfo = false;
             internal List<TypeInfo> RetTypes = new List<TypeInfo>();
             internal List<TypeInfo> ParamTypes = new List<TypeInfo>();
+            internal List<CapturedInfo> ParamBeCaptureds = new List<CapturedInfo>();
+            internal List<CapturedInfo> LocalBeCaptureds = new List<CapturedInfo>();
 
+            internal bool IsParam(string name)
+            {
+                bool ret = false;
+                foreach (var t in ParamTypes) {
+                    if (t.Name == name) {
+                        ret = true;
+                        break;
+                    }
+                }
+                return ret;
+            }
+            internal bool IsBeCaptured(string name)
+            {
+                bool ret = false;
+                foreach (var t in ParamBeCaptureds) {
+                    if (t.Name == name) {
+                        ret = true;
+                        break;
+                    }
+                }
+                if (!ret) {
+                    foreach (var t in LocalBeCaptureds) {
+                        if (t.Name == name) {
+                            ret = true;
+                            break;
+                        }
+                    }
+                }
+                return ret;
+            }
             internal bool TryGetRetTypeInfo(string name, out TypeInfo ti)
             {
                 bool ret = false;

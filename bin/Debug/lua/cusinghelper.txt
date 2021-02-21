@@ -153,7 +153,7 @@ CUsingHelper = {
 		tmp_obj_method = rawget(class, "Dispose");
 		rawset(class, "__self__Dispose", tmp_obj_method);
 
-		local __defineclass_return = defineclass(nil, "CUsingHelper", "CUsingHelper", class, obj_methods, false);
+		local __defineclass_return = defineclass(nil, "CUsingHelper", "CUsingHelper", class, obj_methods, false, false);
 		Utility.Warn("CUsingHelper::__define_class end");
 		return __defineclass_return;
 	end,

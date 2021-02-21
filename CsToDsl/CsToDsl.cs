@@ -1625,6 +1625,50 @@ namespace RoslynTool.CsToDsl
             }
             return null;
         }
+        private void AnalyzeCapturedValueVariable(ExpressionSyntax node)
+        {
+            var dataFlow = m_Model.AnalyzeDataFlow(node);
+            foreach (var vsym in dataFlow.Captured) {
+                if (vsym.Kind == SymbolKind.Parameter) {
+                    var paramSym = vsym as IParameterSymbol;
+                    if (paramSym.Type.IsValueType && !SymbolTable.IsBasicType(paramSym.Type)) {
+                        var csym = paramSym.ContainingSymbol;
+                        while (null != csym && csym.Kind != SymbolKind.Method) {
+                            csym = csym.ContainingSymbol;
+                        }
+                        if (null != csym) {
+                            var msym = csym as IMethodSymbol;
+                            foreach (var mi in m_MethodInfoStack) {
+                                if (mi.SemanticInfo == msym) {
+                                    if (!mi.BeCapturedValueParams.Contains(paramSym))
+                                        mi.BeCapturedValueParams.Add(paramSym);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (vsym.Kind == SymbolKind.Local) {
+                    var localSym = vsym as ILocalSymbol;
+                    if (localSym.Type.IsValueType && !SymbolTable.IsBasicType(localSym.Type)) {
+                        var csym = localSym.ContainingSymbol;
+                        while (null != csym && csym.Kind != SymbolKind.Method) {
+                            csym = csym.ContainingSymbol;
+                        }
+                        if (null != csym) {
+                            var msym = csym as IMethodSymbol;
+                            foreach (var mi in m_MethodInfoStack) {
+                                if (mi.SemanticInfo == msym) {
+                                    if (!mi.BeCapturedValueLocals.Contains(localSym))
+                                        mi.BeCapturedValueLocals.Add(localSym);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         private StringBuilder CodeBuilder
         {

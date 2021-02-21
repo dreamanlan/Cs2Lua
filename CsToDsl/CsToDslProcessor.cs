@@ -946,7 +946,9 @@ namespace RoslynTool.CsToDsl
             var firstClass = classes.Count > 0 ? classes[0] : null;
             string genericTypeKey = key;
             string baseClass = string.Empty;
+            bool isInheritCsharp = false;
             if (null != firstClass) {
+                isInheritCsharp = firstClass.IsInheritCsharp;
                 baseClass = firstClass.BaseKey;
                 genericTypeKey = firstClass.GenericTypeKey;
             }
@@ -1047,7 +1049,7 @@ namespace RoslynTool.CsToDsl
                 sb.AppendFormat("{0}{1}({2}) {{", GetIndentString(indent), isEnumClass ? "enum" : (isValueType ? "struct" : "class"), key);
             }
             else {
-                sb.AppendFormat("{0}{1}({2}, {3}) {{", GetIndentString(indent), isEnumClass ? "enum" : (isValueType ? "struct" : "class"), key, baseClass);
+                sb.AppendFormat("{0}{1}({2}, {3}, {4}) {{", GetIndentString(indent), isEnumClass ? "enum" : (isValueType ? "struct" : "class"), key, baseClass, isInheritCsharp ? "true" : "false");
             }
             sb.AppendLine();
             ++indent;

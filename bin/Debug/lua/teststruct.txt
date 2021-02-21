@@ -80,7 +80,7 @@ TestStruct = {
 			__ctor = rawget(class, "__ctor"),
 		};
 
-		local __defineclass_return = defineclass(nil, "TestStruct", "TestStruct", class, obj_methods, true);
+		local __defineclass_return = defineclass(nil, "TestStruct", "TestStruct", class, obj_methods, true, false);
 		Utility.Warn("TestStruct::__define_class end");
 		return __defineclass_return;
 	end,
@@ -102,7 +102,7 @@ TestStruct = {
 	-------------------------------
 	-------- metadata info --------
 	-------------------------------
-	__is_sealed_class = true;
+	__is_sealed_class = true,
 };
 
 

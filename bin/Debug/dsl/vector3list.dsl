@@ -3,7 +3,7 @@ require("cs2dsl__namespaces");
 require("cs2dsl__externenums");
 require("cs2dsl__interfaces");
 
-class(Vector3List, System.Collections.Generic.List_T) {
+class(Vector3List, System.Collections.Generic.List_T, true) {
 	static_methods {
 		__new_object = deffunc(1)args(...){
 			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(Vector3List, "g_Vector3List", typeargs(), typekinds(), "ctor", 0, null, ...);

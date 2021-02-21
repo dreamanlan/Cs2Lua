@@ -134,8 +134,7 @@ namespace Generator
                         }
                     }
                     --indent;
-                    sb.AppendFormatLine("{0}}}, ", GetIndentString(indent));
-                    sb.AppendFormatLine("{0}__exist = function(k) return false; end", GetIndentString(indent));
+                    sb.AppendFormatLine("{0}}}", GetIndentString(indent));
                     --indent;
                     sb.AppendFormatLine("{0}}};", GetIndentString(indent));
                 }
@@ -193,10 +192,15 @@ namespace Generator
                 }
                 else if (id == "class" || id == "struct") {
                     string className = CalcTypeString(callData.GetParam(0));
+                    bool isInheritCsharp = false;
                     var baseClass = callData.GetParam(1);
+                    var inheritCsharp = callData.GetParam(2) as Dsl.ValueData;
                     string baseClassName = string.Empty;
                     if (null != baseClass) {
                         baseClassName = CalcTypeString(baseClass);
+                    }
+                    if (null != inheritCsharp) {
+                        isInheritCsharp = inheritCsharp.GetId() == "true";
                     }
                     bool isValueType = id == "struct";
 
@@ -282,6 +286,7 @@ namespace Generator
                         sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
                         sb.AppendFormatLine("{0}-------- class methods --------", GetIndentString(indent));
                         sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
+                        s_IsInCoroutine = false;
                         bool firstMethod = true;
                         foreach (var def in staticMethods.Params) {
                             if (!firstMethod)
@@ -312,7 +317,10 @@ namespace Generator
                                         if (second.IsHighOrder)
                                             fcall = second.LowerOrderFunction;
                                         sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
+                                        s_CurMember = mname;
+                                        s_IsInCoroutine = false;
                                         if (null != cdef) {
+                                            s_IsInCoroutine = true;
                                             sb.Append("wrapenumerable(");
                                         }
                                         sb.Append("function(");
@@ -321,6 +329,7 @@ namespace Generator
                                         ++indent;
                                         if (funcOpts.NeedFuncInfo) {
                                             sb.AppendFormatLine("{0}local __cs2lua_func_info = luainitialize();", GetIndentString(indent));
+                                            TryGenerateRemoveFromCallerFuncInfos(sb, indent, funcOpts, calculator);
                                         }
                                         var logInfo = GetPrologueAndEpilogue(className, mname);
                                         if (null != logInfo.PrologueInfo) {
@@ -451,6 +460,7 @@ namespace Generator
                             }
                         }
                         sb.AppendLine();
+                        s_IsInCoroutine = false;
                     }
 
                     var staticFields = FindStatement(funcData, "static_fields") as Dsl.FunctionData;
@@ -481,6 +491,7 @@ namespace Generator
                         sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
                         sb.AppendFormatLine("{0}------ instance methods -------", GetIndentString(indent));
                         sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
+                        s_IsInCoroutine = false;
                         bool firstMethod = true;
                         foreach (var def in instMethods.Params) {
                             if (!firstMethod)
@@ -512,7 +523,10 @@ namespace Generator
                                             fcall = second.LowerOrderFunction;
                                         instMethodNames.Add(mname);
                                         sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
+                                        s_CurMember = mname;
+                                        s_IsInCoroutine = false;
                                         if (null != cdef) {
+                                            s_IsInCoroutine = true;
                                             sb.Append("wrapenumerable(");
                                         }
                                         sb.Append("function(");
@@ -521,6 +535,7 @@ namespace Generator
                                         ++indent;
                                         if (funcOpts.NeedFuncInfo) {
                                             sb.AppendFormatLine("{0}local __cs2lua_func_info = luainitialize();", GetIndentString(indent));
+                                            TryGenerateRemoveFromCallerFuncInfos(sb, indent, funcOpts, calculator);
                                         }
                                         var logInfo = GetPrologueAndEpilogue(className, mname);
                                         if (null != logInfo.PrologueInfo) {
@@ -661,6 +676,7 @@ namespace Generator
                                 }
                             }
                         }
+                        s_IsInCoroutine = false;
                     }
                     var instFields = FindStatement(funcData, "instance_fields") as Dsl.FunctionData;
                     if (null != instFields && instFields.GetParamNum() > 0) {
@@ -677,6 +693,7 @@ namespace Generator
                                 string mname = mdef.GetParamId(0);
                                 var comp = mdef.GetParam(1);
                                 if (comp.GetId() != "null") {
+                                    s_CurMember = mname;
                                     sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
                                     GenerateFieldValueComponent(comp, sb, indent, false, funcOpts, calculator);
                                     sb.AppendLine(",");
@@ -767,12 +784,12 @@ namespace Generator
                     ///4、由lua对面向对象的模拟是基于元表的，应支持obj:method()的访问方式（元表与对象方法的开销是必要的，方便互操作）。
                     ///5、为了利用c#编译时进行的方法选择，对象方法记录到类上（翻译调用使用），obj_methods同时记录一份入口，以支持5。
                     if (null != logInfoForDefineClass.EpilogueInfo) {
-                        sb.AppendFormatLine("{0}local __defineclass_return = defineclass({1}, \"{2}\", \"{3}\", class, obj_methods, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
+                        sb.AppendFormatLine("{0}local __defineclass_return = defineclass({1}, \"{2}\", \"{3}\", class, obj_methods, {4}, {5});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false", isInheritCsharp ? "true" : "false");
                         sb.AppendFormatLine("{0}{1};", GetIndentString(indent), CalcLogInfo(logInfoForDefineClass.EpilogueInfo, className, "__define_class"));
                         sb.AppendFormatLine("{0}return __defineclass_return;", GetIndentString(indent));
                     }
                     else {
-                        sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", \"{3}\", class, obj_methods, {4});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false");
+                        sb.AppendFormatLine("{0}return defineclass({1}, \"{2}\", \"{3}\", class, obj_methods, {4}, {5});", GetIndentString(indent), null == baseClass || !baseClass.IsValid() ? "nil" : baseClassName, className, GetLastName(className), isValueType ? "true" : "false", isInheritCsharp ? "true" : "false");
                     }
                     --indent;
                     sb.AppendFormatLine("{0}end,", GetIndentString(indent));
@@ -831,11 +848,11 @@ namespace Generator
 
                     if (s_GenClassInfo) {
                         if(sealedClass)
-                            sb.AppendFormatLine("{0}__is_sealed_class = true;", GetIndentString(indent));
+                            sb.AppendFormatLine("{0}__is_sealed_class = true,", GetIndentString(indent));
                         if(staticClass)
-                            sb.AppendFormatLine("{0}__is_static_class = true;", GetIndentString(indent));
+                            sb.AppendFormatLine("{0}__is_static_class = true,", GetIndentString(indent));
                         if(abstractClass)
-                            sb.AppendFormatLine("{0}__is_abstract_class = true;", GetIndentString(indent));
+                            sb.AppendFormatLine("{0}__is_abstract_class = true,", GetIndentString(indent));
                     }
 
                     if ((!sealedClass && !staticClass || s_GenMethodInfo) && methodInfos.Count > 0) {
@@ -944,15 +961,42 @@ namespace Generator
         private static bool CallDslHook(DslExpression.DslCalculator calculator, string id, Dsl.FunctionData data, FunctionOptions funcOpts, StringBuilder sb, int indent)
         {
             bool ret = false;
-            var args = calculator.NewCalculatorValueList();
-            args.Add(DslExpression.CalculatorValue.FromObject(data));
-            args.Add(DslExpression.CalculatorValue.FromObject(funcOpts));
-            args.Add(DslExpression.CalculatorValue.FromObject(sb));
-            args.Add(indent);
-            var r = calculator.Calc(id, args);
-            calculator.RecycleCalculatorValueList(args);
-            if (!r.IsNullObject) {
-                ret = r;
+            lock (s_Lock) {
+                var args = calculator.NewCalculatorValueList();
+                args.Add(DslExpression.CalculatorValue.FromObject(data));
+                args.Add(DslExpression.CalculatorValue.FromObject(funcOpts));
+                args.Add(DslExpression.CalculatorValue.FromObject(sb));
+                args.Add(indent);
+                args.Add(s_CurFile);
+                args.Add(s_CurMember);
+                args.Add(id);
+                var r = calculator.Calc(id, args);
+                calculator.RecycleCalculatorValueList(args);
+                if (!r.IsNullObject) {
+                    ret = r;
+                }
+            }
+            return ret;
+        }
+        private static bool CallDslCoroutineHook(DslExpression.DslCalculator calculator, string id, Dsl.FunctionData data, FunctionOptions funcOpts, StringBuilder sb, int indent)
+        {
+            bool ret = false;
+            if (s_IsInCoroutine) {
+                lock (s_Lock) {
+                    var args = calculator.NewCalculatorValueList();
+                    args.Add(DslExpression.CalculatorValue.FromObject(data));
+                    args.Add(DslExpression.CalculatorValue.FromObject(funcOpts));
+                    args.Add(DslExpression.CalculatorValue.FromObject(sb));
+                    args.Add(indent);
+                    args.Add(s_CurFile);
+                    args.Add(s_CurMember);
+                    args.Add(id);
+                    var r = calculator.Calc("coroutinehook", args);
+                    calculator.RecycleCalculatorValueList(args);
+                    if (!r.IsNullObject) {
+                        ret = r;
+                    }
+                }
             }
             return ret;
         }
@@ -1105,6 +1149,7 @@ namespace Generator
                     var param1 = data.GetParam(0);
                     var param2 = data.GetParam(1);
                     bool handled = false;
+                    var vd = param1 as Dsl.ValueData;
                     var fd = param1 as Dsl.FunctionData;
                     var sd = param1 as Dsl.StatementData;
                     var fd2 = param2 as Dsl.FunctionData;
@@ -1348,6 +1393,11 @@ namespace Generator
                         if (id != "=")
                             sb.Append(")");
                     }
+                    if (id == "=" && rightParamId.Contains("struct")) {
+                        if (null != vd) {
+                            TryGenerateRemoveFromFuncInfo(vd.GetId(), sb, funcOpts, calculator);
+                        }
+                    }
                 }
             }
             else if ((id == "setstatic" || id == "setexternstatic") && data.GetParamNum() > 3 && data.GetParamId(3) == "condexp") {
@@ -1369,7 +1419,7 @@ namespace Generator
                     return;
                 }
                 //这里对委托到syslib的翻译提供一个基于dsl脚本翻译的机会，理论上可以提升运行效率                
-                if (!CallDslHook(calculator, id, data, funcOpts, sb, indent)) {
+                if (!CallDslCoroutineHook(calculator, id, data, funcOpts, sb, indent) && !CallDslHook(calculator, id, data, funcOpts, sb, indent)) {
                     if (id == "condexp") {
                         var p1 = data.GetParam(0);
                         var p2 = data.GetParamId(1);
@@ -1472,23 +1522,26 @@ namespace Generator
                                 if (rtiIx < funcOpts.RetTypes.Count) {
                                     var rti = funcOpts.RetTypes[rtiIx];
                                     if (rti.TypeKind == "TypeKind.Struct" && !IsBasicType(rti.Type, rti.TypeKind, true)) {
-                                        if (first)
-                                            first = false;
-                                        else
-                                            sb.Append(GetIndentString(indent));
-                                        var tempFunc = new Dsl.FunctionData();
-                                        tempFunc.Name = new Dsl.ValueData("movetocallerfuncinfo");
-                                        tempFunc.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
-                                        tempFunc.AddParam(rti.OriType);
-                                        tempFunc.AddParam(param);
-                                        if (!CallDslHook(calculator, tempFunc.GetId(), tempFunc, funcOpts, sb, indent)) {
-                                            sb.Append("movetocallerfuncinfo(__cs2lua_func_info, ");
-                                            sb.Append(rti.Type);
-                                            sb.Append(", ");
-                                            GenerateSyntaxComponent(param, sb, indent, false, funcOpts, calculator);
-                                            sb.Append(")");
+                                        string pname = param.GetId();
+                                        if (!funcOpts.IsBeCaptured(pname) && !funcOpts.IsParam(pname)) {
+                                            if (first)
+                                                first = false;
+                                            else
+                                                sb.Append(GetIndentString(indent));
+                                            var tempFunc = new Dsl.FunctionData();
+                                            tempFunc.Name = new Dsl.ValueData("movetocallerfuncinfo");
+                                            tempFunc.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
+                                            tempFunc.AddParam(rti.OriType);
+                                            tempFunc.AddParam(param);
+                                            if (!CallDslHook(calculator, tempFunc.GetId(), tempFunc, funcOpts, sb, indent)) {
+                                                sb.Append("movetocallerfuncinfo(__cs2lua_func_info, ");
+                                                sb.Append(rti.Type);
+                                                sb.Append(", ");
+                                                GenerateSyntaxComponent(param, sb, indent, false, funcOpts, calculator);
+                                                sb.Append(")");
+                                            }
+                                            sb.AppendLine(";");
                                         }
-                                        sb.AppendLine(";");
                                     }
                                 }
                             }
@@ -3354,6 +3407,7 @@ namespace Generator
                         ++indent;
                         if (newFuncOpts.NeedFuncInfo) {
                             sb.AppendFormatLine("{0}local __cs2lua_func_info = luainitialize();", GetIndentString(indent));
+                            TryGenerateRemoveFromCallerFuncInfos(sb, indent, newFuncOpts, calculator);
                         }
                         GenerateStatements(second, sb, indent, newFuncOpts, calculator);
                         bool lastIsNotReturn = !LastIsReturn(second);
@@ -3415,7 +3469,8 @@ namespace Generator
                                     name = callPart.GetId();
                                     if (name == "callstatic" || name == "callexternstatic" || name == "callinstance" || name == "callexterninstance" || name == "calldelegation" || name == "callexterndelegation") {
                                         canSimplify = true;
-                                        funcRetVar = retPart.GetId();
+                                        //tryfunc/usingfunc本身会有返回值与输出参数的重新赋值，这里只需要对临时变量的值调整即可
+                                        funcRetVar = retValVar + "_0";
                                         tryRetVar = retValVar;
                                         tryRetVal = returnStatement.GetParamId(0);
                                     }
@@ -3497,8 +3552,10 @@ namespace Generator
                             else {
                                 sb.AppendLine(");");
                                 //xpcall直接调用函数时，需要对返回结果进行调整
-                                //__try_ret_167_8_176_9,__try_retval_167_8_176_9,__method_ret_143_4_177_5 = luatry(aa);
+                                //__try_ret_167_8_176_9,__try_retval_167_8_176_9,__try_retval_167_8_176_9_0 = luatry(aa);
                                 //其中__try_retval实际上是__method_ret的值，然后__try_retval的值实际保存在tryRetVal变量里
+                                //tryfunc/usingfunc本身会有返回值与输出参数的重新赋值，这里只需要对临时变量__try_retval_167_8_176_9_0的值调整即可
+                                //后续调整里会再将临时变量的值赋给__method_ret_167_8_176_9
                                 sb.AppendFormatLine("{0}if {1} then", GetIndentString(indent), retVar);
                                 ++indent;
                                 sb.AppendFormatLine("{0}{1} = {2};", GetIndentString(indent), funcRetVar, tryRetVar);
@@ -3792,6 +3849,67 @@ namespace Generator
             }
             sb.Append(" end");
         }
+        private static void TryGenerateRemoveFromCallerFuncInfos(StringBuilder sb, int indent, FunctionOptions funcOpts, DslExpression.DslCalculator calculator)
+        {
+            if (funcOpts.NeedFuncInfo) {
+                foreach (var v in funcOpts.ParamBeCaptureds) {
+                    var tempFunc = new Dsl.FunctionData();
+                    tempFunc.Name = new Dsl.ValueData("removefromcallerfuncinfo");
+                    tempFunc.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
+                    tempFunc.AddParam(v.OriType);
+                    tempFunc.AddParam(v.Name);
+                    if (!CallDslHook(calculator, tempFunc.GetId(), tempFunc, funcOpts, sb, indent)) {
+                        sb.Append("removefromcallerfuncinfo(__cs2lua_func_info, ");
+                        sb.Append(v.Type);
+                        sb.Append(", ");
+                        sb.Append(v.Name);
+                        sb.Append(")");
+                    }
+                    sb.AppendLine(";");
+                }
+            }
+        }
+        private static void TryGenerateRemoveFromFuncInfo(string varName, StringBuilder sb, FunctionOptions funcOpts, DslExpression.DslCalculator calculator)
+        {
+            if (funcOpts.NeedFuncInfo) {
+                foreach (var v in funcOpts.ParamBeCaptureds) {
+                    if (v.Name == varName) {
+                        var tempFunc = new Dsl.FunctionData();
+                        tempFunc.Name = new Dsl.ValueData("removefromfuncinfo");
+                        tempFunc.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
+                        tempFunc.AddParam(v.OriType);
+                        tempFunc.AddParam(v.Name);
+                        sb.AppendLine("; ");
+                        if (!CallDslHook(calculator, tempFunc.GetId(), tempFunc, funcOpts, sb, 0)) {
+                            sb.Append("removefromfuncinfo(__cs2lua_func_info, ");
+                            sb.Append(v.Type);
+                            sb.Append(", ");
+                            sb.Append(v.Name);
+                            sb.Append(")");
+                        }
+                        return;
+                    }
+                }
+                foreach (var v in funcOpts.LocalBeCaptureds) {
+                    if (v.Name == varName) {
+                        var tempFunc = new Dsl.FunctionData();
+                        tempFunc.Name = new Dsl.ValueData("removefromfuncinfo");
+                        tempFunc.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
+                        tempFunc.AddParam(v.OriType);
+                        tempFunc.AddParam(v.Name);
+                        sb.AppendLine("; ");
+                        if (!CallDslHook(calculator, tempFunc.GetId(), tempFunc, funcOpts, sb, 0)) {
+                            sb.Append("removefromfuncinfo(__cs2lua_func_info, ");
+                            sb.Append(v.Type);
+                            sb.Append(", ");
+                            sb.Append(v.Name);
+                            sb.Append(")");
+                        }
+                        return;
+                    }
+                }
+            }
+        }
         private static void GenerateAttribute(Dsl.ISyntaxComponent comp, StringBuilder sb, int indent)
         {
             s_CurSyntax = comp;
@@ -4081,22 +4199,22 @@ namespace DslExpression
                         for (int i = 1; i < operands.Count; ++i) {
                             arrayList.Add(operands[i].Get<object>());
                         }
-                        Generator.LuaGenerator.Log("generator.dsl", string.Format(fmt, arrayList.ToArray()));
+                        Generator.LuaGenerator.Log(string.Format(fmt, arrayList.ToArray()));
                         Console.WriteLine(fmt, arrayList.ToArray());
                     }
                     else {
-                        Generator.LuaGenerator.Log("generator.dsl", fmt);
+                        Generator.LuaGenerator.Log(fmt);
                         Console.WriteLine(fmt);
                     }
                 }
                 else {
                     var o = obj.GetObject();
-                    Generator.LuaGenerator.Log("generator.dsl", null != o ? o.ToString() : string.Empty);
+                    Generator.LuaGenerator.Log(null != o ? o.ToString() : string.Empty);
                     Console.WriteLine(o);
                 }
             }
             else {
-                Generator.LuaGenerator.Log("generator.dsl", string.Empty);
+                Generator.LuaGenerator.Log(string.Empty);
                 Console.WriteLine();
             }
             return r;

@@ -3,7 +3,7 @@ require("cs2dsl__namespaces");
 require("cs2dsl__externenums");
 require("cs2dsl__interfaces");
 
-class(StrList, System.Collections.Generic.List_T) {
+class(StrList, System.Collections.Generic.List_T, true) {
 	static_methods {
 		__new_object = deffunc(1)args(...){
 			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(StrList, "g_StrList", typeargs(), typekinds(), "ctor", 0, null, ...);

@@ -102,7 +102,7 @@ Cs2LuaKeyValuePair_System_Int32_System_Int32 = {
 			__ctor = rawget(class, "__ctor"),
 		};
 
-		local __defineclass_return = defineclass(nil, "Cs2LuaKeyValuePair_System_Int32_System_Int32", "Cs2LuaKeyValuePair_System_Int32_System_Int32", class, obj_methods, false);
+		local __defineclass_return = defineclass(nil, "Cs2LuaKeyValuePair_System_Int32_System_Int32", "Cs2LuaKeyValuePair_System_Int32_System_Int32", class, obj_methods, false, false);
 		Utility.Warn("Cs2LuaKeyValuePair_System_Int32_System_Int32::__define_class end");
 		return __defineclass_return;
 	end,
@@ -123,7 +123,7 @@ Cs2LuaKeyValuePair_System_Int32_System_Int32 = {
 	-------------------------------
 	-------- metadata info --------
 	-------------------------------
-	__is_sealed_class = true;
+	__is_sealed_class = true,
 };
 
 

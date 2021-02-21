@@ -3,7 +3,7 @@ require("cs2dsl__namespaces");
 require("cs2dsl__externenums");
 require("cs2dsl__interfaces");
 
-class(StrStrDict, System.Collections.Generic.Dictionary_TKey_TValue) {
+class(StrStrDict, System.Collections.Generic.Dictionary_TKey_TValue, true) {
 	static_methods {
 		__new_object = deffunc(1)args(...){
 			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(StrStrDict, "g_StrStrDict", typeargs(), typekinds(), "ctor", 0, null, ...);

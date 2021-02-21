@@ -64,7 +64,7 @@ IntList = {
 		tmp_obj_method = rawget(class, "ctor");
 		rawset(class, "__self__ctor", tmp_obj_method);
 
-		local __defineclass_return = defineclass(System.Collections.Generic.List_T, "IntList", "IntList", class, obj_methods, false);
+		local __defineclass_return = defineclass(System.Collections.Generic.List_T, "IntList", "IntList", class, obj_methods, false, false);
 		Utility.Warn("IntList::__define_class end");
 		return __defineclass_return;
 	end,

@@ -80,7 +80,7 @@ SIW_DeviceFirstUse = {
 			__ctor = rawget(class, "__ctor"),
 		};
 
-		local __defineclass_return = defineclass(SettingInfoWrapper, "SIW_DeviceFirstUse", "SIW_DeviceFirstUse", class, obj_methods, false);
+		local __defineclass_return = defineclass(SettingInfoWrapper, "SIW_DeviceFirstUse", "SIW_DeviceFirstUse", class, obj_methods, false, false);
 		Utility.Warn("SIW_DeviceFirstUse::__define_class end");
 		return __defineclass_return;
 	end,
@@ -99,7 +99,7 @@ SIW_DeviceFirstUse = {
 	-------------------------------
 	-------- metadata info --------
 	-------------------------------
-	__is_sealed_class = true;
+	__is_sealed_class = true,
 };
 
 

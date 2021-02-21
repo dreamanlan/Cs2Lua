@@ -66,7 +66,7 @@ DictClass = {
 			__ctor = rawget(class, "__ctor"),
 		};
 
-		local __defineclass_return = defineclass(AbstractDictClass, "DictClass", "DictClass", class, obj_methods, false);
+		local __defineclass_return = defineclass(AbstractDictClass, "DictClass", "DictClass", class, obj_methods, false, false);
 		Utility.Warn("DictClass::__define_class end");
 		return __defineclass_return;
 	end,
@@ -88,7 +88,7 @@ DictClass = {
 	__interfaces = {
 		"IDict",
 	},
-	__is_sealed_class = true;
+	__is_sealed_class = true,
 };
 
 

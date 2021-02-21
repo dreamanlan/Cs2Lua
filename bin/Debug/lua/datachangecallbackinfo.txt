@@ -78,7 +78,7 @@ DataChangeCallBackInfo = {
 			__ctor = rawget(class, "__ctor"),
 		};
 
-		local __defineclass_return = defineclass(nil, "DataChangeCallBackInfo", "DataChangeCallBackInfo", class, obj_methods, false);
+		local __defineclass_return = defineclass(nil, "DataChangeCallBackInfo", "DataChangeCallBackInfo", class, obj_methods, false, false);
 		Utility.Warn("DataChangeCallBackInfo::__define_class end");
 		return __defineclass_return;
 	end,
@@ -101,7 +101,7 @@ DataChangeCallBackInfo = {
 	__interfaces = {
 		"ICs2LuaPoolAllocatedObjectEx_DataChangeCallBackInfo",
 	},
-	__is_sealed_class = true;
+	__is_sealed_class = true,
 };
 
 

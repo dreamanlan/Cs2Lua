@@ -79,7 +79,7 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.AppendFormat("{0}(", functor);
                             bool isConvertDsl = false;
                             var typeInfo = m_Model.GetTypeInfoEx(node.Right);
-                            if (op == "as") {
+                            if (op == "as" || op == "is") {
                                 var type = typeInfo.Type;
                                 var srcType = m_Model.GetTypeInfoEx(node.Left).Type;
                                 if (null != type && null != srcType) {

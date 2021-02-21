@@ -138,7 +138,7 @@ SettingInfoWrapper = {
 		tmp_obj_method = rawget(class, "ctor");
 		rawset(class, "__self__ctor", tmp_obj_method);
 
-		local __defineclass_return = defineclass(nil, "SettingInfoWrapper", "SettingInfoWrapper", class, obj_methods, false);
+		local __defineclass_return = defineclass(nil, "SettingInfoWrapper", "SettingInfoWrapper", class, obj_methods, false, false);
 		Utility.Warn("SettingInfoWrapper::__define_class end");
 		return __defineclass_return;
 	end,

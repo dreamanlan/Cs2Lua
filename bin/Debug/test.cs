@@ -252,6 +252,10 @@ class Test
         var rs = from score in a
                  where score > 80
                  select score;
+
+        Action a = () => {
+            Console.WriteLine("{0}", ts.m_A);
+        };
     }
     public int testcall()
     {

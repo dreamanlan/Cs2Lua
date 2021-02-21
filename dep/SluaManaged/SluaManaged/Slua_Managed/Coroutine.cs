@@ -122,7 +122,6 @@ end
                 int r = LuaDLL.lua_status(l);
                 if (r == 0) {
                     if (LuaDLL.lua_gettop(l) == 0) {
-                        //Logger.Log("buildEnumerator loop exit because stack empty");
                         yield break;
                     }
                     else {
@@ -133,7 +132,7 @@ end
                     yield return null;
                 }
                 else {
-                    Logger.LogLuaStack(l, "buildEnumerator loop exit: " + r);
+                    Logger.LogError("buildEnumerator loop exit: " + r);
                     yield break;
                 }
             }

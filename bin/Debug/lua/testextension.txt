@@ -35,7 +35,7 @@ TestExtension = {
 		local obj_methods = nil;
 		local tmp_obj_method = nil;
 
-		local __defineclass_return = defineclass(nil, "TestExtension", "TestExtension", class, obj_methods, false);
+		local __defineclass_return = defineclass(nil, "TestExtension", "TestExtension", class, obj_methods, false, false);
 		Utility.Warn("TestExtension::__define_class end");
 		return __defineclass_return;
 	end,

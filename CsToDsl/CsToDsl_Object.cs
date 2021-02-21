@@ -1024,6 +1024,7 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitSimpleLambdaExpression(SimpleLambdaExpressionSyntax node)
         {
+            AnalyzeCapturedValueVariable(node);
             SymbolInfo symInfo = m_Model.GetSymbolInfoEx(node);
             var sym = symInfo.Symbol as IMethodSymbol;
 
@@ -1073,6 +1074,7 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitParenthesizedLambdaExpression(ParenthesizedLambdaExpressionSyntax node)
         {
+            AnalyzeCapturedValueVariable(node);
             SymbolInfo symInfo = m_Model.GetSymbolInfoEx(node);
             var sym = symInfo.Symbol as IMethodSymbol;
             if (null != sym) {
@@ -1170,6 +1172,7 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitAnonymousMethodExpression(AnonymousMethodExpressionSyntax node)
         {
+            AnalyzeCapturedValueVariable(node);
             SymbolInfo symInfo = m_Model.GetSymbolInfoEx(node);
             var sym = symInfo.Symbol as IMethodSymbol;
             if (null != sym) {

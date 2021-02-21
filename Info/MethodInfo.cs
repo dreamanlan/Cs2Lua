@@ -27,6 +27,8 @@ namespace RoslynTool.CsToDsl
         internal List<bool> ReturnParamIsExterns = new List<bool>();
         internal HashSet<int> OutValueParams = new HashSet<int>();
         internal HashSet<int> OutExternValueParams = new HashSet<int>();
+        internal HashSet<IParameterSymbol> BeCapturedValueParams = new HashSet<IParameterSymbol>();
+        internal HashSet<ILocalSymbol> BeCapturedValueLocals = new HashSet<ILocalSymbol>();
         internal string OriginalParamsName = string.Empty;
         internal string ParamsElementInfo = string.Empty;
         internal bool ExistYield = false;
@@ -232,6 +234,24 @@ namespace RoslynTool.CsToDsl
                     var isExtern = ParamIsExterns[ix];
                     sb.Append(", ");
                     sb.AppendFormat("paramtype({0}, {1}, {2}, {3}, {4})", name, type, typekind, refOrOut, isExtern ? "true" : "false");
+                }
+                foreach(var vp in BeCapturedValueParams) {
+                    var name = vp.Name;
+                    var type = ClassInfo.GetFullName(vp.Type);
+                    if (string.IsNullOrEmpty(type))
+                        type = "null";
+                    bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(vp.Type);
+                    sb.Append(", ");
+                    sb.AppendFormat("parambecaptured({0}, {1}, {2})", name, type, isExtern ? "true" : "false");
+                }
+                foreach (var vl in BeCapturedValueLocals) {
+                    var name = vl.Name;
+                    var type = ClassInfo.GetFullName(vl.Type);
+                    if (string.IsNullOrEmpty(type))
+                        type = "null";
+                    bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(vl.Type);
+                    sb.Append(", ");
+                    sb.AppendFormat("localbecaptured({0}, {1}, {2})", name, type, isExtern ? "true" : "false");
                 }
                 FunctionOptions = sb.ToString();
             }

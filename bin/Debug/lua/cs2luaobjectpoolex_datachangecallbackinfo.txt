@@ -135,7 +135,7 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 			__ctor = rawget(class, "__ctor"),
 		};
 
-		local __defineclass_return = defineclass(nil, "Cs2LuaObjectPoolEx_DataChangeCallBackInfo", "Cs2LuaObjectPoolEx_DataChangeCallBackInfo", class, obj_methods, false);
+		local __defineclass_return = defineclass(nil, "Cs2LuaObjectPoolEx_DataChangeCallBackInfo", "Cs2LuaObjectPoolEx_DataChangeCallBackInfo", class, obj_methods, false, false);
 		Utility.Warn("Cs2LuaObjectPoolEx_DataChangeCallBackInfo::__define_class end");
 		return __defineclass_return;
 	end,
@@ -157,7 +157,7 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 	-------------------------------
 	-------- metadata info --------
 	-------------------------------
-	__is_sealed_class = true;
+	__is_sealed_class = true,
 };
 
 
