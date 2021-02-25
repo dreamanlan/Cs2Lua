@@ -683,7 +683,7 @@ namespace Generator
                         sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
                         sb.AppendFormatLine("{0}------ instance fields -------", GetIndentString(indent));
                         sb.AppendFormatLine("{0}-------------------------------", GetIndentString(indent));
-                        sb.AppendFormatLine("{0}__obj_field_values = {{", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}__init_obj_fields = function(this)", GetIndentString(indent));
                         ++indent;
 
                         var funcOpts = new FunctionOptions();
@@ -694,15 +694,15 @@ namespace Generator
                                 var comp = mdef.GetParam(1);
                                 if (comp.GetId() != "null") {
                                     s_CurMember = mname;
-                                    sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
+                                    sb.AppendFormat("{0}rawset(this, \"{1}\", ", GetIndentString(indent), mname);
                                     GenerateFieldValueComponent(comp, sb, indent, false, funcOpts, calculator);
-                                    sb.AppendLine(",");
+                                    sb.AppendLine(");");
                                 }
                             }
                         }
 
                         --indent;
-                        sb.AppendFormatLine("{0}}},", GetIndentString(indent));
+                        sb.AppendFormatLine("{0}end,", GetIndentString(indent));
                     }
                     sb.AppendLine();
 

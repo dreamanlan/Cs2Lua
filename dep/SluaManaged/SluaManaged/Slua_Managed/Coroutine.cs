@@ -103,8 +103,9 @@ end
         static public int WrapEnumerator(IntPtr l)
         {
             try {
-                var t = LuaDLL.lua_tothread(l, 1);
-                IEnumerator enumer = buildEnumerator(t);
+                LuaThread lt;
+                checkType(l, 1, out lt);
+                IEnumerator enumer = buildEnumerator(lt);
                 LuaDLL.lua_pop(l, 1);
                 pushValue(l, true);
                 pushValue(l, enumer);
@@ -115,13 +116,15 @@ end
             }
         }
 
-        static public IEnumerator buildEnumerator(IntPtr l)
+        static public IEnumerator buildEnumerator(LuaThread lt)
         {
-            LuaDLL.lua_resume(l, 0);
-            for (; ; ) {
-                int r = LuaDLL.lua_status(l);
+            LuaDLL.lua_getref(lt.L, lt.Ref);
+            IntPtr t = LuaDLL.lua_tothread(lt.L, -1);
+            LuaDLL.lua_resume(t, 0);
+            for (; lt.Ref != 0;) {
+                int r = LuaDLL.lua_status(t);
                 if (r == 0) {
-                    if (LuaDLL.lua_gettop(l) == 0) {
+                    if (LuaDLL.lua_gettop(t) == 0) {
                         yield break;
                     }
                     else {

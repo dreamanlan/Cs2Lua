@@ -3637,18 +3637,13 @@ function defineclass(
     --合并基类字段信息
     if base_class then
         obj_fields = {}
-        obj_field_values = {}
         local curClass = class
         while nil~=curClass do
             if warmup(curClass) then
-                if rawget(curClass, "__obj_fields") then
-                    for k,v in pairs(curClass.__obj_fields) do
+                local ofs = rawget(curClass, "__obj_fields")
+                if ofs then
+                    for k,v in pairs(ofs) do
                         rawset(obj_fields, k, v)
-                    end
-                end
-                if rawget(curClass, "__obj_field_values") then
-                    for k,v in pairs(curClass.__obj_field_values) do
-                        rawset(obj_field_values, k, v)
                     end
                 end
             else
@@ -3662,14 +3657,27 @@ function defineclass(
         end
     else
         obj_fields = rawget(class, "__obj_fields")
-        obj_field_values = rawget(class, "__obj_field_values")
     end
     
     local function obj_build()
         local obj = {}
-        if obj_field_values then
-            for k,v in pairs(obj_field_values) do
-                rawset(obj, k, v)
+        if base_class then
+            local curClass = class
+            while nil~=curClass do
+                if warmup(curClass) then
+                    local init_obj_fields = rawget(curClass, "__init_obj_fields")
+                    if init_obj_fields then
+                        init_obj_fields(obj)
+                    end
+                else
+                    break
+                end
+                curClass = rawget(curClass, "__cs2lua_parent")
+            end
+        else
+            local init_obj_fields = rawget(class, "__init_obj_fields")
+            if init_obj_fields then
+                init_obj_fields(obj)
             end
         end
         return obj
