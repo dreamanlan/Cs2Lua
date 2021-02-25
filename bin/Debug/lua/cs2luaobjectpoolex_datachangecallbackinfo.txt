@@ -112,9 +112,9 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 	-------------------------------
 	------ instance fields -------
 	-------------------------------
-	__obj_field_values = {
-		__ctor_called = false,
-	},
+	__init_obj_fields = function(this)
+		rawset(this, "__ctor_called", false);
+	end,
 
 	-------------------------------
 	--- define class and object ---

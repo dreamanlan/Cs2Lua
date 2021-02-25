@@ -128,10 +128,10 @@ CUsingHelper = {
 	-------------------------------
 	------ instance fields -------
 	-------------------------------
-	__obj_field_values = {
-		__attributes = CUsingHelper__Attrs,
-		__ctor_called = false,
-	},
+	__init_obj_fields = function(this)
+		rawset(this, "__attributes", CUsingHelper__Attrs);
+		rawset(this, "__ctor_called", false);
+	end,
 
 	-------------------------------
 	--- define class and object ---

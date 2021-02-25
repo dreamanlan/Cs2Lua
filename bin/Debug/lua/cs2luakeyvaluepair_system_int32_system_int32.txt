@@ -80,11 +80,11 @@ Cs2LuaKeyValuePair_System_Int32_System_Int32 = {
 	-------------------------------
 	------ instance fields -------
 	-------------------------------
-	__obj_field_values = {
-		key = 0,
-		value = 0,
-		__ctor_called = false,
-	},
+	__init_obj_fields = function(this)
+		rawset(this, "key", 0);
+		rawset(this, "value", 0);
+		rawset(this, "__ctor_called", false);
+	end,
 
 	-------------------------------
 	--- define class and object ---

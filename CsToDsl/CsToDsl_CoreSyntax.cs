@@ -934,10 +934,10 @@ namespace RoslynTool.CsToDsl
                 if (null != srcType) {
                     TypeChecker.CheckConvert(m_Model, srcType, typeSym, node, GetCurMethodSemanticInfo());
                 }
-                var oper = m_Model.GetOperationEx(init) as IVariableDeclarationOperation;
+                var oper = m_Model.GetOperationEx(init) as IVariableInitializerOperation;
                 IConversionOperation opd = null;
-                if (null != oper && oper.Declarators.Length == 1) {
-                    opd = oper.Declarators[0] as IConversionOperation;
+                if (null != oper) {
+                    opd = oper.Value as IConversionOperation;
                 }
                 var token = init.EqualsToken;
                 var invocation = init.Value as InvocationExpressionSyntax;

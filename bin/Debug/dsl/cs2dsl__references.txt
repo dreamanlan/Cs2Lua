@@ -4,4 +4,6 @@ System.Exception
 System.Int32
 System.Object
 System.String
+UnityEngine.Color
+UnityEngine.Color32
 UnityEngine.Vector3

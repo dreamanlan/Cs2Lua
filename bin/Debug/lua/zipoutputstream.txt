@@ -60,11 +60,11 @@ ZipOutputStream = {
 	-------------------------------
 	------ instance fields -------
 	-------------------------------
-	__obj_field_values = {
-		V = 0,
-		m_I = 1,
-		__ctor_called = false,
-	},
+	__init_obj_fields = function(this)
+		rawset(this, "V", 0);
+		rawset(this, "m_I", 1);
+		rawset(this, "__ctor_called", false);
+	end,
 
 	-------------------------------
 	--- define class and object ---
@@ -163,9 +163,9 @@ ZipOutputStream.EmbedClass = {
 	-------------------------------
 	------ instance fields -------
 	-------------------------------
-	__obj_field_values = {
-		__ctor_called = false,
-	},
+	__init_obj_fields = function(this)
+		rawset(this, "__ctor_called", false);
+	end,
 
 	-------------------------------
 	--- define class and object ---

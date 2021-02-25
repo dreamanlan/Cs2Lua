@@ -259,10 +259,17 @@ class Test
     }
     public int testcall()
     {
+        UnityEngine.Color c = UnityEngine.Color.red;
+        UnityEngine.Color32 c32 = c;
+        c32 = c;
+        c32 = ((Func<Color32>)(() => { return c; }))();
+        c32 = ((Func<Color32>)(() => c))();
         object data = 1;
         int v = (int)data;
         return 1;
     }
+    public UnityEngine.Color32 testimp() => UnityEngine.Color.red;
+    public UnityEngine.Color32 testimp2 => UnityEngine.Color.red;
     public int test()
     {
         int a = 2, b = 0, c = 1;
@@ -326,4 +333,5 @@ class Test
     private int m_IntVal = 0;
     private Vector3[] m_Vs = new Vector3[10];
     private Cs2LuaKeyValuePair<int, int> m_IntIntKeyValue = new Cs2LuaKeyValuePair<int, int>();
+    private UnityEngine.Color32 m_C32 = UnityEngine.Color.red;
 }
