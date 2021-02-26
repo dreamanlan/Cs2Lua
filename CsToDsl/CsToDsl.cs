@@ -221,14 +221,6 @@ namespace RoslynTool.CsToDsl
         }
         internal void OutputArgumentList(InvocationInfo ii, ITypeSymbol callerType, bool useTypeNameString, SyntaxNode node)
         {
-            var namedCallerType = callerType as INamedTypeSymbol;
-            bool isCs2DslType = null != callerType && SymbolTable.Instance.IsCs2DslSymbol(callerType) || null != namedCallerType && namedCallerType.IsGenericType || SymbolTable.Instance.IsCs2DslSymbol(ii.MethodSymbol) || null == callerType && ii.MethodSymbol.ContainingType.IsGenericType;
-            var callerClassName = ClassInfo.GetFullName(callerType);
-            if (string.IsNullOrEmpty(callerClassName))
-                callerClassName = "null";
-            var className = ClassInfo.GetFullName(ii.MethodSymbol.ContainingType);
-            if (string.IsNullOrEmpty(className))
-                className = "null";
             if (!ii.PostPositionGenericTypeArgs && ii.GenericTypeArgs.Count > 0) {
                 OutputTypeArgumentList(ii.GenericTypeArgs, useTypeNameString, node);
             }
@@ -268,7 +260,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.Append("__cs2dsl_out");
                     }
                     else if (i < ct - 1) {
-                        if (needWrapStruct) {
+                        if (needWrapStruct && null == opd) {
                             CodeBuilder.AppendFormat("wrap{0}structargument(", externFlag);
                             OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
                             CodeBuilder.Append(", ");
@@ -277,10 +269,6 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.Append(argOperKind);
                             CodeBuilder.Append(", ");
                             CodeBuilder.Append(argSymKind);
-                            CodeBuilder.Append(", ");
-                            CodeBuilder.Append(className);
-                            CodeBuilder.Append(", ");
-                            CodeBuilder.Append(callerClassName);
                             CodeBuilder.Append(")");
                         }
                         else {
@@ -290,7 +278,7 @@ namespace RoslynTool.CsToDsl
                     else {
                         if (ii.ArrayToParams) {
                             CodeBuilder.Append("dslunpack(");
-                            if (needWrapStruct) {
+                            if (needWrapStruct && null == opd) {
                                 CodeBuilder.AppendFormat("wrap{0}structarguments(", externFlag);
                                 OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
                                 CodeBuilder.Append(", ");
@@ -299,10 +287,6 @@ namespace RoslynTool.CsToDsl
                                 CodeBuilder.Append(argOperKind);
                                 CodeBuilder.Append(", ");
                                 CodeBuilder.Append(argSymKind);
-                                CodeBuilder.Append(", ");
-                                CodeBuilder.Append(className);
-                                CodeBuilder.Append(", ");
-                                CodeBuilder.Append(callerClassName);
                                 CodeBuilder.Append(")");
                             }
                             else {
@@ -311,7 +295,7 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.Append(")");
                         }
                         else {
-                            if (needWrapStruct) {
+                            if (needWrapStruct && null == opd) {
                                 CodeBuilder.AppendFormat("wrap{0}structargument(", externFlag);
                                 OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
                                 CodeBuilder.Append(", ");
@@ -320,10 +304,6 @@ namespace RoslynTool.CsToDsl
                                 CodeBuilder.Append(argOperKind);
                                 CodeBuilder.Append(", ");
                                 CodeBuilder.Append(argSymKind);
-                                CodeBuilder.Append(", ");
-                                CodeBuilder.Append(className);
-                                CodeBuilder.Append(", ");
-                                CodeBuilder.Append(callerClassName);
                                 CodeBuilder.Append(")");
                             }
                             else {
@@ -363,7 +343,7 @@ namespace RoslynTool.CsToDsl
                         var opd = ii.ArgConversions.Count > ct + i ? ii.ArgConversions[ct + i] : null;
                         bool dslToObject = null != ii.DslToObjectDefArgs ? ii.DslToObjectDefArgs.Contains(i) : false;
                         if (null != info.Expression) {
-                            if (needWrapStruct) {
+                            if (needWrapStruct && null == opd) {
                                 CodeBuilder.AppendFormat("wrap{0}structargument(", externFlag);
                                 OutputExpressionSyntax(info.Expression, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
                                 CodeBuilder.Append(", ");
@@ -372,10 +352,6 @@ namespace RoslynTool.CsToDsl
                                 CodeBuilder.Append(argOperKind);
                                 CodeBuilder.Append(", ");
                                 CodeBuilder.Append(argSymKind);
-                                CodeBuilder.Append(", ");
-                                CodeBuilder.Append(className);
-                                CodeBuilder.Append(", ");
-                                CodeBuilder.Append(callerClassName);
                                 CodeBuilder.Append(")");
                             }
                             else {
@@ -383,7 +359,7 @@ namespace RoslynTool.CsToDsl
                             }
                         }
                         else {
-                            if (needWrapStruct) {
+                            if (needWrapStruct && null == opd) {
                                 CodeBuilder.AppendFormat("wrap{0}structargument(", externFlag);
                                 if (dslToObject)
                                     OutputDslToObjectPrefix(ii.MethodSymbol);
@@ -396,10 +372,6 @@ namespace RoslynTool.CsToDsl
                                 CodeBuilder.Append(argOperKind);
                                 CodeBuilder.Append(", ");
                                 CodeBuilder.Append(argSymKind);
-                                CodeBuilder.Append(", ");
-                                CodeBuilder.Append(className);
-                                CodeBuilder.Append(", ");
-                                CodeBuilder.Append(callerClassName);
                                 CodeBuilder.Append(")");
                             }
                             else {

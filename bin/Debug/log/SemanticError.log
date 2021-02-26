@@ -5,5 +5,5 @@ test.cs(176,9): error CS0246: The type or namespace name 'StringBuilder' could n
 test.cs(176,43): error CS0246: The type or namespace name 'StringBuilder' could not be found (are you missing a using directive or an assembly reference?)
 test.cs(252,32): error CS1936: Could not find an implementation of the query pattern for source type 'int'.  'Where' not found.
 test.cs(256,16): error CS0128: A local variable or function named 'a' is already defined in this scope
-test.cs(303,19): error CS0155: The type caught or thrown must be derived from System.Exception
-test.cs(319,9): error CS0120: An object reference is required for the non-static field, method, or property 'Test.LoadStartupView_FGUI(string, string, string, ViewGroup, bool)'
+test.cs(307,19): error CS0155: The type caught or thrown must be derived from System.Exception
+test.cs(323,9): error CS0120: An object reference is required for the non-static field, method, or property 'Test.LoadStartupView_FGUI(string, string, string, ViewGroup, bool)'

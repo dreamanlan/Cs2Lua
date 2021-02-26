@@ -229,17 +229,17 @@ script(wrapexternstruct)args($funcData, $funcOpts, $sb, $indent)
 
 script(wrapstructargument)args($funcData, $funcOpts, $sb, $indent)
 {
-    //wrapstructargument(v, argType, argOperKind, argSymKind, class, callerClass)
+    //wrapstructargument(v, argType, argOperKind, argSymKind)
     return(false);
 };
 
 script(wrapexternstructargument)args($funcData, $funcOpts, $sb, $indent)
 {
-    //wrapexternstructargument(v, argType, argOperKind, argSymKind, class, callerClass)
+    //wrapexternstructargument(v, argType, argOperKind, argSymKind)
     $argType = getargument($funcData, 1);
 
     if($argType=="UnityEngine.Vector2"){
-        usefunc("wrap_vector2","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        usefunc("wrap_vector2","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3], "__cs2lua_func_info")
         {:
             local obj = UnityEngine.Vector2.New(v.x,v.y)
             table.insert(funcInfo.v2_list, obj)
@@ -248,7 +248,7 @@ script(wrapexternstructargument)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($argType=="UnityEngine.Vector3"){
-        usefunc("wrap_vector3","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        usefunc("wrap_vector3","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3], "__cs2lua_func_info")
         {:
             local obj = UnityEngine.Vector3.New(v.x,v.y,v.z)
             table.insert(funcInfo.v3_list, obj)
@@ -257,7 +257,7 @@ script(wrapexternstructargument)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($argType=="UnityEngine.Vector4"){
-        usefunc("wrap_vector4","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        usefunc("wrap_vector4","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3], "__cs2lua_func_info")
         {:
             local obj = UnityEngine.Vector4.New(v.x,v.y,v.z,v.w)
             table.insert(funcInfo.v4_list, obj)
@@ -266,7 +266,7 @@ script(wrapexternstructargument)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($argType=="UnityEngine.Quaternion"){
-        usefunc("wrap_quaternion","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        usefunc("wrap_quaternion","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3], "__cs2lua_func_info")
         {:
             local obj = UnityEngine.Quaternion.New(v.x,v.y,v.z,v.w)
             table.insert(funcInfo.q_list, obj)
@@ -275,7 +275,7 @@ script(wrapexternstructargument)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($argType=="UnityEngine.Color"){
-        usefunc("wrap_color","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        usefunc("wrap_color","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3], "__cs2lua_func_info")
         {:
             local obj = UnityEngine.Color.New(v.r,v.g,v.b,v.a)
             table.insert(funcInfo.c_list, obj)
@@ -284,7 +284,7 @@ script(wrapexternstructargument)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($argType=="UnityEngine.Color32"){
-        usefunc("wrap_color32","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        usefunc("wrap_color32","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3], "__cs2lua_func_info")
         {:
             local obj = Color32Pool.Alloc()
             obj.r = v.r or 0
@@ -297,7 +297,7 @@ script(wrapexternstructargument)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($argType=="UnityEngine.Rect"){
-        usefunc("wrap_rect","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        usefunc("wrap_rect","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3], "__cs2lua_func_info")
         {:
             local obj = RectPool.Alloc();
             obj.x=v.x
@@ -310,7 +310,7 @@ script(wrapexternstructargument)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($argType=="CsLibrary.DateTime"){
-        usefunc("wrap_datetime","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        usefunc("wrap_datetime","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3], "__cs2lua_func_info")
         {:
             local y,m,d,hh,mm,ss,ms =  CsLibrary.DateTime.GetDateTimeValue(v,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out)
             local obj = DateTimePool.Alloc();
@@ -321,7 +321,7 @@ script(wrapexternstructargument)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($argType=="CsLibrary.TimeSpan"){
-        usefunc("wrap_timespan","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        usefunc("wrap_timespan","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3], "__cs2lua_func_info")
         {:
             local obj = TimeSpanPool.Alloc()
             obj:SetTimeDHMSM(v.Days, v.Hours, v.Minutes, v.Seconds, v.Milliseconds)
@@ -333,7 +333,7 @@ script(wrapexternstructargument)args($funcData, $funcOpts, $sb, $indent)
     elseif($argType=="CsLibrary.PathInfoPoint"){    
         echo("wrapexternstructargument {0}", $argType);
         
-        usefunc("wrap_pathinfopoint","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        usefunc("wrap_pathinfopoint","(funcInfo, v)", $funcData, $funcOpts, $sb, $indent, [1,2,3], "__cs2lua_func_info")
         {:
             local obj = PathInfoPointPool.Alloc();
             local _,x,y,z = v:GetPoint(Slua.out, Slua.out, Slua.out)
@@ -355,17 +355,17 @@ script(wrapexternstructargument)args($funcData, $funcOpts, $sb, $indent)
 
 script(wrapstructarguments)args($funcData, $funcOpts, $sb, $indent)
 {
-    //wrapstructarguments(arr, argType, argOperKind, argSymKind, class, callerClass)
+    //wrapstructarguments(arr, argType, argOperKind, argSymKind)
     return(false);
 };
 
 script(wrapexternstructarguments)args($funcData, $funcOpts, $sb, $indent)
 {
-    //wrapexternstructarguments(arr, argType, argOperKind, argSymKind, class, callerClass)
+    //wrapexternstructarguments(arr, argType, argOperKind, argSymKind)
     $argType = getargument($funcData, 1);
 
     if($argType=="UnityEngine.Vector2"){
-        usefunc("wrap_vector2_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        usefunc("wrap_vector2_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3], "__cs2lua_func_info")
         {:
             for i,v in ipairs(arr) do
                 local obj = UnityEngine.Vector2.New(v.x,v.y)
@@ -377,7 +377,7 @@ script(wrapexternstructarguments)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($argType=="UnityEngine.Vector3"){
-        usefunc("wrap_vector3_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        usefunc("wrap_vector3_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3], "__cs2lua_func_info")
         {:
             for i,v in ipairs(arr) do
                 local obj = UnityEngine.Vector3.New(v.x,v.y,v.z)
@@ -389,7 +389,7 @@ script(wrapexternstructarguments)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($argType=="UnityEngine.Vector4"){
-        usefunc("wrap_vector4_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        usefunc("wrap_vector4_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3], "__cs2lua_func_info")
         {:
             for i,v in ipairs(arr) do
                 local obj = UnityEngine.Vector4.New(v.x,v.y,v.z,v.w)
@@ -401,7 +401,7 @@ script(wrapexternstructarguments)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($argType=="UnityEngine.Quaternion"){
-        usefunc("wrap_quaternion_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        usefunc("wrap_quaternion_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3], "__cs2lua_func_info")
         {:
             for i,v in ipairs(arr) do
                 local obj = UnityEngine.Quaternion.New(v.x,v.y,v.z,v.w)
@@ -413,7 +413,7 @@ script(wrapexternstructarguments)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($argType=="UnityEngine.Color"){
-        usefunc("wrap_color_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        usefunc("wrap_color_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3], "__cs2lua_func_info")
         {:
             for i,v in ipairs(arr) do
                 local obj = UnityEngine.Color.New(v.r,v.g,v.b,v.a)
@@ -425,7 +425,7 @@ script(wrapexternstructarguments)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($argType=="UnityEngine.Color32"){
-        usefunc("wrap_color32_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        usefunc("wrap_color32_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3], "__cs2lua_func_info")
         {:
             for i,v in ipairs(arr) do
                 local obj = Color32Pool.Alloc()
@@ -441,7 +441,7 @@ script(wrapexternstructarguments)args($funcData, $funcOpts, $sb, $indent)
         return(true);
     }
     elseif($argType=="UnityEngine.Rect"){
-        usefunc("wrap_Rect_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        usefunc("wrap_Rect_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3], "__cs2lua_func_info")
         {:
             for i,v in ipairs(arr) do
                 local obj = RectPool.Alloc();
@@ -456,7 +456,7 @@ script(wrapexternstructarguments)args($funcData, $funcOpts, $sb, $indent)
         :};
         return(true);
     }elseif($argType=="CsLibrary.DateTime"){
-        usefunc("wrap_DateTime_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3,4,5], "__cs2lua_func_info")
+        usefunc("wrap_DateTime_array","(funcInfo, arr)", $funcData, $funcOpts, $sb, $indent, [1,2,3], "__cs2lua_func_info")
         {:
             for i,v in ipairs(arr) do
                 local y,m,d,hh,mm,ss,ms =  CsLibrary.DateTime.GetDateTimeValue(v,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out,Slua.out)
@@ -3586,7 +3586,7 @@ script(get_globalvariables_instance)args($funcData, $funcOpts, $sb, $indent)
 
 script(coroutinehook)args($funcData, $funcOpts, $sb, $indent, $curFile, $curMember, $curId)
 {
-    if(stringcontains($curId, ["call","extern"])){
+    if(stringcontains($curId, ["call"])){
         $a = getargument($funcData, 0);
         $b = getargument($funcData, 1);
         $c = getargument($funcData, 2);

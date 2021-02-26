@@ -257,8 +257,12 @@ class Test
             Console.WriteLine("{0}", ts.m_A);
         };
     }
+    public void TestImp(UnityEngine.Vector2 pos)
+    { }
     public int testcall()
     {
+        var v3 = UnityEngine.Vector3.zero;
+        TestImp(v3);
         UnityEngine.Color c = UnityEngine.Color.red;
         UnityEngine.Color32 c32 = c;
         c32 = c;
