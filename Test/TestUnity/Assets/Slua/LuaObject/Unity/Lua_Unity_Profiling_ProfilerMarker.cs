@@ -41,7 +41,7 @@ public class Lua_Unity_Profiling_ProfilerMarker : LuaObject {
 			checkValueType(l,1,out self);
 			self.Begin();
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -58,7 +58,7 @@ public class Lua_Unity_Profiling_ProfilerMarker : LuaObject {
 			checkType(l,2,out a1);
 			self.Begin(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -73,7 +73,7 @@ public class Lua_Unity_Profiling_ProfilerMarker : LuaObject {
 			checkValueType(l,1,out self);
 			self.End();
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {

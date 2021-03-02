@@ -25,7 +25,7 @@ public class Lua_UnityEngine_EventSystems_RaycastResult : LuaObject {
 			checkValueType(l,1,out self);
 			self.Clear();
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -70,7 +70,7 @@ public class Lua_UnityEngine_EventSystems_RaycastResult : LuaObject {
 			UnityEngine.EventSystems.BaseRaycaster v;
 			checkType(l,2,out v);
 			self.module=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -101,7 +101,7 @@ public class Lua_UnityEngine_EventSystems_RaycastResult : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.distance=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -132,7 +132,7 @@ public class Lua_UnityEngine_EventSystems_RaycastResult : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.index=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -163,7 +163,7 @@ public class Lua_UnityEngine_EventSystems_RaycastResult : LuaObject {
 			System.Int32 v;
 			checkType(l,2,out v);
 			self.depth=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -194,7 +194,7 @@ public class Lua_UnityEngine_EventSystems_RaycastResult : LuaObject {
 			System.Int32 v;
 			checkType(l,2,out v);
 			self.sortingLayer=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -225,7 +225,7 @@ public class Lua_UnityEngine_EventSystems_RaycastResult : LuaObject {
 			System.Int32 v;
 			checkType(l,2,out v);
 			self.sortingOrder=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -256,7 +256,7 @@ public class Lua_UnityEngine_EventSystems_RaycastResult : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.worldPosition=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -287,7 +287,7 @@ public class Lua_UnityEngine_EventSystems_RaycastResult : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.worldNormal=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -318,7 +318,7 @@ public class Lua_UnityEngine_EventSystems_RaycastResult : LuaObject {
 			UnityEngine.Vector2 v;
 			checkType(l,2,out v);
 			self.screenPosition=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -349,7 +349,7 @@ public class Lua_UnityEngine_EventSystems_RaycastResult : LuaObject {
 			UnityEngine.GameObject v;
 			checkType(l,2,out v);
 			self.gameObject=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

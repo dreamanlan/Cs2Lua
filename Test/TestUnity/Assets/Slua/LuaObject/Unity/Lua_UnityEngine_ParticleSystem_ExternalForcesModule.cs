@@ -27,7 +27,7 @@ public class Lua_UnityEngine_ParticleSystem_ExternalForcesModule : LuaObject {
 			checkType(l,2,out a1);
 			self.AddInfluence(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -44,7 +44,7 @@ public class Lua_UnityEngine_ParticleSystem_ExternalForcesModule : LuaObject {
 			checkType(l,2,out a1);
 			self.RemoveInfluence(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -61,7 +61,7 @@ public class Lua_UnityEngine_ParticleSystem_ExternalForcesModule : LuaObject {
 			checkType(l,2,out a1);
 			self.RemoveInfluence(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -80,7 +80,7 @@ public class Lua_UnityEngine_ParticleSystem_ExternalForcesModule : LuaObject {
 			checkType(l,3,out a2);
 			self.SetInfluence(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -144,7 +144,7 @@ public class Lua_UnityEngine_ParticleSystem_ExternalForcesModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.enabled=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -175,7 +175,7 @@ public class Lua_UnityEngine_ParticleSystem_ExternalForcesModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.multiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -206,7 +206,7 @@ public class Lua_UnityEngine_ParticleSystem_ExternalForcesModule : LuaObject {
 			UnityEngine.ParticleSystemGameObjectFilter v;
 			checkEnum(l,2,out v);
 			self.influenceFilter=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

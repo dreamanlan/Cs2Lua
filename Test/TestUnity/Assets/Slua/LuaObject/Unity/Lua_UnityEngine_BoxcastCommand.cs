@@ -87,7 +87,7 @@ public class Lua_UnityEngine_BoxcastCommand : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.center=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -118,7 +118,7 @@ public class Lua_UnityEngine_BoxcastCommand : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.halfExtents=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -149,7 +149,7 @@ public class Lua_UnityEngine_BoxcastCommand : LuaObject {
 			UnityEngine.Quaternion v;
 			checkType(l,2,out v);
 			self.orientation=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -180,7 +180,7 @@ public class Lua_UnityEngine_BoxcastCommand : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.direction=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -211,7 +211,7 @@ public class Lua_UnityEngine_BoxcastCommand : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.distance=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -242,7 +242,7 @@ public class Lua_UnityEngine_BoxcastCommand : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.layerMask=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

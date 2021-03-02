@@ -40,7 +40,7 @@ public class Lua_UnityEngine_SkeletonBone : LuaObject {
 			System.String v;
 			checkType(l,2,out v);
 			self.name=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_SkeletonBone : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.position=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -102,7 +102,7 @@ public class Lua_UnityEngine_SkeletonBone : LuaObject {
 			UnityEngine.Quaternion v;
 			checkType(l,2,out v);
 			self.rotation=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -133,7 +133,7 @@ public class Lua_UnityEngine_SkeletonBone : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.scale=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

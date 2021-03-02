@@ -25,7 +25,7 @@ public class Lua_Unity_Jobs_JobHandle : LuaObject {
 			checkValueType(l,1,out self);
 			self.Complete();
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {

@@ -29,7 +29,7 @@ public class Lua_UnityEngine_ParticleSystem_TriggerModule : LuaObject {
 			checkType(l,3,out a2);
 			self.SetCollider(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -76,7 +76,7 @@ public class Lua_UnityEngine_ParticleSystem_TriggerModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.enabled=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -107,7 +107,7 @@ public class Lua_UnityEngine_ParticleSystem_TriggerModule : LuaObject {
 			UnityEngine.ParticleSystemOverlapAction v;
 			checkEnum(l,2,out v);
 			self.inside=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -138,7 +138,7 @@ public class Lua_UnityEngine_ParticleSystem_TriggerModule : LuaObject {
 			UnityEngine.ParticleSystemOverlapAction v;
 			checkEnum(l,2,out v);
 			self.outside=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -169,7 +169,7 @@ public class Lua_UnityEngine_ParticleSystem_TriggerModule : LuaObject {
 			UnityEngine.ParticleSystemOverlapAction v;
 			checkEnum(l,2,out v);
 			self.enter=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -200,7 +200,7 @@ public class Lua_UnityEngine_ParticleSystem_TriggerModule : LuaObject {
 			UnityEngine.ParticleSystemOverlapAction v;
 			checkEnum(l,2,out v);
 			self.exit=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -231,7 +231,7 @@ public class Lua_UnityEngine_ParticleSystem_TriggerModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.radiusScale=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

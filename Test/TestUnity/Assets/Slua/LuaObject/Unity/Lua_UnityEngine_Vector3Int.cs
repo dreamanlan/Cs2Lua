@@ -51,7 +51,7 @@ public class Lua_UnityEngine_Vector3Int : LuaObject {
 			checkType(l,4,out a3);
 			self.Set(a1,a2,a3);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -68,7 +68,7 @@ public class Lua_UnityEngine_Vector3Int : LuaObject {
 			checkValueType(l,2,out a1);
 			self.Scale(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -87,7 +87,7 @@ public class Lua_UnityEngine_Vector3Int : LuaObject {
 			checkValueType(l,3,out a2);
 			self.Clamp(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -428,7 +428,7 @@ public class Lua_UnityEngine_Vector3Int : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.x=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -459,7 +459,7 @@ public class Lua_UnityEngine_Vector3Int : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.y=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -490,7 +490,7 @@ public class Lua_UnityEngine_Vector3Int : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.z=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

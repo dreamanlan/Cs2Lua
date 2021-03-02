@@ -40,7 +40,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.enabled=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			UnityEngine.ParticleSystemShapeType v;
 			checkEnum(l,2,out v);
 			self.shapeType=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -102,7 +102,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.randomDirectionAmount=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -133,7 +133,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.sphericalDirectionAmount=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -164,7 +164,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.randomPositionAmount=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -195,7 +195,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.alignToDirection=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -226,7 +226,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.radius=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -257,7 +257,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			UnityEngine.ParticleSystemShapeMultiModeValue v;
 			checkEnum(l,2,out v);
 			self.radiusMode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -288,7 +288,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.radiusSpread=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -319,7 +319,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.radiusSpeed=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -350,7 +350,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.radiusSpeedMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -381,7 +381,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.radiusThickness=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -412,7 +412,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.angle=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -443,7 +443,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.length=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -474,7 +474,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.boxThickness=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -505,7 +505,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			UnityEngine.ParticleSystemMeshShapeType v;
 			checkEnum(l,2,out v);
 			self.meshShapeType=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -536,7 +536,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			UnityEngine.Mesh v;
 			checkType(l,2,out v);
 			self.mesh=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -567,7 +567,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			UnityEngine.MeshRenderer v;
 			checkType(l,2,out v);
 			self.meshRenderer=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -598,7 +598,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			UnityEngine.SkinnedMeshRenderer v;
 			checkType(l,2,out v);
 			self.skinnedMeshRenderer=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -629,7 +629,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			UnityEngine.Sprite v;
 			checkType(l,2,out v);
 			self.sprite=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -660,7 +660,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			UnityEngine.SpriteRenderer v;
 			checkType(l,2,out v);
 			self.spriteRenderer=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -691,7 +691,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.useMeshMaterialIndex=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -722,7 +722,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.meshMaterialIndex=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -753,7 +753,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.useMeshColors=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -784,7 +784,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.normalOffset=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -815,7 +815,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			UnityEngine.ParticleSystemShapeMultiModeValue v;
 			checkEnum(l,2,out v);
 			self.meshSpawnMode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -846,7 +846,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.meshSpawnSpread=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -877,7 +877,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.meshSpawnSpeed=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -908,7 +908,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.meshSpawnSpeedMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -939,7 +939,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.arc=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -970,7 +970,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			UnityEngine.ParticleSystemShapeMultiModeValue v;
 			checkEnum(l,2,out v);
 			self.arcMode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1001,7 +1001,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.arcSpread=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1032,7 +1032,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.arcSpeed=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1063,7 +1063,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.arcSpeedMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1094,7 +1094,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.donutRadius=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1125,7 +1125,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.position=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1156,7 +1156,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.rotation=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1187,7 +1187,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.scale=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1218,7 +1218,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			UnityEngine.Texture2D v;
 			checkType(l,2,out v);
 			self.texture=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1249,7 +1249,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			UnityEngine.ParticleSystemShapeTextureChannel v;
 			checkEnum(l,2,out v);
 			self.textureClipChannel=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1280,7 +1280,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.textureClipThreshold=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1311,7 +1311,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.textureColorAffectsParticles=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1342,7 +1342,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.textureAlphaAffectsParticles=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1373,7 +1373,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.textureBilinearFiltering=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1404,7 +1404,7 @@ public class Lua_UnityEngine_ParticleSystem_ShapeModule : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.textureUVChannel=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

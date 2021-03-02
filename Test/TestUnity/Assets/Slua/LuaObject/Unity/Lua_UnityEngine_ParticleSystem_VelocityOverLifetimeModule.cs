@@ -40,7 +40,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			bool v;
 			checkType(l,2,out v);
 			self.enabled=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.x=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -102,7 +102,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.y=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -133,7 +133,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.z=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -164,7 +164,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			float v;
 			checkType(l,2,out v);
 			self.xMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -195,7 +195,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			float v;
 			checkType(l,2,out v);
 			self.yMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -226,7 +226,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			float v;
 			checkType(l,2,out v);
 			self.zMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -257,7 +257,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.orbitalX=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -288,7 +288,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.orbitalY=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -319,7 +319,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.orbitalZ=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -350,7 +350,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			float v;
 			checkType(l,2,out v);
 			self.orbitalXMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -381,7 +381,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			float v;
 			checkType(l,2,out v);
 			self.orbitalYMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -412,7 +412,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			float v;
 			checkType(l,2,out v);
 			self.orbitalZMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -443,7 +443,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.orbitalOffsetX=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -474,7 +474,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.orbitalOffsetY=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -505,7 +505,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.orbitalOffsetZ=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -536,7 +536,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			float v;
 			checkType(l,2,out v);
 			self.orbitalOffsetXMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -567,7 +567,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			float v;
 			checkType(l,2,out v);
 			self.orbitalOffsetYMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -598,7 +598,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			float v;
 			checkType(l,2,out v);
 			self.orbitalOffsetZMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -629,7 +629,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.radial=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -660,7 +660,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			float v;
 			checkType(l,2,out v);
 			self.radialMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -691,7 +691,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.speedModifier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -722,7 +722,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			float v;
 			checkType(l,2,out v);
 			self.speedModifierMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -753,7 +753,7 @@ public class Lua_UnityEngine_ParticleSystem_VelocityOverLifetimeModule : LuaObje
 			UnityEngine.ParticleSystemSimulationSpace v;
 			checkEnum(l,2,out v);
 			self.space=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

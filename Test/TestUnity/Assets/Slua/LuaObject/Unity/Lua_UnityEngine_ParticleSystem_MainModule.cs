@@ -40,7 +40,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.duration=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.loop=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -102,7 +102,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.prewarm=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -133,7 +133,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.startDelay=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -164,7 +164,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.startDelayMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -195,7 +195,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.startLifetime=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -226,7 +226,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.startLifetimeMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -257,7 +257,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.startSpeed=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -288,7 +288,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.startSpeedMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -319,7 +319,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.startSize3D=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -350,7 +350,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.startSize=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -381,7 +381,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.startSizeMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -412,7 +412,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.startSizeX=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -443,7 +443,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.startSizeXMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -474,7 +474,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.startSizeY=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -505,7 +505,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.startSizeYMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -536,7 +536,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.startSizeZ=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -567,7 +567,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.startSizeZMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -598,7 +598,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.startRotation3D=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -629,7 +629,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.startRotation=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -660,7 +660,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.startRotationMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -691,7 +691,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.startRotationX=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -722,7 +722,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.startRotationXMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -753,7 +753,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.startRotationY=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -784,7 +784,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.startRotationYMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -815,7 +815,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.startRotationZ=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -846,7 +846,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.startRotationZMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -877,7 +877,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.flipRotation=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -908,7 +908,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxGradient v;
 			checkValueType(l,2,out v);
 			self.startColor=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -939,7 +939,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.gravityModifier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -970,7 +970,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.gravityModifierMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1001,7 +1001,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			UnityEngine.ParticleSystemSimulationSpace v;
 			checkEnum(l,2,out v);
 			self.simulationSpace=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1032,7 +1032,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			UnityEngine.Transform v;
 			checkType(l,2,out v);
 			self.customSimulationSpace=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1063,7 +1063,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.simulationSpeed=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1094,7 +1094,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.useUnscaledTime=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1125,7 +1125,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			UnityEngine.ParticleSystemScalingMode v;
 			checkEnum(l,2,out v);
 			self.scalingMode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1156,7 +1156,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.playOnAwake=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1187,7 +1187,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.maxParticles=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1218,7 +1218,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			UnityEngine.ParticleSystemEmitterVelocityMode v;
 			checkEnum(l,2,out v);
 			self.emitterVelocityMode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1249,7 +1249,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			UnityEngine.ParticleSystemStopAction v;
 			checkEnum(l,2,out v);
 			self.stopAction=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1280,7 +1280,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			UnityEngine.ParticleSystemCullingMode v;
 			checkEnum(l,2,out v);
 			self.cullingMode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1311,7 +1311,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			UnityEngine.ParticleSystemRingBufferMode v;
 			checkEnum(l,2,out v);
 			self.ringBufferMode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1342,7 +1342,7 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			UnityEngine.Vector2 v;
 			checkType(l,2,out v);
 			self.ringBufferLoopRange=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

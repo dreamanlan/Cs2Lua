@@ -91,7 +91,7 @@ public class Lua_UnityEngine_Audio_AudioClipPlayable : LuaObject {
 			checkType(l,2,out a1);
 			self.SetClip(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -123,7 +123,7 @@ public class Lua_UnityEngine_Audio_AudioClipPlayable : LuaObject {
 			checkType(l,2,out a1);
 			self.SetLooped(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -187,7 +187,7 @@ public class Lua_UnityEngine_Audio_AudioClipPlayable : LuaObject {
 			checkType(l,3,out a2);
 			self.Seek(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -208,7 +208,7 @@ public class Lua_UnityEngine_Audio_AudioClipPlayable : LuaObject {
 			checkType(l,4,out a3);
 			self.Seek(a1,a2,a3);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {

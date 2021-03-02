@@ -85,7 +85,7 @@ public class Lua_UnityEngine_Plane : LuaObject {
 			checkType(l,3,out a2);
 			self.SetNormalAndPosition(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -106,7 +106,7 @@ public class Lua_UnityEngine_Plane : LuaObject {
 			checkType(l,4,out a3);
 			self.Set3Points(a1,a2,a3);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -121,7 +121,7 @@ public class Lua_UnityEngine_Plane : LuaObject {
 			checkValueType(l,1,out self);
 			self.Flip();
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -138,7 +138,7 @@ public class Lua_UnityEngine_Plane : LuaObject {
 			checkType(l,2,out a1);
 			self.Translate(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -306,7 +306,7 @@ public class Lua_UnityEngine_Plane : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.normal=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -337,7 +337,7 @@ public class Lua_UnityEngine_Plane : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.distance=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

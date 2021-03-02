@@ -19,6 +19,459 @@ public class Lua_Utility : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int GetType_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=Utility.GetType(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AppendFormat_s(IntPtr l) {
+		try {
+			System.Text.StringBuilder a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.Object[] a3;
+			checkParams(l,3,out a3);
+			Utility.AppendFormat(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Debug_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Object[] a2;
+			checkParams(l,2,out a2);
+			Utility.Debug(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Warn_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Object[] a2;
+			checkParams(l,2,out a2);
+			Utility.Warn(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Error_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Object[] a2;
+			checkParams(l,2,out a2);
+			Utility.Error(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int StringGetChar_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			var ret=Utility.StringGetChar(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CharToString_s(IntPtr l) {
+		try {
+			System.Char a1;
+			checkType(l,1,out a1);
+			var ret=Utility.CharToString(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CharArrayToString_s(IntPtr l) {
+		try {
+			System.Int32[] a1;
+			checkArray(l,1,out a1);
+			var ret=Utility.CharArrayToString(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ByteArrayToHex_s(IntPtr l) {
+		try {
+			System.Byte[] a1;
+			checkArray(l,1,out a1);
+			var ret=Utility.ByteArrayToHex(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int TryParseEnum_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			var ret=Utility.TryParseEnum(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int LuaFormat_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.Object[] a2;
+			checkParams(l,2,out a2);
+			var ret=Utility.LuaFormat(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SingleToString_s(IntPtr l) {
+		try {
+			System.Single a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			var ret=Utility.SingleToString(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int DoubleToString_s(IntPtr l) {
+		try {
+			System.Double a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			var ret=Utility.DoubleToString(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int IntToString_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			var ret=Utility.IntToString(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int UintToString_s(IntPtr l) {
+		try {
+			System.UInt32 a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			var ret=Utility.UintToString(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetCapsuleColliderCenter_s(IntPtr l) {
+		try {
+			UnityEngine.CapsuleCollider a1;
+			checkType(l,1,out a1);
+			System.Single a2;
+			System.Single a3;
+			System.Single a4;
+			var ret=Utility.GetCapsuleColliderCenter(a1,out a2,out a3,out a4);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a2);
+			pushValue(l,a3);
+			pushValue(l,a4);
+			return 5;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ViewportPointToRayV3_s(IntPtr l) {
+		try {
+			UnityEngine.Camera a1;
+			checkType(l,1,out a1);
+			UnityEngine.Vector3 a2;
+			checkType(l,2,out a2);
+			System.Single a3;
+			System.Single a4;
+			System.Single a5;
+			System.Single a6;
+			System.Single a7;
+			System.Single a8;
+			var ret=Utility.ViewportPointToRayV3(a1,a2,out a3,out a4,out a5,out a6,out a7,out a8);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a3);
+			pushValue(l,a4);
+			pushValue(l,a5);
+			pushValue(l,a6);
+			pushValue(l,a7);
+			pushValue(l,a8);
+			return 8;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ViewportPointToRayV3Eye_s(IntPtr l) {
+		try {
+			UnityEngine.Camera a1;
+			checkType(l,1,out a1);
+			UnityEngine.Vector3 a2;
+			checkType(l,2,out a2);
+			UnityEngine.Camera.MonoOrStereoscopicEye a3;
+			checkEnum(l,3,out a3);
+			System.Single a4;
+			System.Single a5;
+			System.Single a6;
+			System.Single a7;
+			System.Single a8;
+			System.Single a9;
+			var ret=Utility.ViewportPointToRayV3Eye(a1,a2,a3,out a4,out a5,out a6,out a7,out a8,out a9);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a4);
+			pushValue(l,a5);
+			pushValue(l,a6);
+			pushValue(l,a7);
+			pushValue(l,a8);
+			pushValue(l,a9);
+			return 8;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ViewportPointToRayV2Eye_s(IntPtr l) {
+		try {
+			UnityEngine.Camera a1;
+			checkType(l,1,out a1);
+			UnityEngine.Vector2 a2;
+			checkType(l,2,out a2);
+			UnityEngine.Camera.MonoOrStereoscopicEye a3;
+			checkEnum(l,3,out a3);
+			System.Single a4;
+			System.Single a5;
+			System.Single a6;
+			System.Single a7;
+			System.Single a8;
+			System.Single a9;
+			var ret=Utility.ViewportPointToRayV2Eye(a1,a2,a3,out a4,out a5,out a6,out a7,out a8,out a9);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a4);
+			pushValue(l,a5);
+			pushValue(l,a6);
+			pushValue(l,a7);
+			pushValue(l,a8);
+			pushValue(l,a9);
+			return 8;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int WorldToScreenPointV3_s(IntPtr l) {
+		try {
+			UnityEngine.Camera a1;
+			checkType(l,1,out a1);
+			UnityEngine.Vector3 a2;
+			checkType(l,2,out a2);
+			System.Single a3;
+			System.Single a4;
+			System.Single a5;
+			var ret=Utility.WorldToScreenPointV3(a1,a2,out a3,out a4,out a5);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a3);
+			pushValue(l,a4);
+			pushValue(l,a5);
+			return 5;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int WorldToScreenPointV3Eye_s(IntPtr l) {
+		try {
+			UnityEngine.Camera a1;
+			checkType(l,1,out a1);
+			UnityEngine.Vector3 a2;
+			checkType(l,2,out a2);
+			UnityEngine.Camera.MonoOrStereoscopicEye a3;
+			checkEnum(l,3,out a3);
+			System.Single a4;
+			System.Single a5;
+			System.Single a6;
+			var ret=Utility.WorldToScreenPointV3Eye(a1,a2,a3,out a4,out a5,out a6);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a4);
+			pushValue(l,a5);
+			pushValue(l,a6);
+			return 5;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int WorldToViewportPointV3_s(IntPtr l) {
+		try {
+			UnityEngine.Camera a1;
+			checkType(l,1,out a1);
+			UnityEngine.Vector3 a2;
+			checkType(l,2,out a2);
+			System.Single a3;
+			System.Single a4;
+			System.Single a5;
+			var ret=Utility.WorldToViewportPointV3(a1,a2,out a3,out a4,out a5);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a3);
+			pushValue(l,a4);
+			pushValue(l,a5);
+			return 5;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int WorldToViewportPointV3Eye_s(IntPtr l) {
+		try {
+			UnityEngine.Camera a1;
+			checkType(l,1,out a1);
+			UnityEngine.Vector3 a2;
+			checkType(l,2,out a2);
+			UnityEngine.Camera.MonoOrStereoscopicEye a3;
+			checkEnum(l,3,out a3);
+			System.Single a4;
+			System.Single a5;
+			System.Single a6;
+			var ret=Utility.WorldToViewportPointV3Eye(a1,a2,a3,out a4,out a5,out a6);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a4);
+			pushValue(l,a5);
+			pushValue(l,a6);
+			return 5;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int QuaternionFromAngleAxis_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -819,140 +1272,33 @@ public class Lua_Utility : LuaObject {
 			return error(l,e);
 		}
 	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int LuaFormat_s(IntPtr l) {
-		try {
-			System.String a1;
-			checkType(l,1,out a1);
-			System.Object[] a2;
-			checkParams(l,2,out a2);
-			var ret=Utility.LuaFormat(a1,a2);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int AppendFormat_s(IntPtr l) {
-		try {
-			System.Text.StringBuilder a1;
-			checkType(l,1,out a1);
-			System.String a2;
-			checkType(l,2,out a2);
-			System.Object[] a3;
-			checkParams(l,3,out a3);
-			Utility.AppendFormat(a1,a2,a3);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int StringGetChar_s(IntPtr l) {
-		try {
-			System.String a1;
-			checkType(l,1,out a1);
-			System.Int32 a2;
-			checkType(l,2,out a2);
-			var ret=Utility.StringGetChar(a1,a2);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int CharToString_s(IntPtr l) {
-		try {
-			System.Char a1;
-			checkType(l,1,out a1);
-			var ret=Utility.CharToString(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int CharArrayToString_s(IntPtr l) {
-		try {
-			System.Char[] a1;
-			checkArray(l,1,out a1);
-			var ret=Utility.CharArrayToString(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Debug_s(IntPtr l) {
-		try {
-			System.String a1;
-			checkType(l,1,out a1);
-			System.Object[] a2;
-			checkParams(l,2,out a2);
-			Utility.Debug(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Warn_s(IntPtr l) {
-		try {
-			System.String a1;
-			checkType(l,1,out a1);
-			System.Object[] a2;
-			checkParams(l,2,out a2);
-			Utility.Warn(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Error_s(IntPtr l) {
-		try {
-			System.String a1;
-			checkType(l,1,out a1);
-			System.Object[] a2;
-			checkParams(l,2,out a2);
-			Utility.Error(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"Utility");
 		addMember(l,ctor_s);
+		addMember(l,GetType_s);
+		addMember(l,AppendFormat_s);
+		addMember(l,Debug_s);
+		addMember(l,Warn_s);
+		addMember(l,Error_s);
+		addMember(l,StringGetChar_s);
+		addMember(l,CharToString_s);
+		addMember(l,CharArrayToString_s);
+		addMember(l,ByteArrayToHex_s);
+		addMember(l,TryParseEnum_s);
+		addMember(l,LuaFormat_s);
+		addMember(l,SingleToString_s);
+		addMember(l,DoubleToString_s);
+		addMember(l,IntToString_s);
+		addMember(l,UintToString_s);
+		addMember(l,GetCapsuleColliderCenter_s);
+		addMember(l,ViewportPointToRayV3_s);
+		addMember(l,ViewportPointToRayV3Eye_s);
+		addMember(l,ViewportPointToRayV2Eye_s);
+		addMember(l,WorldToScreenPointV3_s);
+		addMember(l,WorldToScreenPointV3Eye_s);
+		addMember(l,WorldToViewportPointV3_s);
+		addMember(l,WorldToViewportPointV3Eye_s);
 		addMember(l,QuaternionFromAngleAxis_s);
 		addMember(l,QuaternionFromLookRotation_s);
 		addMember(l,QuaternionRotateTowards_s);
@@ -987,14 +1333,6 @@ public class Lua_Utility : LuaObject {
 		addMember(l,InverseTransformPointXYZ_s);
 		addMember(l,InverseTransformVectorV3_s);
 		addMember(l,InverseTransformVectorXYZ_s);
-		addMember(l,LuaFormat_s);
-		addMember(l,AppendFormat_s);
-		addMember(l,StringGetChar_s);
-		addMember(l,CharToString_s);
-		addMember(l,CharArrayToString_s);
-		addMember(l,Debug_s);
-		addMember(l,Warn_s);
-		addMember(l,Error_s);
 		createTypeMetatable(l,null, typeof(Utility));
 	}
 }

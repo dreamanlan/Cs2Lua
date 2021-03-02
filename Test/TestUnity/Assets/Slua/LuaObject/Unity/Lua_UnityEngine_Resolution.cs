@@ -55,7 +55,7 @@ public class Lua_UnityEngine_Resolution : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.width=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -86,7 +86,7 @@ public class Lua_UnityEngine_Resolution : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.height=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -117,7 +117,7 @@ public class Lua_UnityEngine_Resolution : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.refreshRate=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

@@ -40,7 +40,7 @@ public class Lua_UnityEngine_Touch : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.fingerId=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_Touch : LuaObject {
 			UnityEngine.Vector2 v;
 			checkType(l,2,out v);
 			self.position=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -102,7 +102,7 @@ public class Lua_UnityEngine_Touch : LuaObject {
 			UnityEngine.Vector2 v;
 			checkType(l,2,out v);
 			self.rawPosition=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -133,7 +133,7 @@ public class Lua_UnityEngine_Touch : LuaObject {
 			UnityEngine.Vector2 v;
 			checkType(l,2,out v);
 			self.deltaPosition=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -164,7 +164,7 @@ public class Lua_UnityEngine_Touch : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.deltaTime=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -195,7 +195,7 @@ public class Lua_UnityEngine_Touch : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.tapCount=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -226,7 +226,7 @@ public class Lua_UnityEngine_Touch : LuaObject {
 			UnityEngine.TouchPhase v;
 			checkEnum(l,2,out v);
 			self.phase=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -257,7 +257,7 @@ public class Lua_UnityEngine_Touch : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.pressure=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -288,7 +288,7 @@ public class Lua_UnityEngine_Touch : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.maximumPossiblePressure=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -319,7 +319,7 @@ public class Lua_UnityEngine_Touch : LuaObject {
 			UnityEngine.TouchType v;
 			checkEnum(l,2,out v);
 			self.type=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -350,7 +350,7 @@ public class Lua_UnityEngine_Touch : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.altitudeAngle=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -381,7 +381,7 @@ public class Lua_UnityEngine_Touch : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.azimuthAngle=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -412,7 +412,7 @@ public class Lua_UnityEngine_Touch : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.radius=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -443,7 +443,7 @@ public class Lua_UnityEngine_Touch : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.radiusVariance=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

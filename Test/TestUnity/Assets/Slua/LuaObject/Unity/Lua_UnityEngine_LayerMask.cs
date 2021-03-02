@@ -115,7 +115,7 @@ public class Lua_UnityEngine_LayerMask : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.value=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

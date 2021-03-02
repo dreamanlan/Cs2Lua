@@ -40,7 +40,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.enabled=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 			UnityEngine.ParticleSystemTrailMode v;
 			checkEnum(l,2,out v);
 			self.mode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -102,7 +102,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.ratio=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -133,7 +133,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.lifetime=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -164,7 +164,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.lifetimeMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -195,7 +195,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.minVertexDistance=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -226,7 +226,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 			UnityEngine.ParticleSystemTrailTextureMode v;
 			checkEnum(l,2,out v);
 			self.textureMode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -257,7 +257,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.worldSpace=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -288,7 +288,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.dieWithParticles=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -319,7 +319,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.sizeAffectsWidth=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -350,7 +350,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.sizeAffectsLifetime=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -381,7 +381,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.inheritParticleColor=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -412,7 +412,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxGradient v;
 			checkValueType(l,2,out v);
 			self.colorOverLifetime=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -443,7 +443,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.widthOverTrail=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -474,7 +474,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.widthOverTrailMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -505,7 +505,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxGradient v;
 			checkValueType(l,2,out v);
 			self.colorOverTrail=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -536,7 +536,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.generateLightingData=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -567,7 +567,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.ribbonCount=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -598,7 +598,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.shadowBias=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -629,7 +629,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.splitSubEmitterRibbons=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -660,7 +660,7 @@ public class Lua_UnityEngine_ParticleSystem_TrailModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.attachRibbonsToTransform=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

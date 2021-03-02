@@ -163,7 +163,7 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxCurve : LuaObject {
 			UnityEngine.ParticleSystemCurveMode v;
 			checkEnum(l,2,out v);
 			self.mode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -194,7 +194,7 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxCurve : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.curveMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -225,7 +225,7 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxCurve : LuaObject {
 			UnityEngine.AnimationCurve v;
 			checkType(l,2,out v);
 			self.curveMax=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -256,7 +256,7 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxCurve : LuaObject {
 			UnityEngine.AnimationCurve v;
 			checkType(l,2,out v);
 			self.curveMin=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -287,7 +287,7 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxCurve : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.constantMax=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -318,7 +318,7 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxCurve : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.constantMin=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -349,7 +349,7 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxCurve : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.constant=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -380,7 +380,7 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxCurve : LuaObject {
 			UnityEngine.AnimationCurve v;
 			checkType(l,2,out v);
 			self.curve=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

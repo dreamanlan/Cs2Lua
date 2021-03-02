@@ -40,7 +40,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.enabled=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.separateAxes=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -102,7 +102,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.strength=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -133,7 +133,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.strengthMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -164,7 +164,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.strengthX=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -195,7 +195,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.strengthXMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -226,7 +226,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.strengthY=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -257,7 +257,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.strengthYMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -288,7 +288,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.strengthZ=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -319,7 +319,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.strengthZMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -350,7 +350,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.frequency=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -381,7 +381,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.damping=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -412,7 +412,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.octaveCount=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -443,7 +443,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.octaveMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -474,7 +474,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.octaveScale=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -505,7 +505,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			UnityEngine.ParticleSystemNoiseQuality v;
 			checkEnum(l,2,out v);
 			self.quality=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -536,7 +536,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.scrollSpeed=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -567,7 +567,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.scrollSpeedMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -598,7 +598,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.remapEnabled=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -629,7 +629,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.remap=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -660,7 +660,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.remapMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -691,7 +691,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.remapX=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -722,7 +722,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.remapXMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -753,7 +753,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.remapY=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -784,7 +784,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.remapYMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -815,7 +815,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.remapZ=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -846,7 +846,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.remapZMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -877,7 +877,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.positionAmount=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -908,7 +908,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.rotationAmount=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -939,7 +939,7 @@ public class Lua_UnityEngine_ParticleSystem_NoiseModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.sizeAmount=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

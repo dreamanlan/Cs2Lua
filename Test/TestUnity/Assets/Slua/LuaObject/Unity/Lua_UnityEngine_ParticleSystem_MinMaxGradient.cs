@@ -174,7 +174,7 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxGradient : LuaObject {
 			UnityEngine.ParticleSystemGradientMode v;
 			checkEnum(l,2,out v);
 			self.mode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -205,7 +205,7 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxGradient : LuaObject {
 			UnityEngine.Gradient v;
 			checkType(l,2,out v);
 			self.gradientMax=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -236,7 +236,7 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxGradient : LuaObject {
 			UnityEngine.Gradient v;
 			checkType(l,2,out v);
 			self.gradientMin=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -267,7 +267,7 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxGradient : LuaObject {
 			UnityEngine.Color v;
 			checkType(l,2,out v);
 			self.colorMax=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -298,7 +298,7 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxGradient : LuaObject {
 			UnityEngine.Color v;
 			checkType(l,2,out v);
 			self.colorMin=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -329,7 +329,7 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxGradient : LuaObject {
 			UnityEngine.Color v;
 			checkType(l,2,out v);
 			self.color=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -360,7 +360,7 @@ public class Lua_UnityEngine_ParticleSystem_MinMaxGradient : LuaObject {
 			UnityEngine.Gradient v;
 			checkType(l,2,out v);
 			self.gradient=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

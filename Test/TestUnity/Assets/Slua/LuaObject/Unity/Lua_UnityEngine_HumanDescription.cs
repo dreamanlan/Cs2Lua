@@ -40,7 +40,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 			UnityEngine.HumanBone[] v;
 			checkArray(l,2,out v);
 			self.human=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 			UnityEngine.SkeletonBone[] v;
 			checkArray(l,2,out v);
 			self.skeleton=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -102,7 +102,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.upperArmTwist=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -133,7 +133,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.lowerArmTwist=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -164,7 +164,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.upperLegTwist=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -195,7 +195,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.lowerLegTwist=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -226,7 +226,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.armStretch=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -257,7 +257,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.legStretch=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -288,7 +288,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.feetSpacing=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -319,7 +319,7 @@ public class Lua_UnityEngine_HumanDescription : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.hasTranslationDoF=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

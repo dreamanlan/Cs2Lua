@@ -393,12 +393,21 @@ return Class
             }
         }
 
-        static LuaOut luaOut = new LuaOut();
+        internal static LuaOut luaOut = new LuaOut();
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static public int get_out(IntPtr l)
         {
             pushValue(l, true);
             pushLightObject(l, luaOut);
+            return 2;
+        }
+
+        internal static LuaYieldBreak luaYieldBreak = new LuaYieldBreak();
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static public int get_yieldbreak(IntPtr l)
+        {
+            pushValue(l, true);
+            pushLightObject(l, luaYieldBreak);
             return 2;
         }
 
@@ -423,6 +432,7 @@ return Class
             addMember(l, MakeArray, false);
             addMember(l, ToBytes, false);
             addMember(l, "out", get_out, null, false);
+            addMember(l, "yieldbreak", get_yieldbreak, null, false);
             addMember(l, "version", get_version, null, false);
 
             LuaFunction func = LuaState.get(l).doString(classfunc) as LuaFunction;

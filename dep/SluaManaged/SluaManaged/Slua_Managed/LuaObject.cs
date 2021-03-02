@@ -84,6 +84,7 @@ namespace SLua
     }
 
     public class LuaOut { }
+    public class LuaYieldBreak { }
 
     public partial class LuaObject
     {

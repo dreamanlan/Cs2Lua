@@ -106,7 +106,7 @@ public class Lua_UnityEngine_PhysicsScene : LuaObject {
 			checkType(l,2,out a1);
 			self.Simulate(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {

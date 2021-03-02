@@ -162,7 +162,7 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 			System.Byte v;
 			checkType(l,2,out v);
 			self.r=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -193,7 +193,7 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 			System.Byte v;
 			checkType(l,2,out v);
 			self.g=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -224,7 +224,7 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 			System.Byte v;
 			checkType(l,2,out v);
 			self.b=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -255,7 +255,7 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 			System.Byte v;
 			checkType(l,2,out v);
 			self.a=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

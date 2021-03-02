@@ -56,7 +56,7 @@ public class Lua_UnityEngine_SceneManagement_CreateSceneParameters : LuaObject {
 			UnityEngine.SceneManagement.LocalPhysicsMode v;
 			checkEnum(l,2,out v);
 			self.localPhysicsMode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

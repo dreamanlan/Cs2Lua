@@ -106,7 +106,7 @@ public class Lua_UnityEngine_Animations_AnimationClipPlayable : LuaObject {
 			checkType(l,2,out a1);
 			self.SetApplyFootIK(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -138,7 +138,7 @@ public class Lua_UnityEngine_Animations_AnimationClipPlayable : LuaObject {
 			checkType(l,2,out a1);
 			self.SetApplyPlayableIK(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {

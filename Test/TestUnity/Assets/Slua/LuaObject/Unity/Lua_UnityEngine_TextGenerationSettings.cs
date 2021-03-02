@@ -74,7 +74,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 			UnityEngine.Font v;
 			checkType(l,2,out v);
 			self.font=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -105,7 +105,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 			UnityEngine.Color v;
 			checkType(l,2,out v);
 			self.color=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -136,7 +136,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 			System.Int32 v;
 			checkType(l,2,out v);
 			self.fontSize=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -167,7 +167,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.lineSpacing=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -198,7 +198,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 			System.Boolean v;
 			checkType(l,2,out v);
 			self.richText=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -229,7 +229,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.scaleFactor=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -260,7 +260,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 			UnityEngine.FontStyle v;
 			checkEnum(l,2,out v);
 			self.fontStyle=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -291,7 +291,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 			UnityEngine.TextAnchor v;
 			checkEnum(l,2,out v);
 			self.textAnchor=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -322,7 +322,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 			System.Boolean v;
 			checkType(l,2,out v);
 			self.alignByGeometry=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -353,7 +353,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 			System.Boolean v;
 			checkType(l,2,out v);
 			self.resizeTextForBestFit=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -384,7 +384,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 			System.Int32 v;
 			checkType(l,2,out v);
 			self.resizeTextMinSize=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -415,7 +415,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 			System.Int32 v;
 			checkType(l,2,out v);
 			self.resizeTextMaxSize=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -446,7 +446,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 			System.Boolean v;
 			checkType(l,2,out v);
 			self.updateBounds=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -477,7 +477,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 			UnityEngine.VerticalWrapMode v;
 			checkEnum(l,2,out v);
 			self.verticalOverflow=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -508,7 +508,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 			UnityEngine.HorizontalWrapMode v;
 			checkEnum(l,2,out v);
 			self.horizontalOverflow=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -539,7 +539,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 			UnityEngine.Vector2 v;
 			checkType(l,2,out v);
 			self.generationExtents=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -570,7 +570,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 			UnityEngine.Vector2 v;
 			checkType(l,2,out v);
 			self.pivot=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -601,7 +601,7 @@ public class Lua_UnityEngine_TextGenerationSettings : LuaObject {
 			System.Boolean v;
 			checkType(l,2,out v);
 			self.generateOutOfBounds=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

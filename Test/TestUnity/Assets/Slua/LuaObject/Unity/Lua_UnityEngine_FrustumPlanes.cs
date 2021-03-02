@@ -40,7 +40,7 @@ public class Lua_UnityEngine_FrustumPlanes : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.left=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_FrustumPlanes : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.right=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -102,7 +102,7 @@ public class Lua_UnityEngine_FrustumPlanes : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.bottom=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -133,7 +133,7 @@ public class Lua_UnityEngine_FrustumPlanes : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.top=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -164,7 +164,7 @@ public class Lua_UnityEngine_FrustumPlanes : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.zNear=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -195,7 +195,7 @@ public class Lua_UnityEngine_FrustumPlanes : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.zFar=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

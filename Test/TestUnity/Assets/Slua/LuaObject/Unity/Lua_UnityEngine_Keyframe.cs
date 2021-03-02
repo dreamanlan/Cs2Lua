@@ -106,7 +106,7 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.time=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -137,7 +137,7 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.value=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -168,7 +168,7 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.inTangent=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -199,7 +199,7 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.outTangent=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -230,7 +230,7 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.inWeight=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -261,7 +261,7 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.outWeight=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -292,7 +292,7 @@ public class Lua_UnityEngine_Keyframe : LuaObject {
 			UnityEngine.WeightedMode v;
 			checkEnum(l,2,out v);
 			self.weightedMode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

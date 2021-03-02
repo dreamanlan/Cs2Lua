@@ -40,7 +40,7 @@ public class Lua_UnityEngine_FrameTiming : LuaObject {
 			System.UInt64 v;
 			checkType(l,2,out v);
 			self.cpuTimePresentCalled=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_FrameTiming : LuaObject {
 			System.Double v;
 			checkType(l,2,out v);
 			self.cpuFrameTime=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -102,7 +102,7 @@ public class Lua_UnityEngine_FrameTiming : LuaObject {
 			System.UInt64 v;
 			checkType(l,2,out v);
 			self.cpuTimeFrameComplete=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -133,7 +133,7 @@ public class Lua_UnityEngine_FrameTiming : LuaObject {
 			System.Double v;
 			checkType(l,2,out v);
 			self.gpuFrameTime=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -164,7 +164,7 @@ public class Lua_UnityEngine_FrameTiming : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.heightScale=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -195,7 +195,7 @@ public class Lua_UnityEngine_FrameTiming : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.widthScale=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -226,7 +226,7 @@ public class Lua_UnityEngine_FrameTiming : LuaObject {
 			System.UInt32 v;
 			checkType(l,2,out v);
 			self.syncInterval=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

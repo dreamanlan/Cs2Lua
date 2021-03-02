@@ -40,7 +40,7 @@ public class Lua_UnityEngine_UILineInfo : LuaObject {
 			System.Int32 v;
 			checkType(l,2,out v);
 			self.startCharIdx=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_UILineInfo : LuaObject {
 			System.Int32 v;
 			checkType(l,2,out v);
 			self.height=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -102,7 +102,7 @@ public class Lua_UnityEngine_UILineInfo : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.topY=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -133,7 +133,7 @@ public class Lua_UnityEngine_UILineInfo : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.leading=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

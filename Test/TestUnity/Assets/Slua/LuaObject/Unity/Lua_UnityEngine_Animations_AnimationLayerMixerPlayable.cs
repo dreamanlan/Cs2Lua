@@ -95,7 +95,7 @@ public class Lua_UnityEngine_Animations_AnimationLayerMixerPlayable : LuaObject 
 			checkType(l,3,out a2);
 			self.SetLayerAdditive(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -114,7 +114,7 @@ public class Lua_UnityEngine_Animations_AnimationLayerMixerPlayable : LuaObject 
 			checkType(l,3,out a2);
 			self.SetLayerMaskFromAvatarMask(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {

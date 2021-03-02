@@ -25,7 +25,7 @@ public class Lua_Unity_Profiling_ProfilerMarker_AutoScope : LuaObject {
 			checkValueType(l,1,out self);
 			self.Dispose();
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {

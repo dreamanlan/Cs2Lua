@@ -31,7 +31,7 @@ public class Lua_UnityEngine_DrivenRectTransformTracker : LuaObject {
 			checkEnum(l,4,out a3);
 			self.Add(a1,a2,a3);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -46,7 +46,7 @@ public class Lua_UnityEngine_DrivenRectTransformTracker : LuaObject {
 			checkValueType(l,1,out self);
 			self.Clear();
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {

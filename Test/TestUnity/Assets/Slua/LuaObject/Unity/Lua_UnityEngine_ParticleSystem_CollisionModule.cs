@@ -29,7 +29,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			checkType(l,3,out a2);
 			self.SetPlane(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -76,7 +76,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.enabled=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -107,7 +107,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			UnityEngine.ParticleSystemCollisionType v;
 			checkEnum(l,2,out v);
 			self.type=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -138,7 +138,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			UnityEngine.ParticleSystemCollisionMode v;
 			checkEnum(l,2,out v);
 			self.mode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -169,7 +169,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.dampen=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -200,7 +200,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.dampenMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -231,7 +231,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.bounce=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -262,7 +262,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.bounceMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -293,7 +293,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.lifetimeLoss=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -324,7 +324,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.lifetimeLossMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -355,7 +355,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.minKillSpeed=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -386,7 +386,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.maxKillSpeed=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -417,7 +417,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			UnityEngine.LayerMask v;
 			checkValueType(l,2,out v);
 			self.collidesWith=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -448,7 +448,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.enableDynamicColliders=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -479,7 +479,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.maxCollisionShapes=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -510,7 +510,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			UnityEngine.ParticleSystemCollisionQuality v;
 			checkEnum(l,2,out v);
 			self.quality=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -541,7 +541,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.voxelSize=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -572,7 +572,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.radiusScale=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -603,7 +603,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.sendCollisionMessages=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -634,7 +634,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.colliderForce=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -665,7 +665,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.multiplyColliderForceByCollisionAngle=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -696,7 +696,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.multiplyColliderForceByParticleSpeed=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -727,7 +727,7 @@ public class Lua_UnityEngine_ParticleSystem_CollisionModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.multiplyColliderForceByParticleSize=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

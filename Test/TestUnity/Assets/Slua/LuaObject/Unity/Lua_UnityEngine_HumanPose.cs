@@ -40,7 +40,7 @@ public class Lua_UnityEngine_HumanPose : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.bodyPosition=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_HumanPose : LuaObject {
 			UnityEngine.Quaternion v;
 			checkType(l,2,out v);
 			self.bodyRotation=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -102,7 +102,7 @@ public class Lua_UnityEngine_HumanPose : LuaObject {
 			System.Single[] v;
 			checkArray(l,2,out v);
 			self.muscles=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

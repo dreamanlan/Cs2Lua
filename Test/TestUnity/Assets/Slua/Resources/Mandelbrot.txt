@@ -127,11 +127,11 @@ Mandelbrot = {
 	-------------------------------
 	------ instance fields -------
 	-------------------------------
-	__obj_field_values = {
-		r = 10,
-		scale = 3.00000000,
-		__ctor_called = false,
-	},
+	__init_obj_fields = function(this)
+		rawset(this, "r", 10);
+		rawset(this, "scale", 3.00000000);
+		rawset(this, "__ctor_called", false);
+	end,
 
 	-------------------------------
 	--- define class and object ---

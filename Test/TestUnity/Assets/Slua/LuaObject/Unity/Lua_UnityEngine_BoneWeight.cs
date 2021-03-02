@@ -108,7 +108,7 @@ public class Lua_UnityEngine_BoneWeight : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.weight0=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -139,7 +139,7 @@ public class Lua_UnityEngine_BoneWeight : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.weight1=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -170,7 +170,7 @@ public class Lua_UnityEngine_BoneWeight : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.weight2=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -201,7 +201,7 @@ public class Lua_UnityEngine_BoneWeight : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.weight3=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -232,7 +232,7 @@ public class Lua_UnityEngine_BoneWeight : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.boneIndex0=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -263,7 +263,7 @@ public class Lua_UnityEngine_BoneWeight : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.boneIndex1=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -294,7 +294,7 @@ public class Lua_UnityEngine_BoneWeight : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.boneIndex2=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -325,7 +325,7 @@ public class Lua_UnityEngine_BoneWeight : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.boneIndex3=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

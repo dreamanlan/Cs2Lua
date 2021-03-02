@@ -27,7 +27,7 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 			checkArray(l,2,out a1);
 			self.SetBursts(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -46,7 +46,7 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 			checkType(l,3,out a2);
 			self.SetBursts(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -82,7 +82,7 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 			checkValueType(l,3,out a2);
 			self.SetBurst(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -129,7 +129,7 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.enabled=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -160,7 +160,7 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.rateOverTime=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -191,7 +191,7 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.rateOverTimeMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -222,7 +222,7 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.rateOverDistance=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -253,7 +253,7 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.rateOverDistanceMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -284,7 +284,7 @@ public class Lua_UnityEngine_ParticleSystem_EmissionModule : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.burstCount=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

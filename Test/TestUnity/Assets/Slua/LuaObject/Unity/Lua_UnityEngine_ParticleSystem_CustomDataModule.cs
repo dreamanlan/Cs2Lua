@@ -29,7 +29,7 @@ public class Lua_UnityEngine_ParticleSystem_CustomDataModule : LuaObject {
 			checkEnum(l,3,out a2);
 			self.SetMode(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -65,7 +65,7 @@ public class Lua_UnityEngine_ParticleSystem_CustomDataModule : LuaObject {
 			checkType(l,3,out a2);
 			self.SetVectorComponentCount(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -103,7 +103,7 @@ public class Lua_UnityEngine_ParticleSystem_CustomDataModule : LuaObject {
 			checkValueType(l,4,out a3);
 			self.SetVector(a1,a2,a3);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -141,7 +141,7 @@ public class Lua_UnityEngine_ParticleSystem_CustomDataModule : LuaObject {
 			checkValueType(l,3,out a2);
 			self.SetColor(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -188,7 +188,7 @@ public class Lua_UnityEngine_ParticleSystem_CustomDataModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.enabled=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

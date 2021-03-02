@@ -31,7 +31,7 @@ public class Lua_UnityEngine_ParticleSystem_SubEmittersModule : LuaObject {
 			checkEnum(l,4,out a3);
 			self.AddSubEmitter(a1,a2,a3);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -54,7 +54,7 @@ public class Lua_UnityEngine_ParticleSystem_SubEmittersModule : LuaObject {
 			checkType(l,5,out a4);
 			self.AddSubEmitter(a1,a2,a3,a4);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_ParticleSystem_SubEmittersModule : LuaObject {
 			checkType(l,2,out a1);
 			self.RemoveSubEmitter(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -90,7 +90,7 @@ public class Lua_UnityEngine_ParticleSystem_SubEmittersModule : LuaObject {
 			checkType(l,3,out a2);
 			self.SetSubEmitterSystem(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -109,7 +109,7 @@ public class Lua_UnityEngine_ParticleSystem_SubEmittersModule : LuaObject {
 			checkEnum(l,3,out a2);
 			self.SetSubEmitterType(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -128,7 +128,7 @@ public class Lua_UnityEngine_ParticleSystem_SubEmittersModule : LuaObject {
 			checkType(l,3,out a2);
 			self.SetSubEmitterEmitProbability(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -147,7 +147,7 @@ public class Lua_UnityEngine_ParticleSystem_SubEmittersModule : LuaObject {
 			checkEnum(l,3,out a2);
 			self.SetSubEmitterProperties(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -245,7 +245,7 @@ public class Lua_UnityEngine_ParticleSystem_SubEmittersModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.enabled=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

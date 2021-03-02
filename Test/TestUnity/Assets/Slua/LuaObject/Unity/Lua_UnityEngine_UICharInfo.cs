@@ -40,7 +40,7 @@ public class Lua_UnityEngine_UICharInfo : LuaObject {
 			UnityEngine.Vector2 v;
 			checkType(l,2,out v);
 			self.cursorPos=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_UICharInfo : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.charWidth=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

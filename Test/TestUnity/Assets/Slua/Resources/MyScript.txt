@@ -173,14 +173,14 @@ MyScript = {
 	-------------------------------
 	------ instance fields -------
 	-------------------------------
-	__obj_field_values = {
-		r = 10,
-		max = 400,
-		t = 0,
-		fogStart = 0,
-		__attributes = MyScript__Attrs,
-		__ctor_called = false,
-	},
+	__init_obj_fields = function(this)
+		rawset(this, "r", 10);
+		rawset(this, "max", 400);
+		rawset(this, "t", 0);
+		rawset(this, "fogStart", 0);
+		rawset(this, "__attributes", MyScript__Attrs);
+		rawset(this, "__ctor_called", false);
+	end,
 
 	-------------------------------
 	--- define class and object ---

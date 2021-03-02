@@ -100,7 +100,7 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.width=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -131,7 +131,7 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.height=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -162,7 +162,7 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.msaaSamples=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -193,7 +193,7 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.volumeDepth=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -224,7 +224,7 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 			UnityEngine.RenderTextureFormat v;
 			checkEnum(l,2,out v);
 			self.colorFormat=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -255,7 +255,7 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.depthBufferBits=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -286,7 +286,7 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 			UnityEngine.Rendering.TextureDimension v;
 			checkEnum(l,2,out v);
 			self.dimension=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -317,7 +317,7 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 			UnityEngine.Rendering.ShadowSamplingMode v;
 			checkEnum(l,2,out v);
 			self.shadowSamplingMode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -348,7 +348,7 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 			UnityEngine.VRTextureUsage v;
 			checkEnum(l,2,out v);
 			self.vrUsage=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -393,7 +393,7 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 			UnityEngine.RenderTextureMemoryless v;
 			checkEnum(l,2,out v);
 			self.memoryless=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -424,7 +424,7 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.sRGB=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -455,7 +455,7 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.useMipMap=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -486,7 +486,7 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.autoGenerateMips=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -517,7 +517,7 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.enableRandomWrite=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -548,7 +548,7 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.bindMS=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

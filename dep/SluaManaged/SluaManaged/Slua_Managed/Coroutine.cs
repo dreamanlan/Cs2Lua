@@ -37,6 +37,7 @@ namespace SLua
             mb = m;
             reg(l, Yieldk, "UnityEngine");
             reg(l, WrapEnumerator, "UnityEngine");
+            reg(l, WrapEnumerator2, "UnityEngine");
 
             string yield =
 @"
@@ -138,6 +139,34 @@ end
                     Logger.LogError("buildEnumerator loop exit: " + r);
                     yield break;
                 }
+            }
+        }
+
+        [MonoPInvokeCallback(typeof(LuaCSFunction))]
+        static public int WrapEnumerator2(IntPtr l)
+        {
+            try {
+                LuaFunction cofunc;
+                checkType(l, 1, out cofunc);
+                IEnumerator enumer = buildEnumerator2(cofunc);
+                LuaDLL.lua_pop(l, 1);
+                pushValue(l, true);
+                pushValue(l, enumer);
+                return 2;
+            }
+            catch (Exception e) {
+                return error(l, e);
+            }
+        }
+
+        static public IEnumerator buildEnumerator2(LuaFunction cofunc)
+        {
+            for (; null != cofunc;) {
+                object r = cofunc.call();
+                if (Helper.luaYieldBreak != r)
+                    yield return r;
+                else
+                    yield break;
             }
         }
     }

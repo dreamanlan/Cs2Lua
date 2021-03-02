@@ -74,7 +74,7 @@ public class Lua_UnityEngine_SceneManagement_LoadSceneParameters : LuaObject {
 			UnityEngine.SceneManagement.LoadSceneMode v;
 			checkEnum(l,2,out v);
 			self.loadSceneMode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -105,7 +105,7 @@ public class Lua_UnityEngine_SceneManagement_LoadSceneParameters : LuaObject {
 			UnityEngine.SceneManagement.LocalPhysicsMode v;
 			checkEnum(l,2,out v);
 			self.localPhysicsMode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

@@ -58,7 +58,7 @@ public class Lua_UnityEngine_Camera_GateFitParameters : LuaObject {
 			UnityEngine.Camera.GateFitMode v;
 			checkEnum(l,2,out v);
 			self.mode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -89,7 +89,7 @@ public class Lua_UnityEngine_Camera_GateFitParameters : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.aspect=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

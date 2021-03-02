@@ -489,6 +489,34 @@ public class Lua_UnityEngine_Texture : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_lodBias(IntPtr l) {
+		try {
+			UnityEngine.Texture self=(UnityEngine.Texture)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.lodBias);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_lodBias(IntPtr l) {
+		try {
+			UnityEngine.Texture self=(UnityEngine.Texture)checkSelf(l);
+			float v;
+			checkType(l,2,out v);
+			self.lodBias=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_texelSize(IntPtr l) {
 		try {
 			UnityEngine.Texture self=(UnityEngine.Texture)checkSelf(l);
@@ -748,6 +776,7 @@ public class Lua_UnityEngine_Texture : LuaObject {
 		addMember(l,"lowDetail",get_lowDetail,set_lowDetail,true);
 		addMember(l,"customFlag",get_customFlag,set_customFlag,true);
 		addMember(l,"customValue",get_customValue,set_customValue,true);
+		addMember(l,"lodBias",get_lodBias,set_lodBias,true);
 		addMember(l,"texelSize",get_texelSize,null,true);
 		addMember(l,"updateCount",get_updateCount,null,true);
 		addMember(l,"imageContentsHash",get_imageContentsHash,set_imageContentsHash,true);

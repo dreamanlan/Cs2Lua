@@ -107,7 +107,7 @@ public class Lua_UnityEngine_Ray : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.origin=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -138,7 +138,7 @@ public class Lua_UnityEngine_Ray : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.direction=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

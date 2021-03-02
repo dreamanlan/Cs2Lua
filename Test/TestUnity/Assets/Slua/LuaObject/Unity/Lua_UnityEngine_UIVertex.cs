@@ -40,7 +40,7 @@ public class Lua_UnityEngine_UIVertex : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.position=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_UIVertex : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.normal=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -102,7 +102,7 @@ public class Lua_UnityEngine_UIVertex : LuaObject {
 			UnityEngine.Vector4 v;
 			checkType(l,2,out v);
 			self.tangent=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -133,7 +133,7 @@ public class Lua_UnityEngine_UIVertex : LuaObject {
 			UnityEngine.Color32 v;
 			checkValueType(l,2,out v);
 			self.color=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -164,7 +164,7 @@ public class Lua_UnityEngine_UIVertex : LuaObject {
 			UnityEngine.Vector2 v;
 			checkType(l,2,out v);
 			self.uv0=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -195,7 +195,7 @@ public class Lua_UnityEngine_UIVertex : LuaObject {
 			UnityEngine.Vector2 v;
 			checkType(l,2,out v);
 			self.uv1=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -226,7 +226,7 @@ public class Lua_UnityEngine_UIVertex : LuaObject {
 			UnityEngine.Vector2 v;
 			checkType(l,2,out v);
 			self.uv2=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -257,7 +257,7 @@ public class Lua_UnityEngine_UIVertex : LuaObject {
 			UnityEngine.Vector2 v;
 			checkType(l,2,out v);
 			self.uv3=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

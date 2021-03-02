@@ -64,7 +64,7 @@ public class Lua_UnityEngine_Playables_PlayableBinding : LuaObject {
 			string v;
 			checkType(l,2,out v);
 			self.streamName=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -95,7 +95,7 @@ public class Lua_UnityEngine_Playables_PlayableBinding : LuaObject {
 			UnityEngine.Object v;
 			checkType(l,2,out v);
 			self.sourceObject=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

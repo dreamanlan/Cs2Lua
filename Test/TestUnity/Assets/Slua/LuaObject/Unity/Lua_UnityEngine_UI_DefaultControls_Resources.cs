@@ -40,7 +40,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 			UnityEngine.Sprite v;
 			checkType(l,2,out v);
 			self.standard=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 			UnityEngine.Sprite v;
 			checkType(l,2,out v);
 			self.background=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -102,7 +102,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 			UnityEngine.Sprite v;
 			checkType(l,2,out v);
 			self.inputField=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -133,7 +133,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 			UnityEngine.Sprite v;
 			checkType(l,2,out v);
 			self.knob=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -164,7 +164,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 			UnityEngine.Sprite v;
 			checkType(l,2,out v);
 			self.checkmark=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -195,7 +195,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 			UnityEngine.Sprite v;
 			checkType(l,2,out v);
 			self.dropdown=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -226,7 +226,7 @@ public class Lua_UnityEngine_UI_DefaultControls_Resources : LuaObject {
 			UnityEngine.Sprite v;
 			checkType(l,2,out v);
 			self.mask=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

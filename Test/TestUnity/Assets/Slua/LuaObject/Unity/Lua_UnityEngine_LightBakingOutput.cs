@@ -40,7 +40,7 @@ public class Lua_UnityEngine_LightBakingOutput : LuaObject {
 			System.Int32 v;
 			checkType(l,2,out v);
 			self.probeOcclusionLightIndex=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_LightBakingOutput : LuaObject {
 			System.Int32 v;
 			checkType(l,2,out v);
 			self.occlusionMaskChannel=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -102,7 +102,7 @@ public class Lua_UnityEngine_LightBakingOutput : LuaObject {
 			UnityEngine.LightmapBakeType v;
 			checkEnum(l,2,out v);
 			self.lightmapBakeType=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -133,7 +133,7 @@ public class Lua_UnityEngine_LightBakingOutput : LuaObject {
 			UnityEngine.MixedLightingMode v;
 			checkEnum(l,2,out v);
 			self.mixedLightingMode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -164,7 +164,7 @@ public class Lua_UnityEngine_LightBakingOutput : LuaObject {
 			System.Boolean v;
 			checkType(l,2,out v);
 			self.isBaked=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

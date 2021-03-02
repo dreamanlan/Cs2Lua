@@ -1039,6 +1039,14 @@ function callarraystaticmethod(firstArray, secondArray, method, ...)
                         return arg2(a, b) < 0
                     end
                 )
+            elseif method == "Reverse__Array" then
+                firstArray = table.sort(
+                    firstArray,
+                    function(a,b)
+                        return 1
+                    end
+                )
+                return nil
             else
                 translationlog("need add handler for callarraystaticmethod Array.{0}", method)
                 return nil
@@ -1223,8 +1231,9 @@ RectPool = createpool("Rect",
     function()
         return UnityEngine.Rect.ctor()
     end)
-    
-function wrapenumerable(func)
+
+--slua机制（不支持c# StopCoroutine）
+function wrapenumerable0(func)
     return function(...)
         local args = {...}
         return UnityEngine.WrapEnumerator(
@@ -1237,8 +1246,27 @@ function wrapenumerable(func)
     end
 end
 
-function wrapyield(yieldVal, isEnumerableOrEnumerator, isUnityYield)
+function wrapyield0(yieldVal, isEnumerableOrEnumerator, isUnityYield)
     UnityEngine.Yield(yieldVal)
+end
+
+--xlua协程机制（支持c# StopCoroutine）
+function wrapenumerable(func)
+    return function(...)
+        local args = {...}
+        return UnityEngine.WrapEnumerator2(
+            coroutine.wrap(
+                function()
+                    func(unpack(args))
+                    return Slua.yieldbreak
+                end
+            )
+        )
+    end
+end
+
+function wrapyield(yieldVal, isEnumerableOrEnumerator, isUnityYield)
+    coroutine.yield(yieldVal)
 end
 
 function wrapconst(t, name)
@@ -1287,20 +1315,20 @@ function wrapexternstruct(v, classObj)
     return v
 end
 
-function wrapstructargument(v, argType, argOperKind, argSymKind, class, callerClass)
+function wrapstructargument(v, argType, argOperKind, argSymKind)
     return v
 end
 
-function wrapexternstructargument(v, argType, argOperKind, argSymKind, class, callerClass)
+function wrapexternstructargument(v, argType, argOperKind, argSymKind)
     translationlog("need add handler for wrapexternstructargument {0}", getclasstypename(argType))
     return v
 end
 
-function wrapstructarguments(arr, argType, argOperKind, argSymKind, class, callerClass)
+function wrapstructarguments(arr, argType, argOperKind, argSymKind)
     return arr
 end
 
-function wrapexternstructarguments(arr, argType, argOperKind, argSymKind, class, callerClass)
+function wrapexternstructarguments(arr, argType, argOperKind, argSymKind)
     translationlog("need add handler for wrapexternstructarguments {0}", getclasstypename(argType))
     return arr
 end

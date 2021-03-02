@@ -40,7 +40,7 @@ public class Lua_UnityEngine_HumanLimit : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.useDefaultValues=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_HumanLimit : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.min=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -102,7 +102,7 @@ public class Lua_UnityEngine_HumanLimit : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.max=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -133,7 +133,7 @@ public class Lua_UnityEngine_HumanLimit : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.center=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -164,7 +164,7 @@ public class Lua_UnityEngine_HumanLimit : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.axisLength=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

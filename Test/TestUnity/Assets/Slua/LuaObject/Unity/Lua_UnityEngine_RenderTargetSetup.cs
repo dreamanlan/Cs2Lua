@@ -214,7 +214,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 			UnityEngine.RenderBuffer[] v;
 			checkArray(l,2,out v);
 			self.color=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -245,7 +245,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 			UnityEngine.RenderBuffer v;
 			checkValueType(l,2,out v);
 			self.depth=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -276,7 +276,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 			System.Int32 v;
 			checkType(l,2,out v);
 			self.mipLevel=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -307,7 +307,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 			UnityEngine.CubemapFace v;
 			checkEnum(l,2,out v);
 			self.cubemapFace=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -338,7 +338,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 			System.Int32 v;
 			checkType(l,2,out v);
 			self.depthSlice=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -369,7 +369,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 			UnityEngine.Rendering.RenderBufferLoadAction[] v;
 			checkArray(l,2,out v);
 			self.colorLoad=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -400,7 +400,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 			UnityEngine.Rendering.RenderBufferStoreAction[] v;
 			checkArray(l,2,out v);
 			self.colorStore=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -431,7 +431,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 			UnityEngine.Rendering.RenderBufferLoadAction v;
 			checkEnum(l,2,out v);
 			self.depthLoad=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -462,7 +462,7 @@ public class Lua_UnityEngine_RenderTargetSetup : LuaObject {
 			UnityEngine.Rendering.RenderBufferStoreAction v;
 			checkEnum(l,2,out v);
 			self.depthStore=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

@@ -108,7 +108,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 			UnityEngine.Color v;
 			checkType(l,2,out v);
 			self.normalColor=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -139,7 +139,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 			UnityEngine.Color v;
 			checkType(l,2,out v);
 			self.highlightedColor=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -170,7 +170,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 			UnityEngine.Color v;
 			checkType(l,2,out v);
 			self.pressedColor=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -201,7 +201,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 			UnityEngine.Color v;
 			checkType(l,2,out v);
 			self.disabledColor=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -232,7 +232,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.colorMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -263,7 +263,7 @@ public class Lua_UnityEngine_UI_ColorBlock : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.fadeDuration=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

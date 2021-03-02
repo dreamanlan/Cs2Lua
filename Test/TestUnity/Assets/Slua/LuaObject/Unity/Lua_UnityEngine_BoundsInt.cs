@@ -73,7 +73,7 @@ public class Lua_UnityEngine_BoundsInt : LuaObject {
 			checkValueType(l,3,out a2);
 			self.SetMinMax(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -90,7 +90,7 @@ public class Lua_UnityEngine_BoundsInt : LuaObject {
 			checkValueType(l,2,out a1);
 			self.ClampToBounds(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -220,7 +220,7 @@ public class Lua_UnityEngine_BoundsInt : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.x=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -251,7 +251,7 @@ public class Lua_UnityEngine_BoundsInt : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.y=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -282,7 +282,7 @@ public class Lua_UnityEngine_BoundsInt : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.z=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -327,7 +327,7 @@ public class Lua_UnityEngine_BoundsInt : LuaObject {
 			UnityEngine.Vector3Int v;
 			checkValueType(l,2,out v);
 			self.min=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -358,7 +358,7 @@ public class Lua_UnityEngine_BoundsInt : LuaObject {
 			UnityEngine.Vector3Int v;
 			checkValueType(l,2,out v);
 			self.max=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -389,7 +389,7 @@ public class Lua_UnityEngine_BoundsInt : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.xMin=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -420,7 +420,7 @@ public class Lua_UnityEngine_BoundsInt : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.yMin=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -451,7 +451,7 @@ public class Lua_UnityEngine_BoundsInt : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.zMin=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -482,7 +482,7 @@ public class Lua_UnityEngine_BoundsInt : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.xMax=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -513,7 +513,7 @@ public class Lua_UnityEngine_BoundsInt : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.yMax=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -544,7 +544,7 @@ public class Lua_UnityEngine_BoundsInt : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.zMax=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -575,7 +575,7 @@ public class Lua_UnityEngine_BoundsInt : LuaObject {
 			UnityEngine.Vector3Int v;
 			checkValueType(l,2,out v);
 			self.position=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -606,7 +606,7 @@ public class Lua_UnityEngine_BoundsInt : LuaObject {
 			UnityEngine.Vector3Int v;
 			checkValueType(l,2,out v);
 			self.size=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

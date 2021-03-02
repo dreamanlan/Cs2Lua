@@ -27,7 +27,7 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 			checkType(l,2,out a1);
 			self.AddSprite(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -44,7 +44,7 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 			checkType(l,2,out a1);
 			self.RemoveSprite(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -63,7 +63,7 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 			checkType(l,3,out a2);
 			self.SetSprite(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -110,7 +110,7 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 			bool v;
 			checkType(l,2,out v);
 			self.enabled=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -141,7 +141,7 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 			UnityEngine.ParticleSystemAnimationMode v;
 			checkEnum(l,2,out v);
 			self.mode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -172,7 +172,7 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 			UnityEngine.ParticleSystemAnimationTimeMode v;
 			checkEnum(l,2,out v);
 			self.timeMode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -203,7 +203,7 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 			float v;
 			checkType(l,2,out v);
 			self.fps=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -234,7 +234,7 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 			int v;
 			checkType(l,2,out v);
 			self.numTilesX=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -265,7 +265,7 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 			int v;
 			checkType(l,2,out v);
 			self.numTilesY=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -296,7 +296,7 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 			UnityEngine.ParticleSystemAnimationType v;
 			checkEnum(l,2,out v);
 			self.animation=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -327,7 +327,7 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 			bool v;
 			checkType(l,2,out v);
 			self.useRandomRow=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -358,7 +358,7 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.frameOverTime=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -389,7 +389,7 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 			float v;
 			checkType(l,2,out v);
 			self.frameOverTimeMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -420,7 +420,7 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.startFrame=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -451,7 +451,7 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 			float v;
 			checkType(l,2,out v);
 			self.startFrameMultiplier=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -482,7 +482,7 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 			int v;
 			checkType(l,2,out v);
 			self.cycleCount=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -513,7 +513,7 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 			int v;
 			checkType(l,2,out v);
 			self.rowIndex=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -544,7 +544,7 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 			UnityEngine.Rendering.UVChannelFlags v;
 			checkEnum(l,2,out v);
 			self.uvChannelMask=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -589,7 +589,7 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 			UnityEngine.Vector2 v;
 			checkType(l,2,out v);
 			self.speedRange=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

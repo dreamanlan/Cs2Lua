@@ -58,7 +58,7 @@ public class Lua_UnityEngine_RangeInt : LuaObject {
 			System.Int32 v;
 			checkType(l,2,out v);
 			self.start=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -89,7 +89,7 @@ public class Lua_UnityEngine_RangeInt : LuaObject {
 			System.Int32 v;
 			checkType(l,2,out v);
 			self.length=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

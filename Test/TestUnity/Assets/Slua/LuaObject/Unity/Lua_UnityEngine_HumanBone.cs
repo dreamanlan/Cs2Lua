@@ -40,7 +40,7 @@ public class Lua_UnityEngine_HumanBone : LuaObject {
 			UnityEngine.HumanLimit v;
 			checkValueType(l,2,out v);
 			self.limit=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_HumanBone : LuaObject {
 			string v;
 			checkType(l,2,out v);
 			self.boneName=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -102,7 +102,7 @@ public class Lua_UnityEngine_HumanBone : LuaObject {
 			string v;
 			checkType(l,2,out v);
 			self.humanName=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

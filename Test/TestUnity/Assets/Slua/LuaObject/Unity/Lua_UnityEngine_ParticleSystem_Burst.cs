@@ -142,7 +142,7 @@ public class Lua_UnityEngine_ParticleSystem_Burst : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.time=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -173,7 +173,7 @@ public class Lua_UnityEngine_ParticleSystem_Burst : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxCurve v;
 			checkValueType(l,2,out v);
 			self.count=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -204,7 +204,7 @@ public class Lua_UnityEngine_ParticleSystem_Burst : LuaObject {
 			System.Int16 v;
 			checkType(l,2,out v);
 			self.minCount=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -235,7 +235,7 @@ public class Lua_UnityEngine_ParticleSystem_Burst : LuaObject {
 			System.Int16 v;
 			checkType(l,2,out v);
 			self.maxCount=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -266,7 +266,7 @@ public class Lua_UnityEngine_ParticleSystem_Burst : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.cycleCount=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -297,7 +297,7 @@ public class Lua_UnityEngine_ParticleSystem_Burst : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.repeatInterval=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -328,7 +328,7 @@ public class Lua_UnityEngine_ParticleSystem_Burst : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.probability=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

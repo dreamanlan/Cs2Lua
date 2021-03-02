@@ -40,7 +40,7 @@ public class Lua_UnityEngine_WheelFrictionCurve : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.extremumSlip=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_WheelFrictionCurve : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.extremumValue=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -102,7 +102,7 @@ public class Lua_UnityEngine_WheelFrictionCurve : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.asymptoteSlip=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -133,7 +133,7 @@ public class Lua_UnityEngine_WheelFrictionCurve : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.asymptoteValue=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -164,7 +164,7 @@ public class Lua_UnityEngine_WheelFrictionCurve : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.stiffness=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

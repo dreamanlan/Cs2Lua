@@ -91,7 +91,7 @@ public class Lua_UnityEngine_ParticleSystem_Particle : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.position=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -122,7 +122,7 @@ public class Lua_UnityEngine_ParticleSystem_Particle : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.velocity=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -181,7 +181,7 @@ public class Lua_UnityEngine_ParticleSystem_Particle : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.remainingLifetime=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -212,7 +212,7 @@ public class Lua_UnityEngine_ParticleSystem_Particle : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.startLifetime=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -243,7 +243,7 @@ public class Lua_UnityEngine_ParticleSystem_Particle : LuaObject {
 			UnityEngine.Color32 v;
 			checkValueType(l,2,out v);
 			self.startColor=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -274,7 +274,7 @@ public class Lua_UnityEngine_ParticleSystem_Particle : LuaObject {
 			System.UInt32 v;
 			checkType(l,2,out v);
 			self.randomSeed=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -305,7 +305,7 @@ public class Lua_UnityEngine_ParticleSystem_Particle : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.axisOfRotation=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -336,7 +336,7 @@ public class Lua_UnityEngine_ParticleSystem_Particle : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.startSize=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -367,7 +367,7 @@ public class Lua_UnityEngine_ParticleSystem_Particle : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.startSize3D=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -398,7 +398,7 @@ public class Lua_UnityEngine_ParticleSystem_Particle : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.rotation=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -429,7 +429,7 @@ public class Lua_UnityEngine_ParticleSystem_Particle : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.rotation3D=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -460,7 +460,7 @@ public class Lua_UnityEngine_ParticleSystem_Particle : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.angularVelocity=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -491,7 +491,7 @@ public class Lua_UnityEngine_ParticleSystem_Particle : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.angularVelocity3D=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

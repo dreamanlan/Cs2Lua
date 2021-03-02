@@ -68,7 +68,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			checkType(l,4,out a3);
 			self.SetTRS(a1,a2,a3);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -155,7 +155,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			checkType(l,3,out a2);
 			self.SetColumn(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -174,7 +174,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			checkType(l,3,out a2);
 			self.SetRow(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -586,7 +586,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.m00=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -617,7 +617,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.m10=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -648,7 +648,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.m20=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -679,7 +679,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.m30=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -710,7 +710,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.m01=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -741,7 +741,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.m11=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -772,7 +772,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.m21=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -803,7 +803,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.m31=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -834,7 +834,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.m02=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -865,7 +865,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.m12=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -896,7 +896,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.m22=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -927,7 +927,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.m32=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -958,7 +958,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.m03=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -989,7 +989,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.m13=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1020,7 +1020,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.m23=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1051,7 +1051,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.m33=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

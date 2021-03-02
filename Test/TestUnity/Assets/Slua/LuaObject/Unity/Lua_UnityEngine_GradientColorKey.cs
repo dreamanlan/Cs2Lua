@@ -58,7 +58,7 @@ public class Lua_UnityEngine_GradientColorKey : LuaObject {
 			UnityEngine.Color v;
 			checkType(l,2,out v);
 			self.color=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -89,7 +89,7 @@ public class Lua_UnityEngine_GradientColorKey : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.time=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

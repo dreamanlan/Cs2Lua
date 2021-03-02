@@ -40,7 +40,7 @@ public class Lua_UnityEngine_ParticleSystem_ColorBySpeedModule : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.enabled=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_ParticleSystem_ColorBySpeedModule : LuaObject {
 			UnityEngine.ParticleSystem.MinMaxGradient v;
 			checkValueType(l,2,out v);
 			self.color=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -102,7 +102,7 @@ public class Lua_UnityEngine_ParticleSystem_ColorBySpeedModule : LuaObject {
 			UnityEngine.Vector2 v;
 			checkType(l,2,out v);
 			self.range=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

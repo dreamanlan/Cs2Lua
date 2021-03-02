@@ -192,7 +192,7 @@ public class Lua_UnityEngine_Pose : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.position=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -223,7 +223,7 @@ public class Lua_UnityEngine_Pose : LuaObject {
 			UnityEngine.Quaternion v;
 			checkType(l,2,out v);
 			self.rotation=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

@@ -74,7 +74,7 @@ public class Lua_UnityEngine_UI_SpriteState : LuaObject {
 			UnityEngine.Sprite v;
 			checkType(l,2,out v);
 			self.highlightedSprite=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -105,7 +105,7 @@ public class Lua_UnityEngine_UI_SpriteState : LuaObject {
 			UnityEngine.Sprite v;
 			checkType(l,2,out v);
 			self.pressedSprite=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -136,7 +136,7 @@ public class Lua_UnityEngine_UI_SpriteState : LuaObject {
 			UnityEngine.Sprite v;
 			checkType(l,2,out v);
 			self.disabledSprite=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

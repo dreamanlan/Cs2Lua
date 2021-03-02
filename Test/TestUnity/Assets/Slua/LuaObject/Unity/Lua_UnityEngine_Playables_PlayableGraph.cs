@@ -59,7 +59,7 @@ public class Lua_UnityEngine_Playables_PlayableGraph : LuaObject {
 			checkValueType(l,1,out self);
 			self.Evaluate();
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -76,7 +76,7 @@ public class Lua_UnityEngine_Playables_PlayableGraph : LuaObject {
 			checkType(l,2,out a1);
 			self.Evaluate(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -91,7 +91,7 @@ public class Lua_UnityEngine_Playables_PlayableGraph : LuaObject {
 			checkValueType(l,1,out self);
 			self.Destroy();
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -151,7 +151,7 @@ public class Lua_UnityEngine_Playables_PlayableGraph : LuaObject {
 			checkValueType(l,1,out self);
 			self.Play();
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -166,7 +166,7 @@ public class Lua_UnityEngine_Playables_PlayableGraph : LuaObject {
 			checkValueType(l,1,out self);
 			self.Stop();
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -198,7 +198,7 @@ public class Lua_UnityEngine_Playables_PlayableGraph : LuaObject {
 			checkEnum(l,2,out a1);
 			self.SetTimeUpdateMode(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -230,7 +230,7 @@ public class Lua_UnityEngine_Playables_PlayableGraph : LuaObject {
 			checkType(l,2,out a1);
 			self.SetResolver(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {

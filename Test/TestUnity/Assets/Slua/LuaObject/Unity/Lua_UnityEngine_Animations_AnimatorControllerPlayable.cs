@@ -42,7 +42,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkValueType(l,2,out a1);
 			self.SetHandle(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -129,7 +129,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,3,out a2);
 			self.SetFloat(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -148,7 +148,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,3,out a2);
 			self.SetFloat(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -201,7 +201,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,3,out a2);
 			self.SetBool(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -220,7 +220,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,3,out a2);
 			self.SetBool(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -273,7 +273,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,3,out a2);
 			self.SetInteger(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -292,7 +292,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,3,out a2);
 			self.SetInteger(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -309,7 +309,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,2,out a1);
 			self.SetTrigger(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -326,7 +326,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,2,out a1);
 			self.SetTrigger(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -343,7 +343,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,2,out a1);
 			self.ResetTrigger(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -360,7 +360,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,2,out a1);
 			self.ResetTrigger(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -479,7 +479,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,3,out a2);
 			self.SetLayerWeight(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -566,7 +566,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,3,out a2);
 			self.GetCurrentAnimatorClipInfo(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -602,7 +602,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,3,out a2);
 			self.GetNextAnimatorClipInfo(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -704,7 +704,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,3,out a2);
 			self.CrossFadeInFixedTime(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -723,7 +723,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,3,out a2);
 			self.CrossFadeInFixedTime(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -744,7 +744,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,4,out a3);
 			self.CrossFadeInFixedTime(a1,a2,a3);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -765,7 +765,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,4,out a3);
 			self.CrossFadeInFixedTime(a1,a2,a3);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -788,7 +788,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,5,out a4);
 			self.CrossFadeInFixedTime(a1,a2,a3,a4);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -811,7 +811,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,5,out a4);
 			self.CrossFadeInFixedTime(a1,a2,a3,a4);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -830,7 +830,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,3,out a2);
 			self.CrossFade(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -849,7 +849,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,3,out a2);
 			self.CrossFade(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -870,7 +870,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,4,out a3);
 			self.CrossFade(a1,a2,a3);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -891,7 +891,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,4,out a3);
 			self.CrossFade(a1,a2,a3);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -914,7 +914,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,5,out a4);
 			self.CrossFade(a1,a2,a3,a4);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -937,7 +937,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,5,out a4);
 			self.CrossFade(a1,a2,a3,a4);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -954,7 +954,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,2,out a1);
 			self.PlayInFixedTime(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -971,7 +971,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,2,out a1);
 			self.PlayInFixedTime(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -990,7 +990,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,3,out a2);
 			self.PlayInFixedTime(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -1009,7 +1009,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,3,out a2);
 			self.PlayInFixedTime(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -1030,7 +1030,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,4,out a3);
 			self.PlayInFixedTime(a1,a2,a3);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -1051,7 +1051,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,4,out a3);
 			self.PlayInFixedTime(a1,a2,a3);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -1068,7 +1068,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,2,out a1);
 			self.Play(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -1085,7 +1085,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,2,out a1);
 			self.Play(a1);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -1104,7 +1104,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,3,out a2);
 			self.Play(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -1123,7 +1123,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,3,out a2);
 			self.Play(a1,a2);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -1144,7 +1144,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,4,out a3);
 			self.Play(a1,a2,a3);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {
@@ -1165,7 +1165,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			checkType(l,4,out a3);
 			self.Play(a1,a2,a3);
 			pushValue(l,true);
-			setBack(l,self);
+			setBack(l,(object)self);
 			return 1;
 		}
 		catch(Exception e) {

@@ -74,7 +74,7 @@ public class Lua_UnityEngine_UI_Navigation : LuaObject {
 			UnityEngine.UI.Navigation.Mode v;
 			checkEnum(l,2,out v);
 			self.mode=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -105,7 +105,7 @@ public class Lua_UnityEngine_UI_Navigation : LuaObject {
 			UnityEngine.UI.Selectable v;
 			checkType(l,2,out v);
 			self.selectOnUp=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -136,7 +136,7 @@ public class Lua_UnityEngine_UI_Navigation : LuaObject {
 			UnityEngine.UI.Selectable v;
 			checkType(l,2,out v);
 			self.selectOnDown=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -167,7 +167,7 @@ public class Lua_UnityEngine_UI_Navigation : LuaObject {
 			UnityEngine.UI.Selectable v;
 			checkType(l,2,out v);
 			self.selectOnLeft=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -198,7 +198,7 @@ public class Lua_UnityEngine_UI_Navigation : LuaObject {
 			UnityEngine.UI.Selectable v;
 			checkType(l,2,out v);
 			self.selectOnRight=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

@@ -40,7 +40,7 @@ public class Lua_UnityEngine_CombineInstance : LuaObject {
 			UnityEngine.Mesh v;
 			checkType(l,2,out v);
 			self.mesh=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_CombineInstance : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.subMeshIndex=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -102,7 +102,7 @@ public class Lua_UnityEngine_CombineInstance : LuaObject {
 			UnityEngine.Matrix4x4 v;
 			checkValueType(l,2,out v);
 			self.transform=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -133,7 +133,7 @@ public class Lua_UnityEngine_CombineInstance : LuaObject {
 			UnityEngine.Vector4 v;
 			checkType(l,2,out v);
 			self.lightmapScaleOffset=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -164,7 +164,7 @@ public class Lua_UnityEngine_CombineInstance : LuaObject {
 			UnityEngine.Vector4 v;
 			checkType(l,2,out v);
 			self.realtimeLightmapScaleOffset=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

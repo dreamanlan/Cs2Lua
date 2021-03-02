@@ -9,6 +9,7 @@ public class Lua_UnityEngine_DepthTextureMode : LuaObject {
 		addMember(l,1,"Depth");
 		addMember(l,2,"DepthNormals");
 		addMember(l,4,"MotionVectors");
+		addMember(l,8,"DepthPrePass");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

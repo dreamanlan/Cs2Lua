@@ -40,7 +40,7 @@ public class Lua_UnityEngine_Animations_ConstraintSource : LuaObject {
 			UnityEngine.Transform v;
 			checkType(l,2,out v);
 			self.sourceTransform=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -71,7 +71,7 @@ public class Lua_UnityEngine_Animations_ConstraintSource : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.weight=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}

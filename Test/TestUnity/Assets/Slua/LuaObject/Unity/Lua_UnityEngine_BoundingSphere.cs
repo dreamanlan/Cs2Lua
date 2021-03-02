@@ -74,7 +74,7 @@ public class Lua_UnityEngine_BoundingSphere : LuaObject {
 			UnityEngine.Vector3 v;
 			checkType(l,2,out v);
 			self.position=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
@@ -105,7 +105,7 @@ public class Lua_UnityEngine_BoundingSphere : LuaObject {
 			System.Single v;
 			checkType(l,2,out v);
 			self.radius=v;
-			setBack(l,self);
+			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
 		}
