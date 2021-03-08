@@ -1047,6 +1047,33 @@ function callarraystaticmethod(firstArray, secondArray, method, ...)
                     end
                 )
                 return nil
+            elseif method == "Find" then
+                local ct = __get_array_count(arg1)
+                for i = 1, ct do
+                    local v = rawget(arg1, i)
+                    if arg2(v) then
+                        return v
+                    end
+                end
+                return nil
+            elseif method == "FindIndex" then
+                local ct = __get_array_count(arg1)
+                for i = 1, ct do
+                    local v = rawget(arg1, i)
+                    if arg2(v) then
+                        return i-1
+                    end
+                end
+                return -1
+            elseif method == "Copy__Array__Int32__Array__Int32__Int32" then
+                local __,__,arg3 ,arg4, arg5 = ...
+                local ct = __get_array_count(arg1)
+                for i = arg2 + 1, arg2 + arg5 do
+                    local v = rawget(arg1, i)
+                    rawset(arg3 , arg4 + 1 , v)
+                    arg4 = arg4 + 1;
+                end
+                return nil
             else
                 translationlog("need add handler for callarraystaticmethod Array.{0}", method)
                 return nil
@@ -2012,6 +2039,7 @@ __mt_index_of_array_table = {
             return ret
         end,
     Add = function(obj, v)
+            v = __unwrap_if_string(v)
             table.insert(obj, v)
             __inc_array_count(obj)
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj);
@@ -2022,6 +2050,7 @@ __mt_index_of_array_table = {
             local ct = __get_array_count(obj)
             for i = 1, ct do
                 local v = rawget(obj, i)
+                p = __unwrap_if_string(p)
                 if isequal(v, p) then
                     pos = i
                     ret = v
@@ -2029,15 +2058,39 @@ __mt_index_of_array_table = {
                 end
             end
             if ret then
-                table.remove(obj, pos)
+                if pos == ct then
+                    rawset(obj , pos , nil);
+                else 
+                    for j = pos + 1, ct , 1 do
+                        local vj = rawget(obj , j)
+                        rawset(obj , j-1 , vj);
+                    end
+                    rawset(obj , ct , nil);
+                end
+                -- table.remove(obj, pos)
                 __dec_array_count(obj)
             end
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
             return ret
         end,
     RemoveAt = function(obj, ix)
-            table.remove(obj, ix + 1)
-            __dec_array_count(obj)
+            local ct = __get_array_count(obj)
+            if ix + 1 == ct then
+               rawset(obj , ct ,nil) 
+            else
+                for j = ix + 2, ct , 1 do
+                    local vj = rawget(obj , j)
+                    rawset(obj , j-1 , vj);
+                end
+                if ix + 1 <= ct then
+                    rawset(obj , ct , nil);
+                end
+            end
+            
+            if ix + 1 <= ct then
+                __dec_array_count(obj)
+            end
+            -- table.remove(obj, ix + 1)
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
         end,
     RemoveAll = function(obj, pred)
@@ -2049,7 +2102,8 @@ __mt_index_of_array_table = {
                 end
             end
             for i, v in ipairs(deletes) do
-                table.remove(obj, v)
+                rawset(obj , i , nil)
+                --table.remove(obj, v)
                 __dec_array_count(obj)
             end
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
@@ -2057,6 +2111,7 @@ __mt_index_of_array_table = {
     AddRange = function(obj, coll)
             local iter = newiterator(nil, coll)
             for v in getiterator(iter) do
+                v = __unwrap_if_string(v)
                 table.insert(obj, v)
                 __inc_array_count(obj)
             end
@@ -2064,6 +2119,7 @@ __mt_index_of_array_table = {
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
         end,
     Insert = function(obj, ix, p)
+            p = __unwrap_if_string(p)
             table.insert(obj, ix + 1, p)
             __inc_array_count(obj)
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
@@ -2079,9 +2135,19 @@ __mt_index_of_array_table = {
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
         end,
     RemoveRange = function(obj, ix, ct)
-            for i=1,ct do                
-                table.remove(obj, ix + 1)
-                __dec_array_count(obj)
+            for i=1,ct do
+                local curCount = __get_array_count(obj)
+                if ix + 1 == curCount then
+                    rawset(obj , curCount ,nil) 
+                else
+                    for j = ix + 2, curCount , 1 do
+                        local vj = rawget(obj , j)
+                        rawset(obj , j-1 , vj);
+                    end
+                end
+                if ix + 1 <= curCount then
+                    __dec_array_count(obj)
+                end
             end
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
         end,
@@ -2153,6 +2219,7 @@ __mt_index_of_array_table = {
             local ct = __get_array_count(obj)
             for i = 1, ct do
                 local v = rawget(obj, i)
+                p = __unwrap_if_string(p)
                 if rawequal(v,p) then
                     ret = true
                     break
@@ -2172,7 +2239,8 @@ __mt_index_of_array_table = {
     Dequeue = function(obj)
             local ct = __get_array_count(obj)
             local v = rawget(obj, ct)
-            table.remove(obj, ct)
+            rawset(obj , ct ,nil)
+            -- table.remove(obj, ct)
             __dec_array_count(obj)
             return v
         end,
@@ -2183,7 +2251,8 @@ __mt_index_of_array_table = {
     Pop = function(obj)
             local ct = __get_array_count(obj)
             local v = rawget(obj, ct)
-            table.remove(obj, num)
+            rawset(obj , ct ,nil)
+            -- table.remove(obj, num)
             __dec_array_count(obj)
             return v
         end,
@@ -2204,7 +2273,8 @@ __mt_index_of_array_table = {
     Clear = function(obj)
             local ct = __get_array_count(obj)
             for i = ct, 1, -1 do
-                table.remove(obj, i)
+                rawset(obj , i , nil)
+                -- table.remove(obj, i)
             end
             __set_array_count(obj, 0)
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
@@ -2213,6 +2283,17 @@ __mt_index_of_array_table = {
             return GetArrayEnumerator(obj)
         end,
     Sort = function(obj, predicate)
+            local ct = __get_array_count(obj)
+            for i = 1, ct, 1 do
+                local v = rawget(obj, i)
+                if(isequal(v , nil)) then
+                    for j = i + 1, ct , 1 do
+                        local vj = rawget(obj , j)
+                        rawset(obj , j-1 , vj);
+                    end
+                    rawset(obj , ct , nil);
+                end
+            end
             table.sort(
                 obj,
                 function(a, b)
@@ -2248,6 +2329,10 @@ rawset(__mt_index_of_array_table, "Reverse__Int32__Int32", rawget(__mt_index_of_
 rawset(__mt_index_of_array_table, "Sort__IComparer_1_T", rawget(__mt_index_of_array_table, "Sort"))
 rawset(__mt_index_of_array_table, "Sort__Comparison_1_T", rawget(__mt_index_of_array_table, "Sort"))
 rawset(__mt_index_of_array_table, "Sort__Int32__Int32__IComparer_1_T", rawget(__mt_index_of_array_table, "Sort"))
+
+for k,v in pairs(__mt_index_of_array_table) do
+    rawset(System.Collections.Generic.List_T, k, v)
+end
 
 __mt_index_of_array = function(t, k)
     if k == "Length" or k == "Count" then
@@ -2338,6 +2423,10 @@ __mt_index_of_dictionary_table = {
 }
 
 rawset(__mt_index_of_dictionary_table, "Remove__TKey", rawget(__mt_index_of_dictionary_table, "Remove"))
+
+for k,v in pairs(__mt_index_of_dictionary_table) do
+    rawset(System.Collections.Generic.Dictionary_TKey_TValue, k, v)
+end
 
 __mt_index_of_dictionary = function(t, k)
     if k == "Count" then
@@ -2434,6 +2523,10 @@ __mt_index_of_hashset_table = {
 rawset(__mt_index_of_hashset_table, "CopyTo__A_T", rawget(__mt_index_of_hashset_table, "CopyTo"))
 rawset(__mt_index_of_hashset_table, "CopyTo__A_T__Int32", rawget(__mt_index_of_hashset_table, "CopyTo"))
 rawset(__mt_index_of_hashset_table, "CopyTo__A_T__Int32__Int32", rawget(__mt_index_of_hashset_table, "CopyTo"))
+
+for k,v in pairs(__mt_index_of_hashset_table) do
+    rawset(System.Collections.Generic.HashSet_T, k, v)
+end
 
 __mt_index_of_hashset = function(t, k)
     if k == "Count" then
@@ -3786,9 +3879,15 @@ function defineclass(
     return class
 end
 
+
+function getoriginalmethod(class, name)
+    local obj_methods = class.__get_obj_methods()
+    return obj_methods[name]
+end
+
 function buildbaseobj(obj, class, baseClass, baseCtor, baseCtorRetCt, ...)
     rawset(obj, "__base", nil)
-    baseClass[baseCtor](obj, ...)
+    getoriginalmethod(baseClass, baseCtor)(obj, ...)
     rawset(obj, "__ctor_called", false)
 end
 

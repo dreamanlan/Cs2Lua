@@ -605,7 +605,7 @@ namespace Generator
                                             }
                                             sb.AppendLine(",");
 
-                                            instMethodNames.Add(string.Format("__ori_{0}", mname));
+                                            //instMethodNames.Add(string.Format("__ori_{0}", mname));
                                             sb.AppendFormat("{0}__ori_{1} = ", GetIndentString(indent), mname);
                                             sb.Append("function(this, __cs2lua_func_info");
                                             if (fcall.GetParamNum() > 1)
@@ -657,7 +657,7 @@ namespace Generator
                                         System.Diagnostics.Debug.Assert(isInstance);
                                         int rct;
                                         int.TryParse(fcall.GetParamId(5), out rct);
-                                        instMethodNames.Add(mname);
+                                        //instMethodNames.Add(mname);
                                         sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
                                         sb.Append("function(this");
                                         if (funcOpts.NeedFuncInfo) {
@@ -722,20 +722,6 @@ namespace Generator
                         sb.AppendFormatLine("{0}local obj_methods = {{", GetIndentString(indent));
                         ++indent;
                         foreach (var mname in instMethodNames) {
-                            if (!sealedClass) {
-                                Cs2LuaMethodInfo cmi;
-                                if (methodInfos.TryGetValue(mname, out cmi)) {
-                                    if (cmi.IsAbstract) {
-                                        sb.AppendFormatLine("{0}__self__{1} = rawget(class, \"__self__{1}\");", GetIndentString(indent), mname);
-                                    }
-                                    else if (cmi.IsVirtual || cmi.IsOverride) {
-                                        sb.AppendFormatLine("{0}__self__{1} = rawget(class, \"__self__{1}\");", GetIndentString(indent), mname);
-                                    }
-                                    else if (cmi.IsCtor || !cmi.IsPrivate && !cmi.IsSealed) {
-                                        sb.AppendFormatLine("{0}__self__{1} = rawget(class, \"__self__{1}\");", GetIndentString(indent), mname);
-                                    }
-                                }
-                            }
                             sb.AppendFormatLine("{0}{1} = rawget(class, \"{1}\"),", GetIndentString(indent), mname);
                         }
                         --indent;
@@ -751,7 +737,6 @@ namespace Generator
                             var cmi = pair.Value;
                             if (cmi.IsAbstract) {
                                 sb.AppendFormatLine("{0}rawset(class, \"{1}\", wrapabstract(\"{1}\", {2}));", GetIndentString(indent), mname, className);
-                                sb.AppendFormatLine("{0}rawset(class, \"__self__{1}\", dummycall);", GetIndentString(indent), mname);
                             }
                         }
                     }
@@ -763,11 +748,6 @@ namespace Generator
                                 if (cmi.IsVirtual || cmi.IsOverride) {
                                     sb.AppendFormatLine("{0}tmp_obj_method = rawget(class, \"{1}\");", GetIndentString(indent), mname);
                                     sb.AppendFormatLine("{0}rawset(class, \"{1}\", wrapvirtual(\"{1}\", tmp_obj_method, {2}));", GetIndentString(indent), mname, className);
-                                    sb.AppendFormatLine("{0}rawset(class, \"__self__{1}\", tmp_obj_method);", GetIndentString(indent), mname);
-                                }
-                                else if (cmi.IsCtor || !cmi.IsPrivate && !cmi.IsSealed) {
-                                    sb.AppendFormatLine("{0}tmp_obj_method = rawget(class, \"{1}\");", GetIndentString(indent), mname);
-                                    sb.AppendFormatLine("{0}rawset(class, \"__self__{1}\", tmp_obj_method);", GetIndentString(indent), mname);
                                 }
                             }
                         }
@@ -1742,8 +1722,9 @@ namespace Generator
                             var objVd = obj as Dsl.ValueData;
                             var objCd = obj as Dsl.FunctionData;
                             if (null != objCd && objCd.GetId() == "getbase") {
+                                sb.Append("getoriginalmethod(");
                                 sb.Append(className);
-                                sb.AppendFormat(".__self__get_{0}(this)", mid);
+                                sb.AppendFormat(", \"get_{0}\")(this)", mid);
                             }
                             else if (null != objVd && objVd.GetId() == "this") {
                                 sb.Append(className);
@@ -1793,8 +1774,9 @@ namespace Generator
                             var objVd = obj as Dsl.ValueData;
                             var objCd = obj as Dsl.FunctionData;
                             if (null != objCd && objCd.GetId() == "getbase") {
+                                sb.Append("getoriginalmethod(");
                                 sb.Append(className);
-                                sb.AppendFormat(".__self__set_{0}(this, ", mid);
+                                sb.AppendFormat(", \"set_{0}\")(this, ", mid);
                                 GenerateSyntaxComponent(val, sb, indent, false, funcOpts, calculator);
                                 sb.Append(")");
                             }
@@ -1881,8 +1863,9 @@ namespace Generator
                         var objVd = obj as Dsl.ValueData;
                         var objCd = obj as Dsl.FunctionData;
                         if (null != objCd && objCd.GetId() == "getbase") {
+                            sb.Append("getoriginalmethod(");
                             sb.Append(className);
-                            sb.AppendFormat(".__self__{0}(this", mid);
+                            sb.AppendFormat(", \"{0}\")(this", mid);
                             int start = 3;
                             if (data.GetParamNum() > start)
                                 sb.Append(", ");
@@ -1983,8 +1966,9 @@ namespace Generator
                         var objVd = obj as Dsl.ValueData;
                         var objCd = obj as Dsl.FunctionData;
                         if (null != objCd && objCd.GetId() == "getbase") {
+                            sb.Append("getoriginalmethod(");
                             sb.Append(className);
-                            sb.AppendFormat(".__self__{0}(this", mid);
+                            sb.AppendFormat(", \"{0}\")(this", mid);
                             int start = ignoreCt + 3;
                             if (data.GetParamNum() > start)
                                 sb.Append(", ");
@@ -2518,7 +2502,6 @@ namespace Generator
                         sb.Append(prestr);
                         var ctor = data.GetParamId(3);
                         sb.Append('"');
-                        sb.Append("__self__");
                         sb.Append(ctor);
                         sb.Append('"');
                         if (data.GetParamNum() > 4) {
@@ -3128,8 +3111,9 @@ namespace Generator
                                     var objVd = obj as Dsl.ValueData;
                                     var objCd = obj as Dsl.FunctionData;
                                     if (null != objCd && objCd.GetId() == "getbase") {
+                                        sb.Append("getoriginalmethod(");
                                         sb.Append(className);
-                                        sb.AppendFormat(".__self__{0}, this", mid);
+                                        sb.AppendFormat(", \"{0}\"), this", mid);
                                     }
                                     else if (null != objVd && objVd.GetId() == "this") {
                                         sb.Append(className);
@@ -3500,8 +3484,9 @@ namespace Generator
                                 var objVd = obj as Dsl.ValueData;
                                 var objCd = obj as Dsl.FunctionData;
                                 if (null != objCd && objCd.GetId() == "getbase") {
+                                    sb.Append("getoriginalmethod(");
                                     sb.Append(className);
-                                    sb.AppendFormat(".__self__{0}, this", mid);
+                                    sb.AppendFormat(", \"{0}\"), this", mid);
                                 }
                                 else if (null != objVd && objVd.GetId() == "this") {
                                     sb.Append(className);
