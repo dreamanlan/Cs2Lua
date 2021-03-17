@@ -3603,3 +3603,21 @@ script(coroutinehook)args($funcData, $funcOpts, $sb, $indent, $curFile, $curMemb
     };
     return(false);
 };
+
+script(dsltoobject)args($funcData, $funcOpts, $sb, $indent)
+{
+    //luatoobject(symKind, isStatic, symName, arg1, ...)
+    
+    //首行的缩进cs2lua已经处理，新行需要自己添加缩进
+    writearguments($sb, $funcData, $funcOpts, $indent, 3);
+    return(true);
+};
+
+script(objecttodsl)args($funcData, $funcOpts, $sb, $indent)
+{
+    //objecttolua(arg1, ...)
+    
+    //首行的缩进cs2lua已经处理，新行需要自己添加缩进
+    writearguments($sb, $funcData, $funcOpts, $indent, 0);
+    return(true);
+};

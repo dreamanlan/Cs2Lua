@@ -1256,8 +1256,11 @@ namespace RoslynTool.CsToDsl
                         sb.AppendFormat("{0}ctor = deffunc(0)args(this){{", GetIndentString(indent));
                         sb.AppendLine();
                         ++indent;
-                        if (!string.IsNullOrEmpty(baseClass) && myselfDefinedBaseClass) {
-                            sb.AppendFormat("{0}buildbaseobj(this, {1}, {2}, \"ctor\", 0);", GetIndentString(indent), key, baseClass);
+                        if (!string.IsNullOrEmpty(baseClass)) {
+                            if(myselfDefinedBaseClass)
+                                sb.AppendFormat("{0}buildbaseobj(this, {1}, {2}, \"ctor\", 0);", GetIndentString(indent), key, baseClass);
+                            else
+                                sb.AppendFormat("{0}buildexternbaseobj(this, {1}, {2}, \"ctor\", 0);", GetIndentString(indent), key, baseClass);
                             sb.AppendLine();
                         }
                         sb.AppendFormat("{0}callinstance(this, {1}, \"__ctor\");", GetIndentString(indent), key);
