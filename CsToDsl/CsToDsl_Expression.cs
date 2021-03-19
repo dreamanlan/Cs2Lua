@@ -100,8 +100,7 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.Append(", ");
                             if (op == "as" || op == "is") {
                                 var type = typeInfo.Type;
-                                OutputType(type, node, ci, op);
-                                CodeBuilder.AppendFormat(", TypeKind.{0}", type.TypeKind);
+                                OutputTypeAndTypeKindForIsAsCast(type, node, ci, op);
                             }
                             else if (op == "??") {
                                 var rightOper = m_Model.GetOperationEx(node.Right);
@@ -420,8 +419,7 @@ namespace RoslynTool.CsToDsl
                 }
 
                 CodeBuilder.Append(", ");
-                OutputType(type, node, ci, "cast");
-                CodeBuilder.AppendFormat(", TypeKind.{0}", type.TypeKind);
+                OutputTypeAndTypeKindForIsAsCast(type, node, ci, "cast");
                 CodeBuilder.Append(")");
             }
         }

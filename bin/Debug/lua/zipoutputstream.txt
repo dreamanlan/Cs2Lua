@@ -74,17 +74,11 @@ ZipOutputStream = {
 
 		local class = ZipOutputStream;
 		local obj_methods = {
-			__self__Test = rawget(class, "__self__Test");
 			Test = rawget(class, "Test"),
-			__self__ctor = rawget(class, "__self__ctor");
 			ctor = rawget(class, "ctor"),
 			__ctor = rawget(class, "__ctor"),
 		};
 		local tmp_obj_method = nil;
-		tmp_obj_method = rawget(class, "Test");
-		rawset(class, "__self__Test", tmp_obj_method);
-		tmp_obj_method = rawget(class, "ctor");
-		rawset(class, "__self__ctor", tmp_obj_method);
 
 		local __defineclass_return = defineclass(nil, "ZipOutputStream", "ZipOutputStream", class, obj_methods, false, false);
 		Utility.Warn("ZipOutputStream::__define_class end");
@@ -175,17 +169,11 @@ ZipOutputStream.EmbedClass = {
 
 		local class = ZipOutputStream.EmbedClass;
 		local obj_methods = {
-			__self__Test = rawget(class, "__self__Test");
 			Test = rawget(class, "Test"),
-			__self__ctor = rawget(class, "__self__ctor");
 			ctor = rawget(class, "ctor"),
 			__ctor = rawget(class, "__ctor"),
 		};
 		local tmp_obj_method = nil;
-		tmp_obj_method = rawget(class, "Test");
-		rawset(class, "__self__Test", tmp_obj_method);
-		tmp_obj_method = rawget(class, "ctor");
-		rawset(class, "__self__ctor", tmp_obj_method);
 
 		local __defineclass_return = defineclass(nil, "ZipOutputStream.EmbedClass", "EmbedClass", class, obj_methods, false, false);
 		Utility.Warn("ZipOutputStream.EmbedClass::__define_class end");

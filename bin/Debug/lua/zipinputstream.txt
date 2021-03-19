@@ -40,7 +40,7 @@ ZipInputStream = {
 		local os;
 		(= os);
 		local os2;
-		os2 = typeas(objecttolua(ZipInputStream.Test(this, luatoobject(SymbolKind.Method, false, "ZipInputStream:Test", os), luatoobject(SymbolKind.Method, false, "ZipInputStream:Test", os), luatoobject(SymbolKind.Method, false, "ZipInputStream:Test", os))), ZipOutputStream, TypeKind.Class);
+		os2 = typeas(ZipInputStream.Test(this, os, os, os), ZipOutputStream, TypeKind.Class);
 		local intList;
 		intList = newlist(IntList, nil, nil, {});
 		local a;
@@ -56,9 +56,9 @@ ZipInputStream = {
 		local b;
 		b = ZipInputStream.Test2(this, 124, newexternlist(System.Collections.Generic.List_T, buildglobalinfoonce("typeargs_TypeArgs", getglobalinfo("typeargs_TypeArgs") or {TypeKind.Struct}), nil, {}));
 		local o;
-		o = luatoobject(SymbolKind.Local, false, "o", wraparray({1, 2}, nil, System.Int32, TypeKind.Struct));
+		o = wraparray({1, 2}, nil, System.Int32, TypeKind.Struct);
 		local arr;
-		arr = typeas(objecttolua(o), System.Array, TypeKind.Array);
+		arr = typeas(o, System.Array, TypeKind.Array);
 		local aa;
 		aa = "123";
 		local bb;
@@ -175,19 +175,13 @@ ZipInputStream = {
 
 		local class = ZipInputStream;
 		local obj_methods = {
-			__self__ctor = rawget(class, "__self__ctor");
 			ctor = rawget(class, "ctor"),
-			__ori_ctor = rawget(class, "__ori_ctor"),
 			Test = rawget(class, "Test"),
-			__ori_Test = rawget(class, "__ori_Test"),
 			Test2 = rawget(class, "Test2"),
 			Test3 = rawget(class, "Test3"),
-			__ori_Test3 = rawget(class, "__ori_Test3"),
 			__ctor = rawget(class, "__ctor"),
 		};
 		local tmp_obj_method = nil;
-		tmp_obj_method = rawget(class, "ctor");
-		rawset(class, "__self__ctor", tmp_obj_method);
 
 		local __defineclass_return = defineclass(nil, "ZipInputStream", "ZipInputStream", class, obj_methods, false, false);
 		Utility.Warn("ZipInputStream::__define_class end");

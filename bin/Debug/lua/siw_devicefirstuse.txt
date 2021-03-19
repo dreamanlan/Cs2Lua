@@ -42,12 +42,12 @@ SIW_DeviceFirstUse = {
 
 	OnSet = function(this, _value)
 		local __method_ret_208_4_211_5;
-		__method_ret_208_4_211_5 = SettingInfoWrapper.__self__OnSet(this, _value);
+		__method_ret_208_4_211_5 = getoriginalmethod(SettingInfoWrapper, "OnSet")(this, _value);
 		return __method_ret_208_4_211_5;
 	end,
 
 	ctor = function(this)
-		buildbaseobj(this, SIW_DeviceFirstUse, SettingInfoWrapper, "__self__ctor", 0);
+		buildbaseobj(this, SIW_DeviceFirstUse, SettingInfoWrapper, "ctor", 0);
 		SIW_DeviceFirstUse.__ctor(this);
 	end,
 

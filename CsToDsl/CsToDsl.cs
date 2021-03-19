@@ -1088,6 +1088,126 @@ namespace RoslynTool.CsToDsl
         {
             OutputConstValue(CodeBuilder, val, operOrSym, dslStrToCsStr);
         }
+        private void OutputTypeAndTypeKindForIsAsCast(ITypeSymbol type, SyntaxNode node, ClassInfo ci, string errorTag)
+        {
+            if (null != type && type.TypeKind != TypeKind.Error) {
+                if (type.TypeKind == TypeKind.TypeParameter) {
+                    var typeParam = type as ITypeParameterSymbol;
+                    if (typeParam.TypeParameterKind == TypeParameterKind.Type && !m_SkipGenericTypeDefine && null != m_GenericTypeInstance) {
+                        IMethodSymbol sym = FindClassMethodDeclaredSymbol(node);
+                        if (null != sym) {
+                            var t = SymbolTable.Instance.FindTypeArgument(type);
+                            if (t.TypeKind != TypeKind.TypeParameter) {
+                                CodeBuilder.Append(ClassInfo.GetFullName(t));
+                                AddReferenceAndTryDeriveGenericTypeInstance(ci, t);
+                            }
+                            else {
+                                CodeBuilder.Append(t.Name);
+                            }
+                        }
+                        else {
+                            ISymbol varSym = FindVariableDeclaredSymbol(node);
+                            if (null != varSym) {
+                                var t = SymbolTable.Instance.FindTypeArgument(type);
+                                if (t.TypeKind != TypeKind.TypeParameter) {
+                                    CodeBuilder.Append(ClassInfo.GetFullName(t));
+                                    AddReferenceAndTryDeriveGenericTypeInstance(ci, t);
+                                }
+                                else {
+                                    CodeBuilder.Append(t.Name);
+                                }
+                            }
+                            else {
+                                Log(node, "Can't find declaration for type param !", type.Name);
+                            }
+                        }
+                    }
+                    else {
+                        CodeBuilder.Append(type.Name);
+                    }
+                    CodeBuilder.Append(", TypeKind.");
+                    CodeBuilder.Append(type.TypeKind.ToString());
+                }
+                else if (type.TypeKind == TypeKind.Array) {
+                    var arrType = type as IArrayTypeSymbol;
+                    if (null != arrType) {
+                        List<int> ranks = new List<int>();
+                        ranks.Add(arrType.Rank);
+                        var elementType = arrType.ElementType;
+                        var earrType = elementType as IArrayTypeSymbol;
+                        while (null != earrType) {
+                            ranks.Add(earrType.Rank);
+                            elementType = earrType.ElementType;
+                            earrType = elementType as IArrayTypeSymbol;
+                        }
+                        var fullName = ClassInfo.GetFullName(elementType);
+                        CodeBuilder.Append(fullName);
+                        CodeBuilder.Append(", TypeKind.");
+                        CodeBuilder.Append(type.TypeKind.ToString());
+                        foreach (var rank in ranks) {
+                            CodeBuilder.Append(", ");
+                            CodeBuilder.Append(rank);
+                        }
+                    }
+                    else {
+                        CodeBuilder.Append("System.Array");
+                        CodeBuilder.Append(", TypeKind.");
+                        CodeBuilder.Append(type.TypeKind.ToString());
+                    }
+                }
+                else if (type.TypeKind == TypeKind.Delegate) {
+                    var fullName = ClassInfo.GetFullName(type);
+                    CodeBuilder.AppendFormat("\"{0}\"", fullName);
+                    CodeBuilder.Append(", TypeKind.");
+                    CodeBuilder.Append(type.TypeKind.ToString());
+                }
+                else {
+                    var fullName = ClassInfo.GetFullName(type);
+                    CodeBuilder.Append(fullName);
+                    CodeBuilder.Append(", TypeKind.");
+                    CodeBuilder.Append(type.TypeKind.ToString());
+
+                    var namedType = type as INamedTypeSymbol;
+                    if (null != namedType) {
+                        AddReferenceAndTryDeriveGenericTypeInstance(ci, namedType);
+
+                        if (namedType.IsGenericType) {
+                            foreach (var targ in namedType.TypeArguments) {
+                                CodeBuilder.Append(", TypeKind.");
+                                CodeBuilder.Append(targ.TypeKind.ToString());
+                                CodeBuilder.Append(", ");
+                                if (targ.TypeKind == TypeKind.Array) {
+                                    var tarr = targ as IArrayTypeSymbol;
+                                    if (null != tarr && tarr.Rank == 1) {
+                                        //用作泛型类型参数的数组只识别一维的类型，更多就算不匹配了
+                                        var telement = tarr.ElementType;
+                                        var tname = ClassInfo.GetFullName(telement);
+                                        CodeBuilder.Append(tname);
+                                    }
+                                    else {
+                                        CodeBuilder.Append("System.Array");
+                                    }
+                                }
+                                else {
+                                    var tname = ClassInfo.GetFullName(targ);
+                                    CodeBuilder.Append(tname);
+                                }
+                            }
+                        }
+                    }                    
+                }
+            }
+            else if (null != type) {
+                CodeBuilder.Append("null");
+                CodeBuilder.Append(", TypeKind.Error");
+                ReportIllegalType(node, type);
+            }
+            else {
+                CodeBuilder.Append("null");
+                CodeBuilder.Append(", null");
+                Log(node, "Unknown {0} Type !", errorTag);
+            }
+        }
         private void OutputType(ITypeSymbol type, SyntaxNode node, ClassInfo ci, string errorTag)
         {
             if (null != type && type.TypeKind != TypeKind.Error) {

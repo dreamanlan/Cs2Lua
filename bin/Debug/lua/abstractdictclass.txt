@@ -60,19 +60,12 @@ AbstractDictClass = {
 
 		local class = AbstractDictClass;
 		local obj_methods = {
-			__self__Add = rawget(class, "__self__Add");
 			Add = rawget(class, "Add"),
-			__self__ctor = rawget(class, "__self__ctor");
 			ctor = rawget(class, "ctor"),
 			__ctor = rawget(class, "__ctor"),
 		};
 		rawset(class, "AddImpl", wrapabstract("AddImpl", AbstractDictClass));
-		rawset(class, "__self__AddImpl", dummycall);
 		local tmp_obj_method = nil;
-		tmp_obj_method = rawget(class, "Add");
-		rawset(class, "__self__Add", tmp_obj_method);
-		tmp_obj_method = rawget(class, "ctor");
-		rawset(class, "__self__ctor", tmp_obj_method);
 
 		local __defineclass_return = defineclass(nil, "AbstractDictClass", "AbstractDictClass", class, obj_methods, false, false);
 		Utility.Warn("AbstractDictClass::__define_class end");

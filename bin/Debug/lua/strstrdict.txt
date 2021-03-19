@@ -31,6 +31,7 @@ StrStrDict = {
 	------ instance methods -------
 	-------------------------------
 	ctor = function(this)
+		buildexternbaseobj(this, StrStrDict, System.Collections.Generic.Dictionary_TKey_TValue, "ctor", 0);
 		StrStrDict.__ctor(this);
 	end,
 
@@ -66,21 +67,12 @@ StrStrDict = {
 
 		local class = StrStrDict;
 		local obj_methods = {
-			__self__ctor = rawget(class, "__self__ctor");
 			ctor = rawget(class, "ctor"),
-			__self__ctor__Int32 = rawget(class, "__self__ctor__Int32");
 			ctor__Int32 = rawget(class, "ctor__Int32"),
-			__self__ctor__IDictionary_2_String_String = rawget(class, "__self__ctor__IDictionary_2_String_String");
 			ctor__IDictionary_2_String_String = rawget(class, "ctor__IDictionary_2_String_String"),
 			__ctor = rawget(class, "__ctor"),
 		};
 		local tmp_obj_method = nil;
-		tmp_obj_method = rawget(class, "ctor");
-		rawset(class, "__self__ctor", tmp_obj_method);
-		tmp_obj_method = rawget(class, "ctor__Int32");
-		rawset(class, "__self__ctor__Int32", tmp_obj_method);
-		tmp_obj_method = rawget(class, "ctor__IDictionary_2_String_String");
-		rawset(class, "__self__ctor__IDictionary_2_String_String", tmp_obj_method);
 
 		local __defineclass_return = defineclass(System.Collections.Generic.Dictionary_TKey_TValue, "StrStrDict", "StrStrDict", class, obj_methods, false, true);
 		Utility.Warn("StrStrDict::__define_class end");

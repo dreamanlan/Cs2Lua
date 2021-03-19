@@ -63,9 +63,9 @@ Cs2LuaKeyValuePair_System_Int32_System_Int32 = {
 		local __method_ret_173_4_184_5;
 		local stringBuilder;
 		(= stringBuilder);
-		if (not isequal(typecast(luatoobject(SymbolKind.NamedType, false, "System.Object", Cs2LuaKeyValuePair_System_Int32_System_Int32.get_Key(this)), System.Object, TypeKind.Class), nil)) then 
+		if (not isequal(typecast(Cs2LuaKeyValuePair_System_Int32_System_Int32.get_Key(this), System.Object, TypeKind.Class), nil)) then 
 		end;
-		if (not isequal(typecast(luatoobject(SymbolKind.NamedType, false, "System.Object", Cs2LuaKeyValuePair_System_Int32_System_Int32.get_Value(this)), System.Object, TypeKind.Class), nil)) then 
+		if (not isequal(typecast(Cs2LuaKeyValuePair_System_Int32_System_Int32.get_Value(this), System.Object, TypeKind.Class), nil)) then 
 		end;
 		return __method_ret_173_4_184_5;
 	end,

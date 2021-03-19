@@ -67,21 +67,12 @@ StrList = {
 
 		local class = StrList;
 		local obj_methods = {
-			__self__ctor = rawget(class, "__self__ctor");
 			ctor = rawget(class, "ctor"),
-			__self__ctor__Int32 = rawget(class, "__self__ctor__Int32");
 			ctor__Int32 = rawget(class, "ctor__Int32"),
-			__self__ctor__ICollection_1_String = rawget(class, "__self__ctor__ICollection_1_String");
 			ctor__ICollection_1_String = rawget(class, "ctor__ICollection_1_String"),
 			__ctor = rawget(class, "__ctor"),
 		};
 		local tmp_obj_method = nil;
-		tmp_obj_method = rawget(class, "ctor");
-		rawset(class, "__self__ctor", tmp_obj_method);
-		tmp_obj_method = rawget(class, "ctor__Int32");
-		rawset(class, "__self__ctor__Int32", tmp_obj_method);
-		tmp_obj_method = rawget(class, "ctor__ICollection_1_String");
-		rawset(class, "__self__ctor__ICollection_1_String", tmp_obj_method);
 
 		local __defineclass_return = defineclass(System.Collections.Generic.List_T, "StrList", "StrList", class, obj_methods, false, true);
 		Utility.Warn("StrList::__define_class end");

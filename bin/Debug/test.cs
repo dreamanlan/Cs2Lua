@@ -258,7 +258,11 @@ class Test
         };
     }
     public void TestImp(UnityEngine.Vector2 pos)
-    { }
+    {
+        object o = pos;
+        var list = o as IList<int>;
+        var arr = o as int[,][];
+    }
     public int testcall()
     {
         var v3 = UnityEngine.Vector3.zero;

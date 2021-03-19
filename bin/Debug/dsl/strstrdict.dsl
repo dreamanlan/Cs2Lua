@@ -28,6 +28,7 @@ class(StrStrDict, System.Collections.Generic.Dictionary_TKey_TValue, true) {
 
 	instance_methods {
 		ctor = deffunc(0)args(this){
+			buildexternbaseobj(this, StrStrDict, System.Collections.Generic.Dictionary_TKey_TValue, "ctor", 0);
 			callinstance(this, StrStrDict, "__ctor");
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)],
 		ctor__Int32 = deffunc(0)args(this, capacity){

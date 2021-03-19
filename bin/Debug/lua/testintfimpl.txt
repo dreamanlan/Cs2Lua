@@ -67,21 +67,12 @@ TestIntfImpl = {
 
 		local class = TestIntfImpl;
 		local obj_methods = {
-			__self__get_prop = rawget(class, "__self__get_prop");
 			get_prop = rawget(class, "get_prop"),
-			__self__set_prop = rawget(class, "__self__set_prop");
 			set_prop = rawget(class, "set_prop"),
-			__self__ctor = rawget(class, "__self__ctor");
 			ctor = rawget(class, "ctor"),
 			__ctor = rawget(class, "__ctor"),
 		};
 		local tmp_obj_method = nil;
-		tmp_obj_method = rawget(class, "get_prop");
-		rawset(class, "__self__get_prop", tmp_obj_method);
-		tmp_obj_method = rawget(class, "set_prop");
-		rawset(class, "__self__set_prop", tmp_obj_method);
-		tmp_obj_method = rawget(class, "ctor");
-		rawset(class, "__self__ctor", tmp_obj_method);
 
 		local __defineclass_return = defineclass(nil, "TestIntfImpl", "TestIntfImpl", class, obj_methods, false, false);
 		Utility.Warn("TestIntfImpl::__define_class end");

@@ -35,7 +35,7 @@ DictClass = {
 	end,
 
 	ctor = function(this)
-		buildbaseobj(this, DictClass, AbstractDictClass, "__self__ctor", 0);
+		buildbaseobj(this, DictClass, AbstractDictClass, "ctor", 0);
 		DictClass.__ctor(this);
 	end,
 

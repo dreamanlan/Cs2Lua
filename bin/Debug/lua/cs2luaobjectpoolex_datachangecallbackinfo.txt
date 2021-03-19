@@ -129,7 +129,6 @@ Cs2LuaObjectPoolEx_DataChangeCallBackInfo = {
 			Alloc = rawget(class, "Alloc"),
 			Recycle = rawget(class, "Recycle"),
 			Clear = rawget(class, "Clear"),
-			__ori_Clear = rawget(class, "__ori_Clear"),
 			get_Count = rawget(class, "get_Count"),
 			ctor = rawget(class, "ctor"),
 			__ctor = rawget(class, "__ctor"),
