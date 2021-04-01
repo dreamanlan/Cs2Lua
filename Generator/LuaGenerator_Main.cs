@@ -1113,6 +1113,7 @@ namespace Generator
             else {
                 id = data.GetId();
             }
+            Dsl.ISyntaxComponent condExpParam = null;
             if (data.GetParamClass() == (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_OPERATOR) {
                 id = ConvertOperator(id);
                 int paramNum = data.GetParamNum();
@@ -1126,8 +1127,8 @@ namespace Generator
                     sb.Append(")");
                 }
                 else if (paramNum == 2) {
-                    var param1 = data.GetParam(0);
-                    var param2 = data.GetParam(1);
+                    var param1 = RemoveParenthesis(data.GetParam(0));
+                    var param2 = RemoveParenthesis(data.GetParam(1));
                     bool handled = false;
                     var vd = param1 as Dsl.ValueData;
                     var fd = param1 as Dsl.FunctionData;
@@ -1380,14 +1381,14 @@ namespace Generator
                     }
                 }
             }
-            else if ((id == "setstatic" || id == "setexternstatic") && data.GetParamNum() > 3 && data.GetParamId(3) == "condexp") {
+            else if ((id == "setstatic" || id == "setexternstatic") && GetParamIdAfterRemoveParenthesis(data, 3, out condExpParam) == "condexp") {
                 int condIx = 3;
-                Dsl.FunctionData condExp = data.GetParam(3) as Dsl.FunctionData;
+                var condExp = condExpParam as Dsl.FunctionData;
                 GenerateMemberAssignmentCondExp(data, condIx, condExp, sb, indent, firstLineUseIndent, funcOpts, calculator);
             }
-            else if ((id == "setinstance" || id == "setexterninstance") && data.GetParamNum() > 4 && data.GetParamId(4) == "condexp") {
+            else if ((id == "setinstance" || id == "setexterninstance") && GetParamIdAfterRemoveParenthesis(data, 4, out condExpParam) == "condexp") {
                 int condIx = 4;
-                Dsl.FunctionData condExp = data.GetParam(4) as Dsl.FunctionData;
+                var condExp = condExpParam as Dsl.FunctionData;
                 GenerateMemberAssignmentCondExp(data, condIx, condExp, sb, indent, firstLineUseIndent, funcOpts, calculator);
             }
             else {
@@ -2951,17 +2952,26 @@ namespace Generator
             }
             else if (id == "while") {
                 var condExp = fcall.GetParam(0);
-                Dsl.FunctionData closure = null;
+                Dsl.FunctionData closure1 = null;
+                Dsl.FunctionData closure2 = null;
                 Dsl.FunctionData oper = null;
+                string closure2VarName = string.Empty;
                 bool prefix = false;
-                if (CanRemoveClosure(condExp, out closure) || CanSplitPrefixPostfixOperator(condExp, out oper, out prefix)) {
+                if (CanRemoveClosure(condExp, out closure1, out closure2) || CanSplitPrefixPostfixOperator(condExp, out oper, out prefix)) {
                     //TryGetValue这样的单一条件表达式可以转换为非匿名函数包装样式
                     sb.AppendLine("while true do");
                     ++indent;
-                    if (null != closure) {
-                        GenerateClosure(closure, sb, indent, true, funcOpts, calculator);
-                        var p = closure.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
+                    if (null != closure1) {
+                        GenerateClosure(closure1, sb, indent, true, funcOpts, calculator);
+                        var p = closure1.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
                         p.SetId("false");
+                    }
+                    if (null != closure2) {
+                        var p1 = closure2.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
+                        var p2 = closure2.LowerOrderFunction.GetParam(1) as Dsl.ValueData;
+                        closure2VarName = p2.GetId();
+                        p1.SetId("false");
+                        p2.SetId("true");
                     }
                     if (null != oper) {
                         sb.AppendFormat("{0}", GetIndentString(indent));
@@ -2977,6 +2987,18 @@ namespace Generator
                     sb.AppendFormatLine("{0}break;", GetIndentString(indent));
                     --indent;
                     sb.AppendFormatLine("{0}end;", GetIndentString(indent));
+                    if (null != closure2) {
+                        var p1 = closure2.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
+                        var p2 = closure2.LowerOrderFunction.GetParam(1) as Dsl.ValueData;
+                        p2.SetId(closure2VarName);
+                        GenerateClosure(closure2, sb, indent, true, funcOpts, calculator);
+
+                        sb.AppendFormatLine("{0}if not {1} then", GetIndentString(indent), closure2VarName);
+                        ++indent;
+                        sb.AppendFormatLine("{0}break;", GetIndentString(indent));
+                        --indent;
+                        sb.AppendFormatLine("{0}end;", GetIndentString(indent));
+                    }
                     --indent;
                 }
                 else {
@@ -2992,16 +3014,26 @@ namespace Generator
             }
             else if (id == "if") {
                 var condExp = fcall.GetParam(0);
-                Dsl.FunctionData closure = null;
+                Dsl.FunctionData closure1 = null;
+                Dsl.FunctionData closure2 = null;
                 Dsl.FunctionData oper = null;
+                string closure2VarName = string.Empty;
                 bool prefix = false;
-                if (CanRemoveClosure(condExp, out closure) || CanSplitPrefixPostfixOperator(condExp, out oper, out prefix)) {
+                if (CanRemoveClosure(condExp, out closure1, out closure2) || CanSplitPrefixPostfixOperator(condExp, out oper, out prefix)) {
                     //TryGetValue这样的单一条件表达式可以提到if语句外面
-                    if (null != closure) {
+                    if (null != closure1) {
                         sb.AppendLine("--");
-                        GenerateClosure(closure, sb, indent, true, funcOpts, calculator);
-                        var p = closure.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
+                        GenerateClosure(closure1, sb, indent, true, funcOpts, calculator);
+                        var p = closure1.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
                         p.SetId("false");
+                    }
+                    if (null != closure2) {
+                        sb.AppendLine("--");
+                        var p1 = closure2.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
+                        var p2 = closure2.LowerOrderFunction.GetParam(1) as Dsl.ValueData;
+                        closure2VarName = p2.GetId();
+                        p1.SetId("false");
+                        p2.SetId("true");
                     }
                     if (null != oper) {
                         sb.AppendLine("--");
@@ -3021,7 +3053,20 @@ namespace Generator
                 if (data.HaveStatement()) {
                     sb.AppendLine();
                     ++indent;
+                    if (null != closure2) {
+                        var p1 = closure2.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
+                        var p2 = closure2.LowerOrderFunction.GetParam(1) as Dsl.ValueData;
+                        p2.SetId(closure2VarName);
+                        GenerateClosure(closure2, sb, indent, true, funcOpts, calculator);
+
+                        sb.AppendFormatLine("{0}if {1} then", GetIndentString(indent), closure2VarName);
+                        ++indent;
+                    }
                     GenerateStatements(data, sb, indent, funcOpts, calculator);
+                    if (null != closure2) {
+                        --indent;
+                        sb.AppendFormatLine("{0}end;", GetIndentString(indent));
+                    }
                     --indent;
                     sb.AppendFormat("{0}end", GetIndentString(indent));
                 }
@@ -3249,15 +3294,24 @@ namespace Generator
                     }
                     else if (funcData == data.Second) {
                         var condExp = fcall.GetParam(0);
-                        Dsl.FunctionData closure = null;
+                        Dsl.FunctionData closure1 = null;
+                        Dsl.FunctionData closure2 = null;
                         Dsl.FunctionData oper = null;
+                        string closure2VarName = string.Empty;
                         bool prefix = false;
-                        if (CanRemoveClosure(condExp, out closure) || CanSplitPrefixPostfixOperator(condExp, out oper, out prefix)) {
+                        if (CanRemoveClosure(condExp, out closure1, out closure2) || CanSplitPrefixPostfixOperator(condExp, out oper, out prefix)) {
                             ++indent;
-                            if (null != closure) {
-                                GenerateClosure(closure, sb, indent, true, funcOpts, calculator);
-                                var p = closure.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
+                            if (null != closure1) {
+                                GenerateClosure(closure1, sb, indent, true, funcOpts, calculator);
+                                var p = closure1.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
                                 p.SetId("false");
+                            }
+                            if (null != closure2) {
+                                var p1 = closure2.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
+                                var p2 = closure2.LowerOrderFunction.GetParam(1) as Dsl.ValueData;
+                                closure2VarName = p2.GetId();
+                                p1.SetId("false");
+                                p2.SetId("true");
                             }
                             if (null != oper) {
                                 sb.AppendFormat("{0}", GetIndentString(indent));
@@ -3266,9 +3320,27 @@ namespace Generator
                                 var p = oper.GetParam(0) as Dsl.ValueData;
                                 p.SetId("false");
                             }
-                            --indent;
-                            sb.AppendFormat("{0}until not ", GetIndentString(indent));
+                            sb.AppendFormat("{0}if not ", GetIndentString(indent));
                             GenerateSyntaxComponent(condExp, sb, 0, false, funcOpts, calculator);
+                            sb.AppendLine(" then");
+                            ++indent;
+                            sb.AppendFormatLine("{0}break;", GetIndentString(indent));
+                            --indent;
+                            sb.AppendFormatLine("{0}end;", GetIndentString(indent));
+                            if (null != closure2) {
+                                var p1 = closure2.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
+                                var p2 = closure2.LowerOrderFunction.GetParam(1) as Dsl.ValueData;
+                                p2.SetId(closure2VarName);
+                                GenerateClosure(closure2, sb, indent, true, funcOpts, calculator);
+
+                                sb.AppendFormatLine("{0}if not {1} then", GetIndentString(indent), closure2VarName);
+                                ++indent;
+                                sb.AppendFormatLine("{0}break;", GetIndentString(indent));
+                                --indent;
+                                sb.AppendFormatLine("{0}end;", GetIndentString(indent));
+                            }
+                            --indent;
+                            sb.AppendFormat("{0}until false", GetIndentString(indent));
                         }
                         else if (condExp.GetId() == "false") {
                             sb.AppendFormat("{0}until true", GetIndentString(indent));
@@ -3296,16 +3368,26 @@ namespace Generator
                 var fdata = data.First;
                 var fcall = fdata.LowerOrderFunction;
                 var condExp = fcall.GetParam(0);
-                Dsl.FunctionData closure = null;
+                Dsl.FunctionData closure1 = null;
+                Dsl.FunctionData closure2 = null;
                 Dsl.FunctionData oper = null;
+                string closure2VarName = string.Empty;
                 bool prefix = false;
-                if (CanRemoveClosure(condExp, out closure) || CanSplitPrefixPostfixOperator(condExp, out oper, out prefix)) {
+                if (CanRemoveClosure(condExp, out closure1, out closure2) || CanSplitPrefixPostfixOperator(condExp, out oper, out prefix)) {
                     //TryGetValue这样的单一条件表达式可以提到if语句外面
-                    if (null != closure) {
+                    if (null != closure1) {
                         sb.AppendLine("--");
-                        GenerateClosure(closure, sb, indent, true, funcOpts, calculator);
-                        var p = closure.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
+                        GenerateClosure(closure1, sb, indent, true, funcOpts, calculator);
+                        var p = closure1.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
                         p.SetId("false");
+                    }
+                    if (null != closure2) {
+                        sb.AppendLine("--");
+                        var p1 = closure2.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
+                        var p2 = closure2.LowerOrderFunction.GetParam(1) as Dsl.ValueData;
+                        closure2VarName = p2.GetId();
+                        p1.SetId("false");
+                        p2.SetId("true");
                     }
                     if (null != oper) {
                         sb.AppendLine("--");
@@ -3325,7 +3407,20 @@ namespace Generator
                 if (fdata.HaveStatement()) {
                     sb.AppendLine();
                     ++indent;
+                    if (null != closure2) {
+                        var p1 = closure2.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
+                        var p2 = closure2.LowerOrderFunction.GetParam(1) as Dsl.ValueData;
+                        p2.SetId(closure2VarName);
+                        GenerateClosure(closure2, sb, indent, true, funcOpts, calculator);
+
+                        sb.AppendFormatLine("{0}if {1} then", GetIndentString(indent), closure2VarName);
+                        ++indent;
+                    }
                     GenerateStatements(fdata, sb, indent, funcOpts, calculator);
+                    if (null != closure2) {
+                        --indent;
+                        sb.AppendFormatLine("{0}end;", GetIndentString(indent));
+                    }
                     --indent;
                 }
                 if (data.GetFunctionNum() == 1) {
@@ -3602,10 +3697,10 @@ namespace Generator
         {
             var p1 = data.GetParam(0);
             var p2 = data.GetParamId(1);
-            var p3 = data.GetParam(2);
+            var p3 = RemoveParenthesis(data.GetParam(2));
             var p3Func = p3 as Dsl.FunctionData;
             var p4 = data.GetParamId(3);
-            var p5 = data.GetParam(4);
+            var p5 = RemoveParenthesis(data.GetParam(4));
             var p5Func = p5 as Dsl.FunctionData;
             string p2n = p2;
             var p3n = p3;
@@ -3681,10 +3776,10 @@ namespace Generator
         {
             var p1 = condExp.GetParam(0);
             var p2 = condExp.GetParamId(1);
-            var p3 = condExp.GetParam(2);
+            var p3 = RemoveParenthesis(condExp.GetParam(2));
             var p3Func = p3 as Dsl.FunctionData;
             var p4 = condExp.GetParamId(3);
-            var p5 = condExp.GetParam(4);
+            var p5 = RemoveParenthesis(condExp.GetParam(4));
             var p5Func = p5 as Dsl.FunctionData;
             string p2n = p2;
             var p3n = p3;
@@ -3766,10 +3861,10 @@ namespace Generator
         {
             var p1 = data.GetParam(0);
             var p2 = data.GetParamId(1);
-            var p3 = data.GetParam(2);
+            var p3 = RemoveParenthesis(data.GetParam(2));
             var p3Func = p3 as Dsl.FunctionData;
             var p4 = data.GetParamId(3);
-            var p5 = data.GetParam(4);
+            var p5 = RemoveParenthesis(data.GetParam(4));
             var p5Func = p5 as Dsl.FunctionData;
             string p2n = p2;
             var p3n = p3;

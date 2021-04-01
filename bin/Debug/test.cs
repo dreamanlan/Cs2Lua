@@ -262,6 +262,25 @@ class Test
         object o = pos;
         var list = o as IList<int>;
         var arr = o as int[,][];
+        var dict = new StrStrDict();
+        string v;
+        if (null != dict && dict.TryGetValue("abc", out v)) {
+            Console.WriteLine(v);
+        }
+        else if(null!= dict && dict.TryGetValue("abc2", out v)){
+            Console.WriteLine(v);
+        }
+        while(null != dict && dict.TryGetValue("abc2", out v)) {
+            Console.WriteLine(v);
+        }
+        do {
+            Console.WriteLine(v);
+        } while (null != dict && dict.TryGetValue("abc2", out v));
+
+        UnityEngine.Vector3 vv = UnityEngine.Vector3.zero;
+        vv.x = v == "yes" ? 123 : v == "no" ? 456 : 789;
+        int iv = v == "yes" ? 123 : v == "no" ? 456 : 789;
+        list.Add(v == "yes" ? 123 : v == "no" ? 456 : 789);
     }
     public int testcall()
     {

@@ -104,14 +104,18 @@ namespace Generator
         }
         private static bool CanRemoveClosure(Dsl.ISyntaxComponent param)
         {
-            Dsl.FunctionData closure;
-            return CanRemoveClosure(param, out closure);
+            Dsl.FunctionData closure1;
+            Dsl.FunctionData closure2;
+            return CanRemoveClosure(param, out closure1, out closure2);
         }
-        private static bool CanRemoveClosure(Dsl.ISyntaxComponent param, out Dsl.FunctionData closure)
+        private static bool CanRemoveClosure(Dsl.ISyntaxComponent param, out Dsl.FunctionData closure1, out Dsl.FunctionData closure2)
         {
             bool first = true;
-            closure = null;
-            return CanRemoveClosure(param, ref first, ref closure);
+            closure1 = null;
+            closure2 = null;
+            bool one = CanRemoveClosure(param, ref first, ref closure1);
+            bool two = CanRemoveLastClosure(param, ref closure2);
+            return one || two;
         }
         private static bool CanRemoveClosure(Dsl.ISyntaxComponent param, ref bool first, ref Dsl.FunctionData closure)
         {
@@ -171,6 +175,33 @@ namespace Generator
                     return true;
                 if (!first)
                     return false;
+            }
+            return false;
+        }
+        private static bool CanRemoveLastClosure(Dsl.ISyntaxComponent param, ref Dsl.FunctionData closure)
+        {
+            var funcData = param as Dsl.FunctionData;
+            if (null != funcData) {
+                return CanRemoveLastClosure(funcData, ref closure);
+            }
+            closure = null;
+            return false;
+        }
+        private static bool CanRemoveLastClosure(Dsl.FunctionData param, ref Dsl.FunctionData closure)
+        {
+            if (param.GetId() != "execbinary")
+                return false;
+            if (param.GetParamNum() < 3)
+                return false;
+            if (param.GetParamId(0) != "&&")
+                return false;
+            var funcData = param.GetParam(2) as Dsl.FunctionData;
+            if (null != funcData && funcData.IsHighOrder) {
+                var fcall = funcData.LowerOrderFunction;
+                if (!fcall.IsHighOrder && fcall.GetId() == "execclosure") {
+                    closure = funcData;
+                    return true;
+                }
             }
             return false;
         }

@@ -1,4 +1,5 @@
 System.ArgumentException
+System.Boolean
 System.Console
 System.Exception
 System.Int32

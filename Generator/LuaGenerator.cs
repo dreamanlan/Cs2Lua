@@ -175,6 +175,27 @@ namespace Generator
                 }
             }
         }
+        internal static Dsl.ISyntaxComponent RemoveParenthesis(Dsl.ISyntaxComponent comp)
+        {
+            var funcData = comp as Dsl.FunctionData;
+            if (null != funcData) {
+                if (!funcData.HaveId() && funcData.HaveParam() && funcData.GetParamNum() == 1 && funcData.GetParamClass() == (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS) {
+                    return RemoveParenthesis(funcData.GetParam(0));
+
+                }
+            }
+            return comp;
+        }
+        internal static string GetParamIdAfterRemoveParenthesis(Dsl.ISyntaxComponent comp, int ix, out Dsl.ISyntaxComponent param)
+        {
+            var data = comp as Dsl.FunctionData;
+            if (null != data && data.GetParamNum() > ix) {
+                param = RemoveParenthesis(data.GetParam(ix));
+                return param.GetId();
+            }
+            param = null;
+            return string.Empty;
+        }
         internal static void ParseFunctionOptions(Dsl.FunctionData opts, FunctionOptions funcOpts)
         {
             foreach (var opt in opts.Params) {
