@@ -3711,27 +3711,41 @@ namespace Generator
             if (p2 == "false" && null != p3Func && p3Func.GetId() == "condexp") {
                 p3IsCondExp = true;
             }
-            else if (p2 == "false" && null != p3Func && !ExistEmbedFunctionObject(p3Func)) {
+            else if (p2 == "false" && null != p3Func) {
                 var func = p3Func.GetParam(0) as Dsl.FunctionData;
                 if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
                     func = func.GetParam(0) as Dsl.FunctionData;
                 }
                 if (null != func && func.GetId() == "funcobjret") {
-                    p2n = "true";
-                    p3n = func.GetParam(0);
+                    var tp3n = RemoveParenthesis(func.GetParam(0));
+                    if (tp3n.GetId() == "condexp") {
+                        p3Func = tp3n as Dsl.FunctionData;
+                        p3IsCondExp = true;
+                    }
+                    else if (!ExistEmbedFunctionObject(p3Func)) {
+                        p2n = "true";
+                        p3n = tp3n;
+                    }
                 }
             }
             if (p4 == "false" && null != p5Func && p5Func.GetId() == "condexp") {
                 p5IsCondExp = true;
             }
-            else if (p4 == "false" && null != p5Func && !ExistEmbedFunctionObject(p5Func)) {
+            else if (p4 == "false" && null != p5Func) {
                 var func = p5Func.GetParam(0) as Dsl.FunctionData;
                 if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
                     func = func.GetParam(0) as Dsl.FunctionData;
                 }
                 if (null != func && func.GetId() == "funcobjret") {
-                    p4n = "true";
-                    p5n = func.GetParam(0);
+                    var tp5n = RemoveParenthesis(func.GetParam(0));
+                    if (tp5n.GetId() == "condexp") {
+                        p5Func = tp5n as Dsl.FunctionData;
+                        p5IsCondExp = true;
+                    }
+                    else if (!ExistEmbedFunctionObject(p5Func)) {
+                        p4n = "true";
+                        p5n = tp5n;
+                    }
                 }
             }
 
@@ -3790,27 +3804,41 @@ namespace Generator
             if (p2 == "false" && null != p3Func && p3Func.GetId() == "condexp") {
                 p3IsCondExp = true;
             }
-            else if (p2 == "false" && null != p3Func && !ExistEmbedFunctionObject(p3Func)) {
+            else if (p2 == "false" && null != p3Func) {
                 var func = p3Func.GetParam(0) as Dsl.FunctionData;
                 if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
                     func = func.GetParam(0) as Dsl.FunctionData;
                 }
                 if (null != func && func.GetId() == "funcobjret") {
-                    p2n = "true";
-                    p3n = func.GetParam(0);
+                    var tp3n = RemoveParenthesis(func.GetParam(0));
+                    if (tp3n.GetId() == "condexp") {
+                        p3Func = tp3n as Dsl.FunctionData;
+                        p3IsCondExp = true;
+                    }
+                    else if (!ExistEmbedFunctionObject(p3Func)) {
+                        p2n = "true";
+                        p3n = tp3n;
+                    }
                 }
             }
             if (p4 == "false" && null != p5Func && p5Func.GetId() == "condexp") {
                 p5IsCondExp = true;
             }
-            else if (p4 == "false" && null != p5Func && !ExistEmbedFunctionObject(p5Func)) {
+            else if (p4 == "false" && null != p5Func) {
                 var func = p5Func.GetParam(0) as Dsl.FunctionData;
                 if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
                     func = func.GetParam(0) as Dsl.FunctionData;
                 }
                 if (null != func && func.GetId() == "funcobjret") {
-                    p4n = "true";
-                    p5n = func.GetParam(0);
+                    var tp5n = RemoveParenthesis(func.GetParam(0));
+                    if (tp5n.GetId() == "condexp") {
+                        p5Func = tp5n as Dsl.FunctionData;
+                        p5IsCondExp = true;
+                    }
+                    else if (!ExistEmbedFunctionObject(p5Func)) {
+                        p4n = "true";
+                        p5n = tp5n;
+                    }
                 }
             }
 
@@ -3875,27 +3903,41 @@ namespace Generator
             if (p2 == "false" && null != p3Func && p3Func.GetId() == "condexp") {
                 p3IsCondExp = true;
             }
-            else if (p2 == "false" && null != p3Func && !ExistEmbedFunctionObject(p3Func)) {
+            else if (p2 == "false" && null != p3Func) {
                 var func = p3Func.GetParam(0) as Dsl.FunctionData;
                 if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
                     func = func.GetParam(0) as Dsl.FunctionData;
                 }
                 if (null != func && func.GetId() == "funcobjret") {
-                    p2n = "true";
-                    p3n = func.GetParam(0);
+                    var tp3n = RemoveParenthesis(func.GetParam(0));
+                    if (tp3n.GetId() == "condexp") {
+                        p3Func = tp3n as Dsl.FunctionData;
+                        p3IsCondExp = true;
+                    }
+                    else if (!ExistEmbedFunctionObject(p3Func)) {
+                        p2n = "true";
+                        p3n = tp3n;
+                    }
                 }
             }
             if (p4 == "false" && null != p5Func && p5Func.GetId() == "condexp") {
                 p5IsCondExp = true;
             }
-            else if (p4 == "false" && null != p5Func && !ExistEmbedFunctionObject(p5Func)) {
+            else if (p4 == "false" && null != p5Func) {
                 var func = p5Func.GetParam(0) as Dsl.FunctionData;
                 if (null != func && !func.HaveId() && func.GetParamNum() == 1) {
                     func = func.GetParam(0) as Dsl.FunctionData;
                 }
                 if (null != func && func.GetId() == "funcobjret") {
-                    p4n = "true";
-                    p5n = func.GetParam(0);
+                    var tp5n = RemoveParenthesis(func.GetParam(0));
+                    if (tp5n.GetId() == "condexp") {
+                        p5Func = tp5n as Dsl.FunctionData;
+                        p5IsCondExp = true;
+                    }
+                    else if (!ExistEmbedFunctionObject(p5Func)) {
+                        p4n = "true";
+                        p5n = tp5n;
+                    }
                 }
             }
 

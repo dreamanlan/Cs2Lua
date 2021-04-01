@@ -281,6 +281,8 @@ class Test
         vv.x = v == "yes" ? 123 : v == "no" ? 456 : 789;
         int iv = v == "yes" ? 123 : v == "no" ? 456 : 789;
         list.Add(v == "yes" ? 123 : v == "no" ? 456 : 789);
+        int statusA = 3;
+        statusA = statusA == 1 ? 2 : statusA == 2 ? 1 : statusA == 3 ? 0 : ++statusA;
     }
     public int testcall()
     {
